@@ -128,6 +128,15 @@ function TOOLTIP:SetTooltipFonts()
     end
 end
 
+function TOOLTIP:FixRecipeItemNameWidth()
+    for i = 1, self:NumLines() do
+        local line = _G['GameTooltipTextLeft' .. i]
+        if line:GetHeight() > 40 then
+            line:SetWidth(line:GetWidth() + 1)
+        end
+    end
+end
+
 -- Tooltip Registration
 local tipTable = {}
 function TOOLTIP:RegisterTooltips(addon, func)

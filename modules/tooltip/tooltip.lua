@@ -414,6 +414,8 @@ function TOOLTIP:OnLogin()
     end
 
     TOOLTIP:SetTooltipFonts()
+    _G.GameTooltip:HookScript('OnTooltipSetItem', TOOLTIP.FixRecipeItemNameWidth)
+
     TOOLTIP:ReskinTooltipIcons()
     TOOLTIP:LinkHover()
     TOOLTIP:ExtraInfo()

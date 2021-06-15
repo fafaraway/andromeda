@@ -98,8 +98,11 @@ function UNITFRAME:CreatePowerBar(self)
     --     power.colorClass = true
     --     power.colorReaction = true
     -- else
-        power.colorPower = true
+        -- power.colorPower = true
     -- end
+
+    power.colorPower = true
+    power.colorReaction = true
 
     self.Power.PostUpdate = PostUpdatePower
 

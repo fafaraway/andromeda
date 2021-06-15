@@ -11,7 +11,6 @@ local GetFramerate = GetFramerate
 local InCombatLockdown = InCombatLockdown
 local ShowUIPanel = ShowUIPanel
 local HideUIPanel = HideUIPanel
-local TimeManagerClockButton_OnClick = TimeManagerClockButton_OnClick
 local UpdateAddOnMemoryUsage = UpdateAddOnMemoryUsage
 local GetNumAddOns = GetNumAddOns
 local IsAddOnLoaded = IsAddOnLoaded
@@ -97,11 +96,11 @@ local function Button_OnMouseUp(self, btn)
         else
             HideUIPanel(_G.AddonList)
         end
-    elseif btn == 'RightButton' then --#FIXME
+    elseif btn == 'RightButton' then
         if not _G.TimeManagerClockButton then
             LoadAddOn('Blizzard_TimeManager')
         end
-        TimeManagerClockButton_OnClick(_G.TimeManagerClockButton)
+        _G.TimeManagerClockButton_OnClick(_G.TimeManagerClockButton)
     end
 end
 
