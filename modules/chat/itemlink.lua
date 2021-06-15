@@ -97,7 +97,11 @@ local function convertItemLevel(link)
         local slotType = GetSlotType(itemLink)
         local name, itemLevel = isItemHasLevel(itemLink)
         if name and itemLevel then
-            link = gsub(link, '|h%[(.-)%]|h', '|h[' .. name .. ' (' .. slotType .. ' ' .. itemLevel .. ')]|h' .. isItemHasGem(itemLink))
+            if slotType then
+                link = gsub(link, '|h%[(.-)%]|h', '|h[' .. name .. ' (' .. slotType .. ' ' .. itemLevel .. ')]|h' .. isItemHasGem(itemLink))
+            else
+                link = gsub(link, '|h%[(.-)%]|h', '|h[' .. name .. ' (' .. itemLevel .. ')]|h' .. isItemHasGem(itemLink))
+            end
             itemCache[link] = link
         end
     end
