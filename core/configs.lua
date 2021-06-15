@@ -951,10 +951,10 @@ C.CharacterSettings = {
         AzeriteTrait = true,
 
         AutoScreenshot = true,
-        EarnedNewAchievement = true,
-        ChallengeModeCompleted = true,
-        PlayerLevelUp = false,
-        PlayerDead = false,
+            EarnedNewAchievement = true,
+            ChallengeModeCompleted = true,
+            PlayerLevelUp = false,
+            PlayerDead = false,
 
         FasterZooming = true,
         ActionCamera = false,
@@ -971,6 +971,9 @@ C.CharacterSettings = {
         GroupTool = true,
         RuneCheck = false,
         Countdown = '10',
+
+        SaveRecipient = true,
+        RecipientName = '',
     },
 
     Combat = {

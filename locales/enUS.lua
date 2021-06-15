@@ -246,6 +246,7 @@ L['Restyle blizzard frames'] = true
 L['Restyle other addons'] = true
 L['Revert threat'] = true
 L['Ritual of summoning'] = true
+L['Save mail recipient'] = true
 L['Save postion by spec'] = true
 L['Screen saver'] = true
 L['Scroll multi-lines by holding Ctrl key, and scroll to top or bottom by holding Shift key.'] = true

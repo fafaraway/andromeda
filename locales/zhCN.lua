@@ -591,3 +591,5 @@ L['Colorized special bags'] = '添加特殊背包的背景色'
 L['|nShow color for Herb bag, Mining bag, Gem bag, Enchanted mageweave pouch.'] = '|n为草药袋、矿石袋、附魔材料袋等特殊背包添加背景颜色。'
 L['Filter items'] = '物品分类存放'
 L['Equipement Set'] = '装备配置方案'
+
+L['Save mail recipient'] = '保存收件人名字'

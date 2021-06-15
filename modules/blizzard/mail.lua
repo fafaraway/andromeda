@@ -4,14 +4,14 @@ local select = select
 local format = format
 local floor = floor
 local CreateFrame = CreateFrame
+local hooksecurefunc = hooksecurefunc
 local GetInboxNumItems = GetInboxNumItems
 local GetInboxHeaderInfo = GetInboxHeaderInfo
 local AutoLootMailItem = AutoLootMailItem
 local TakeInboxMoney = TakeInboxMoney
-local ITEMS = ITEMS
 
 local F, C, L = unpack(select(2, ...))
-local BLIZZARD = F:GetModule('Blizzard')
+local EM = F:RegisterModule('EnhancedMail')
 
 local text
 local processing = false
@@ -32,7 +32,7 @@ local function OnEvent()
         end
         cash = cash + money
     end
-    text:SetText(C.InfoColor .. format('%d ' .. _G.WORLD_QUEST_REWARD_FILTERS_GOLD  .. ' %d ' .. ITEMS, floor(cash * 0.0001), items))
+    text:SetText(C.InfoColor .. format('%d ' .. _G.WORLD_QUEST_REWARD_FILTERS_GOLD .. ' %d ' .. _G.ITEMS, floor(cash * 0.0001), items))
 
     if (processing) then
         if (num == 0) then
@@ -67,7 +67,7 @@ local function OnHide()
     processing = false
 end
 
-function BLIZZARD:EnhancedMailButton()
+function EM:CollectButton()
     if not C.DB.General.EnhancedMailButton then
         return
     end
@@ -88,4 +88,58 @@ function BLIZZARD:EnhancedMailButton()
     b:SetScript('OnClick', OnClick)
     b:SetScript('OnHide', OnHide)
 end
-BLIZZARD:RegisterBlizz('EnhancedMailButton', BLIZZARD.EnhancedMailButton)
+
+function EM:SaveRecipient()
+    local mailSaver = CreateFrame('CheckButton', nil, _G.SendMailFrame, 'OptionsCheckButtonTemplate')
+    mailSaver:SetHitRectInsets(0, 0, 0, 0)
+    mailSaver:SetPoint('RIGHT', _G.MailFrame.CloseButton, 'LEFT', -3, 0)
+    mailSaver:SetSize(24, 24)
+    F.ReskinCheck(mailSaver)
+
+    mailSaver:SetChecked(C.DB.General.SaveRecipient)
+    mailSaver:SetScript(
+        'OnClick',
+        function(self)
+            C.DB.General.SaveRecipient = self:GetChecked()
+        end
+    )
+    F.AddTooltip(mailSaver, 'ANCHOR_TOP', L['Save mail recipient'])
+
+    local resetPending
+    hooksecurefunc(
+        'SendMailFrame_SendMail',
+        function()
+            if C.DB.General.SaveRecipient then
+                C.DB.General.RecipientName = _G.SendMailNameEditBox:GetText()
+                resetPending = true
+            else
+                resetPending = nil
+            end
+        end
+    )
+
+    hooksecurefunc(
+        _G.SendMailNameEditBox,
+        'SetText',
+        function(self, text)
+            if resetPending and text == '' then
+                self:SetText(C.DB.General.RecipientName)
+                resetPending = nil
+            end
+        end
+    )
+
+    _G.SendMailFrame:HookScript(
+        'OnShow',
+        function()
+            if C.DB.General.SaveRecipient then
+                _G.SendMailNameEditBox:SetText(C.DB.General.RecipientName)
+            end
+        end
+    )
+end
+
+function EM:OnLogin()
+    EM:CollectButton()
+    EM:SaveRecipient()
+end
