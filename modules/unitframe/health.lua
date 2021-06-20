@@ -134,16 +134,13 @@ end
 -- Prediction
 function UNITFRAME:CreateHealthPrediction(self)
     local trans = C.DB.Unitframe.Transparent
-    -- local colors = C.ClassColors[C.MyClass] or C.ClassColors['PRIEST']
 
     local myBar = CreateFrame('StatusBar', nil, self.Health)
     myBar:SetPoint('TOP')
     myBar:SetPoint('BOTTOM')
     myBar:SetPoint('LEFT', self.Health:GetStatusBarTexture(), trans and 'LEFT' or 'RIGHT')
     myBar:SetStatusBarTexture(C.Assets.statusbar_tex)
-    --myBar:GetStatusBarTexture():SetBlendMode('BLEND')
-    myBar:SetStatusBarColor(.35, .24, .16, .6)
-    -- myBar:SetStatusBarColor(colors.r / 2, colors.g / 2, colors.b / 2, .85)
+    myBar:SetStatusBarColor(.2, .47, .17)
     myBar:SetWidth(self:GetWidth())
 
     local otherBar = CreateFrame('StatusBar', nil, self.Health)
@@ -151,9 +148,7 @@ function UNITFRAME:CreateHealthPrediction(self)
     otherBar:SetPoint('BOTTOM')
     otherBar:SetPoint('LEFT', myBar:GetStatusBarTexture(), trans and 'LEFT' or 'RIGHT')
     otherBar:SetStatusBarTexture(C.Assets.statusbar_tex)
-    --otherBar:GetStatusBarTexture():SetBlendMode('BLEND')
-    otherBar:SetStatusBarColor(.11, .35, .25, .6)
-    -- otherBar:SetStatusBarColor(colors.r / 2, colors.g / 2, colors.b / 2, .85)
+    otherBar:SetStatusBarColor(.46, .45, .22)
     otherBar:SetWidth(self:GetWidth())
 
     local absorbBar = CreateFrame('StatusBar', nil, self.Health)
