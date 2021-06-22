@@ -9,7 +9,6 @@
     <Script file="dressup.lua"/>
     <Script file="errors.lua"/>
     <Script file="fixes.lua"/>
-    <Script file="friends.lua"/>
     <Script file="fonts.lua"/>
     <Script file="loot.lua"/>
     <Script file="mail.lua"/>

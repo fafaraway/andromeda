@@ -8,20 +8,25 @@ local unpack = unpack
 local select = select
 local strsplit = strsplit
 local hooksecurefunc = hooksecurefunc
+local BNET_CLIENT_WOW = BNET_CLIENT_WOW
+local BNET_CLIENT_SC2 = BNET_CLIENT_SC2
+local BNET_CLIENT_D3 = BNET_CLIENT_D3
+local BNET_CLIENT_WTCG = BNET_CLIENT_WTCG
 local BNET_CLIENT_APP = BNET_CLIENT_APP
+local BNET_CLIENT_HEROES = BNET_CLIENT_HEROES
+local BNET_CLIENT_OVERWATCH = BNET_CLIENT_OVERWATCH
 local BNET_CLIENT_CLNT = BNET_CLIENT_CLNT
+local BNET_CLIENT_SC = BNET_CLIENT_SC
 local BNET_CLIENT_COD = BNET_CLIENT_COD
 local BNET_CLIENT_COD_MW = BNET_CLIENT_COD_MW
 local BNET_CLIENT_COD_MW2 = BNET_CLIENT_COD_MW2
 local BNET_CLIENT_COD_BOCW = BNET_CLIENT_COD_BOCW
-local BNET_CLIENT_D3 = BNET_CLIENT_D3
-local BNET_CLIENT_HEROES = BNET_CLIENT_HEROES
-local BNET_CLIENT_OVERWATCH = BNET_CLIENT_OVERWATCH
-local BNET_CLIENT_SC = BNET_CLIENT_SC
-local BNET_CLIENT_SC2 = BNET_CLIENT_SC2
 local BNET_CLIENT_WC3 = BNET_CLIENT_WC3
-local BNET_CLIENT_WOW = BNET_CLIENT_WOW
-local BNET_CLIENT_WTCG = BNET_CLIENT_WTCG
+local BNET_CLIENT_ARCADE = BNET_CLIENT_ARCADE
+local BNET_CLIENT_CRASH4 = BNET_CLIENT_CRASH4
+local BNET_CLIENT_D2 = BNET_CLIENT_D2
+local WOW_PROJECT_CLASSIC = WOW_PROJECT_CLASSIC
+local WOW_PROJECT_CLASSIC_TBC = 5
 local FRIENDS_TEXTURE_AFK = FRIENDS_TEXTURE_AFK
 local FRIENDS_TEXTURE_DND = FRIENDS_TEXTURE_DND
 local FRIENDS_TEXTURE_OFFLINE = FRIENDS_TEXTURE_OFFLINE
@@ -30,11 +35,14 @@ local LOCALIZED_CLASS_NAMES_FEMALE = LOCALIZED_CLASS_NAMES_FEMALE
 local LOCALIZED_CLASS_NAMES_MALE = LOCALIZED_CLASS_NAMES_MALE
 local FRIENDS_BUTTON_TYPE_DIVIDER = FRIENDS_BUTTON_TYPE_DIVIDER
 local FRIENDS_BUTTON_TYPE_BNET = FRIENDS_BUTTON_TYPE_BNET
+local FRIENDS_BUTTON_TYPE_WOW = FRIENDS_BUTTON_TYPE_WOW
 local BNET_FRIEND_TOOLTIP_WOW_CLASSIC = BNET_FRIEND_TOOLTIP_WOW_CLASSIC
 local BNConnected = BNConnected
 local BNet_GetClientTexture = BNet_GetClientTexture
 local GetQuestDifficultyColor = GetQuestDifficultyColor
 local C_BattleNet_GetFriendAccountInfo = C_BattleNet.GetFriendAccountInfo
+local C_FriendList_GetFriendInfoByIndex = C_FriendList.GetFriendInfoByIndex
+local FriendsFrame_Update = FriendsFrame_Update
 
 local F, C = unpack(select(2, ...))
 local EFL = F:RegisterModule('EnhancedFriendsList')
@@ -42,24 +50,26 @@ local EFL = F:RegisterModule('EnhancedFriendsList')
 local mediaPath = 'Interface\\AddOns\\FreeUI\\assets\\textures\\'
 
 local gameIcons = {
-    ['Alliance'] = {Default = BNet_GetClientTexture(BNET_CLIENT_WOW), Modern = mediaPath .. 'game_icons\\Alliance'},
-    ['Horde'] = {Default = BNet_GetClientTexture(BNET_CLIENT_WOW), Modern = mediaPath .. 'game_icons\\Horde'},
-    ['Neutral'] = {Default = BNet_GetClientTexture(BNET_CLIENT_WOW), Modern = mediaPath .. 'game_icons\\WoW'},
-    [BNET_CLIENT_WOW] = {Default = BNet_GetClientTexture(BNET_CLIENT_WOW), Modern = mediaPath .. 'game_icons\\WoWSL'},
-    [BNET_CLIENT_WOW .. 'C'] = {Default = BNet_GetClientTexture(BNET_CLIENT_WOW), Modern = mediaPath .. 'game_icons\\WoW'},
-    [BNET_CLIENT_D3] = {Default = BNet_GetClientTexture(BNET_CLIENT_D3), Modern = mediaPath .. 'game_icons\\D3'},
-    [BNET_CLIENT_WTCG] = {Default = BNet_GetClientTexture(BNET_CLIENT_WTCG), Modern = mediaPath .. 'game_icons\\HS'},
-    [BNET_CLIENT_SC] = {Default = BNet_GetClientTexture(BNET_CLIENT_SC), Modern = mediaPath .. 'game_icons\\SC'},
-    [BNET_CLIENT_SC2] = {Default = BNet_GetClientTexture(BNET_CLIENT_SC2), Modern = mediaPath .. 'game_icons\\SC2'},
-    [BNET_CLIENT_APP] = {Default = BNet_GetClientTexture(BNET_CLIENT_APP), Modern = mediaPath .. 'game_icons\\App'},
-    ['BSAp'] = {Default = BNet_GetClientTexture(BNET_CLIENT_APP), Modern = mediaPath .. 'game_icons\\Mobile'},
-    [BNET_CLIENT_HEROES] = {Default = BNet_GetClientTexture(BNET_CLIENT_HEROES), Modern = mediaPath .. 'game_icons\\HotS'},
-    [BNET_CLIENT_OVERWATCH] = {Default = BNet_GetClientTexture(BNET_CLIENT_OVERWATCH), Modern = mediaPath .. 'game_icons\\OW'},
-    [BNET_CLIENT_COD] = {Default = BNet_GetClientTexture(BNET_CLIENT_COD), Modern = mediaPath .. 'game_icons\\COD'},
-    [BNET_CLIENT_COD_BOCW] = {Default = BNet_GetClientTexture(BNET_CLIENT_COD_BOCW), Modern = mediaPath .. 'game_icons\\COD_CW'},
-    [BNET_CLIENT_COD_MW] = {Default = BNet_GetClientTexture(BNET_CLIENT_COD_MW), Modern = mediaPath .. 'game_icons\\COD_MW'},
-    [BNET_CLIENT_COD_MW2] = {Default = BNet_GetClientTexture(BNET_CLIENT_COD_MW2), Modern = mediaPath .. 'game_icons\\COD_MW2'},
-    [BNET_CLIENT_WC3] = {Default = BNet_GetClientTexture(BNET_CLIENT_WC3), Modern = mediaPath .. 'game_icons\\WC3'},
+    [BNET_CLIENT_WOW] = mediaPath .. 'game_icons\\WoWSL',
+    [BNET_CLIENT_WOW .. 'C'] = mediaPath .. 'game_icons\\WoW',
+    [BNET_CLIENT_WOW .. 'C_TBC'] = mediaPath .. 'game_icons\\WoWC',
+    [BNET_CLIENT_D2] = mediaPath .. 'GameIcons\\D2',
+    [BNET_CLIENT_D3] = mediaPath .. 'game_icons\\D3',
+    [BNET_CLIENT_WTCG] = mediaPath .. 'game_icons\\HS',
+    [BNET_CLIENT_SC] = mediaPath .. 'game_icons\\SC',
+    [BNET_CLIENT_SC2] = mediaPath .. 'game_icons\\SC2',
+    [BNET_CLIENT_APP] = mediaPath .. 'game_icons\\App',
+    ['BSAp'] = mediaPath .. 'game_icons\\Mobile',
+    [BNET_CLIENT_HEROES] = mediaPath .. 'game_icons\\HotS',
+    [BNET_CLIENT_OVERWATCH] = mediaPath .. 'game_icons\\OW',
+    [BNET_CLIENT_COD] = mediaPath .. 'game_icons\\COD',
+    [BNET_CLIENT_COD_BOCW] = mediaPath .. 'game_icons\\COD_CW',
+    [BNET_CLIENT_COD_MW] = mediaPath .. 'game_icons\\COD_MW',
+    [BNET_CLIENT_COD_MW2] = mediaPath .. 'game_icons\\COD_MW2',
+    [BNET_CLIENT_WC3] = mediaPath .. 'game_icons\\WC3',
+    [BNET_CLIENT_CLNT] = BNet_GetClientTexture(BNET_CLIENT_CLNT),
+    [BNET_CLIENT_CRASH4] = mediaPath .. 'game_icons\\CRASH4',
+    [BNET_CLIENT_ARCADE] = BNet_GetClientTexture(BNET_CLIENT_ARCADE)
 }
 
 local statusIcons = {
@@ -69,8 +79,9 @@ local statusIcons = {
     ['AFK'] = FRIENDS_TEXTURE_AFK
 }
 
-local MaxLevel = {
+local maxLevel = {
     [BNET_CLIENT_WOW .. 'C'] = 60,
+    [BNET_CLIENT_WOW .. 'C_TBC'] = 70,
     [BNET_CLIENT_WOW] = C.MaxLevel
 }
 
@@ -88,9 +99,8 @@ local clientColor = {
     [BNET_CLIENT_COD] = {r = 0, g = 0.8, b = 0}, -- 使命召唤
     [BNET_CLIENT_COD_MW] = {r = 0, g = 0.8, b = 0}, -- 使命召唤：现代战争 2
     [BNET_CLIENT_COD_BOCW] = {r = 0, g = 0.8, b = 0}, -- 使命召唤：冷战
-    -- 命运 2 因为已经分家了，不会出现了，下面为自定客户端代码
     [BNET_CLIENT_WOW .. 'C'] = {r = 0.866, g = 0.690, b = 0.180}, -- 魔兽世界怀旧版
-    ['BSAp'] = {r = 0.509, g = 0.772, b = 1}, -- 手机战网 App
+    ['BSAp'] = {r = 0.509, g = 0.772, b = 1} -- 手机战网 App
 }
 
 local function GetClassColor(className)
@@ -115,10 +125,30 @@ local function UpdateFriendButton(button)
         return
     end
 
-    local game, realID, name, server, class, area, level, faction, status
+    local game, realID, name, server, class, area, level, status
 
     -- 获取好友游戏情况
-    if button.buttonType == FRIENDS_BUTTON_TYPE_BNET and BNConnected() then
+    if button.buttonType == FRIENDS_BUTTON_TYPE_WOW then
+        -- 角色游戏好友
+        game = BNET_CLIENT_WOW
+        local friendInfo = C_FriendList_GetFriendInfoByIndex(button.id)
+        name, server = strsplit('-', friendInfo.name) -- 如果是同一个服务器，server 为 nil
+        level = friendInfo.level
+        class = friendInfo.className
+        area = friendInfo.area
+
+        if friendInfo.connected then
+            if friendInfo.afk then
+                status = 'AFK'
+            elseif friendInfo.dnd then
+                status = 'DND'
+            else
+                status = 'Online'
+            end
+        else
+            status = 'Offline'
+        end
+    elseif button.buttonType == FRIENDS_BUTTON_TYPE_BNET and BNConnected() then
         -- 战网好友
         local friendAccountInfo = C_BattleNet_GetFriendAccountInfo(button.id)
         if friendAccountInfo then
@@ -139,18 +169,22 @@ local function UpdateFriendButton(button)
                 status = 'Offline'
             end
 
-            -- 如果是魔兽正式服/怀旧服，进一步获取角色信息
+            -- Fetch version if friend playing WoW
             if game == BNET_CLIENT_WOW then
                 name = gameAccountInfo.characterName or ''
                 level = gameAccountInfo.characterLevel or 0
-                faction = gameAccountInfo.factionName or nil
                 class = gameAccountInfo.className or ''
                 area = gameAccountInfo.areaName or ''
 
-                if gameAccountInfo.wowProjectID == 2 then
-                    game = BNET_CLIENT_WOW .. 'C' -- 标注怀旧服好友
+                if gameAccountInfo.wowProjectID == WOW_PROJECT_CLASSIC then
+                    game = BNET_CLIENT_WOW .. 'C' -- Classic
                     local serverStrings = {strsplit(' - ', gameAccountInfo.richPresence)}
                     server = serverStrings[#serverStrings] or BNET_FRIEND_TOOLTIP_WOW_CLASSIC
+                    server = server .. '*'
+                elseif gameAccountInfo.wowProjectID == WOW_PROJECT_CLASSIC_TBC then
+                    game = BNET_CLIENT_WOW .. 'C_TBC' -- TBC
+                    local serverStrings = {strsplit(' - ', gameAccountInfo.richPresence)}
+                    server = serverStrings[#serverStrings] or BNET_FRIEND_TOOLTIP_WOW_CLASSIC .. ' (' .. _G.CINEMATIC_NAME_2 .. ')'
                     server = server .. '*'
                 else
                     server = gameAccountInfo.realmDisplayName or ''
@@ -176,7 +210,7 @@ local function UpdateFriendButton(button)
             nameString = F:CreateColorString(name, classColor)
         end
 
-        if level and level ~= 0 and MaxLevel[game] and (level ~= MaxLevel[game]) then
+        if level and level ~= 0 and maxLevel[game] and (level ~= maxLevel[game]) then
             nameString = nameString .. F:CreateColorString(' ' .. level, GetQuestDifficultyColor(level))
         end
 
@@ -202,11 +236,10 @@ local function UpdateFriendButton(button)
         end
 
         -- 游戏图标
-        -- local iconGroup = faction or game
-        local iconGroup = game
-        local iconTex = gameIcons[iconGroup]['Modern'] or BNet_GetClientTexture(game)
+        local iconTex = gameIcons[game] or BNet_GetClientTexture(game)
         button.gameIcon:SetTexture(iconTex)
         button.gameIcon:Show() -- 普通角色好友暴雪隐藏了
+        button.gameIcon:SetAlpha(1)
 
         if button.summonButton:IsShown() then
             button.gameIcon:Hide()
@@ -217,7 +250,7 @@ local function UpdateFriendButton(button)
     end
 
     F:SetFS(button.name, C.Assets.Fonts.Bold, 13, nil, nil, nil, true)
-    F:SetFS(button.info, C.Assets.Fonts.Regular, 12, nil, nil, nil, true)
+    F:SetFS(button.info, C.Assets.Fonts.Condensed, 12, nil, nil, nil, true)
 
     if button.Favorite:IsShown() then
         button.Favorite:ClearAllPoints()
@@ -227,4 +260,5 @@ end
 
 function EFL:OnLogin()
     hooksecurefunc('FriendsFrame_UpdateFriendButton', UpdateFriendButton)
+    FriendsFrame_Update()
 end
