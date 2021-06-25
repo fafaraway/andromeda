@@ -85,6 +85,7 @@ L['DK runes timer'] = true
 L['Daily/Weekly'] = true
 L['Daily/weekly infomation'] = true
 L['Damage meter filter'] = true
+L['Death'] = true
 L['Debuff Frame'] = true
 L['Debuff reverse growth'] = true
 L['Decimal timer'] = true

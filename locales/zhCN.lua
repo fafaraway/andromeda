@@ -551,6 +551,7 @@ L['Portal'] = '传送门'
 L['Toy'] = '玩具'
 L['Quest progress'] = '任务进度'
 L['Instance reset'] = '副本重置'
+L['Death'] = '死亡'
 
 L['Enable Map'] = '启用地图模块'
 L['Remove map fog'] = '清除世界地图迷雾'

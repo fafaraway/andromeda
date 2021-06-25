@@ -1010,6 +1010,7 @@ C.CharacterSettings = {
         Stolen = true,
         Reflect = true,
         BattleRez = true,
+        Death = true,
 
         Feast = true,
         Cauldron = true,

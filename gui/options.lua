@@ -316,6 +316,7 @@ GUI.OptionsList = {
         {1, 'Announcement', 'Stolen', L['Steal']},
         {1, 'Announcement', 'Reflect', L['Reflect'], true},
         {1, 'Announcement', 'BattleRez', L['Battle resurrection']},
+        {1, 'Announcement', 'Death', L['Death'], true},
         {1, 'Announcement', 'Feast', L['Feast']},
         {1, 'Announcement', 'Cauldron', L['Cauldron'], true},
         {1, 'Announcement', 'RefreshmentTable', L['Refreshment table']},

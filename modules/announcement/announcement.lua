@@ -18,6 +18,7 @@ local IsInInstance = IsInInstance
 local InCombatLockdown = InCombatLockdown
 local GetNumGroupMembers = GetNumGroupMembers
 local GetSpellInfo = GetSpellInfo
+local UnitIsFeignDeath = UnitIsFeignDeath
 
 local F, C, L = unpack(select(2, ...))
 local ANNOUNCEMENT = F:RegisterModule('Announcement')
@@ -49,10 +50,6 @@ function ANNOUNCEMENT:GetChannel(warning)
     elseif C.DB.Announcement.Channel == 4 then
         return 'SAY'
     end
-end
-
-function ANNOUNCEMENT:Announce(msg, channel)
-    SendChatMessage(msg, channel)
 end
 
 local feastsList = {
@@ -169,6 +166,7 @@ function ANNOUNCEMENT:OnEvent()
     end
 
     local _, eventType, _, srcGUID, srcName, srcFlags, _, destGUID, destName, _, _, spellID, _, _, extraSpellID = CombatLogGetCurrentEventInfo()
+    --    1  2          3  4        5        6         7  8         9         10 11 12       13 14 15
 
     if srcName then
         srcName = srcName:gsub('%-[^|]+', '')
@@ -180,20 +178,20 @@ function ANNOUNCEMENT:OnEvent()
 
     if eventType == 'SPELL_INTERRUPT' and C.DB.Announcement.Interrupt then
         if srcGUID == UnitGUID('player') or srcGUID == UnitGUID('pet') then
-            ANNOUNCEMENT:Announce(format(L['Interrupt %s → %s'], GetSpellLink(extraSpellID), destName), 'SAY')
+            SendChatMessage(format(L['Interrupted %s → %s'], GetSpellLink(extraSpellID), destName), 'SAY')
         end
     elseif eventType == 'SPELL_DISPEL' and C.DB.Announcement.Dispel then
         if srcGUID == UnitGUID('player') or srcGUID == UnitGUID('pet') then
-            ANNOUNCEMENT:Announce(format(L['Dispelled %s → %s'], GetSpellLink(extraSpellID), destName), 'SAY')
+            SendChatMessage(format(L['Dispelled %s → %s'], GetSpellLink(extraSpellID), destName), 'SAY')
         end
     elseif eventType == 'SPELL_STOLEN' and C.DB.Announcement.Stolen then
         if srcGUID == UnitGUID('player') then
-            ANNOUNCEMENT:Announce(format(L['Stolen %s → %s'], GetSpellLink(extraSpellID), destName), 'SAY')
+            SendChatMessage(format(L['Stolen %s → %s'], GetSpellLink(extraSpellID), destName), 'SAY')
         end
     elseif eventType == 'SPELL_MISSED' and C.DB.Announcement.Reflect then
         local missType, _, _ = select(15, CombatLogGetCurrentEventInfo())
         if missType == 'REFLECT' and destGUID == UnitGUID('player') then
-            ANNOUNCEMENT:Announce(format(L['Reflected %s → %s'], GetSpellLink(spellID), srcName), 'SAY')
+            SendChatMessage(format(L['Reflected %s → %s'], GetSpellLink(spellID), srcName), 'SAY')
         end
     end
 
@@ -205,9 +203,9 @@ function ANNOUNCEMENT:OnEvent()
 
             if C.DB.Announcement.BattleRez and rezList[spellID] then
                 if destName == nil then
-                    ANNOUNCEMENT:Announce(format(L['%s has casted %s'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel())
+                    SendChatMessage(format(L['%s has casted %s'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel())
                 else
-                    ANNOUNCEMENT:Announce(format(L['%s has casted %s → %s'], srcName, GetSpellLink(spellID), destName), ANNOUNCEMENT:GetChannel())
+                    SendChatMessage(format(L['%s has casted %s → %s'], srcName, GetSpellLink(spellID), destName), ANNOUNCEMENT:GetChannel())
                 end
             end
         else
@@ -217,19 +215,23 @@ function ANNOUNCEMENT:OnEvent()
 
             if rezList[spellID] and C.DB.Announcement.BattleRez then
                 if destName == nil then
-                    ANNOUNCEMENT:Announce(format(L['I have casted %s'], GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel())
+                    SendChatMessage(format(L['I have casted %s'], GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel())
                 else
-                    ANNOUNCEMENT:Announce(format(L['I have casted %s → %s'], GetSpellLink(spellID), destName), ANNOUNCEMENT:GetChannel())
+                    SendChatMessage(format(L['I have casted %s → %s'], GetSpellLink(spellID), destName), ANNOUNCEMENT:GetChannel())
                 end
             end
 
             if ANNOUNCEMENT.AnnounceableSpellsList[spellID] and C.DB.Announcement.PersonalMajorSpell then
                 if destName == nil then
-                    ANNOUNCEMENT:Announce(format(L['I have casted %s'], GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel())
+                    SendChatMessage(format(L['I have casted %s'], GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel())
                 else
-                    ANNOUNCEMENT:Announce(format(L['I have casted %s → %s'], GetSpellLink(spellID), destName), ANNOUNCEMENT:GetChannel())
+                    SendChatMessage(format(L['I have casted %s → %s'], GetSpellLink(spellID), destName), ANNOUNCEMENT:GetChannel())
                 end
             end
+        end
+    elseif eventType == 'UNIT_DIED' then
+        if C.DB.Announcement.Death and not UnitIsFeignDeath(destName) then
+            SendChatMessage(format('%s died', destName), ANNOUNCEMENT:GetChannel())
         end
     end
 
@@ -248,16 +250,16 @@ function ANNOUNCEMENT:OnEvent()
     if eventType == 'SPELL_CAST_SUCCESS' then
         -- Feasts and Cauldron
         if (C.DB.Announcement.Feast and feastsList[spellID]) or (C.DB.Announcement.Cauldron and cauldronList[spellID]) then
+            -- Refreshment Table
             SendChatMessage(format(L['%s has prepared %s.'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
-        -- Refreshment Table
         elseif C.DB.Announcement.RefreshmentTable and spellID == 43987 then
+            -- Ritual of Summoning
             SendChatMessage(format(L['%s has prepared %s.'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
-        -- Ritual of Summoning
         elseif C.DB.Announcement.RitualofSummoning and spellID == 698 then
+            -- Piccolo of the Flaming Fire
             SendChatMessage(format(L['%s is casting %s. Click!'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
-        -- Piccolo of the Flaming Fire
         elseif C.DB.Announcement.Toy and spellID == 182346 then
-            SendChatMessage(format(L['%s used %s.'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
+            SendChatMessage(format(L['%s has put down %s.'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
         end
     elseif eventType == 'SPELL_SUMMON' then
         -- Repair Bots and Codex
@@ -271,7 +273,7 @@ function ANNOUNCEMENT:OnEvent()
         elseif C.DB.Announcement.Toy and toysList[spellID] then -- Toys
             SendChatMessage(format(L['%s has put down %s.'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
         elseif C.DB.Announcement.Portal and portalsList[spellID] then -- Portals
-            SendChatMessage(format(L['%s is casting %s.'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
+            SendChatMessage(format(L['%s has opened %s.'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
         end
     elseif eventType == 'SPELL_AURA_APPLIED' then
         -- Turkey Feathers and Party G.R.E.N.A.D.E.
