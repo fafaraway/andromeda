@@ -2,7 +2,6 @@ local _G = _G
 local unpack = unpack
 local select = select
 local format = format
-local wipe = wipe
 local Ambiguate = Ambiguate
 local GetAutoCompleteRealms = GetAutoCompleteRealms
 local GetMoney = GetMoney
