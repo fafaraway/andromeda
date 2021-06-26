@@ -16,7 +16,7 @@ local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
 local GetAddOnMetadata = GetAddOnMetadata
 
 _G.BINDING_HEADER_FREEUI = GetAddOnMetadata(..., 'Title')
-_G.BINDING_NAME_TOGGLE_FREEUI_GUI = 'Toggle FreeUI Config Panel'
+_G.BINDING_NAME_FREEUI_TOGGLE_GUI = 'Toggle GUI'
 
 local _, ns = ...
 

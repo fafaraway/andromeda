@@ -1,6 +1,6 @@
 <Bindings>
 
-    <Binding name='TOGGLE_FREEUI_GUI' category='ADDONS' header='FREEUI'>
+    <Binding name='FREEUI_TOGGLE_GUI' category='BINDING_HEADER_FREEUI' header='FREEUI'>
         FreeUI[1].ToggleGUI()
     </Binding>
 
