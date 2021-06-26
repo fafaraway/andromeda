@@ -230,6 +230,10 @@ function ANNOUNCEMENT:OnEvent()
             end
         end
     elseif eventType == 'UNIT_DIED' then
+        if not ANNOUNCEMENT:IsInMyGroup(srcFlags) then
+            return
+        end
+
         if C.DB.Announcement.Death and not UnitIsFeignDeath(destName) then
             SendChatMessage(format('%s died', destName), ANNOUNCEMENT:GetChannel())
         end
