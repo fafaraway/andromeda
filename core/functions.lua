@@ -78,14 +78,14 @@ do
         return false
     end
 
-    function F:Print(...)
-        _G.DEFAULT_CHAT_FRAME:AddMessage(C.AddonName .. C.GreyColor .. ':|r ' .. format(...))
+    function F:Print(str, ...)
+        print(C.GreyColor .. '<|r' .. C.AddonName.. C.GreyColor .. '>|r ' .. str:format(...))
     end
 
-    function F:Debug(...)
+    function F:Debug(str, ...)
         if not C.IsDeveloper then return end
 
-        _G.DEFAULT_CHAT_FRAME:AddMessage('Debug: ' .. format(...))
+        print(C.GreyColor .. '<|r' .. C.RedColor .. 'Debug|r' .. C.GreyColor .. '>|r ' .. str:format(...))
     end
 
     function F:ThrowError(err, msg)
@@ -639,19 +639,11 @@ do
         _G.GameTooltip:SetOwner(self, self.anchor, 0, 4)
         _G.GameTooltip:ClearLines()
 
-        local r, g, b = 1, .8, 0
         if self.title then
-            if self.titleColor == 'CLASS' then
-                r, g, b = C.r, C.g, C.b
-            elseif self.titleColor == 'SYSTEM' then
-                r, g, b = 1, .8, 0
-            elseif self.titleColor == 'BLUE' then
-                r, g, b = .6, .8, 1
-            elseif self.titleColor == 'RED' then
-                r, g, b = .9, .3, .3
-            end
-            _G.GameTooltip:AddLine(self.title, r, g, b, 1)
+            _G.GameTooltip:AddLine(self.title)
         end
+
+        local r, g, b
 
         if tonumber(self.text) then
             _G.GameTooltip:SetSpellByID(self.text)
@@ -665,17 +657,22 @@ do
             elseif self.color == 'RED' then
                 r, g, b = .9, .3, .3
             end
+
+            if self.blankLine then
+                _G.GameTooltip:AddLine(' ')
+            end
+
             _G.GameTooltip:AddLine(self.text, r, g, b, 1)
         end
 
         _G.GameTooltip:Show()
     end
 
-    function F:AddTooltip(anchor, text, color, titleColor)
+    function F:AddTooltip(anchor, text, color, blankLine)
         self.anchor = anchor
         self.text = text
         self.color = color
-        self.titleColor = titleColor
+        self.blankLine = blankLine
         self:HookScript('OnEnter', Tooltip_OnEnter)
         self:HookScript('OnLeave', F.HideTooltip)
     end
