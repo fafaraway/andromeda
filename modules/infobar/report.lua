@@ -196,7 +196,7 @@ local function Button_OnEnter(self)
 
     for _, v in pairs(questlist) do
         if v.name and IsQuestFlaggedCompleted(v.id) then
-            if v.name == L['INFOBAR_TIMEWARPED'] and isTimeWalker and CheckTexture(v.texture) or v.name ~= L['Timewarped'] then
+            if v.name == L['Timewarped'] and isTimeWalker and CheckTexture(v.texture) or v.name ~= L['Timewarped'] then
                 AddTitle(_G.QUESTS_LABEL)
                 _G.GameTooltip:AddDoubleLine(v.name, _G.QUEST_COMPLETE, 1, 1, 1, 0, 1, 0)
             end

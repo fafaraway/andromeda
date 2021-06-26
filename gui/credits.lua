@@ -32,9 +32,9 @@ function GUI:CreateCreditsFrame(parent)
     local clr = F.SetGradient(credit, 'H', .7, .7, .7, .5, 0, 160, C.Mult)
     clr:SetPoint('TOP', 80, -32)
 
-    F.CreateFS(credit, C.Assets.Fonts.Header, 22, nil, L['Haleth, siweia'], 'BLUE', true, 'TOP', 0, -50)
-    F.CreateFS(credit, C.Assets.Fonts.Condensed, 16, nil, L['Alza, Tukz, Gethe, Elv|nHaste, Lightspark, Zork, Allez|nAlleyKat, Caellian, p3lim, Shantalya|ntekkub, Tuller, Wildbreath, aduth|nsilverwind, Nibelheim, humfras, aliluya555|nPaojy, Rubgrsch, EKE, fang2hou|nlilbitz95, Djamy, Hacktivist'], 'GREEN', true, 'TOP', 0, -90)
-    F.CreateFS(credit, C.Assets.Fonts.Regular, 14, nil, L['NDui, ShestakUI, RealUI, ElvUI, ElvUI_WindTools'], 'GREY', true, 'TOP', 0, -220)
+    F.CreateFS(credit, C.Assets.Fonts.Header, 22, nil, 'Haleth, siweia', 'BLUE', true, 'TOP', 0, -50)
+    F.CreateFS(credit, C.Assets.Fonts.Condensed, 16, nil, 'Alza, Tukz, Gethe, Elv|nHaste, Lightspark, Zork, Allez|nAlleyKat, Caellian, p3lim, Shantalya|ntekkub, Tuller, Wildbreath, aduth|nsilverwind, Nibelheim, humfras, aliluya555|nPaojy, Rubgrsch, EKE, fang2hou|nlilbitz95, Djamy, Hacktivist', 'GREEN', true, 'TOP', 0, -90)
+    F.CreateFS(credit, C.Assets.Fonts.Regular, 14, nil, 'NDui, ShestakUI, RealUI, ElvUI, ElvUI_WindTools', 'GREY', true, 'TOP', 0, -220)
 
     local feedback = CreateFrame('Frame', nil, parent)
     feedback:SetSize(360, 200)
