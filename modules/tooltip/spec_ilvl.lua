@@ -295,7 +295,7 @@ function TOOLTIP:InspectUnit(unit, forced)
     end
 end
 
-function TOOLTIP:InspectUnitSpecAndLevel()
+function TOOLTIP:InspectUnitSpecAndLevel(unit)
     if not C.DB.Tooltip.SpecIlvl then
         return
     end
@@ -303,7 +303,6 @@ function TOOLTIP:InspectUnitSpecAndLevel()
         return
     end
 
-    local _, unit = self:GetUnit()
     if not unit or not CanInspect(unit) then
         return
     end

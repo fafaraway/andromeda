@@ -212,11 +212,11 @@ function TOOLTIP:OnTooltipSetUnit()
         else
             self.StatusBar:Hide()
         end
+
+        TOOLTIP.InspectUnitSpecAndLevel(self, unit)
     else
         self.StatusBar:SetStatusBarColor(0, .9, 0)
     end
-
-    TOOLTIP.InspectUnitSpecAndLevel(self)
 end
 
 function TOOLTIP:OnTooltipCleared()

@@ -170,6 +170,7 @@ function TOOLTIP:ExtraInfo()
 
     -- Items
     _G.GameTooltip:HookScript('OnTooltipSetItem', TOOLTIP.SetItemID)
+    _G.GameTooltipTooltip:HookScript('OnTooltipSetItem', TOOLTIP.SetItemID)
     _G.ItemRefTooltip:HookScript('OnTooltipSetItem', TOOLTIP.SetItemID)
     _G.ShoppingTooltip1:HookScript('OnTooltipSetItem', TOOLTIP.SetItemID)
     _G.ShoppingTooltip2:HookScript('OnTooltipSetItem', TOOLTIP.SetItemID)
