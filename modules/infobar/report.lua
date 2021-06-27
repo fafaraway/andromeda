@@ -68,7 +68,6 @@ local questlist = {
     {name = L['Timewarped Badge Reward'], id = 40173, texture = 1129686}, -- WotLK
     {name = L['Timewarped Badge Reward'], id = 40786, texture = 1304688}, -- Cata
     {name = L['Timewarped Badge Reward'], id = 45799, texture = 1530590}, -- MoP
-    {name = 'The Grand Executor', id = 57688} -- 大执行官
 }
 
 -- Torghast

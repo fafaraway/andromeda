@@ -92,7 +92,7 @@ end
 function EM:SaveRecipient()
     local mailSaver = CreateFrame('CheckButton', nil, _G.SendMailFrame, 'OptionsCheckButtonTemplate')
     mailSaver:SetHitRectInsets(0, 0, 0, 0)
-    mailSaver:SetPoint('RIGHT', _G.MailFrame.CloseButton, 'LEFT', -3, 0)
+    mailSaver:SetPoint('LEFT', _G.SendMailNameEditBox, 'RIGHT')
     mailSaver:SetSize(24, 24)
     F.ReskinCheck(mailSaver)
 

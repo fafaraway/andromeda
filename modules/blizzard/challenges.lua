@@ -23,8 +23,6 @@ local CHALLENGE_MODE_GUILD_BEST_LINE = CHALLENGE_MODE_GUILD_BEST_LINE
 local CHALLENGE_MODE_GUILD_BEST_LINE_YOU = CHALLENGE_MODE_GUILD_BEST_LINE_YOU
 local WEEKLY_REWARDS_MYTHIC_TOP_RUNS = WEEKLY_REWARDS_MYTHIC_TOP_RUNS
 local LE_ITEM_QUALITY_EPIC = LE_ITEM_QUALITY_EPIC
-local GUILD = GUILD
-local GREAT_VAULT_REWARDS = GREAT_VAULT_REWARDS
 
 local F, C, L = unpack(select(2, ...))
 local BLIZZARD = F:GetModule('Blizzard')
@@ -55,7 +53,7 @@ function BLIZZARD:GuildBest_Create()
     frame:SetPoint('BOTTOMRIGHT', -8, 75)
     frame:SetSize(170, 105)
     F.CreateBD(frame, .3)
-    F.CreateFS(frame, C.Assets.Fonts.Regular, 14, true, GUILD, nil, nil, 'TOPLEFT', 16, -6)
+    F.CreateFS(frame, C.Assets.Fonts.Regular, 14, true, _G.GUILD, nil, nil, 'TOPLEFT', 16, -6)
 
     frame.entries = {}
     for i = 1, 4 do
@@ -122,6 +120,10 @@ function BLIZZARD:GuildBest_Update()
         frame:SetPoint('BOTTOMLEFT', scheduel, 'TOPLEFT', 0, 10)
 
         self.WeeklyInfo.Child.ThisWeekLabel:SetPoint('TOP', -135, -25)
+        if C.IsNewPatch then
+            self.WeeklyInfo.Child.DungeonScoreInfo:SetPoint('TOP', -140, -210)
+        end
+
         local affix = self.WeeklyInfo.Child.Affixes[1]
         if affix then
             affix:ClearAllPoints()
@@ -183,34 +185,40 @@ function BLIZZARD:KeystoneInfo_Create()
     button:SetSize(35, 35)
     F.PixelIcon(button, texture, true)
     button.bg:SetBackdropBorderColor(iconColor.r, iconColor.g, iconColor.b)
-    button:SetScript('OnEnter', function(self)
-        _G.GameTooltip:ClearLines()
-        _G.GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
-        _G.GameTooltip:AddLine(L['Account Keystones'])
-        for name, info in pairs(_G.FREE_ADB.KeystoneInfo) do
-            local name = Ambiguate(name, 'none')
-            local mapID, level, class, faction = strsplit(':', info)
-            local color = F:RGBToHex(F:ClassColor(class))
-            local factionColor = faction == 'Horde' and '|cffff5040' or '|cff00adf0'
-            local dungeon = C_ChallengeMode_GetMapUIInfo(tonumber(mapID))
-            _G.GameTooltip:AddDoubleLine(format(color .. '%s:|r', name), format('%s%s(%s)|r', factionColor, dungeon, level))
-        end
-        _G.GameTooltip:AddDoubleLine(' ', C.LineString)
-        _G.GameTooltip:AddDoubleLine(' ', C.Assets.mouse_left .. GREAT_VAULT_REWARDS .. ' ', 1, 1, 1, .6, .8, 1)
-        _G.GameTooltip:AddDoubleLine(' ', C.Assets.mouse_middle .. L['Delete keystones info'] .. ' ', 1, 1, 1, .6, .8, 1)
-        _G.GameTooltip:Show()
-    end)
-    button:SetScript('OnLeave', F.HideTooltip)
-    button:SetScript('OnMouseUp', function(_, btn)
-        if btn == 'LeftButton' then
-            if not _G.WeeklyRewardsFrame then
-                WeeklyRewards_LoadUI()
+    button:SetScript(
+        'OnEnter',
+        function(self)
+            _G.GameTooltip:ClearLines()
+            _G.GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
+            _G.GameTooltip:AddLine(L['Account Keystones'])
+            for name, info in pairs(_G.FREE_ADB.KeystoneInfo) do
+                local name = Ambiguate(name, 'none')
+                local mapID, level, class, faction = strsplit(':', info)
+                local color = F:RGBToHex(F:ClassColor(class))
+                local factionColor = faction == 'Horde' and '|cffff5040' or '|cff00adf0'
+                local dungeon = C_ChallengeMode_GetMapUIInfo(tonumber(mapID))
+                _G.GameTooltip:AddDoubleLine(format(color .. '%s:|r', name), format('%s%s(%s)|r', factionColor, dungeon, level))
             end
-            F:TogglePanel(_G.WeeklyRewardsFrame)
-        elseif btn == 'MiddleButton' then
-            wipe(_G.FREE_ADB.KeystoneInfo)
+            _G.GameTooltip:AddDoubleLine(' ', C.LineString)
+            _G.GameTooltip:AddDoubleLine(' ', C.Assets.mouse_left .. _G.GREAT_VAULT_REWARDS .. ' ', 1, 1, 1, .6, .8, 1)
+            _G.GameTooltip:AddDoubleLine(' ', C.Assets.mouse_middle .. L['Delete keystones info'] .. ' ', 1, 1, 1, .6, .8, 1)
+            _G.GameTooltip:Show()
         end
-    end)
+    )
+    button:SetScript('OnLeave', F.HideTooltip)
+    button:SetScript(
+        'OnMouseUp',
+        function(_, btn)
+            if btn == 'LeftButton' then
+                if not _G.WeeklyRewardsFrame then
+                    WeeklyRewards_LoadUI()
+                end
+                F:TogglePanel(_G.WeeklyRewardsFrame)
+            elseif btn == 'MiddleButton' then
+                wipe(_G.FREE_ADB.KeystoneInfo)
+            end
+        end
+    )
 end
 
 function BLIZZARD:KeystoneInfo_UpdateBag()
