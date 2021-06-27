@@ -190,7 +190,7 @@ end
 GUI.OptionsList = {
     [1] = { -- general
         {1, 'General', 'CursorTrail', L['Cursor trail']},
-        {1, 'General', 'Vignette', L['Vignette'], nil, nil, nil, L['|nAdd shadowed overlay to screen corner.']},
+        {1, 'General', 'Vignette', L['Vignette'], nil, nil, nil, L['Add shadowed overlay to screen corner.']},
         {3, 'General', 'VignetteAlpha', L['Vignette Alpha'], true, {0, 1, .1}},
         {1, 'ACCOUNT', 'UseCustomClassColor', L['Custom class color'], nil, SetupCustomClassColor},
         {1, 'ACCOUNT', 'FontOutline', L['Font outline'], nil, nil, nil, L['|nAdd font outline globally, enable this if you run game on low resolution.']},

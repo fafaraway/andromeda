@@ -594,3 +594,13 @@ L['Filter items'] = '物品分类存放'
 L['Equipement Set'] = '装备配置方案'
 
 L['Save mail recipient'] = '保存收件人名字'
+
+L['Interrupted %s -> %s'] = '已打断 %s → %s'
+L['Dispelled %s -> %s'] = '已驱散 %s → %s'
+L['Stolen %s -> %s'] = '已偷取 %s → %s'
+L['Reflected %s -> %s'] = '已反射 %s → %s'
+L['%s used %s'] = '%s 使用了 %s'
+L['%s used %s -> %s'] = '%s 使用了 → %s'
+L['%s is casting %s.'] = '%s 正在施放 %s.'
+L['%s has put down %s.'] = '%s 放出了 %s.'
+L['%s has opened %s.'] = '%s 开启了 %s.'
