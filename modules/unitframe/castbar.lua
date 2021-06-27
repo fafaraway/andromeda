@@ -448,7 +448,7 @@ function UNITFRAME:CreateCastBar(self)
     if style == 'player' then
         local safeZone = castbar:CreateTexture(nil, 'OVERLAY')
         safeZone:SetTexture(C.Assets.statusbar_tex)
-        safeZone:SetVertexColor(.87, .25, .42, .6)
+        safeZone:SetVertexColor(.87, .25, .42)
         safeZone:SetPoint('TOPRIGHT')
         safeZone:SetPoint('BOTTOMRIGHT')
         castbar.SafeZone = safeZone
