@@ -1,12 +1,9 @@
 local _G = _G
 local unpack = unpack
 local select = select
-local wipe = wipe
-local CreateFrame = CreateFrame
 local C_EncounterJournal_GetSectionInfo = C_EncounterJournal.GetSectionInfo
 
 local F, C = unpack(select(2, ...))
-local GUI = F:RegisterModule('GUI')
 
 C.ReminderBuffsList = {
     ITEMS = {
@@ -834,6 +831,12 @@ C.AuraWhiteList = {
     [327812] = true, -- 晋升高塔，振奋英气
     [339917] = true, -- 晋升高塔，命运之矛
     [323149] = true, -- 仙林，黑暗之拥
+    [355147] = true, -- 集市，鱼群鼓舞
+    [355057] = true, -- 集市，鱼人战吼
+    [351088] = true, -- 集市，圣物联结
+    [355640] = true, -- 集市，重装方阵
+    [355783] = true, -- 集市，力量增幅
+    [347840] = true, -- 集市，野性
     -- Raids
     [334695] = true, -- 动荡能量，猎手
     [345902] = true, -- 破裂的联结，猎手
@@ -870,6 +873,7 @@ C.NPSpecialUnitsList = {
     [164464] = true, -- 伤逝剧场，卑劣的席拉
     [165251] = true, -- 仙林，幻影仙狐
     [171341] = true, -- 彼界，幼鹤
+    [175576] = true, -- 集市，监禁
     -- Raids
     [GetSectionInfo(21953)] = true, -- 凯子，灵能灌注者
     [175992] = true, -- 猩红议会，忠实的侍从
@@ -881,6 +885,7 @@ C.NPShowPowerUnitsList = {
 }
 
 C.NPMajorSpellsList = {
+    [358967] = true, -- S2，地狱烈火
     [334664] = true, -- 彼界，惊恐嚎哭
     [332612] = true, -- 彼界，治疗波
     [332706] = true, -- 彼界，治疗
@@ -1348,7 +1353,7 @@ C.CharacterSettings = {
         DamageMeterFilter = true,
         SpamFilter = true,
         Matches = 1,
-        IgnoreFriends = true,
+        BlockSpammer = false,
         BlockStrangerWhisper = false,
         BlockAddonSpam = true,
         GroupLootFilter = true,
@@ -1468,74 +1473,3 @@ C.AccountSettings = {
         PALADIN = {b = 0.4588235294117647, colorStr = 'ffff7675', g = 0.4627450980392157, r = 1},
     },
 }
-
-local function InitializeSettings(source, target, fullClean)
-    for i, j in pairs(source) do
-        if type(j) == 'table' then
-            if target[i] == nil then
-                target[i] = {}
-            end
-            for k, v in pairs(j) do
-                if target[i][k] == nil then
-                    target[i][k] = v
-                end
-            end
-        else
-            if target[i] == nil then
-                target[i] = j
-            end
-        end
-    end
-
-    for i, j in pairs(target) do
-        if source[i] == nil then
-            target[i] = nil
-        end
-        if fullClean and type(j) == 'table' then
-            for k, v in pairs(j) do
-                if type(v) ~= 'table' and source[i] and source[i][k] == nil then
-                    target[i][k] = nil
-                end
-            end
-        end
-    end
-end
-
-local loader = CreateFrame('Frame')
-loader:RegisterEvent('ADDON_LOADED')
-loader:SetScript('OnEvent', function(self, _, addon)
-    if addon ~= 'FreeUI' then
-        return
-    end
-
-    InitializeSettings(C.AccountSettings, _G.FREE_ADB)
-    if not next(_G.FREE_PDB) then
-        for i = 1, 5 do
-            _G.FREE_PDB[i] = {}
-        end
-    end
-
-    if not _G.FREE_ADB['ProfileIndex'][C.MyFullName] then
-        _G.FREE_ADB['ProfileIndex'][C.MyFullName] = 1
-    end
-
-    if _G.FREE_ADB['ProfileIndex'][C.MyFullName] == 1 then
-        C.DB = _G.FREE_DB
-        if not C.DB['ShadowLands'] then
-            wipe(C.DB)
-            C.DB['ShadowLands'] = true
-        end
-    else
-        C.DB = _G.FREE_PDB[_G.FREE_ADB['ProfileIndex'][C.MyFullName] - 1]
-    end
-    InitializeSettings(C.CharacterSettings, C.DB, true)
-
-    F:SetupUIScale(true)
-
-    if not GUI.TexturesList[_G.FREE_ADB.TextureStyle] then
-        _G.FREE_ADB.TextureStyle = 1 -- reset value if not exists
-    end
-    C.Assets.statusbar_tex = GUI.TexturesList[_G.FREE_ADB.TextureStyle].texture
-
-    self:UnregisterAllEvents()
-end)
