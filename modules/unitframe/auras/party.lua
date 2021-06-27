@@ -8,7 +8,10 @@ local SEASON_SPELLS = {
     [209858] = 2, -- 死疽
     [240443] = 2, -- 爆裂
     [240559] = 2, -- 重伤
-    [342494] = 2, -- 狂妄吹嘘
+    [342494] = 2, -- 狂妄吹嘘，S1
+    [355732] = 2, -- 融化灵魂
+    [356667] = 2, -- 刺骨之寒
+    [356925] = 2, -- 屠戮
 }
 
 local function RegisterSeasonSpells(INSTANCE)
@@ -20,6 +23,26 @@ end
 if C.IsNewPatch then
     INSTANCE = 1194 -- 塔扎维什，帷纱集市
     RegisterSeasonSpells(INSTANCE)
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 356011) -- 光线切分者
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 347949, 6) -- 审讯
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 345770) -- 扣押违禁品
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 355915) -- 约束雕文
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 346962) -- 现金汇款
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 349627) -- 暴食
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 347481) -- 奥能手里波
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 350804) -- 坍缩能量
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 350885) -- 超光速震荡
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 351101) -- 能量碎片
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 350013) -- 暴食盛宴
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 355641) -- 闪烁
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 355451) -- 逆流
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 351956) -- 高价值目标
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 346297) -- 动荡爆炸
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 347728) -- 群殴
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 356408) -- 大地践踏
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 347744) -- 迅斩
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 350134) -- 永恒吐息
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 355465) -- 投掷巨石
 end
 
 INSTANCE = 1187 -- 伤逝剧场
