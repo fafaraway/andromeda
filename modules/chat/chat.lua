@@ -484,14 +484,26 @@ function CHAT:PlayWhisperSound(event)
 
     local currentTime = GetTime()
     if event == 'CHAT_MSG_WHISPER' then
+        if CHAT.MuteThisTime then
+            CHAT.MuteThisTime = nil
+            return
+        end
+
         if not self.soundTimer or currentTime > self.soundTimer then
             PlaySoundFile(C.Assets.Sounds.Whisper, 'Master')
         end
+
         self.soundTimer = currentTime + C.DB.Chat.SoundThreshold
     elseif event == 'CHAT_MSG_BN_WHISPER' then
+        if CHAT.MuteThisTime then
+            CHAT.MuteThisTime = nil
+            return
+        end
+
         if not self.soundTimer or currentTime > self.soundTimer then
             PlaySoundFile(C.Assets.Sounds.WhisperBattleNet, 'Master')
         end
+
         self.soundTimer = currentTime + C.DB.Chat.SoundThreshold
     end
 end
@@ -664,7 +676,7 @@ function CHAT:OnLogin()
 
     hooksecurefunc('FCFTab_UpdateColors', CHAT.UpdateTabColors)
     hooksecurefunc('FloatingChatFrame_OnEvent', CHAT.UpdateTabEventColors)
-    hooksecurefunc('ChatFrame_ConfigEventHandler', CHAT.PlayWhisperSound)
+    hooksecurefunc('ChatFrame_MessageEventHandler', CHAT.PlayWhisperSound)
     hooksecurefunc('ChatEdit_CustomTabPressed', CHAT.UpdateTabChannelSwitch)
     hooksecurefunc('SetItemRef', CHAT.AltClickToInvite)
 

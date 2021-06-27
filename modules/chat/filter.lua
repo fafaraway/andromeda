@@ -29,9 +29,7 @@ local F, C = unpack(select(2, ...))
 local CHAT = F:GetModule('Chat')
 
 -- Filter Chat symbols
--- LuaFormatter off
 local msgSymbols = {'`', '～', '＠', '＃', '^', '＊', '！', '？', '。', '|', ' ', '—', '——', '￥', '’', '‘', '“', '”', '【', '】', '『', '』', '《', '》', '〈', '〉', '（', '）', '〔', '〕', '、', '，', '：', ',', '_', '/', '~'}
--- LuaFormatter on
 
 local FilterList = {}
 function CHAT:UpdateFilterList()
@@ -68,17 +66,17 @@ local chatLines, prevLineID, filterResult = {}, 0, false
 function CHAT:GetFilterResult(event, msg, name, flag, guid)
     if name == C.MyName or (event == 'CHAT_MSG_WHISPER' and flag == 'GM') or flag == 'DEV' then
         return
-    elseif guid and C.DB.Chat.IgnoreFriends and
-        (IsGuildMember(guid) or C_BattleNet_GetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) or
-            IsGUIDInGroup(guid)) then
+    elseif guid and (IsGuildMember(guid) or C_BattleNet_GetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) or IsGUIDInGroup(guid)) then
         return
     end
 
+    -- Block strangers
     if C.DB.Chat.BlockStrangerWhisper and event == 'CHAT_MSG_WHISPER' then
+        CHAT.MuteThisTime = true
         return true
     end
 
-    if C.BadBoys[name] and C.BadBoys[name] >= 5 then
+    if C.DB.Chat.BlockSpammer and C.BadBoys[name] and C.BadBoys[name] >= 5 then
         return true
     end
 
@@ -134,7 +132,7 @@ function CHAT:GetFilterResult(event, msg, name, flag, guid)
     chatLines[chatLinesSize + 1] = msgTable
     for i = 1, chatLinesSize do
         local line = chatLines[i]
-        if line[1] == msgTable[1] and ((msgTable[3] - line[3] < .6) or CHAT:CompareStrDiff(line[2], msgTable[2]) <= .1) then
+        if line[1] == msgTable[1] and ((event == 'CHAT_MSG_CHANNEL' and msgTable[3] - line[3] < .6) or CHAT:CompareStrDiff(line[2], msgTable[2]) <= .1) then
             tremove(chatLines, i)
             return true
         end
@@ -150,8 +148,11 @@ function CHAT:UpdateChatFilter(event, msg, author, _, _, _, flag, _, _, _, _, li
 
         local name = Ambiguate(author, 'none')
         filterResult = CHAT:GetFilterResult(event, msg, name, flag, guid)
-        if filterResult then
+        if filterResult and filterResult ~= 0 then
             C.BadBoys[name] = (C.BadBoys[name] or 0) + 1
+        end
+        if filterResult == 0 then
+            filterResult = true
         end
     end
 
@@ -159,7 +160,9 @@ function CHAT:UpdateChatFilter(event, msg, author, _, _, _, flag, _, _, _, _, li
 end
 
 function CHAT:SpamFilter()
-    if not C.DB.Chat.SpamFilter then return end
+    if not C.DB.Chat.SpamFilter then
+        return
+    end
 
     CHAT:UpdateFilterList()
     CHAT:UpdateFilterWhiteList()
@@ -194,7 +197,7 @@ local addonBlockList = {
     'wow.+验证码',
     '【有爱插件】',
     '：.+>',
-    '|Hspell.+=>',
+    '|Hspell.+=>'
 }
 
 local cvar
@@ -224,6 +227,8 @@ function CHAT:UpdateAddOnBlocker(event, msg, author)
                 CHAT:ToggleChatBubble()
             elseif event == 'CHAT_MSG_PARTY' or event == 'CHAT_MSG_PARTY_LEADER' then
                 CHAT:ToggleChatBubble(true)
+            elseif event == 'CHAT_MSG_WHISPER' then
+                CHAT.MuteThisTime = true
             end
             return true
         end
@@ -231,7 +236,9 @@ function CHAT:UpdateAddOnBlocker(event, msg, author)
 end
 
 function CHAT:BlockAddonSpam()
-    if not C.DB.Chat.BlockAddonSpam then return end
+    if not C.DB.Chat.BlockAddonSpam then
+        return
+    end
 
     ChatFrame_AddMessageEventFilter('CHAT_MSG_SAY', CHAT.UpdateAddOnBlocker)
     ChatFrame_AddMessageEventFilter('CHAT_MSG_WHISPER', CHAT.UpdateAddOnBlocker)
@@ -294,7 +301,9 @@ function CHAT:CheckLoot(event, msg, looter)
 end
 
 function CHAT:GroupLootFilter()
-    if not C.DB.Chat.GroupLootFilter then return end
+    if not C.DB.Chat.GroupLootFilter then
+        return
+    end
 
     ChatFrame_AddMessageEventFilter('CHAT_MSG_LOOT', self.CheckLoot)
 end

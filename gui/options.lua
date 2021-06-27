@@ -248,7 +248,7 @@ GUI.OptionsList = {
         {1, 'Chat', 'SpamFilter', L['Spam filter']},
         {1, 'Chat', 'BlockAddonSpam', L['Block addon spam']},
         {2, 'ACCOUNT', 'ChatFilterWhiteList', L['White List Mode'], true, nil, UpdateFilterWhiteList, L['|nOnly show messages that match the words below. Disabled if empty. Use key SPACE between multi words.']},
-        {1, 'Chat', 'IgnoreFriends', L['Allow friends\' spam'], nil, nil, nil, L['|nAllow spam messages from friends, party members and guild members.']},
+        {1, 'Chat', 'BlockSpammer', L['Block spammer message'], nil, nil, nil, L["If enanbled, repeat messages spammer will be blocked, you won't receive any messages from it any more."]},
         {1, 'Chat', 'BlockStrangerWhisper', L['Block stranger whisper'], nil, nil, nil, L['|nOnly accept whispers from party or raid members, friends and guild members.']},
         {2, 'ACCOUNT', 'ChatFilterBlackList', L['Filter List'], true, nil, UpdateFilterList, L['|nFilter messages that match the words blow. Use key SPACE between multi words.']},
         {1, 'Chat', 'DamageMeterFilter', L['Damage meter filter'], nil, nil, nil, L['|nSimplify chat messages from damage meters like Details and instead provides a chat-link to provide the blocked damage statistics in a popup.']},
