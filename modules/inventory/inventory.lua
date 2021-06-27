@@ -1223,7 +1223,7 @@ function INVENTORY:OnLogin()
         elseif strmatch(name, 'Quest') then
             label = _G.QUESTS_LABEL
         elseif strmatch(name, 'Anima') then
-            label = _G.ANIMA
+            label = _G.POWER_TYPE_ANIMA
         end
 
         if label then
