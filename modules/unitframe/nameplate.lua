@@ -48,7 +48,6 @@ local GetSpellInfo = GetSpellInfo
 local GetSpellTexture = GetSpellTexture
 local UnitNameplateShowsWidgetsOnly = UnitNameplateShowsWidgetsOnly
 local LE_SCENARIO_TYPE_CHALLENGE_MODE = LE_SCENARIO_TYPE_CHALLENGE_MODE
-local INTERRUPTED = INTERRUPTED
 
 local F, C = unpack(select(2, ...))
 local NAMEPLATE = F:GetModule('Nameplate')
@@ -663,27 +662,6 @@ function NAMEPLATE:CheckExplosives()
 end
 
 -- Major spells glow
-function NAMEPLATE:InitializeMajorSpells()
-    for spellID in pairs(C.NPMajorSpellsList) do
-        local name = GetSpellInfo(spellID)
-        if name then
-            if _G.FREE_ADB['NPMajorSpells'][spellID] then
-                _G.FREE_ADB['NPMajorSpells'][spellID] = nil
-            end
-        else
-            if C.IsDeveloper then
-                F:Debug('Invalid nameplate major spell ID: ' .. spellID)
-            end
-        end
-    end
-
-    for spellID, value in pairs(_G.FREE_ADB['NPMajorSpells']) do
-        if value == false and C.NPMajorSpellsList[spellID] == nil then
-            _G.FREE_ADB['NPMajorSpells'][spellID] = nil
-        end
-    end
-end
-
 NAMEPLATE.MajorSpellsList = {}
 function NAMEPLATE:RefreshMajorSpells()
     wipe(NAMEPLATE.MajorSpellsList)
@@ -1078,7 +1056,6 @@ function NAMEPLATE:OnLogin()
     NAMEPLATE:CheckExplosives()
     NAMEPLATE:UpdateGroupRoles()
     NAMEPLATE:RefreshPlateOnFactionChanged()
-    NAMEPLATE:InitializeMajorSpells()
     NAMEPLATE:RefreshMajorSpells()
 
     OUF:RegisterStyle('Nameplate', NAMEPLATE.CreateNameplateStyle)

@@ -18,6 +18,7 @@ taintless.xml
 libs\libs.xml
 locales\locales.xml
 init.lua
+config\config.xml
 core\core.xml
 modules\modules.xml
 gui\gui.xml

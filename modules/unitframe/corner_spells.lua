@@ -10,31 +10,6 @@ local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
 local OUF = F.Libs.oUF
 
-function UNITFRAME:InitializeCornerSpells()
-    if not _G.FREE_ADB['CornerSpellsList'][C.MyClass] then
-        _G.FREE_ADB['CornerSpellsList'][C.MyClass] = {}
-    end
-    local data = C.CornerSpellsList[C.MyClass]
-    if not data then
-        return
-    end
-
-    for spellID, _ in pairs(data) do
-        local name = GetSpellInfo(spellID)
-        if not name then
-            if C.IsDeveloper then
-                F:Debug('Invalid cornerspell ID: ' .. spellID)
-            end
-        end
-    end
-
-    for spellID, value in pairs(_G.FREE_ADB['CornerSpellsList'][C.MyClass]) do
-        if not next(value) and C.CornerSpellsList[C.MyClass][spellID] == nil or C.BloodlustList[spellID] then
-            _G.FREE_ADB['CornerSpellsList'][C.MyClass][spellID] = nil
-        end
-    end
-end
-
 UNITFRAME.CornerSpellsList = {}
 function UNITFRAME:UpdateCornerSpells()
     wipe(UNITFRAME.CornerSpellsList)

@@ -38,7 +38,7 @@ function UNITFRAME.PostCreateIcon(element, button)
     button.bg = F.CreateBDFrame(button)
 
     --if style ~= 'party' and style ~= 'raid' then
-        button.glow = F.CreateSD(button.bg)
+    button.glow = F.CreateSD(button.bg)
     --end
 
     element.disableCooldown = true
@@ -160,28 +160,23 @@ function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, cast
             element.bolsterIndex = button
             return true
         end
+    elseif style == 'raid' then
+        if C.RaidBuffsList['ALL'][spellID] or _G.FREE_ADB['RaidAuraWatch'][spellID] then
+            element.__owner.rawSpellID = spellID
+            return true
+        else
+            element.__owner.rawSpellID = nil
+        end
     elseif style == 'party' then
         if C.PartyAurasList[spellID] then
             return true
         else
             return false
         end
-    elseif style == 'target' then
-        if element.onlyShowPlayer and button.isDebuff then
-            return isMine
-        else
-            return true
-        end
-    elseif style == 'focus' or style == 'focustarget' then
-        if button.isDebuff then
-            return true
-        else
-            return false
-        end
-    elseif style == 'pet' then
-        return true
-    elseif (style == 'nameplate' and C.DB.Nameplate.ShowAura) or style == 'arena' then
-        if _G.FREE_ADB['NPAuraFilter'][2][spellID] or C.AuraBlackList[spellID] then
+    elseif style == 'nameplate' or style == 'boss' or style == 'arena' then
+        if element.__owner.isNameOnly then
+            return _G.FREE_ADB['NPAuraFilter'][1][spellID] or C.AuraWhiteList[spellID]
+        elseif _G.FREE_ADB['NPAuraFilter'][2][spellID] or C.AuraBlackList[spellID] then
             return false
         elseif element.showStealableBuffs and isStealable and not UnitIsPlayer(unit) then
             return true
@@ -191,14 +186,45 @@ function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, cast
             local auraFilter = C.DB.Nameplate.AuraFilterMode
             return (auraFilter == 3 and nameplateShowAll) or (auraFilter ~= 1 and isMine)
         end
-    elseif style == 'boss' then
-        if element.onlyShowPlayer and button.isDebuff then
-            return isMine
+    elseif style == 'focus' then
+        return (not button.isDebuff and isStealable) or (button.isDebuff and name)
+    else
+        return (element.onlyShowPlayer and button.isPlayer) or (not element.onlyShowPlayer and name)
+    end
+end
+
+function UNITFRAME.RaidBuffFilter(_, _, _, _, _, _, _, _, _, caster, _, _, spellID, canApplyAura, isBossAura)
+    local isMine = F:MultiCheck(caster, 'player', 'pet', 'vehicle')
+    if isBossAura then
+        return true
+    else
+        local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellID, UnitAffectingCombat('player') and 'RAID_INCOMBAT' or 'RAID_OUTOFCOMBAT')
+        local isPlayerSpell = isMine
+        if hasCustom then
+            return showForMySpec or (alwaysShowMine and isPlayerSpell)
+        else
+            return isPlayerSpell and canApplyAura and not SpellIsSelfBuff(spellID)
+        end
+    end
+end
+
+function UNITFRAME.RaidDebuffFilter(element, _, _, _, _, _, _, _, _, caster, _, _, spellID, _, isBossAura)
+    local isMine = F:MultiCheck(caster, 'player', 'pet', 'vehicle')
+    local parent = element.__owner
+
+    if C.RaidDebuffsBlackList[spellID] then
+        return false
+    elseif (C.DB.Unitframe.CornerIndicator and UNITFRAME.CornerSpellsList[spellID]) or parent.RaidDebuffs.spellID == spellID or parent.rawSpellID == spellID then
+        return false
+    elseif isBossAura or SpellIsPriorityAura(spellID) then
+        return true
+    else
+        local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellID, UnitAffectingCombat('player') and 'RAID_INCOMBAT' or 'RAID_OUTOFCOMBAT')
+        if hasCustom then
+            return showForMySpec or (alwaysShowMine and isMine)
         else
             return true
         end
-    elseif (element.onlyShowPlayer and button.isPlayer) or (not element.onlyShowPlayer and name) then
-        return true
     end
 end
 
@@ -217,39 +243,6 @@ function UNITFRAME:UpdateAuraContainer(parent, element, maxAuras)
     element.size = iconsPerRow and GetIconSize(width, iconsPerRow, element.spacing) or element.size
     element:SetWidth(width)
     element:SetHeight((element.size + element.spacing) * maxLines)
-end
-
-function UNITFRAME.RaidBuffFilter(_, _, _, _, _, _, _, _, _, caster, _, _, spellID, canApplyAura, isBossAura)
-    if isBossAura then
-        return true
-    else
-        local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellID, UnitAffectingCombat('player') and 'RAID_INCOMBAT' or 'RAID_OUTOFCOMBAT')
-        local isPlayerSpell = (caster == 'player' or caster == 'pet' or caster == 'vehicle')
-        if hasCustom then
-            return showForMySpec or (alwaysShowMine and isPlayerSpell)
-        else
-            return isPlayerSpell and canApplyAura and not SpellIsSelfBuff(spellID)
-        end
-    end
-end
-
-function UNITFRAME.RaidDebuffFilter(element, _, _, _, _, _, _, _, _, caster, _, _, spellID, _, isBossAura)
-    local parent = element.__owner
-
-    if C.RaidDebuffsBlackList[spellID] then
-        return false
-    elseif (C.DB.Unitframe.CornerIndicator and UNITFRAME.CornerSpellsList[spellID]) or parent.RaidDebuffs.spellID == spellID or parent.rawSpellID == spellID then
-        return false
-    elseif isBossAura or SpellIsPriorityAura(spellID) then
-        return true
-    else
-        local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellID, UnitAffectingCombat('player') and 'RAID_INCOMBAT' or 'RAID_OUTOFCOMBAT')
-        if hasCustom then
-            return showForMySpec or (alwaysShowMine and (caster == 'player' or caster == 'pet' or caster == 'vehicle'))
-        else
-            return true
-        end
-    end
 end
 
 function UNITFRAME:CreateAuras(self)
@@ -341,7 +334,7 @@ function UNITFRAME:CreateBuffs(self)
     if style == 'raid' then
         bu.CustomFilter = UNITFRAME.RaidBuffFilter
     else
-        bu.onlyShowPlayer = true
+        bu.onlyShowPlayer = false
     end
 
     UNITFRAME:UpdateAuraContainer(self, bu, bu.num)

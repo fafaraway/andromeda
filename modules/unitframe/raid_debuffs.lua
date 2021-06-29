@@ -8,47 +8,6 @@ local EJ_GetInstanceInfo = EJ_GetInstanceInfo
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
 
-local raidDebuffsList = {}
-function UNITFRAME:RegisterDebuff(_, instID, _, spellID, level)
-    local instName = EJ_GetInstanceInfo(instID)
-    if not instName then
-        if C.IsDeveloper then
-            F:Debug('Invalid instance ID: ' .. instID)
-        end
-        return
-    end
-
-    if not raidDebuffsList[instName] then
-        raidDebuffsList[instName] = {}
-    end
-    if not level then
-        level = 2
-    end
-    if level > 6 then
-        level = 6
-    end
-
-    raidDebuffsList[instName][spellID] = level
-end
-
-function UNITFRAME:InitializeRaidDebuffs()
-    for instName, value in pairs(raidDebuffsList) do
-        for spell, priority in pairs(value) do
-            if _G.FREE_ADB['RaidDebuffsList'][instName] and _G.FREE_ADB['RaidDebuffsList'][instName][spell] and
-                _G.FREE_ADB['RaidDebuffs'][instName][spell] == priority then
-                _G.FREE_ADB['RaidDebuffsList'][instName][spell] = nil
-            end
-        end
-    end
-    for instName, value in pairs(_G.FREE_ADB['RaidDebuffsList']) do
-        if not next(value) then
-            _G.FREE_ADB['RaidDebuffsList'][instName] = nil
-        end
-    end
-
-    C.RaidDebuffsList = raidDebuffsList
-end
-
 local debuffList = {}
 function UNITFRAME:UpdateRaidDebuffs()
     wipe(debuffList)

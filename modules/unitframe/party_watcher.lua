@@ -18,20 +18,6 @@ local C_ChatInfo_RegisterAddonMessagePrefix = C_ChatInfo.RegisterAddonMessagePre
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
 
-function UNITFRAME:InitializePartySpells()
-    for spellID, duration in pairs(C.PartySpellsList) do
-        local name = GetSpellInfo(spellID)
-        if name then
-            local modDuration = _G.FREE_ADB['PartySpellsList'][spellID]
-            if modDuration and modDuration == duration then
-                _G.FREE_ADB['PartySpellsList'][spellID] = nil
-            end
-        else
-            F:Debug('Invalid partyspell ID: ' .. spellID)
-        end
-    end
-end
-
 UNITFRAME.PartySpellsList = {}
 function UNITFRAME:UpdatePartyWatcherSpells()
     wipe(UNITFRAME.PartySpellsList)

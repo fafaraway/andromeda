@@ -52,93 +52,6 @@ function ANNOUNCEMENT:GetChannel(warning)
     end
 end
 
-local feastsList = {
-    [308458] = true, -- Surprisingly Palatable Feast
-    [308462] = true -- Feast of Gluttonous Hedonism
-}
-
-local cauldronList = {
-    [307157] = true -- Eternal Cauldron
-}
-
-local botsList = {
-    [22700] = true, -- Field Repair Bot 74A
-    [44389] = true, -- Field Repair Bot 110G
-    [54711] = true, -- Scrapbot
-    [67826] = true, -- Jeeves
-    [126459] = true, -- Blingtron 4000
-    [161414] = true, -- Blingtron 5000
-    [298926] = true, -- Blingtron 7000
-    [199109] = true -- Auto-Hammer
-}
-
-local codexList = {
-    [324029] = true -- Codex of the Still Mind
-}
-
-local toysList = {
-    [61031] = true, -- Toy Train Set
-    [49844] = true -- Direbrew's Remote
-}
-
-local portalsList = {
-    -- Alliance
-    [10059] = true, -- Stormwind
-    [11416] = true, -- Ironforge
-    [11419] = true, -- Darnassus
-    [32266] = true, -- Exodar
-    [49360] = true, -- Theramore
-    [33691] = true, -- Shattrath
-    [88345] = true, -- Tol Barad
-    [132620] = true, -- Vale of Eternal Blossoms
-    [176246] = true, -- Stormshield
-    [281400] = true, -- Boralus
-    -- Horde
-    [11417] = true, -- Orgrimmar
-    [11420] = true, -- Thunder Bluff
-    [11418] = true, -- Undercity
-    [32267] = true, -- Silvermoon
-    [49361] = true, -- Stonard
-    [35717] = true, -- Shattrath
-    [88346] = true, -- Tol Barad
-    [132626] = true, -- Vale of Eternal Blossoms
-    [176244] = true, -- Warspear
-    [281402] = true, -- Dazar'alor
-    -- Alliance/Horde
-    [53142] = true, -- Dalaran
-    [120146] = true, -- Ancient Dalaran
-    [224871] = true, -- Dalaran, Broken Isles
-    [344597] = true -- Oribos
-}
-
-local rezList = {
-    [61999] = true, -- Raise Ally
-    [20484] = true, -- Rebirth
-    [20707] = true, -- Soulstone
-    [345130] = true -- Disposable Spectrophasic Reanimator
-}
-
-function ANNOUNCEMENT:InitSpells()
-    for spellID in pairs(C.AnnounceableSpellsList) do
-        local name = GetSpellInfo(spellID)
-        if name then
-            if _G.FREE_ADB['AnnounceableSpellsList'][spellID] then
-                _G.FREE_ADB['AnnounceableSpellsList'][spellID] = nil
-            end
-        else
-            if C.IsDeveloper then
-                F:Debug('Invalid announce spell ID: ' .. spellID)
-            end
-        end
-    end
-
-    for spellID, value in pairs(_G.FREE_ADB['AnnounceableSpellsList']) do
-        if value == false and C.AnnounceableSpellsList[spellID] == nil then
-            _G.FREE_ADB['AnnounceableSpellsList'][spellID] = nil
-        end
-    end
-end
-
 ANNOUNCEMENT.AnnounceableSpellsList = {}
 function ANNOUNCEMENT:RefreshSpells()
     wipe(ANNOUNCEMENT.AnnounceableSpellsList)
@@ -201,7 +114,7 @@ function ANNOUNCEMENT:OnEvent()
                 return
             end
 
-            if C.DB.Announcement.BattleRez and rezList[spellID] then
+            if C.DB.Announcement.BattleRez and C.BattleRezList[spellID] then
                 if destName == nil then
                     SendChatMessage(format(L['%s used %s'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel())
                 else
@@ -213,19 +126,19 @@ function ANNOUNCEMENT:OnEvent()
                 return
             end
 
-            if rezList[spellID] and C.DB.Announcement.BattleRez then
+            if C.BattleRezList[spellID] and C.DB.Announcement.BattleRez then
                 if destName == nil then
-                    SendChatMessage(format(L['used %s'], GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel())
+                    SendChatMessage(format(L['I have cast %s'], GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel())
                 else
-                    SendChatMessage(format(L['used %s -> %s'], GetSpellLink(spellID), destName), ANNOUNCEMENT:GetChannel())
+                    SendChatMessage(format(L['I have cast %s -> %s'], GetSpellLink(spellID), destName), ANNOUNCEMENT:GetChannel())
                 end
             end
 
             if ANNOUNCEMENT.AnnounceableSpellsList[spellID] and C.DB.Announcement.PersonalMajorSpell then
                 if destName == nil then
-                    SendChatMessage(format(L['used %s'], GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel())
+                    SendChatMessage(format(L['I have cast %s'], GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel())
                 else
-                    SendChatMessage(format(L['used %s -> %s'], GetSpellLink(spellID), destName), ANNOUNCEMENT:GetChannel())
+                    SendChatMessage(format(L['I have cast %s -> %s'], GetSpellLink(spellID), destName), ANNOUNCEMENT:GetChannel())
                 end
             end
         end
@@ -235,7 +148,7 @@ function ANNOUNCEMENT:OnEvent()
         end
 
         if C.DB.Announcement.Death and not UnitIsFeignDeath(destName) then
-            SendChatMessage(format('%s died', destName), ANNOUNCEMENT:GetChannel())
+            SendChatMessage(format('%s died', destName), ANNOUNCEMENT:GetChannel(true))
         end
     end
 
@@ -253,38 +166,38 @@ function ANNOUNCEMENT:OnEvent()
 
     if eventType == 'SPELL_CAST_SUCCESS' then
         -- Feasts and Cauldron
-        if (C.DB.Announcement.Feast and feastsList[spellID]) or (C.DB.Announcement.Cauldron and cauldronList[spellID]) then
-            SendChatMessage(format(L['%s has put down %s.'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
+        if (C.DB.Announcement.Feast and C.FeastsList[spellID]) or (C.DB.Announcement.Cauldron and C.CauldronList[spellID]) then
+            SendChatMessage(format(L['%s has put down %s'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
 
         -- Refreshment Table
         elseif C.DB.Announcement.RefreshmentTable and spellID == 43987 then
-            SendChatMessage(format(L['%s has put down %s.'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
+            SendChatMessage(format(L['%s has put down %s'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
 
         -- Ritual of Summoning
         elseif C.DB.Announcement.RitualofSummoning and spellID == 698 then
-            SendChatMessage(format(L['%s is casting %s.'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
+            SendChatMessage(format(L['%s is casting %s'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
 
         -- Piccolo of the Flaming Fire
         elseif C.DB.Announcement.Toy and spellID == 182346 then
-            SendChatMessage(format(L['%s is casting %s.'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
+            SendChatMessage(format(L['%s is casting %s'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
         end
 
     elseif eventType == 'SPELL_SUMMON' then
         -- Repair Bots and Codex
-        if (C.DB.Announcement.Bot and botsList[spellID]) or (C.DB.Announcement.Codex and codexList[spellID]) then
-            SendChatMessage(format(L['%s has put down %s.'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
+        if (C.DB.Announcement.Bot and C.BotsList[spellID]) or (C.DB.Announcement.Codex and C.CodexList[spellID]) then
+            SendChatMessage(format(L['%s has put down %s'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
         end
 
     elseif eventType == 'SPELL_CREATE' then
         -- 29893 Soulwell 54710 MOLL-E 261602 Katy's Stampwhistle
         if C.DB.Announcement.Mailbox and (spellID == 29893 or spellID == 54710 or spellID == 261602) then
-            SendChatMessage(format(L['%s has put down %s.'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
+            SendChatMessage(format(L['%s has put down %s'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
 
-        elseif C.DB.Announcement.Toy and toysList[spellID] then -- Toys
-            SendChatMessage(format(L['%s has put down %s.'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
+        elseif C.DB.Announcement.Toy and C.ToysList[spellID] then -- Toys
+            SendChatMessage(format(L['%s has put down %s'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
 
-        elseif C.DB.Announcement.Portal and portalsList[spellID] then -- Portals
-            SendChatMessage(format(L['%s has opened %s.'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
+        elseif C.DB.Announcement.Portal and C.PortalsList[spellID] then -- Portals
+            SendChatMessage(format(L['%s has opened %s'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
         end
 
     elseif eventType == 'SPELL_AURA_APPLIED' then
@@ -304,7 +217,6 @@ function ANNOUNCEMENT:OnLogin()
         return
     end
 
-    ANNOUNCEMENT:InitSpells()
     ANNOUNCEMENT:RefreshSpells()
 
     ANNOUNCEMENT:AnnounceSpells()

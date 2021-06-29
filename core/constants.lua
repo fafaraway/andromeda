@@ -34,12 +34,7 @@ local Enum_ItemQuality_Heirloom = Enum.ItemQuality.Heirloom
 
 local F, C = unpack(select(2, ...))
 
-local addonVersion = '@project-version@'
-if (addonVersion:find('project%-version')) then
-    addonVersion = 'Development'
-end
-C.AddonVersion = addonVersion
-C.IsDeveloper = C.AddonVersion == 'Development'
+
 
 C.IsRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 C.IsNewPatch = C.IsRetail and select(4, GetBuildInfo()) >= 90100 -- 9.1.0

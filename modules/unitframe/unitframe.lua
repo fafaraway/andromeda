@@ -13,7 +13,6 @@ local F, C = unpack(select(2, ...))
 local UNITFRAME = F:RegisterModule('Unitframe')
 local NAMEPLATE = F:RegisterModule('Nameplate')
 
-
 --[[ Backdrop ]]
 
 local function UF_OnEnter(self)
@@ -96,11 +95,6 @@ function UNITFRAME:OnLogin()
 
     UNITFRAME:UpdateHealthColor()
     UNITFRAME:UpdateClassColor()
-    UNITFRAME:InitializeRaidDebuffs()
-    UNITFRAME:InitializePartySpells()
-    UNITFRAME:InitializeCornerSpells()
-
-
 
     self:SpawnPlayer()
     self:SpawnPet()

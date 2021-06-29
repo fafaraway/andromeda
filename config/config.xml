@@ -1,0 +1,7 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="settings.lua"/>
+    <Script file="auras.lua"/>
+    <Script file="nameplate.lua"/>
+    <Script file="announcement.lua"/>
+    <Include file="auras\auras.xml"/>
+</Ui>
