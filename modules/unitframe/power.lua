@@ -30,34 +30,33 @@ local function UpdatePowerColor(power, unit)
 
     local spec = GetSpecialization() or 0
     if C.MyClass == 'DEMONHUNTER' then
-        if spec ~= 1 then
-            return
-        end
+        if spec == 1 then -- Havoc
+            -- EyeBeam needs 30 power, ChaosStrike needs 40 power
+            -- BladeDance needs 35 power or 15 power with FirstBlood
+            local eyeBeam, _ = IsUsableSpell(198013)
+            local chaosStrike, _ = IsUsableSpell(162794)
+            -- local bladeDance, _ = IsUsableSpell(188499)
 
-        -- EyeBeam needs 30 power, ChaosStrike needs 40 power
-        -- BladeDance needs 35 power or 15 power with FirstBlood
-        local eyeBeam, _ = IsUsableSpell(198013)
-        local chaosStrike, _ = IsUsableSpell(162794)
-        -- local bladeDance, _ = IsUsableSpell(188499)
+            if chaosStrike then
+                power:SetStatusBarColor(.85, .16, .23)
+            elseif eyeBeam then
+                power:SetStatusBarColor(.93, .74, .13)
+            else
+                power:SetStatusBarColor(.5, .5, .5)
+            end
+        else -- Vengeance
+            -- Soul Cleave needs 30 power
+            local soulCleave, _ = IsUsableSpell(228477)
+            -- Fel Devastation needs 50 power
+            local felDevastation, _ = IsUsableSpell(212084)
 
-        if chaosStrike then
-            power:SetStatusBarColor(.85, .16, .23)
-        elseif eyeBeam then
-            power:SetStatusBarColor(.93, .74, .13)
-        else
-            power:SetStatusBarColor(.5, .5, .5)
-        end
-    elseif C.MyClass == 'WARRIOR' then
-        if spec ~= 2 then
-            return
-        end
-
-        local rampage, _ = IsUsableSpell(184367)
-
-        if rampage then
-            power:SetStatusBarColor(184 / 255, 92 / 255, 214 / 255)
-        else
-            power:SetStatusBarColor(215 / 255, 22 / 255, 55 / 255)
+            if felDevastation then
+                power:SetStatusBarColor(.85, .16, .23)
+            elseif soulCleave then
+                power:SetStatusBarColor(.93, .74, .13)
+            else
+                power:SetStatusBarColor(.5, .5, .5)
+            end
         end
     end
 end
