@@ -1,10 +1,12 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local wipe = wipe
-local CreateFrame = CreateFrame
+local _G = getfenv(0)
+local wipe = _G.table.wipe
+local CreateFrame = _G.CreateFrame
+local GetLocale = _G.GetLocale
 
-local F, C = unpack(select(2, ...))
+local FreeUI = select(2, ...)
+FreeUI[3] = FreeUI[1].Libs.ACL:GetLocale('FreeUI', GetLocale())
+
+local F, C = unpack(FreeUI)
 local GUI = F:RegisterModule('GUI')
 
 local function InitialSettings(source, target, fullClean)

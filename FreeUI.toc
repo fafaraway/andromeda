@@ -13,12 +13,11 @@
 ## X-WoWI-ID: 23258
 ## X-Wago-ID: 0mNw8l6o
 
-
 taintless.xml
 libs\libs.xml
-locales\locales.xml
 init.lua
-config\config.xml
+locales\locales.xml
 core\core.xml
+config\config.xml
 modules\modules.xml
 gui\gui.xml

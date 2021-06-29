@@ -1,7 +1,8 @@
-local L = _G.LibStub('AceLocale-3.0'):NewLocale('FreeUI', 'zhCN')
+local F = unpack(select(2, ...))
+local L = F.Libs.ACL:NewLocale('FreeUI', 'zhCN')
 if not L then return end
 
---@localization(locale="zhCN", format="lua_additive_table", same-key-is-true=true, handle-unlocalized="comment")@
+--@localization(locale="zhCN", format="lua_additive_table", same-key-is-true=true, handle-subnamespaces="concat")@
 
 L['Player Frame'] = '玩家框体'
 L['Pet Frame'] = '宠物框体'
@@ -599,9 +600,11 @@ L['Stolen %s -> %s'] = '已偷取 %s → %s'
 L['Reflected %s -> %s'] = '已反射 %s → %s'
 L['%s used %s'] = '%s 使用了 %s'
 L['%s used %s -> %s'] = '%s 使用了 → %s'
-L['%s is casting %s.'] = '%s 正在施放 %s.'
-L['%s has put down %s.'] = '%s 放出了 %s.'
-L['%s has opened %s.'] = '%s 开启了 %s.'
+L['%s is casting %s'] = '%s 正在施放 %s'
+L['%s has put down %s'] = '%s 放出了 %s'
+L['%s has opened %s'] = '%s 开启了 %s'
+L['I have cast %s'] = '我使用了 %s'
+L['I have cast %s -> %s'] = '我使用了 %s → %s'
 
 L['Block spammer message'] = "阻止刷屏者的消息"
 L["If enanbled, repeat messages spammer will be blocked, you won't receive any messages from it any more."] = '启用后，在聊天中重复刷屏的玩家会被屏蔽，你不再收到来自他的任何消息。'

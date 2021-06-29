@@ -22,7 +22,7 @@ local _, ns = ...
 
 ns[1] = {} -- Functions
 ns[2] = {} -- Constants/Config
-ns[3] = LibStub('AceLocale-3.0'):GetLocale('FreeUI') -- Localization
+ns[3] = {} -- Localization
 
 _G.FREE_ADB = {} -- Account variables
 _G.FREE_PDB = {}
