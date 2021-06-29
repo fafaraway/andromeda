@@ -1,15 +1,14 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local getn = getn
-local strsub = strsub
-local tonumber = tonumber
-local CreateFrame = CreateFrame
-local CALENDAR_COPY_EVENT = CALENDAR_COPY_EVENT
-local CALENDAR_PASTE_EVENT = CALENDAR_PASTE_EVENT
+local _G = getfenv(0)
+local unpack = _G.unpack
+local select = _G.select
+local tonumber = _G.tonumber
+local floor = _G.math.floor
+local strsub = _G.string.sub
+local format = _G.string.format
+local CreateFrame = _G.CreateFrame
 
 local F = unpack(select(2, ...))
-local BLIZZARD = F:GetModule('Blizzard')
+local ECP = F:RegisterModule('EnhancedColorPicker')
 
 local colorBuffer = {}
 local editingText
@@ -17,15 +16,15 @@ local editingText
 local function UpdateAlphaText()
     local a = _G.OpacitySliderFrame:GetValue()
     a = (1 - a) * 100
-    a = math.floor(a + 0.05)
-    _G.ColorPPBoxA:SetText(string.format('%d', a))
+    a = floor(a + 0.05)
+    _G.ColorPPBoxA:SetText(format('%d', a))
 end
 
 local function UpdateAlpha(tbox)
     local a = tbox:GetNumber()
     if a > 100 then
         a = 100
-        _G.ColorPPBoxA:SetText(string.format('%d', a))
+        _G.ColorPPBoxA:SetText(format('%d', a))
     end
     a = 1 - (a / 100)
     editingText = true
@@ -37,13 +36,13 @@ local function UpdateColorTexts(r, g, b)
     if not r then
         r, g, b = _G.ColorPickerFrame:GetColorRGB()
     end
-    r = math.floor(r * 255 + 0.5)
-    g = math.floor(g * 255 + 0.5)
-    b = math.floor(b * 255 + 0.5)
-    _G.ColorPPBoxR:SetText(string.format('%d', r))
-    _G.ColorPPBoxG:SetText(string.format('%d', g))
-    _G.ColorPPBoxB:SetText(string.format('%d', b))
-    _G.ColorPPBoxH:SetText(string.format('%.2x', r) .. string.format('%.2x', g) .. string.format('%.2x', b))
+    r = floor(r * 255 + 0.5)
+    g = floor(g * 255 + 0.5)
+    b = floor(b * 255 + 0.5)
+    _G.ColorPPBoxR:SetText(format('%d', r))
+    _G.ColorPPBoxG:SetText(format('%d', g))
+    _G.ColorPPBoxB:SetText(format('%d', b))
+    _G.ColorPPBoxH:SetText(format('%.2x', r) .. format('%.2x', g) .. format('%.2x', b))
 end
 
 local function UpdateColor(tbox)
@@ -51,19 +50,19 @@ local function UpdateColor(tbox)
     local id = tbox:GetID()
 
     if id == 1 then
-        r = string.format('%d', tbox:GetNumber())
+        r = format('%d', tbox:GetNumber())
         if not r then
             r = 0
         end
         r = r / 255
     elseif id == 2 then
-        g = string.format('%d', tbox:GetNumber())
+        g = format('%d', tbox:GetNumber())
         if not g then
             g = 0
         end
         g = g / 255
     elseif id == 3 then
-        b = string.format('%d', tbox:GetNumber())
+        b = format('%d', tbox:GetNumber())
         if not b then
             b = 0
         end
@@ -102,41 +101,56 @@ local function UpdateColor(tbox)
     editingText = nil
 end
 
-function BLIZZARD:ColorPicker()
-    _G.ColorPickerFrame:HookScript('OnShow', function()
-        -- Get color that will be replaced
-        local r, g, b = _G.ColorPickerFrame:GetColorRGB()
-        _G.ColorPPOldColorSwatch:SetColorTexture(r, g, b)
+function ECP:SetupColorPicker()
+    _G.ColorPickerFrame:HookScript(
+        'OnShow',
+        function()
+            -- Get color that will be replaced
+            local r, g, b = _G.ColorPickerFrame:GetColorRGB()
+            _G.ColorPPOldColorSwatch:SetColorTexture(r, g, b)
 
-        -- Show/hide the alpha box
-        if _G.ColorPickerFrame.hasOpacity then
-            _G.ColorPPBoxA:Show()
-            _G.ColorPPBoxLabelA:Show()
-            _G.ColorPPBoxH:SetScript('OnTabPressed', function()
-                _G.ColorPPBoxA:SetFocus()
-            end)
-            UpdateAlphaText()
-        else
-            _G.ColorPPBoxA:Hide()
-            _G.ColorPPBoxLabelA:Hide()
-            _G.ColorPPBoxH:SetScript('OnTabPressed', function()
-                _G.ColorPPBoxR:SetFocus()
-            end)
+            -- Show/hide the alpha box
+            if _G.ColorPickerFrame.hasOpacity then
+                _G.ColorPPBoxA:Show()
+                _G.ColorPPBoxLabelA:Show()
+                _G.ColorPPBoxH:SetScript(
+                    'OnTabPressed',
+                    function()
+                        _G.ColorPPBoxA:SetFocus()
+                    end
+                )
+                UpdateAlphaText()
+            else
+                _G.ColorPPBoxA:Hide()
+                _G.ColorPPBoxLabelA:Hide()
+                _G.ColorPPBoxH:SetScript(
+                    'OnTabPressed',
+                    function()
+                        _G.ColorPPBoxR:SetFocus()
+                    end
+                )
+            end
         end
-    end)
+    )
 
-    _G.ColorPickerFrame:HookScript('OnColorSelect', function(_, r, g, b)
-        _G.ColorSwatch:SetColorTexture(r, g, b)
-        if not editingText then
-            UpdateColorTexts(r, g, b)
+    _G.ColorPickerFrame:HookScript(
+        'OnColorSelect',
+        function(_, r, g, b)
+            _G.ColorSwatch:SetColorTexture(r, g, b)
+            if not editingText then
+                UpdateColorTexts(r, g, b)
+            end
         end
-    end)
+    )
 
-    _G.OpacitySliderFrame:HookScript('OnValueChanged', function()
-        if not editingText then
-            UpdateAlphaText()
+    _G.OpacitySliderFrame:HookScript(
+        'OnValueChanged',
+        function()
+            if not editingText then
+                UpdateAlphaText()
+            end
         end
-    end)
+    )
 
     -- Make the Color Picker dialog a bit taller, to make room for edit boxes
     _G.ColorPickerFrame:SetHeight(_G.ColorPickerFrame:GetHeight() + 40)
@@ -163,32 +177,35 @@ function BLIZZARD:ColorPicker()
 
     -- Add copy button to the ColorPickerFrame
     local b = CreateFrame('Button', 'ColorPPCopy', _G.ColorPickerFrame, 'UIPanelButtonTemplate')
-    b:SetText(CALENDAR_COPY_EVENT)
+    b:SetText(_G.CALENDAR_COPY_EVENT)
     b:SetWidth(80)
     b:SetHeight(20)
     b:SetPoint('TOPLEFT', 'ColorSwatch', 'BOTTOMLEFT', -15, -5)
     F.Reskin(b)
 
     -- Copy color into buffer on button click
-    b:SetScript('OnClick', function()
-        -- Copy current dialog colors into buffer
-        colorBuffer.r, colorBuffer.g, colorBuffer.b = _G.ColorPickerFrame:GetColorRGB()
+    b:SetScript(
+        'OnClick',
+        function()
+            -- Copy current dialog colors into buffer
+            colorBuffer.r, colorBuffer.g, colorBuffer.b = _G.ColorPickerFrame:GetColorRGB()
 
-        -- Enable Paste button and display copied color into swatch
-        _G.ColorPPPaste:Enable()
-        _G.ColorPPCopyColorSwatch:SetColorTexture(colorBuffer.r, colorBuffer.g, colorBuffer.b)
-        _G.ColorPPCopyColorSwatch:Show()
+            -- Enable Paste button and display copied color into swatch
+            _G.ColorPPPaste:Enable()
+            _G.ColorPPCopyColorSwatch:SetColorTexture(colorBuffer.r, colorBuffer.g, colorBuffer.b)
+            _G.ColorPPCopyColorSwatch:Show()
 
-        if _G.ColorPickerFrame.hasOpacity then
-            colorBuffer.a = _G.OpacitySliderFrame:GetValue()
-        else
-            colorBuffer.a = nil
+            if _G.ColorPickerFrame.hasOpacity then
+                colorBuffer.a = _G.OpacitySliderFrame:GetValue()
+            else
+                colorBuffer.a = nil
+            end
         end
-    end)
+    )
 
     -- Paste button
     b = CreateFrame('Button', 'ColorPPPaste', _G.ColorPickerFrame, 'UIPanelButtonTemplate')
-    b:SetText(CALENDAR_PASTE_EVENT)
+    b:SetText(_G.CALENDAR_PASTE_EVENT)
     b:SetWidth(80)
     b:SetHeight(20)
     b:SetPoint('TOPLEFT', 'ColorPPCopy', 'BOTTOMLEFT', 0, -7)
@@ -196,30 +213,18 @@ function BLIZZARD:ColorPicker()
     F.Reskin(b)
 
     -- Paste color on button click, updating frame components
-    b:SetScript('OnClick', function()
-        _G.ColorPickerFrame:SetColorRGB(colorBuffer.r, colorBuffer.g, colorBuffer.b)
-        _G.ColorSwatch:SetColorTexture(colorBuffer.r, colorBuffer.g, colorBuffer.b)
-        if _G.ColorPickerFrame.hasOpacity then
-            if colorBuffer.a then -- Color copied had an alpha value
-                _G.OpacitySliderFrame:SetValue(colorBuffer.a)
+    b:SetScript(
+        'OnClick',
+        function()
+            _G.ColorPickerFrame:SetColorRGB(colorBuffer.r, colorBuffer.g, colorBuffer.b)
+            _G.ColorSwatch:SetColorTexture(colorBuffer.r, colorBuffer.g, colorBuffer.b)
+            if _G.ColorPickerFrame.hasOpacity then
+                if colorBuffer.a then -- Color copied had an alpha value
+                    _G.OpacitySliderFrame:SetValue(colorBuffer.a)
+                end
             end
         end
-    end)
-
-    -- ClassColor button
-    --[[ b = CreateFrame('Button', 'ColorPPClass', ColorPickerFrame, 'UIPanelButtonTemplate')
-	b:SetText(CLASS)
-	b:SetWidth(b:GetWidth() + 10)
-	b:SetHeight(22)
-	b:SetPoint('TOPRIGHT', 'ColorPPPaste', 'BOTTOMRIGHT', 0, -7)
-
-	b:SetScript('OnClick', function()
-		ColorPickerFrame:SetColorRGB(C.r, C.g, C.b)
-		ColorSwatch:SetColorTexture(C.r, C.g, C.b)
-		if ColorPickerFrame.hasOpacity then
-			OpacitySliderFrame:SetValue(0)
-		end
-	end) ]]
+    )
 
     -- Locate Color Swatch for copy color
     _G.ColorPPCopyColorSwatch:SetPoint('LEFT', 'ColorSwatch', 'LEFT')
@@ -232,7 +237,7 @@ function BLIZZARD:ColorPicker()
 
     -- Set up edit box frames and interior label and text areas
     local boxes = {'R', 'G', 'B', 'H', 'A'}
-    for i = 1, getn(boxes) do
+    for i = 1, #(boxes) do
         local rgb = boxes[i]
         local box = CreateFrame('EditBox', 'ColorPPBox' .. rgb, _G.ColorPickerFrame, 'InputBoxTemplate')
         box:SetID(i)
@@ -266,41 +271,68 @@ function BLIZZARD:ColorPicker()
 
         -- Set up scripts to handle event appropriately
         if i == 5 then
-            box:SetScript('OnEscapePressed', function(self)
-                self:ClearFocus()
-                UpdateAlphaText()
-            end)
-            box:SetScript('OnEnterPressed', function(self)
-                self:ClearFocus()
-                UpdateAlphaText()
-            end)
-            box:SetScript('OnTextChanged', function(self)
-                UpdateAlpha(self)
-            end)
+            box:SetScript(
+                'OnEscapePressed',
+                function(self)
+                    self:ClearFocus()
+                    UpdateAlphaText()
+                end
+            )
+            box:SetScript(
+                'OnEnterPressed',
+                function(self)
+                    self:ClearFocus()
+                    UpdateAlphaText()
+                end
+            )
+            box:SetScript(
+                'OnTextChanged',
+                function(self)
+                    UpdateAlpha(self)
+                end
+            )
         else
-            box:SetScript('OnEscapePressed', function(self)
-                self:ClearFocus()
-                UpdateColorTexts()
-            end)
-            box:SetScript('OnEnterPressed', function(self)
-                self:ClearFocus()
-                UpdateColorTexts()
-            end)
-            box:SetScript('OnTextChanged', function(self)
-                UpdateColor(self)
-            end)
+            box:SetScript(
+                'OnEscapePressed',
+                function(self)
+                    self:ClearFocus()
+                    UpdateColorTexts()
+                end
+            )
+            box:SetScript(
+                'OnEnterPressed',
+                function(self)
+                    self:ClearFocus()
+                    UpdateColorTexts()
+                end
+            )
+            box:SetScript(
+                'OnTextChanged',
+                function(self)
+                    UpdateColor(self)
+                end
+            )
         end
 
-        box:SetScript('OnEditFocusGained', function(self)
-            self:SetCursorPosition(0)
-            self:HighlightText()
-        end)
-        box:SetScript('OnEditFocusLost', function(self)
-            self:HighlightText(0, 0)
-        end)
-        box:SetScript('OnTextSet', function(self)
-            self:ClearFocus()
-        end)
+        box:SetScript(
+            'OnEditFocusGained',
+            function(self)
+                self:SetCursorPosition(0)
+                self:HighlightText()
+            end
+        )
+        box:SetScript(
+            'OnEditFocusLost',
+            function(self)
+                self:HighlightText(0, 0)
+            end
+        )
+        box:SetScript(
+            'OnTextSet',
+            function(self)
+                self:ClearFocus()
+            end
+        )
         box:Show()
     end
 
@@ -312,32 +344,52 @@ function BLIZZARD:ColorPicker()
     _G.ColorPPBoxA:SetPoint('LEFT', 'ColorPPBoxH', 'RIGHT', 18, 0)
 
     -- Define the order of tab cursor movement
-    _G.ColorPPBoxR:SetScript('OnTabPressed', function()
-        _G.ColorPPBoxG:SetFocus()
-    end)
-    _G.ColorPPBoxG:SetScript('OnTabPressed', function()
-        _G.ColorPPBoxB:SetFocus()
-    end)
-    _G.ColorPPBoxB:SetScript('OnTabPressed', function()
-        _G.ColorPPBoxH:SetFocus()
-    end)
-    _G.ColorPPBoxA:SetScript('OnTabPressed', function()
-        _G.ColorPPBoxR:SetFocus()
-    end)
+    _G.ColorPPBoxR:SetScript(
+        'OnTabPressed',
+        function()
+            _G.ColorPPBoxG:SetFocus()
+        end
+    )
+    _G.ColorPPBoxG:SetScript(
+        'OnTabPressed',
+        function()
+            _G.ColorPPBoxB:SetFocus()
+        end
+    )
+    _G.ColorPPBoxB:SetScript(
+        'OnTabPressed',
+        function()
+            _G.ColorPPBoxH:SetFocus()
+        end
+    )
+    _G.ColorPPBoxA:SetScript(
+        'OnTabPressed',
+        function()
+            _G.ColorPPBoxR:SetFocus()
+        end
+    )
 
     -- Make the color picker movable
     local mover = CreateFrame('Frame', nil, _G.ColorPickerFrame)
     mover:SetPoint('TOPLEFT', _G.ColorPickerFrame, 'TOPLEFT', 0, 0)
     mover:SetPoint('BOTTOMRIGHT', _G.ColorPickerFrame, 'TOPRIGHT', 0, -15)
     mover:EnableMouse(true)
-    mover:SetScript('OnMouseDown', function()
-        _G.ColorPickerFrame:StartMoving()
-    end)
-    mover:SetScript('OnMouseUp', function()
-        _G.ColorPickerFrame:StopMovingOrSizing()
-    end)
+    mover:SetScript(
+        'OnMouseDown',
+        function()
+            _G.ColorPickerFrame:StartMoving()
+        end
+    )
+    mover:SetScript(
+        'OnMouseUp',
+        function()
+            _G.ColorPickerFrame:StopMovingOrSizing()
+        end
+    )
     _G.ColorPickerFrame:SetUserPlaced(true)
     _G.ColorPickerFrame:EnableKeyboard(false)
 end
 
-BLIZZARD:RegisterBlizz('ColorPicker', BLIZZARD.ColorPicker)
+function ECP:OnLogin()
+    ECP:SetupColorPicker()
+end
