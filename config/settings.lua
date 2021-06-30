@@ -306,8 +306,8 @@ C.CharacterSettings = {
         TargetScale = 1,
         MinAlpha = .6,
         OccludedAlpha = .2,
-        VerticalSpacing = .7,
-        HorizontalSpacing = .3
+        VerticalSpacing = 1.8,
+        HorizontalSpacing = 1.4
     },
     Tooltip = {
         Enable = true,
