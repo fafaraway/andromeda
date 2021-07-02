@@ -41,7 +41,7 @@ local function startSelling()
             if link then
                 local price = select(11, GetItemInfo(link))
                 local _, count, _, quality, _, _, _, _, _, itemID = GetContainerItemInfo(bag, slot)
-                if (quality == 0 or _G.FREE_ADB['CustomJunkList'][itemID]) and price > 0 and not cache['b' .. bag .. 's' .. slot] then
+                if (quality == 0 or _G.FREE_ADB['CustomJunkList'][itemID]) and (not INVENTORY:IsPetTrashCurrency(itemID)) and price > 0 and not cache['b' .. bag .. 's' .. slot] then
                     sellCount = sellCount + price * count
                     cache['b' .. bag .. 's' .. slot] = true
                     UseContainerItem(bag, slot)
