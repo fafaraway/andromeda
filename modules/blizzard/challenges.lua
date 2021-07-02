@@ -5,6 +5,7 @@ local pairs = pairs
 local wipe = wipe
 local format = format
 local strsplit = strsplit
+local strsub = strsub
 local tonumber = tonumber
 local sort = sort
 local Ambiguate = Ambiguate
@@ -25,13 +26,13 @@ local WEEKLY_REWARDS_MYTHIC_TOP_RUNS = WEEKLY_REWARDS_MYTHIC_TOP_RUNS
 local LE_ITEM_QUALITY_EPIC = LE_ITEM_QUALITY_EPIC
 
 local F, C, L = unpack(select(2, ...))
-local BLIZZARD = F:GetModule('Blizzard')
+local ECF = F:RegisterModule('EnhancedChallengeFrame')
 
 local hasAngryKeystones
 local frame
 local WeeklyRunsThreshold = 10
 
-function BLIZZARD:GuildBest_UpdateTooltip()
+function ECF:GuildBest_UpdateTooltip()
     local leaderInfo = self.leaderInfo
     if not leaderInfo then
         return
@@ -42,13 +43,13 @@ function BLIZZARD:GuildBest_UpdateTooltip()
     _G.GameTooltip:SetText(name, 1, 1, 1)
     _G.GameTooltip:AddLine(format(CHALLENGE_MODE_POWER_LEVEL, leaderInfo.keystoneLevel))
     for i = 1, #leaderInfo.members do
-        local classColorStr = string.sub(F:RGBToHex(F:ClassColor(leaderInfo.members[i].classFileName)), 3, 10)
+        local classColorStr = strsub(F:RGBToHex(F:ClassColor(leaderInfo.members[i].classFileName)), 3, 10)
         _G.GameTooltip:AddLine(format(CHALLENGE_MODE_GUILD_BEST_LINE, classColorStr, leaderInfo.members[i].name))
     end
     _G.GameTooltip:Show()
 end
 
-function BLIZZARD:GuildBest_Create()
+function ECF:GuildBest_Create()
     frame = CreateFrame('Frame', nil, _G.ChallengesFrame, 'BackdropTemplate')
     frame:SetPoint('BOTTOMRIGHT', -8, 75)
     frame:SetSize(170, 105)
@@ -84,28 +85,28 @@ function BLIZZARD:GuildBest_Create()
     end
 end
 
-function BLIZZARD:GuildBest_SetUp(leaderInfo)
+function ECF:GuildBest_SetUp(leaderInfo)
     self.leaderInfo = leaderInfo
     local str = CHALLENGE_MODE_GUILD_BEST_LINE
     if leaderInfo.isYou then
         str = CHALLENGE_MODE_GUILD_BEST_LINE_YOU
     end
 
-    local classColorStr = string.sub(F:RGBToHex(F:ClassColor(leaderInfo.classFileName)), 3, 10)
+    local classColorStr = strsub(F:RGBToHex(F:ClassColor(leaderInfo.classFileName)), 3, 10)
     self.CharacterName:SetText(format(str, classColorStr, leaderInfo.name))
     self.Level:SetText(leaderInfo.keystoneLevel)
 end
 
 local resize
-function BLIZZARD:GuildBest_Update()
+function ECF:GuildBest_Update()
     if not frame then
-        BLIZZARD:GuildBest_Create()
+        ECF:GuildBest_Create()
     end
     if self.leadersAvailable then
         local leaders = C_ChallengeMode_GetGuildLeaders()
         if leaders and #leaders > 0 then
             for i = 1, #leaders do
-                BLIZZARD.GuildBest_SetUp(frame.entries[i], leaders[i])
+                ECF.GuildBest_SetUp(frame.entries[i], leaders[i])
             end
             frame:Show()
         else
@@ -114,14 +115,14 @@ function BLIZZARD:GuildBest_Update()
     end
 
     if not resize and hasAngryKeystones then
-        local scheduel = select(5, self:GetChildren())
+        local schedule = _G.AngryKeystones.Modules.Schedule
         frame:SetWidth(246)
         frame:ClearAllPoints()
-        frame:SetPoint('BOTTOMLEFT', scheduel, 'TOPLEFT', 0, 10)
+        frame:SetPoint('BOTTOMLEFT', schedule.AffixFrame, 'TOPLEFT', 0, 10)
 
         self.WeeklyInfo.Child.ThisWeekLabel:SetPoint('TOP', -135, -25)
         if C.IsNewPatch then
-            self.WeeklyInfo.Child.DungeonScoreInfo:SetPoint('TOP', -140, -210)
+            schedule.KeystoneText:SetScale(.0001)
         end
 
         local affix = self.WeeklyInfo.Child.Affixes[1]
@@ -134,13 +135,13 @@ function BLIZZARD:GuildBest_Update()
     end
 end
 
-function BLIZZARD.GuildBest_OnLoad(event, addon)
+function ECF.GuildBest_OnLoad(event, addon)
     if addon == 'Blizzard_ChallengesUI' then
-        hooksecurefunc('ChallengesFrame_Update', BLIZZARD.GuildBest_Update)
-        BLIZZARD:KeystoneInfo_Create()
-        _G.ChallengesFrame.WeeklyInfo.Child.WeeklyChest:HookScript('OnEnter', BLIZZARD.KeystoneInfo_WeeklyRuns)
+        hooksecurefunc('ChallengesFrame_Update', ECF.GuildBest_Update)
+        ECF:KeystoneInfo_Create()
+        _G.ChallengesFrame.WeeklyInfo.Child.WeeklyChest:HookScript('OnEnter', ECF.KeystoneInfo_WeeklyRuns)
 
-        F:UnregisterEvent(event, BLIZZARD.GuildBest_OnLoad)
+        F:UnregisterEvent(event, ECF.GuildBest_OnLoad)
     end
 end
 
@@ -152,7 +153,7 @@ local function sortHistory(entry1, entry2)
     end
 end
 
-function BLIZZARD:KeystoneInfo_WeeklyRuns()
+function ECF:KeystoneInfo_WeeklyRuns()
     local runHistory = C_MythicPlus_GetRunHistory(false, true)
     local numRuns = runHistory and #runHistory
     if numRuns > 0 then
@@ -177,7 +178,7 @@ function BLIZZARD:KeystoneInfo_WeeklyRuns()
     end
 end
 
-function BLIZZARD:KeystoneInfo_Create()
+function ECF:KeystoneInfo_Create()
     local texture = select(10, GetItemInfo(158923)) or 525134
     local iconColor = C.QualityColors[LE_ITEM_QUALITY_EPIC or 4]
     local button = CreateFrame('Frame', nil, _G.ChallengesFrame.WeeklyInfo, 'BackdropTemplate')
@@ -221,15 +222,15 @@ function BLIZZARD:KeystoneInfo_Create()
     )
 end
 
-function BLIZZARD:KeystoneInfo_UpdateBag()
+function ECF:KeystoneInfo_UpdateBag()
     local keystoneMapID = C_MythicPlus_GetOwnedKeystoneChallengeMapID()
     if keystoneMapID then
         return keystoneMapID, C_MythicPlus_GetOwnedKeystoneLevel()
     end
 end
 
-function BLIZZARD:KeystoneInfo_Update()
-    local mapID, keystoneLevel = BLIZZARD:KeystoneInfo_UpdateBag()
+function ECF:KeystoneInfo_Update()
+    local mapID, keystoneLevel = ECF:KeystoneInfo_UpdateBag()
     if mapID then
         _G.FREE_ADB['KeystoneInfo'][C.MyFullName] = mapID .. ':' .. keystoneLevel .. ':' .. C.MyClass .. ':' .. C.MyFaction
     else
@@ -237,12 +238,10 @@ function BLIZZARD:KeystoneInfo_Update()
     end
 end
 
-function BLIZZARD:GuildBest()
+function ECF:OnLogin()
     hasAngryKeystones = IsAddOnLoaded('AngryKeystones')
-    F:RegisterEvent('ADDON_LOADED', BLIZZARD.GuildBest_OnLoad)
+    F:RegisterEvent('ADDON_LOADED', ECF.GuildBest_OnLoad)
 
-    BLIZZARD:KeystoneInfo_Update()
-    F:RegisterEvent('BAG_UPDATE', BLIZZARD.KeystoneInfo_Update)
+    ECF:KeystoneInfo_Update()
+    F:RegisterEvent('BAG_UPDATE', ECF.KeystoneInfo_Update)
 end
-
-BLIZZARD:RegisterBlizz('GuildBest', BLIZZARD.GuildBest)
