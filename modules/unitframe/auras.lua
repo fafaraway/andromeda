@@ -186,6 +186,8 @@ function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, cast
             local auraFilter = C.DB.Nameplate.AuraFilterMode
             return (auraFilter == 3 and nameplateShowAll) or (auraFilter ~= 1 and isMine)
         end
+    elseif style == 'target' then
+        return (not button.isDebuff and isStealable) or (element.onlyShowPlayer and button.isPlayer) or (not element.onlyShowPlayer and name)
     elseif style == 'focus' then
         return (not button.isDebuff and isStealable) or (button.isDebuff and name)
     else
