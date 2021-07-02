@@ -18,6 +18,15 @@ C.ReminderBuffsList = {
             equip = true,
             instance = true,
             disable = true
+        },
+        {
+            itemID = 185818, -- 究极秘术
+            spells = {
+                [351952] = true
+            },
+            equip = true,
+            instance = true,
+            combat = true
         }
     },
     MAGE = {
