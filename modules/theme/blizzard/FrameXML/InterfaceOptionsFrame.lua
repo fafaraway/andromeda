@@ -56,13 +56,10 @@ tinsert(
                     'InterfaceOptionsCameraPanel',
                     'InterfaceOptionsMousePanel',
                     'InterfaceOptionsAccessibilityPanel',
+                    'InterfaceOptionsColorblindPanel',
                     'CompactUnitFrameProfiles',
                     'CompactUnitFrameProfilesGeneralOptionsFrame'
                 }
-
-                if C.IsNewPatch then
-                    tinsert(interfacePanels, 'InterfaceOptionsColorblindPanel')
-                end
 
                 for _, name in pairs(interfacePanels) do
                     local frame = _G[name]

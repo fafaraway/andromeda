@@ -313,11 +313,6 @@ TOOLTIP:RegisterTooltips(
     function()
         TOOLTIP.ReskinTooltip(_G.FrameStackTooltip)
         _G.FrameStackTooltip:SetScale(_G.UIParent:GetScale())
-        if not C.IsNewPatch then
-            TOOLTIP.ReskinTooltip(_G.EventTraceTooltip)
-            _G.EventTraceTooltip:SetParent(_G.UIParent)
-            _G.EventTraceTooltip:SetFrameStrata('TOOLTIP')
-        end
     end
 )
 

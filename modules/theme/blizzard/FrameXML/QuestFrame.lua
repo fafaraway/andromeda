@@ -111,22 +111,12 @@ tinsert(
         local bg = F.SetBD(_G.QuestModelScene)
         bg:SetOutside(nil, nil, nil, _G.QuestNPCModelTextFrame)
 
-        if C.IsNewPatch then
-            hooksecurefunc(
-                'QuestFrame_ShowQuestPortrait',
-                function(parentFrame, _, _, _, _, _, x, y)
-                    x = x + 6
-                    _G.QuestModelScene:SetPoint('TOPLEFT', parentFrame, 'TOPRIGHT', x, y)
-                end
-            )
-        else
-            hooksecurefunc(
-                'QuestFrame_ShowQuestPortrait',
-                function(parentFrame, _, _, _, _, x, y)
-                    x = x + 6
-                    _G.QuestModelScene:SetPoint('TOPLEFT', parentFrame, 'TOPRIGHT', x, y)
-                end
-            )
-        end
+        hooksecurefunc(
+            'QuestFrame_ShowQuestPortrait',
+            function(parentFrame, _, _, _, _, _, x, y)
+                x = x + 6
+                _G.QuestModelScene:SetPoint('TOPLEFT', parentFrame, 'TOPRIGHT', x, y)
+            end
+        )
     end
 )

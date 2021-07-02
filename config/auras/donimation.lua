@@ -1,7 +1,5 @@
-local F, C = unpack(select(2, ...))
+local F = unpack(select(2, ...))
 local AURA = F:GetModule('AurasTable')
-
-if not C.IsNewPatch then return end
 
 local TIER = 9
 local INSTANCE = 1193 -- 统御圣所

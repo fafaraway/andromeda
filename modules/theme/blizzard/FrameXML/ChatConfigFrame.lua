@@ -192,53 +192,51 @@ tinsert(
         _G.ChatConfigMoveFilterDownButton:SetPoint('LEFT', _G.ChatConfigMoveFilterUpButton, 'RIGHT', 1, 0)
 
         -- TextToSpeech
-        if C.IsNewPatch then
-            F.StripTextures(_G.TextToSpeechButton, 5)
+        F.StripTextures(_G.TextToSpeechButton, 5)
 
-            F.Reskin(_G.TextToSpeechFramePlaySampleButton)
-            F.Reskin(_G.TextToSpeechFramePlaySampleAlternateButton)
-            F.Reskin(_G.TextToSpeechDefaultButton)
+        F.Reskin(_G.TextToSpeechFramePlaySampleButton)
+        F.Reskin(_G.TextToSpeechFramePlaySampleAlternateButton)
+        F.Reskin(_G.TextToSpeechDefaultButton)
 
-            F.ReskinDropDown(_G.TextToSpeechFrameTtsVoiceDropdown)
-            F.ReskinDropDown(_G.TextToSpeechFrameTtsVoiceAlternateDropdown)
-            F.ReskinSlider(_G.TextToSpeechFrameAdjustRateSlider)
-            F.ReskinSlider(_G.TextToSpeechFrameAdjustVolumeSlider)
+        F.ReskinDropDown(_G.TextToSpeechFrameTtsVoiceDropdown)
+        F.ReskinDropDown(_G.TextToSpeechFrameTtsVoiceAlternateDropdown)
+        F.ReskinSlider(_G.TextToSpeechFrameAdjustRateSlider)
+        F.ReskinSlider(_G.TextToSpeechFrameAdjustVolumeSlider)
 
-            local checkboxes = {
-                'PlayActivitySoundWhenNotFocusedCheckButton',
-                'PlaySoundSeparatingChatLinesCheckButton',
-                'AddCharacterNameToSpeechCheckButton',
-                'NarrateMyMessagesCheckButton',
-                'UseAlternateVoiceForSystemMessagesCheckButton'
-            }
-            for _, checkbox in pairs(checkboxes) do
-                F.ReskinCheck(_G.TextToSpeechFramePanelContainer[checkbox])
-            end
+        local checkboxes = {
+            'PlayActivitySoundWhenNotFocusedCheckButton',
+            'PlaySoundSeparatingChatLinesCheckButton',
+            'AddCharacterNameToSpeechCheckButton',
+            'NarrateMyMessagesCheckButton',
+            'UseAlternateVoiceForSystemMessagesCheckButton'
+        }
+        for _, checkbox in pairs(checkboxes) do
+            F.ReskinCheck(_G.TextToSpeechFramePanelContainer[checkbox])
+        end
 
-            hooksecurefunc(
-                'TextToSpeechFrame_UpdateMessageCheckboxes',
-                function(frame)
-                    local checkBoxTable = frame.checkBoxTable
-                    if checkBoxTable then
-                        local checkBoxNameString = frame:GetName() .. 'CheckBox'
-                        local checkBoxName, checkBox
-                        for index, _ in ipairs(checkBoxTable) do
-                            checkBoxName = checkBoxNameString .. index
-                            checkBox = _G[checkBoxName]
-                            if checkBox and not checkBox.styled then
-                                F.ReskinCheck(checkBox)
-                                checkBox.styled = true
-                            end
+        hooksecurefunc(
+            'TextToSpeechFrame_UpdateMessageCheckboxes',
+            function(frame)
+                local checkBoxTable = frame.checkBoxTable
+                if checkBoxTable then
+                    local checkBoxNameString = frame:GetName() .. 'CheckBox'
+                    local checkBoxName, checkBox
+                    for index in ipairs(checkBoxTable) do
+                        checkBoxName = checkBoxNameString .. index
+                        checkBox = _G[checkBoxName]
+                        if checkBox and not checkBox.styled then
+                            F.ReskinCheck(checkBox)
+                            checkBox.styled = true
                         end
                     end
                 end
-            )
+            end
+        )
 
-            -- voice pickers
-            ReskinVoicePicker(_G.TextToSpeechFrameTtsVoicePicker)
-            ReskinVoicePicker(_G.TextToSpeechFrameTtsVoiceAlternatePicker)
+        -- voice pickers
+        ReskinVoicePicker(_G.TextToSpeechFrameTtsVoicePicker)
+        ReskinVoicePicker(_G.TextToSpeechFrameTtsVoiceAlternatePicker)
 
-            F.StripTextures(_G.ChatConfigTextToSpeechChannelSettingsLeft)
-        end
+        F.StripTextures(_G.ChatConfigTextToSpeechChannelSettingsLeft)
     end
 )

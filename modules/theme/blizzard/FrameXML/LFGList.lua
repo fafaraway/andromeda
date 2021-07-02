@@ -149,9 +149,6 @@ tinsert(
         local prevHeader
         for _, headerName in pairs({'NameColumnHeader', 'RoleColumnHeader', 'ItemLevelColumnHeader', 'DungeonScoreColumnHeader'}) do
             local header = ApplicationViewer[headerName]
-            if not header then
-                break
-            end -- isNewPatch
 
             F.StripTextures(header)
             header.Label:SetFont(C.Assets.Fonts.Regular, 14, 'OUTLINE')

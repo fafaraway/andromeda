@@ -1507,6 +1507,13 @@ local function UpdateRaidDebuffs()
     UNITFRAME:UpdateRaidDebuffs()
 end
 
+local function AddNewDungeon(dungeons, dungeonID)
+    local name = EJ_GetInstanceInfo(dungeonID)
+    if name then
+        tinsert(dungeons, name)
+    end
+end
+
 function GUI:SetupRaidDebuffs(parent)
     local guiName = 'FreeUI_GUI_RaidDebuffs'
     TogglePanel(guiName)
@@ -1544,19 +1551,13 @@ function GUI:SetupRaidDebuffs(parent)
 
     local dungeons = {}
     for dungeonID = 1182, 1189 do
-        local name = EJ_GetInstanceInfo(dungeonID)
-        if name then
-            tinsert(dungeons, name)
-        end
+        AddNewDungeon(dungeons, dungeonID)
     end
 
-    local raids = {[1] = EJ_GetInstanceInfo(1190)}
-
-    if C.IsNewPatch then
-        raids[2] = EJ_GetInstanceInfo(1193)
-        local newInst = EJ_GetInstanceInfo(1194)
-        tinsert(dungeons, newInst)
-    end
+    local raids = {
+        [1] = EJ_GetInstanceInfo(1190),
+        [2] = EJ_GetInstanceInfo(1193),
+    }
 
     options[1] = GUI:CreateDropdown(frame, _G.DUNGEONS, 123, -30, dungeons, nil, 107, 24)
     options[1]:Hide()
