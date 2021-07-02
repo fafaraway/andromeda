@@ -1,8 +1,6 @@
 local F, C = unpack(select(2, ...))
 local L = F.Libs.ACL:NewLocale('FreeUI', 'zhCN', true, C.IsDeveloper)
 
---@localization(locale="enUS", format="lua_additive_table", same-key-is-true=true, handle-subnamespaces="concat")@
-
 L['%s is casting %s'] = true
 L['%s has been reset.'] = true
 L['%s has put down %s'] = true
