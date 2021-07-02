@@ -66,11 +66,11 @@ local function ApplyStyle(self)
     local timer = _G[frame_name .. 'BarTimer']
 
     if self.enlarged then
-        frame:SetWidth(self.owner.options.HugeWidth)
-        tbar:SetWidth(self.owner.options.HugeWidth)
+        frame:SetWidth(self.owner.Options.HugeWidth)
+        tbar:SetWidth(self.owner.Options.HugeWidth)
     else
-        frame:SetWidth(self.owner.options.Width)
-        tbar:SetWidth(self.owner.options.Width)
+        frame:SetWidth(self.owner.Options.Width)
+        tbar:SetWidth(self.owner.Options.Width)
     end
 
     frame:SetScale(1)
