@@ -37,6 +37,9 @@ local hooksecurefunc = hooksecurefunc
 local UnitClass = UnitClass
 local UnitCreatureType = UnitCreatureType
 local UnitIsConnected = UnitIsConnected
+local IsAltKeyDown = IsAltKeyDown
+local C_ChallengeMode_GetDungeonScoreRarityColor = C_ChallengeMode.GetDungeonScoreRarityColor
+local C_PlayerInfo_GetPlayerMythicPlusRatingSummary = C_PlayerInfo.GetPlayerMythicPlusRatingSummary
 
 local F, C, L = unpack(select(2, ...))
 local TOOLTIP = F:RegisterModule('Tooltip')
@@ -94,6 +97,19 @@ function TOOLTIP:GetTarget(unit)
         return format('|cffff0000%s|r', '>' .. strupper(_G.YOU) .. '<')
     else
         return F:RGBToHex(F:UnitColor(unit)) .. UnitName(unit) .. '|r'
+    end
+end
+
+function TOOLTIP:GetChallengeModeScore(unit)
+    if not C.DB.Tooltip.ChallengeModeScore or not IsAltKeyDown() then
+        return
+    end
+
+    local summary = C_PlayerInfo_GetPlayerMythicPlusRatingSummary(unit)
+    local score = summary and summary.currentSeasonScore
+    if score and score > 0 then
+        local color = C_ChallengeMode_GetDungeonScoreRarityColor(score) or _G.HIGHLIGHT_FONT_COLOR
+        _G.GameTooltip:AddLine(format(L['MythicScore'], color:WrapTextInColorCode(score)))
     end
 end
 
@@ -214,6 +230,7 @@ function TOOLTIP:OnTooltipSetUnit()
         end
 
         TOOLTIP.InspectUnitSpecAndLevel(self, unit)
+        TOOLTIP:GetChallengeModeScore(unit)
     else
         self.StatusBar:SetStatusBarColor(0, .9, 0)
     end

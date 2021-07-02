@@ -321,6 +321,7 @@ C.CharacterSettings = {
         BorderColor = true,
         SpecIlvl = true,
         SpecIlvlByAlt = true,
+        ChallengeModeScore = true,
         Icon = true,
         TargetBy = true,
         ExtraInfo = true,
