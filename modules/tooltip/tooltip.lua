@@ -101,15 +101,15 @@ function TOOLTIP:GetTarget(unit)
 end
 
 function TOOLTIP:GetChallengeModeScore(unit)
-    if not C.DB.Tooltip.ChallengeModeScore or not IsAltKeyDown() then
+    if not C.DB.Tooltip.ChallengeModeScore then
         return
     end
 
     local summary = C_PlayerInfo_GetPlayerMythicPlusRatingSummary(unit)
     local score = summary and summary.currentSeasonScore
-    if score and score > 0 then
+    if score and score > 0 and IsAltKeyDown() then
         local color = C_ChallengeMode_GetDungeonScoreRarityColor(score) or _G.HIGHLIGHT_FONT_COLOR
-        _G.GameTooltip:AddLine(format(L['MythicScore'], color:WrapTextInColorCode(score)))
+        _G.GameTooltip:AddLine(format(L['Mythic Score: %s'], color:WrapTextInColorCode(score)))
     end
 end
 
