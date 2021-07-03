@@ -30,7 +30,14 @@ _G.FREE_DB = {} -- Character variables
 
 _G.FreeUI = ns -- Allow other addon access
 
-local F = unpack(ns)
+local F, C = unpack(ns)
+
+local addonVersion = '@project-version@'
+if (addonVersion:find('project%-version')) then
+    addonVersion = 'Development'
+end
+C.AddonVersion = addonVersion
+C.IsDeveloper = C.AddonVersion == 'Development'
 
 --[[ Libraries ]]
 

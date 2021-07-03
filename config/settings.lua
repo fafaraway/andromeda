@@ -4,13 +4,6 @@ local select = _G.select
 
 local _, C = unpack(select(2, ...))
 
-local addonVersion = '@project-version@'
-if (addonVersion:find('project%-version')) then
-    addonVersion = 'Development'
-end
-C.AddonVersion = addonVersion
-C.IsDeveloper = C.AddonVersion == 'Development'
-
 C.CharacterSettings = {
     ShadowLands = false,
     InstallationComplete = false,
