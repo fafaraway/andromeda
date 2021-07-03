@@ -28,6 +28,16 @@ local function ShouldHideBackground()
     return IsInJailersTower() or instID == 8
 end
 
+local function ReskinSpellWidget(spell)
+    if not spell.bg then
+        spell.Border:SetAlpha(0)
+        spell.bg = F.ReskinIcon(spell.Icon)
+    end
+
+    spell.IconMask:Hide()
+    spell.Text:SetTextColor(1, 1, 1)
+end
+
 C.Themes['Blizzard_PlayerChoice'] = function()
     hooksecurefunc(
         _G.PlayerChoiceFrame,
@@ -93,6 +103,9 @@ C.Themes['Blizzard_PlayerChoice'] = function()
                 if widgetContainer and widgetContainer.widgetFrames then
                     for _, widgetFrame in pairs(widgetContainer.widgetFrames) do
                         ReskinOptionText(widgetFrame.Text, 1, 1, 1)
+                        if widgetFrame.Spell then
+                            ReskinSpellWidget(widgetFrame.Spell)
+                        end
                     end
                 end
             end
