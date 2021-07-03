@@ -1,14 +1,13 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
     <Script file="AddonList.lua"/>
     <Script file="AlertFrames.lua"/>
-    <Script file="BankFrame.lua"/>
     <Script file="CharacterFrame.lua"/>
     <Script file="ChatBubbles.lua"/>
     <Script file="ChatConfigFrame.lua"/>
     <Script file="ChatFrame.lua"/>
     <Script file="ColorPickerFrame.lua"/>
     <Script file="CompactRaidFrames.lua"/>
-    <Script file="ContainerFrame.lua"/>
+
     <Script file="DressUpFrames.lua"/>
     <Script file="EquipmentFlyout.lua"/>
     <Script file="FriendsFrame.lua"/>
@@ -21,6 +20,7 @@
     <Script file="HelpFrame.lua"/>
     <Script file="HelpTipTemplate.lua"/>
     <Script file="InterfaceOptionsFrame.lua"/>
+    <Script file="Inventory.lua"/>
     <Script file="ItemTextFrame.lua"/>
     <Script file="LFGFrame.lua"/>
     <Script file="LFGList.lua"/>
