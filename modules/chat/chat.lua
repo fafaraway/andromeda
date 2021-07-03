@@ -663,6 +663,15 @@ local function FixProfanityFilterSideEffects()
         end
         return gameAccountInfo
     end
+
+    local Old_GetFriendAccountInfo = _G.C_BattleNet.GetFriendAccountInfo
+    function _G.C_BattleNet.GetFriendAccountInfo(...)
+        local accountInfo = Old_GetFriendAccountInfo(...)
+        if accountInfo and accountInfo.gameAccountInfo then
+            accountInfo.gameAccountInfo.isInCurrentRegion = true
+        end
+        return accountInfo
+    end
 end
 
 function CHAT:DisableProfanityFilter()
