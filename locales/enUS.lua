@@ -314,6 +314,7 @@ L['Message fading'] = true
 L['MinScale'] = true
 L['Minimap Scale'] = true
 L['Monk stagger bar'] = true
+L['Mythic Score: %s'] = true
 L['Mythic+ completed'] = true
 L['Name only style'] = true
 L['Nameplate'] = true
