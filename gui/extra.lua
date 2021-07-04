@@ -807,7 +807,7 @@ function GUI:SetupNameplateSize(parent)
     local offset = -10
     for _, v in ipairs(datas) do
         CreateGroupTitle(scroll, L['Nameplate Size'], offset)
-        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50)
+        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50)
         offset = offset - 65
     end
 end
