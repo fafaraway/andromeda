@@ -360,7 +360,7 @@ GUI.OptionsList = {
         {1, 'Tooltip', 'TargetBy', L['Show unit targeted by']},
         {1, 'Tooltip', 'ExtraInfo', L['Show extra info'], true},
         {1, 'Tooltip', 'SpecIlvl', L['Show spec&ilvl']},
-        {1, 'Tooltip', 'ChallengeModeScore', L['Show mythic+ rating'], true, nil, nil, L['Show unit Mythic+ Rating at current season.|nHide tooltip info if unit score is ZERO.']},
+        {1, 'Tooltip', 'PvEStats', L['Show PvE stats'], true, nil, nil, L['Show PvE progression of current season.']},
         {1, 'Tooltip', 'HideRealm', L['Hide realm']},
         {1, 'Tooltip', 'HideTitle', L['Hide title'], true},
         {1, 'Tooltip', 'HideGuildRank', L['Hide guild rank']},

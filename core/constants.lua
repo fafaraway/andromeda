@@ -46,6 +46,7 @@ C.MyClass = select(2, UnitClass('player'))
 C.MyName = UnitName('player')
 C.MyLevel = UnitLevel('player')
 C.MyFaction = select(2, UnitFactionGroup('player'))
+C.MyGUID = UnitGUID('player')
 C.MyRace = select(2, UnitRace('player'))
 C.MyRealm = GetRealmName()
 C.MyFullName = C.MyName .. '-' .. C.MyRealm

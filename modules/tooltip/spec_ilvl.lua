@@ -27,7 +27,6 @@ local UnitIsUnit = UnitIsUnit
 local UnitIsPlayer = UnitIsPlayer
 local UnitIsDeadOrGhost = UnitIsDeadOrGhost
 local UnitIsVisible = UnitIsVisible
-local IsShiftKeyDown = IsShiftKeyDown
 local IsAltKeyDown = IsAltKeyDown
 local CanInspect = CanInspect
 local UnitOnTaxi = UnitOnTaxi
@@ -115,6 +114,7 @@ function TOOLTIP:SetupSpecLevel(spec, level)
     if specLine then
         specLine:SetText(spec)
     else
+        _G.GameTooltip:AddLine(' ')
         _G.GameTooltip:AddLine(spec)
     end
 

@@ -59,7 +59,6 @@ local F, C, L = unpack(select(2, ...))
 local assets = C.Assets
 
 --[[ Functions ]]
-
 do
     function F.HelpInfoAcknowledge(callbackArg)
         _G.FREE_ADB['HelpTips'][callbackArg] = true
@@ -79,17 +78,21 @@ do
     end
 
     function F:Print(str, ...)
-        print(C.GreyColor .. '<|r' .. C.AddonName.. C.GreyColor .. '>|r ' .. str:format(...))
+        print(C.GreyColor .. '<|r' .. C.AddonName .. C.GreyColor .. '>|r ' .. str:format(...))
     end
 
     function F:Debug(str, ...)
-        if not C.IsDeveloper then return end
+        if not C.IsDeveloper then
+            return
+        end
 
         print(C.GreyColor .. '<|r' .. C.RedColor .. 'Debug|r' .. C.GreyColor .. '>|r ' .. str:format(...))
     end
 
     function F:ThrowError(err, msg)
-        if not err then return end
+        if not err then
+            return
+        end
 
         err = format('FreeUI: %s Error\n%s', msg, err)
 
@@ -99,10 +102,37 @@ do
             _G.ScriptErrorsFrame:OnError(err, false, false)
         end
     end
+
+    function F:RawHook(object, method, func)
+        if type(object) ~= 'table' then
+            object, method, func = nil, object, method
+        end
+
+        assert(type(func) == 'function', 'Bad arg, function expected')
+        if object then
+            assert(type(object[method]) == 'function', 'Bad arg, string function name expected')
+        else
+            assert(type(_G[method]) == 'function', 'Bad arg, string function name expected')
+        end
+
+        self.hooks = self.hooks or {}
+
+        if object then
+            self.hooks[object] = self.hooks[object] or {}
+            self.hooks[object][method] = object[method]
+            object[method] = function(...)
+                func(...)
+            end
+        else
+            self.hooks[method] = _G[method]
+            _G[method] = function(...)
+                func(...)
+            end
+        end
+    end
 end
 
 --[[ Math ]]
-
 do
     local numCap = {CHINESE = {'兆', '亿', '万'}}
 
@@ -378,8 +408,6 @@ do
         return id
     end
 
-
-
     function F:WaitFunc(elapse)
         local i = 1
         while i <= #F.WaitTable do
@@ -424,7 +452,6 @@ do
 end
 
 --[[ UI widgets ]]
-
 do
     -- Dropdown menu
     F.EasyMenu = CreateFrame('Frame', 'FreeUI_EasyMenu', _G.UIParent, 'UIDropDownMenuTemplate')
@@ -822,7 +849,6 @@ do
 end
 
 --[[ UI skins ]]
-
 do
     -- Kill regions
     F.HiddenFrame = CreateFrame('Frame')
@@ -866,7 +892,7 @@ do
         'portrait',
         'ScrollFrameBorder',
         'ScrollUpBorder',
-        'ScrollDownBorder',
+        'ScrollDownBorder'
     }
 
     function F:StripTextures(kill)
@@ -948,7 +974,7 @@ do
         ['auctionhouse-itemicon-border-purple'] = LE_ITEM_QUALITY_EPIC,
         ['auctionhouse-itemicon-border-orange'] = LE_ITEM_QUALITY_LEGENDARY,
         ['auctionhouse-itemicon-border-artifact'] = LE_ITEM_QUALITY_ARTIFACT,
-        ['auctionhouse-itemicon-border-account'] = LE_ITEM_QUALITY_HEIRLOOM,
+        ['auctionhouse-itemicon-border-account'] = LE_ITEM_QUALITY_HEIRLOOM
     }
 
     local function UpdateIconBorderColorByAtlas(self, atlas)
@@ -992,21 +1018,24 @@ do
         local alpha = 1
         local last = 0
 
-        frame:SetScript('OnUpdate', function(self, elapsed)
-            last = last + elapsed
-            if last > speed then
-                last = 0
-                self:SetAlpha(alpha)
-            end
+        frame:SetScript(
+            'OnUpdate',
+            function(self, elapsed)
+                last = last + elapsed
+                if last > speed then
+                    last = 0
+                    self:SetAlpha(alpha)
+                end
 
-            alpha = alpha - elapsed * mult
-            if alpha < 0 and mult > 0 then
-                mult = mult * -1
-                alpha = 0
-            elseif alpha > 1 and mult < 0 then
-                mult = mult * -1
+                alpha = alpha - elapsed * mult
+                if alpha < 0 and mult > 0 then
+                    mult = mult * -1
+                    alpha = 0
+                elseif alpha > 1 and mult < 0 then
+                    mult = mult * -1
+                end
             end
-        end)
+        )
     end
 
     local function StartGlow(self)
@@ -1083,7 +1112,7 @@ do
         'BottomRightTex',
         'RightTex',
         'MiddleTex',
-        'Center',
+        'Center'
     }
 
     function F:Reskin(noGlow)
@@ -1249,7 +1278,9 @@ do
         self:SetPoint('TOPRIGHT', parent, 'TOPRIGHT', xOffset, yOffset)
 
         F.StripTextures(self)
-        if self.Border then self.Border:SetAlpha(0) end
+        if self.Border then
+            self.Border:SetAlpha(0)
+        end
         local bg = F.CreateBDFrame(self, 0, true)
         bg:SetAllPoints()
 
@@ -1585,7 +1616,7 @@ do
         ['Adventures-Tank'] = 'Soulbinds_Tree_Conduit_Icon_Protect',
         ['Adventures-Healer'] = 'ui_adv_health',
         ['Adventures-DPS'] = 'ui_adv_atk',
-        ['Adventures-DPS-Ranged'] = 'Soulbinds_Tree_Conduit_Icon_Utility',
+        ['Adventures-DPS-Ranged'] = 'Soulbinds_Tree_Conduit_Icon_Utility'
     }
 
     local function ReplaceFollowerRole(roleIcon, atlas)
@@ -1737,7 +1768,6 @@ do
 end
 
 --[[ GUI elements ]]
-
 do
     function F:CreateHelpInfo(tooltip)
         local bu = CreateFrame('Button', nil, self)
@@ -2062,7 +2092,6 @@ do
 end
 
 --[[ Add APIs ]]
-
 do
     function F:SetPointsRestricted(frame)
         if frame and not pcall(frame.GetPoint, frame) then
@@ -2212,7 +2241,7 @@ do
         'portrait',
         'ScrollFrameBorder',
         'ScrollUpBorder',
-        'ScrollDownBorder',
+        'ScrollDownBorder'
     }
 
     local STRIP_TEX = 'Texture'
@@ -2352,7 +2381,6 @@ do
 end
 
 --[[ Itemlevel ]]
-
 do
     local iLvlDB = {}
     local itemLevelString = '^' .. gsub(ITEM_LEVEL, '%%d', '')
@@ -2499,7 +2527,6 @@ do
 end
 
 --[[ Smooth ]]
-
 do
     local activeObjects, handledObjects = {}, {}
     local targetFPS, amount = 60, .33

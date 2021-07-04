@@ -100,19 +100,6 @@ function TOOLTIP:GetTarget(unit)
     end
 end
 
-function TOOLTIP:GetChallengeModeScore(unit)
-    if not C.DB.Tooltip.ChallengeModeScore then
-        return
-    end
-
-    local summary = C_PlayerInfo_GetPlayerMythicPlusRatingSummary(unit)
-    local score = summary and summary.currentSeasonScore
-    if score and score > 0 and IsAltKeyDown() then
-        local color = C_ChallengeMode_GetDungeonScoreRarityColor(score) or _G.HIGHLIGHT_FONT_COLOR
-        _G.GameTooltip:AddLine(format(L['Mythic Score: %s'], color:WrapTextInColorCode(score)))
-    end
-end
-
 function TOOLTIP:OnTooltipSetUnit()
     if self:IsForbidden() then
         return
@@ -230,7 +217,7 @@ function TOOLTIP:OnTooltipSetUnit()
         end
 
         TOOLTIP.InspectUnitSpecAndLevel(self, unit)
-        TOOLTIP:GetChallengeModeScore(unit)
+        TOOLTIP.AddPvEStats()
     else
         self.StatusBar:SetStatusBarColor(0, .9, 0)
     end
@@ -439,4 +426,5 @@ function TOOLTIP:OnLogin()
     TOOLTIP:TargetedInfo()
     TOOLTIP:ConduitCollectionData()
     TOOLTIP:Achievement()
+
 end
