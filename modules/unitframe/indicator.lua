@@ -76,6 +76,9 @@ function UNITFRAME:AddPvPIndicator(self) -- Deprecated
 end
 
 local function CombatIndicatorPostUpdate(self, inCombat)
+    if not C.DB.Unitframe.RestingIndicator then
+        return
+    end
     local isResting = IsResting()
     if inCombat then
         self.__owner.RestingIndicator:Hide()
