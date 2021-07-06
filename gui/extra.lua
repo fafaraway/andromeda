@@ -229,7 +229,9 @@ local function Checkbox_OnClick(self)
     local value = self.__value
     C.DB[key][value] = not C.DB[key][value]
     self:SetChecked(C.DB[key][value])
-    self.__func()
+    if self.__func then
+        self.__func()
+    end
 end
 
 local function CreateCheckbox(parent, offset, key, value, text, func)
