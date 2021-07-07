@@ -14,6 +14,7 @@ local GameTooltip_ClearMoney = GameTooltip_ClearMoney
 local hooksecurefunc = hooksecurefunc
 local UnitGUID = UnitGUID
 local C_PetBattles_IsInBattle = C_PetBattles.IsInBattle
+local C_CurrencyInfo_GetCurrencyListLink = C_CurrencyInfo.GetCurrencyListLink
 
 local F, C, L = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
@@ -21,6 +22,7 @@ local TOOLTIP = F:GetModule('Tooltip')
 local types = {
     spell = 'SpellID',
     item = 'ItemID',
+    currency = 'CurrencyID',
     quest = 'QuestID',
     talent = 'TalentID',
     achievement = 'AchievementID',
@@ -78,7 +80,6 @@ function TOOLTIP:AddLineForID(id, linkType, noadd)
         if itemStackCount and itemStackCount > 1 then
             self:AddDoubleLine(L['Stack'] .. ':', C.BlueColor .. itemStackCount)
         end
-
     end
 
     -- self:AddDoubleLine(linkType, format('%s', C.WhiteColor .. id))
@@ -147,26 +148,36 @@ function TOOLTIP:ExtraInfo()
     hooksecurefunc(_G.ItemRefTooltip, 'SetHyperlink', TOOLTIP.SetHyperLinkID)
 
     -- Spells
-    hooksecurefunc(_G.GameTooltip, 'SetUnitAura', function(self, ...)
-        local id = select(10, UnitAura(...))
-        if id then
-            TOOLTIP.AddLineForID(self, id, types.spell)
+    hooksecurefunc(
+        _G.GameTooltip,
+        'SetUnitAura',
+        function(self, ...)
+            local id = select(10, UnitAura(...))
+            if id then
+                TOOLTIP.AddLineForID(self, id, types.spell)
+            end
         end
-    end)
+    )
 
-    _G.GameTooltip:HookScript('OnTooltipSetSpell', function(self)
-        local id = select(2, self:GetSpell())
-        if id then
-            TOOLTIP.AddLineForID(self, id, types.spell)
+    _G.GameTooltip:HookScript(
+        'OnTooltipSetSpell',
+        function(self)
+            local id = select(2, self:GetSpell())
+            if id then
+                TOOLTIP.AddLineForID(self, id, types.spell)
+            end
         end
-    end)
+    )
 
-    hooksecurefunc('SetItemRef', function(link)
-        local id = tonumber(strmatch(link, 'spell:(%d+)'))
-        if id then
-            TOOLTIP.AddLineForID(_G.ItemRefTooltip, id, types.spell)
+    hooksecurefunc(
+        'SetItemRef',
+        function(link)
+            local id = tonumber(strmatch(link, 'spell:(%d+)'))
+            if id then
+                TOOLTIP.AddLineForID(_G.ItemRefTooltip, id, types.spell)
+            end
         end
-    end)
+    )
 
     -- Items
     _G.GameTooltip:HookScript('OnTooltipSetItem', TOOLTIP.SetItemID)
@@ -179,44 +190,83 @@ function TOOLTIP:ExtraInfo()
 
     -- GameTooltip:HookScript('OnTooltipSetItem', TOOLTIP.RemoveMoneyLine)
 
-    hooksecurefunc(_G.GameTooltip, 'SetToyByItemID', function(self, id)
-        if id then
-            TOOLTIP.AddLineForID(self, id, types.item)
-        end
-    end)
-
-    hooksecurefunc(_G.GameTooltip, 'SetRecipeReagentItem', function(self, recipeID, reagentIndex)
-        local link = C_TradeSkillUI_GetRecipeReagentItemLink(recipeID, reagentIndex)
-        local id = link and strmatch(link, 'item:(%d+):')
-        if id then
-            TOOLTIP.AddLineForID(self, id, types.item)
-        end
-    end)
-
-    -- NPCs
-    _G.GameTooltip:HookScript('OnTooltipSetUnit', function(self)
-        if C_PetBattles_IsInBattle() then
-            return
-        end
-
-        local unit = select(2, self:GetUnit())
-        if unit then
-            local guid = UnitGUID(unit) or ''
-            local id = tonumber(guid:match('-(%d+)-%x+$'), 10)
-            if id and guid:match('%a+') ~= 'Player' then
-                TOOLTIP.AddLineForID(self, id, types.unit)
+    hooksecurefunc(
+        _G.GameTooltip,
+        'SetToyByItemID',
+        function(self, id)
+            if id then
+                TOOLTIP.AddLineForID(self, id, types.item)
             end
         end
-    end)
+    )
+
+    hooksecurefunc(
+        _G.GameTooltip,
+        'SetRecipeReagentItem',
+        function(self, recipeID, reagentIndex)
+            local link = C_TradeSkillUI_GetRecipeReagentItemLink(recipeID, reagentIndex)
+            local id = link and strmatch(link, 'item:(%d+):')
+            if id then
+                TOOLTIP.AddLineForID(self, id, types.item)
+            end
+        end
+    )
+
+    -- Currencies
+    hooksecurefunc(
+        _G.GameTooltip,
+        'SetCurrencyToken',
+        function(self, index)
+            local id = tonumber(strmatch(C_CurrencyInfo_GetCurrencyListLink(index), 'currency:(%d+)'))
+            TOOLTIP.AddLineForID(self, id, types.currency)
+        end
+    )
+
+    hooksecurefunc(
+        _G.GameTooltip,
+        'SetCurrencyByID',
+        function(self, id)
+            TOOLTIP.AddLineForID(self, id, types.currency)
+        end
+    )
+
+    hooksecurefunc(
+        _G.GameTooltip,
+        'SetCurrencyTokenByID',
+        function(self, id)
+            TOOLTIP.AddLineForID(self, id, types.currency)
+        end
+    )
+
+    -- NPCs
+    _G.GameTooltip:HookScript(
+        'OnTooltipSetUnit',
+        function(self)
+            if C_PetBattles_IsInBattle() then
+                return
+            end
+
+            local unit = select(2, self:GetUnit())
+            if unit then
+                local guid = UnitGUID(unit) or ''
+                local id = tonumber(guid:match('-(%d+)-%x+$'), 10)
+                if id and guid:match('%a+') ~= 'Player' then
+                    TOOLTIP.AddLineForID(self, id, types.unit)
+                end
+            end
+        end
+    )
 
     -- Quests
-    hooksecurefunc('QuestMapLogTitleButton_OnEnter', function(self)
-        if self.questID then
-            TOOLTIP.AddLineForID(_G.GameTooltip, self.questID, types.quest)
+    hooksecurefunc(
+        'QuestMapLogTitleButton_OnEnter',
+        function(self)
+            if self.questID then
+                TOOLTIP.AddLineForID(_G.GameTooltip, self.questID, types.quest)
+            end
         end
-    end)
+    )
 
     -- Spell caster
     hooksecurefunc(_G.GameTooltip, 'SetUnitAura', TOOLTIP.UpdateSpellCaster)
 end
-
