@@ -181,4 +181,5 @@ function INFOBAR:OnLogin()
     INFOBAR:CreateFriendsBlock()
     INFOBAR:CreateReportBlock()
     INFOBAR:CreateCurrenciesBlock()
+    INFOBAR:CreateGoldBlock()
 end

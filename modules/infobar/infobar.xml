@@ -7,4 +7,5 @@
     <Script file="friends.lua"/>
     <Script file="report.lua"/>
     <Script file="currencies.lua"/>
+    <Script file="gold.lua"/>
 </Ui>

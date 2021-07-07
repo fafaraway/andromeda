@@ -341,7 +341,8 @@ C.CharacterSettings = {
         Guild = true,
         Friends = true,
         Report = true,
-        Currencies = true
+        Currencies = true,
+        Gold = true
     },
     Notification = {
         Enable = true,
