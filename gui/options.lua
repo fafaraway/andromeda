@@ -225,9 +225,10 @@ GUI.OptionsList = {
         {1, 'Infobar', 'Report', L['Daily/weekly infomation'], true},
         {1, 'Infobar', 'Friends', L['Friends']},
         {1, 'Infobar', 'Guild', L['Guild'], true},
-        {1, 'Infobar', 'Durability', L['Equipment durability']},
-        {1, 'Infobar', 'Currencies', L['Currencies stats'], true},
-        {1, 'Infobar', 'Spec', L['Specialization']},
+        {1, 'Infobar', 'Durability', L['Durability']},
+        {1, 'Infobar', 'Spec', L['Specialization'], true},
+        {1, 'Infobar', 'Gold', L['Gold']},
+        {1, 'Infobar', 'Currencies', L['Currencies'], true},
     },
     [4] = { -- chat
         {1, 'Chat', 'Enable', L['Enable Chat']},
