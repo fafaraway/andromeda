@@ -24,7 +24,6 @@ local types = {
     item = 'ItemID',
     currency = 'CurrencyID',
     quest = 'QuestID',
-    talent = 'TalentID',
     achievement = 'AchievementID',
     unit = 'NPCID'
 }
@@ -95,8 +94,6 @@ function TOOLTIP:SetHyperLinkID(link)
 
     if linkType == 'spell' or linkType == 'enchant' or linkType == 'trade' then
         TOOLTIP.AddLineForID(self, id, types.spell)
-    elseif linkType == 'talent' then
-        TOOLTIP.AddLineForID(self, id, types.talent, true)
     elseif linkType == 'quest' then
         TOOLTIP.AddLineForID(self, id, types.quest)
     elseif linkType == 'achievement' then
@@ -120,15 +117,7 @@ function TOOLTIP:SetItemID()
     end
 end
 
-function TOOLTIP:UpdateSpellCaster(...)
-    local unitCaster = select(7, UnitAura(...))
-    if unitCaster then
-        local name = GetUnitName(unitCaster, true)
-        local hexColor = F:RGBToHex(F:UnitColor(unitCaster))
-        self:AddDoubleLine(L['CastBy'] .. ':', hexColor .. name)
-        self:Show()
-    end
-end
+
 
 function TOOLTIP:RemoveMoneyLine() -- #TODO
     if not self.shownMoneyFrames then
@@ -142,6 +131,8 @@ function TOOLTIP:ExtraInfo()
     if not C.DB.Tooltip.ExtraInfo then
         return
     end
+
+
 
     -- Update all
     hooksecurefunc(_G.GameTooltip, 'SetHyperlink', TOOLTIP.SetHyperLinkID)
@@ -267,6 +258,7 @@ function TOOLTIP:ExtraInfo()
         end
     )
 
-    -- Spell caster
-    hooksecurefunc(_G.GameTooltip, 'SetUnitAura', TOOLTIP.UpdateSpellCaster)
+
 end
+
+

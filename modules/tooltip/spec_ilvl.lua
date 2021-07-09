@@ -39,6 +39,8 @@ local TOOLTIP = F:GetModule('Tooltip')
 local specPrefix = _G.SPECIALIZATION .. ': ' .. C.InfoColor
 local levelPrefix = L['iLvl'] .. ': ' .. C.InfoColor
 local isPending = _G.LFG_LIST_LOADING
+local prefixColor = '|cffffeeaa'
+local detailColor = '|cffffffff'
 local resetTime, frequency = 900, .5
 local cache, weapon, currentUNIT, currentGUID = {}, {}
 
@@ -99,7 +101,7 @@ function TOOLTIP:SetupSpecLevel(spec, level)
         return
     end
 
-    local specLine, levelLine
+    --[[ local specLine, levelLine
     for i = 2, _G.GameTooltip:NumLines() do
         local line = _G['GameTooltipTextLeft' .. i]
         local text = line:GetText()
@@ -123,6 +125,30 @@ function TOOLTIP:SetupSpecLevel(spec, level)
         levelLine:SetText(level)
     else
         _G.GameTooltip:AddLine(level)
+    end ]]
+
+    local infoLine
+    for i = 2, _G.GameTooltip:NumLines() do
+        local line = _G['GameTooltipTextLeft' .. i]
+        local text = line and line:GetText() or ''
+        if text == isPending or strfind(text, specPrefix) then
+            infoLine = line
+            break
+        end
+    end
+
+    spec = specPrefix .. (spec or isPending)
+    level = levelPrefix .. (level or isPending)
+
+    local infoString = isPending
+    if spec ~= isPending then
+        infoString = spec .. ' ' .. level
+    end
+
+    if infoLine then
+        infoLine:SetText(infoString)
+    else
+        _G.GameTooltip:AddLine(infoString)
     end
 end
 

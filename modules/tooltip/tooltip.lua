@@ -37,14 +37,14 @@ local hooksecurefunc = hooksecurefunc
 local UnitClass = UnitClass
 local UnitCreatureType = UnitCreatureType
 local UnitIsConnected = UnitIsConnected
-local IsAltKeyDown = IsAltKeyDown
-local C_ChallengeMode_GetDungeonScoreRarityColor = C_ChallengeMode.GetDungeonScoreRarityColor
-local C_PlayerInfo_GetPlayerMythicPlusRatingSummary = C_PlayerInfo.GetPlayerMythicPlusRatingSummary
+local UnitAura = UnitAura
+local GetUnitName = GetUnitName
 
 local F, C, L = unpack(select(2, ...))
 local TOOLTIP = F:RegisterModule('Tooltip')
 
 _G.ITEM_CREATED_BY = '' -- Remove creator name
+_G.PVP_ENABLED = '' -- Remove PvP text
 
 local targetTable = {}
 local classification = {
@@ -97,6 +97,32 @@ function TOOLTIP:GetTarget(unit)
         return format('|cffff0000%s|r', '>' .. strupper(_G.YOU) .. '<')
     else
         return F:RGBToHex(F:UnitColor(unit)) .. UnitName(unit) .. '|r'
+    end
+end
+
+function TOOLTIP:ScanTargetsInfo()
+    if not IsInGroup() then
+        return
+    end
+
+    local _, unit = self:GetUnit()
+    if not UnitExists(unit) then
+        return
+    end
+
+    wipe(targetTable)
+
+    for i = 1, GetNumGroupMembers() do
+        local member = (IsInRaid() and 'raid' .. i or 'party' .. i)
+        if UnitIsUnit(unit, member .. 'target') and not UnitIsUnit('player', member) and not UnitIsDeadOrGhost(member) then
+            local color = F:RGBToHex(F:UnitColor(member))
+            local name = color .. UnitName(member) .. '|r'
+            tinsert(targetTable, name)
+        end
+    end
+
+    if #targetTable > 0 then
+        _G.GameTooltip:AddLine(L['TargetBy'] .. ': ' .. C.InfoColor .. '(' .. #targetTable .. ')|r ' .. tconcat(targetTable, ', '), nil, nil, nil, 1)
     end
 end
 
@@ -313,38 +339,14 @@ function TOOLTIP:GameTooltip_ShowProgressBar()
     end
 end
 
-function TOOLTIP:ScanTargets()
-    if not IsInGroup() then
-        return
+function TOOLTIP:AuraSource(...)
+    local unitCaster = select(7, UnitAura(...))
+    if unitCaster then
+        local name = GetUnitName(unitCaster, true)
+        local hexColor = F:RGBToHex(F:UnitColor(unitCaster))
+        self:AddDoubleLine(L['CastBy'] .. ':', hexColor .. name)
+        self:Show()
     end
-
-    local _, unit = self:GetUnit()
-    if not UnitExists(unit) then
-        return
-    end
-
-    wipe(targetTable)
-
-    for i = 1, GetNumGroupMembers() do
-        local member = (IsInRaid() and 'raid' .. i or 'party' .. i)
-        if UnitIsUnit(unit, member .. 'target') and not UnitIsUnit('player', member) and not UnitIsDeadOrGhost(member) then
-            local color = F:RGBToHex(F:UnitColor(member))
-            local name = color .. UnitName(member) .. '|r'
-            tinsert(targetTable, name)
-        end
-    end
-
-    if #targetTable > 0 then
-        _G.GameTooltip:AddLine(L['TargetedBy'] .. ': ' .. C.InfoColor .. '(' .. #targetTable .. ')|r ' .. tconcat(targetTable, ', '), nil, nil, nil, 1)
-    end
-end
-
-function TOOLTIP:TargetedInfo()
-    if not C.DB.Tooltip.TargetBy then
-        return
-    end
-
-    _G.GameTooltip:HookScript('OnTooltipSetUnit', TOOLTIP.ScanTargets)
 end
 
 -- Fix comparison position
@@ -417,14 +419,19 @@ function TOOLTIP:OnLogin()
         end
     end
 
+    if C.DB.Tooltip.TargetBy then
+        _G.GameTooltip:HookScript('OnTooltipSetUnit', TOOLTIP.ScanTargetsInfo)
+    end
+
     TOOLTIP:SetTooltipFonts()
     _G.GameTooltip:HookScript('OnTooltipSetItem', TOOLTIP.FixRecipeItemNameWidth)
+
+    hooksecurefunc(_G.GameTooltip, 'SetUnitAura', TOOLTIP.AuraSource)
 
     TOOLTIP:ReskinTooltipIcons()
     TOOLTIP:LinkHover()
     TOOLTIP:ExtraInfo()
-    TOOLTIP:TargetedInfo()
     TOOLTIP:ConduitCollectionData()
     TOOLTIP:Achievement()
-
+    TOOLTIP:MountSource()
 end

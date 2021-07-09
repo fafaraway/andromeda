@@ -319,6 +319,7 @@ C.CharacterSettings = {
         ExtraInfo = true,
         HealthValue = false,
         PvEStats = true,
+        MountSource = true,
     },
     Map = {
         Enable = true,

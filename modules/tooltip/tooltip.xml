@@ -5,6 +5,7 @@
     <Script file="extra.lua"/>
     <Script file="hyper_link.lua"/>
     <Script file="icon.lua"/>
+    <Script file="mount.lua"/>
     <Script file="multi_itemref.lua"/>
     <Script file="pve_stats.lua"/>
     <Script file="spec_ilvl.lua"/>
