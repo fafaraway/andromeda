@@ -38,12 +38,16 @@ function COOLDOWN:OnSizeChanged(width, height)
     end
     self.fontScale = fontScale
 
-    local font, size, flag = self.text:GetFont()
+    local outline = _G.FREE_ADB.FontOutline
+    local font = C.Assets.Fonts.Bold
 
     if fontScale < minScale then
         self:Hide()
     else
-        self.text:SetFont(font, size * fontScale, flag)
+
+        self.text:SetFont(font, fontScale * fontSize, outline and 'OUTLINE' or nil)
+        self.text:SetShadowColor(0, 0, 0, outline and 0 or 1)
+        self.text:SetShadowOffset(2, -2)
 
         if self.enabled then
             COOLDOWN.ForceUpdate(self)
@@ -82,12 +86,7 @@ function COOLDOWN:OnCreate()
     timer:SetScript('OnUpdate', COOLDOWN.TimerOnUpdate)
     scaler.timer = timer
 
-    local outline = _G.FREE_ADB.FontOutline
-    local font = C.Assets.Fonts.Bold
     local text = timer:CreateFontString(nil, 'BACKGROUND')
-    text:SetFont(font, fontSize, outline and 'OUTLINE' or nil)
-    text:SetShadowColor(0, 0, 0, outline and 0 or 1)
-    text:SetShadowOffset(2, -2)
     text:SetPoint('CENTER', 1, 0)
     text:SetJustifyH('CENTER')
     timer.text = text
