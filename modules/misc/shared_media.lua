@@ -46,6 +46,7 @@ local function RegisterMediaAssets()
     LSM:Register(LSM.MediaType.SOUND, '!Free_Mario', C.AssetsPath .. 'sounds\\mario.ogg')
     LSM:Register(LSM.MediaType.SOUND, '!Free_Alarm', C.AssetsPath .. 'sounds\\alarm.ogg')
     LSM:Register(LSM.MediaType.SOUND, '!Free_Ding', C.AssetsPath .. 'sounds\\ding.ogg')
+    LSM:Register(LSM.MediaType.SOUND, '!Free_Dang', C.AssetsPath .. 'sounds\\dang.ogg')
 end
 
 F:RegisterEvent('ADDON_LOADED', RegisterMediaAssets)

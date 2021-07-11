@@ -119,6 +119,7 @@ C.Assets = {
         Mario = C.AssetsPath .. 'sounds\\mario.ogg',
         Alarm = C.AssetsPath .. 'sounds\\alarm.ogg',
         Ding = C.AssetsPath .. 'sounds\\ding.ogg',
+        Dang = C.AssetsPath .. 'sounds\\dang.ogg',
     },
 
     Fonts = {
