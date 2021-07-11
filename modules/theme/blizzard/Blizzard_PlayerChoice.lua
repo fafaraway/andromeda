@@ -1,10 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local hooksecurefunc = hooksecurefunc
-local GetInstanceInfo = GetInstanceInfo
-local IsInJailersTower = IsInJailersTower
-
 local F, C = unpack(select(2, ...))
 
 local function ReskinOptionText(text, r, g, b)
@@ -34,7 +27,7 @@ local function ReskinSpellWidget(spell)
 end
 
 C.Themes['Blizzard_PlayerChoice'] = function()
-    hooksecurefunc(
+    _G.hooksecurefunc(
         _G.PlayerChoiceFrame,
         'TryShow',
         function(self)
@@ -54,7 +47,7 @@ C.Themes['Blizzard_PlayerChoice'] = function()
             if self.CloseButton.Border then
                 self.CloseButton.Border:SetAlpha(0)
             end -- no border for some templates
-            self.bg:SetShown(self.Background:IsShown())
+            self.bg:SetShown(self.uiTextureKit ~= 'jailerstower')
 
             for optionFrame in self.optionPools:EnumerateActiveByTemplate(self.optionFrameTemplate) do
                 local header = optionFrame.Header

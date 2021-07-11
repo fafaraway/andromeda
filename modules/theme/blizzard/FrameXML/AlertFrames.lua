@@ -1,9 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local tinsert = tinsert
-local hooksecurefunc = hooksecurefunc
-
 local F, C = unpack(select(2, ...))
 
 -- Fix Alertframe bg
@@ -53,13 +47,13 @@ local function fixAnim(frame)
     frame.hookded = true
 end
 
-tinsert(
+_G.tinsert(
     C.BlizzThemes,
     function()
-        hooksecurefunc('AlertFrame_PauseOutAnimation', fixBg)
+        _G.hooksecurefunc('AlertFrame_PauseOutAnimation', fixBg)
 
         -- AlertFrames
-        hooksecurefunc(
+        _G.hooksecurefunc(
             _G.AlertFrame,
             'AddAlertFrame',
             function(_, frame)
@@ -111,6 +105,9 @@ tinsert(
                         frame.bg:SetPoint('BOTTOMRIGHT', frame, -13, 13)
 
                         F.ReskinIcon(lootItem.Icon)
+                        lootItem.Icon:SetInside()
+                        lootItem.IconOverlay:SetInside()
+                        lootItem.IconOverlay2:SetInside()
                         lootItem.SpecRing:SetTexture('')
                         lootItem.SpecIcon:SetPoint('TOPLEFT', lootItem.Icon, -5, 5)
                         lootItem.SpecIcon.bg = F.ReskinIcon(lootItem.SpecIcon)
@@ -339,7 +336,7 @@ tinsert(
         )
 
         -- Reward Icons
-        hooksecurefunc(
+        _G.hooksecurefunc(
             'StandardRewardAlertFrame_AdjustRewardAnchors',
             function(frame)
                 if frame.RewardFrames then
@@ -358,7 +355,7 @@ tinsert(
         )
 
         -- BonusRollLootWonFrame
-        hooksecurefunc(
+        _G.hooksecurefunc(
             'LootWonAlertFrame_SetUp',
             function(frame)
                 local lootItem = frame.lootItem
@@ -386,7 +383,7 @@ tinsert(
         )
 
         -- BonusRollMoneyWonFrame
-        hooksecurefunc(
+        _G.hooksecurefunc(
             'MoneyWonAlertFrame_SetUp',
             function(frame)
                 if not frame.bg then

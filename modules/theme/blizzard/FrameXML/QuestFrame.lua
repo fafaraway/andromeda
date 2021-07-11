@@ -1,31 +1,23 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local tinsert = tinsert
-local hooksecurefunc = hooksecurefunc
-local GetQuestItemInfo = GetQuestItemInfo
-local GetQuestCurrencyInfo = GetQuestCurrencyInfo
-
 local F, C = unpack(select(2, ...))
 
 local function UpdateProgressItemQuality(self)
     local button = self.__owner
-    local index = button.__id
+    local index = button:GetID()
     local buttonType = button.type
     local objectType = button.objectType
 
     local quality
     if objectType == 'item' then
-        quality = select(4, GetQuestItemInfo(buttonType, index))
+        quality = select(4, _G.GetQuestItemInfo(buttonType, index))
     elseif objectType == 'currency' then
-        quality = select(4, GetQuestCurrencyInfo(buttonType, index))
+        quality = select(4, _G.GetQuestCurrencyInfo(buttonType, index))
     end
 
     local color = C.QualityColors[quality or 1]
     button.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 end
 
-tinsert(
+_G.tinsert(
     C.BlizzThemes,
     function()
         F.ReskinPortraitFrame(_G.QuestFrame)
@@ -51,9 +43,8 @@ tinsert(
             local button = _G['QuestProgressItem' .. i]
             button.NameFrame:Hide()
             button.bg = F.ReskinIcon(button.Icon)
-            button.__id = i
             button.Icon.__owner = button
-            hooksecurefunc(button.Icon, 'SetTexture', UpdateProgressItemQuality)
+            _G.hooksecurefunc(button.Icon, 'SetTexture', UpdateProgressItemQuality)
 
             local bg = F.CreateBDFrame(button, .25)
             bg:SetPoint('TOPLEFT', button.bg, 'TOPRIGHT', 2, 0)
@@ -62,7 +53,7 @@ tinsert(
 
         _G.QuestDetailScrollFrame:SetWidth(302) -- else these buttons get cut off
 
-        hooksecurefunc(
+        _G.hooksecurefunc(
             _G.QuestProgressRequiredMoneyText,
             'SetTextColor',
             function(self, r)
@@ -111,7 +102,7 @@ tinsert(
         local bg = F.SetBD(_G.QuestModelScene)
         bg:SetOutside(nil, nil, nil, _G.QuestNPCModelTextFrame)
 
-        hooksecurefunc(
+        _G.hooksecurefunc(
             'QuestFrame_ShowQuestPortrait',
             function(parentFrame, _, _, _, _, _, x, y)
                 x = x + 6

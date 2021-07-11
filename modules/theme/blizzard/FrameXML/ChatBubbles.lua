@@ -12,7 +12,7 @@ local F, C = unpack(select(2, ...))
 local function UpdateBorderColor(frame)
     local r, g, b = frame.String:GetTextColor()
     if frame.__shadow then
-        frame.__shadow:SetBackdropBorderColor(r, g, b)
+        frame.__shadow:SetBackdropBorderColor(r, g, b, .25)
     end
 end
 
