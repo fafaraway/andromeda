@@ -320,19 +320,8 @@ local cycles = {
     {
         chatType = 'CHANNEL',
         use = function(_, editbox)
-            if GetCVar('portal') ~= 'CN' then
-                return false
-            end
-            local channels, inWorldChannel, number = {GetChannelList()}
-            for i = 1, #channels do
-                if channels[i] == '大脚世界频道' then
-                    inWorldChannel = true
-                    number = channels[i - 1]
-                    break
-                end
-            end
-            if inWorldChannel then
-                editbox:SetAttribute('channelTarget', number)
+            if CHAT.InWorldChannel and CHAT.WorldChannelID then
+                editbox:SetAttribute("channelTarget", CHAT.WorldChannelID)
                 return true
             else
                 return false

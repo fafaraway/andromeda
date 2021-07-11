@@ -19,7 +19,6 @@ local C_GuildInfo_CanEditOfficerNote = C_GuildInfo.CanEditOfficerNote
 local LeaveChannelByName = LeaveChannelByName
 local JoinPermanentChannel = JoinPermanentChannel
 
-
 local F, C, L = unpack(select(2, ...))
 local CHAT = F:GetModule('Chat')
 
@@ -153,51 +152,46 @@ function CHAT:CreateChannelBar()
 
     -- WORLD CHANNEL
     if C.IsCNPortal then
-        local channelName, channelID = C.IsChinses and '大脚世界频道' or 'BigfootWorldChannel'
-        local wc = AddButton(0, .8, 1, L['World channel'])
+        local channelName = '大脚世界频道'
+        local wcButton = AddButton(0, .8, 1, L['World Channel'])
 
         local function updateChannelInfo()
             local id = GetChannelName(channelName)
             if not id or id == 0 then
-                wc.inChannel = false
-                channelID = nil
-                wc.Icon:SetVertexColor(1, .1, .1)
+                CHAT.InWorldChannel = false
+                CHAT.WorldChannelID = nil
+                wcButton.Icon:SetVertexColor(1, .1, .1)
             else
-                wc.inChannel = true
-                channelID = id
-                wc.Icon:SetVertexColor(0, .8, 1)
+                CHAT.InWorldChannel = true
+                CHAT.WorldChannelID = id
+                wcButton.Icon:SetVertexColor(0, .8, 1)
             end
         end
 
-        local function isInChannel(event)
+        local function checkChannelStatus(event)
             F:Delay(.2, updateChannelInfo)
-
-            if event == 'PLAYER_ENTERING_WORLD' then
-                F:UnregisterEvent(event, isInChannel)
-            end
         end
-        F:RegisterEvent('PLAYER_ENTERING_WORLD', isInChannel)
-        F:RegisterEvent('CHANNEL_UI_UPDATE', isInChannel)
-        hooksecurefunc('ChatConfigChannelSettings_UpdateCheckboxes', isInChannel) -- toggle in chatconfig
 
-        wc:SetScript(
+        checkChannelStatus()
+        F:RegisterEvent('CHANNEL_UI_UPDATE', checkChannelStatus)
+        hooksecurefunc('ChatConfigChannelSettings_UpdateCheckboxes', checkChannelStatus) -- toggle in chatconfig
+
+        wcButton:SetScript(
             'OnClick',
             function(_, btn)
-                if wc.inChannel then
+                if CHAT.InWorldChannel then
                     if btn == 'RightButton' then
                         LeaveChannelByName(channelName)
-
-                        F:Print(format(C.RedColor .. L['Leave'] .. '|r %s', channelName))
-                        wc.inChannel = false
-                    elseif channelID then
-                        ChatFrame_OpenChat('/' .. channelID, chatFrame)
+                        F:Print('|cffd82026' .. _G.QUIT .. '|r ' .. C.InfoColor .. L['World Channel'])
+                        CHAT.InWorldChannel = false
+                    elseif CHAT.WorldChannelID then
+                        ChatFrame_OpenChat('/' .. CHAT.WorldChannelID, chatFrame)
                     end
                 else
                     JoinPermanentChannel(channelName, nil, 1)
                     ChatFrame_AddChannel(_G.ChatFrame1, channelName)
-
-                    F:Print(format(C.GreenColor .. L['Join'] .. '|r %s', channelName))
-                    wc.inChannel = true
+                    F:Print('|cff27ba24' .. _G.JOIN .. '|r ' .. C.InfoColor .. L['World Channel'])
+                    CHAT.InWorldChannel = true
                 end
             end
         )
