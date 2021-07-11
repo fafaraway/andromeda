@@ -152,7 +152,7 @@ function MM:CreateCalendar()
         'OnClick',
         function(_, btn)
             Invt:Hide()
-            if btn == 'LeftButton' and not InCombatLockdown() then
+            if btn == 'LeftButton' then
                 ToggleCalendar()
             end
             F:UnregisterEvent('CALENDAR_UPDATE_PENDING_INVITES', updateInviteVisibility)
