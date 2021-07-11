@@ -27,11 +27,9 @@ local GetNumGuildMembers = GetNumGuildMembers
 local GetGuildInfo = GetGuildInfo
 local GetNumGuildApplicants = GetNumGuildApplicants
 local GetGuildRosterInfo = GetGuildRosterInfo
-local InCombatLockdown = InCombatLockdown
 local MouseIsOver = MouseIsOver
 local IsInGuild = IsInGuild
 local LoadAddOn = LoadAddOn
-local LookingForGuildFrame_Toggle = LookingForGuildFrame_Toggle
 local ToggleCommunitiesFrame = ToggleCommunitiesFrame
 
 local F, C, L = unpack(select(2, ...))
@@ -344,11 +342,6 @@ local function delayLeave()
 end
 
 local function Button_OnMouseUp(self, btn)
-    if InCombatLockdown() then
-        _G.UIErrorsFrame:AddMessage(C.InfoColor .. _G.ERR_NOT_IN_COMBAT)
-        return
-    end
-
     if infoFrame then
         infoFrame:Hide()
     end

@@ -9,11 +9,8 @@ local GetSpecialization = GetSpecialization
 local GetSpecializationInfo = GetSpecializationInfo
 local GetLootSpecialization = GetLootSpecialization
 local GetSpecializationInfoByID = GetSpecializationInfoByID
-local GetSpecializationRole = GetSpecializationRole
-local GetSpecializationRoleByID = GetSpecializationRoleByID
 local GetTalentInfo = GetTalentInfo
 local GetPvpTalentInfoByID = GetPvpTalentInfoByID
-local InCombatLockdown = InCombatLockdown
 local ToggleTalentFrame = ToggleTalentFrame
 local C_SpecializationInfo_CanPlayerUsePVPTalentUI = C_SpecializationInfo.CanPlayerUsePVPTalentUI
 local C_SpecializationInfo_GetAllSelectedPvpTalentIDs = C_SpecializationInfo.GetAllSelectedPvpTalentIDs
@@ -56,10 +53,6 @@ local function Button_OnMouseUp(self, btn)
     end
 
     if btn == 'LeftButton' then
-        if InCombatLockdown() then
-            _G.UIErrorsFrame:AddMessage(C.InfoColor .. _G.ERR_NOT_IN_COMBAT)
-            return
-        end
         ToggleTalentFrame(2)
     else
         menuList[2].menuList = {{}, {}, {}, {}}
@@ -166,6 +159,7 @@ local function Button_OnEnter(self)
         wipe(pvpTalents)
     end
 
+    _G.GameTooltip:AddLine(' ')
     _G.GameTooltip:AddDoubleLine(' ', C.LineString)
     _G.GameTooltip:AddDoubleLine(' ', C.Assets.mouse_left .. L['Toggle Talent Panel'] .. ' ', 1, 1, 1, .9, .8, .6)
     _G.GameTooltip:AddDoubleLine(' ', C.Assets.mouse_right .. L['Change Specialization & Loot'] .. ' ', 1, 1, 1, .9, .8, .6)

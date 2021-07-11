@@ -8,7 +8,6 @@ local floor = floor
 local GetInventoryItemLink = GetInventoryItemLink
 local GetInventoryItemDurability = GetInventoryItemDurability
 local GetInventoryItemTexture = GetInventoryItemTexture
-local InCombatLockdown = InCombatLockdown
 
 local F, C, L = unpack(select(2, ...))
 local INFOBAR = F:GetModule('Infobar')
@@ -90,17 +89,13 @@ local function Button_OnEvent(self)
 end
 
 local function Button_OnMouseUp(self, btn)
-    if InCombatLockdown() then
-        _G.UIErrorsFrame:AddMessage(C.InfoColor .. _G.ERR_NOT_IN_COMBAT)
-        return
-    end
     -- #TODO
     if btn == 'LeftButton' then
-        print('left')
+        F:Debug('left')
     elseif btn == 'RightButton' then
-        print('right')
+        F:Debug('right')
     elseif btn == 'MiddleButton' then
-        print('middle')
+        F:Debug('middle')
     end
 end
 
@@ -110,6 +105,7 @@ local function Button_OnEnter(self)
     _G.GameTooltip:ClearLines()
     _G.GameTooltip:AddLine(_G.DURABILITY, .9, .8, .6)
     _G.GameTooltip:AddLine(' ')
+
     for i = 1, 10 do
         if slots[i][3] ~= 1000 then
             local green = slots[i][3] * 2
@@ -118,6 +114,8 @@ local function Button_OnEnter(self)
             _G.GameTooltip:AddDoubleLine(slotIcon .. slots[i][2], floor(slots[i][3] * 100) .. '%', 1, 1, 1, red + 1, green, 0)
         end
     end
+
+    _G.GameTooltip:AddLine(' ')
     _G.GameTooltip:AddDoubleLine(' ', C.LineString)
     _G.GameTooltip:AddDoubleLine(' ', C.Assets.mouse_left .. L['Toggle Character Panel'] .. ' ', 1, 1, 1, .9, .8, .6)
     _G.GameTooltip:Show()

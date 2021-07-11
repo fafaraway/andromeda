@@ -2,6 +2,7 @@ local _G = _G
 local unpack = unpack
 local select = select
 local format = format
+local BreakUpLargeNumbers = BreakUpLargeNumbers
 local securecall = securecall
 local ToggleCharacter = ToggleCharacter
 local C_CurrencyInfo_GetCurrencyInfo = C_CurrencyInfo.GetCurrencyInfo
@@ -42,7 +43,8 @@ local function AddTitle(text)
 end
 
 local function Button_OnEvent(self, event)
-    self.Text:SetText(_G.CURRENCY)
+    local info = C_CurrencyInfo_GetCurrencyInfo(1828)
+    self.Text:SetText(format('%s: |cffdf5ed9%s|r', info.name, BreakUpLargeNumbers(info.quantity)))
 end
 
 local function Button_OnMouseUp(self, btn)
@@ -63,11 +65,11 @@ local function Button_OnEnter(self)
         local info = C_CurrencyInfo_GetCurrencyInfo(id)
         local amount
         if info.maxQuantity > 0 then
-            amount = format('|cffffffff%s|r |cff7f7f7f/|r |cff20ff20%s|r', info.quantity, info.maxQuantity)
+            amount = format('|cff20ff20%s|r |cff7f7f7f/|r |cffff2020%s|r', BreakUpLargeNumbers(info.quantity), BreakUpLargeNumbers(info.maxQuantity))
         else
-            amount = format('|cffffffff%s|r', info.quantity)
+            amount = format('|cff20ff20%s|r', BreakUpLargeNumbers(info.quantity))
         end
-        _G.GameTooltip:AddDoubleLine(AddIcon(info.iconFileID) .. info.name, amount)
+        _G.GameTooltip:AddDoubleLine(AddIcon(info.iconFileID) .. info.name, amount, 1, 1, 1)
     end
 
     title = false
@@ -76,13 +78,14 @@ local function Button_OnEnter(self)
         local info = C_CurrencyInfo_GetCurrencyInfo(id)
         local amount
         if info.maxQuantity > 0 then
-            amount = format('|cffffffff%s|r |cff7f7f7f/|r |cff20ff20%s|r', info.quantity, info.maxQuantity)
+            amount = format('|cff20ff20%s|r |cff7f7f7f/|r |cffff2020%s|r', BreakUpLargeNumbers(info.quantity), BreakUpLargeNumbers(info.maxQuantity))
         else
-            amount = format('|cffffffff%s|r', info.quantity)
+            amount = format('|cff20ff20%s|r', BreakUpLargeNumbers(info.quantity))
         end
-        _G.GameTooltip:AddDoubleLine(AddIcon(info.iconFileID) .. info.name, amount)
+        _G.GameTooltip:AddDoubleLine(AddIcon(info.iconFileID) .. info.name, amount, 1, 1, 1)
     end
 
+    _G.GameTooltip:AddLine(' ')
     _G.GameTooltip:AddDoubleLine(' ', C.LineString)
     _G.GameTooltip:AddDoubleLine(' ', C.Assets.mouse_left .. L['Toggle Currency Panel'] .. ' ', 1, 1, 1, .9, .8, .6)
     _G.GameTooltip:Show()

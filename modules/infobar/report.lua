@@ -5,7 +5,6 @@ local strfind = strfind
 local gsub = gsub
 local min = min
 local LoadAddOn = LoadAddOn
-local InCombatLockdown = InCombatLockdown
 local ToggleFrame = ToggleFrame
 local ToggleCalendar = ToggleCalendar
 local RequestRaidInfo = RequestRaidInfo
@@ -95,11 +94,6 @@ local function AddTitle(text)
 end
 
 local function Button_OnMouseUp(self, btn)
-    if InCombatLockdown() then
-        _G.UIErrorsFrame:AddMessage(C.InfoColor .. _G.ERR_NOT_IN_COMBAT)
-        return
-    end
-
     if btn == 'RightButton' then
         if not _G.WeeklyRewardsFrame then
             LoadAddOn('Blizzard_WeeklyRewards')

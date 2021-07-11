@@ -14,7 +14,6 @@ local FriendsFrame_InviteOrRequestToJoin = FriendsFrame_InviteOrRequestToJoin
 local FriendsFrame_GetLastOnline = FriendsFrame_GetLastOnline
 local IsAltKeyDown = IsAltKeyDown
 local IsShiftKeyDown = IsShiftKeyDown
-local InCombatLockdown = InCombatLockdown
 local EasyMenu = EasyMenu
 local MouseIsOver = MouseIsOver
 local ToggleFriendsFrame = ToggleFriendsFrame
@@ -535,11 +534,6 @@ local function delayLeave()
 end
 
 local function Button_OnMouseUp(self, btn)
-    if InCombatLockdown() then
-        _G.UIErrorsFrame:AddMessage(C.InfoColor .. _G.ERR_NOT_IN_COMBAT)
-        return
-    end
-
     if infoFrame then
         infoFrame:Hide()
     end

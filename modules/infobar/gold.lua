@@ -6,23 +6,19 @@ local Ambiguate = Ambiguate
 local GetAutoCompleteRealms = GetAutoCompleteRealms
 local GetMoney = GetMoney
 local GetMoneyString = GetMoneyString
-local InCombatLockdown = InCombatLockdown
+local BreakUpLargeNumbers = BreakUpLargeNumbers
 local securecall = securecall
 local LoadAddOn = LoadAddOn
 local StaticPopup_Show = StaticPopup_Show
-local ToggleCharacter = ToggleCharacter
 local ToggleStoreUI = ToggleStoreUI
-local C_CurrencyInfo_GetCurrencyInfo = C_CurrencyInfo.GetCurrencyInfo
-local C_CurrencyInfo_GetBackpackCurrencyInfo = C_CurrencyInfo.GetBackpackCurrencyInfo
 local C_WowTokenPublic_UpdateMarketPrice = C_WowTokenPublic.UpdateMarketPrice
 local C_WowTokenPublic_GetCurrentMarketPrice = C_WowTokenPublic.GetCurrentMarketPrice
-local GetNumWatchedTokens = GetNumWatchedTokens
 
 local F, C, L = unpack(select(2, ...))
 local INFOBAR = F:GetModule('Infobar')
 
 local function FormatMoney(money)
-    return format('%s: ' .. C.InfoColor .. '%d', 'Gold', money * .0001)
+    return format('%s: |cffeddf6a%s|r', L['Gold'], BreakUpLargeNumbers(money * .0001))
 end
 
 local function GetClassIcon(class)
@@ -74,11 +70,6 @@ local function Button_OnEvent(self, event)
 end
 
 local function Button_OnMouseUp(self, btn)
-    if InCombatLockdown() then
-        _G.UIErrorsFrame:AddMessage(C.InfoColor .. _G.ERR_NOT_IN_COMBAT)
-        return
-    end
-
     if btn == 'LeftButton' then
         if (not _G.StoreFrame) then
             LoadAddOn('Blizzard_StoreUI')
@@ -97,12 +88,12 @@ local function Button_OnEnter(self)
     _G.GameTooltip:AddLine(' ')
 
     _G.GameTooltip:AddLine(L['Session'], .6, .8, 1)
-    _G.GameTooltip:AddDoubleLine(L['Earned'], GetMoneyString(profit), 1, 1, 1, 1, 1, 1)
-    _G.GameTooltip:AddDoubleLine(L['Spent'], GetMoneyString(spent), 1, 1, 1, 1, 1, 1)
+    _G.GameTooltip:AddDoubleLine(L['Earned'], GetMoneyString(profit, true), 1, 1, 1, 1, 1, 1)
+    _G.GameTooltip:AddDoubleLine(L['Spent'], GetMoneyString(spent, true), 1, 1, 1, 1, 1, 1)
     if profit < spent then
-        _G.GameTooltip:AddDoubleLine(L['Deficit'], GetMoneyString(spent - profit), 1, 0, 0, 1, 1, 1)
+        _G.GameTooltip:AddDoubleLine(L['Deficit'], GetMoneyString(spent - profit, true), 1, 0, 0, 1, 1, 1)
     elseif profit > spent then
-        _G.GameTooltip:AddDoubleLine(L['Profit'], GetMoneyString(profit - spent), 0, 1, 0, 1, 1, 1)
+        _G.GameTooltip:AddDoubleLine(L['Profit'], GetMoneyString(profit - spent, true), 0, 1, 0, 1, 1, 1)
     end
     _G.GameTooltip:AddLine(' ')
 
@@ -116,44 +107,21 @@ local function Button_OnEnter(self)
                 local name = Ambiguate(k .. '-' .. realm, 'none')
                 local gold, class = unpack(v)
                 local r, g, b = F:ClassColor(class)
-                _G.GameTooltip:AddDoubleLine(GetClassIcon(class) .. name, GetMoneyString(gold), r, g, b, 1, 1, 1)
+                _G.GameTooltip:AddDoubleLine(GetClassIcon(class) .. name, GetMoneyString(gold, true), r, g, b, 1, 1, 1)
                 totalGold = totalGold + gold
             end
         end
     end
 
     _G.GameTooltip:AddLine(' ')
-    _G.GameTooltip:AddDoubleLine(_G.HONOR_LIFETIME, GetMoneyString(totalGold), .6, .8, 1, 1, 1, 1)
+    _G.GameTooltip:AddDoubleLine(_G.HONOR_LIFETIME, GetMoneyString(totalGold, true), .6, .8, 1, 1, 1, 1)
 
     _G.GameTooltip:AddLine(' ')
     _G.GameTooltip:AddLine(_G.ITEM_QUALITY8_DESC, .6, .8, 1)
     local tokenPrice = C_WowTokenPublic_GetCurrentMarketPrice()
-    _G.GameTooltip:AddDoubleLine(_G.AUCTION_HOUSE_BROWSE_HEADER_PRICE, GetMoneyString(tokenPrice), 1, 1, 1, 1, 1, 1)
+    _G.GameTooltip:AddDoubleLine(_G.AUCTION_HOUSE_BROWSE_HEADER_PRICE, GetMoneyString(tokenPrice, true), 1, 1, 1, 1, 1, 1)
 
-    --[[ for i = 1, GetNumWatchedTokens() do
-        local currencyInfo = C_CurrencyInfo_GetBackpackCurrencyInfo(i)
-        if not currencyInfo then
-            break
-        end
-        local name = currencyInfo.name
-        local count = currencyInfo.quantity
-        local icon = currencyInfo.iconFileID
-        local currencyID = currencyInfo.currencyTypesID
-        if name and i == 1 then
-            _G.GameTooltip:AddLine(' ')
-            _G.GameTooltip:AddLine(_G.CURRENCY .. ':', .6, .8, 1)
-        end
-        if name and count then
-            local total = C_CurrencyInfo_GetCurrencyInfo(currencyID).maxQuantity
-            local iconTexture = ' |T' .. icon .. ':13:15:0:0:50:50:4:46:4:46|t'
-            if total > 0 then
-                _G.GameTooltip:AddDoubleLine(name, count .. '/' .. total .. iconTexture, 1, 1, 1, 1, 1, 1)
-            else
-                _G.GameTooltip:AddDoubleLine(name, count .. iconTexture, 1, 1, 1, 1, 1, 1)
-            end
-        end
-    end ]]
-
+    _G.GameTooltip:AddLine(' ')
     _G.GameTooltip:AddDoubleLine(' ', C.LineString)
     _G.GameTooltip:AddDoubleLine(' ', C.Assets.mouse_left .. L['Toggle Store Panel'] .. ' ', 1, 1, 1, .9, .8, .6)
     _G.GameTooltip:AddDoubleLine(' ', C.Assets.mouse_right .. L['Reset Gold Statistics'] .. ' ', 1, 1, 1, .9, .8, .6)

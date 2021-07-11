@@ -79,11 +79,6 @@ local function CreateHolder()
 end
 
 local function Button_OnMouseUp(self, btn)
-    if InCombatLockdown() then
-        _G.UIErrorsFrame:AddMessage(C.InfoColor .. _G.ERR_NOT_IN_COMBAT)
-        return
-    end
-
     if btn == 'LeftButton' then
         local openaddonlist
 
