@@ -8,6 +8,7 @@
     <Script file="LibRangeCheck-2.0.lua"/>
     <Script file="LibRealmInfo.lua"/>
     <Script file="LibSharedMedia-3.0.lua"/>
+    <Script file="LibShowUIPanel-1.0.lua"/>
     <Script file="UTF8.lua"/>
     <Include file="cargBags\cargBags.xml"/>
     <Include file="LibDropDown\embed.xml"/>
