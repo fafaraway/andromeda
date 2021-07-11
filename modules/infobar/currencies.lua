@@ -1,7 +1,7 @@
 local _G = _G
 local unpack = unpack
 local select = select
-local InCombatLockdown = InCombatLockdown
+local format = format
 local securecall = securecall
 local ToggleCharacter = ToggleCharacter
 local C_CurrencyInfo_GetCurrencyInfo = C_CurrencyInfo.GetCurrencyInfo
@@ -46,11 +46,6 @@ local function Button_OnEvent(self, event)
 end
 
 local function Button_OnMouseUp(self, btn)
-    if InCombatLockdown() then
-        _G.UIErrorsFrame:AddMessage(C.InfoColor .. _G.ERR_NOT_IN_COMBAT)
-        return
-    end
-
     if btn == 'LeftButton' then
         securecall(ToggleCharacter, 'TokenFrame')
     end
@@ -66,14 +61,26 @@ local function Button_OnEnter(self)
     for _, id in pairs(currPvE) do
         AddTitle('PvE')
         local info = C_CurrencyInfo_GetCurrencyInfo(id)
-        _G.GameTooltip:AddDoubleLine(AddIcon(info.iconFileID) .. info.name, info.quantity, 1, 1, 1, .9, .8, .6)
+        local amount
+        if info.maxQuantity > 0 then
+            amount = format('|cffffffff%s|r |cff7f7f7f/|r |cff20ff20%s|r', info.quantity, info.maxQuantity)
+        else
+            amount = format('|cffffffff%s|r', info.quantity)
+        end
+        _G.GameTooltip:AddDoubleLine(AddIcon(info.iconFileID) .. info.name, amount)
     end
 
     title = false
     for _, id in pairs(currPvP) do
         AddTitle('PvP')
         local info = C_CurrencyInfo_GetCurrencyInfo(id)
-        _G.GameTooltip:AddDoubleLine(AddIcon(info.iconFileID) .. info.name, info.quantity, 1, 1, 1, .9, .8, .6)
+        local amount
+        if info.maxQuantity > 0 then
+            amount = format('|cffffffff%s|r |cff7f7f7f/|r |cff20ff20%s|r', info.quantity, info.maxQuantity)
+        else
+            amount = format('|cffffffff%s|r', info.quantity)
+        end
+        _G.GameTooltip:AddDoubleLine(AddIcon(info.iconFileID) .. info.name, amount)
     end
 
     _G.GameTooltip:AddDoubleLine(' ', C.LineString)
