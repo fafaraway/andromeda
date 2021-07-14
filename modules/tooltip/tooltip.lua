@@ -432,6 +432,7 @@ function TOOLTIP:OnLogin()
     TOOLTIP:LinkHover()
     TOOLTIP:ExtraInfo()
     TOOLTIP:ConduitCollectionData()
+    TOOLTIP:DominationRank()
     TOOLTIP:Achievement()
     TOOLTIP:MountSource()
 end

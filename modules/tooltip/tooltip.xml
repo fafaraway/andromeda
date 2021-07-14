@@ -2,6 +2,7 @@
     <Script file="tooltip.lua"/>
     <Script file="achievement.lua"/>
     <Script file="conduit.lua"/>
+    <Script file="domination.lua"/>
     <Script file="extra.lua"/>
     <Script file="hyper_link.lua"/>
     <Script file="icon.lua"/>
