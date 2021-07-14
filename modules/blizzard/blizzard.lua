@@ -8,9 +8,6 @@ local IsGuildMember = IsGuildMember
 local C_BattleNet_GetGameAccountInfoByGUID = C_BattleNet.GetGameAccountInfoByGUID
 local C_FriendList_IsFriend = C_FriendList.IsFriend
 local VehicleSeatIndicator = VehicleSeatIndicator
-local FRIEND = FRIEND
-local GUILD = GUILD
-local DELETE_ITEM_CONFIRM_STRING = DELETE_ITEM_CONFIRM_STRING
 
 local F, C, L = unpack(select(2, ...))
 local BLIZZARD = F:RegisterModule('Blizzard')
@@ -74,22 +71,25 @@ function BLIZZARD:TradeTargetInfo()
         end
         local text = C.RedColor .. L['Stranger']
         if C_BattleNet_GetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) then
-            text = C.GreenColor .. FRIEND
+            text = C.GreenColor .. _G.FRIEND
         elseif IsGuildMember(guid) then
-            text = C.BlueColor .. GUILD
+            text = C.BlueColor .. _G.GUILD
         end
         infoText:SetText(text)
     end
     hooksecurefunc('TradeFrame_Update', updateColor)
 end
 
-
 do
     local deleteDialog = _G.StaticPopupDialogs['DELETE_GOOD_ITEM']
     if deleteDialog.OnShow then
-        hooksecurefunc(deleteDialog, 'OnShow', function(self)
-            self.editBox:SetText(DELETE_ITEM_CONFIRM_STRING)
-        end)
+        hooksecurefunc(
+            deleteDialog,
+            'OnShow',
+            function(self)
+                self.editBox:SetText(_G.DELETE_ITEM_CONFIRM_STRING)
+            end
+        )
     end
 end
 
@@ -98,13 +98,17 @@ function BLIZZARD:VehicleIndicatorMover()
     frame:SetSize(100, 100)
     F.Mover(frame, L['Vehicle Indicator'], 'VehicleIndicator', {'BOTTOMRIGHT', _G.Minimap, 'TOPRIGHT', 0, 0})
 
-    hooksecurefunc(VehicleSeatIndicator, 'SetPoint', function(self, _, parent)
-        if parent == 'MinimapCluster' or parent == _G.MinimapCluster then
-            self:ClearAllPoints()
-            self:SetPoint('TOPLEFT', frame)
-            self:SetScale(.7)
+    hooksecurefunc(
+        VehicleSeatIndicator,
+        'SetPoint',
+        function(self, _, parent)
+            if parent == 'MinimapCluster' or parent == _G.MinimapCluster then
+                self:ClearAllPoints()
+                self:SetPoint('TOPLEFT', frame)
+                self:SetScale(.7)
+            end
         end
-    end)
+    )
 end
 
 function BLIZZARD:DurabilityFrameMover()
@@ -112,22 +116,30 @@ function BLIZZARD:DurabilityFrameMover()
     frame:SetSize(100, 100)
     F.Mover(frame, L['Durability Indicator'], 'DurabilityFrame', {'TOPRIGHT', _G.ObjectiveTrackerFrame, 'TOPLEFT', -10, 0})
 
-    hooksecurefunc(_G.DurabilityFrame, 'SetPoint', function(self, _, parent)
-        if parent == 'MinimapCluster' or parent == _G.MinimapCluster then
-            self:ClearAllPoints()
-            self:SetPoint('TOPLEFT', frame)
-            self:SetScale(.7)
+    hooksecurefunc(
+        _G.DurabilityFrame,
+        'SetPoint',
+        function(self, _, parent)
+            if parent == 'MinimapCluster' or parent == _G.MinimapCluster then
+                self:ClearAllPoints()
+                self:SetPoint('TOPLEFT', frame)
+                self:SetScale(.7)
+            end
         end
-    end)
+    )
 end
 
 function BLIZZARD:TicketStatusMover()
-    hooksecurefunc(_G.TicketStatusFrame, 'SetPoint', function(self, relF)
-        if relF == 'TOPRIGHT' then
-            self:ClearAllPoints()
-            self:SetPoint('TOP', _G.UIParent, 'TOP', 0, -100)
+    hooksecurefunc(
+        _G.TicketStatusFrame,
+        'SetPoint',
+        function(self, relF)
+            if relF == 'TOPRIGHT' then
+                self:ClearAllPoints()
+                self:SetPoint('TOP', _G.UIParent, 'TOP', 0, -100)
+            end
         end
-    end)
+    )
 end
 
 function BLIZZARD:UIWidgetMover()
@@ -135,10 +147,32 @@ function BLIZZARD:UIWidgetMover()
     frame:SetSize(200, 50)
     F.Mover(frame, L['Widget Frame'], 'UIWidgetFrame', {'TOP', 0, -80})
 
-    hooksecurefunc(_G.UIWidgetBelowMinimapContainerFrame, 'SetPoint', function(self, _, parent)
-        if parent == 'MinimapCluster' or parent == _G.MinimapCluster then
-            self:ClearAllPoints()
-            self:SetPoint('TOP', frame)
+    hooksecurefunc(
+        _G.UIWidgetBelowMinimapContainerFrame,
+        'SetPoint',
+        function(self, _, parent)
+            if parent == 'MinimapCluster' or parent == _G.MinimapCluster then
+                self:ClearAllPoints()
+                self:SetPoint('TOP', frame)
+            end
         end
-    end)
+    )
+end
+
+function BLIZZARD:MawBuffsFrameMover()
+    local frame = CreateFrame('Frame', 'FreeUI_MawBuffsMover', _G.UIParent)
+    frame:SetSize(235, 28)
+    local mover = F.Mover(frame, _G.MAW_POWER_DESCRIPTION, 'MawBuffs', {'BOTTOMRIGHT', _G.UIParent, 'RIGHT', -225, -80})
+    frame:SetPoint('TOPLEFT', mover, 4, 12)
+
+    hooksecurefunc(
+        _G.MawBuffsBelowMinimapFrame,
+        'SetPoint',
+        function(self, _, parent)
+            if parent == 'MinimapCluster' or parent == _G.MinimapCluster then
+                self:ClearAllPoints()
+                self:SetPoint('TOPRIGHT', frame)
+            end
+        end
+    )
 end
