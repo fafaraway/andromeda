@@ -152,7 +152,7 @@ local function BlockList_Show(self)
     self.button:SetButtonState('NORMAL')
     self.button:SetPushedTextOffset(1.25, -1)
     self.button:SetButtonState('PUSHED', true)
-    self.__bg:SetBackdropBorderColor(1, .8, 0, .7)
+    self.__bg:SetBackdropBorderColor(C.r, C.g, C.b, .7)
 end
 
 local function BlockList_Hide(self)

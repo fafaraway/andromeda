@@ -1,9 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local tinsert = tinsert
-local hooksecurefunc = hooksecurefunc
-
 local F, C = unpack(select(2, ...))
 
 local Type_StatusBar = _G.Enum.UIWidgetVisualizationType.StatusBar
@@ -65,7 +59,7 @@ local function ReskinWidgetStatusBar(bar)
         end
         F.SetBD(bar)
         F.ReplaceWidgetBarTexture(bar, bar:GetStatusBarAtlas())
-        hooksecurefunc(bar, 'SetStatusBarAtlas', F.ReplaceWidgetBarTexture)
+        _G.hooksecurefunc(bar, 'SetStatusBarAtlas', F.ReplaceWidgetBarTexture)
 
         bar.styled = true
     end
@@ -103,22 +97,19 @@ local function ReskinPVPCaptureBar(self)
     end
 end
 
-local function ReskinSpellDisplayWidget(self)
-    if not self.styled then
-        local widgetSpell = self.Spell
-        widgetSpell.IconMask:Hide()
-        widgetSpell.Border:SetTexture(nil)
-        widgetSpell.DebuffBorder:SetTexture(nil)
-        F.ReskinIcon(widgetSpell.Icon)
-
-        self.styled = true
+local function ReskinSpellDisplayWidget(spell)
+    if not spell.bg then
+        spell.Border:SetAlpha(0)
+        spell.DebuffBorder:SetAlpha(0)
+        spell.bg = F.ReskinIcon(spell.Icon)
     end
+    spell.IconMask:Hide()
 end
 
-tinsert(
+_G.tinsert(
     C.BlizzThemes,
     function()
-        hooksecurefunc(
+        _G.hooksecurefunc(
             _G.UIWidgetTopCenterContainerFrame,
             'UpdateWidgetLayout',
             function(self)
@@ -127,7 +118,7 @@ tinsert(
                     if widgetType == Type_DoubleStatusBar then
                         ReskinDoubleStatusBarWidget(widgetFrame)
                     elseif widgetType == Type_SpellDisplay then
-                        ReskinSpellDisplayWidget(widgetFrame)
+                        ReskinSpellDisplayWidget(widgetFrame.Spell)
                     elseif widgetType == Type_StatusBar then
                         ReskinWidgetStatusBar(widgetFrame.Bar)
                     end
@@ -135,7 +126,7 @@ tinsert(
             end
         )
 
-        hooksecurefunc(
+        _G.hooksecurefunc(
             _G.UIWidgetBelowMinimapContainerFrame,
             'UpdateWidgetLayout',
             function(self)
@@ -147,7 +138,7 @@ tinsert(
             end
         )
 
-        hooksecurefunc(
+        _G.hooksecurefunc(
             _G.UIWidgetPowerBarContainerFrame,
             'UpdateWidgetLayout',
             function(self)
@@ -159,7 +150,7 @@ tinsert(
             end
         )
 
-        hooksecurefunc(
+        _G.hooksecurefunc(
             _G.TopScenarioWidgetContainerBlock.WidgetContainer,
             'UpdateWidgetLayout',
             function(self)
@@ -171,19 +162,20 @@ tinsert(
             end
         )
 
-        hooksecurefunc(
+        _G.hooksecurefunc(
             _G.BottomScenarioWidgetContainerBlock.WidgetContainer,
             'UpdateWidgetLayout',
             function(self)
                 for _, widgetFrame in pairs(self.widgetFrames) do
                     if widgetFrame.widgetType == Type_SpellDisplay then
-                        ReskinSpellDisplayWidget(widgetFrame)
+                        ReskinSpellDisplayWidget(widgetFrame.Spell)
                     end
                 end
             end
         )
 
-        hooksecurefunc(
+        -- needs review, might remove this in the future
+        _G.hooksecurefunc(
             _G.UIWidgetTemplateStatusBarMixin,
             'Setup',
             function(self)
