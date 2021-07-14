@@ -4,13 +4,9 @@ local select = select
 local strmatch = strmatch
 local tonumber = tonumber
 local UnitAura = UnitAura
-local GetItemCount = GetItemCount
-local GetItemInfo = GetItemInfo
-local GetUnitName = GetUnitName
 local GetItemInfoFromHyperlink = GetItemInfoFromHyperlink
 local C_TradeSkillUI_GetRecipeReagentItemLink = C_TradeSkillUI.GetRecipeReagentItemLink
 local IsAltKeyDown = IsAltKeyDown
-local GameTooltip_ClearMoney = GameTooltip_ClearMoney
 local hooksecurefunc = hooksecurefunc
 local UnitGUID = UnitGUID
 local C_PetBattles_IsInBattle = C_PetBattles.IsInBattle
@@ -65,23 +61,6 @@ function TOOLTIP:AddLineForID(id, linkType, noadd)
         self:AddLine(' ')
     end
 
-    if linkType == types.item then
-        local bagCount = GetItemCount(id)
-        local bankCount = GetItemCount(id, true) - bagCount
-        local itemStackCount = select(8, GetItemInfo(id))
-        -- local itemSellPrice = select(11, GetItemInfo(id))
-
-        if bankCount > 0 then
-            self:AddDoubleLine(_G.BAGSLOT .. '/' .. _G.BANK .. ':', C.BlueColor .. bagCount .. '/' .. bankCount)
-        elseif bagCount > 1 then
-            self:AddDoubleLine(_G.BAGSLOT .. ':', C.BlueColor .. bagCount)
-        end
-        if itemStackCount and itemStackCount > 1 then
-            self:AddDoubleLine(L['Stack'] .. ':', C.BlueColor .. itemStackCount)
-        end
-    end
-
-    -- self:AddDoubleLine(linkType, format('%s', C.WhiteColor .. id))
     self:AddDoubleLine(left, right)
     self:Show()
 end
@@ -117,22 +96,10 @@ function TOOLTIP:SetItemID()
     end
 end
 
-
-
-function TOOLTIP:RemoveMoneyLine() -- #TODO
-    if not self.shownMoneyFrames then
-        return
-    end
-
-    GameTooltip_ClearMoney(self)
-end
-
 function TOOLTIP:ExtraInfo()
     if not C.DB.Tooltip.ExtraInfo then
         return
     end
-
-
 
     -- Update all
     hooksecurefunc(_G.GameTooltip, 'SetHyperlink', TOOLTIP.SetHyperLinkID)
@@ -178,8 +145,6 @@ function TOOLTIP:ExtraInfo()
     _G.ShoppingTooltip2:HookScript('OnTooltipSetItem', TOOLTIP.SetItemID)
     _G.ItemRefShoppingTooltip1:HookScript('OnTooltipSetItem', TOOLTIP.SetItemID)
     _G.ItemRefShoppingTooltip2:HookScript('OnTooltipSetItem', TOOLTIP.SetItemID)
-
-    -- GameTooltip:HookScript('OnTooltipSetItem', TOOLTIP.RemoveMoneyLine)
 
     hooksecurefunc(
         _G.GameTooltip,
@@ -257,8 +222,6 @@ function TOOLTIP:ExtraInfo()
             end
         end
     )
-
-
 end
 
 

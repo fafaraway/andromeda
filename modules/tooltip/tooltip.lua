@@ -430,6 +430,7 @@ function TOOLTIP:OnLogin()
 
     TOOLTIP:ReskinTooltipIcons()
     TOOLTIP:LinkHover()
+    TOOLTIP:ItemCountAndStack()
     TOOLTIP:ExtraInfo()
     TOOLTIP:ConduitCollectionData()
     TOOLTIP:DominationRank()
