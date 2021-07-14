@@ -181,6 +181,10 @@ local function SetupSimpleFloatingCombatText()
     GUI:SetupSimpleFloatingCombatText(GUI.Page[7])
 end
 
+local function SetupSoundAlert()
+    GUI:SetupSoundAlert(GUI.Page[7])
+end
+
 -- Announcement
 local function SetupAnnounceableSpells()
     GUI:SetupAnnounceableSpells(GUI.Page[8])
@@ -300,7 +304,7 @@ GUI.OptionsList = {
         {3, 'ACCOUNT', 'WorldTextScale', L['Combat Text Scale'], true, {1, 3, .1}, UpdateWorldTextScale},
         {1, 'ACCOUNT', 'FloatingCombatTextOldStyle', L['Use old style combat text'], nil, nil, UpdateBlizzardFloatingCombatText, L['|nCombat text vertical up over nameplate instead of arc.']},
         {1, 'Combat', 'CombatAlert', L['Combat alert'], nil, nil, nil, L['|nShow an animated alert when you enter/leave combat.']},
-        {1, 'Combat', 'SpellSound', L['Spell sound'], true, nil, nil, L['|nPlay a sound when you successfully interrup or dispel.']},
+        {1, 'Combat', 'SoundAlert', L['Sound alert'], true, SetupSoundAlert},
         {1, 'Combat', 'SmartTab', L['Smart TAB target'], nil, nil, nil, L['|nChange TAB binding to only target enemy players automatically when in PvP zones.']},
         {1, 'Combat', 'PvPSound', L['PvP sound'], true, nil, nil, L['|nPlay DotA-like sounds on PvP killing blows.']},
         {1, 'Combat', 'SimpleFloatingCombatText', L['Simple floating combat text'], nil, SetupSimpleFloatingCombatText, nil, L['|nProvides necessary combat infomation, including damage healing and events (dodge, parry, absorb etc...).']},

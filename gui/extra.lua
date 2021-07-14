@@ -1959,6 +1959,51 @@ function GUI:SetupSimpleFloatingCombatText(parent)
     end
 end
 
+function GUI:SetupSoundAlert(parent)
+    local guiName = 'FreeUI_GUI_SoundAlert'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+
+    local datas = {
+        [1] = {
+            value = 'Interrupt',
+            text = L['Interrupt']
+        },
+        [2] = {
+            value = 'Dispel',
+            text = L['Dispel']
+        },
+        [3] = {
+            value = 'SpellSteal',
+            text = L['Spell Steal']
+        },
+        [4] = {
+            value = 'SpellMiss',
+            text = L['Spell Miss']
+        },
+        [5] = {
+            value = 'LowHealth',
+            text = L['Low Health']
+        },
+        [6] = {
+            value = 'LowMana',
+            text = L['Low Mana']
+        }
+    }
+
+    local offset = -10
+    for _, data in ipairs(datas) do
+        CreateGroupTitle(scroll, L['Sound Alert'], offset)
+        CreateCheckbox(scroll, offset - 30, 'Combat', data.value, data.text)
+        offset = offset - 35
+    end
+end
+
 -- Announcement
 local function RefreshAnnounceableSpells()
     ANNOUNCEMENT:RefreshSpells()
