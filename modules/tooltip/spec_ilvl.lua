@@ -36,11 +36,7 @@ local GetItemInfo = GetItemInfo
 local F, C, L = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 
-local specPrefix = _G.SPECIALIZATION .. ': ' .. C.InfoColor
-local levelPrefix = L['iLvl'] .. ': ' .. C.InfoColor
 local isPending = _G.LFG_LIST_LOADING
-local prefixColor = '|cffffeeaa'
-local detailColor = '|cffffffff'
 local resetTime, frequency = 900, .5
 local cache, weapon, currentUNIT, currentGUID = {}, {}
 
@@ -101,48 +97,22 @@ function TOOLTIP:SetupSpecLevel(spec, level)
         return
     end
 
-    --[[ local specLine, levelLine
-    for i = 2, _G.GameTooltip:NumLines() do
-        local line = _G['GameTooltipTextLeft' .. i]
-        local text = line:GetText()
-        if text and strfind(text, specPrefix) then
-            specLine = line
-        elseif text and strfind(text, levelPrefix) then
-            levelLine = line
-        end
-    end
-
-    spec = specPrefix .. (spec or isPending)
-    if specLine then
-        specLine:SetText(spec)
-    else
-        _G.GameTooltip:AddLine(' ')
-        _G.GameTooltip:AddLine(spec)
-    end
-
-    level = levelPrefix .. (level or isPending)
-    if levelLine then
-        levelLine:SetText(level)
-    else
-        _G.GameTooltip:AddLine(level)
-    end ]]
-
     local infoLine
     for i = 2, _G.GameTooltip:NumLines() do
         local line = _G['GameTooltipTextLeft' .. i]
         local text = line and line:GetText() or ''
-        if text == isPending or strfind(text, specPrefix) then
+        if text == isPending or strfind(text, _G.SPECIALIZATION) then
             infoLine = line
             break
         end
     end
 
-    spec = specPrefix .. (spec or isPending)
-    level = levelPrefix .. (level or isPending)
+    spec = spec or isPending
+    level = level or isPending
 
     local infoString = isPending
     if spec ~= isPending then
-        infoString = spec .. ' ' .. level
+        infoString = format('|cffffffff%s:|r |cffe9c55d%s|r |cffffffff%s:|r |cffe9c55d%s|r', _G.SPECIALIZATION, spec, L['iLvl'], level)
     end
 
     if infoLine then
