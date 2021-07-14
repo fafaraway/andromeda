@@ -57,6 +57,7 @@ C.AuraWhiteList = {
     [355640] = true, -- 集市，重装方阵
     [355783] = true, -- 集市，力量增幅
     [347840] = true, -- 集市，野性
+    [347015] = true, -- 集市，强化防御
 
     -- Raids
     [334695] = true, -- 动荡能量，猎手
@@ -82,10 +83,8 @@ local function GetSectionInfo(id)
 end
 
 C.NPSpecialUnitsList = {
-    -- Nzoth vision
-    [153401] = true, -- 克熙尔支配者
-    [157610] = true, -- 克熙尔支配者
-    [156795] = true, -- 军情七处线人
+    [179823] = true, -- 圣物收集者
+    [180501] = true, -- 无辜的灵魂，低语威能碎片
     -- Dungeons
     [120651] = true, -- 大米，爆炸物
     [174773] = true, -- 大米，怨毒影魔
@@ -97,6 +96,7 @@ C.NPSpecialUnitsList = {
     [165251] = true, -- 仙林，幻影仙狐
     [171341] = true, -- 彼界，幼鹤
     [175576] = true, -- 集市，监禁
+    [179733] = true, -- 集市，鱼串
     -- Raids
     [175992] = true, -- 猩红议会，忠实的侍从
     [GetSectionInfo(21953)] = true -- 凯子，灵能灌注者
