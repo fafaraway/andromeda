@@ -168,6 +168,6 @@ end
 
 function Handler:Message()
     for i = 1, 2 do
-        RaidNotice_AddMessage(_G.RaidWarningFrame, L['Stand in circle and spam <SpaceBar> to complete!'], ChatTypeInfo.RAID_WARNING)
+        RaidNotice_AddMessage(_G.RaidWarningFrame, L['Spam <SpaceBar> to complete!'], _G.ChatTypeInfo.RAID_WARNING)
     end
 end
