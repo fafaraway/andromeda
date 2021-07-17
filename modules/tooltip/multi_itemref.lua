@@ -6,6 +6,7 @@ local CreateFrame = CreateFrame
 local HideUIPanel = HideUIPanel
 local ShowUIPanel = ShowUIPanel
 local IsModifiedClick = IsModifiedClick
+local InCombatLockdown = InCombatLockdown
 
 local F = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
@@ -99,7 +100,7 @@ end
 local SetHyperlink = _G.ItemRefTooltip.SetHyperlink
 function _G.ItemRefTooltip:SetHyperlink(link, ...)
     local handled = strsplit(':', link)
-    if not IsModifiedClick() and handled and types[handled] and not TOOLTIP.MultiShown then
+    if not InCombatLockdown() and not IsModifiedClick() and handled and types[handled] and not TOOLTIP.MultiShown then
         local tip = CreateTip(link)
         if tip then
             ShowTip(tip, link)
