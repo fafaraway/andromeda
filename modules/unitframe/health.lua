@@ -12,6 +12,7 @@ local UnitIsTapDenied = UnitIsTapDenied
 
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
+local OUF = F.Libs.oUF
 
 local function OverrideHealth(self, event, unit)
     if not C.DB.Unitframe.Transparent then
@@ -131,6 +132,14 @@ function UNITFRAME:CreateHealthBar(self)
     self.Health.PostUpdate = PostUpdateHealth
 end
 
+function UNITFRAME:UpdateHealthMethod()
+    for _, frame in pairs(OUF.objects) do
+        frame:SetHealthUpdateMethod(true)
+        frame:SetHealthUpdateSpeed(0.1)
+        frame.Health:ForceUpdate()
+    end
+end
+
 -- Prediction
 function UNITFRAME:CreateHealthPrediction(self)
     local trans = C.DB.Unitframe.Transparent
@@ -173,6 +182,6 @@ function UNITFRAME:CreateHealthPrediction(self)
         absorbBar = absorbBar,
         overAbsorb = overAbsorb,
         maxOverflow = 1,
-        frequentUpdates = true,
+        frequentUpdates = true
     }
 end

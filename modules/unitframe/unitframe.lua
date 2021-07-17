@@ -96,6 +96,8 @@ function UNITFRAME:OnLogin()
     UNITFRAME:UpdateHealthColor()
     UNITFRAME:UpdateClassColor()
 
+    UNITFRAME:UpdateHealthMethod()
+
     self:SpawnPlayer()
     self:SpawnPet()
     self:SpawnTarget()

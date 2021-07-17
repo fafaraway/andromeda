@@ -1,28 +1,17 @@
 --[[
 # Element: Health Bar
-
 Handles the updating of a status bar that displays the unit's health.
-
 ## Widget
-
 Health - A `StatusBar` used to represent the unit's health.
-
 ## Sub-Widgets
-
 .bg - A `Texture` used as a background. It will inherit the color of the main StatusBar.
-
 ## Notes
-
 A default texture will be applied if the widget is a StatusBar and doesn't have a texture set.
-
 ## Options
-
 .smoothGradient                   - 9 color values to be used with the .colorSmooth option (table)
 .considerSelectionInCombatHostile - Indicates whether selection should be considered hostile while the unit is in
                                     combat with the player (boolean)
-
 The following options are listed by priority. The first check that returns true decides the color of the bar.
-
 .colorDisconnected - Use `self.colors.disconnected` to color the bar if the unit is offline (boolean)
 .colorTapping      - Use `self.colors.tapping` to color the bar if the unit isn't tapped by the player (boolean)
 .colorThreat       - Use `self.colors.threat[threat]` to color the bar based on the unit's threat status. `threat` is
@@ -42,35 +31,27 @@ The following options are listed by priority. The first check that returns true 
                      based on the player's current health percentage (boolean)
 .colorHealth       - Use `self.colors.health` to color the bar. This flag is used to reset the bar color back to default
                      if none of the above conditions are met (boolean)
-
 ## Sub-Widgets Options
-
 .multiplier - Used to tint the background based on the main widgets R, G and B values. Defaults to 1 (number)[0-1]
-
 ## Examples
-
     -- Position and size
     local Health = CreateFrame('StatusBar', nil, self)
     Health:SetHeight(20)
     Health:SetPoint('TOP')
     Health:SetPoint('LEFT')
     Health:SetPoint('RIGHT')
-
     -- Add a background
     local Background = Health:CreateTexture(nil, 'BACKGROUND')
     Background:SetAllPoints(Health)
     Background:SetTexture(1, 1, 1, .5)
-
     -- Options
     Health.colorTapping = true
     Health.colorDisconnected = true
     Health.colorClass = true
     Health.colorReaction = true
     Health.colorHealth = true
-
     -- Make the background darker.
     Background.multiplier = .5
-
     -- Register it with oUF
     Health.bg = Background
     self.Health = Health
@@ -124,7 +105,6 @@ local function UpdateColor(self, event, unit)
 
 	--[[ Callback: Health:PostUpdateColor(unit, r, g, b)
 	Called after the element color has been updated.
-
 	* self - the Health element
 	* unit - the unit for which the update has been triggered (string)
 	* r    - the red component of the used color (number)[0-1]
@@ -139,7 +119,6 @@ end
 local function ColorPath(self, ...)
 	--[[ Override: Health.UpdateColor(self, event, unit)
 	Used to completely override the internal function for updating the widgets' colors.
-
 	* self  - the parent object
 	* event - the event triggering the update (string)
 	* unit  - the unit accompanying the event (string)
@@ -153,7 +132,6 @@ local function Update(self, event, unit)
 
 	--[[ Callback: Health:PreUpdate(unit)
 	Called before the element has been updated.
-
 	* self - the Health element
 	* unit - the unit for which the update has been triggered (string)
 	--]]
@@ -175,7 +153,6 @@ local function Update(self, event, unit)
 
 	--[[ Callback: Health:PostUpdate(unit, cur, max)
 	Called after the element has been updated.
-
 	* self - the Health element
 	* unit - the unit for which the update has been triggered (string)
 	* cur  - the unit's current health value (number)
@@ -189,7 +166,6 @@ end
 local function Path(self, ...)
 	--[[ Override: Health.Override(self, event, unit)
 	Used to completely override the internal update function.
-
 	* self  - the parent object
 	* event - the event triggering the update (string)
 	* unit  - the unit accompanying the event (string)
@@ -205,7 +181,6 @@ end
 
 --[[ Health:SetColorDisconnected(state, isForced)
 Used to toggle coloring if the unit is offline.
-
 * self     - the Health element
 * state    - the desired state (boolean)
 * isForced - forces the event update even if the state wasn't changed (boolean)
@@ -223,7 +198,6 @@ end
 
 --[[ Health:SetColorSelection(state, isForced)
 Used to toggle coloring by the unit's selection.
-
 * self     - the Health element
 * state    - the desired state (boolean)
 * isForced - forces the event update even if the state wasn't changed (boolean)
@@ -241,7 +215,6 @@ end
 
 --[[ Health:SetColorTapping(state, isForced)
 Used to toggle coloring if the unit isn't tapped by the player.
-
 * self     - the Health element
 * state    - the desired state (boolean)
 * isForced - forces the event update even if the state wasn't changed (boolean)
@@ -259,7 +232,6 @@ end
 
 --[[ Health:SetColorThreat(state, isForced)
 Used to toggle coloring by the unit's threat status.
-
 * self     - the Health element
 * state    - the desired state (boolean)
 * isForced - forces the event update even if the state wasn't changed (boolean)
@@ -275,6 +247,38 @@ local function SetColorThreat(element, state, isForced)
 	end
 end
 
+local onUpdateElapsed, onUpdateWait = 0, 0.25
+local function onUpdateHealth(self, elapsed)
+	if onUpdateElapsed > onUpdateWait then
+		Path(self.__owner, 'OnUpdate', self.__owner.unit)
+
+		onUpdateElapsed = 0
+	else
+		onUpdateElapsed = onUpdateElapsed + elapsed
+	end
+end
+
+local function SetHealthUpdateSpeed(self, state)
+	if state < .1 then state = .1 end
+	onUpdateWait = state
+end
+
+local function SetHealthUpdateMethod(self, state, force)
+	if self.effectiveHealth ~= state or force then
+		self.effectiveHealth = state
+
+		if state then
+			self.Health:SetScript('OnUpdate', onUpdateHealth)
+			self:UnregisterEvent('UNIT_HEALTH', Path)
+			self:UnregisterEvent('UNIT_MAXHEALTH', Path)
+		else
+			self.Health:SetScript('OnUpdate', nil)
+			self:RegisterEvent('UNIT_HEALTH', Path) -- Needed for Pet Battles
+			self:RegisterEvent('UNIT_MAXHEALTH', Path)
+		end
+	end
+end
+
 local function Enable(self, unit)
 	local element = self.Health
 	if(element) then
@@ -284,6 +288,10 @@ local function Enable(self, unit)
 		element.SetColorSelection = SetColorSelection
 		element.SetColorTapping = SetColorTapping
 		element.SetColorThreat = SetColorThreat
+
+		self.SetHealthUpdateSpeed = SetHealthUpdateSpeed
+		self.SetHealthUpdateMethod = SetHealthUpdateMethod
+		SetHealthUpdateMethod(self, self.effectiveHealth, true)
 
 		if(element.colorDisconnected) then
 			self:RegisterEvent('UNIT_CONNECTION', ColorPath)
@@ -318,6 +326,8 @@ local function Disable(self)
 	local element = self.Health
 	if(element) then
 		element:Hide()
+
+		element:SetScript('OnUpdate', nil)
 
 		self:UnregisterEvent('UNIT_HEALTH', Path)
 		self:UnregisterEvent('UNIT_MAXHEALTH', Path)
