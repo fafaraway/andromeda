@@ -35,6 +35,7 @@ function BLIZZARD:OnLogin()
     self:VehicleIndicatorMover()
     self:DurabilityFrameMover()
     self:UIWidgetMover()
+    self:MawBuffsFrameMover()
 end
 
 function BLIZZARD:ToggleBossBanner()
