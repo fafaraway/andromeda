@@ -1325,8 +1325,6 @@ function INVENTORY:OnLogin()
     F:RegisterEvent('BANKFRAME_OPENED', INVENTORY.AutoDeposit)
 
     -- Fixes
-    -- _G.BankFrame.GetRight = function()
-    --     return f.bank:GetRight()
-    -- end
+    _G.BankFrame.GetRight = function() return f.bank:GetRight() end
     _G.BankFrameItemButton_Update = F.Dummy
 end
