@@ -44,10 +44,7 @@ function MISC:OnLogin()
     end
 
     MISC:ForceWarning()
-
     MISC:FasterLoot()
-    MISC:LFDFix()
-
     MISC:MawWidgetFrame()
 end
 
@@ -193,22 +190,51 @@ function MISC:MawWidgetFrame()
 end
 
 -- Auto select current event boss from LFD tool
-local firstLFD
-local function LFDOnShow()
-    if not firstLFD then
-        firstLFD = 1
-        for i = 1, GetNumRandomDungeons() do
-            local id = GetLFGRandomDungeonInfo(i)
-            local isHoliday = select(15, GetLFGDungeonInfo(id))
-            if isHoliday and not GetLFGDungeonRewards(id) then
-                LFDQueueFrame_SetType(id)
+do
+    local firstLFD
+    local function LFD_OnShow()
+        if not firstLFD then
+            firstLFD = 1
+            for i = 1, GetNumRandomDungeons() do
+                local id = GetLFGRandomDungeonInfo(i)
+                local isHoliday = select(15, GetLFGDungeonInfo(id))
+                if isHoliday and not GetLFGDungeonRewards(id) then
+                    LFDQueueFrame_SetType(id)
+                end
             end
         end
     end
+
+    _G.LFDParentFrame:HookScript('OnShow', LFD_OnShow)
 end
 
-function MISC:LFDFix()
-    _G.LFDParentFrame:HookScript('OnShow', LFDOnShow)
+-- Auto collapse TradeSkillFrame RecipeList
+do
+    local f = CreateFrame('Frame')
+    f:RegisterEvent('ADDON_LOADED')
+    f:SetScript(
+        'OnEvent',
+        function(self, _, addon)
+            if addon ~= 'Blizzard_TradeSkillUI' then
+                return
+            end
+
+            hooksecurefunc(
+                _G.TradeSkillFrame.RecipeList,
+                'OnDataSourceChanged',
+                function(self)
+                    self.tradeSkillChanged = nil
+                    self.collapsedCategories = {}
+
+                    for _, categoryID in ipairs({_G.C_TradeSkillUI.GetCategories()}) do
+                        self.collapsedCategories[categoryID] = true
+                    end
+
+                    self:Refresh()
+                end
+            )
+
+            self:UnregisterAllEvents()
+        end
+    )
 end
-
-
