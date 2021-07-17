@@ -85,6 +85,7 @@ local lodFrames = {
         ['CommunitiesFrame.NotificationSettingsDialog'] = false,
         ['ClubFinderCommunityAndGuildFinderFrame.RequestToJoinFrame'] = false
     },
+    Blizzard_EncounterJournal = {['EncounterJournal'] = false},
     Blizzard_FlightMap = {['FlightMapFrame'] = false},
     Blizzard_GMSurveyUI = {['GMSurveyFrame'] = false},
     Blizzard_GuildBankUI = {['GuildBankFrame'] = false, ['GuildBankEmblemFrame'] = true},
