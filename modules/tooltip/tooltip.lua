@@ -428,6 +428,10 @@ function TOOLTIP:OnLogin()
 
     hooksecurefunc(_G.GameTooltip, 'SetUnitAura', TOOLTIP.AuraSource)
 
+    if C.DB.Tooltip.PvEStats then
+        F:RegisterEvent('ADDON_LOADED', TOOLTIP.PvEStats_OnEvent)
+    end
+
     TOOLTIP:ReskinTooltipIcons()
     TOOLTIP:LinkHover()
     TOOLTIP:ItemCountAndStack()

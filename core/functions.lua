@@ -102,34 +102,6 @@ do
             _G.ScriptErrorsFrame:OnError(err, false, false)
         end
     end
-
-    function F:RawHook(object, method, func)
-        if type(object) ~= 'table' then
-            object, method, func = nil, object, method
-        end
-
-        assert(type(func) == 'function', 'Bad arg, function expected')
-        if object then
-            assert(type(object[method]) == 'function', 'Bad arg, string function name expected')
-        else
-            assert(type(_G[method]) == 'function', 'Bad arg, string function name expected')
-        end
-
-        self.hooks = self.hooks or {}
-
-        if object then
-            self.hooks[object] = self.hooks[object] or {}
-            self.hooks[object][method] = object[method]
-            object[method] = function(...)
-                func(...)
-            end
-        else
-            self.hooks[method] = _G[method]
-            _G[method] = function(...)
-                func(...)
-            end
-        end
-    end
 end
 
 --[[ Math ]]

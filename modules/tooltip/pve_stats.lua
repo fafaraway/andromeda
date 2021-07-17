@@ -9,7 +9,6 @@ local select = select
 local GetTime = GetTime
 local format = string.format
 local gsub = string.gsub
-local strfind = string.find
 local UnitExists = UnitExists
 local UnitRace = UnitRace
 local UnitLevel = UnitLevel
@@ -26,15 +25,11 @@ local C_CreatureInfo_GetFactionInfo = C_CreatureInfo.GetFactionInfo
 local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo
 local InCombatLockdown = InCombatLockdown
 local IsAltKeyDown = IsAltKeyDown
-local IsAddOnLoaded = IsAddOnLoaded
-local AchievementFrame_LoadUI = AchievementFrame_LoadUI
 local SetAchievementComparisonUnit = SetAchievementComparisonUnit
-local HideUIPanel = HideUIPanel
 
 local F, C, L = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 
-local loadedComparison
 local compareGUID
 local cache = {}
 
@@ -305,58 +300,7 @@ function TOOLTIP:SetPvEStats(unit, guid)
         return
     end
 
-    local updated = false
-
-    for i = 2, _G.GameTooltip:NumLines() do
-        local leftTip = _G['GameTooltipTextLeft' .. i]
-        local leftTipText = leftTip:GetText()
-        local found = false
-
-        if leftTipText then
-
-            for _, achievement in ipairs(specialAchievements) do
-                local name = achievement.name
-                local nameStr = locales[name] and locales[name].short or name
-                if strfind(leftTipText, nameStr) then
-                    local rightTip = _G['GameTooltipTextRight' .. i]
-                    leftTip:SetText(nameStr .. ':')
-                    rightTip:SetText(cache[guid].info.special[name])
-                    updated = true
-                    found = true
-                    break
-                end
-                if found then
-                    break
-                end
-            end
-
-            found = false
-
-            for _, tier in ipairs(tiers) do
-                for _, level in ipairs(levels) do
-                    if strfind(leftTipText, locales[tier].short) then
-                        local rightTip = _G['GameTooltipTextRight' .. i]
-                        leftTip:SetText(format('%s:', locales[tier].short))
-                        rightTip:SetText(GetLevelColoredString(level) .. ' ' .. cache[guid].info.raids[tier][level])
-                        updated = true
-                        found = true
-                        break
-                    end
-                end
-
-                if found then
-                    break
-                end
-            end
-
-        end
-    end
-
-    if updated then
-        return
-    end
-
-    if cache[guid].info.special then
+    if cache[guid].info.special and next(cache[guid].info.special) then
         _G.GameTooltip:AddLine(' ')
         _G.GameTooltip:AddLine(L['Special Achievements'])
         for _, achievement in ipairs(specialAchievements) do
@@ -368,7 +312,7 @@ function TOOLTIP:SetPvEStats(unit, guid)
         end
     end
 
-    if next(cache[guid].info.raids) then
+    if cache[guid].info.raids and next(cache[guid].info.raids) then
         local title = false
 
         for _, tier in ipairs(tiers) do
@@ -396,13 +340,14 @@ function TOOLTIP:SetPvEStats(unit, guid)
         _G.GameTooltip:AddLine(' ')
         local color = C_ChallengeMode_GetDungeonScoreRarityColor(score) or _G.HIGHLIGHT_FONT_COLOR
         _G.GameTooltip:AddLine(format(L['Mythic Plus: %s'], color:WrapTextInColorCode(score)))
-        --_G.GameTooltip:AddDoubleLine(L['MythicDungeons'], L['Score (Level)'])
 
         for _, info in ipairs(runs) do
             local name = dungeons[info.challengeModeID] and locales[dungeons[info.challengeModeID]].short or C_ChallengeMode_GetMapUIInfo(info.challengeModeID)
             local left = format('%s:', name)
-            local color = C_ChallengeMode_GetSpecificDungeonOverallScoreRarityColor(info.mapScore) or _G.HIGHLIGHT_FONT_COLOR
-            local right = format('%s (%d)', color:WrapTextInColorCode(info.mapScore), info.bestRunLevel)
+            local scoreColor = C_ChallengeMode_GetSpecificDungeonOverallScoreRarityColor(info.mapScore) or _G.HIGHLIGHT_FONT_COLOR
+            local levelColor = info.finishedSuccess and '|cffffffff' or '|cff888888'
+            local right = format('%s (%s)', scoreColor:WrapTextInColorCode(info.mapScore), levelColor .. info.bestRunLevel .. '|r')
+
             _G.GameTooltip:AddDoubleLine(left, right, .6, .8, 1, 1, 1, 1)
         end
     end
@@ -430,13 +375,13 @@ function TOOLTIP:GetAchievementInfo(GUID)
 end
 
 function TOOLTIP:AddPvEStats()
-    if not C.DB.Tooltip.PvEStats then return end
-
     if InCombatLockdown() then
         return
     end
 
-    if not IsAltKeyDown() then return end
+    if not IsAltKeyDown() then
+        return
+    end
 
     local unit = TOOLTIP.GetUnit(self)
     if not unit or not CanInspect(unit) or not UnitIsPlayer(unit) then
@@ -448,23 +393,12 @@ function TOOLTIP:AddPvEStats()
         return
     end
 
-    if not IsAddOnLoaded('Blizzard_AchievementUI') then
-        AchievementFrame_LoadUI()
-    end
-
     local guid = UnitGUID(unit)
     if not cache[guid] or (GetTime() - cache[guid].timer) > 600 then
         if guid == C.MyGUID then
             TOOLTIP:UpdatePvEStats(guid, C.MyFaction)
         else
             ClearAchievementComparisonUnit()
-
-            if not loadedComparison and select(2, IsAddOnLoaded('Blizzard_AchievementUI')) then
-                _G.AchievementFrame_DisplayComparison(unit)
-                HideUIPanel(_G.AchievementFrame)
-                ClearAchievementComparisonUnit()
-                loadedComparison = true
-            end
 
             compareGUID = guid
 
@@ -479,20 +413,15 @@ function TOOLTIP:AddPvEStats()
     TOOLTIP:SetPvEStats(unit, guid)
 end
 
-local function loadFunc(event, addon)
+function TOOLTIP:PvEStats_OnEvent(event, addon)
     if addon == 'Blizzard_AchievementUI' then
-        local method = 'AchievementFrameComparison_UpdateStatusBars'
-        if _G[method] then
-            F:RawHook(
-                method,
-                function(id)
-                    if id and id ~= 'summary' then
-                        F.hooks[method](id)
-                    end
-                end
-            )
+        local origUpdateStatusBars = _G.AchievementFrameComparison_UpdateStatusBars
+        _G.AchievementFrameComparison_UpdateStatusBars = function(id)
+            if id and id ~= 'summary' then
+                origUpdateStatusBars(id)
+            end
         end
-        F:UnregisterEvent(event, loadFunc)
+        F:UnregisterEvent(event, TOOLTIP.PvEStats_OnEvent)
     end
 end
-F:RegisterEvent('ADDON_LOADED', loadFunc)
+
