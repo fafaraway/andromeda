@@ -9,14 +9,19 @@ local F, C, L = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 
 local function ItemInfo(self)
-    local _, link = self:GetItem()
-    local bagCount = GetItemCount(link)
-    local bankCount = GetItemCount(link, true) - bagCount
-    local itemStackCount = select(8, GetItemInfo(link))
-
     if not IsAltKeyDown() then
         return
     end
+
+    local _, link = self:GetItem()
+
+    if not link then
+        return
+    end
+
+    local bagCount = GetItemCount(link)
+    local bankCount = GetItemCount(link, true) - bagCount
+    local itemStackCount = select(8, GetItemInfo(link))
 
     self:AddLine(' ')
 
