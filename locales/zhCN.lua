@@ -626,7 +626,7 @@ if L then
     L["Split Count"] = "拆分数量"
     --[[Translation missing --]]
     L["Stack"] = "Stack"
-    L["Stand in circle and spam <SpaceBar> to complete!"] = "站在圈内连续按空格键完成任务！"
+    L["Spam <SpaceBar> to complete!"] = "连续按空格键完成任务！"
     L["Standard: b/m/k"] = "标准模式: b/m/k"
     L["Steal"] = "偷取"
     L["Stolen %s -> %s"] = "已偷取 %s → %s"
