@@ -125,6 +125,7 @@ local function ReskinTooltip(self)
             bg:SetPoint('TOPLEFT', 0, 0)
             bg:SetPoint('BOTTOMRIGHT', 6, 0)
             tooltip.Icon.Border:SetAlpha(0)
+            F.ReskinIcon(tooltip.Icon.Texture)
             tooltip.Hilite:SetOutside(bg, 2, 2)
             tooltip.styled = true
         end
