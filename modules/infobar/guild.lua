@@ -84,6 +84,7 @@ function INFOBAR:GuildPanel_CreateButton(parent, index)
     button.zone = F.CreateFS(button, C.Assets.Fonts.Regular, 13, nil, 'Zone', nil, true, 'RIGHT', -2, 0)
     button.zone:SetPoint('LEFT', button, 'RIGHT', -120, 0)
     button.zone:SetJustifyH('RIGHT')
+    button.zone:SetWordWrap(false)
 
     button:RegisterForClicks('AnyUp')
     button:SetScript('OnClick', rosterButtonOnClick)
