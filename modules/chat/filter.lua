@@ -72,7 +72,7 @@ function CHAT:GetFilterResult(event, msg, name, flag, guid)
 
     -- Block strangers
     if C.DB.Chat.BlockStrangerWhisper and event == 'CHAT_MSG_WHISPER' then
-        CHAT.MuteThisTime = true
+        CHAT.MuteCache[name] = GetTime()
         return true
     end
 
@@ -228,7 +228,7 @@ function CHAT:UpdateAddOnBlocker(event, msg, author)
             elseif event == 'CHAT_MSG_PARTY' or event == 'CHAT_MSG_PARTY_LEADER' then
                 CHAT:ToggleChatBubble(true)
             elseif event == 'CHAT_MSG_WHISPER' then
-                CHAT.MuteThisTime = true
+                CHAT.MuteCache[name] = GetTime()
             end
             return true
         end

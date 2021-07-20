@@ -21,10 +21,8 @@ local ChatEdit_OnEscapePressed = ChatEdit_OnEscapePressed
 local ChatTypeInfo = ChatTypeInfo
 local GetChatWindowInfo = GetChatWindowInfo
 local GetChannelName = GetChannelName
-local GetChannelList = GetChannelList
 local GetInstanceInfo = GetInstanceInfo
 local GetRealmName = GetRealmName
-local GetCVar = GetCVar
 local SetCVar = SetCVar
 local Ambiguate = Ambiguate
 local GetTime = GetTime
@@ -321,7 +319,7 @@ local cycles = {
         chatType = 'CHANNEL',
         use = function(_, editbox)
             if CHAT.InWorldChannel and CHAT.WorldChannelID then
-                editbox:SetAttribute("channelTarget", CHAT.WorldChannelID)
+                editbox:SetAttribute('channelTarget', CHAT.WorldChannelID)
                 return true
             else
                 return false
@@ -466,29 +464,26 @@ function CHAT:WhisperInvite()
 end
 
 -- Whisper sound
-function CHAT:PlayWhisperSound(event)
+CHAT.MuteCache = {}
+function CHAT:PlayWhisperSound(event, _, author)
     if not C.DB.Chat.WhisperSound then
         return
     end
 
     local currentTime = GetTime()
-    if event == 'CHAT_MSG_WHISPER' then
-        if CHAT.MuteThisTime then
-            CHAT.MuteThisTime = nil
-            return
-        end
+    local name = Ambiguate(author, 'none')
 
+    if CHAT.MuteCache[name] == currentTime then
+        return
+    end
+
+    if event == 'CHAT_MSG_WHISPER' then
         if not self.soundTimer or currentTime > self.soundTimer then
             PlaySoundFile(C.Assets.Sounds.Whisper, 'Master')
         end
 
         self.soundTimer = currentTime + C.DB.Chat.SoundThreshold
     elseif event == 'CHAT_MSG_BN_WHISPER' then
-        if CHAT.MuteThisTime then
-            CHAT.MuteThisTime = nil
-            return
-        end
-
         if not self.soundTimer or currentTime > self.soundTimer then
             PlaySoundFile(C.Assets.Sounds.WhisperBattleNet, 'Master')
         end
