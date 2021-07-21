@@ -51,7 +51,6 @@ local IsReagentBankUnlocked = IsReagentBankUnlocked
 local StaticPopup_Show = StaticPopup_Show
 local DepositReagentBank = DepositReagentBank
 
-
 local F, C, L = unpack(select(2, ...))
 local INVENTORY = F:RegisterModule('Inventory')
 local cargBags = F.Libs.cargBags
@@ -332,9 +331,13 @@ function INVENTORY:CreateSortButton(name)
 end
 
 local function updateRepairButtonStatus(bu)
-    if C.DB.Inventory.AutoRepair then
+    if _G.FREE_ADB['RepairType'] == 1 then
         bu.Icon:SetVertexColor(C.r, C.g, C.b, 1)
-        bu.text = L['|nRepair your equipment automatically when you visit an able vendor.']
+        bu.text = L['Repair your equipment automatically when you visit an able vendor.|nPriority use of guild funds.']
+        bu.title = L['Auto Repair'] .. ': ' .. C.GreenColor .. _G.VIDEO_OPTIONS_ENABLED
+    elseif _G.FREE_ADB['RepairType'] == 2 then
+        bu.Icon:SetVertexColor(C.r, C.g, C.b, 1)
+        bu.text = L['Repair your equipment automatically when you visit an able vendor.|nDo not use guild funds.']
         bu.title = L['Auto Repair'] .. ': ' .. C.GreenColor .. _G.VIDEO_OPTIONS_ENABLED
     else
         bu.Icon:SetVertexColor(.5, .5, .5, 1)
@@ -349,7 +352,7 @@ function INVENTORY:CreateRepairButton()
     bu:SetScript(
         'OnClick',
         function(self)
-            C.DB.Inventory.AutoRepair = not C.DB.Inventory.AutoRepair
+            _G.FREE_ADB['RepairType'] = mod(_G.FREE_ADB['RepairType'] + 1, 3)
             updateRepairButtonStatus(bu)
             self:GetScript('OnEnter')(self)
         end
@@ -1325,6 +1328,8 @@ function INVENTORY:OnLogin()
     F:RegisterEvent('BANKFRAME_OPENED', INVENTORY.AutoDeposit)
 
     -- Fixes
-    _G.BankFrame.GetRight = function() return f.bank:GetRight() end
+    _G.BankFrame.GetRight = function()
+        return f.bank:GetRight()
+    end
     _G.BankFrameItemButton_Update = F.Dummy
 end
