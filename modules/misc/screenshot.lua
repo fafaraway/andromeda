@@ -24,7 +24,12 @@ local function ChallengeModeCompleted()
         return
     end
 
-    F:Delay(2, _G.Screenshot)
+    _G.ChallengeModeCompleteBanner:HookScript(
+        'OnShow',
+        function()
+            F:Delay(1, _G.Screenshot)
+        end
+    )
 end
 
 local function PlayerLevelUp()
