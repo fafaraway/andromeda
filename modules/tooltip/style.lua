@@ -269,10 +269,13 @@ TOOLTIP:RegisterTooltips(
                 if _G.LootBarToolTip then
                     TOOLTIP.ReskinTooltip(_G.LootBarToolTip)
                 end
-
                 -- Narcissus
                 if _G.NarciGameTooltip then
                     TOOLTIP.ReskinTooltip(_G.NarciGameTooltip)
+                end
+                -- Altoholic
+                if _G.AltoTooltip then
+                    TOOLTIP.ReskinTooltip(_G.AltoTooltip)
                 end
             end
         )

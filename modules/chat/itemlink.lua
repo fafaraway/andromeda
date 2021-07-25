@@ -15,7 +15,7 @@ local CHAT = F:GetModule('Chat')
 local function isItemHasLevel(link)
     local name, _, rarity, level, _, _, _, _, _, _, _, classID = GetItemInfo(link)
     if name and level and rarity > 1 and (classID == _G.LE_ITEM_CLASS_WEAPON or classID == _G.LE_ITEM_CLASS_ARMOR) then
-        local itemLevel = F:GetItemLevel(link)
+        local itemLevel = F.GetItemLevel(link)
         return name, itemLevel
     end
 end
