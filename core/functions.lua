@@ -38,22 +38,7 @@ local UnitIsTapDenied = UnitIsTapDenied
 local UnitClass = UnitClass
 local UnitReaction = UnitReaction
 local GetSpellDescription = GetSpellDescription
-local ITEM_SPELL_TRIGGER_ONEQUIP = ITEM_SPELL_TRIGGER_ONEQUIP
-local FACTION_BAR_COLORS = FACTION_BAR_COLORS
-local ENCHANTED_TOOLTIP_LINE = ENCHANTED_TOOLTIP_LINE
-local RETRIEVING_ITEM_INFO = RETRIEVING_ITEM_INFO
-local ITEM_LEVEL = ITEM_LEVEL
-local LE_ITEM_QUALITY_POOR = LE_ITEM_QUALITY_POOR
-local LE_ITEM_QUALITY_COMMON = LE_ITEM_QUALITY_COMMON
-local LE_ITEM_QUALITY_UNCOMMON = LE_ITEM_QUALITY_UNCOMMON
-local LE_ITEM_QUALITY_RARE = LE_ITEM_QUALITY_RARE
-local LE_ITEM_QUALITY_EPIC = LE_ITEM_QUALITY_EPIC
-local LE_ITEM_QUALITY_LEGENDARY = LE_ITEM_QUALITY_LEGENDARY
-local LE_ITEM_QUALITY_ARTIFACT = LE_ITEM_QUALITY_ARTIFACT
-local LE_ITEM_QUALITY_HEIRLOOM = LE_ITEM_QUALITY_HEIRLOOM
 local ColorPicker_GetPreviousValues = ColorPicker_GetPreviousValues
-local EnumerateFrames = EnumerateFrames
-local BaudErrorFrameHandler = BaudErrorFrameHandler
 
 local F, C, L = unpack(select(2, ...))
 local assets = C.Assets
@@ -96,8 +81,8 @@ do
 
         err = format('FreeUI: %s Error\n%s', msg, err)
 
-        if BaudErrorFrameHandler then
-            BaudErrorFrameHandler(err)
+        if _G.BaudErrorFrameHandler then
+            _G.BaudErrorFrameHandler(err)
         else
             _G.ScriptErrorsFrame:OnError(err, false, false)
         end
@@ -449,7 +434,7 @@ do
         else
             local reaction = UnitReaction(unit, 'player')
             if reaction then
-                local color = FACTION_BAR_COLORS[reaction]
+                local color = _G.FACTION_BAR_COLORS[reaction]
                 r, g, b = color.r, color.g, color.b
             end
         end
@@ -939,14 +924,14 @@ do
     end
 
     local atlasToQuality = {
-        ['auctionhouse-itemicon-border-gray'] = LE_ITEM_QUALITY_POOR,
-        ['auctionhouse-itemicon-border-white'] = LE_ITEM_QUALITY_COMMON,
-        ['auctionhouse-itemicon-border-green'] = LE_ITEM_QUALITY_UNCOMMON,
-        ['auctionhouse-itemicon-border-blue'] = LE_ITEM_QUALITY_RARE,
-        ['auctionhouse-itemicon-border-purple'] = LE_ITEM_QUALITY_EPIC,
-        ['auctionhouse-itemicon-border-orange'] = LE_ITEM_QUALITY_LEGENDARY,
-        ['auctionhouse-itemicon-border-artifact'] = LE_ITEM_QUALITY_ARTIFACT,
-        ['auctionhouse-itemicon-border-account'] = LE_ITEM_QUALITY_HEIRLOOM
+        ['auctionhouse-itemicon-border-gray'] = _G.LE_ITEM_QUALITY_POOR,
+        ['auctionhouse-itemicon-border-white'] = _G.LE_ITEM_QUALITY_COMMON,
+        ['auctionhouse-itemicon-border-green'] = _G.LE_ITEM_QUALITY_UNCOMMON,
+        ['auctionhouse-itemicon-border-blue'] = _G.LE_ITEM_QUALITY_RARE,
+        ['auctionhouse-itemicon-border-purple'] = _G.LE_ITEM_QUALITY_EPIC,
+        ['auctionhouse-itemicon-border-orange'] = _G.LE_ITEM_QUALITY_LEGENDARY,
+        ['auctionhouse-itemicon-border-artifact'] = _G.LE_ITEM_QUALITY_ARTIFACT,
+        ['auctionhouse-itemicon-border-account'] = _G.LE_ITEM_QUALITY_HEIRLOOM
     }
 
     local function UpdateIconBorderColorByAtlas(self, atlas)
@@ -2341,24 +2326,25 @@ do
     AddAPI(object:CreateTexture())
     AddAPI(object:CreateMaskTexture())
 
-    object = EnumerateFrames()
+    object = _G.EnumerateFrames()
     while object do
         if not object:IsForbidden() and not handled[object:GetObjectType()] then
             AddAPI(object)
             handled[object:GetObjectType()] = true
         end
 
-        object = EnumerateFrames(object)
+        object = _G.EnumerateFrames(object)
     end
 end
 
 --[[ Itemlevel ]]
 do
     local iLvlDB = {}
-    local itemLevelString = '^' .. gsub(ITEM_LEVEL, '%%d', '')
-    local enchantString = gsub(ENCHANTED_TOOLTIP_LINE, '%%s', '(.+)')
+    local itemLevelString = '^' .. gsub(_G.ITEM_LEVEL, '%%d', '')
+    local enchantString = gsub(_G.ENCHANTED_TOOLTIP_LINE, '%%s', '(.+)')
     local essenceTextureID = 2975691
     local essenceDescription = GetSpellDescription(277253)
+
     local tip = CreateFrame('GameTooltip', 'FreeUI_ScanTooltip', nil, 'GameTooltipTemplate')
     F.ScanTip = tip
 
@@ -2419,8 +2405,8 @@ do
     function F:CollectEssenceInfo(index, lineText, slotInfo)
         local step = 1
         local essence = slotInfo.essences[step]
-        if essence and next(essence) and (strfind(lineText, ITEM_SPELL_TRIGGER_ONEQUIP, nil, true) and strfind(lineText, essenceDescription, nil, true)) then
-            for i = 4, 2, -1 do
+        if essence and next(essence) and (strfind(lineText, _G.ITEM_SPELL_TRIGGER_ONEQUIP, nil, true) and strfind(lineText, essenceDescription, nil, true)) then
+            for i = 5, 2, -1 do
                 local line = _G[tip:GetName() .. 'TextLeft' .. index - i]
                 local text = line and line:GetText()
 
@@ -2437,7 +2423,7 @@ do
         end
     end
 
-    function F:GetItemLevel(link, arg1, arg2, fullScan)
+    function F.GetItemLevel(link, arg1, arg2, fullScan)
         if fullScan then
             tip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
             tip:SetInventoryItem(arg1, arg2)
@@ -2455,8 +2441,12 @@ do
                 local line = _G[tip:GetName() .. 'TextLeft' .. i]
                 if line then
                     local text = line:GetText() or ''
-                    F:InspectItemInfo(text, slotInfo)
-                    F:CollectEssenceInfo(i, text, slotInfo)
+                    if i == 1 and text == _G.RETRIEVING_ITEM_INFO then
+                        return 'tooSoon'
+                    else
+                        F:InspectItemInfo(text, slotInfo)
+                        F:CollectEssenceInfo(i, text, slotInfo)
+                    end
                 end
             end
 
@@ -2476,7 +2466,7 @@ do
             end
 
             local firstLine = _G.FreeUI_ScanTooltipTextLeft1:GetText()
-            if firstLine == RETRIEVING_ITEM_INFO then
+            if firstLine == _G.RETRIEVING_ITEM_INFO then
                 return 'tooSoon'
             end
 

@@ -1,6 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
     <Script file="inventory.lua"/>
-    <Script file="item-filters.lua"/>
-    <Script file="auto-repair.lua"/>
-    <Script file="auto-sell.lua"/>
+    <Script file="filters.lua"/>
+    <Script file="repair.lua"/>
+    <Script file="sell.lua"/>
 </Ui>

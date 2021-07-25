@@ -41,7 +41,7 @@ local function isItemJunk(item)
     if not C.DB.Inventory.FilterJunk then
         return
     end
-    return (item.rarity == _G.LE_ITEM_QUALITY_POOR or _G.FREE_ADB['CustomJunkList'][item.id]) and item.sellPrice and item.sellPrice > 0 and not INVENTORY:IsPetTrashCurrency(item.id)
+    return (item.quality == _G.LE_ITEM_QUALITY_POOR or _G.FREE_ADB['CustomJunkList'][item.id]) and item.hasPrice and not INVENTORY:IsPetTrashCurrency(item.id)
 end
 
 local function isItemEquipSet(item)
@@ -67,8 +67,15 @@ local function isAzeriteArmor(item)
     return C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID(item.link)
 end
 
-function INVENTORY:IsArtifactRelic(item)
-    return item.classID == _G.LE_ITEM_CLASS_GEM and item.subClassID == _G.LE_ITEM_GEM_ARTIFACTRELIC
+local iLvlClassIDs = {
+    [_G.LE_ITEM_CLASS_GEM] = _G.LE_ITEM_GEM_ARTIFACTRELIC,
+    [_G.LE_ITEM_CLASS_ARMOR] = 0,
+    [_G.LE_ITEM_CLASS_WEAPON] = 0
+}
+
+function INVENTORY:IsItemHasLevel(item)
+    local index = iLvlClassIDs[item.classID]
+    return index and (index == 0 or index == item.subClassID)
 end
 
 local function isItemEquipment(item)
@@ -78,8 +85,13 @@ local function isItemEquipment(item)
     if not C.DB.Inventory.FilterEquipment then
         return
     end
-    return item.level and item.rarity > _G.LE_ITEM_QUALITY_COMMON and (INVENTORY:IsArtifactRelic(item) or item.classID == _G.LE_ITEM_CLASS_WEAPON or item.classID == _G.LE_ITEM_CLASS_ARMOR)
+    return item.link and item.quality > _G.LE_ITEM_QUALITY_COMMON and INVENTORY:IsItemHasLevel(item)
 end
+
+local consumableIDs = {
+    [_G.LE_ITEM_CLASS_CONSUMABLE] = true,
+    [_G.LE_ITEM_CLASS_ITEM_ENHANCEMENT] = true
+}
 
 local function isItemConsumable(item)
     if not C.DB.Inventory.ItemFilter then
@@ -91,7 +103,7 @@ local function isItemConsumable(item)
     if isCustomFilter(item) == false then
         return
     end
-    return isCustomFilter(item) or (item.classID and (item.classID == _G.LE_ITEM_CLASS_CONSUMABLE or item.classID == _G.LE_ITEM_CLASS_ITEM_ENHANCEMENT))
+    return isCustomFilter(item) or consumableIDs[item.classID]
 end
 
 local function isItemLegendary(item)
@@ -101,15 +113,20 @@ local function isItemLegendary(item)
     if not C.DB.Inventory.FilterLegendary then
         return
     end
-    return item.rarity == _G.LE_ITEM_QUALITY_LEGENDARY
+    return item.quality == _G.LE_ITEM_QUALITY_LEGENDARY
 end
 
 local isPetToy = {
     [174925] = true
 }
 
+local collectionIDs = {
+    [_G.LE_ITEM_MISCELLANEOUS_MOUNT] = _G.LE_ITEM_CLASS_MISCELLANEOUS,
+    [_G.LE_ITEM_MISCELLANEOUS_COMPANION_PET] = _G.LE_ITEM_CLASS_MISCELLANEOUS
+}
+
 local function isMountOrPet(item)
-    return (not isPetToy[item.id]) and item.classID == _G.LE_ITEM_CLASS_MISCELLANEOUS and (item.subClassID == LE_ITEM_MISCELLANEOUS_MOUNT or item.subClassID == LE_ITEM_MISCELLANEOUS_COMPANION_PET)
+    return not isPetToy[item.id] and item.subClassID and collectionIDs[item.subClassID] == item.classID
 end
 
 local petTrashCurrenies = {

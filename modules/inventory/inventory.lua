@@ -6,14 +6,9 @@ local strmatch = string.match
 local unpack = unpack
 local ceil = math.ceil
 local strfind = strfind
+local mod = mod
 local CreateFrame = CreateFrame
 local ToggleFrame = ToggleFrame
-local EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC = EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC
-local LE_ITEM_QUALITY_POOR = LE_ITEM_QUALITY_POOR
-local LE_ITEM_QUALITY_RARE = LE_ITEM_QUALITY_RARE
-local LE_ITEM_QUALITY_HEIRLOOM = LE_ITEM_QUALITY_HEIRLOOM
-local LE_ITEM_CLASS_WEAPON = LE_ITEM_CLASS_WEAPON
-local LE_ITEM_CLASS_ARMOR = LE_ITEM_CLASS_ARMOR
 local LE_ITEM_CLASS_CONTAINER = LE_ITEM_CLASS_CONTAINER
 local SortBankBags = SortBankBags
 local SortReagentBankBags = SortReagentBankBags
@@ -135,16 +130,6 @@ end
 
 local function highlightFunction(button, match)
     button:SetAlpha(match and 1 or .3)
-end
-
-function INVENTORY:CreateCurrencyFrame()
-    local currencyFrame = CreateFrame('Button', nil, self)
-    currencyFrame:SetPoint('TOPLEFT', 6, 0)
-    currencyFrame:SetSize(140, 26)
-
-    local tag = self:SpawnPlugin('TagDisplay', '[money]  [currencies]', currencyFrame)
-    F:SetFS(tag, C.Assets.Fonts.Bold, 11, nil, '', nil, 'THICK')
-    tag:SetPoint('TOPLEFT', 0, -3)
 end
 
 function INVENTORY:CreateBagBar(settings, columns)
@@ -622,7 +607,7 @@ local function favouriteOnClick(self)
     end
 
     local texture, _, _, quality, _, _, _, _, _, itemID = GetContainerItemInfo(self.bagID, self.slotID)
-    if texture and quality > LE_ITEM_QUALITY_POOR then
+    if texture and quality > _G.LE_ITEM_QUALITY_POOR then
         if C.DB.Inventory.FavItemsList[itemID] then
             C.DB.Inventory.FavItemsList[itemID] = nil
         else
@@ -738,7 +723,7 @@ local function deleteButtonOnClick(self)
     end
 
     local texture, _, _, quality = GetContainerItemInfo(self.bagID, self.slotID)
-    if IsControlKeyDown() and IsAltKeyDown() and texture and (quality < LE_ITEM_QUALITY_RARE or quality == LE_ITEM_QUALITY_HEIRLOOM) then
+    if IsControlKeyDown() and IsAltKeyDown() and texture and (quality < _G.LE_ITEM_QUALITY_RARE or quality == LE_ITEM_QUALITY_HEIRLOOM) then
         PickupContainerItem(self.bagID, self.slotID)
         DeleteCursorItem()
     end
@@ -995,7 +980,7 @@ function INVENTORY:OnLogin()
     }
 
     local function isItemNeedsLevel(item)
-        return item.link and item.level and item.rarity > 1 and (item.subType == EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC or item.classID == LE_ITEM_CLASS_WEAPON or item.classID == LE_ITEM_CLASS_ARMOR)
+        return item.link and item.quality > 1 and INVENTORY:IsItemHasLevel(item)
     end
 
     local function isItemExist(item)
@@ -1045,7 +1030,7 @@ function INVENTORY:OnLogin()
 
     function MyButton:OnUpdate(item)
         if self.JunkIcon then
-            if (_G.MerchantFrame:IsShown() or customJunkEnable) and (item.rarity == LE_ITEM_QUALITY_POOR or _G.FREE_ADB['CustomJunkList'][item.id]) and item.sellPrice > 0 then
+            if (_G.MerchantFrame:IsShown() or customJunkEnable) and (item.quality == _G.LE_ITEM_QUALITY_POOR or _G.FREE_ADB['CustomJunkList'][item.id]) and item.hasPrice then
                 self.JunkIcon:Show()
             else
                 self.JunkIcon:Hide()
@@ -1061,7 +1046,7 @@ function INVENTORY:OnLogin()
             self.IconOverlay:Show()
 
             if secondAtlas then
-                local color = C.QualityColors[item.rarity or 1]
+                local color = C.QualityColors[item.quality or 1]
                 self.IconOverlay:SetVertexColor(color.r, color.g, color.b)
                 self.IconOverlay2:SetAtlas(secondAtlas)
                 self.IconOverlay2:Show()
@@ -1085,11 +1070,18 @@ function INVENTORY:OnLogin()
         end
 
         self.iLvl:SetText('')
-        if C.DB.Inventory.ItemLevel and isItemNeedsLevel(item) then
-            local level = F:GetItemLevel(item.link, item.bagID, item.slotID) or item.level
+        if C.DB.Inventory.ItemLevel then
+            local level = item.level -- ilvl for keystone and battlepet
 
-            if level > C.DB.Inventory.MinItemLevelToShow then
-                local color = C.QualityColors[item.rarity]
+            if not level and isItemNeedsLevel(item) then
+				local ilvl = F.GetItemLevel(item.link, item.bagID, item.slotID)
+				if ilvl then
+					level = ilvl
+				end
+			end
+
+            if level then
+                local color = C.QualityColors[item.quality]
                 self.iLvl:SetText(level)
                 self.iLvl:SetTextColor(color.r, color.g, color.b)
             end
@@ -1147,8 +1139,8 @@ function INVENTORY:OnLogin()
 
         if item.questID or item.isQuestItem then
             self:SetBackdropBorderColor(.8, .8, 0, 1)
-        elseif item.rarity and item.rarity > -1 then
-            local color = C.QualityColors[item.rarity]
+        elseif item.quality and item.quality > -1 then
+            local color = C.QualityColors[item.quality]
             self:SetBackdropBorderColor(color.r, color.g, color.b, 1)
         else
             self:SetBackdropBorderColor(0, 0, 0, .2)
@@ -1233,8 +1225,6 @@ function INVENTORY:OnLogin()
             self.label = F.CreateFS(self, C.Assets.Fonts.Regular, 12, nil, label, nil, 'THICK', 'TOPLEFT', 5, -4)
             return
         end
-
-        INVENTORY.CreateCurrencyFrame(self)
 
         local buttons = {}
         buttons[1] = INVENTORY.CreateRestoreButton(self, f)
