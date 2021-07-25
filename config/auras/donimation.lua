@@ -9,8 +9,7 @@ BOSS = 2435 -- 塔拉格鲁
 AURA:RegisterDebuff(TIER, INSTANCE, BOSS, 347283) -- 捕食者之嚎
 AURA:RegisterDebuff(TIER, INSTANCE, BOSS, 347286) -- 不散之惧
 AURA:RegisterDebuff(TIER, INSTANCE, BOSS, 346986) -- 粉碎护甲
-AURA:RegisterDebuff(TIER, INSTANCE, BOSS, 347991) -- 高塔之十
-AURA:RegisterDebuff(TIER, INSTANCE, BOSS, 347269) -- 永恒锁链
+AURA:RegisterDebuff(TIER, INSTANCE, BOSS, 347269, 6) -- 永恒锁链
 AURA:RegisterDebuff(TIER, INSTANCE, BOSS, 346985) -- 压制
 AURA:RegisterDebuff(TIER, INSTANCE, BOSS, 347274) -- 毁灭猛击
 
