@@ -4,6 +4,7 @@
     <Script file="already_known.lua"/>
     <Script file="camera.lua"/>
     <Script file="cursor.lua"/>
+    <Script file="domination-shards.lua"/>
     <Script file="enhanced_menu.lua"/>
     <Script file="friends_list.lua"/>
     <Script file="dragemall.lua"/>
