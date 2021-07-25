@@ -465,27 +465,29 @@ end
 
 -- Whisper sound
 CHAT.MuteCache = {}
+local whisperEvents = {
+    ['CHAT_MSG_WHISPER'] = true,
+    ['CHAT_MSG_BN_WHISPER'] = true
+}
 function CHAT:PlayWhisperSound(event, _, author)
     if not C.DB.Chat.WhisperSound then
         return
     end
 
-    local currentTime = GetTime()
-    local name = Ambiguate(author, 'none')
+    if whisperEvents[event] then
+        local name = Ambiguate(author, 'none')
+        local currentTime = GetTime()
 
-    if CHAT.MuteCache[name] == currentTime then
-        return
-    end
-
-    if event == 'CHAT_MSG_WHISPER' then
-        if not self.soundTimer or currentTime > self.soundTimer then
-            PlaySoundFile(C.Assets.Sounds.Whisper, 'Master')
+        if CHAT.MuteCache[name] == currentTime then
+            return
         end
 
-        self.soundTimer = currentTime + C.DB.Chat.SoundThreshold
-    elseif event == 'CHAT_MSG_BN_WHISPER' then
         if not self.soundTimer or currentTime > self.soundTimer then
-            PlaySoundFile(C.Assets.Sounds.WhisperBattleNet, 'Master')
+            if event == 'CHAT_MSG_WHISPER' then
+                PlaySoundFile(C.Assets.Sounds.Whisper, 'Master')
+            elseif event == 'CHAT_MSG_BN_WHISPER' then
+                PlaySoundFile(C.Assets.Sounds.WhisperBattleNet, 'Master')
+            end
         end
 
         self.soundTimer = currentTime + C.DB.Chat.SoundThreshold
