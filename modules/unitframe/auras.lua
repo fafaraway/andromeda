@@ -195,6 +195,10 @@ function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, cast
     end
 end
 
+function UNITFRAME.ModifierCustomFilter()
+    return true
+end
+
 function UNITFRAME.RaidBuffFilter(_, _, _, _, _, _, _, _, _, caster, _, _, spellID, canApplyAura, isBossAura)
     local isMine = F:MultiCheck(caster, 'player', 'pet', 'vehicle')
     if isBossAura then
@@ -410,3 +414,46 @@ function UNITFRAME:RefreshAurasByCombat(self)
     self:RegisterEvent('PLAYER_REGEN_ENABLED', RefreshAurasElements, true)
     self:RegisterEvent('PLAYER_REGEN_DISABLED', RefreshAurasElements, true)
 end
+
+function UNITFRAME:MODIFIER_STATE_CHANGED(key, state)
+    if key ~= 'RALT' then
+        return
+    end
+
+    for _, object in next, OUF.objects do
+        local unit = object.realUnit or object.unit
+        if unit == 'target' then
+            local auras = object.Auras
+            if state == 1 then -- modifier key pressed
+                auras.CustomFilter = UNITFRAME.ModifierCustomFilter
+            else
+                auras.CustomFilter = UNITFRAME.CustomFilter
+            end
+            auras:ForceUpdate()
+            break
+        end
+    end
+end
+
+function UNITFRAME:PLAYER_REGEN_DISABLED()
+    F:UnregisterEvent('MODIFIER_STATE_CHANGED', UNITFRAME.MODIFIER_STATE_CHANGED)
+end
+
+function UNITFRAME:PLAYER_REGEN_ENABLED()
+    F:RegisterEvent('MODIFIER_STATE_CHANGED', UNITFRAME.MODIFIER_STATE_CHANGED)
+end
+
+function UNITFRAME:PLAYER_ENTERING_WORLD()
+    F:RegisterEvent('PLAYER_REGEN_DISABLED', UNITFRAME.MODIFIER_STATE_CHANGED)
+    F:RegisterEvent('PLAYER_REGEN_ENABLED', UNITFRAME.MODIFIER_STATE_CHANGED)
+
+    if InCombatLockdown() then
+        UNITFRAME:PLAYER_REGEN_DISABLED()
+    else
+        UNITFRAME:PLAYER_REGEN_ENABLED()
+    end
+end
+
+F:RegisterEvent('PLAYER_ENTERING_WORLD', UNITFRAME.PLAYER_ENTERING_WORLD)
+
+

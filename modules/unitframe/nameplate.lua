@@ -5,7 +5,7 @@ local pairs = pairs
 local unpack = unpack
 local select = select
 local rad = rad
-local format = format
+local floor = floor
 local strmatch = strmatch
 local CreateFrame = CreateFrame
 local hooksecurefunc = hooksecurefunc
@@ -19,7 +19,6 @@ local UnitIsUnit = UnitIsUnit
 local UnitReaction = UnitReaction
 local UnitIsConnected = UnitIsConnected
 local UnitIsPlayer = UnitIsPlayer
-local UnitSelectionColor = UnitSelectionColor
 local GetInstanceInfo = GetInstanceInfo
 local UnitClassification = UnitClassification
 local UnitExists = UnitExists
@@ -27,8 +26,6 @@ local UnitHealth = UnitHealth
 local UnitHealthMax = UnitHealthMax
 local InCombatLockdown = InCombatLockdown
 local UnitGUID = UnitGUID
-local GetPlayerInfoByGUID = GetPlayerInfoByGUID
-local Ambiguate = Ambiguate
 local issecure = issecure
 local IsInRaid = IsInRaid
 local IsInGroup = IsInGroup
@@ -41,13 +38,9 @@ local C_NamePlate_SetNamePlateFriendlySize = C_NamePlate.SetNamePlateFriendlySiz
 local C_NamePlate_SetNamePlateEnemySize = C_NamePlate.SetNamePlateEnemySize
 local C_NamePlate_GetNamePlateForUnit = C_NamePlate.GetNamePlateForUnit
 local C_MythicPlus_GetCurrentAffixes = C_MythicPlus.GetCurrentAffixes
-local C_Scenario_GetInfo = C_Scenario.GetInfo
-local C_Scenario_GetStepInfo = C_Scenario.GetStepInfo
-local C_Scenario_GetCriteriaInfo = C_Scenario.GetCriteriaInfo
 local GetSpellInfo = GetSpellInfo
 local GetSpellTexture = GetSpellTexture
 local UnitNameplateShowsWidgetsOnly = UnitNameplateShowsWidgetsOnly
-local LE_SCENARIO_TYPE_CHALLENGE_MODE = LE_SCENARIO_TYPE_CHALLENGE_MODE
 
 local F, C = unpack(select(2, ...))
 local NAMEPLATE = F:GetModule('Nameplate')
@@ -57,7 +50,6 @@ local OUF = F.Libs.oUF
 local guidToPlate = {}
 
 --[[ CVars ]]
-
 function NAMEPLATE:PlateInsideView()
     if C.DB.Nameplate.InsideView then
         SetCVar('nameplateOtherTopInset', .05)
@@ -97,7 +89,9 @@ function NAMEPLATE:UpdatePlateHorizontalSpacing()
 end
 
 function NAMEPLATE:SetupCVars()
-    if not C.DB.Nameplate.ControlCVars then return end
+    if not C.DB.Nameplate.ControlCVars then
+        return
+    end
 
     NAMEPLATE:PlateInsideView()
 
@@ -117,7 +111,6 @@ function NAMEPLATE:SetupCVars()
 end
 
 --[[ AddOn ]]
-
 function NAMEPLATE:BlockAddons()
     if not _G.DBM or not _G.DBM.Nameplate then
         return
@@ -139,7 +132,6 @@ function NAMEPLATE:BlockAddons()
 end
 
 --[[ Elements ]]
-
 local customUnits = {}
 function NAMEPLATE:CreateUnitTable()
     wipe(customUnits)
@@ -449,18 +441,24 @@ function NAMEPLATE:CreateHighlight(self)
     self:RegisterEvent('UPDATE_MOUSEOVER_UNIT', NAMEPLATE.UpdateMouseoverShown, true)
 
     local f = CreateFrame('Frame', nil, self)
-    f:SetScript('OnUpdate', function(_, elapsed)
-        f.elapsed = (f.elapsed or 0) + elapsed
-        if f.elapsed > .1 then
-            if not NAMEPLATE.IsMouseoverUnit(self) then
-                f:Hide()
+    f:SetScript(
+        'OnUpdate',
+        function(_, elapsed)
+            f.elapsed = (f.elapsed or 0) + elapsed
+            if f.elapsed > .1 then
+                if not NAMEPLATE.IsMouseoverUnit(self) then
+                    f:Hide()
+                end
+                f.elapsed = 0
             end
-            f.elapsed = 0
         end
-    end)
-    f:HookScript('OnHide', function()
-        highlight:Hide()
-    end)
+    )
+    f:HookScript(
+        'OnHide',
+        function()
+            highlight:Hide()
+        end
+    )
 
     self.HighlightIndicator = highlight
     self.HighlightUpdater = f
@@ -525,10 +523,18 @@ function NAMEPLATE:QuestIconCheck()
     F:RegisterEvent('PLAYER_ENTERING_WORLD', CheckInstanceStatus)
 end
 
+local function isQuestTitle(textLine)
+    local r, g, b = textLine:GetTextColor()
+    if r > .99 and g > .82 and b == 0 then
+        return true
+    end
+end
+
 function NAMEPLATE:UpdateQuestUnit(_, unit)
     if not C.DB.Nameplate.QuestIndicator then
         return
     end
+
     if isInInstance then
         self.questIcon:Hide()
         self.questCount:SetText('')
@@ -537,43 +543,36 @@ function NAMEPLATE:UpdateQuestUnit(_, unit)
 
     unit = unit or self.unit
 
-    local isLootQuest, questProgress
+    local startLooking, questProgress
     F.ScanTip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
     F.ScanTip:SetUnit(unit)
 
     for i = 2, F.ScanTip:NumLines() do
         local textLine = _G['FreeUI_ScanTooltipTextLeft' .. i]
-        local text = textLine:GetText()
-        if textLine and text then
-            local r, g, b = textLine:GetTextColor()
-            if r > .99 and g > .82 and b == 0 then
-                if isInGroup and text == C.MyName or not isInGroup then
-                    isLootQuest = true
+        local text = textLine and textLine:GetText()
 
-                    local questLine = _G['FreeUI_ScanTooltipTextLeft' .. (i + 1)]
-                    local questText = questLine:GetText()
-                    if questLine and questText then
-                        local current, goal = strmatch(questText, '(%d+)/(%d+)')
-                        local progress = strmatch(questText, '(%d+)%%')
-                        if current and goal then
-                            current = tonumber(current)
-                            goal = tonumber(goal)
-                            if current == goal then
-                                isLootQuest = nil
-                            elseif current < goal then
-                                questProgress = goal - current
-                                break
-                            end
-                        elseif progress then
-                            progress = tonumber(progress)
-                            if progress == 100 then
-                                isLootQuest = nil
-                            elseif progress < 100 then
-                                questProgress = progress .. '%'
-                                -- break -- lower priority on progress
-                            end
-                        end
+        if not text then
+            break
+        end
+
+        if text ~= '' then
+            if isInGroup and text == C.MyName or (not isInGroup and isQuestTitle(textLine)) then
+                startLooking = true
+            elseif startLooking then
+                local current, goal = strmatch(text, '(%d+)/(%d+)')
+                local progress = strmatch(text, '(%d+)%%')
+                if current and goal then
+                    local diff = floor(goal - current)
+                    if diff > 0 then
+                        questProgress = diff
+                        break
                     end
+                elseif progress and not strmatch(text, _G.THREAT_TOOLTIP) then
+                    if floor(100 - progress) > 0 then
+                        questProgress = progress .. '%' -- lower priority on progress, keep looking
+                    end
+                else
+                    break
                 end
             end
         end
@@ -705,62 +704,6 @@ function NAMEPLATE:UpdateSpitefulIndicator()
     self.tarName:SetShown(self.npcID == 174773)
 end
 
--- M+ progress
--- AngryKeystones REQUIRED
-function NAMEPLATE:CreateDungeonProgress(self)
-    -- if not C.DB.Nameplate.AKProgress then
-    --     return
-    -- end
-
-    self.progressText = F.CreateFS(self, C.Assets.Fonts.Regular, 11, true, '', nil, true)
-    self.progressText:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
-end
-
-local cache = {}
-function NAMEPLATE:UpdateDungeonProgress(unit)
-    if not self.progressText or not _G.AngryKeystones_Data then
-        return
-    end
-
-    if unit ~= self.unit then
-        return
-    end
-
-    self.progressText:SetText('')
-
-    local name, _, _, _, _, _, _, _, _, scenarioType = C_Scenario_GetInfo()
-    if scenarioType == LE_SCENARIO_TYPE_CHALLENGE_MODE then
-        local npcID = self.npcID
-        local info = _G.AngryKeystones_Data.progress[npcID]
-        if info then
-            local numCriteria = select(3, C_Scenario_GetStepInfo())
-            local total = cache[name]
-            if not total then
-                for criteriaIndex = 1, numCriteria do
-                    local _, _, _, _, totalQuantity, _, _, _, _, _, _, _, isWeightedProgress = C_Scenario_GetCriteriaInfo(criteriaIndex)
-                    if isWeightedProgress then
-                        cache[name] = totalQuantity
-                        total = cache[name]
-                        break
-                    end
-                end
-            end
-
-            local value, valueCount
-            for amount, count in pairs(info) do
-                if not valueCount or count > valueCount or (count == valueCount and amount < value) then
-                    value = amount
-                    valueCount = count
-                end
-            end
-
-            if value and total then
-                self.progressText:SetText(format('+%.2f', value / total * 100))
-            end
-        end
-    end
-end
-
 -- Totem icon
 local totemsList = {
     -- npcID spellID duration
@@ -779,7 +722,7 @@ local totemsList = {
     [105451] = {204331, 15}, -- Counterstrike
     [104818] = {207399, 30}, -- Ancestral
     [105427] = {204330, 15}, -- Skyfury
-    [119052] = {236320, 15}, -- Warrior War Banner
+    [119052] = {236320, 15} -- Warrior War Banner
 }
 
 local function CreateTotemIcon(self)
@@ -797,7 +740,6 @@ local function CreateTotemIcon(self)
 end
 
 --[[ Create plate ]]
-
 local platesList = {}
 function NAMEPLATE:CreateNameplateStyle()
     self.unitStyle = 'nameplate'
@@ -841,7 +783,6 @@ function NAMEPLATE:CreateNameplateStyle()
     UNITFRAME:CreateRaidTargetIndicator(self)
     UNITFRAME:CreateAuras(self)
     NAMEPLATE:CreateSpitefulIndicator(self)
-    NAMEPLATE:CreateDungeonProgress(self)
 
     self:RegisterEvent('PLAYER_FOCUS_CHANGED', NAMEPLATE.UpdateFocusColor, true)
 
@@ -856,8 +797,8 @@ function NAMEPLATE:UpdateClickableSize()
     local width = C.DB.Nameplate.Width
     local height = C.DB.Nameplate.Height
     local scale = _G.FREE_ADB.UIScale
-    C_NamePlate_SetNamePlateEnemySize(width * scale, height * scale + 4)
-    C_NamePlate_SetNamePlateFriendlySize(width * scale, height * scale + 4)
+    C_NamePlate_SetNamePlateEnemySize(width * scale, height * scale + 2)
+    C_NamePlate_SetNamePlateFriendlySize(width * scale, height * scale + 2)
 end
 
 function NAMEPLATE:UpdateNameplateAuras()
@@ -889,7 +830,7 @@ local disabledElements = {
     'Castbar',
     'HealPredictionAndAbsorb',
     'PvPClassificationIndicator',
-    'ThreatIndicator',
+    'ThreatIndicator'
 }
 
 function NAMEPLATE:UpdatePlateByType()
@@ -1018,7 +959,6 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
                 self.Name:Show()
             end
         end
-
     elseif event == 'NAME_PLATE_UNIT_REMOVED' then
         if self.unitGUID then
             guidToPlate[self.unitGUID] = nil
@@ -1035,7 +975,6 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
         NAMEPLATE.UpdateUnitClassify(self, unit)
         NAMEPLATE.UpdateQuestUnit(self, event, unit)
         NAMEPLATE.UpdateSpitefulIndicator(self)
-        NAMEPLATE.UpdateDungeonProgress(self, unit)
     end
 
     NAMEPLATE.UpdateExplosives(self, event, unit)

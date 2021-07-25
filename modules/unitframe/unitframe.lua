@@ -8,6 +8,10 @@ local GetSpecialization = GetSpecialization
 local CompactRaidFrameManager_SetSetting = CompactRaidFrameManager_SetSetting
 local CompactRaidFrameManager = CompactRaidFrameManager
 local UnitIsUnit = UnitIsUnit
+local UnitExists = UnitExists
+local UnitIsFriend = UnitIsFriend
+local UnitIsEnemy = UnitIsEnemy
+local PlaySound = PlaySound
 
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:RegisterModule('Unitframe')
@@ -85,6 +89,35 @@ function UNITFRAME:CreateSelectedBorder(self)
     self:RegisterEvent('GROUP_ROSTER_UPDATE', UpdateSelectedBorder, true)
 end
 
+--[[ Sound effect for target/focus changed ]]
+
+function UNITFRAME:PLAYER_TARGET_CHANGED()
+    if (UnitExists('target')) then
+        if (UnitIsEnemy('target', 'player')) then
+            PlaySound(873)
+        elseif (UnitIsFriend('target', 'player')) then
+            PlaySound(867)
+        else
+            PlaySound(871)
+        end
+    else
+        PlaySound(684)
+    end
+end
+
+function UNITFRAME:PLAYER_FOCUS_CHANGED()
+    if (UnitExists('focus')) then
+        if (UnitIsEnemy('focus', 'player')) then
+            PlaySound(873)
+        elseif (UnitIsFriend('focus', 'player')) then
+            PlaySound(867)
+        else
+            PlaySound(871)
+        end
+    else
+        PlaySound(684)
+    end
+end
 
 function UNITFRAME:OnLogin()
     if not C.DB.Unitframe.Enable then
@@ -98,15 +131,16 @@ function UNITFRAME:OnLogin()
 
     UNITFRAME:UpdateHealthMethod()
 
+    F:RegisterEvent('PLAYER_TARGET_CHANGED', UNITFRAME.PLAYER_TARGET_CHANGED)
+    F:RegisterEvent('PLAYER_FOCUS_CHANGED', UNITFRAME.PLAYER_FOCUS_CHANGED)
+
     self:SpawnPlayer()
     self:SpawnPet()
     self:SpawnTarget()
     self:SpawnTargetTarget()
     self:SpawnFocus()
     self:SpawnFocusTarget()
-
     self:SpawnBoss()
-
 
     if C.DB.Unitframe.Arena then
         self:SpawnArena()
@@ -150,8 +184,7 @@ function UNITFRAME:OnLogin()
                 end
 
                 if not C.DB['UIAnchor']['party_position' .. specIndex] then
-                    C.DB['UIAnchor']['party_position' .. specIndex] =
-                        {'BOTTOMRIGHT', 'oUF_Player', 'TOPLEFT', -100, 60}
+                    C.DB['UIAnchor']['party_position' .. specIndex] = {'BOTTOMRIGHT', 'oUF_Player', 'TOPLEFT', -100, 60}
                 end
                 if UNITFRAME.PartyMover then
                     UNITFRAME.PartyMover:ClearAllPoints()
@@ -163,23 +196,29 @@ function UNITFRAME:OnLogin()
         F:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED', UpdateSpecPos)
 
         if UNITFRAME.RaidMover then
-            UNITFRAME.RaidMover:HookScript('OnDragStop', function()
-                local specIndex = GetSpecialization()
-                if not specIndex then
-                    return
+            UNITFRAME.RaidMover:HookScript(
+                'OnDragStop',
+                function()
+                    local specIndex = GetSpecialization()
+                    if not specIndex then
+                        return
+                    end
+                    C.DB['UIAnchor']['raid_position' .. specIndex] = C.DB['UIAnchor']['RaidFrame']
                 end
-                C.DB['UIAnchor']['raid_position' .. specIndex] = C.DB['UIAnchor']['RaidFrame']
-            end)
+            )
         end
 
         if UNITFRAME.PartyMover then
-            UNITFRAME.PartyMover:HookScript('OnDragStop', function()
-                local specIndex = GetSpecialization()
-                if not specIndex then
-                    return
+            UNITFRAME.PartyMover:HookScript(
+                'OnDragStop',
+                function()
+                    local specIndex = GetSpecialization()
+                    if not specIndex then
+                        return
+                    end
+                    C.DB['UIAnchor']['party_position' .. specIndex] = C.DB['UIAnchor']['PartyFrame']
                 end
-                C.DB['UIAnchor']['party_position' .. specIndex] = C.DB['UIAnchor']['PartyFrame']
-            end)
+            )
         end
     end
 end

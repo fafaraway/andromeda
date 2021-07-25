@@ -3,15 +3,7 @@ local unpack = unpack
 local select = select
 local format = format
 local tinsert = tinsert
-local UnitExists = UnitExists
-local UnitIsFriend = UnitIsFriend
-local UnitIsEnemy = UnitIsEnemy
-local PlaySound = PlaySound
 local RegisterStateDriver = RegisterStateDriver
-local SOUNDKIT_IG_CREATURE_AGGRO_SELECT = SOUNDKIT.IG_CREATURE_AGGRO_SELECT
-local SOUNDKIT_IG_CHARACTER_NPC_SELECT = SOUNDKIT.IG_CHARACTER_NPC_SELECT
-local SOUNDKIT_IG_CREATURE_NEUTRAL_SELECT = SOUNDKIT.IG_CREATURE_NEUTRAL_SELECT
-local SOUNDKIT_INTERFACE_SOUND_LOST_TARGET_UNIT = SOUNDKIT.INTERFACE_SOUND_LOST_TARGET_UNIT
 
 local F, C, L = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
@@ -102,22 +94,6 @@ function UNITFRAME:SpawnPet()
     F.Mover(pet, L['Pet Frame'], 'PetFrame', unitsPos.pet, pet:GetWidth(), pet:GetHeight())
 end
 
-local function Target_OnEvent(self, event)
-    if event == 'PLAYER_TARGET_CHANGED' then
-        if UnitExists(self.unit) then
-            if UnitIsEnemy(self.unit, 'player') then
-                PlaySound(SOUNDKIT_IG_CREATURE_AGGRO_SELECT)
-            elseif UnitIsFriend('player', self.unit) then
-                PlaySound(SOUNDKIT_IG_CHARACTER_NPC_SELECT)
-            else
-                PlaySound(SOUNDKIT_IG_CREATURE_NEUTRAL_SELECT)
-            end
-        else
-            PlaySound(SOUNDKIT_INTERFACE_SOUND_LOST_TARGET_UNIT)
-        end
-    end
-end
-
 local function CreateTargetStyle(self)
     self.unitStyle = 'target'
     self:SetSize(C.DB.Unitframe.TargetWidth, C.DB.Unitframe.TargetHeight)
@@ -133,11 +109,6 @@ local function CreateTargetStyle(self)
     UNITFRAME:CreateAuras(self)
     UNITFRAME:CreateRaidTargetIndicator(self)
     UNITFRAME:CreateRangeCheck(self)
-
-    self:RegisterEvent('PLAYER_TARGET_CHANGED', Target_OnEvent)
-    self.Health:SetScript('OnShow', function()
-        Target_OnEvent(self, 'PLAYER_TARGET_CHANGED')
-    end)
 end
 
 function UNITFRAME:SpawnTarget()
@@ -168,22 +139,6 @@ function UNITFRAME:SpawnTargetTarget()
     F.Mover(targettarget, L['Target of Target Frame'], 'TargetTargetFrame', unitsPos.tot, targettarget:GetWidth(), targettarget:GetHeight())
 end
 
-local function Focus_OnEvent(self, event)
-    if event == 'PLAYER_FOCUS_CHANGED' then
-        if UnitExists(self.unit) then
-            if UnitIsEnemy(self.unit, 'player') then
-                PlaySound(SOUNDKIT_IG_CREATURE_AGGRO_SELECT)
-            elseif UnitIsFriend('player', self.unit) then
-                PlaySound(SOUNDKIT_IG_CHARACTER_NPC_SELECT)
-            else
-                PlaySound(SOUNDKIT_IG_CREATURE_NEUTRAL_SELECT)
-            end
-        else
-            PlaySound(SOUNDKIT_INTERFACE_SOUND_LOST_TARGET_UNIT)
-        end
-    end
-end
-
 local function CreateFocusStyle(self)
     self.unitStyle = 'focus'
     self:SetSize(C.DB.Unitframe.FocusWidth, C.DB.Unitframe.FocusHeight)
@@ -197,11 +152,6 @@ local function CreateFocusStyle(self)
     UNITFRAME:CreateAuras(self)
     UNITFRAME:CreateRaidTargetIndicator(self)
     UNITFRAME:CreateRangeCheck(self)
-
-    self:RegisterEvent('PLAYER_FOCUS_CHANGED', Focus_OnEvent)
-    self.Health:SetScript('OnShow', function()
-        Focus_OnEvent(self, 'PLAYER_FOCUS_CHANGED')
-    end)
 end
 
 function UNITFRAME:SpawnFocus()

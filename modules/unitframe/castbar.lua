@@ -393,7 +393,8 @@ function UNITFRAME:CreateCastBar(self)
         castbar.glowFrame = F.CreateGlowFrame(castbar, icon:GetHeight())
         castbar.glowFrame:SetPoint('CENTER', castbar.Icon)
 
-        local spellTarget = F.CreateFS(castbar, font, 12, outline, '', nil, outline or 'THICK')
+        -- Target name
+        local spellTarget = F.CreateFS(castbar, C.Assets.Fonts.Bold, 12, outline, '', nil, outline or 'THICK')
         spellTarget:ClearAllPoints()
         spellTarget:SetJustifyH('CENTER')
         spellTarget:SetPoint('TOP', self, 'BOTTOM', 0, -3)

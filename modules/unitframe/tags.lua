@@ -248,9 +248,11 @@ end
 
 function UNITFRAME:CreateNameText(self)
     local style = self.unitStyle
+    local isNP = style == 'nameplate'
     local outline = _G.FREE_ADB.FontOutline
+    local boldFont = C.Assets.Fonts.Bold
 
-    local name = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
+    local name = F.CreateFS(self.Health, isNP and boldFont or font, 11, outline, nil, nil, outline or 'THICK')
 
     if style == 'target' then
         name:SetJustifyH('RIGHT')
