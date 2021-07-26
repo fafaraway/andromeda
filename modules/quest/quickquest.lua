@@ -59,31 +59,6 @@ local F, C, L = unpack(select(2, ...))
 
 local choiceQueue
 
-local created
-local function CreateCheckBox()
-    if created then
-        return
-    end
-    local bu = CreateFrame('CheckButton', nil, _G.WorldMapFrame.BorderFrame, 'InterfaceOptionsCheckButtonTemplate')
-    bu:SetPoint('TOPRIGHT', -150, -4)
-    bu:SetSize(20, 20)
-    bu:SetHitRectInsets(-5, -5, -5, -5)
-    F.ReskinCheck(bu, true)
-    bu.text = F.CreateFS(bu, C.Assets.Fonts.Regular, 11, nil, L['Auto turn-in'], 'YELLOW', true, 'LEFT', 22, 0)
-    bu:SetChecked(C.DB.Quest.Automation)
-    bu:SetScript(
-        'OnClick',
-        function(self)
-            C.DB.Quest.Automation = self:GetChecked()
-        end
-    )
-    bu.title = L['Auto turn-in']
-    F.AddTooltip(bu, 'ANCHOR_TOPRIGHT', L['|nAutomatically accept and deliver quests.|nHold ALT key to STOP automation.'], 'BLUE')
-
-    created = true
-end
-_G.WorldMapFrame:HookScript('OnShow', CreateCheckBox)
-
 -- Main
 local QuickQuest = CreateFrame('Frame')
 QuickQuest:SetScript(
@@ -96,7 +71,7 @@ QuickQuest:SetScript(
 function QuickQuest:Register(event, func)
     self:RegisterEvent(event)
     self[event] = function(...)
-        if C.DB.Quest.Automation and not IsAltKeyDown() then
+        if C.DB.Quest.QuickQuest and not IsAltKeyDown() then
             func(...)
         end
     end
