@@ -354,6 +354,31 @@ function GUI:SetupAuraSize(parent)
 end
 
 -- Inventory
+function GUI:SetupInventoryMinItemLevelToShow(parent)
+    local guiName = 'FreeUI_GUI_Inventory_MinItemLevelToShow'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+
+    local values = C.DB.Inventory
+
+    local datas = {
+        key = 'MinItemLevelToShow',
+        value = values.MinItemLevelToShow,
+        text = L['Item Level Threshold'],
+        min = 1,
+        max = 300,
+        step = 1,
+    }
+
+    local offset = -30
+    CreateSlider(scroll, 'Inventory', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset)
+end
+
 function GUI:SetupInventoryFilter(parent)
     local guiName = 'FreeUI_GUI_Inventory_Filter'
     TogglePanel(guiName)
@@ -383,25 +408,29 @@ function GUI:SetupInventoryFilter(parent)
         },
         [5] = {
             value = 'FilterAnima',
-            text = _G.ANIMA
+            text = _G.POWER_TYPE_ANIMA
         },
         [6] = {
+            value = 'FilterRelic',
+            text = L['Korthia Relics']
+        },
+        [7] = {
             value = 'FilterEquipment',
             text = _G.BAG_FILTER_EQUIPMENT
         },
-        [7] = {
-            value = 'FilterEquipSet',
-            text = L['Equipement set']
-        },
         [8] = {
+            value = 'FilterEquipSet',
+            text = L['Equipement Set']
+        },
+        [9] = {
             value = 'FilterLegendary',
             text = _G.LOOT_JOURNAL_LEGENDARIES
         },
-        [9] = {
+        [10] = {
             value = 'FilterCollection',
             text = _G.COLLECTIONS
         },
-        [10] = {
+        [11] = {
             value = 'FilterFavourite',
             text = _G.PREFERENCES
         },
@@ -416,7 +445,7 @@ function GUI:SetupInventoryFilter(parent)
 end
 
 function GUI:SetupInventorySize(parent)
-    local guiName = 'FreeUI_GUI_Inventory'
+    local guiName = 'FreeUI_GUI_Inventory_Size'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return

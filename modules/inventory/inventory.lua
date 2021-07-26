@@ -127,7 +127,7 @@ function INVENTORY:UpdateAnchors(parent, bags)
             index = index + 1
 
             bag:ClearAllPoints()
-            if (index - 1) % 4 == 0 then
+            if (index - 1) % 4 == 0 and C.DB.Inventory.MultiRows then
                 bag:SetPoint('BOTTOMRIGHT', anchorCache[index - 4], 'BOTTOMLEFT', -5, 0)
             else
                 bag:SetPoint('BOTTOMLEFT', anchorCache[index - 1], 'TOPLEFT', 0, 5)
@@ -155,10 +155,8 @@ local BagSmartFilter = {
         text = strlower(text)
         if text == 'boe' then
             return item.bindOn == 'equip'
-        elseif IsItemMatched(item.subType, text) or IsItemMatched(item.equipLoc, text) then
-            return true
         else
-            return IsItemMatched(item.name, text)
+            return IsItemMatched(item.subType, text) or IsItemMatched(item.equipLoc, text) or IsItemMatched(item.name, text)
         end
     end,
     _default = 'default'
@@ -434,7 +432,7 @@ function INVENTORY:CreateSearchButton()
     searchBar:SetPoint('RIGHT', bu, 'RIGHT', -6, 0)
     searchBar:SetSize(80, 26)
     searchBar:DisableDrawLayer('BACKGROUND')
-    F.AddTooltip(searchBar, 'ANCHOR_TOP', L['Type item name to search'], 'BLUE')
+    F.AddTooltip(searchBar, 'ANCHOR_TOP', L['You can type in item names or item equip locations.|n"boe" for items that bind on equip and "quest" for quest items.'], 'BLUE')
 
     local bg = F.CreateBDFrame(searchBar, 0, true)
     bg:SetPoint('TOPLEFT', -5, -5)
@@ -853,16 +851,17 @@ function INVENTORY:OnLogin()
     function Backpack:OnInit()
         local MyContainer = self:GetContainerClass()
 
-        AddNewContainer('Bag', 10, 'Junk', filters.bagsJunk)
+        AddNewContainer('Bag', 11, 'Junk', filters.bagsJunk)
+        AddNewContainer("Bag", 8, "BagRelic", filters.bagRelic)
         AddNewContainer('Bag', 7, 'BagAnima', filters.bagAnima)
-        AddNewContainer('Bag', 9, 'BagFavourite', filters.bagFavourite)
+        AddNewContainer('Bag', 10, 'BagFavourite', filters.bagFavourite)
         AddNewContainer('Bag', 3, 'EquipSet', filters.bagEquipSet)
         AddNewContainer('Bag', 1, 'AzeriteItem', filters.bagAzeriteItem)
         AddNewContainer('Bag', 2, 'Equipment', filters.bagEquipment)
         AddNewContainer('Bag', 4, 'BagCollection', filters.bagCollection)
         AddNewContainer('Bag', 6, 'Consumable', filters.bagConsumable)
         AddNewContainer('Bag', 5, 'BagGoods', filters.bagGoods)
-        AddNewContainer('Bag', 8, 'BagQuest', filters.bagQuest)
+        AddNewContainer('Bag', 9, 'BagQuest', filters.bagQuest)
 
         f.main = MyContainer:New('Bag', {Columns = bagsWidth, Bags = 'bags'})
         f.main:SetPoint('BOTTOMRIGHT', -C.UIGap, C.UIGap)
@@ -1096,7 +1095,7 @@ function INVENTORY:OnLogin()
             end
         end
 
-        if C.DB.Inventory.FavItemsList[item.id] then
+        if C.DB.Inventory.FavItemsList[item.id] and not C.DB.Inventory.ItemFilter then
             self.Favourite:Show()
         else
             self.Favourite:Hide()
@@ -1190,6 +1189,11 @@ function INVENTORY:OnLogin()
         end
     end
 
+    function INVENTORY:UpdateAllAnchors()
+        INVENTORY:UpdateAnchors(f.main, ContainerGroups['Bag'])
+        INVENTORY:UpdateAnchors(f.bank, ContainerGroups['Bank'])
+    end
+
     function MyContainer:OnContentsChanged()
         self:SortButtons('bagSlot')
 
@@ -1226,8 +1230,7 @@ function INVENTORY:OnLogin()
         end
         self:SetSize(width + xOffset * 2, height + offset)
 
-        INVENTORY:UpdateAnchors(f.main, ContainerGroups['Bag'])
-        INVENTORY:UpdateAnchors(f.bank, ContainerGroups['Bank'])
+        INVENTORY:UpdateAllAnchors()
     end
 
     function MyContainer:OnCreate(name, settings)
@@ -1262,6 +1265,8 @@ function INVENTORY:OnLogin()
             label = _G.QUESTS_LABEL
         elseif strmatch(name, 'Anima') then
             label = _G.POWER_TYPE_ANIMA
+        elseif name == "BagRelic" then
+            label = L['Korthia Relics']
         end
 
         if label then

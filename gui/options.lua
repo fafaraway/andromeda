@@ -17,8 +17,12 @@ local function SetupAuraSize()
 end
 
 -- Inventory
-function GUI:UpdateInventoryStatus()
+local function UpdateInventoryStatus()
     INVENTORY:UpdateAllBags()
+end
+
+local function UpdateInventoryAnchor()
+    INVENTORY:UpdateAllAnchors()
 end
 
 local function SetupInventoryFilter()
@@ -27,6 +31,10 @@ end
 
 local function SetupInventorySize()
     GUI:SetupInventorySize(GUI.Page[9])
+end
+
+local function SetupInventoryMinItemLevelToShow()
+    GUI:SetupInventoryMinItemLevelToShow(GUI.Page[9])
 end
 
 -- Actionbar
@@ -202,6 +210,11 @@ GUI.OptionsList = {
         {1, 'General', 'HideTalkingHead', L['Hide talking head']},
         {1, 'General', 'HideBossBanner', L['Hide boss banner'], nil},
         {1, 'General', 'HideBossEmote', L['Hide boss emote'], true},
+
+        {1, 'Quest', 'QuickQuest', L['Quick Quest'], nil, nil, nil, L['Automatically accept and deliver quests.|nHold ALT key to STOP automation.']},
+        {1, 'Quest', 'CompletedSound', L['Quest Complete Sound'], true, nil, nil, L['Play a sound when a quest is completed.']},
+        {1, 'Quest', 'AutoCollapseTracker', L['Auto Collapse Quest Tracker'], nil, nil, nil, L['Automatically collapse quest tracker when you are in the instance.']},
+
         {1, 'General', 'SimplifyErrors', L['Simplify Errors'], nil, nil, nil, L['|nSimplify standard error messages when you in combat. It\'s the red text in the middle of your screen that constantly annoys you with things like, \'Your too far away!\', \'Not enough mana.\', etc.']},
         {1, 'General', 'FasterLoot', L['Faster auto looting'], nil, nil, nil, L['|nLoot instantly. |nNo more waiting for the loot window to be populated.']},
         {1, 'General', 'FasterMovieSkip', L['Faster movie skip'], true, nil, nil, L['|nIf enabled, allow space bar, escape key and enter key to cancel cinematic without confirmation.']},
@@ -245,7 +258,7 @@ GUI.OptionsList = {
         {1, 'Chat', 'ChannelBar', L['Channel bar']},
         {1, 'Chat', 'GroupRoleIcon', L['Group role icon'], true},
         {1, 'Chat', 'WhisperSticky', L['Whisper sticky'], nil, nil, UpdateWhisperSticky},
-        {1, 'Chat', 'WhisperSound', L['Whisper sound'], true},
+        {1, 'Chat', 'WhisperSound', L['Whisper sound'], true, nil, nil, L['Play sound when the new whisper message is more than 60 seconds from previous one.']},
         {1, 'Chat', 'SmartChatBubble', L['Smart bubble'], nil, nil, nil, L['|nOnly show chat bubbles in raid.']},
         {1, 'Chat', 'ExtendItemLink', L['Extend item link'], true, nil, nil, L['|nModifies displayed item links in chat to show the it\'s level and slot inline.']},
         {1, 'Chat', 'DisableProfanityFilter', L['Disable profanity filter']},
@@ -337,14 +350,14 @@ GUI.OptionsList = {
     },
     [9] = { -- inventory
         {1, 'Inventory', 'Enable', L['Enable Inventory'], nil, SetupInventorySize},
-        {1, 'Inventory', 'NewItemFlash', L['Flash new items']},
-        {4, 'Inventory', 'SortMode', L['Sort Mode'], true, {L['Forward'], L['Backward'], _G.DISABLE}},
-        {1, 'Inventory', 'ItemLevel', L['Show item level'], nil, nil, GUI.UpdateInventoryStatus},
-        {3, 'Inventory', 'MinItemLevelToShow', L['Item Level Threshold'], true, {1, 200, 1}, nil, L['|nOnly show iLvl info if higher than threshold.']},
-        {1, 'Inventory', 'CombineFreeSlots', L['Combine free slots'], nil, nil, GUI.UpdateInventoryStatus},
-        {1, 'Inventory', 'BindType', L['Show BOE indicator'], nil, nil, GUI.UpdateInventoryStatus},
-        {1, 'Inventory', 'SpecialBagsColor', L['Colorized special bags'], true, nil, GUI.UpdateInventoryStatus, L['|nShow color for Herb bag, Mining bag, Gem bag, Enchanted mageweave pouch.']},
-        {1, 'Inventory', 'ItemFilter', L['Filter items'], nil, SetupInventoryFilter, GUI.UpdateInventoryStatus},
+        {1, 'Inventory', 'CombineFreeSlots', L['Combine free slots'], nil, nil, UpdateInventoryStatus},
+        {1, 'Inventory', 'MultiRows', L['Anchor by rows'], true, nil, UpdateInventoryAnchor, L['If item filter enabled, every four bags will anchor into one row.']},
+        {1, 'Inventory', 'SpecialBagsColor', L['Colorized special bags'], nil, nil, UpdateInventoryStatus, L['Show color for Herb bag, Mining bag, Gem bag, Enchanted mageweave pouch.']},
+        {1, 'Inventory', 'NewItemFlash', L['Flash new items'], nil},
+        {1, 'Inventory', 'ItemLevel', L['Show item level'], true, SetupInventoryMinItemLevelToShow, UpdateInventoryStatus},
+        {1, 'Inventory', 'BindType', L['Show BOE/BOA indicator'], nil, nil, UpdateInventoryStatus},
+        {1, 'Inventory', 'ItemFilter', L['Filter items'], true, SetupInventoryFilter, UpdateInventoryStatus},
+        {4, 'Inventory', 'SortMode', L['Sort Mode'], nil, {L['Forward'], L['Backward'], _G.DISABLE}},
     },
     [10] = { -- map
         {1, 'Map', 'Enable', L['Enable Map'], nil, SetupMapScale},

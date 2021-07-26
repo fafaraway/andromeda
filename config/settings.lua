@@ -118,8 +118,9 @@ C.CharacterSettings = {
         Offset = 26,
         Spacing = 3,
         SlotSize = 44,
-        BagColumns = 14,
-        BankColumns = 14,
+        BagColumns = 10,
+        BankColumns = 10,
+        MultiRows = true,
         SortMode = 2,
         ItemLevel = true,
         MinItemLevelToShow = 1,
@@ -142,6 +143,7 @@ C.CharacterSettings = {
         FilterCollection = true,
         FilterFavourite = true,
         FilterAnima = true,
+        FilterRelic = true,
         AutoSellJunk = true,
         AutoRepair = true
     },
@@ -328,6 +330,7 @@ C.CharacterSettings = {
         HealthValue = false,
         PvEStats = true,
         MountSource = true,
+        DomiRank = true,
     },
     Map = {
         Enable = true,
@@ -437,8 +440,9 @@ C.CharacterSettings = {
         OverrideWA = false
     },
     Quest = {
-        Automation = false,
-        CompleteSound = true
+        QuickQuest = false,
+        CompletedSound = true,
+        AutoCollapseTracker = true,
     }
 }
 
@@ -467,6 +471,7 @@ C.AccountSettings = {
     FloatingCombatTextOldStyle = true,
     ChatFilterBlackList = '',
     ChatFilterWhiteList = '',
+    RepairType = 1,
     CustomJunkList = {},
     NPAuraFilter = {[1] = {}, [2] = {}},
     RaidDebuffsList = {},
