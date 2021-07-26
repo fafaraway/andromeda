@@ -7,7 +7,11 @@ local FreeUI = select(2, ...)
 FreeUI[3] = FreeUI[1].Libs.ACL:GetLocale('FreeUI', GetLocale())
 
 local F, C = unpack(FreeUI)
-local GUI = F:RegisterModule('GUI')
+
+do
+    F:RegisterModule('Tooltip')
+    F:RegisterModule('GUI')
+end
 
 local function InitialSettings(source, target, fullClean)
     for i, j in pairs(source) do
@@ -72,6 +76,7 @@ loader:SetScript('OnEvent', function(self, _, addon)
 
     F:SetupUIScale(true)
 
+    local GUI = F:GetModule('GUI')
     if not GUI.TexturesList[_G.FREE_ADB.TextureStyle] then
         _G.FREE_ADB.TextureStyle = 1 -- reset value if not exists
     end

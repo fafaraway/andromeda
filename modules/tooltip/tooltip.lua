@@ -41,7 +41,7 @@ local UnitAura = UnitAura
 local GetUnitName = GetUnitName
 
 local F, C, L = unpack(select(2, ...))
-local TOOLTIP = F:RegisterModule('Tooltip')
+local TOOLTIP = F:GetModule('Tooltip')
 
 _G.ITEM_CREATED_BY = '' -- Remove creator name
 _G.PVP_ENABLED = '' -- Remove PvP text

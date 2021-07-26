@@ -78,11 +78,13 @@ TOOLTIP.DomiDataByGroup = {
     }
 }
 
-TOOLTIP.DomiData = {}
+TOOLTIP.DomiRankData = {}
+TOOLTIP.DomiIndexData = {}
 
-for _, value in pairs(TOOLTIP.DomiDataByGroup) do
+for index, value in pairs(TOOLTIP.DomiDataByGroup) do
     for itemID, rank in pairs(value) do
-        TOOLTIP.DomiData[itemID] = rank
+        TOOLTIP.DomiRankData[itemID] = rank
+        TOOLTIP.DomiIndexData[itemID] = index
     end
 end
 
@@ -121,10 +123,10 @@ function TOOLTIP:Domination_CheckStatus()
     end
 
     local itemID = GetItemInfoFromHyperlink(link)
-    local rank = itemID and TOOLTIP.DomiData[itemID]
+    local rank = itemID and TOOLTIP.DomiRankData[itemID]
 
-    -- Domi rank on gems
     if rank then
+        -- Domi rank on gems
         local textLine = _G[self:GetName() .. 'TextLeft2']
         local text = textLine and textLine:GetText()
         if text and strfind(text, '|cFF66BBFF') then
@@ -134,7 +136,7 @@ function TOOLTIP:Domination_CheckStatus()
         -- Domi rank on gears
         local gemID = strmatch(link, 'item:%d+:%d*:(%d*):')
         itemID = tonumber(gemID)
-        rank = itemID and TOOLTIP.DomiData[itemID]
+        rank = itemID and TOOLTIP.DomiRankData[itemID]
         if rank then
             local name = TOOLTIP:GetDomiName(itemID)
             TOOLTIP.Domination_UpdateText(self, name, rank)
@@ -143,6 +145,10 @@ function TOOLTIP:Domination_CheckStatus()
 end
 
 function TOOLTIP:DominationRank()
+    if not C.DB.Tooltip.DomiRank then
+        return
+    end
+
     _G.GameTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Domination_CheckStatus)
     _G.ItemRefTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Domination_CheckStatus)
     _G.ShoppingTooltip1:HookScript('OnTooltipSetItem', TOOLTIP.Domination_CheckStatus)
