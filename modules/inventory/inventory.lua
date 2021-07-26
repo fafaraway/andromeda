@@ -6,6 +6,7 @@ local strmatch = string.match
 local unpack = unpack
 local ceil = math.ceil
 local strfind = strfind
+local strlower = strlower
 local mod = mod
 local CreateFrame = CreateFrame
 local ToggleFrame = ToggleFrame
@@ -109,27 +110,68 @@ function INVENTORY:ReverseSort()
     INVENTORY:UpdateAllBags()
 end
 
+local anchorCache = {}
 function INVENTORY:UpdateAnchors(parent, bags)
     if not parent:IsShown() then
         return
     end
 
-    local anchor = parent
+    wipe(anchorCache)
+
+    local index = 1
+    anchorCache[index] = parent
+
     for _, bag in ipairs(bags) do
         if bag:GetHeight() > 45 then
             bag:Show()
+            index = index + 1
+
+            bag:ClearAllPoints()
+            if (index - 1) % 4 == 0 then
+                bag:SetPoint('BOTTOMRIGHT', anchorCache[index - 4], 'BOTTOMLEFT', -5, 0)
+            else
+                bag:SetPoint('BOTTOMLEFT', anchorCache[index - 1], 'TOPLEFT', 0, 5)
+            end
+            anchorCache[index] = bag
         else
             bag:Hide()
-        end
-        if bag:IsShown() then
-            bag:SetPoint('BOTTOMLEFT', anchor, 'TOPLEFT', 0, 5)
-            anchor = bag
         end
     end
 end
 
 local function highlightFunction(button, match)
-    button:SetAlpha(match and 1 or .3)
+    button.searchOverlay:SetShown(not match)
+end
+
+local function IsItemMatched(type, text)
+    if not type or type == '' then
+        return
+    end
+    return strmatch(type, text)
+end
+
+local BagSmartFilter = {
+    default = function(item, text)
+        text = strlower(text)
+        if text == 'boe' then
+            return item.bindOn == 'equip'
+        elseif IsItemMatched(item.subType, text) or IsItemMatched(item.equipLoc, text) then
+            return true
+        else
+            return IsItemMatched(item.name, text)
+        end
+    end,
+    _default = 'default'
+}
+
+function INVENTORY:CreateMoneyFrame()
+    local moneyFrame = CreateFrame('Button', nil, self)
+    moneyFrame:SetPoint('TOPLEFT', 6, 0)
+    moneyFrame:SetSize(140, 26)
+
+    local tag = self:SpawnPlugin('TagDisplay', '[money]', moneyFrame)
+    F:SetFS(tag, C.Assets.Fonts.Bold, 11, nil, '', nil, 'THICK')
+    tag:SetPoint('TOPLEFT', 0, -3)
 end
 
 function INVENTORY:CreateBagBar(settings, columns)
@@ -397,6 +439,7 @@ function INVENTORY:CreateSearchButton()
     local bg = F.CreateBDFrame(searchBar, 0, true)
     bg:SetPoint('TOPLEFT', -5, -5)
     bg:SetPoint('BOTTOMRIGHT', 5, 5)
+    searchBar.textFilters = BagSmartFilter
 
     searchBar:SetScript(
         'OnShow',
@@ -723,7 +766,7 @@ local function deleteButtonOnClick(self)
     end
 
     local texture, _, _, quality = GetContainerItemInfo(self.bagID, self.slotID)
-    if IsControlKeyDown() and IsAltKeyDown() and texture and (quality < _G.LE_ITEM_QUALITY_RARE or quality == LE_ITEM_QUALITY_HEIRLOOM) then
+    if IsControlKeyDown() and IsAltKeyDown() and texture and (quality < _G.LE_ITEM_QUALITY_RARE or quality == _G.LE_ITEM_QUALITY_HEIRLOOM) then
         PickupContainerItem(self.bagID, self.slotID)
         DeleteCursorItem()
     end
@@ -1074,11 +1117,11 @@ function INVENTORY:OnLogin()
             local level = item.level -- ilvl for keystone and battlepet
 
             if not level and isItemNeedsLevel(item) then
-				local ilvl = F.GetItemLevel(item.link, item.bagID, item.slotID)
-				if ilvl then
-					level = ilvl
-				end
-			end
+                local ilvl = F.GetItemLevel(item.link, item.bagID, item.slotID)
+                if ilvl then
+                    level = ilvl
+                end
+            end
 
             if level then
                 local color = C.QualityColors[item.quality]
@@ -1225,6 +1268,8 @@ function INVENTORY:OnLogin()
             self.label = F.CreateFS(self, C.Assets.Fonts.Regular, 12, nil, label, nil, 'THICK', 'TOPLEFT', 5, -4)
             return
         end
+
+        INVENTORY.CreateMoneyFrame(self)
 
         local buttons = {}
         buttons[1] = INVENTORY.CreateRestoreButton(self, f)
