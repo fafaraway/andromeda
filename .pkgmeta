@@ -1,3 +1,6 @@
 package-as: FreeUI
-wowi-archive-previous : no
-wowi-create-changelog : yes
+
+ignore:
+  - locales/FreeUI.bat
+  - locales/FreeUI.py
+  - locales/update_locales.py
