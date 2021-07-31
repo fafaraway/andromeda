@@ -11,12 +11,12 @@ local C_QuestLog_IsWorldQuest = C_QuestLog.IsWorldQuest
 local SOUNDKIT_ALARM_CLOCK_WARNING_3 = SOUNDKIT.ALARM_CLOCK_WARNING_3
 
 local F, C = unpack(select(2, ...))
-local QUEST = F:RegisterModule('Quest')
+local QCS = F:RegisterModule('QuestCompletedSound')
 
 local completedQuest = {}
 local initComplete
 
-function QUEST:CheckNormalQuest()
+function QCS:CheckNormalQuest()
     for i = 1, C_QuestLog_GetNumQuestLogEntries() do
         local questID = C_QuestLog_GetQuestIDForLogIndex(i)
         local title = C_QuestLog_GetTitleForQuestID(questID)
@@ -32,7 +32,7 @@ function QUEST:CheckNormalQuest()
     initComplete = true
 end
 
-function QUEST:CheckWorldQuest(questID)
+function QCS:CheckWorldQuest(questID)
     if C_QuestLog_IsWorldQuest(questID) then
         local title = C_QuestLog_GetTitleForQuestID(questID)
         if title and not completedQuest[questID] then
@@ -42,13 +42,13 @@ function QUEST:CheckWorldQuest(questID)
     end
 end
 
-function QUEST:OnLogin()
+function QCS:OnLogin()
     if C.DB.Quest.CompletedSound then
-        F:RegisterEvent('QUEST_LOG_UPDATE', QUEST.CheckNormalQuest)
-        F:RegisterEvent('QUEST_TURNED_IN', QUEST.CheckWorldQuest)
+        F:RegisterEvent('QUEST_LOG_UPDATE', QCS.CheckNormalQuest)
+        F:RegisterEvent('QUEST_TURNED_IN', QCS.CheckWorldQuest)
     else
         wipe(completedQuest)
-        F:UnregisterEvent('QUEST_LOG_UPDATE', QUEST.CheckNormalQuest)
-        F:UnregisterEvent('QUEST_TURNED_IN', QUEST.CheckWorldQuest)
+        F:UnregisterEvent('QUEST_LOG_UPDATE', QCS.CheckNormalQuest)
+        F:UnregisterEvent('QUEST_TURNED_IN', QCS.CheckWorldQuest)
     end
 end

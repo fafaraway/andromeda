@@ -55,7 +55,7 @@ local C_GossipInfo_GetNumAvailableQuests = C_GossipInfo.GetNumAvailableQuests
 local UnitIsDeadOrGhost = UnitIsDeadOrGhost
 local StaticPopup_Hide = StaticPopup_Hide
 
-local F, C, L = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
 
 local choiceQueue
 
