@@ -107,14 +107,14 @@ local function Button_OnEvent(self)
         -- local lootrole = GetSpecializationRoleByID(lootSpecID)
 
         if not lootname or name == lootname then
-            self.Text:SetText(format(_G.CLUB_FINDER_SPEC .. ': ' .. C.MyColor .. '%s  |r' .. L['Loot'] .. ':' .. C.MyColor .. ' %s', name, name))
+            self.Text:SetText(format(L['Spec'] .. ': ' .. C.MyColor .. '%s  |r' .. L['Loot'] .. ':' .. C.MyColor .. ' %s', name, name))
         else
-            self.Text:SetText(format(_G.CLUB_FINDER_SPEC .. ': ' .. C.MyColor .. '%s  |r' .. L['Loot'] .. ':' .. C.MyColor .. ' %s', name, lootname))
+            self.Text:SetText(format(L['Spec'] .. ': ' .. C.MyColor .. '%s  |r' .. L['Loot'] .. ':' .. C.MyColor .. ' %s', name, lootname))
         end
 
         -- INFOBAR:ShowButton(self)
     else
-        self.Text:SetText(format(_G.CLUB_FINDER_SPEC .. ': ' .. C.MyColor .. '%s  |r', _G.NONE))
+        self.Text:SetText(format(L['Spec'] .. ': ' .. C.MyColor .. '%s  |r', _G.NONE))
 
         -- INFOBAR:HideButton(self)
     end
