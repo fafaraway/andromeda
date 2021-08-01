@@ -99,7 +99,7 @@ def update_locales(keys, old: {str: str}, del_no_use: bool = True) -> {str: str}
     for key in keys:
         try:
             string = old[key]
-            string = string.replace("，", ",").replace("。", ".")
+            # string = string.replace("，", ",").replace("。", ".")
             new[key] = string
         except KeyError:
             new[key] = ""
