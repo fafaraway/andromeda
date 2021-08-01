@@ -12,7 +12,7 @@
 <br />
 
 ## Introduction
-**FreeUI** is an user interface replacement for World of Warcraft.  
+**FreeUI** is a user interface replacement for World of Warcraft.  
 **Minimalist**, **elegant**, yet also **efficient** and **practical**.
 
 ## Screenshots
@@ -26,7 +26,7 @@
 *  Join [FreeUI Discord channel](https://discord.gg/86wbfZXxn7)
 
 ## Download
-*  Stable release on [WoWInterface](https://www.wowinterface.com/downloads/info23258-FreeUI.html), [CurseForge](https://www.curseforge.com/wow/addons/freeui) and [Wago](https://addons.wago.io/addons/freeui)
+*  Stable release on [CurseForge](https://www.curseforge.com/wow/addons/freeui)
 *  Beta release on [Github](https://github.com/Solor/FreeUI/releases)
 *  Development repository on [Github](https://github.com/Solor/FreeUI)
 
