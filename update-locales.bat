@@ -1,2 +1,2 @@
 call conda activate deep
-python FreeUI.py
+python update-locales.py
