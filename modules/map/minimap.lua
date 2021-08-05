@@ -50,6 +50,7 @@ function MM:ReskinMinimap()
     map:SetFrameLevel(map:GetFrameLevel() + 2)
     map:ClearAllPoints()
     map:SetPoint('CENTER', backdrop)
+    map:SetParent(map.backdrop)
 
     local pos = {'BOTTOMRIGHT', _G.UIParent, 'BOTTOMRIGHT', -C.UIGap, C.UIGap}
     local mover = F.Mover(backdrop, _G.MINIMAP_LABEL, 'Minimap', pos)
@@ -731,6 +732,29 @@ function MM:UpdateMinimapScale()
     map.mover:SetSize(256 * scale, 190 * scale)
 end
 
+function MM:HideInCombat()
+    if not C.DB.Map.HideMinimapInCombat then
+        return
+    end
+
+    _G.Minimap.backdrop:RegisterEvent('PLAYER_REGEN_ENABLED')
+    _G.Minimap.backdrop:RegisterEvent('PLAYER_REGEN_DISABLED')
+    _G.Minimap.backdrop:HookScript(
+        'OnEvent',
+        function(self, event)
+            if event == 'PLAYER_REGEN_ENABLED' then
+                F:UIFrameFadeIn(self, .1, self:GetAlpha(), 1)
+                F:UIFrameFadeIn(_G.Minimap, .1, self:GetAlpha(), 1)
+                print('show')
+            elseif event == 'PLAYER_REGEN_DISABLED' then
+                F:UIFrameFadeOut(self, .1, self:GetAlpha(), 0)
+                F:UIFrameFadeOut(_G.Minimap, .1, self:GetAlpha(), 0)
+                print('hide')
+            end
+        end
+    )
+end
+
 function MM:OnLogin()
     F:RegisterEvent('ADDON_LOADED', MM.HybridMinimapOnLoad)
 
@@ -745,4 +769,5 @@ function MM:OnLogin()
     MM:WhoPings()
     MM:MouseFunc()
     MM:ProgressBar()
+    MM:HideInCombat()
 end
