@@ -432,7 +432,7 @@ function INVENTORY:CreateSearchButton()
     searchBar:SetPoint('RIGHT', bu, 'RIGHT', -6, 0)
     searchBar:SetSize(80, 26)
     searchBar:DisableDrawLayer('BACKGROUND')
-    F.AddTooltip(searchBar, 'ANCHOR_TOP', L['You can type in item names or item equip locations.|n"boe" for items that bind on equip and "quest" for quest items.'], 'BLUE')
+    F.AddTooltip(searchBar, 'ANCHOR_TOP', L["You can type in item names or item equip locations.|n'boe' for items that bind on equip and 'quest' for quest items."], 'BLUE')
 
     local bg = F.CreateBDFrame(searchBar, 0, true)
     bg:SetPoint('TOPLEFT', -5, -5)
@@ -1009,7 +1009,7 @@ function INVENTORY:OnLogin()
 
     local bagTypeColor = {
         [0] = {0, 0, 0, .25}, -- 容器
-        [1] = false, -- 弹药袋
+        [1] = false, -- 灵魂袋
         [2] = {0, .5, 0, .25}, -- 草药袋
         [3] = {.8, 0, .8, .25}, -- 附魔袋
         [4] = {1, .8, 0, .25}, -- 工程袋
