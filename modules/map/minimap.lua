@@ -745,11 +745,9 @@ function MM:HideInCombat()
             if event == 'PLAYER_REGEN_ENABLED' then
                 F:UIFrameFadeIn(self, .1, self:GetAlpha(), 1)
                 F:UIFrameFadeIn(_G.Minimap, .1, self:GetAlpha(), 1)
-                print('show')
             elseif event == 'PLAYER_REGEN_DISABLED' then
                 F:UIFrameFadeOut(self, .1, self:GetAlpha(), 0)
                 F:UIFrameFadeOut(_G.Minimap, .1, self:GetAlpha(), 0)
-                print('hide')
             end
         end
     )
