@@ -130,7 +130,7 @@ function CHAT:CreateChannelBar()
         return
     end
 
-    local channelBar = CreateFrame('Frame', 'FreeUI_ChannelBar', _G.UIParent)
+    local channelBar = CreateFrame('Frame', 'FreeUI_ChannelBar', _G.ChatFrame1)
     channelBar:SetSize(_G.ChatFrame1:GetWidth(), 5)
     channelBar:SetPoint('TOPLEFT', _G.ChatFrame1, 'BOTTOMLEFT', 0, -6)
     channelBar:SetAlpha(.2)

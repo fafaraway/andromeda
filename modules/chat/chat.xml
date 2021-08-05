@@ -1,10 +1,11 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
     <Script file="chat.lua"/>
-    <Script file="channelbar.lua"/>
-    <Script file="copy.lua"/>
-    <Script file="filter.lua"/>
-    <Script file="itemlink.lua"/>
-    <Script file="reallink.lua"/>
-    <Script file="shorten.lua"/>
-    <Script file="spamagemeter.lua"/>
+    <Script file="abbreviation.lua"/>
+    <Script file="channel-bar.lua"/>
+    <Script file="copy-chat.lua"/>
+    <Script file="copy-url.lua"/>
+    <Script file="fader.lua"/>
+    <Script file="filters.lua"/>
+    <Script file="extend-item-link.lua"/>
+    <Script file="damage-meter.lua"/>
 </Ui>

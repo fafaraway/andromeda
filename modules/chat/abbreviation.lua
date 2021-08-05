@@ -86,7 +86,7 @@ function CHAT:UpdateChannelNames(text, ...)
     return self.oldAddMsg(self, text, r, g, b)
 end
 
-function CHAT:Abbreviate()
+function CHAT:Abbreviation()
     for i = 1, _G.NUM_CHAT_WINDOWS do
         if i ~= 2 then
             local chatFrame = _G['ChatFrame' .. i]
