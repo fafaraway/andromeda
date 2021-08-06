@@ -606,27 +606,6 @@ function CHAT:AddRoleIcon()
     _G.GetColoredName = getColoredName
 end
 
--- Loot icon
-local function GetIcon(link)
-    local texture = GetItemIcon(link)
-
-    return ' \124T' .. texture .. ':12:12:0:0:64:64:5:59:5:59\124t' .. link
-end
-
-local function ReplaceLootString(_, _, message, ...)
-    message = message:gsub('(\124c%x+\124Hitem:.-\124h\124r)', GetIcon)
-
-    return false, message, ...
-end
-
-function CHAT:AddLootIcon()
-    if not C.DB.Chat.LootIcon then
-        return
-    end
-
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_LOOT', ReplaceLootString)
-end
-
 -- Disable pet battle tab
 local old = _G.FCFManager_GetNumDedicatedFrames
 function _G.FCFManager_GetNumDedicatedFrames(...)
@@ -705,7 +684,6 @@ function CHAT:OnLogin()
     CHAT:SaveSlashCommandTypo()
     CHAT:WhisperInvite()
     CHAT:CreateChannelBar()
-    CHAT:AddLootIcon()
     CHAT:AddRoleIcon()
     CHAT:DisableProfanityFilter()
     CHAT:HideInCombat()

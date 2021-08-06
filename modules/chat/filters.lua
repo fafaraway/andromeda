@@ -312,7 +312,7 @@ function CHAT:ChatFilter()
     CHAT:SpamFilter()
     CHAT:BlockAddonSpam()
     CHAT:BlockTrashClub()
-    CHAT:ExtendItemLink()
+    CHAT:ExtendLink()
     CHAT:GroupLootFilter()
     CHAT:DamageMeterFilter()
 end

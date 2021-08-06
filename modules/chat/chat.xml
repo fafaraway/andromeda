@@ -6,6 +6,6 @@
     <Script file="copy-url.lua"/>
     <Script file="fader.lua"/>
     <Script file="filters.lua"/>
-    <Script file="extend-item-link.lua"/>
+    <Script file="extend-link.lua"/>
     <Script file="damage-meter.lua"/>
 </Ui>
