@@ -12,7 +12,7 @@ local IsSpellInRange = IsSpellInRange
 local GetSpellInfo = GetSpellInfo
 
 local F, C = unpack(select(2, ...))
-local OUF = F.Libs.oUF
+local oUF = F.Libs.oUF
 local LRC = F.Libs.LRC
 
 local updateFrequency = 0.25
@@ -277,4 +277,4 @@ local function Disable(self)
     end
 end
 
-OUF:AddElement('RangeCheck', Path, Enable, Disable)
+oUF:AddElement('RangeCheck', Path, Enable, Disable)

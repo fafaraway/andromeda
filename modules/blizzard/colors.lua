@@ -27,7 +27,7 @@ local UIDropDownMenu_GetSelectedID = UIDropDownMenu_GetSelectedID
 local NUM_CHAT_WINDOWS = NUM_CHAT_WINDOWS
 
 local F, C = unpack(select(2, ...))
-local OUF = F.Libs.oUF
+local oUF = F.Libs.oUF
 
 -- Colors
 local function classColor(class, showRGB)
@@ -52,7 +52,7 @@ local rankColor = {1, 0, 0, 1, 1, 0, 0, 1, 0}
 local repColor = {1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1}
 
 local function smoothColor(cur, max, color)
-    local r, g, b = OUF:RGBColorGradient(cur, max, unpack(color))
+    local r, g, b = oUF:RGBColorGradient(cur, max, unpack(color))
     return F:RGBToHex(r, g, b)
 end
 

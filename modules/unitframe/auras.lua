@@ -13,7 +13,7 @@ local SpellIsPriorityAura = SpellIsPriorityAura
 
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
-local OUF = F.Libs.oUF
+local oUF = F.Libs.oUF
 
 local function Aura_OnEnter(self)
     if not self:IsVisible() then
@@ -115,7 +115,7 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
             button.glow:SetBackdropBorderColor(1, 1, 1, .25)
         end
     elseif button.isDebuff and element.showDebuffType then
-        local color = OUF.colors.debuff[debuffType] or OUF.colors.debuff.none
+        local color = oUF.colors.debuff[debuffType] or oUF.colors.debuff.none
 
         button.bg:SetBackdropBorderColor(color[1], color[2], color[3])
 
@@ -420,7 +420,7 @@ function UNITFRAME:MODIFIER_STATE_CHANGED(key, state)
         return
     end
 
-    for _, object in next, OUF.objects do
+    for _, object in next, oUF.objects do
         local unit = object.realUnit or object.unit
         if unit == 'target' then
             local auras = object.Auras

@@ -10,7 +10,7 @@ local SetOverrideBindingClick = SetOverrideBindingClick
 
 local F, C = unpack(select(2, ...))
 local COMBAT = F:GetModule('Combat')
-local OUF = F.Libs.oUF
+local oUF = F.Libs.oUF
 
 local modifier
 local mouseButton = '1' -- 1 = left, 2 = right, 3 = middle, 4 and 5 = thumb buttons if there are any
@@ -58,7 +58,7 @@ function COMBAT.Focuser_OnEvent(event)
             end
         end
     else
-        for _, object in next, OUF.objects do
+        for _, object in next, oUF.objects do
             if not object.focuser then
                 COMBAT.Focuser_Setup(object)
             end

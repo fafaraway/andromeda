@@ -18,7 +18,7 @@ local GetMouseFocus = GetMouseFocus
 local IsInInstance = IsInInstance
 
 local F = unpack(select(2, ...))
-local OUF = F.Libs.oUF
+local oUF = F.Libs.oUF
 
 local _, powerToken = UnitPowerType('player')
 local reversePowers = {
@@ -188,4 +188,4 @@ local function Disable(self, unit)
     end
 end
 
-OUF:AddElement('Fader', Path, Enable, Disable)
+oUF:AddElement('Fader', Path, Enable, Disable)

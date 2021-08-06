@@ -8,7 +8,7 @@ local UnitAura = UnitAura
 
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
-local OUF = F.Libs.oUF
+local oUF = F.Libs.oUF
 
 UNITFRAME.CornerSpellsList = {}
 function UNITFRAME:UpdateCornerSpells()
@@ -130,7 +130,7 @@ function UNITFRAME:CreateCornerIndicator(self)
 end
 
 function UNITFRAME:RefreshRaidFrameIcons()
-    for _, frame in pairs(OUF.objects) do
+    for _, frame in pairs(oUF.objects) do
         if frame.unitStyle == 'raid' then
             if frame.RaidDebuffs then
                 frame.RaidDebuffs:SetScale(C.DB.Unitframe.RaidDebuffsScale)

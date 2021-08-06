@@ -16,7 +16,7 @@ local RegisterAttributeDriver = RegisterAttributeDriver
 
 local F, C, L = unpack(select(2, ...))
 local AURA = F:RegisterModule('Aura')
-local OUF = F.Libs.oUF
+local oUF = F.Libs.oUF
 
 local settings
 
@@ -131,7 +131,7 @@ function AURA:UpdateAuras(button, index)
         end
 
         if filter == 'HARMFUL' then
-            local color = OUF.colors.debuff[debuffType or 'none']
+            local color = oUF.colors.debuff[debuffType or 'none']
             button:SetBackdropBorderColor(color.r, color.g, color.b)
             if button.__shadow then
                 button.__shadow:SetBackdropBorderColor(color.r, color.g, color.b, .35)

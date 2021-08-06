@@ -7,7 +7,7 @@ local UnitGUID = UnitGUID
 local GetSpellTexture = GetSpellTexture
 
 local F = unpack(select(2, ...))
-local OUF = F.Libs.oUF
+local oUF = F.Libs.oUF
 
 local function Update(self, event, unit, _, spellID)
     if unit ~= self.unit then
@@ -96,4 +96,4 @@ local function Disable(self)
     end
 end
 
-OUF:AddElement('PartyWatcher', nil, Enable, Disable)
+oUF:AddElement('PartyWatcher', nil, Enable, Disable)

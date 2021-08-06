@@ -45,7 +45,7 @@ local UnitNameplateShowsWidgetsOnly = UnitNameplateShowsWidgetsOnly
 local F, C = unpack(select(2, ...))
 local NAMEPLATE = F:GetModule('Nameplate')
 local UNITFRAME = F:GetModule('Unitframe')
-local OUF = F.Libs.oUF
+local oUF = F.Libs.oUF
 
 local guidToPlate = {}
 
@@ -237,7 +237,7 @@ function NAMEPLATE:UpdateColor(_, unit)
     local r, g, b
 
     if not UnitIsConnected(unit) then
-        r, g, b = unpack(OUF.colors.disconnected)
+        r, g, b = unpack(oUF.colors.disconnected)
     else
         if coloredTarget and UnitIsUnit(unit, 'target') then
             r, g, b = targetColor.r, targetColor.g, targetColor.b
@@ -254,9 +254,9 @@ function NAMEPLATE:UpdateColor(_, unit)
         elseif isPlayer and (not isFriendly) and hostileClassColor then
             r, g, b = F:UnitColor(unit)
         elseif UnitIsTapDenied(unit) and not UnitPlayerControlled(unit) then
-            r, g, b = unpack(OUF.colors.tapped)
+            r, g, b = unpack(oUF.colors.tapped)
         else
-            r, g, b = unpack(OUF.colors.reaction[UnitReaction(unit, 'player') or 5])
+            r, g, b = unpack(oUF.colors.reaction[UnitReaction(unit, 'player') or 5])
             if status and (tankMode or C.MyRole == 'Tank') then
                 if status == 3 then
                     if C.MyRole ~= 'Tank' and revertThreat then
@@ -751,7 +751,7 @@ function NAMEPLATE:CreateNameplateStyle()
     health:SetAllPoints()
     health:SetStatusBarTexture(C.Assets.statusbar_tex)
     health.backdrop = F.SetBD(health)
-    F:SmoothBar(health)
+    health.Smooth = true
 
     self.Health = health
     self.Health.UpdateColor = NAMEPLATE.UpdateColor
@@ -773,7 +773,7 @@ function NAMEPLATE:CreateNameplateStyle()
     self.npcTitle = title
 
     UNITFRAME:CreateNameText(self)
-    UNITFRAME:CreateHealthPrediction(self)
+    UNITFRAME:CreateHealPrediction(self)
     NAMEPLATE:CreateTargetIndicator(self)
     NAMEPLATE:CreateHighlight(self)
     NAMEPLATE:CreateClassifyIndicator(self)
@@ -997,7 +997,7 @@ function NAMEPLATE:OnLogin()
     NAMEPLATE:RefreshPlateOnFactionChanged()
     NAMEPLATE:RefreshMajorSpells()
 
-    OUF:RegisterStyle('Nameplate', NAMEPLATE.CreateNameplateStyle)
-    OUF:SetActiveStyle('Nameplate')
-    OUF:SpawnNamePlates('oUF_Nameplate', NAMEPLATE.PostUpdatePlates)
+    oUF:RegisterStyle('Nameplate', NAMEPLATE.CreateNameplateStyle)
+    oUF:SetActiveStyle('Nameplate')
+    oUF:SpawnNamePlates('oUF_Nameplate', NAMEPLATE.PostUpdatePlates)
 end

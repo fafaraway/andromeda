@@ -9,13 +9,13 @@ local UnitCanAttack = UnitCanAttack
 local UnitAura = UnitAura
 
 local F, C = unpack(select(2, ...))
-local OUF = F.Libs.oUF
+local oUF = F.Libs.oUF
 local LBG = F.Libs.LBG
 
 local RaidDebuffsIgnore = {}
 local invalidPrio = -1
 
-local DispellColor = OUF.colors.debuff
+local DispellColor = oUF.colors.debuff
 
 local DispellPriority = {['Magic'] = 4, ['Curse'] = 3, ['Disease'] = 2, ['Poison'] = 1}
 
@@ -222,4 +222,4 @@ local function Disable(self)
     self:UnregisterEvent('PLAYER_ENTERING_WORLD', checkInstance)
 end
 
-OUF:AddElement('RaidDebuffs', Update, Enable, Disable)
+oUF:AddElement('RaidDebuffs', Update, Enable, Disable)
