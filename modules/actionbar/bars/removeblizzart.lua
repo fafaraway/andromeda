@@ -119,6 +119,7 @@ function ACTIONBAR:RemoveBlizzArt()
     MainMenuBarVehicleLeaveButton:RegisterEvent('PLAYER_ENTERING_WORLD')
 
     -- Update button grid
+    ToggleButtonGrid()
     hooksecurefunc('MultiActionBar_UpdateGridVisibility', ToggleButtonGrid)
 
     -- Update token panel
