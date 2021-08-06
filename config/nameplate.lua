@@ -84,7 +84,8 @@ local function GetSectionInfo(id)
 end
 
 C.NPSpecialUnitsList = {
-    [179823] = true, -- 圣物收集者
+    [179823] = true, -- 圣物收集者，刻希亚
+    [179565] = true, -- 圣物饕餮者，刻希亚
     [180501] = true, -- 无辜的灵魂，低语威能碎片
     -- Dungeons
     [120651] = true, -- 大米，爆炸物
