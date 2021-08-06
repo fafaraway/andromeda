@@ -1,6 +1,4 @@
 package-as: FreeUI
 
 ignore:
-  - locales/FreeUI.bat
-  - locales/FreeUI.py
-  - locales/update_locales.py
+  - *.py
