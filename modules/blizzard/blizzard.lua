@@ -161,19 +161,26 @@ function BLIZZARD:UIWidgetMover()
 end
 
 function BLIZZARD:MawBuffsFrameMover()
-    local frame = CreateFrame('Frame', 'FreeUI_MawBuffsMover', _G.UIParent)
-    frame:SetSize(235, 28)
-    local mover = F.Mover(frame, _G.MAW_POWER_DESCRIPTION, 'MawBuffs', {'BOTTOMRIGHT', _G.UIParent, 'RIGHT', -225, -80})
-    frame:SetPoint('TOPLEFT', mover, 4, 12)
+    local maw = _G.MawBuffsBelowMinimapFrame
 
-    hooksecurefunc(
-        _G.MawBuffsBelowMinimapFrame,
-        'SetPoint',
-        function(self, _, parent)
-            if parent == 'MinimapCluster' or parent == _G.MinimapCluster then
-                self:ClearAllPoints()
-                self:SetPoint('TOPRIGHT', frame)
+    if C.DB.General.HideMawBuffsFrame then
+        maw:SetAlpha(0)
+        maw:SetScale(0.001)
+    else
+        local frame = CreateFrame('Frame', 'FreeUI_MawBuffsMover', _G.UIParent)
+        frame:SetSize(235, 28)
+        local mover = F.Mover(frame, _G.MAW_POWER_DESCRIPTION, 'MawBuffs', {'BOTTOMRIGHT', _G.UIParent, 'RIGHT', -225, -80})
+        frame:SetPoint('TOPLEFT', mover, 4, 12)
+
+        hooksecurefunc(
+            maw,
+            'SetPoint',
+            function(self, _, parent)
+                if parent == 'MinimapCluster' or parent == _G.MinimapCluster then
+                    self:ClearAllPoints()
+                    self:SetPoint('TOPRIGHT', frame)
+                end
             end
-        end
-    )
+        )
+    end
 end
