@@ -34,7 +34,6 @@ local compareGUID
 local cache = {}
 
 local tiers = {
-    'Castle Nathria',
     'Sanctum of Domination'
 }
 
@@ -42,7 +41,6 @@ local levels = {
     'Mythic',
     'Heroic',
     'Normal',
-    'Raid Finder'
 }
 
 local locales = {
@@ -52,9 +50,6 @@ local locales = {
     ['Shadowlands Keystone Master: Season Two'] = {
         short = L['Keystone Master: Season Two']
     },
-    ['Raid Finder'] = {
-        short = L['Raid Finder']
-    },
     ['Normal'] = {
         short = L['Normal']
     },
@@ -63,9 +58,6 @@ local locales = {
     },
     ['Mythic'] = {
         short = L['Mythic']
-    },
-    ['Castle Nathria'] = {
-        short = L['Castle Nathria']
     },
     ['Sanctum of Domination'] = {
         short = L['Sanctum of Domination']
@@ -97,56 +89,6 @@ local locales = {
 }
 
 local raidAchievements = {
-    ['Castle Nathria'] = {
-        ['Mythic'] = {
-            14421,
-            14425,
-            14429,
-            14433,
-            14437,
-            14441,
-            14445,
-            14449,
-            14453,
-            14457
-        },
-        ['Heroic'] = {
-            14420,
-            14424,
-            14428,
-            14432,
-            14436,
-            14440,
-            14444,
-            14448,
-            14452,
-            14456
-        },
-        ['Normal'] = {
-            14419,
-            14423,
-            14427,
-            14431,
-            14435,
-            14439,
-            14443,
-            14447,
-            14451,
-            14455
-        },
-        ['Raid Finder'] = {
-            14422,
-            14426,
-            14430,
-            14434,
-            14438,
-            14442,
-            14446,
-            14450,
-            14454,
-            14458
-        }
-    },
     ['Sanctum of Domination'] = {
         ['Mythic'] = {
             15139,

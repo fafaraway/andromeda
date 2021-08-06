@@ -24,15 +24,7 @@ local types = {
     unit = 'NPCID'
 }
 
-function TOOLTIP:AddLineForID(id, linkType, noadd)
-    if not id or id == '' then
-        return
-    end
-
-    if type(id) == 'table' and #id == 1 then
-        id = id[1]
-    end
-
+function TOOLTIP:AddLineForID(id, linkType)
     if not IsAltKeyDown() then
         return
     end
@@ -48,20 +40,8 @@ function TOOLTIP:AddLineForID(id, linkType, noadd)
         end
     end
 
-    local left, right
-    if type(id) == 'table' then
-        left = _G.NORMAL_FONT_COLOR_CODE .. linkType .. 's:' .. _G.FONT_COLOR_CODE_CLOSE
-        right = C.BlueColor .. table.concat(id, ', ') .. _G.FONT_COLOR_CODE_CLOSE
-    else
-        left = _G.NORMAL_FONT_COLOR_CODE .. linkType .. ':' .. _G.FONT_COLOR_CODE_CLOSE
-        right = C.BlueColor .. id .. _G.FONT_COLOR_CODE_CLOSE
-    end
-
-    if not noadd then
-        self:AddLine(' ')
-    end
-
-    self:AddDoubleLine(left, right)
+    self:AddLine(' ')
+    self:AddDoubleLine(linkType .. ':', id, 1, .5, .3, 1, 1, 1)
     self:Show()
 end
 

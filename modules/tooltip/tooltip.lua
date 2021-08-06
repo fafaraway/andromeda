@@ -43,9 +43,6 @@ local GetUnitName = GetUnitName
 local F, C, L = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 
-_G.ITEM_CREATED_BY = '' -- Remove creator name
-_G.PVP_ENABLED = '' -- Remove PvP text
-
 local targetTable = {}
 local classification = {
     elite = ' |cffcc8800' .. _G.ELITE .. '|r',
@@ -401,6 +398,8 @@ function TOOLTIP:OnLogin()
         return
     end
 
+
+
     _G.GameTooltip.StatusBar = _G.GameTooltipStatusBar
 
     _G.GameTooltip:HookScript('OnTooltipSetUnit', TOOLTIP.OnTooltipSetUnit)
@@ -434,7 +433,7 @@ function TOOLTIP:OnLogin()
 
     TOOLTIP:ReskinTooltipIcons()
     TOOLTIP:LinkHover()
-    TOOLTIP:ItemCountAndStack()
+    TOOLTIP:ItemInfo()
     TOOLTIP:ExtraInfo()
     TOOLTIP:ConduitCollectionData()
     TOOLTIP:DominationRank()

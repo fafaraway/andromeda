@@ -12,5 +12,4 @@
     <Script file="pve_stats.lua"/>
     <Script file="spec_ilvl.lua"/>
     <Script file="style.lua"/>
-    <Script file="wardrobe.lua"/>
 </Ui>
