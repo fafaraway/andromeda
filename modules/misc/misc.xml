@@ -15,6 +15,7 @@
     <Script file="movie_skip.lua"/>
     <Script file="mute_sounds.lua"/>
     <Script file="proposal_timer.lua"/>
+    <Script file="reputation.lua"/>
     <Script file="screenshot.lua"/>
     <Script file="shared_media.lua"/>
     <Script file="stats_report.lua"/>
