@@ -2,7 +2,6 @@ local _G = _G
 local select = select
 local unpack = unpack
 local wipe = wipe
-local format = format
 local IsAddOnLoaded = IsAddOnLoaded
 
 local F, C = unpack(select(2, ...))
@@ -10,8 +9,27 @@ local THEME = F:RegisterModule('Theme')
 
 C.Themes = {}
 C.BlizzThemes = {}
+C.AddonThemes = {}
 
-function THEME:LoadDefaultSkins()
+function THEME:RegisterSkin(addonName, func)
+    C.AddonThemes[addonName] = func
+end
+
+function THEME:LoadSkins(list)
+    if not next(list) then
+        return
+    end
+
+    for addonName, func in pairs(list) do
+        local isLoaded, isFinished = IsAddOnLoaded(addonName)
+        if isLoaded and isFinished then
+            func()
+            list[addonName] = nil
+        end
+    end
+end
+
+function THEME:LoadAddOnSkins()
     for _, func in pairs(C.BlizzThemes) do
         func()
     end
@@ -19,53 +37,28 @@ function THEME:LoadDefaultSkins()
     wipe(C.BlizzThemes)
 
     if not _G.FREE_ADB.ReskinBlizz then
-        return
+        wipe(C.Themes)
     end
 
-    for addonName, func in pairs(C.Themes) do
-        local isLoaded, isFinished = IsAddOnLoaded(addonName)
-        if isLoaded and isFinished then
-            func()
-            C.Themes[addonName] = nil
-        end
-    end
+    THEME:LoadSkins(C.Themes) -- blizzard ui
+    THEME:LoadSkins(C.AddonThemes) -- other addons
 
-    F:RegisterEvent('ADDON_LOADED', function(_, addonName)
-        local func = C.Themes[addonName]
-        if func then
-            func()
-            C.Themes[addonName] = nil
-        end
-    end)
-end
-
-function THEME:LoadWithAddOn(addonName, func)
-    local function loadFunc(event, addon)
-        if not _G.FREE_ADB.ReskinAddons then
-            return
-        end
-
-        if event == 'PLAYER_ENTERING_WORLD' then
-            F:UnregisterEvent(event, loadFunc)
-            if IsAddOnLoaded(addonName) then
+    F:RegisterEvent(
+        'ADDON_LOADED',
+        function(_, addonName)
+            local func = C.Themes[addonName]
+            if func then
                 func()
-                F:UnregisterEvent('ADDON_LOADED', loadFunc)
+                C.Themes[addonName] = nil
             end
-        elseif event == 'ADDON_LOADED' and addon == addonName then
-            func()
-            F:UnregisterEvent(event, loadFunc)
+
+            local func = C.AddonThemes[addonName]
+            if func then
+                func()
+                C.AddonThemes[addonName] = nil
+            end
         end
-    end
-
-    F:RegisterEvent('PLAYER_ENTERING_WORLD', loadFunc)
-    F:RegisterEvent('ADDON_LOADED', loadFunc)
-end
-
-THEME.SkinList = {}
-function THEME:RegisterSkin(name, func)
-    if not THEME.SkinList[name] then
-        THEME.SkinList[name] = func
-    end
+    )
 end
 
 local function ReskinTimerBar(bar)
@@ -112,16 +105,9 @@ local function ReskinMirrorBars()
 end
 
 function THEME:OnLogin()
-    for name, func in next, THEME.SkinList do
-        if name and type(func) == 'function' then
-            local _, catch = pcall(func)
-            F:ThrowError(catch, format('%s Skin', name))
-        end
-    end
+    self:LoadAddOnSkins()
 
-    self:LoadDefaultSkins()
     self:ReskinABP()
-    self:ReskinBigWigs()
     self:ReskinDBM()
     self:ReskinPGF()
     self:ReskinREHack()

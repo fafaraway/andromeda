@@ -59,7 +59,7 @@ local function ReskinObject(f, fType)
             f.bg:SetBackdropBorderColor(0, 0, 0)
             UpdateIconTexCoord(f.icon)
             hooksecurefunc(f.icon, 'SetTexCoord', UpdateIconTexCoord)
-            -- f.iconFrame:SetAllPoints(f.icon)
+            f.iconFrame:SetAllPoints(f.icon)
             F.SetBD(f.iconFrame)
 
             f.styled = true
@@ -68,6 +68,10 @@ local function ReskinObject(f, fType)
 end
 
 local function ReskinWA()
+    if not _G.FREE_ADB.ReskinAddons then
+        return
+    end
+
     local regionTypes = _G.WeakAuras.regionTypes
     local Create_Icon, Modify_Icon = regionTypes.icon.create, regionTypes.icon.modify
     local Create_AuraBar, Modify_AuraBar = regionTypes.aurabar.create, regionTypes.aurabar.modify
@@ -94,12 +98,11 @@ local function ReskinWA()
         ReskinObject(region, 'aurabar')
     end
 
-    for weakAura in pairs(_G.WeakAuras.regions) do
-        local regions = _G.WeakAuras.regions[weakAura]
+    for _, regions in pairs(_G.WeakAuras.regions) do
         if regions.regionType == 'icon' or regions.regionType == 'aurabar' then
             ReskinObject(regions.region, regions.regionType)
         end
     end
 end
 
-THEME:LoadWithAddOn('WeakAuras', ReskinWA)
+THEME:RegisterSkin('WeakAuras', ReskinWA)

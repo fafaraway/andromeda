@@ -2,7 +2,6 @@ local _G = _G
 local select = select
 local unpack = unpack
 local hooksecurefunc = hooksecurefunc
-local IsAddOnLoaded = IsAddOnLoaded
 
 local F, C = unpack(select(2, ...))
 local THEME = F:GetModule('Theme')
@@ -86,7 +85,11 @@ local styleData = {
     end
 }
 
-local function RegisterStyle()
+function THEME:RegisterBigWigsStyle()
+    if not _G.FREE_ADB.ReskinAddons then
+        return
+    end
+
     if not _G.BigWigsAPI then
         return
     end
@@ -98,7 +101,7 @@ local function RegisterStyle()
     hooksecurefunc(
         _G.BigWigsAPI,
         'GetBarStyle',
-        function(_, key)
+        function()
             if pending then
                 _G.BigWigsAPI.GetBarStyle = function()
                     return styleData
@@ -114,23 +117,22 @@ function THEME:ReskinBigWigs()
         return
     end
 
-    if not IsAddOnLoaded('BigWigs') then
-        return
-    end
+    if _G.BigWigsLoader and _G.BigWigsLoader.RegisterMessage then
+        _G.BigWigsLoader.RegisterMessage(
+            _,
+            'BigWigs_FrameCreated',
+            function(_, frame, name)
+                if name == 'QueueTimer' and not frame.styled then
+                    F.StripTextures(frame)
+                    frame:SetStatusBarTexture(C.Assets.statusbar_tex)
+                    F.SetBD(frame)
 
-    if not _G.BigWigs3DB then
-        return
-    end
-
-    if IsAddOnLoaded('BigWigs_Plugins') then
-        RegisterStyle()
-    else
-        local function loadStyle(event, addon)
-            if addon == 'BigWigs_Plugins' then
-                RegisterStyle()
-                F:UnregisterEvent(event, loadStyle)
+                    frame.styled = true
+                end
             end
-        end
-        F:RegisterEvent('ADDON_LOADED', loadStyle)
+        )
     end
 end
+
+THEME:RegisterSkin('BigWigs', THEME.ReskinBigWigs)
+THEME:RegisterSkin('BigWigs_Plugins', THEME.RegisterBigWigsStyle)
