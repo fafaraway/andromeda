@@ -50,7 +50,7 @@ function NOTIFICATION:RareAlert_Update(id)
         local tex = format('|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t', file, 0, 0, atlasWidth, atlasHeight, atlasWidth * txLeft, atlasWidth * txRight, atlasHeight * txTop, atlasHeight * txBottom)
 
         F:Print(C.InfoColor .. GARRISON_MISSION_RARE .. C.BlueColor .. ' (' .. tex .. (info.name or '') .. ')')
-        F:CreateNotification(GARRISON_MISSION_RARE, tex .. (info.name or ''), nil, 'Interface\\ICONS\\INV_Letter_20')
+        F:CreateNotification(GARRISON_MISSION_RARE, tex .. (info.name or ''), nil, 'Interface\\ICONS\\INV_Misc_Map_01')
 
         cache[id] = true
     end
