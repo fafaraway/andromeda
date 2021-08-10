@@ -4,6 +4,7 @@ local select = select
 local GetItemCount = GetItemCount
 local GetItemInfo = GetItemInfo
 local IsAltKeyDown = IsAltKeyDown
+local GetMoneyString = GetMoneyString
 
 local F, C, L = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
@@ -14,7 +15,7 @@ local function RemoveLines()
     _G.GameTooltip:SetScript('OnTooltipAddMoney', F.Dummy) -- Remove sell price
 end
 
-local function AddInfos(self)
+local function AddLines(self)
     if not IsAltKeyDown() then
         return
     end
@@ -42,12 +43,12 @@ local function AddInfos(self)
         self:AddDoubleLine(L['Stack'] .. ':', itemStackCount, .5, .8, 1, 1, 1, 1)
     end
 
-    if itemSellPrice then
+    if itemSellPrice and itemSellPrice > 0 then
         self:AddDoubleLine(L['Price'] .. ':', GetMoneyString(itemSellPrice, true), .5, .8, 1, 1, 1, 1)
     end
 end
 
 function TOOLTIP:ItemInfo()
     _G.GameTooltip:HookScript('OnTooltipSetItem', RemoveLines)
-    _G.GameTooltip:HookScript('OnTooltipSetItem', AddInfos)
+    _G.GameTooltip:HookScript('OnTooltipSetItem', AddLines)
 end
