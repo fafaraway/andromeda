@@ -13,7 +13,7 @@ local GetUnitPowerBarStringsByID = GetUnitPowerBarStringsByID
 
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
-local OUF = F.Libs.oUF
+local oUF = F.Libs.oUF
 
 local function PostUpdatePower(power, unit, _, _, max)
     if max == 0 or not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then
@@ -22,7 +22,9 @@ local function PostUpdatePower(power, unit, _, _, max)
 end
 
 local function UpdatePowerColor(power, unit)
-    if not C.IsDeveloper then return end
+    if not C.IsDeveloper then
+        return
+    end
 
     if unit ~= 'player' or UnitHasVehicleUI('player') then
         return
@@ -31,31 +33,45 @@ local function UpdatePowerColor(power, unit)
     local spec = GetSpecialization() or 0
     if C.MyClass == 'DEMONHUNTER' then
         if spec == 1 then -- Havoc
-            -- EyeBeam needs 30 power, ChaosStrike needs 40 power
+            -- ChaosStrike needs 40 power
             -- BladeDance needs 35 power or 15 power with FirstBlood
-            local eyeBeam, _ = IsUsableSpell(198013)
-            local chaosStrike, _ = IsUsableSpell(162794)
-            -- local bladeDance, _ = IsUsableSpell(188499)
+            -- EyeBeam needs 30 power
 
-            if chaosStrike then
-                power:SetStatusBarColor(.85, .16, .23)
-            elseif eyeBeam then
-                power:SetStatusBarColor(.93, .74, .13)
+            -- If Chaos Strike can be used, the energy bar is red
+            -- if Blade Dance can be used, the energy bar is yellow
+            -- if the eye can be used, the energy bar is green
+            -- and if nothing can be used, the energy bar is gray
+
+            local _, eyeBeam = IsUsableSpell(198013)
+            local _, bladeDance = IsUsableSpell(188499)
+            local _, chaosStrike = IsUsableSpell(162794)
+
+            if not chaosStrike then
+                power:SetStatusBarColor(234 / 255, 64 / 255, 58 / 255)
+            elseif not bladeDance then
+                power:SetStatusBarColor(234 / 255, 218 / 255, 92 / 255)
+            elseif not eyeBeam then
+                power:SetStatusBarColor(77 / 255, 218 / 255, 135 / 255)
             else
-                power:SetStatusBarColor(.5, .5, .5)
+                power:SetStatusBarColor(.45, .45, .45)
             end
         else -- Vengeance
-            -- Soul Cleave needs 30 power
-            local soulCleave, _ = IsUsableSpell(228477)
             -- Fel Devastation needs 50 power
-            local felDevastation, _ = IsUsableSpell(212084)
+            -- Soul Cleave needs 30 power
 
-            if felDevastation then
-                power:SetStatusBarColor(.85, .16, .23)
-            elseif soulCleave then
-                power:SetStatusBarColor(.93, .74, .13)
+            -- If Fel Devastation can be used, the energy bar is red
+            -- if Soul Cleave can be used, the energy bar is yellow
+            -- and if nothing can be used, the energy bar is gray
+
+            local _, soulCleave = IsUsableSpell(228477)
+            local _, felDevastation = IsUsableSpell(212084)
+
+            if not felDevastation then
+                power:SetStatusBarColor(234 / 255, 64 / 255, 58 / 255)
+            elseif not soulCleave then
+                power:SetStatusBarColor(234 / 255, 218 / 255, 92 / 255)
             else
-                power:SetStatusBarColor(.5, .5, .5)
+                power:SetStatusBarColor(.45, .45, .45)
             end
         end
     end
@@ -63,18 +79,26 @@ end
 
 function UNITFRAME:CreatePowerBar(self)
     local style = self.unitStyle
+    local smooth = C.DB.Unitframe.Smooth
+    local inverted = C.DB.Unitframe.InvertedColorMode
+    local isPlayer = style == 'player'
+    local isParty = (style == 'party')
+    local isRaid = (style == 'raid')
 
     local power = CreateFrame('StatusBar', nil, self)
     power:SetPoint('LEFT')
     power:SetPoint('RIGHT')
     power:SetPoint('TOP', self.Health, 'BOTTOM', 0, -C.Mult)
     power:SetStatusBarTexture(C.Assets.statusbar_tex)
-    power:SetHeight(C.DB.Unitframe.PowerBarHeight)
+    power:SetHeight(C.DB.Unitframe.PowerHeight)
 
-    F:SmoothBar(power)
-    power.frequentUpdates = true
-
-    self.Power = power
+    if isParty then
+        power:SetHeight(C.DB.Unitframe.PartyPowerHeight)
+    elseif isRaid then
+        power:SetHeight(C.DB.Unitframe.RaidPowerHeight)
+    else
+        power:SetHeight(C.DB.Unitframe.PowerHeight)
+    end
 
     local line = power:CreateTexture(nil, 'OVERLAY')
     line:SetHeight(C.Mult)
@@ -83,35 +107,31 @@ function UNITFRAME:CreatePowerBar(self)
     line:SetTexture(C.Assets.bd_tex)
     line:SetVertexColor(0, 0, 0)
 
-    local bg = power:CreateTexture(nil, 'BACKGROUND')
-    bg:SetAllPoints()
-    bg:SetTexture(C.Assets.bd_tex)
-    bg:SetAlpha(.2)
-    bg.multiplier = .1
-    power.bg = bg
+    if not inverted then
+        local bg = power:CreateTexture(nil, 'BACKGROUND')
+        bg:SetAllPoints()
+        bg:SetTexture(C.Assets.bd_tex)
+        bg.multiplier = .1
+        power.bg = bg
+    end
+
+    power.Smooth = smooth
+    power.frequentUpdates = true
 
     power.colorTapping = true
     power.colorDisconnected = true
+    power.colorPower = not inverted or style == 'player'
+    power.colorClass = inverted
+    power.colorReaction = inverted
 
-    -- if C.DB.Unitframe.Transparent and style ~= 'player' then
-    --     power.colorClass = true
-    --     power.colorReaction = true
-    -- else
-        -- power.colorPower = true
-    -- end
-
-    power.colorPower = true
-    power.colorReaction = true
-
+    self.Power = power
     self.Power.PostUpdate = PostUpdatePower
+    self.Power.PostUpdateColor = isPlayer and UpdatePowerColor
 
-    if style == 'player' then
-        self.Power.PostUpdateColor = UpdatePowerColor
-    end
+    F:RegisterEvent('PLAYER_TALENT_UPDATE', UpdatePowerColor)
 end
 
 --[[ Alternative power ]]
-
 local function AltPowerOnEnter(self)
     if (not self:IsVisible()) then
         return
@@ -136,7 +156,7 @@ local function PostUpdateAltPower(self, _, cur, _, max)
 
     if cur and max then
         local value = parent.AlternativePowerValue
-        local r, g, b = F:ColorGradient(cur / max, unpack(OUF.colors.smooth))
+        local r, g, b = F:ColorGradient(cur / max, unpack(oUF.colors.smooth))
 
         self:SetStatusBarColor(r, g, b)
         value:SetTextColor(r, g, b)
@@ -152,12 +172,13 @@ local function PostUpdateAltPower(self, _, cur, _, max)
 end
 
 function UNITFRAME:CreateAlternativePowerBar(self)
+    local smooth = C.DB.Unitframe.Smooth
     local altPower = CreateFrame('StatusBar', nil, self)
     altPower:SetStatusBarTexture(C.Assets.statusbar_tex)
     altPower:SetPoint('TOP', self.Power, 'BOTTOM', 0, -2)
     altPower:Size(self:GetWidth(), C.DB.Unitframe.AlternativePowerBarHeight)
     altPower:EnableMouse(true)
-    F:SmoothBar(altPower)
+    altPower.Smooth = smooth
     altPower.bg = F.SetBD(altPower)
 
     altPower.UpdateTooltip = AltPowerUpdateTooltip

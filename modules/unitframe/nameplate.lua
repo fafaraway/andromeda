@@ -682,6 +682,27 @@ function NAMEPLATE:RefreshMajorSpells()
     end
 end
 
+function NAMEPLATE:CheckMajorSpells()
+    for spellID in pairs(C.NPMajorSpellsList) do
+        local name = GetSpellInfo(spellID)
+        if name then
+            if _G.FREE_ADB['NPMajorSpells'][spellID] then
+                _G.FREE_ADB['NPMajorSpells'][spellID] = nil
+            end
+        else
+            if C.IsDeveloper then
+                F:Debug('Invalid Nameplate Major Spells ID: ' .. spellID)
+            end
+        end
+    end
+
+    for spellID, value in pairs(_G.FREE_ADB['NPMajorSpells']) do
+        if value == false and C.NPMajorSpellsList[spellID] == nil then
+            _G.FREE_ADB['NPMajorSpells'][spellID] = nil
+        end
+    end
+end
+
 -- Spiteful indicator
 function NAMEPLATE:CreateSpitefulIndicator(self)
     local font = C.Assets.Fonts.Condensed
@@ -743,6 +764,7 @@ end
 local platesList = {}
 function NAMEPLATE:CreateNameplateStyle()
     self.unitStyle = 'nameplate'
+    local smooth = C.DB.Unitframe.Smooth
     self:SetSize(C.DB.Nameplate.Width, C.DB.Nameplate.Height)
     self:SetPoint('CENTER', 0, -10)
     self:SetScale(_G.UIParent:GetScale())
@@ -751,7 +773,7 @@ function NAMEPLATE:CreateNameplateStyle()
     health:SetAllPoints()
     health:SetStatusBarTexture(C.Assets.statusbar_tex)
     health.backdrop = F.SetBD(health)
-    health.Smooth = true
+    health.Smooth = smooth
 
     self.Health = health
     self.Health.UpdateColor = NAMEPLATE.UpdateColor
@@ -995,6 +1017,7 @@ function NAMEPLATE:OnLogin()
     NAMEPLATE:CheckExplosives()
     NAMEPLATE:UpdateGroupRoles()
     NAMEPLATE:RefreshPlateOnFactionChanged()
+    NAMEPLATE:CheckMajorSpells()
     NAMEPLATE:RefreshMajorSpells()
 
     oUF:RegisterStyle('Nameplate', NAMEPLATE.CreateNameplateStyle)

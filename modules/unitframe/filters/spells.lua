@@ -3,7 +3,6 @@ local unpack = _G.unpack
 local select = _G.select
 
 local F, C = unpack(select(2, ...))
-local AURA = F:GetModule('AurasTable')
 
 -- Bloodlust buffs
 C.BloodlustList = {
@@ -515,7 +514,7 @@ C.PartySpellsDB = {
 }
 
 -- Raid frame buffs
-local list = {
+C.PartyMajorAuraList = {
     ['ALL'] = {
         -- 全职业
         [642] = true, -- 圣盾术
@@ -550,7 +549,7 @@ local list = {
         [209261] = true -- 未被污染的邪能
     }
 }
-AURA:AddClassSpells(list)
+
 
 -- Party frame important auras
 C.PartyAurasList = {

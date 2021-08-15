@@ -144,3 +144,28 @@ function UNITFRAME:RefreshRaidFrameIcons()
         end
     end
 end
+
+function UNITFRAME:CheckCornerSpells()
+    if not _G.FREE_ADB['CornerSpellsList'][C.MyClass] then
+        _G.FREE_ADB['CornerSpellsList'][C.MyClass] = {}
+    end
+    local data = C.CornerSpellsList[C.MyClass]
+    if not data then
+        return
+    end
+
+    for spellID, _ in pairs(data) do
+        local name = GetSpellInfo(spellID)
+        if not name then
+            if C.IsDeveloper then
+                F:Debug('Invalid Corner Spell ID: ' .. spellID)
+            end
+        end
+    end
+
+    for spellID, value in pairs(_G.FREE_ADB['CornerSpellsList'][C.MyClass]) do
+        if not next(value) and C.CornerBuffs[C.MyClass][spellID] == nil then
+            _G.FREE_ADB['CornerSpellsList'][C.MyClass][spellID] = nil
+        end
+    end
+end

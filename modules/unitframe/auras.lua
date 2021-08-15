@@ -32,6 +32,45 @@ local function UpdateAuraTooltip(aura)
     _G.GameTooltip:SetUnitAura(aura:GetParent().__owner.unit, aura:GetID(), aura.filter)
 end
 
+function UNITFRAME:MODIFIER_STATE_CHANGED(key, state)
+    if key ~= 'RALT' then
+        return
+    end
+
+    for _, object in next, oUF.objects do
+        local unit = object.realUnit or object.unit
+        if unit == 'target' then
+            local auras = object.Auras
+            if state == 1 then -- modifier key pressed
+                auras.CustomFilter = UNITFRAME.ModifierCustomFilter
+            else
+                auras.CustomFilter = UNITFRAME.CustomFilter
+            end
+            auras:ForceUpdate()
+            break
+        end
+    end
+end
+
+function UNITFRAME:PLAYER_REGEN_DISABLED()
+    F:UnregisterEvent('MODIFIER_STATE_CHANGED', UNITFRAME.MODIFIER_STATE_CHANGED)
+end
+
+function UNITFRAME:PLAYER_REGEN_ENABLED()
+    F:RegisterEvent('MODIFIER_STATE_CHANGED', UNITFRAME.MODIFIER_STATE_CHANGED)
+end
+
+function UNITFRAME:PLAYER_ENTERING_WORLD()
+    F:RegisterEvent('PLAYER_REGEN_DISABLED', UNITFRAME.MODIFIER_STATE_CHANGED)
+    F:RegisterEvent('PLAYER_REGEN_ENABLED', UNITFRAME.MODIFIER_STATE_CHANGED)
+
+    if InCombatLockdown() then
+        UNITFRAME:PLAYER_REGEN_DISABLED()
+    else
+        UNITFRAME:PLAYER_REGEN_ENABLED()
+    end
+end
+
 function UNITFRAME.PostCreateIcon(element, button)
     local style = element.__owner.unitStyle
 
@@ -287,7 +326,7 @@ function UNITFRAME:CreateAuras(self)
         bu.initialAnchor = 'LEFT'
         bu:SetPoint('LEFT', self, 'RIGHT', 5, 0)
         bu['growth-y'] = 'RIGHT'
-        bu.size = C.DB.Unitframe.PartyHeight * .7
+        bu.size = C.DB.Unitframe.PartyHealthHeight * .7
         bu.numTotal = 4
         bu.gap = false
     elseif style == 'raid' then
@@ -322,7 +361,10 @@ function UNITFRAME:CreateAuras(self)
     bu.PostUpdate = BolsterPostUpdate
 
     self.Auras = bu
+
+    F:RegisterEvent('PLAYER_ENTERING_WORLD', UNITFRAME.PLAYER_ENTERING_WORLD)
 end
+
 
 function UNITFRAME:CreateBuffs(self)
     local style = self.unitStyle
@@ -351,6 +393,8 @@ function UNITFRAME:CreateBuffs(self)
     self.Buffs = bu
 end
 
+
+
 function UNITFRAME:CreateDebuffs(self)
     local bu = CreateFrame('Frame', nil, self)
     bu.spacing = 4
@@ -375,6 +419,8 @@ function UNITFRAME:CreateDebuffs(self)
 
     self.Debuffs = bu
 end
+
+
 
 function UNITFRAME:UpdateRaidAuras()
     for _, frame in pairs(F.Libs.oUF.objects) do
@@ -414,46 +460,5 @@ function UNITFRAME:RefreshAurasByCombat(self)
     self:RegisterEvent('PLAYER_REGEN_ENABLED', RefreshAurasElements, true)
     self:RegisterEvent('PLAYER_REGEN_DISABLED', RefreshAurasElements, true)
 end
-
-function UNITFRAME:MODIFIER_STATE_CHANGED(key, state)
-    if key ~= 'RALT' then
-        return
-    end
-
-    for _, object in next, oUF.objects do
-        local unit = object.realUnit or object.unit
-        if unit == 'target' then
-            local auras = object.Auras
-            if state == 1 then -- modifier key pressed
-                auras.CustomFilter = UNITFRAME.ModifierCustomFilter
-            else
-                auras.CustomFilter = UNITFRAME.CustomFilter
-            end
-            auras:ForceUpdate()
-            break
-        end
-    end
-end
-
-function UNITFRAME:PLAYER_REGEN_DISABLED()
-    F:UnregisterEvent('MODIFIER_STATE_CHANGED', UNITFRAME.MODIFIER_STATE_CHANGED)
-end
-
-function UNITFRAME:PLAYER_REGEN_ENABLED()
-    F:RegisterEvent('MODIFIER_STATE_CHANGED', UNITFRAME.MODIFIER_STATE_CHANGED)
-end
-
-function UNITFRAME:PLAYER_ENTERING_WORLD()
-    F:RegisterEvent('PLAYER_REGEN_DISABLED', UNITFRAME.MODIFIER_STATE_CHANGED)
-    F:RegisterEvent('PLAYER_REGEN_ENABLED', UNITFRAME.MODIFIER_STATE_CHANGED)
-
-    if InCombatLockdown() then
-        UNITFRAME:PLAYER_REGEN_DISABLED()
-    else
-        UNITFRAME:PLAYER_REGEN_ENABLED()
-    end
-end
-
-F:RegisterEvent('PLAYER_ENTERING_WORLD', UNITFRAME.PLAYER_ENTERING_WORLD)
 
 

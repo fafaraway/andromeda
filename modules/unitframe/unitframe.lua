@@ -4,7 +4,6 @@ local select = select
 local CreateFrame = CreateFrame
 local UnitFrame_OnEnter = UnitFrame_OnEnter
 local UnitFrame_OnLeave = UnitFrame_OnLeave
-local GetSpecialization = GetSpecialization
 local CompactRaidFrameManager_SetSetting = CompactRaidFrameManager_SetSetting
 local CompactRaidFrameManager = CompactRaidFrameManager
 local UnitIsUnit = UnitIsUnit
@@ -12,10 +11,10 @@ local UnitExists = UnitExists
 local UnitIsFriend = UnitIsFriend
 local UnitIsEnemy = UnitIsEnemy
 local PlaySound = PlaySound
+local EJ_GetInstanceInfo = EJ_GetInstanceInfo
 
 local F, C = unpack(select(2, ...))
-local UNITFRAME = F:RegisterModule('Unitframe')
-local NAMEPLATE = F:RegisterModule('Nameplate')
+local UNITFRAME = F:GetModule('Unitframe')
 
 --[[ Backdrop ]]
 
@@ -43,15 +42,10 @@ function UNITFRAME:CreateBackdrop(self)
     self:HookScript('OnEnter', UF_OnEnter)
     self:HookScript('OnLeave', UF_OnLeave)
 
-    F.CreateTex(self)
-
-    local bg = F.CreateBDFrame(self)
-    bg:SetBackdropBorderColor(0, 0, 0, 1)
-    bg:SetBackdropColor(0, 0, 0, 0)
-    self.Bg = bg
-
-    local glow = F.CreateSD(self.Bg)
-    self.Glow = glow
+    self.backdrop = F.SetBD(self, 0)
+    self.backdrop:SetBackdropColor(.1, .1, .1, .8)
+    self.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
+    self.shadow = self.backdrop.__shadow
 
     if not self.unitStyle == 'player' then
         return
@@ -78,7 +72,7 @@ local function UpdateSelectedBorder(self)
 end
 
 function UNITFRAME:CreateSelectedBorder(self)
-    local border = F.CreateBDFrame(self.Bg)
+    local border = F.CreateBDFrame(self)
     border:SetBackdropBorderColor(1, 1, 1, 1)
     border:SetBackdropColor(0, 0, 0, 0)
     border:SetFrameLevel(self:GetFrameLevel() + 5)
@@ -119,106 +113,74 @@ function UNITFRAME:PLAYER_FOCUS_CHANGED()
     end
 end
 
-function UNITFRAME:OnLogin()
-    if not C.DB.Unitframe.Enable then
-        return
-    end
-
-    F:SetSmoothingAmount(.3)
-
-    UNITFRAME:UpdateHealthColor()
-    UNITFRAME:UpdateClassColor()
-
-    UNITFRAME:UpdateHealthMethod()
-
+function UNITFRAME:CreateTargetSound()
     F:RegisterEvent('PLAYER_TARGET_CHANGED', UNITFRAME.PLAYER_TARGET_CHANGED)
     F:RegisterEvent('PLAYER_FOCUS_CHANGED', UNITFRAME.PLAYER_FOCUS_CHANGED)
+end
 
-    self:SpawnPlayer()
-    self:SpawnPet()
-    self:SpawnTarget()
-    self:SpawnTargetTarget()
-    self:SpawnFocus()
-    self:SpawnFocusTarget()
-    self:SpawnBoss()
+--[[ Remove blizz raid frame ]]
 
-    if C.DB.Unitframe.Arena then
-        self:SpawnArena()
-    end
-
-    if not C.DB.Unitframe.Group then
-        return
-    end
-
-    -- get rid of blizz raid frame
+function UNITFRAME:RemoveBlizzRaidFrame()
     if CompactRaidFrameManager_SetSetting then
         CompactRaidFrameManager_SetSetting('IsShown', '0')
         _G.UIParent:UnregisterEvent('GROUP_ROSTER_UPDATE')
         CompactRaidFrameManager:UnregisterAllEvents()
         CompactRaidFrameManager:SetParent(F.HiddenFrame)
     end
+end
 
-    self:SpawnParty()
-    self:SpawnRaid()
-    self:ClickCast()
+--[[  ]]
 
-    if C.DB.Unitframe.PositionBySpec then
-        local function UpdateSpecPos(event, ...)
-            local unit, _, spellID = ...
-            if (event == 'UNIT_SPELLCAST_SUCCEEDED' and unit == 'player' and spellID == 200749) or event == 'ON_LOGIN' then
-                local specIndex = GetSpecialization()
-                if not specIndex then
-                    return
-                end
+local RaidBuffs = {}
+function UNITFRAME:AddClassSpells(list)
+    for class, value in pairs(list) do
+        RaidBuffs[class] = value
+    end
+end
 
-                if not C.DB['UIAnchor']['raid_position' .. specIndex] then
-                    C.DB['UIAnchor']['raid_position' .. specIndex] = {'TOPLEFT', 'oUF_Target', 'BOTTOMLEFT', 0, -10}
-                end
+local RaidDebuffs = {}
+function UNITFRAME:RegisterDebuff(_, instID, _, spellID, level)
+    local instName = EJ_GetInstanceInfo(instID)
+    if not instName then
+        if C.IsDeveloper then
+            print('Invalid instance ID: ' .. instID)
+        end
+        return
+    end
 
-                UNITFRAME.RaidMover:ClearAllPoints()
-                UNITFRAME.RaidMover:SetPoint(unpack(C.DB['UIAnchor']['raid_position' .. specIndex]))
+    if not RaidDebuffs[instName] then
+        RaidDebuffs[instName] = {}
+    end
+    if not level then
+        level = 2
+    end
+    if level > 6 then
+        level = 6
+    end
 
-                if UNITFRAME.RaidMover then
-                    UNITFRAME.RaidMover:ClearAllPoints()
-                    UNITFRAME.RaidMover:SetPoint(unpack(C.DB['UIAnchor']['raid_position' .. specIndex]))
-                end
+    RaidDebuffs[instName][spellID] = level
+end
 
-                if not C.DB['UIAnchor']['party_position' .. specIndex] then
-                    C.DB['UIAnchor']['party_position' .. specIndex] = {'BOTTOMRIGHT', 'oUF_Player', 'TOPLEFT', -100, 60}
-                end
-                if UNITFRAME.PartyMover then
-                    UNITFRAME.PartyMover:ClearAllPoints()
-                    UNITFRAME.PartyMover:SetPoint(unpack(C.DB['UIAnchor']['party_position' .. specIndex]))
-                end
+function UNITFRAME:OnLogin()
+    UNITFRAME:AddDungeonSpells()
+    UNITFRAME:AddDonimationSpells()
+    UNITFRAME:AddNathriaSpells()
+
+    for instName, value in pairs(RaidDebuffs) do
+        for spell, priority in pairs(value) do
+            if _G.FREE_ADB['RaidDebuffsList'][instName] and _G.FREE_ADB['RaidDebuffsList'][instName][spell] and _G.FREE_ADB['RaidDebuffsList'][instName][spell] == priority then
+                _G.FREE_ADB['RaidDebuffsList'][instName][spell] = nil
             end
         end
-        UpdateSpecPos('ON_LOGIN')
-        F:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED', UpdateSpecPos)
-
-        if UNITFRAME.RaidMover then
-            UNITFRAME.RaidMover:HookScript(
-                'OnDragStop',
-                function()
-                    local specIndex = GetSpecialization()
-                    if not specIndex then
-                        return
-                    end
-                    C.DB['UIAnchor']['raid_position' .. specIndex] = C.DB['UIAnchor']['RaidFrame']
-                end
-            )
-        end
-
-        if UNITFRAME.PartyMover then
-            UNITFRAME.PartyMover:HookScript(
-                'OnDragStop',
-                function()
-                    local specIndex = GetSpecialization()
-                    if not specIndex then
-                        return
-                    end
-                    C.DB['UIAnchor']['party_position' .. specIndex] = C.DB['UIAnchor']['PartyFrame']
-                end
-            )
+    end
+    for instName, value in pairs(_G.FREE_ADB['RaidDebuffsList']) do
+        if not next(value) then
+            _G.FREE_ADB['RaidDebuffsList'][instName] = nil
         end
     end
+
+    C.RaidBuffsList = RaidBuffs
+    C.RaidDebuffsList = RaidDebuffs
+
+    UNITFRAME:SpawnUnits()
 end

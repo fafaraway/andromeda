@@ -126,7 +126,7 @@ function UNITFRAME:CreatePartyWatcher(self)
 
     local buttons = {}
     local maxIcons = 4
-    local iconSize = C.DB.Unitframe.PartyHeight * .75
+    local iconSize = (C.DB.Unitframe.PartyHealthHeight + C.DB.Unitframe.PartyPowerHeight + C.Mult) * .75
     local partyHorizon = C.DB.Unitframe.PartyHorizon
 
     for i = 1, maxIcons do
@@ -158,5 +158,21 @@ function UNITFRAME:CreatePartyWatcher(self)
     self.PartyWatcher = buttons
     if C.DB.Unitframe.PartyWatcherSync then
         self.PartyWatcher.PostUpdate = UNITFRAME.PartyWatcherPostUpdate
+    end
+end
+
+function UNITFRAME:CheckPartySpells()
+    for spellID, duration in pairs(C.PartySpellsList) do
+        local name = GetSpellInfo(spellID)
+        if name then
+            local modDuration = _G.FREE_ADB['PartySpellsList'][spellID]
+            if modDuration and modDuration == duration then
+                _G.FREE_ADB['PartySpellsList'][spellID] = nil
+            end
+        else
+            if C.IsDeveloper then
+                F:Debug('Invalid Party Spell ID: ' .. spellID)
+            end
+        end
     end
 end

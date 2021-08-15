@@ -106,14 +106,14 @@ tagEvents['free:title'] = 'UNIT_NAME_UPDATE'
 
 tags['free:color'] = function(unit)
     local class = select(2, UnitClass(unit))
-    local r, g, b = UnitSelectionColor(unit, true)
+    local reaction = UnitReaction(unit, "player")
 
     if UnitIsTapDenied(unit) then
         return F:RGBToHex(colors.tapped)
     elseif UnitIsPlayer(unit) then
         return F:RGBToHex(colors.class[class])
-    elseif r then
-        return F:RGBToHex(r, g, b)
+    elseif reaction then
+        return F:RGBToHex(colors.reaction[reaction])
     else
         return F:RGBToHex(1, 1, 1)
     end
@@ -171,22 +171,31 @@ end
 tagEvents['free:npname'] = 'UNIT_NAME_UPDATE'
 
 tags['free:groupname'] = function(unit)
-    local groupName = C.DB.Unitframe.GroupShowName
-    local str = UnitName(unit)
+    local showName = C.DB.Unitframe.GroupShowName
+    local nameStr = UnitName(unit)
 
-    if not UnitIsConnected(unit) then
-        return '|cffcccccc' .. 'Off'
-    elseif UnitIsDead(unit) then
-        return '|cffd84343' .. 'Dead'
-    elseif UnitIsGhost(unit) then
-        return '|cffbd69be' .. 'Ghost'
-    elseif groupName then
-        return F:ShortenString(str, C.IsChinses and 2 or 4)
-    else
-        return ''
-    end
+
+
+        if UnitIsGhost(unit) then
+            return '|cffbd69be' .. F:ShortenString(nameStr, C.IsChinses and 6 or 4)
+        elseif UnitIsDead(unit) then
+            return '|cffd84343' .. F:ShortenString(nameStr, C.IsChinses and 6 or 4)
+        elseif showName then
+            return '|cffffffff' .. F:ShortenString(nameStr, C.IsChinses and 6 or 4)
+        end
+
+
+    -- if UnitIsDead(unit) then
+    --     return '|cffd84343' .. 'Dead'
+    -- elseif UnitIsGhost(unit) then
+    --     return '|cffbd69be' .. 'Ghost'
+    -- elseif not UnitIsConnected(unit) then
+    --     return '|cffcccccc' .. 'Off'
+    -- elseif groupName then
+    --     return F:ShortenString(str, C.IsChinses and 2 or 4)
+    -- end
 end
-tagEvents['free:groupname'] = 'UNIT_HEALTH GROUP_ROSTER_UPDATE UNIT_CONNECTION'
+tagEvents['free:groupname'] = 'UNIT_HEALTH UNIT_MAXHEALTH GROUP_ROSTER_UPDATE UNIT_CONNECTION'
 
 tags['free:resting'] = function(unit)
     if (unit == 'player' and IsResting()) then
@@ -242,7 +251,8 @@ function UNITFRAME:CreateGroupNameText(self)
     local outline = _G.FREE_ADB.FontOutline
     local groupName = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
 
-    self:Tag(groupName, '[free:groupname]')
+    --self:Tag(groupName, '[free:groupname]')
+    self:Tag(groupName, '[free:color][name]')
     self.GroupName = groupName
 end
 
@@ -341,4 +351,44 @@ function UNITFRAME:CreateAlternativePowerValueText(self)
     self:Tag(altPowerValue, '[free:altpower]')
 
     self.AlternativePowerValue = altPowerValue
+end
+
+
+local function Player_OnEnter(self)
+    self.LeftText:Show()
+    self.RightText:Show()
+    self:UpdateTags()
+end
+
+local function Player_OnLeave(self)
+    self.LeftText:Hide()
+    self.RightText:Hide()
+end
+
+
+function UNITFRAME:CreatePlayerTags(self)
+    local style = self.unitStyle
+    local outline = _G.FREE_ADB.FontOutline
+
+    local leftText = F.CreateFS(self, font, 11, outline, nil, nil, outline or 'THICK')
+    leftText:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
+
+
+    self:Tag(leftText, '[free:health] [free:healthpercentage] [free:dead] [free:resting]')
+
+
+    local rightText = F.CreateFS(self, font, 11, outline, nil, nil, outline or 'THICK')
+    rightText:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
+
+    self:Tag(rightText, '[powercolor][free:power]')
+
+    self.LeftText = leftText
+    self.RightText = rightText
+
+    if C.DB.Unitframe.HidePlayerTags then
+        self.LeftText:Hide()
+        self.RightText:Hide()
+        self:HookScript('OnEnter', Player_OnEnter)
+        self:HookScript('OnLeave', Player_OnLeave)
+    end
 end

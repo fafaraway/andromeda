@@ -3,7 +3,6 @@ local unpack = unpack
 local select = select
 local wipe = wipe
 local CreateFrame = CreateFrame
-local EJ_GetInstanceInfo = EJ_GetInstanceInfo
 
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
@@ -33,7 +32,7 @@ function UNITFRAME:UpdateRaidDebuffs()
     end
 end
 
-local function buttonOnEnter(self)
+local function ButtonOnEnter(self)
     if not self.index then
         return
     end
@@ -69,13 +68,13 @@ function UNITFRAME:CreateRaidDebuff(self)
     bu.glowFrame = F.CreateGlowFrame(bu, bu:GetHeight())
 
     if not C.DB.Unitframe.AurasClickThrough then
-        bu:SetScript('OnEnter', buttonOnEnter)
+        bu:SetScript('OnEnter', ButtonOnEnter)
         bu:SetScript('OnLeave', F.HideTooltip)
     end
 
     bu.ShowDispellableDebuff = true
     bu.ShowDebuffBorder = true
-    bu.FilterDispellableDebuff = true
+    --bu.FilterDispellableDebuff = true
 
     if C.DB.Unitframe.InstanceAuras then
         if not next(debuffList) then

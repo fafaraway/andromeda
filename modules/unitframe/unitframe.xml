@@ -1,4 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Include file="filters\filters.xml"/>
     <Include file="plugins\plugins.xml"/>
     <Script file="unitframe.lua"/>
     <Script file="colors.lua"/>
@@ -6,14 +7,14 @@
     <Script file="health.lua"/>
     <Script file="power.lua"/>
     <Script file="castbar.lua"/>
-    <Script file="class_power.lua"/>
+    <Script file="class-power.lua"/>
     <Script file="auras.lua"/>
-    <Script file="corner_spells.lua"/>
-    <Script file="debuff_highlight.lua"/>
+    <Script file="corner-spells.lua"/>
+    <Script file="debuff-highlight.lua"/>
     <Script file="indicator.lua"/>
-    <Script file="party_watcher.lua"/>
+    <Script file="party-spells.lua"/>
     <Script file="portrait.lua"/>
-    <Script file="raid_debuffs.lua"/>
+    <Script file="aura-watch.lua"/>
     <Script file="range.lua"/>
     <Script file="stagger.lua"/>
     <Script file="tags.lua"/>

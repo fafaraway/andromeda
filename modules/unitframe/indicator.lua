@@ -1,11 +1,9 @@
 local _G = _G
 local unpack = unpack
 local select = select
-local rad = rad
 local CreateFrame = CreateFrame
 local GetSpellCooldown = GetSpellCooldown
 local GetTime = GetTime
-local IsResting = IsResting
 local UnitGroupRolesAssigned = UnitGroupRolesAssigned
 
 local F, C = unpack(select(2, ...))
@@ -75,69 +73,13 @@ function UNITFRAME:AddPvPIndicator(self) -- Deprecated
     self.PvPIndicator = PvPIndicator
 end
 
-local function CombatIndicatorPostUpdate(self, inCombat)
-    if not C.DB.Unitframe.RestingIndicator then
-        return
-    end
-    local isResting = IsResting()
-    if inCombat then
-        self.__owner.RestingIndicator:Hide()
-    elseif isResting then
-        self.__owner.RestingIndicator:Show()
-    end
-end
-
-function UNITFRAME:CreateCombatIndicator(self)
-    if not C.DB.Unitframe.CombatIndicator then
-        return
-    end
-
-    local combatIndicator = self:CreateTexture(nil, 'OVERLAY')
-    combatIndicator:SetPoint('BOTTOMLEFT', self, 'TOPLEFT')
-    combatIndicator:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT')
-    combatIndicator:SetHeight(6)
-    combatIndicator:SetTexture(C.Assets.glow_tex)
-    combatIndicator:SetVertexColor(1, 0, 0, .25)
-
-    self.CombatIndicator = combatIndicator
-    self.CombatIndicator.PostUpdate = CombatIndicatorPostUpdate
-end
-
-function UNITFRAME:CreateRestingIndicator(self)
-    if not C.DB.Unitframe.RestingIndicator then
-        return
-    end
-
-    local restingIndicator = self:CreateTexture(nil, 'OVERLAY')
-    restingIndicator:SetPoint('BOTTOMLEFT', self, 'TOPLEFT')
-    restingIndicator:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT')
-    restingIndicator:SetHeight(6)
-    restingIndicator:SetTexture(C.Assets.glow_tex)
-    restingIndicator:SetVertexColor(0, 1, 0, .25)
-
-    self.RestingIndicator = restingIndicator
-end
-
-function UNITFRAME:CreateEmergencyIndicator(self)
-    local emergencyIndicator = self:CreateTexture(nil, 'OVERLAY')
-    emergencyIndicator:SetPoint('TOPLEFT', self, 'BOTTOMLEFT')
-    emergencyIndicator:SetPoint('TOPRIGHT', self, 'BOTTOMRIGHT')
-    emergencyIndicator:SetHeight(10)
-    emergencyIndicator:SetTexture(C.Assets.glow_tex)
-    emergencyIndicator:SetRotation(rad(180))
-    emergencyIndicator:SetVertexColor(1, 0, 0, .45)
-    emergencyIndicator:Hide()
-
-    self.EmergencyIndicator = emergencyIndicator
-end
-
 function UNITFRAME:UpdateRaidTargetIndicator()
     local style = self.unitStyle
     local raidTarget = self.RaidTargetIndicator
     local nameOnlyName = self.nameOnlyName
     local title = self.npcTitle
     local isNameOnly = self.isNameOnly
-    local size = C.DB.Unitframe.RaidTargetIndicatorSize
+    local size = self:GetHeight()
     local alpha = C.DB.Unitframe.RaidTargetIndicatorAlpha
     local npSize = C.DB.Nameplate.RaidTargetIndicatorSize
     local npAlpha = C.DB.Nameplate.RaidTargetIndicatorAlpha
@@ -158,7 +100,7 @@ function UNITFRAME:UpdateRaidTargetIndicator()
     else
         raidTarget:SetPoint('CENTER')
         raidTarget:SetAlpha(alpha)
-        raidTarget:SetSize(size, size)
+        raidTarget:SetSize(size*.8, size*.8)
     end
 end
 

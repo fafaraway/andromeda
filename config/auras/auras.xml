@@ -1,7 +1,3 @@
 <Ui xmlns='http://www.blizzard.com/wow/ui/'>
-    <Script file="spells.lua"/>
     <Script file="reminder.lua"/>
-    <Script file="party.lua"/>
-    <Script file="nathria.lua"/>
-    <Script file="donimation.lua"/>
 </Ui>
