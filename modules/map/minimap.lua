@@ -50,7 +50,7 @@ function MM:ReskinMinimap()
     map:SetFrameLevel(map:GetFrameLevel() + 2)
     map:ClearAllPoints()
     map:SetPoint('CENTER', backdrop)
-    map:SetParent(map.backdrop)
+    --map:SetParent(map.backdrop)
 
     local pos = {'BOTTOMRIGHT', _G.UIParent, 'BOTTOMRIGHT', -C.UIGap, C.UIGap}
     local mover = F.Mover(backdrop, _G.MINIMAP_LABEL, 'Minimap', pos)
