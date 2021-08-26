@@ -42,6 +42,6 @@ C.Themes['Blizzard_ItemUpgradeUI'] = function()
     F.StripTextures(_G.ItemUpgradeFrameMoneyFrame)
     F.ReskinIcon(_G.ItemUpgradeFrameMoneyFrame.Currency.icon)
     F.Reskin(_G.ItemUpgradeFrameUpgradeButton)
-
     F.ReskinDropDown(ItemUpgradeFrame.UpgradeLevelDropDown.DropDownMenu)
+    ItemUpgradeFrame.StatsScrollBar:SetAlpha(0)
 end
