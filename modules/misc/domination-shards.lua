@@ -85,17 +85,20 @@ function DS:DomiShards_ListFrame()
         return
     end
 
+    local iconSize = 28
+    local frameSize = iconSize * 3
+
     local frame = CreateFrame('Frame', 'FreeUIDomiShards', _G.ItemSocketingFrame)
-    frame:SetSize(102, 102)
-    frame:SetPoint('RIGHT', -35, 30)
+    frame:SetSize(frameSize, frameSize)
+    frame:SetPoint('BOTTOMLEFT', 22, 3)
     frame.icons = {}
     DS.DomiShardsFrame = frame
 
     for index, value in pairs(TOOLTIP.DomiDataByGroup) do
         for itemID in pairs(value) do
             local button = CreateFrame('Button', nil, frame)
-            button:SetSize(30, 30)
-            button:SetPoint('TOPLEFT', 3 + mod(index - 1, 3) * 33, -3 - floor((index - 1) / 3) * 33)
+            button:SetSize(iconSize, iconSize)
+            button:SetPoint('TOPLEFT', mod(index - 1, 3) * iconSize, -floor((index - 1) / 3) * iconSize)
             F.PixelIcon(button, GetItemIcon(itemID), true)
             button:SetScript('OnClick', DS.DomiShard_Equip)
             button:SetScript('OnEnter', DS.DomiShard_ShowTooltip)
