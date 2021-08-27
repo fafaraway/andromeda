@@ -97,10 +97,15 @@ function UNITFRAME:UpdateRaidTargetIndicator()
 
         raidTarget:SetAlpha(npAlpha)
         raidTarget:SetSize(npSize, npSize)
+    elseif style == 'party' or style == 'raid' or style == 'boss' then
+        raidTarget:ClearAllPoints()
+        raidTarget:SetPoint('CENTER')
+        raidTarget:SetAlpha(.2)
+        raidTarget:SetSize(size*.8, size*.8)
     else
         raidTarget:SetPoint('CENTER')
-        raidTarget:SetAlpha(alpha)
-        raidTarget:SetSize(size*.8, size*.8)
+        raidTarget:SetAlpha(.2)
+        raidTarget:SetSize(size*2, size*2)
     end
 end
 
@@ -117,9 +122,9 @@ function UNITFRAME:CreateRaidTargetIndicator(self)
 end
 
 function UNITFRAME:CreateReadyCheckIndicator(self)
-    local readyCheckIndicator = self.Health:CreateTexture(nil, 'OVERLAY')
-    readyCheckIndicator:SetPoint('CENTER', self.Health)
-    readyCheckIndicator:SetSize(16, 16)
+    local readyCheckIndicator = self:CreateTexture(nil, 'OVERLAY')
+    readyCheckIndicator:SetPoint('CENTER')
+    readyCheckIndicator:SetSize(self:GetHeight() * .8, self:GetHeight() * .8)
     self.ReadyCheckIndicator = readyCheckIndicator
 end
 
@@ -171,15 +176,15 @@ function UNITFRAME:CreatePhaseIndicator(self)
 end
 
 function UNITFRAME:CreateSummonIndicator(self)
-    local summonIndicator = self.Health:CreateTexture(nil, 'OVERLAY')
-    summonIndicator:SetSize(self:GetHeight() * .8, self:GetHeight() * .8)
+    local summonIndicator = self:CreateTexture(nil, 'OVERLAY')
+    summonIndicator:SetSize(self:GetHeight(), self:GetHeight())
     summonIndicator:SetPoint('CENTER')
 
     self.SummonIndicator = summonIndicator
 end
 
 function UNITFRAME:CreateResurrectIndicator(self)
-    local resurrectIndicator = self.Health:CreateTexture(nil, 'OVERLAY')
+    local resurrectIndicator = self:CreateTexture(nil, 'OVERLAY')
     resurrectIndicator:SetSize(self:GetHeight() * .8, self:GetHeight() * .8)
     resurrectIndicator:SetPoint('CENTER')
 

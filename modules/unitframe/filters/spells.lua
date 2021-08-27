@@ -513,135 +513,32 @@ C.PartySpellsDB = {
     }
 }
 
--- Raid frame buffs
-C.PartyMajorAuraList = {
-    ['ALL'] = {
-        -- 全职业
-        [642] = true, -- 圣盾术
-        [871] = true, -- 盾墙
-        [1022] = true, -- 保护祝福
-        [27827] = true, -- 救赎之魂
-        [31224] = true, -- 暗影斗篷
-        [33206] = true, -- 痛苦压制
-        [45438] = true, -- 冰箱
-        [47585] = true, -- 消散
-        [47788] = true, -- 守护之魂
-        [48792] = true, -- 冰封之韧
-        [86659] = true, -- 远古列王守卫
-        [102342] = true, -- 铁木树皮
-        [104773] = true, -- 不灭决心
-        [108271] = true, -- 星界转移
-        [115203] = true, -- 壮胆酒
-        [116849] = true, -- 作茧缚命
-        [118038] = true, -- 剑在人在
-        [160029] = true, -- 正在复活
-        [186265] = true, -- 灵龟守护
-        [196555] = true, -- 虚空行走
-        [204018] = true, -- 破咒祝福
-        [204150] = true, -- 圣光护盾
-        [264735] = true, -- 优胜劣汰
-        [281195] = true, -- 优胜劣汰
-    },
-    ['WARNING'] = {
-        [87023] = true, -- 灸灼
-        [95809] = true, -- 疯狂
-        [123981] = true, -- 永劫不复
-        [209261] = true -- 未被污染的邪能
-    }
+
+
+
+
+
+-- Ignore these debuffs on RaidFrames #TODO
+C.RaidDebuffsBlackList = {
+    [206151] = true, -- 挑战者的负担
+    [331154] = true, -- 折磨：上层区域之力
+    [296847] = true, -- 压迫光环
+	[338906] = true, -- 典狱长之链
 }
 
 
--- Party frame important auras
-C.PartyAurasList = {
-    -- Immunities
-    [196555] = true, -- Netherwalk (Demon Hunter)
-    [186265] = true, -- Aspect of the Turtle (Hunter)
-    [45438] = true, -- Ice Block (Mage)
-    [125174] = true, -- Touch of Karma (Monk)
-    [228050] = true, -- Divine Shield (Prot Paladin PVP)
-    [642] = true, -- Divine Shield (Paladin)
-    [199448] = true, -- Blessing of Ultimate Sacrifice (Paladin)
-    [1022] = true, -- Blessing of Protection (Paladin)
-    [47788] = true, -- Guardian Spirit (Priest)
-    [31224] = true, -- Cloak of Shadows (Rogue)
-    [210918] = true, -- Ethereal Form (Shaman)
-    -- Death Knight
-    [48707] = true, -- Anti-Magic Shell
-    [48792] = true, -- Icebound Fortitude
-    [287081] = true, -- Lichborne
-    [55233] = true, -- Vampiric Blood
-    [194679] = true, -- Rune Tap
-    [145629] = true, -- Anti-Magic Zone
-    [81256] = true, -- Dancing Rune Weapon
-    -- Demon Hunter
-    [206804] = true, -- Rain from Above
-    [187827] = true, -- Metamorphosis (Vengeance)
-    [212800] = true, -- Blur
-    [263648] = true, -- Soul Barrier
-    -- Druid
-    [102342] = true, -- Ironbark
-    [22812] = true, -- Barkskin
-    [61336] = true, -- Survival Instincts
-    [203554] = true, -- Focused Growth (Druid)
-    -- Hunter
-    [53480] = true, -- Roar of Sacrifice
-    [264735] = true, -- Survival of the Fittest (Pet Ability)
-    [281195] = true, -- Survival of the Fittest (Lone Wolf)
-    -- Mage
-    [198111] = true, -- Temporal Shield
-    [113862] = true, -- Greater Invisibility
-    -- Monk
-    [120954] = true, -- Fortifying Brew (Brewmaster)
-    [243435] = true, -- Fortifying Brew (Mistweaver)
-    [201318] = true, -- Fortifying Brew (Windwalker)
-    [115176] = true, -- Zen Meditation
-    [116849] = true, -- Life Cocoon
-    [122278] = true, -- Dampen Harm
-    [122783] = true, -- Diffuse Magic
-    -- Paladin
-    [1044] = true, -- Blessing of Freedom
-    [204018] = true, -- Blessing of Spellwarding
-    [6940] = true, -- Blessing of Sacrifice
-    [498] = true, -- Divine Protection
-    [31850] = true, -- Ardent Defender
-    [86659] = true, -- Guardian of Ancient Kings
-    [212641] = true, -- Guardian of Ancient Kings (Glyph)
-    [205191] = true, -- Eye for an Eye
-    -- Priest
-    [47585] = true, -- Dispersion
-    [33206] = true, -- Pain Suppression
-    [213602] = true, -- Greater Fade
-    [81782] = true, -- Power Word: Barrier
-    [271466] = true, -- Luminous Barrier
-    -- Rogue
-    [45182] = true, -- Cheating Death
-    [5277] = true, -- Evasion
-    [199754] = true, -- Riposte
-    [1966] = true, -- Feint
-    -- Shaman
-    [108271] = true, -- Astral Shift
-    [118337] = true, -- Harden Skin
-    -- Warlock
-    [212195] = true, -- Nether Ward
-    [104773] = true, -- Unending Resolve
-    [108416] = true, -- Dark Pact
-    -- Warrior
-    [190456] = true, -- Ignore Pain
-    [118038] = true, -- Die by the Sword
-    [871] = true, -- Shield Wall
-    [213915] = true, -- Mass Spell Reflection
-    [23920] = true, -- Spell Reflection (Prot)
-    [216890] = true, -- Spell Reflection (Arms/Fury)
-    [184364] = true, -- Enraged Regeneration
-    [97463] = true, -- Rallying Cry
-    [12975] = true, -- Last Stand
-    -- Other
-    [185710] = true, -- Sugar-Crusted Fish Feast
+C.PartyBuffsList = {
+    -- All
+    [160029] = true, -- Resurrecting
+
+    -- Racial
+    [65116] = true, -- Stoneform
+
     -- Covenant
-    [319217] = true, -- 灵茧守护者
-    [320224] = true, -- 灵茧守护者
-    -- MISC
-    [160029] = true, -- 正在复活
+    [324867] = true, -- Fleshcraft
+    [319217] = true, -- Podtender
+    [320224] = true, -- Podtender
+
     -- Potion
     [307159] = true, -- 幽魂敏捷药水
     [307162] = true, -- 幽魂智力药水
@@ -652,6 +549,7 @@ C.PartyAurasList = {
     [307496] = true, -- 神圣觉醒药水
     [307497] = true, -- 死亡偏执药水
     [344314] = true, -- 心华之速药水
+
     -- Bloodlust
     [2825] = true, -- 嗜血
     [32182] = true, -- 英勇
@@ -662,11 +560,137 @@ C.PartyAurasList = {
     [256740] = true, -- 漩涡战鼓
     [309658] = true, -- 死亡凶蛮战鼓
     [102364] = true, -- 青铜龙的祝福
-    [292686] = true -- 制皮鼓
-}
+    [292686] = true, -- 制皮鼓
 
--- Ignore these debuffs on RaidFrames #TODO
-C.RaidDebuffsBlackList = {
-    [206151] = true, -- Challenger's Burden
-    [331154] = true
+    -- DH
+    [162264] = true, -- Metamorphosis (Havoc)
+    [187827] = true, -- Metamorphosis (Vengeance)
+    [212800] = true, -- Blur
+    [209426] = true, -- Darkness
+    [196555] = true, -- Netherwalk
+    [209261] = true, -- Uncontained Fel
+    [203819] = true, -- Demon Spikes
+
+    -- Warrior
+    [871] = true, -- Shield Wall
+    [107574] = true, -- Avatar
+    [1719] = true, -- Recklessness
+    [118038] = true, -- Die by the Sword
+    [97463] = true, -- Rallying Cry
+    [147833] = true, -- Intervene
+    [190456] = true, -- Ignore Pain
+    [213915] = true, -- Mass Spell Reflection
+    [23920] = true, -- Spell Reflection (Prot)
+    [216890] = true, -- Spell Reflection (Arms/Fury)
+    [12975] = true, -- Last Stand
+    [197690] = true, -- Defensive Stance
+    [184364] = true, -- Enraged Regeneration
+    [132404] = true, -- Shield Block
+    [335198] = true, -- Safeguard
+
+    -- Warlock
+    [113860] =true, -- Dark Soul: Misery
+    [104773] = true, -- Unending Resolve
+    [108416] = true, -- Dark Pact
+    [132413] = true, -- Shadow Bulwark
+
+    -- Shaman
+    [114051] = true, -- Ascendance
+    [108271] = true, -- Astral Shift
+    [974] = true, -- Earth Shield
+    [98007] = true, -- Spirit Link Totem
+    [325174] = true, -- Spirit Link Totem
+    [207498] = true, -- Ancestral Protection
+    [118337] = true, -- Harden Skin
+
+    -- Rogue
+    [13750] = true, -- Adrenaline Rush
+    [31224] = true, -- Cloak of Shadows
+    [5277] = true, -- Evasion
+    [45182] = true, -- Cheating Death
+    [1966] = true, -- Feint
+    [199754] = true, -- Riposte
+
+    -- Paladin
+    [31884] = true, -- Avenging Wrath
+    [31850] = true, -- Ardent Defender
+    [1044] = true, -- Blessing of Freedom
+    [31821] = true, -- Aura Mastery
+    [1022] = true, -- Blessing of Protection
+    [6940] = true, -- Blessing of Sacrifice
+    [199448] = true, -- Blessing of Sacrifice
+    [204018] = true, -- Blessing of Spellwarding
+    [498] = true, -- Divine Protection
+    [642] = true, -- Divine Shield
+    [184662] = true, -- Shield of Vengeance
+    [86659] = true, -- Guardian of Ancient Kings
+    [212641] = true, -- Guardian of Ancient Kings (Glyph)
+    [132403] = true, -- Shield of the Righteous
+    [205191] = true, -- Eye for an Eye
+    [228050] = true, -- Divine Shield
+
+    -- Monk
+    [115176] = true, -- Zen Meditation
+    [137639] = true, -- Storm, Earth, and Fire
+    [116849] = true, -- Life Cocoon
+    [122278] = true, -- Dampen Harm
+    [125174] = true, -- Touch of Karma
+    [115203] = true, -- Fortifying Brew
+    [215479] = true, -- Shuffle
+    [115295] = true, -- Guard
+
+    -- Mage
+    [12472] = true, -- Icy Veins
+    [190319] = true, -- Combustion
+    [12042] = true, -- Arcane Power
+    [110909] = true, -- Alter Time
+    [342245] = true, -- Alter Time
+    [45438] = true, -- Iceblock
+    [87023] = true, -- Cauterize
+
+    -- Hunter
+    [193530] = true, -- Aspect of the Wild
+    [266779] = true, -- Coordinated Assault
+    [19574] = true, -- Bestial Wrath
+    [186258] = true, -- Aspect of the Cheetah
+    [199483] = true, -- Camouflage
+    [186265] = true, -- Aspect of the Turtle
+    [264735] = true, -- Survival of the Fittest
+    [281195] = true, -- Survival of the Fittest
+
+    -- Druid
+    [106951] = true, -- Berserk
+    [194223] = true, -- Celestial Alignment
+    [102560] = true, -- Incarnation: Chosen of Elune
+    [102558] = true, -- Incarnation: Guardian of Ursoc
+    [61336] = true, -- Survival Instincts
+    [22812] = true, -- Barkskin
+    [22842] = true, -- Frenzied Regeneration
+    [29166] = true, -- Innervate
+    [102342] = true, -- Ironbark
+    [192081] = true, -- Ironfur
+
+    -- DK
+    [194679] = true, -- Rune Tap
+    [55233] = true, -- Vampiric Blood
+    [334547] = true, -- Vampiric Aura
+    [81256] = true, -- Dancing Rune Weapon
+    [48707] = true, -- Anti-Magic Shell
+    [145629] = true, -- Anti-Magic Zone
+    [49039] = true, -- Lichborne
+    [48792] = true, -- Icebound Fortitude
+    [48265] = true, -- Death's Advance
+    [212552] = true, -- Wraith Walk
+    [123981] = true, -- Perdition
+    [194844] = true, -- Bonestorm
+
+    -- Priest
+    [19236] = true, -- Desperate Prayer
+    [47585] = true, -- Dispersion
+    [47788] = true, -- Guardian Spirit
+    [33206] = true, -- Pain Suppression
+    [81782] = true, -- Power Word: Barrier
+    [62618] = true, -- Power Word: Barrier
+    [15286] = true, -- Vampiric Embrace
+    [10060] = true, -- Power Infusion
 }

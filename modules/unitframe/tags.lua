@@ -107,8 +107,14 @@ tagEvents['free:title'] = 'UNIT_NAME_UPDATE'
 tags['free:color'] = function(unit)
     local class = select(2, UnitClass(unit))
     local reaction = UnitReaction(unit, "player")
+    local isOffline = not UnitIsConnected(unit)
+    local isDead = UnitIsDead(unit)
+    local isGhost = UnitIsGhost(unit)
+    local isTapped = UnitIsTapDenied(unit)
 
-    if UnitIsTapDenied(unit) then
+    if (unit == 'targettarget' and UnitIsUnit('targettarget', 'player')) or (unit == 'focustarget' and UnitIsUnit('focustarget', 'player')) then
+        return F:RGBToHex(1, 0, 0)
+    elseif isTapped or isOffline then
         return F:RGBToHex(colors.tapped)
     elseif UnitIsPlayer(unit) then
         return F:RGBToHex(colors.class[class])
@@ -140,19 +146,11 @@ tags['free:name'] = function(unit)
     local useAbbr = C.DB.Unitframe.AbbreviatedName
     local str = UnitName(unit)
     local abbrName = F:AbbreviateString(str)
-    local r, g, b
-
-    if UnitIsPlayer(unit) then
-        local _, class = UnitClass(unit)
-        r, g, b = unpack(colors.class[class])
-    else
-        r, g, b = unpack(colors.reaction[UnitReaction(unit, 'player') or 5])
-    end
 
     if (unit == 'targettarget' and UnitIsUnit('targettarget', 'player')) or (unit == 'focustarget' and UnitIsUnit('focustarget', 'player')) then
-        return C.RedColor .. '<' .. _G.YOU .. '>'
+        return '<' .. _G.YOU .. '>'
     else
-        return format('|cff%02x%02x%02x%s|r', r * 255, g * 255, b * 255, F:ShortenString(useAbbr and abbrName or str, C.IsChinses and 6 or 8, true))
+        return useAbbr and abbrName or str
     end
 end
 tagEvents['free:name'] = 'UNIT_NAME_UPDATE'
@@ -171,29 +169,22 @@ end
 tagEvents['free:npname'] = 'UNIT_NAME_UPDATE'
 
 tags['free:groupname'] = function(unit)
-    local showName = C.DB.Unitframe.GroupShowName
+    local isRaid = (unit:match('raid%d?$'))
+    local showGroupName = C.DB.Unitframe.GroupShowName
+    local shortenName = C.DB.Unitframe.ShortenName
     local nameStr = UnitName(unit)
+    local shortenStr = F:ShortenString(nameStr, isRaid and 2 or 4)
+    local isOffline = not UnitIsConnected(unit)
+    local isDead = UnitIsDead(unit)
+    local isGhost = UnitIsGhost(unit)
 
-
-
-        if UnitIsGhost(unit) then
-            return '|cffbd69be' .. F:ShortenString(nameStr, C.IsChinses and 6 or 4)
-        elseif UnitIsDead(unit) then
-            return '|cffd84343' .. F:ShortenString(nameStr, C.IsChinses and 6 or 4)
-        elseif showName then
-            return '|cffffffff' .. F:ShortenString(nameStr, C.IsChinses and 6 or 4)
-        end
-
-
-    -- if UnitIsDead(unit) then
-    --     return '|cffd84343' .. 'Dead'
-    -- elseif UnitIsGhost(unit) then
-    --     return '|cffbd69be' .. 'Ghost'
-    -- elseif not UnitIsConnected(unit) then
-    --     return '|cffcccccc' .. 'Off'
-    -- elseif groupName then
-    --     return F:ShortenString(str, C.IsChinses and 2 or 4)
-    -- end
+    if showGroupName then
+        return shortenName and shortenStr or nameStr
+    elseif isOffline then
+        return 'off'
+    elseif isDead or isGhost then
+        return 'dead'
+    end
 end
 tagEvents['free:groupname'] = 'UNIT_HEALTH UNIT_MAXHEALTH GROUP_ROSTER_UPDATE UNIT_CONNECTION'
 
@@ -251,8 +242,7 @@ function UNITFRAME:CreateGroupNameText(self)
     local outline = _G.FREE_ADB.FontOutline
     local groupName = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
 
-    --self:Tag(groupName, '[free:groupname]')
-    self:Tag(groupName, '[free:color][name]')
+    self:Tag(groupName, '[free:color][free:groupname]')
     self.GroupName = groupName
 end
 
@@ -281,9 +271,9 @@ function UNITFRAME:CreateNameText(self)
     if style == 'nameplate' then
         self:Tag(name, '[free:npname]')
     elseif style == 'arena' then
-        self:Tag(name, '[free:name] [arenaspec]')
+        self:Tag(name, '[free:color][free:name] [arenaspec]')
     else
-        self:Tag(name, '[free:name]')
+        self:Tag(name, '[free:color][free:name]')
     end
 
     self.Name = name
@@ -367,15 +357,12 @@ end
 
 
 function UNITFRAME:CreatePlayerTags(self)
-    local style = self.unitStyle
     local outline = _G.FREE_ADB.FontOutline
 
     local leftText = F.CreateFS(self, font, 11, outline, nil, nil, outline or 'THICK')
     leftText:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
 
-
     self:Tag(leftText, '[free:health] [free:healthpercentage] [free:dead] [free:resting]')
-
 
     local rightText = F.CreateFS(self, font, 11, outline, nil, nil, outline or 'THICK')
     rightText:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
@@ -392,3 +379,4 @@ function UNITFRAME:CreatePlayerTags(self)
         self:HookScript('OnLeave', Player_OnLeave)
     end
 end
+

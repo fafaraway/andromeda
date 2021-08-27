@@ -70,13 +70,13 @@ local function PostUpdateRunes(element, runemap)
 end
 
 function UNITFRAME:CreateClassPowerBar(self)
-    if not C.DB.Unitframe.ClassPowerBar then
+    if not C.DB.Unitframe.ClassPower then
         return
     end
 
     local gap = 3
     local barWidth = C.DB.Unitframe.PlayerWidth
-    local barHeight = C.DB.Unitframe.ClassPowerBarHeight
+    local barHeight = C.DB.Unitframe.ClassPowerHeight
 
     local bars = {}
     for i = 1, 6 do

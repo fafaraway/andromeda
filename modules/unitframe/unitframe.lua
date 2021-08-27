@@ -52,7 +52,7 @@ function UNITFRAME:CreateBackdrop(self)
     end
 
     local width = C.DB.Unitframe.PlayerWidth
-    local height = C.DB.Unitframe.ClassPowerBarHeight
+    local height = C.DB.Unitframe.ClassPowerHeight
 
     local classPowerBarHolder = CreateFrame('Frame', nil, self)
     classPowerBarHolder:SetSize(width, height)

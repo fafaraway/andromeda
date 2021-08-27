@@ -112,23 +112,45 @@ function UNITFRAME:CreateHealthBar(self)
     local style = self.unitStyle
     local smooth = C.DB.Unitframe.Smooth
     local inverted = C.DB.Unitframe.InvertedColorMode
-    local isParty = (style == 'party')
-    local isRaid = (style == 'raid')
+    local isPlayer = style == 'player'
+    local isPet = style == 'pet'
+    local isTarget = style == 'target'
+    local isToT = style == 'targettarget'
+    local isFocus = style == 'focus'
+    local isToF = style == 'focustarget'
+    local isParty = style == 'party'
+    local isRaid = style == 'raid'
+    local isBoss = style == 'boss'
+    local isArena = style == 'arena'
 
     local health = CreateFrame('StatusBar', nil, self)
     health:SetFrameStrata('LOW')
     health:SetReverseFill(inverted)
-    health:SetStatusBarTexture(inverted and C.Assets.bd_tex or C.Assets.statusbar_tex)
+    health:SetStatusBarTexture(C.Assets.statusbar_tex)
     health:SetPoint('LEFT')
     health:SetPoint('RIGHT')
     health:SetPoint('TOP')
 
-    if isParty then
+    if isPlayer then
+        health:SetHeight(C.DB.Unitframe.PlayerHealthHeight)
+    elseif isPet then
+        health:SetHeight(C.DB.Unitframe.PetHealthHeight)
+    elseif isTarget then
+        health:SetHeight(C.DB.Unitframe.TargetHealthHeight)
+    elseif isToT then
+        health:SetHeight(C.DB.Unitframe.TargetTargetHealthHeight)
+    elseif isFocus then
+        health:SetHeight(C.DB.Unitframe.FocusHealthHeight)
+    elseif isToF then
+        health:SetHeight(C.DB.Unitframe.FocusTargetHealthHeight)
+    elseif isParty then
         health:SetHeight(C.DB.Unitframe.PartyHealthHeight)
     elseif isRaid then
         health:SetHeight(C.DB.Unitframe.RaidHealthHeight)
-    else
-        health:SetHeight(C.DB.Unitframe.HealthHeight)
+    elseif isBoss then
+        health:SetHeight(C.DB.Unitframe.BossHealthHeight)
+    elseif isArena then
+        health:SetHeight(C.DB.Unitframe.ArenaHealthHeight)
     end
 
     if not inverted then
@@ -167,7 +189,7 @@ function UNITFRAME:CreateHealPrediction(self)
     myBar:SetPoint('BOTTOM')
     myBar:SetPoint('LEFT', self.Health:GetStatusBarTexture(), inverted and 'LEFT' or 'RIGHT')
     myBar:SetStatusBarTexture(C.Assets.statusbar_tex)
-    myBar:SetStatusBarColor(.3, .3, .3)
+    myBar:SetStatusBarColor(.3, .3, .3, .8)
     myBar:SetWidth(self:GetWidth())
 
     local otherBar = CreateFrame('StatusBar', nil, self.Health)
@@ -175,7 +197,7 @@ function UNITFRAME:CreateHealPrediction(self)
     otherBar:SetPoint('BOTTOM')
     otherBar:SetPoint('LEFT', myBar:GetStatusBarTexture(), inverted and 'LEFT' or 'RIGHT')
     otherBar:SetStatusBarTexture(C.Assets.statusbar_tex)
-    otherBar:SetStatusBarColor(.3, .3, .3)
+    otherBar:SetStatusBarColor(.3, .3, .3, .8)
     otherBar:SetWidth(self:GetWidth())
 
     local absorbBar = CreateFrame('StatusBar', nil, self.Health)
@@ -187,7 +209,7 @@ function UNITFRAME:CreateHealPrediction(self)
     absorbBar:GetStatusBarTexture():SetHorizTile(true)
     absorbBar:GetStatusBarTexture():SetVertTile(true)
 
-    absorbBar:SetStatusBarColor(.3, .3, .3)
+    absorbBar:SetStatusBarColor(.3, .3, .3, .8)
     absorbBar:SetWidth(self:GetWidth())
 
     local overAbsorb = self.Health:CreateTexture(nil, 'OVERLAY')

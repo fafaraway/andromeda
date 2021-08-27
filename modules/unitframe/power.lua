@@ -82,22 +82,42 @@ function UNITFRAME:CreatePowerBar(self)
     local smooth = C.DB.Unitframe.Smooth
     local inverted = C.DB.Unitframe.InvertedColorMode
     local isPlayer = style == 'player'
-    local isParty = (style == 'party')
-    local isRaid = (style == 'raid')
+    local isPet = style == 'pet'
+    local isTarget = style == 'target'
+    local isToT = style == 'targettarget'
+    local isFocus = style == 'focus'
+    local isToF = style == 'focustarget'
+    local isParty = style == 'party'
+    local isRaid = style == 'raid'
+    local isBoss = style == 'boss'
+    local isArena = style == 'arena'
 
     local power = CreateFrame('StatusBar', nil, self)
     power:SetPoint('LEFT')
     power:SetPoint('RIGHT')
     power:SetPoint('TOP', self.Health, 'BOTTOM', 0, -C.Mult)
     power:SetStatusBarTexture(C.Assets.statusbar_tex)
-    power:SetHeight(C.DB.Unitframe.PowerHeight)
 
-    if isParty then
+    if isPlayer then
+        power:SetHeight(C.DB.Unitframe.PlayerPowerHeight)
+    elseif isPet then
+        power:SetHeight(C.DB.Unitframe.PetPowerHeight)
+    elseif isTarget then
+        power:SetHeight(C.DB.Unitframe.TargetPowerHeight)
+    elseif isToT then
+        power:SetHeight(C.DB.Unitframe.TargetTargetPowerHeight)
+    elseif isFocus then
+        power:SetHeight(C.DB.Unitframe.FocusPowerHeight)
+    elseif isToF then
+        power:SetHeight(C.DB.Unitframe.FocusTargetPowerHeight)
+    elseif isParty then
         power:SetHeight(C.DB.Unitframe.PartyPowerHeight)
     elseif isRaid then
         power:SetHeight(C.DB.Unitframe.RaidPowerHeight)
-    else
-        power:SetHeight(C.DB.Unitframe.PowerHeight)
+    elseif isBoss then
+        power:SetHeight(C.DB.Unitframe.BossPowerHeight)
+    elseif isArena then
+        power:SetHeight(C.DB.Unitframe.ArenaPowerHeight)
     end
 
     local line = power:CreateTexture(nil, 'OVERLAY')
@@ -176,7 +196,7 @@ function UNITFRAME:CreateAlternativePowerBar(self)
     local altPower = CreateFrame('StatusBar', nil, self)
     altPower:SetStatusBarTexture(C.Assets.statusbar_tex)
     altPower:SetPoint('TOP', self.Power, 'BOTTOM', 0, -2)
-    altPower:Size(self:GetWidth(), C.DB.Unitframe.AlternativePowerBarHeight)
+    altPower:Size(self:GetWidth(), C.DB.Unitframe.AltPowerHeight)
     altPower:EnableMouse(true)
     altPower.Smooth = smooth
     altPower.bg = F.SetBD(altPower)

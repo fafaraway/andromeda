@@ -4,6 +4,7 @@ local select = select
 local format = format
 local tinsert = tinsert
 local RegisterStateDriver = RegisterStateDriver
+local GetSpecialization = GetSpecialization
 
 local F, C, L = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
@@ -25,14 +26,12 @@ UNITFRAME.Positions = {
 local function CreatePlayerStyle(self)
     self.unitStyle = 'player'
     self:SetWidth(C.DB.Unitframe.PlayerWidth)
-    self:SetHeight(C.DB.Unitframe.HealthHeight + C.DB.Unitframe.PowerHeight + C.Mult)
+    self:SetHeight(C.DB.Unitframe.PlayerHealthHeight + C.DB.Unitframe.PlayerPowerHeight + C.Mult)
 
     UNITFRAME:CreateBackdrop(self)
     UNITFRAME:CreateHealthBar(self)
     UNITFRAME:CreateHealPrediction(self)
-    --UNITFRAME:CreateHealthValueText(self)
     UNITFRAME:CreatePowerBar(self)
-    --UNITFRAME:CreatePowerValueText(self)
     UNITFRAME:CreateAlternativePowerBar(self)
     UNITFRAME:CreateAlternativePowerValueText(self)
     UNITFRAME:CreatePortrait(self)
@@ -43,7 +42,6 @@ local function CreatePlayerStyle(self)
     UNITFRAME:CreateClassPowerBar(self)
     UNITFRAME:CreateStagger(self)
     UNITFRAME:CreateTotemsBar(self)
-
     UNITFRAME:CreatePlayerTags(self)
 end
 
@@ -58,7 +56,7 @@ end
 local function CreatePetStyle(self)
     self.unitStyle = 'pet'
     self:SetWidth(C.DB.Unitframe.PetWidth)
-    self:SetHeight(C.DB.Unitframe.HealthHeight + C.DB.Unitframe.PowerHeight + C.Mult)
+    self:SetHeight(C.DB.Unitframe.PetHealthHeight + C.DB.Unitframe.PetPowerHeight + C.Mult)
 
     UNITFRAME:CreateBackdrop(self)
     UNITFRAME:CreateHealthBar(self)
@@ -81,7 +79,7 @@ end
 local function CreateTargetStyle(self)
     self.unitStyle = 'target'
     self:SetWidth(C.DB.Unitframe.TargetWidth)
-    self:SetHeight(C.DB.Unitframe.HealthHeight + C.DB.Unitframe.PowerHeight + C.Mult)
+    self:SetHeight(C.DB.Unitframe.TargetHealthHeight + C.DB.Unitframe.TargetPowerHeight + C.Mult)
 
     UNITFRAME:CreateBackdrop(self)
     UNITFRAME:CreateHealthBar(self)
@@ -107,7 +105,7 @@ end
 local function CreateTargetTargetStyle(self)
     self.unitStyle = 'targettarget'
     self:SetWidth(C.DB.Unitframe.TargetTargetWidth)
-    self:SetHeight(C.DB.Unitframe.HealthHeight + C.DB.Unitframe.PowerHeight + C.Mult)
+    self:SetHeight(C.DB.Unitframe.TargetTargetHealthHeight + C.DB.Unitframe.TargetTargetPowerHeight + C.Mult)
 
     UNITFRAME:CreateBackdrop(self)
     UNITFRAME:CreateHealthBar(self)
@@ -128,7 +126,7 @@ end
 local function CreateFocusStyle(self)
     self.unitStyle = 'focus'
     self:SetWidth(C.DB.Unitframe.FocusWidth)
-    self:SetHeight(C.DB.Unitframe.HealthHeight + C.DB.Unitframe.PowerHeight + C.Mult)
+    self:SetHeight(C.DB.Unitframe.FocusHealthHeight + C.DB.Unitframe.FocusPowerHeight + C.Mult)
 
     UNITFRAME:CreateBackdrop(self)
     UNITFRAME:CreateHealthBar(self)
@@ -152,7 +150,7 @@ end
 local function CreateFocusTargetStyle(self)
     self.unitStyle = 'focustarget'
     self:SetWidth(C.DB.Unitframe.FocusTargetWidth)
-    self:SetHeight(C.DB.Unitframe.HealthHeight + C.DB.Unitframe.PowerHeight + C.Mult)
+    self:SetHeight(C.DB.Unitframe.FocusTargetHealthHeight + C.DB.Unitframe.FocusTargetPowerHeight + C.Mult)
 
     UNITFRAME:CreateBackdrop(self)
     UNITFRAME:CreateHealthBar(self)
@@ -174,7 +172,7 @@ end
 local function CreateBossStyle(self)
     self.unitStyle = 'boss'
     self:SetWidth(C.DB.Unitframe.BossWidth)
-    self:SetHeight(C.DB.Unitframe.HealthHeight + C.DB.Unitframe.PowerHeight + C.Mult)
+    self:SetHeight(C.DB.Unitframe.BossHealthHeight + C.DB.Unitframe.BossPowerHeight + C.Mult)
 
     UNITFRAME:CreateBackdrop(self)
     UNITFRAME:CreateHealthBar(self)
@@ -209,7 +207,7 @@ end
 local function CreateArenaStyle(self)
     self.unitStyle = 'arena'
     self:SetWidth(C.DB.Unitframe.ArenaWidth)
-    self:SetHeight(C.DB.Unitframe.HealthHeight + C.DB.Unitframe.PowerHeight + C.Mult)
+    self:SetHeight(C.DB.Unitframe.ArenaHealthHeight + C.DB.Unitframe.ArenaPowerHeight + C.Mult)
 
     UNITFRAME:CreateBackdrop(self)
     UNITFRAME:CreateHealthBar(self)
@@ -295,12 +293,10 @@ local function CreatePartyStyle(self)
     UNITFRAME:CreateThreatIndicator(self)
     UNITFRAME:CreateSelectedBorder(self)
     UNITFRAME:CreateRangeCheck(self)
-    UNITFRAME:CreateAuras(self)
     UNITFRAME:CreateBuffs(self)
     UNITFRAME:CreateDebuffs(self)
     UNITFRAME:RefreshAurasByCombat(self)
     UNITFRAME:CreateCornerIndicator(self)
-    UNITFRAME:CreateRaidDebuff(self)
     UNITFRAME:CreateDebuffHighlight(self)
     UNITFRAME:CreatePartyWatcher(self)
 end
@@ -363,8 +359,6 @@ local function CreateRaidStyle(self)
     UNITFRAME:CreateRangeCheck(self)
     UNITFRAME:CreateCornerIndicator(self)
     UNITFRAME:CreateRaidDebuff(self)
-    UNITFRAME:CreateBuffs(self)
-    UNITFRAME:CreateDebuffs(self)
     UNITFRAME:RefreshAurasByCombat(self)
     UNITFRAME:CreateDebuffHighlight(self)
 end
