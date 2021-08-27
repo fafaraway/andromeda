@@ -94,12 +94,12 @@ local function UpdateColor(self, event, unit)
 	end
 
 	if(b) then
-		element:SetStatusBarColor(r, g, b)
+		element:SetStatusBarColor(r, g, b, .5)
 
 		local bg = element.bg
 		if(bg) then
 			local mu = bg.multiplier or 1
-			bg:SetVertexColor(r * mu, g * mu, b * mu)
+			bg:SetVertexColor(r * mu, g * mu, b * mu, .5)
 		end
 	end
 
