@@ -45,6 +45,38 @@ local ConvertToParty = C_PartyInfo.ConvertToParty
 local F, C, L = unpack(select(2, ...))
 local GT = F:RegisterModule('GroupTool')
 
+local buffsList = {
+    [1] = {
+        -- 合剂
+        307166, -- 大锅
+        307185, -- 通用合剂
+        307187 -- 耐力合剂
+    },
+    [2] = {
+        -- 进食充分
+        104273 -- 250敏捷，BUFF名一致
+    },
+    [3] = {
+        -- 10%智力
+        1459,
+        264760
+    },
+    [4] = {
+        -- 10%耐力
+        21562,
+        264764
+    },
+    [5] = {
+        -- 10%攻强
+        6673,
+        264761
+    },
+    [6] = {
+        -- 符文
+        270058
+    }
+}
+
 function GT:RaidTool_Visibility(frame)
     if IsInGroup() then
         frame:Show()
@@ -392,7 +424,7 @@ function GT:RaidTool_BuffChecker(parent)
                 numPlayer = numPlayer + 1
                 for j = 1, numGroups do
                     local HasBuff
-                    local buffTable = C.GroupBuffsCheckList[j]
+                    local buffTable = buffsList[j]
                     for k = 1, #buffTable do
                         local buffName = GetSpellInfo(buffTable[k])
                         for index = 1, 32 do
