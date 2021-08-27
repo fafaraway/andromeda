@@ -15,22 +15,82 @@ local IsInGroup = IsInGroup
 local SendChatMessage = SendChatMessage
 local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
 local IsInInstance = IsInInstance
-local InCombatLockdown = InCombatLockdown
 local GetNumGroupMembers = GetNumGroupMembers
 local GetSpellInfo = GetSpellInfo
-local UnitIsFeignDeath = UnitIsFeignDeath
 
 local F, C, L = unpack(select(2, ...))
 local ANNOUNCEMENT = F:RegisterModule('Announcement')
 
-function ANNOUNCEMENT:IsInMyGroup(flag)
+C.AnnounceableSpellsList = {
+    -- Paladin
+    [1044] = true, -- Blessing of Freedom
+    [204018] = true, -- Blessing of Spellwarding
+    [6940] = true, -- Blessing of Sacrifice
+    [1022] = true, -- Blessing of Protection
+    [498] = true, -- Divine Protection
+    [31850] = true, -- Ardent Defender
+    [86659] = true, -- Guardian of Ancient Kings
+    [212641] = true, -- Guardian of Ancient Kings (Glyph)
+    [642] = true, -- Divine Shield
+    [31884] = true, -- Avenging Wrath
+    [633] = true, -- Lay On Hands
+    [31821] = true, -- Aura Mastery
+
+    -- Warrior
+    [97462] = true, -- Rallying Cry
+
+    -- Demon Hunter
+    [196718] = true, -- Darkness
+
+    -- Death Knight
+    [51052] = true, -- Anti-Magic Zone
+    [15286] = true, -- Vampiric Embrace
+
+    -- Priest
+    [246287] = true, -- Evangelism
+    [265202] = true, -- Holy Word: Salvation
+    [200183] = true, -- Apotheosis
+    [62618] = true, -- Power Word: Barrier
+    [64843] = true, -- Divine Hymn
+    [64901] = true, -- Symbol of Hope
+    [47536] = true, -- Rapture
+    [109964] = true, -- Spirit Shell
+    [33206] = true, -- Pain Suppression
+    [47788] = true, -- Guardian Spirit
+
+    -- Shaman
+    [207399] = true, -- Ancestral Protection Totem
+    [108280] = true, -- Healing Tide Totem
+    [98008] = true, -- Spirit Link Totem
+    [114052] = true, -- Ascendance
+    [16191] = true, -- Mana Tide Totem
+    [108281] = true, -- Ancestral Guidance
+    [198838] = true, -- Earthen Wall Totem
+
+    -- Druid
+    [740] = true, -- Tranquility
+    [33891] = true, -- Incarnation: Tree of Life
+    [197721] = true, -- Flourish
+    [205636] = true, -- Force of Nature
+
+    -- Monk
+    [115310] = true, -- Revival
+    [325197] = true, -- Invoke Chi-Ji, the Red Crane
+    [116849] = true, -- Life Cocoon
+    [322118] = true, -- Invoke Yu'lon, the Jade Serpent
+
+    -- Covenants
+    [316958] = true, -- Ashen Hallow
+}
+
+local function IsInMyGroup(flag)
     local inParty = IsInGroup() and bit_band(flag, _G.COMBATLOG_OBJECT_AFFILIATION_PARTY) ~= 0
     local inRaid = IsInRaid() and bit_band(flag, _G.COMBATLOG_OBJECT_AFFILIATION_RAID) ~= 0
 
     return inRaid or inParty
 end
 
-function ANNOUNCEMENT:GetChannel(warning)
+local function GetChannel(warning)
     if C.DB.Announcement.Channel == 1 then
         if IsInGroup(_G.LE_PARTY_CATEGORY_INSTANCE) then
             return 'INSTANCE_CHAT'
@@ -78,132 +138,34 @@ function ANNOUNCEMENT:OnEvent()
         return true
     end
 
-    local _, eventType, _, srcGUID, srcName, srcFlags, _, destGUID, destName, _, _, spellID, _, _, extraSpellID = CombatLogGetCurrentEventInfo()
-    --    1  2          3  4        5        6         7  8         9         10 11 12       13 14 15
-
-    if srcName then
-        srcName = srcName:gsub('%-[^|]+', '')
-    end
+    local _, eventType, _, srcGUID, _, _, _, _, destName, destFlags, _, spellID, _, _, extraSpellID = CombatLogGetCurrentEventInfo()
 
     if destName then
         destName = destName:gsub('%-[^|]+', '')
     end
 
-    if eventType == 'SPELL_INTERRUPT' and C.DB.Announcement.Interrupt then
-        if srcGUID == UnitGUID('player') or srcGUID == UnitGUID('pet') then
-            SendChatMessage(format(L['Interrupted %s -> %s'], GetSpellLink(extraSpellID), destName), 'SAY')
+    if not (srcGUID == UnitGUID('player') or srcGUID == UnitGUID('pet')) then return end
+
+    if eventType == 'SPELL_CAST_SUCCESS' then
+        if ANNOUNCEMENT.AnnounceableSpellsList[spellID] and C.DB.Announcement.Spells then
+            if destName == nil then
+                SendChatMessage(format(L['Used %s'], GetSpellLink(spellID)), GetChannel())
+            else
+                SendChatMessage(format(L['Used %s -> %s'], GetSpellLink(spellID), destName), GetChannel())
+            end
         end
+    elseif eventType == 'SPELL_INTERRUPT' and C.DB.Announcement.Interrupt then
+        SendChatMessage(format(L['Interrupted %s'], GetSpellLink(extraSpellID)), GetChannel())
     elseif eventType == 'SPELL_DISPEL' and C.DB.Announcement.Dispel then
-        if srcGUID == UnitGUID('player') or srcGUID == UnitGUID('pet') then
-            SendChatMessage(format(L['Dispelled %s -> %s'], GetSpellLink(extraSpellID), destName), 'SAY')
-        end
+        SendChatMessage(format(L['Dispelled %s'], GetSpellLink(extraSpellID)), GetChannel())
     elseif eventType == 'SPELL_STOLEN' and C.DB.Announcement.Stolen then
-        if srcGUID == UnitGUID('player') then
-            SendChatMessage(format(L['Stolen %s -> %s'], GetSpellLink(extraSpellID), destName), 'SAY')
-        end
+        SendChatMessage(format(L['Stolen %s'], GetSpellLink(extraSpellID)), GetChannel())
     elseif eventType == 'SPELL_MISSED' and C.DB.Announcement.Reflect then
-        local missType, _, _ = select(15, CombatLogGetCurrentEventInfo())
-        if missType == 'REFLECT' and destGUID == UnitGUID('player') then
-            SendChatMessage(format(L['Reflected %s -> %s'], GetSpellLink(spellID), srcName), 'SAY')
-        end
-    end
-
-    if eventType == 'SPELL_CAST_SUCCESS' then
-        if not (srcGUID == UnitGUID('player') and srcName == C.MyName) then
-            if not srcName then
-                return
-            end
-
-            if C.DB.Announcement.BattleRez and C.BattleRezList[spellID] then
-                if destName == nil then
-                    SendChatMessage(format(L['%s used %s'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel())
-                else
-                    SendChatMessage(format(L['%s used %s -> %s'], srcName, GetSpellLink(spellID), destName), ANNOUNCEMENT:GetChannel())
-                end
-            end
-        else
-            if not (srcGUID == UnitGUID('player') and srcName == C.MyName) then
-                return
-            end
-
-            if C.BattleRezList[spellID] and C.DB.Announcement.BattleRez then
-                if destName == nil then
-                    SendChatMessage(format(L['I have cast %s'], GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel())
-                else
-                    SendChatMessage(format(L['I have cast %s -> %s'], GetSpellLink(spellID), destName), ANNOUNCEMENT:GetChannel())
-                end
-            end
-
-            if ANNOUNCEMENT.AnnounceableSpellsList[spellID] and C.DB.Announcement.PersonalMajorSpell then
-                if destName == nil then
-                    SendChatMessage(format(L['I have cast %s'], GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel())
-                else
-                    SendChatMessage(format(L['I have cast %s -> %s'], GetSpellLink(spellID), destName), ANNOUNCEMENT:GetChannel())
-                end
-            end
-        end
-    elseif eventType == 'UNIT_DIED' then
-        if not ANNOUNCEMENT:IsInMyGroup(srcFlags) then
-            return
-        end
-
-        if C.DB.Announcement.Death and not UnitIsFeignDeath(destName) then
-            SendChatMessage(format('%s died', destName), ANNOUNCEMENT:GetChannel(true))
-        end
-    end
-
-    if InCombatLockdown() then
-        return
-    end
-
-    if not eventType or not spellID or not srcName then
-        return
-    end
-
-    if not ANNOUNCEMENT:IsInMyGroup(srcFlags) then
-        return
-    end
-
-    if eventType == 'SPELL_CAST_SUCCESS' then
-        -- Feasts and Cauldron
-        if (C.DB.Announcement.Feast and C.FeastsList[spellID]) or (C.DB.Announcement.Cauldron and C.CauldronList[spellID]) then
-            SendChatMessage(format(L['%s has put down %s'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
-
-        -- Refreshment Table
-        elseif C.DB.Announcement.RefreshmentTable and spellID == 43987 then
-            SendChatMessage(format(L['%s has put down %s'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
-
-        -- Ritual of Summoning
-        elseif C.DB.Announcement.RitualofSummoning and spellID == 698 then
-            SendChatMessage(format(L['%s is casting %s'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
-
-        -- Piccolo of the Flaming Fire
-        elseif C.DB.Announcement.Toy and spellID == 182346 then
-            SendChatMessage(format(L['%s is casting %s'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
-        end
-
-    elseif eventType == 'SPELL_SUMMON' then
-        -- Repair Bots and Codex
-        if (C.DB.Announcement.Bot and C.BotsList[spellID]) or (C.DB.Announcement.Codex and C.CodexList[spellID]) then
-            SendChatMessage(format(L['%s has put down %s'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
-        end
-
-    elseif eventType == 'SPELL_CREATE' then
-        -- 29893 Soulwell 54710 MOLL-E 261602 Katy's Stampwhistle
-        if C.DB.Announcement.Mailbox and (spellID == 29893 or spellID == 54710 or spellID == 261602) then
-            SendChatMessage(format(L['%s has put down %s'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
-
-        elseif C.DB.Announcement.Toy and C.ToysList[spellID] then -- Toys
-            SendChatMessage(format(L['%s has put down %s'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
-
-        elseif C.DB.Announcement.Portal and C.PortalsList[spellID] then -- Portals
-            SendChatMessage(format(L['%s has opened %s'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
-        end
-
-    elseif eventType == 'SPELL_AURA_APPLIED' then
-        -- Turkey Feathers and Party G.R.E.N.A.D.E.
-        if C.DB.Announcement.Toy and (spellID == 61781 or ((spellID == 51508 or spellID == 51510) and destName == C.MyName)) then
-            SendChatMessage(format(L['%s used %s.'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel(true))
+        local spellID, _, _, missType = select(12, CombatLogGetCurrentEventInfo())
+        if missType=="REFLECT"then
+            SendChatMessage(L['Reflected %s']..GetSpellLink(spellID), GetChannel())
+        elseif missType=="ABSORB" and destName == L['Grounding Totem'] and destFlags == 8465 then
+            SendChatMessage(L["Absorbed %s"]..GetSpellLink(spellID), GetChannel())
         end
     end
 end
@@ -212,11 +174,33 @@ function ANNOUNCEMENT:AnnounceSpells()
     F:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED', ANNOUNCEMENT.OnEvent)
 end
 
+function ANNOUNCEMENT:CheckAnnounceableSpells()
+    for spellID in pairs(C.AnnounceableSpellsList) do
+        local name = GetSpellInfo(spellID)
+        if name then
+            if _G.FREE_ADB['AnnounceableSpellsList'][spellID] then
+                _G.FREE_ADB['AnnounceableSpellsList'][spellID] = nil
+            end
+        else
+            if C.IsDeveloper then
+                F:Debug('Invalid Announceable Spells ID: ' .. spellID)
+            end
+        end
+    end
+
+    for spellID, value in pairs(_G.FREE_ADB['AnnounceableSpellsList']) do
+        if value == false and C.AnnounceableSpellsList[spellID] == nil then
+            _G.FREE_ADB['AnnounceableSpellsList'][spellID] = nil
+        end
+    end
+end
+
 function ANNOUNCEMENT:OnLogin()
     if not C.DB.Announcement.Enable then
         return
     end
 
+    ANNOUNCEMENT:CheckAnnounceableSpells()
     ANNOUNCEMENT:RefreshSpells()
 
     ANNOUNCEMENT:AnnounceSpells()
