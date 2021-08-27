@@ -21,7 +21,139 @@ local GetItemIcon = GetItemIcon
 local F, C, L = unpack(select(2, ...))
 local AURA = F:GetModule('Aura')
 
-local groups = C.ReminderBuffsList[C.MyClass]
+local buffsList = {
+    ITEMS = {
+        {
+            itemID = 178742, -- 瓶装毒素饰品
+            spells = {
+                [345545] = true
+            },
+            equip = true,
+            instance = true,
+            combat = true
+        },
+        {
+            itemID = 174906, -- 属性符文
+            spells = {
+                [317065] = true,
+                [270058] = true
+            },
+            instance = true,
+            disable = true
+        },
+        {
+            itemID = 185818, -- 究极秘术
+            spells = {
+                [351952] = true
+            },
+            equip = true,
+            instance = true,
+            combat = true
+        }
+    },
+    MAGE = {
+        {
+            spells = {
+                -- 奥术魔宠
+                [210126] = true
+            },
+            depend = 205022,
+            spec = 1,
+            combat = true,
+            instance = true,
+            pvp = true
+        },
+        {
+            spells = {
+                -- 奥术智慧
+                [1459] = true
+            },
+            depend = 1459,
+            instance = true
+        }
+    },
+    PRIEST = {
+        {
+            spells = {
+                -- 真言术耐
+                [21562] = true
+            },
+            depend = 21562,
+            instance = true
+        }
+    },
+    WARRIOR = {
+        {
+            spells = {
+                -- 战斗怒吼
+                [6673] = true
+            },
+            depend = 6673,
+            instance = true
+        }
+    },
+    SHAMAN = {
+        {
+            spells = {
+                [192106] = true, -- 闪电之盾
+                [974] = true, -- 大地之盾
+                [52127] = true -- 水之护盾
+            },
+            depend = 192106,
+            combat = true,
+            instance = true,
+            pvp = true
+        },
+        {
+            spells = {
+                [33757] = true -- 风怒武器
+            },
+            depend = 33757,
+            combat = true,
+            instance = true,
+            pvp = true,
+            weaponIndex = 1,
+            spec = 2
+        },
+        {
+            spells = {
+                [318038] = true -- 火舌武器
+            },
+            depend = 318038,
+            combat = true,
+            instance = true,
+            pvp = true,
+            weaponIndex = 2,
+            spec = 2
+        }
+    },
+    ROGUE = {
+        {
+            spells = {
+                -- 伤害类毒药
+                [2823] = true, -- 致命药膏
+                [8679] = true, -- 致伤药膏
+                [315584] = true -- 速效药膏
+            },
+            texture = 132273,
+            depend = 315584,
+            combat = true,
+            instance = true,
+            pvp = true
+        },
+        {
+            spells = {
+                -- 效果类毒药
+                [3408] = true, -- 减速药膏
+                [5761] = true -- 迟钝药膏
+            },
+            depend = 3408,
+            pvp = true
+        }
+    }
+}
+
+local groups = buffsList[C.MyClass]
 local iconSize = 36
 local frames, parentFrame = {}
 
@@ -134,7 +266,7 @@ function AURA:Reminder_OnEvent()
 end
 
 function AURA:Reminder_AddItemGroup()
-    for _, value in pairs(C.ReminderBuffsList['ITEMS']) do
+    for _, value in pairs(buffsList['ITEMS']) do
         if not value.disable and GetItemCount(value.itemID) > 0 then
             if not value.texture then
                 value.texture = GetItemIcon(value.itemID)
