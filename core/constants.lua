@@ -57,7 +57,9 @@ C.ServerID = tonumber(serverID)
 C.MyGuid = playerGUID
 
 C.ScreenWidth, C.ScreenHeight = GetPhysicalScreenSize()
-C.isLowRes = C.ScreenHeight < 1500
+C.IsLowRes =C.ScreenHeight < 1080
+C.IsMediumRes = C.ScreenHeight > 1080 and C.ScreenHeight < 1440
+C.IsHighRes = C.ScreenHeight > 1440
 
 C.AssetsPath = 'Interface\\AddOns\\FreeUI\\assets\\'
 C.TexCoord = {.08, .92, .08, .92}
@@ -159,14 +161,14 @@ function F.UpdateCustomClassColors()
 end
 F:RegisterEvent('ADDON_LOADED', F.UpdateCustomClassColors)
 
-C.InfoColor = '|cffe9c55d'
+C.InfoColor = '|cffe9c55d' -- .9, .8, .4
 C.YellowColor = '|cffffff00'
 C.GreyColor = '|cff7f7f7f'
 C.WhiteColor = '|cffffffff'
 C.RedColor = '|cffff2020'
 C.GreenColor = '|cff20ff20'
-C.BlueColor = '|cff82c5ff'
-C.OrangeColor = '|cffff7f3f'
+C.BlueColor = '|cff82c5ff' -- .5, .8, 1
+C.OrangeColor = '|cffff7f3f' -- 1, .5, .3
 C.PurpleColor = '|cffa571df'
 C.LineString = C.GreyColor .. '---------------'
 

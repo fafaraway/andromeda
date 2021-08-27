@@ -11,6 +11,8 @@ local F, C = unpack(FreeUI)
 do
     F:RegisterModule('Tooltip')
     F:RegisterModule('GUI')
+    F:RegisterModule('Unitframe')
+    F:RegisterModule('Nameplate')
 end
 
 local function InitialSettings(source, target, fullClean)

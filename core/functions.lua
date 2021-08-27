@@ -122,19 +122,6 @@ do
         end
     end
 
-    -- Quick convert function: (nil or table to populate, 'ff0000', '00ff00', '0000ff', ...) to get (1,0,0, 0,1,0, 0,0,1, ...)
-    function F:HexsToRGBs(rgb, ...)
-        if not rgb then
-            rgb = {}
-        end
-        for i = 1, select('#', ...) do
-            local x, r, g, b = #rgb, F:HexToRGB(select(i, ...))
-            rgb[x + 1], rgb[x + 2], rgb[x + 3] = r / 255, g / 255, b / 255
-        end
-
-        return unpack(rgb)
-    end
-
     -- RGB to Hex
     function F:RGBToHex(r, g, b, header, ending)
         if r then
@@ -150,16 +137,17 @@ do
     end
 
     -- Hex to RGB
-    function F:HexToRGB(hex)
-        local a, r, g, b = strmatch(hex, '^|?c?(%x%x)(%x%x)(%x%x)(%x?%x?)|?r?$')
-        if not a then
-            return 0, 0, 0, 0
+    function F:HexToRGB(rgb)
+        if string.len(rgb) == 6 then
+            local r, g, b
+            r, g, b = tonumber('0x'..strsub(rgb, 0, 2)), tonumber('0x'..strsub(rgb, 3, 4)), tonumber('0x'..strsub(rgb, 5, 6))
+            if not r then r = 0 else r = r/255 end
+            if not g then g = 0 else g = g/255 end
+            if not b then b = 0 else b = b/255 end
+            return r,g,b
+        else
+            return
         end
-        if b == '' then
-            r, g, b, a = a, r, g, 'ff'
-        end
-
-        return tonumber(r, 16), tonumber(g, 16), tonumber(b, 16), tonumber(a, 16)
     end
 
     -- http://www.wowwiki.com/ColorGradient
