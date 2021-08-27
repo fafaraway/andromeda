@@ -114,6 +114,14 @@ local function SetupUnitFrameSize()
     GUI:SetupUnitFrameSize(GUI.Page[12])
 end
 
+local function SetupBossFrameSize()
+    GUI:SetupBossFrameSize(GUI.Page[12])
+end
+
+local function SetupArenaFrameSize()
+    GUI:SetupArenaFrameSize(GUI.Page[12])
+end
+
 local function SetupUnitFrameFader()
     GUI:SetupUnitFrameFader(GUI.Page[12])
 end
@@ -121,6 +129,11 @@ end
 local function SetupCastbar()
     GUI:SetupCastbar(GUI.Page[12])
 end
+
+local function SetupClassPowerHeight()
+    GUI:SetupClassPowerHeight(GUI.Page[12])
+end
+
 
 -- Groupframe
 local function SetupGroupFrameSize()
@@ -208,8 +221,9 @@ GUI.OptionsList = {
         {1, 'ACCOUNT', 'FontOutline', L['Font outline'], nil, nil, nil, L['|nAdd font outline globally, enable this if you run game on low resolution.']},
         {3, 'ACCOUNT', 'UIScale', L['UI scale'], true, {.5, 2, .01}, nil, L['|nChange global scale for whole interface.|nRecommend 1080P set to 1, 1440P set to 1.2-1.4, 2160P set to 2.']},
         {1, 'General', 'HideTalkingHead', L['Hide talking head']},
-        {1, 'General', 'HideBossBanner', L['Hide boss banner'], nil},
+        {1, 'General', 'HideBossBanner', L['Hide boss banner']},
         {1, 'General', 'HideBossEmote', L['Hide boss emote'], true},
+        {1, 'General', 'HideMawBuffsFrame', L['Hide anima buffs frame']},
 
         {1, 'Quest', 'QuickQuest', L['Quick Quest'], nil, nil, nil, L['Automatically accept and deliver quests.|nHold ALT key to STOP automation.']},
         {1, 'Quest', 'CompletedSound', L['Quest Complete Sound'], true, nil, nil, L['Play a sound when a quest is completed.']},
@@ -260,8 +274,9 @@ GUI.OptionsList = {
         {1, 'Chat', 'WhisperSticky', L['Whisper sticky'], nil, nil, UpdateWhisperSticky},
         {1, 'Chat', 'WhisperSound', L['Whisper sound'], true, nil, nil, L['Play sound when the new whisper message is more than 60 seconds from previous one.']},
         {1, 'Chat', 'SmartChatBubble', L['Smart bubble'], nil, nil, nil, L['|nOnly show chat bubbles in raid.']},
-        {1, 'Chat', 'ExtendItemLink', L['Extend item link'], true, nil, nil, L['|nModifies displayed item links in chat to show the it\'s level and slot inline.']},
-        {1, 'Chat', 'DisableProfanityFilter', L['Disable profanity filter']},
+        {1, 'Chat', 'ExtendLink', L['Extend link'], true},
+        {1, 'Chat', 'HideInCombat', L['Hide chat frame in combat']},
+        {1, 'Chat', 'DisableProfanityFilter', L['Disable profanity filter'], true},
         {},
         {1, 'Chat', 'SpamFilter', L['Spam filter']},
         {1, 'Chat', 'BlockAddonSpam', L['Block addon spam']},
@@ -327,24 +342,13 @@ GUI.OptionsList = {
     },
     [8] = { -- announcement
         {1, 'Announcement', 'Enable', L['Enable Announcement']},
-        {1, 'Announcement', 'PersonalMajorSpell', L['Personal major spells'], nil, SetupAnnounceableSpells},
+        {1, 'Announcement', 'Spells', L['Major spells'], nil, SetupAnnounceableSpells},
         {4, 'Announcement', 'Channel', _G.CHANNEL, true, {_G.CHAT_MSG_PARTY .. '/' .. _G.CHAT_MSG_RAID, _G.YELL, _G.EMOTE, _G.SAY}},
         {1, 'Announcement', 'Interrupt', L['Interrupt']},
         {1, 'Announcement', 'Dispel', L['Dispel'], true},
         {1, 'Announcement', 'Stolen', L['Steal']},
+        {1, 'Announcement', 'Absorb', L['Absorb']},
         {1, 'Announcement', 'Reflect', L['Reflect'], true},
-        {1, 'Announcement', 'BattleRez', L['Battle resurrection']},
-        {1, 'Announcement', 'Death', L['Death'], true},
-        {1, 'Announcement', 'Feast', L['Feast']},
-        {1, 'Announcement', 'Cauldron', L['Cauldron'], true},
-        {1, 'Announcement', 'RefreshmentTable', L['Refreshment table']},
-        {1, 'Announcement', 'Soulwell', L['Soulwell'], true},
-        {1, 'Announcement', 'Bot', L['Bot']},
-        {1, 'Announcement', 'Codex', L['Codex'], true},
-        {1, 'Announcement', 'RitualofSummoning', L['Ritual of summoning']},
-        {1, 'Announcement', 'Mailbox', L['Mailbox'], true},
-        {1, 'Announcement', 'Portal', L['Portal']},
-        {1, 'Announcement', 'Toy', L['Toy'], true},
         {1, 'Announcement', 'Quest', L['Quest progress']},
         {1, 'Announcement', 'Reset', L['Instance reset'], true},
     },
@@ -365,6 +369,7 @@ GUI.OptionsList = {
         {1, 'Map', 'Coords', L['Show coords'], true},
         {1, 'Map', 'WhoPings', L['Show who pings']},
         {1, 'Map', 'ExpBar', L['Progress bar'], true},
+        {1, 'Map', 'HideMinimapInCombat', L['Hide minimap in combat']},
     },
     [11] = { -- tooltip
         {1, 'Tooltip', 'Enable', L['Enable Tooltip']},
@@ -385,24 +390,18 @@ GUI.OptionsList = {
     },
     [12] = { -- unitframe
         {1, 'Unitframe', 'Enable', L['Enable Unitframes'], nil, SetupUnitFrameSize},
-        {1, 'Unitframe', 'Transparent', L['Transparent mode']},
+        {1, 'Unitframe', 'InvertedColorMode', L['Inverted Color Mode']},
         {4, 'Unitframe', 'ColorStyle', L['Health bar style'], true, {L['Default white'], L['Class colored'], L['Percentage gradient']}},
         {1, 'Unitframe', 'RangeCheck', L['Range check']},
-        {3, 'Unitframe', 'RangeCheckAlpha', L['Ouf of range alpha'], true, {.2, 1, .1}},
-        {1, 'Unitframe', 'Portrait', L['Portrait']},
-        {1, 'Unitframe', 'AbbreviatedName', L['Abbreviated name']},
+        {1, 'Unitframe', 'Portrait', L['Portrait'], true},
         {1, 'Unitframe', 'Fader', L['Conditional fader'], nil, SetupUnitFrameFader},
         {1, 'Unitframe', 'OnlyShowPlayer', L['Shows only debuffs created by player'], true},
-        {1, 'Unitframe', 'CombatIndicator', L['Combat indicator']},
-        {1, 'Unitframe', 'RestingIndicator', L['Resting indicator'], true},
         {1, 'Unitframe', 'RaidTargetIndicator', L['Raid target indicator']},
         {1, 'Unitframe', 'GCDIndicator', L['GCD indicator'], true},
-        {1, 'Unitframe', 'ClassPowerBar', L['Class power bar']},
-
+        {1, 'Unitframe', 'ClassPower', L['Class power bar']},
+        {1, 'Unitframe', 'RunesTimer', L['DK runes timer'], true},
         {1, 'Unitframe', 'TotemsBar', L['Shaman totems bar']},
-        {3, 'Unitframe', 'ClassPowerBarHeight', L['Class Power Bar Height'], true, {1, 10, 1}},
-        {1, 'Unitframe', 'RunesTimer', L['DK runes timer']},
-        {1, 'Unitframe', 'StaggerBar', L['Monk stagger bar']},
+        {1, 'Unitframe', 'StaggerBar', L['Monk stagger bar'], true},
         {},
         {1, 'Unitframe', 'Castbar', L['Enable Castbar'], nil, SetupCastbar},
         {1, 'Unitframe', 'CompactCastbar', L['Compact style'], true},
@@ -413,22 +412,18 @@ GUI.OptionsList = {
         {5, 'Unitframe', 'FailColor', L['Fail'], 2},
         {5, 'Unitframe', 'UninterruptibleColor', L['Uninterruptible'], 3},
         {},
-        {1, 'Unitframe', 'Boss', L['Enable boss frames']},
-        {1, 'Unitframe', 'Arena', L['Enable arena frames'], true},
+        {1, 'Unitframe', 'Boss', L['Enable boss frames'], nil, SetupBossFrameSize},
+        {1, 'Unitframe', 'Arena', L['Enable arena frames'], true, SetupArenaFrameSize},
     },
     [13] = { -- groupframe
         {1, 'Unitframe', 'Group', L['Enable Groupframes'], nil, SetupGroupFrameSize},
         {1, 'Unitframe', 'SmartRaid', L['Smart layout'], nil, nil, UpdateAllHeaders, L['|nOnly show raid frames if there are more than 5 members in your group.|nIf disabled, show raid frames when in raid, show party frames when in party.']},
-        {4, 'Unitframe', 'GroupColorStyle', L['Health bar style'], true, {L['Default white'], L['Class colored'], L['Percentage gradient']}},
+        {3, 'Unitframe', 'GroupFilter', L['Group filter'], true, {4, 8, 1}},
         {1, 'Unitframe', 'GroupShowName', L['Show names']},
         {1, 'Unitframe', 'ClickToCast', L['Enable click to cast'], nil, nil, nil, L['|nOpen your spell book to configure click to cast.']},
-        {3, 'Unitframe', 'GroupFilter', L['Group filter'], true, {4, 8, 1}},
-        {1, 'Unitframe', 'PositionBySpec', L['Save postion by spec']},
-        {1, 'Unitframe', 'DebuffHighlight', L['Dispellable debuff highlight']},
+        {1, 'Unitframe', 'PositionBySpec', L['Save postion by spec'], true},
         {1, 'Unitframe', 'InstanceAuras', L['Show raid debuffs'], nil, SetupRaidDebuffs, nil, L['|nShow custom major debuffs in raid and dungeons.']},
         {1, 'Unitframe', 'DispellableOnly', L['Show dispellable debuffs only'], true},
-        {1, 'Unitframe', 'ShowRaidDebuff', L['Show debuffs'] , nil, nil, UpdateRaidAuras, L['|nShow debuffs on group frame by blizzard default logic, up to 3 icons.']},
-        {1, 'Unitframe', 'ShowRaidBuff', L['Show buffs'], true, nil, UpdateRaidAuras, L['|nShow buffs on group frame by blizzard default logic, up to 3 icons.|nBetter not to use this with Corner Indicator.']},
         {1, 'Unitframe', 'AurasClickThrough', L['Disable auras tooltip']},
         {1, 'Unitframe', 'CornerIndicator', L['Enable corner indicator']},
         {1, 'Unitframe', 'ThreatIndicator', L['Threat indicator'], true},

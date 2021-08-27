@@ -97,6 +97,7 @@ local function SetupCVars()
     SetCVar('nameplateShowEnemyTotems', 1)
     SetCVar('nameplateShowEnemyMinus', 1)
     SetCVar('nameplateMotion', 1)
+    SetCVar('nameplateMotionSpeed', 0.2)
 
     -- quest
     SetCVar('autoQuestWatch', 1)
@@ -131,10 +132,10 @@ local function SetupCVars()
     end
 end
 
-local function SetupUIScale()
-    if C.ScreenHeight >= 2000 then
+local function UpdateUIScale()
+    if C.IsHighRes then
         _G.FREE_ADB.UIScale = 2
-    elseif C.ScreenHeight >= 1500 then
+    elseif C.IsMediumRes then
         _G.FREE_ADB.UIScale = 1.4
     else
         _G.FREE_ADB.UIScale = 1
@@ -334,7 +335,7 @@ function INSTALL:HelloWorld()
         rightButton:SetScript(
             'OnClick',
             function()
-                SetupUIScale()
+                UpdateUIScale()
                 F.SetupUIScale(true)
                 F.SetupUIScale()
                 step3()

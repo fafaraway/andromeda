@@ -922,6 +922,27 @@ function GUI:SetupNameplateCVars(parent)
 end
 
 -- Unitframe
+local function SetUnitFrameSize(self, unit)
+    local style = self.unitStyle
+    local width = C.DB.Unitframe[unit.."Width"]
+    local healthHeight = C.DB.Unitframe[unit.."HealthHeight"]
+    local powerHeight = C.DB.Unitframe[unit.."PowerHeight"]
+    local height = healthHeight + powerHeight + C.Mult
+    self:SetSize(width, height)
+    self.Health:SetHeight(healthHeight)
+    self.Power:SetHeight(powerHeight)
+end
+
+
+local function UpdateUnitFrameSize()
+    SetUnitFrameSize(_G.oUF_Player, 'Player')
+    SetUnitFrameSize(_G.oUF_Pet, 'Pet')
+    SetUnitFrameSize(_G.oUF_Target, 'Target')
+    SetUnitFrameSize(_G.oUF_TargetTarget, 'TargetTarget')
+    SetUnitFrameSize(_G.oUF_Focus, 'Focus')
+    SetUnitFrameSize(_G.oUF_FocusTarget, 'FocusTarget')
+end
+
 function GUI:SetupUnitFrameSize(parent)
     local guiName = 'FreeUI_GUI_Unitframe_Setup'
     TogglePanel(guiName)
@@ -932,19 +953,29 @@ function GUI:SetupUnitFrameSize(parent)
     local panel = CreateExtraGUI(parent, guiName)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
+    local mKey = 'Unitframe'
+    local db = C.CharacterSettings.Unitframe
+
     local playerDatas = {
         [1] = {
             key = 'PlayerWidth',
-            value = '160',
+            value = db.PlayerWidth,
             text = L['Width'],
-            min = 40,
+            min = 10,
             max = 400
         },
         [2] = {
-            key = 'PlayerHeight',
-            value = '6',
-            text = L['Height'],
-            min = 4,
+            key = 'PlayerHealthHeight',
+            value = db.PlayerHealthHeight,
+            text = L['Health Height'],
+            min = 1,
+            max = 40
+        },
+        [3] = {
+            key = 'PlayerPowerHeight',
+            value = db.PlayerPowerHeight,
+            text = L['Power Height'],
+            min = 1,
             max = 40
         }
     }
@@ -952,16 +983,23 @@ function GUI:SetupUnitFrameSize(parent)
     local petDatas = {
         [1] = {
             key = 'PetWidth',
-            value = '60',
+            value = db.PetWidth,
             text = L['Width'],
-            min = 40,
+            min = 10,
             max = 400
         },
         [2] = {
-            key = 'PetHeight',
-            value = '6',
-            text = L['Height'],
-            min = 4,
+            key = 'PetHealthHeight',
+            value = db.PetHealthHeight,
+            text = L['Health Height'],
+            min = 1,
+            max = 40
+        },
+        [3] = {
+            key = 'PetPowerHeight',
+            value = db.PetPowerHeight,
+            text = L['Power Height'],
+            min = 1,
             max = 40
         }
     }
@@ -969,33 +1007,47 @@ function GUI:SetupUnitFrameSize(parent)
     local targetDatas = {
         [1] = {
             key = 'TargetWidth',
-            value = '160',
+            value = db.TargetWidth,
             text = L['Width'],
-            min = 40,
+            min = 10,
             max = 400
         },
         [2] = {
-            key = 'TargetHeight',
-            value = '6',
-            text = L['Height'],
-            min = 4,
+            key = 'TargetHealthHeight',
+            value = db.TargetHealthHeight,
+            text = L['Health Height'],
+            min = 1,
+            max = 40
+        },
+        [3] = {
+            key = 'TargetPowerHeight',
+            value = db.TargetPowerHeight,
+            text = L['Power Height'],
+            min = 1,
             max = 40
         }
     }
 
     local totDatas = {
         [1] = {
-            key = 'ToTWidth',
-            value = '60',
+            key = 'TargetTargetWidth',
+            value = db.TargetTargetWidth,
             text = L['Width'],
-            min = 40,
+            min = 10,
             max = 400
         },
         [2] = {
-            key = 'ToTHeight',
-            value = '6',
-            text = L['Height'],
-            min = 4,
+            key = 'TargetTargetHealthHeight',
+            value = db.TargetTargetHealthHeight,
+            text = L['Health Height'],
+            min = 1,
+            max = 40
+        },
+        [3] = {
+            key = 'TargetTargetPowerHeight',
+            value = db.TargetTargetPowerHeight,
+            text = L['Power Height'],
+            min = 1,
             max = 40
         }
     }
@@ -1003,58 +1055,55 @@ function GUI:SetupUnitFrameSize(parent)
     local focusDatas = {
         [1] = {
             key = 'FocusWidth',
-            value = '60',
+            value = db.FocusWidth,
             text = L['Width'],
-            min = 40,
+            min = 10,
             max = 400
         },
         [2] = {
-            key = 'FocusHeight',
-            value = '6',
-            text = L['Height'],
-            min = 4,
+            key = 'FocusHealthHeight',
+            value = db.FocusHealthHeight,
+            text = L['Health Height'],
+            min = 1,
+            max = 40
+        },
+        [3] = {
+            key = 'FocusPowerHeight',
+            value = db.FocusPowerHeight,
+            text = L['Power Height'],
+            min = 1,
             max = 40
         }
     }
 
     local tofDatas = {
         [1] = {
-            key = 'ToFWidth',
-            value = '60',
+            key = 'FocusTargetWidth',
+            value = db.FocusTargetWidth,
             text = L['Width'],
-            min = 40,
+            min = 10,
             max = 400
         },
         [2] = {
-            key = 'ToFHeight',
-            value = '6',
-            text = L['Height'],
-            min = 4,
+            key = 'FocusTargetHealthHeight',
+            value = db.FocusTargetHealthHeight,
+            text = L['Health Height'],
+            min = 1,
             max = 40
-        }
-    }
-
-    local powerDatas = {
-        [1] = {
-            key = 'PowerBarHeight',
-            value = '2',
+        },
+        [3] = {
+            key = 'FocusTargetPowerHeight',
+            value = db.FocusTargetPowerHeight,
             text = L['Power Height'],
             min = 1,
-            max = 10
-        },
-        [2] = {
-            key = 'AlternativePowerBarHeight',
-            value = '2',
-            text = L['Alternat Power Height'],
-            min = 1,
-            max = 10
+            max = 40
         }
     }
 
     local offset = -10
     for _, v in ipairs(playerDatas) do
         CreateGroupTitle(scroll, L['Player Frame'], offset)
-        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdateUnitFrameSize)
         offset = offset - 65
     end
 
@@ -1062,7 +1111,7 @@ function GUI:SetupUnitFrameSize(parent)
 
     for _, v in ipairs(petDatas) do
         CreateGroupTitle(scroll, L['Pet Frame'], offset - 50)
-        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 100)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 100, UpdateUnitFrameSize)
         offset = offset - 65
     end
 
@@ -1070,7 +1119,7 @@ function GUI:SetupUnitFrameSize(parent)
 
     for _, v in ipairs(targetDatas) do
         CreateGroupTitle(scroll, L['Target Frame'], offset - 100)
-        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 150)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 150, UpdateUnitFrameSize)
         offset = offset - 65
     end
 
@@ -1078,7 +1127,7 @@ function GUI:SetupUnitFrameSize(parent)
 
     for _, v in ipairs(totDatas) do
         CreateGroupTitle(scroll, L['Target of Target Frame'], offset - 150)
-        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 200)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 200, UpdateUnitFrameSize)
         offset = offset - 65
     end
 
@@ -1086,7 +1135,7 @@ function GUI:SetupUnitFrameSize(parent)
 
     for _, v in ipairs(focusDatas) do
         CreateGroupTitle(scroll, L['Focus Frame'], offset - 200)
-        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 250)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 250, UpdateUnitFrameSize)
         offset = offset - 65
     end
 
@@ -1094,15 +1143,111 @@ function GUI:SetupUnitFrameSize(parent)
 
     for _, v in ipairs(tofDatas) do
         CreateGroupTitle(scroll, L['Target of Focus Frame'], offset - 250)
-        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 300)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 300, UpdateUnitFrameSize)
         offset = offset - 65
     end
+end
 
-    scroll.groupTitle = nil
+function GUI:SetupBossFrameSize(parent)
+    local guiName = 'FreeUI_GUI_Bossframe_Setup'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
 
-    for _, v in ipairs(powerDatas) do
-        CreateGroupTitle(scroll, L['Power Bar'], offset - 300)
-        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 350)
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+
+    local mKey = 'Unitframe'
+    local db = C.CharacterSettings.Unitframe
+
+    local bossDatas = {
+        [1] = {
+            key = 'BossWidth',
+            value = db.BossWidth,
+            text = L['Width'],
+            min = 10,
+            max = 400
+        },
+        [2] = {
+            key = 'BossHealthHeight',
+            value = db.BossHealthHeight,
+            text = L['Health Height'],
+            min = 1,
+            max = 40
+        },
+        [3] = {
+            key = 'BossPowerHeight',
+            value = db.BossPowerHeight,
+            text = L['Power Height'],
+            min = 1,
+            max = 40
+        },
+        [4] = {
+            key = 'BossGap',
+            value = db.BossGap,
+            text = L['Spacing'],
+            min = 10,
+            max = 40
+        }
+    }
+
+    local offset = -10
+    for _, v in ipairs(bossDatas) do
+        CreateGroupTitle(scroll, L['Boss Frame'], offset)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50)
+        offset = offset - 65
+    end
+end
+
+function GUI:SetupArenaFrameSize(parent)
+    local guiName = 'FreeUI_GUI_Arenaframe_Setup'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+
+    local mKey = 'Unitframe'
+    local db = C.CharacterSettings.Unitframe
+
+    local bossDatas = {
+        [1] = {
+            key = 'ArenaWidth',
+            value = db.ArenaWidth,
+            text = L['Width'],
+            min = 10,
+            max = 400
+        },
+        [2] = {
+            key = 'ArenaHealthHeight',
+            value = db.ArenaHealthHeight,
+            text = L['Health Height'],
+            min = 1,
+            max = 40
+        },
+        [3] = {
+            key = 'ArenaPowerHeight',
+            value = db.ArenaPowerHeight,
+            text = L['Power Height'],
+            min = 1,
+            max = 40
+        },
+        [4] = {
+            key = 'ArenaGap',
+            value = db.ArenaGap,
+            text = L['Spacing'],
+            min = 10,
+            max = 40
+        }
+    }
+
+    local offset = -10
+    for _, v in ipairs(bossDatas) do
+        CreateGroupTitle(scroll, L['Arena Frame'], offset)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50)
         offset = offset - 65
     end
 end
@@ -1117,25 +1262,35 @@ function GUI:SetupGroupFrameSize(parent)
     local panel = CreateExtraGUI(parent, guiName)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
+    local mKey = 'Unitframe'
+    local db = C.CharacterSettings.Unitframe
+
     local partyDatas = {
         [1] = {
             key = 'PartyWidth',
-            value = '62',
+            value = db.PartyWidth,
             text = L['Width'],
             min = 10,
             max = 200
         },
         [2] = {
-            key = 'PartyHeight',
-            value = '28',
-            text = L['Height'],
-            min = 10,
+            key = 'PartyHealthHeight',
+            value = db.PartyHealthHeight,
+            text = L['Health Height'],
+            min = 1,
             max = 200
         },
         [3] = {
+            key = 'PartyPowerHeight',
+            value = db.PartyPowerHeight,
+            text = L['Power Height'],
+            min = 1,
+            max = 200
+        },
+        [4] = {
             key = 'PartyGap',
             value = '6',
-            text = L['Gap'],
+            text = L['Spacing'],
             min = 4,
             max = 20
         }
@@ -1144,22 +1299,29 @@ function GUI:SetupGroupFrameSize(parent)
     local raidDatas = {
         [1] = {
             key = 'RaidWidth',
-            value = '38',
+            value = db.RaidWidth,
             text = L['Width'],
             min = 40,
             max = 400
         },
         [2] = {
-            key = 'RaidHeight',
-            value = '30',
-            text = L['Height'],
-            min = 4,
+            key = 'PartyHealthHeight',
+            value = db.PartyHealthHeight,
+            text = L['Health Height'],
+            min = 1,
             max = 40
         },
         [3] = {
+            key = 'PartyPowerHeight',
+            value = db.PartyPowerHeight,
+            text = L['Power Height'],
+            min = 1,
+            max = 40
+        },
+        [4] = {
             key = 'RaidGap',
-            value = '5',
-            text = L['Gap'],
+            value = db.RaidGap,
+            text = L['Spacing'],
             min = 4,
             max = 20
         }
@@ -1168,7 +1330,7 @@ function GUI:SetupGroupFrameSize(parent)
     local offset = -10
     for _, v in ipairs(partyDatas) do
         CreateGroupTitle(scroll, L['Party Frame'], offset)
-        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50)
         offset = offset - 65
     end
 
@@ -1176,7 +1338,38 @@ function GUI:SetupGroupFrameSize(parent)
 
     for _, v in ipairs(raidDatas) do
         CreateGroupTitle(scroll, L['Raid Frame'], offset - 50)
-        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 100)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 100)
+        offset = offset - 65
+    end
+end
+
+function GUI:SetupClassPowerHeight(parent)
+    local guiName = 'FreeUI_GUI_ClassPower_Setup'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+
+    local mKey = 'Unitframe'
+    local db = C.CharacterSettings.Unitframe
+
+    local bossDatas = {
+        [1] = {
+            key = 'ClassPowerHeight',
+            value = db.ClassPowerHeight,
+            text = L['Height'],
+            min = 1,
+            max = 10
+        }
+    }
+
+    local offset = -10
+    for _, v in ipairs(bossDatas) do
+        CreateGroupTitle(scroll, L['Class Power'], offset)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50)
         offset = offset - 65
     end
 end
@@ -1275,17 +1468,20 @@ function GUI:SetupCastbar(parent)
     local panel = CreateExtraGUI(parent, guiName)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
+    local mKey = 'Unitframe'
+    local db = C.CharacterSettings.Unitframe
+
     local playerDatas = {
         [1] = {
             key = 'PlayerCastbarWidth',
-            value = '200',
+            value = db.PlayerCastbarWidth,
             text = L['Width'],
             min = 60,
             max = 400
         },
         [2] = {
             key = 'PlayerCastbarHeight',
-            value = '16',
+            value = db.PlayerCastbarHeight,
             text = L['Height'],
             min = 6,
             max = 40
@@ -1295,14 +1491,14 @@ function GUI:SetupCastbar(parent)
     local targetDatas = {
         [1] = {
             key = 'TargetCastbarWidth',
-            value = '160',
+            value = db.TargetCastbarWidth,
             text = L['Width'],
             min = 60,
             max = 400
         },
         [2] = {
             key = 'TargetCastbarHeight',
-            value = '10',
+            value = db.TargetCastbarHeight,
             text = L['Height'],
             min = 6,
             max = 40
@@ -1312,14 +1508,14 @@ function GUI:SetupCastbar(parent)
     local focusDatas = {
         [1] = {
             key = 'FocusCastbarWidth',
-            value = '200',
+            value = db.FocusCastbarWidth,
             text = L['Width'],
             min = 60,
             max = 400
         },
         [2] = {
             key = 'FocusCastbarHeight',
-            value = '16',
+            value = db.FocusCastbarHeight,
             text = L['Height'],
             min = 6,
             max = 40
@@ -1328,24 +1524,24 @@ function GUI:SetupCastbar(parent)
 
     local offset = -10
     for _, v in ipairs(playerDatas) do
-        CreateGroupTitle(scroll, L['Player castbar'], offset)
-        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50)
+        CreateGroupTitle(scroll, L['Player Castbar'], offset)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
     for _, v in ipairs(targetDatas) do
-        CreateGroupTitle(scroll, L['Target castbar'], offset - 50)
-        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 100)
+        CreateGroupTitle(scroll, L['Target Castbar'], offset - 50)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 100)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
     for _, v in ipairs(focusDatas) do
-        CreateGroupTitle(scroll, L['Focus castbar'], offset - 100)
-        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 150)
+        CreateGroupTitle(scroll, L['Focus Castbar'], offset - 100)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 150)
         offset = offset - 65
     end
 end
