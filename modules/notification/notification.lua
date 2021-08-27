@@ -164,6 +164,10 @@ local function HandleIncoming()
 end
 
 function F:CreateNotification(name, message, clickFunc, texture)
+    if not C.DB.Notification.Enable then
+        return
+    end
+
     if UnitIsAFK('player') then
         tinsert(incoming, {name, message, clickFunc, texture})
         handler:RegisterEvent('PLAYER_FLAGS_CHANGED')
@@ -238,5 +242,6 @@ function NOTIFICATION:OnLogin()
     self:RareNotify()
     self:RepairNotify()
     self:ParagonNotify()
+    self:InstanceNotify()
     self:CheckIncompatible()
 end
