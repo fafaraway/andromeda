@@ -498,7 +498,11 @@ function INVENTORY:FreeSlotOnDrop()
     end
 end
 
-local freeSlotContainer = {['Bag'] = true, ['Bank'] = true, ['Reagent'] = true}
+local freeSlotContainer = {
+    ['Bag'] = true,
+    ['Bank'] = true,
+    ['Reagent'] = true
+}
 
 function INVENTORY:CreateFreeSlots()
     local name = self.name
@@ -849,34 +853,32 @@ function INVENTORY:OnLogin()
     end
 
     function Backpack:OnInit()
-        local MyContainer = self:GetContainerClass()
-
+        AddNewContainer('Bag', 11, 'Junk', filters.bagsJunk)
         AddNewContainer('Bag', 1, 'BagFavourite', filters.bagFavourite)
+        AddNewContainer('Bag', 4, 'EquipSet', filters.bagEquipSet)
         AddNewContainer('Bag', 2, 'AzeriteItem', filters.bagAzeriteItem)
         AddNewContainer('Bag', 3, 'Equipment', filters.bagEquipment)
-        AddNewContainer('Bag', 4, 'EquipSet', filters.bagEquipSet)
         AddNewContainer('Bag', 5, 'BagCollection', filters.bagCollection)
-        AddNewContainer('Bag', 6, 'Consumable', filters.bagConsumable)
-        AddNewContainer('Bag', 7, 'BagGoods', filters.bagGoods)
-        AddNewContainer('Bag', 8, 'BagAnima', filters.bagAnima)
-        AddNewContainer("Bag", 9, "BagRelic", filters.bagRelic)
-        AddNewContainer('Bag', 10, 'BagQuest', filters.bagQuest)
-        AddNewContainer('Bag', 11, 'Junk', filters.bagsJunk)
+        AddNewContainer('Bag', 8, 'Consumable', filters.bagConsumable)
+        AddNewContainer('Bag', 6, 'BagGoods', filters.bagGoods)
+        AddNewContainer('Bag', 7, 'BagQuest', filters.bagQuest)
+        AddNewContainer('Bag', 9, 'BagAnima', filters.bagAnima)
+        AddNewContainer('Bag', 10, 'BagRelic', filters.bagRelic)
 
         f.main = MyContainer:New('Bag', {Columns = bagsWidth, Bags = 'bags'})
         f.main:SetPoint('BOTTOMRIGHT', -C.UIGap, C.UIGap)
         f.main:SetFilter(filters.onlyBags, true)
 
         AddNewContainer('Bank', 1, 'BankFavourite', filters.bankFavourite)
-        AddNewContainer('Bank', 2, 'BankAzeriteItem', filters.bankAzeriteItem)
-        AddNewContainer('Bank', 3, 'BankEquipment', filters.bankEquipment)
-        AddNewContainer('Bank', 4, 'BankEquipSet', filters.bankEquipSet)
-        AddNewContainer('Bank', 5, 'BankLegendary', filters.bankLegendary)
+        AddNewContainer('Bank', 5, 'BankEquipSet', filters.bankEquipSet)
+        AddNewContainer('Bank', 3, 'BankAzeriteItem', filters.bankAzeriteItem)
+        AddNewContainer('Bank', 2, 'BankLegendary', filters.bankLegendary)
+        AddNewContainer('Bank', 4, 'BankEquipment', filters.bankEquipment)
         AddNewContainer('Bank', 6, 'BankCollection', filters.bankCollection)
         AddNewContainer('Bank', 7, 'BankConsumable', filters.bankConsumable)
         AddNewContainer('Bank', 8, 'BankGoods', filters.bankGoods)
-        AddNewContainer('Bank', 9, 'BankAnima', filters.bankAnima)
-        AddNewContainer('Bank', 10, 'BankQuest', filters.bankQuest)
+        AddNewContainer('Bank', 9, 'BankQuest', filters.bankQuest)
+        AddNewContainer('Bank', 10, 'BankAnima', filters.bankAnima)
 
         f.bank = MyContainer:New('Bank', {Columns = bankWidth, Bags = 'bank'})
         f.bank:SetPoint('BOTTOMRIGHT', f.main, 'BOTTOMLEFT', -10, 0)
@@ -1265,7 +1267,7 @@ function INVENTORY:OnLogin()
             label = _G.QUESTS_LABEL
         elseif strmatch(name, 'Anima') then
             label = _G.POWER_TYPE_ANIMA
-        elseif name == "BagRelic" then
+        elseif name == 'BagRelic' then
             label = L['Korthia Relics']
         end
 
