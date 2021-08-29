@@ -23,14 +23,7 @@ local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 local BAG_ITEM_QUALITY_COLORS = BAG_ITEM_QUALITY_COLORS
 local WOW_PROJECT_ID = WOW_PROJECT_ID
 local WOW_PROJECT_MAINLINE = WOW_PROJECT_MAINLINE
-local Enum_ItemQuality_Poor = Enum.ItemQuality.Poor
-local Enum_ItemQuality_Common = Enum.ItemQuality.Common
-local Enum_ItemQuality_Uncommon = Enum.ItemQuality.Uncommon
-local Enum_ItemQuality_Rare = Enum.ItemQuality.Rare
-local Enum_ItemQuality_Epic = Enum.ItemQuality.Epic
-local Enum_ItemQuality_Legendary = Enum.ItemQuality.Legendary
-local Enum_ItemQuality_Artifact = Enum.ItemQuality.Artifact
-local Enum_ItemQuality_Heirloom = Enum.ItemQuality.Heirloom
+
 
 local F, C = unpack(select(2, ...))
 
@@ -173,14 +166,14 @@ C.PurpleColor = '|cffa571df'
 C.LineString = C.GreyColor .. '---------------'
 
 -- Deprecated
-_G.LE_ITEM_QUALITY_POOR = Enum_ItemQuality_Poor
-_G.LE_ITEM_QUALITY_COMMON = Enum_ItemQuality_Common
-_G.LE_ITEM_QUALITY_UNCOMMON = Enum_ItemQuality_Uncommon
-_G.LE_ITEM_QUALITY_RARE = Enum_ItemQuality_Rare
-_G.LE_ITEM_QUALITY_EPIC = Enum_ItemQuality_Epic
-_G.LE_ITEM_QUALITY_LEGENDARY = Enum_ItemQuality_Legendary
-_G.LE_ITEM_QUALITY_ARTIFACT = Enum_ItemQuality_Artifact
-_G.LE_ITEM_QUALITY_HEIRLOOM = Enum_ItemQuality_Heirloom
+_G.LE_ITEM_QUALITY_POOR = _G.Enum.ItemQuality.Poor
+_G.LE_ITEM_QUALITY_COMMON = _G.Enum.ItemQuality.Common
+_G.LE_ITEM_QUALITY_UNCOMMON = _G.Enum.ItemQuality.Uncommon
+_G.LE_ITEM_QUALITY_RARE = _G.Enum.ItemQuality.Rare
+_G.LE_ITEM_QUALITY_EPIC = _G.Enum.ItemQuality.Epic
+_G.LE_ITEM_QUALITY_LEGENDARY = _G.Enum.ItemQuality.Legendary
+_G.LE_ITEM_QUALITY_ARTIFACT = _G.Enum.ItemQuality.Artifact
+_G.LE_ITEM_QUALITY_HEIRLOOM = _G.Enum.ItemQuality.Heirloom
 
 C.QualityColors = {}
 local qualityColors = BAG_ITEM_QUALITY_COLORS
