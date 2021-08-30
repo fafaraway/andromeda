@@ -244,9 +244,9 @@ end
 
 function UNITFRAME.DebuffFilter(element, _, _, _, _, _, _, _, _, caster, _, _, spellID, _, isBossAura)
     local isMine = F:MultiCheck(caster, 'player', 'pet', 'vehicle')
-    local parent = element.__owner
+    -- local parent = element.__owner
 
-    if C.RaidDebuffsBlackList[spellID] then
+    if C.PartyDebuffsBlackList[spellID] then
         return false
     -- elseif (C.DB.Unitframe.CornerIndicator and UNITFRAME.CornerSpellsList[spellID]) or parent.RaidDebuffs.spellID == spellID or parent.rawSpellID == spellID then
     --     return false

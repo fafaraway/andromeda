@@ -519,11 +519,20 @@ C.PartySpellsDB = {
 
 
 -- Ignore these debuffs on RaidFrames #TODO
-C.RaidDebuffsBlackList = {
+C.PartyDebuffsBlackList = {
+    [8326] = true, -- 鬼魂
+    [160029] = true, -- 正在复活
+    [57723] = true, -- 筋疲力尽
+    [57724] = true, -- 心满意足
+    [80354] = true, -- 时空错位
+    [264689] = true, -- 疲倦
     [206151] = true, -- 挑战者的负担
+    [195776] = true, -- 月羽疫病
+    [352562] = true, -- 起伏机动
+    [356419] = true, -- 审判灵魂
     [331154] = true, -- 折磨：上层区域之力
     [296847] = true, -- 压迫光环
-	[338906] = true, -- 典狱长之链
+    [338906] = true, -- 典狱长之链
 }
 
 
