@@ -120,12 +120,54 @@ end
 
 --[[ Remove blizz raid frame ]]
 
+local function HideBlizzPartyFrame(baseName, doNotReparent)
+    local frame = _G[baseName]
+
+    if frame then
+        frame:UnregisterAllEvents()
+        frame:Hide()
+
+        if not doNotReparent then
+            frame:SetParent(F.HiddenFrame)
+        end
+
+        local health = frame.healthBar or frame.healthbar
+        if health then
+            health:UnregisterAllEvents()
+        end
+
+        local power = frame.manabar
+        if power then
+            power:UnregisterAllEvents()
+        end
+
+        local spell = frame.castBar or frame.spellbar
+        if spell then
+            spell:UnregisterAllEvents()
+        end
+
+        local altpowerbar = frame.powerBarAlt
+        if altpowerbar then
+            altpowerbar:UnregisterAllEvents()
+        end
+
+        local buffFrame = frame.BuffFrame
+        if buffFrame then
+            buffFrame:UnregisterAllEvents()
+        end
+    end
+end
+
 function UNITFRAME:RemoveBlizzRaidFrame()
-    if CompactRaidFrameManager_SetSetting then
-        CompactRaidFrameManager_SetSetting('IsShown', '0')
-        _G.UIParent:UnregisterEvent('GROUP_ROSTER_UPDATE')
-        CompactRaidFrameManager:UnregisterAllEvents()
-        CompactRaidFrameManager:SetParent(F.HiddenFrame)
+    -- raid
+    CompactRaidFrameManager_SetSetting('IsShown', '0')
+    _G.UIParent:UnregisterEvent('GROUP_ROSTER_UPDATE')
+    CompactRaidFrameManager:UnregisterAllEvents()
+    CompactRaidFrameManager:SetParent(F.HiddenFrame)
+
+    -- party
+    for i = 1, 4 do
+        HideBlizzPartyFrame('PartyMemberFrame' .. i)
     end
 end
 
