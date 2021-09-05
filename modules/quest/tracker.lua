@@ -1,17 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local min = min
-local abs = abs
-local strmatch = strmatch
-local CreateFrame = CreateFrame
-local hooksecurefunc = hooksecurefunc
-local IsInInstance = IsInInstance
-local InCombatLockdown = InCombatLockdown
-local ObjectiveTracker_Update = ObjectiveTracker_Update
-local ObjectiveTracker_Collapse = ObjectiveTracker_Collapse
-local ObjectiveTracker_Expand = ObjectiveTracker_Expand
-
 local F, C, L = unpack(select(2, ...))
 local EOT = F:RegisterModule('EnhancedObjectiveTracker')
 
@@ -63,9 +49,9 @@ local function GetProgressColor(progress)
     local b = (progressColors.complete.r - progressColors.start.b) * progress + progressColors.start.b
 
     local addition = 0.35
-    r = min(r + abs(0.5 - progress) * addition, r)
-    g = min(g + abs(0.5 - progress) * addition, g)
-    b = min(b + abs(0.5 - progress) * addition, b)
+    r = math.min(r + math.abs(0.5 - progress) * addition, r)
+    g = math.min(g + math.abs(0.5 - progress) * addition, g)
+    b = math.min(b + math.abs(0.5 - progress) * addition, b)
 
     return {r = r, g = g, b = b}
 end
@@ -134,10 +120,10 @@ function EOT:ColorfulProgression(text)
         return
     end
 
-    local current, required, details = strmatch(info, '^(%d-)/(%d-) (.+)')
+    local current, required, details = string.match(info, '^(%d-)/(%d-) (.+)')
 
     if not (current and required and details) then
-        details, current, required = strmatch(info, '(.+): (%d-)/(%d-)$')
+        details, current, required = string.match(info, '(.+): (%d-)/(%d-)$')
     end
 
     if not (current and required and details) then
@@ -209,7 +195,7 @@ function EOT:RestyleObjectiveTrackerText()
         end
     )
 
-    ObjectiveTracker_Update()
+    _G.ObjectiveTracker_Update()
 end
 
 local headers = {
@@ -233,7 +219,7 @@ function EOT:PLAYER_ENTERING_WORLD()
                 end
             end
         else
-            ObjectiveTracker_Collapse()
+            _G.ObjectiveTracker_Collapse()
         end
     else
         if not InCombatLockdown() then
@@ -244,7 +230,7 @@ function EOT:PLAYER_ENTERING_WORLD()
                 end
             end
             if _G.ObjectiveTrackerFrame.collapsed then
-                ObjectiveTracker_Expand()
+                _G.ObjectiveTracker_Expand()
             end
         end
     end
@@ -252,7 +238,6 @@ end
 
 function EOT:OnLogin()
     EOT:ObjectiveTrackerMover()
-
     EOT:RestyleObjectiveTrackerText()
 
     -- Kill reward animation when finished dungeon or bonus objectives

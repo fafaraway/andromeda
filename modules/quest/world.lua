@@ -1,38 +1,11 @@
 -- Better World Quests
--- Credits: BetterWorldQuests by p3lim
+-- Credit: p3lim
 -- https://github.com/p3lim-wow/BetterWorldQuests
-
-local _G = _G
-local CreateFrame = CreateFrame
-local UnitFactionGroup = UnitFactionGroup
-local CreateFromMixins = CreateFromMixins
-local WorldQuestPinMixin = WorldQuestPinMixin
-local WorldQuestDataProviderMixin = WorldQuestDataProviderMixin
-local WorldMap_WorldQuestPinMixin = WorldMap_WorldQuestPinMixin
-local HaveQuestData = HaveQuestData
-local QuestUtils_IsQuestWorldQuest = QuestUtils_IsQuestWorldQuest
-local C_TaskQuest_GetQuestsForPlayerByMapID = C_TaskQuest.GetQuestsForPlayerByMapID
-local C_QuestLog_IsQuestCriteriaForBounty = C_QuestLog.IsQuestCriteriaForBounty
-local C_QuestLog_GetQuestTagInfo = C_QuestLog.GetQuestTagInfo
-local Enum_QuestTagType_PvP = Enum.QuestTagType.PvP
-local Enum_QuestTagType_PetBattle = Enum.QuestTagType.PetBattle
-local Enum_QuestTagType_Profession = Enum.QuestTagType.Profession
-local Enum_QuestTagType_Dungeon = Enum.QuestTagType.Dungeon
-local Enum_QuestTagType_Raid = Enum.QuestTagType.Raid
-local Enum_QuestTagType_Invasion = Enum.QuestTagType.Invasion
-local Enum_QuestTagType_FactionAssault = Enum.QuestTagType.FactionAssault
-local GetNumQuestLogRewards = GetNumQuestLogRewards
-local GetQuestLogRewardInfo = GetQuestLogRewardInfo
-local GetNumQuestLogRewardCurrencies = GetNumQuestLogRewardCurrencies
-local GetQuestLogRewardCurrencyInfo = GetQuestLogRewardCurrencyInfo
-local GetQuestLogRewardMoney = GetQuestLogRewardMoney
-local SetPortraitToTexture = SetPortraitToTexture
-local WORLD_QUEST_ICONS_BY_PROFESSION = WORLD_QUEST_ICONS_BY_PROFESSION
-
 
 local parentMaps = {
     -- list of all continents and their sub-zones that have world quests
-    [1550] = { -- Shadowlands
+    [1550] = {
+        -- Shadowlands
         [1525] = true, -- Revendreth
         [1533] = true, -- Bastion
         [1536] = true, -- Maldraxxus
@@ -40,8 +13,7 @@ local parentMaps = {
     }
 }
 
-local factionAssaultAtlasName = UnitFactionGroup('player') == 'Horde' and 'worldquest-icon-horde' or
-                                    'worldquest-icon-alliance'
+local factionAssaultAtlasName = UnitFactionGroup('player') == 'Horde' and 'worldquest-icon-horde' or 'worldquest-icon-alliance'
 
 local function AdjustedMapID(mapID)
     -- this will replace the Argus map ID with the one used by the taxi UI, since one of the
@@ -51,7 +23,7 @@ end
 
 -- create a new data provider that will display the world quests on zones from the list above,
 -- based on WorldQuestDataProviderMixin
-local DataProvider = CreateFromMixins(WorldQuestDataProviderMixin)
+local DataProvider = CreateFromMixins(_G.WorldQuestDataProviderMixin)
 DataProvider:SetMatchWorldMapFilters(true)
 DataProvider:SetUsesSpellEffect(true)
 DataProvider:SetCheckBounties(true)
@@ -87,7 +59,7 @@ function DataProvider:RefreshAllData()
     local Map = self:GetMap()
     local mapID = AdjustedMapID(Map:GetMapID())
 
-    local quests = mapID and C_TaskQuest_GetQuestsForPlayerByMapID(mapID)
+    local quests = mapID and C_TaskQuest.GetQuestsForPlayerByMapID(mapID)
     if (quests) then
         for _, questInfo in next, quests do
             if (self:ShouldShowQuest(questInfo) and self:DoesWorldQuestInfoPassFilters(questInfo)) then
@@ -128,9 +100,9 @@ end
 
 _G.WorldMapFrame:AddDataProvider(DataProvider)
 
-BetterWorldQuestPinMixin = CreateFromMixins(WorldMap_WorldQuestPinMixin)
-function BetterWorldQuestPinMixin:OnLoad()
-    WorldQuestPinMixin.OnLoad(self)
+_G.BetterWorldQuestPinMixin = CreateFromMixins(_G.WorldMap_WorldQuestPinMixin)
+function _G.BetterWorldQuestPinMixin:OnLoad()
+    _G.WorldQuestPinMixin.OnLoad(self)
 
     -- create any extra widgets we need if they don't already exist
     local Border = self:CreateTexture(nil, 'OVERLAY', nil, 1)
@@ -156,11 +128,11 @@ function BetterWorldQuestPinMixin:OnLoad()
 end
 
 local function IsParentMap(mapID)
-    return not not parentMaps[AdjustedMapID(mapID)]
+    return not (not parentMaps[AdjustedMapID(mapID)])
 end
 
-function BetterWorldQuestPinMixin:RefreshVisuals()
-    WorldMap_WorldQuestPinMixin.RefreshVisuals(self)
+function _G.BetterWorldQuestPinMixin:RefreshVisuals()
+    _G.WorldMap_WorldQuestPinMixin.RefreshVisuals(self)
 
     -- update scale
     if (IsParentMap(self:GetMap():GetMapID())) then
@@ -189,34 +161,31 @@ function BetterWorldQuestPinMixin:RefreshVisuals()
 
     -- update our own widgets
     local bountyQuestID = self.dataProvider:GetBountyQuestID()
-    self.Bounty:SetShown(bountyQuestID and
-                             C_QuestLog_IsQuestCriteriaForBounty(questID, bountyQuestID))
+    self.Bounty:SetShown(bountyQuestID and C_QuestLog.IsQuestCriteriaForBounty(questID, bountyQuestID))
 
-    local Indicator = self.Indicator
-    local questInfo = C_QuestLog_GetQuestTagInfo(questID)
-    -- local _, _, worldQuestType, _, _, professionID = C_QuestLog.GetQuestTagInfo(questID)
-    if (questInfo.worldQuestType == Enum_QuestTagType_PvP) then
+    local questInfo = C_QuestLog.GetQuestTagInfo(questID)
+    if (questInfo.worldQuestType == Enum.QuestTagType_PvP) then
         self.Indicator:SetAtlas('Warfronts-BaseMapIcons-Empty-Barracks-Minimap')
         self.Indicator:SetSize(58, 58)
         self.Indicator:Show()
     else
         self.Indicator:SetSize(44, 44)
-        if (questInfo.worldQuestType == Enum_QuestTagType_PetBattle) then
+        if (questInfo.worldQuestType == Enum.QuestTagType_PetBattle) then
             self.Indicator:SetAtlas('WildBattlePetCapturable')
             self.Indicator:Show()
-        elseif (questInfo.worldQuestType == Enum_QuestTagType_Profession) then
-            self.Indicator:SetAtlas(WORLD_QUEST_ICONS_BY_PROFESSION[questInfo.tradeskillLineID])
+        elseif (questInfo.worldQuestType == Enum.QuestTagType_Profession) then
+            self.Indicator:SetAtlas(_G.WORLD_QUEST_ICONS_BY_PROFESSION[questInfo.tradeskillLineID])
             self.Indicator:Show()
-        elseif (questInfo.worldQuestType == Enum_QuestTagType_Dungeon) then
+        elseif (questInfo.worldQuestType == Enum.QuestTagType_Dungeon) then
             self.Indicator:SetAtlas('Dungeon')
             self.Indicator:Show()
-        elseif (questInfo.worldQuestType == Enum_QuestTagType_Raid) then
+        elseif (questInfo.worldQuestType == Enum.QuestTagType_Raid) then
             self.Indicator:SetAtlas('Raid')
             self.Indicator:Show()
-        elseif (questInfo.worldQuestType == Enum_QuestTagType_Invasion) then
+        elseif (questInfo.worldQuestType == Enum.QuestTagType_Invasion) then
             self.Indicator:SetAtlas('worldquest-icon-burninglegion')
             self.Indicator:Show()
-        elseif (questInfo.worldQuestType == Enum_QuestTagType_FactionAssault) then
+        elseif (questInfo.worldQuestType == Enum.QuestTagType_FactionAssault) then
             self.Indicator:SetAtlas(factionAssaultAtlasName)
             self.Indicator:SetSize(38, 38)
             self.Indicator:Show()

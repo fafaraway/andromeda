@@ -1,50 +1,12 @@
 -- Extra Quest Button
--- Credits: ExtraQuestButton by p3lim
+-- Credit: p3lim
 -- https://github.com/p3lim-wow/ExtraQuestButton
-
-local _G = _G
-local unpack = unpack
-local select = select
-local format = format
-local sqrt = sqrt
-local next = next
-local type = type
-local CreateFrame = CreateFrame
-local GetTime = GetTime
-local RegisterStateDriver = RegisterStateDriver
-local InCombatLockdown = InCombatLockdown
-local IsItemInRange = IsItemInRange
-local ItemHasRange = ItemHasRange
-local HasExtraActionBar = HasExtraActionBar
-local GetItemCooldown = GetItemCooldown
-local GetItemCount = GetItemCount
-local GetItemIcon = GetItemIcon
-local GetItemInfoFromHyperlink = GetItemInfoFromHyperlink
-local GetBindingKey = GetBindingKey
-local GetBindingText = GetBindingText
-local GetQuestLogSpecialItemInfo = GetQuestLogSpecialItemInfo
-local QuestHasPOIInfo = QuestHasPOIInfo
-local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
-local C_QuestLog_GetInfo = C_QuestLog.GetInfo
-local C_QuestLog_IsOnMap = C_QuestLog.IsOnMap
-local C_QuestLog_IsComplete = C_QuestLog.IsComplete
-local C_QuestLog_IsWorldQuest = C_QuestLog.IsWorldQuest
-local C_QuestLog_GetNumQuestWatches = C_QuestLog.GetNumQuestWatches
-local C_QuestLog_GetDistanceSqToQuest = C_QuestLog.GetDistanceSqToQuest
-local C_QuestLog_GetNumQuestLogEntries = C_QuestLog.GetNumQuestLogEntries
-local C_QuestLog_GetLogIndexForQuestID = C_QuestLog.GetLogIndexForQuestID
-local C_QuestLog_GetNumWorldQuestWatches = C_QuestLog.GetNumWorldQuestWatches
-local C_QuestLog_GetQuestIDForQuestWatchIndex = C_QuestLog.GetQuestIDForQuestWatchIndex
-local C_QuestLog_GetQuestIDForWorldQuestWatchIndex = C_QuestLog.GetQuestIDForWorldQuestWatchIndex
-local TOOLTIP_UPDATE_TIME = TOOLTIP_UPDATE_TIME
-local RANGE_INDICATOR = RANGE_INDICATOR
-local ExtraActionButton1 = ExtraActionButton1
-local MAX_DISTANCE_YARDS = 1e5
 
 local F, C, L = unpack(select(2, ...))
 local ACTIONBAR = F:GetModule('Actionbar')
 
 local onlyCurrentZone = true
+local maxDistanceYards = 1e5
 
 -- Warlords of Draenor intro quest items which inspired this addon
 local blacklist = {
@@ -82,7 +44,7 @@ local inaccurateQuestAreas = {
     [34461] = 590, -- Horde Garrison
     [59809] = true,
     [60004] = 118, -- 前夕任务：英勇之举
-    [63971] = 1543, -- 法夜突袭，蜗牛践踏
+    [63971] = 1543 -- 法夜突袭，蜗牛践踏
 }
 
 -- items that should be used for a quest but aren't (questID = itemID)
@@ -130,7 +92,7 @@ local questItems = {
     [59809] = 177904, -- Night Fae Covenant
     [60188] = 178464, -- Night Fae Covenant
     [60649] = 180170, -- Ardenweald
-    [60609] = 180008, -- Ardenweald
+    [60609] = 180008 -- Ardenweald
 }
 
 local ExtraQuestButton = CreateFrame('Button', 'ExtraQuestButton', _G.UIParent, 'SecureActionButtonTemplate, SecureHandlerStateTemplate, SecureHandlerAttributeTemplate')
@@ -239,8 +201,8 @@ function ExtraQuestButton:PLAYER_LOGIN()
     self:SetAttribute('_onattributechanged', onAttributeChanged)
     self:SetAttribute('type', 'item')
 
-    self:SetSize(ExtraActionButton1:GetSize())
-    self:SetScale(ExtraActionButton1:GetScale())
+    self:SetSize(_G.ExtraActionButton1:GetSize())
+    self:SetScale(_G.ExtraActionButton1:GetScale())
     self:SetScript('OnLeave', F.HideTooltip)
     self:SetClampedToScreen(true)
     self:SetToplevel(true)
@@ -290,7 +252,6 @@ function ExtraQuestButton:PLAYER_LOGIN()
     Artwork:SetSize(20, 20)
     Artwork:SetAtlas('adventureguide-microbutton-alert')
     self.Artwork = Artwork ]]
-
     self:RegisterEvent('UPDATE_BINDINGS')
     self:RegisterEvent('BAG_UPDATE_COOLDOWN')
     self:RegisterEvent('BAG_UPDATE_DELAYED')
@@ -317,13 +278,13 @@ ExtraQuestButton:SetScript(
     'OnUpdate',
     function(self, elapsed)
         if self.updateRange then
-            if (self.rangeTimer or 0) > TOOLTIP_UPDATE_TIME then
+            if (self.rangeTimer or 0) > _G.TOOLTIP_UPDATE_TIME then
                 local HotKey = self.HotKey
                 local Icon = self.Icon
 
                 -- BUG: IsItemInRange() is broken versus friendly npcs (and possibly others)
                 local inRange = IsItemInRange(self.itemLink, 'target')
-                if HotKey:GetText() == RANGE_INDICATOR then
+                if HotKey:GetText() == _G.RANGE_INDICATOR then
                     if inRange == false then
                         HotKey:SetTextColor(1, .1, .1)
                         HotKey:Show()
@@ -408,7 +369,7 @@ function ExtraQuestButton:SetItem(itemLink)
             HotKey:SetText(GetBindingText(key, 1))
             HotKey:Show()
         elseif hasRange then
-            HotKey:SetText(RANGE_INDICATOR)
+            HotKey:SetText(_G.RANGE_INDICATOR)
             HotKey:Show()
         else
             HotKey:Hide()
@@ -428,11 +389,11 @@ function ExtraQuestButton:RemoveItem()
 end
 
 local function IsQuestOnMap(questID)
-    return not onlyCurrentZone or C_QuestLog_IsOnMap(questID)
+    return not onlyCurrentZone or C_QuestLog.IsOnMap(questID)
 end
 
 local function GetQuestDistanceWithItem(questID)
-    local questLogIndex = C_QuestLog_GetLogIndexForQuestID(questID)
+    local questLogIndex = C_QuestLog.GetLogIndexForQuestID(questID)
     if not questLogIndex then
         return
     end
@@ -441,7 +402,7 @@ local function GetQuestDistanceWithItem(questID)
     if not itemLink then
         local fallbackItemID = questItems[questID]
         if fallbackItemID then
-            itemLink = format('|Hitem:%d|h', fallbackItemID)
+            itemLink = string.format('|Hitem:%d|h', fallbackItemID)
         end
     end
     if not itemLink then
@@ -450,31 +411,33 @@ local function GetQuestDistanceWithItem(questID)
     if GetItemCount(itemLink) == 0 then
         return
     end
-    if blacklist[GetItemInfoFromHyperlink(itemLink)] then return end
-
-    if C_QuestLog_IsComplete(questID) and not showWhenComplete then
+    if blacklist[GetItemInfoFromHyperlink(itemLink)] then
         return
     end
 
-    local distanceSq = C_QuestLog_GetDistanceSqToQuest(questID)
-    local distanceYd = distanceSq and sqrt(distanceSq)
-    if IsQuestOnMap(questID) and distanceYd and distanceYd <= MAX_DISTANCE_YARDS then
+    if C_QuestLog.IsComplete(questID) and not showWhenComplete then
+        return
+    end
+
+    local distanceSq = C_QuestLog.GetDistanceSqToQuest(questID)
+    local distanceYd = distanceSq and math.sqrt(distanceSq)
+    if IsQuestOnMap(questID) and distanceYd and distanceYd <= maxDistanceYards then
         return distanceYd, itemLink
     end
 
     local questMapID = inaccurateQuestAreas[questID]
     if questMapID then
-        local currentMapID = C_Map_GetBestMapForUnit('player')
+        local currentMapID = C_Map.GetBestMapForUnit('player')
         if type(questMapID) == 'boolean' then
-            return MAX_DISTANCE_YARDS - 1, itemLink
+            return maxDistanceYards - 1, itemLink
         elseif type(questMapID) == 'number' then
             if questMapID == currentMapID then
-                return MAX_DISTANCE_YARDS - 2, itemLink
+                return maxDistanceYards - 2, itemLink
             end
         elseif type(questMapID) == 'table' then
             for _, mapID in next, questMapID do
                 if mapID == currentMapID then
-                    return MAX_DISTANCE_YARDS - 2, itemLink
+                    return maxDistanceYards - 2, itemLink
                 end
             end
         end
@@ -483,12 +446,12 @@ end
 
 local function GetClosestQuestItem()
     local closestQuestItemLink
-    local closestDistance = MAX_DISTANCE_YARDS
+    local closestDistance = maxDistanceYards
 
-    for index = 1, C_QuestLog_GetNumWorldQuestWatches() do
+    for index = 1, C_QuestLog.GetNumWorldQuestWatches() do
         -- this only tracks supertracked worldquests,
         -- e.g. stuff the player has shift-clicked on the map
-        local questID = C_QuestLog_GetQuestIDForWorldQuestWatchIndex(index)
+        local questID = C_QuestLog.GetQuestIDForWorldQuestWatchIndex(index)
         if questID then
             local distance, itemLink = GetQuestDistanceWithItem(questID)
             if distance and distance <= closestDistance then
@@ -499,8 +462,8 @@ local function GetClosestQuestItem()
     end
 
     if not closestQuestItemLink then
-        for index = 1, C_QuestLog_GetNumQuestWatches() do
-            local questID = C_QuestLog_GetQuestIDForQuestWatchIndex(index)
+        for index = 1, C_QuestLog.GetNumQuestWatches() do
+            local questID = C_QuestLog.GetQuestIDForQuestWatchIndex(index)
             if questID and QuestHasPOIInfo(questID) then
                 local distance, itemLink = GetQuestDistanceWithItem(questID)
                 if distance and distance <= closestDistance then
@@ -512,10 +475,10 @@ local function GetClosestQuestItem()
     end
 
     if not closestQuestItemLink then
-        for index = 1, C_QuestLog_GetNumQuestLogEntries() do
-            local info = C_QuestLog_GetInfo(index)
+        for index = 1, C_QuestLog.GetNumQuestLogEntries() do
+            local info = C_QuestLog.GetInfo(index)
             local questID = info and info.questID
-            if questID and not info.isHeader and (not info.isHidden or C_QuestLog_IsWorldQuest(questID)) and QuestHasPOIInfo(questID) then
+            if questID and not info.isHeader and (not info.isHidden or C_QuestLog.IsWorldQuest(questID)) and QuestHasPOIInfo(questID) then
                 local distance, itemLink = GetQuestDistanceWithItem(questID)
                 if distance and distance <= closestDistance then
                     closestDistance = distance

@@ -1,11 +1,10 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
     <Frame name='BetterWorldQuestPinTemplate' inherits='WorldMap_WorldQuestPinTemplate' mixin='BetterWorldQuestPinMixin' virtual='true'/>
 
-    <Script file="better-world-quests.lua"/>
-    <Script file="completed-sound.lua"/>
-    <Script file="extra-quest-button.lua"/>
-    <Script file="objective-tracker.lua"/>
-    <Script file="quick-quest.lua"/>
-    <Script file="train-helper.lua"/>
-    <Script file="wilderling-helper.lua"/>
+    <Script file="quest.lua"/>
+    <Script file="automatic.lua"/>
+    <Script file="button.lua"/>
+    <Script file="helper.lua"/>
+    <Script file="tracker.lua"/>
+    <Script file="world.lua"/>
 </Ui>

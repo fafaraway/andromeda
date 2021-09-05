@@ -1,59 +1,6 @@
 -- Quick Quest
--- Credits: QuickQuest by p3lim
+-- Credit: p3lim
 -- https://github.com/p3lim-wow/QuickQuest
-
-local _G = _G
-local unpack = unpack
-local select = select
-local next = next
-local ipairs = ipairs
-local CreateFrame = CreateFrame
-local UnitGUID = UnitGUID
-local IsAltKeyDown = IsAltKeyDown
-local GetItemInfoFromHyperlink = GetItemInfoFromHyperlink
-local GetNumTrackingTypes = GetNumTrackingTypes
-local GetTrackingInfo = GetTrackingInfo
-local GetInstanceInfo = GetInstanceInfo
-local GetQuestID = GetQuestID
-local GetNumActiveQuests = GetNumActiveQuests
-local GetActiveTitle = GetActiveTitle
-local GetActiveQuestID = GetActiveQuestID
-local SelectActiveQuest = SelectActiveQuest
-local IsQuestCompletable = IsQuestCompletable
-local GetNumQuestItems = GetNumQuestItems
-local GetQuestItemLink = GetQuestItemLink
-local QuestIsFromAreaTrigger = QuestIsFromAreaTrigger
-local QuestGetAutoAccept = QuestGetAutoAccept
-local AcceptQuest = AcceptQuest
-local CloseQuest = CloseQuest
-local CompleteQuest = CompleteQuest
-local AcknowledgeAutoAcceptQuest = AcknowledgeAutoAcceptQuest
-local QuestInfoItem_OnClick = QuestInfoItem_OnClick
-local GetNumQuestChoices = GetNumQuestChoices
-local GetQuestReward = GetQuestReward
-local GetItemInfo = GetItemInfo
-local GetQuestItemInfo = GetQuestItemInfo
-local GetNumAvailableQuests = GetNumAvailableQuests
-local GetAvailableQuestInfo = GetAvailableQuestInfo
-local SelectAvailableQuest = SelectAvailableQuest
-local GetNumAutoQuestPopUps = GetNumAutoQuestPopUps
-local GetAutoQuestPopUp = GetAutoQuestPopUp
-local ShowQuestOffer = ShowQuestOffer
-local ShowQuestComplete = ShowQuestComplete
-local C_QuestLog_IsWorldQuest = C_QuestLog.IsWorldQuest
-local C_QuestLog_IsQuestTrivial = C_QuestLog.IsQuestTrivial
-local C_QuestLog_GetQuestTagInfo = C_QuestLog.GetQuestTagInfo
-local C_GossipInfo_GetOptions = C_GossipInfo.GetOptions
-local C_GossipInfo_SelectOption = C_GossipInfo.SelectOption
-local C_GossipInfo_GetNumOptions = C_GossipInfo.GetNumOptions
-local C_GossipInfo_GetActiveQuests = C_GossipInfo.GetActiveQuests
-local C_GossipInfo_SelectActiveQuest = C_GossipInfo.SelectActiveQuest
-local C_GossipInfo_GetAvailableQuests = C_GossipInfo.GetAvailableQuests
-local C_GossipInfo_GetNumActiveQuests = C_GossipInfo.GetNumActiveQuests
-local C_GossipInfo_SelectAvailableQuest = C_GossipInfo.SelectAvailableQuest
-local C_GossipInfo_GetNumAvailableQuests = C_GossipInfo.GetNumAvailableQuests
-local UnitIsDeadOrGhost = UnitIsDeadOrGhost
-local StaticPopup_Hide = StaticPopup_Hide
 
 local F, C = unpack(select(2, ...))
 
@@ -120,7 +67,7 @@ local ignoreQuestNPC = {
     [160248] = true, -- 档案员费安，罪魂碎片
     [127037] = true, -- 纳毕鲁
     [326027] = true, -- 运输站回收生成器DX-82
-    [162804] = true, -- 威娜莉
+    [162804] = true -- 威娜莉
 }
 
 QuickQuest:Register(
@@ -136,7 +83,7 @@ QuickQuest:Register(
             for index = 1, active do
                 local _, isComplete = GetActiveTitle(index)
                 local questID = GetActiveQuestID(index)
-                if isComplete and not C_QuestLog_IsWorldQuest(questID) then
+                if isComplete and not C_QuestLog.IsWorldQuest(questID) then
                     SelectActiveQuest(index)
                 end
             end
@@ -221,49 +168,49 @@ QuickQuest:Register(
             return
         end
 
-        local active = C_GossipInfo_GetNumActiveQuests()
+        local active = C_GossipInfo.GetNumActiveQuests()
         if active > 0 then
-            for index, questInfo in ipairs(C_GossipInfo_GetActiveQuests()) do
+            for index, questInfo in ipairs(C_GossipInfo.GetActiveQuests()) do
                 local questID = questInfo.questID
-                local isWorldQuest = questID and C_QuestLog_IsWorldQuest(questID)
+                local isWorldQuest = questID and C_QuestLog.IsWorldQuest(questID)
                 if questInfo.isComplete and (not questID or not isWorldQuest) then
-                    C_GossipInfo_SelectActiveQuest(index)
+                    C_GossipInfo.SelectActiveQuest(index)
                 end
             end
         end
 
-        local available = C_GossipInfo_GetNumAvailableQuests()
+        local available = C_GossipInfo.GetNumAvailableQuests()
         if available > 0 then
-            for index, questInfo in ipairs(C_GossipInfo_GetAvailableQuests()) do
+            for index, questInfo in ipairs(C_GossipInfo.GetAvailableQuests()) do
                 local trivial = questInfo.isTrivial
                 if not trivial or IsTrackingHidden() or (trivial and npcID == 64337) then
-                    C_GossipInfo_SelectAvailableQuest(index)
+                    C_GossipInfo.SelectAvailableQuest(index)
                 end
             end
         end
 
         if rogueClassHallInsignia[npcID] then
-            return C_GossipInfo_SelectOption(1)
+            return C_GossipInfo.SelectOption(1)
         end
 
         if available == 0 and active == 0 then
-            local numOptions = C_GossipInfo_GetNumOptions()
+            local numOptions = C_GossipInfo.GetNumOptions()
             if numOptions == 1 then
                 if npcID == 57850 then
-                    return C_GossipInfo_SelectOption(1)
+                    return C_GossipInfo.SelectOption(1)
                 end
 
                 local _, instance, _, _, _, _, _, mapID = GetInstanceInfo()
                 if instance ~= 'raid' and not ignoreGossipNPC[npcID] and not (instance == 'scenario' and mapID == 1626) then
-                    local gossipInfoTable = C_GossipInfo_GetOptions()
+                    local gossipInfoTable = C_GossipInfo.GetOptions()
                     local gType = gossipInfoTable[1] and gossipInfoTable[1].type
                     if gType and autoGossipTypes[gType] then
-                        C_GossipInfo_SelectOption(1)
+                        C_GossipInfo.SelectOption(1)
                         return
                     end
                 end
             elseif followerAssignees[npcID] and numOptions > 1 then
-                return C_GossipInfo_SelectOption(1)
+                return C_GossipInfo.SelectOption(1)
             end
         end
     end
@@ -280,8 +227,8 @@ QuickQuest:Register(
     function(index)
         local npcID = GetNPCID()
         if npcID and darkmoonNPC[npcID] then
-            C_GossipInfo_SelectOption(index, '', true)
-            StaticPopup_Hide('GOSSIP_CONFIRM')
+            C_GossipInfo.SelectOption(index, '', true)
+            _G.StaticPopup_Hide('GOSSIP_CONFIRM')
         end
     end
 )
@@ -290,22 +237,22 @@ QuickQuest:Register(
     'QUEST_DETAIL',
     function()
         if QuestIsFromAreaTrigger() then
-            AcceptQuest()
+            _G.AcceptQuest()
         elseif QuestGetAutoAccept() then
             AcknowledgeAutoAcceptQuest()
-        elseif not C_QuestLog_IsQuestTrivial(GetQuestID()) or IsTrackingHidden() then
-            AcceptQuest()
+        elseif not C_QuestLog.IsQuestTrivial(GetQuestID()) or IsTrackingHidden() then
+            _G.AcceptQuest()
         end
     end
 )
 
-QuickQuest:Register('QUEST_ACCEPT_CONFIRM', AcceptQuest)
+QuickQuest:Register('QUEST_ACCEPT_CONFIRM', _G.AcceptQuest)
 
 QuickQuest:Register(
     'QUEST_ACCEPTED',
     function()
         if _G.QuestFrame:IsShown() and QuestGetAutoAccept() then
-            CloseQuest()
+            _G.CloseQuest()
         end
     end
 )
@@ -375,7 +322,7 @@ QuickQuest:Register(
     'QUEST_PROGRESS',
     function()
         if IsQuestCompletable() then
-            local info = C_QuestLog_GetQuestTagInfo(GetQuestID())
+            local info = C_QuestLog.GetQuestTagInfo(GetQuestID())
             if info and (info.tagID == 153 or info.worldQuestType) then
                 return
             end
@@ -393,7 +340,7 @@ QuickQuest:Register(
                         local id = GetItemInfoFromHyperlink(link)
                         for _, itemID in next, itemBlacklist do
                             if itemID == id then
-                                CloseQuest()
+                                _G.CloseQuest()
                                 return
                             end
                         end
@@ -405,7 +352,7 @@ QuickQuest:Register(
                 end
             end
 
-            CompleteQuest()
+            _G.CompleteQuest()
         end
     end
 )
@@ -455,7 +402,7 @@ QuickQuest:Register(
 
             local button = bestIndex and _G.QuestInfoRewardsFrame.RewardButtons[bestIndex]
             if button then
-                QuestInfoItem_OnClick(button)
+                _G.QuestInfoItem_OnClick(button)
             end
         end
     end
@@ -469,7 +416,7 @@ local function AttemptAutoComplete(event)
         end
 
         local questID, popUpType = GetAutoQuestPopUp(1)
-        if not C_QuestLog_IsWorldQuest(questID) then
+        if not C_QuestLog.IsWorldQuest(questID) then
             if popUpType == 'OFFER' then
                 ShowQuestOffer(questID)
             elseif popUpType == 'COMPLETE' then
@@ -482,4 +429,5 @@ local function AttemptAutoComplete(event)
         QuickQuest:UnregisterEvent(event)
     end
 end
+
 QuickQuest:Register('QUEST_LOG_UPDATE', AttemptAutoComplete)
