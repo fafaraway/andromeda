@@ -1,14 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local UnitGUID = UnitGUID
-local PlaySoundFile = PlaySoundFile
-local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
-local UnitHealth = UnitHealth
-local UnitHealthMax = UnitHealthMax
-local UnitPower = UnitPower
-local UnitPowerMax = UnitPowerMax
-
 local F, C = unpack(select(2, ...))
 local COMBAT = F:RegisterModule('Combat')
 
@@ -28,25 +17,24 @@ function COMBAT:COMBAT_LOG_EVENT_UNFILTERED()
         end
     elseif eventType == 'SPELL_DISPEL' and C.DB.Combat.Dispel then
         if srcGUID == UnitGUID('player') or srcGUID == UnitGUID('pet') then
-
             PlaySoundFile(C.Assets.Sounds.Dispel, 'Master')
         end
     elseif eventType == 'SPELL_STOLEN' and C.DB.Combat.SpellSteal then
         if srcGUID == UnitGUID('player') then
-
             PlaySoundFile(C.Assets.Sounds.Dispel, 'Master')
         end
     elseif eventType == 'SPELL_MISSED' and C.DB.Combat.SpellMiss then
         local missType, _, _ = select(15, CombatLogGetCurrentEventInfo())
         if missType == 'REFLECT' and destGUID == UnitGUID('player') then
-
             PlaySoundFile(C.Assets.Sounds.Missed, 'Master')
         end
     end
 end
 
 function COMBAT:UNIT_HEALTH(unit)
-    if not C.DB.Combat.LowHealth then return end
+    if not C.DB.Combat.LowHealth then
+        return
+    end
 
     if unit ~= 'player' then
         return
@@ -65,8 +53,10 @@ function COMBAT:UNIT_HEALTH(unit)
     end
 end
 
-function COMBAT:UNIT_POWER_UPDATE(unit, powerType)
-    if not C.DB.Combat.LowMana then return end
+function COMBAT:UNIT_POWER_UPDATE(unit)
+    if not C.DB.Combat.LowMana then
+        return
+    end
 
     if unit ~= 'player' then
         return
@@ -74,8 +64,9 @@ function COMBAT:UNIT_POWER_UPDATE(unit, powerType)
 
     local threshold = C.DB.Combat.LowManaThreshold
     local sound = C.Assets.Sounds.LowMana
+    local _, powerToken = UnitPowerType('player')
 
-    if powerType == 'MANA' then
+    if powerToken == 'MANA' then
         if (UnitPower('player') / UnitPowerMax('player')) <= threshold then
             if not playedLowMana then
                 PlaySoundFile(sound, 'Master')
