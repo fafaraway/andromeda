@@ -197,7 +197,8 @@ local addonBlockList = {
     'wow.+验证码',
     '【有爱插件】',
     '：.+>',
-    '|Hspell.+=>'
+    '|Hspell.+=>',
+    '<EH>'
 }
 
 local cvar
