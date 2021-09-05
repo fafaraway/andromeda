@@ -722,7 +722,7 @@ function NAMEPLATE:UpdateSpitefulIndicator()
         return
     end
 
-    self.tarName:SetShown(self.npcID == 174773)
+    self.tarName:SetShown(C.ShowTargetNPCs[self.npcID])
 end
 
 -- Totem icon
@@ -935,6 +935,8 @@ end
 function NAMEPLATE:RefreshPlateOnFactionChanged()
     F:RegisterEvent('UNIT_FACTION', NAMEPLATE.OnUnitFactionChanged)
 end
+
+
 
 function NAMEPLATE:PostUpdatePlates(event, unit)
     if not self then

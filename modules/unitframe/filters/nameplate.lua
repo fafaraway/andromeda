@@ -1,9 +1,10 @@
-local _G = getfenv(0)
-local unpack = _G.unpack
-local select = _G.select
-local C_EncounterJournal_GetSectionInfo = _G.C_EncounterJournal.GetSectionInfo
-
 local _, C = unpack(select(2, ...))
+
+-- 取自地城手册的段落ID
+-- 纯数字则为GUID，选择目标后输入/getnpcid获取
+local function GetSectionInfo(id)
+    return C_EncounterJournal.GetSectionInfo(id).title
+end
 
 C.AuraWhiteList = {
     -- Buffs
@@ -77,11 +78,10 @@ C.AuraBlackList = {
     [206930] = true -- 心脏打击
 }
 
--- 取自地城手册的段落ID
--- 纯数字则为GUID，选择目标后输入/getnpcid获取
-local function GetSectionInfo(id)
-    return C_EncounterJournal_GetSectionInfo(id).title
-end
+C.ShowTargetNPCs = {
+    [165251] = true, -- 仙林狐狸
+    [174773] = true, -- 怨毒怪
+}
 
 C.NPSpecialUnitsList = {
     [179823] = true, -- 圣物收集者，刻希亚

@@ -308,6 +308,10 @@ local function CreateCastBarMover(bar, text, value, anchor)
     bar.mover = mover
 end
 
+local function UpdateCastbar(self, _, unit)
+    UNITFRAME.PostCastUpdate(self.Castbar, unit)
+end
+
 local cbPosition = {
     player = {'CENTER', _G.UIParent, 'CENTER', 0, -280},
     target = {'LEFT', _G.UIParent, 'CENTER', 113, -152},
@@ -406,6 +410,8 @@ function UNITFRAME:CreateCastBar(self)
         end
 
         castbar.SpellTarget = spellTarget
+
+        self:RegisterEvent('UNIT_TARGET', UpdateCastbar)
 
     else
         text:SetShown(C.DB.Unitframe.SpellName)
