@@ -140,11 +140,23 @@ do
     function F:HexToRGB(rgb)
         if string.len(rgb) == 6 then
             local r, g, b
-            r, g, b = tonumber('0x'..strsub(rgb, 0, 2)), tonumber('0x'..strsub(rgb, 3, 4)), tonumber('0x'..strsub(rgb, 5, 6))
-            if not r then r = 0 else r = r/255 end
-            if not g then g = 0 else g = g/255 end
-            if not b then b = 0 else b = b/255 end
-            return r,g,b
+            r, g, b = tonumber('0x' .. strsub(rgb, 0, 2)), tonumber('0x' .. strsub(rgb, 3, 4)), tonumber('0x' .. strsub(rgb, 5, 6))
+            if not r then
+                r = 0
+            else
+                r = r / 255
+            end
+            if not g then
+                g = 0
+            else
+                g = g / 255
+            end
+            if not b then
+                b = 0
+            else
+                b = b / 255
+            end
+            return r, g, b
         else
             return
         end
@@ -558,15 +570,18 @@ do
         return hex .. text .. '|r'
     end
 
-    function F:ShortenString(str, numChars, dots)
-        local bytes = #str
-        if bytes <= numChars then
-            return str
+    function F.ShortenString(string, i, dots)
+        if not string then
+            return
+        end
+        local bytes = string:len()
+        if bytes <= i then
+            return string
         else
             local len, pos = 0, 1
-            while pos <= bytes do
+            while (pos <= bytes) do
                 len = len + 1
-                local c = str:byte(pos)
+                local c = string:byte(pos)
                 if c > 0 and c <= 127 then
                     pos = pos + 1
                 elseif c >= 192 and c <= 223 then
@@ -576,30 +591,16 @@ do
                 elseif c >= 240 and c <= 247 then
                     pos = pos + 4
                 end
-                if len == numChars then
+                if len == i then
                     break
                 end
             end
-
-            if len == numChars and pos <= bytes then
-                return strsub(str, 1, pos - 1) .. (dots and '...' or '')
+            if len == i and pos <= bytes then
+                return string:sub(1, pos - 1) .. (dots and '...' or '')
             else
-                return str
+                return string
             end
         end
-    end
-
-    function F:AbbreviateString(str, allUpper)
-        local newString = ''
-        for word in gmatch(str, '[^%s]+') do
-            word = utf8sub(word, 1, 1) -- get only first letter of each word
-            if allUpper then
-                word = strupper(word)
-            end
-            newString = newString .. word
-        end
-
-        return newString
     end
 
     -- GameTooltip

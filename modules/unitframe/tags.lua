@@ -1,35 +1,4 @@
-local _G = _G
-local format = format
-local select = select
-local floor = floor
-local unpack = unpack
-local select = select
-local strfind = strfind
-local UnitName = UnitName
-local UnitLevel = UnitLevel
-local UnitClass = UnitClass
-local UnitIsConnected = UnitIsConnected
-local UnitIsDead = UnitIsDead
-local UnitIsGhost = UnitIsGhost
-local UnitIsDeadOrGhost = UnitIsDeadOrGhost
-local UnitIsPVP = UnitIsPVP
-local UnitIsPlayer = UnitIsPlayer
-local UnitIsTapDenied = UnitIsTapDenied
-local UnitReaction = UnitReaction
-local UnitHealth = UnitHealth
-local UnitHealthMax = UnitHealthMax
-local UnitPower = UnitPower
-local UnitPowerMax = UnitPowerMax
-local UnitStagger = UnitStagger
-local UnitIsUnit = UnitIsUnit
-local UnitExists = UnitExists
-local UnitClassification = UnitClassification
-local UnitSelectionColor = UnitSelectionColor
-local IsResting = IsResting
-local GetCVarBool = GetCVarBool
-local ALTERNATE_POWER_INDEX = Enum.PowerType.Alternate
-
-local F, C = unpack(select(2, ...))
+local F, C, L = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
 
 local colors = F.Libs.oUF.colors
@@ -44,7 +13,7 @@ tags['free:health'] = function(unit)
     local cur = UnitHealth(unit)
     local r, g, b = unpack(colors.reaction[UnitReaction(unit, 'player') or 5])
 
-    return format('|cff%02x%02x%02x%s|r', r * 255, g * 255, b * 255, F:Numb(cur))
+    return string.format('|cff%02x%02x%02x%s|r', r * 255, g * 255, b * 255, F:Numb(cur))
 end
 tagEvents['free:health'] = 'UNIT_CONNECTION UNIT_HEALTH UNIT_MAXHEALTH'
 
@@ -58,7 +27,7 @@ tags['free:healthpercentage'] = function(unit)
     r, g, b = r * 255, g * 255, b * 255
 
     if cur ~= max then
-        return format('|cff%02x%02x%02x%d%%|r', r, g, b, floor(cur / max * 100 + 0.5))
+        return string.format('|cff%02x%02x%02x%d%%|r', r, g, b, math.floor(cur / max * 100 + 0.5))
     end
 end
 tagEvents['free:healthpercentage'] = 'UNIT_CONNECTION UNIT_HEALTH UNIT_MAXHEALTH'
@@ -85,7 +54,7 @@ tags['free:stagger'] = function(unit)
         return
     end
 
-    return F:Numb(cur) .. ' / ' .. C.MyColor .. floor(perc * 100 + .5) .. '%'
+    return F:Numb(cur) .. ' / ' .. C.MyColor .. math.floor(perc * 100 + .5) .. '%'
 end
 tagEvents['free:stagger'] = 'UNIT_MAXHEALTH UNIT_AURA'
 
@@ -97,8 +66,8 @@ tags['free:title'] = function(unit)
     F.ScanTip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
     F.ScanTip:SetUnit(unit)
 
-    local title = _G[format('FreeUI_ScanTooltipTextLeft%d', GetCVarBool('colorblindmode') and 3 or 2)]:GetText()
-    if title and not strfind(title, '^' .. _G.LEVEL) then
+    local title = _G[string.format('FreeUI_ScanTooltipTextLeft%d', GetCVarBool('colorblindmode') and 3 or 2)]:GetText()
+    if title and not string.find(title, '^' .. _G.LEVEL) then
         return title
     end
 end
@@ -108,8 +77,6 @@ tags['free:color'] = function(unit)
     local class = select(2, UnitClass(unit))
     local reaction = UnitReaction(unit, "player")
     local isOffline = not UnitIsConnected(unit)
-    local isDead = UnitIsDead(unit)
-    local isGhost = UnitIsGhost(unit)
     local isTapped = UnitIsTapDenied(unit)
 
     if (unit == 'targettarget' and UnitIsUnit('targettarget', 'player')) or (unit == 'focustarget' and UnitIsUnit('focustarget', 'player')) then
@@ -128,65 +95,53 @@ tagEvents['free:color'] = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_FACT
 
 tags['free:dead'] = function(unit)
     if UnitIsDead(unit) then
-        return '|cffd84343' .. 'Dead'
+        return '|cffd84343' .. L['Dead']
     elseif UnitIsGhost(unit) then
-        return '|cffbd69be' .. 'Ghost'
+        return '|cffbd69be' .. L['Ghost']
     end
 end
 tagEvents['free:dead'] = 'UNIT_HEALTH'
 
 tags['free:offline'] = function(unit)
     if not UnitIsConnected(unit) then
-        return '|cffcccccc' .. 'Off'
+        return '|cffcccccc' .. L['Off']
     end
 end
 tagEvents['free:offline'] = 'UNIT_HEALTH UNIT_CONNECTION'
 
 tags['free:name'] = function(unit)
-    local useAbbr = C.DB.Unitframe.AbbreviatedName
+    local shorten = C.DB.Unitframe.ShortenName
     local str = UnitName(unit)
-    local abbrName = F:AbbreviateString(str)
+    local newStr = (string.len(str) > 12) and string.gsub(str, "%s?(.[\128-\191]*)%S+%s", "%1. ") or str
 
     if (unit == 'targettarget' and UnitIsUnit('targettarget', 'player')) or (unit == 'focustarget' and UnitIsUnit('focustarget', 'player')) then
         return '<' .. _G.YOU .. '>'
     else
-        return useAbbr and abbrName or str
+        return shorten and F.ShortenString(newStr, 12, true) or str
     end
 end
 tagEvents['free:name'] = 'UNIT_NAME_UPDATE'
 
 tags['free:npname'] = function(unit)
-    local useAbbr = C.DB.Unitframe.AbbreviatedName
+    local shorten = C.DB.Unitframe.ShortenName
     local str = UnitName(unit)
-    local abbrName = F:AbbreviateString(str)
+    local newStr = (string.len(str) > 12) and string.gsub(str, "%s?(.[\128-\191]*)%S+%s", "%1. ") or str
 
-    if (unit == 'targettarget' and UnitIsUnit('targettarget', 'player')) or (unit == 'focustarget' and UnitIsUnit('focustarget', 'player')) then
-        return C.RedColor .. '<' .. _G.YOU .. '>'
-    else
-        return F:ShortenString(useAbbr and abbrName or str, C.IsChinses and 6 or 8, true)
-    end
+    return shorten and F.ShortenString(newStr, 12, true) or str
 end
 tagEvents['free:npname'] = 'UNIT_NAME_UPDATE'
 
 tags['free:groupname'] = function(unit)
     local isRaid = (unit:match('raid%d?$'))
     local showGroupName = C.DB.Unitframe.GroupShowName
-    local shortenName = C.DB.Unitframe.ShortenName
-    local nameStr = UnitName(unit)
-    local shortenStr = F:ShortenString(nameStr, isRaid and 2 or 4)
-    local isOffline = not UnitIsConnected(unit)
-    local isDead = UnitIsDead(unit)
-    local isGhost = UnitIsGhost(unit)
+    local shorten = C.DB.Unitframe.ShortenName
+    local str = UnitName(unit)
 
     if showGroupName then
-        return shortenName and shortenStr or nameStr
-    elseif isOffline then
-        return 'off'
-    elseif isDead or isGhost then
-        return 'dead'
+        return shorten and F.ShortenString(str, isRaid and 2 or 4) or str
     end
 end
-tagEvents['free:groupname'] = 'UNIT_HEALTH UNIT_MAXHEALTH GROUP_ROSTER_UPDATE UNIT_CONNECTION'
+tagEvents['free:groupname'] = 'UNIT_NAME_UPDATE'
 
 tags['free:resting'] = function(unit)
     if (unit == 'player' and IsResting()) then
@@ -219,10 +174,10 @@ end
 tagEvents['free:pvp'] = 'UNIT_FACTION'
 
 tags['free:altpower'] = function(unit)
-    local cur = UnitPower(unit, ALTERNATE_POWER_INDEX)
-    local max = UnitPowerMax(unit, ALTERNATE_POWER_INDEX)
+    local cur = UnitPower(unit, _G.ALTERNATE_POWER_INDEX)
+    local max = UnitPowerMax(unit, _G.ALTERNATE_POWER_INDEX)
     if max > 0 and not UnitIsDeadOrGhost(unit) then
-        return ('%s%%'):format(floor(cur / max * 100 + .5))
+        return ('%s%%'):format(math.floor(cur / max * 100 + .5))
     end
 end
 tagEvents['free:altpower'] = 'UNIT_POWER_UPDATE'

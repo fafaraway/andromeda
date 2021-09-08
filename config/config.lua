@@ -183,7 +183,7 @@ C.CharacterSettings = {
             TotemsBar = true,
             TotemsBarHeight = 2,
             OnlyShowPlayer = true,
-            AbbreviatedName = false,
+            ShortenName = true,
             TextScale = 1,
             GroupTextScale = 1,
 
@@ -233,7 +233,6 @@ C.CharacterSettings = {
 
             Group = true,
                 GroupShowName = false,
-                ShortenName = true,
                 ShowSolo = false,
                 SmartRaid = true,
                 ShowRaidBuff = false,
