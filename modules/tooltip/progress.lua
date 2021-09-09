@@ -3,30 +3,6 @@
     Credit: Elv_WindTools by fang2hou
 ]]
 
-local _G = _G
-local unpack = unpack
-local select = select
-local GetTime = GetTime
-local format = string.format
-local gsub = string.gsub
-local UnitExists = UnitExists
-local UnitRace = UnitRace
-local UnitLevel = UnitLevel
-local UnitIsPlayer = UnitIsPlayer
-local UnitGUID = UnitGUID
-local CanInspect = CanInspect
-local GetAchievementInfo = GetAchievementInfo
-local GetAchievementComparisonInfo = GetAchievementComparisonInfo
-local ClearAchievementComparisonUnit = ClearAchievementComparisonUnit
-local C_PlayerInfo_GetPlayerMythicPlusRatingSummary = C_PlayerInfo.GetPlayerMythicPlusRatingSummary
-local C_ChallengeMode_GetDungeonScoreRarityColor = C_ChallengeMode.GetDungeonScoreRarityColor
-local C_ChallengeMode_GetSpecificDungeonOverallScoreRarityColor = C_ChallengeMode.GetSpecificDungeonOverallScoreRarityColor
-local C_CreatureInfo_GetFactionInfo = C_CreatureInfo.GetFactionInfo
-local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo
-local InCombatLockdown = InCombatLockdown
-local IsAltKeyDown = IsAltKeyDown
-local SetAchievementComparisonUnit = SetAchievementComparisonUnit
-
 local F, C, L = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 
@@ -40,7 +16,7 @@ local tiers = {
 local levels = {
     'Mythic',
     'Heroic',
-    'Normal',
+    'Normal'
 }
 
 local locales = {
@@ -192,7 +168,7 @@ local function GetAchievementInfoByID(guid, achievementID)
     return completed, month, day, year
 end
 
-function TOOLTIP:UpdatePvEStats(guid, faction)
+function TOOLTIP:UpdateProgress(guid, faction)
     cache[guid] = cache[guid] or {}
     cache[guid].info = cache[guid].info or {}
     cache[guid].timer = GetTime()
@@ -203,9 +179,9 @@ function TOOLTIP:UpdatePvEStats(guid, faction)
         local completed, month, day, year = GetAchievementInfoByID(guid, achievement.id)
         local completedString = '|cff888888' .. L['Not Completed'] .. '|r'
         if completed then
-            completedString = gsub(L['%month%-%day%-%year%'], '%%month%%', month)
-            completedString = gsub(completedString, '%%day%%', day)
-            completedString = gsub(completedString, '%%year%%', 2000 + year)
+            completedString = string.gsub(L['%month%-%day%-%year%'], '%%month%%', month)
+            completedString = string.gsub(completedString, '%%day%%', day)
+            completedString = string.gsub(completedString, '%%year%%', 2000 + year)
         end
 
         cache[guid].info.special[achievement.name] = completedString
@@ -228,7 +204,7 @@ function TOOLTIP:UpdatePvEStats(guid, faction)
             end
 
             if alreadyKilled > 0 then
-                cache[guid].info.raids[tier][level] = format('%d/%d', alreadyKilled, #bosses[level])
+                cache[guid].info.raids[tier][level] = string.format('%d/%d', alreadyKilled, #bosses[level])
                 if alreadyKilled == #bosses[level] then
                     break
                 end
@@ -237,7 +213,7 @@ function TOOLTIP:UpdatePvEStats(guid, faction)
     end
 end
 
-function TOOLTIP:SetPvEStats(unit, guid)
+function TOOLTIP:SetProgress(unit, guid)
     if not cache[guid] then
         return
     end
@@ -248,7 +224,7 @@ function TOOLTIP:SetPvEStats(unit, guid)
         for _, achievement in ipairs(specialAchievements) do
             local name = achievement.name
             local nameStr = locales[name] and locales[name].short or name
-            local left = format('%s:', nameStr)
+            local left = string.format('%s:', nameStr)
             local right = cache[guid].info.special[name]
             _G.GameTooltip:AddDoubleLine(left, right, .6, .8, 1, 1, 1, 1)
         end
@@ -266,7 +242,7 @@ function TOOLTIP:SetPvEStats(unit, guid)
                         title = true
                     end
 
-                    local left = format('%s:', locales[tier].short)
+                    local left = string.format('%s:', locales[tier].short)
                     local right = GetLevelColoredString(level) .. ' ' .. cache[guid].info.raids[tier][level]
                     _G.GameTooltip:AddDoubleLine(left, right, .6, .8, 1, 1, 1, 1)
                 end
@@ -274,21 +250,21 @@ function TOOLTIP:SetPvEStats(unit, guid)
         end
     end
 
-    local summary = C_PlayerInfo_GetPlayerMythicPlusRatingSummary(unit)
+    local summary = C_PlayerInfo.GetPlayerMythicPlusRatingSummary(unit)
     local score = summary and summary.currentSeasonScore
     local runs = summary and summary.runs
 
     if runs and next(runs) then
         _G.GameTooltip:AddLine(' ')
-        local color = C_ChallengeMode_GetDungeonScoreRarityColor(score) or _G.HIGHLIGHT_FONT_COLOR
-        _G.GameTooltip:AddLine(format(L['Mythic Plus: %s'], color:WrapTextInColorCode(score)))
+        local color = C_ChallengeMode.GetDungeonScoreRarityColor(score) or _G.HIGHLIGHT_FONT_COLOR
+        _G.GameTooltip:AddLine(string.format(L['Mythic Plus: %s'], color:WrapTextInColorCode(score)))
 
         for _, info in ipairs(runs) do
-            local name = dungeons[info.challengeModeID] and locales[dungeons[info.challengeModeID]].short or C_ChallengeMode_GetMapUIInfo(info.challengeModeID)
-            local left = format('%s:', name)
-            local scoreColor = C_ChallengeMode_GetSpecificDungeonOverallScoreRarityColor(info.mapScore) or _G.HIGHLIGHT_FONT_COLOR
+            local name = dungeons[info.challengeModeID] and locales[dungeons[info.challengeModeID]].short or C_ChallengeMode.GetMapUIInfo(info.challengeModeID)
+            local left = string.format('%s:', name)
+            local scoreColor = C_ChallengeMode.GetSpecificDungeonOverallScoreRarityColor(info.mapScore) or _G.HIGHLIGHT_FONT_COLOR
             local levelColor = info.finishedSuccess and '|cffffffff' or '|cff888888'
-            local right = format('%s (%s)', scoreColor:WrapTextInColorCode(info.mapScore), levelColor .. info.bestRunLevel .. '|r')
+            local right = string.format('%s (%s)', scoreColor:WrapTextInColorCode(info.mapScore), levelColor .. info.bestRunLevel .. '|r')
 
             _G.GameTooltip:AddDoubleLine(left, right, .6, .8, 1, 1, 1, 1)
         end
@@ -304,9 +280,9 @@ function TOOLTIP:GetAchievementInfo(GUID)
 
     if UnitExists(unit) then
         local race = select(3, UnitRace(unit))
-        local faction = race and C_CreatureInfo_GetFactionInfo(race).groupTag
+        local faction = race and C_CreatureInfo.GetFactionInfo(race).groupTag
         if faction then
-            TOOLTIP:UpdatePvEStats(GUID, faction)
+            TOOLTIP:UpdateProgress(GUID, faction)
             _G.GameTooltip:SetUnit(unit)
         end
     end
@@ -316,7 +292,7 @@ function TOOLTIP:GetAchievementInfo(GUID)
     F:UnregisterEvent(self, TOOLTIP.GetAchievementInfo)
 end
 
-function TOOLTIP:AddPvEStats()
+function TOOLTIP:AddPvEProgress()
     if InCombatLockdown() then
         return
     end
@@ -324,7 +300,6 @@ function TOOLTIP:AddPvEStats()
     if not IsAltKeyDown() then
         return
     end
-
     local unit = TOOLTIP.GetUnit(self)
     if not unit or not CanInspect(unit) or not UnitIsPlayer(unit) then
         return
@@ -338,7 +313,7 @@ function TOOLTIP:AddPvEStats()
     local guid = UnitGUID(unit)
     if not cache[guid] or (GetTime() - cache[guid].timer) > 600 then
         if guid == C.MyGUID then
-            TOOLTIP:UpdatePvEStats(guid, C.MyFaction)
+            TOOLTIP:UpdateProgress(guid, C.MyFaction)
         else
             ClearAchievementComparisonUnit()
 
@@ -352,7 +327,7 @@ function TOOLTIP:AddPvEStats()
         end
     end
 
-    TOOLTIP:SetPvEStats(unit, guid)
+    TOOLTIP:SetProgress(unit, guid)
 end
 
 function TOOLTIP:PvEStats_OnEvent(event, addon)
@@ -366,4 +341,3 @@ function TOOLTIP:PvEStats_OnEvent(event, addon)
         F:UnregisterEvent(event, TOOLTIP.PvEStats_OnEvent)
     end
 end
-

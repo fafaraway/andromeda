@@ -1,18 +1,4 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local strmatch = strmatch
-local tonumber = tonumber
-local UnitAura = UnitAura
-local GetItemInfoFromHyperlink = GetItemInfoFromHyperlink
-local C_TradeSkillUI_GetRecipeReagentItemLink = C_TradeSkillUI.GetRecipeReagentItemLink
-local IsAltKeyDown = IsAltKeyDown
-local hooksecurefunc = hooksecurefunc
-local UnitGUID = UnitGUID
-local C_PetBattles_IsInBattle = C_PetBattles.IsInBattle
-local C_CurrencyInfo_GetCurrencyListLink = C_CurrencyInfo.GetCurrencyListLink
-
-local F, C, L = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 
 local types = {
@@ -46,7 +32,7 @@ function TOOLTIP:AddLineForID(id, linkType)
 end
 
 function TOOLTIP:SetHyperLinkID(link)
-    local linkType, id = strmatch(link, '^(%a+):(%d+)')
+    local linkType, id = string.match(link, '^(%a+):(%d+)')
     if not linkType or not id then
         return
     end
@@ -66,7 +52,7 @@ function TOOLTIP:SetItemID()
     local link = select(2, self:GetItem())
     if link then
         local id = GetItemInfoFromHyperlink(link)
-        local keystone = strmatch(link, '|Hkeystone:([0-9]+):')
+        local keystone = string.match(link, '|Hkeystone:([0-9]+):')
         if keystone then
             id = tonumber(keystone)
         end
@@ -110,7 +96,7 @@ function TOOLTIP:ExtraInfo()
     hooksecurefunc(
         'SetItemRef',
         function(link)
-            local id = tonumber(strmatch(link, 'spell:(%d+)'))
+            local id = tonumber(string.match(link, 'spell:(%d+)'))
             if id then
                 TOOLTIP.AddLineForID(_G.ItemRefTooltip, id, types.spell)
             end
@@ -140,8 +126,8 @@ function TOOLTIP:ExtraInfo()
         _G.GameTooltip,
         'SetRecipeReagentItem',
         function(self, recipeID, reagentIndex)
-            local link = C_TradeSkillUI_GetRecipeReagentItemLink(recipeID, reagentIndex)
-            local id = link and strmatch(link, 'item:(%d+):')
+            local link = C_TradeSkillUI.GetRecipeReagentItemLink(recipeID, reagentIndex)
+            local id = link and string.match(link, 'item:(%d+):')
             if id then
                 TOOLTIP.AddLineForID(self, id, types.item)
             end
@@ -153,7 +139,7 @@ function TOOLTIP:ExtraInfo()
         _G.GameTooltip,
         'SetCurrencyToken',
         function(self, index)
-            local id = tonumber(strmatch(C_CurrencyInfo_GetCurrencyListLink(index), 'currency:(%d+)'))
+            local id = tonumber(string.match(C_CurrencyInfo.GetCurrencyListLink(index), 'currency:(%d+)'))
             TOOLTIP.AddLineForID(self, id, types.currency)
         end
     )
@@ -178,7 +164,7 @@ function TOOLTIP:ExtraInfo()
     _G.GameTooltip:HookScript(
         'OnTooltipSetUnit',
         function(self)
-            if C_PetBattles_IsInBattle() then
+            if C_PetBattles.IsInBattle() then
                 return
             end
 
@@ -203,5 +189,3 @@ function TOOLTIP:ExtraInfo()
         end
     )
 end
-
-

@@ -1,45 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local tinsert = tinsert
-local wipe = wipe
-local format = format
-local tconcat = table.concat
-local strfind = strfind
-local strupper = strupper
-local GetMouseFocus = GetMouseFocus
-local UnitIsUnit = UnitIsUnit
-local UnitName = UnitName
-local InCombatLockdown = InCombatLockdown
-local IsShiftKeyDown = IsShiftKeyDown
-local UnitExists = UnitExists
-local GetRaidTargetIndex = GetRaidTargetIndex
-local UnitIsPlayer = UnitIsPlayer
-local UnitPVPName = UnitPVPName
-local UnitRealmRelationship = UnitRealmRelationship
-local UnitIsDND = UnitIsDND
-local UnitIsAFK = UnitIsAFK
-local GetGuildInfo = GetGuildInfo
-local IsInGuild = IsInGuild
-local UnitIsDeadOrGhost = UnitIsDeadOrGhost
-local UnitIsWildBattlePet = UnitIsWildBattlePet
-local UnitIsBattlePetCompanion = UnitIsBattlePetCompanion
-local UnitBattlePetLevel = UnitBattlePetLevel
-local UnitLevel = UnitLevel
-local GetCreatureDifficultyColor = GetCreatureDifficultyColor
-local UnitClassification = UnitClassification
-local UnitIsPVP = UnitIsPVP
-local UnitRace = UnitRace
-local IsInGroup = IsInGroup
-local GetNumGroupMembers = GetNumGroupMembers
-local IsInRaid = IsInRaid
-local hooksecurefunc = hooksecurefunc
-local UnitClass = UnitClass
-local UnitCreatureType = UnitCreatureType
-local UnitIsConnected = UnitIsConnected
-local UnitAura = UnitAura
-local GetUnitName = GetUnitName
-
 local F, C, L = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 
@@ -52,11 +10,7 @@ local classification = {
 }
 
 function TOOLTIP:GetUnit()
-    local _, unit = self and self:GetUnit()
-    if not unit then
-        local mFocus = GetMouseFocus()
-        unit = mFocus and (mFocus.unit or (mFocus.GetAttribute and mFocus:GetAttribute('unit'))) or 'mouseover'
-    end
+    local unit = (select(2, _G.GameTooltip:GetUnit())) or (GetMouseFocus() and GetMouseFocus().GetAttribute and GetMouseFocus():GetAttribute('unit')) or (UnitExists('mouseover') and 'mouseover') or nil
     return unit
 end
 
@@ -83,7 +37,7 @@ function TOOLTIP:GetLevelLine()
     for i = 2, self:NumLines() do
         local tiptext = _G['GameTooltipTextLeft' .. i]
         local linetext = tiptext:GetText()
-        if linetext and strfind(linetext, _G.LEVEL) then
+        if linetext and string.find(linetext, _G.LEVEL) then
             return tiptext
         end
     end
@@ -91,7 +45,7 @@ end
 
 function TOOLTIP:GetTarget(unit)
     if UnitIsUnit(unit, 'player') then
-        return format('|cffff0000%s|r', '>' .. strupper(_G.YOU) .. '<')
+        return string.format('|cffff0000%s|r', '>' .. string.upper(_G.YOU) .. '<')
     else
         return F:RGBToHex(F:UnitColor(unit)) .. UnitName(unit) .. '|r'
     end
@@ -107,19 +61,19 @@ function TOOLTIP:ScanTargetsInfo()
         return
     end
 
-    wipe(targetTable)
+    table.wipe(targetTable)
 
     for i = 1, GetNumGroupMembers() do
         local member = (IsInRaid() and 'raid' .. i or 'party' .. i)
         if UnitIsUnit(unit, member .. 'target') and not UnitIsUnit('player', member) and not UnitIsDeadOrGhost(member) then
             local color = F:RGBToHex(F:UnitColor(member))
             local name = color .. UnitName(member) .. '|r'
-            tinsert(targetTable, name)
+            table.insert(targetTable, name)
         end
     end
 
     if #targetTable > 0 then
-        _G.GameTooltip:AddLine(L['TargetBy'] .. ': ' .. C.InfoColor .. '(' .. #targetTable .. ')|r ' .. tconcat(targetTable, ', '), nil, nil, nil, 1)
+        _G.GameTooltip:AddLine(L['TargetBy'] .. ': ' .. C.InfoColor .. '(' .. #targetTable .. ')|r ' .. table.concat(targetTable, ', '), nil, nil, nil, 1)
     end
 end
 
@@ -168,11 +122,11 @@ function TOOLTIP:OnTooltipSetUnit()
 
             local status = (UnitIsAFK(unit) and _G.AFK) or (UnitIsDND(unit) and _G.DND) or (not UnitIsConnected(unit) and _G.PLAYER_OFFLINE)
             if status then
-                status = format(' |cffffcc00[%s]|r', status)
+                status = string.format(' |cffffcc00[%s]|r', status)
             end
             _G.GameTooltipTextLeft1:SetFormattedText('%s', name .. (status or ''))
 
-            local guildName, rank, rankIndex, guildRealm = GetGuildInfo(unit)
+            local guildName, rank, _, guildRealm = GetGuildInfo(unit)
             local hasText = _G.GameTooltipTextLeft2:GetText()
             if guildName and hasText then
                 local myGuild, _, _, myGuildRealm = GetGuildInfo('player')
@@ -182,16 +136,17 @@ function TOOLTIP:OnTooltipSetUnit()
                     _G.GameTooltipTextLeft2:SetTextColor(.6, .8, 1)
                 end
 
-                rankIndex = rankIndex + 1
                 if C.DB.Tooltip.HideGuildRank then
                     rank = ''
                 end
                 if guildRealm and isShiftKeyDown then
                     guildName = guildName .. '-' .. guildRealm
                 end
-                --[[ if cfg.hideJunkGuild and not isShiftKeyDown then
-                    if strlen(guildName) > 31 then guildName = '...' end
-                end ]]
+                if not isShiftKeyDown then
+                    if string.len(guildName) > 31 then
+                        guildName = '...'
+                    end
+                end
                 _G.GameTooltipTextLeft2:SetText('<' .. guildName .. '> ' .. rank)
             end
         end
@@ -213,13 +168,13 @@ function TOOLTIP:OnTooltipSetUnit()
                 boss = '|cffff0000??|r'
             end
 
-            local diff = GetCreatureDifficultyColor(level)
+            local diff = _G.GetCreatureDifficultyColor(level)
             local classify = UnitClassification(unit)
-            local textLevel = format('%s%s%s|r', F:RGBToHex(diff), boss or format('%d', level), classification[classify] or '')
+            local textLevel = string.format('%s%s%s|r', F:RGBToHex(diff), boss or string.format('%d', level), classification[classify] or '')
             local tiptextLevel = TOOLTIP.GetLevelLine(self)
             if tiptextLevel then
-                local pvpFlag = isPlayer and UnitIsPVP(unit) and format(' |cffff0000%s|r', _G.PVP) or ''
-                local unitClass = isPlayer and format('%s %s', UnitRace(unit) or '', hexColor .. (UnitClass(unit) or '') .. '|r') or UnitCreatureType(unit) or ''
+                local pvpFlag = isPlayer and UnitIsPVP(unit) and string.format(' |cffff0000%s|r', _G.PVP) or ''
+                local unitClass = isPlayer and string.format('%s %s', UnitRace(unit) or '', hexColor .. (UnitClass(unit) or '') .. '|r') or UnitCreatureType(unit) or ''
                 tiptextLevel:SetFormattedText(('%s%s %s %s'), textLevel, pvpFlag, unitClass, (not alive and '|cffCCCCCC' .. _G.DEAD .. '|r' or ''))
             end
         end
@@ -229,7 +184,7 @@ function TOOLTIP:OnTooltipSetUnit()
             if tarRicon and tarRicon > 8 then
                 tarRicon = nil
             end
-            local tar = format('%s%s', (tarRicon and _G.ICON_LIST[tarRicon] .. '10|t') or '', TOOLTIP:GetTarget(unit .. 'target'))
+            local tar = string.format('%s%s', (tarRicon and _G.ICON_LIST[tarRicon] .. '10|t') or '', TOOLTIP:GetTarget(unit .. 'target'))
             self:AddLine(_G.TARGET .. ': ' .. tar)
         end
 
@@ -240,7 +195,7 @@ function TOOLTIP:OnTooltipSetUnit()
         end
 
         TOOLTIP.InspectUnitSpecAndLevel(self, unit)
-        TOOLTIP.AddPvEStats()
+        TOOLTIP.AddPvEProgress()
     else
         self.StatusBar:SetStatusBarColor(0, .9, 0)
     end
@@ -398,8 +353,6 @@ function TOOLTIP:OnLogin()
         return
     end
 
-
-
     _G.GameTooltip.StatusBar = _G.GameTooltipStatusBar
 
     _G.GameTooltip:HookScript('OnTooltipSetUnit', TOOLTIP.OnTooltipSetUnit)
@@ -407,7 +360,9 @@ function TOOLTIP:OnLogin()
     hooksecurefunc('GameTooltip_ShowStatusBar', TOOLTIP.GameTooltip_ShowStatusBar)
     hooksecurefunc('GameTooltip_ShowProgressBar', TOOLTIP.GameTooltip_ShowProgressBar)
     hooksecurefunc('GameTooltip_SetDefaultAnchor', TOOLTIP.GameTooltip_SetDefaultAnchor)
-    hooksecurefunc('SharedTooltip_SetBackdropStyle', TOOLTIP.SharedTooltip_SetBackdropStyle)
+    if not C.IsNewPatch then
+        hooksecurefunc('SharedTooltip_SetBackdropStyle', TOOLTIP.SharedTooltip_SetBackdropStyle)
+    end
     hooksecurefunc('GameTooltip_AnchorComparisonTooltips', TOOLTIP.GameTooltip_ComparisonFix)
 
     if C.DB.Tooltip.DisableFading then
@@ -438,5 +393,6 @@ function TOOLTIP:OnLogin()
     TOOLTIP:ConduitCollectionData()
     TOOLTIP:DominationRank()
     TOOLTIP:Achievement()
+    TOOLTIP:AzeriteArmor()
     TOOLTIP:MountSource()
 end

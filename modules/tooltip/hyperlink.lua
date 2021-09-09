@@ -1,14 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local strsplit = strsplit
-local strmatch = strmatch
-local BattlePetToolTip_Show = BattlePetToolTip_Show
-local C_EncounterJournal_GetSectionInfo = C_EncounterJournal.GetSectionInfo
-local EJ_GetInstanceInfo = EJ_GetInstanceInfo
-local EJ_GetEncounterInfo = EJ_GetEncounterInfo
-local GetDifficultyInfo = GetDifficultyInfo
-
 local F, C, L = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 
@@ -27,27 +16,27 @@ local linkTypes = {
     keystone = true,
     azessence = true,
     mawpower = true,
-    conduit = true,
+    conduit = true
 }
 
 function TOOLTIP:HyperLink_SetPet(link)
     _G.GameTooltip:SetOwner(self, 'ANCHOR_TOPRIGHT', -3, 5)
     _G.GameTooltip:Show()
-    local _, speciesID, level, breedQuality, maxHealth, power, speed = strsplit(':', link)
-    BattlePetToolTip_Show(tonumber(speciesID), tonumber(level), tonumber(breedQuality), tonumber(maxHealth), tonumber(power), tonumber(speed))
+    local _, speciesID, level, breedQuality, maxHealth, power, speed = string.split(':', link)
+    _G.BattlePetToolTip_Show(tonumber(speciesID), tonumber(level), tonumber(breedQuality), tonumber(maxHealth), tonumber(power), tonumber(speed))
 end
 
 function TOOLTIP:HyperLink_GetSectionInfo(id)
     local info = sectionInfo[id]
     if not info then
-        info = C_EncounterJournal_GetSectionInfo(id)
+        info = C_EncounterJournal.GetSectionInfo(id)
         sectionInfo[id] = info
     end
     return info
 end
 
 function TOOLTIP:HyperLink_SetJournal(link)
-    local _, idType, id, diffID = strsplit(':', link)
+    local _, idType, id, diffID = string.split(':', link)
     local name, description, icon, idString
     if idType == '0' then
         name, description = EJ_GetInstanceInfo(id)
@@ -80,7 +69,7 @@ function TOOLTIP:HyperLink_SetTypes(link)
 end
 
 function TOOLTIP:HyperLink_OnEnter(link, ...)
-    local linkType = strmatch(link, '^([^:]+)')
+    local linkType = string.match(link, '^([^:]+)')
     if linkType then
         if linkType == 'battlepet' then
             TOOLTIP.HyperLink_SetPet(self, link)

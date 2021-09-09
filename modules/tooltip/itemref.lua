@@ -1,13 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local strsplit = strsplit
-local CreateFrame = CreateFrame
-local HideUIPanel = HideUIPanel
-local ShowUIPanel = ShowUIPanel
-local IsModifiedClick = IsModifiedClick
-local InCombatLockdown = InCombatLockdown
-
 local F = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 
@@ -25,7 +15,7 @@ local types = {
     achievement = true,
     glyph = true,
     instancelock = true,
-    currency = true,
+    currency = true
 }
 
 local function CreateTip(link)
@@ -33,7 +23,7 @@ local function CreateTip(link)
         for _, tip in ipairs(tips) do
             if tip:IsShown() and tip.link == link then
                 tip.link = nil
-                HideUIPanel(tip)
+                _G.HideUIPanel(tip)
                 return
             end
         end
@@ -55,12 +45,18 @@ local function CreateTip(link)
     tip:SetMovable(true)
     tip:SetClampedToScreen(true)
     tip:RegisterForDrag('LeftButton')
-    tip:SetScript('OnDragStart', function(self)
-        self:StartMoving()
-    end)
-    tip:SetScript('OnDragStop', function(self)
-        self:StopMovingOrSizing()
-    end)
+    tip:SetScript(
+        'OnDragStart',
+        function(self)
+            self:StartMoving()
+        end
+    )
+    tip:SetScript(
+        'OnDragStop',
+        function(self)
+            self:StopMovingOrSizing()
+        end
+    )
 
     tip:SetBackdrop(nil)
     tip.SetBackdrop = F.Dummy
@@ -74,9 +70,12 @@ local function CreateTip(link)
     F.SetBD(bg)
 
     local close = CreateFrame('Button', 'ItemRefTooltip' .. num .. 'CloseButton', tip)
-    close:SetScript('OnClick', function()
-        HideUIPanel(tip)
-    end)
+    close:SetScript(
+        'OnClick',
+        function()
+            _G.HideUIPanel(tip)
+        end
+    )
     F.ReskinClose(close)
 
     table.insert(_G.UISpecialFrames, tip:GetName())
@@ -88,7 +87,7 @@ local function CreateTip(link)
 end
 
 local function ShowTip(tip, link)
-    ShowUIPanel(tip)
+    _G.ShowUIPanel(tip)
     if not tip:IsShown() then
         tip:SetOwner(_G.UIParent, 'ANCHOR_PRESERVE')
     end
@@ -99,7 +98,7 @@ end
 
 local SetHyperlink = _G.ItemRefTooltip.SetHyperlink
 function _G.ItemRefTooltip:SetHyperlink(link, ...)
-    local handled = strsplit(':', link)
+    local handled = string.split(':', link)
     if not InCombatLockdown() and not IsModifiedClick() and handled and types[handled] and not TOOLTIP.MultiShown then
         local tip = CreateTip(link)
         if tip then

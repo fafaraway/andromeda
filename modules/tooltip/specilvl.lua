@@ -2,37 +2,6 @@
     Credit Cloudy Unit Info by Cloudyfa
 ]]
 
-local _G = _G
-local unpack = unpack
-local select = select
-local max = max
-local format = format
-local strfind = strfind
-local strsplit = strsplit
-local CreateFrame = CreateFrame
-local ClearInspectPlayer = ClearInspectPlayer
-local UnitGUID = UnitGUID
-local NotifyInspect = NotifyInspect
-local UnitExists = UnitExists
-local GetTime = GetTime
-local UnitClass = UnitClass
-local GetInventoryItemTexture = GetInventoryItemTexture
-local GetInventoryItemLink = GetInventoryItemLink
-local GetAverageItemLevel = GetAverageItemLevel
-local GetSpecialization = GetSpecialization
-local GetSpecializationInfo = GetSpecializationInfo
-local GetInspectSpecialization = GetInspectSpecialization
-local GetSpecializationInfoByID = GetSpecializationInfoByID
-local UnitIsUnit = UnitIsUnit
-local UnitIsPlayer = UnitIsPlayer
-local UnitIsDeadOrGhost = UnitIsDeadOrGhost
-local UnitIsVisible = UnitIsVisible
-local IsAltKeyDown = IsAltKeyDown
-local CanInspect = CanInspect
-local UnitOnTaxi = UnitOnTaxi
-local GetItemGem = GetItemGem
-local GetItemInfo = GetItemInfo
-
 local F, C, L = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 
@@ -101,7 +70,7 @@ function TOOLTIP:SetupSpecLevel(spec, level)
     for i = 2, _G.GameTooltip:NumLines() do
         local line = _G['GameTooltipTextLeft' .. i]
         local text = line and line:GetText() or ''
-        if text == isPending or strfind(text, _G.SPECIALIZATION) then
+        if text == isPending or string.find(text, _G.SPECIALIZATION) then
             infoLine = line
             break
         end
@@ -112,7 +81,7 @@ function TOOLTIP:SetupSpecLevel(spec, level)
 
     local infoString = isPending
     if spec ~= isPending then
-        infoString = format('|cffffffff%s:|r |cffe9c55d%s|r |cffffffff%s:|r |cffe9c55d%s|r', _G.SPECIALIZATION, spec, L['iLvl'], level)
+        infoString = string.format('|cffffffff%s:|r |cffe9c55d%s|r |cffffffff%s:|r |cffe9c55d%s|r', _G.SPECIALIZATION, spec, L['iLvl'], level)
     end
 
     if infoLine then
@@ -128,7 +97,8 @@ function TOOLTIP:GetUnitItemLevel(unit)
     end
 
     local class = select(2, UnitClass(unit))
-    local ilvl, boa, total, haveWeapon, twohand = 0, 0, 0, 0, 0
+    local ilvl
+    local boa, total, haveWeapon, twohand = 0, 0, 0, 0
     local delay, mainhand, offhand, hasArtifact
     weapon[1], weapon[2] = 0, 0
 
@@ -155,7 +125,7 @@ function TOOLTIP:GetUnitItemLevel(unit)
                             if i < 16 then
                                 total = total + level
                             elseif i > 15 and quality == _G.LE_ITEM_QUALITY_ARTIFACT then
-                                local relics = {select(4, strsplit(':', itemLink))}
+                                local relics = {select(4, string.split(':', itemLink))}
                                 for i = 1, 3 do
                                     local relicID = relics[i] ~= '' and relics[i]
                                     local relicLink = select(2, GetItemGem(itemLink, i))
@@ -197,7 +167,7 @@ function TOOLTIP:GetUnitItemLevel(unit)
             ilvl = select(2, GetAverageItemLevel())
         else
             if hasArtifact or twohand == 2 then
-                local higher = max(weapon[1], weapon[2])
+                local higher = math.max(weapon[1], weapon[2])
                 total = total + higher * 2
             elseif twohand == 1 and haveWeapon == 1 then
                 total = total + weapon[1] * 2 + weapon[2] * 2
@@ -216,7 +186,7 @@ function TOOLTIP:GetUnitItemLevel(unit)
         end
 
         if ilvl > 0 then
-            ilvl = format('%.1f', ilvl)
+            ilvl = string.format('%.1f', ilvl)
         end
         if boa > 0 then
             ilvl = ilvl .. ' |cff00ccff(' .. boa .. _G.HEIRLOOMS .. ')'

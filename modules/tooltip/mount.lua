@@ -1,22 +1,11 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local UnitIsPlayer = UnitIsPlayer
-local UnitIsUnit = UnitIsUnit
-local UnitAura = UnitAura
-local hooksecurefunc = hooksecurefunc
-local C_MountJournal_GetMountIDs = C_MountJournal.GetMountIDs
-local C_MountJournal_GetMountInfoByID = C_MountJournal.GetMountInfoByID
-local C_MountJournal_GetMountInfoExtraByID = C_MountJournal.GetMountInfoExtraByID
-
 local F, C = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 
 local mountCache = {}
 
 local function GetMountIDS()
-    for _, mountID in ipairs(C_MountJournal_GetMountIDs()) do
-        mountCache[select(2, C_MountJournal_GetMountInfoByID(mountID))] = mountID
+    for _, mountID in ipairs(C_MountJournal.GetMountIDs()) do
+        mountCache[select(2, C_MountJournal.GetMountInfoByID(mountID))] = mountID
     end
 end
 
@@ -31,7 +20,7 @@ local function GetMountInfo(self, ...)
     if id and mountCache[id] then
         local text = _G.NOT_COLLECTED
         local r, g, b = 1, 0, 0
-        local collected = select(11, C_MountJournal_GetMountInfoByID(mountCache[id]))
+        local collected = select(11, C_MountJournal.GetMountInfoByID(mountCache[id]))
 
         if collected then
             text = _G.COLLECTED
@@ -41,7 +30,7 @@ local function GetMountInfo(self, ...)
         self:AddLine(' ')
         self:AddLine(text, r, g, b)
 
-        local sourceText = select(3, C_MountJournal_GetMountInfoExtraByID(mountCache[id]))
+        local sourceText = select(3, C_MountJournal.GetMountInfoExtraByID(mountCache[id]))
         self:AddLine(sourceText, 1, 1, 1)
         self:Show()
     end
@@ -54,4 +43,3 @@ function TOOLTIP:MountSource()
 
     hooksecurefunc(_G.GameTooltip, 'SetUnitAura', GetMountInfo)
 end
-

@@ -1,21 +1,13 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local pairs = pairs
-local GetItemInfo = GetItemInfo
-local GetItemInfoFromHyperlink = GetItemInfoFromHyperlink
-local C_Soulbinds_GetConduitCollection = C_Soulbinds.GetConduitCollection
-local C_Soulbinds_IsItemConduitByItemInfo = C_Soulbinds.IsItemConduitByItemInfo
-
-local F, C = unpack(select(2, ...))
+local F = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 
 local COLLECTED_STRING = ' |cffff0000(' .. _G.COLLECTED .. ')|r'
+
 TOOLTIP.ConduitData = {}
 
 function TOOLTIP:Conduit_UpdateCollection()
     for i = 0, 2 do
-        local collectionData = C_Soulbinds_GetConduitCollection(i)
+        local collectionData = C_Soulbinds.GetConduitCollection(i)
         for _, value in pairs(collectionData) do
             TOOLTIP.ConduitData[value.conduitItemID] = value.conduitItemLevel
         end
@@ -27,7 +19,7 @@ function TOOLTIP:Conduit_CheckStatus()
     if not link then
         return
     end
-    if not C_Soulbinds_IsItemConduitByItemInfo(link) then
+    if not C_Soulbinds.IsItemConduitByItemInfo(link) then
         return
     end
 

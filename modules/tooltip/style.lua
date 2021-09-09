@@ -1,15 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local CreateFrame = CreateFrame
-local hooksecurefunc = hooksecurefunc
-local GetItemInfo = GetItemInfo
-local C_PetBattles_GetNumAuras = C_PetBattles.GetNumAuras
-local C_PetBattles_GetAuraInfo = C_PetBattles.GetAuraInfo
-local IsAddOnLoaded = IsAddOnLoaded
-local SetTooltipMoney = SetTooltipMoney
-local GameTooltip_ClearMoney = GameTooltip_ClearMoney
-
 local F, C = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 
@@ -40,9 +28,7 @@ function TOOLTIP:ReskinTooltip()
     self:SetScale(1)
 
     if not self.tipStyled then
-        if self.SetBackdrop then
-            self:SetBackdrop(nil)
-        end
+        F.HideBackdrop(self) -- IsNewPatch
         self:DisableDrawLayer('BACKGROUND')
         self.bg = F.SetBD(self)
         self.bg:SetInside(self)
@@ -106,9 +92,9 @@ function TOOLTIP:SetTooltipFonts()
     TooltipSetFont(_G.GameTooltipTextSmall, C.Assets.Fonts.Regular, textSize)
 
     if not _G.GameTooltip.hasMoney then
-        SetTooltipMoney(_G.GameTooltip, 1, nil, '', '')
-        SetTooltipMoney(_G.GameTooltip, 1, nil, '', '')
-        GameTooltip_ClearMoney(_G.GameTooltip)
+        _G.SetTooltipMoney(_G.GameTooltip, 1, nil, '', '')
+        _G.SetTooltipMoney(_G.GameTooltip, 1, nil, '', '')
+        _G.GameTooltip_ClearMoney(_G.GameTooltip)
     end
 
     if _G.GameTooltip.hasMoney then
@@ -223,8 +209,8 @@ TOOLTIP:RegisterTooltips(
             'PetBattleUnitTooltip_UpdateForUnit',
             function(self)
                 local nextBuff, nextDebuff = 1, 1
-                for i = 1, C_PetBattles_GetNumAuras(self.petOwner, self.petIndex) do
-                    local _, _, _, isBuff = C_PetBattles_GetAuraInfo(self.petOwner, self.petIndex, i)
+                for i = 1, C_PetBattles.GetNumAuras(self.petOwner, self.petIndex) do
+                    local _, _, _, isBuff = C_PetBattles.GetAuraInfo(self.petOwner, self.petIndex, i)
                     if isBuff and self.Buffs then
                         local frame = self.Buffs.frames[nextBuff]
                         if frame and frame.Icon then

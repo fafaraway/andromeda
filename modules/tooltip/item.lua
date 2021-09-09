@@ -1,12 +1,4 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local GetItemCount = GetItemCount
-local GetItemInfo = GetItemInfo
-local IsAltKeyDown = IsAltKeyDown
-local GetMoneyString = GetMoneyString
-
-local F, C, L = unpack(select(2, ...))
+local F, _, L = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 
 local function RemoveLines()
