@@ -1,18 +1,10 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local wipe = wipe
-local CreateFrame = CreateFrame
-local GetSpellInfo = GetSpellInfo
-local UnitAura = UnitAura
-
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
 local oUF = F.Libs.oUF
 
 UNITFRAME.CornerSpellsList = {}
 function UNITFRAME:UpdateCornerSpells()
-    wipe(UNITFRAME.CornerSpellsList)
+    table.wipe(UNITFRAME.CornerSpellsList)
 
     for spellID, value in pairs(C.CornerSpellsList[C.MyClass]) do
         local modData = _G.FREE_ADB['CornerSpellsList'][C.MyClass]
@@ -47,7 +39,7 @@ function UNITFRAME:UpdateCornerIndicator(event, unit)
     local buttons = self.BuffIndicator
     unit = self.unit
 
-    wipe(found)
+    table.wipe(found)
     for _, filter in next, auraFilter do
         for i = 1, 32 do
             local name, _, _, _, duration, expiration, caster, _, _, spellID = UnitAura(unit, i, filter)

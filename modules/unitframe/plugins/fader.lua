@@ -1,22 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local wipe = wipe
-local UnitPower = UnitPower
-local UnitPowerMax = UnitPowerMax
-local UnitPowerType = UnitPowerType
-local UnitHealth = UnitHealth
-local UnitHealthMax = UnitHealthMax
-local UnitIsDead = UnitIsDead
-local UnitIsGhost = UnitIsGhost
-local UnitExists = UnitExists
-local UnitAffectingCombat = UnitAffectingCombat
-local UnitCastingInfo = UnitCastingInfo
-local UnitChannelInfo = UnitChannelInfo
-local GetZonePVPInfo = GetZonePVPInfo
-local GetMouseFocus = GetMouseFocus
-local IsInInstance = IsInInstance
-
 local F = unpack(select(2, ...))
 local oUF = F.Libs.oUF
 
@@ -50,22 +31,22 @@ local unitList = {
 }
 
 local function flush(self)
-    wipe(self.Fader)
+    table.wipe(self.Fader)
 end
 
 local function Update(self)
     local unit = self.unit
     local element = self.Fader
 
-    if (element.arena and (GetZonePVPInfo() == 'arena')) or
-        (element.instance and (IsInInstance() == true)) or
-        (element.combat and UnitAffectingCombat(unit)) or (element.target and UnitExists('target')) or
-        (element.casting and (UnitCastingInfo(unit) or UnitChannelInfo(unit))) or
-        (element.injured and (UnitHealth(unit) < UnitHealthMax(unit)) and not UnitIsDead(unit) and
-            not UnitIsGhost(unit)) or
-        (element.mana and (powerToken == 'MANA' and (UnitPower('player') ~= UnitPowerMax('player')))) or
-        (element.power and (not isPowerRested(powerToken))) or
-        (element.hover and GetMouseFocus() == self) then
+    if
+        (element.arena and (GetZonePVPInfo() == 'arena')) or (element.instance and (IsInInstance() == true)) or (element.combat and UnitAffectingCombat(unit)) or
+            (element.target and UnitExists('target')) or
+            (element.casting and (UnitCastingInfo(unit) or UnitChannelInfo(unit))) or
+            (element.injured and (UnitHealth(unit) < UnitHealthMax(unit)) and not UnitIsDead(unit) and not UnitIsGhost(unit)) or
+            (element.mana and (powerToken == 'MANA' and (UnitPower('player') ~= UnitPowerMax('player')))) or
+            (element.power and (not isPowerRested(powerToken))) or
+            (element.hover and GetMouseFocus() == self)
+     then
         F:UIFrameFadeIn(self, element.inDuration, self:GetAlpha(), element.maxAlpha or 1)
 
         if _G.oUF_Pet then

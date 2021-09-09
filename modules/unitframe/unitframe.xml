@@ -4,13 +4,13 @@
     <Script file="unitframe.lua"/>
     <Script file="colors.lua"/>
     <Script file="fader.lua"/>
+    <Script file="gcd.lua"/>
     <Script file="health.lua"/>
     <Script file="power.lua"/>
     <Script file="castbar.lua"/>
     <Script file="classpower.lua"/>
     <Script file="auras.lua"/>
     <Script file="cornerbuffs.lua"/>
-    <Script file="debuffhighlight.lua"/>
     <Script file="indicator.lua"/>
     <Script file="partycooldown.lua"/>
     <Script file="portrait.lua"/>

@@ -1,11 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local format = format
-local tinsert = tinsert
-local RegisterStateDriver = RegisterStateDriver
-local GetSpecialization = GetSpecialization
-
 local F, C, L = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
 local oUF = F.Libs.oUF
@@ -37,7 +29,7 @@ local function CreatePlayerStyle(self)
     UNITFRAME:CreatePortrait(self)
     UNITFRAME:CreateCastBar(self)
     UNITFRAME:CreateRaidTargetIndicator(self)
-    UNITFRAME:CreateGCDIndicator(self)
+    UNITFRAME:CreateGCDTicker(self)
     UNITFRAME:CreateFader(self)
     UNITFRAME:CreateClassPowerBar(self)
     UNITFRAME:CreateStagger(self)
@@ -267,9 +259,9 @@ function UNITFRAME:UpdateAllHeaders()
 
     for _, header in pairs(UNITFRAME.headers) do
         if header.groupType == 'party' then
-            RegisterStateDriver(header, 'visibility', GetPartyVisibility())
+            _G.RegisterStateDriver(header, 'visibility', GetPartyVisibility())
         elseif header.groupType == 'raid' then
-            RegisterStateDriver(header, 'visibility', GetRaidVisibility())
+            _G.RegisterStateDriver(header, 'visibility', GetRaidVisibility())
         end
     end
 end
@@ -282,12 +274,12 @@ local function CreatePartyStyle(self)
     UNITFRAME:CreateHealPrediction(self)
     UNITFRAME:CreatePowerBar(self)
     UNITFRAME:CreatePortrait(self)
-    UNITFRAME:CreateGroupNameText(self)
-    UNITFRAME:CreateLeaderIndicator(self)
+    UNITFRAME:CreateGroupNameTag(self)
+    UNITFRAME:CreateGroupLeaderTag(self)
     UNITFRAME:CreateRaidTargetIndicator(self)
     UNITFRAME:CreateResurrectIndicator(self)
     UNITFRAME:CreateReadyCheckIndicator(self)
-    UNITFRAME:CreateGroupRoleIndicator(self)
+    UNITFRAME:CreateGroupRoleTag(self)
     UNITFRAME:CreatePhaseIndicator(self)
     UNITFRAME:CreateSummonIndicator(self)
     UNITFRAME:CreateThreatIndicator(self)
@@ -297,7 +289,6 @@ local function CreatePartyStyle(self)
     UNITFRAME:CreateDebuffs(self)
     UNITFRAME:RefreshAurasByCombat(self)
     UNITFRAME:CreateCornerIndicator(self)
-    UNITFRAME:CreateDebuffHighlight(self)
     UNITFRAME:CreatePartyWatcher(self)
 end
 
@@ -311,7 +302,7 @@ function UNITFRAME:SpawnParty()
     local partyWidth = C.DB.Unitframe.PartyWidth
     local partyHeight = C.DB.Unitframe.PartyHealthHeight + C.DB.Unitframe.PartyPowerHeight + C.Mult
     local partyHorizon = C.DB.Unitframe.PartyHorizon
-    local partyReverse = C.DB.Unitframe.PartyReverse
+    -- local partyReverse = C.DB.Unitframe.PartyReverse
     local partyGap = C.DB.Unitframe.PartyGap
     local groupingOrder = partyHorizon and 'TANK,HEALER,DAMAGER,NONE' or 'TANK,HEALER,DAMAGER,NONE'
     local moverWidth = partyHorizon and partyWidth * 5 + partyGap * 4 or partyWidth
@@ -328,11 +319,11 @@ function UNITFRAME:SpawnParty()
         'groupingOrder', groupingOrder,
         'groupBy', 'ASSIGNEDROLE',
         'sortMethod', 'NAME',
-        'oUF-initialConfigFunction', format('self:SetWidth(%d); self:SetHeight(%d);', partyWidth, partyHeight))
+        'oUF-initialConfigFunction', string.format('self:SetWidth(%d); self:SetHeight(%d);', partyWidth, partyHeight))
 
     party.groupType = 'party'
-    tinsert(UNITFRAME.headers, party)
-    RegisterStateDriver(party, 'visibility', GetPartyVisibility())
+    table.insert(UNITFRAME.headers, party)
+    _G.RegisterStateDriver(party, 'visibility', GetPartyVisibility())
 
     partyMover = F.Mover(party, L['Party Frame'], 'PartyFrame', UNITFRAME.Positions.party, moverWidth, moverHeight)
     party:ClearAllPoints()
@@ -347,12 +338,12 @@ local function CreateRaidStyle(self)
     UNITFRAME:CreateHealthBar(self)
     UNITFRAME:CreateHealPrediction(self)
     UNITFRAME:CreatePowerBar(self)
-    UNITFRAME:CreateGroupNameText(self)
-    UNITFRAME:CreateLeaderIndicator(self)
+    UNITFRAME:CreateGroupNameTag(self)
+    UNITFRAME:CreateGroupLeaderTag(self)
     UNITFRAME:CreateRaidTargetIndicator(self)
     UNITFRAME:CreateResurrectIndicator(self)
     UNITFRAME:CreateReadyCheckIndicator(self)
-    UNITFRAME:CreateGroupRoleIndicator(self)
+    UNITFRAME:CreateGroupRoleTag(self)
     UNITFRAME:CreatePhaseIndicator(self)
     UNITFRAME:CreateSummonIndicator(self)
     UNITFRAME:CreateSelectedBorder(self)
@@ -360,7 +351,6 @@ local function CreateRaidStyle(self)
     UNITFRAME:CreateCornerIndicator(self)
     UNITFRAME:CreateRaidDebuff(self)
     UNITFRAME:RefreshAurasByCombat(self)
-    UNITFRAME:CreateDebuffHighlight(self)
 end
 
 function UNITFRAME:SpawnRaid()
@@ -392,30 +382,17 @@ function UNITFRAME:SpawnRaid()
             'columnSpacing', raidGap,
             'point', raidHorizon and 'LEFT' or 'TOP',
             'columnAnchorPoint', 'LEFT',
-            'oUF-initialConfigFunction', format('self:SetWidth(%d); self:SetHeight(%d);', raidWidth, raidHeight))
+            'oUF-initialConfigFunction', string.format('self:SetWidth(%d); self:SetHeight(%d);', raidWidth, raidHeight))
 
         return raid
-    end
-
-    local groupFilter
-    if numGroups == 4 then
-        groupFilter = '1,2,3,4'
-    elseif numGroups == 5 then
-        groupFilter = '1,2,3,4,5'
-    elseif numGroups == 6 then
-        groupFilter = '1,2,3,4,5,6'
-    elseif numGroups == 7 then
-        groupFilter = '1,2,3,4,5,6,7'
-    elseif numGroups == 8 then
-        groupFilter = '1,2,3,4,5,6,7,8'
     end
 
     local groups = {}
     for i = 1, numGroups do
         groups[i] = CreateRaid('oUF_Raid' .. i, i)
         groups[i].groupType = 'raid'
-        tinsert(UNITFRAME.headers, groups[i])
-        RegisterStateDriver(groups[i], 'visibility', GetRaidVisibility())
+        table.insert(UNITFRAME.headers, groups[i])
+        _G.RegisterStateDriver(groups[i], 'visibility', GetRaidVisibility())
 
         if i == 1 then
             if raidHorizon then

@@ -1,26 +1,9 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local wipe = wipe
-local split = split
-local format = format
-local CreateFrame = CreateFrame
-local GetSpellInfo = GetSpellInfo
-local GetTime = GetTime
-local GetSpellCooldown = GetSpellCooldown
-local IsPartyLFG = IsPartyLFG
-local IsInRaid = IsInRaid
-local IsInGroup = IsInGroup
-local UnitGUID = UnitGUID
-local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
-local C_ChatInfo_RegisterAddonMessagePrefix = C_ChatInfo.RegisterAddonMessagePrefix
-
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
 
 UNITFRAME.PartySpellsList = {}
 function UNITFRAME:UpdatePartyWatcherSpells()
-    wipe(UNITFRAME.PartySpellsList)
+    table.wipe(UNITFRAME.PartySpellsList)
 
     for spellID, duration in pairs(C.PartySpellsList) do
         local name = GetSpellInfo(spellID)
@@ -54,7 +37,7 @@ function UNITFRAME:HandleCDMessage(...)
         return
     end
 
-    local _, msgType, guid, spellID, duration, remaining = split(':', msg)
+    local _, msgType, guid, spellID, duration, remaining = string.split(':', msg)
     if msgType == 'U' then
         spellID = tonumber(spellID)
         duration = tonumber(duration)
@@ -82,8 +65,8 @@ function UNITFRAME:SendCDMessage()
                     if remaining < 0 then
                         remaining = 0
                     end
-                    C_ChatInfo_SendAddonMessage('ZenTracker', format('3:U:%s:%d:%.2f:%.2f:%s', UNITFRAME.myGUID, spellID, duration, remaining, '-'), IsPartyLFG() and 'INSTANCE_CHAT' or 'PARTY')
-                    -- sync to others
+                    C_ChatInfo.SendAddonMessage('ZenTracker', string.format('3:U:%s:%d:%.2f:%.2f:%s', UNITFRAME.myGUID, spellID, duration, remaining, '-'), IsPartyLFG() and 'INSTANCE_CHAT' or 'PARTY')
+                -- sync to others
                 end
             end
         end
@@ -96,7 +79,7 @@ function UNITFRAME:UpdateSyncStatus()
     if IsInGroup() and not IsInRaid() and C.DB.Unitframe.PartyWatcherSync then
         local thisTime = GetTime()
         if thisTime - lastSyncTime > 5 then
-            C_ChatInfo_SendAddonMessage('ZenTracker', format('3:H:%s:0::0:1', UNITFRAME.myGUID), IsPartyLFG() and 'INSTANCE_CHAT' or 'PARTY')
+            C_ChatInfo.SendAddonMessage('ZenTracker', string.format('3:H:%s:0::0:1', UNITFRAME.myGUID), IsPartyLFG() and 'INSTANCE_CHAT' or 'PARTY')
             -- handshake to ZenTracker
             lastSyncTime = thisTime
         end
@@ -112,7 +95,7 @@ function UNITFRAME:SyncWithZenTracker()
     end
 
     UNITFRAME.myGUID = UnitGUID('player')
-    C_ChatInfo_RegisterAddonMessagePrefix('ZenTracker')
+    C_ChatInfo.RegisterAddonMessagePrefix('ZenTracker')
     F:RegisterEvent('CHAT_MSG_ADDON', UNITFRAME.HandleCDMessage)
 
     UNITFRAME:UpdateSyncStatus()

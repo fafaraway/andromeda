@@ -1,19 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local format = format
-local strupper = strupper
-local CreateFrame = CreateFrame
-local IsPlayerSpell = IsPlayerSpell
-local GetTime = GetTime
-local IsInInstance = IsInInstance
-local IsInGroup = IsInGroup
-local GetNumGroupMembers = GetNumGroupMembers
-local UnitExists = UnitExists
-local UnitIsUnit = UnitIsUnit
-local UnitName = UnitName
-local UnitInVehicle = UnitInVehicle
-
 local F, C, L = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
 local NAMEPLATE = F:GetModule('Nameplate')
@@ -165,7 +149,7 @@ local function UpdateSpellTarget(self, unit)
     if UnitExists(unitTarget) then
         local nameString
         if UnitIsUnit(unitTarget, 'player') then
-            nameString = format('|cffff0000%s|r', '>' .. strupper(_G.YOU) .. '<')
+            nameString = string.format('|cffff0000%s|r', '>' .. strupper(_G.YOU) .. '<')
         else
             nameString = '<' .. F:RGBToHex(F:UnitColor(unitTarget)) .. UnitName(unitTarget) .. '|r>'
         end
@@ -412,7 +396,6 @@ function UNITFRAME:CreateCastBar(self)
         castbar.SpellTarget = spellTarget
 
         self:RegisterEvent('UNIT_TARGET', UpdateCastbar)
-
     else
         text:SetShown(C.DB.Unitframe.SpellName)
         time:SetShown(C.DB.Unitframe.SpellTime)

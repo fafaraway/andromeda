@@ -1,15 +1,7 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local wipe = wipe
-local GetTime = GetTime
-local UnitGUID = UnitGUID
-local GetSpellTexture = GetSpellTexture
-
 local F = unpack(select(2, ...))
 local oUF = F.Libs.oUF
 
-local function Update(self, event, unit, _, spellID)
+local function Update(self, _, unit, _, spellID)
     if unit ~= self.unit then
         return
     end
@@ -53,7 +45,7 @@ end
 local function ResetButtons(self)
     local element = self.PartyWatcher
     element.index = 0
-    wipe(element.spellToButton)
+    table.wipe(element.spellToButton)
     for i = 1, element.__max do
         local button = element[i]
         button.spellID = nil

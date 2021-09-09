@@ -1,13 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local GetSpecialization = GetSpecialization
-local IsInInstance = IsInInstance
-local GetInstanceInfo = GetInstanceInfo
-local UnitIsCharmed = UnitIsCharmed
-local UnitCanAttack = UnitCanAttack
-local UnitAura = UnitAura
-
 local F, C = unpack(select(2, ...))
 local oUF = F.Libs.oUF
 local LBG = F.Libs.LBG
@@ -27,7 +17,7 @@ do
         ['PALADIN'] = {['Magic'] = false, ['Poison'] = true, ['Disease'] = true},
         ['PRIEST'] = {['Magic'] = true, ['Disease'] = true},
         ['SHAMAN'] = {['Magic'] = false, ['Curse'] = true},
-        ['MAGE'] = {['Curse'] = true},
+        ['MAGE'] = {['Curse'] = true}
     }
 
     DispellFilter = dispellClasses[C.MyClass] or {}

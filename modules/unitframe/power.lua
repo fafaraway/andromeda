@@ -1,16 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local format = format
-local CreateFrame = CreateFrame
-local UnitIsConnected = UnitIsConnected
-local UnitIsDead = UnitIsDead
-local UnitIsGhost = UnitIsGhost
-local UnitHasVehicleUI = UnitHasVehicleUI
-local GetSpecialization = GetSpecialization
-local IsUsableSpell = IsUsableSpell
-local GetUnitPowerBarStringsByID = GetUnitPowerBarStringsByID
-
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
 local oUF = F.Libs.oUF
@@ -22,10 +9,6 @@ local function PostUpdatePower(power, unit, _, _, max)
 end
 
 local function UpdatePowerColor(power, unit)
-    if not C.IsDeveloper then
-        return
-    end
-
     if unit ~= 'player' or UnitHasVehicleUI('player') then
         return
     end
@@ -167,7 +150,7 @@ local function AltPowerUpdateTooltip(self)
     local name, tooltip = GetUnitPowerBarStringsByID(self.__barID)
     _G.GameTooltip:SetText(name or '', 1, 1, 1)
     _G.GameTooltip:AddLine(tooltip or '', nil, nil, nil, true)
-    _G.GameTooltip:AddLine(format('%d (%d%%)', value, (value - min) / (max - min) * 100), 1, 1, 1)
+    _G.GameTooltip:AddLine(string.format('%d (%d%%)', value, (value - min) / (max - min) * 100), 1, 1, 1)
     _G.GameTooltip:Show()
 end
 

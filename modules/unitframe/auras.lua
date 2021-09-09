@@ -1,16 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local CreateFrame = CreateFrame
-local InCombatLockdown = InCombatLockdown
-local CancelUnitBuff = CancelUnitBuff
-local UnitAura = UnitAura
-local UnitIsPlayer = UnitIsPlayer
-local SpellGetVisibilityInfo = SpellGetVisibilityInfo
-local SpellIsSelfBuff = SpellIsSelfBuff
-local UnitAffectingCombat = UnitAffectingCombat
-local SpellIsPriorityAura = SpellIsPriorityAura
-
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
 local oUF = F.Libs.oUF
@@ -234,7 +221,7 @@ function UNITFRAME.ModifierCustomFilter()
     return true
 end
 
-function UNITFRAME.BuffFilter(_, _, _, _, _, _, _, _, _, caster, _, _, spellID, canApplyAura, isBossAura)
+function UNITFRAME.BuffFilter(_, _, _, _, _, _, _, _, _, _, _, _, spellID)
     if C.PartyBuffsList[spellID] then
         return true
     else
@@ -242,14 +229,14 @@ function UNITFRAME.BuffFilter(_, _, _, _, _, _, _, _, _, caster, _, _, spellID, 
     end
 end
 
-function UNITFRAME.DebuffFilter(element, _, _, _, _, _, _, _, _, caster, _, _, spellID, _, isBossAura)
+function UNITFRAME.DebuffFilter(_, _, _, _, _, _, _, _, _, caster, _, _, spellID, _, isBossAura)
     local isMine = F:MultiCheck(caster, 'player', 'pet', 'vehicle')
     -- local parent = element.__owner
 
     if C.PartyDebuffsBlackList[spellID] then
+        -- elseif (C.DB.Unitframe.CornerIndicator and UNITFRAME.CornerSpellsList[spellID]) or parent.RaidDebuffs.spellID == spellID or parent.rawSpellID == spellID then
+        --     return false
         return false
-    -- elseif (C.DB.Unitframe.CornerIndicator and UNITFRAME.CornerSpellsList[spellID]) or parent.RaidDebuffs.spellID == spellID or parent.rawSpellID == spellID then
-    --     return false
     elseif isBossAura or SpellIsPriorityAura(spellID) then
         return true
     else

@@ -1,15 +1,9 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local wipe = wipe
-local CreateFrame = CreateFrame
-
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
 
 local debuffList = {}
 function UNITFRAME:UpdateRaidDebuffs()
-    wipe(debuffList)
+    table.wipe(debuffList)
     for instName, value in pairs(C.RaidDebuffsList) do
         for spell, priority in pairs(value) do
             if not (_G.FREE_ADB['RaidDebuffsList'][instName] and _G.FREE_ADB['RaidDebuffsList'][instName][spell]) then
@@ -74,7 +68,6 @@ function UNITFRAME:CreateRaidDebuff(self)
 
     bu.ShowDispellableDebuff = true
     bu.ShowDebuffBorder = true
-    --bu.FilterDispellableDebuff = true
 
     if C.DB.Unitframe.InstanceAuras then
         if not next(debuffList) then

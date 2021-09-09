@@ -1,8 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local CreateFrame = CreateFrame
-
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
 
@@ -11,7 +6,7 @@ local totemsColor = {
     {0.26, 0.71, 0.13}, -- green
     {0.13, 0.55, 0.71}, -- blue
     {0.58, 0.13, 0.71}, -- violet
-    {0.71, 0.58, 0.13}, -- yellow
+    {0.71, 0.58, 0.13} -- yellow
 }
 
 function UNITFRAME:CreateTotemsBar(self)

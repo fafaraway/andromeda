@@ -1,30 +1,15 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local CreateFrame = CreateFrame
-local UnitFrame_OnEnter = UnitFrame_OnEnter
-local UnitFrame_OnLeave = UnitFrame_OnLeave
-local CompactRaidFrameManager_SetSetting = CompactRaidFrameManager_SetSetting
-local CompactRaidFrameManager = CompactRaidFrameManager
-local UnitIsUnit = UnitIsUnit
-local UnitExists = UnitExists
-local UnitIsFriend = UnitIsFriend
-local UnitIsEnemy = UnitIsEnemy
-local PlaySound = PlaySound
-local EJ_GetInstanceInfo = EJ_GetInstanceInfo
-
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
 
 --[[ Backdrop ]]
 
 local function UF_OnEnter(self)
-    UnitFrame_OnEnter(self)
+    _G.UnitFrame_OnEnter(self)
     self.Highlight:Show()
 end
 
 local function UF_OnLeave(self)
-    UnitFrame_OnLeave(self)
+    _G.UnitFrame_OnLeave(self)
     self.Highlight:Hide()
 end
 
@@ -160,10 +145,10 @@ end
 
 function UNITFRAME:RemoveBlizzRaidFrame()
     -- raid
-    CompactRaidFrameManager_SetSetting('IsShown', '0')
+    _G.CompactRaidFrameManager_SetSetting('IsShown', '0')
     _G.UIParent:UnregisterEvent('GROUP_ROSTER_UPDATE')
-    CompactRaidFrameManager:UnregisterAllEvents()
-    CompactRaidFrameManager:SetParent(F.HiddenFrame)
+    _G.CompactRaidFrameManager:UnregisterAllEvents()
+    _G.CompactRaidFrameManager:SetParent(F.HiddenFrame)
 
     -- party
     for i = 1, 4 do
@@ -205,7 +190,7 @@ end
 
 function UNITFRAME:OnLogin()
     UNITFRAME:AddDungeonSpells()
-    UNITFRAME:AddDonimationSpells()
+    UNITFRAME:AddDominationSpells()
     UNITFRAME:AddNathriaSpells()
 
     for instName, value in pairs(RaidDebuffs) do

@@ -1,13 +1,7 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local UnitThreatSituation = UnitThreatSituation
-local GetThreatStatusColor = GetThreatStatusColor
-
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
 
-local function UpdateThreat(self, event, unit)
+local function UpdateThreat(self, _, unit)
     if not self.Glow or self.unit ~= unit then
         return
     end
@@ -29,6 +23,6 @@ function UNITFRAME:CreateThreatIndicator(self)
     self.ThreatIndicator = {
         IsObjectType = function()
         end,
-        Override = UpdateThreat,
+        Override = UpdateThreat
     }
 end

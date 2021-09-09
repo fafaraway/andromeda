@@ -1,13 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local CreateFrame = CreateFrame
-local UnitIsConnected = UnitIsConnected
-local UnitHealth = UnitHealth
-local UnitHealthMax = UnitHealthMax
-local UnitIsDead = UnitIsDead
-local UnitIsGhost = UnitIsGhost
-
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
 local oUF = F.Libs.oUF
@@ -68,11 +58,12 @@ function UNITFRAME:UpdateHealthBarColor(self, force)
     end
 end
 
-local function OverrideHealth(self, event, unit)
+local function OverrideHealth(self, _, unit)
     if (not unit or self.unit ~= unit) then
         return
     end
 
+    local parent = self.__owner
     local health = self.Health
     local cur, max = UnitHealth(unit), UnitHealthMax(unit)
     local isOffline = not UnitIsConnected(unit)
@@ -81,30 +72,43 @@ local function OverrideHealth(self, event, unit)
 
     health:SetMinMaxValues(0, max)
 
-    if isDead or isGhost or isOffline then
-        health:SetValue(max)
+    if isOffline then
+        health:SetValue(0)
+        parent.backdrop:SetBackdropColor(.5, .5, .5, .8)
+    elseif isDead or isGhost then
+        health:SetValue(0)
+        parent.backdrop:SetBackdropColor(0, 0, 0, .8)
     else
         if max == cur then
             health:SetValue(0)
         else
             health:SetValue(max - cur)
         end
+
+        parent.backdrop:SetBackdropColor(.1, .1, .1, .8)
     end
 end
 
 local function PostUpdateHealth(self, unit, cur, max)
+    local parent = self.__owner
     local isOffline = not UnitIsConnected(unit)
     local isDead = UnitIsDead(unit)
     local isGhost = UnitIsGhost(unit)
 
-    if isDead or isGhost or isOffline then
-        self:SetValue(max)
+    if isOffline then
+        self:SetValue(0)
+        parent.backdrop:SetBackdropColor(.5, .5, .5, .8)
+    elseif isDead or isGhost then
+        self:SetValue(0)
+        parent.backdrop:SetBackdropColor(0, 0, 0, .8)
     else
         if max == cur then
             self:SetValue(0)
         else
             self:SetValue(max - cur)
         end
+
+        parent.backdrop:SetBackdropColor(.1, .1, .1, .8)
     end
 end
 

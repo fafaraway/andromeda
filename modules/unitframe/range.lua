@@ -1,7 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
 
@@ -16,5 +12,5 @@ function UNITFRAME:CreateRangeCheck(self)
 
     self.RangeCheck.enabled = true
     self.RangeCheck.insideAlpha = 1
-    self.RangeCheck.RangeCheckAlpha = .4
+    self.RangeCheck.RangeCheckAlpha = .3
 end

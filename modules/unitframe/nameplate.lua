@@ -1,60 +1,14 @@
-local _G = _G
-local wipe = wipe
-local tonumber = tonumber
-local pairs = pairs
-local unpack = unpack
-local select = select
-local rad = rad
-local floor = floor
-local strmatch = strmatch
-local CreateFrame = CreateFrame
-local hooksecurefunc = hooksecurefunc
-local SetCVar = SetCVar
-local NamePlateDriverFrame = NamePlateDriverFrame
-local UnitLevel = UnitLevel
-local UnitThreatSituation = UnitThreatSituation
-local UnitIsTapDenied = UnitIsTapDenied
-local UnitPlayerControlled = UnitPlayerControlled
-local UnitIsUnit = UnitIsUnit
-local UnitReaction = UnitReaction
-local UnitIsConnected = UnitIsConnected
-local UnitIsPlayer = UnitIsPlayer
-local GetInstanceInfo = GetInstanceInfo
-local UnitClassification = UnitClassification
-local UnitExists = UnitExists
-local UnitHealth = UnitHealth
-local UnitHealthMax = UnitHealthMax
-local InCombatLockdown = InCombatLockdown
-local UnitGUID = UnitGUID
-local issecure = issecure
-local IsInRaid = IsInRaid
-local IsInGroup = IsInGroup
-local IsInInstance = IsInInstance
-local UnitName = UnitName
-local GetNumGroupMembers = GetNumGroupMembers
-local GetNumSubgroupMembers = GetNumSubgroupMembers
-local UnitGroupRolesAssigned = UnitGroupRolesAssigned
-local C_NamePlate_SetNamePlateFriendlySize = C_NamePlate.SetNamePlateFriendlySize
-local C_NamePlate_SetNamePlateEnemySize = C_NamePlate.SetNamePlateEnemySize
-local C_NamePlate_GetNamePlateForUnit = C_NamePlate.GetNamePlateForUnit
-local C_MythicPlus_GetCurrentAffixes = C_MythicPlus.GetCurrentAffixes
-local GetSpellInfo = GetSpellInfo
-local GetSpellTexture = GetSpellTexture
-local UnitNameplateShowsWidgetsOnly = UnitNameplateShowsWidgetsOnly
-
 local F, C = unpack(select(2, ...))
 local NAMEPLATE = F:GetModule('Nameplate')
 local UNITFRAME = F:GetModule('Unitframe')
 local oUF = F.Libs.oUF
-
-local guidToPlate = {}
 
 --[[ CVars ]]
 function NAMEPLATE:PlateInsideView()
     if C.DB.Nameplate.InsideView then
         SetCVar('nameplateOtherTopInset', .05)
         SetCVar('nameplateOtherBottomInset', .08)
-    else
+    elseif GetCVar("nameplateOtherTopInset") == "0.05" and GetCVar("nameplateOtherBottomInset") == "0.08" then
         SetCVar('nameplateOtherTopInset', -1)
         SetCVar('nameplateOtherBottomInset', -1)
     end
@@ -134,7 +88,7 @@ end
 --[[ Elements ]]
 local customUnits = {}
 function NAMEPLATE:CreateUnitTable()
-    wipe(customUnits)
+    table.wipe(customUnits)
     if not C.DB.Nameplate.CustomUnitColor then
         return
     end
@@ -144,7 +98,7 @@ end
 
 local showPowerList = {}
 function NAMEPLATE:CreatePowerUnitTable()
-    wipe(showPowerList)
+    table.wipe(showPowerList)
     F:CopyTable(C.NPShowPowerUnitsList, showPowerList)
     F:SplitList(showPowerList, C.DB.Nameplate.ShowPowerList)
 end
@@ -165,7 +119,7 @@ local groupRoles, isInGroup = {}
 local function refreshGroupRoles()
     local isInRaid = IsInRaid()
     isInGroup = isInRaid or IsInGroup()
-    wipe(groupRoles)
+    table.wipe(groupRoles)
 
     if isInGroup then
         local numPlayers = (isInRaid and GetNumGroupMembers()) or GetNumSubgroupMembers()
@@ -181,7 +135,7 @@ end
 
 local function resetGroupRoles()
     isInGroup = IsInRaid() or IsInGroup()
-    wipe(groupRoles)
+    table.wipe(groupRoles)
 end
 
 function NAMEPLATE:UpdateGroupRoles()
@@ -390,7 +344,7 @@ function NAMEPLATE:CreateTargetIndicator(self)
     frame.Glow:SetPoint('TOPRIGHT', frame, 'BOTTOMRIGHT', 0, 0)
     frame.Glow:SetHeight(8)
     frame.Glow:SetTexture(C.Assets.glow_tex)
-    frame.Glow:SetRotation(rad(180))
+    frame.Glow:SetRotation(math.rad(180))
     frame.Glow:SetVertexColor(r, g, b)
 
     frame.nameGlow = frame:CreateTexture(nil, 'BACKGROUND', nil, -5)
@@ -543,7 +497,7 @@ function NAMEPLATE:UpdateQuestUnit(_, unit)
 
     unit = unit or self.unit
 
-    local startLooking, questProgress
+    local startLooking, isLootQuest, questProgress
     F.ScanTip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
     F.ScanTip:SetUnit(unit)
 
@@ -559,16 +513,16 @@ function NAMEPLATE:UpdateQuestUnit(_, unit)
             if isInGroup and text == C.MyName or (not isInGroup and isQuestTitle(textLine)) then
                 startLooking = true
             elseif startLooking then
-                local current, goal = strmatch(text, '(%d+)/(%d+)')
-                local progress = strmatch(text, '(%d+)%%')
+                local current, goal = string.match(text, '(%d+)/(%d+)')
+                local progress = string.match(text, '(%d+)%%')
                 if current and goal then
-                    local diff = floor(goal - current)
+                    local diff = math.floor(goal - current)
                     if diff > 0 then
                         questProgress = diff
                         break
                     end
-                elseif progress and not strmatch(text, _G.THREAT_TOOLTIP) then
-                    if floor(100 - progress) > 0 then
+                elseif progress and not string.match(text, _G.THREAT_TOOLTIP) then
+                    if math.floor(100 - progress) > 0 then
                         questProgress = progress .. '%' -- lower priority on progress, keep looking
                     end
                 else
@@ -640,7 +594,7 @@ local function checkInstance()
 end
 
 local function checkAffixes(event)
-    local affixes = C_MythicPlus_GetCurrentAffixes()
+    local affixes = C_MythicPlus.GetCurrentAffixes()
     if not affixes then
         return
     end
@@ -663,7 +617,7 @@ end
 -- Major spells glow
 NAMEPLATE.MajorSpellsList = {}
 function NAMEPLATE:RefreshMajorSpells()
-    wipe(NAMEPLATE.MajorSpellsList)
+    table.wipe(NAMEPLATE.MajorSpellsList)
 
     for spellID in pairs(C.NPMajorSpellsList) do
         local name = GetSpellInfo(spellID)
@@ -819,8 +773,8 @@ function NAMEPLATE:UpdateClickableSize()
     local width = C.DB.Nameplate.Width
     local height = C.DB.Nameplate.Height
     local scale = _G.FREE_ADB.UIScale
-    C_NamePlate_SetNamePlateEnemySize(width * scale, height * scale + 2)
-    C_NamePlate_SetNamePlateFriendlySize(width * scale, height * scale + 2)
+    C_NamePlate.SetNamePlateEnemySize(width * scale, height * scale + 2)
+    C_NamePlate.SetNamePlateFriendlySize(width * scale, height * scale + 2)
 end
 
 function NAMEPLATE:UpdateNameplateAuras()
@@ -925,7 +879,7 @@ function NAMEPLATE:RefreshPlateType(unit)
 end
 
 function NAMEPLATE:OnUnitFactionChanged(unit)
-    local nameplate = C_NamePlate_GetNamePlateForUnit(unit, issecure())
+    local nameplate = C_NamePlate.GetNamePlateForUnit(unit, issecure())
     local unitFrame = nameplate and nameplate.unitFrame
     if unitFrame and unitFrame.unitName then
         NAMEPLATE.RefreshPlateType(unitFrame, unit)
@@ -946,9 +900,6 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
     if event == 'NAME_PLATE_UNIT_ADDED' then
         self.unitName = UnitName(unit)
         self.unitGUID = UnitGUID(unit)
-        if self.unitGUID then
-            guidToPlate[self.unitGUID] = self
-        end
         self.isPlayer = UnitIsPlayer(unit)
         self.npcID = F:GetNPCID(self.unitGUID)
         self.widgetsOnly = UnitNameplateShowsWidgetsOnly(unit)
@@ -970,7 +921,7 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
             self.TotemIcon:Show()
 
             local totemData = totemsList[self.npcID]
-            local spellID, duration = unpack(totemData)
+            local spellID, _ = unpack(totemData)
             local texure = GetSpellTexture(spellID)
 
             self.TotemIcon.texure:SetTexture(texure)
@@ -984,9 +935,6 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
             end
         end
     elseif event == 'NAME_PLATE_UNIT_REMOVED' then
-        if self.unitGUID then
-            guidToPlate[self.unitGUID] = nil
-        end
         self.npcID = nil
 
         if self.TotemIcon then
@@ -1010,7 +958,7 @@ function NAMEPLATE:OnLogin()
     end
 
     NAMEPLATE:UpdateClickableSize()
-    hooksecurefunc(NamePlateDriverFrame, 'UpdateNamePlateOptions', NAMEPLATE.UpdateClickableSize)
+    hooksecurefunc(_G.NamePlateDriverFrame, 'UpdateNamePlateOptions', NAMEPLATE.UpdateClickableSize)
 
     NAMEPLATE:SetupCVars()
     NAMEPLATE:BlockAddons()

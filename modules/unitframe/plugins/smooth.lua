@@ -1,10 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local abs = abs
-local CreateFrame = CreateFrame
-local GetFramerate = GetFramerate
-
 local F = unpack(select(2, ...))
 local oUF = F.Libs.oUF
 
@@ -59,7 +52,7 @@ f:SetScript(
                     bar.Filling:SetTexCoord(0, 1, math.abs(new / barmax - 1), 1)
                 end
             end
-            if cur == value or abs(cur - value) < 2 then
+            if cur == value or math.abs(cur - value) < 2 then
                 bar:SetValue_(value)
                 smoothing[bar] = nil
             end

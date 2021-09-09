@@ -94,10 +94,8 @@ end
 tagEvents['free:color'] = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_FACTION UNIT_CONNECTION PLAYER_FLAGS_CHANGED'
 
 tags['free:dead'] = function(unit)
-    if UnitIsDead(unit) then
+    if UnitIsDeadOrGhost(unit) then
         return '|cffd84343' .. L['Dead']
-    elseif UnitIsGhost(unit) then
-        return '|cffbd69be' .. L['Ghost']
     end
 end
 tagEvents['free:dead'] = 'UNIT_HEALTH'
@@ -133,15 +131,30 @@ tagEvents['free:npname'] = 'UNIT_NAME_UPDATE'
 
 tags['free:groupname'] = function(unit)
     local isRaid = (unit:match('raid%d?$'))
-    local showGroupName = C.DB.Unitframe.GroupShowName
     local shorten = C.DB.Unitframe.ShortenName
     local str = UnitName(unit)
 
-    if showGroupName then
-        return shorten and F.ShortenString(str, isRaid and 2 or 4) or str
-    end
+    return shorten and F.ShortenString(str, isRaid and 2 or 4) or str
 end
 tagEvents['free:groupname'] = 'UNIT_NAME_UPDATE'
+
+tags["free:grouprole"] = function(unit)
+	local role = UnitGroupRolesAssigned(unit)
+	if role == "TANK" then
+		return "|cffffe934#|r"
+	elseif role == "HEALER" then
+		return "|cff2aff3d+|r"
+	elseif role == "DAMAGER" then
+		return "|cffff0052*|r"
+	end
+end
+tagEvents["free:grouprole"] = "PLAYER_ROLES_ASSIGNED GROUP_ROSTER_UPDATE"
+
+tags["free:groupleader"] = function(unit)
+    local isLeader = (UnitInParty(unit) or UnitInRaid(unit)) and UnitIsGroupLeader(unit)
+	return isLeader and "|cffffffff!|r"
+end
+tagEvents["free:groupleader"] = "PARTY_LEADER_CHANGED GROUP_ROSTER_UPDATE"
 
 tags['free:resting'] = function(unit)
     if (unit == 'player' and IsResting()) then
@@ -193,11 +206,34 @@ tagEvents['free:tarname'] = 'UNIT_NAME_UPDATE UNIT_THREAT_SITUATION_UPDATE UNIT_
 
 local font = C.Assets.Fonts.Condensed
 
-function UNITFRAME:CreateGroupNameText(self)
+function UNITFRAME:CreateGroupLeaderTag(self)
+    local font = C.Assets.Fonts.Pixel
+    local groupLeader = F.CreateFS(self.Health, font, 8, 'OUTLINE, MONOCHROME')
+    groupLeader:SetPoint('TOPLEFT', 2, -2)
+
+    self:Tag(groupLeader, '[free:groupleader]')
+    self.GroupLeader = groupLeader
+end
+
+function UNITFRAME:CreateGroupRoleTag(self)
+    local font = C.Assets.Fonts.Pixel
+    local groupRole = F.CreateFS(self.Health, font, 8, 'OUTLINE, MONOCHROME')
+    groupRole:SetPoint('BOTTOM', 1, 1)
+
+    self:Tag(groupRole, '[free:grouprole]')
+    self.GroupRole = groupRole
+end
+
+function UNITFRAME:CreateGroupNameTag(self)
     local outline = _G.FREE_ADB.FontOutline
+    local showName = C.DB.Unitframe.GroupShowName
     local groupName = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
 
-    self:Tag(groupName, '[free:color][free:groupname]')
+    if showName then
+        self:Tag(groupName, '[free:color][free:groupname]')
+    else
+        self:Tag(groupName, '[free:color][free:offline][free:dead]')
+    end
     self.GroupName = groupName
 end
 

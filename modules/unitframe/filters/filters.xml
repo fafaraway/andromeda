@@ -1,7 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-    <Script file="spells.lua"/>
     <Script file="nameplate.lua"/>
     <Script file="dungeon.lua"/>
     <Script file="nathria.lua"/>
     <Script file="domination.lua"/>
+    <Script file="player.lua"/>
 </Ui>

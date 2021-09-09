@@ -1,31 +1,6 @@
 -- Simple click to cast spell binder
 -- Credits: sBinder by Fernir, ShestakUI
 
-local _G = _G
-local format = format
-local unpack = unpack
-local select = select
-local tremove = tremove
-local tinsert = tinsert
-local CreateFrame = CreateFrame
-local hooksecurefunc = hooksecurefunc
-local GetSpellInfo = GetSpellInfo
-local IsShiftKeyDown = IsShiftKeyDown
-local IsControlKeyDown = IsControlKeyDown
-local IsAltKeyDown = IsAltKeyDown
-local IsHarmfulSpell = IsHarmfulSpell
-local InCombatLockdown = InCombatLockdown
-local GetSpellBookItemTexture = GetSpellBookItemTexture
-local GetSpellBookItemName = GetSpellBookItemName
-local GetNumSpellTabs = GetNumSpellTabs
-local C_Timer_After = C_Timer.After
-local AutoCastShine_AutoCastStart = AutoCastShine_AutoCastStart
-local SpellBook_GetSpellBookSlot = SpellBook_GetSpellBookSlot
-local SecureButton_GetButtonSuffix = SecureButton_GetButtonSuffix
-local SPELLS_PER_PAGE = SPELLS_PER_PAGE
-local BOOKTYPE_PROFESSION = BOOKTYPE_PROFESSION
-local BOOKTYPE_PET = BOOKTYPE_PET
-
 local F, C, L = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
 
@@ -191,17 +166,17 @@ SpellBinder.makeFramesList = function()
 end
 
 SpellBinder.ToggleButtons = function()
-    for i = 1, SPELLS_PER_PAGE do
+    for i = 1, _G.SPELLS_PER_PAGE do
         SpellBinder.spellbuttons[i]:Hide()
-        if SpellBinder.sbOpen and _G.SpellBookFrame.bookType ~= BOOKTYPE_PROFESSION then
-            local slot = SpellBook_GetSpellBookSlot(SpellBinder.spellbuttons[i]:GetParent())
+        if SpellBinder.sbOpen and _G.SpellBookFrame.bookType ~= _G.BOOKTYPE_PROFESSION then
+            local slot = _G.SpellBook_GetSpellBookSlot(SpellBinder.spellbuttons[i]:GetParent())
 
             if slot then
                 local spellname = GetSpellBookItemName(slot, _G.SpellBookFrame.bookType)
 
                 if spellname then
                     SpellBinder.spellbuttons[i]:Show()
-                    AutoCastShine_AutoCastStart(SpellBinder.spellbuttons[i])
+                    _G.AutoCastShine_AutoCastStart(SpellBinder.spellbuttons[i])
                 end
             end
         end
@@ -248,11 +223,11 @@ end
 
 local addSpell = function(self, button)
     if SpellBinder.sbOpen then
-        local slot = SpellBook_GetSpellBookSlot(self:GetParent())
+        local slot = _G.SpellBook_GetSpellBookSlot(self:GetParent())
         local spellname = GetSpellBookItemName(slot, _G.SpellBookFrame.bookType)
         local texture = GetSpellBookItemTexture(slot, _G.SpellBookFrame.bookType)
 
-        if spellname ~= 0 and ((_G.SpellBookFrame.bookType == BOOKTYPE_PET) or (_G.SpellBookFrame.selectedSkillLine > 1)) then
+        if spellname ~= 0 and ((_G.SpellBookFrame.bookType == _G.BOOKTYPE_PET) or (_G.SpellBookFrame.selectedSkillLine > 1)) then
             local originalbutton = button
             local modifier = ''
 
@@ -267,10 +242,10 @@ local addSpell = function(self, button)
             end
 
             if IsHarmfulSpell(slot, _G.SpellBookFrame.bookType) then
-                button = format('%s%d', 'harmbutton', SecureButton_GetButtonSuffix(button))
+                button = string.format('%s%d', 'harmbutton', _G.SecureButton_GetButtonSuffix(button))
                 originalbutton = '|cffff2222(harm)|r ' .. originalbutton
             else
-                button = SecureButton_GetButtonSuffix(button)
+                button = _G.SecureButton_GetButtonSuffix(button)
             end
 
             for _, v in pairs(DB.spells) do
@@ -427,7 +402,7 @@ function UNITFRAME:ClickCast()
     SpellBinder:makeFramesList()
     SpellBinder:makeSpellsList(true)
 
-    for i = 1, SPELLS_PER_PAGE do
+    for i = 1, _G.SPELLS_PER_PAGE do
         local parent = _G['SpellButton' .. i]
         local button = CreateFrame('Button', 'SpellBinderFakeButton' .. i, parent, 'AutoCastShineTemplate')
         button:SetID(parent:GetID())
@@ -448,7 +423,7 @@ function UNITFRAME:ClickCast()
         'OnEvent',
         function(self, event)
             if event == 'PLAYER_ENTERING_WORLD' or event == 'GROUP_ROSTER_UPDATE' or event == 'ZONE_CHANGED' or event == 'ZONE_CHANGED_NEW_AREA' then
-                C_Timer_After(
+                C_Timer.After(
                     0.5,
                     function()
                         SpellBinder.UpdateAll()

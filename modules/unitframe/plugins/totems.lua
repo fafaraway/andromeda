@@ -1,9 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local GetTime = GetTime
-local GetTotemInfo = GetTotemInfo
-
 local F = unpack(select(2, ...))
 local oUF = F.Libs.oUF
 
@@ -36,9 +30,9 @@ local function OnUpdate(totem, elapsed)
     end
 end
 
-local function UpdateTotem(self, event, slot)
+local function UpdateTotem(self, _, slot)
     local totem = self.CustomTotems[slot]
-    local _, _, start, duration, icon = GetTotemInfo(slot)
+    local _, _, start, duration = GetTotemInfo(slot)
 
     if (duration > 0) then
         -- totem.icon:SetTexture(icon)

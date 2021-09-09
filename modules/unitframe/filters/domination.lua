@@ -5,7 +5,7 @@ local TIER = 9
 local INSTANCE = 1193 -- 统御圣所
 local BOSS
 
-function UNITFRAME:AddDonimationSpells()
+function UNITFRAME:AddDominationSpells()
     BOSS = 2435 -- 塔拉格鲁
     UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 347283) -- 捕食者之嚎
     UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 347286) -- 不散之惧

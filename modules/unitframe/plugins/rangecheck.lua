@@ -1,16 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local CreateFrame = CreateFrame
-local UnitCanAttack = UnitCanAttack
-local UnitCanAssist = UnitCanAssist
-local UnitIsFriend = UnitIsFriend
-local UnitIsVisible = UnitIsVisible
-local UnitIsConnected = UnitIsConnected
-local IsSpellKnown = IsSpellKnown
-local IsSpellInRange = IsSpellInRange
-local GetSpellInfo = GetSpellInfo
-
 local F, C = unpack(select(2, ...))
 local oUF = F.Libs.oUF
 local LRC = F.Libs.LRC
@@ -188,7 +175,7 @@ local function IsUnitInRange(unit)
     return false
 end
 
-local function Update(self, isInRange, event)
+local function Update(self, isInRange)
     local element = self.RangeCheck
     local unit = self.unit
 
