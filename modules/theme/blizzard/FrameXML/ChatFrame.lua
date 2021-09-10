@@ -1,10 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local tinsert = tinsert
-local hooksecurefunc = hooksecurefunc
-local GetPlayerInfoByGUID = GetPlayerInfoByGUID
-
 local F, C = unpack(select(2, ...))
 
 local function scrollOnEnter(self)
@@ -31,11 +24,11 @@ local function ReskinChatScroll(self)
     self.ScrollBar:HookScript('OnLeave', scrollOnLeave)
 end
 
-tinsert(
+table.insert(
     C.BlizzThemes,
     function()
         -- Battlenet toast frame
-        _G.BNToastFrame:SetBackdrop(nil)
+        F.HideBackdrop(_G.BNToastFrame.TooltipFrame) -- IsNewPatch
         F.SetBD(_G.BNToastFrame)
         _G.BNToastFrame.TooltipFrame:SetBackdrop(nil)
         F.SetBD(_G.BNToastFrame.TooltipFrame)

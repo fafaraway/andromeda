@@ -1,10 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local tinsert = tinsert
-local hooksecurefunc = hooksecurefunc
-local FCF_GetCurrentChatFrame = FCF_GetCurrentChatFrame
-
 local F, C = unpack(select(2, ...))
 
 local function reskinPickerOptions(self)
@@ -35,7 +28,7 @@ local function ReskinVoicePicker(voicePicker)
     voicePicker:HookScript('OnShow', reskinPickerOptions)
 end
 
-tinsert(
+table.insert(
     C.BlizzThemes,
     function()
         F.StripTextures(_G.ChatConfigFrame)
@@ -45,7 +38,7 @@ tinsert(
         hooksecurefunc(
             'ChatConfig_UpdateCheckboxes',
             function(frame)
-                if not FCF_GetCurrentChatFrame() then
+                if not _G.FCF_GetCurrentChatFrame() then
                     return
                 end
 
@@ -54,7 +47,7 @@ tinsert(
                     local checkBoxName = nameString .. index
                     local checkbox = _G[checkBoxName]
                     if checkbox and not checkbox.styled then
-                        checkbox:SetBackdrop(nil)
+                        F.HideBackdrop(checkbox) -- IsNewPatch
                         local bg = F.CreateBDFrame(checkbox, .25)
                         bg:SetInside()
                         F.ReskinCheck(_G[checkBoxName .. 'Check'])
@@ -197,6 +190,9 @@ tinsert(
         F.Reskin(_G.TextToSpeechFramePlaySampleButton)
         F.Reskin(_G.TextToSpeechFramePlaySampleAlternateButton)
         F.Reskin(_G.TextToSpeechDefaultButton)
+        if C.IsNewPatch then
+            F.ReskinCheck(_G.TextToSpeechCharacterSpecificButton)
+        end
 
         F.ReskinDropDown(_G.TextToSpeechFrameTtsVoiceDropdown)
         F.ReskinDropDown(_G.TextToSpeechFrameTtsVoiceAlternateDropdown)

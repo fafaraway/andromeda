@@ -1,129 +1,139 @@
 local F, C = unpack(select(2, ...))
 
-tinsert(C.BlizzThemes, function()
-	if not _G.FREE_ADB.ReskinBlizz then return end
+table.insert(
+    C.BlizzThemes,
+    function()
+        if not _G.FREE_ADB.ReskinBlizz then
+            return
+        end
 
-	local r, g, b = C.r, C.g, C.b
+        local r, g, b = C.r, C.g, C.b
 
-	local LootHistoryFrame = LootHistoryFrame
+        local LootHistoryFrame = _G.LootHistoryFrame
+        LootHistoryFrame.Label:ClearAllPoints()
+        LootHistoryFrame.Label:SetPoint('TOP', LootHistoryFrame, 'TOP', 0, -8)
 
-	for i = 1, 9 do
-		select(i, LootHistoryFrame:GetRegions()):Hide()
-	end
-	LootHistoryFrame.LootIcon:Hide()
-	LootHistoryFrame.Divider:SetAlpha(0)
-	LootHistoryFrameScrollFrame:GetRegions():Hide()
+        F.StripTextures(LootHistoryFrame)
+        F.SetBD(LootHistoryFrame)
+        F.ReskinClose(LootHistoryFrame.CloseButton)
+        F.ReskinScroll(_G.LootHistoryFrameScrollFrameScrollBar)
 
-	LootHistoryFrame.Label:ClearAllPoints()
-	LootHistoryFrame.Label:SetPoint("TOP", LootHistoryFrame, "TOP", 0, -8)
+        -- [[ Resize button ]]
 
-	F.SetBD(LootHistoryFrame)
-	F.ReskinClose(LootHistoryFrame.CloseButton)
-	F.ReskinScroll(LootHistoryFrameScrollFrameScrollBar)
+        LootHistoryFrame.ResizeButton:SetNormalTexture('')
+        LootHistoryFrame.ResizeButton:SetHeight(8)
 
-	-- [[ Resize button ]]
+        do
+            local line1 = LootHistoryFrame.ResizeButton:CreateTexture()
+            line1:SetTexture(C.Assets.bd_tex)
+            line1:SetVertexColor(.7, .7, .7)
+            line1:SetSize(30, 1)
+            line1:SetPoint('TOP')
 
-	LootHistoryFrame.ResizeButton:SetNormalTexture("")
-	LootHistoryFrame.ResizeButton:SetHeight(8)
+            local line2 = LootHistoryFrame.ResizeButton:CreateTexture()
+            line2:SetTexture(C.Assets.bd_tex)
+            line2:SetVertexColor(.7, .7, .7)
+            line2:SetSize(30, 1)
+            line2:SetPoint('TOP', 0, -3)
 
-	do
-		local line1 = LootHistoryFrame.ResizeButton:CreateTexture()
-		line1:SetTexture(C.Assets.bd_tex)
-		line1:SetVertexColor(.7, .7, .7)
-		line1:SetSize(30, 1)
-		line1:SetPoint("TOP")
+            LootHistoryFrame.ResizeButton:HookScript(
+                'OnEnter',
+                function()
+                    line1:SetVertexColor(r, g, b)
+                    line2:SetVertexColor(r, g, b)
+                end
+            )
 
-		local line2 = LootHistoryFrame.ResizeButton:CreateTexture()
-		line2:SetTexture(C.Assets.bd_tex)
-		line2:SetVertexColor(.7, .7, .7)
-		line2:SetSize(30, 1)
-		line2:SetPoint("TOP", 0, -3)
+            LootHistoryFrame.ResizeButton:HookScript(
+                'OnLeave',
+                function()
+                    line1:SetVertexColor(.7, .7, .7)
+                    line2:SetVertexColor(.7, .7, .7)
+                end
+            )
+        end
 
-		LootHistoryFrame.ResizeButton:HookScript("OnEnter", function()
-			line1:SetVertexColor(r, g, b)
-			line2:SetVertexColor(r, g, b)
-		end)
+        -- [[ Item frame ]]
 
-		LootHistoryFrame.ResizeButton:HookScript("OnLeave", function()
-			line1:SetVertexColor(.7, .7, .7)
-			line2:SetVertexColor(.7, .7, .7)
-		end)
-	end
+        hooksecurefunc(
+            'LootHistoryFrame_UpdateItemFrame',
+            function(self, frame)
+                local rollID, _, _, isDone, winnerIdx = C_LootHistory.GetItem(frame.itemIdx)
+                local expanded = self.expandedRolls[rollID]
 
-	-- [[ Item frame ]]
+                if not frame.styled then
+                    frame.Divider:Hide()
+                    frame.NameBorderLeft:Hide()
+                    frame.NameBorderRight:Hide()
+                    frame.NameBorderMid:Hide()
+                    frame.WinnerRoll:SetTextColor(.9, .9, .9)
 
-	hooksecurefunc("LootHistoryFrame_UpdateItemFrame", function(self, frame)
-		local rollID, _, _, isDone, winnerIdx = C_LootHistory.GetItem(frame.itemIdx)
-		local expanded = self.expandedRolls[rollID]
+                    frame.bg = F.ReskinIcon(frame.Icon)
+                    F.ReskinIconBorder(frame.IconBorder)
 
-		if not frame.styled then
-			frame.Divider:Hide()
-			frame.NameBorderLeft:Hide()
-			frame.NameBorderRight:Hide()
-			frame.NameBorderMid:Hide()
-			frame.WinnerRoll:SetTextColor(.9, .9, .9)
+                    F.ReskinCollapse(frame.ToggleButton)
+                    frame.ToggleButton:GetNormalTexture():SetAlpha(0)
+                    frame.ToggleButton:GetPushedTexture():SetAlpha(0)
+                    frame.ToggleButton:GetDisabledTexture():SetAlpha(0)
 
-			frame.bg = F.ReskinIcon(frame.Icon)
-			F.ReskinIconBorder(frame.IconBorder)
+                    frame.styled = true
+                end
 
-			F.ReskinCollapse(frame.ToggleButton)
-			frame.ToggleButton:GetNormalTexture():SetAlpha(0)
-			frame.ToggleButton:GetPushedTexture():SetAlpha(0)
-			frame.ToggleButton:GetDisabledTexture():SetAlpha(0)
+                if isDone and not expanded and winnerIdx then
+                    local name, class = C_LootHistory.GetPlayerInfo(frame.itemIdx, winnerIdx)
+                    if name then
+                        local color = C.ClassColors[class]
+                        frame.WinnerName:SetVertexColor(color.r, color.g, color.b)
+                    end
+                end
+            end
+        )
 
-			frame.styled = true
-		end
+        -- [[ Player frame ]]
 
-		if isDone and not expanded and winnerIdx then
-			local name, class = C_LootHistory.GetPlayerInfo(frame.itemIdx, winnerIdx)
-			if name then
-				local color = C.ClassColors[class]
-				frame.WinnerName:SetVertexColor(color.r, color.g, color.b)
-			end
-		end
-	end)
+        hooksecurefunc(
+            'LootHistoryFrame_UpdatePlayerFrame',
+            function(_, playerFrame)
+                if not playerFrame.styled then
+                    playerFrame.RollText:SetTextColor(.9, .9, .9)
+                    playerFrame.WinMark:SetDesaturated(true)
 
-	-- [[ Player frame ]]
+                    playerFrame.styled = true
+                end
 
-	hooksecurefunc("LootHistoryFrame_UpdatePlayerFrame", function(_, playerFrame)
-		if not playerFrame.styled then
-			playerFrame.RollText:SetTextColor(.9, .9, .9)
-			playerFrame.WinMark:SetDesaturated(true)
+                if playerFrame.playerIdx then
+                    local name, class, _, _, isWinner = C_LootHistory.GetPlayerInfo(playerFrame.itemIdx, playerFrame.playerIdx)
 
-			playerFrame.styled = true
-		end
+                    if name then
+                        local color = C.ClassColors[class]
+                        playerFrame.PlayerName:SetTextColor(color.r, color.g, color.b)
 
-		if playerFrame.playerIdx then
-			local name, class, _, _, isWinner = C_LootHistory.GetPlayerInfo(playerFrame.itemIdx, playerFrame.playerIdx)
+                        if isWinner then
+                            playerFrame.WinMark:SetVertexColor(color.r, color.g, color.b)
+                        end
+                    end
+                end
+            end
+        )
 
-			if name then
-				local color = C.ClassColors[class]
-				playerFrame.PlayerName:SetTextColor(color.r, color.g, color.b)
+        -- [[ Dropdown ]]
 
-				if isWinner then
-					playerFrame.WinMark:SetVertexColor(color.r, color.g, color.b)
-				end
-			end
-		end
-	end)
+        _G.LootHistoryDropDown.initialize = function(self)
+            local info = _G.UIDropDownMenu_CreateInfo()
+            info.isTitle = 1
+            info.text = _G.MASTER_LOOTER
+            info.fontObject = _G.GameFontNormalLeft
+            info.notCheckable = 1
+            _G.UIDropDownMenu_AddButton(info)
 
-	-- [[ Dropdown ]]
-
-	LootHistoryDropDown.initialize = function(self)
-		local info = UIDropDownMenu_CreateInfo();
-		info.isTitle = 1;
-		info.text = MASTER_LOOTER;
-		info.fontObject = GameFontNormalLeft;
-		info.notCheckable = 1;
-		UIDropDownMenu_AddButton(info);
-
-		info = UIDropDownMenu_CreateInfo();
-		info.notCheckable = 1;
-		local name, class = C_LootHistory.GetPlayerInfo(self.itemIdx, self.playerIdx);
-		local classColor = C.ClassColors[class];
-		local colorCode = classColor.colorStr
-		info.text = string.format(MASTER_LOOTER_GIVE_TO, colorCode..name.."|r");
-		info.func = LootHistoryDropDown_OnClick;
-		UIDropDownMenu_AddButton(info);
-	end
-end)
+            info = _G.UIDropDownMenu_CreateInfo()
+            info.notCheckable = 1
+            local name, class = C_LootHistory.GetPlayerInfo(self.itemIdx, self.playerIdx)
+            local classColor = C.ClassColors[class]
+            local colorCode = classColor.colorStr
+            info.text = string.format(_G.MASTER_LOOTER_GIVE_TO, colorCode .. name .. '|r')
+            info.func = _G.LootHistoryDropDown_OnClick
+            _G.UIDropDownMenu_AddButton(info)
+        end
+    end
+)

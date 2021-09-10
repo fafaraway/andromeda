@@ -1,10 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local tinsert = tinsert
-local hooksecurefunc = hooksecurefunc
-local C_LFGList_GetApplicationInfo = C_LFGList.GetApplicationInfo
-
 local F, C = unpack(select(2, ...))
 
 local function Highlight_OnEnter(self)
@@ -34,7 +27,7 @@ local function ReplaceApplicantRoles(texture, atlas)
     end
 end
 
-tinsert(
+table.insert(
     C.BlizzThemes,
     function()
         local r, g, b = C.r, C.g, C.b
@@ -44,12 +37,12 @@ tinsert(
 
         -- [[ Category selection ]]
 
-        local CategorySelection = LFGListFrame.CategorySelection
+        local categorySelection = LFGListFrame.CategorySelection
 
-        F.Reskin(CategorySelection.FindGroupButton)
-        F.Reskin(CategorySelection.StartGroupButton)
-        CategorySelection.Inset:Hide()
-        CategorySelection.CategoryButtons[1]:SetNormalFontObject(_G.GameFontNormal)
+        F.Reskin(categorySelection.FindGroupButton)
+        F.Reskin(categorySelection.StartGroupButton)
+        categorySelection.Inset:Hide()
+        categorySelection.CategoryButtons[1]:SetNormalFontObject(_G.GameFontNormal)
 
         hooksecurefunc(
             'LFGListCategorySelection_AddButton',
@@ -89,19 +82,19 @@ tinsert(
 
         -- [[ Search panel ]]
 
-        local SearchPanel = LFGListFrame.SearchPanel
+        local searchPanel = LFGListFrame.SearchPanel
 
-        F.Reskin(SearchPanel.RefreshButton)
-        F.Reskin(SearchPanel.BackButton)
-        F.Reskin(SearchPanel.SignUpButton)
-        F.Reskin(SearchPanel.ScrollFrame.ScrollChild.StartGroupButton)
-        F.ReskinInput(SearchPanel.SearchBox)
-        F.ReskinScroll(SearchPanel.ScrollFrame.scrollBar)
+        F.Reskin(searchPanel.RefreshButton)
+        F.Reskin(searchPanel.BackButton)
+        F.Reskin(searchPanel.SignUpButton)
+        F.Reskin(searchPanel.ScrollFrame.ScrollChild.StartGroupButton)
+        F.ReskinInput(searchPanel.SearchBox)
+        F.ReskinScroll(searchPanel.ScrollFrame.scrollBar)
 
-        SearchPanel.RefreshButton:SetSize(24, 24)
-        SearchPanel.RefreshButton.Icon:SetPoint('CENTER')
-        SearchPanel.ResultsInset:Hide()
-        F.StripTextures(SearchPanel.AutoCompleteFrame)
+        searchPanel.RefreshButton:SetSize(24, 24)
+        searchPanel.RefreshButton.Icon:SetPoint('CENTER')
+        searchPanel.ResultsInset:Hide()
+        F.StripTextures(searchPanel.AutoCompleteFrame)
 
         local numResults = 1
         hooksecurefunc(
@@ -142,13 +135,14 @@ tinsert(
 
         -- [[ Application viewer ]]
 
-        local ApplicationViewer = LFGListFrame.ApplicationViewer
-        ApplicationViewer.InfoBackground:Hide()
-        ApplicationViewer.Inset:Hide()
+        local applicationViewer = LFGListFrame.ApplicationViewer
+        applicationViewer.InfoBackground:Hide()
+        applicationViewer.Inset:Hide()
 
         local prevHeader
-        for _, headerName in pairs({'NameColumnHeader', 'RoleColumnHeader', 'ItemLevelColumnHeader', 'DungeonScoreColumnHeader'}) do
-            local header = ApplicationViewer[headerName]
+        local scoreHeader = C.IsNewPatch and 'RatingColumnHeader' or 'DungeonScoreColumnHeader'
+        for _, headerName in pairs({'NameColumnHeader', 'RoleColumnHeader', 'ItemLevelColumnHeader', scoreHeader}) do
+            local header = applicationViewer[headerName]
 
             F.StripTextures(header)
             header.Label:SetFont(C.Assets.Fonts.Regular, 14, 'OUTLINE')
@@ -172,13 +166,14 @@ tinsert(
             prevHeader = header
         end
 
-        F.Reskin(ApplicationViewer.RefreshButton)
-        F.Reskin(ApplicationViewer.RemoveEntryButton)
-        F.Reskin(ApplicationViewer.EditButton)
+        F.Reskin(applicationViewer.RefreshButton)
+        F.Reskin(applicationViewer.RemoveEntryButton)
+        F.Reskin(applicationViewer.EditButton)
+        F.ReskinCheck(applicationViewer.AutoAcceptButton)
         F.ReskinScroll(_G.LFGListApplicationViewerScrollFrameScrollBar)
 
-        ApplicationViewer.RefreshButton:SetSize(24, 24)
-        ApplicationViewer.RefreshButton.Icon:SetPoint('CENTER')
+        applicationViewer.RefreshButton:SetSize(24, 24)
+        applicationViewer.RefreshButton.Icon:SetPoint('CENTER')
 
         hooksecurefunc(
             'LFGListApplicationViewer_UpdateApplicant',
@@ -212,22 +207,30 @@ tinsert(
 
         -- [[ Entry creation ]]
 
-        local EntryCreation = LFGListFrame.EntryCreation
-        EntryCreation.Inset:Hide()
-        F.StripTextures(EntryCreation.Description)
-        F.Reskin(EntryCreation.ListGroupButton)
-        F.Reskin(EntryCreation.CancelButton)
-        F.ReskinInput(EntryCreation.Description)
-        F.ReskinInput(EntryCreation.Name)
-        F.ReskinInput(EntryCreation.ItemLevel.EditBox)
-        F.ReskinInput(EntryCreation.VoiceChat.EditBox)
-        F.ReskinDropDown(EntryCreation.CategoryDropDown)
-        F.ReskinDropDown(EntryCreation.GroupDropDown)
-        F.ReskinDropDown(EntryCreation.ActivityDropDown)
-        F.ReskinCheck(EntryCreation.ItemLevel.CheckButton)
-        F.ReskinCheck(EntryCreation.VoiceChat.CheckButton)
-        F.ReskinCheck(EntryCreation.PrivateGroup.CheckButton)
-        F.ReskinCheck(LFGListFrame.ApplicationViewer.AutoAcceptButton)
+        local entryCreation = LFGListFrame.EntryCreation
+        entryCreation.Inset:Hide()
+        F.StripTextures(entryCreation.Description)
+        F.Reskin(entryCreation.ListGroupButton)
+        F.Reskin(entryCreation.CancelButton)
+        F.ReskinInput(entryCreation.Description)
+        F.ReskinInput(entryCreation.Name)
+        F.ReskinInput(entryCreation.ItemLevel.EditBox)
+        F.ReskinInput(entryCreation.VoiceChat.EditBox)
+        if not C.IsNewPatch then
+            F.ReskinDropDown(entryCreation.CategoryDropDown)
+        end
+        F.ReskinDropDown(entryCreation.GroupDropDown)
+        F.ReskinDropDown(entryCreation.ActivityDropDown)
+        if C.IsNewPatch then
+            F.ReskinDropDown(entryCreation.PlayStyleDropdown)
+            F.ReskinCheck(entryCreation.MythicPlusRating.CheckButton)
+            F.ReskinInput(entryCreation.MythicPlusRating.EditBox)
+            F.ReskinCheck(entryCreation.PVPRating.CheckButton)
+            F.ReskinInput(entryCreation.PVPRating.EditBox)
+        end
+        F.ReskinCheck(entryCreation.ItemLevel.CheckButton)
+        F.ReskinCheck(entryCreation.VoiceChat.CheckButton)
+        F.ReskinCheck(entryCreation.PrivateGroup.CheckButton)
 
         -- [[ Role count ]]
 
@@ -264,15 +267,16 @@ tinsert(
 
         -- Activity finder
 
-        local ActivityFinder = EntryCreation.ActivityFinder
+        local activityFinder = entryCreation.ActivityFinder
+        activityFinder.Background:SetTexture('')
 
-        ActivityFinder.Background:SetTexture('')
-        F.StripTextures(ActivityFinder.Dialog)
-        F.ReskinInput(ActivityFinder.Dialog)
-        F.Reskin(ActivityFinder.Dialog.SelectButton)
-        F.Reskin(ActivityFinder.Dialog.CancelButton)
-        F.ReskinInput(ActivityFinder.Dialog.EntryBox)
-        F.ReskinScroll(_G.LFGListEntryCreationSearchScrollFrameScrollBar)
+        local finderDialog = activityFinder.Dialog
+        F.StripTextures(finderDialog)
+        F.SetBD(finderDialog)
+        F.Reskin(finderDialog.SelectButton)
+        F.Reskin(finderDialog.CancelButton)
+        F.ReskinInput(finderDialog.EntryBox)
+        F.ReskinScroll(finderDialog.ScrollFrame.scrollBar)
 
         -- [[ Application dialog ]]
 
@@ -302,7 +306,7 @@ tinsert(
         hooksecurefunc(
             'LFGListInviteDialog_Show',
             function(self, resultID)
-                local role = select(5, C_LFGList_GetApplicationInfo(resultID))
+                local role = select(5, C_LFGList.GetApplicationInfo(resultID))
                 self.RoleIcon:SetTexCoord(F.GetRoleTexCoord(role))
             end
         )

@@ -12,7 +12,7 @@ C.Themes['Blizzard_ItemSocketingUI'] = function()
         PunchcardRed = {r = 1, g = 0.47, b = 0.47},
         PunchcardYellow = {r = 0.97, g = 0.82, b = 0.29},
         PunchcardBlue = {r = 0.47, g = 0.67, b = 1},
-        Domination = {r=.24, g=.5, b=.7}
+        Domination = {r = .24, g = .5, b = .7}
     }
 
     for i = 1, _G.MAX_NUM_SOCKETS do
@@ -31,7 +31,7 @@ C.Themes['Blizzard_ItemSocketingUI'] = function()
         socket.Background:SetAlpha(0)
     end
 
-    _G.hooksecurefunc(
+    hooksecurefunc(
         'ItemSocketingFrame_Update',
         function()
             for i, socket in ipairs(_G.ItemSocketingFrame.Sockets) do
@@ -43,7 +43,7 @@ C.Themes['Blizzard_ItemSocketingUI'] = function()
                 socket.bg:SetBackdropBorderColor(color.r, color.g, color.b)
             end
 
-            _G.ItemSocketingDescription:SetBackdrop(nil)
+            F.HideBackdrop(_G.ItemSocketingDescription) -- IsNewPatch
         end
     )
 

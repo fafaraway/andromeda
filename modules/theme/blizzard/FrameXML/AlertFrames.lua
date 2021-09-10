@@ -47,13 +47,32 @@ local function fixAnim(frame)
     frame.hookded = true
 end
 
-_G.tinsert(
+table.insert(
     C.BlizzThemes,
     function()
-        _G.hooksecurefunc('AlertFrame_PauseOutAnimation', fixBg)
+        hooksecurefunc('AlertFrame_PauseOutAnimation', fixBg)
 
         -- AlertFrames
-        _G.hooksecurefunc(
+        local garrAlertTemplate = {
+            [_G.GarrisonMissionAlertSystem] = true,
+            [_G.GarrisonRandomMissionAlertSystem] = true,
+            [_G.GarrisonShipMissionAlertSystem] = true,
+            [_G.GarrisonShipFollowerAlertSystem] = true
+        }
+
+        if not _G.NewCosmeticAlertFrameSystem then
+            _G.NewCosmeticAlertFrameSystem = 123
+        end
+
+        local newAlertTemplate = {
+            [_G.NewPetAlertSystem] = true,
+            [_G.NewMountAlertSystem] = true,
+            [_G.NewToyAlertSystem] = true,
+            [_G.NewRuneforgePowerAlertSystem] = true,
+            [_G.NewCosmeticAlertFrameSystem] = true
+        }
+
+        hooksecurefunc(
             _G.AlertFrame,
             'AddAlertFrame',
             function(_, frame)
@@ -200,10 +219,7 @@ _G.tinsert(
                         frame.shine:SetTexture('')
                     end
                     frame.FollowerBG:SetTexture('')
-                elseif
-                    frame.queue == _G.GarrisonMissionAlertSystem or frame.queue == _G.GarrisonRandomMissionAlertSystem or frame.queue == _G.GarrisonShipMissionAlertSystem or
-                        frame.queue == _G.GarrisonShipFollowerAlertSystem
-                 then
+                elseif garrAlertTemplate[frame.queue] then
                     if not frame.bg then
                         frame.bg = F.SetBD(frame)
                         frame.bg:SetPoint('TOPLEFT', 8, -8)
@@ -307,7 +323,7 @@ _G.tinsert(
                         frame.Background3:SetTexture('')
                         frame.glow:SetTexture('')
                     end
-                elseif frame.queue == _G.NewPetAlertSystem or frame.queue == _G.NewMountAlertSystem or frame.queue == _G.NewToyAlertSystem or frame.queue == _G.NewRuneforgePowerAlertSystem then
+                elseif newAlertTemplate[frame.queue] then
                     if not frame.bg then
                         frame.bg = F.SetBD(frame)
                         frame.bg:SetPoint('TOPLEFT', 12, -13)
@@ -336,7 +352,7 @@ _G.tinsert(
         )
 
         -- Reward Icons
-        _G.hooksecurefunc(
+        hooksecurefunc(
             'StandardRewardAlertFrame_AdjustRewardAnchors',
             function(frame)
                 if frame.RewardFrames then
@@ -355,7 +371,7 @@ _G.tinsert(
         )
 
         -- BonusRollLootWonFrame
-        _G.hooksecurefunc(
+        hooksecurefunc(
             'LootWonAlertFrame_SetUp',
             function(frame)
                 local lootItem = frame.lootItem
@@ -383,7 +399,7 @@ _G.tinsert(
         )
 
         -- BonusRollMoneyWonFrame
-        _G.hooksecurefunc(
+        hooksecurefunc(
             'MoneyWonAlertFrame_SetUp',
             function(frame)
                 if not frame.bg then

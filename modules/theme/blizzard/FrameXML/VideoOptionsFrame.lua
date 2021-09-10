@@ -1,9 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local tinsert = tinsert
-local hooksecurefunc = hooksecurefunc
-
 local F, C = unpack(select(2, ...))
 
 local function reskinPanelSection(frame)
@@ -12,7 +6,7 @@ local function reskinPanelSection(frame)
     _G[frame:GetName() .. 'Title']:SetPoint('BOTTOMLEFT', frame, 'TOPLEFT', 5, 2)
 end
 
-tinsert(
+table.insert(
     C.BlizzThemes,
     function()
         local styledOptions = false
@@ -42,9 +36,9 @@ tinsert(
                 line:SetPoint('LEFT', 205, 30)
                 line:SetColorTexture(1, 1, 1, .25)
 
-                _G.Display_:SetBackdrop(nil)
-                _G.Graphics_:SetBackdrop(nil)
-                _G.RaidGraphics_:SetBackdrop(nil)
+                F.HideBackdrop(_G.Display_) -- IsNewPatch
+                F.HideBackdrop(_G.Graphics_) -- IsNewPatch
+                F.HideBackdrop(_G.RaidGraphics_) -- IsNewPatch
 
                 _G.GraphicsButton:DisableDrawLayer('BACKGROUND')
                 _G.RaidButton:DisableDrawLayer('BACKGROUND')

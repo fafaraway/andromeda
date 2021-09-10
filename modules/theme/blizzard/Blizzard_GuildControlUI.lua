@@ -51,7 +51,7 @@ C.Themes['Blizzard_GuildControlUI'] = function()
     hooksecurefunc('GuildControlUI_RankOrder_Update', updateGuildRanks)
 
     -- Guild tabs
-    local checkboxes = {'viewCB', 'depositCB', 'infoCB'}
+    local checkboxes = {'viewCB', 'depositCB'}
     hooksecurefunc(
         'GuildControlUI_BankTabPermissions_Update',
         function()
