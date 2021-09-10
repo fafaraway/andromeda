@@ -13,7 +13,7 @@
 ## X-WoWI-ID: 23258
 ## X-Wago-ID: 0mNw8l6o
 
-taintless.xml
+libs\taintless.xml
 libs\libs.xml
 init.lua
 locales\locales.xml
