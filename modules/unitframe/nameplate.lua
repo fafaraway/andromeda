@@ -207,7 +207,7 @@ function NAMEPLATE:UpdateColor(_, unit)
             end
         elseif isPlayer and (not isFriendly) and hostileClassColor then
             r, g, b = F:UnitColor(unit)
-        elseif UnitIsTapDenied(unit) and not UnitPlayerControlled(unit) then
+        elseif UnitIsTapDenied(unit) and not UnitPlayerControlled(unit) or C.TrashUnits[npcID] then
             r, g, b = unpack(oUF.colors.tapped)
         else
             r, g, b = unpack(oUF.colors.reaction[UnitReaction(unit, 'player') or 5])
@@ -251,9 +251,9 @@ function NAMEPLATE:UpdateColor(_, unit)
     end
 
     if executeRatio > 0 and healthPerc <= executeRatio then
-        self.Name:SetTextColor(1, 0, 0)
+        self.NameTag:SetTextColor(1, 0, 0)
     else
-        self.Name:SetTextColor(1, 1, 1)
+        self.NameTag:SetTextColor(1, 1, 1)
     end
 end
 
@@ -745,10 +745,10 @@ function NAMEPLATE:CreateNameplateStyle()
     title:ClearAllPoints()
     title:SetPoint('TOP', name, 'BOTTOM', 0, -4)
     title:Hide()
-    self:Tag(title, '[free:title]')
+    self:Tag(title, '[free:nptitle]')
     self.npcTitle = title
 
-    UNITFRAME:CreateNameText(self)
+    UNITFRAME:CreateNameTag(self)
     UNITFRAME:CreateHealPrediction(self)
     NAMEPLATE:CreateTargetIndicator(self)
     NAMEPLATE:CreateHighlight(self)
@@ -811,7 +811,7 @@ local disabledElements = {
 
 function NAMEPLATE:UpdatePlateByType()
     local nameOnlyName = self.nameOnlyName
-    local normalName = self.Name
+    local normalName = self.NameTag
     local title = self.npcTitle
     local classify = self.ClassifyIndicator
     local isNameOnly = self.isNameOnly
@@ -926,12 +926,12 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
 
             self.TotemIcon.texure:SetTexture(texure)
 
-            if self.Name then
-                self.Name:Hide()
+            if self.NameTag then
+                self.NameTag:Hide()
             end
         else
-            if self.Name then
-                self.Name:Show()
+            if self.NameTag then
+                self.NameTag:Show()
             end
         end
     elseif event == 'NAME_PLATE_UNIT_REMOVED' then

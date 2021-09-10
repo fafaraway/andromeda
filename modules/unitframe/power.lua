@@ -158,7 +158,7 @@ local function PostUpdateAltPower(self, _, cur, _, max)
     local parent = self.__owner
 
     if cur and max then
-        local value = parent.AlternativePowerValue
+        local value = parent.AltPowerTag
         local r, g, b = F:ColorGradient(cur / max, unpack(oUF.colors.smooth))
 
         self:SetStatusBarColor(r, g, b)

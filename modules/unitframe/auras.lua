@@ -185,7 +185,7 @@ local function BolsterPostUpdate(element)
     end
 end
 
-function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, caster, isStealable, _, spellID, _, _, _, nameplateShowAll)
+function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, caster, isStealable, _, spellID, _, isBossAura, _, nameplateShowAll)
     local style = element.__owner.unitStyle
     local isMine = F:MultiCheck(caster, 'player', 'pet', 'vehicle')
 
@@ -211,7 +211,7 @@ function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, cast
     elseif style == 'target' then
         return not button.isDebuff or (element.onlyShowPlayer and button.isPlayer) or (not element.onlyShowPlayer and name)
     elseif style == 'focus' then
-        return (not button.isDebuff and isStealable) or (button.isDebuff and name)
+        return button.isPlayer or isStealable or isBossAura or SpellIsPriorityAura(spellID)
     else
         return (element.onlyShowPlayer and button.isPlayer) or (not element.onlyShowPlayer and name)
     end
@@ -229,11 +229,11 @@ function UNITFRAME.BuffFilter(_, _, _, _, _, _, _, _, _, _, _, _, spellID)
     end
 end
 
-function UNITFRAME.DebuffFilter(_, _, _, _, _, _, _, _, _, caster, _, _, spellID, _, isBossAura)
+function UNITFRAME.DebuffFilter(_, unit, _, _, _, _, _, _, _, caster, _, _, spellID, _, isBossAura)
     local isMine = F:MultiCheck(caster, 'player', 'pet', 'vehicle')
     -- local parent = element.__owner
 
-    if C.PartyDebuffsBlackList[spellID] then
+    if UnitIsDeadOrGhost(unit) or C.PartyDebuffsBlackList[spellID] then
         -- elseif (C.DB.Unitframe.CornerIndicator and UNITFRAME.CornerSpellsList[spellID]) or parent.RaidDebuffs.spellID == spellID or parent.rawSpellID == spellID then
         --     return false
         return false

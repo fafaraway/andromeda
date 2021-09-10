@@ -132,6 +132,12 @@ local function UpdateNameTimeVisibility(self, unit)
     end
 end
 
+local function ResetSpellTarget(self)
+    if self.spellTarget then
+        self.spellTarget:SetText('')
+    end
+end
+
 local function UpdateSpellTarget(self, unit)
     if not C.DB.Nameplate.SpellTarget then
         return
@@ -141,25 +147,21 @@ local function UpdateSpellTarget(self, unit)
         return
     end
 
-    if not self.SpellTarget or not unit then
+    if not self.spellTarget then
         return
     end
 
-    local unitTarget = unit .. 'target'
-    if UnitExists(unitTarget) then
+    local unitTarget = unit and unit .. 'target'
+    if unitTarget and UnitExists(unitTarget) then
         local nameString
         if UnitIsUnit(unitTarget, 'player') then
-            nameString = string.format('|cffff0000%s|r', '>' .. strupper(_G.YOU) .. '<')
+            nameString = string.format('|cffff0000%s|r', '>' .. string.upper(_G.YOU) .. '<')
         else
             nameString = '<' .. F:RGBToHex(F:UnitColor(unitTarget)) .. UnitName(unitTarget) .. '|r>'
         end
         self.SpellTarget:SetText(nameString)
-    end
-end
-
-local function ResetSpellTarget(self)
-    if self.SpellTarget then
-        self.SpellTarget:SetText('')
+    else
+        ResetSpellTarget(self) -- when unit loses target
     end
 end
 
