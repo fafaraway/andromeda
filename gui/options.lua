@@ -398,6 +398,7 @@ GUI.OptionsList = {
         {1, 'Unitframe', 'OnlyShowPlayer', L['Shows only debuffs created by player'], true},
         {1, 'Unitframe', 'RaidTargetIndicator', L['Raid target indicator']},
         {1, 'Unitframe', 'GCDIndicator', L['GCD indicator'], true},
+        {},
         {1, 'Unitframe', 'ClassPower', L['Class power bar']},
         {1, 'Unitframe', 'RunesTimer', L['DK runes timer'], true},
         {1, 'Unitframe', 'TotemsBar', L['Shaman totems bar']},

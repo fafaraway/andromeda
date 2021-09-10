@@ -1,39 +1,8 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local format = format
-local tonumber = tonumber
-local split = strsplit
-local UnitName = UnitName
-local UnitClass = UnitClass
-local UnitLevel = UnitLevel
-local UnitRace = UnitRace
-local UnitFactionGroup = UnitFactionGroup
-local UnitGUID = UnitGUID
-local GetRealmName = GetRealmName
-local GetLocale = GetLocale
-local GetCVar = GetCVar
-local GetPhysicalScreenSize = GetPhysicalScreenSize
-local GetBuildInfo = GetBuildInfo
-local GetMaxLevelForPlayerExpansion = GetMaxLevelForPlayerExpansion
-local GetSpecialization = GetSpecialization
-local GetSpecializationInfo = GetSpecializationInfo
-local LOCALIZED_CLASS_NAMES_MALE = LOCALIZED_CLASS_NAMES_MALE
-local RAID_CLASS_COLORS = RAID_CLASS_COLORS
-local BAG_ITEM_QUALITY_COLORS = BAG_ITEM_QUALITY_COLORS
-local WOW_PROJECT_ID = WOW_PROJECT_ID
-local WOW_PROJECT_MAINLINE = WOW_PROJECT_MAINLINE
-
 
 local F, C = unpack(select(2, ...))
 
-
-
-C.IsRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
-C.IsNewPatch = C.IsRetail and select(4, GetBuildInfo()) >= 90100 -- 9.1.0
-C.GameLocale = GetLocale()
-C.IsChinses = C.GameLocale == 'zhCN' or C.GameLocale == 'zhTW'
-C.IsCNPortal = GetCVar('portal') == 'CN'
+C.IsRetail = _G.WOW_PROJECT_ID == _G.WOW_PROJECT_MAINLINE
+C.IsNewPatch = C.IsRetail and select(4, GetBuildInfo()) >= 90105 -- 9.1.5
 C.MaxLevel = GetMaxLevelForPlayerExpansion()
 C.MyClass = select(2, UnitClass('player'))
 C.MyName = UnitName('player')
@@ -45,13 +14,13 @@ C.MyRealm = GetRealmName()
 C.MyFullName = C.MyName .. '-' .. C.MyRealm
 
 local playerGUID = UnitGUID('player')
-local _, serverID = split('-', playerGUID)
+local _, serverID = string.split('-', playerGUID)
 C.ServerID = tonumber(serverID)
 C.MyGuid = playerGUID
 
 C.ScreenWidth, C.ScreenHeight = GetPhysicalScreenSize()
 C.IsLowRes =C.ScreenHeight < 1080
-C.IsMediumRes = C.ScreenHeight > 1080 and C.ScreenHeight < 1440
+C.IsMedRes = C.ScreenHeight > 1080 and C.ScreenHeight < 1440
 C.IsHighRes = C.ScreenHeight > 1440
 
 C.AssetsPath = 'Interface\\AddOns\\FreeUI\\assets\\'
@@ -130,13 +99,13 @@ C.Assets = {
 }
 
 C.ClassList = {}
-for k, v in pairs(LOCALIZED_CLASS_NAMES_MALE) do
+for k, v in pairs(_G.LOCALIZED_CLASS_NAMES_MALE) do
     C.ClassList[v] = k
 end
 
 C.ClassColors = {}
 function F.UpdateCustomClassColors()
-    local colors = _G.FREE_ADB.UseCustomClassColor and _G.FREE_ADB.CustomClassColors or RAID_CLASS_COLORS
+    local colors = _G.FREE_ADB.UseCustomClassColor and _G.FREE_ADB.CustomClassColors or _G.RAID_CLASS_COLORS
     for class, value in pairs(colors) do
         C.ClassColors[class] = {}
         C.ClassColors[class].r = value.r
@@ -149,7 +118,7 @@ function F.UpdateCustomClassColors()
     C.g = C.ClassColors[C.MyClass].g
     C.b = C.ClassColors[C.MyClass].b
 
-    C.MyColor = format('|cff%02x%02x%02x', C.r * 255, C.g * 255, C.b * 255)
+    C.MyColor = string.format('|cff%02x%02x%02x', C.r * 255, C.g * 255, C.b * 255)
     C.AddonName = 'Free' .. C.MyColor ..'UI|r'
 end
 F:RegisterEvent('ADDON_LOADED', F.UpdateCustomClassColors)
@@ -176,7 +145,7 @@ _G.LE_ITEM_QUALITY_ARTIFACT = _G.Enum.ItemQuality.Artifact
 _G.LE_ITEM_QUALITY_HEIRLOOM = _G.Enum.ItemQuality.Heirloom
 
 C.QualityColors = {}
-local qualityColors = BAG_ITEM_QUALITY_COLORS
+local qualityColors = _G.BAG_ITEM_QUALITY_COLORS
 for index, value in pairs(qualityColors) do
     C.QualityColors[index] = {r = value.r, g = value.g, b = value.b}
 end
@@ -184,9 +153,9 @@ C.QualityColors[-1] = {r = 0, g = 0, b = 0}
 C.QualityColors[_G.LE_ITEM_QUALITY_POOR] = {r = .61, g = .61, b = .61}
 C.QualityColors[_G.LE_ITEM_QUALITY_COMMON] = {r = 0, g = 0, b = 0}
 
-_G.GOLD_AMOUNT_SYMBOL = format('|cffffd700%s|r', _G.GOLD_AMOUNT_SYMBOL)
-_G.SILVER_AMOUNT_SYMBOL = format('|cffd0d0d0%s|r', _G.SILVER_AMOUNT_SYMBOL)
-_G.COPPER_AMOUNT_SYMBOL = format('|cffc77050%s|r', _G.COPPER_AMOUNT_SYMBOL)
+_G.GOLD_AMOUNT_SYMBOL = string.format('|cffffd700%s|r', _G.GOLD_AMOUNT_SYMBOL)
+_G.SILVER_AMOUNT_SYMBOL = string.format('|cffd0d0d0%s|r', _G.SILVER_AMOUNT_SYMBOL)
+_G.COPPER_AMOUNT_SYMBOL = string.format('|cffc77050%s|r', _G.COPPER_AMOUNT_SYMBOL)
 _G.COPPER_AMOUNT = '%d\124TInterface\\MoneyFrame\\UI-CopperIcon:0:0:2:0\124t'
 _G.SILVER_AMOUNT = '%d\124TInterface\\MoneyFrame\\UI-SilverIcon:0:0:2:0\124t'
 _G.GOLD_AMOUNT = '%d\124TInterface\\MoneyFrame\\UI-GoldIcon:0:0:2:0\124t'

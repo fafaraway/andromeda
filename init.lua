@@ -7,16 +7,9 @@
     \_|   \_| \_\____/\____/ \___/ \___/
 ]]
 
-local _G = _G
-local unpack = unpack
-local tinsert = tinsert
-local LibStub = LibStub
-local CreateFrame = CreateFrame
-local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
-local GetAddOnMetadata = GetAddOnMetadata
 
 _G.BINDING_HEADER_FREEUI = GetAddOnMetadata(..., 'Title')
-_G.BINDING_NAME_FREEUI_TOGGLE_GUI = 'Toggle GUI'
+_G.BINDING_NAME_FREEUI_TOGGLE_GUI = 'GUI'
 
 local _, ns = ...
 
@@ -69,7 +62,7 @@ do
     F.Libs.oUF = ns.oUF
     F.Libs.cargBags = ns.cargBags
 
-    LibStub('AceTimer-3.0'):Embed(F)
+    _G.LibStub('AceTimer-3.0'):Embed(F)
 end
 
 --[[ Events ]]
@@ -125,7 +118,7 @@ function F:RegisterModule(name)
     module.name = name
     modules[name] = module
 
-    tinsert(initQueue, module)
+    table.insert(initQueue, module)
     return module
 end
 

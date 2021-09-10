@@ -1,45 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local next = next
-local Lerp = Lerp
-local abs = abs
-local wipe = wipe
-local tremove = tremove
-local tinsert = tinsert
-local type = type
-local pairs = pairs
-local tonumber = tonumber
-local strmatch = strmatch
-local strfind = strfind
-local strupper = strupper
-local format = format
-local gsub = gsub
-local strsub = strsub
-local gmatch = gmatch
-local utf8sub = string.utf8sub
-local utf8len = string.utf8len
-local min = min
-local max = max
-local floor = floor
-local rad = rad
-local modf = math.modf
-local CreateFrame = CreateFrame
-local hooksecurefunc = hooksecurefunc
-local PlaySound = PlaySound
-local GetTime = GetTime
-local GetScreenWidth = GetScreenWidth
-local GetScreenHeight = GetScreenHeight
-local C_Timer_After = C_Timer.After
-local C_ChallengeMode_GetAffixInfo = C_ChallengeMode.GetAffixInfo
-local SOUNDKIT_GS_TITLE_OPTION_OK = SOUNDKIT.GS_TITLE_OPTION_OK
-local UnitIsPlayer = UnitIsPlayer
-local UnitIsTapDenied = UnitIsTapDenied
-local UnitClass = UnitClass
-local UnitReaction = UnitReaction
-local GetSpellDescription = GetSpellDescription
-local ColorPicker_GetPreviousValues = ColorPicker_GetPreviousValues
-
 local F, C, L = unpack(select(2, ...))
 local assets = C.Assets
 
@@ -79,7 +37,7 @@ do
             return
         end
 
-        err = format('FreeUI: %s Error\n%s', msg, err)
+        err = string.format('FreeUI: %s Error\n%s', msg, err)
 
         if _G.BaudErrorFrameHandler then
             _G.BaudErrorFrameHandler(err)
@@ -109,16 +67,16 @@ do
             end
         elseif _G.FREE_ADB.NumberFormat == 2 then
             if n >= 1e12 then
-                return format('%.2f' .. numCap['CHINESE'][1], n / 1e12)
+                return string.format('%.2f' .. numCap['CHINESE'][1], n / 1e12)
             elseif n >= 1e8 then
-                return format('%.2f' .. numCap['CHINESE'][2], n / 1e8)
+                return string.format('%.2f' .. numCap['CHINESE'][2], n / 1e8)
             elseif n >= 1e4 then
-                return format('%.2f' .. numCap['CHINESE'][3], n / 1e4)
+                return string.format('%.2f' .. numCap['CHINESE'][3], n / 1e4)
             else
-                return format('%.0f', n)
+                return string.format('%.0f', n)
             end
         else
-            return format('%.0f', n)
+            return string.format('%.0f', n)
         end
     end
 
@@ -132,7 +90,7 @@ do
                     r, g, b = unpack(r)
                 end
             end
-            return format('%s%02x%02x%02x%s', header or '|cff', r * 255, g * 255, b * 255, ending or '')
+            return string.format('%s%02x%02x%02x%s', header or '|cff', r * 255, g * 255, b * 255, ending or '')
         end
     end
 
@@ -140,7 +98,7 @@ do
     function F:HexToRGB(rgb)
         if string.len(rgb) == 6 then
             local r, g, b
-            r, g, b = tonumber('0x' .. strsub(rgb, 0, 2)), tonumber('0x' .. strsub(rgb, 3, 4)), tonumber('0x' .. strsub(rgb, 5, 6))
+            r, g, b = tonumber('0x' .. string.sub(rgb, 0, 2)), tonumber('0x' .. string.sub(rgb, 3, 4)), tonumber('0x' .. string.sub(rgb, 5, 6))
             if not r then
                 r = 0
             else
@@ -171,7 +129,7 @@ do
         end
 
         local num = select('#', ...) / 3
-        local segment, relperc = modf(perc * (num - 1))
+        local segment, relperc = math.modf(perc * (num - 1))
         local r1, g1, b1, r2, g2, b2 = select((segment * 3) + 1, ...)
 
         return r1 + (r2 - r1) * relperc, g1 + (g2 - g1) * relperc, b1 + (b2 - b1) * relperc
@@ -179,16 +137,16 @@ do
 
     -- Text Gradient by Simpy
     function F:TextGradient(text, ...)
-        local msg, len, idx = '', utf8len(text), 0
+        local msg, len, idx = '', string.utf8len(text), 0
 
         for i = 1, len do
-            local x = utf8sub(text, i, i)
-            if strmatch(x, '%s') then
+            local x = string.utf8sub(text, i, i)
+            if string.match(x, '%s') then
                 msg = msg .. x
                 idx = idx + 1
             else
                 local num = select('#', ...) / 3
-                local segment, relperc = modf((idx / len) * num)
+                local segment, relperc = math.modf((idx / len) * num)
                 local r1, g1, b1, r2, g2, b2 = select((segment * 3) + 1, ...)
 
                 if not r2 then
@@ -211,10 +169,10 @@ do
 
         if idp and idp > 0 then
             local mult = 10 ^ idp
-            return floor(num * mult + 0.5) / mult
+            return math.floor(num * mult + 0.5) / mult
         end
 
-        return floor(num + 0.5)
+        return math.floor(num + 0.5)
     end
 
     -- Truncate a number off to n places
@@ -282,33 +240,33 @@ do
     local day, hour, minute = 86400, 3600, 60
     function F:FormatTime(s)
         if s >= day then
-            return format('|cffbebfb3%d|r', s / day), s % day -- grey
+            return string.format('|cffbebfb3%d|r', s / day), s % day -- grey
         elseif s >= hour then
-            return format('|cff4fcd35%d|r', s / hour), s % hour -- white
+            return string.format('|cff4fcd35%d|r', s / hour), s % hour -- white
         elseif s >= minute then
-            return format('|cff21c8de%d|r', s / minute), s % minute -- blue
+            return string.format('|cff21c8de%d|r', s / minute), s % minute -- blue
         elseif s > 3 then
-            return format('|cffffe700%d|r', s), s - floor(s) -- yellow
+            return string.format('|cffffe700%d|r', s), s - math.floor(s) -- yellow
         else
             if C.DB.Cooldown.Decimal then
-                return format('|cfffd3612%.1f|r', s), s - format('%.1f', s) -- red
+                return string.format('|cfffd3612%.1f|r', s), s - string.format('%.1f', s) -- red
             else
-                return format('|cfffd3612%d|r', s + .5), s - floor(s)
+                return string.format('|cfffd3612%d|r', s + .5), s - math.floor(s)
             end
         end
     end
 
     function F:FormatTimeRaw(s)
         if s >= day then
-            return format('%dd', s / day)
+            return string.format('%dd', s / day)
         elseif s >= hour then
-            return format('%dh', s / hour)
+            return string.format('%dh', s / hour)
         elseif s >= minute then
-            return format('%dm', s / minute)
+            return string.format('%dm', s / minute)
         elseif s >= 3 then
-            return floor(s)
+            return math.floor(s)
         else
-            return format('%d', s)
+            return string.format('%d', s)
         end
     end
 
@@ -350,7 +308,7 @@ do
 
     function F:SplitList(list, variable, cleanup)
         if cleanup then
-            wipe(list)
+            table.wipe(list)
         end
 
         for word in variable:gmatch('%S+') do
@@ -361,7 +319,7 @@ do
 
     -- GUID to npcID
     function F:GetNPCID(guid)
-        local id = tonumber(strmatch((guid or ''), '%-(%d-)%-%x-$'))
+        local id = tonumber(string.match((guid or ''), '%-(%d-)%-%x-$'))
         return id
     end
 
@@ -372,7 +330,7 @@ do
             if data[1] > elapse then
                 data[1], i = data[1] - elapse, i + 1
             else
-                tremove(F.WaitTable, i)
+                table.remove(F.WaitTable, i)
                 data[2](unpack(data[3]))
 
                 if #F.WaitTable == 0 then
@@ -398,9 +356,9 @@ do
         end
 
         if select('#', ...) <= 0 then
-            C_Timer_After(delay, func)
+            C_Timer.After(delay, func)
         else
-            tinsert(F.WaitTable, {delay, func, {...}})
+            table.insert(F.WaitTable, {delay, func, {...}})
             F.WaitFrame:Show()
         end
 
@@ -537,7 +495,7 @@ do
     end
 
     function F:StyleAddonName(msg)
-        msg = gsub(msg, '%%AddonName%%', C.AddonName)
+        msg = string.gsub(msg, '%%AddonName%%', C.AddonName)
         return msg
     end
 
@@ -746,6 +704,16 @@ do
         self:SetBackdropBorderColor(borderColor.r, borderColor.g, borderColor.b, 1)
     end
 
+    function F:HideBackdrop()
+        if C.IsNewPatch then
+            self.NineSlice:SetAlpha(0)
+        else
+            if self.SetBackdrop then
+                self:SetBackdrop(nil)
+            end
+        end
+    end
+
     C.Frames = {}
     function F:CreateBD(alpha)
         local backdropColor = _G.FREE_ADB.BackdropColor
@@ -757,7 +725,7 @@ do
         F.SetBorderColor(self)
 
         if not alpha then
-            tinsert(C.Frames, self)
+            table.insert(C.Frames, self)
         end
     end
 
@@ -873,7 +841,7 @@ do
     -- Handle icons
     function F:ReskinIcon(shadow)
         self:SetTexCoord(unpack(C.TexCoord))
-        local bg = F.CreateBDFrame(self)
+        local bg = F.CreateBDFrame(self, .25) -- exclude from opacity control
         bg:SetBackdropBorderColor(0, 0, 0)
         if shadow then
             F.CreateSD(bg)
@@ -889,7 +857,7 @@ do
         self.Icon:SetInside()
         self.Icon:SetTexCoord(unpack(C.TexCoord))
         if texture then
-            local atlas = strmatch(texture, 'Atlas:(.+)$')
+            local atlas = string.match(texture, 'Atlas:(.+)$')
             if atlas then
                 self.Icon:SetAtlas(atlas)
             else
@@ -1155,7 +1123,7 @@ do
 
     local function GrabScrollBarElement(frame, element)
         local frameName = frame:GetDebugName()
-        return frame[element] or frameName and (_G[frameName .. element] or strfind(frameName, element)) or nil
+        return frame[element] or frameName and (_G[frameName .. element] or string.find(frameName, element)) or nil
     end
 
     function F:ReskinScroll()
@@ -1277,7 +1245,7 @@ do
 
     function F:SetupArrow(direction)
         self:SetTexture(assets.arrow_tex)
-        self:SetRotation(rad(arrowDegree[direction]))
+        self:SetRotation(math.rad(arrowDegree[direction]))
     end
 
     function F:ReskinArrow(direction)
@@ -1463,7 +1431,7 @@ do
         thumb:SetBlendMode('ADD')
 
         if vertical then
-            thumb:SetRotation(rad(90))
+            thumb:SetRotation(math.rad(90))
         end
     end
 
@@ -1481,9 +1449,9 @@ do
         self:SetNormalTexture('')
 
         if texture and texture ~= '' then
-            if strfind(texture, 'Plus') or strfind(texture, 'Closed') then
+            if string.find(texture, 'Plus') or string.find(texture, 'Closed') then
                 self.__texture:DoCollapse(true)
-            elseif strfind(texture, 'Minus') or strfind(texture, 'Open') then
+            elseif string.find(texture, 'Minus') or string.find(texture, 'Open') then
                 self.__texture:DoCollapse(false)
             end
             self.bg:Show()
@@ -1546,6 +1514,7 @@ do
     function F:ReskinPortraitFrame()
         F.StripTextures(self)
         local bg = F.SetBD(self)
+        bg:SetAllPoints(self)
         local frameName = self.GetName and self:GetName()
         local portrait = self.PortraitTexture or self.portrait or (frameName and _G[frameName .. 'Portrait'])
         if portrait then
@@ -1653,7 +1622,7 @@ do
             if frame.info then
                 frame.Portrait:SetTexture(_G.CHALLENGE_MODE_EXTRA_AFFIX_INFO[frame.info.key].texture)
             elseif frame.affixID then
-                local _, _, filedataid = C_ChallengeMode_GetAffixInfo(frame.affixID)
+                local _, _, filedataid = C_ChallengeMode.GetAffixInfo(frame.affixID)
                 frame.Portrait:SetTexture(filedataid)
             end
         end
@@ -1805,7 +1774,7 @@ do
     end
 
     local function Option_OnClick(self)
-        PlaySound(SOUNDKIT_GS_TITLE_OPTION_OK)
+        PlaySound(_G.SOUNDKIT.GS_TITLE_OPTION_OK)
         local opt = self.__owner.options
         for i = 1, #opt do
             if self == opt[i] then
@@ -1839,7 +1808,7 @@ do
     end
 
     local function DD_OnClick(self)
-        PlaySound(SOUNDKIT_GS_TITLE_OPTION_OK)
+        PlaySound(_G.SOUNDKIT.GS_TITLE_OPTION_OK)
         F:TogglePanel(self.__list)
     end
 
@@ -1911,7 +1880,7 @@ do
     local function UpdatePicker()
         local swatch = _G.ColorPickerFrame.__swatch
         local r, g, b = _G.ColorPickerFrame:GetColorRGB()
-        local colorStr = format('ff%02x%02x%02x', r * 255, g * 255, b * 255)
+        local colorStr = string.format('ff%02x%02x%02x', r * 255, g * 255, b * 255)
         swatch.tex:SetVertexColor(r, g, b)
         swatch.color.r, swatch.color.g, swatch.color.b, swatch.color.colorStr = r, g, b, colorStr
         F.UpdateCustomClassColors()
@@ -1919,8 +1888,8 @@ do
 
     local function CancelPicker()
         local swatch = _G.ColorPickerFrame.__swatch
-        local r, g, b = ColorPicker_GetPreviousValues()
-        local colorStr = format('ff%02x%02x%02x', r * 255, g * 255, b * 255)
+        local r, g, b = _G.ColorPicker_GetPreviousValues()
+        local colorStr = string.format('ff%02x%02x%02x', r * 255, g * 255, b * 255)
         swatch.tex:SetVertexColor(r, g, b)
         swatch.color.r, swatch.color.g, swatch.color.b, swatch.color.colorStr = r, g, b, colorStr
     end
@@ -1979,8 +1948,8 @@ do
         if not text then
             return
         end
-        text = min(maxValue, text)
-        text = max(minValue, text)
+        text = math.min(maxValue, text)
+        text = math.max(minValue, text)
         slider:SetValue(text)
         self:SetText(text)
         self:ClearFocus()
@@ -2329,8 +2298,8 @@ end
 --[[ Itemlevel ]]
 do
     local iLvlDB = {}
-    local itemLevelString = '^' .. gsub(_G.ITEM_LEVEL, '%%d', '')
-    local enchantString = gsub(_G.ENCHANTED_TOOLTIP_LINE, '%%s', '(.+)')
+    local itemLevelString = '^' .. string.gsub(_G.ITEM_LEVEL, '%%d', '')
+    local enchantString = string.gsub(_G.ENCHANTED_TOOLTIP_LINE, '%%s', '(.+)')
     local essenceTextureID = 2975691
     local essenceDescription = GetSpellDescription(277253)
 
@@ -2341,14 +2310,14 @@ do
         if not tip.gems then
             tip.gems = {}
         else
-            wipe(tip.gems)
+            table.wipe(tip.gems)
         end
 
         if not tip.essences then
             tip.essences = {}
         else
             for _, essences in pairs(tip.essences) do
-                wipe(essences)
+                table.wipe(essences)
             end
         end
 
@@ -2380,12 +2349,12 @@ do
     end
 
     function F:InspectItemInfo(text, slotInfo)
-        local itemLevel = strfind(text, itemLevelString) and strmatch(text, '(%d+)%)?$')
+        local itemLevel = string.find(text, itemLevelString) and string.match(text, '(%d+)%)?$')
         if itemLevel then
             slotInfo.iLvl = tonumber(itemLevel)
         end
 
-        local enchant = strmatch(text, enchantString)
+        local enchant = string.match(text, enchantString)
         if enchant then
             slotInfo.enchantText = enchant
         end
@@ -2394,12 +2363,12 @@ do
     function F:CollectEssenceInfo(index, lineText, slotInfo)
         local step = 1
         local essence = slotInfo.essences[step]
-        if essence and next(essence) and (strfind(lineText, _G.ITEM_SPELL_TRIGGER_ONEQUIP, nil, true) and strfind(lineText, essenceDescription, nil, true)) then
+        if essence and next(essence) and (string.find(lineText, _G.ITEM_SPELL_TRIGGER_ONEQUIP, nil, true) and string.find(lineText, essenceDescription, nil, true)) then
             for i = 5, 2, -1 do
                 local line = _G[tip:GetName() .. 'TextLeft' .. index - i]
                 local text = line and line:GetText()
 
-                if text and (not strmatch(text, '^[ +]')) and essence and next(essence) then
+                if text and (not string.match(text, '^[ +]')) and essence and next(essence) then
                     local r, g, b = line:GetTextColor()
                     essence[4] = r
                     essence[5] = g
@@ -2420,7 +2389,7 @@ do
             if not tip.slotInfo then
                 tip.slotInfo = {}
             else
-                wipe(tip.slotInfo)
+                table.wipe(tip.slotInfo)
             end
 
             local slotInfo = tip.slotInfo
@@ -2463,9 +2432,9 @@ do
                 local line = _G[tip:GetName() .. 'TextLeft' .. i]
                 if line then
                     local text = line:GetText() or ''
-                    local found = strfind(text, itemLevelString)
+                    local found = string.find(text, itemLevelString)
                     if found then
-                        local level = strmatch(text, '(%d+)%)?$')
+                        local level = string.match(text, '(%d+)%)?$')
                         iLvlDB[link] = tonumber(level)
                         break
                     end
@@ -2498,7 +2467,7 @@ do
 
     local function IsCloseEnough(new, target, range)
         if range > 0 then
-            return abs((new - target) / range) <= .001
+            return math.abs((new - target) / range) <= .001
         end
 
         return true
@@ -2508,7 +2477,7 @@ do
 
     local function Bar_OnUpdate(_, elapsed)
         for object, target in next, activeObjects do
-            local new = Lerp(object._value, target, Clamp(amount * elapsed * targetFPS))
+            local new = _G.Lerp(object._value, target, Clamp(amount * elapsed * targetFPS))
             if IsCloseEnough(new, target, object._max - object._min) then
                 new = target
                 activeObjects[object] = nil

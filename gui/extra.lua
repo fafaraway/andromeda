@@ -308,7 +308,7 @@ function GUI:SetupAuraSize(parent)
             key = 'BuffSize',
             value = '40',
             text = L['Size'],
-            min = 20,
+            min = 24,
             max = 60
         },
         [2] = {
@@ -325,7 +325,7 @@ function GUI:SetupAuraSize(parent)
             key = 'DebuffSize',
             value = '50',
             text = L['Size'],
-            min = 20,
+            min = 24,
             max = 60
         },
         [2] = {

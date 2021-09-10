@@ -134,7 +134,7 @@ end
 local function UpdateUIScale()
     if C.IsHighRes then
         _G.FREE_ADB.UIScale = 2
-    elseif C.IsMediumRes then
+    elseif C.IsMedRes then
         _G.FREE_ADB.UIScale = 1.4
     else
         _G.FREE_ADB.UIScale = 1
