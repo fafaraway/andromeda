@@ -1,8 +1,3 @@
-local _G = _G
-local select = select
-local unpack = unpack
-local hooksecurefunc = hooksecurefunc
-
 local F, C = unpack(select(2, ...))
 local THEME = F:GetModule('Theme')
 
@@ -134,5 +129,5 @@ function THEME:ReskinBigWigs()
     end
 end
 
-THEME:RegisterSkin('BigWigs', THEME.ReskinBigWigs)
+--THEME:RegisterSkin('BigWigs', THEME.ReskinBigWigs)
 THEME:RegisterSkin('BigWigs_Plugins', THEME.RegisterBigWigsStyle)
