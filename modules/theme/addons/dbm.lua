@@ -1,16 +1,7 @@
-local _G = _G
-local select = select
-local unpack = unpack
-local strfind = strfind
-local strmatch = strmatch
-local gsub = gsub
-local IsAddOnLoaded = IsAddOnLoaded
-local hooksecurefunc = hooksecurefunc
-
 local F, C = unpack(select(2, ...))
 local THEME = F:GetModule('Theme')
 
-local buttonSize = 18
+local buttonSize = 20
 
 local function ReskinIcon(icon, frame)
     if not icon then
@@ -31,7 +22,7 @@ local function ReskinIcon(icon, frame)
     end
 
     icon:ClearAllPoints()
-    icon:SetPoint('BOTTOMRIGHT', frame, 'BOTTOMLEFT', -2, 0)
+    icon:SetPoint('BOTTOMRIGHT', frame, 'BOTTOMLEFT', -4, 0)
 end
 
 local function ReskinBar(bar, frame)
@@ -74,7 +65,7 @@ local function ApplyStyle(self)
     end
 
     frame:SetScale(1)
-    frame:SetHeight(buttonSize * .6)
+    frame:SetHeight(buttonSize * .7)
 
     ReskinIcon(icon1, frame)
     ReskinIcon(icon2, frame)
@@ -87,13 +78,13 @@ local function ApplyStyle(self)
     name:ClearAllPoints()
     name:SetPoint('LEFT', frame, 'LEFT', 2, 6)
     name:SetPoint('RIGHT', frame, 'LEFT', tbar:GetWidth() * .85, 6)
-    name:SetFont(C.Assets.Fonts.Condensed, 12, nil, nil, nil, nil, 'THICK')
+    name:SetFont(C.Assets.Fonts.Bold, 12, nil, nil, nil, nil, 'THICK')
     name:SetJustifyH('LEFT')
     name:SetWordWrap(false)
 
     timer:ClearAllPoints()
     timer:SetPoint('RIGHT', frame, 'RIGHT', -2, 6)
-    timer:SetFont(C.Assets.Fonts.Condensed, 12, nil, nil, nil, nil, 'THICK')
+    timer:SetFont(C.Assets.Fonts.Bold, 12, nil, nil, nil, nil, 'THICK')
     timer:SetJustifyH('RIGHT')
 end
 
@@ -124,15 +115,15 @@ function THEME:ReskinDBM()
     -- Default notice message
     local RaidNotice_AddMessage_ = _G.RaidNotice_AddMessage
     _G.RaidNotice_AddMessage = function(noticeFrame, textString, colorInfo)
-        if strfind(textString, '|T') then
-            if strmatch(textString, ':(%d+):(%d+)') then
-                local size1, size2 = strmatch(textString, ':(%d+):(%d+)')
+        if string.find(textString, '|T') then
+            if string.match(textString, ':(%d+):(%d+)') then
+                local size1, size2 = string.match(textString, ':(%d+):(%d+)')
                 size1, size2 = size1 + 3, size2 + 3
-                textString = gsub(textString, ':(%d+):(%d+)', ':' .. size1 .. ':' .. size2 .. ':0:0:64:64:5:59:5:59')
-            elseif strmatch(textString, ':(%d+)|t') then
-                local size = strmatch(textString, ':(%d+)|t')
+                textString = string.gsub(textString, ':(%d+):(%d+)', ':' .. size1 .. ':' .. size2 .. ':0:0:64:64:5:59:5:59')
+            elseif string.match(textString, ':(%d+)|t') then
+                local size = string.match(textString, ':(%d+)|t')
                 size = size + 3
-                textString = gsub(textString, ':(%d+)|t', ':' .. size .. ':' .. size .. ':0:0:64:64:5:59:5:59|t')
+                textString = string.gsub(textString, ':(%d+)|t', ':' .. size .. ':' .. size .. ':0:0:64:64:5:59:5:59|t')
             end
         end
         return RaidNotice_AddMessage_(noticeFrame, textString, colorInfo)
