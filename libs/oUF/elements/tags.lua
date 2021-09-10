@@ -106,8 +106,9 @@ local _, ns = ...
 local oUF = ns.oUF
 local Private = oUF.Private
 
-local xpcall = Private.xpcall
+local nierror = Private.nierror
 local unitExists = Private.unitExists
+local xpcall = Private.xpcall
 
 local _PATTERN = '%[..-%]+'
 
@@ -257,7 +258,7 @@ local tagStrings = {
 	end]],
 
 	['level'] = [[function(u)
-		local l = UnitLevel(u)
+		local l = UnitEffectiveLevel(u)
 		if(UnitIsWildBattlePet(u) or UnitIsBattlePetCompanion(u)) then
 			l = UnitBattlePetLevel(u)
 		end
@@ -671,6 +672,12 @@ local function getTagFunc(tagstr)
 	if(not func) then
 		local format, numTags = tagstr:gsub('%%', '%%%%'):gsub(_PATTERN, '%%s')
 		local args = {}
+		local idx = 1
+
+		local format_ = {}
+		for i = 1, numTags do
+			format_[i] = '%s'
+		end
 
 		for bracket in tagstr:gmatch(_PATTERN) do
 			local tagFunc = funcPool[bracket] or tags[bracket:sub(2, -2)]
@@ -678,14 +685,14 @@ local function getTagFunc(tagstr)
 				local tagName, prefixEnd, suffixStart, suffixEnd, customArgs = getBracketData(bracket)
 				local tag = tags[tagName]
 				if(tag) then
-					if(prefixEnd ~= 1 and suffixStart - suffixEnd ~= 1) then
-						local prefix = bracket:sub(2, prefixEnd)
-						local suffix = bracket:sub(suffixStart, suffixEnd)
+					if(prefixEnd ~= 1 or suffixStart - suffixEnd ~= 1) then
+						local prefix = prefixEnd ~= 1 and bracket:sub(2, prefixEnd) or ''
+						local suffix = suffixStart - suffixEnd ~= 1 and bracket:sub(suffixStart, suffixEnd) or ''
 
 						tagFunc = function(unit, realUnit)
 							local str
 							if(customArgs) then
-								str = tag(unit, realUnit, strsplit(',', customArgs))
+								str = tag(unit, realUnit, string.split(',', customArgs))
 							else
 								str = tag(unit, realUnit)
 							end
@@ -694,41 +701,11 @@ local function getTagFunc(tagstr)
 								return prefix .. str .. suffix
 							end
 						end
-					elseif(prefixEnd ~= 1) then
-						local prefix = bracket:sub(2, prefixEnd)
-
-						tagFunc = function(unit, realUnit)
-							local str
-							if(customArgs) then
-								str = tag(unit, realUnit, strsplit(',', customArgs))
-							else
-								str = tag(unit, realUnit)
-							end
-
-							if(str and str ~= '') then
-								return prefix .. str
-							end
-						end
-					elseif(suffixStart - suffixEnd ~= 1) then
-						local suffix = bracket:sub(suffixStart, suffixEnd)
-
-						tagFunc = function(unit, realUnit)
-							local str
-							if(customArgs) then
-								str = tag(unit, realUnit, strsplit(',', customArgs))
-							else
-								str = tag(unit, realUnit)
-							end
-
-							if(str and str ~= '') then
-								return str .. suffix
-							end
-						end
 					else
 						tagFunc = function(unit, realUnit)
 							local str
 							if(customArgs) then
-								str = tag(unit, realUnit, strsplit(',', customArgs))
+								str = tag(unit, realUnit, string.split(',', customArgs))
 							else
 								str = tag(unit, realUnit)
 							end
@@ -745,8 +722,16 @@ local function getTagFunc(tagstr)
 
 			if(tagFunc) then
 				table.insert(args, tagFunc)
+
+				idx = idx + 1
 			else
-				return error(string.format('Attempted to use invalid tag %s.', bracket), 3)
+				nierror(string.format('Attempted to use invalid tag %s.', bracket))
+
+				format_[idx] = bracket
+				format = format:format(unpack(format_, 1, numTags))
+				format_[idx] = '%s'
+
+				numTags = numTags - 1
 			end
 		end
 
