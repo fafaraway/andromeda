@@ -4,6 +4,7 @@ quiet = 1 -- suppress report output for files without warnings
 exclude_files = {'libs/'}
 
 ignore = {
+    '113/_',
     '212/self', -- unused argument self
     '4', -- shadowing
     '631' -- line is too long
@@ -15,9 +16,12 @@ read_globals = {
         fields = {
             'join',
             'split',
-            'trim'
+            'trim',
+            'utf8len',
+            'utf8sub'
         }
     },
+
     table = {
         fields = {
             'removemulti',
@@ -25,12 +29,7 @@ read_globals = {
         }
     },
 
-    'SOUNDKIT',
-    'Enum',
-
     -- FrameXML
-    'UIParent',
-    'GameTooltip',
 
     -- Namespace
     'C_AccountInfo',
@@ -70,6 +69,7 @@ read_globals = {
     'C_Covenants',
     'C_CreatureInfo',
     'C_Cursor',
+    'C_CurrencyInfo',
     'C_DateAndTime',
     'C_DeathInfo',
     'C_Debug',
@@ -747,6 +747,7 @@ read_globals = {
     'GetCursorInfo',
     'GetCursorMoney',
     'GetCursorPosition',
+    'GetCVar',
     'GetCVarBool',
     'GetDailyQuestsCompleted',
     'GetDeathRecapLink',
@@ -893,6 +894,7 @@ read_globals = {
     'GetItemGem',
     'GetItemIcon',
     'GetItemInfo',
+    'GetItemInfoFromHyperlink',
     'GetItemInfoInstant',
     'GetItemInventorySlotInfo',
     'GetItemLevelColor',
@@ -1021,6 +1023,7 @@ read_globals = {
     'GetModifiedClick',
     'GetModifiedClickAction',
     'GetMoney',
+    'GetMoneyString',
     'GetMonitorAspectRatio',
     'GetMonitorCount',
     'GetMonitorName',
@@ -1194,6 +1197,7 @@ read_globals = {
     'GetQuestBackgroundMaterial',
     'GetQuestCurrencyID',
     'GetQuestCurrencyInfo',
+    'GetQuestDifficultyColor',
     'GetQuestExpansion',
     'GetQuestFactionGroup',
     'GetQuestID',
@@ -1427,6 +1431,7 @@ read_globals = {
     'GetUnitChargedPowerPoints',
     'GetUnitHealthModifier',
     'GetUnitMaxHealthModifier',
+    'GetUnitName',
     'GetUnitPowerBarInfo',
     'GetUnitPowerBarInfoByID',
     'GetUnitPowerBarStrings',
@@ -1787,6 +1792,7 @@ read_globals = {
     'LootMoneyNotify',
     'LootSlot',
     'LootSlotHasItem',
+    'MouseIsOver',
     'MouseOverrideCinematicDisable',
     'MouselookStart',
     'MouselookStop',
@@ -1995,6 +2001,7 @@ read_globals = {
     'SearchLFGJoin',
     'SearchLFGLeave',
     'SearchLFGSort',
+    'SecondsToTime',
     'SecureCmdOptionParse',
     'SelectActiveQuest',
     'SelectAvailableQuest',
@@ -2045,6 +2052,7 @@ read_globals = {
     'SetCurrentTitle',
     'SetCursor',
     'SetCursorVirtualItem',
+    'SetCVar',
     'SetDefaultVideoOptions',
     'SetDungeonDifficultyID',
     'SetEuropeanNumbers',
