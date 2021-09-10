@@ -3,7 +3,6 @@
     <Script file="bw.lua"/>
     <Script file="dbm.lua"/>
     <Script file="extvendor.lua"/>
-    <Script file="friendgroups.lua"/>
     <Script file="immersion.lua"/>
     <Script file="pgf.lua"/>
     <Script file="rehack.lua"/>
