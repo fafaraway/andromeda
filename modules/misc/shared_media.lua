@@ -7,13 +7,13 @@ local LSM = F.Libs.LSM
 
 local function RegisterMediaAssets()
     local LOCALE_MASK
-    if C.GameLocale == 'koKR' then
+    if GetLocale() == 'koKR' then
         LOCALE_MASK = 1
-    elseif C.GameLocale == 'ruRU' then
+    elseif GetLocale() == 'ruRU' then
         LOCALE_MASK = 2
-    elseif C.GameLocale == 'zhCN' then
+    elseif GetLocale() == 'zhCN' then
         LOCALE_MASK = 4
-    elseif C.GameLocale == 'zhTW' then
+    elseif GetLocale() == 'zhTW' then
         LOCALE_MASK = 8
     else
         LOCALE_MASK = 128

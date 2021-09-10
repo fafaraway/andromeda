@@ -649,7 +649,7 @@ function CHAT:DisableProfanityFilter()
         return
     end
 
-    if C.IsCNPortal then
+    if GetCVar('portal') == 'CN' then
         ConsoleExec('portal TW')
 
         FixProfanityFilterSideEffects()

@@ -151,7 +151,7 @@ function CHAT:CreateChannelBar()
     combat:SetAttribute('macrotext', '/combatlog')
 
     -- WORLD CHANNEL
-    if C.IsCNPortal then
+    if GetCVar('portal') == 'CN' then
         local channelName = '大脚世界频道'
         local wcButton = AddButton(0, .8, 1, L['World Channel'])
 

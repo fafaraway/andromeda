@@ -185,6 +185,23 @@ function UNITFRAME:UpdateRaidHealthMethod()
 end
 
 -- Heal Prediction
+local function PostUpdateHealPrediction(element, unit)
+
+    local r, g, b = F:UnitColor(unit)
+
+    if element.myBar then
+        element.myBar:SetStatusBarColor(r/2, g/2, b/2, .6)
+    end
+
+    if element.otherBar then
+        element.otherBar:SetStatusBarColor(r/2, g/2, b/2, .6)
+    end
+
+    if element.absorbBar then
+        element.absorbBar:SetStatusBarColor(r/2, g/2, b/2, .6)
+    end
+end
+
 function UNITFRAME:CreateHealPrediction(self)
     local inverted = C.DB.Unitframe.InvertedColorMode
 
@@ -193,7 +210,7 @@ function UNITFRAME:CreateHealPrediction(self)
     myBar:SetPoint('BOTTOM')
     myBar:SetPoint('LEFT', self.Health:GetStatusBarTexture(), inverted and 'LEFT' or 'RIGHT')
     myBar:SetStatusBarTexture(C.Assets.statusbar_tex)
-    myBar:SetStatusBarColor(.3, .3, .3, .8)
+    --myBar:SetStatusBarColor(.3, .3, .3, .8)
     myBar:SetWidth(self:GetWidth())
 
     local otherBar = CreateFrame('StatusBar', nil, self.Health)
@@ -201,7 +218,7 @@ function UNITFRAME:CreateHealPrediction(self)
     otherBar:SetPoint('BOTTOM')
     otherBar:SetPoint('LEFT', myBar:GetStatusBarTexture(), inverted and 'LEFT' or 'RIGHT')
     otherBar:SetStatusBarTexture(C.Assets.statusbar_tex)
-    otherBar:SetStatusBarColor(.3, .3, .3, .8)
+    --otherBar:SetStatusBarColor(.3, .3, .3, .8)
     otherBar:SetWidth(self:GetWidth())
 
     local absorbBar = CreateFrame('StatusBar', nil, self.Health)
@@ -231,4 +248,5 @@ function UNITFRAME:CreateHealPrediction(self)
         maxOverflow = 1,
         frequentUpdates = true
     }
+    self.HealthPrediction.PostUpdate = PostUpdateHealPrediction
 end

@@ -11,25 +11,25 @@ do
         C.Assets.Fonts.Bold = 'Fonts\\FreeUI\\bold.ttf'
         C.Assets.Fonts.Header = 'Fonts\\FreeUI\\header.ttf'
         C.Assets.Fonts.Combat = 'Fonts\\FreeUI\\combat.ttf'
-    elseif C.GameLocale == 'zhCN' then
+    elseif GetLocale() == 'zhCN' then
         C.Assets.Fonts.Regular = 'Fonts\\ARKai_T.ttf'
         C.Assets.Fonts.Condensed = 'Fonts\\ARKai_T.ttf'
         C.Assets.Fonts.Bold = 'Fonts\\ARHei.ttf'
         C.Assets.Fonts.Header = 'Fonts\\ARKai_T.ttf'
         C.Assets.Fonts.Combat = 'Fonts\\ARKai_C.ttf'
-    elseif C.GameLocale == 'zhTW' then
+    elseif GetLocale() == 'zhTW' then
         C.Assets.Fonts.Regular = 'Fonts\\blei00d.ttf'
         C.Assets.Fonts.Condensed = 'Fonts\\blei00d.ttf'
         C.Assets.Fonts.Bold = 'Fonts\\blei00d.ttf'
         C.Assets.Fonts.Header = 'Fonts\\blei00d.ttf'
         C.Assets.Fonts.Combat = 'Fonts\\bKAI00M.ttf'
-    elseif C.GameLocale == 'koKR' then
+    elseif GetLocale() == 'koKR' then
         C.Assets.Fonts.Regular = 'Fonts\\2002.ttf'
         C.Assets.Fonts.Condensed = 'Fonts\\2002.ttf'
         C.Assets.Fonts.Bold = 'Fonts\\2002B.ttf'
         C.Assets.Fonts.Header = 'Fonts\\2002.ttf'
         C.Assets.Fonts.Combat = 'Fonts\\K_Damage.ttf'
-    elseif C.GameLocale == 'ruRU' then
+    elseif GetLocale() == 'ruRU' then
         C.Assets.Fonts.Regular = 'Fonts\\FRIZQT___CYR.ttf'
         C.Assets.Fonts.Condensed = 'Fonts\\FRIZQT___CYR.ttf'
         C.Assets.Fonts.Bold = 'Fonts\\FRIZQT___CYR.ttf'

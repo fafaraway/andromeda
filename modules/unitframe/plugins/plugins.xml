@@ -4,5 +4,4 @@
     <Script file='raiddebuffs.lua'/>
     <Script file='rangecheck.lua'/>
     <Script file='smooth.lua'/>
-    <Script file='totems.lua'/>
 </Ui>
