@@ -1,9 +1,3 @@
-local _G = _G
-local select = select
-local unpack = unpack
-local wipe = wipe
-local IsAddOnLoaded = IsAddOnLoaded
-
 local F, C = unpack(select(2, ...))
 local THEME = F:RegisterModule('Theme')
 
@@ -34,10 +28,10 @@ function THEME:LoadAddOnSkins()
         func()
     end
 
-    wipe(C.BlizzThemes)
+    table.wipe(C.BlizzThemes)
 
     if not _G.FREE_ADB.ReskinBlizz then
-        wipe(C.Themes)
+        table.wipe(C.Themes)
     end
 
     THEME:LoadSkins(C.Themes) -- blizzard ui
@@ -104,20 +98,22 @@ local function ReskinMirrorBars()
     end
 end
 
-function THEME:OnLogin()
-    self:LoadAddOnSkins()
-
-    self:ReskinABP()
-    self:ReskinDBM()
-    self:ReskinPGF()
-    self:ReskinREHack()
-    self:ReskinExtVendor()
-    self:ReskinFriendGroups()
-
+function THEME:ReskinBlizzBars()
     if not _G.FREE_ADB.ReskinBlizz then
         return
     end
 
     ReskinMirrorBars()
     F:RegisterEvent('START_TIMER', UpdateTimerTracker)
+end
+
+function THEME:OnLogin()
+    THEME:LoadAddOnSkins()
+
+    THEME:ReskinBlizzBars()
+    THEME:ReskinABP()
+    THEME:ReskinDBM()
+    THEME:ReskinPGF()
+    THEME:ReskinREHack()
+    THEME:ReskinExtVendor()
 end
