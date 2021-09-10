@@ -1,27 +1,7 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local pairs = pairs
-local next = next
-local type = type
-local hooksecurefunc = hooksecurefunc
-local UnitGUID = UnitGUID
-local UnitExists = UnitExists
-local GetItemInfo = GetItemInfo
-local GetSpellInfo = GetSpellInfo
-local GetContainerItemLink = GetContainerItemLink
-local GetInventoryItemLink = GetInventoryItemLink
-local EquipmentManager_UnpackLocation = EquipmentManager_UnpackLocation
-local EquipmentManager_GetItemInfoByLocation = EquipmentManager_GetItemInfoByLocation
-local C_AzeriteEmpoweredItem_IsPowerSelected = C_AzeriteEmpoweredItem.IsPowerSelected
-local C_Timer_After = C_Timer.After
-local ItemLocation = ItemLocation
-local EQUIPMENTFLYOUT_FIRST_SPECIAL_LOCATION = EQUIPMENTFLYOUT_FIRST_SPECIAL_LOCATION
-
 local F, C = unpack(select(2, ...))
-local MISC = F:GetModule('General')
+local IL = F:RegisterModule('ItemLevel')
+local TT = F:GetModule('Tooltip')
 
--- LuaFormatter off
 local inspectSlots = {
     'Head',
     'Neck',
@@ -39,11 +19,10 @@ local inspectSlots = {
     'Trinket1',
     'Back',
     'MainHand',
-    'SecondaryHand',
+    'SecondaryHand'
 }
--- LuaFormatter on
 
-function MISC:GetSlotAnchor(index)
+function IL:GetSlotAnchor(index)
     if not index then
         return
     end
@@ -59,7 +38,7 @@ function MISC:GetSlotAnchor(index)
     end
 end
 
-function MISC:CreateItemTexture(slot, relF, x, y)
+function IL:CreateItemTexture(slot, relF, x, y)
     local icon = slot:CreateTexture()
     icon:SetPoint(relF, x, y)
     icon:SetSize(14, 14)
@@ -71,7 +50,7 @@ function MISC:CreateItemTexture(slot, relF, x, y)
     return icon
 end
 
-function MISC:CreateItemString(frame, strType)
+function IL:CreateItemString(frame, strType)
     if frame.fontCreated then
         return
     end
@@ -82,7 +61,7 @@ function MISC:CreateItemString(frame, strType)
             slotFrame.iLvlText = F.CreateFS(slotFrame, C.Assets.Fonts.Condensed, 11, true, '', nil, true)
             slotFrame.iLvlText:ClearAllPoints()
             slotFrame.iLvlText:SetPoint('BOTTOMRIGHT', slotFrame, -1, 1)
-            local relF, x, y = MISC:GetSlotAnchor(index)
+            local relF, x, y = IL:GetSlotAnchor(index)
             slotFrame.enchantText = F.CreateFS(slotFrame, C.Assets.Fonts.Condensed, 11, nil, '', nil, true)
             slotFrame.enchantText:ClearAllPoints()
             slotFrame.enchantText:SetPoint(relF, slotFrame, x, y)
@@ -91,7 +70,7 @@ function MISC:CreateItemString(frame, strType)
                 local offset = (i - 1) * 18 + 5
                 local iconX = x > 0 and x + offset or x - offset
                 local iconY = index > 15 and 20 or 2
-                slotFrame['textureIcon' .. i] = MISC:CreateItemTexture(slotFrame, relF, iconX, iconY)
+                slotFrame['textureIcon' .. i] = IL:CreateItemTexture(slotFrame, relF, iconX, iconY)
             end
         end
     end
@@ -99,7 +78,11 @@ function MISC:CreateItemString(frame, strType)
     frame.fontCreated = true
 end
 
-local azeriteSlots = {[1] = true, [3] = true, [5] = true}
+local azeriteSlots = {
+    [1] = true,
+    [3] = true,
+    [5] = true
+}
 
 local locationCache = {}
 local function GetSlotItemLocation(id)
@@ -109,13 +92,45 @@ local function GetSlotItemLocation(id)
 
     local itemLocation = locationCache[id]
     if not itemLocation then
-        itemLocation = ItemLocation:CreateFromEquipmentSlot(id)
+        itemLocation = _G.ItemLocation:CreateFromEquipmentSlot(id)
         locationCache[id] = itemLocation
     end
     return itemLocation
 end
 
-function MISC:ItemLevel_UpdateInfo(slotFrame, info, quality)
+function IL:ItemLevel_UpdateTraits(button, id, link)
+    local empoweredItemLocation = GetSlotItemLocation(id)
+    if not empoweredItemLocation then
+        return
+    end
+
+    local allTierInfo = TT:Azerite_UpdateTier(link)
+    if not allTierInfo then
+        return
+    end
+
+    for i = 1, 2 do
+        local powerIDs = allTierInfo[i] and allTierInfo[i].azeritePowerIDs
+        if not powerIDs or powerIDs[1] == 13 then
+            break
+        end
+
+        for _, powerID in pairs(powerIDs) do
+            local selected = C_AzeriteEmpoweredItem.IsPowerSelected(empoweredItemLocation, powerID)
+            if selected then
+                local spellID = TT:Azerite_PowerToSpell(powerID)
+                local name, _, icon = GetSpellInfo(spellID)
+                local texture = button['textureIcon' .. i]
+                if name and texture then
+                    texture:SetTexture(icon)
+                    texture.bg:Show()
+                end
+            end
+        end
+    end
+end
+
+function IL:ItemLevel_UpdateInfo(slotFrame, info, quality)
     local infoType = type(info)
     local level
     if infoType == 'table' then
@@ -168,23 +183,26 @@ function MISC:ItemLevel_UpdateInfo(slotFrame, info, quality)
     end
 end
 
-function MISC:ItemLevel_RefreshInfo(link, unit, index, slotFrame)
-    C_Timer_After(.1, function()
-        local quality = select(3, GetItemInfo(link))
-        local info = F.GetItemLevel(link, unit, index, C.DB.General.GemEnchant)
-        if info == 'tooSoon' then
-            return
+function IL:ItemLevel_RefreshInfo(link, unit, index, slotFrame)
+    C_Timer.After(
+        .1,
+        function()
+            local quality = select(3, GetItemInfo(link))
+            local info = F.GetItemLevel(link, unit, index, C.DB.General.GemEnchant)
+            if info == 'tooSoon' then
+                return
+            end
+            IL:ItemLevel_UpdateInfo(slotFrame, info, quality)
         end
-        MISC:ItemLevel_UpdateInfo(slotFrame, info, quality)
-    end)
+    )
 end
 
-function MISC:ItemLevel_SetupLevel(frame, strType, unit)
+function IL:ItemLevel_SetupLevel(frame, strType, unit)
     if not UnitExists(unit) then
         return
     end
 
-    MISC:CreateItemString(frame, strType)
+    IL:CreateItemString(frame, strType)
 
     for index, slot in pairs(inspectSlots) do
         if index ~= 4 then
@@ -202,27 +220,31 @@ function MISC:ItemLevel_SetupLevel(frame, strType, unit)
                 local quality = select(3, GetItemInfo(link))
                 local info = F.GetItemLevel(link, unit, index, C.DB.General.GemEnchant)
                 if info == 'tooSoon' then
-                    MISC:ItemLevel_RefreshInfo(link, unit, index, slotFrame)
+                    IL:ItemLevel_RefreshInfo(link, unit, index, slotFrame)
                 else
-                    MISC:ItemLevel_UpdateInfo(slotFrame, info, quality)
+                    IL:ItemLevel_UpdateInfo(slotFrame, info, quality)
+                end
+
+                if strType == 'Character' then
+                    IL:ItemLevel_UpdateTraits(slotFrame, index, link)
                 end
             end
         end
     end
 end
 
-function MISC:ItemLevel_UpdatePlayer()
-    MISC:ItemLevel_SetupLevel(_G.CharacterFrame, 'Character', 'player')
+function IL:ItemLevel_UpdatePlayer()
+    IL:ItemLevel_SetupLevel(_G.CharacterFrame, 'Character', 'player')
 end
 
-function MISC:ItemLevel_UpdateInspect(...)
+function IL:ItemLevel_UpdateInspect(...)
     local guid = ...
     if _G.InspectFrame and _G.InspectFrame.unit and UnitGUID(_G.InspectFrame.unit) == guid then
-        MISC:ItemLevel_SetupLevel(_G.InspectFrame, 'Inspect', _G.InspectFrame.unit)
+        IL:ItemLevel_SetupLevel(_G.InspectFrame, 'Inspect', _G.InspectFrame.unit)
     end
 end
 
-function MISC:ItemLevel_FlyoutUpdate(bag, slot, quality)
+function IL:ItemLevel_FlyoutUpdate(bag, slot, quality)
     if not self.iLvl then
         self.iLvl = F.CreateFS(self, C.Assets.Fonts.Condensed, 11, true, '', nil, true, 'BOTTOMRIGHT', -1, 1)
     end
@@ -245,29 +267,45 @@ function MISC:ItemLevel_FlyoutUpdate(bag, slot, quality)
     self.iLvl:SetTextColor(color.r, color.g, color.b)
 end
 
-function MISC:ItemLevel_FlyoutSetup()
+function IL:ItemLevel_FlyoutSetup()
     if self.iLvl then
         self.iLvl:SetText('')
     end
 
     local location = self.location
-    if not location or location >= EQUIPMENTFLYOUT_FIRST_SPECIAL_LOCATION then
+    if not location then
         return
     end
 
-    local _, _, bags, voidStorage, slot, bag = EquipmentManager_UnpackLocation(location)
-    if voidStorage then
-        return
-    end
-    local quality = select(13, EquipmentManager_GetItemInfoByLocation(location))
-    if bags then
-        MISC.ItemLevel_FlyoutUpdate(self, bag, slot, quality)
+    if tonumber(location) then
+        if location >= _G.EQUIPMENTFLYOUT_FIRST_SPECIAL_LOCATION then
+            return
+        end
+
+        local _, _, bags, voidStorage, slot, bag = _G.EquipmentManager_UnpackLocation(location)
+        if voidStorage then
+            return
+        end
+        local quality = select(13, _G.EquipmentManager_GetItemInfoByLocation(location))
+        if bags then
+            IL.ItemLevel_FlyoutUpdate(self, bag, slot, quality)
+        else
+            IL.ItemLevel_FlyoutUpdate(self, nil, slot, quality)
+        end
     else
-        MISC.ItemLevel_FlyoutUpdate(self, nil, slot, quality)
+        local itemLocation = self:GetItemLocation()
+        local quality = itemLocation and C_Item.GetItemQuality(itemLocation)
+        if itemLocation:IsBagAndSlot() then
+            local bag, slot = itemLocation:GetBagAndSlot()
+            IL.ItemLevel_FlyoutUpdate(self, bag, slot, quality)
+        elseif itemLocation:IsEquipmentSlot() then
+            local slot = itemLocation:GetEquipmentSlot()
+            IL.ItemLevel_FlyoutUpdate(self, nil, slot, quality)
+        end
     end
 end
 
-function MISC:ItemLevel_ScrappingUpdate()
+function IL:ItemLevel_ScrappingUpdate()
     if not self.iLvl then
         self.iLvl = F.CreateFS(self, C.Assets.Fonts.Condensed, 11, true, '', nil, true, 'BOTTOMRIGHT', -1, 1)
     end
@@ -286,17 +324,17 @@ function MISC:ItemLevel_ScrappingUpdate()
     self.iLvl:SetTextColor(color.r, color.g, color.b)
 end
 
-function MISC.ItemLevel_ScrappingShow(event, addon)
+function IL.ItemLevel_ScrappingShow(event, addon)
     if addon == 'Blizzard_ScrappingMachineUI' then
         for button in pairs(_G.ScrappingMachineFrame.ItemSlots.scrapButtons.activeObjects) do
-            hooksecurefunc(button, 'RefreshIcon', MISC.ItemLevel_ScrappingUpdate)
+            hooksecurefunc(button, 'RefreshIcon', IL.ItemLevel_ScrappingUpdate)
         end
 
-        F:UnregisterEvent(event, MISC.ItemLevel_ScrappingShow)
+        F:UnregisterEvent(event, IL.ItemLevel_ScrappingShow)
     end
 end
 
-function MISC:ItemLevel_UpdateMerchant(link)
+function IL:ItemLevel_UpdateMerchant(link)
     local quality = link and select(3, GetItemInfo(link)) or nil
     if quality then
         if not self.iLvl then
@@ -309,25 +347,33 @@ function MISC:ItemLevel_UpdateMerchant(link)
     end
 end
 
-function MISC:ItemLevel()
+function IL:OnLogin()
     if not C.DB.General.ItemLevel then
         return
     end
 
     -- iLvl on CharacterFrame
-    _G.CharacterFrame:HookScript('OnShow', MISC.ItemLevel_UpdatePlayer)
-    F:RegisterEvent('PLAYER_EQUIPMENT_CHANGED', MISC.ItemLevel_UpdatePlayer)
+    _G.CharacterFrame:HookScript('OnShow', IL.ItemLevel_UpdatePlayer)
+    F:RegisterEvent('PLAYER_EQUIPMENT_CHANGED', IL.ItemLevel_UpdatePlayer)
 
     -- iLvl on InspectFrame
-    F:RegisterEvent('INSPECT_READY', MISC.ItemLevel_UpdateInspect)
+    F:RegisterEvent('INSPECT_READY', IL.ItemLevel_UpdateInspect)
 
     -- iLvl on FlyoutButtons
-    hooksecurefunc('EquipmentFlyout_DisplayButton', MISC.ItemLevel_FlyoutSetup)
+    hooksecurefunc(
+        'EquipmentFlyout_UpdateItems',
+        function()
+            for _, button in pairs(_G.EquipmentFlyoutFrame.buttons) do
+                if button:IsShown() then
+                    IL.ItemLevel_FlyoutSetup(button)
+                end
+            end
+        end
+    )
 
     -- iLvl on ScrappingMachineFrame
-    F:RegisterEvent('ADDON_LOADED', MISC.ItemLevel_ScrappingShow)
+    F:RegisterEvent('ADDON_LOADED', IL.ItemLevel_ScrappingShow)
 
     -- iLvl on MerchantFrame
-    hooksecurefunc('MerchantFrameItem_UpdateQuality', MISC.ItemLevel_UpdateMerchant)
+    hooksecurefunc('MerchantFrameItem_UpdateQuality', IL.ItemLevel_UpdateMerchant)
 end
-MISC:RegisterMisc('GearInfo', MISC.ItemLevel)
