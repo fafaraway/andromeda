@@ -19,7 +19,7 @@
 *  https://imgur.com/a/0JfIGql
 
 ## Videos
-*  https://www.youtube.com/watch?v=grg4Au_EmMU
+*  https://www.youtube.com/channel/UCC4m4mhVtB9d_jaeON8ui7A
 
 ## Feedback
 *  Report issues on [GitHub](https://github.com/Solor/FreeUI/issues)
