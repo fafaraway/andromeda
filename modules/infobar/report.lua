@@ -1,48 +1,22 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local strfind = strfind
-local gsub = gsub
-local min = min
-local LoadAddOn = LoadAddOn
-local ToggleFrame = ToggleFrame
-local ToggleCalendar = ToggleCalendar
-local RequestRaidInfo = RequestRaidInfo
-local GetNumSavedWorldBosses = GetNumSavedWorldBosses
-local GetSavedWorldBossInfo = GetSavedWorldBossInfo
-local SecondsToTime = SecondsToTime
-local GetNumSavedInstances = GetNumSavedInstances
-local GetSavedInstanceInfo = GetSavedInstanceInfo
-local C_DateAndTime_GetCurrentCalendarTime = C_DateAndTime.GetCurrentCalendarTime
-local C_Calendar_SetAbsMonth = C_Calendar.SetAbsMonth
-local C_Calendar_OpenCalendar = C_Calendar.OpenCalendar
-local C_Calendar_GetNumDayEvents = C_Calendar.GetNumDayEvents
-local C_Calendar_GetDayEvent = C_Calendar.GetDayEvent
-local C_AreaPoiInfo_GetAreaPOIInfo = C_AreaPoiInfo.GetAreaPOIInfo
-local C_UIWidgetManager_GetTextWithStateWidgetVisualizationInfo = C_UIWidgetManager.GetTextWithStateWidgetVisualizationInfo
-local IsQuestFlaggedCompleted = C_QuestLog.IsQuestFlaggedCompleted
-local CONQUEST_CURRENCY_ID = Constants.CurrencyConsts.CONQUEST_CURRENCY_ID
-local C_CurrencyInfo_GetCurrencyInfo = C_CurrencyInfo.GetCurrencyInfo
-
 local F, C, L = unpack(select(2, ...))
 local INFOBAR = F:GetModule('Infobar')
 
 -- TimeWalker
 local isTimeWalker, walkerTexture
 local function CheckTimeWalker(event)
-    local date = C_DateAndTime_GetCurrentCalendarTime()
-    C_Calendar_SetAbsMonth(date.month, date.year)
-    C_Calendar_OpenCalendar()
+    local date = C_DateAndTime.GetCurrentCalendarTime()
+    C_Calendar.SetAbsMonth(date.month, date.year)
+    C_Calendar.OpenCalendar()
 
     local today = date.monthDay
-    local numEvents = C_Calendar_GetNumDayEvents(0, today)
+    local numEvents = C_Calendar.GetNumDayEvents(0, today)
     if numEvents <= 0 then
         return
     end
 
     for i = 1, numEvents do
-        local info = C_Calendar_GetDayEvent(0, today, i)
-        if info and strfind(info.title, _G.PLAYER_DIFFICULTY_TIMEWALKER) and info.sequenceType ~= 'END' then
+        local info = C_Calendar.GetDayEvent(0, today, i)
+        if info and string.find(info.title, _G.PLAYER_DIFFICULTY_TIMEWALKER) and info.sequenceType ~= 'END' then
             isTimeWalker = true
             walkerTexture = info.iconTexture
             break
@@ -82,7 +56,7 @@ local torgWidgets = {
 }
 
 local function CleanupLevelName(text)
-    return gsub(text, '|n', '')
+    return string.gsub(text, '|n', '')
 end
 
 local title
@@ -99,9 +73,9 @@ local function Button_OnMouseUp(self, btn)
         if not _G.WeeklyRewardsFrame then
             LoadAddOn('Blizzard_WeeklyRewards')
         end
-        ToggleFrame(_G.WeeklyRewardsFrame)
+        _G.ToggleFrame(_G.WeeklyRewardsFrame)
     else
-        ToggleCalendar()
+        _G.ToggleCalendar()
     end
 end
 
@@ -157,16 +131,16 @@ local function Button_OnEnter(self)
 
     -- Torghast
     if not torgInfo then
-        torgInfo = C_AreaPoiInfo_GetAreaPOIInfo(1543, 6640)
+        torgInfo = C_AreaPoiInfo.GetAreaPOIInfo(1543, 6640)
     end
-    if torgInfo and IsQuestFlaggedCompleted(60136) then
+    if torgInfo and C_QuestLog.IsQuestFlaggedCompleted(60136) then
         title = false
         for _, value in pairs(torgWidgets) do
-            local nameInfo = C_UIWidgetManager_GetTextWithStateWidgetVisualizationInfo(value.nameID)
+            local nameInfo = C_UIWidgetManager.GetTextWithStateWidgetVisualizationInfo(value.nameID)
             if nameInfo and nameInfo.shownState == 1 then
                 AddTitle(torgInfo.name)
                 local nameText = CleanupLevelName(nameInfo.text)
-                local levelInfo = C_UIWidgetManager_GetTextWithStateWidgetVisualizationInfo(value.levelID)
+                local levelInfo = C_UIWidgetManager.GetTextWithStateWidgetVisualizationInfo(value.levelID)
                 local levelText = _G.AVAILABLE
                 if levelInfo and levelInfo.shownState == 1 then
                     levelText = CleanupLevelName(levelInfo.text)
@@ -179,17 +153,8 @@ local function Button_OnEnter(self)
     -- Quests
     title = false
 
-    local currencyInfo = C_CurrencyInfo_GetCurrencyInfo(CONQUEST_CURRENCY_ID)
-    local totalEarned = currencyInfo.totalEarned
-    if currencyInfo and totalEarned > 0 then
-        AddTitle(_G.QUESTS_LABEL)
-        local maxProgress = currencyInfo.maxQuantity
-        local progress = min(totalEarned, maxProgress)
-        _G.GameTooltip:AddDoubleLine(currencyInfo.name, progress .. '/' .. maxProgress, 1, 1, 1, 1, 1, 1)
-    end
-
     for _, v in pairs(questlist) do
-        if v.name and IsQuestFlaggedCompleted(v.id) then
+        if v.name and C_QuestLog.IsQuestFlaggedCompleted(v.id) then
             if v.name == L['Timewarped'] and isTimeWalker and CheckTexture(v.texture) or v.name ~= L['Timewarped'] then
                 AddTitle(_G.QUESTS_LABEL)
                 _G.GameTooltip:AddDoubleLine(v.name, _G.QUEST_COMPLETE, 1, 1, 1, 0, 1, 0)
