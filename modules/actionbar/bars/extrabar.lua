@@ -14,7 +14,7 @@ local padding = 4
 
 function ACTIONBAR:CreateExtrabar()
     local buttonList = {}
-    local size = C.DB.Actionbar.ButtonSize + 4
+    local size = C.DB.Actionbar.ButtonSize + 10
 
     -- ExtraActionButton
     local frame = CreateFrame('Frame', 'FreeUI_ActionBarExtra', _G.UIParent, 'SecureHandlerStateTemplate')
