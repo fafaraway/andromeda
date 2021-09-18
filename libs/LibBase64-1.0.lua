@@ -10,7 +10,6 @@ local MAJOR, MINOR = 'LibBase64-1.0', 2
 local LibBase64 = LibStub:NewLibrary(MAJOR, MINOR)
 if not LibBase64 then return end
 
-
 local wipe, type, error, format, strsub, strchar, strbyte, tconcat = wipe, type, error, format, strsub, strchar, strbyte, table.concat
 local _chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
 local byteToNum, numToChar = {}, {}
@@ -163,4 +162,3 @@ function LibBase64:IsBase64(text)
 
 	return true
 end
-

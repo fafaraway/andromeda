@@ -113,12 +113,12 @@ local function UpdateColor(self, event, unit)
 	end
 
 	if(b) then
-		element:SetStatusBarColor(r, g, b, .6)
+		element:SetStatusBarColor(r, g, b, .3)
 
 		local bg = element.bg
 		if(bg) then
 			local mu = bg.multiplier or 1
-			bg:SetVertexColor(r * mu, g * mu, b * mu, .6)
+			bg:SetVertexColor(r * mu, g * mu, b * mu, .3)
 		end
 	end
 
@@ -215,8 +215,12 @@ local function SetColorDisconnected(element, state, isForced)
 		element.colorDisconnected = state
 		if(state) then
 			element.__owner:RegisterEvent('UNIT_CONNECTION', ColorPath)
+			element.__owner:RegisterEvent('PARTY_MEMBER_ENABLE', ColorPath)
+			element.__owner:RegisterEvent('PARTY_MEMBER_DISABLE', ColorPath)
 		else
 			element.__owner:UnregisterEvent('UNIT_CONNECTION', ColorPath)
+			element.__owner:UnregisterEvent('PARTY_MEMBER_ENABLE', ColorPath)
+			element.__owner:UnregisterEvent('PARTY_MEMBER_DISABLE', ColorPath)
 		end
 	end
 end
@@ -287,6 +291,8 @@ local function Enable(self)
 
 		if(element.colorDisconnected) then
 			self:RegisterEvent('UNIT_CONNECTION', ColorPath)
+			self:RegisterEvent('PARTY_MEMBER_ENABLE', ColorPath)
+			self:RegisterEvent('PARTY_MEMBER_DISABLE', ColorPath)
 		end
 
 		if(element.colorSelection) then
@@ -324,6 +330,8 @@ local function Disable(self)
 		self:UnregisterEvent('UNIT_CONNECTION', ColorPath)
 		self:UnregisterEvent('UNIT_FACTION', ColorPath)
 		self:UnregisterEvent('UNIT_FLAGS', ColorPath)
+		self:UnregisterEvent('PARTY_MEMBER_ENABLE', ColorPath)
+		self:UnregisterEvent('PARTY_MEMBER_DISABLE', ColorPath)
 		self:UnregisterEvent('UNIT_THREAT_LIST_UPDATE', ColorPath)
 	end
 end
