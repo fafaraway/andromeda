@@ -10,6 +10,7 @@
     <Script file="dragemall.lua"/>
     <Script file="group_tool.lua"/>
     <Script file="itemlevel.lua"/>
+    <Script file="lfg.lua"/>
     <Script file="logo.lua"/>
     <Script file="merchant.lua"/>
     <Script file="movie_skip.lua"/>

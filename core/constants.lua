@@ -62,7 +62,14 @@ C.Assets = {
     ['mouse_right'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:333:410|t ',
     ['mouse_middle'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:127:204|t ',
 
-    Textures = {}, -- #TODO
+    Textures = { -- #TODO
+        Tank = C.AssetsPath .. 'textures\\roles_tank',
+        Healer = C.AssetsPath .. 'textures\\roles_healer',
+        Damager = C.AssetsPath .. 'textures\\roles_dps',
+        Class = C.AssetsPath .. 'textures\\UI-CLASSES-CIRCLES',
+        Leader = C.AssetsPath .. 'textures\\leader',
+        Role = C.AssetsPath .. 'textures\\role',
+    },
 
     Sounds = {
         Intro = C.AssetsPath .. 'sounds\\intro.ogg',
