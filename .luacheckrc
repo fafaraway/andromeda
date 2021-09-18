@@ -2002,6 +2002,7 @@ read_globals = {
     'SearchLFGLeave',
     'SearchLFGSort',
     'SecondsToTime',
+    'SecondsToClock',
     'SecureCmdOptionParse',
     'SelectActiveQuest',
     'SelectAvailableQuest',

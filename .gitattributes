@@ -1,3 +1,21 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+*               text=auto
 
+.gitattributes  text
+.gitignore      text
+.editorconfig   text
+
+.luacheckrc     text
+.pkgmeta        text
+
+*.lua           text
+*.xml           text
+*.toc           text
+
+*.yml           text
+*.md            text
+*.py            text
+
+*.blp           binary
+*.tga           binary
+*.ogg           binary
+*.ttf           binary
