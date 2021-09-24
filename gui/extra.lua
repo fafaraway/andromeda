@@ -817,18 +817,19 @@ function GUI:SetupNameplateSize(parent)
 
     local panel = CreateExtraGUI(parent, guiName)
     local scroll = GUI:CreateScroll(panel, 220, 540)
+    local db = C.CharacterSettings.Nameplate
 
     local datas = {
         [1] = {
             key = 'Width',
-            value = '100',
+            value = db.Width,
             text = L['Width'],
             min = 40,
             max = 400
         },
         [2] = {
             key = 'Height',
-            value = '8',
+            value = db.Height,
             text = L['Height'],
             min = 4,
             max = 40
