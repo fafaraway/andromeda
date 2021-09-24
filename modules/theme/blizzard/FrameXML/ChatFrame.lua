@@ -28,9 +28,9 @@ table.insert(
     C.BlizzThemes,
     function()
         -- Battlenet toast frame
-        F.HideBackdrop(_G.BNToastFrame.TooltipFrame) -- IsNewPatch
+        _G.BNToastFrame:SetBackdrop(nil)
         F.SetBD(_G.BNToastFrame)
-        _G.BNToastFrame.TooltipFrame:SetBackdrop(nil)
+        F.HideBackdrop(_G.BNToastFrame.TooltipFrame) -- IsNewPatch
         F.SetBD(_G.BNToastFrame.TooltipFrame)
         F.ReskinClose(_G.BNToastFrame.CloseButton)
 

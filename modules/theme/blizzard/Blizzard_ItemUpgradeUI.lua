@@ -10,9 +10,12 @@ local function reskinCurrencyIcon(self)
 end
 
 C.Themes['Blizzard_ItemUpgradeUI'] = function()
+    local ItemUpgradeFrame = _G.ItemUpgradeFrame
+	F.ReskinPortraitFrame(ItemUpgradeFrame)
+
     if C.IsNewPatch then
         hooksecurefunc(
-            _G.ItemUpgradeFrame,
+            ItemUpgradeFrame,
             'Update',
             function(self)
                 if self.upgradeInfo then
@@ -21,7 +24,7 @@ C.Themes['Blizzard_ItemUpgradeUI'] = function()
             end
         )
 
-        local bg = F.CreateBDFrame(_G.ItemUpgradeFrame, .25)
+        local bg = F.CreateBDFrame(ItemUpgradeFrame, .25)
         bg:SetPoint('TOPLEFT', 20, -25)
         bg:SetPoint('BOTTOMRIGHT', -20, 375)
 
@@ -31,8 +34,8 @@ C.Themes['Blizzard_ItemUpgradeUI'] = function()
         itemButton.bg = F.ReskinIcon(itemButton.icon)
         F.ReskinIconBorder(itemButton.IconBorder)
 
-        F.ReskinDropDown(_G.ItemUpgradeFrame.ItemInfo.Dropdown)
-        F.Reskin(_G.ItemUpgradeFrame.UpgradeButton)
+        F.ReskinDropDown(ItemUpgradeFrame.ItemInfo.Dropdown)
+        F.Reskin(ItemUpgradeFrame.UpgradeButton)
         _G.ItemUpgradeFramePlayerCurrenciesBorder:Hide()
 
         F.CreateBDFrame(_G.ItemUpgradeFrameLeftItemPreviewFrame, .25)
@@ -40,10 +43,10 @@ C.Themes['Blizzard_ItemUpgradeUI'] = function()
         F.CreateBDFrame(_G.ItemUpgradeFrameRightItemPreviewFrame, .25)
         _G.ItemUpgradeFrameRightItemPreviewFrame.NineSlice:SetAlpha(0)
 
-        hooksecurefunc(_G.ItemUpgradeFrame.UpgradeCostFrame, 'GetIconFrame', reskinCurrencyIcon)
-        hooksecurefunc(_G.ItemUpgradeFrame.PlayerCurrencies, 'GetIconFrame', reskinCurrencyIcon)
+        hooksecurefunc(ItemUpgradeFrame.UpgradeCostFrame, 'GetIconFrame', reskinCurrencyIcon)
+        hooksecurefunc(ItemUpgradeFrame.PlayerCurrencies, 'GetIconFrame', reskinCurrencyIcon)
     else
-        local itemButton = _G.ItemUpgradeFrame.ItemButton
+        local itemButton = ItemUpgradeFrame.ItemButton
         itemButton.bg = F.CreateBDFrame(itemButton, .25)
         itemButton.Frame:SetTexture('')
         itemButton:SetPushedTexture('')
@@ -65,17 +68,17 @@ C.Themes['Blizzard_ItemUpgradeUI'] = function()
             end
         )
 
-        local textFrame = _G.ItemUpgradeFrame.TextFrame
+        local textFrame = ItemUpgradeFrame.TextFrame
         F.StripTextures(textFrame)
         local bg = F.CreateBDFrame(textFrame, .25)
-        bg:SetPoint('TOPLEFT', itemButton.IconTexture, 'TOPRIGHT', 3, C.mult)
+        bg:SetPoint('TOPLEFT', itemButton.IconTexture, 'TOPRIGHT', 3, C.Mult)
         bg:SetPoint('BOTTOMRIGHT', -6, 2)
 
-        F.StripTextures(_G.ItemUpgradeFrame.ButtonFrame)
+        F.StripTextures(ItemUpgradeFrame.ButtonFrame)
         F.StripTextures(_G.ItemUpgradeFrameMoneyFrame)
         F.ReskinIcon(_G.ItemUpgradeFrameMoneyFrame.Currency.icon)
         F.Reskin(_G.ItemUpgradeFrameUpgradeButton)
-        F.ReskinDropDown(_G.ItemUpgradeFrame.UpgradeLevelDropDown.DropDownMenu)
-        _G.ItemUpgradeFrame.StatsScrollBar:SetAlpha(0)
+        F.ReskinDropDown(ItemUpgradeFrame.UpgradeLevelDropDown.DropDownMenu)
+        ItemUpgradeFrame.StatsScrollBar:SetAlpha(0)
     end
 end

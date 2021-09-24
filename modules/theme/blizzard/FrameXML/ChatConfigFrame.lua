@@ -167,6 +167,9 @@ table.insert(
         F.Reskin(_G.ChatConfigFrameOkayButton)
         F.Reskin(_G.ChatConfigFrameDefaultButton)
         F.Reskin(_G.ChatConfigFrameRedockButton)
+        if C.IsNewPatch then
+            F.Reskin(_G.ChatConfigFrame.ToggleChatButton)
+        end
         F.ReskinArrow(_G.ChatConfigMoveFilterUpButton, 'up')
         F.ReskinArrow(_G.ChatConfigMoveFilterDownButton, 'down')
         F.ReskinInput(_G.CombatConfigSettingsNameEditBox)
