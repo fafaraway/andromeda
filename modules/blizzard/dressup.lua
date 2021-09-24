@@ -1,9 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local format = format
-local CreateFrame = CreateFrame
-
 local F, C, L = unpack(select(2, ...))
 local BLIZZARD = F:GetModule('Blizzard')
 
@@ -41,6 +35,11 @@ function BLIZZARD:EnhancedDressup()
         end
     end)
 
-    F.AddTooltip(button, 'ANCHOR_TOP', format(L['%sUndress all|n%sUndress tabard'], C.Assets.mouse_left, C.Assets.mouse_right))
+    F.AddTooltip(button, 'ANCHOR_TOP', string.format(L['%sUndress all|n%sUndress tabard'], C.Assets.mouse_left, C.Assets.mouse_right))
+
+    if C.IsNewPatch then
+        _G.DressUpFrame.LinkButton:SetWidth(80)
+        _G.DressUpFrame.LinkButton:SetText(_G.SOCIAL_SHARE_TEXT)
+    end
 end
 BLIZZARD:RegisterBlizz('EnhancedDressup', BLIZZARD.EnhancedDressup)
