@@ -8,22 +8,33 @@
 ]]
 
 
-_G.BINDING_HEADER_FREEUI = GetAddOnMetadata(..., 'Title')
-_G.BINDING_NAME_FREEUI_TOGGLE_GUI = 'GUI'
+do
+    _G.BINDING_HEADER_FREEUI = GetAddOnMetadata(..., 'Title')
+    _G.BINDING_NAME_FREEUI_TOGGLE_GUI = 'GUI'
+end
 
-local _, ns = ...
 
-ns[1] = {} -- Functions
-ns[2] = {} -- Constants/Config
-ns[3] = {} -- Localization
+local addOnName, engine = ...
+local FREE = _G.LibStub("AceAddon-3.0"):NewAddon(addOnName, 'AceConsole-3.0', 'AceEvent-3.0', 'AceTimer-3.0', 'AceHook-3.0')
+
+
+engine[1] = FREE
+engine[2] = {}
+engine[3] = {}
 
 _G.FREE_ADB = {} -- Account variables
 _G.FREE_PDB = {}
 _G.FREE_DB = {} -- Character variables
 
-_G.FreeUI = ns -- Allow other addon access
+_G.FreeUI = engine -- Allow other addon access
 
-local F, C = unpack(ns)
+
+-- #TODO
+FREE.UnitFrames = FREE:NewModule('UnitFrames', 'AceTimer-3.0','AceEvent-3.0','AceHook-3.0')
+
+
+
+local F, C = unpack(engine)
 
 local addonVersion = '@project-version@'
 if (addonVersion:find('project%-version')) then
@@ -38,7 +49,7 @@ do
     F.Libs = {}
     F.LibsMinor = {}
 
-    local function AddLib(name, major, minor)
+    function F:AddLib(name, major, minor)
         if not name then
             return
         end
@@ -51,19 +62,71 @@ do
         end
     end
 
-    AddLib('ACL', 'AceLocale-3.0')
-    AddLib('LBG', 'LibButtonGlow-1.0')
-    AddLib('LRC', 'LibRangeCheck-2.0')
-    AddLib('LRI', 'LibRealmInfo')
-    AddLib('LSM', 'LibSharedMedia-3.0')
-    AddLib('LDD', 'LibDropDown')
-    AddLib('Base64', 'LibBase64-1.0')
 
-    F.Libs.oUF = ns.oUF
-    F.Libs.cargBags = ns.cargBags
+    F:AddLib('ACL', 'AceLocale-3.0')
+    F:AddLib('LBG', 'LibButtonGlow-1.0')
+    F:AddLib('LRC', 'LibRangeCheck-2.0')
+    F:AddLib('LRI', 'LibRealmInfo')
+    F:AddLib('LSM', 'LibSharedMedia-3.0')
+    F:AddLib('LDD', 'LibDropDown')
+    F:AddLib('Base64', 'LibBase64-1.0')
 
-    _G.LibStub('AceTimer-3.0'):Embed(F)
+    F.Libs.oUF = engine.oUF
+    F.Libs.cargBags = engine.cargBags
 end
+
+
+
+--[[ function F:OnEnable()
+    F:Initialize()
+end
+
+function F:CallLoadedModule(obj, silent, object, index)
+	local name, func
+	if type(obj) == 'table' then name, func = unpack(obj) else name = obj end
+	local module = name and F:GetModule(name, silent)
+
+	if not module then return end
+	if func and type(func) == 'string' then
+		F:CallLoadFunc(module[func], module)
+	elseif func and type(func) == 'function' then
+		F:CallLoadFunc(func, module)
+	elseif module.Initialize then
+		F:CallLoadFunc(module.Initialize, module)
+	end
+
+	if object and index then object[index] = nil end
+end
+
+function F:RegisterInitialModule(name, func)
+	F.RegisteredInitialModules[#F.RegisteredInitialModules + 1] = (func and {name, func}) or name
+end
+
+function F:RegisterModule(name, func)
+	if F.initialized then
+		F:CallLoadedModule((func and {name, func}) or name)
+	else
+		F.RegisteredModules[#F.RegisteredModules + 1] = (func and {name, func}) or name
+	end
+end
+
+function F:InitializeInitialModules()
+	for index, object in ipairs(F.RegisteredInitialModules) do
+		F:CallLoadedModule(object, true, F.RegisteredInitialModules, index)
+	end
+end
+
+function F:InitializeModules()
+	for index, object in ipairs(F.RegisteredModules) do
+		F:CallLoadedModule(object, true, F.RegisteredModules, index)
+	end
+end
+
+function F:Initialize()
+    F:InitializeModules()
+end ]]
+
+
 
 --[[ Events ]]
 
@@ -140,5 +203,5 @@ F:RegisterEvent('PLAYER_LOGIN', function()
         end
     end
 
-    F.Modules = modules
+    --F.Modules = modules
 end)

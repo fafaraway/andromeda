@@ -881,18 +881,21 @@ do
     end
 
     local atlasToQuality = {
-        ['auctionhouse-itemicon-border-gray'] = _G.LE_ITEM_QUALITY_POOR,
-        ['auctionhouse-itemicon-border-white'] = _G.LE_ITEM_QUALITY_COMMON,
-        ['auctionhouse-itemicon-border-green'] = _G.LE_ITEM_QUALITY_UNCOMMON,
-        ['auctionhouse-itemicon-border-blue'] = _G.LE_ITEM_QUALITY_RARE,
-        ['auctionhouse-itemicon-border-purple'] = _G.LE_ITEM_QUALITY_EPIC,
-        ['auctionhouse-itemicon-border-orange'] = _G.LE_ITEM_QUALITY_LEGENDARY,
-        ['auctionhouse-itemicon-border-artifact'] = _G.LE_ITEM_QUALITY_ARTIFACT,
-        ['auctionhouse-itemicon-border-account'] = _G.LE_ITEM_QUALITY_HEIRLOOM
+        ['error'] = 99,
+        ['uncollected'] = _G.LE_ITEM_QUALITY_POOR,
+        ['gray'] = _G.LE_ITEM_QUALITY_POOR,
+        ['white'] = _G.LE_ITEM_QUALITY_COMMON,
+        ['green'] = _G.LE_ITEM_QUALITY_UNCOMMON,
+        ['blue'] = _G.LE_ITEM_QUALITY_RARE,
+        ['purple'] = _G.LE_ITEM_QUALITY_EPIC,
+        ['orange'] = _G.LE_ITEM_QUALITY_LEGENDARY,
+        ['artifact'] = _G.LE_ITEM_QUALITY_ARTIFACT,
+        ['account'] = _G.LE_ITEM_QUALITY_HEIRLOOM
     }
 
     local function UpdateIconBorderColorByAtlas(self, atlas)
-        local quality = atlasToQuality[atlas]
+        local atlasAbbr = atlas and string.match(atlas, '%-(%w+)$')
+        local quality = atlasAbbr and atlasToQuality[atlasAbbr]
         local color = C.QualityColors[quality or 1]
         self.__owner.bg:SetBackdropBorderColor(color.r, color.g, color.b)
     end
@@ -904,18 +907,24 @@ do
         self.__owner.bg:SetBackdropBorderColor(r, g, b)
     end
 
-    local function ResetIconBorderColor(self)
-        self.__owner.bg:SetBackdropBorderColor(0, 0, 0)
+    local function ResetIconBorderColor(self, texture)
+        if not texture then
+            self.__owner.bg:SetBackdropBorderColor(0, 0, 0)
+        end
     end
 
-    function F:ReskinIconBorder(needInit)
+    function F:ReskinIconBorder(needInit, useAtlas)
         self:SetAlpha(0)
         self.__owner = self:GetParent()
         if not self.__owner.bg then
             return
         end
-        if self.__owner.useCircularIconBorder then -- for auction item display
+        if useAtlas or self.__owner.useCircularIconBorder then -- for auction item display
             hooksecurefunc(self, 'SetAtlas', UpdateIconBorderColorByAtlas)
+            hooksecurefunc(self, 'SetTexture', ResetIconBorderColor)
+            if needInit then
+                self:SetAtlas(self:GetAtlas()) -- for border with color before hook
+            end
         else
             hooksecurefunc(self, 'SetVertexColor', UpdateIconBorderColor)
             if needInit then

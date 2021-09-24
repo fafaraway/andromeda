@@ -339,9 +339,20 @@ function NAMEPLATE:CreateTargetIndicator(self)
     frame:SetFrameLevel(self:GetFrameLevel() - 1)
     frame:Hide()
 
+    -- frame.ArrowLeft = frame:CreateTexture(nil, 'OVERLAY')
+    -- frame.ArrowLeft:SetPoint('RIGHT', frame, 'LEFT', -6, 0)
+    -- frame.ArrowLeft:SetSize(C.DB.Nameplate.Height+10, C.DB.Nameplate.Height+10)
+    -- frame.ArrowLeft:SetTexture(C.Assets.Textures.Arrow)
+
+    -- frame.ArrowRight = frame:CreateTexture(nil, 'OVERLAY')
+    -- frame.ArrowRight:SetPoint('LEFT', frame, 'RIGHT', 6, 0)
+    -- frame.ArrowRight:SetSize(C.DB.Nameplate.Height+10, C.DB.Nameplate.Height+10)
+    -- frame.ArrowRight:SetTexture(C.Assets.Textures.Arrow)
+    -- frame.ArrowRight:SetRotation(math.rad(180))
+
     frame.Glow = frame:CreateTexture(nil, 'OVERLAY')
-    frame.Glow:SetPoint('TOPLEFT', frame, 'BOTTOMLEFT', 0, 0)
-    frame.Glow:SetPoint('TOPRIGHT', frame, 'BOTTOMRIGHT', 0, 0)
+    frame.Glow:SetPoint('TOPLEFT', frame, 'BOTTOMLEFT')
+    frame.Glow:SetPoint('TOPRIGHT', frame, 'BOTTOMRIGHT')
     frame.Glow:SetHeight(8)
     frame.Glow:SetTexture(C.Assets.glow_tex)
     frame.Glow:SetRotation(math.rad(180))
@@ -356,6 +367,7 @@ function NAMEPLATE:CreateTargetIndicator(self)
 
     self.TargetIndicator = frame
     self:RegisterEvent('PLAYER_TARGET_CHANGED', NAMEPLATE.UpdateTargetChange, true)
+
     NAMEPLATE.UpdateTargetIndicator(self)
 end
 
@@ -432,7 +444,7 @@ function NAMEPLATE:CreateClassifyIndicator(self)
     end
 
     local height = C.DB.Nameplate.Height
-    local icon = self:CreateTexture(nil, 'ARTWORK')
+    local icon = self:CreateTexture(nil, 'BACKGROUND')
     icon:SetPoint('RIGHT', self, 'LEFT')
     icon:SetSize(height + 10, height + 10)
     icon:SetAtlas('')

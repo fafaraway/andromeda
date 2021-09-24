@@ -1,31 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local ipairs = ipairs
-local tinsert = tinsert
-local wipe = wipe
-local strfind = strfind
-local gsub = gsub
-local C_FriendList_GetWhoInfo = C_FriendList.GetWhoInfo
-local C_FriendList_GetNumWhoResults = C_FriendList.GetNumWhoResults
-local GetQuestDifficultyColor = GetQuestDifficultyColor
-local GetRealZoneText = GetRealZoneText
-local GetGuildInfo = GetGuildInfo
-local GetGuildTradeSkillInfo = GetGuildTradeSkillInfo
-local GetGuildRosterInfo = GetGuildRosterInfo
-local GetSpecialization = GetSpecialization
-local GetSpecializationInfo = GetSpecializationInfo
-local UnitRace = UnitRace
-local UnitClass = UnitClass
-local GetCVar = GetCVar
-local UnitLevel = UnitLevel
-local UnitEffectiveLevel = UnitEffectiveLevel
-local hooksecurefunc = hooksecurefunc
-local HybridScrollFrame_GetOffset = HybridScrollFrame_GetOffset
-local RAID_CLASS_COLORS = RAID_CLASS_COLORS
-local UIDropDownMenu_GetSelectedID = UIDropDownMenu_GetSelectedID
-local NUM_CHAT_WINDOWS = NUM_CHAT_WINDOWS
-
 local F, C = unpack(select(2, ...))
 local oUF = F.Libs.oUF
 
@@ -115,10 +87,10 @@ F:RegisterEvent('ADDON_LOADED', updateGuildUI)
 local columnTable = {}
 local function updateWhoList()
     local scrollFrame = _G.WhoListScrollFrame
-    local offset = HybridScrollFrame_GetOffset(scrollFrame)
+    local offset = _G.HybridScrollFrame_GetOffset(scrollFrame)
     local buttons = scrollFrame.buttons
     local numButtons = #buttons
-    local numWhos = C_FriendList_GetNumWhoResults()
+    local numWhos = C_FriendList.GetNumWhoResults()
 
     local playerZone = GetRealZoneText()
     local playerGuild = GetGuildInfo('player')
@@ -132,7 +104,7 @@ local function updateWhoList()
             local levelText = button.Level
             local variableText = button.Variable
 
-            local info = C_FriendList_GetWhoInfo(index)
+            local info = C_FriendList.GetWhoInfo(index)
             local guild, level, race, zone, class = info.fullGuildName, info.level, info.raceStr, info.area, info.filename
             if zone == playerZone then
                 zone = '|cff00ff00' .. zone
@@ -144,14 +116,14 @@ local function updateWhoList()
                 race = '|cff00ff00' .. race
             end
 
-            wipe(columnTable)
-            tinsert(columnTable, zone)
-            tinsert(columnTable, guild)
-            tinsert(columnTable, race)
+            table.wipe(columnTable)
+            table.insert(columnTable, zone)
+            table.insert(columnTable, guild)
+            table.insert(columnTable, race)
 
             nameText:SetTextColor(classColor(class, true))
             levelText:SetText(diffColor(level) .. level)
-            variableText:SetText(columnTable[UIDropDownMenu_GetSelectedID(_G.WhoFrameDropDown)])
+            variableText:SetText(columnTable[_G.UIDropDownMenu_GetSelectedID(_G.WhoFrameDropDown)])
         end
     end
 end
@@ -159,7 +131,7 @@ hooksecurefunc('WhoList_Update', updateWhoList)
 hooksecurefunc(_G.WhoListScrollFrame, 'update', updateWhoList)
 
 local blizzHexColors = {}
-for class, color in pairs(RAID_CLASS_COLORS) do
+for class, color in pairs(_G.RAID_CLASS_COLORS) do
     blizzHexColors[color.colorStr] = class
 end
 
@@ -168,16 +140,16 @@ do
     local AddMessage = {}
 
     local function FixClassColors(frame, message, ...)
-        if type(message) == 'string' and strfind(message, '|cff') then
+        if type(message) == 'string' and string.find(message, '|cff') then
             for hex, class in pairs(blizzHexColors) do
                 local color = C.ClassColors[class]
-                message = color and gsub(message, hex, color.colorStr) or message
+                message = color and string.gsub(message, hex, color.colorStr) or message
             end
         end
         return AddMessage[frame](frame, message, ...)
     end
 
-    for i = 1, NUM_CHAT_WINDOWS do
+    for i = 1, _G.NUM_CHAT_WINDOWS do
         local frame = _G['ChatFrame' .. i]
         AddMessage[frame] = frame.AddMessage
         frame.AddMessage = FixClassColors
@@ -217,10 +189,10 @@ end)
 do
     local AddMessage = _G.RaidNotice_AddMessage
     _G.RaidNotice_AddMessage = function(frame, message, ...)
-        if strfind(message, '|cff') then
+        if string.find(message, '|cff') then
             for hex, class in pairs(blizzHexColors) do
                 local color = C.ClassColors[class]
-                message = gsub(message, hex, color.colorStr)
+                message = string.gsub(message, hex, color.colorStr)
             end
         end
         return AddMessage(frame, message, ...)

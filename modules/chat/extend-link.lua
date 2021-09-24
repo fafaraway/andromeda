@@ -1,23 +1,30 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local format = format
-local strmatch = strmatch
-local strrep = strrep
-local gsub = gsub
-local GetItemInfo = GetItemInfo
-local GetItemStats = GetItemStats
-local GetItemIcon = GetItemIcon
-local GetSpellTexture = GetSpellTexture
-local GetPvpTalentInfoByID = GetPvpTalentInfoByID
-local GetTalentInfoByID = GetTalentInfoByID
-local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
-
-local F, C = unpack(select(2, ...))
+local F, C, L = unpack(select(2, ...))
 local CHAT = F:GetModule('Chat')
+local TOOLTIP = F:GetModule('Tooltip')
 
-local iconStr = ' |T%s:14:16:0:0:64:64:4:60:7:57'
+local events = {
+    'CHAT_MSG_BATTLEGROUND',
+    'CHAT_MSG_BATTLEGROUND_LEADER',
+    'CHAT_MSG_BN_WHISPER',
+    'CHAT_MSG_BN_WHISPER_INFORM',
+    'CHAT_MSG_CHANNEL',
+    'CHAT_MSG_GUILD',
+    'CHAT_MSG_INSTANCE_CHAT',
+    'CHAT_MSG_INSTANCE_CHAT_LEADER',
+    'CHAT_MSG_OFFICER',
+    'CHAT_MSG_PARTY',
+    'CHAT_MSG_PARTY_LEADER',
+    'CHAT_MSG_RAID',
+    'CHAT_MSG_RAID_LEADER',
+    'CHAT_MSG_RAID_WARNING',
+    'CHAT_MSG_SAY',
+    'CHAT_MSG_WHISPER',
+    'CHAT_MSG_WHISPER_INFORM',
+    'CHAT_MSG_YELL',
+    'CHAT_MSG_LOOT'
+}
 
+-- item level and gem
 local function IsItemHasLevel(link)
     local name, _, rarity, level, _, _, _, _, _, _, _, classID = GetItemInfo(link)
     if name and level and rarity > 1 and (classID == _G.LE_ITEM_CLASS_WEAPON or classID == _G.LE_ITEM_CLASS_ARMOR) then
@@ -41,14 +48,14 @@ local socketWatchList = {
 }
 
 local function GetSocketTexture(socket, count)
-    return strrep('|TInterface\\ItemSocketingFrame\\UI-EmptySocket-' .. socket .. ':0|t', count)
+    return string.rep('|TInterface\\ItemSocketingFrame\\UI-EmptySocket-' .. socket .. ':0|t', count)
 end
 
 local function IsItemHasGem(link)
     local text = ''
     local stats = GetItemStats(link)
     for stat, count in pairs(stats) do
-        local socket = strmatch(stat, 'EMPTY_SOCKET_(%S+)')
+        local socket = string.match(stat, 'EMPTY_SOCKET_(%S+)')
         if socket and socketWatchList[socket] then
             text = text .. GetSocketTexture(socket, count)
         end
@@ -56,137 +63,127 @@ local function IsItemHasGem(link)
     return text
 end
 
-local armorType = {
-    INVTYPE_HEAD = true,
-    INVTYPE_SHOULDER = true,
-    INVTYPE_CHEST = true,
-    INVTYPE_WRIST = true,
-    INVTYPE_HAND = true,
-    INVTYPE_WAIST = true,
-    INVTYPE_LEGS = true,
-    INVTYPE_FEET = true
-}
+local itemCache, GetDungeonScoreInColor = {}
 
-local function GetSlotType(link)
-    local id = strmatch(link, 'Hitem:(%d-):')
-    if not id then
+function CHAT.ReplaceChatHyperlink(link, linkType, value)
+    if not link then
         return
     end
-    id = tonumber(id)
 
-    local slotType
-    local type = select(6, GetItemInfo(id))
-
-    if type == _G.WEAPON then
-        local equipLoc = select(9, GetItemInfo(id))
-        if equipLoc ~= '' then
-            local weaponType = select(7, GetItemInfo(id))
-            slotType = weaponType or _G[equipLoc]
+    if linkType == 'item' then
+        if itemCache[link] then
+            return itemCache[link]
         end
-    elseif type == _G.ARMOR then
-        local equipLoc = select(9, GetItemInfo(id))
-        if equipLoc ~= '' then
-            if armorType[equipLoc] then
-                local armorType = select(7, GetItemInfo(id))
-                slotType = armorType .. ' ' .. (_G[equipLoc])
-            else
-                slotType = _G[equipLoc]
-            end
+        local name, itemLevel = IsItemHasLevel(link)
+        if name and itemLevel then
+            link = string.gsub(link, '|h%[(.-)%]|h', '|h[' .. name .. '(' .. itemLevel .. ')]|h' .. IsItemHasGem(link))
+            itemCache[link] = link
         end
+        return link
+    elseif linkType == 'dungeonScore' then
+        return value and string.gsub(link, '|h%[(.-)%]|h', '|h[' .. string.format(L['MythicScore'], GetDungeonScoreInColor(value)) .. ']|h')
     end
-
-    return slotType
 end
 
-local itemCache = {}
-local function AddItemInfo(link)
-    if itemCache[link] then
-        return itemCache[link]
-    end
-
-    local itemLink = strmatch(link, '|Hitem:.-|h')
-    if not itemLink then
-        return
-    end
-
-    local slotType = GetSlotType(itemLink)
-    local name, itemLevel = IsItemHasLevel(itemLink)
-    if name and itemLevel then
-        if slotType then
-            link = gsub(link, '|h%[(.-)%]|h', '|h[' .. name .. ' (' .. slotType .. ' ' .. itemLevel .. ')]|h' .. IsItemHasGem(itemLink))
-        else
-            link = gsub(link, '|h%[(.-)%]|h', '|h[' .. name .. ' (' .. itemLevel .. ')]|h' .. IsItemHasGem(itemLink))
-        end
-        itemCache[link] = link
-    end
-
-    local texture = GetItemIcon(itemLink)
-    local icon = format(iconStr .. ':255:255:255|t', texture)
-    link = icon .. ' ' .. link
-
-    return link
+function CHAT:UpdateItemLevel(_, msg, ...)
+    msg = string.gsub(msg, '(|H([^:]+):(%d+):.-|h.-|h)', CHAT.ReplaceChatHyperlink)
+    return false, msg, ...
 end
 
-local function AddSpellInfo(Hyperlink)
-    local id = strmatch(Hyperlink, 'Hspell:(%d-):')
+function CHAT:AddItemLevel()
+    for _, event in pairs(events) do
+        _G.ChatFrame_AddMessageEventFilter(event, CHAT.UpdateItemLevel)
+    end
+end
+
+-- icon for item/spell/achievement
+local function GetHyperlink(Hyperlink, texture)
+    if (not texture) then
+        return Hyperlink
+    else
+        return ' |T' .. texture .. ':12:14:0:0:64:64:5:59:5:59|t ' .. Hyperlink
+    end
+end
+
+local function AddChatIcon(Hyperlink)
+    local schema, id = string.match(Hyperlink, '|H(%w+):(%d+):')
     if not id then
         return
     end
 
-    local texture = GetSpellTexture(tonumber(id))
-    local icon = format(iconStr .. ':255:255:255|t', texture)
-    Hyperlink = icon .. ' |cff71d5ff' .. Hyperlink .. '|r'
+    local texture
+    if schema == 'item' then
+        texture = select(10, GetItemInfo(tonumber(id)))
+    elseif schema == 'spell' then
+        texture = select(3, GetSpellInfo(tonumber(id)))
+    elseif schema == 'achievement' then
+        texture = select(10, GetAchievementInfo(tonumber(id)))
+    end
 
-    return Hyperlink
+    return GetHyperlink(Hyperlink, texture)
 end
 
-local function AddEnchantInfo(Hyperlink)
-    local id = strmatch(Hyperlink, 'Henchant:(%d-)\124')
+local function AddEnchantIcon(Hyperlink)
+    local id = string.match(Hyperlink, 'Henchant:(%d-)|')
     if not id then
         return
     end
 
-    local texture = GetSpellTexture(tonumber(id))
-    local icon = format(iconStr .. ':255:255:255|t', texture)
-    Hyperlink = icon .. ' ' .. Hyperlink
-
-    return Hyperlink
+    return GetHyperlink(Hyperlink, GetSpellTexture(tonumber(id)))
 end
 
-local function AddPvPTalentInfo(Hyperlink)
-    local id = strmatch(Hyperlink, 'Hpvptal:(%d-)|')
+local function AddTalentIcon(Hyperlink)
+    local schema, id = string.match(Hyperlink, 'H(%w+):(%d-)|')
     if not id then
         return
     end
 
-    local texture = select(3, GetPvpTalentInfoByID(tonumber(id)))
-    local icon = format(iconStr .. ':255:255:255|t', texture)
-    Hyperlink = icon .. ' ' .. Hyperlink
+    local texture
+    if schema == 'talent' then
+        texture = select(3, GetTalentInfoByID(tonumber(id)))
+    elseif schema == 'pvptal' then
+        texture = select(3, GetPvpTalentInfoByID(tonumber(id)))
+    end
 
-    return Hyperlink
+    return GetHyperlink(Hyperlink, texture)
 end
 
-local function AddTalentInfo(Hyperlink)
-    local id = strmatch(Hyperlink, 'Htalent:(%d-)|')
+local function AddTradeIcon(Hyperlink)
+    local id = string.match(Hyperlink, 'Htrade:[^:]-:(%d+)')
     if not id then
         return
     end
 
-    local texture = select(3, GetTalentInfoByID(tonumber(id)))
-    local icon = format(iconStr .. ':255:255:255|t', texture)
-    Hyperlink = icon .. ' ' .. Hyperlink
-
-    return Hyperlink
+    return GetHyperlink(Hyperlink, GetSpellTexture(tonumber(id)))
 end
 
-function CHAT:ReplaceLinks(event, msg, ...)
-    msg = gsub(msg, '(|Hitem:%d+:.-|h.-|h)', AddItemInfo)
-    msg = gsub(msg, '(|Hspell:%d+:%d+|h.-|h)', AddSpellInfo)
-    msg = gsub(msg, '(|Henchant:%d+|h.-|h)', AddEnchantInfo)
-    msg = gsub(msg, '(|Htalent:%d+|h.-|h)', AddTalentInfo)
-    msg = gsub(msg, '(|Hpvptal:%d+|h.-|h)', AddPvPTalentInfo)
+function CHAT:UpdateLinkIcon(_, msg, ...)
+    msg = string.gsub(msg, '(|H%w+:%d+:.-|h.-|h)', AddChatIcon)
+    msg = string.gsub(msg, '(|Henchant:%d+|h.-|h)', AddEnchantIcon)
+    msg = string.gsub(msg, '(|H%w+:%d+|h.-|h)', AddTalentIcon)
+    msg = string.gsub(msg, '(|Htrade:.+:%d+|h.-|h)', AddTradeIcon)
 
     return false, msg, ...
+end
+
+function CHAT:AddLinkIcon()
+    for _, event in pairs(events) do
+        _G.ChatFrame_AddMessageEventFilter(event, CHAT.UpdateLinkIcon)
+    end
+
+    -- fix send message
+    hooksecurefunc(
+        'ChatEdit_OnTextChanged',
+        function(self, userInput)
+            local text = self:GetText()
+            if userInput then
+                local newText, count = string.gsub(text, '|T.+|t', '')
+                if count > 0 then
+                    self:SetText(newText)
+                end
+            end
+        end
+    )
 end
 
 function CHAT:ExtendLink()
@@ -194,24 +191,8 @@ function CHAT:ExtendLink()
         return
     end
 
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_ACHIEVEMENT', self.ReplaceLinks)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_BATTLEGROUND', self.ReplaceLinks)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_BN_WHISPER', self.ReplaceLinks)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_CHANNEL', self.ReplaceLinks)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_COMMUNITIES_CHANNEL', self.ReplaceLinks)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_EMOTE', self.ReplaceLinks)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_GUILD', self.ReplaceLinks)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_INSTANCE_CHAT', self.ReplaceLinks)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_INSTANCE_CHAT_LEADER', self.ReplaceLinks)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_LOOT', self.ReplaceLinks)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_OFFICER', self.ReplaceLinks)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_PARTY', self.ReplaceLinks)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_PARTY_LEADER', self.ReplaceLinks)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_RAID', self.ReplaceLinks)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_RAID_LEADER', self.ReplaceLinks)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_SAY', self.ReplaceLinks)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_TRADESKILLS', self.ReplaceLinks)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_WHISPER', self.ReplaceLinks)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_WHISPER_INFORM', self.ReplaceLinks)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_YELL', self.ReplaceLinks)
+    GetDungeonScoreInColor = TOOLTIP.GetDungeonScore
+
+    CHAT:AddItemLevel()
+    CHAT:AddLinkIcon()
 end

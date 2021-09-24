@@ -293,6 +293,10 @@ function TOOLTIP:GetAchievementInfo(GUID)
 end
 
 function TOOLTIP:AddPvEProgress()
+    if not C.DB.Tooltip.PvEStats then
+        return
+    end
+
     if InCombatLockdown() then
         return
     end
@@ -300,6 +304,7 @@ function TOOLTIP:AddPvEProgress()
     if not IsAltKeyDown() then
         return
     end
+
     local unit = TOOLTIP.GetUnit(self)
     if not unit or not CanInspect(unit) or not UnitIsPlayer(unit) then
         return
@@ -330,7 +335,7 @@ function TOOLTIP:AddPvEProgress()
     TOOLTIP:SetProgress(unit, guid)
 end
 
-function TOOLTIP:PvEStats_OnEvent(event, addon)
+local function Loader(event, addon)
     if addon == 'Blizzard_AchievementUI' then
         local origUpdateStatusBars = _G.AchievementFrameComparison_UpdateStatusBars
         _G.AchievementFrameComparison_UpdateStatusBars = function(id)
@@ -338,6 +343,8 @@ function TOOLTIP:PvEStats_OnEvent(event, addon)
                 origUpdateStatusBars(id)
             end
         end
-        F:UnregisterEvent(event, TOOLTIP.PvEStats_OnEvent)
+
+        F:UnregisterEvent(event, Loader)
     end
 end
+F:RegisterEvent('ADDON_LOADED', Loader)

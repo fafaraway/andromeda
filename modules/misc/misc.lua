@@ -1,30 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local next = next
-local floor = floor
-local CreateFrame = CreateFrame
-local hooksecurefunc = hooksecurefunc
-local PlaySound = PlaySound
-local GetMaxBattlefieldID = GetMaxBattlefieldID
-local GetBattlefieldStatus = GetBattlefieldStatus
-local GetTime = GetTime
-local GetCVarBool = GetCVarBool
-local GetNumLootItems = GetNumLootItems
-local IsModifiedClick = IsModifiedClick
-local LootSlot = LootSlot
-local C_UIWidgetManager_GetDiscreteProgressStepsVisualizationInfo = C_UIWidgetManager.GetDiscreteProgressStepsVisualizationInfo
-local C_UIWidgetManager_GetTextureWithAnimationVisualizationInfo = C_UIWidgetManager.GetTextureWithAnimationVisualizationInfo
-local UIWidgetTopCenterContainerFrame = UIWidgetTopCenterContainerFrame
-local SplitTextIntoHeaderAndNonHeader = SplitTextIntoHeaderAndNonHeader
-local GetNumRandomDungeons = GetNumRandomDungeons
-local GetLFGRandomDungeonInfo = GetLFGRandomDungeonInfo
-local GetLFGDungeonInfo = GetLFGDungeonInfo
-local GetLFGDungeonRewards = GetLFGDungeonRewards
-local LFDQueueFrame_SetType = LFDQueueFrame_SetType
-local SOUNDKIT_PVP_THROUGH_QUEUE = SOUNDKIT.PVP_THROUGH_QUEUE
-local SOUNDKIT_READY_CHECK = SOUNDKIT.READY_CHECK
-
 local F, C, L = unpack(select(2, ...))
 local MISC = F:RegisterModule('General')
 
@@ -55,15 +28,15 @@ local function ForceWarning_OnEvent(_, event)
         for i = 1, GetMaxBattlefieldID() do
             local status = GetBattlefieldStatus(i)
             if status == 'confirm' then
-                PlaySound(SOUNDKIT_PVP_THROUGH_QUEUE, 'Master')
+                PlaySound(_G.SOUNDKIT.PVP_THROUGH_QUEUE, 'Master')
                 break
             end
             i = i + 1
         end
     elseif event == 'PET_BATTLE_QUEUE_PROPOSE_MATCH' then
-        PlaySound(SOUNDKIT_PVP_THROUGH_QUEUE, 'Master')
+        PlaySound(_G.SOUNDKIT.PVP_THROUGH_QUEUE, 'Master')
     elseif event == 'LFG_PROPOSAL_SHOW' then
-        PlaySound(SOUNDKIT_READY_CHECK, 'Master')
+        PlaySound(_G.SOUNDKIT.READY_CHECK, 'Master')
     elseif event == 'RESURRECT_REQUEST' then
         PlaySound(37, 'Master')
     end
@@ -71,7 +44,7 @@ end
 
 local function ReadyCheckHook(_, initiator)
     if initiator ~= 'player' then
-        PlaySound(SOUNDKIT_READY_CHECK, 'Master')
+        PlaySound(_G.SOUNDKIT.READY_CHECK, 'Master')
     end
 end
 
@@ -110,10 +83,10 @@ end
 -- Maw threat bar
 local maxValue = 1000
 local function GetMawBarValue()
-    local widgetInfo = C_UIWidgetManager_GetDiscreteProgressStepsVisualizationInfo(2885)
+    local widgetInfo = C_UIWidgetManager.GetDiscreteProgressStepsVisualizationInfo(2885)
     if widgetInfo and widgetInfo.shownState == 1 then
         local value = widgetInfo.progressVal
-        return floor(value / maxValue), value % maxValue
+        return math.floor(value / maxValue), value % maxValue
     end
 end
 
@@ -139,10 +112,10 @@ function MISC:UpdateMawBarLayout()
             bar:SetValue(value)
         end
         bar:Show()
-        UIWidgetTopCenterContainerFrame:Hide()
+        _G.UIWidgetTopCenterContainerFrame:Hide()
     else
         bar:Hide()
-        UIWidgetTopCenterContainerFrame:Show()
+        _G.UIWidgetTopCenterContainerFrame:Show()
     end
 end
 
@@ -169,10 +142,10 @@ function MISC:MawWidgetFrame()
         'OnEnter',
         function(self)
             local rank = GetMawBarValue()
-            local widgetInfo = rank and C_UIWidgetManager_GetTextureWithAnimationVisualizationInfo(2873 + rank)
+            local widgetInfo = rank and C_UIWidgetManager.GetTextureWithAnimationVisualizationInfo(2873 + rank)
             if widgetInfo and widgetInfo.shownState == 1 then
                 _G.GameTooltip:SetOwner(self, 'ANCHOR_BOTTOM', 0, -10)
-                local header, nonHeader = SplitTextIntoHeaderAndNonHeader(widgetInfo.tooltip)
+                local header, nonHeader = _G.SplitTextIntoHeaderAndNonHeader(widgetInfo.tooltip)
                 if header then
                     _G.GameTooltip:AddLine(header, nil, nil, nil, 1)
                 end
@@ -190,10 +163,9 @@ function MISC:MawWidgetFrame()
     F:RegisterEvent('UPDATE_UI_WIDGET', MISC.UpdateMawBarLayout)
 end
 
-
 -- Support cmd /way if TomTom disabled
 
-local pointString = C.InfoColor .. '|Hworldmap:%d+:%d+:%d+|h[|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a%s (%s, %s)]|h|r'
+local pointString = C.InfoColor .. '|Hworldmap:%d+:%d+:%d+|h[|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a%s (%s, %s)%s]|h|r'
 
 local function GetCorrectCoord(x)
     x = tonumber(x)
@@ -214,7 +186,7 @@ function MISC:JerryWay()
 
     _G.SlashCmdList['FREEUI_JERRY_WAY'] = function(msg)
         msg = string.gsub(msg, '(%d)[%.,] (%d)', '%1 %2')
-        local x, y = string.split(' ', msg)
+        local x, y, z = string.match(msg, '(%S+)%s(%S+)(.*)')
         if x and y then
             local mapID = C_Map.GetBestMapForUnit('player')
             if mapID then
@@ -223,7 +195,10 @@ function MISC:JerryWay()
                 if mapName then
                     x = GetCorrectCoord(x)
                     y = GetCorrectCoord(y)
-                    print(string.format(pointString, mapID, x * 100, y * 100, mapName, x, y))
+
+                    if x and y then
+                        print(string.format(pointString, mapID, x * 100, y * 100, mapName, x, y, z or ''))
+                    end
                 end
             end
         end
@@ -241,7 +216,7 @@ do
                 local id = GetLFGRandomDungeonInfo(i)
                 local isHoliday = select(15, GetLFGDungeonInfo(id))
                 if isHoliday and not GetLFGDungeonRewards(id) then
-                    LFDQueueFrame_SetType(id)
+                    _G.LFDQueueFrame_SetType(id)
                 end
             end
         end

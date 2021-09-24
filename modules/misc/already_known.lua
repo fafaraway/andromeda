@@ -1,30 +1,4 @@
-local _G = _G
-local mod = mod
-local format = format
-local strmatch = strmatch
-local strfind = strfind
-local CreateFrame = CreateFrame
-local GetItemInfo = GetItemInfo
-local hooksecurefunc = hooksecurefunc
-local SetItemButtonTextureVertexColor = SetItemButtonTextureVertexColor
-local GetCurrentGuildBankTab = GetCurrentGuildBankTab
-local GetGuildBankItemInfo = GetGuildBankItemInfo
-local GetGuildBankItemLink = GetGuildBankItemLink
-local GetMerchantNumItems = GetMerchantNumItems
-local GetMerchantItemInfo = GetMerchantItemInfo
-local GetMerchantItemLink = GetMerchantItemLink
-local GetNumBuybackItems = GetNumBuybackItems
-local GetBuybackItemInfo = GetBuybackItemInfo
-local GetBuybackItemLink = GetBuybackItemLink
-local C_PetJournal_GetNumCollectedInfo = C_PetJournal.GetNumCollectedInfo
-local HybridScrollFrame_GetButtons = HybridScrollFrame_GetButtons
-local LE_ITEM_CLASS_CONSUMABLE = LE_ITEM_CLASS_CONSUMABLE
-local LE_ITEM_CLASS_RECIPE = LE_ITEM_CLASS_RECIPE
-local LE_ITEM_CLASS_MISCELLANEOUS = LE_ITEM_CLASS_MISCELLANEOUS
-local LE_ITEM_CLASS_ITEM_ENHANCEMENT = LE_ITEM_CLASS_ITEM_ENHANCEMENT
-local LE_ITEM_CLASS_BATTLEPET = LE_ITEM_CLASS_BATTLEPET
-
-local F = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
 
 local COLOR = {
     r = .1,
@@ -32,10 +6,10 @@ local COLOR = {
     b = .1
 }
 local knowables = {
-    [LE_ITEM_CLASS_CONSUMABLE] = true,
-    [LE_ITEM_CLASS_RECIPE] = true,
-    [LE_ITEM_CLASS_MISCELLANEOUS] = true,
-    [LE_ITEM_CLASS_ITEM_ENHANCEMENT] = true
+    [_G.LE_ITEM_CLASS_CONSUMABLE] = true,
+    [_G.LE_ITEM_CLASS_RECIPE] = true,
+    [_G.LE_ITEM_CLASS_MISCELLANEOUS] = true,
+    [_G.LE_ITEM_CLASS_ITEM_ENHANCEMENT] = true
 }
 local knowns = {}
 
@@ -43,7 +17,7 @@ local function isPetCollected(speciesID)
     if not speciesID or speciesID == 0 then
         return
     end
-    local numOwned = C_PetJournal_GetNumCollectedInfo(speciesID)
+    local numOwned = C_PetJournal.GetNumCollectedInfo(speciesID)
     if numOwned > 0 then
         return true
     end
@@ -54,7 +28,7 @@ local function IsAlreadyKnown(link, index)
         return
     end
 
-    local linkType, linkID = strmatch(link, '|H(%a+):(%d+)')
+    local linkType, linkID = string.match(link, '|H(%a+):(%d+)')
     linkID = tonumber(linkID)
 
     if linkType == 'battlepet' then
@@ -65,7 +39,7 @@ local function IsAlreadyKnown(link, index)
             return
         end
 
-        if itemClassID == LE_ITEM_CLASS_BATTLEPET and index then
+        if itemClassID == _G.LE_ITEM_CLASS_BATTLEPET and index then
             local speciesID = F.ScanTip:SetGuildBankItem(GetCurrentGuildBankTab(), index)
             return isPetCollected(speciesID)
         elseif F:GetModule('Tooltip').ConduitData[linkID] and F:GetModule('Tooltip').ConduitData[linkID] >= level then
@@ -82,7 +56,7 @@ local function IsAlreadyKnown(link, index)
             F.ScanTip:SetHyperlink(link)
             for i = 1, F.ScanTip:NumLines() do
                 local text = _G['FreeUI_ScanTooltipTextLeft' .. i]:GetText() or ''
-                if strfind(text, _G.COLLECTED) or text == _G.ITEM_SPELL_KNOWN then
+                if string.find(text, _G.COLLECTED) or text == _G.ITEM_SPELL_KNOWN then
                     knowns[link] = true
                     return true
                 end
@@ -108,7 +82,7 @@ local function Hook_UpdateMerchantInfo()
                 if numAvailable == 0 then
                     r, g, b = r * .5, g * .5, b * .5
                 end
-                SetItemButtonTextureVertexColor(button, r, g, b)
+                _G.SetItemButtonTextureVertexColor(button, r, g, b)
             end
         end
     end
@@ -126,7 +100,7 @@ local function Hook_UpdateBuybackInfo()
         if button and button:IsShown() then
             local _, _, _, _, _, isUsable = GetBuybackItemInfo(index)
             if isUsable and IsAlreadyKnown(GetBuybackItemLink(index)) then
-                SetItemButtonTextureVertexColor(button, COLOR.r, COLOR.g, COLOR.b)
+                _G.SetItemButtonTextureVertexColor(button, COLOR.r, COLOR.g, COLOR.b)
             end
         end
     end
@@ -137,7 +111,7 @@ hooksecurefunc('MerchantFrame_UpdateBuybackInfo', Hook_UpdateBuybackInfo)
 local function Hook_UpdateAuctionHouse(self)
     local numResults = self.getNumEntries()
 
-    local buttons = HybridScrollFrame_GetButtons(self.ScrollFrame)
+    local buttons = _G.HybridScrollFrame_GetButtons(self.ScrollFrame)
     local buttonCount = #buttons
     local offset = self:GetScrollOffset()
     for i = 1, buttonCount do
@@ -147,9 +121,9 @@ local function Hook_UpdateAuctionHouse(self)
             if button.rowData.itemKey.itemID then
                 local itemLink
                 if button.rowData.itemKey.itemID == 82800 then -- BattlePet
-                    itemLink = format('|Hbattlepet:%d::::::|h[Dummy]|h', button.rowData.itemKey.battlePetSpeciesID)
+                    itemLink = string.format('|Hbattlepet:%d::::::|h[Dummy]|h', button.rowData.itemKey.battlePetSpeciesID)
                 else -- Normal item
-                    itemLink = format('item:%d', button.rowData.itemKey.itemID)
+                    itemLink = string.format('item:%d', button.rowData.itemKey.itemID)
                 end
 
                 if itemLink and IsAlreadyKnown(itemLink) then
@@ -173,6 +147,37 @@ local function Hook_UpdateAuctionHouse(self)
 end
 
 -- guild bank frame
+local MAX_GUILDBANK_SLOTS_PER_TAB = _G.MAX_GUILDBANK_SLOTS_PER_TAB or 98
+local NUM_SLOTS_PER_GUILDBANK_GROUP = _G.NUM_SLOTS_PER_GUILDBANK_GROUP or 14
+
+local function GuildBankFrame_Update(self)
+    if self.mode ~= 'bank' then
+        return
+    end
+
+    local button, index, column
+    local tab = GetCurrentGuildBankTab()
+    for i = 1, MAX_GUILDBANK_SLOTS_PER_TAB do
+        index = math.fmod(i, NUM_SLOTS_PER_GUILDBANK_GROUP)
+        if index == 0 then
+            index = NUM_SLOTS_PER_GUILDBANK_GROUP
+        end
+
+        column = math.ceil((i - .5) / NUM_SLOTS_PER_GUILDBANK_GROUP)
+        button = self.Columns[column].Buttons[index]
+        if button and button:IsShown() then
+            local texture, _, locked = GetGuildBankItemInfo(tab, i)
+            if texture and not locked then
+                if IsAlreadyKnown(GetGuildBankItemLink(tab, i), i) then
+                    _G.SetItemButtonTextureVertexColor(button, COLOR.r, COLOR.g, COLOR.b)
+                else
+                    _G.SetItemButtonTextureVertexColor(button, 1, 1, 1)
+                end
+            end
+        end
+    end
+end
+
 local function Hook_GuildBankUpdate()
     if _G.GuildBankFrame.mode ~= 'bank' then
         return
@@ -180,7 +185,7 @@ local function Hook_GuildBankUpdate()
 
     local tab = GetCurrentGuildBankTab()
     for i = 1, _G.MAX_GUILDBANK_SLOTS_PER_TAB do
-        local index = mod(i, _G.NUM_SLOTS_PER_GUILDBANK_GROUP)
+        local index = math.fmod(i, _G.NUM_SLOTS_PER_GUILDBANK_GROUP)
         if index == 0 then
             index = _G.NUM_SLOTS_PER_GUILDBANK_GROUP
         end
@@ -190,9 +195,9 @@ local function Hook_GuildBankUpdate()
             local texture, _, locked = GetGuildBankItemInfo(tab, i)
             if texture and not locked then
                 if IsAlreadyKnown(GetGuildBankItemLink(tab, i), i) then
-                    SetItemButtonTextureVertexColor(button, COLOR.r, COLOR.g, COLOR.b)
+                    _G.SetItemButtonTextureVertexColor(button, COLOR.r, COLOR.g, COLOR.b)
                 else
-                    SetItemButtonTextureVertexColor(button, 1, 1, 1)
+                    _G.SetItemButtonTextureVertexColor(button, 1, 1, 1)
                 end
             end
         end
@@ -209,7 +214,11 @@ f:SetScript(
             hooksecurefunc(_G.AuctionHouseFrame.BrowseResultsFrame.ItemList, 'RefreshScrollFrame', Hook_UpdateAuctionHouse)
             hookCount = hookCount + 1
         elseif addon == 'Blizzard_GuildBankUI' then
-            hooksecurefunc('GuildBankFrame_Update', Hook_GuildBankUpdate)
+            if C.IsNewPatch then
+                hooksecurefunc(_G.GuildBankFrame, 'Update', GuildBankFrame_Update)
+            else
+                hooksecurefunc('GuildBankFrame_Update', Hook_GuildBankUpdate)
+            end
             hookCount = hookCount + 1
         end
 

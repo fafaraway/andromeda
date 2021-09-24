@@ -15,7 +15,7 @@ local events = {
     altpowerperc = 'UNIT_MAXPOWER UNIT_POWER_UPDATE',
     dead = 'UNIT_HEALTH',
     offline = 'UNIT_HEALTH UNIT_CONNECTION',
-    name = 'UNIT_NAME_UPDATE',
+    name = 'UNIT_NAME_UPDATE UNIT_HEALTH UNIT_CONNECTION',
     partyname = 'UNIT_NAME_UPDATE',
     raidname = 'UNIT_NAME_UPDATE',
     npname = 'UNIT_NAME_UPDATE',
@@ -99,12 +99,22 @@ local _tags = {
         local isParty = (unit:match('party%d?$'))
         local isRaid = (unit:match('raid%d?$'))
         local isBoss = (unit:match('boss%d?$'))
-        local str = UnitName(unit)
         local num = GetLocale() == 'zhCN' and 8 or 12
+        local numParty = GetLocale() == 'zhCN' and 4 or 6
+        local numBoss = GetLocale() == 'zhCN' and 6 or 12
+        local str = UnitName(unit)
         local newStr = AbbrName(str, num) or str
 
         if (unit == 'targettarget' and UnitIsUnit('targettarget', 'player')) or (unit == 'focustarget' and UnitIsUnit('focustarget', 'player')) then
             return '<' .. _G.YOU .. '>'
+        elseif (not UnitIsConnected(unit)) then
+            return '|cffcccccc' .. L['Off']
+        elseif UnitIsDeadOrGhost(unit) then
+            return '|cffd84343' .. L['Dead']
+        elseif isParty then
+            return shorten and F.ShortenString(str, numParty) or str
+        elseif isBoss then
+            return shorten and F.ShortenString(newStr, numBoss, true) or str
         else
             return shorten and F.ShortenString(newStr, num, true) or str
         end
@@ -180,7 +190,7 @@ local _tags = {
         local role = UnitGroupRolesAssigned(unit)
 
         if role == 'TANK' then
-            return '|cffffe934#|r'
+            return '|cff3884ff#|r'
         elseif role == 'HEALER' then
             return '|cff2aff3d+|r'
         elseif role == 'DAMAGER' then
@@ -227,34 +237,34 @@ end
 
 function UNITFRAME:CreateGroupLeaderTag(self)
     local font = C.Assets.Fonts.Pixel
-    local tag = F.CreateFS(self.Health, font, 8, 'OUTLINE, MONOCHROME')
-    tag:SetPoint('TOPLEFT', 2, -2)
+    local text = F.CreateFS(self.Health, font, 8, 'OUTLINE, MONOCHROME')
+    text:SetPoint('TOPLEFT', 2, -2)
 
-    self:Tag(tag, '[free:groupleader]')
-    self.GroupLeader = tag
+    self:Tag(text, '[free:groupleader]')
+    self.GroupLeader = text
 end
 
 function UNITFRAME:CreateGroupRoleTag(self)
     local font = C.Assets.Fonts.Pixel
-    local tag = F.CreateFS(self.Health, font, 8, 'OUTLINE, MONOCHROME')
-    tag:SetPoint('BOTTOM', 1, 1)
+    local text = F.CreateFS(self.Health, font, 8, 'OUTLINE, MONOCHROME')
+    text:SetPoint('BOTTOM', 1, 1)
 
-    self:Tag(tag, '[free:grouprole]')
-    self.GroupRole = tag
+    self:Tag(text, '[free:grouprole]')
+    self.GroupRole = text
 end
 
 function UNITFRAME:CreateGroupNameTag(self)
     local font = C.Assets.Fonts.Condensed
     local outline = _G.FREE_ADB.FontOutline
     local showName = C.DB.Unitframe.GroupShowName
-    local tag = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
+    local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
 
     if showName then
-        self:Tag(tag, '[free:color][free:partyname]')
+        self:Tag(text, '[free:color][free:partyname]')
     else
-        self:Tag(tag, '[free:color][free:offline][free:dead]')
+        self:Tag(text, '[free:color][free:offline][free:dead]')
     end
-    self.GroupNameTag = tag
+    self.GroupNameTag = text
 end
 
 function UNITFRAME:CreateNameTag(self)
@@ -264,31 +274,31 @@ function UNITFRAME:CreateNameTag(self)
     local outline = _G.FREE_ADB.FontOutline
     local boldFont = C.Assets.Fonts.Bold
 
-    local tag = F.CreateFS(self.Health, isNP and boldFont or font, 11, outline, nil, nil, outline or 'THICK')
+    local text = F.CreateFS(self.Health, isNP and boldFont or font, 11, outline, nil, nil, outline or 'THICK')
 
     if style == 'target' then
-        tag:SetJustifyH('RIGHT')
-        tag:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
+        text:SetJustifyH('RIGHT')
+        text:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
     elseif style == 'arena' or style == 'boss' then
-        tag:SetJustifyH('LEFT')
-        tag:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
+        text:SetJustifyH('LEFT')
+        text:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
     elseif style == 'nameplate' then
-        tag:SetJustifyH('CENTER')
-        tag:SetPoint('BOTTOM', self, 'TOP', 0, -3)
+        text:SetJustifyH('CENTER')
+        text:SetPoint('BOTTOM', self, 'TOP', 0, -3)
     else
-        tag:SetJustifyH('CENTER')
-        tag:SetPoint('BOTTOM', self, 'TOP', 0, 3)
+        text:SetJustifyH('CENTER')
+        text:SetPoint('BOTTOM', self, 'TOP', 0, 3)
     end
 
     if style == 'nameplate' then
-        self:Tag(tag, '[free:npname]')
+        self:Tag(text, '[free:npname]')
     elseif style == 'arena' then
-        self:Tag(tag, '[free:color][free:name] [arenaspec]')
+        self:Tag(text, '[free:color][free:name] [arenaspec]')
     else
-        self:Tag(tag, '[free:color][free:name]')
+        self:Tag(text, '[free:color][free:name]')
     end
 
-    self.NameTag = tag
+    self.NameTag = text
 end
 
 function UNITFRAME:CreateHealthTag(self)
@@ -296,24 +306,24 @@ function UNITFRAME:CreateHealthTag(self)
     local style = self.unitStyle
     local outline = _G.FREE_ADB.FontOutline
 
-    local tag = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
-    tag:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
+    local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
+    text:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
 
     if style == 'target' then
-        self:Tag(tag, '[free:dead][free:offline][free:healthvalue] [free:healthperc]')
+        self:Tag(text, '[free:dead][free:offline][free:healthvalue] [free:healthperc]')
     elseif style == 'boss' then
-        tag:ClearAllPoints()
-        tag:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
-        tag:SetJustifyH('RIGHT')
-        self:Tag(tag, '[free:dead][free:healthvalue] [free:healthperc]')
+        text:ClearAllPoints()
+        text:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
+        text:SetJustifyH('RIGHT')
+        self:Tag(text, '[free:dead][free:healthvalue] [free:healthperc]')
     elseif style == 'arena' then
-        tag:ClearAllPoints()
-        tag:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
-        tag:SetJustifyH('RIGHT')
-        self:Tag(tag, '[free:dead][free:offline][free:healthvalue]')
+        text:ClearAllPoints()
+        text:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
+        text:SetJustifyH('RIGHT')
+        self:Tag(text, '[free:dead][free:offline][free:healthvalue]')
     end
 
-    self.HealthTag = tag
+    self.HealthTag = text
 end
 
 function UNITFRAME:CreateAltPowerTag(self)
@@ -321,17 +331,17 @@ function UNITFRAME:CreateAltPowerTag(self)
     local style = self.unitStyle
     local outline = _G.FREE_ADB.FontOutline
 
-    local tag = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
+    local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
 
     if style == 'boss' then
-        tag:SetPoint('LEFT', self, 'RIGHT', 2, 0)
+        text:SetPoint('LEFT', self, 'RIGHT', 2, 0)
     else
-        tag:SetPoint('BOTTOM', self.Health, 'TOP', 0, 3)
+        text:SetPoint('BOTTOM', self.Health, 'TOP', 0, 3)
     end
 
-    self:Tag(tag, '[free:altpowerperc]')
+    self:Tag(text, '[free:altpowerperc]')
 
-    self.AltPowerTag = tag
+    self.AltPowerTag = text
 end
 
 local function Player_OnEnter(self)

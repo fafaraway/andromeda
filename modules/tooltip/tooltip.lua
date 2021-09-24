@@ -10,7 +10,8 @@ local classification = {
 }
 
 function TOOLTIP:GetUnit()
-    local unit = (select(2, _G.GameTooltip:GetUnit())) or (GetMouseFocus() and GetMouseFocus().GetAttribute and GetMouseFocus():GetAttribute('unit')) or (UnitExists('mouseover') and 'mouseover') or nil
+    local unit =
+        (select(2, _G.GameTooltip:GetUnit())) or (GetMouseFocus() and GetMouseFocus().GetAttribute and GetMouseFocus():GetAttribute('unit')) or (UnitExists('mouseover') and 'mouseover') or nil
     return unit
 end
 
@@ -188,11 +189,7 @@ function TOOLTIP:OnTooltipSetUnit()
             self:AddLine(_G.TARGET .. ': ' .. tar)
         end
 
-        if alive then
-            self.StatusBar:SetStatusBarColor(F:UnitColor(unit))
-        else
-            self.StatusBar:Hide()
-        end
+        self.StatusBar:SetStatusBarColor(F:UnitColor(unit))
 
         TOOLTIP.InspectUnitSpecAndLevel(self, unit)
         TOOLTIP.AddPvEProgress()
@@ -204,6 +201,16 @@ end
 function TOOLTIP:OnTooltipCleared()
     self.tipUpdate = 1
     self.tipUnit = nil
+
+    _G.GameTooltip_ClearMoney(self)
+    _G.GameTooltip_ClearStatusBars(self)
+    _G.GameTooltip_ClearProgressBars(self)
+    _G.GameTooltip_ClearWidgetSet(self)
+end
+
+function TOOLTIP.GetDungeonScore(score)
+    local color = C_ChallengeMode.GetDungeonScoreRarityColor(score) or _G.HIGHLIGHT_FONT_COLOR
+    return color:WrapTextInColorCode(score)
 end
 
 function TOOLTIP:GameTooltip_OnUpdate(elapsed)
@@ -381,10 +388,6 @@ function TOOLTIP:OnLogin()
     _G.GameTooltip:HookScript('OnTooltipSetItem', TOOLTIP.FixRecipeItemNameWidth)
 
     hooksecurefunc(_G.GameTooltip, 'SetUnitAura', TOOLTIP.AuraSource)
-
-    if C.DB.Tooltip.PvEStats then
-        F:RegisterEvent('ADDON_LOADED', TOOLTIP.PvEStats_OnEvent)
-    end
 
     TOOLTIP:ReskinTooltipIcons()
     TOOLTIP:LinkHover()

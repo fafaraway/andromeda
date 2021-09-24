@@ -1,21 +1,10 @@
---[[
-    ScreenSaver
-    Credit: Zork
-]]
 
-local _G = _G
-local unpack = unpack
-local select = select
-local CreateFrame = CreateFrame
-local UnitIsAFK = UnitIsAFK
-local GetServerTime = GetServerTime
-local SecondsToClock = SecondsToClock
 
 local F, C, L = unpack(select(2, ...))
-local SS = F:RegisterModule('ScreenSaver')
+local M = F:NewModule('ScreenSaver')
 
-function SS:Enable()
-    local self = SS.Frame
+function M:Enable()
+    local self = M.Frame
     if self.isActive then
         return
     end
@@ -24,8 +13,8 @@ function SS:Enable()
     self.fadeIn:Play()
 end
 
-function SS:Disable()
-    local self = SS.Frame
+function M:Disable()
+    local self = M.Frame
     if not self.isActive then
         return
     end
@@ -34,22 +23,22 @@ function SS:Disable()
 end
 
 local afkCount
-function SS:OnEvent(event)
+function M:OnEvent()
     if UnitIsAFK('player') then
         afkCount = GetServerTime()
-        SS:Enable()
+        M:Enable()
     else
         afkCount = nil
-        SS:Disable()
+        M:Disable()
     end
 end
 
-function SS:OnDoubleClick()
-    SS:Disable()
+function M:OnDoubleClick()
+    M:Disable()
 end
 
-function SS:CreateAnimation()
-    local self = SS.Frame
+function M:CreateAnimation()
+    local self = M.Frame
 
     self.fadeIn = self:CreateAnimationGroup()
     self.fadeIn.anim = self.fadeIn:CreateAnimation('Alpha')
@@ -79,16 +68,16 @@ function SS:CreateAnimation()
     )
 end
 
-function SS:CreateBackdrop()
-    local self = SS.Frame
+function M:CreateBackdrop()
+    local self = M.Frame
     self.bg = self:CreateTexture(nil, 'BACKGROUND', nil, -8)
     self.bg:SetColorTexture(1, 1, 1)
     self.bg:SetVertexColor(0, 0, 0, 1)
     self.bg:SetAllPoints()
 end
 
-function SS:CreateGalaxy()
-    local self = SS.Frame
+function M:CreateGalaxy()
+    local self = M.Frame
     self.galaxy = CreateFrame('PlayerModel', nil, self)
     self.galaxy:SetDisplayInfo(67918)
     self.galaxy:SetCamDistanceScale(2.4)
@@ -96,8 +85,8 @@ function SS:CreateGalaxy()
     self.galaxy:SetAllPoints()
 end
 
-function SS:CreatePlayerModel()
-    local self = SS.Frame
+function M:CreatePlayerModel()
+    local self = M.Frame
     local height = self:GetHeight()
     self.model = CreateFrame('PlayerModel', nil, self.galaxy)
     self.model:SetUnit('player')
@@ -108,22 +97,22 @@ function SS:CreatePlayerModel()
 end
 
 _G.MINUTES_SECONDS = '%.2d : %.2d'
-function SS:UpdateTimer()
-    local self = SS.Frame
+function M:UpdateTimer()
+    local self = M.Frame
     if afkCount then
         local timeStr = SecondsToClock(GetServerTime() - afkCount)
         self.timer:SetText(timeStr)
     end
 end
 
-function SS:CreateText()
-    local self = SS.Frame
+function M:CreateText()
+    local self = M.Frame
     local font = C.Assets.Fonts.Combat
     self.text = F.CreateFS(self.galaxy, font, 18, 'OUTLINE', L['Double click to unlock!'], 'GREY', nil, 'TOPLEFT', 20, -20)
     self.timer = F.CreateFS(self.galaxy, font, 18, 'OUTLINE', '', 'CLASS', nil, 'TOPLEFT', 20, -40)
 end
 
-function SS:SetupScreenSaver()
+function M:SetupScreenSaver()
     local f = CreateFrame('Button', nil, _G.UIParent)
     f:SetFrameStrata('FULLSCREEN')
     f:SetAllPoints()
@@ -131,27 +120,27 @@ function SS:SetupScreenSaver()
     f:SetAlpha(0)
     f:Hide()
 
-    f:SetScript('OnUpdate', SS.UpdateTimer)
-    f:SetScript('OnEvent', SS.OnEvent)
-    f:SetScript('OnDoubleClick', SS.OnDoubleClick)
+    f:SetScript('OnUpdate', M.UpdateTimer)
+    f:SetScript('OnEvent', M.OnEvent)
+    f:SetScript('OnDoubleClick', M.OnDoubleClick)
 
     f:RegisterEvent('PLAYER_FLAGS_CHANGED')
     f:RegisterEvent('PLAYER_ENTERING_WORLD')
     f:RegisterEvent('PLAYER_LEAVING_WORLD')
 
-    SS.Frame = f
+    M.Frame = f
 
-    SS:CreateAnimation()
-    SS:CreateBackdrop()
-    SS:CreateGalaxy()
-    SS:CreatePlayerModel()
-    SS:CreateText()
+    M:CreateAnimation()
+    M:CreateBackdrop()
+    M:CreateGalaxy()
+    M:CreatePlayerModel()
+    M:CreateText()
 end
 
-function SS:OnLogin()
+function M:OnEnable()
     if not C.DB.General.ScreenSaver then
         return
     end
 
-    SS:SetupScreenSaver()
+    M:SetupScreenSaver()
 end

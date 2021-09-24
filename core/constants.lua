@@ -69,6 +69,11 @@ C.Assets = {
         Class = C.AssetsPath .. 'textures\\UI-CLASSES-CIRCLES',
         Leader = C.AssetsPath .. 'textures\\leader',
         Role = C.AssetsPath .. 'textures\\role',
+        Melli = C.AssetsPath .. 'textures\\statusbar\\melli',
+        Norm = C.AssetsPath .. 'textures\\statusbar\\norm',
+        Grad = C.AssetsPath .. 'textures\\statusbar\\grad',
+        Flat = C.AssetsPath .. 'textures\\statusbar\\flat',
+        Arrow = C.AssetsPath .. 'textures\\nparrow',
     },
 
     Sounds = {
@@ -159,6 +164,7 @@ end
 C.QualityColors[-1] = {r = 0, g = 0, b = 0}
 C.QualityColors[_G.LE_ITEM_QUALITY_POOR] = {r = .61, g = .61, b = .61}
 C.QualityColors[_G.LE_ITEM_QUALITY_COMMON] = {r = 0, g = 0, b = 0}
+C.QualityColors[99] = {r = 1, g = 0, b = 0}
 
 _G.GOLD_AMOUNT_SYMBOL = string.format('|cffffd700%s|r', _G.GOLD_AMOUNT_SYMBOL)
 _G.SILVER_AMOUNT_SYMBOL = string.format('|cffd0d0d0%s|r', _G.SILVER_AMOUNT_SYMBOL)

@@ -165,7 +165,8 @@ TOOLTIP:RegisterTooltips(
             _G.FloatingBattlePetTooltip,
             _G.FloatingPetBattleAbilityTooltip,
             _G.IMECandidatesFrame,
-            _G.QuickKeybindTooltip
+            _G.QuickKeybindTooltip,
+            _G.GameSmallHeaderTooltip
         }
 
         for _, tip in pairs(tooltips) do
