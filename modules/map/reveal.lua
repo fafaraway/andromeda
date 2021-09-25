@@ -3,23 +3,8 @@
     Leatrix Maps by Leatix
 ]]
 
-local _G = _G
-local unpack = unpack
-local select = select
-local wipe = wipe
-local tinsert = tinsert
-local strsplit = strsplit
-local ceil = ceil
-local mod = mod
-local C_Map_GetMapArtID = C_Map.GetMapArtID
-local C_Map_GetMapArtLayers = C_Map.GetMapArtLayers
-local C_MapExplorationInfo_GetExploredMapTextures = C_MapExplorationInfo.GetExploredMapTextures
-local TexturePool_HideAndClearAnchors = TexturePool_HideAndClearAnchors
-local IsAddOnLoaded = IsAddOnLoaded
-local hooksecurefunc = hooksecurefunc
-
 local F, C = unpack(select(2, ...))
-local MAP = F:GetModule('WorldMap')
+local M = F:NewModule('RemoveMapFog')
 
 local LeaMapsData = {
     [2] = {
@@ -1981,7 +1966,8 @@ local LeaMapsData = {
         ['1009:835:1442:1262'] = '3745832, 3745840, 3745841, 3745842, 3745843, 3745844, 3745845, 3745846, 3745847, 3745833, 3745834, 3745835, 3745836, 3745837, 3745838, 3745839',
         ['954:1076:262:1423'] = '3745812, 3745823, 3745825, 3745826, 3745827, 3745828, 3745829, 3745830, 3745831, 3745813, 3745814, 3745815, 3745816, 3745817, 3745818, 3745819, 3745820, 3745821, 3745822, 3745824'
     },
-    [1693] = { -- New maw
+    [1693] = {
+        -- New maw
         ['1078:824:772:598'] = '4178966, 4178967, 4178968, 4178969, 4178970, 4178971, 4178972, 4178973, 4178974, 4178975, 4178976, 4178977, 4178978, 4178979, 4178980, 4178981, 4178982, 4178983, 4178984, 4178985',
         ['954:1076:262:1423'] = '4178902, 4178903, 4178904, 4178905, 4178906, 4178907, 4178908, 4178909, 4178910, 4178911, 4178912, 4178913, 4178914, 4178915, 4178916, 4178917, 4178918, 4178919, 4178920, 4178921',
         ['1053:934:49:918'] = '4178986, 4178987, 4178988, 4178989, 4178990, 4178991, 4178992, 4178993, 4178994, 4178995, 4178996, 4178997, 4178998, 4178999, 4179000, 4179001, 4179002, 4179003, 4179004, 4179005',
@@ -1995,7 +1981,8 @@ local LeaMapsData = {
         ['1395:932:183:0'] = '4179031, 4179032, 4179033, 4179034, 4179035, 4179036, 4179037, 4179038, 4179039, 4179040, 4179041, 4179042, 4179043, 4179044, 4179045, 4179046, 4179047, 4179048, 4179049, 4179050, 4179051, 4179052, 4179053, 4179054',
         ['1186:821:1100:696'] = '4178946, 4178947, 4178948, 4178949, 4178950, 4178951, 4178952, 4178953, 4178954, 4178955, 4178956, 4178957, 4178958, 4178959, 4178960, 4178961, 4178962, 4178963, 4178964, 4178965'
     },
-    [1648] = { -- Korthia
+    [1648] = {
+        -- Korthia
         ['929:817:597:1053'] = '4075090, 4075098, 4075099, 4075100, 4075101, 4075102, 4075103, 4075104, 4075105, 4075091, 4075092, 4075093, 4075094, 4075095, 4075096, 4075097',
         ['1871:1010:1231:1429'] = '4075058, 4075069, 4075080, 4075084, 4075085, 4075086, 4075087, 4075088, 4075089, 4075059, 4075060, 4075061, 4075062, 4075063, 4075064, 4075065, 4075066, 4075067, 4075068, 4075070, 4075071, 4075072, 4075073, 4075074, 4075075, 4075076, 4075077, 4075078, 4075079, 4075081, 4075082, 4075083',
         ['1412:792:1474:891'] = '4075034, 4075045, 4075051, 4075052, 4075053, 4075054, 4075055, 4075056, 4075057, 4075035, 4075036, 4075037, 4075038, 4075039, 4075040, 4075041, 4075042, 4075043, 4075044, 4075046, 4075047, 4075048, 4075049, 4075050',
@@ -2014,20 +2001,20 @@ local overlayTextures, TileExists = {}, {}
 -- Blizzard_SharedMapDataProviders\MapExplorationDataProvider
 
 local function MapExplorationPin_RefreshOverlays(pin, fullUpdate)
-    wipe(overlayTextures)
-    wipe(TileExists)
+    table.wipe(overlayTextures)
+    table.wipe(TileExists)
 
     local mapID = _G.WorldMapFrame.mapID
     if not mapID then
         return
     end
-    local artID = C_Map_GetMapArtID(mapID)
+    local artID = C_Map.GetMapArtID(mapID)
     if not artID or not LeaMapsData[artID] then
         return
     end
     local LeaMapsZone = LeaMapsData[artID]
 
-    local exploredMapTextures = C_MapExplorationInfo_GetExploredMapTextures(mapID)
+    local exploredMapTextures = C_MapExplorationInfo.GetExploredMapTextures(mapID)
     if exploredMapTextures then
         for _, exploredTextureInfo in ipairs(exploredMapTextures) do
             local key = exploredTextureInfo.textureWidth .. ':' .. exploredTextureInfo.textureHeight .. ':' .. exploredTextureInfo.offsetX .. ':' .. exploredTextureInfo.offsetY
@@ -2036,7 +2023,7 @@ local function MapExplorationPin_RefreshOverlays(pin, fullUpdate)
     end
 
     pin.layerIndex = pin:GetMap():GetCanvasContainer():GetCurrentLayerIndex()
-    local layers = C_Map_GetMapArtLayers(mapID)
+    local layers = C_Map.GetMapArtLayers(mapID)
     local layerInfo = layers and layers[pin.layerIndex]
     if not layerInfo then
         return
@@ -2047,17 +2034,17 @@ local function MapExplorationPin_RefreshOverlays(pin, fullUpdate)
     -- Show textures if they are in database and have not been explored
     for key, files in pairs(LeaMapsZone) do
         if not TileExists[key] then
-            local width, height, offsetX, offsetY = strsplit(':', key)
-            local fileDataIDs = {strsplit(',', files)}
-            local numTexturesWide = ceil(width / TILE_SIZE_WIDTH)
-            local numTexturesTall = ceil(height / TILE_SIZE_HEIGHT)
+            local width, height, offsetX, offsetY = string.split(':', key)
+            local fileDataIDs = {string.split(',', files)}
+            local numTexturesWide = math.ceil(width / TILE_SIZE_WIDTH)
+            local numTexturesTall = math.ceil(height / TILE_SIZE_HEIGHT)
             local texturePixelWidth, textureFileWidth, texturePixelHeight, textureFileHeight
             for j = 1, numTexturesTall do
                 if (j < numTexturesTall) then
                     texturePixelHeight = TILE_SIZE_HEIGHT
                     textureFileHeight = TILE_SIZE_HEIGHT
                 else
-                    texturePixelHeight = mod(height, TILE_SIZE_HEIGHT)
+                    texturePixelHeight = math.fmod(height, TILE_SIZE_HEIGHT)
                     if (texturePixelHeight == 0) then
                         texturePixelHeight = TILE_SIZE_HEIGHT
                     end
@@ -2072,7 +2059,7 @@ local function MapExplorationPin_RefreshOverlays(pin, fullUpdate)
                         texturePixelWidth = TILE_SIZE_WIDTH
                         textureFileWidth = TILE_SIZE_WIDTH
                     else
-                        texturePixelWidth = mod(width, TILE_SIZE_WIDTH)
+                        texturePixelWidth = math.fmod(width, TILE_SIZE_WIDTH)
                         if (texturePixelWidth == 0) then
                             texturePixelWidth = TILE_SIZE_WIDTH
                         end
@@ -2096,7 +2083,7 @@ local function MapExplorationPin_RefreshOverlays(pin, fullUpdate)
                     end
                     texture:SetVertexColor(.4, .4, .4)
 
-                    tinsert(overlayTextures, texture)
+                    table.insert(overlayTextures, texture)
                 end
             end
         end
@@ -2107,10 +2094,10 @@ end
 local function TexturePool_ResetVertexColor(pool, texture)
     texture:SetVertexColor(1, 1, 1)
     texture:SetAlpha(1)
-    return TexturePool_HideAndClearAnchors(pool, texture)
+    return _G.TexturePool_HideAndClearAnchors(pool, texture)
 end
 
-function MAP:MapReveal()
+function M:OnEnable()
     if IsAddOnLoaded('Leatrix_Maps') then
         return
     end

@@ -362,6 +362,7 @@ C.CharacterSettings = {
         MaxWorldMapScale = 1,
         RemoveFog = true,
         Coords = true,
+        Minimap = true,
         MinimapScale = 1,
         HideMinimapInCombat = false,
         WhoPings = true,

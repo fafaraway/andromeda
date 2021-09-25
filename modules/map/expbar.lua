@@ -1,40 +1,7 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local min = min
-local mod = mod
-local format = format
-local floor = floor
-local UnitXP = UnitXP
-local UnitXPMax = UnitXPMax
-local UnitHonor = UnitHonor
-local UnitHonorMax = UnitHonorMax
-local UnitLevel = UnitLevel
-local UnitSex = UnitSex
-local UnitHonorLevel = UnitHonorLevel
-local GetXPExhaustion = GetXPExhaustion
-local IsXPUserDisabled = IsXPUserDisabled
-local IsWatchingHonorAsXP = IsWatchingHonorAsXP
-local GetWatchedFactionInfo = GetWatchedFactionInfo
-local GetFriendshipReputation = GetFriendshipReputation
-local IsPlayerAtEffectiveMaxLevel = IsPlayerAtEffectiveMaxLevel
-local C_Reputation_IsFactionParagon = C_Reputation.IsFactionParagon
-local C_Reputation_GetFactionParagonInfo = C_Reputation.GetFactionParagonInfo
-local BreakUpLargeNumbers = BreakUpLargeNumbers
-local GetFriendshipReputationRanks = GetFriendshipReputationRanks
-local GetText = GetText
-local SocketInventoryItem = SocketInventoryItem
-local HasArtifactEquipped = HasArtifactEquipped
-local hooksecurefunc = hooksecurefunc
-local CreateFrame = CreateFrame
-local GetNumFactions = GetNumFactions
-local GetFactionInfo = GetFactionInfo
-local FauxScrollFrame_GetOffset = FauxScrollFrame_GetOffset
-
 local F, C, L = unpack(select(2, ...))
-local MAP = F:GetModule('Minimap')
+local M = F:NewModule('ExpBar')
 
-function MAP:ExpBar_Update()
+function M:ExpBar_Update()
     local rest = self.restBar
     if rest then
         rest:Hide()
@@ -48,7 +15,7 @@ function MAP:ExpBar_Update()
         self:Show()
         if rxp then
             rest:SetMinMaxValues(0, mxp)
-            rest:SetValue(min(xp + rxp, mxp))
+            rest:SetValue(math.min(xp + rxp, mxp))
             rest:Show()
         end
         if IsXPUserDisabled() then
@@ -57,17 +24,17 @@ function MAP:ExpBar_Update()
     elseif GetWatchedFactionInfo() then
         local _, standing, barMin, barMax, value, factionID = GetWatchedFactionInfo()
         local friendID, friendRep, _, _, _, _, _, friendThreshold, nextFriendThreshold = GetFriendshipReputation(factionID)
-        if friendID then
+        if C_Reputation.IsFactionParagon(factionID) then
+            local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
+            currentValue = math.fmod(currentValue, threshold)
+            barMin, barMax, value = 0, threshold, currentValue
+        elseif friendID then
             if nextFriendThreshold then
                 barMin, barMax, value = friendThreshold, nextFriendThreshold, friendRep
             else
                 barMin, barMax, value = 0, 1, 1
             end
             standing = 5
-        elseif C_Reputation_IsFactionParagon(factionID) then
-            local currentValue, threshold = C_Reputation_GetFactionParagonInfo(factionID)
-            currentValue = mod(currentValue, threshold)
-            barMin, barMax, value = 0, threshold, currentValue
         else
             if standing == _G.MAX_REPUTATION_REACTION then
                 barMin, barMax, value = 0, 1, 1
@@ -88,7 +55,7 @@ function MAP:ExpBar_Update()
     end
 end
 
-function MAP:ExpBar_UpdateTooltip()
+function M:ExpBar_UpdateTooltip()
     _G.GameTooltip:SetOwner(self, 'ANCHOR_LEFT')
     _G.GameTooltip:ClearLines()
     _G.GameTooltip:AddDoubleLine(C.MyName, _G.LEVEL .. ': ' .. UnitLevel('player'), C.r, C.g, C.b, 1, 1, 1)
@@ -96,9 +63,9 @@ function MAP:ExpBar_UpdateTooltip()
     if not IsPlayerAtEffectiveMaxLevel() then
         _G.GameTooltip:AddLine(' ')
         local xp, mxp, rxp = UnitXP('player'), UnitXPMax('player'), GetXPExhaustion()
-        _G.GameTooltip:AddDoubleLine(_G.XP .. ':', BreakUpLargeNumbers(xp) .. ' / ' .. BreakUpLargeNumbers(mxp) .. ' (' .. format('%.1f%%)', xp / mxp * 100), .6, .8, 1, 1, 1, 1)
+        _G.GameTooltip:AddDoubleLine(_G.XP .. ':', BreakUpLargeNumbers(xp) .. ' / ' .. BreakUpLargeNumbers(mxp) .. ' (' .. string.format('%.1f%%)', xp / mxp * 100), .6, .8, 1, 1, 1, 1)
         if rxp then
-            _G.GameTooltip:AddDoubleLine(_G.TUTORIAL_TITLE26 .. ':', '+' .. BreakUpLargeNumbers(rxp) .. ' (' .. format('%.1f%%)', rxp / mxp * 100), .6, .8, 1, 1, 1, 1)
+            _G.GameTooltip:AddDoubleLine(_G.TUTORIAL_TITLE26 .. ':', '+' .. BreakUpLargeNumbers(rxp) .. ' (' .. string.format('%.1f%%)', rxp / mxp * 100), .6, .8, 1, 1, 1, 1)
         end
         if IsXPUserDisabled() then
             _G.GameTooltip:AddLine('|cffff0000' .. _G.XP .. _G.LOCKED)
@@ -129,13 +96,22 @@ function MAP:ExpBar_UpdateTooltip()
         end
         _G.GameTooltip:AddLine(' ')
         _G.GameTooltip:AddLine(name, 0, .6, 1)
-        _G.GameTooltip:AddDoubleLine(standingtext, value - barMin .. ' / ' .. barMax - barMin .. ' (' .. floor((value - barMin) / (barMax - barMin) * 100) .. '%)', colors.r, colors.g, colors.b, 1, 1, 1)
+        _G.GameTooltip:AddDoubleLine(
+            standingtext,
+            value - barMin .. ' / ' .. barMax - barMin .. ' (' .. math.floor((value - barMin) / (barMax - barMin) * 100) .. '%)',
+            colors.r,
+            colors.g,
+            colors.b,
+            1,
+            1,
+            1
+        )
 
-        if C_Reputation_IsFactionParagon(factionID) then
-            local currentValue, threshold = C_Reputation_GetFactionParagonInfo(factionID)
-            local paraCount = floor(currentValue / threshold)
-            currentValue = mod(currentValue, threshold)
-            _G.GameTooltip:AddDoubleLine(L['Paragon'] .. '(' .. paraCount .. ')', currentValue .. ' / ' .. threshold .. ' (' .. floor(currentValue / threshold * 100) .. '%)', .6, .8, 1, 1, 1, 1)
+        if C_Reputation.IsFactionParagon(factionID) then
+            local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
+            local paraCount = math.floor(currentValue / threshold)
+            currentValue = math.fmod(currentValue, threshold)
+            _G.GameTooltip:AddDoubleLine(L['Paragon'] .. '(' .. paraCount .. ')', currentValue .. ' / ' .. threshold .. ' (' .. math.floor(currentValue / threshold * 100) .. '%)', .6, .8, 1, 1, 1, 1)
         end
 
         if factionID == 2465 then -- 荒猎团
@@ -145,7 +121,7 @@ function MAP:ExpBar_UpdateTooltip()
                 local currentMax = nextThreshold - threshold
                 _G.GameTooltip:AddLine(' ')
                 _G.GameTooltip:AddLine(name, 0, .6, 1)
-                _G.GameTooltip:AddDoubleLine(reaction, current .. ' / ' .. currentMax .. ' (' .. floor(current / currentMax * 100) .. '%)', .6, .8, 1, 1, 1, 1)
+                _G.GameTooltip:AddDoubleLine(reaction, current .. ' / ' .. currentMax .. ' (' .. math.floor(current / currentMax * 100) .. '%)', .6, .8, 1, 1, 1, 1)
             end
         end
     end
@@ -160,7 +136,7 @@ function MAP:ExpBar_UpdateTooltip()
     _G.GameTooltip:Show()
 end
 
-function MAP:SetupScript(bar)
+function M:SetupScript(bar)
     bar.eventList = {
         'PLAYER_XP_UPDATE',
         'PLAYER_LEVEL_UP',
@@ -177,8 +153,8 @@ function MAP:SetupScript(bar)
     for _, event in pairs(bar.eventList) do
         bar:RegisterEvent(event)
     end
-    bar:SetScript('OnEvent', MAP.ExpBar_Update)
-    bar:SetScript('OnEnter', MAP.ExpBar_UpdateTooltip)
+    bar:SetScript('OnEvent', M.ExpBar_Update)
+    bar:SetScript('OnEnter', M.ExpBar_UpdateTooltip)
     bar:SetScript('OnLeave', F.HideTooltip)
     bar:SetScript(
         'OnMouseUp',
@@ -197,12 +173,15 @@ function MAP:SetupScript(bar)
         _G.StatusTrackingBarManager,
         'UpdateBarsShown',
         function()
-            MAP.ExpBar_Update(bar)
+            M.ExpBar_Update(bar)
         end
     )
 end
 
-function MAP:ProgressBar()
+function M:OnEnable()
+    if not C.DB.Map.Enable then
+        return
+    end
     if not C.DB.Map.ExpBar then
         return
     end
@@ -215,7 +194,6 @@ function MAP:ProgressBar()
     bar.bg = F.CreateBDFrame(bar)
 
     bar:SetFrameLevel(_G.Minimap:GetFrameLevel() + 2)
-
     bar:SetHitRectInsets(0, 0, 0, -10)
 
     local rest = CreateFrame('StatusBar', nil, bar)
@@ -225,38 +203,5 @@ function MAP:ProgressBar()
     rest:SetFrameLevel(bar:GetFrameLevel() - 1)
     bar.restBar = rest
 
-    MAP:SetupScript(bar)
-end
-
--- Paragon reputation info
-function MAP:HookParagonRep()
-    local numFactions = GetNumFactions()
-    local factionOffset = FauxScrollFrame_GetOffset(_G.ReputationListScrollFrame)
-    for i = 1, _G.NUM_FACTIONS_DISPLAYED, 1 do
-        local factionIndex = factionOffset + i
-        local factionRow = _G['ReputationBar' .. i]
-        local factionBar = _G['ReputationBar' .. i .. 'ReputationBar']
-        local factionStanding = _G['ReputationBar' .. i .. 'ReputationBarFactionStanding']
-
-        if factionIndex <= numFactions then
-            local factionID = select(14, GetFactionInfo(factionIndex))
-            if factionID and C_Reputation_IsFactionParagon(factionID) then
-                local currentValue, threshold = C_Reputation_GetFactionParagonInfo(factionID)
-                if currentValue then
-                    local barValue = mod(currentValue, threshold)
-                    local factionStandingtext = L['Paragon'] .. floor(currentValue / threshold)
-
-                    factionBar:SetMinMaxValues(0, threshold)
-                    factionBar:SetValue(barValue)
-                    factionStanding:SetText(factionStandingtext)
-                    factionRow.standingText = factionStandingtext
-                    factionRow.rolloverText = format(_G.REPUTATION_PROGRESS_FORMAT, BreakUpLargeNumbers(barValue), BreakUpLargeNumbers(threshold))
-                end
-            end
-        end
-    end
-end
-
-function MAP:ParagonReputationSetup()
-    hooksecurefunc('ReputationFrame_Update', MAP.HookParagonRep)
+    M:SetupScript(bar)
 end

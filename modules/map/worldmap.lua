@@ -1,20 +1,9 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local tinsert = tinsert
-local CreateFrame = CreateFrame
-local WorldMapFrame = WorldMapFrame
-local CreateVector2D = CreateVector2D
-local UnitPosition = UnitPosition
-local C_Map_GetWorldPosFromMapPos = C_Map.GetWorldPosFromMapPos
-local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
-local hooksecurefunc = hooksecurefunc
-
 local F, C, L = unpack(select(2, ...))
-local MAP = F:RegisterModule('WorldMap')
+local MAP = F:NewModule('WorldMap')
 
+local mapFrame = _G.WorldMapFrame
 local mapRects = {}
-local tempVec2D = CreateVector2D(0, 0)
+local tempVec2D = _G.CreateVector2D(0, 0)
 local currentMapID, playerCoords, cursorCoords
 
 function MAP:GetPlayerMapPos(mapID)
@@ -25,8 +14,8 @@ function MAP:GetPlayerMapPos(mapID)
 
     local mapRect = mapRects[mapID]
     if not mapRect then
-        local pos1 = select(2, C_Map_GetWorldPosFromMapPos(mapID, CreateVector2D(0, 0)))
-        local pos2 = select(2, C_Map_GetWorldPosFromMapPos(mapID, CreateVector2D(1, 1)))
+        local pos1 = select(2, C_Map.GetWorldPosFromMapPos(mapID, _G.CreateVector2D(0, 0)))
+        local pos2 = select(2, C_Map.GetWorldPosFromMapPos(mapID, _G.CreateVector2D(1, 1)))
         if not pos1 or not pos2 then
             return
         end
@@ -41,11 +30,11 @@ function MAP:GetPlayerMapPos(mapID)
 end
 
 function MAP:GetCursorCoords()
-    if not WorldMapFrame.ScrollContainer:IsMouseOver() then
+    if not mapFrame.ScrollContainer:IsMouseOver() then
         return
     end
 
-    local cursorX, cursorY = WorldMapFrame.ScrollContainer:GetNormalizedCursorPosition()
+    local cursorX, cursorY = mapFrame.ScrollContainer:GetNormalizedCursorPosition()
     if cursorX < 0 or cursorX > 1 or cursorY < 0 or cursorY > 1 then
         return
     end
@@ -83,7 +72,7 @@ function MAP:UpdateCoords(elapsed)
 end
 
 function MAP:UpdateMapID()
-    if self:GetMapID() == C_Map_GetBestMapForUnit('player') then
+    if self:GetMapID() == C_Map.GetBestMapForUnit('player') then
         currentMapID = self:GetMapID()
     else
         currentMapID = nil
@@ -95,15 +84,15 @@ function MAP:AddCoords()
         return
     end
 
-    playerCoords = F.CreateFS(WorldMapFrame.BorderFrame, C.Assets.Fonts.Bold, 12, nil, '', nil, 'THICK', 'BOTTOMLEFT', 10, 10)
-    cursorCoords = F.CreateFS(WorldMapFrame.BorderFrame, C.Assets.Fonts.Bold, 12, nil, '', nil, 'THICK', 'BOTTOMLEFT', 130, 10)
+    playerCoords = F.CreateFS(mapFrame.BorderFrame, C.Assets.Fonts.Bold, 12, nil, '', nil, 'THICK', 'BOTTOMLEFT', 10, 10)
+    cursorCoords = F.CreateFS(mapFrame.BorderFrame, C.Assets.Fonts.Bold, 12, nil, '', nil, 'THICK', 'BOTTOMLEFT', 130, 10)
 
-    F.HideObject(WorldMapFrame.BorderFrame.Tutorial)
+    F.HideObject(mapFrame.BorderFrame.Tutorial)
 
-    hooksecurefunc(WorldMapFrame, 'OnFrameSizeChanged', MAP.UpdateMapID)
-    hooksecurefunc(WorldMapFrame, 'OnMapChanged', MAP.UpdateMapID)
+    hooksecurefunc(mapFrame, 'OnFrameSizeChanged', MAP.UpdateMapID)
+    hooksecurefunc(mapFrame, 'OnMapChanged', MAP.UpdateMapID)
 
-    local CoordsUpdater = CreateFrame('Frame', nil, WorldMapFrame.BorderFrame)
+    local CoordsUpdater = CreateFrame('Frame', nil, mapFrame.BorderFrame)
     CoordsUpdater:SetScript('OnUpdate', MAP.UpdateCoords)
 end
 
@@ -121,34 +110,33 @@ function MAP:UpdateMapAnchor()
 end
 
 function MAP:WorldMapScale()
-    WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
+    mapFrame.ScrollContainer.GetCursorPosition = function(f)
         local x, y = _G.MapCanvasScrollControllerMixin.GetCursorPosition(f)
-        local scale = WorldMapFrame:GetScale()
+        local scale = mapFrame:GetScale()
         return x / scale, y / scale
     end
 
-    F.CreateMF(WorldMapFrame, nil, true)
-    hooksecurefunc(WorldMapFrame, 'SynchronizeDisplayState', self.UpdateMapAnchor)
+    F.CreateMF(mapFrame, nil, true)
+    hooksecurefunc(mapFrame, 'SynchronizeDisplayState', self.UpdateMapAnchor)
 end
 
-function MAP:OnLogin()
+function MAP:OnEnable()
     if not C.DB.Map.Enable then
         return
     end
 
     -- Remove from frame manager
-    WorldMapFrame:ClearAllPoints()
-    WorldMapFrame:SetPoint('CENTER') -- init anchor
-    WorldMapFrame:SetAttribute('UIPanelLayout-area', nil)
-    WorldMapFrame:SetAttribute('UIPanelLayout-enabled', false)
-    WorldMapFrame:SetAttribute('UIPanelLayout-allowOtherPanels', true)
-    tinsert(_G.UISpecialFrames, 'WorldMapFrame')
+    mapFrame:ClearAllPoints()
+    mapFrame:SetPoint('CENTER') -- init anchor
+    mapFrame:SetAttribute('UIPanelLayout-area', nil)
+    mapFrame:SetAttribute('UIPanelLayout-enabled', false)
+    mapFrame:SetAttribute('UIPanelLayout-allowOtherPanels', true)
+    table.insert(_G.UISpecialFrames, 'WorldMapFrame')
 
     -- Hide stuff
-    WorldMapFrame.BlackoutFrame:SetAlpha(0)
-    WorldMapFrame.BlackoutFrame:EnableMouse(false)
+    mapFrame.BlackoutFrame:SetAlpha(0)
+    mapFrame.BlackoutFrame:EnableMouse(false)
 
     self:WorldMapScale()
     self:AddCoords()
-    self:MapReveal()
 end
