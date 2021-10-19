@@ -3,13 +3,13 @@
     <Script file="azerite.lua"/>
     <Script file="achievement.lua"/>
     <Script file="conduit.lua"/>
+    <Script file="covenant.lua"/>
     <Script file="domination.lua"/>
     <Script file="hyperlink.lua"/>
     <Script file="icon.lua"/>
     <Script file="id.lua"/>
     <Script file="item.lua"/>
     <Script file="itemref.lua"/>
-    <Script file="mount.lua"/>
     <Script file="progress.lua"/>
     <Script file="specilvl.lua"/>
     <Script file="style.lua"/>

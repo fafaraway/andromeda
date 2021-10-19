@@ -1,4 +1,4 @@
-local F, _, L = unpack(select(2, ...))
+local F, C, L = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 
 local function RemoveLines()
@@ -8,7 +8,10 @@ local function RemoveLines()
 end
 
 local function AddLines(self)
-    if not IsAltKeyDown() then
+    if not C.DB.Tooltip.ItemInfo then
+        return
+    end
+    if C.DB.Tooltip.ItemInfoByAlt and not IsAltKeyDown() then
         return
     end
 

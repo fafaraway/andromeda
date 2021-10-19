@@ -1,6 +1,4 @@
---[[
-    Credit Cloudy Unit Info by Cloudyfa
-]]
+-- Credit Cloudy Unit Info by Cloudyfa
 
 local F, C, L = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
@@ -87,6 +85,7 @@ function TOOLTIP:SetupSpecLevel(spec, level)
     if infoLine then
         infoLine:SetText(infoString)
     else
+        _G.GameTooltip:AddLine(' ')
         _G.GameTooltip:AddLine(infoString)
     end
 end
@@ -265,7 +264,7 @@ function TOOLTIP:InspectUnitSpecAndLevel(unit)
     if not C.DB.Tooltip.SpecIlvl then
         return
     end
-    if C.DB.Tooltip.SpecIlvlByAlt and not IsAltKeyDown() then
+    if C.DB.Tooltip.PlayerInfoByAlt and not IsAltKeyDown() then
         return
     end
 

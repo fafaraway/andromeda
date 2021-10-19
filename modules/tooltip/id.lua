@@ -11,7 +11,7 @@ local types = {
 }
 
 function TOOLTIP:AddLineForID(id, linkType)
-    if not IsAltKeyDown() then
+    if C.DB.Tooltip.IDsByAlt and not IsAltKeyDown() then
         return
     end
 
@@ -62,8 +62,8 @@ function TOOLTIP:SetItemID()
     end
 end
 
-function TOOLTIP:ExtraInfo()
-    if not C.DB.Tooltip.ExtraInfo then
+function TOOLTIP:AddID()
+    if not C.DB.Tooltip.IDs then
         return
     end
 
