@@ -1,13 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local tinsert = tinsert
-local CreateFrame = CreateFrame
-local RegisterStateDriver = RegisterStateDriver
-local SHOW_MULTIBAR4_TEXT = SHOW_MULTIBAR4_TEXT
-local NUM_ACTIONBAR_BUTTONS = NUM_ACTIONBAR_BUTTONS
-local MultiBarLeft = MultiBarLeft
-
 local F, C = unpack(select(2, ...))
 local ACTIONBAR = F:GetModule('ActionBar')
 
@@ -22,7 +12,7 @@ local function SetFrameSize(frame, size, num)
 
     if not frame.mover then
         if C.DB.Actionbar.Bar5 then
-            frame.mover = F.Mover(frame, SHOW_MULTIBAR4_TEXT, 'Bar5', frame.Pos)
+            frame.mover = F.Mover(frame, _G.SHOW_MULTIBAR4_TEXT, 'Bar5', frame.Pos)
         end
     else
         frame.mover:SetSize(frame:GetSize())
@@ -36,21 +26,21 @@ local function SetFrameSize(frame, size, num)
 end
 
 function ACTIONBAR:CreateBar5()
-    local num = NUM_ACTIONBAR_BUTTONS
+    local num = _G.NUM_ACTIONBAR_BUTTONS
     local buttonList = {}
     local size = C.DB.Actionbar.ButtonSize
 
     local frame = CreateFrame('Frame', 'FreeUI_ActionBar5', _G.UIParent, 'SecureHandlerStateTemplate')
     frame.Pos = {'RIGHT', _G.FreeUI_ActionBar4, 'LEFT', margin, 0}
 
-    MultiBarLeft:SetParent(frame)
-    MultiBarLeft:EnableMouse(false)
-    MultiBarLeft.QuickKeybindGlow:SetTexture('')
+    _G.MultiBarLeft:SetParent(frame)
+    _G.MultiBarLeft:EnableMouse(false)
+    _G.MultiBarLeft.QuickKeybindGlow:SetTexture('')
 
     for i = 1, num do
         local button = _G['MultiBarLeftButton' .. i]
-        tinsert(buttonList, button)
-        tinsert(ACTIONBAR.buttons, button)
+        table.insert(buttonList, button)
+        table.insert(ACTIONBAR.buttons, button)
         button:ClearAllPoints()
         if i == 1 then
             button:SetPoint('TOPRIGHT', frame, -padding, -padding)
@@ -68,5 +58,5 @@ function ACTIONBAR:CreateBar5()
     else
         frame.frameVisibility = 'hide'
     end
-    RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
+    _G.RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
 end

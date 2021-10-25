@@ -1,10 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local tinsert = tinsert
-local CreateFrame = CreateFrame
-local RegisterStateDriver = RegisterStateDriver
-
 local F, C, L = unpack(select(2, ...))
 local ACTIONBAR = F:GetModule('ActionBar')
 
@@ -52,8 +45,8 @@ function ACTIONBAR:CreatePetbar()
 
     for i = 1, num do
         local button = _G['PetActionButton' .. i]
-        tinsert(buttonList, button)
-        tinsert(ACTIONBAR.buttons, button)
+        table.insert(buttonList, button)
+        table.insert(ACTIONBAR.buttons, button)
         button:ClearAllPoints()
         if i == 1 then
             button:SetPoint('LEFT', frame, padding, 0)
@@ -71,5 +64,5 @@ function ACTIONBAR:CreatePetbar()
     else
         frame.frameVisibility = 'hide'
     end
-    RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
+    _G.RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
 end

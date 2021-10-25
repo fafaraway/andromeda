@@ -1,12 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local tinsert = tinsert
-local CreateFrame = CreateFrame
-local RegisterStateDriver = RegisterStateDriver
-local ZoneAbilityFrame = ZoneAbilityFrame
-local hooksecurefunc = hooksecurefunc
-
 local F, C, L = unpack(select(2, ...))
 local ACTIONBAR = F:GetModule('ActionBar')
 
@@ -30,12 +21,12 @@ function ACTIONBAR:CreateExtrabar()
     _G.ExtraAbilityContainer.ignoreFramePositionManager = true
 
     local button = _G.ExtraActionButton1
-    tinsert(buttonList, button)
-    tinsert(ACTIONBAR.buttons, button)
+    table.insert(buttonList, button)
+    table.insert(ACTIONBAR.buttons, button)
     button:SetSize(size, size)
 
     frame.frameVisibility = '[extrabar] show; hide'
-    RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
+    _G.RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
 
     -- ZoneAbility
     local zoneFrame = CreateFrame('Frame', 'FreeUI_ActionBarZone', _G.UIParent)
@@ -44,30 +35,38 @@ function ACTIONBAR:CreateExtrabar()
     zoneFrame.Pos = {'CENTER', _G.UIParent, 'CENTER', 0, 250}
     zoneFrame.mover = F.Mover(zoneFrame, L['Zone Ability Button'], 'ZoneAbility', zoneFrame.Pos)
 
-    ZoneAbilityFrame:SetParent(zoneFrame)
-    ZoneAbilityFrame:ClearAllPoints()
-    ZoneAbilityFrame:SetPoint('CENTER', zoneFrame)
-    ZoneAbilityFrame.ignoreFramePositionManager = true
-    ZoneAbilityFrame.Style:SetAlpha(0)
+    _G.ZoneAbilityFrame:SetParent(zoneFrame)
+    _G.ZoneAbilityFrame:ClearAllPoints()
+    _G.ZoneAbilityFrame:SetPoint('CENTER', zoneFrame)
+    _G.ZoneAbilityFrame.ignoreFramePositionManager = true
+    _G.ZoneAbilityFrame.Style:SetAlpha(0)
 
-    hooksecurefunc(ZoneAbilityFrame, 'UpdateDisplayedZoneAbilities', function(self)
-        for spellButton in self.SpellButtonContainer:EnumerateActive() do
-            if spellButton and not spellButton.styled then
-                spellButton.NormalTexture:SetAlpha(0)
-                spellButton:SetPushedTexture(C.Assets.button_pushed) -- force it to gain a texture
-                spellButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-                spellButton:GetHighlightTexture():SetInside()
-                spellButton.Icon:SetInside()
-                F.ReskinIcon(spellButton.Icon, true)
-                spellButton.styled = true
+    hooksecurefunc(
+        _G.ZoneAbilityFrame,
+        'UpdateDisplayedZoneAbilities',
+        function(self)
+            for spellButton in self.SpellButtonContainer:EnumerateActive() do
+                if spellButton and not spellButton.styled then
+                    spellButton.NormalTexture:SetAlpha(0)
+                    spellButton:SetPushedTexture(C.Assets.button_pushed) -- force it to gain a texture
+                    spellButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+                    spellButton:GetHighlightTexture():SetInside()
+                    spellButton.Icon:SetInside()
+                    F.ReskinIcon(spellButton.Icon, true)
+                    spellButton.styled = true
+                end
             end
         end
-    end)
+    )
 
     -- Fix button visibility
-    hooksecurefunc(ZoneAbilityFrame, 'SetParent', function(self, parent)
-        if parent == _G.ExtraAbilityContainer then
-            self:SetParent(zoneFrame)
+    hooksecurefunc(
+        _G.ZoneAbilityFrame,
+        'SetParent',
+        function(self, parent)
+            if parent == _G.ExtraAbilityContainer then
+                self:SetParent(zoneFrame)
+            end
         end
-    end)
+    )
 end

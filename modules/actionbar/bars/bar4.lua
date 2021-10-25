@@ -1,15 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local tinsert = tinsert
-local CreateFrame = CreateFrame
-local RegisterStateDriver = RegisterStateDriver
-local SHOW_MULTIBAR3_TEXT = SHOW_MULTIBAR3_TEXT
-local InCombatLockdown = InCombatLockdown
-local InterfaceOptions_UpdateMultiActionBars = InterfaceOptions_UpdateMultiActionBars
-local NUM_ACTIONBAR_BUTTONS = NUM_ACTIONBAR_BUTTONS
-local MultiBarRight = MultiBarRight
-
 local F, C = unpack(select(2, ...))
 local ACTIONBAR = F:GetModule('ActionBar')
 
@@ -24,7 +12,7 @@ local function SetFrameSize(frame, size, num)
 
     if not frame.mover then
         if C.DB.Actionbar.Bar4 then
-            frame.mover = F.Mover(frame, SHOW_MULTIBAR3_TEXT, 'Bar4', frame.Pos)
+            frame.mover = F.Mover(frame, _G.SHOW_MULTIBAR3_TEXT, 'Bar4', frame.Pos)
         end
     else
         frame.mover:SetSize(frame:GetSize())
@@ -41,7 +29,7 @@ local function updateVisibility(event)
     if InCombatLockdown() then
         F:RegisterEvent('PLAYER_REGEN_ENABLED', updateVisibility)
     else
-        InterfaceOptions_UpdateMultiActionBars()
+        _G.InterfaceOptions_UpdateMultiActionBars()
         F:UnregisterEvent(event, updateVisibility)
     end
 end
@@ -54,21 +42,21 @@ function ACTIONBAR:FixSizebarVisibility()
 end
 
 function ACTIONBAR:CreateBar4()
-    local num = NUM_ACTIONBAR_BUTTONS
+    local num = _G.NUM_ACTIONBAR_BUTTONS
     local buttonList = {}
     local size = C.DB.Actionbar.ButtonSize
 
     local frame = CreateFrame('Frame', 'FreeUI_ActionBar4', _G.UIParent, 'SecureHandlerStateTemplate')
     frame.Pos = {'RIGHT', _G.UIParent, 'RIGHT', -2, 0}
 
-    MultiBarRight:SetParent(frame)
-    MultiBarRight:EnableMouse(false)
-    MultiBarRight.QuickKeybindGlow:SetTexture('')
+    _G.MultiBarRight:SetParent(frame)
+    _G.MultiBarRight:EnableMouse(false)
+    _G.MultiBarRight.QuickKeybindGlow:SetTexture('')
 
     for i = 1, num do
         local button = _G['MultiBarRightButton' .. i]
-        tinsert(buttonList, button)
-        tinsert(ACTIONBAR.buttons, button)
+        table.insert(buttonList, button)
+        table.insert(ACTIONBAR.buttons, button)
         button:ClearAllPoints()
 
         if i == 1 then
@@ -87,7 +75,7 @@ function ACTIONBAR:CreateBar4()
     else
         frame.frameVisibility = 'hide'
     end
-    RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
+    _G.RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
 
     -- Fix visibility when leaving vehicle or petbattle
     ACTIONBAR:FixSizebarVisibility()

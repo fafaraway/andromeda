@@ -1,18 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local CreateFrame = CreateFrame
-local IsInInstance = IsInInstance
-local UnitAffectingCombat = UnitAffectingCombat
-local UnitHasVehicleUI = UnitHasVehicleUI
-local UnitExists = UnitExists
-local hooksecurefunc = hooksecurefunc
-local ActionButton1Cooldown = ActionButton1Cooldown
-local GetOverrideBarSkin = GetOverrideBarSkin
-local HasVehicleActionBar = HasVehicleActionBar
-local UnitVehicleSkin = UnitVehicleSkin
-local HasOverrideActionBar = HasOverrideActionBar
-
 local F, C = unpack(select(2, ...))
 local ACTIONBAR = F:GetModule('ActionBar')
 
@@ -24,7 +9,7 @@ local barsList = {
     'FreeUI_ActionBar5',
     'FreeUI_CustomBar',
     'FreeUI_ActionBarPet',
-    'FreeUI_ActionBarStance',
+    'FreeUI_ActionBarStance'
 }
 
 function ACTIONBAR:Bar_OnEnter()
@@ -47,7 +32,9 @@ function ACTIONBAR:FadeParent_OnEvent()
     local isTargeting = (UnitExists('target') or UnitExists('focus')) and C.DB.Actionbar.ConditionTarget
     local isInPvPArea = (instanceType == 'pvp' or instanceType == 'arena') and C.DB.Actionbar.ConditionPvP
     local isInDungeon = (instanceType == 'party' or instanceType == 'raid') and C.DB.Actionbar.ConditionDungeon
-    local isInVehicle = ((HasVehicleActionBar() and UnitVehicleSkin('player') and UnitVehicleSkin('player') ~= '') or (HasOverrideActionBar() and GetOverrideBarSkin() and GetOverrideBarSkin() ~= '')) and C.DB.Actionbar.ConditionVehicle
+    local isInVehicle =
+        ((HasVehicleActionBar() and UnitVehicleSkin('player') and UnitVehicleSkin('player') ~= '') or (HasOverrideActionBar() and GetOverrideBarSkin() and GetOverrideBarSkin() ~= '')) and
+        C.DB.Actionbar.ConditionVehicle
 
     if isCombating or isTargeting or isInPvPArea or isInDungeon or isInVehicle then
         self.mouseLock = true
@@ -123,7 +110,11 @@ function ACTIONBAR:UpdateActionBarFade()
 
     -- Completely remove cooldown bling
     DisableCooldownBling()
-    hooksecurefunc(getmetatable(ActionButton1Cooldown).__index, 'SetCooldown', function(self)
-        self:SetDrawBling(false)
-    end)
+    hooksecurefunc(
+        getmetatable(_G.ActionButton1Cooldown).__index,
+        'SetCooldown',
+        function(self)
+            self:SetDrawBling(false)
+        end
+    )
 end

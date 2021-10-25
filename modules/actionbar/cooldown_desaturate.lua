@@ -1,10 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local GetTime = GetTime
-local GetActionCooldown = GetActionCooldown
-local hooksecurefunc = hooksecurefunc
-
 local F, C = unpack(select(2, ...))
 local ACTIONBAR = F:GetModule('ActionBar')
 

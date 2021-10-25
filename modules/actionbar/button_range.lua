@@ -1,15 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local next = next
-local pairs = pairs
-local unpack = unpack
-local CreateFrame = CreateFrame
-local HasAction = HasAction
-local IsUsableAction = IsUsableAction
-local IsActionInRange = IsActionInRange
-local hooksecurefunc = hooksecurefunc
-
 local F = unpack(select(2, ...))
 local ACTIONBAR = F:GetModule('ActionBar')
 

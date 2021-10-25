@@ -1,21 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local format = format
-local GetSpellCooldown = GetSpellCooldown
-local GetSpellLink = GetSpellLink
-local GetItemCooldown = GetItemCooldown
-local GetActionInfo = GetActionInfo
-local GetItemInfo = GetItemInfo
-local SendChatMessage = SendChatMessage
-local GetMacroSpell = GetMacroSpell
-local GetMacroItem = GetMacroItem
-local GetItemInfoFromHyperlink = GetItemInfoFromHyperlink
-local IsInGroup = IsInGroup
-local GetTime = GetTime
-local IsPartyLFG = IsPartyLFG
-local IsInRaid = IsInRaid
-
 local F, C, L = unpack(select(2, ...))
 local ACTIONBAR = F:GetModule('ActionBar')
 
@@ -35,9 +17,9 @@ end
 
 local function GetRemainTime(second)
     if second > 60 then
-        return format('%d:%.2d', second / 60, second % 60)
+        return string.format('%d:%.2d', second / 60, second % 60)
     else
-        return format('%ds', second)
+        return string.format('%ds', second)
     end
 end
 
@@ -47,9 +29,9 @@ function ACTIONBAR:SendCurrentSpell(thisTime, spellID)
     local spellLink = GetSpellLink(spellID)
     if start and duration > 0 then
         local remain = start + duration - thisTime
-        SendNotifyMessage(format(L['%s cooldown remaining %s.'], spellLink, GetRemainTime(remain)))
+        SendNotifyMessage(string.format(L['%s cooldown remaining %s.'], spellLink, GetRemainTime(remain)))
     else
-        SendNotifyMessage(format(L['%s is now available.'], spellLink))
+        SendNotifyMessage(string.format(L['%s is now available.'], spellLink))
     end
 end
 
@@ -57,9 +39,9 @@ function ACTIONBAR:SendCurrentItem(thisTime, itemID, itemLink)
     local start, duration = GetItemCooldown(itemID)
     if start and duration > 0 then
         local remain = start + duration - thisTime
-        SendNotifyMessage(format(L['%s cooldown remaining %s.'], itemLink, GetRemainTime(remain)))
+        SendNotifyMessage(string.format(L['%s cooldown remaining %s.'], itemLink, GetRemainTime(remain)))
     else
-        SendNotifyMessage(format(L['%s is now available.'], itemLink))
+        SendNotifyMessage(string.format(L['%s is now available.'], itemLink))
     end
 end
 

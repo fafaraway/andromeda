@@ -1,29 +1,4 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local next = next
-local tonumber = tonumber
-local TokenFrame_LoadUI = TokenFrame_LoadUI
-local TokenFrame_Update = TokenFrame_Update
-local BackpackTokenFrame_Update = BackpackTokenFrame_Update
-local InCombatLockdown = InCombatLockdown
-local GetCVar = GetCVar
-local hooksecurefunc = hooksecurefunc
-local ACTION_BUTTON_SHOW_GRID_REASON_CVAR = ACTION_BUTTON_SHOW_GRID_REASON_CVAR
-local MainMenuBar = MainMenuBar
-local OverrideActionBar = OverrideActionBar
-local MicroButtonAndBagsBar = MicroButtonAndBagsBar
-local MainMenuBarArtFrame = MainMenuBarArtFrame
-local StatusTrackingBarManager = StatusTrackingBarManager
-local ActionBarDownButton = ActionBarDownButton
-local ActionBarUpButton = ActionBarUpButton
-local MainMenuBarVehicleLeaveButton = MainMenuBarVehicleLeaveButton
-local OverrideActionBarExpBar = OverrideActionBarExpBar
-local OverrideActionBarHealthBar = OverrideActionBarHealthBar
-local OverrideActionBarPowerBar = OverrideActionBarPowerBar
-local OverrideActionBarPitchFrame = OverrideActionBarPitchFrame
-
-local F, C = unpack(select(2, ...))
+local F = unpack(select(2, ...))
 local ACTIONBAR = F:GetModule('ActionBar')
 
 local scripts = {
@@ -40,23 +15,23 @@ local scripts = {
 }
 
 local framesToHide = {
-    MainMenuBar,
-    OverrideActionBar
+    _G.MainMenuBar,
+    _G.OverrideActionBar
 }
 
 local framesToDisable = {
-    MainMenuBar,
-    MicroButtonAndBagsBar,
-    MainMenuBarArtFrame,
-    StatusTrackingBarManager,
-    ActionBarDownButton,
-    ActionBarUpButton,
-    MainMenuBarVehicleLeaveButton,
-    OverrideActionBar,
-    OverrideActionBarExpBar,
-    OverrideActionBarHealthBar,
-    OverrideActionBarPowerBar,
-    OverrideActionBarPitchFrame
+    _G.MainMenuBar,
+    _G.MicroButtonAndBagsBar,
+    _G.MainMenuBarArtFrame,
+    _G.StatusTrackingBarManager,
+    _G.ActionBarDownButton,
+    _G.ActionBarUpButton,
+    _G.MainMenuBarVehicleLeaveButton,
+    _G.OverrideActionBar,
+    _G.OverrideActionBarExpBar,
+    _G.OverrideActionBarHealthBar,
+    _G.OverrideActionBarPowerBar,
+    _G.OverrideActionBarPitchFrame
 }
 
 local function DisableAllScripts(frame)
@@ -72,7 +47,7 @@ local function ButtonShowGrid(name, showgrid)
         local button = _G[name .. i]
         if button then
             button:SetAttribute('showgrid', showgrid)
-            button:ShowGrid(ACTION_BUTTON_SHOW_GRID_REASON_CVAR)
+            button:ShowGrid(_G.ACTION_BUTTON_SHOW_GRID_REASON_CVAR)
         end
     end
 end
@@ -95,16 +70,16 @@ local function ToggleButtonGrid()
 end
 
 local function UpdateTokenVisibility()
-    TokenFrame_LoadUI()
-    TokenFrame_Update()
-    BackpackTokenFrame_Update()
+    _G.TokenFrame_LoadUI()
+    _G.TokenFrame_Update()
+    _G.BackpackTokenFrame_Update()
 end
 
 function ACTIONBAR:RemoveBlizzArt()
-    MainMenuBar:SetMovable(true)
-    MainMenuBar:SetUserPlaced(true)
-    MainMenuBar.ignoreFramePositionManager = true
-    MainMenuBar:SetAttribute('ignoreFramePositionManager', true)
+    _G.MainMenuBar:SetMovable(true)
+    _G.MainMenuBar:SetUserPlaced(true)
+    _G.MainMenuBar.ignoreFramePositionManager = true
+    _G.MainMenuBar:SetAttribute('ignoreFramePositionManager', true)
 
     for _, frame in next, framesToHide do
         frame:SetParent(F.HiddenFrame)
@@ -116,7 +91,7 @@ function ACTIONBAR:RemoveBlizzArt()
     end
 
     -- Fix maw block anchor
-    MainMenuBarVehicleLeaveButton:RegisterEvent('PLAYER_ENTERING_WORLD')
+    _G.MainMenuBarVehicleLeaveButton:RegisterEvent('PLAYER_ENTERING_WORLD')
 
     -- Update button grid
     ToggleButtonGrid()

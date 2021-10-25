@@ -1,13 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local tinsert = tinsert
-local mod = mod
-local min = min
-local ceil = ceil
-local CreateFrame = CreateFrame
-local RegisterStateDriver = RegisterStateDriver
-
 local F, C, L = unpack(select(2, ...))
 local ACTIONBAR = F:GetModule('ActionBar')
 
@@ -28,8 +18,8 @@ function ACTIONBAR:CustomBar(anchor)
 
     frame.buttons = {}
 
-    RegisterStateDriver(frame, 'visibility', '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show')
-    RegisterStateDriver(frame, 'page', page)
+    _G.RegisterStateDriver(frame, 'visibility', '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show')
+    _G.RegisterStateDriver(frame, 'page', page)
 
     local buttonList = {}
     for i = 1, num do
@@ -40,8 +30,8 @@ function ACTIONBAR:CustomBar(anchor)
         button.commandName = L[name] .. i
         button:SetAttribute('action', button.id)
         frame.buttons[i] = button
-        tinsert(buttonList, button)
-        tinsert(ACTIONBAR.buttons, button)
+        table.insert(buttonList, button)
+        table.insert(ACTIONBAR.buttons, button)
     end
 
     ACTIONBAR:UpdateCustomBar()
@@ -68,7 +58,7 @@ function ACTIONBAR:UpdateCustomBar()
         button:ClearAllPoints()
         if i == 1 then
             button:SetPoint('TOPLEFT', frame, padding, -padding)
-        elseif mod(i - 1, perRow) == 0 then
+        elseif math.fmod(i - 1, perRow) == 0 then
             button:SetPoint('TOP', frame.buttons[i - perRow], 'BOTTOM', 0, -margin)
         else
             button:SetPoint('LEFT', frame.buttons[i - 1], 'RIGHT', margin, 0)
@@ -83,8 +73,8 @@ function ACTIONBAR:UpdateCustomBar()
         button:Hide()
     end
 
-    local column = min(num, perRow)
-    local rows = ceil(num / perRow)
+    local column = math.min(num, perRow)
+    local rows = math.ceil(num / perRow)
     frame:SetWidth(column * size + (column - 1) * margin + 2 * padding)
     frame:SetHeight(size * rows + (rows - 1) * margin + 2 * padding)
     frame.mover:SetSize(frame:GetSize())

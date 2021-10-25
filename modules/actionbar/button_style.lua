@@ -1,20 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local gsub = gsub
-local CreateFrame = CreateFrame
-local hooksecurefunc = hooksecurefunc
-local GetBindingKey = GetBindingKey
-local IsEquippedAction = IsEquippedAction
-local KEY_BUTTON4 = KEY_BUTTON4
-local KEY_NUMPAD1 = KEY_NUMPAD1
-local KEY_BUTTON3 = KEY_BUTTON3
-local KEY_MOUSEWHEELUP = KEY_MOUSEWHEELUP
-local KEY_MOUSEWHEELDOWN = KEY_MOUSEWHEELDOWN
-local KEY_SPACE = KEY_SPACE
-local CAPSLOCK_KEY_TEXT = CAPSLOCK_KEY_TEXT
-local RANGE_INDICATOR = RANGE_INDICATOR
-
 local F, C = unpack(select(2, ...))
 local ACTIONBAR = F:GetModule('ActionBar')
 
@@ -184,18 +167,18 @@ end
 local function SetupBackdrop(icon)
     local bg = F.SetBD(icon, .25)
     if C.DB.Actionbar.ClassColor then
-        bg:SetBackdropColor(C.r, C.g, C.b, .25)
         -- bg:SetBackdropBorderColor(C.r, C.g, C.b)
+        bg:SetBackdropColor(C.r, C.g, C.b, .25)
     else
-        bg:SetBackdropColor(.1, .1, .1, .25)
         -- bg:SetBackdropBorderColor(0, 0, 0)
+        bg:SetBackdropColor(.1, .1, .1, .25)
     end
 
     icon:GetParent().__bg = bg
 end
 
-local keyButton = gsub(KEY_BUTTON4, '%d', '')
-local keyNumpad = gsub(KEY_NUMPAD1, '%d', '')
+local keyButton = string.gsub(_G.KEY_BUTTON4, '%d', '')
+local keyNumpad = string.gsub(_G.KEY_NUMPAD1, '%d', '')
 
 local replaces = {
     {'(' .. keyButton .. ')', 'M'},
@@ -203,11 +186,11 @@ local replaces = {
     {'(a%-)', 'a'},
     {'(c%-)', 'c'},
     {'(s%-)', 's'},
-    {KEY_BUTTON3, 'M3'},
-    {KEY_MOUSEWHEELUP, 'MU'},
-    {KEY_MOUSEWHEELDOWN, 'MD'},
-    {KEY_SPACE, 'Sp'},
-    {CAPSLOCK_KEY_TEXT, 'CL'},
+    {_G.KEY_BUTTON3, 'M3'},
+    {_G.KEY_MOUSEWHEELUP, 'MU'},
+    {_G.KEY_MOUSEWHEELDOWN, 'MD'},
+    {_G.KEY_SPACE, 'Sp'},
+    {_G.CAPSLOCK_KEY_TEXT, 'CL'},
     {'BUTTON', 'M'},
     {'NUMPAD', 'N'},
     {'(ALT%-)', 'a'},
@@ -231,10 +214,10 @@ function ACTIONBAR:UpdateHotKey()
     end
 
     for _, value in pairs(replaces) do
-        text = gsub(text, value[1], value[2])
+        text = string.gsub(text, value[1], value[2])
     end
 
-    if text == RANGE_INDICATOR then
+    if text == _G.RANGE_INDICATOR then
         hotkey:SetText('')
     else
         hotkey:SetText('|cffffffff' .. text)

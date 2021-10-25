@@ -1,10 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local CreateFrame = CreateFrame
-local hooksecurefunc = hooksecurefunc
-local GetActionButtonForID = GetActionButtonForID
-
 local F, C = unpack(select(2, ...))
 local ACTIONBAR = F:GetModule('ActionBar')
 
@@ -49,7 +42,7 @@ function ACTIONBAR:SetupButtonFlash()
 end
 
 function ACTIONBAR:ActionButtonDown(id)
-    local button = GetActionButtonForID(id)
+    local button = _G.GetActionButtonForID(id)
     if (button) then
         self:AnimateButton(button)
     end

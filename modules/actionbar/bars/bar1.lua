@@ -1,17 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local tinsert = tinsert
-local rad = rad
-local CreateFrame = CreateFrame
-local RegisterStateDriver = RegisterStateDriver
-local NUM_ACTIONBAR_BUTTONS = NUM_ACTIONBAR_BUTTONS
-local GetActionTexture = GetActionTexture
-local GetOverrideBarSkin = GetOverrideBarSkin
-local HasVehicleActionBar = HasVehicleActionBar
-local UnitVehicleSkin = UnitVehicleSkin
-local HasOverrideActionBar = HasOverrideActionBar
-
 local F, C, L = unpack(select(2, ...))
 local ACTIONBAR = F:GetModule('ActionBar')
 
@@ -80,7 +66,9 @@ local function UpdateBarShadow()
 end
 
 function ACTIONBAR:CreateBarShadow()
-    if ACTIONBAR.BarShadow then return end
+    if ACTIONBAR.BarShadow then
+        return
+    end
 
     local bar1 = _G.FreeUI_ActionBar1
     local bar2 = _G.FreeUI_ActionBar2
@@ -95,7 +83,7 @@ function ACTIONBAR:CreateBarShadow()
     bTex:SetPoint('TOP', bar1, 'BOTTOM', 0, padding)
     bTex:SetSize(width, height)
     bTex:SetTexture(C.Assets.glow_tex)
-    bTex:SetRotation(rad(180))
+    bTex:SetRotation(math.rad(180))
     bTex:SetVertexColor(0, 0, 0, .5)
 
     local tTex = bar1:CreateTexture(nil, 'OVERLAY')
@@ -117,7 +105,7 @@ function ACTIONBAR:CreateBarShadow()
 end
 
 function ACTIONBAR:CreateBar1()
-    local num = NUM_ACTIONBAR_BUTTONS
+    local num = _G.NUM_ACTIONBAR_BUTTONS
     local size = C.DB.Actionbar.ButtonSize
     local buttonList = {}
 
@@ -126,8 +114,8 @@ function ACTIONBAR:CreateBar1()
 
     for i = 1, num do
         local button = _G['ActionButton' .. i]
-        tinsert(buttonList, button)
-        tinsert(ACTIONBAR.buttons, button)
+        table.insert(buttonList, button)
+        table.insert(ACTIONBAR.buttons, button)
         button:SetParent(frame)
         button:ClearAllPoints()
 
@@ -145,9 +133,10 @@ function ACTIONBAR:CreateBar1()
     -- frame.frameVisibility = '[mod:shift][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar,@vehicle,exists] show; hide'
 
     frame.frameVisibility = '[petbattle] hide; show'
-    RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
+    _G.RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
 
-    local actionPage = '[bar:6]6;[bar:5]5;[bar:4]4;[bar:3]3;[bar:2]2;[overridebar]14;[shapeshift]13;[vehicleui]12;[possessbar]12;[bonusbar:5]11;[bonusbar:4]10;[bonusbar:3]9;[bonusbar:2]8;[bonusbar:1]7;1'
+    local actionPage =
+        '[bar:6]6;[bar:5]5;[bar:4]4;[bar:3]3;[bar:2]2;[possessbar]12;[overridebar]14;[shapeshift]13;[vehicleui]12;[bonusbar:5]11;[bonusbar:4]10;[bonusbar:3]9;[bonusbar:2]8;[bonusbar:1]7;1'
     local buttonName = 'ActionButton'
     for i, button in next, buttonList do
         frame:SetFrameRef(buttonName .. i, button)
@@ -165,7 +154,7 @@ function ACTIONBAR:CreateBar1()
             button:SetAttribute('actionpage', newstate)
         end
     ]])
-    RegisterStateDriver(frame, 'page', actionPage)
+    _G.RegisterStateDriver(frame, 'page', actionPage)
 
     -- Fix button texture, need reviewed
     local function FixActionBarTexture()
@@ -198,8 +187,6 @@ function ACTIONBAR:OnLogin()
     end
 
     ACTIONBAR.buttons = {}
-
-
 
     ACTIONBAR:CreateBar1()
     ACTIONBAR:CreateBar2()
