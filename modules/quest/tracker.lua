@@ -208,32 +208,37 @@ local headers = {
     _G.WORLD_QUEST_TRACKER_MODULE
 }
 
-function EOT:PLAYER_ENTERING_WORLD()
-    local inInstance, instanceType = IsInInstance()
-    if inInstance then
-        if instanceType == 'party' or instanceType == 'scenario' then
-            for i = 3, #headers do
-                local button = headers[i].Header.MinimizeButton
-                if button and not headers[i].collapsed then
-                    button:Click()
+function EOT:AutoCollapse()
+    F:Delay(
+        1,
+        function()
+            local inInstance, instanceType = IsInInstance()
+            if inInstance then
+                if instanceType == 'party' or instanceType == 'scenario' then
+                    for i = 3, #headers do
+                        local button = headers[i].Header.MinimizeButton
+                        if button and not headers[i].collapsed then
+                            button:Click()
+                        end
+                    end
+                else
+                    _G.ObjectiveTracker_Collapse()
+                end
+            else
+                if not InCombatLockdown() then
+                    for i = 3, #headers do
+                        local button = headers[i].Header.MinimizeButton
+                        if button and headers[i].collapsed then
+                            button:Click()
+                        end
+                    end
+                    if _G.ObjectiveTrackerFrame.collapsed then
+                        _G.ObjectiveTracker_Expand()
+                    end
                 end
             end
-        else
-            _G.ObjectiveTracker_Collapse()
         end
-    else
-        if not InCombatLockdown() then
-            for i = 3, #headers do
-                local button = headers[i].Header.MinimizeButton
-                if button and headers[i].collapsed then
-                    button:Click()
-                end
-            end
-            if _G.ObjectiveTrackerFrame.collapsed then
-                _G.ObjectiveTracker_Expand()
-            end
-        end
-    end
+    )
 end
 
 function EOT:OnLogin()
@@ -253,6 +258,6 @@ function EOT:OnLogin()
 
     -- Auto collapse Objective Tracker
     if C.DB.Quest.AutoCollapseTracker then
-        F:RegisterEvent('PLAYER_ENTERING_WORLD', EOT.PLAYER_ENTERING_WORLD)
+        F:RegisterEvent('PLAYER_ENTERING_WORLD', EOT.AutoCollapse)
     end
 end
