@@ -64,19 +64,20 @@ function COMBAT:UNIT_POWER_UPDATE(unit)
 
     local threshold = C.DB.Combat.LowManaThreshold
     local sound = C.Assets.Sounds.LowMana
-    local _, powerToken = UnitPowerType('player')
 
-    if powerToken ~= 'MANA' then
-        return
-    end
+    if UnitPowerType('player') == 0 then
+        local cur = UnitPower('player', 0)
+        local max = UnitPowerMax('player', 0)
+        local percMana = max > 0 and (cur / max * 100) or 100
 
-    if (UnitPower('player') / UnitPowerMax('player')) <= threshold then
-        if not playedLowMana then
-            PlaySoundFile(sound, 'Master')
-            playedLowMana = true
+        if percMana <= threshold and not UnitIsDeadOrGhost('player') then
+            if not playedLowMana then
+                PlaySoundFile(sound, 'Master')
+                playedLowMana = true
+            end
+        else
+            playedLowMana = false
         end
-    else
-        playedLowMana = false
     end
 end
 
