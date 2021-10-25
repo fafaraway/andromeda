@@ -12,14 +12,15 @@
 <br />
 
 ## Introduction
-**FreeUI** is a user interface replacement for World of Warcraft.  
-**Minimalist**, **elegant**, yet also **efficient** and **practical**.
+&emsp;&emsp;**FreeUI** is a user interface replacement for World of Warcraft.  
+&emsp;&emsp;**Minimalist**, **elegant**, yet also **efficient** and **practical**.
 
 ## Screenshots
 *  https://imgur.com/a/0JfIGql
 
 ## Videos
 *  https://www.youtube.com/channel/UCC4m4mhVtB9d_jaeON8ui7A
+*  https://space.bilibili.com/13263810/channel/seriesdetail?sid=392529
 
 ## Feedback
 *  Report issues on [GitHub](https://github.com/Solor/FreeUI/issues)
@@ -28,7 +29,6 @@
 ## Download
 *  Stable release on [CurseForge](https://www.curseforge.com/wow/addons/freeui)
 *  Beta release on [Github](https://github.com/Solor/FreeUI/releases)
-*  Development repository on [Github](https://github.com/Solor/FreeUI)
 
 ## Usage
 *  `/free` *list all available commands*
@@ -38,12 +38,12 @@
 *  `/free reset` *reset all saved options data*
 
 ## Additional
-*  [WeakAuras Collection](https://wago.io/ByU12CBbm) *My WA collection*
+*  [WeakAuras Collection](https://wago.io/WloMMMBpx) *WA collection*
 *  [Clean Icons - Mechagnome Edition](https://www.wowinterface.com/downloads/info25064-CleanIcons-MechagnomeEdition.html#info) *Icons replacement with high resolution*
 *  [Chinese Fonts Pack](https://1drv.ms/u/s!AocaDk73Gt7sgrk6bdKqfZGZQMQA2Q?e=SdbUe5) *Fonts replacement for Chinese game client*
 *  [Interface Textures](https://1drv.ms/u/s!AocaDk73Gt7sgrlAYVUKxYvs3pCGFg?e=ijoI9E) *Textures replacement for chat bubble in protected area*
 
 ## Credits
 *  Haleth, siweia, Alza, Tukz, Gethe, Elv, Haste, Lightspark, Zork, Allez, AlleyKat, Caellian, p3lim, Shantalya, tekkub, Tuller, Wildbreath, aduth, silverwind, Nibelheim, humfras, aliluya555, Paojy, Rubgrsch, EKE, fang2hou, lilbitz95, Djamy, Hacktivist
-*  NDui, ShestakUI, RealUI, ElvUI, ElvUI_WindTools
+*  NDui, NDui_Plus, ShestakUI, RealUI, ElvUI, ElvUI_WindTools
 
