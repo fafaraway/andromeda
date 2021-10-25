@@ -153,9 +153,9 @@ end
 
 local cache = {}
 function M:UpdateRosterInfo()
-    -- if not IsInGroup() then
-    --     return
-    -- end
+    if not IsInGroup() then
+        return
+    end
 
     if not DCLoaded then
         for i = 1, GetNumGroupMembers() do
