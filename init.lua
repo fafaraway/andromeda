@@ -14,11 +14,13 @@ do
 end
 
 
+local AceAddon, AceAddonMinor = _G.LibStub('AceAddon-3.0')
+local CallbackHandler = _G.LibStub('CallbackHandler-1.0')
+
 local addOnName, engine = ...
-local FREE = _G.LibStub("AceAddon-3.0"):NewAddon(addOnName, 'AceConsole-3.0', 'AceEvent-3.0', 'AceTimer-3.0', 'AceHook-3.0')
+local F = AceAddon:NewAddon(addOnName, 'AceConsole-3.0', 'AceEvent-3.0', 'AceTimer-3.0', 'AceHook-3.0')
 
-
-engine[1] = FREE
+engine[1] = F
 engine[2] = {}
 engine[3] = {}
 
@@ -28,23 +30,14 @@ _G.FREE_DB = {} -- Character variables
 
 _G.FreeUI = engine -- Allow other addon access
 
-
--- #TODO
-FREE.UnitFrames = FREE:NewModule('UnitFrames', 'AceTimer-3.0','AceEvent-3.0','AceHook-3.0')
-
-
-
-local F, C = unpack(engine)
-
 local addonVersion = '@project-version@'
 if (addonVersion:find('project%-version')) then
     addonVersion = 'Development'
 end
-C.AddonVersion = addonVersion
-C.IsDeveloper = C.AddonVersion == 'Development'
+engine[2].AddonVersion = addonVersion
+engine[2].IsDeveloper = engine[2].AddonVersion == 'Development'
 
---[[ Libraries ]]
-
+-- Libraries
 do
     F.Libs = {}
     F.LibsMinor = {}
@@ -63,6 +56,7 @@ do
     end
 
 
+    F:AddLib('AceAddon', AceAddon, AceAddonMinor)
     F:AddLib('ACL', 'AceLocale-3.0')
     F:AddLib('LBG', 'LibButtonGlow-1.0')
     F:AddLib('LRC', 'LibRangeCheck-2.0')
@@ -128,8 +122,7 @@ end ]]
 
 
 
---[[ Events ]]
-
+-- Events
 local events = {}
 local host = CreateFrame('Frame')
 host:SetScript('OnEvent', function(_, event, ...)
@@ -167,10 +160,8 @@ function F:UnregisterEvent(event, func)
     end
 end
 
---[[ Modules ]]
-
+-- Modules
 local modules, initQueue = {}, {}
-
 function F:RegisterModule(name)
     if modules[name] then
         print('Module <' .. name .. '> has been registered.')

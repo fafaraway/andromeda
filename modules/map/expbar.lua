@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local M = F:NewModule('ExpBar')
+local M = F:GetModule('Minimap')
 
 function M:ExpBar_Update()
     local rest = self.restBar
@@ -178,10 +178,7 @@ function M:SetupScript(bar)
     )
 end
 
-function M:OnEnable()
-    if not C.DB.Map.Enable then
-        return
-    end
+function M:AddExpBar()
     if not C.DB.Map.ExpBar then
         return
     end

@@ -572,6 +572,12 @@ C.PartyBuffsList = {
     [102364] = true, -- 青铜龙的祝福
     [292686] = true, -- 制皮鼓
 
+    -- Dungeon (Necrotic Wake)
+    [328325] = true,
+    [328126] = true,
+    [328399] = true,
+    [325189] = true,
+
     -- DH
     [162264] = true, -- Metamorphosis (Havoc)
     [187827] = true, -- Metamorphosis (Vengeance)

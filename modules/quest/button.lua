@@ -3,10 +3,10 @@
 -- https://github.com/p3lim-wow/ExtraQuestButton
 
 local F, C, L = unpack(select(2, ...))
-local ACTIONBAR = F:GetModule('Actionbar')
+local ACTIONBAR = F:GetModule('ActionBar')
 
 local onlyCurrentZone = true
-local maxDistanceYards = 1e5
+local maxDistanceYards = 1e4 -- needs review
 
 -- Warlords of Draenor intro quest items which inspired this addon
 local blacklist = {
@@ -93,6 +93,22 @@ local questItems = {
     [60188] = 178464, -- Night Fae Covenant
     [60649] = 180170, -- Ardenweald
     [60609] = 180008 -- Ardenweald
+}
+
+-- items that need to be shown, but not. (itemID = bool/mapID)
+local completeShownItems = {
+    [35797] = 116, -- Grizzly Hills
+    [60273] = 50, -- Northern Stranglethorn Vale
+    [52853] = true, -- Mount Hyjal
+    [41058] = 120, -- Storm Peaks
+    [177904] = true
+}
+
+-- items that need to be hidden, but not. (itemID = bool/mapID)
+local completeHiddenItems = {
+    [184876] = true, -- Cohesion Crystal
+    [186199] = true, -- Lady Moonberry's Wand
+    [187012] = true -- Unbalanced Riftstone
 }
 
 local ExtraQuestButton = CreateFrame('Button', 'ExtraQuestButton', _G.UIParent, 'SecureActionButtonTemplate, SecureHandlerStateTemplate, SecureHandlerAttributeTemplate')
@@ -197,7 +213,7 @@ function ExtraQuestButton:UPDATE_BINDINGS()
 end
 
 function ExtraQuestButton:PLAYER_LOGIN()
-    RegisterStateDriver(self, 'visible', visibilityState)
+    _G.RegisterStateDriver(self, 'visible', visibilityState)
     self:SetAttribute('_onattributechanged', onAttributeChanged)
     self:SetAttribute('type', 'item')
 
@@ -324,7 +340,7 @@ ExtraQuestButton:SetScript(
 ExtraQuestButton:SetScript(
     'OnEnable',
     function(self)
-        RegisterStateDriver(self, 'visible', visibilityState)
+        _G.RegisterStateDriver(self, 'visible', visibilityState)
         self:SetAttribute('_onattributechanged', onAttributeChanged)
         self:Update()
         self:SetItem()
@@ -338,7 +354,7 @@ ExtraQuestButton:SetScript(
             self:SetMovable(true)
         end
 
-        RegisterStateDriver(self, 'visible', 'show')
+        _G.RegisterStateDriver(self, 'visible', 'show')
         self:SetAttribute('_onattributechanged', nil)
         self.Icon:SetTexture([[Interface\Icons\INV_Misc_Wrench_01]])
         self.HotKey:Hide()
@@ -411,12 +427,18 @@ local function GetQuestDistanceWithItem(questID)
     if GetItemCount(itemLink) == 0 then
         return
     end
-    if blacklist[GetItemInfoFromHyperlink(itemLink)] then
+    local itemID = GetItemInfoFromHyperlink(itemLink)
+    if blacklist[itemID] then
         return
     end
 
-    if C_QuestLog.IsComplete(questID) and not showWhenComplete then
-        return
+    if C_QuestLog.IsComplete(questID) then
+        if showWhenComplete and completeHiddenItems[itemID] then
+            return
+        end -- hide item when quest completed
+        if not showWhenComplete and not completeShownItems[itemID] then
+            return
+        end -- show item even quest completed
     end
 
     local distanceSq = C_QuestLog.GetDistanceSqToQuest(questID)

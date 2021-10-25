@@ -1,7 +1,13 @@
 local F, C, L = unpack(select(2, ...))
-local UNITFRAME = F:GetModule('Unitframe')
+local UNITFRAME = F:GetModule('UnitFrame')
 local NAMEPLATE = F:GetModule('Nameplate')
 local LBG = F.Libs.LBG
+
+local cbPosition = {
+    player = {'CENTER', _G.UIParent, 'CENTER', 0, -280},
+    target = {'LEFT', _G.UIParent, 'CENTER', 113, -152},
+    focus = {'CENTER', _G.UIParent, 'CENTER', 0, 120}
+}
 
 local channelingTicks = {
     [740] = 4, -- 宁静
@@ -75,19 +81,21 @@ function UNITFRAME:OnCastbarUpdate(elapsed)
         end
 
         if self.__owner.unit == 'player' then
-            if self.delay ~= 0 then
-                self.Time:SetFormattedText(decimal .. ' | |cffff0000' .. decimal, duration, self.casting and self.max + self.delay or self.max - self.delay)
-            else
-                self.Time:SetFormattedText(decimal .. ' | ' .. decimal, duration, self.max)
-                if self.Lag and self.SafeZone and self.SafeZone.timeDiff and self.SafeZone.timeDiff ~= 0 then
-                    self.Lag:SetFormattedText('%d ms', self.SafeZone.timeDiff * 1000)
-                end
-            end
+            -- if self.delay ~= 0 then
+            --     self.Time:SetFormattedText(decimal .. ' | |cffff0000' .. decimal, duration, self.casting and self.max + self.delay or self.max - self.delay)
+            -- else
+            --     self.Time:SetFormattedText(decimal .. ' | ' .. decimal, duration, self.max)
+            --     if self.Lag and self.SafeZone and self.SafeZone.timeDiff and self.SafeZone.timeDiff ~= 0 then
+            --         self.Lag:SetFormattedText('%d ms', self.SafeZone.timeDiff * 1000)
+            --     end
+            -- end
+            self.Time:SetFormattedText(decimal, self.max - duration)
         else
             if duration > 1e4 then
-                self.Time:SetText('∞ | ∞')
+                self.Time:SetText('∞')
             else
-                self.Time:SetFormattedText(decimal .. ' | ' .. decimal, duration, self.casting and self.max + self.delay or self.max - self.delay)
+                --self.Time:SetFormattedText(decimal .. ' | ' .. decimal, duration, self.casting and self.max + self.delay or self.max - self.delay)
+                self.Time:SetFormattedText(decimal, self.max - duration)
             end
         end
 
@@ -123,6 +131,10 @@ local function UpdateNameTimeVisibility(self, unit)
         return
     end
 
+    local style = self.unitStyle
+    local isNP = style == 'nameplate'
+    local npCompact = C.DB.Nameplate.CastbarCompact
+
     if self.Text then
         self.Text:SetShown(C.DB.Nameplate.CastbarSpellName)
     end
@@ -130,38 +142,9 @@ local function UpdateNameTimeVisibility(self, unit)
     if self.Time then
         self.Time:SetShown(C.DB.Nameplate.CastbarSpellTime)
     end
-end
 
-local function ResetSpellTarget(self)
-    if self.spellTarget then
-        self.spellTarget:SetText('')
-    end
-end
-
-local function UpdateSpellTarget(self, unit)
-    if not C.DB.Nameplate.SpellTarget then
-        return
-    end
-
-    if not (IsInInstance() and IsInGroup() and GetNumGroupMembers() > 1) then
-        return
-    end
-
-    if not self.spellTarget then
-        return
-    end
-
-    local unitTarget = unit and unit .. 'target'
-    if unitTarget and UnitExists(unitTarget) then
-        local nameString
-        if UnitIsUnit(unitTarget, 'player') then
-            nameString = string.format('|cffff0000%s|r', '>' .. string.upper(_G.YOU) .. '<')
-        else
-            nameString = '<' .. F:RGBToHex(F:UnitColor(unitTarget)) .. UnitName(unitTarget) .. '|r>'
-        end
-        self.SpellTarget:SetText(nameString)
-    else
-        ResetSpellTarget(self) -- when unit loses target
+    if self.Shield then
+        self.Shield:SetShown(isNP and npCompact)
     end
 end
 
@@ -228,15 +211,11 @@ function UNITFRAME:PostCastStart(unit)
         else
             LBG.HideOverlayGlow(self.glowFrame)
         end
-
-        -- Spell target
-        UpdateSpellTarget(self, unit)
     end
 end
 
 function UNITFRAME:PostCastUpdate(unit)
     UpdateNameTimeVisibility(self, unit)
-    UpdateSpellTarget(self, unit)
 end
 
 function UNITFRAME:PostUpdateInterruptible()
@@ -272,8 +251,6 @@ function UNITFRAME:PostCastStop()
     end
 
     self:Show()
-
-    ResetSpellTarget(self)
 end
 
 function UNITFRAME:PostCastFailed()
@@ -283,8 +260,6 @@ function UNITFRAME:PostCastFailed()
     self:SetValue(self.max)
     self.fadeOut = true
     self:Show()
-
-    ResetSpellTarget(self)
 end
 
 local function CreateCastBarMover(bar, text, value, anchor)
@@ -294,22 +269,13 @@ local function CreateCastBarMover(bar, text, value, anchor)
     bar.mover = mover
 end
 
-local function UpdateCastbar(self, _, unit)
-    UNITFRAME.PostCastUpdate(self.Castbar, unit)
-end
-
-local cbPosition = {
-    player = {'CENTER', _G.UIParent, 'CENTER', 0, -280},
-    target = {'LEFT', _G.UIParent, 'CENTER', 113, -152},
-    focus = {'CENTER', _G.UIParent, 'CENTER', 0, 120}
-}
-
 function UNITFRAME:CreateCastBar(self)
     if not C.DB.Unitframe.Castbar then
         return
     end
 
     local style = self.unitStyle
+    local isPlayer = style == 'player'
     local compact = C.DB.Unitframe.CompactCastbar
     local npCompact = C.DB.Nameplate.CastbarCompact
     local playerWidth = C.DB.Unitframe.PlayerCastbarWidth
@@ -321,11 +287,12 @@ function UNITFRAME:CreateCastBar(self)
     local outline = _G.FREE_ADB.FontOutline
     local font = C.Assets.Fonts.Condensed
     local color = C.DB.Unitframe.CastingColor
-    local spellName = C.DB.Nameplate.CastbarSpellName
-    local spellTime = C.DB.Nameplate.CastbarSpellTime
+    local npCastBarName = C.DB.Nameplate.CastbarSpellName
+    local npCastBarTime = C.DB.Nameplate.CastbarSpellTime
+    local npCastBarHeight = C.DB.Nameplate.CastbarHeight
 
     local castbar = CreateFrame('StatusBar', 'oUF_Castbar' .. style, self)
-    castbar:SetStatusBarTexture(C.Assets.statusbar_tex)
+    castbar:SetStatusBarTexture(C.Assets.Textures.Norm)
     castbar.Backdrop = F.CreateBDFrame(castbar)
     castbar.Border = F.CreateSD(castbar.Backdrop, .35, 6, 6, true)
     self.Castbar = castbar
@@ -338,13 +305,12 @@ function UNITFRAME:CreateCastBar(self)
     castbar.Spark = spark
 
     local text = F.CreateFS(castbar, font, 11, outline, '', nil, outline or 'THICK')
-    text:SetPoint('TOP', castbar, 'BOTTOM', 0, -3)
-    text:SetTextColor(1, 1, 1)
+    text:SetPoint('CENTER')
     text:SetShown(false)
     castbar.Text = text
 
     local time = F.CreateFS(castbar, font, 11, outline, '', nil, outline or 'THICK')
-    time:SetPoint('CENTER', castbar)
+    time:SetPoint('RIGHT')
     time:SetShown(false)
     castbar.Time = time
     castbar.Decimal = '%.1f'
@@ -355,9 +321,17 @@ function UNITFRAME:CreateCastBar(self)
     icon.__bg:SetBackdropBorderColor(0, 0, 0)
     castbar.Icon = icon
 
+    local safeZone = castbar:CreateTexture(nil, 'OVERLAY')
+    safeZone:SetTexture(C.Assets.Textures.Flat)
+    safeZone:SetVertexColor(.87, .25, .42)
+    safeZone:SetPoint('TOPRIGHT')
+    safeZone:SetPoint('BOTTOMRIGHT')
+    safeZone:SetShown(isPlayer)
+    castbar.SafeZone = safeZone
+
     if style == 'nameplate' then
-        text:SetShown(spellName)
-        time:SetShown(spellTime)
+        text:SetShown(npCastBarName)
+        time:SetShown(npCastBarTime)
 
         if npCompact then
             castbar:SetStatusBarColor(0, 0, 0, 0)
@@ -370,11 +344,18 @@ function UNITFRAME:CreateCastBar(self)
             icon:SetSize(self:GetHeight() + 10, self:GetHeight() + 10)
             icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
         else
-            castbar:SetSize(self:GetWidth(), 4)
+            local shield = castbar:CreateTexture(nil, 'OVERLAY')
+            shield:SetTexture(C.Assets.Textures.Shield)
+            shield:SetSize(npCastBarHeight + 4, npCastBarHeight + 4)
+            shield:SetPoint('CENTER', castbar, 'BOTTOMLEFT')
+            shield:SetShown(npCompact)
+            castbar.Shield = shield
+
+            castbar:SetSize(self:GetWidth(), npCastBarHeight)
             castbar:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -2)
             castbar:SetStatusBarColor(color.r, color.g, color.b)
 
-            icon:SetSize(castbar:GetHeight() + self:GetHeight() + 2, castbar:GetHeight() + self:GetHeight() + 2)
+            icon:SetSize(npCastBarHeight + self:GetHeight() + 2, npCastBarHeight + self:GetHeight() + 2)
             icon:ClearAllPoints()
             icon:SetPoint('TOPRIGHT', self, 'TOPLEFT', -2, 0)
         end
@@ -382,22 +363,6 @@ function UNITFRAME:CreateCastBar(self)
         -- Major spells glow
         castbar.glowFrame = F.CreateGlowFrame(castbar, icon:GetHeight())
         castbar.glowFrame:SetPoint('CENTER', castbar.Icon)
-
-        -- Target name
-        local spellTarget = F.CreateFS(castbar, C.Assets.Fonts.Bold, 12, outline, '', nil, outline or 'THICK')
-        spellTarget:ClearAllPoints()
-        spellTarget:SetJustifyH('CENTER')
-        spellTarget:SetPoint('TOP', self, 'BOTTOM', 0, -3)
-
-        if spellName then
-            spellTarget:SetPoint('LEFT', text, 'RIGHT', 3, 0)
-        else
-            spellTarget:SetPoint('TOP', self, 'BOTTOM', 0, -3)
-        end
-
-        castbar.SpellTarget = spellTarget
-
-        self:RegisterEvent('UNIT_TARGET', UpdateCastbar)
     else
         text:SetShown(C.DB.Unitframe.SpellName)
         time:SetShown(C.DB.Unitframe.SpellTime)
@@ -437,19 +402,19 @@ function UNITFRAME:CreateCastBar(self)
         end
     end
 
-    if style == 'player' then
-        local safeZone = castbar:CreateTexture(nil, 'OVERLAY')
-        safeZone:SetTexture(C.Assets.statusbar_tex)
-        safeZone:SetVertexColor(.87, .25, .42)
-        safeZone:SetPoint('TOPRIGHT')
-        safeZone:SetPoint('BOTTOMRIGHT')
-        castbar.SafeZone = safeZone
-    end
-
     castbar.OnUpdate = UNITFRAME.OnCastbarUpdate
     castbar.PostCastStart = UNITFRAME.PostCastStart
     castbar.PostCastUpdate = UNITFRAME.PostCastUpdate
     castbar.PostCastStop = UNITFRAME.PostCastStop
     castbar.PostCastFail = UNITFRAME.PostCastFailed
     castbar.PostCastInterruptible = UNITFRAME.PostUpdateInterruptible
+end
+
+function UNITFRAME:CreateCompactCastBar(self)
+end
+
+function UNITFRAME:CreateNamePlateCastBar(self)
+    if not C.DB.Nameplate.Castbar then
+        return
+    end
 end

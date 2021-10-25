@@ -9,7 +9,7 @@ local CreateFrame = CreateFrame
 local RegisterStateDriver = RegisterStateDriver
 
 local F, C, L = unpack(select(2, ...))
-local ACTIONBAR = F:GetModule('Actionbar')
+local ACTIONBAR = F:GetModule('ActionBar')
 
 function ACTIONBAR:CustomBar(anchor)
     local padding = C.DB.Actionbar.CBPadding

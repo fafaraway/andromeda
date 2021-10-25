@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local UNITFRAME = F:GetModule('Unitframe')
+local UNITFRAME = F:GetModule('UnitFrame')
 
 UNITFRAME.PartySpellsList = {}
 function UNITFRAME:UpdatePartyWatcherSpells()

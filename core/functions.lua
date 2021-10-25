@@ -1250,7 +1250,12 @@ do
     F.ReskinInput = F.ReskinEditBox -- Deprecated
 
     -- Handle arrows
-    local arrowDegree = {['up'] = 0, ['down'] = 180, ['left'] = 90, ['right'] = -90}
+    local arrowDegree = {
+        ['up'] = 0,
+        ['down'] = 180,
+        ['left'] = 90,
+        ['right'] = -90
+    }
 
     function F:SetupArrow(direction)
         self:SetTexture(assets.arrow_tex)
@@ -1594,7 +1599,7 @@ do
 
             local roleIcon = self.HealthBar.RoleIcon
             roleIcon:ClearAllPoints()
-            roleIcon:SetPoint('CENTER', self.squareBG, 'TOPRIGHT')
+            roleIcon:SetPoint('CENTER', self.squareBG, 'TOPRIGHT', -2, -2)
             ReplaceFollowerRole(roleIcon, roleIcon:GetAtlas())
             hooksecurefunc(roleIcon, 'SetAtlas', ReplaceFollowerRole)
 
@@ -1603,7 +1608,7 @@ do
             background:ClearAllPoints()
             background:SetPoint('TOPLEFT', self.squareBG, 'BOTTOMLEFT', C.Mult, 6)
             background:SetPoint('BOTTOMRIGHT', self.squareBG, 'BOTTOMRIGHT', -C.Mult, C.Mult)
-            self.HealthBar.Health:SetTexture(C.Assets.statusbar_tex)
+            self.HealthBar.Health:SetTexture(C.Assets.Textures.Norm)
         end
     end
 
@@ -1717,6 +1722,12 @@ do
         logo:SetAlpha(.1)
         logo:SetBlendMode('ADD')
         logo:SetDesaturated(true)
+    end
+
+    local CLASS_ICON_TCOORDS = _G.CLASS_ICON_TCOORDS
+    function F:ClassIconTexCoord(class)
+        local tcoords = CLASS_ICON_TCOORDS[class]
+        self:SetTexCoord(tcoords[1] + .022, tcoords[2] - .025, tcoords[3] + .022, tcoords[4] - .025)
     end
 
     function F:CreateSB(spark, r, g, b)

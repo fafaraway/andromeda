@@ -65,14 +65,14 @@ local function ApplyStyle(self)
     end
 
     frame:SetScale(1)
-    frame:SetHeight(buttonSize * .7)
+    frame:SetHeight(buttonSize * .6)
 
     ReskinIcon(icon1, frame)
     ReskinIcon(icon2, frame)
     ReskinBar(tbar, frame)
 
     if texture then
-        texture:SetTexture(C.Assets.statusbar_tex)
+        texture:SetTexture(C.Assets.Textures.Norm)
     end
 
     name:ClearAllPoints()

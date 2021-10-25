@@ -1,5 +1,5 @@
-local F, C = unpack(select(2, ...))
-local UNITFRAME = F:GetModule('Unitframe')
+local F, C, L = unpack(select(2, ...))
+local UNITFRAME = F:GetModule('UnitFrame')
 local oUF = F.Libs.oUF
 
 UNITFRAME.UnitFrames = {
@@ -58,33 +58,39 @@ function UNITFRAME:UpdateHealthBarColor(self, force)
     end
 end
 
-local function OverrideHealth(self, _, unit)
+local function PreUpdateHealth(self, unit)
     if (not unit or self.unit ~= unit) then
         return
     end
 
     local parent = self.__owner
-    local health = self.Health
     local cur, max = UnitHealth(unit), UnitHealthMax(unit)
     local isOffline = not UnitIsConnected(unit)
     local isDead = UnitIsDead(unit)
     local isGhost = UnitIsGhost(unit)
 
-    health:SetMinMaxValues(0, max)
+    self:SetMinMaxValues(0, max)
 
     if isOffline then
-        health:SetValue(0)
+        self:SetValue(0)
+        self.StatusText:SetText(L['Offline'])
         parent.backdrop:SetBackdropColor(.5, .5, .5, .8)
-    elseif isDead or isGhost then
-        health:SetValue(0)
-        parent.backdrop:SetBackdropColor(0, 0, 0, .8)
+    elseif isGhost then
+        self:SetValue(max)
+        self.StatusText:SetText(L['Ghost'])
+        parent.backdrop:SetBackdropColor(.1, .1, .1, .8)
+    elseif isDead then
+        self:SetValue(max)
+        self.StatusText:SetText(L['Dead'])
+        parent.backdrop:SetBackdropColor(.1, .1, .1, .8)
     else
         if max == cur then
-            health:SetValue(0)
+            self:SetValue(0)
         else
-            health:SetValue(max - cur)
+            self:SetValue(max - cur)
         end
 
+        self.StatusText:SetText('')
         parent.backdrop:SetBackdropColor(.1, .1, .1, .8)
     end
 end
@@ -97,10 +103,16 @@ local function PostUpdateHealth(self, unit, cur, max)
 
     if isOffline then
         self:SetValue(0)
+        self.StatusText:SetText(L['Offline'])
         parent.backdrop:SetBackdropColor(.5, .5, .5, .8)
-    elseif isDead or isGhost then
-        self:SetValue(0)
-        parent.backdrop:SetBackdropColor(0, 0, 0, .8)
+    elseif isGhost then
+        self:SetValue(max)
+        self.StatusText:SetText(L['Ghost'])
+        parent.backdrop:SetBackdropColor(.1, .1, .1, .8)
+    elseif isDead then
+        self:SetValue(max)
+        self.StatusText:SetText(L['Dead'])
+        parent.backdrop:SetBackdropColor(.1, .1, .1, .8)
     else
         if max == cur then
             self:SetValue(0)
@@ -108,6 +120,7 @@ local function PostUpdateHealth(self, unit, cur, max)
             self:SetValue(max - cur)
         end
 
+        self.StatusText:SetText('')
         parent.backdrop:SetBackdropColor(.1, .1, .1, .8)
     end
 end
@@ -130,10 +143,11 @@ function UNITFRAME:CreateHealthBar(self)
     local health = CreateFrame('StatusBar', nil, self)
     health:SetFrameStrata('LOW')
     health:SetReverseFill(inverted)
-    health:SetStatusBarTexture(C.Assets.statusbar_tex)
+    health:SetStatusBarTexture(UNITFRAME.StatusBarTex)
     health:SetPoint('LEFT')
     health:SetPoint('RIGHT')
     health:SetPoint('TOP')
+    health.Smooth = smooth
 
     if isPlayer then
         health:SetHeight(C.DB.Unitframe.PlayerHealthHeight)
@@ -166,9 +180,12 @@ function UNITFRAME:CreateHealthBar(self)
         health.bg = bg
     end
 
-    health.Smooth = smooth
+    local font = C.Assets.Fonts.Condensed
+    local outline = _G.FREE_ADB.FontOutline
+    health.StatusText = F.CreateFS(health, font, 11, outline, nil, nil, outline or 'THICK')
+
     self.Health = health
-    self.Health.PreUpdate = inverted and OverrideHealth
+    self.Health.PreUpdate = inverted and PreUpdateHealth
     self.Health.PostUpdate = inverted and PostUpdateHealth
 
     UNITFRAME:UpdateHealthBarColor(self)
@@ -209,7 +226,7 @@ function UNITFRAME:CreateHealPrediction(self)
     myBar:SetPoint('TOP')
     myBar:SetPoint('BOTTOM')
     myBar:SetPoint('LEFT', self.Health:GetStatusBarTexture(), inverted and 'LEFT' or 'RIGHT')
-    myBar:SetStatusBarTexture(C.Assets.statusbar_tex)
+    myBar:SetStatusBarTexture(UNITFRAME.StatusBarTex)
     --myBar:SetStatusBarColor(.3, .3, .3, .8)
     myBar:SetWidth(self:GetWidth())
 
@@ -217,7 +234,7 @@ function UNITFRAME:CreateHealPrediction(self)
     otherBar:SetPoint('TOP')
     otherBar:SetPoint('BOTTOM')
     otherBar:SetPoint('LEFT', myBar:GetStatusBarTexture(), inverted and 'LEFT' or 'RIGHT')
-    otherBar:SetStatusBarTexture(C.Assets.statusbar_tex)
+    otherBar:SetStatusBarTexture(UNITFRAME.StatusBarTex)
     --otherBar:SetStatusBarColor(.3, .3, .3, .8)
     otherBar:SetWidth(self:GetWidth())
 

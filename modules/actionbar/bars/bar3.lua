@@ -9,7 +9,7 @@ local NUM_ACTIONBAR_BUTTONS = NUM_ACTIONBAR_BUTTONS
 local MultiBarBottomRight = MultiBarBottomRight
 
 local F, C = unpack(select(2, ...))
-local ACTIONBAR = F:GetModule('Actionbar')
+local ACTIONBAR = F:GetModule('ActionBar')
 
 local margin, padding = 3, 3
 

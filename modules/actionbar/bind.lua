@@ -34,7 +34,7 @@ local APPLY = APPLY
 local CANCEL = CANCEL
 
 local F, C, L = unpack(select(2, ...))
-local ACTIONBAR = F:GetModule('Actionbar')
+local ACTIONBAR = F:GetModule('ActionBar')
 
 -- Button types
 local function hookActionButton(self)

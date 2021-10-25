@@ -1,15 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local SetCVar = SetCVar
-local SetActionBarToggles = SetActionBarToggles
-local MultiActionBar_Update = MultiActionBar_Update
-local ChatFrame_RemoveMessageGroup = ChatFrame_RemoveMessageGroup
-local FCF_SavePositionAndDimensions = FCF_SavePositionAndDimensions
-local CreateFrame = CreateFrame
-local PlaySoundFile = PlaySoundFile
-local ReloadUI = ReloadUI
-
 local F, C, L = unpack(select(2, ...))
 local INSTALL = F:RegisterModule('Installation')
 
@@ -128,6 +116,7 @@ local function SetupCVars()
 
     if C.IsDeveloper then
         SetCVar('cursorsizepreferred', 2)
+        SetCVar('worldPreloadNonCritical', 0)
     end
 end
 
@@ -150,7 +139,7 @@ local function SetupActionbars()
 
     SetActionBarToggles(1, 1, 1, 1, 1)
 
-    MultiActionBar_Update()
+    _G.MultiActionBar_Update()
 
     _G.MultiBarBottomLeft:SetShown(true)
     _G.MultiBarRight:SetShown(true)
@@ -163,9 +152,9 @@ local function SetupChatFrame()
 
     for i = 1, _G.NUM_CHAT_WINDOWS do
         local cf = _G['ChatFrame' .. i]
-        ChatFrame_RemoveMessageGroup(cf, 'CHANNEL')
+        _G.ChatFrame_RemoveMessageGroup(cf, 'CHANNEL')
     end
-    FCF_SavePositionAndDimensions(_G.ChatFrame1)
+    _G.FCF_SavePositionAndDimensions(_G.ChatFrame1)
 
     C.DB.Chat.LockPosition = true
 end
@@ -225,7 +214,7 @@ function INSTALL:HelloWorld()
     local progressBar = CreateFrame('StatusBar', nil, f.body)
     progressBar:SetPoint('BOTTOM', f.body, 'BOTTOM', 0, 10)
     progressBar:SetSize(320, 20)
-    progressBar:SetStatusBarTexture(C.Assets.statusbar_tex)
+    progressBar:SetStatusBarTexture(C.Assets.Textures.Norm)
     progressBar:Hide()
     F:SmoothBar(progressBar)
 
@@ -270,7 +259,7 @@ function INSTALL:HelloWorld()
             'OnClick',
             function()
                 C.DB.InstallationComplete = true
-                ReloadUI()
+                _G.ReloadUI()
             end
         )
     end

@@ -44,7 +44,7 @@ tinsert(
             unit.HealthBarBG:Hide()
             unit.HealthBarFrame:Hide()
             unit.healthBarWidth = 250
-            unit.ActualHealthBar:SetTexture(C.Assets.statusbar_tex)
+            unit.ActualHealthBar:SetTexture(C.Assets.Textures.Norm)
             unit.healthBg = F.SetBD(unit.ActualHealthBar)
             unit.healthBg:ClearAllPoints()
             unit.healthBg:SetWidth(252)
@@ -118,7 +118,7 @@ tinsert(
             unit.healthBarWidth = 36
             unit.ActualHealthBar:ClearAllPoints()
             unit.ActualHealthBar:SetPoint('TOPLEFT', unit.Icon, 'BOTTOMLEFT', 1, -4)
-            unit.ActualHealthBar:SetTexture(C.Assets.statusbar_tex)
+            unit.ActualHealthBar:SetTexture(C.Assets.Textures.Norm)
             unit.healthBg = F.SetBD(unit.ActualHealthBar)
             unit.healthBg:SetPoint('TOPLEFT', unit.ActualHealthBar, -1, 1)
             unit.healthBg:SetPoint('BOTTOMRIGHT', unit.ActualHealthBar, 'TOPLEFT', 37, -8)
@@ -276,7 +276,7 @@ tinsert(
         F.StripTextures(xpbar)
         xpbar:SetParent(bar)
         xpbar:SetWidth(bar:GetWidth())
-        xpbar:SetStatusBarTexture(C.Assets.statusbar_tex)
+        xpbar:SetStatusBarTexture(C.Assets.Textures.Norm)
         F.SetBD(xpbar)
 
         local turnTimer = bottomFrame.TurnTimer
@@ -320,7 +320,7 @@ tinsert(
             unit.Name:SetPoint('TOPLEFT', icon, 'TOPRIGHT', 3, -3)
 
             unit.ActualHealthBar:SetPoint('BOTTOMLEFT', icon, 'BOTTOMRIGHT', 5, 0)
-            unit.ActualHealthBar:SetTexture(C.Assets.statusbar_tex)
+            unit.ActualHealthBar:SetTexture(C.Assets.Textures.Norm)
             local bg = F.SetBD(unit.ActualHealthBar)
             bg:SetPoint('TOPLEFT', unit.ActualHealthBar, -1, 1)
             bg:SetPoint('BOTTOMRIGHT', unit.ActualHealthBar, 'BOTTOMLEFT', 129, -1)

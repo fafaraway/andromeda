@@ -1,15 +1,7 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local max = max
-local min = min
-local InCombatLockdown = InCombatLockdown
-local GetPhysicalScreenSize = GetPhysicalScreenSize
-
 local F, C = unpack(select(2, ...))
 
 local function GetBestScale()
-    local scale = max(.4, min(1.15, 768 / C.ScreenHeight))
+    local scale = math.max(.4, math.min(1.15, 768 / C.ScreenHeight))
     return F:Round(scale, 2)
 end
 
@@ -54,14 +46,17 @@ function F:Scale(n)
     return (m == 1 or n == 0) and n or ((m < 1 and Trunc(n / m) or Round(n / m)) * m)
 end
 
-F:RegisterEvent('PLAYER_LOGIN', function()
-    if C.DB.InstallationComplete then
-        F:SetupUIScale()
-        F:RegisterEvent('UI_SCALE_CHANGED', UpdatePixelScale)
+F:RegisterEvent(
+    'PLAYER_LOGIN',
+    function()
+        if C.DB.InstallationComplete then
+            F:SetupUIScale()
+            F:RegisterEvent('UI_SCALE_CHANGED', UpdatePixelScale)
 
-        _G.Display_UseUIScale:Kill()
-        _G.Display_UIScaleSlider:Kill()
-    else
-        F:SetupUIScale(true)
+            _G.Display_UseUIScale:Kill()
+            _G.Display_UIScaleSlider:Kill()
+        else
+            F:SetupUIScale(true)
+        end
     end
-end)
+)

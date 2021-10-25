@@ -1,23 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local tinsert = tinsert
-local CreateFrame = CreateFrame
-local IsInInstance = IsInInstance
-local IsEquippedItem = IsEquippedItem
-local GetItemCount = GetItemCount
-local GetItemCooldown = GetItemCooldown
-local IsPlayerSpell = IsPlayerSpell
-local GetSpecialization = GetSpecialization
-local InCombatLockdown = InCombatLockdown
-local GetZonePVPInfo = GetZonePVPInfo
-local GetWeaponEnchantInfo = GetWeaponEnchantInfo
-local UnitInVehicle = UnitInVehicle
-local UnitBuff = UnitBuff
-local UnitIsDeadOrGhost = UnitIsDeadOrGhost
-local GetSpellTexture = GetSpellTexture
-local GetItemIcon = GetItemIcon
-
 local F, C, L = unpack(select(2, ...))
 local AURA = F:GetModule('Aura')
 
@@ -240,7 +220,7 @@ function AURA:Reminder_Create(cfg)
     frame:Hide()
     cfg.frame = frame
 
-    tinsert(frames, frame)
+    table.insert(frames, frame)
 end
 
 function AURA:Reminder_UpdateAnchor()
@@ -274,7 +254,7 @@ function AURA:Reminder_AddItemGroup()
             if not groups then
                 groups = {}
             end
-            tinsert(groups, value)
+            table.insert(groups, value)
         end
     end
 end

@@ -1,21 +1,5 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local tinsert = tinsert
-local CreateFrame = CreateFrame
-local GetScreenWidth = GetScreenWidth
-local GetScreenHeight = GetScreenHeight
-local GetCursorPosition = GetCursorPosition
-local IsShiftKeyDown = IsShiftKeyDown
-local IsControlKeyDown = IsControlKeyDown
-local IsModifierKeyDown = IsModifierKeyDown
-local PlaySound = PlaySound
-local InCombatLockdown = InCombatLockdown
-local StaticPopup_Show = StaticPopup_Show
-local SOUNDKIT_IG_MAINMENU_OPTION_CHECKBOX_ON = SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON
-
 local F, C, L = unpack(select(2, ...))
-local MOVER = F:RegisterModule('Layout')
+local M = F:RegisterModule('Layout')
 
 -- Grids
 local toggle = 0
@@ -134,13 +118,13 @@ function F:Mover(text, value, anchor, width, height)
     mover.__key = key
     mover.__value = value
     mover.__anchor = anchor
-    mover:SetScript('OnEnter', MOVER.Mover_OnEnter)
-    mover:SetScript('OnLeave', MOVER.Mover_OnLeave)
-    mover:SetScript('OnDragStart', MOVER.Mover_OnDragStart)
-    mover:SetScript('OnDragStop', MOVER.Mover_OnDragStop)
-    mover:SetScript('OnMouseUp', MOVER.Mover_OnClick)
+    mover:SetScript('OnEnter', M.Mover_OnEnter)
+    mover:SetScript('OnLeave', M.Mover_OnLeave)
+    mover:SetScript('OnDragStart', M.Mover_OnDragStart)
+    mover:SetScript('OnDragStop', M.Mover_OnDragStop)
+    mover:SetScript('OnMouseUp', M.Mover_OnClick)
 
-    tinsert(MoverList, mover)
+    table.insert(MoverList, mover)
 
     self:ClearAllPoints()
     self:SetPoint('TOPLEFT', mover)
@@ -148,7 +132,7 @@ function F:Mover(text, value, anchor, width, height)
     return mover
 end
 
-function MOVER:CalculateMoverPoints(mover, trimX, trimY)
+function M:CalculateMoverPoints(mover, trimX, trimY)
     local screenWidth = F:Round(_G.UIParent:GetRight())
     local screenHeight = F:Round(_G.UIParent:GetTop())
     local screenCenter = F:Round(_G.UIParent:GetCenter(), nil)
@@ -183,8 +167,8 @@ function MOVER:CalculateMoverPoints(mover, trimX, trimY)
     return x, y, point
 end
 
-function MOVER:UpdateTrimFrame()
-    local x, y = MOVER:CalculateMoverPoints(self)
+function M:UpdateTrimFrame()
+    local x, y = M:CalculateMoverPoints(self)
     x, y = F:Round(x), F:Round(y)
     f.__x:SetText(x)
     f.__y:SetText(y)
@@ -193,10 +177,10 @@ function MOVER:UpdateTrimFrame()
     f.__trimText:SetText(self.text:GetText())
 end
 
-function MOVER:DoTrim(trimX, trimY)
+function M:DoTrim(trimX, trimY)
     local mover = updater.__owner
     if mover then
-        local x, y, point = MOVER:CalculateMoverPoints(mover, trimX, trimY)
+        local x, y, point = M:CalculateMoverPoints(mover, trimX, trimY)
         x, y = F:Round(x), F:Round(y)
         f.__x:SetText(x)
         f.__y:SetText(y)
@@ -208,7 +192,7 @@ function MOVER:DoTrim(trimX, trimY)
     end
 end
 
-function MOVER:Mover_OnClick(btn)
+function M:Mover_OnClick(btn)
     if IsShiftKeyDown() and btn == 'RightButton' then
         self:Hide()
     elseif IsControlKeyDown() and btn == 'RightButton' then
@@ -217,27 +201,27 @@ function MOVER:Mover_OnClick(btn)
         C.DB[self.__key][self.__value] = nil
     end
     updater.__owner = self
-    MOVER.UpdateTrimFrame(self)
+    M.UpdateTrimFrame(self)
 end
 
-function MOVER:Mover_OnEnter()
+function M:Mover_OnEnter()
     self.bg:SetBackdropBorderColor(C.r, C.g, C.b)
     self.text:SetTextColor(1, .8, 0)
 end
 
-function MOVER:Mover_OnLeave()
+function M:Mover_OnLeave()
     F.SetBorderColor(self.bg)
     self.text:SetTextColor(1, 1, 1)
 end
 
-function MOVER:Mover_OnDragStart()
+function M:Mover_OnDragStart()
     self:StartMoving()
-    MOVER.UpdateTrimFrame(self)
+    M.UpdateTrimFrame(self)
     updater.__owner = self
     updater:Show()
 end
 
-function MOVER:Mover_OnDragStop()
+function M:Mover_OnDragStop()
     self:StopMovingOrSizing()
     local orig, _, tar, x, y = self:GetPoint()
     x = F:Round(x)
@@ -246,11 +230,11 @@ function MOVER:Mover_OnDragStop()
     self:ClearAllPoints()
     self:SetPoint(orig, 'UIParent', tar, x, y)
     C.DB[self.__key][self.__value] = {orig, 'UIParent', tar, x, y}
-    MOVER.UpdateTrimFrame(self)
+    M.UpdateTrimFrame(self)
     updater:Hide()
 end
 
-function MOVER:UnlockElements()
+function M:UnlockElements()
     for i = 1, #MoverList do
         local mover = MoverList[i]
         if not mover:IsShown() then
@@ -261,7 +245,7 @@ function MOVER:UnlockElements()
     f:Show()
 end
 
-function MOVER:LockElements()
+function M:LockElements()
     for i = 1, #MoverList do
         local mover = MoverList[i]
         mover:Hide()
@@ -297,7 +281,7 @@ local function CreateConsole()
     end
 
     -- Lock
-    bu[1]:SetScript('OnClick', MOVER.LockElements)
+    bu[1]:SetScript('OnClick', M.LockElements)
 
     -- Grids
     bu[2]:SetScript('OnClick', function()
@@ -315,7 +299,7 @@ local function CreateConsole()
 
     -- Reset
     bu[3]:SetScript('OnClick', function()
-        StaticPopup_Show('FREEUI_RESET_LAYOUT')
+        _G.StaticPopup_Show('FREEUI_RESET_LAYOUT')
     end)
 
     local header = CreateFrame('Frame', nil, f)
@@ -343,7 +327,7 @@ local function CreateConsole()
         if text then
             local diff = text - self.__current
             self.__current = text
-            MOVER:DoTrim(diff)
+            M:DoTrim(diff)
         end
     end)
     f.__x = xBox
@@ -359,7 +343,7 @@ local function CreateConsole()
         if text then
             local diff = text - self.__current
             self.__current = text
-            MOVER:DoTrim(nil, diff)
+            M:DoTrim(nil, diff)
         end
     end)
     f.__y = yBox
@@ -369,11 +353,11 @@ local function CreateConsole()
     local function arrowOnClick(self)
         local modKey = IsModifierKeyDown()
         if self.__index < 3 then
-            MOVER:DoTrim(self.__offset * (modKey and 10 or 1))
+            M:DoTrim(self.__offset * (modKey and 10 or 1))
         else
-            MOVER:DoTrim(nil, self.__offset * (modKey and 10 or 1))
+            M:DoTrim(nil, self.__offset * (modKey and 10 or 1))
         end
-        PlaySound(SOUNDKIT_IG_MAINMENU_OPTION_CHECKBOX_ON)
+        PlaySound(_G.SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
     end
 
     for i = 1, 4 do
@@ -393,11 +377,11 @@ local function CreateConsole()
     local function showLater(event)
         if event == 'PLAYER_REGEN_DISABLED' then
             if f:IsShown() then
-                MOVER:LockElements()
+                M:LockElements()
                 F:RegisterEvent('PLAYER_REGEN_ENABLED', showLater)
             end
         else
-            MOVER:UnlockElements()
+            M:UnlockElements()
             F:UnregisterEvent(event, showLater)
         end
     end
@@ -410,14 +394,14 @@ function F:MoverConsole()
         return
     end
     CreateConsole()
-    MOVER:UnlockElements()
+    M:UnlockElements()
 end
 
-function MOVER:OnLogin()
+function M:OnLogin()
     updater = CreateFrame('Frame')
     updater:Hide()
     updater:SetScript('OnUpdate', function()
-        MOVER.UpdateTrimFrame(updater.__owner)
+        M.UpdateTrimFrame(updater.__owner)
     end)
 end
 

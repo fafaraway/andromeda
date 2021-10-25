@@ -9,7 +9,7 @@ local GetScreenWidth = GetScreenWidth
 local IsShiftKeyDown = IsShiftKeyDown
 
 local F, C = unpack(select(2, ...))
-local NOTIFICATION = F:RegisterModule('Notification')
+local NOTIFICATION = F:GetModule('Notification')
 
 local playSounds = true
 local animations = true

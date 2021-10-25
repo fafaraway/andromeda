@@ -14,7 +14,7 @@ local UnitVehicleSkin = UnitVehicleSkin
 local HasOverrideActionBar = HasOverrideActionBar
 
 local F, C = unpack(select(2, ...))
-local ACTIONBAR = F:GetModule('Actionbar')
+local ACTIONBAR = F:GetModule('ActionBar')
 
 local barsList = {
     'FreeUI_ActionBar1',

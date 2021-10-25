@@ -230,7 +230,7 @@ tinsert(C.BlizzThemes, function()
 		for i = 1, GetNumFactions() do
 			local statusbar = _G["ReputationBar"..i.."ReputationBar"]
 			if statusbar then
-				statusbar:SetStatusBarTexture(C.Assets.statusbar_tex)
+				statusbar:SetStatusBarTexture(C.Assets.Textures.Norm)
 
 				if not statusbar.reskinned then
 					F.CreateBDFrame(statusbar, .25)

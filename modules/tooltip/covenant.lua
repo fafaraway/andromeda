@@ -110,7 +110,8 @@ local addonPrefixes = {
 local function GetCovenantIcon(covenantID)
     local covenant = covenantList[covenantID]
     if covenant then
-        return string.format('|T' .. C.AssetsPath .. 'textures\\covenants\\%s:12:12|t', covenant)
+        local tex = C.Assets.Textures.Covenant[covenant]
+        return string.format('|T' .. tex .. ':12:12|t')
     end
 
     return ''
@@ -152,9 +153,9 @@ end
 
 local cache = {}
 function M:UpdateRosterInfo()
-    if not IsInGroup() then
-        return
-    end
+    -- if not IsInGroup() then
+    --     return
+    -- end
 
     if not DCLoaded then
         for i = 1, GetNumGroupMembers() do
@@ -263,7 +264,7 @@ function M:AddCovenantInfo()
     end
 
     if covenantID and covenantID ~= 0 then
-        _G.GameTooltip:AddLine(string.format('%s %s %s', C.WhiteColor..L['Covenant']..':|r', GetCovenantName(covenantID), GetCovenantIcon(covenantID)))
+        _G.GameTooltip:AddLine(string.format('%s %s %s', C.WhiteColor .. L['Covenant'] .. ':|r', GetCovenantName(covenantID), GetCovenantIcon(covenantID)))
     end
 end
 

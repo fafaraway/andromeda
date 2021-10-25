@@ -1,16 +1,5 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local sort = sort
-local format = format
-local gsub = gsub
-local floor = floor
-local GetInventoryItemLink = GetInventoryItemLink
-local GetInventoryItemDurability = GetInventoryItemDurability
-local GetInventoryItemTexture = GetInventoryItemTexture
-
 local F, C, L = unpack(select(2, ...))
-local INFOBAR = F:GetModule('Infobar')
+local INFOBAR = F:GetModule('InfoBar')
 
 local showRepair = true
 local slots = {
@@ -40,7 +29,7 @@ local function GetItemDurability()
             slots[i][3] = 1000
         end
     end
-    sort(
+    table.sort(
         slots,
         function(a, b)
             return a[3] < b[3]
@@ -63,7 +52,7 @@ local function GradientColor(perc)
     local seg, relperc = math.modf(perc * 2)
     local r1, g1, b1, r2, g2, b2 = select(seg * 3 + 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0) -- R -> Y -> G
     local r, g, b = r1 + (r2 - r1) * relperc, g1 + (g2 - g1) * relperc, b1 + (b2 - b1) * relperc
-    return format('|cff%02x%02x%02x', r * 255, g * 255, b * 255), r, g, b
+    return string.format('|cff%02x%02x%02x', r * 255, g * 255, b * 255), r, g, b
 end
 
 local function ResetRepairNotify()
@@ -82,7 +71,7 @@ local function Button_OnEvent(self)
     local numSlots = GetItemDurability()
 
     if numSlots > 0 then
-        self.Text:SetText(format(gsub(L['Durability'] .. ': [color]%d|r%%', '%[color%]', (GradientColor(floor(slots[1][3] * 100) / 100))), floor(slots[1][3] * 100)))
+        self.Text:SetText(string.format(string.gsub(L['Durability'] .. ': [color]%d|r%%', '%[color%]', (GradientColor(math.floor(slots[1][3] * 100) / 100))), math.floor(slots[1][3] * 100)))
     else
         self.Text:SetText(L['Durability'] .. ': ' .. C.InfoColor .. _G.NONE)
     end
@@ -111,7 +100,7 @@ local function Button_OnEnter(self)
             local green = slots[i][3] * 2
             local red = 1 - green
             local slotIcon = '|T' .. GetInventoryItemTexture('player', slots[i][1]) .. ':13:15:0:0:50:50:4:46:4:46|t ' or ''
-            _G.GameTooltip:AddDoubleLine(slotIcon .. slots[i][2], floor(slots[i][3] * 100) .. '%', 1, 1, 1, red + 1, green, 0)
+            _G.GameTooltip:AddDoubleLine(slotIcon .. slots[i][2], math.floor(slots[i][3] * 100) .. '%', 1, 1, 1, red + 1, green, 0)
         end
     end
 

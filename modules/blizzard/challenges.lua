@@ -1,30 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local pairs = pairs
-local wipe = wipe
-local format = format
-local strsplit = strsplit
-local strsub = strsub
-local tonumber = tonumber
-local sort = sort
-local Ambiguate = Ambiguate
-local CreateFrame = CreateFrame
-local hooksecurefunc = hooksecurefunc
-local IsAddOnLoaded = IsAddOnLoaded
-local GetItemInfo = GetItemInfo
-local WeeklyRewards_LoadUI = WeeklyRewards_LoadUI
-local C_MythicPlus_GetRunHistory = C_MythicPlus.GetRunHistory
-local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo
-local C_ChallengeMode_GetGuildLeaders = C_ChallengeMode.GetGuildLeaders
-local C_MythicPlus_GetOwnedKeystoneLevel = C_MythicPlus.GetOwnedKeystoneLevel
-local C_MythicPlus_GetOwnedKeystoneChallengeMapID = C_MythicPlus.GetOwnedKeystoneChallengeMapID
-local CHALLENGE_MODE_POWER_LEVEL = CHALLENGE_MODE_POWER_LEVEL
-local CHALLENGE_MODE_GUILD_BEST_LINE = CHALLENGE_MODE_GUILD_BEST_LINE
-local CHALLENGE_MODE_GUILD_BEST_LINE_YOU = CHALLENGE_MODE_GUILD_BEST_LINE_YOU
-local WEEKLY_REWARDS_MYTHIC_TOP_RUNS = WEEKLY_REWARDS_MYTHIC_TOP_RUNS
-local LE_ITEM_QUALITY_EPIC = LE_ITEM_QUALITY_EPIC
-
 local F, C, L = unpack(select(2, ...))
 local ECF = F:RegisterModule('EnhancedChallengeFrame')
 
@@ -39,12 +12,12 @@ function ECF:GuildBest_UpdateTooltip()
     end
 
     _G.GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
-    local name = C_ChallengeMode_GetMapUIInfo(leaderInfo.mapChallengeModeID)
+    local name = C_ChallengeMode.GetMapUIInfo(leaderInfo.mapChallengeModeID)
     _G.GameTooltip:SetText(name, 1, 1, 1)
-    _G.GameTooltip:AddLine(format(CHALLENGE_MODE_POWER_LEVEL, leaderInfo.keystoneLevel))
+    _G.GameTooltip:AddLine(string.format(_G.CHALLENGE_MODE_POWER_LEVEL, leaderInfo.keystoneLevel))
     for i = 1, #leaderInfo.members do
-        local classColorStr = strsub(F:RGBToHex(F:ClassColor(leaderInfo.members[i].classFileName)), 3, 10)
-        _G.GameTooltip:AddLine(format(CHALLENGE_MODE_GUILD_BEST_LINE, classColorStr, leaderInfo.members[i].name))
+        local classColorStr = string.sub(F:RGBToHex(F:ClassColor(leaderInfo.members[i].classFileName)), 3, 10)
+        _G.GameTooltip:AddLine(string.format(_G.CHALLENGE_MODE_GUILD_BEST_LINE, classColorStr, leaderInfo.members[i].name))
     end
     _G.GameTooltip:Show()
 end
@@ -87,13 +60,13 @@ end
 
 function ECF:GuildBest_SetUp(leaderInfo)
     self.leaderInfo = leaderInfo
-    local str = CHALLENGE_MODE_GUILD_BEST_LINE
+    local str = _G.CHALLENGE_MODE_GUILD_BEST_LINE
     if leaderInfo.isYou then
-        str = CHALLENGE_MODE_GUILD_BEST_LINE_YOU
+        str = _G.CHALLENGE_MODE_GUILD_BEST_LINE_YOU
     end
 
-    local classColorStr = strsub(F:RGBToHex(F:ClassColor(leaderInfo.classFileName)), 3, 10)
-    self.CharacterName:SetText(format(str, classColorStr, leaderInfo.name))
+    local classColorStr = string.sub(F:RGBToHex(F:ClassColor(leaderInfo.classFileName)), 3, 10)
+    self.CharacterName:SetText(string.format(str, classColorStr, leaderInfo.name))
     self.Level:SetText(leaderInfo.keystoneLevel)
 end
 
@@ -103,7 +76,7 @@ function ECF:GuildBest_Update()
         ECF:GuildBest_Create()
     end
     if self.leadersAvailable then
-        local leaders = C_ChallengeMode_GetGuildLeaders()
+        local leaders = C_ChallengeMode.GetGuildLeaders()
         if leaders and #leaders > 0 then
             for i = 1, #leaders do
                 ECF.GuildBest_SetUp(frame.entries[i], leaders[i])
@@ -165,12 +138,12 @@ local function sortHistory(entry1, entry2)
 end
 
 function ECF:KeystoneInfo_WeeklyRuns()
-    local runHistory = C_MythicPlus_GetRunHistory(false, true)
+    local runHistory = C_MythicPlus.GetRunHistory(false, true)
     local numRuns = runHistory and #runHistory
     if numRuns > 0 then
         _G.GameTooltip:AddLine(' ')
-        _G.GameTooltip:AddDoubleLine(format(WEEKLY_REWARDS_MYTHIC_TOP_RUNS, WeeklyRunsThreshold), '(' .. numRuns .. ')', .6, .8, 1)
-        sort(runHistory, sortHistory)
+        _G.GameTooltip:AddDoubleLine(string.format(_G.WEEKLY_REWARDS_MYTHIC_TOP_RUNS, WeeklyRunsThreshold), '(' .. numRuns .. ')', .6, .8, 1)
+        table.sort(runHistory, sortHistory)
 
         for i = 1, WeeklyRunsThreshold do
             local runInfo = runHistory[i]
@@ -178,7 +151,7 @@ function ECF:KeystoneInfo_WeeklyRuns()
                 break
             end
 
-            local name = C_ChallengeMode_GetMapUIInfo(runInfo.mapChallengeModeID)
+            local name = C_ChallengeMode.GetMapUIInfo(runInfo.mapChallengeModeID)
             local r, g, b = 0, 1, 0
             if not runInfo.completed then
                 r, g, b = 1, 0, 0
@@ -191,7 +164,7 @@ end
 
 function ECF:KeystoneInfo_Create()
     local texture = select(10, GetItemInfo(158923)) or 525134
-    local iconColor = C.QualityColors[LE_ITEM_QUALITY_EPIC or 4]
+    local iconColor = C.QualityColors[_G.LE_ITEM_QUALITY_EPIC or 4]
     local button = CreateFrame('Frame', nil, _G.ChallengesFrame.WeeklyInfo, 'BackdropTemplate')
     button:SetPoint('BOTTOMLEFT', 10, 67)
     button:SetSize(35, 35)
@@ -205,11 +178,11 @@ function ECF:KeystoneInfo_Create()
             _G.GameTooltip:AddLine(L['Account Keystones'])
             for name, info in pairs(_G.FREE_ADB.KeystoneInfo) do
                 local name = Ambiguate(name, 'none')
-                local mapID, level, class, faction = strsplit(':', info)
+                local mapID, level, class, faction = string.split(':', info)
                 local color = F:RGBToHex(F:ClassColor(class))
                 local factionColor = faction == 'Horde' and '|cffff5040' or '|cff00adf0'
-                local dungeon = C_ChallengeMode_GetMapUIInfo(tonumber(mapID))
-                _G.GameTooltip:AddDoubleLine(format(color .. '%s:|r', name), format('%s%s(%s)|r', factionColor, dungeon, level))
+                local dungeon = C_ChallengeMode.GetMapUIInfo(tonumber(mapID))
+                _G.GameTooltip:AddDoubleLine(string.format(color .. '%s:|r', name), string.format('%s%s(%s)|r', factionColor, dungeon, level))
             end
             _G.GameTooltip:AddDoubleLine(' ', C.LineString)
             _G.GameTooltip:AddDoubleLine(' ', C.Assets.mouse_left .. _G.GREAT_VAULT_REWARDS .. ' ', 1, 1, 1, .6, .8, 1)
@@ -223,20 +196,21 @@ function ECF:KeystoneInfo_Create()
         function(_, btn)
             if btn == 'LeftButton' then
                 if not _G.WeeklyRewardsFrame then
-                    WeeklyRewards_LoadUI()
+                    _G.WeeklyRewards_LoadUI()
                 end
                 F:TogglePanel(_G.WeeklyRewardsFrame)
             elseif btn == 'MiddleButton' then
-                wipe(_G.FREE_ADB.KeystoneInfo)
+                table.wipe(_G.FREE_ADB.KeystoneInfo)
+                ECF:KeystoneInfo_Update() -- update own keystone info after reset
             end
         end
     )
 end
 
 function ECF:KeystoneInfo_UpdateBag()
-    local keystoneMapID = C_MythicPlus_GetOwnedKeystoneChallengeMapID()
+    local keystoneMapID = C_MythicPlus.GetOwnedKeystoneChallengeMapID()
     if keystoneMapID then
-        return keystoneMapID, C_MythicPlus_GetOwnedKeystoneLevel()
+        return keystoneMapID, C_MythicPlus.GetOwnedKeystoneLevel()
     end
 end
 

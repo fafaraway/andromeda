@@ -1,20 +1,34 @@
-local _G = getfenv(0)
-local wipe = _G.table.wipe
-local CreateFrame = _G.CreateFrame
-local GetLocale = _G.GetLocale
+local addOnName, engine = ...
 
-local FreeUI = select(2, ...)
-FreeUI[3] = FreeUI[1].Libs.ACL:GetLocale('FreeUI', GetLocale())
+local F = engine[1]
+local C = engine[2]
 
-local F, C = unpack(FreeUI)
+-- Get locale strings from AceLocale
+engine[3] = F.Libs.ACL:GetLocale(addOnName, GetLocale())
 
+-- Prepare modules
 do
-    F:RegisterModule('Tooltip')
-    F:RegisterModule('GUI')
-    F:RegisterModule('Unitframe')
-    F:RegisterModule('Nameplate')
+    F.UnitFrame = F:RegisterModule('UnitFrame')
+    F.WorldMap = F:RegisterModule('WorldMap')
+    F.Minimap = F:RegisterModule('Minimap')
+    F.Tooltip = F:RegisterModule('Tooltip')
+    F.GUI = F:RegisterModule('GUI')
+    F.Quest = F:RegisterModule('Quest')
+    F.Inventory = F:RegisterModule('Inventory')
+    F.InfoBar = F:RegisterModule('InfoBar')
+    F.ActionBar = F:RegisterModule('ActionBar')
+    F.Announcement = F:RegisterModule('Announcement')
+    F.Aura = F:RegisterModule('Aura')
+    F.Chat = F:RegisterModule('Chat')
+    F.Combat = F:RegisterModule('Combat')
+    F.Cooldown = F:RegisterModule('Cooldown')
+    F.Notification = F:RegisterModule('Notification')
+    F.Theme = F:RegisterModule('Theme')
+    F.Blizzard = F:RegisterModule('Blizzard')
+    F.Nameplate = F:RegisterModule('Nameplate')
 end
 
+-- Initialize settings
 local function InitialSettings(source, target, fullClean)
     for i, j in pairs(source) do
         if type(j) == 'table' then
@@ -68,7 +82,7 @@ loader:SetScript('OnEvent', function(self, _, addon)
     if _G.FREE_ADB['ProfileIndex'][C.MyFullName] == 1 then
         C.DB = _G.FREE_DB
         if not C.DB['ShadowLands'] then
-            wipe(C.DB)
+            table.wipe(C.DB)
             C.DB['ShadowLands'] = true
         end
     else
@@ -79,10 +93,17 @@ loader:SetScript('OnEvent', function(self, _, addon)
     F:SetupUIScale(true)
 
     local GUI = F:GetModule('GUI')
-    if not GUI.TexturesList[_G.FREE_ADB.TextureStyle] then
-        _G.FREE_ADB.TextureStyle = 1 -- reset value if not exists
+    local NAMEPLATE = F:GetModule('Nameplate')
+    if not GUI.TexturesList[C.DB.Nameplate.TextureStyle] then
+        C.DB.Nameplate.TextureStyle = 1
     end
-    C.Assets.statusbar_tex = GUI.TexturesList[_G.FREE_ADB.TextureStyle].texture
+    NAMEPLATE.StatusBarTex = GUI.TexturesList[C.DB.Nameplate.TextureStyle].texture
+
+    local UNITFRAME = F:GetModule('UnitFrame')
+    if not GUI.TexturesList[C.DB.Unitframe.TextureStyle] then
+        C.DB.Unitframe.TextureStyle = 1
+    end
+    UNITFRAME.StatusBarTex = GUI.TexturesList[C.DB.Unitframe.TextureStyle].texture
 
     self:UnregisterAllEvents()
 end)

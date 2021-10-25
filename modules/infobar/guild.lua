@@ -1,39 +1,5 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local wipe = wipe
-local sort = sort
-local format = format
-local Ambiguate = Ambiguate
-local CreateFrame = CreateFrame
-local IsAltKeyDown = IsAltKeyDown
-local IsShiftKeyDown = IsShiftKeyDown
-local MailFrameTab_OnClick = MailFrameTab_OnClick
-local ChatEdit_ChooseBoxForSend = ChatEdit_ChooseBoxForSend
-local ChatEdit_ActivateChat = ChatEdit_ActivateChat
-local ChatFrame_OpenChat = ChatFrame_OpenChat
-local ChatFrame_GetMobileEmbeddedTexture = ChatFrame_GetMobileEmbeddedTexture
-local HybridScrollFrame_GetOffset = HybridScrollFrame_GetOffset
-local HybridScrollFrame_Update = HybridScrollFrame_Update
-local C_GuildInfo_GuildRoster = C_GuildInfo.GuildRoster
-local C_PartyInfo_InviteUnit = C_PartyInfo.InviteUnit
-local C_Timer_After = C_Timer.After
-local UnitInRaid = UnitInRaid
-local UnitInParty = UnitInParty
-local GetRealZoneText = GetRealZoneText
-local GetQuestDifficultyColor = GetQuestDifficultyColor
-local GetTime = GetTime
-local GetNumGuildMembers = GetNumGuildMembers
-local GetGuildInfo = GetGuildInfo
-local GetNumGuildApplicants = GetNumGuildApplicants
-local GetGuildRosterInfo = GetGuildRosterInfo
-local MouseIsOver = MouseIsOver
-local IsInGuild = IsInGuild
-local LoadAddOn = LoadAddOn
-local ToggleCommunitiesFrame = ToggleCommunitiesFrame
-
 local F, C, L = unpack(select(2, ...))
-local INFOBAR = F:GetModule('Infobar')
+local INFOBAR = F:GetModule('InfoBar')
 
 INFOBAR.GuildTable = {}
 
@@ -43,16 +9,16 @@ local function rosterButtonOnClick(self, btn)
     local name = INFOBAR.GuildTable[self.index][3]
     if btn == 'LeftButton' then
         if IsAltKeyDown() then
-            C_PartyInfo_InviteUnit(name)
+            C_PartyInfo.InviteUnit(name)
         elseif IsShiftKeyDown() then
             if _G.MailFrame:IsShown() then
-                MailFrameTab_OnClick(nil, 2)
+                _G.MailFrameTab_OnClick(nil, 2)
                 _G.SendMailNameEditBox:SetText(name)
                 _G.SendMailNameEditBox:HighlightText()
             else
-                local editBox = ChatEdit_ChooseBoxForSend()
+                local editBox = _G.ChatEdit_ChooseBoxForSend()
                 local hasText = (editBox:GetText() ~= '')
-                ChatEdit_ActivateChat(editBox)
+                _G.ChatEdit_ActivateChat(editBox)
                 editBox:Insert(name)
                 if not hasText then
                     editBox:HighlightText()
@@ -60,7 +26,7 @@ local function rosterButtonOnClick(self, btn)
             end
         end
     else
-        ChatFrame_OpenChat('/w ' .. name .. ' ', _G.SELECTED_DOCK_FRAME)
+        _G.ChatFrame_OpenChat('/w ' .. name .. ' ', _G.SELECTED_DOCK_FRAME)
     end
 end
 
@@ -99,8 +65,7 @@ function INFOBAR:GuildPanel_UpdateButton(button)
     local levelcolor = F:RGBToHex(GetQuestDifficultyColor(level))
     button.level:SetText(levelcolor .. level)
 
-    local tcoords = _G.CLASS_ICON_TCOORDS[class]
-    button.class:SetTexCoord(tcoords[1] + .022, tcoords[2] - .025, tcoords[3] + .022, tcoords[4] - .025)
+    F.ClassIconTexCoord(button.class, class)
 
     local namecolor = F:RGBToHex(F:ClassColor(class))
     button.name:SetText(namecolor .. name .. status)
@@ -120,7 +85,7 @@ function INFOBAR:GuildPanel_Update()
     local buttons = scrollFrame.buttons
     local height = scrollFrame.buttonHeight
     local numMemberButtons = infoFrame.numMembers
-    local offset = HybridScrollFrame_GetOffset(scrollFrame)
+    local offset = _G.HybridScrollFrame_GetOffset(scrollFrame)
 
     for i = 1, #buttons do
         local button = buttons[i]
@@ -136,7 +101,7 @@ function INFOBAR:GuildPanel_Update()
         end
     end
 
-    HybridScrollFrame_Update(scrollFrame, numMemberButtons * height, usedHeight)
+    _G.HybridScrollFrame_Update(scrollFrame, numMemberButtons * height, usedHeight)
 end
 
 function INFOBAR:GuildPanel_OnMouseWheel(delta)
@@ -160,7 +125,7 @@ local function sortRosters(a, b)
 end
 
 function INFOBAR:GuildPanel_SortUpdate()
-    sort(INFOBAR.GuildTable, sortRosters)
+    table.sort(INFOBAR.GuildTable, sortRosters)
     INFOBAR:GuildPanel_Update()
 end
 
@@ -268,11 +233,11 @@ function INFOBAR:GuildPanel_Init()
     scrollBar:SetValue(0)
 end
 
-C_Timer_After(
+F:Delay(
     5,
     function()
         if IsInGuild() then
-            C_GuildInfo_GuildRoster()
+            C_GuildInfo.GuildRoster()
         end
     end
 )
@@ -280,18 +245,18 @@ C_Timer_After(
 function INFOBAR:GuildPanel_Refresh()
     local thisTime = GetTime()
     if not prevTime or (thisTime - prevTime > 5) then
-        C_GuildInfo_GuildRoster()
+        C_GuildInfo.GuildRoster()
         prevTime = thisTime
     end
 
-    wipe(INFOBAR.GuildTable)
+    table.wipe(INFOBAR.GuildTable)
     local count = 0
     local total, _, online = GetNumGuildMembers()
     local guildName, guildRank = GetGuildInfo('player')
 
     gName:SetText(F:RGBToHex({.9, .8, .6}) .. '<' .. (guildName or '') .. '>')
-    gOnline:SetText(format(C.InfoColor .. '%s:' .. ' %d/%d', _G.GUILD_ONLINE_LABEL, online, total))
-    gApps:SetText(format(C.InfoColor .. _G.GUILDINFOTAB_APPLICANTS, GetNumGuildApplicants()))
+    gOnline:SetText(string.format(C.InfoColor .. '%s:' .. ' %d/%d', _G.GUILD_ONLINE_LABEL, online, total))
+    gApps:SetText(string.format(C.InfoColor .. _G.GUILDINFOTAB_APPLICANTS, GetNumGuildApplicants()))
     gRank:SetText(C.InfoColor .. _G.RANK .. ': ' .. (guildRank or ''))
 
     for i = 1, total do
@@ -304,7 +269,7 @@ function INFOBAR:GuildPanel_Refresh()
                 elseif status == 2 then
                     status = '|TInterface\\ChatFrame\\UI-ChatIcon-ArmoryChat-BusyMobile:14:14:0:0:16:16:0:16:0:16|t'
                 else
-                    status = ChatFrame_GetMobileEmbeddedTexture(73 / 255, 177 / 255, 73 / 255)
+                    status = _G.ChatFrame_GetMobileEmbeddedTexture(73 / 255, 177 / 255, 73 / 255)
                 end
             else
                 if status == 1 then
@@ -362,7 +327,7 @@ local function Button_OnMouseUp(self, btn)
             _G.LookingForGuildFrame_Toggle()
         end
     elseif btn == 'RightButton' then
-        ToggleCommunitiesFrame()
+        _G.ToggleCommunitiesFrame()
     end
 end
 
@@ -374,7 +339,7 @@ local function Button_OnEvent(self, event, arg1)
 
     if event == 'GUILD_ROSTER_UPDATE' then
         if arg1 then
-            C_GuildInfo_GuildRoster()
+            C_GuildInfo.GuildRoster()
         end
     end
 
@@ -404,7 +369,7 @@ local function Button_OnLeave(self)
     if not infoFrame then
         return
     end
-    C_Timer_After(.1, delayLeave)
+    F:Delay(.1, delayLeave)
 end
 
 function INFOBAR:CreateGuildBlock()

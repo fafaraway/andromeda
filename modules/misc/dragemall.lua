@@ -44,7 +44,10 @@ local frames = {
     ['TokenFrame'] = true,
     ['TradeFrame'] = false,
     ['TutorialFrame'] = false,
-    ['VideoOptionsFrame'] = false
+    ['VideoOptionsFrame'] = false,
+
+    -- Addon Frames
+    ['BindPadFrame'] = false,
 }
 
 -- Frame Existing Check

@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local COMBAT = F:RegisterModule('Combat')
+local COMBAT = F:GetModule('Combat')
 
 local playedLowHealth = false
 local playedLowMana = false

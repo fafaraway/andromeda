@@ -10,7 +10,7 @@ local C_FriendList_IsFriend = C_FriendList.IsFriend
 local VehicleSeatIndicator = VehicleSeatIndicator
 
 local F, C, L = unpack(select(2, ...))
-local BLIZZARD = F:RegisterModule('Blizzard')
+local BLIZZARD = F:GetModule('Blizzard')
 
 local BLIZZARD_LIST = {}
 

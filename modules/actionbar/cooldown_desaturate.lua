@@ -6,7 +6,7 @@ local GetActionCooldown = GetActionCooldown
 local hooksecurefunc = hooksecurefunc
 
 local F, C = unpack(select(2, ...))
-local ACTIONBAR = F:GetModule('Actionbar')
+local ACTIONBAR = F:GetModule('ActionBar')
 
 -- Desaturate the action icon when the spell is on cooldown
 

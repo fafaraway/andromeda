@@ -12,7 +12,7 @@ local ActionButton1Cooldown = ActionButton1Cooldown
 local ActionBarButtonEventsFrameMixin = ActionBarButtonEventsFrameMixin
 
 local F, C = unpack(select(2, ...))
-local COOLDOWN = F:RegisterModule('Cooldown')
+local COOLDOWN = F:GetModule('Cooldown')
 
 local fontSize = 18
 local iconSize = 36

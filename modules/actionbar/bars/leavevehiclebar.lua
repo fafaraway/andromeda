@@ -11,7 +11,7 @@ local TaxiRequestEarlyLanding = TaxiRequestEarlyLanding
 local CanExitVehicle = CanExitVehicle
 
 local F, C, L = unpack(select(2, ...))
-local ACTIONBAR = F:GetModule('Actionbar')
+local ACTIONBAR = F:GetModule('ActionBar')
 
 local margin, padding = 4, 4
 

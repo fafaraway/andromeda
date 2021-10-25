@@ -1,53 +1,5 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local tostring = tostring
-local pairs = pairs
-local ipairs = ipairs
-local strsub = strsub
-local strlower = strlower
-local strfind = strfind
-local strmatch = strmatch
-local IsInGroup = IsInGroup
-local IsInRaid = IsInRaid
-local IsPartyLFG = IsPartyLFG
-local IsInGuild = IsInGuild
-local IsShiftKeyDown = IsShiftKeyDown
-local IsControlKeyDown = IsControlKeyDown
-local ChatEdit_UpdateHeader = ChatEdit_UpdateHeader
-local ChatEdit_ChooseBoxForSend = ChatEdit_ChooseBoxForSend
-local ChatEdit_AddHistory = ChatEdit_AddHistory
-local ChatEdit_OnEscapePressed = ChatEdit_OnEscapePressed
-local ChatTypeInfo = ChatTypeInfo
-local GetChatWindowInfo = GetChatWindowInfo
-local GetChannelName = GetChannelName
-local GetInstanceInfo = GetInstanceInfo
-local GetRealmName = GetRealmName
-local SetCVar = SetCVar
-local Ambiguate = Ambiguate
-local GetTime = GetTime
-local GetNumGuildMembers = GetNumGuildMembers
-local GetGuildRosterInfo = GetGuildRosterInfo
-local IsGuildMember = IsGuildMember
-local UnitIsGroupLeader = UnitIsGroupLeader
-local UnitIsGroupAssistant = UnitIsGroupAssistant
-local CanCooperateWithGameAccount = CanCooperateWithGameAccount
-local BNInviteFriend = BNInviteFriend
-local BNFeaturesEnabledAndConnected = BNFeaturesEnabledAndConnected
-local PlaySoundFile = PlaySoundFile
-local C_BattleNet_GetAccountInfoByID = C_BattleNet.GetAccountInfoByID
-local C_PartyInfo_InviteUnit = C_PartyInfo.InviteUnit
-local GeneralDockManager = GeneralDockManager
-local FCF_SavePositionAndDimensions = FCF_SavePositionAndDimensions
-local hooksecurefunc = hooksecurefunc
-local UnitGroupRolesAssigned = UnitGroupRolesAssigned
-local ConsoleExec = ConsoleExec
-local GetItemIcon = GetItemIcon
-local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
-local IsAltKeyDown = IsAltKeyDown
-
 local F, C, L = unpack(select(2, ...))
-local CHAT = F:RegisterModule('Chat')
+local CHAT = F:GetModule('Chat')
 
 local isScaling = false
 function CHAT:UpdateChatSize()
@@ -99,7 +51,7 @@ end
 
 function CHAT:UpdateTabEventColors(event)
     local tab = _G[self:GetName() .. 'Tab']
-    local selected = GeneralDockManager.selected:GetID() == tab:GetID()
+    local selected = _G.GeneralDockManager.selected:GetID() == tab:GetID()
     if event == 'CHAT_MSG_WHISPER' then
         tab.whisperIndex = 1
         CHAT.UpdateTabColors(tab, selected)
@@ -234,19 +186,19 @@ function CHAT:UpdateEditBoxBorderColor()
     hooksecurefunc(
         'ChatEdit_UpdateHeader',
         function()
-            local editBox = ChatEdit_ChooseBoxForSend()
+            local editBox = _G.ChatEdit_ChooseBoxForSend()
             local mType = editBox:GetAttribute('chatType')
             if mType == 'CHANNEL' then
                 local id = GetChannelName(editBox:GetAttribute('channelTarget'))
                 if id == 0 then
                     editBox.bd:SetBackdropBorderColor(0, 0, 0)
                 else
-                    editBox.bd:SetBackdropBorderColor(ChatTypeInfo[mType .. id].r, ChatTypeInfo[mType .. id].g, ChatTypeInfo[mType .. id].b)
+                    editBox.bd:SetBackdropBorderColor(_G.ChatTypeInfo[mType .. id].r, _G.ChatTypeInfo[mType .. id].g, _G.ChatTypeInfo[mType .. id].b)
                 end
             elseif mType == 'SAY' then
                 editBox.bd:SetBackdropBorderColor(0, 0, 0)
             else
-                editBox.bd:SetBackdropBorderColor(ChatTypeInfo[mType].r, ChatTypeInfo[mType].g, ChatTypeInfo[mType].b)
+                editBox.bd:SetBackdropBorderColor(_G.ChatTypeInfo[mType].r, _G.ChatTypeInfo[mType].g, _G.ChatTypeInfo[mType].b)
             end
         end
     )
@@ -268,7 +220,7 @@ function CHAT:ResizeChatFrame()
         function(_, btn)
             if btn == 'LeftButton' then
                 _G.ChatFrame1:StopMovingOrSizing()
-                FCF_SavePositionAndDimensions(_G.ChatFrame1)
+                _G.FCF_SavePositionAndDimensions(_G.ChatFrame1)
             end
         end
     )
@@ -339,7 +291,7 @@ function CHAT:UpdateTabChannelSwitch()
     if not C.DB.Chat.EasyChannelSwitch then
         return
     end
-    if strsub(tostring(self:GetText()), 1, 1) == '/' then
+    if string.sub(tostring(self:GetText()), 1, 1) == '/' then
         return
     end
     local currChatType = self:GetAttribute('chatType')
@@ -352,7 +304,7 @@ function CHAT:UpdateTabChannelSwitch()
             for j = h, r, step do
                 if cycles[j]:use(self, currChatType) then
                     self:SetAttribute('chatType', cycles[j].chatType)
-                    ChatEdit_UpdateHeader(self)
+                    _G.ChatEdit_UpdateHeader(self)
                     return
                 end
             end
@@ -432,23 +384,23 @@ end
 function CHAT.OnChatWhisper(event, ...)
     local msg, author, _, _, _, _, _, _, _, _, _, guid, presenceID = ...
     for word in pairs(whisperList) do
-        if (not IsInGroup() or UnitIsGroupLeader('player') or UnitIsGroupAssistant('player')) and strlower(msg) == strlower(word) then
+        if (not IsInGroup() or UnitIsGroupLeader('player') or UnitIsGroupAssistant('player')) and string.lower(msg) == string.lower(word) then
             if event == 'CHAT_MSG_BN_WHISPER' then
-                local accountInfo = C_BattleNet_GetAccountInfoByID(presenceID)
+                local accountInfo = C_BattleNet.GetAccountInfoByID(presenceID)
                 if accountInfo then
                     local gameAccountInfo = accountInfo.gameAccountInfo
                     local gameID = gameAccountInfo.gameAccountID
                     if gameID then
                         local charName = gameAccountInfo.characterName
                         local realmName = gameAccountInfo.realmName
-                        if CanCooperateWithGameAccount(accountInfo) and (not C.DB.Chat.GuildOnly or CHAT:IsUnitInGuild(charName .. '-' .. realmName)) then
+                        if _G.CanCooperateWithGameAccount(accountInfo) and (not C.DB.Chat.GuildOnly or CHAT:IsUnitInGuild(charName .. '-' .. realmName)) then
                             BNInviteFriend(gameID)
                         end
                     end
                 end
             else
                 if not C.DB.Chat.GuildOnly or IsGuildMember(guid) then
-                    C_PartyInfo_InviteUnit(author)
+                    C_PartyInfo.InviteUnit(author)
                 end
             end
         end
@@ -498,34 +450,34 @@ end
 -- Whisper sticky
 function CHAT:WhisperSticky()
     if C.DB.Chat.WhisperSticky then
-        ChatTypeInfo['WHISPER'].sticky = 1
-        ChatTypeInfo['BN_WHISPER'].sticky = 1
+        _G.ChatTypeInfo['WHISPER'].sticky = 1
+        _G.ChatTypeInfo['BN_WHISPER'].sticky = 1
     else
-        ChatTypeInfo['WHISPER'].sticky = 0
-        ChatTypeInfo['BN_WHISPER'].sticky = 0
+        _G.ChatTypeInfo['WHISPER'].sticky = 0
+        _G.ChatTypeInfo['BN_WHISPER'].sticky = 0
     end
 end
 
 -- Alt+Click to Invite player
 function CHAT:AltClickToInvite(link)
     if IsAltKeyDown() then
-        local ChatFrameEditBox = ChatEdit_ChooseBoxForSend()
+        local ChatFrameEditBox = _G.ChatEdit_ChooseBoxForSend()
         local player = link:match('^player:([^:]+)')
         local bplayer = link:match('^BNplayer:([^:]+)')
         if player then
-            C_PartyInfo_InviteUnit(player)
+            C_PartyInfo.InviteUnit(player)
         elseif bplayer then
-            local _, value = strmatch(link, '(%a+):(.+)')
-            local _, bnID = strmatch(value, '([^:]*):([^:]*):')
+            local _, value = string.match(link, '(%a+):(.+)')
+            local _, bnID = string.match(value, '([^:]*):([^:]*):')
             if not bnID then
                 return
             end
-            local accountInfo = C_BattleNet_GetAccountInfoByID(bnID)
-            if accountInfo.gameAccountInfo.clientProgram == _G.BNET_CLIENT_WOW and CanCooperateWithGameAccount(accountInfo) then
+            local accountInfo = C_BattleNet.GetAccountInfoByID(bnID)
+            if accountInfo.gameAccountInfo.clientProgram == _G.BNET_CLIENT_WOW and _G.CanCooperateWithGameAccount(accountInfo) then
                 BNInviteFriend(accountInfo.gameAccountInfo.gameAccountID)
             end
         end
-        ChatEdit_OnEscapePressed(ChatFrameEditBox) -- Secure hook opens whisper, so closing it.
+        _G.ChatEdit_OnEscapePressed(ChatFrameEditBox) -- Secure hook opens whisper, so closing it.
     end
 end
 
@@ -546,8 +498,8 @@ end
 
 -- Save slash command typo
 local function TypoHistory_Posthook_AddMessage(chat, text)
-    if text and strfind(text, _G.HELP_TEXT_SIMPLE) then
-        ChatEdit_AddHistory(chat.editBox)
+    if text and string.find(text, _G.HELP_TEXT_SIMPLE) then
+        _G.ChatEdit_AddHistory(chat.editBox)
     end
 end
 

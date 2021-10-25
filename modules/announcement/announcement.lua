@@ -19,7 +19,7 @@ local GetNumGroupMembers = GetNumGroupMembers
 local GetSpellInfo = GetSpellInfo
 
 local F, C, L = unpack(select(2, ...))
-local ANNOUNCEMENT = F:RegisterModule('Announcement')
+local ANNOUNCEMENT = F:GetModule('Announcement')
 
 C.AnnounceableSpellsList = {
     -- Paladin

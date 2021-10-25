@@ -8,7 +8,7 @@ local ZoneAbilityFrame = ZoneAbilityFrame
 local hooksecurefunc = hooksecurefunc
 
 local F, C, L = unpack(select(2, ...))
-local ACTIONBAR = F:GetModule('Actionbar')
+local ACTIONBAR = F:GetModule('ActionBar')
 
 local padding = 4
 

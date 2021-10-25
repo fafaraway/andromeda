@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local UNITFRAME = F:GetModule('Unitframe')
+local UNITFRAME = F:GetModule('UnitFrame')
 
 local function SetLastBarColor(element, max, powerType)
     if not element or not max then
@@ -77,7 +77,7 @@ function UNITFRAME:CreateClassPowerBar(self)
         bars[i] = CreateFrame('StatusBar', nil, self.ClassPowerBarHolder)
         bars[i]:SetHeight(barHeight)
         bars[i]:SetWidth((barWidth - 5 * gap) / 6)
-        bars[i]:SetStatusBarTexture(C.Assets.statusbar_tex)
+        bars[i]:SetStatusBarTexture(C.Assets.Textures.Norm)
         bars[i]:SetFrameLevel(self:GetFrameLevel() + 5)
 
         F.SetBD(bars[i])

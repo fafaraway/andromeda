@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local MAP = F:NewModule('WorldMap')
+local MAP = F:GetModule('WorldMap')
 
 local mapFrame = _G.WorldMapFrame
 local mapRects = {}
@@ -120,7 +120,7 @@ function MAP:WorldMapScale()
     hooksecurefunc(mapFrame, 'SynchronizeDisplayState', self.UpdateMapAnchor)
 end
 
-function MAP:OnEnable()
+function MAP:OnLogin()
     if not C.DB.Map.Enable then
         return
     end

@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local UNITFRAME = F:GetModule('Unitframe')
+local UNITFRAME = F:GetModule('UnitFrame')
 
 local function UpdateThreat(self, _, unit)
     if not self.Glow or self.unit ~= unit then

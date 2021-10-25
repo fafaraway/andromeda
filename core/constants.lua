@@ -1,6 +1,13 @@
 
 local F, C = unpack(select(2, ...))
 
+--[[ local addonVersion = '@project-version@'
+if (addonVersion:find('project%-version')) then
+    addonVersion = 'Development'
+end
+C.AddonVersion = addonVersion
+C.IsDeveloper = C.AddonVersion == 'Development' ]]
+
 C.IsRetail = _G.WOW_PROJECT_ID == _G.WOW_PROJECT_MAINLINE
 C.IsNewPatch = C.IsRetail and select(4, GetBuildInfo()) >= 90105 -- 9.1.5
 C.MaxLevel = GetMaxLevelForPlayerExpansion()
@@ -69,11 +76,35 @@ C.Assets = {
         Class = C.AssetsPath .. 'textures\\UI-CLASSES-CIRCLES',
         Leader = C.AssetsPath .. 'textures\\leader',
         Role = C.AssetsPath .. 'textures\\role',
-        Melli = C.AssetsPath .. 'textures\\statusbar\\melli',
+        Shield = C.AssetsPath .. 'textures\\uninterrupted-shield',
         Norm = C.AssetsPath .. 'textures\\statusbar\\norm',
         Grad = C.AssetsPath .. 'textures\\statusbar\\grad',
         Flat = C.AssetsPath .. 'textures\\statusbar\\flat',
-        Arrow = C.AssetsPath .. 'textures\\nparrow',
+
+        Covenant = {
+            Kyrian = C.AssetsPath .. 'textures\\covenants\\kyrian',
+            Necrolord = C.AssetsPath .. 'textures\\covenants\\necrolord',
+            NightFae = C.AssetsPath .. 'textures\\covenants\\nightfae',
+            Venthyr = C.AssetsPath .. 'textures\\covenants\\venthyr',
+        },
+
+
+
+        Inventory = {
+            Restore = C.AssetsPath .. 'textures\\inventory\\restore',
+            Toggle = C.AssetsPath .. 'textures\\inventory\\toggle',
+            Sort = C.AssetsPath .. 'textures\\inventory\\sort',
+            Reagen = C.AssetsPath .. 'textures\\inventory\\reagen',
+            Deposit = C.AssetsPath .. 'textures\\inventory\\deposit',
+            Delete = C.AssetsPath .. 'textures\\inventory\\delete',
+            Favourite = C.AssetsPath .. 'textures\\inventory\\favourite',
+            Split = C.AssetsPath .. 'textures\\inventory\\split',
+            Repair = C.AssetsPath .. 'textures\\inventory\\repair',
+            Sell = C.AssetsPath .. 'textures\\inventory\\sell',
+            Search = C.AssetsPath .. 'textures\\inventory\\search',
+            Junk = C.AssetsPath .. 'textures\\inventory\\junk'
+        },
+
     },
 
     Sounds = {

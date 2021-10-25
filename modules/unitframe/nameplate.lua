@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 local NAMEPLATE = F:GetModule('Nameplate')
-local UNITFRAME = F:GetModule('Unitframe')
+local UNITFRAME = F:GetModule('UnitFrame')
 local oUF = F.Libs.oUF
 
 --[[ CVars ]]
@@ -339,21 +339,10 @@ function NAMEPLATE:CreateTargetIndicator(self)
     frame:SetFrameLevel(self:GetFrameLevel() - 1)
     frame:Hide()
 
-    -- frame.ArrowLeft = frame:CreateTexture(nil, 'OVERLAY')
-    -- frame.ArrowLeft:SetPoint('RIGHT', frame, 'LEFT', -6, 0)
-    -- frame.ArrowLeft:SetSize(C.DB.Nameplate.Height+10, C.DB.Nameplate.Height+10)
-    -- frame.ArrowLeft:SetTexture(C.Assets.Textures.Arrow)
-
-    -- frame.ArrowRight = frame:CreateTexture(nil, 'OVERLAY')
-    -- frame.ArrowRight:SetPoint('LEFT', frame, 'RIGHT', 6, 0)
-    -- frame.ArrowRight:SetSize(C.DB.Nameplate.Height+10, C.DB.Nameplate.Height+10)
-    -- frame.ArrowRight:SetTexture(C.Assets.Textures.Arrow)
-    -- frame.ArrowRight:SetRotation(math.rad(180))
-
     frame.Glow = frame:CreateTexture(nil, 'OVERLAY')
     frame.Glow:SetPoint('TOPLEFT', frame, 'BOTTOMLEFT')
     frame.Glow:SetPoint('TOPRIGHT', frame, 'BOTTOMRIGHT')
-    frame.Glow:SetHeight(8)
+    frame.Glow:SetHeight(12)
     frame.Glow:SetTexture(C.Assets.glow_tex)
     frame.Glow:SetRotation(math.rad(180))
     frame.Glow:SetVertexColor(r, g, b)
@@ -509,7 +498,7 @@ function NAMEPLATE:UpdateQuestUnit(_, unit)
 
     unit = unit or self.unit
 
-    local startLooking, isLootQuest, questProgress
+    local startLooking, questProgress
     F.ScanTip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
     F.ScanTip:SetUnit(unit)
 
@@ -550,12 +539,7 @@ function NAMEPLATE:UpdateQuestUnit(_, unit)
         self.questIcon:Show()
     else
         self.questCount:SetText('')
-        if isLootQuest then
-            self.questIcon:SetAtlas('adventureguide-microbutton-alert')
-            self.questIcon:Show()
-        else
-            self.questIcon:Hide()
-        end
+        self.questIcon:Hide()
     end
 end
 
@@ -737,7 +721,7 @@ function NAMEPLATE:CreateNameplateStyle()
 
     local health = CreateFrame('StatusBar', nil, self)
     health:SetAllPoints()
-    health:SetStatusBarTexture(C.Assets.statusbar_tex)
+    health:SetStatusBarTexture(NAMEPLATE.StatusBarTex)
     health.backdrop = F.SetBD(health)
     health.Smooth = smooth
 

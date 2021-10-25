@@ -1,36 +1,20 @@
---[[
-    Auto change Tab key to only target enemy players
-    RE/TabBinder by Veev/AcidWeb
-]]
-
-local _G = _G
-local unpack = unpack
-local select = select
-local CreateFrame = CreateFrame
-local GetCurrentBindingSet = GetCurrentBindingSet
-local InCombatLockdown = InCombatLockdown
-local GetZonePVPInfo = GetZonePVPInfo
-local IsInInstance = IsInInstance
-local GetBindingKey = GetBindingKey
-local GetBindingAction = GetBindingAction
-local SaveBindings = SaveBindings
-local SetBinding = SetBinding
+-- Auto change Tab key to only target enemy players
+-- RE/TabBinder by Veev/AcidWeb
 
 local F, C = unpack(select(2, ...))
 local COMBAT = F:GetModule('Combat')
 
 local RTB_Fail, RTB_DefaultKey = false, true
 local LastTargetKey, TargetKey, CurrentBind, Success
-local tabBinder = CreateFrame('Frame')
 
-tabBinder:SetScript('OnEvent', function(_, event, ...)
-    if event == 'CHAT_MSG_SYSTEM' then
-        local RTBChatMessage = ...
-        if RTBChatMessage == _G.ERR_DUEL_REQUESTED then
+local function OnEvent(self, event, ...)
+    if event == 'ZONE_CHANGED_NEW_AREA' or (event == 'PLAYER_REGEN_ENABLED' and RTB_Fail) or event == 'DUEL_REQUESTED' or event == 'DUEL_FINISHED' or event == 'CHAT_MSG_SYSTEM' then
+        if event == 'CHAT_MSG_SYSTEM' and ... == _G.ERR_DUEL_REQUESTED then
             event = 'DUEL_REQUESTED'
+        elseif event == 'CHAT_MSG_SYSTEM' then
+            return
         end
-    elseif event == 'ZONE_CHANGED_NEW_AREA' or event == 'PLAYER_ENTERING_WORLD' or
-        (event == 'PLAYER_REGEN_ENABLED' and RTB_Fail) or event == 'DUEL_REQUESTED' or event == 'DUEL_FINISHED' then
+
         local BindSet = GetCurrentBindingSet()
         if BindSet ~= 1 and BindSet ~= 2 then
             return
@@ -100,17 +84,17 @@ tabBinder:SetScript('OnEvent', function(_, event, ...)
             end
         end
     end
-end)
+end
 
 function COMBAT:SmartTab()
     if not C.DB.Combat.SmartTab then
         return
     end
 
-    tabBinder:RegisterEvent('PLAYER_ENTERING_WORLD')
-    tabBinder:RegisterEvent('ZONE_CHANGED_NEW_AREA')
-    tabBinder:RegisterEvent('PLAYER_REGEN_ENABLED')
-    tabBinder:RegisterEvent('DUEL_REQUESTED')
-    tabBinder:RegisterEvent('DUEL_FINISHED')
-    tabBinder:RegisterEvent('CHAT_MSG_SYSTEM')
+    F:RegisterEvent('PLAYER_ENTERING_WORLD', OnEvent)
+    F:RegisterEvent('ZONE_CHANGED_NEW_AREA', OnEvent)
+    F:RegisterEvent('PLAYER_REGEN_ENABLED', OnEvent)
+    F:RegisterEvent('DUEL_REQUESTED', OnEvent)
+    F:RegisterEvent('DUEL_FINISHED', OnEvent)
+    F:RegisterEvent('CHAT_MSG_SYSTEM', OnEvent)
 end

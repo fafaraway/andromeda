@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local QUEST = F:RegisterModule('Quest')
+local QUEST = F:GetModule('Quest')
 
 local completedQuest = {}
 local initComplete

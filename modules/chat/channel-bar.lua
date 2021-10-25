@@ -1,24 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local tinsert = tinsert
-local format = format
-local CreateFrame = CreateFrame
-local hooksecurefunc = hooksecurefunc
-local ChatFrame_OpenChat = ChatFrame_OpenChat
-local ChatFrame_ReplyTell = ChatFrame_ReplyTell
-local ChatFrame_AddChannel = ChatFrame_AddChannel
-local GetChannelName = GetChannelName
-local UnitExists = UnitExists
-local UnitIsPlayer = UnitIsPlayer
-local UnitName = UnitName
-local GetUnitName = GetUnitName
-local GetDefaultLanguage = GetDefaultLanguage
-local IsPartyLFG = IsPartyLFG
-local C_GuildInfo_CanEditOfficerNote = C_GuildInfo.CanEditOfficerNote
-local LeaveChannelByName = LeaveChannelByName
-local JoinPermanentChannel = JoinPermanentChannel
-
 local F, C, L = unpack(select(2, ...))
 local CHAT = F:GetModule('Chat')
 
@@ -34,9 +13,9 @@ local buttonInfo = {
         _G.SAY .. '/' .. _G.YELL,
         function(_, btn)
             if btn == 'RightButton' then
-                ChatFrame_OpenChat('/y ', chatFrame)
+                _G.ChatFrame_OpenChat('/y ', chatFrame)
             else
-                ChatFrame_OpenChat('/s ', chatFrame)
+                _G.ChatFrame_OpenChat('/s ', chatFrame)
             end
         end
     },
@@ -47,16 +26,16 @@ local buttonInfo = {
         _G.WHISPER,
         function(_, btn)
             if btn == 'RightButton' then
-                ChatFrame_ReplyTell(chatFrame)
+                _G.ChatFrame_ReplyTell(chatFrame)
                 if not editBox:IsVisible() or editBox:GetAttribute('chatType') ~= 'WHISPER' then
-                    ChatFrame_OpenChat('/w ', chatFrame)
+                    _G.ChatFrame_OpenChat('/w ', chatFrame)
                 end
             else
                 if UnitExists('target') and UnitName('target') and UnitIsPlayer('target') and GetDefaultLanguage('player') == GetDefaultLanguage('target') then
                     local name = GetUnitName('target', true)
-                    ChatFrame_OpenChat('/w ' .. name .. ' ', chatFrame)
+                    _G.ChatFrame_OpenChat('/w ' .. name .. ' ', chatFrame)
                 else
-                    ChatFrame_OpenChat('/w ', chatFrame)
+                    _G.ChatFrame_OpenChat('/w ', chatFrame)
                 end
             end
         end
@@ -67,7 +46,7 @@ local buttonInfo = {
         1,
         _G.PARTY,
         function()
-            ChatFrame_OpenChat('/p ', chatFrame)
+            _G.ChatFrame_OpenChat('/p ', chatFrame)
         end
     },
     {
@@ -77,9 +56,9 @@ local buttonInfo = {
         _G.INSTANCE .. '/' .. _G.RAID,
         function()
             if IsPartyLFG() then
-                ChatFrame_OpenChat('/i ', chatFrame)
+                _G.ChatFrame_OpenChat('/i ', chatFrame)
             else
-                ChatFrame_OpenChat('/raid ', chatFrame)
+                _G.ChatFrame_OpenChat('/raid ', chatFrame)
             end
         end
     },
@@ -89,16 +68,16 @@ local buttonInfo = {
         .25,
         _G.GUILD .. '/' .. _G.OFFICER,
         function(_, btn)
-            if btn == 'RightButton' and C_GuildInfo_CanEditOfficerNote() then
-                ChatFrame_OpenChat('/o ', chatFrame)
+            if btn == 'RightButton' and C_GuildInfo.CanEditOfficerNote() then
+                _G.ChatFrame_OpenChat('/o ', chatFrame)
             else
-                ChatFrame_OpenChat('/g ', chatFrame)
+                _G.ChatFrame_OpenChat('/g ', chatFrame)
             end
         end
     }
 }
 
-local function AddButton(r, g, b, text, func)
+local function CreateButton(r, g, b, text, func)
     local bu = CreateFrame('Button', nil, CHAT.ChannelBar, 'SecureActionButtonTemplate, BackdropTemplate')
     bu:SetSize(30, 3)
     F.PixelIcon(bu, C.Assets.norm_tex, true)
@@ -113,8 +92,68 @@ local function AddButton(r, g, b, text, func)
         bu:SetScript('OnClick', func)
     end
 
-    tinsert(buttonList, bu)
+    table.insert(buttonList, bu)
     return bu
+end
+
+local function EnableCombatLogging()
+    LoggingCombat(true)
+    F:Print(L['CombatLogging is now |cff20ff20ON|r.'])
+end
+
+local function DisableCombatLoggin()
+    LoggingCombat(false)
+    F:Print(L['CombatLogging is now |cffff2020OFF|r.'])
+end
+
+local function LoggingButton_OnClick()
+    local icon = CHAT.ChannelBar.LoggingButton.Icon
+
+    if LoggingCombat() then
+        DisableCombatLoggin()
+        icon:SetVertexColor(1, 1, 0)
+    else
+        EnableCombatLogging()
+        icon:SetVertexColor(0, 1, 0)
+    end
+end
+
+local function UpdateChannelInfo()
+    local channelName = '大脚世界频道'
+    local icon = CHAT.ChannelBar.WorldChannelButton.Icon
+
+    local id = GetChannelName(channelName)
+    if not id or id == 0 then
+        CHAT.InWorldChannel = false
+        CHAT.WorldChannelID = nil
+        icon:SetVertexColor(1, .1, .1)
+    else
+        CHAT.InWorldChannel = true
+        CHAT.WorldChannelID = id
+        icon:SetVertexColor(0, .8, 1)
+    end
+end
+
+local function CheckChannelStatus()
+    F:Delay(.2, UpdateChannelInfo)
+end
+
+local function WorldChannelButton_OnClick(self, btn)
+    local channelName = '大脚世界频道'
+    if CHAT.InWorldChannel then
+        if btn == 'RightButton' then
+            LeaveChannelByName(channelName)
+            F:Print('|cffd82026' .. _G.QUIT .. '|r ' .. C.InfoColor .. L['World Channel'])
+            CHAT.InWorldChannel = false
+        elseif CHAT.WorldChannelID then
+            _G.ChatFrame_OpenChat('/' .. CHAT.WorldChannelID, chatFrame)
+        end
+    else
+        JoinPermanentChannel(channelName, nil, 1)
+        _G.ChatFrame_AddChannel(_G.ChatFrame1, channelName)
+        F:Print('|cff27ba24' .. _G.JOIN .. '|r ' .. C.InfoColor .. L['World Channel'])
+        CHAT.InWorldChannel = true
+    end
 end
 
 function CHAT:Bar_OnEnter()
@@ -137,64 +176,30 @@ function CHAT:CreateChannelBar()
     CHAT.ChannelBar = channelBar
 
     for _, info in pairs(buttonInfo) do
-        AddButton(unpack(info))
+        CreateButton(unpack(info))
     end
 
     -- ROLL
-    local roll = AddButton(.8, 1, .6, _G.LOOT_ROLL)
-    roll:SetAttribute('type', 'macro')
-    roll:SetAttribute('macrotext', '/roll')
+    local rollButton = CreateButton(.8, 1, .6, _G.LOOT_ROLL)
+    rollButton:SetAttribute('type', 'macro')
+    rollButton:SetAttribute('macrotext', '/roll')
+    channelBar.RollButton = rollButton
 
     -- COMBATLOG
-    local combat = AddButton(1, 1, 0, _G.BINDING_NAME_TOGGLECOMBATLOG)
-    combat:SetAttribute('type', 'macro')
-    combat:SetAttribute('macrotext', '/combatlog')
+    local clButton = CreateButton(1, 1, 0, _G.BINDING_NAME_TOGGLECOMBATLOG)
+    channelBar.LoggingButton = clButton
+    clButton:SetScript('OnClick', LoggingButton_OnClick)
 
     -- WORLD CHANNEL
     if GetCVar('portal') == 'CN' then
-        local channelName = '大脚世界频道'
-        local wcButton = AddButton(0, .8, 1, L['World Channel'])
+        local wcButton = CreateButton(0, .8, 1, L['World Channel'])
+        channelBar.WorldChannelButton = wcButton
 
-        local function updateChannelInfo()
-            local id = GetChannelName(channelName)
-            if not id or id == 0 then
-                CHAT.InWorldChannel = false
-                CHAT.WorldChannelID = nil
-                wcButton.Icon:SetVertexColor(1, .1, .1)
-            else
-                CHAT.InWorldChannel = true
-                CHAT.WorldChannelID = id
-                wcButton.Icon:SetVertexColor(0, .8, 1)
-            end
-        end
+        CheckChannelStatus()
+        F:RegisterEvent('CHANNEL_UI_UPDATE', CheckChannelStatus)
+        hooksecurefunc('ChatConfigChannelSettings_UpdateCheckboxes', CheckChannelStatus) -- toggle in chatconfig
 
-        local function checkChannelStatus(event)
-            F:Delay(.2, updateChannelInfo)
-        end
-
-        checkChannelStatus()
-        F:RegisterEvent('CHANNEL_UI_UPDATE', checkChannelStatus)
-        hooksecurefunc('ChatConfigChannelSettings_UpdateCheckboxes', checkChannelStatus) -- toggle in chatconfig
-
-        wcButton:SetScript(
-            'OnClick',
-            function(_, btn)
-                if CHAT.InWorldChannel then
-                    if btn == 'RightButton' then
-                        LeaveChannelByName(channelName)
-                        F:Print('|cffd82026' .. _G.QUIT .. '|r ' .. C.InfoColor .. L['World Channel'])
-                        CHAT.InWorldChannel = false
-                    elseif CHAT.WorldChannelID then
-                        ChatFrame_OpenChat('/' .. CHAT.WorldChannelID, chatFrame)
-                    end
-                else
-                    JoinPermanentChannel(channelName, nil, 1)
-                    ChatFrame_AddChannel(_G.ChatFrame1, channelName)
-                    F:Print('|cff27ba24' .. _G.JOIN .. '|r ' .. C.InfoColor .. L['World Channel'])
-                    CHAT.InWorldChannel = true
-                end
-            end
-        )
+        wcButton:SetScript('OnClick', WorldChannelButton_OnClick)
     end
 
     -- Order Postions

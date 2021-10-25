@@ -1,12 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local strsplit = strsplit
-local Ambiguate = Ambiguate
-local CreateFrame = CreateFrame
-local StaticPopup_Show = StaticPopup_Show
-local SetPortraitTexture = SetPortraitTexture
-
 local F, C, L = unpack(select(2, ...))
 local GUI = F:GetModule('GUI')
 
@@ -22,22 +13,22 @@ function GUI:CreateProfileIcon(bar, index, texture, title, description)
 end
 
 function GUI:Reset_OnClick()
-    StaticPopup_Show('FREEUI_RESET_CURRENT_PROFILE')
+    _G.StaticPopup_Show('FREEUI_RESET_CURRENT_PROFILE')
 end
 
 function GUI:Apply_OnClick()
     GUI.currentProfile = self:GetParent().index
-    StaticPopup_Show('FREEUI_APPLY_PROFILE')
+    _G.StaticPopup_Show('FREEUI_APPLY_PROFILE')
 end
 
 function GUI:Download_OnClick()
     GUI.currentProfile = self:GetParent().index
-    StaticPopup_Show('FREEUI_REPLACE_CURRENT_PROFILE')
+    _G.StaticPopup_Show('FREEUI_REPLACE_CURRENT_PROFILE')
 end
 
 function GUI:Upload_OnClick()
     GUI.currentProfile = self:GetParent().index
-    StaticPopup_Show('FREEUI_REPLACE_SELECTED_PROFILE')
+    _G.StaticPopup_Show('FREEUI_REPLACE_SELECTED_PROFILE')
 end
 
 function GUI:GetClassFromGoldInfo(name, realm)
@@ -53,7 +44,7 @@ function GUI:FindProfleUser(icon)
     icon.list = {}
     for fullName, index in pairs(_G.FREE_ADB['ProfileIndex']) do
         if index == icon.index then
-            local name, realm = strsplit('-', fullName)
+            local name, realm = string.split('-', fullName)
             if not icon.list[realm] then
                 icon.list[realm] = {}
             end
@@ -190,7 +181,7 @@ function GUI:Delete_OnEnter()
     if not text or text == '' then
         return
     end
-    local name, realm = strsplit('-', text)
+    local name, realm = string.split('-', text)
     if not realm then
         realm = C.MyRealm
         text = name .. '-' .. realm
@@ -198,7 +189,7 @@ function GUI:Delete_OnEnter()
     end
 
     if _G.FREE_ADB['ProfileIndex'][text] or (_G.FREE_ADB['GoldStatistic'][realm] and _G.FREE_ADB['GoldStatistic'][realm][name]) then
-        StaticPopup_Show('FREEUI_DELETE_UNIT_PROFILE', text, GUI:GetClassFromGoldInfo(name, realm))
+        _G.StaticPopup_Show('FREEUI_DELETE_UNIT_PROFILE', text, GUI:GetClassFromGoldInfo(name, realm))
     else
         _G.UIErrorsFrame:AddMessage(C.RedColor .. L['Invalid character name.'])
     end
@@ -214,7 +205,7 @@ function GUI:CreateProfileGUI(parent)
     reset:SetScript(
         'OnClick',
         function()
-            StaticPopup_Show('FREEUI_RESET_ALL')
+            _G.StaticPopup_Show('FREEUI_RESET_ALL')
         end
     )
     F.AddTooltip(reset, 'ANCHOR_TOP', F:StyleAddonName(L['Delete %AddonName% all settings, reset to the default.']), 'RED')

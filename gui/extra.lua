@@ -1,28 +1,12 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local min = min
-local max = max
-local tinsert = tinsert
-local format = format
-local tonumber = tonumber
-local CreateFrame = CreateFrame
-local GetSpellInfo = GetSpellInfo
-local GetSpellTexture = GetSpellTexture
-local GetInstanceInfo = GetInstanceInfo
-local StaticPopup_Show = StaticPopup_Show
-local EasyMenu = EasyMenu
-local LOCALIZED_CLASS_NAMES_MALE = LOCALIZED_CLASS_NAMES_MALE
-local EJ_GetInstanceInfo = EJ_GetInstanceInfo
-
 local F, C, L = unpack(select(2, ...))
 local GUI = F:GetModule('GUI')
-local UNITFRAME = F:GetModule('Unitframe')
+local UNITFRAME = F:GetModule('UnitFrame')
 local NAMEPLATE = F:GetModule('Nameplate')
-local ACTIONBAR = F:GetModule('Actionbar')
+local ACTIONBAR = F:GetModule('ActionBar')
 local CHAT = F:GetModule('Chat')
 local ANNOUNCEMENT = F:GetModule('Announcement')
 local MAP = F:GetModule('Minimap')
+local INVENTORY = F:GetModule("Inventory")
 
 local extraGUIs = {}
 
@@ -264,9 +248,9 @@ end
 local function Slider_OnValueChanged(self, v)
     local current
     if self.__step < 1 then
-        current = tonumber(format('%.1f', v))
+        current = tonumber(string.format('%.1f', v))
     else
-        current = tonumber(format('%.0f', v))
+        current = tonumber(string.format('%.0f', v))
     end
 
     self.value:SetText(current)
@@ -354,6 +338,11 @@ function GUI:SetupAuraSize(parent)
 end
 
 -- Inventory
+
+local function UpdateBagSize()
+    INVENTORY:UpdateBagSize()
+end
+
 function GUI:SetupInventoryMinItemLevelToShow(parent)
     local guiName = 'FreeUI_GUI_Inventory_MinItemLevelToShow'
     TogglePanel(guiName)
@@ -489,20 +478,12 @@ function GUI:SetupInventorySize(parent)
             max = 20,
             step = 1,
         },
-        [5] = {
-            key = 'Scale',
-            value = values.Scale,
-            text = L['Inventory Scale'],
-            min = .5,
-            max = 2,
-            step = .1,
-        }
     }
 
     local offset = -10
     for _, v in ipairs(datas) do
         CreateGroupTitle(scroll, L['Inventory Size'], offset)
-        CreateSlider(scroll, 'Inventory', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50)
+        CreateSlider(scroll, 'Inventory', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateBagSize)
         offset = offset - 65
     end
 end
@@ -797,7 +778,7 @@ function GUI:SetupMajorSpells(parent)
     scroll.reset:SetScript(
         'OnClick',
         function()
-            StaticPopup_Show('FREEUI_RESET_MAJOR_SPELLS')
+            _G.StaticPopup_Show('FREEUI_RESET_MAJOR_SPELLS')
         end
     )
 
@@ -924,7 +905,6 @@ end
 
 -- Unitframe
 local function SetUnitFrameSize(self, unit)
-    local style = self.unitStyle
     local width = C.DB.Unitframe[unit.."Width"]
     local healthHeight = C.DB.Unitframe[unit.."HealthHeight"]
     local powerHeight = C.DB.Unitframe[unit.."PowerHeight"]
@@ -1631,7 +1611,7 @@ function GUI:SetupPartyWatcher(parent)
     scroll.reset:SetScript(
         'OnClick',
         function()
-            StaticPopup_Show('FREEUI_RESET_PARTY_SPELLS')
+            _G.StaticPopup_Show('FREEUI_RESET_PARTY_SPELLS')
         end
     )
 
@@ -1687,7 +1667,7 @@ function GUI:SetupPartyWatcher(parent)
     local index = 1
     for class, value in pairs(C.PartySpellsDB) do
         local color = F:RGBToHex(F:ClassColor(class))
-        local localClassName = LOCALIZED_CLASS_NAMES_MALE[class]
+        local localClassName = _G.LOCALIZED_CLASS_NAMES_MALE[class]
         menuList[index] = {
             text = color .. localClassName,
             notCheckable = true,
@@ -1698,7 +1678,7 @@ function GUI:SetupPartyWatcher(parent)
         for spellID, duration in pairs(value) do
             local spellName, _, texture = GetSpellInfo(spellID)
             if spellName then
-                tinsert(
+                table.insert(
                     menuList[index].menuList,
                     {
                         text = spellName,
@@ -1722,7 +1702,7 @@ function GUI:SetupPartyWatcher(parent)
     scroll.preset:SetScript(
         'OnClick',
         function(self)
-            EasyMenu(menuList, F.EasyMenu, self, -100, 100, 'MENU', 1)
+            _G.EasyMenu(menuList, F.EasyMenu, self, -100, 100, 'MENU', 1)
         end
     )
 
@@ -1738,7 +1718,7 @@ end
 local function AddNewDungeon(dungeons, dungeonID)
     local name = EJ_GetInstanceInfo(dungeonID)
     if name then
-        tinsert(dungeons, name)
+        table.insert(dungeons, name)
     end
 end
 
@@ -1808,8 +1788,8 @@ function GUI:SetupRaidDebuffs(parent)
 
     local function analyzePrio(priority)
         priority = priority or 2
-        priority = min(priority, 6)
-        priority = max(priority, 1)
+        priority = math.min(priority, 6)
+        priority = math.max(priority, 1)
         return priority
     end
 
@@ -1863,7 +1843,7 @@ function GUI:SetupRaidDebuffs(parent)
     scroll.reset:SetScript(
         'OnClick',
         function()
-            StaticPopup_Show('FREEUI_RESET_RAID_DEBUFFS')
+            _G.StaticPopup_Show('FREEUI_RESET_RAID_DEBUFFS')
         end
     )
     scroll.add = F.CreateButton(frame, 70, 24, _G.ADD)
@@ -2285,7 +2265,7 @@ function GUI:SetupAnnounceableSpells(parent)
     scroll.reset:SetScript(
         'OnClick',
         function()
-            StaticPopup_Show('FREEUI_RESET_ANNOUNCEABLE_SPELLS')
+            _G.StaticPopup_Show('FREEUI_RESET_ANNOUNCEABLE_SPELLS')
         end
     )
 

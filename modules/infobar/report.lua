@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local INFOBAR = F:GetModule('Infobar')
+local INFOBAR = F:GetModule('InfoBar')
 
 -- TimeWalker
 local isTimeWalker, walkerTexture

@@ -17,7 +17,7 @@ local IsPartyLFG = IsPartyLFG
 local IsInRaid = IsInRaid
 
 local F, C, L = unpack(select(2, ...))
-local ACTIONBAR = F:GetModule('Actionbar')
+local ACTIONBAR = F:GetModule('ActionBar')
 
 local debugMode = false
 

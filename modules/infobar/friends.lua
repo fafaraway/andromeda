@@ -1,6 +1,6 @@
 
 local F, C, L = unpack(select(2, ...))
-local INFOBAR = F:GetModule('Infobar')
+local INFOBAR = F:GetModule('InfoBar')
 
 local WOW_PROJECT_ID = _G.WOW_PROJECT_ID or 1
 local WOW_PROJECT_60 = _G.WOW_PROJECT_CLASSIC or 2

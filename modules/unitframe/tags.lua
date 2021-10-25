@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local UNITFRAME = F:GetModule('Unitframe')
+local UNITFRAME = F:GetModule('UnitFrame')
 local oUF = F.Libs.oUF
 
 local colors = oUF.colors
@@ -83,7 +83,7 @@ local _tags = {
     end,
     -- dead
     dead = function(unit)
-        if UnitIsDeadOrGhost(unit) then
+        if UnitIsDeadOrGhost(unit) and UnitIsConnected(unit) then
             return '|cffd84343' .. L['Dead']
         end
     end,
@@ -96,23 +96,23 @@ local _tags = {
     -- name
     name = function(unit)
         local shorten = C.DB.Unitframe.ShortenName
-        local isParty = (unit:match('party%d?$'))
-        local isRaid = (unit:match('raid%d?$'))
+        local isTargted = (unit == 'targettarget' and UnitIsUnit('targettarget', 'player'))
+        local isFocusTargeted = (unit == 'focustarget' and UnitIsUnit('focustarget', 'player'))
+        local isNP = (unit:match('nameplate%d+$'))
         local isBoss = (unit:match('boss%d?$'))
-        local num = GetLocale() == 'zhCN' and 8 or 12
-        local numParty = GetLocale() == 'zhCN' and 4 or 6
-        local numBoss = GetLocale() == 'zhCN' and 6 or 12
+        local num = GetLocale() == 'zhCN' and 8 or 10
+        local numBoss = GetLocale() == 'zhCN' and 6 or 8
+        local numTar = GetLocale() == 'zhCN' and 5 or 8
+        local numNP = GetLocale() == 'zhCN' and 6 or 8
         local str = UnitName(unit)
         local newStr = AbbrName(str, num) or str
 
-        if (unit == 'targettarget' and UnitIsUnit('targettarget', 'player')) or (unit == 'focustarget' and UnitIsUnit('focustarget', 'player')) then
+        if isTargted or isFocusTargeted then
             return '<' .. _G.YOU .. '>'
-        elseif (not UnitIsConnected(unit)) then
-            return '|cffcccccc' .. L['Off']
-        elseif UnitIsDeadOrGhost(unit) then
-            return '|cffd84343' .. L['Dead']
-        elseif isParty then
-            return shorten and F.ShortenString(str, numParty) or str
+        elseif isNP then
+            return shorten and F.ShortenString(newStr, numNP, true) or str
+        elseif unit == 'targettarget' or unit == 'focus' or unit == 'focustarget' then
+            return shorten and F.ShortenString(newStr, numTar, true) or str
         elseif isBoss then
             return shorten and F.ShortenString(newStr, numBoss, true) or str
         else
@@ -254,15 +254,21 @@ function UNITFRAME:CreateGroupRoleTag(self)
 end
 
 function UNITFRAME:CreateGroupNameTag(self)
+    local style = self.unitStyle
     local font = C.Assets.Fonts.Condensed
     local outline = _G.FREE_ADB.FontOutline
     local showName = C.DB.Unitframe.GroupShowName
     local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
 
     if showName then
-        self:Tag(text, '[free:color][free:partyname]')
+        if style == 'party' then
+            self:Tag(text, '[free:color][free:partyname]')
+        else
+            self:Tag(text, '[free:color][free:raidname]')
+        end
     else
-        self:Tag(text, '[free:color][free:offline][free:dead]')
+        --self:Tag(text, '[free:color][free:offline][free:dead]')
+        --self:Tag(text, '[dead][offline]')
     end
     self.GroupNameTag = text
 end

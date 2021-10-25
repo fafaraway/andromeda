@@ -1,12 +1,5 @@
-﻿local _G = _G
-local unpack = unpack
-local select = select
-local tinsert = tinsert
-local CreateFrame = CreateFrame
-local RegisterStateDriver = RegisterStateDriver
-
-local F, C = unpack(select(2, ...))
-local INFOBAR = F:RegisterModule('Infobar')
+﻿local F, C = unpack(select(2, ...))
+local INFOBAR = F:GetModule('InfoBar')
 
 INFOBAR.Buttons = {}
 local barAlpha, buttonAlpha
@@ -40,7 +33,7 @@ function INFOBAR:CreateInfoBar()
     bar:SetScript('OnEnter', INFOBAR.ShowBar)
     bar:SetScript('OnLeave', INFOBAR.HideBar)
 
-    RegisterStateDriver(bar, 'visibility', '[petbattle] hide; show')
+    _G.RegisterStateDriver(bar, 'visibility', '[petbattle] hide; show')
 
     INFOBAR.Bar = bar
 
@@ -161,7 +154,7 @@ function INFOBAR:AddBlock(text, position, width)
 
     bu.position = position
 
-    tinsert(INFOBAR.Buttons, bu)
+    table.insert(INFOBAR.Buttons, bu)
 
     ReanchorButtons()
 

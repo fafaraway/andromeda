@@ -1,24 +1,8 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local format = format
-local Ambiguate = Ambiguate
-local GetAutoCompleteRealms = GetAutoCompleteRealms
-local GetMoney = GetMoney
-local GetMoneyString = GetMoneyString
-local BreakUpLargeNumbers = BreakUpLargeNumbers
-local securecall = securecall
-local LoadAddOn = LoadAddOn
-local StaticPopup_Show = StaticPopup_Show
-local ToggleStoreUI = ToggleStoreUI
-local C_WowTokenPublic_UpdateMarketPrice = C_WowTokenPublic.UpdateMarketPrice
-local C_WowTokenPublic_GetCurrentMarketPrice = C_WowTokenPublic.GetCurrentMarketPrice
-
 local F, C, L = unpack(select(2, ...))
-local INFOBAR = F:GetModule('Infobar')
+local INFOBAR = F:GetModule('InfoBar')
 
 local function FormatMoney(money)
-    return format('%s: |cffeddf6a%s|r', L['Gold'], BreakUpLargeNumbers(money * .0001))
+    return string.format('%s: |cffeddf6a%s|r', L['Gold'], BreakUpLargeNumbers(money * .0001))
 end
 
 local function GetClassIcon(class)
@@ -38,12 +22,12 @@ local profit, spent, oldMoney = 0, 0, 0
 local function Button_OnEvent(self, event)
     if event == 'PLAYER_ENTERING_WORLD' then
         oldMoney = GetMoney()
-        C_WowTokenPublic_UpdateMarketPrice()
+        C_WowTokenPublic.UpdateMarketPrice()
         self:UnregisterEvent(event)
     end
 
     if event == 'TOKEN_MARKET_PRICE_UPDATED' then
-        C_WowTokenPublic_UpdateMarketPrice()
+        C_WowTokenPublic.UpdateMarketPrice()
         return
     end
 
@@ -74,9 +58,9 @@ local function Button_OnMouseUp(self, btn)
         if (not _G.StoreFrame) then
             LoadAddOn('Blizzard_StoreUI')
         end
-        securecall(ToggleStoreUI)
+        securecall(_G.ToggleStoreUI)
     elseif btn == 'RightButton' then
-        StaticPopup_Show('FREEUI_RESET_GOLD')
+        _G.StaticPopup_Show('FREEUI_RESET_GOLD')
     end
 end
 
@@ -118,7 +102,7 @@ local function Button_OnEnter(self)
 
     _G.GameTooltip:AddLine(' ')
     _G.GameTooltip:AddLine(_G.ITEM_QUALITY8_DESC, .6, .8, 1)
-    local tokenPrice = C_WowTokenPublic_GetCurrentMarketPrice()
+    local tokenPrice = C_WowTokenPublic.GetCurrentMarketPrice()
     _G.GameTooltip:AddDoubleLine(_G.AUCTION_HOUSE_BROWSE_HEADER_PRICE, GetMoneyString(tokenPrice, true), 1, 1, 1, 1, 1, 1)
 
     _G.GameTooltip:AddLine(' ')

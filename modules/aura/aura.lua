@@ -1,21 +1,5 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local format = format
-local floor = floor
-local strmatch = strmatch
-local CreateFrame = CreateFrame
-local GetWeaponEnchantInfo = GetWeaponEnchantInfo
-local UnitAura = UnitAura
-local GetTime = GetTime
-local GetInventoryItemTexture = GetInventoryItemTexture
-local GetInventoryItemQuality = GetInventoryItemQuality
-local GetItemQualityColor = GetItemQualityColor
-local RegisterStateDriver = RegisterStateDriver
-local RegisterAttributeDriver = RegisterAttributeDriver
-
 local F, C, L = unpack(select(2, ...))
-local AURA = F:RegisterModule('Aura')
+local AURA = F:GetModule('Aura')
 local oUF = F.Libs.oUF
 
 local settings
@@ -54,26 +38,27 @@ function AURA:OnLogin()
     AURA.DebuffFrame:SetPoint('TOPRIGHT', AURA.DebuffFrame.mover)
 
     AURA:InitReminder()
+    AURA:AddAuraSource()
 end
 
 local day, hour, minute = 86400, 3600, 60
 function AURA:FormatAuraTime(s)
     if s >= day then
-        return format('%d' .. C.InfoColor .. 'd', s / day), s % day
+        return string.format('%d' .. C.InfoColor .. 'd', s / day), s % day
     elseif s >= hour then
-        return format('%d' .. C.InfoColor .. 'h', F:Round(s / hour, 1)), s % hour
+        return string.format('%d' .. C.InfoColor .. 'h', F:Round(s / hour, 1)), s % hour
     elseif s >= 2 * hour then
-        return format('%d' .. C.InfoColor .. 'h', s / hour), s % hour
+        return string.format('%d' .. C.InfoColor .. 'h', s / hour), s % hour
     elseif s >= 10 * minute then
-        return format('%d' .. C.InfoColor .. 'm', s / minute), s % minute
+        return string.format('%d' .. C.InfoColor .. 'm', s / minute), s % minute
     elseif s >= minute then
-        return format('%d:%.2d', s / minute, s % minute), s - floor(s)
+        return string.format('%d:%.2d', s / minute, s % minute), s - math.floor(s)
     elseif s > 10 then
-        return format('%d' .. C.InfoColor .. 's', s), s - floor(s)
+        return string.format('%d' .. C.InfoColor .. 's', s), s - math.floor(s)
     elseif s > 5 then
-        return format('|cffffff00%.1f|r', s), s - format('%.1f', s)
+        return string.format('|cffffff00%.1f|r', s), s - string.format('%.1f', s)
     else
-        return format('|cffff0000%.1f|r', s), s - format('%.1f', s)
+        return string.format('|cffff0000%.1f|r', s), s - string.format('%.1f', s)
     end
 end
 
@@ -154,7 +139,7 @@ function AURA:UpdateTempEnchant(button, index)
 
     local offset = 2
     local weapon = button:GetName():sub(-1)
-    if strmatch(weapon, '2') then
+    if string.match(weapon, '2') then
         offset = 6
     end
 
@@ -198,7 +183,7 @@ function AURA:UpdateHeader(header)
     if header:GetAttribute('filter') == 'HELPFUL' then
         cfg = settings.Buffs
         header:SetAttribute('consolidateTo', 0)
-        header:SetAttribute('weaponTemplate', format('FreeUIAuraTemplate%d', cfg.size))
+        header:SetAttribute('weaponTemplate', string.format('FreeUIAuraTemplate%d', cfg.size))
     end
 
     header:SetAttribute('separateOwn', 1)
@@ -213,13 +198,13 @@ function AURA:UpdateHeader(header)
     header:SetAttribute('yOffset', 0)
     header:SetAttribute('wrapXOffset', 0)
     header:SetAttribute('wrapYOffset', -(cfg.size + C.DB.Aura.Offset))
-    header:SetAttribute('template', format('FreeUIAuraTemplate%d', cfg.size))
+    header:SetAttribute('template', string.format('FreeUIAuraTemplate%d', cfg.size))
 
-    local fontSize = floor(cfg.size / 30 * 10 + .5)
+    local fontSize = math.floor(cfg.size / 30 * 10 + .5)
     local index = 1
     local child = select(index, header:GetChildren())
     while child do
-        if (floor(child:GetWidth() * 100 + .5) / 100) ~= cfg.size then
+        if (math.floor(child:GetWidth() * 100 + .5) / 100) ~= cfg.size then
             child:SetSize(cfg.size, cfg.size)
         end
 
@@ -246,8 +231,8 @@ function AURA:CreateAuraHeader(filter)
     header:SetClampedToScreen(true)
     header:SetAttribute('unit', 'player')
     header:SetAttribute('filter', filter)
-    RegisterStateDriver(header, 'visibility', '[petbattle] hide; show')
-    RegisterAttributeDriver(header, 'unit', '[vehicleui] vehicle; player')
+    _G.RegisterStateDriver(header, 'visibility', '[petbattle] hide; show')
+    _G.RegisterAttributeDriver(header, 'unit', '[vehicleui] vehicle; player')
 
     if filter == 'HELPFUL' then
         header:SetAttribute('consolidateDuration', -1)

@@ -4,7 +4,7 @@ local select = select
 
 local F, C = unpack(select(2, ...))
 local NOTIFICATION = F:GetModule('Notification')
-local INFOBAR = F:GetModule('Infobar')
+local INFOBAR = F:GetModule('InfoBar')
 
 function NOTIFICATION:RepairNotify()
     if C.DB.Notification.LowDurability then

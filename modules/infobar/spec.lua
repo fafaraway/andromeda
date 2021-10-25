@@ -1,27 +1,8 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local format = format
-local wipe = wipe
-local SetLootSpecialization = SetLootSpecialization
-local SetSpecialization = SetSpecialization
-local GetSpecialization = GetSpecialization
-local GetSpecializationInfo = GetSpecializationInfo
-local GetLootSpecialization = GetLootSpecialization
-local GetSpecializationInfoByID = GetSpecializationInfoByID
-local GetTalentInfo = GetTalentInfo
-local GetPvpTalentInfoByID = GetPvpTalentInfoByID
-local ToggleTalentFrame = ToggleTalentFrame
-local C_SpecializationInfo_CanPlayerUsePVPTalentUI = C_SpecializationInfo.CanPlayerUsePVPTalentUI
-local C_SpecializationInfo_GetAllSelectedPvpTalentIDs = C_SpecializationInfo.GetAllSelectedPvpTalentIDs
-local C_CurrencyInfo_GetCurrencyInfo = C_CurrencyInfo.GetCurrencyInfo
-local EasyMenu = EasyMenu
-
 local F, C, L = unpack(select(2, ...))
-local INFOBAR = F:GetModule('Infobar')
+local INFOBAR = F:GetModule('InfoBar')
 
 local pvpTalents
-local pvpIconTexture = C_CurrencyInfo_GetCurrencyInfo(104).iconFileID
+local pvpIconTexture = C_CurrencyInfo.GetCurrencyInfo(104).iconFileID
 
 local menuList = {
     {text = _G.CHOOSE_SPECIALIZATION, isTitle = true, notCheckable = true},
@@ -53,16 +34,20 @@ local function Button_OnMouseUp(self, btn)
     end
 
     if btn == 'LeftButton' then
-        ToggleTalentFrame(2)
+        _G.ToggleTalentFrame(2)
     else
         menuList[2].menuList = {{}, {}, {}, {}}
         menuList[3].menuList = {{}, {}, {}, {}, {}}
         local specList, lootList = menuList[2].menuList, menuList[3].menuList
         local spec, specName = GetSpecializationInfo(specIndex)
         local lootSpec = GetLootSpecialization()
-        lootList[1] = {text = format(_G.LOOT_SPECIALIZATION_DEFAULT, specName), func = function()
+        lootList[1] = {
+            text = string.format(_G.LOOT_SPECIALIZATION_DEFAULT, specName),
+            func = function()
                 ClickFunc(0, true)
-            end, checked = lootSpec == 0 and true or false}
+            end,
+            checked = lootSpec == 0 and true or false
+        }
 
         for i = 1, 4 do
             local id, name = GetSpecializationInfo(i)
@@ -79,16 +64,20 @@ local function Button_OnMouseUp(self, btn)
                     end
                     specList[i].checked = false
                 end
-                lootList[i + 1] = {text = name, func = function()
+                lootList[i + 1] = {
+                    text = name,
+                    func = function()
                         ClickFunc(id, true)
-                    end, checked = id == lootSpec and true or false}
+                    end,
+                    checked = id == lootSpec and true or false
+                }
             else
                 specList[i] = nil
                 lootList[i + 1] = nil
             end
         end
 
-        EasyMenu(menuList, F.EasyMenu, self, -80, 100, 'MENU', 1)
+        _G.EasyMenu(menuList, F.EasyMenu, self, -80, 100, 'MENU', 1)
         _G.GameTooltip:Hide()
     end
 end
@@ -98,6 +87,7 @@ local function Button_OnEvent(self)
     local lootSpecID = GetLootSpecialization()
 
     if currentSpec then
+        -- INFOBAR:ShowButton(self)
         local _, name = GetSpecializationInfo(currentSpec)
         if not name then
             return
@@ -107,16 +97,13 @@ local function Button_OnEvent(self)
         -- local lootrole = GetSpecializationRoleByID(lootSpecID)
 
         if not lootname or name == lootname then
-            self.Text:SetText(format(L['Spec'] .. ': ' .. C.MyColor .. '%s  |r' .. L['Loot'] .. ':' .. C.MyColor .. ' %s', name, name))
+            self.Text:SetText(string.format(L['Spec'] .. ': ' .. C.MyColor .. '%s  |r' .. L['Loot'] .. ':' .. C.MyColor .. ' %s', name, name))
         else
-            self.Text:SetText(format(L['Spec'] .. ': ' .. C.MyColor .. '%s  |r' .. L['Loot'] .. ':' .. C.MyColor .. ' %s', name, lootname))
+            self.Text:SetText(string.format(L['Spec'] .. ': ' .. C.MyColor .. '%s  |r' .. L['Loot'] .. ':' .. C.MyColor .. ' %s', name, lootname))
         end
-
-        -- INFOBAR:ShowButton(self)
     else
-        self.Text:SetText(format(L['Spec'] .. ': ' .. C.MyColor .. '%s  |r', _G.NONE))
-
         -- INFOBAR:HideButton(self)
+        self.Text:SetText(string.format(L['Spec'] .. ': ' .. C.MyColor .. '%s  |r', _G.NONE))
     end
 end
 
@@ -143,8 +130,8 @@ local function Button_OnEnter(self)
         end
     end
 
-    if C_SpecializationInfo_CanPlayerUsePVPTalentUI() then
-        pvpTalents = C_SpecializationInfo_GetAllSelectedPvpTalentIDs()
+    if C_SpecializationInfo.CanPlayerUsePVPTalentUI() then
+        pvpTalents = C_SpecializationInfo.GetAllSelectedPvpTalentIDs()
         if #pvpTalents > 0 then
             _G.GameTooltip:AddLine(' ')
             _G.GameTooltip:AddLine(AddIcon(pvpIconTexture) .. ' ' .. _G.PVP_TALENTS, .6, .8, 1)
@@ -156,7 +143,7 @@ local function Button_OnEnter(self)
             end
         end
 
-        wipe(pvpTalents)
+        table.wipe(pvpTalents)
     end
 
     _G.GameTooltip:AddLine(' ')

@@ -1,29 +1,5 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local format = format
-local floor = floor
-local sort = sort
-local wipe = wipe
-local CreateFrame = CreateFrame
-local GetNetStats = GetNetStats
-local GetFramerate = GetFramerate
-local InCombatLockdown = InCombatLockdown
-local ShowUIPanel = ShowUIPanel
-local HideUIPanel = HideUIPanel
-local UpdateAddOnMemoryUsage = UpdateAddOnMemoryUsage
-local GetNumAddOns = GetNumAddOns
-local IsAddOnLoaded = IsAddOnLoaded
-local LoadAddOn = LoadAddOn
-local GetAddOnMemoryUsage = GetAddOnMemoryUsage
-local GetAddOnInfo = GetAddOnInfo
-local C_DateAndTime_GetCurrentCalendarTime = C_DateAndTime.GetCurrentCalendarTime
-local GameTime_GetLocalTime = GameTime_GetLocalTime
-local GameTime_GetGameTime = GameTime_GetGameTime
-local GameTime_GetTime = GameTime_GetTime
-
 local F, C, L = unpack(select(2, ...))
-local INFOBAR = F:GetModule('Infobar')
+local INFOBAR = F:GetModule('InfoBar')
 
 local memory
 local addons = {}
@@ -33,9 +9,9 @@ local lastLag = 0
 
 local function FormatMemory(value)
     if value > 1024 then
-        return format('%.1f MB', value / 1024)
+        return string.format('%.1f MB', value / 1024)
     else
-        return format('%.0f KB', value)
+        return string.format('%.0f KB', value)
     end
 end
 
@@ -87,9 +63,9 @@ local function Button_OnMouseUp(self, btn)
         end
 
         if not openaddonlist then
-            ShowUIPanel(_G.AddonList)
+            _G.ShowUIPanel(_G.AddonList)
         else
-            HideUIPanel(_G.AddonList)
+            _G.HideUIPanel(_G.AddonList)
         end
     elseif btn == 'RightButton' then
         if not _G.TimeManagerClockButton then
@@ -112,7 +88,7 @@ local function Button_OnUpdate(self, elapsed)
     end
 
     if last >= 1 then
-        INFOBAR.StatsText:SetText(format(string, floor(GetFramerate() + .5), home, world, GameTime_GetTime(false)))
+        INFOBAR.StatsText:SetText(string.format(string, math.floor(GetFramerate() + .5), home, world, _G.GameTime_GetTime(false)))
         last = 0
     end
 end
@@ -133,18 +109,18 @@ local function Button_OnEnter(self)
             total = total + memory
         end
     end
-    sort(addons, Order)
+    table.sort(addons, Order)
 
     local anchorTop = C.DB.Infobar.AnchorTop
     _G.GameTooltip:SetOwner(self, (anchorTop and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (anchorTop and -6) or 6)
     _G.GameTooltip:ClearLines()
 
-    local today = C_DateAndTime_GetCurrentCalendarTime()
+    local today = C_DateAndTime.GetCurrentCalendarTime()
     local w, m, d, y = today.weekday, today.month, today.monthDay, today.year
-    _G.GameTooltip:AddLine(format(_G.FULLDATE, _G.CALENDAR_WEEKDAY_NAMES[w], _G.CALENDAR_FULLDATE_MONTH_NAMES[m], d, y), .9, .82, .62)
+    _G.GameTooltip:AddLine(string.format(_G.FULLDATE, _G.CALENDAR_WEEKDAY_NAMES[w], _G.CALENDAR_FULLDATE_MONTH_NAMES[m], d, y), .9, .82, .62)
     _G.GameTooltip:AddLine(' ')
-    _G.GameTooltip:AddDoubleLine(L['Local Time'], GameTime_GetLocalTime(true), .6, .8, 1, 1, 1, 1)
-    _G.GameTooltip:AddDoubleLine(L['Realm Time'], GameTime_GetGameTime(true), .6, .8, 1, 1, 1, 1)
+    _G.GameTooltip:AddDoubleLine(L['Local Time'], _G.GameTime_GetLocalTime(true), .6, .8, 1, 1, 1, 1)
+    _G.GameTooltip:AddDoubleLine(L['Realm Time'], _G.GameTime_GetGameTime(true), .6, .8, 1, 1, 1, 1)
     _G.GameTooltip:AddLine(' ')
     _G.GameTooltip:AddDoubleLine(_G.ADDONS, FormatMemory(total), .9, .82, .62, MemoryColor(total))
 
@@ -162,7 +138,7 @@ end
 local function Button_OnLeave(self)
     F:HideTooltip()
     n, total = 0, 0
-    wipe(addons)
+    table.wipe(addons)
 end
 
 function INFOBAR:CreateStatsBlock()

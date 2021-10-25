@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local THEME = F:RegisterModule('Theme')
+local THEME = F:GetModule('Theme')
 
 C.Themes = {}
 C.BlizzThemes = {}

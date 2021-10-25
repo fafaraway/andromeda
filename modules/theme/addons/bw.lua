@@ -33,7 +33,7 @@ local function ReskinBar(bar)
         F.SetBD(bar.candyBarBar)
         bar.styled = true
     end
-    bar:SetTexture(C.Assets.statusbar_tex)
+    bar:SetTexture(C.Assets.Textures.Norm)
 
     local tex = bar:GetIcon()
     if tex then
@@ -119,7 +119,7 @@ function THEME:ReskinBigWigs()
             function(_, frame, name)
                 if name == 'QueueTimer' and not frame.styled then
                     F.StripTextures(frame)
-                    frame:SetStatusBarTexture(C.Assets.statusbar_tex)
+                    frame:SetStatusBarTexture(C.Assets.Textures.Norm)
                     F.SetBD(frame)
 
                     frame.styled = true

@@ -1,4 +1,4 @@
-local F, C, L = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
 local MISC = F:RegisterModule('General')
 
 local MISC_LIST = {}
@@ -17,8 +17,6 @@ function MISC:OnLogin()
     end
 
     MISC:ForceWarning()
-    MISC:FasterLoot()
-    MISC:MawWidgetFrame()
     MISC:JerryWay()
 end
 
@@ -57,111 +55,7 @@ function MISC:ForceWarning()
     hooksecurefunc('ShowReadyCheck', ReadyCheckHook)
 end
 
--- Faster loot
-local lootDelay = 0
-local function fasterLootOnEvent()
-    local thisTime = GetTime()
-    if thisTime - lootDelay >= .3 then
-        lootDelay = thisTime
-        if GetCVarBool('autoLootDefault') ~= IsModifiedClick('AUTOLOOTTOGGLE') then
-            for i = GetNumLootItems(), 1, -1 do
-                LootSlot(i)
-            end
-            lootDelay = thisTime
-        end
-    end
-end
 
-function MISC:FasterLoot()
-    if C.DB.General.FasterLoot then
-        F:RegisterEvent('LOOT_READY', fasterLootOnEvent)
-    else
-        F:UnregisterEvent('LOOT_READY', fasterLootOnEvent)
-    end
-end
-
--- Maw threat bar
-local maxValue = 1000
-local function GetMawBarValue()
-    local widgetInfo = C_UIWidgetManager.GetDiscreteProgressStepsVisualizationInfo(2885)
-    if widgetInfo and widgetInfo.shownState == 1 then
-        local value = widgetInfo.progressVal
-        return math.floor(value / maxValue), value % maxValue
-    end
-end
-
-local MawRankColor = {
-    [0] = {.6, .8, 1},
-    [1] = {0, 1, 0},
-    [2] = {0, .7, .3},
-    [3] = {1, .8, 0},
-    [4] = {1, .5, 0},
-    [5] = {1, 0, 0}
-}
-
-function MISC:UpdateMawBarLayout()
-    local bar = MISC.MawBar
-    local rank, value = GetMawBarValue()
-    if rank then
-        bar:SetStatusBarColor(unpack(MawRankColor[rank]))
-        if rank == 5 then
-            bar.text:SetText('Lv' .. rank)
-            bar:SetValue(maxValue)
-        else
-            bar.text:SetText('Lv' .. rank .. ' - ' .. value .. '/' .. maxValue)
-            bar:SetValue(value)
-        end
-        bar:Show()
-        _G.UIWidgetTopCenterContainerFrame:Hide()
-    else
-        bar:Hide()
-        _G.UIWidgetTopCenterContainerFrame:Show()
-    end
-end
-
-function MISC:MawWidgetFrame()
-    if not C.DB.General.MawThreatBar then
-        return
-    end
-
-    if MISC.MawBar then
-        return
-    end
-
-    local bar = CreateFrame('StatusBar', nil, _G.UIParent)
-    bar:SetSize(200, 16)
-    bar:SetMinMaxValues(0, maxValue)
-    bar.text = F.CreateFS(bar, C.Assets.Fonts.Regular, 12, nil, nil, nil, true)
-    F.CreateSB(bar)
-    F:SmoothBar(bar)
-    MISC.MawBar = bar
-
-    F.Mover(bar, L['Maw Threat Bar'], 'MawThreatBar', {'TOP', _G.UIParent, 0, -80})
-
-    bar:SetScript(
-        'OnEnter',
-        function(self)
-            local rank = GetMawBarValue()
-            local widgetInfo = rank and C_UIWidgetManager.GetTextureWithAnimationVisualizationInfo(2873 + rank)
-            if widgetInfo and widgetInfo.shownState == 1 then
-                _G.GameTooltip:SetOwner(self, 'ANCHOR_BOTTOM', 0, -10)
-                local header, nonHeader = _G.SplitTextIntoHeaderAndNonHeader(widgetInfo.tooltip)
-                if header then
-                    _G.GameTooltip:AddLine(header, nil, nil, nil, 1)
-                end
-                if nonHeader then
-                    _G.GameTooltip:AddLine(nonHeader, nil, nil, nil, 1)
-                end
-                _G.GameTooltip:Show()
-            end
-        end
-    )
-    bar:SetScript('OnLeave', F.HideTooltip)
-
-    MISC:UpdateMawBarLayout()
-    F:RegisterEvent('PLAYER_ENTERING_WORLD', MISC.UpdateMawBarLayout)
-    F:RegisterEvent('UPDATE_UI_WIDGET', MISC.UpdateMawBarLayout)
-end
 
 -- Support cmd /way if TomTom disabled
 

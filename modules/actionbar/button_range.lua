@@ -11,7 +11,7 @@ local IsActionInRange = IsActionInRange
 local hooksecurefunc = hooksecurefunc
 
 local F = unpack(select(2, ...))
-local ACTIONBAR = F:GetModule('Actionbar')
+local ACTIONBAR = F:GetModule('ActionBar')
 
 local UPDATE_DELAY = .2
 local buttonColors, buttonsToUpdate = {}, {}

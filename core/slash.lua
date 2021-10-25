@@ -1,56 +1,7 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local strsplit = strsplit
-local format = format
-local ReloadUI = ReloadUI
-local GetAddOnInfo = GetAddOnInfo
-local DisableAddOn = DisableAddOn
-local EnableAddOn = EnableAddOn
-local LoadAddOn = LoadAddOn
-local GetNumAddOns = GetNumAddOns
-local GetAddOnEnableState = GetAddOnEnableState
-local InCombatLockdown = InCombatLockdown
-local StaticPopup_Show = StaticPopup_Show
-local UnitInRaid = UnitInRaid
-local UninviteUnit = UninviteUnit
-local UnitName = UnitName
-local UnitIsGroupLeader = UnitIsGroupLeader
-local UnitInParty = UnitInParty
-local UnitCanCooperate = UnitCanCooperate
-local UnitIsUnit = UnitIsUnit
-local SendChatMessage = SendChatMessage
-local GetUnitName = GetUnitName
-local GetNumGroupMembers = GetNumGroupMembers
-local GetRaidRosterInfo = GetRaidRosterInfo
-local C_PartyInfo_LeaveParty = C_PartyInfo.LeaveParty
-local C_PartyInfo_ConvertToParty = C_PartyInfo.ConvertToParty
-local C_PartyInfo_ConvertToRaid = C_PartyInfo.ConvertToRaid
-local C_SpecializationInfo_CanPlayerUseTalentSpecUI = C_SpecializationInfo.CanPlayerUseTalentSpecUI
-local ResetInstances = ResetInstances
-local IsInInstance = IsInInstance
-local LFGTeleport = LFGTeleport
-local DoReadyCheck = DoReadyCheck
-local InitiateRolePoll = InitiateRolePoll
-local Screenshot = Screenshot
-local GetUnitSpeed = GetUnitSpeed
-local DoEmote = DoEmote
-local BNSetCustomMessage = BNSetCustomMessage
-local GetSpecialization = GetSpecialization
-local SetSpecialization = SetSpecialization
-local hooksecurefunc = hooksecurefunc
-local ChatEdit_ParseText = ChatEdit_ParseText
-local GetDefaultLanguage = GetDefaultLanguage
-local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT
-local ERR_NOT_IN_GROUP = ERR_NOT_IN_GROUP
-local ACCEPT = ACCEPT
-local CANCEL = CANCEL
-
 local F, C, L = unpack(select(2, ...))
 
-
 _G.SlashCmdList.RELOADUI = function()
-    ReloadUI()
+    _G.ReloadUI()
 end
 _G.SLASH_RELOADUI1 = '/rl'
 _G.SLASH_RELOADUI2 = '/reload'
@@ -71,20 +22,20 @@ local cmdList = {
     '/clear - Clear chat',
     '/bb - Set BattleNet broadcast',
     '/spec - Switch specialization',
-    '/bind - Launch quick keybind mode',
+    '/bind - Launch quick keybind mode'
 }
 
 local function PrintCommand()
     for _, v in ipairs(cmdList) do
-        local command, desc = strsplit('-', tostring(v))
-        print(format('%s|r - %s|r', C.YellowColor .. command, C.BlueColor .. desc))
+        local command, desc = string.split('-', tostring(v))
+        print(string.format('%s|r - %s|r', C.YellowColor .. command, C.BlueColor .. desc))
     end
 end
 
 _G.SlashCmdList.FREEUI = function(str)
-    local cmd, _ = strsplit(' ', str:lower(), 2)
+    local cmd, _ = string.split(' ', str:lower(), 2)
     if cmd == 'reset' then
-        StaticPopup_Show('FREEUI_RESET_ALL')
+        _G.StaticPopup_Show('FREEUI_RESET_ALL')
     elseif cmd == 'install' then
         F:GetModule('Installation'):HelloWorld()
     elseif cmd == 'unlock' then
@@ -107,9 +58,9 @@ _G.SlashCmdList.DISABLE_ADDON = function(addon)
     local _, _, _, _, _, reason = GetAddOnInfo(addon)
     if reason ~= 'MISSING' then
         DisableAddOn(addon)
-        ReloadUI()
+        _G.ReloadUI()
     else
-        print('|cffffff00' .. L['Addon'] .. '\'' .. addon .. '\'' .. L['not found'] .. '|r')
+        print('|cffffff00' .. L['Addon'] .. "'" .. addon .. "'" .. L['not found'] .. '|r')
     end
 end
 _G.SLASH_DISABLE_ADDON1 = '/dis'
@@ -120,9 +71,9 @@ _G.SlashCmdList.ENABLE_ADDON = function(addon)
     if reason ~= 'MISSING' then
         EnableAddOn(addon)
         LoadAddOn(addon)
-        ReloadUI()
+        _G.ReloadUI()
     else
-        print('|cffffff00' .. L['Addon'] .. ' \'' .. addon .. '\' ' .. L['not found'] .. '|r')
+        print('|cffffff00' .. L['Addon'] .. " '" .. addon .. "' " .. L['not found'] .. '|r')
     end
 end
 _G.SLASH_ENABLE_ADDON1 = '/en'
@@ -135,7 +86,7 @@ _G.SlashCmdList.ONLY_UI = function()
             DisableAddOn(name, C.MyName)
         end
     end
-    ReloadUI()
+    _G.ReloadUI()
 end
 _G.SLASH_ONLY_UI1 = '/onlyfree'
 
@@ -143,7 +94,7 @@ _G.SLASH_ONLY_UI1 = '/onlyfree'
 
 --	Disband party or raid
 _G.SlashCmdList.GROUPDISBAND = function()
-    StaticPopup_Show('FREEUI_DISBAND_GROUP')
+    _G.StaticPopup_Show('FREEUI_DISBAND_GROUP')
 end
 _G.SLASH_GROUPDISBAND1 = '/disband'
 
@@ -151,12 +102,12 @@ _G.SLASH_GROUPDISBAND1 = '/disband'
 _G.SlashCmdList.PARTYTORAID = function()
     if GetNumGroupMembers() > 0 then
         if UnitInRaid('player') and (UnitIsGroupLeader('player')) then
-            C_PartyInfo_ConvertToParty()
+            C_PartyInfo.ConvertToParty()
         elseif UnitInParty('player') and (UnitIsGroupLeader('player')) then
-            C_PartyInfo_ConvertToRaid()
+            C_PartyInfo.ConvertToRaid()
         end
     else
-        print('|cffffff00' .. ERR_NOT_IN_GROUP .. '|r')
+        print('|cffffff00' .. _G.ERR_NOT_IN_GROUP .. '|r')
     end
 end
 _G.SLASH_PARTYTORAID1 = '/toraid'
@@ -193,13 +144,12 @@ _G.SLASH_ROLECHECK1 = '/rpc'
 _G.SLASH_ROLECHECK2 = '/role'
 
 _G.SlashCmdList.LEAVEGROUP = function()
-    C_PartyInfo_LeaveParty()
+    C_PartyInfo.LeaveParty()
 end
 _G.SLASH_LEAVEGROUP1 = '/lg'
 _G.SLASH_LEAVEGROUP2 = '/leave'
 
 --[[ misc ]]
-
 -- Take screenshot
 _G.SlashCmdList.SCREENSHOT = function()
     Screenshot()
@@ -209,7 +159,7 @@ _G.SLASH_SCREENSHOT1 = '/ss'
 -- Clear chat
 _G.SlashCmdList.CLEARCHAT = function()
     for i = 1, _G.NUM_CHAT_WINDOWS do
-        _G[format('ChatFrame%d', i)]:Clear()
+        _G[string.format('ChatFrame%d', i)]:Clear()
     end
 end
 _G.SLASH_CLEARCHAT1 = '/clear'
@@ -230,7 +180,7 @@ _G.SLASH_BNBROADCAST1 = '/bb'
 
 -- Switch specialization
 _G.SlashCmdList.SPEC = function(spec)
-    local canUse, failureReason = C_SpecializationInfo_CanPlayerUseTalentSpecUI()
+    local canUse, failureReason = C_SpecializationInfo.CanPlayerUseTalentSpecUI()
     if canUse then
         if GetSpecialization() ~= tonumber(spec) then
             SetSpecialization(spec)
@@ -242,13 +192,15 @@ end
 _G.SLASH_SPEC1 = '/spec'
 
 -- Whisper target
-hooksecurefunc('ChatEdit_OnSpacePressed', function(self)
-    if (string.sub(self:GetText(), 1, 3) == '/tt' and
-        (UnitCanCooperate('player', 'target') or UnitIsUnit('player', 'target'))) then
-        self:SetText(_G.SLASH_SMART_WHISPER1 .. ' ' .. GetUnitName('target', true):gsub(' ', '') .. ' ')
-        ChatEdit_ParseText(self, 0)
+hooksecurefunc(
+    'ChatEdit_OnSpacePressed',
+    function(self)
+        if (string.sub(self:GetText(), 1, 3) == '/tt' and (UnitCanCooperate('player', 'target') or UnitIsUnit('player', 'target'))) then
+            self:SetText(_G.SLASH_SMART_WHISPER1 .. ' ' .. GetUnitName('target', true):gsub(' ', '') .. ' ')
+            _G.ChatEdit_ParseText(self, 0)
+        end
     end
-end)
+)
 
 _G.SLASH_WHISPERTARGET1 = '/tt'
 _G.SlashCmdList.WHISPERTARGET = function(str)

@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local MM = F:NewModule('Minimap')
+local MM = F:GetModule('Minimap')
 
 local map = _G.Minimap
 local offset = 256 / 8
@@ -723,7 +723,7 @@ function MM:HideInCombat()
     )
 end
 
-function MM:OnEnable()
+function MM:OnLogin()
     if not C.DB.Map.Minimap then
         return
     end
@@ -741,4 +741,5 @@ function MM:OnEnable()
     MM:WhoPings()
     MM:MouseFunc()
     MM:HideInCombat()
+    MM:AddExpBar()
 end

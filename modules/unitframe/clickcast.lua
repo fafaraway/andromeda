@@ -2,7 +2,7 @@
 -- Credits: sBinder by Fernir, ShestakUI
 
 local F, C, L = unpack(select(2, ...))
-local UNITFRAME = F:GetModule('Unitframe')
+local UNITFRAME = F:GetModule('UnitFrame')
 
 -- #TODO need cleanup
 

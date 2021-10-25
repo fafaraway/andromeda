@@ -1,14 +1,5 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local format = format
-local BreakUpLargeNumbers = BreakUpLargeNumbers
-local securecall = securecall
-local ToggleCharacter = ToggleCharacter
-local C_CurrencyInfo_GetCurrencyInfo = C_CurrencyInfo.GetCurrencyInfo
-
 local F, C, L = unpack(select(2, ...))
-local INFOBAR = F:GetModule('Infobar')
+local INFOBAR = F:GetModule('InfoBar')
 
 local currPvE = {
     ['Reservoir Anima'] = 1813,
@@ -42,14 +33,14 @@ local function AddTitle(text)
     end
 end
 
-local function Button_OnEvent(self, event)
-    local info = C_CurrencyInfo_GetCurrencyInfo(1828)
-    self.Text:SetText(format('%s: |cffdf5ed9%s|r', info.name, BreakUpLargeNumbers(info.quantity)))
+local function Button_OnEvent(self)
+    local info = C_CurrencyInfo.GetCurrencyInfo(1828)
+    self.Text:SetText(string.format('%s: |cffdf5ed9%s|r', info.name, BreakUpLargeNumbers(info.quantity)))
 end
 
 local function Button_OnMouseUp(self, btn)
     if btn == 'LeftButton' then
-        securecall(ToggleCharacter, 'TokenFrame')
+        securecall(_G.ToggleCharacter, 'TokenFrame')
     end
 end
 
@@ -62,12 +53,12 @@ local function Button_OnEnter(self)
     title = false
     for _, id in pairs(currPvE) do
         AddTitle('PvE')
-        local info = C_CurrencyInfo_GetCurrencyInfo(id)
+        local info = C_CurrencyInfo.GetCurrencyInfo(id)
         local amount
         if info.maxQuantity > 0 then
-            amount = format('|cff20ff20%s|r |cff7f7f7f/|r |cffff2020%s|r', BreakUpLargeNumbers(info.quantity), BreakUpLargeNumbers(info.maxQuantity))
+            amount = string.format('|cff20ff20%s|r |cff7f7f7f/|r |cffff2020%s|r', BreakUpLargeNumbers(info.quantity), BreakUpLargeNumbers(info.maxQuantity))
         else
-            amount = format('|cff20ff20%s|r', BreakUpLargeNumbers(info.quantity))
+            amount = string.format('|cff20ff20%s|r', BreakUpLargeNumbers(info.quantity))
         end
         _G.GameTooltip:AddDoubleLine(AddIcon(info.iconFileID) .. info.name, amount, 1, 1, 1)
     end
@@ -75,12 +66,12 @@ local function Button_OnEnter(self)
     title = false
     for _, id in pairs(currPvP) do
         AddTitle('PvP')
-        local info = C_CurrencyInfo_GetCurrencyInfo(id)
+        local info = C_CurrencyInfo.GetCurrencyInfo(id)
         local amount
         if info.maxQuantity > 0 then
-            amount = format('|cff20ff20%s|r |cff7f7f7f/|r |cffff2020%s|r', BreakUpLargeNumbers(info.quantity), BreakUpLargeNumbers(info.maxQuantity))
+            amount = string.format('|cff20ff20%s|r |cff7f7f7f/|r |cffff2020%s|r', BreakUpLargeNumbers(info.quantity), BreakUpLargeNumbers(info.maxQuantity))
         else
-            amount = format('|cff20ff20%s|r', BreakUpLargeNumbers(info.quantity))
+            amount = string.format('|cff20ff20%s|r', BreakUpLargeNumbers(info.quantity))
         end
         _G.GameTooltip:AddDoubleLine(AddIcon(info.iconFileID) .. info.name, amount, 1, 1, 1)
     end

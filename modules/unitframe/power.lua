@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local UNITFRAME = F:GetModule('Unitframe')
+local UNITFRAME = F:GetModule('UnitFrame')
 local oUF = F.Libs.oUF
 
 local function PostUpdatePower(power, unit, _, _, max)
@@ -79,7 +79,7 @@ function UNITFRAME:CreatePowerBar(self)
     power:SetPoint('LEFT')
     power:SetPoint('RIGHT')
     power:SetPoint('TOP', self.Health, 'BOTTOM', 0, -C.Mult)
-    power:SetStatusBarTexture(C.Assets.statusbar_tex)
+    power:SetStatusBarTexture(C.Assets.Textures.Norm)
 
     if isPlayer then
         power:SetHeight(C.DB.Unitframe.PlayerPowerHeight)
@@ -177,7 +177,7 @@ end
 function UNITFRAME:CreateAlternativePowerBar(self)
     local smooth = C.DB.Unitframe.Smooth
     local altPower = CreateFrame('StatusBar', nil, self)
-    altPower:SetStatusBarTexture(C.Assets.statusbar_tex)
+    altPower:SetStatusBarTexture(C.Assets.Textures.Norm)
     altPower:SetPoint('TOP', self.Power, 'BOTTOM', 0, -2)
     altPower:Size(self:GetWidth(), C.DB.Unitframe.AltPowerHeight)
     altPower:EnableMouse(true)

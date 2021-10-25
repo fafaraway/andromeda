@@ -13,7 +13,7 @@ local UnitVehicleSkin = UnitVehicleSkin
 local HasOverrideActionBar = HasOverrideActionBar
 
 local F, C, L = unpack(select(2, ...))
-local ACTIONBAR = F:RegisterModule('Actionbar')
+local ACTIONBAR = F:GetModule('ActionBar')
 
 local margin, padding = 3, 3
 

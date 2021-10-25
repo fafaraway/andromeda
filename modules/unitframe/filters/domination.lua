@@ -1,5 +1,5 @@
 local F = unpack(select(2, ...))
-local UNITFRAME = F:GetModule('Unitframe')
+local UNITFRAME = F:GetModule('UnitFrame')
 
 local TIER = 9
 local INSTANCE = 1193 -- 统御圣所
