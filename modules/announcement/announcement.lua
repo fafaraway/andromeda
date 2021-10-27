@@ -1,23 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local wipe = wipe
-local format = format
-local IsInGroup = IsInGroup
-local IsInRaid = IsInRaid
-local UnitIsGroupLeader = UnitIsGroupLeader
-local UnitIsGroupAssistant = UnitIsGroupAssistant
-local IsEveryoneAssistant = IsEveryoneAssistant
-local bit_band = bit.band
-local GetSpellLink = GetSpellLink
-local UnitGUID = UnitGUID
-local IsInGroup = IsInGroup
-local SendChatMessage = SendChatMessage
-local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
-local IsInInstance = IsInInstance
-local GetNumGroupMembers = GetNumGroupMembers
-local GetSpellInfo = GetSpellInfo
-
 local F, C, L = unpack(select(2, ...))
 local ANNOUNCEMENT = F:GetModule('Announcement')
 
@@ -35,17 +15,14 @@ C.AnnounceableSpellsList = {
     [31884] = true, -- Avenging Wrath
     [633] = true, -- Lay On Hands
     [31821] = true, -- Aura Mastery
-
     -- Warrior
     [97462] = true, -- Rallying Cry
-
+    [23920] = true, -- Spell Reflection
     -- Demon Hunter
     [196718] = true, -- Darkness
-
     -- Death Knight
     [51052] = true, -- Anti-Magic Zone
     [15286] = true, -- Vampiric Embrace
-
     -- Priest
     [246287] = true, -- Evangelism
     [265202] = true, -- Holy Word: Salvation
@@ -57,7 +34,6 @@ C.AnnounceableSpellsList = {
     [109964] = true, -- Spirit Shell
     [33206] = true, -- Pain Suppression
     [47788] = true, -- Guardian Spirit
-
     -- Shaman
     [207399] = true, -- Ancestral Protection Totem
     [108280] = true, -- Healing Tide Totem
@@ -66,29 +42,19 @@ C.AnnounceableSpellsList = {
     [16191] = true, -- Mana Tide Totem
     [108281] = true, -- Ancestral Guidance
     [198838] = true, -- Earthen Wall Totem
-
     -- Druid
     [740] = true, -- Tranquility
     [33891] = true, -- Incarnation: Tree of Life
     [197721] = true, -- Flourish
     [205636] = true, -- Force of Nature
-
     -- Monk
     [115310] = true, -- Revival
     [325197] = true, -- Invoke Chi-Ji, the Red Crane
     [116849] = true, -- Life Cocoon
     [322118] = true, -- Invoke Yu'lon, the Jade Serpent
-
     -- Covenants
-    [316958] = true, -- Ashen Hallow
+    [316958] = true -- Ashen Hallow
 }
-
-local function IsInMyGroup(flag)
-    local inParty = IsInGroup() and bit_band(flag, _G.COMBATLOG_OBJECT_AFFILIATION_PARTY) ~= 0
-    local inRaid = IsInRaid() and bit_band(flag, _G.COMBATLOG_OBJECT_AFFILIATION_RAID) ~= 0
-
-    return inRaid or inParty
-end
 
 local function GetChannel(warning)
     if C.DB.Announcement.Channel == 1 then
@@ -114,7 +80,7 @@ end
 
 ANNOUNCEMENT.AnnounceableSpellsList = {}
 function ANNOUNCEMENT:RefreshSpells()
-    wipe(ANNOUNCEMENT.AnnounceableSpellsList)
+    table.wipe(ANNOUNCEMENT.AnnounceableSpellsList)
 
     for spellID in pairs(C.AnnounceableSpellsList) do
         local name = GetSpellInfo(spellID)
@@ -138,35 +104,41 @@ function ANNOUNCEMENT:OnEvent()
         return true
     end
 
-    local _, eventType, _, srcGUID, _, _, _, _, destName, destFlags, _, spellID, _, _, extraSpellID = CombatLogGetCurrentEventInfo()
+    local _, eventType, _, srcGUID, srcName, srcFlags, _, _, destName, _, _, spellID, _, _, extraSpellID = CombatLogGetCurrentEventInfo()
+
+    if not srcGUID or srcName == destName then
+        return
+    end
 
     if destName then
         destName = destName:gsub('%-[^|]+', '')
     end
 
-    if not (srcGUID == UnitGUID('player') or srcGUID == UnitGUID('pet')) then return end
+    if eventType == 'SPELL_MISSED' and C.DB.Announcement.Reflect then
+        local spellID, _, _, missType = select(12, CombatLogGetCurrentEventInfo())
+        if missType == 'REFLECT' and destName == C.MyName then
+            SendChatMessage(string.format(L['Reflected -> %s'], GetSpellLink(spellID)), GetChannel())
+        end
+    end
+
+    if srcName ~= C.MyName and not C:IsMyPet(srcFlags) then
+        return
+    end
 
     if eventType == 'SPELL_CAST_SUCCESS' then
         if ANNOUNCEMENT.AnnounceableSpellsList[spellID] and C.DB.Announcement.Spells then
             if destName == nil then
-                SendChatMessage(format(L['Used %s'], GetSpellLink(spellID)), GetChannel())
+                SendChatMessage(string.format(L['Used %s'], GetSpellLink(spellID)), GetChannel())
             else
-                SendChatMessage(format(L['Used %s -> %s'], GetSpellLink(spellID), destName), GetChannel())
+                SendChatMessage(string.format(L['Used %s -> %s'], GetSpellLink(spellID), destName), GetChannel())
             end
         end
     elseif eventType == 'SPELL_INTERRUPT' and C.DB.Announcement.Interrupt then
-        SendChatMessage(format(L['Interrupted %s'], GetSpellLink(extraSpellID)), GetChannel())
+        SendChatMessage(string.format(L['Interrupted -> %s'], GetSpellLink(extraSpellID)), GetChannel())
     elseif eventType == 'SPELL_DISPEL' and C.DB.Announcement.Dispel then
-        SendChatMessage(format(L['Dispelled %s'], GetSpellLink(extraSpellID)), GetChannel())
+        SendChatMessage(string.format(L['Dispelled -> %s'], GetSpellLink(extraSpellID)), GetChannel())
     elseif eventType == 'SPELL_STOLEN' and C.DB.Announcement.Stolen then
-        SendChatMessage(format(L['Stolen %s'], GetSpellLink(extraSpellID)), GetChannel())
-    elseif eventType == 'SPELL_MISSED' and C.DB.Announcement.Reflect then
-        local spellID, _, _, missType = select(12, CombatLogGetCurrentEventInfo())
-        if missType=="REFLECT"then
-            SendChatMessage(L['Reflected %s']..GetSpellLink(spellID), GetChannel())
-        elseif missType=="ABSORB" and destName == L['Grounding Totem'] and destFlags == 8465 then
-            SendChatMessage(L["Absorbed %s"]..GetSpellLink(spellID), GetChannel())
-        end
+        SendChatMessage(string.format(L['Stolen -> %s'], GetSpellLink(extraSpellID)), GetChannel())
     end
 end
 

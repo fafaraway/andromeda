@@ -225,3 +225,17 @@ local function CheckMyRole()
 end
 F:RegisterEvent('ADDON_LOADED', CheckMyRole)
 F:RegisterEvent('PLAYER_TALENT_UPDATE', CheckMyRole)
+
+-- Flags
+function C:IsMyPet(flags)
+    return _G.bit.band(flags, _G.COMBATLOG_OBJECT_AFFILIATION_MINE) > 0
+end
+C.PartyPetFlags = _G.bit.bor(_G.COMBATLOG_OBJECT_AFFILIATION_PARTY, _G.COMBATLOG_OBJECT_REACTION_FRIENDLY, _G.COMBATLOG_OBJECT_CONTROL_PLAYER, _G.COMBATLOG_OBJECT_TYPE_PET)
+C.RaidPetFlags = _G.bit.bor(_G.COMBATLOG_OBJECT_AFFILIATION_RAID, _G.COMBATLOG_OBJECT_REACTION_FRIENDLY, _G.COMBATLOG_OBJECT_CONTROL_PLAYER, _G.COMBATLOG_OBJECT_TYPE_PET)
+
+function C:IsInMyGroup(flags)
+    local inParty = IsInGroup() and _G.bit.band(flags, _G.COMBATLOG_OBJECT_AFFILIATION_PARTY) ~= 0
+    local inRaid = IsInRaid() and _G.bit.band(flags, _G.COMBATLOG_OBJECT_AFFILIATION_RAID) ~= 0
+
+    return inRaid or inParty
+end

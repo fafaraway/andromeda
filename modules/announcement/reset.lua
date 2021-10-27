@@ -1,14 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local strmatch = strmatch
-local gsub = gsub
-local format = format
-local IsPartyLFG = IsPartyLFG
-local IsInRaid = IsInRaid
-local IsInGroup = IsInGroup
-local SendChatMessage = SendChatMessage
-
 local F, C, L = unpack(select(2, ...))
 local ANNOUNCEMENT = F:GetModule('Announcement')
 
@@ -18,7 +7,7 @@ local msgList = {
     INSTANCE_RESET_SUCCESS = L['%s has been reset.'],
     INSTANCE_RESET_FAILED = L['Can not reset %s, there are players still inside the instance.'],
     INSTANCE_RESET_FAILED_ZONING = L['Can not reset %s, there are players in your party attempting to zone into an instance.'],
-    INSTANCE_RESET_FAILED_OFFLINE = L['Can not reset %s, there are players offline in your party.'],
+    INSTANCE_RESET_FAILED_OFFLINE = L['Can not reset %s, there are players offline in your party.']
 }
 
 local function SendMessage(msg)
@@ -33,21 +22,17 @@ local function SendMessage(msg)
     end
 end
 
-local function InstanceReset(text)
+local function InstanceReset(_, text)
     for systemMessage, friendlyMessage in pairs(msgList) do
         systemMessage = _G[systemMessage]
-        if (strmatch(text, gsub(systemMessage, '%%s', '.+'))) then
-            local instance = strmatch(text, gsub(systemMessage, '%%s', '(.+)'))
+        if (string.match(text, string.gsub(systemMessage, '%%s', '.+'))) then
+            local instance = string.match(text, string.gsub(systemMessage, '%%s', '(.+)'))
 
-            SendMessage(format(friendlyMessage, instance))
+            SendMessage(string.format(friendlyMessage, instance))
 
             return
         end
     end
-end
-
-local function OnEvent(event, text)
-    InstanceReset(text)
 end
 
 function ANNOUNCEMENT:AnnounceReset()
@@ -55,5 +40,5 @@ function ANNOUNCEMENT:AnnounceReset()
         return
     end
 
-    F:RegisterEvent('CHAT_MSG_SYSTEM', OnEvent)
+    F:RegisterEvent('CHAT_MSG_SYSTEM', InstanceReset)
 end
