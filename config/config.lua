@@ -84,7 +84,6 @@ C.CharacterSettings = {
         Dispel = true,
         Stolen = true,
         Reflect = true,
-        Absorb = true,
         Quest = false,
         Reset = true
     },

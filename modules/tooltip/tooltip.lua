@@ -323,12 +323,12 @@ function TOOLTIP:ScanTargets()
     end
 end
 
--- Add aura source and mount source
+-- Add mount source
 function TOOLTIP:SetUnitAura(unit, index, filter)
     if not self or not CanAccessObject(self) then
         return
     end
-    local _, _, _, _, _, _, caster, _, _, id = UnitAura(unit, index, filter)
+    local _, _, _, _, _, _, _, _, _, id = UnitAura(unit, index, filter)
 
     if id then
         local mountText
@@ -341,14 +341,6 @@ function TOOLTIP:SetUnitAura(unit, index, filter)
                 self:AddLine(mountText, 1, 1, 1)
             end
         end
-
-        -- if caster then
-        --     local name = GetUnitName(caster, true)
-        --     local hexColor = F:RGBToHex(F:UnitColor(caster))
-        --     self:AddLine(' ')
-        --     self:AddDoubleLine(L['CastBy:'], hexColor .. name)
-        --     self:Show()
-        -- end
     end
 end
 

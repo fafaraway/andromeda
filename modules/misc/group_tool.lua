@@ -1,47 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local next = next
-local pairs = pairs
-local mod = mod
-local tinsert = tinsert
-local wipe = wipe
-local strsplit = strsplit
-local format = format
-local CreateFrame = CreateFrame
-local IsInGroup = IsInGroup
-local IsInRaid = IsInRaid
-local IsInInstance = IsInInstance
-local UnitIsGroupLeader = UnitIsGroupLeader
-local UnitIsGroupAssistant = UnitIsGroupAssistant
-local IsPartyLFG = IsPartyLFG
-local IsLFGComplete = IsLFGComplete
-local HasLFGRestrictions = HasLFGRestrictions
-local GetInstanceInfo = GetInstanceInfo
-local GetNumGroupMembers = GetNumGroupMembers
-local GetRaidRosterInfo = GetRaidRosterInfo
-local GetSpellCharges = GetSpellCharges
-local GetSpellInfo = GetSpellInfo
-local GetSpellTexture = GetSpellTexture
-local UnitAura = UnitAura
-local GetTime = GetTime
-local SendChatMessage = SendChatMessage
-local LoadAddOn = LoadAddOn
-local EnableAddOn = EnableAddOn
-local IsAddOnLoaded = IsAddOnLoaded
-local IsAltKeyDown = IsAltKeyDown
-local IsControlKeyDown = IsControlKeyDown
-local InCombatLockdown = InCombatLockdown
-local DoReadyCheck = DoReadyCheck
-local InitiateRolePoll = InitiateRolePoll
-local GetReadyCheckStatus = GetReadyCheckStatus
-local StaticPopup_Show = StaticPopup_Show
-local ToggleFriendsFrame = ToggleFriendsFrame
-local C_Timer_After = C_Timer.After
-local LeaveParty = C_PartyInfo.LeaveParty
-local ConvertToRaid = C_PartyInfo.ConvertToRaid
-local ConvertToParty = C_PartyInfo.ConvertToParty
-
 local F, C, L = unpack(select(2, ...))
 local GT = F:RegisterModule('GroupTool')
 
@@ -125,7 +81,7 @@ function GT:RaidTool_Header()
         'OnDoubleClick',
         function(_, btn)
             if btn == 'RightButton' and (IsPartyLFG() and IsLFGComplete() or not IsInInstance()) then
-                LeaveParty()
+                C_PartyInfo.LeaveParty()
             end
         end
     )
@@ -294,7 +250,7 @@ function GT:RaidTool_ReadyCheck(parent)
             else
                 rc:SetTextColor(1, 0, 0)
             end
-            C_Timer_After(5, hideRCFrame)
+            F:Delay(5, hideRCFrame)
         else
             count, total = 0, 0
 
@@ -396,7 +352,7 @@ function GT:RaidTool_BuffChecker(parent)
             if count >= numPlayer then
                 sendMsg(L['Lack of'] .. BuffName[i] .. ': ' .. _G.ALL .. _G.PLAYER)
             elseif count >= 5 and i > 2 then
-                sendMsg(L['Lack of'] .. BuffName[i] .. ': ' .. format(L['%s players'], count))
+                sendMsg(L['Lack of'] .. BuffName[i] .. ': ' .. string.format(L['%s players'], count))
             else
                 local str = L['Lack of'] .. BuffName[i] .. ': '
                 for j = 1, count do
@@ -413,7 +369,7 @@ function GT:RaidTool_BuffChecker(parent)
 
     local function scanBuff()
         for i = 1, numGroups do
-            wipe(NoBuff[i])
+            table.wipe(NoBuff[i])
         end
         numPlayer = 0
 
@@ -436,8 +392,8 @@ function GT:RaidTool_BuffChecker(parent)
                         end
                     end
                     if not HasBuff then
-                        name = strsplit('-', name) -- remove realm name
-                        tinsert(NoBuff[j], name)
+                        name = string.split('-', name) -- remove realm name
+                        table.insert(NoBuff[j], name)
                     end
                 end
             end
@@ -567,7 +523,7 @@ function GT:RaidTool_CreateMenu(parent)
             _G.TEAM_DISBAND,
             function()
                 if UnitIsGroupLeader('player') then
-                    StaticPopup_Show('FREEUI_DISBAND_GROUP')
+                    _G.StaticPopup_Show('FREEUI_DISBAND_GROUP')
                 else
                     _G.UIErrorsFrame:AddMessage(C.RedColor .. _G.ERR_NOT_LEADER)
                 end
@@ -578,9 +534,9 @@ function GT:RaidTool_CreateMenu(parent)
             function()
                 if UnitIsGroupLeader('player') and not HasLFGRestrictions() and GetNumGroupMembers() <= 5 then
                     if IsInRaid() then
-                        ConvertToParty()
+                        C_PartyInfo.ConvertToParty()
                     else
-                        ConvertToRaid()
+                        C_PartyInfo.ConvertToRaid()
                     end
                     frame:Hide()
                     frame:SetScript('OnUpdate', nil)
@@ -602,7 +558,7 @@ function GT:RaidTool_CreateMenu(parent)
         {
             _G.RAID_CONTROL,
             function()
-                ToggleFriendsFrame(3)
+                _G.ToggleFriendsFrame(3)
             end
         }
     }
@@ -610,7 +566,7 @@ function GT:RaidTool_CreateMenu(parent)
     local bu = {}
     for i, j in pairs(buttons) do
         bu[i] = F.CreateButton(frame, 84, 28, j[1], 12)
-        bu[i]:SetPoint(mod(i, 2) == 0 and 'TOPRIGHT' or 'TOPLEFT', mod(i, 2) == 0 and -5 or 5, i > 2 and -37 or -5)
+        bu[i]:SetPoint(math.fmod(i, 2) == 0 and 'TOPRIGHT' or 'TOPLEFT', math.fmod(i, 2) == 0 and -5 or 5, i > 2 and -37 or -5)
         bu[i]:SetScript('OnClick', j[2])
     end
 
