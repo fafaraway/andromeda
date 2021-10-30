@@ -841,10 +841,14 @@ function GUI:SetupNameplateCVars(parent)
         return
     end
 
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local db = C.CharacterSettings.Nameplate
+
     local cvarsDatas = {
         [1] = {
             key = 'MinScale',
-            value = .7,
+            value = db.MinScale,
             text = L['MinScale'],
             min = .5,
             max = 1,
@@ -852,7 +856,7 @@ function GUI:SetupNameplateCVars(parent)
         },
         [2] = {
             key = 'TargetScale',
-            value = 1,
+            value = db.TargetScale,
             text = L['TargetScale'],
             min = 1,
             max = 2,
@@ -860,7 +864,7 @@ function GUI:SetupNameplateCVars(parent)
         },
         [3] = {
             key = 'MinAlpha',
-            value = .6,
+            value = db.MinAlpha,
             text = L['TargetScale'],
             min = .5,
             max = 1,
@@ -868,7 +872,7 @@ function GUI:SetupNameplateCVars(parent)
         },
         [4] = {
             key = 'OccludedAlpha',
-            value = .2,
+            value = db.OccludedAlpha,
             text = L['OccludedAlpha'],
             min = .2,
             max = 1,
@@ -876,7 +880,7 @@ function GUI:SetupNameplateCVars(parent)
         },
         [5] = {
             key = 'VerticalSpacing',
-            value = .7,
+            value = db.VerticalSpacing,
             text = L['VerticalSpacing'],
             min = .3,
             max = 3,
@@ -884,16 +888,13 @@ function GUI:SetupNameplateCVars(parent)
         },
         [6] = {
             key = 'HorizontalSpacing',
-            value = .3,
+            value = db.HorizontalSpacing,
             text = L['HorizontalSpacing'],
             min = .3,
             max = 3,
             step = .1
         }
     }
-
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
 
     local offset = -10
     for _, v in ipairs(cvarsDatas) do
