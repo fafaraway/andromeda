@@ -21,6 +21,5 @@
     <Script file="shared_media.lua"/>
     <Script file="stats_report.lua"/>
     <Script file="talent_manager.lua"/>
-    <Script file="vignette.lua"/>
-    <Script file="wowhead_link.lua"/>
+    <Script file="vignetting.lua"/>
 </Ui>

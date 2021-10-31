@@ -1,18 +1,9 @@
---[[
-    Increases camera zoom speed
-    Based on FasterCamera by Ketho
-    https://www.wowinterface.com/downloads/info20483-FasterCamera.html
-]]
-
-local _G = _G
-local unpack = unpack
-local select = select
-local GetCameraZoom = GetCameraZoom
-local SetCVar = SetCVar
-local ConsoleExec = ConsoleExec
+-- Increases camera zoom speed
+-- Based on FasterCamera by Ketho
+-- https://www.wowinterface.com/downloads/info20483-FasterCamera.html
 
 local F, C = unpack(select(2, ...))
-local EC = F:RegisterModule('EnhancedCamera')
+local CAMERA = F:GetModule('Camera')
 
 local datas = {
     increment = 4,
@@ -43,7 +34,7 @@ function _G.CameraZoomOut(v)
     CameraZoom(oldZoomOut, v)
 end
 
-function EC:OnEvent(event)
+function CAMERA:OnEvent()
     if not C.DB.General.FasterZooming then
         return
     end
@@ -62,7 +53,7 @@ local function Exec(cmd)
     ConsoleExec('ActionCam ' .. cmd)
 end
 
-function EC:UpdateActionCamera()
+function CAMERA:UpdateActionCamera()
     if C.DB.General.ActionCamera then
         Exec('basic')
     else
@@ -70,13 +61,13 @@ function EC:UpdateActionCamera()
     end
 end
 
-function EC:ActionCamera()
+function CAMERA:ActionCamera()
     _G.UIParent:UnregisterEvent('EXPERIMENTAL_CVAR_CONFIRMATION_NEEDED')
 
-    EC:UpdateActionCamera()
+    CAMERA:UpdateActionCamera()
 end
 
-function EC:OnLogin()
-    F:RegisterEvent('ADDON_LOADED', EC.OnEvent)
-    F:RegisterEvent('PLAYER_ENTERING_WORLD', EC.ActionCamera)
+function CAMERA:OnLogin()
+    F:RegisterEvent('ADDON_LOADED', CAMERA.OnEvent)
+    F:RegisterEvent('PLAYER_ENTERING_WORLD', CAMERA.ActionCamera)
 end

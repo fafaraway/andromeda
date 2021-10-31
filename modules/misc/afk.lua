@@ -1,7 +1,5 @@
-
-
 local F, C, L = unpack(select(2, ...))
-local M = F:NewModule('ScreenSaver')
+local M = F:RegisterModule('ScreenSaver')
 
 function M:Enable()
     local self = M.Frame
@@ -137,7 +135,7 @@ function M:SetupScreenSaver()
     M:CreateText()
 end
 
-function M:OnEnable()
+function M:OnLogin()
     if not C.DB.General.ScreenSaver then
         return
     end
