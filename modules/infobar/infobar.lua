@@ -4,12 +4,31 @@ local INFOBAR = F:GetModule('InfoBar')
 INFOBAR.Buttons = {}
 local barAlpha, buttonAlpha
 
-local function UpdateBorderColor(event)
+local function BorderAnim_OnEvent(event)
     local bar = INFOBAR.Bar
     if event == 'PLAYER_REGEN_DISABLED' then
-        bar.bg:SetBackdropBorderColor(1, 0, 0, 1)
+        bar.bg:SetBackdropBorderColor(1, 0, 0)
+        bar.anim:Play()
+    elseif not InCombatLockdown() then
+        if C_Calendar.GetNumPendingInvites() > 0 then
+            bar.bg:SetBackdropBorderColor(1, 1, 0)
+            bar.anim:Play()
+        else
+            bar.anim:Stop()
+            bar.bg:SetBackdropBorderColor(0, 0, 0)
+        end
+    end
+end
+
+function INFOBAR:UpdateCombatPulse()
+    if C.DB.Infobar.CombatPulse then
+        F:RegisterEvent('PLAYER_REGEN_ENABLED', BorderAnim_OnEvent)
+        F:RegisterEvent('PLAYER_REGEN_DISABLED', BorderAnim_OnEvent)
+        F:RegisterEvent('CALENDAR_UPDATE_PENDING_INVITES', BorderAnim_OnEvent)
     else
-        bar.bg:SetBackdropBorderColor(0, 0, 0, 0)
+        F:UnregisterEvent('PLAYER_REGEN_ENABLED', BorderAnim_OnEvent)
+        F:UnregisterEvent('PLAYER_REGEN_DISABLED', BorderAnim_OnEvent)
+        F:UnregisterEvent('CALENDAR_UPDATE_PENDING_INVITES', BorderAnim_OnEvent)
     end
 end
 
@@ -23,10 +42,6 @@ function INFOBAR:CreateInfoBar()
     bar:SetPoint(anchorTop and 'TOPLEFT' or 'BOTTOMLEFT', 0, 0)
     bar:SetPoint(anchorTop and 'TOPRIGHT' or 'BOTTOMRIGHT', 0, 0)
 
-    bar.bg = F.CreateBDFrame(bar)
-    bar.bg:SetBackdropColor(0, 0, 0, mouseover and .25 or .65)
-    bar.bg:SetBackdropBorderColor(0, 0, 0, 0)
-
     barAlpha = mouseover and .25 or .65
     buttonAlpha = mouseover and 0 or 1
 
@@ -37,8 +52,21 @@ function INFOBAR:CreateInfoBar()
 
     INFOBAR.Bar = bar
 
-    F:RegisterEvent('PLAYER_REGEN_DISABLED', UpdateBorderColor)
-    F:RegisterEvent('PLAYER_REGEN_ENABLED', UpdateBorderColor)
+    bar.bg = CreateFrame('Frame', nil, bar, 'BackdropTemplate')
+    bar.bg:SetOutside(bar, 2, 2)
+    bar.bg:SetFrameStrata('BACKGROUND')
+    bar.bg:SetFrameLevel(1) -- Make sure the frame level is higher than the vignetting
+    bar.bg:SetBackdrop({bgFile = C.Assets.bd_tex, edgeFile = C.Assets.bd_tex, edgeSize = 1})
+    bar.bg:SetBackdropColor(0, 0, 0, mouseover and .25 or .65)
+    bar.bg:SetBackdropBorderColor(0, 0, 0)
+
+    bar.anim = bar.bg:CreateAnimationGroup()
+    bar.anim:SetLooping('BOUNCE')
+    bar.anim.fader = bar.anim:CreateAnimation('Alpha')
+    bar.anim.fader:SetFromAlpha(1)
+    bar.anim.fader:SetToAlpha(.2)
+    bar.anim.fader:SetDuration(1)
+    bar.anim.fader:SetSmoothing('OUT')
 end
 
 function INFOBAR:FadeIn(elapsed)
@@ -167,6 +195,7 @@ function INFOBAR:OnLogin()
     end
 
     INFOBAR:CreateInfoBar()
+    INFOBAR:UpdateCombatPulse()
     INFOBAR:CreateStatsBlock()
     INFOBAR:CreateSpecBlock()
     INFOBAR:CreateDurabilityBlock()
