@@ -1322,26 +1322,6 @@ do
     end
 
     -- Handle checkbox and radio
-    local function CheckBox_OnEnter(self)
-        -- if self.shadow then
-        --     self.shadow:SetBackdropBorderColor(C.r, C.g, C.b, .25)
-        -- else
-        --     self.bg:SetBackdropBorderColor(C.r, C.g, C.b)
-        -- end
-
-        self.bg:SetBackdropColor(C.r, C.g, C.b, .3)
-    end
-
-    local function CheckBox_OnLeave(self)
-        -- if self.shadow then
-        --     self.shadow:SetBackdropBorderColor(0, 0, 0, .25)
-        -- else
-        --     F.SetBorderColor(self.bg)
-        -- end
-
-        self.bg:SetBackdropColor(0, 0, 0, 1)
-    end
-
     function F:ReskinCheck(flat, forceSaturation)
         self:SetNormalTexture('')
         self:SetPushedTexture('')
@@ -1354,8 +1334,8 @@ do
         self.shadow = shadow
 
         if self.SetHighlightTexture then
-            local highligh = self:CreateTexture()
-            highligh:SetColorTexture(1, 1, 1, 0.3)
+            local highligh = self:CreateTexture(nil, 'HIGHLIGHT')
+            highligh:SetColorTexture(1, 1, 1, .25)
             highligh:SetPoint('TOPLEFT', self, 6, -6)
             highligh:SetPoint('BOTTOMRIGHT', self, -6, 6)
             self:SetHighlightTexture(highligh)
@@ -1396,9 +1376,6 @@ do
                 disabled:SetPoint('BOTTOMRIGHT', self, -5, 5)
             end
         end
-
-        self:HookScript('OnEnter', CheckBox_OnEnter)
-        self:HookScript('OnLeave', CheckBox_OnLeave)
 
         self.forceSaturation = forceSaturation
     end
