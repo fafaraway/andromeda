@@ -25,6 +25,3 @@ jobs:
           branch: interface-version
           delete-branch: true
 
-    env:
-      WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
-      CF_API_KEY: ${{ secrets.CF_API_KEY }}
