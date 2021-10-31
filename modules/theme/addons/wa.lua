@@ -59,8 +59,10 @@ local function ReskinObject(f, fType)
             f.bg:SetBackdropBorderColor(0, 0, 0)
             UpdateIconTexCoord(f.icon)
             hooksecurefunc(f.icon, 'SetTexCoord', UpdateIconTexCoord)
+
             f.iconFrame:SetAllPoints(f.icon)
-            F.SetBD(f.iconFrame)
+            f.icon.bg = F.SetBD(f.iconFrame, 0)
+            f.icon.bg:SetBackdropBorderColor(0, 0, 0)
 
             f.styled = true
         end
