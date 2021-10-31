@@ -7,4 +7,5 @@
     <Script file="helper.lua"/>
     <Script file="tracker.lua"/>
     <Script file="world.lua"/>
+    <Script file="wowhead.lua"/>
 </Ui>

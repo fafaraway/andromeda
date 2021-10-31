@@ -12,7 +12,7 @@ function QUEST:CheckNormalQuest()
         local isWorldQuest = C_QuestLog.IsWorldQuest(questID)
         if title and isComplete and not completedQuest[questID] and not isWorldQuest then
             if initComplete then
-                PlaySound(SOUNDKIT.ALARM_CLOCK_WARNING_3, 'Master')
+                PlaySound(_G.SOUNDKIT.ALARM_CLOCK_WARNING_3, 'Master')
             end
             completedQuest[questID] = true
         end
@@ -24,7 +24,7 @@ function QUEST:CheckWorldQuest(questID)
     if C_QuestLog.IsWorldQuest(questID) then
         local title = C_QuestLog.GetTitleForQuestID(questID)
         if title and not completedQuest[questID] then
-            PlaySound(SOUNDKIT.ALARM_CLOCK_WARNING_3, 'Master')
+            PlaySound(_G.SOUNDKIT.ALARM_CLOCK_WARNING_3, 'Master')
             completedQuest[questID] = true
         end
     end
@@ -39,4 +39,6 @@ function QUEST:OnLogin()
         F:UnregisterEvent('QUEST_LOG_UPDATE', QUEST.CheckNormalQuest)
         F:UnregisterEvent('QUEST_TURNED_IN', QUEST.CheckWorldQuest)
     end
+
+    QUEST:WowheadLink()
 end
