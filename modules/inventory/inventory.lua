@@ -37,7 +37,7 @@ function INVENTORY:ReverseSort()
 end
 
 local anchorCache = {}
-function INVENTORY:UpdateAnchors(parent, bags)
+function INVENTORY:UpdateAnchors(parent, bags, isBank)
     if not parent:IsShown() then
         return
     end
@@ -45,6 +45,7 @@ function INVENTORY:UpdateAnchors(parent, bags)
     table.wipe(anchorCache)
 
     local index = 1
+    local perRow = C.DB.Inventory.BagsPerRow
     anchorCache[index] = parent
 
     for _, bag in ipairs(bags) do
@@ -53,10 +54,18 @@ function INVENTORY:UpdateAnchors(parent, bags)
             index = index + 1
 
             bag:ClearAllPoints()
-            if (index - 1) % 4 == 0 and C.DB.Inventory.MultiRows then
-                bag:SetPoint('BOTTOMRIGHT', anchorCache[index - 4], 'BOTTOMLEFT', -5, 0)
+            if (index - 1) % perRow == 0 then
+                if isBank then
+                    bag:SetPoint('TOPLEFT', anchorCache[index - perRow], 'TOPRIGHT', 5, 0)
+                else
+                    bag:SetPoint('BOTTOMRIGHT', anchorCache[index - perRow], 'BOTTOMLEFT', -5, 0)
+                end
             else
-                bag:SetPoint('BOTTOMLEFT', anchorCache[index - 1], 'TOPLEFT', 0, 5)
+                if isBank then
+                    bag:SetPoint('TOPLEFT', anchorCache[index - 1], 'BOTTOMLEFT', 0, -5)
+                else
+                    bag:SetPoint('BOTTOMLEFT', anchorCache[index - 1], 'TOPLEFT', 0, 5)
+                end
             end
             anchorCache[index] = bag
         else
@@ -169,9 +178,9 @@ local function CloseOrRestoreBags(self, btn)
         bag:ClearAllPoints()
         bag:SetPoint('BOTTOMRIGHT', -C.UIGap, C.UIGap)
         bank:ClearAllPoints()
-        bank:SetPoint('BOTTOMRIGHT', bag, 'BOTTOMLEFT', -10, 0)
+        bank:SetPoint('TOPLEFT', C.UIGap, -C.UIGap)
         reagent:ClearAllPoints()
-        reagent:SetPoint('BOTTOMLEFT', bank)
+        reagent:SetPoint('TOPLEFT', bank)
         PlaySound(_G.SOUNDKIT.IG_MINIMAP_OPEN)
     else
         _G.CloseAllBags()
@@ -248,7 +257,7 @@ local function updateDepositButtonStatus(bu)
 end
 
 function INVENTORY:AutoDeposit()
-    if C.DB.Inventory.AutoDeposit then
+    if C.DB.Inventory.AutoDeposit and not IsShiftKeyDown() then
         DepositReagentBank()
     end
 end
@@ -780,13 +789,13 @@ function INVENTORY:OnLogin()
         AddNewContainer('Bank', 10, 'BankAnima', filters.bankAnima)
 
         f.bank = MyContainer:New('Bank', {Bags = 'bank', BagType = 'Bank'})
-        f.bank:SetPoint('BOTTOMRIGHT', f.main, 'BOTTOMLEFT', -10, 0)
+        f.bank:SetPoint('TOPLEFT', C.UIGap, -C.UIGap)
         f.bank:SetFilter(filters.onlyBank, true)
         f.bank:Hide()
 
         f.reagent = MyContainer:New('Reagent', {Bags = 'bankreagent', BagType = 'Bank'})
         f.reagent:SetFilter(filters.onlyReagent, true)
-        f.reagent:SetPoint('BOTTOMLEFT', f.bank)
+        f.reagent:SetPoint('TOPLEFT', f.bank)
         f.reagent:Hide()
 
         for bagType, groups in pairs(ContainerGroups) do
@@ -1004,7 +1013,7 @@ function INVENTORY:OnLogin()
             local level = item.level -- ilvl for keystone and battlepet
 
             if not level and isItemNeedsLevel(item) then
-                local ilvl = F.GetItemLevel(item.link, item.bagID, item.slotID)
+                local ilvl = F.GetItemLevel(item.link, item.bagID ~= -1 and item.bagID, item.slotID) -- SetBagItem return nil for default bank slots
                 if ilvl then
                     level = ilvl
                 end
@@ -1079,7 +1088,7 @@ function INVENTORY:OnLogin()
 
     function INVENTORY:UpdateAllAnchors()
         INVENTORY:UpdateAnchors(f.main, ContainerGroups['Bag'])
-        INVENTORY:UpdateAnchors(f.bank, ContainerGroups['Bank'])
+        INVENTORY:UpdateAnchors(f.bank, ContainerGroups['Bank'], true)
     end
 
     function INVENTORY:GetContainerColumns(bagType)
@@ -1098,7 +1107,8 @@ function INVENTORY:OnLogin()
         local spacing = C.DB.Inventory.Spacing
         local xOffset = 5
         local yOffset = -offset + xOffset
-        local width, height = self:LayoutButtons('grid', columns, spacing, xOffset, yOffset)
+        local _, height = self:LayoutButtons('grid', columns, spacing, xOffset, yOffset)
+        local width = columns * (iconSize + spacing) - spacing
         if self.freeSlot then
             if C.DB.Inventory.CombineFreeSlots then
                 local numSlots = #self.buttons + 1
