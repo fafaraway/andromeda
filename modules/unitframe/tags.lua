@@ -15,9 +15,9 @@ local events = {
     altpowerperc = 'UNIT_MAXPOWER UNIT_POWER_UPDATE',
     dead = 'UNIT_HEALTH',
     offline = 'UNIT_HEALTH UNIT_CONNECTION',
-    name = 'UNIT_NAME_UPDATE UNIT_HEALTH UNIT_CONNECTION',
-    partyname = 'UNIT_NAME_UPDATE',
-    raidname = 'UNIT_NAME_UPDATE',
+    name = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED',
+    partyname = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED',
+    raidname = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED',
     npname = 'UNIT_NAME_UPDATE',
     tarname = 'UNIT_NAME_UPDATE UNIT_THREAT_SITUATION_UPDATE UNIT_HEALTH',
     color = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_FACTION UNIT_CONNECTION PLAYER_FLAGS_CHANGED',
@@ -84,13 +84,13 @@ local _tags = {
     -- dead
     dead = function(unit)
         if UnitIsDeadOrGhost(unit) and UnitIsConnected(unit) then
-            return '|cffd84343' .. L['Dead']
+            return '|cffd84343' .. _G.DEAD
         end
     end,
     -- offline
     offline = function(unit)
         if not UnitIsConnected(unit) then
-            return '|cffcccccc' .. L['Off']
+            return '|cffcccccc' .. _G.PLAYER_OFFLINE
         end
     end,
     -- name
@@ -121,28 +121,48 @@ local _tags = {
     end,
     -- party name
     partyname = function(unit)
+        local showName = C.DB.Unitframe.GroupShowName
         local shorten = C.DB.Unitframe.ShortenName
         local str = UnitName(unit)
         local num = GetLocale() == 'zhCN' and 4 or 6
 
-        return shorten and F.ShortenString(str, num) or str
+        if showName then
+            return shorten and F.ShortenString(str, num) or str
+        elseif not UnitIsConnected(unit) then
+            return _G.PLAYER_OFFLINE
+        elseif UnitIsDeadOrGhost(unit) and UnitIsConnected(unit) then
+            return _G.DEAD
+        else
+            return
+        end
+
     end,
     -- raid name
     raidname = function(unit)
+        local showName = C.DB.Unitframe.GroupShowName
         local shorten = C.DB.Unitframe.ShortenName
         local str = UnitName(unit)
         local num = GetLocale() == 'zhCN' and 2 or 4
 
-        return shorten and F.ShortenString(str, num) or str
+        if showName then
+            return shorten and F.ShortenString(str, num) or str
+        elseif not UnitIsConnected(unit) then
+            return _G.PLAYER_OFFLINE
+        elseif UnitIsDeadOrGhost(unit) and UnitIsConnected(unit) then
+            return _G.DEAD
+        else
+            return
+        end
     end,
     -- nameplate name
     npname = function(unit)
+        local nameOnly = C.DB.Unitframe.NameOnly
         local shorten = C.DB.Unitframe.ShortenName
-        local num = C.IsChinese and 8 or 12
+        local num = GetLocale() == 'zhCN' and 6 or 10
         local str = UnitName(unit)
-        local newStr = (string.len(str) > num) and string.gsub(str, '%s?(.[\128-\191]*)%S+%s', '%1. ') or str
+        local newStr = AbbrName(str, num) or str
 
-        return shorten and F.ShortenString(newStr, num, true) or str
+        return shorten and not nameOnly and F.ShortenString(newStr, num, true) or str
     end,
     -- target name
     tarname = function(unit)
@@ -158,11 +178,14 @@ local _tags = {
         local reaction = UnitReaction(unit, 'player')
         local isOffline = not UnitIsConnected(unit)
         local isTapped = UnitIsTapDenied(unit)
+        local isDead = UnitIsDeadOrGhost(unit)
 
         if (unit == 'targettarget' and UnitIsUnit('targettarget', 'player')) or (unit == 'focustarget' and UnitIsUnit('focustarget', 'player')) then
             return F:RGBToHex(1, 0, 0)
         elseif isTapped or isOffline then
             return F:RGBToHex(colors.tapped)
+        elseif isDead then
+            return F:RGBToHex(1, 0, 0)
         elseif UnitIsPlayer(unit) then
             return F:RGBToHex(colors.class[class])
         elseif reaction then
@@ -257,19 +280,14 @@ function UNITFRAME:CreateGroupNameTag(self)
     local style = self.unitStyle
     local font = C.Assets.Fonts.Condensed
     local outline = _G.FREE_ADB.FontOutline
-    local showName = C.DB.Unitframe.GroupShowName
     local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
 
-    if showName then
-        if style == 'party' then
-            self:Tag(text, '[free:color][free:partyname]')
-        else
-            self:Tag(text, '[free:color][free:raidname]')
-        end
+    if style == 'party' then
+        self:Tag(text, '[free:color][free:partyname]')
     else
-        --self:Tag(text, '[free:color][free:offline][free:dead]')
-        --self:Tag(text, '[dead][offline]')
+        self:Tag(text, '[free:color][free:raidname]')
     end
+
     self.GroupNameTag = text
 end
 

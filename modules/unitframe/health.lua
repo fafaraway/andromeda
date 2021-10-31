@@ -73,15 +73,9 @@ local function PreUpdateHealth(self, unit)
 
     if isOffline then
         self:SetValue(0)
-        self.StatusText:SetText(L['Offline'])
         parent.backdrop:SetBackdropColor(.5, .5, .5, .8)
-    elseif isGhost then
+    elseif isGhost or isDead then
         self:SetValue(max)
-        self.StatusText:SetText(L['Ghost'])
-        parent.backdrop:SetBackdropColor(.1, .1, .1, .8)
-    elseif isDead then
-        self:SetValue(max)
-        self.StatusText:SetText(L['Dead'])
         parent.backdrop:SetBackdropColor(.1, .1, .1, .8)
     else
         if max == cur then
@@ -89,8 +83,6 @@ local function PreUpdateHealth(self, unit)
         else
             self:SetValue(max - cur)
         end
-
-        self.StatusText:SetText('')
         parent.backdrop:SetBackdropColor(.1, .1, .1, .8)
     end
 end
@@ -103,15 +95,9 @@ local function PostUpdateHealth(self, unit, cur, max)
 
     if isOffline then
         self:SetValue(0)
-        self.StatusText:SetText(L['Offline'])
         parent.backdrop:SetBackdropColor(.5, .5, .5, .8)
-    elseif isGhost then
+    elseif isGhost or isDead then
         self:SetValue(max)
-        self.StatusText:SetText(L['Ghost'])
-        parent.backdrop:SetBackdropColor(.1, .1, .1, .8)
-    elseif isDead then
-        self:SetValue(max)
-        self.StatusText:SetText(L['Dead'])
         parent.backdrop:SetBackdropColor(.1, .1, .1, .8)
     else
         if max == cur then
@@ -119,8 +105,6 @@ local function PostUpdateHealth(self, unit, cur, max)
         else
             self:SetValue(max - cur)
         end
-
-        self.StatusText:SetText('')
         parent.backdrop:SetBackdropColor(.1, .1, .1, .8)
     end
 end

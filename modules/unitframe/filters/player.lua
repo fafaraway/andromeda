@@ -513,11 +513,6 @@ C.PartySpellsDB = {
     }
 }
 
-
-
-
-
-
 -- Ignore these debuffs on RaidFrames #TODO
 C.PartyDebuffsBlackList = {
     [8326] = true, -- 鬼魂
@@ -533,22 +528,18 @@ C.PartyDebuffsBlackList = {
     [331154] = true, -- 折磨：上层区域之力
     [296847] = true, -- 压迫光环
     [338906] = true, -- 典狱长之链
-    [294720] = true, -- 瓶装谜团
+    [294720] = true -- 瓶装谜团
 }
-
 
 C.PartyBuffsList = {
     -- All
     [160029] = true, -- Resurrecting
-
     -- Racial
     [65116] = true, -- Stoneform
-
     -- Covenant
     [324867] = true, -- Fleshcraft
     [319217] = true, -- Podtender
     [320224] = true, -- Podtender
-
     -- Potion
     [307159] = true, -- 幽魂敏捷药水
     [307162] = true, -- 幽魂智力药水
@@ -559,7 +550,6 @@ C.PartyBuffsList = {
     [307496] = true, -- 神圣觉醒药水
     [307497] = true, -- 死亡偏执药水
     [344314] = true, -- 心华之速药水
-
     -- Bloodlust
     [2825] = true, -- 嗜血
     [32182] = true, -- 英勇
@@ -571,22 +561,17 @@ C.PartyBuffsList = {
     [309658] = true, -- 死亡凶蛮战鼓
     [102364] = true, -- 青铜龙的祝福
     [292686] = true, -- 制皮鼓
-
     -- Dungeon (Necrotic Wake)
     [328325] = true,
     [328126] = true,
     [328399] = true,
     [325189] = true,
-
     -- DH
-    [162264] = true, -- Metamorphosis (Havoc)
-    [187827] = true, -- Metamorphosis (Vengeance)
     [212800] = true, -- Blur
-    [209426] = true, -- Darkness
-    [196555] = true, -- Netherwalk
-    [209261] = true, -- Uncontained Fel
+    [196555] = true, -- Nether Walk
+    [187827] = true, -- Metamorphosis (Tank)
     [203819] = true, -- Demon Spikes
-
+    [209261] = true, -- Uncontained Fel
     -- Warrior
     [871] = true, -- Shield Wall
     [107574] = true, -- Avatar
@@ -603,13 +588,11 @@ C.PartyBuffsList = {
     [184364] = true, -- Enraged Regeneration
     [132404] = true, -- Shield Block
     [335198] = true, -- Safeguard
-
     -- Warlock
-    [113860] =true, -- Dark Soul: Misery
+    [113860] = true, -- Dark Soul: Misery
     [104773] = true, -- Unending Resolve
     [108416] = true, -- Dark Pact
     [132413] = true, -- Shadow Bulwark
-
     -- Shaman
     [114051] = true, -- Ascendance
     [108271] = true, -- Astral Shift
@@ -618,15 +601,13 @@ C.PartyBuffsList = {
     [325174] = true, -- Spirit Link Totem
     [207498] = true, -- Ancestral Protection
     [118337] = true, -- Harden Skin
-
     -- Rogue
-    [13750] = true, -- Adrenaline Rush
+    [1966] = true, -- Feint
     [31224] = true, -- Cloak of Shadows
     [5277] = true, -- Evasion
-    [45182] = true, -- Cheating Death
-    [1966] = true, -- Feint
     [199754] = true, -- Riposte
-
+    [45182] = true, -- Cheating Death
+    [114018] = true, -- Shroud of Concealment
     -- Paladin
     [31884] = true, -- Avenging Wrath
     [31850] = true, -- Ardent Defender
@@ -644,8 +625,13 @@ C.PartyBuffsList = {
     [132403] = true, -- Shield of the Righteous
     [205191] = true, -- Eye for an Eye
     [228050] = true, -- Divine Shield
-
     -- Monk
+    [122470] = true, -- 业报之触
+    [122783] = true, -- 散魔功
+    [243435] = true, -- 壮胆酒（织雾和踏风）
+    [120954] = true, -- 壮胆酒（酒仙）
+    [322507] = true, -- 天神酒
+    [132578] = true, -- 玄牛下凡
     [115176] = true, -- Zen Meditation
     [137639] = true, -- Storm, Earth, and Fire
     [116849] = true, -- Life Cocoon
@@ -654,7 +640,6 @@ C.PartyBuffsList = {
     [115203] = true, -- Fortifying Brew
     [215479] = true, -- Shuffle
     [115295] = true, -- Guard
-
     -- Mage
     [12472] = true, -- Icy Veins
     [190319] = true, -- Combustion
@@ -663,18 +648,13 @@ C.PartyBuffsList = {
     [342245] = true, -- Alter Time
     [45438] = true, -- Iceblock
     [87023] = true, -- Cauterize
-
     -- Hunter
-    [193530] = true, -- Aspect of the Wild
-    [266779] = true, -- Coordinated Assault
-    [19574] = true, -- Bestial Wrath
-    [186258] = true, -- Aspect of the Cheetah
     [199483] = true, -- Camouflage
     [186265] = true, -- Aspect of the Turtle
-    [264735] = true, -- Survival of the Fittest
-    [281195] = true, -- Survival of the Fittest
-
+    [264735] = true, -- Survival of the Fittest (Command Pet)
+    [281195] = true, -- Survival of the Fittest (Lone Wolf)
     -- Druid
+    [158792] = true, -- Pulverize
     [106951] = true, -- Berserk
     [194223] = true, -- Celestial Alignment
     [102560] = true, -- Incarnation: Chosen of Elune
@@ -685,21 +665,19 @@ C.PartyBuffsList = {
     [29166] = true, -- Innervate
     [102342] = true, -- Ironbark
     [192081] = true, -- Ironfur
-
     -- DK
     [194679] = true, -- Rune Tap
+    [48792] = true, -- Icebound Fortitude
+    [194844] = true, -- Bonestorm
+    [48265] = true, -- Death's Advance
+    [212552] = true, -- Wraith Walk
+    [123981] = true, -- Perdition
     [55233] = true, -- Vampiric Blood
     [334547] = true, -- Vampiric Aura
     [81256] = true, -- Dancing Rune Weapon
     [48707] = true, -- Anti-Magic Shell
     [145629] = true, -- Anti-Magic Zone
     [49039] = true, -- Lichborne
-    [48792] = true, -- Icebound Fortitude
-    [48265] = true, -- Death's Advance
-    [212552] = true, -- Wraith Walk
-    [123981] = true, -- Perdition
-    [194844] = true, -- Bonestorm
-
     -- Priest
     [19236] = true, -- Desperate Prayer
     [47585] = true, -- Dispersion
@@ -708,5 +686,5 @@ C.PartyBuffsList = {
     [81782] = true, -- Power Word: Barrier
     [62618] = true, -- Power Word: Barrier
     [15286] = true, -- Vampiric Embrace
-    [10060] = true, -- Power Infusion
+    [10060] = true -- Power Infusion
 }

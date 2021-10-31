@@ -60,6 +60,7 @@ function NAMEPLATE:SetupCVars()
 
     SetCVar('nameplateShowSelf', 0)
     SetCVar('nameplateResourceOnTarget', 0)
+
     F.HideOption(_G.InterfaceOptionsNamesPanelUnitNameplatesPersonalResource)
     F.HideOption(_G.InterfaceOptionsNamesPanelUnitNameplatesPersonalResourceOnEnemy)
 end
@@ -733,7 +734,7 @@ function NAMEPLATE:CreateNameplateStyle()
     name:ClearAllPoints()
     name:SetPoint('CENTER', 0, 14)
     name:Hide()
-    self:Tag(name, '[free:color][name]')
+    self:Tag(name, '[free:color][free:npname]')
     self.nameOnlyName = name
 
     local title = F.CreateFS(self, C.Assets.Fonts.Condensed, 11, nil, nil, nil, 'THICK')

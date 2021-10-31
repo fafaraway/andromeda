@@ -12,5 +12,5 @@ function UNITFRAME:CreateRangeCheck(self)
 
     self.RangeCheck.enabled = true
     self.RangeCheck.insideAlpha = 1
-    self.RangeCheck.RangeCheckAlpha = .3
+    self.RangeCheck.RangeCheckAlpha = .1
 end
