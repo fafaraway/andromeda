@@ -1,18 +1,7 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local pairs = pairs
-local format = format
-local gsub = gsub
-local strfind = strfind
-local BNGetFriendInfoByID = BNGetFriendInfoByID
-local BNGetGameAccountInfo = BNGetGameAccountInfo
-local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
-
 local F, C, L = unpack(select(2, ...))
 local CHAT = F:GetModule('Chat')
 
-local function GetColor(className, isLocal)
+--[[ local function GetColor(className, isLocal)
     if isLocal then
         local found
         for k, v in pairs(_G.LOCALIZED_CLASS_NAMES_FEMALE) do
@@ -34,10 +23,9 @@ local function GetColor(className, isLocal)
     local tbl = C.ClassColors[className]
     local color = ('%02x%02x%02x'):format(tbl.r * 255, tbl.g * 255, tbl.b * 255)
     return color
-end
-
+end ]]
 -- #FIXME
-local function FormatBNPlayerName(misc, id, moreMisc, fakeName, tag, colon)
+--[[ local function FormatBNPlayerName(misc, id, moreMisc, fakeName, tag, colon)
     local gameAccount = select(6, BNGetFriendInfoByID(id))
     if gameAccount then
         local _, charName, _, _, _, _, _, englishClass = BNGetGameAccountInfo(gameAccount)
@@ -46,38 +34,38 @@ local function FormatBNPlayerName(misc, id, moreMisc, fakeName, tag, colon)
         end
     end
     return misc .. id .. moreMisc .. fakeName .. tag .. (colon == ':' and ':' or colon)
-end
+end ]]
 
 local function FormatPlayerName(info, name)
-    return format('|Hplayer:%s|h%s|h', info, gsub(name, '%-[^|]+', ''))
+    return string.format('|Hplayer:%s|h%s|h', info, string.gsub(name, '%-[^|]+', ''))
 end
 
-local function RemoveRealmName(self, event, msg, author, ...)
-    local realm = gsub(C.MyRealm, ' ', '')
+local function RemoveRealmName(self, _, msg, author, ...)
+    local realm = string.gsub(C.MyRealm, ' ', '')
     if msg:find('-' .. realm) then
-        return false, gsub(msg, '%-' .. realm, ''), author, ...
+        return false, string.gsub(msg, '%-' .. realm, ''), author, ...
     end
 end
 
 function CHAT:UpdateChannelNames(text, ...)
     -- Make whisper color different
     local r, g, b = ...
-    if strfind(text, L['Tell'] .. ' |H[BN]*player.+%]') then
+    if string.find(text, L['Tell'] .. ' |H[BN]*player.+%]') then
         r, g, b = r * .7, g * .7, b * .7
     end
 
     if C.DB.Chat.ShortenChannelName then
         -- Shorten world channel name
-        --[[ text = gsub(text, '|h%[(%d+)%. 大脚世界频道%]|h', '|h%[世界%]|h')
-        text = gsub(text, '|h%[(%d+)%. 大腳世界頻道%]|h', '|h%[世界%]|h')
-        text = gsub(text, '|h%[(%d+)%. BigfootWorldChannel%]|h', '|h%[WC%]|h') ]]
+        -- text = string.gsub(text, '|h%[(%d+)%. 大脚世界频道%]|h', '|h%[世%]|h')
+        -- text = string.gsub(text, '|h%[(%d+)%. 大腳世界頻道%]|h', '|h%[世%]|h')
+        -- text = string.gsub(text, '|h%[(%d+)%. BigfootWorldChannel%]|h', '|h%[世%]|h')
 
         -- Shorten other channel name
-        text = gsub(text, '|h%[(%d+)%. .-%]|h', '|h%1.|h')
+        text = string.gsub(text, '|h%[(%d+)%. .-%]|h', '|h%[1]|h')
     end
 
     -- Remove brackets from player name
-    text = gsub(text, '|Hplayer:(.-)|h%[(.-)%]|h', FormatPlayerName)
+    text = string.gsub(text, '|Hplayer:(.-)|h%[(.-)%]|h', FormatPlayerName)
     -- text = gsub(text, '(|HBNplayer:%S-|k:)(%d-)(:%S-|h)%[(%S-)%](|?h?)(:?)', FormatBNPlayerName)
 
     -- Remove brackets from item and spell links
@@ -95,11 +83,11 @@ function CHAT:Abbreviation()
         end
     end
 
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_SYSTEM', RemoveRealmName)
+    _G.ChatFrame_AddMessageEventFilter('CHAT_MSG_SYSTEM', RemoveRealmName)
 
     -- online/offline info
-    _G.ERR_FRIEND_ONLINE_SS = gsub(_G.ERR_FRIEND_ONLINE_SS, '%]%|h', ']|h|cff00c957')
-    _G.ERR_FRIEND_OFFLINE_S = gsub(_G.ERR_FRIEND_OFFLINE_S, '%%s', '%%s|cffff7f50')
+    _G.ERR_FRIEND_ONLINE_SS = string.gsub(_G.ERR_FRIEND_ONLINE_SS, '%]%|h', ']|h|cff00c957')
+    _G.ERR_FRIEND_OFFLINE_S = string.gsub(_G.ERR_FRIEND_OFFLINE_S, '%%s', '%%s|cffff7f50')
 
     -- whisper
     _G.CHAT_WHISPER_INFORM_GET = L['Tell'] .. ' %s '

@@ -1,17 +1,5 @@
---[[
-    Merge damage meter spam
-    SpamageMeters by Wrug and Cybey
-]]
-
-local _G = _G
-local unpack = unpack
-local select = select
-local ipairs = ipairs
-local strsub = strsub
-local format = format
-local strsplit = strsplit
-local time = time
-local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
+-- Merge damage meter spam
+-- SpamageMeters by Wrug and Cybey
 
 local F, C = unpack(select(2, ...))
 local CHAT = F:GetModule('Chat')
@@ -34,14 +22,14 @@ local firstLines = {
     '데미지량 -(.*)$', -- TinyDPS koKR
     '힐량 -(.*)$', -- TinyDPS koKR
     'Урон:(.*)$', -- TinyDPS ruRU
-    'Исцеление:(.*)$', -- TinyDPS ruRU
+    'Исцеление:(.*)$' -- TinyDPS ruRU
 }
 
 local nextLines = {
     '^(%d+). (.*)$', -- Recount, Details! and Skada
     '^(.*)   (.*)$', -- Additional Skada
     '^[+-]%d+.%d', -- Numeration deathlog details
-    '^(%d+). (.*):(.*)(%d+)(.*)(%d+)%%(.*)%((%d+)%)$', -- TinyDPS
+    '^(%d+). (.*):(.*)(%d+)(.*)(%d+)%%(.*)%((%d+)%)$' -- TinyDPS
 }
 
 local meters = {}
@@ -59,14 +47,14 @@ local events = {
     'CHAT_MSG_SAY',
     'CHAT_MSG_WHISPER',
     'CHAT_MSG_WHISPER_INFORM',
-    'CHAT_MSG_YELL',
+    'CHAT_MSG_YELL'
 }
 
 local function FilterLine(event, source, message)
     for i = 1, #nextLines do
         local v = nextLines[i]
         if message:match(v) then
-            local curTime = time()
+            local curTime = _G.time()
             for i = 1, #meters do
                 local j = meters[i]
                 local elapsed = curTime - j.time
@@ -92,14 +80,14 @@ local function FilterLine(event, source, message)
         local v = firstLines[i]
         local newID = 0
         if message:match(v) then
-            local curTime = time()
+            local curTime = _G.time()
 
             for i = 1, #meters do
                 local j = meters[i]
                 local elapsed = curTime - j.time
                 if j.source == source and j.event == event and elapsed < 1 then
                     newID = i
-                    return true, true, format('|Hspam:%1$d|h|cFFFFFF00[%2$s]|r|h', newID or 0, message or 'nil')
+                    return true, true, string.format('|Hspam:%1$d|h|cFFFFFF00[%2$s]|r|h', newID or 0, message or 'nil')
                 end
             end
 
@@ -112,7 +100,7 @@ local function FilterLine(event, source, message)
                 end
             end
 
-            return true, true, format('|Hspam:%1$d|h|cFFFFFF00[%2$s]|r|h', newID or 0, message or 'nil')
+            return true, true, string.format('|Hspam:%1$d|h|cFFFFFF00[%2$s]|r|h', newID or 0, message or 'nil')
         end
     end
     return false, false, nil
@@ -120,12 +108,12 @@ end
 
 local SetHyperlink = _G.ItemRefTooltip.SetHyperlink
 function _G.ItemRefTooltip:SetHyperlink(link, ...)
-    if link and (strsub(link, 1, 4) == 'spam') then
-        local _, id = strsplit(':', link)
+    if link and (string.sub(link, 1, 4) == 'spam') then
+        local _, id = string.split(':', link)
         local meterID = tonumber(id)
         _G.ItemRefTooltip:ClearLines()
         _G.ItemRefTooltip:AddLine(meters[meterID].title)
-        _G.ItemRefTooltip:AddLine(format(_G.BY_SOURCE .. ': %s', meters[meterID].source))
+        _G.ItemRefTooltip:AddLine(string.format(_G.BY_SOURCE .. ': %s', meters[meterID].source))
         for _, v in ipairs(meters[meterID].data) do
             local left, right = v:match('^(.*)  (.*)$')
             if left and right then
@@ -157,6 +145,6 @@ function CHAT:DamageMeterFilter()
         return
     end
     for _, event in pairs(events) do
-        ChatFrame_AddMessageEventFilter(event, ParseChatEvent)
+        _G.ChatFrame_AddMessageEventFilter(event, ParseChatEvent)
     end
 end

@@ -1,35 +1,48 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local ipairs = ipairs
-local pairs = pairs
-local tremove = tremove
-local min = min
-local max = max
-local gsub = gsub
-local strfind = strfind
-local strrep = strrep
-local Ambiguate = Ambiguate
-local IsGuildMember = IsGuildMember
-local IsGUIDInGroup = IsGUIDInGroup
-local GetTime = GetTime
-local SetCVar = SetCVar
-local GetCVarBool = GetCVarBool
-local UnitIsUnit = UnitIsUnit
-local UnitName = UnitName
-local GetRealmName = GetRealmName
-local GetItemInfo = GetItemInfo
-local hooksecurefunc = hooksecurefunc
-local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
-local C_FriendList_IsFriend = C_FriendList.IsFriend
-local C_BattleNet_GetGameAccountInfoByGUID = C_BattleNet.GetGameAccountInfoByGUID
-local BN_TOAST_TYPE_CLUB_INVITATION = BN_TOAST_TYPE_CLUB_INVITATION or 6
-
 local F, C = unpack(select(2, ...))
 local CHAT = F:GetModule('Chat')
 
+local BN_TOAST_TYPE_CLUB_INVITATION = _G.BN_TOAST_TYPE_CLUB_INVITATION or 6
+
 -- Filter Chat symbols
-local msgSymbols = {'`', '～', '＠', '＃', '^', '＊', '！', '？', '。', '|', ' ', '—', '——', '￥', '’', '‘', '“', '”', '【', '】', '『', '』', '《', '》', '〈', '〉', '（', '）', '〔', '〕', '、', '，', '：', ',', '_', '/', '~'}
+local msgSymbols = {
+    '`',
+    '～',
+    '＠',
+    '＃',
+    '^',
+    '＊',
+    '！',
+    '？',
+    '。',
+    '|',
+    ' ',
+    '—',
+    '——',
+    '￥',
+    '’',
+    '‘',
+    '“',
+    '”',
+    '【',
+    '】',
+    '『',
+    '』',
+    '《',
+    '》',
+    '〈',
+    '〉',
+    '（',
+    '）',
+    '〔',
+    '〕',
+    '、',
+    '，',
+    '：',
+    ',',
+    '_',
+    '/',
+    '~'
+}
 
 local FilterList = {}
 function CHAT:UpdateFilterList()
@@ -51,13 +64,13 @@ function CHAT:CompareStrDiff(sA, sB) -- arrays of bytes
     for i = 1, len_a do
         this[1] = i
         for j = 1, len_b do
-            this[j + 1] = (sA[i] == sB[j]) and last[j] or (min(last[j + 1], this[j], last[j]) + 1)
+            this[j + 1] = (sA[i] == sB[j]) and last[j] or (math.min(last[j + 1], this[j], last[j]) + 1)
         end
         for j = 0, len_b do
             last[j + 1] = this[j + 1]
         end
     end
-    return this[len_b + 1] / max(len_a, len_b)
+    return this[len_b + 1] / math.max(len_a, len_b)
 end
 
 C.BadBoys = {} -- debug
@@ -66,7 +79,7 @@ local chatLines, prevLineID, filterResult = {}, 0, false
 function CHAT:GetFilterResult(event, msg, name, flag, guid)
     if name == C.MyName or (event == 'CHAT_MSG_WHISPER' and flag == 'GM') or flag == 'DEV' then
         return
-    elseif guid and (IsGuildMember(guid) or C_BattleNet_GetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) or IsGUIDInGroup(guid)) then
+    elseif guid and (IsGuildMember(guid) or C_BattleNet.GetGameAccountInfoByGUID(guid) or C_FriendList.IsFriend(guid) or IsGUIDInGroup(guid)) then
         return
     end
 
@@ -80,13 +93,13 @@ function CHAT:GetFilterResult(event, msg, name, flag, guid)
         return true
     end
 
-    local filterMsg = gsub(msg, '|H.-|h(.-)|h', '%1')
-    filterMsg = gsub(filterMsg, '|c%x%x%x%x%x%x%x%x', '')
-    filterMsg = gsub(filterMsg, '|r', '')
+    local filterMsg = string.gsub(msg, '|H.-|h(.-)|h', '%1')
+    filterMsg = string.gsub(filterMsg, '|c%x%x%x%x%x%x%x%x', '')
+    filterMsg = string.gsub(filterMsg, '|r', '')
 
     -- Trash Filter
     for _, symbol in ipairs(msgSymbols) do
-        filterMsg = gsub(filterMsg, symbol, '')
+        filterMsg = string.gsub(filterMsg, symbol, '')
     end
 
     if event == 'CHAT_MSG_CHANNEL' then
@@ -95,7 +108,7 @@ function CHAT:GetFilterResult(event, msg, name, flag, guid)
         for keyword in pairs(WhiteFilterList) do
             if keyword ~= '' then
                 found = true
-                local _, count = gsub(filterMsg, keyword, '')
+                local _, count = string.gsub(filterMsg, keyword, '')
                 if count > 0 then
                     matches = matches + 1
                 end
@@ -109,7 +122,7 @@ function CHAT:GetFilterResult(event, msg, name, flag, guid)
     local matches = 0
     for keyword in pairs(FilterList) do
         if keyword ~= '' then
-            local _, count = gsub(filterMsg, keyword, '')
+            local _, count = string.gsub(filterMsg, keyword, '')
             if count > 0 then
                 matches = matches + 1
             end
@@ -133,12 +146,12 @@ function CHAT:GetFilterResult(event, msg, name, flag, guid)
     for i = 1, chatLinesSize do
         local line = chatLines[i]
         if line[1] == msgTable[1] and ((event == 'CHAT_MSG_CHANNEL' and msgTable[3] - line[3] < .6) or CHAT:CompareStrDiff(line[2], msgTable[2]) <= .1) then
-            tremove(chatLines, i)
+            table.remove(chatLines, i)
             return true
         end
     end
     if chatLinesSize >= 30 then
-        tremove(chatLines, 1)
+        table.remove(chatLines, 1)
     end
 end
 
@@ -167,12 +180,12 @@ function CHAT:SpamFilter()
     CHAT:UpdateFilterList()
     CHAT:UpdateFilterWhiteList()
 
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_CHANNEL', self.UpdateChatFilter)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_SAY', self.UpdateChatFilter)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_YELL', self.UpdateChatFilter)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_WHISPER', self.UpdateChatFilter)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_EMOTE', self.UpdateChatFilter)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_TEXT_EMOTE', self.UpdateChatFilter)
+    _G.ChatFrame_AddMessageEventFilter('CHAT_MSG_CHANNEL', self.UpdateChatFilter)
+    _G.ChatFrame_AddMessageEventFilter('CHAT_MSG_SAY', self.UpdateChatFilter)
+    _G.ChatFrame_AddMessageEventFilter('CHAT_MSG_YELL', self.UpdateChatFilter)
+    _G.ChatFrame_AddMessageEventFilter('CHAT_MSG_WHISPER', self.UpdateChatFilter)
+    _G.ChatFrame_AddMessageEventFilter('CHAT_MSG_EMOTE', self.UpdateChatFilter)
+    _G.ChatFrame_AddMessageEventFilter('CHAT_MSG_TEXT_EMOTE', self.UpdateChatFilter)
 end
 
 -- Block addon msg
@@ -187,7 +200,7 @@ local addonBlockList = {
     'PS 死亡: .+>',
     '%*%*.+%*%*',
     '<iLvl>',
-    strrep('%-', 20),
+    string.rep('%-', 20),
     '<小队物品等级:.+>',
     '<LFG>',
     '进度:',
@@ -223,7 +236,7 @@ function CHAT:UpdateAddOnBlocker(event, msg, author)
     end
 
     for _, word in ipairs(addonBlockList) do
-        if strfind(msg, word) then
+        if string.find(msg, word) then
             if event == 'CHAT_MSG_SAY' or event == 'CHAT_MSG_YELL' then
                 CHAT:ToggleChatBubble()
             elseif event == 'CHAT_MSG_PARTY' or event == 'CHAT_MSG_PARTY_LEADER' then
@@ -241,16 +254,16 @@ function CHAT:BlockAddonSpam()
         return
     end
 
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_SAY', CHAT.UpdateAddOnBlocker)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_WHISPER', CHAT.UpdateAddOnBlocker)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_EMOTE', CHAT.UpdateAddOnBlocker)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_PARTY', CHAT.UpdateAddOnBlocker)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_PARTY_LEADER', CHAT.UpdateAddOnBlocker)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_RAID', CHAT.UpdateAddOnBlocker)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_RAID_LEADER', CHAT.UpdateAddOnBlocker)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_INSTANCE_CHAT', CHAT.UpdateAddOnBlocker)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_INSTANCE_CHAT_LEADER', CHAT.UpdateAddOnBlocker)
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_CHANNEL', CHAT.UpdateAddOnBlocker)
+    _G.ChatFrame_AddMessageEventFilter('CHAT_MSG_SAY', CHAT.UpdateAddOnBlocker)
+    _G.ChatFrame_AddMessageEventFilter('CHAT_MSG_WHISPER', CHAT.UpdateAddOnBlocker)
+    _G.ChatFrame_AddMessageEventFilter('CHAT_MSG_EMOTE', CHAT.UpdateAddOnBlocker)
+    _G.ChatFrame_AddMessageEventFilter('CHAT_MSG_PARTY', CHAT.UpdateAddOnBlocker)
+    _G.ChatFrame_AddMessageEventFilter('CHAT_MSG_PARTY_LEADER', CHAT.UpdateAddOnBlocker)
+    _G.ChatFrame_AddMessageEventFilter('CHAT_MSG_RAID', CHAT.UpdateAddOnBlocker)
+    _G.ChatFrame_AddMessageEventFilter('CHAT_MSG_RAID_LEADER', CHAT.UpdateAddOnBlocker)
+    _G.ChatFrame_AddMessageEventFilter('CHAT_MSG_INSTANCE_CHAT', CHAT.UpdateAddOnBlocker)
+    _G.ChatFrame_AddMessageEventFilter('CHAT_MSG_INSTANCE_CHAT_LEADER', CHAT.UpdateAddOnBlocker)
+    _G.ChatFrame_AddMessageEventFilter('CHAT_MSG_CHANNEL', CHAT.UpdateAddOnBlocker)
 end
 
 -- Block trash clubs
@@ -259,7 +272,7 @@ function CHAT:CheckClubName()
     if self.toastType == BN_TOAST_TYPE_CLUB_INVITATION then
         local text = self.DoubleLine:GetText() or ''
         for _, name in pairs(trashClubs) do
-            if strfind(text, name) then
+            if string.find(text, name) then
                 self:Hide()
                 return
             end
@@ -282,10 +295,9 @@ end
     '7', 'Heirloom',
     '8', 'All'
 ]]
-
 local activeplayer = (tostring(UnitName('player')) .. '-' .. tostring(GetRealmName()))
 
-function CHAT:CheckLoot(event, msg, looter)
+function CHAT:CheckLoot(_, msg, looter)
     local itemID, itemRarity
     itemID = msg:match('item:(%d+):')
 
@@ -306,7 +318,7 @@ function CHAT:GroupLootFilter()
         return
     end
 
-    ChatFrame_AddMessageEventFilter('CHAT_MSG_LOOT', self.CheckLoot)
+    _G.ChatFrame_AddMessageEventFilter('CHAT_MSG_LOOT', self.CheckLoot)
 end
 
 function CHAT:ChatFilter()
