@@ -1,15 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local tonumber = tonumber
-local strmatch = strmatch
-local GetSpellInfo = GetSpellInfo
-local GetItemInfo = GetItemInfo
-local InCombatLockdown = InCombatLockdown
-local hooksecurefunc = hooksecurefunc
-local PanelTemplates_GetSelectedTab = PanelTemplates_GetSelectedTab
-local C_Timer_After = C_Timer.After
-
 local F = unpack(select(2, ...))
 
 -- Fix Drag Collections taint
@@ -142,9 +130,9 @@ end
 hooksecurefunc('ChatEdit_InsertLink', function(text) -- shift-clicked
     -- change from SearchBox:HasFocus to :IsShown again
     if text and _G.TradeSkillFrame and _G.TradeSkillFrame:IsShown() then
-        local spellId = strmatch(text, 'enchant:(%d+)')
+        local spellId = string.match(text, 'enchant:(%d+)')
         local spell = GetSpellInfo(spellId)
-        local item = GetItemInfo(strmatch(text, 'item:(%d+)') or 0)
+        local item = GetItemInfo(string.match(text, 'item:(%d+)') or 0)
         local search = spell or item
         if not search then
             return
@@ -155,11 +143,11 @@ hooksecurefunc('ChatEdit_InsertLink', function(text) -- shift-clicked
 
         -- jump to the recipe
         if spell then -- can only select recipes on the learned tab
-            if PanelTemplates_GetSelectedTab(_G.TradeSkillFrame.RecipeList) == 1 then
+            if _G.PanelTemplates_GetSelectedTab(_G.TradeSkillFrame.RecipeList) == 1 then
                 _G.TradeSkillFrame:SelectRecipe(tonumber(spellId))
             end
         elseif item then
-            C_Timer_After(.1, function() -- wait a bit or we cant select the recipe yet
+            F:Delay(.1, function() -- wait a bit or we cant select the recipe yet
                 for _, v in pairs(_G.TradeSkillFrame.RecipeList.dataList) do
                     if v.name == item then
                         -- TradeSkillFrame.RecipeList:RefreshDisplay() -- didnt seem to help

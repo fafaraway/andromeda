@@ -22,18 +22,21 @@ function BLIZZARD:EnhancedDressup()
     local parent = _G.DressUpFrameResetButton
     local button = BLIZZARD:CreatButton(parent, 80, 22, L['Undress'], {'RIGHT', parent, 'LEFT', -1, 0})
     button:RegisterForClicks('AnyUp')
-    button:SetScript('OnClick', function(_, btn)
-        local actor = _G.DressUpFrame.ModelScene:GetPlayerActor()
-        if not actor then
-            return
-        end
+    button:SetScript(
+        'OnClick',
+        function(_, btn)
+            local actor = _G.DressUpFrame.ModelScene:GetPlayerActor()
+            if not actor then
+                return
+            end
 
-        if btn == 'LeftButton' then
-            actor:Undress()
-        else
-            actor:UndressSlot(19)
+            if btn == 'LeftButton' then
+                actor:Undress()
+            else
+                actor:UndressSlot(19)
+            end
         end
-    end)
+    )
 
     F.AddTooltip(button, 'ANCHOR_TOP', string.format(L['%sUndress all|n%sUndress tabard'], C.Assets.mouse_left, C.Assets.mouse_right))
 

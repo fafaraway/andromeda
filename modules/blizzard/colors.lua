@@ -157,33 +157,40 @@ do
 end
 
 -- FrameXML/LevelUpDisplay.lua
-hooksecurefunc('BossBanner_ConfigureLootFrame', function(lootFrame, data)
-    local color = C.ClassColors[data.className]
-    lootFrame.PlayerName:SetTextColor(color.r, color.g, color.b)
-end)
+hooksecurefunc(
+    'BossBanner_ConfigureLootFrame',
+    function(lootFrame, data)
+        local color = C.ClassColors[data.className]
+        lootFrame.PlayerName:SetTextColor(color.r, color.g, color.b)
+    end
+)
 
 -- FrameXML/PaperDollFrame.lua
-hooksecurefunc('PaperDollFrame_SetLevel', function()
-    local className, class = UnitClass('player')
-    local color = C.ClassColors[class].colorStr
+local primaryTalentTree, specName
+hooksecurefunc(
+    'PaperDollFrame_SetLevel',
+    function()
+        local className, class = UnitClass('player')
+        local color = C.ClassColors[class].colorStr
 
-    local primaryTalentTree, specName = GetSpecialization()
-    if primaryTalentTree then
-        primaryTalentTree, specName = GetSpecializationInfo(primaryTalentTree)
-    end
+        primaryTalentTree, specName = GetSpecialization()
+        if primaryTalentTree then
+            primaryTalentTree, specName = GetSpecializationInfo(primaryTalentTree)
+        end
 
-    local level = UnitLevel('player')
-    local effectiveLevel = UnitEffectiveLevel('player')
-    if effectiveLevel ~= level then
-        level = _G.EFFECTIVE_LEVEL_FORMAT:format(effectiveLevel, level)
-    end
+        local level = UnitLevel('player')
+        local effectiveLevel = UnitEffectiveLevel('player')
+        if effectiveLevel ~= level then
+            level = _G.EFFECTIVE_LEVEL_FORMAT:format(effectiveLevel, level)
+        end
 
-    if specName and specName ~= '' then
-        _G.CharacterLevelText:SetFormattedText(_G.PLAYER_LEVEL, level, color, specName, className)
-    else
-        _G.CharacterLevelText:SetFormattedText(_G.PLAYER_LEVEL_NO_SPEC, level, color, className)
+        if specName and specName ~= '' then
+            _G.CharacterLevelText:SetFormattedText(_G.PLAYER_LEVEL, level, color, specName, className)
+        else
+            _G.CharacterLevelText:SetFormattedText(_G.PLAYER_LEVEL_NO_SPEC, level, color, className)
+        end
     end
-end)
+)
 
 -- FrameXML/RaidWarning.lua
 do

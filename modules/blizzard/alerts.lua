@@ -1,12 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local ipairs = ipairs
-local tremove = tremove
-local CreateFrame = CreateFrame
-local hooksecurefunc = hooksecurefunc
-local IsAddOnLoaded = IsAddOnLoaded
-
 local F, C, L = unpack(select(2, ...))
 local BLIZZARD = F:GetModule('Blizzard')
 
@@ -103,7 +94,7 @@ local function MoveTalkingHead()
 
     for index, alertFrameSubSystem in ipairs(_G.AlertFrame.alertFrameSubSystems) do
         if alertFrameSubSystem.anchorFrame and alertFrameSubSystem.anchorFrame == TalkingHeadFrame then
-            tremove(_G.AlertFrame.alertFrameSubSystems, index)
+            table.remove(_G.AlertFrame.alertFrameSubSystems, index)
         end
     end
 end
@@ -113,9 +104,13 @@ local function NoTalkingHeads()
         return
     end
 
-    hooksecurefunc(_G.TalkingHeadFrame, 'Show', function(self)
-        self:Hide()
-    end)
+    hooksecurefunc(
+        _G.TalkingHeadFrame,
+        'Show',
+        function(self)
+            self:Hide()
+        end
+    )
 end
 
 local function TalkingHeadOnLoad(event, addon)
@@ -138,9 +133,13 @@ function BLIZZARD:AlertFrame_Setup()
         BLIZZARD.AlertFrame_AdjustPosition(alertFrameSubSystem)
     end
 
-    hooksecurefunc(_G.AlertFrame, 'AddAlertFrameSubSystem', function(_, alertFrameSubSystem)
-        BLIZZARD.AlertFrame_AdjustPosition(alertFrameSubSystem)
-    end)
+    hooksecurefunc(
+        _G.AlertFrame,
+        'AddAlertFrameSubSystem',
+        function(_, alertFrameSubSystem)
+            BLIZZARD.AlertFrame_AdjustPosition(alertFrameSubSystem)
+        end
+    )
 
     hooksecurefunc(_G.AlertFrame, 'UpdateAnchors', BLIZZARD.AlertFrame_UpdateAnchor)
     hooksecurefunc('GroupLootContainer_Update', BLIZZARD.UpdatGroupLootContainer)

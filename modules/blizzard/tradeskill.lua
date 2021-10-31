@@ -1,36 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local tinsert = tinsert
-local format = format
-local CreateFrame = CreateFrame
-local hooksecurefunc = hooksecurefunc
-local GetProfessions = GetProfessions
-local GetSpellBookItemInfo = GetSpellBookItemInfo
-local GetProfessionInfo = GetProfessionInfo
-local GetItemCount = GetItemCount
-local GetItemCooldown = GetItemCooldown
-local GetSpellCooldown = GetSpellCooldown
-local GetItemInfo = GetItemInfo
-local GetSpellInfo = GetSpellInfo
-local IsPlayerSpell = IsPlayerSpell
-local IsPassiveSpell = IsPassiveSpell
-local IsCurrentSpell = IsCurrentSpell
-local InCombatLockdown = InCombatLockdown
-local UseItemByName = UseItemByName
-local PlayerHasToy = PlayerHasToy
-local BOOKTYPE_PROFESSION = BOOKTYPE_PROFESSION
-local C_ToyBox_IsToyUsable = C_ToyBox.IsToyUsable
-local C_ToyBox_GetToyInfo = C_ToyBox.GetToyInfo
-local TRADESKILL_FILTER_HAS_SKILL_UP = TRADESKILL_FILTER_HAS_SKILL_UP
-local CRAFT_IS_MAKEABLE = CRAFT_IS_MAKEABLE
-local C_TradeSkillUI_GetOnlyShowSkillUpRecipes = C_TradeSkillUI.GetOnlyShowSkillUpRecipes
-local C_TradeSkillUI_SetOnlyShowSkillUpRecipes = C_TradeSkillUI.SetOnlyShowSkillUpRecipes
-local C_TradeSkillUI_GetOnlyShowMakeableRecipes = C_TradeSkillUI.GetOnlyShowMakeableRecipes
-local C_TradeSkillUI_SetOnlyShowMakeableRecipes = C_TradeSkillUI.SetOnlyShowMakeableRecipes
-local C_TradeSkillUI_GetRecipeInfo = C_TradeSkillUI.GetRecipeInfo
-local C_TradeSkillUI_GetTradeSkillLine = C_TradeSkillUI.GetTradeSkillLine
-
 local F, C, L = unpack(select(2, ...))
 local BLIZZARD = F:GetModule('Blizzard')
 
@@ -46,7 +13,7 @@ local onlyPrimary = {
     [202] = true, -- Engineering
     [182] = true, -- Herbalism
     [393] = true, -- Skinning
-    [356] = true, -- Fishing
+    [356] = true -- Fishing
 }
 
 function BLIZZARD:UpdateProfessions()
@@ -70,8 +37,8 @@ function BLIZZARD:UpdateProfessions()
         if numSpells > 0 then
             for i = 1, numSpells do
                 local slotID = i + spelloffset
-                if not IsPassiveSpell(slotID, BOOKTYPE_PROFESSION) then
-                    local spellID = select(2, GetSpellBookItemInfo(slotID, BOOKTYPE_PROFESSION))
+                if not IsPassiveSpell(slotID, _G.BOOKTYPE_PROFESSION) then
+                    local spellID = select(2, GetSpellBookItemInfo(slotID, _G.BOOKTYPE_PROFESSION))
                     if i == 1 then
                         BLIZZARD:TradeTabs_Create(spellID)
                     else
@@ -82,7 +49,7 @@ function BLIZZARD:UpdateProfessions()
         end
     end
 
-    if isCook and PlayerHasToy(CHEF_HAT) and C_ToyBox_IsToyUsable(CHEF_HAT) then
+    if isCook and PlayerHasToy(CHEF_HAT) and C_ToyBox.IsToyUsable(CHEF_HAT) then
         BLIZZARD:TradeTabs_Create(nil, CHEF_HAT)
     end
     if GetItemCount(THERMAL_ANVIL) > 0 then
@@ -135,7 +102,7 @@ local index = 1
 function BLIZZARD:TradeTabs_Create(spellID, toyID, itemID)
     local name, _, texture
     if toyID then
-        _, name, texture = C_ToyBox_GetToyInfo(toyID)
+        _, name, texture = C_ToyBox.GetToyInfo(toyID)
     elseif itemID then
         name, _, _, _, _, _, _, _, _, texture = GetItemInfo(itemID)
     else
@@ -149,7 +116,7 @@ function BLIZZARD:TradeTabs_Create(spellID, toyID, itemID)
     tab.type = (toyID and 'toy') or (itemID and 'item') or 'spell'
     if spellID == 818 then -- cooking fire
         tab:SetAttribute('type', 'macro')
-        tab:SetAttribute('macrotext', '/cast [@player]'..name)
+        tab:SetAttribute('macrotext', '/cast [@player]' .. name)
     else
         tab:SetAttribute('type', tab.type)
         tab:SetAttribute(tab.type, spellID or name)
@@ -166,14 +133,14 @@ function BLIZZARD:TradeTabs_Create(spellID, toyID, itemID)
     tab.cover:EnableMouse(true)
 
     tab:SetPoint('TOPLEFT', _G.TradeSkillFrame, 'TOPRIGHT', 3, -index * 42)
-    tinsert(tabList, tab)
+    table.insert(tabList, tab)
     index = index + 1
 end
 
 function BLIZZARD:TradeTabs_FilterIcons()
     local buttonList = {
-        [1] = {'Atlas:bags-greenarrow', TRADESKILL_FILTER_HAS_SKILL_UP, C_TradeSkillUI_GetOnlyShowSkillUpRecipes, C_TradeSkillUI_SetOnlyShowSkillUpRecipes},
-        [2] = {'Interface\\RAIDFRAME\\ReadyCheck-Ready', CRAFT_IS_MAKEABLE, C_TradeSkillUI_GetOnlyShowMakeableRecipes, C_TradeSkillUI_SetOnlyShowMakeableRecipes},
+        [1] = {'Atlas:bags-greenarrow', _G.TRADESKILL_FILTER_HAS_SKILL_UP, C_TradeSkillUI.GetOnlyShowSkillUpRecipes, C_TradeSkillUI.SetOnlyShowSkillUpRecipes},
+        [2] = {'Interface\\RAIDFRAME\\ReadyCheck-Ready', _G.CRAFT_IS_MAKEABLE, C_TradeSkillUI.GetOnlyShowMakeableRecipes, C_TradeSkillUI.SetOnlyShowMakeableRecipes}
     }
 
     local function filterClick(self)
@@ -246,12 +213,12 @@ local function IsRecipeEnchanting(self)
     isEnchanting = nil
 
     local recipeID = self.selectedRecipeID
-    local recipeInfo = recipeID and C_TradeSkillUI_GetRecipeInfo(recipeID)
+    local recipeInfo = recipeID and C_TradeSkillUI.GetRecipeInfo(recipeID)
     if recipeInfo and recipeInfo.alternateVerb then
-        local parentSkillLineID = select(6, C_TradeSkillUI_GetTradeSkillLine())
+        local parentSkillLineID = select(6, C_TradeSkillUI.GetTradeSkillLine())
         if parentSkillLineID == 333 then
             isEnchanting = true
-            self.CreateButton.tooltip = format(tooltipString, L['Right click to use vellum'], GetItemCount(ENCHANTING_VELLUM))
+            self.CreateButton.tooltip = string.format(tooltipString, L['Right click to use vellum'], GetItemCount(ENCHANTING_VELLUM))
         end
     end
 end
@@ -266,11 +233,14 @@ function BLIZZARD:TradeTabs_QuickEnchanting()
 
     local createButton = detailsFrame.CreateButton
     createButton:RegisterForClicks('AnyUp')
-    createButton:HookScript('OnClick', function(self, btn)
-        if btn == 'RightButton' and isEnchanting then
-            UseItemByName(ENCHANTING_VELLUM)
+    createButton:HookScript(
+        'OnClick',
+        function(self, btn)
+            if btn == 'RightButton' and isEnchanting then
+                UseItemByName(ENCHANTING_VELLUM)
+            end
         end
-    end)
+    )
 end
 
 function BLIZZARD:TradeTabs()

@@ -15,5 +15,4 @@
     <Script file="orderhall.lua"/>
     <Script file="talent.lua"/>
     <Script file="tradeskill.lua"/>
-    <Script file="tutorials.lua"/>
 </Ui>

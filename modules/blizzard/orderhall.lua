@@ -1,19 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local ipairs = ipairs
-local format = format
-local CreateFrame = CreateFrame
-local hooksecurefunc = hooksecurefunc
-local IsAddOnLoaded = IsAddOnLoaded
-local IsShiftKeyDown = IsShiftKeyDown
-local C_CurrencyInfo_GetCurrencyInfo = C_CurrencyInfo.GetCurrencyInfo
-local C_Garrison_GetCurrencyTypes = C_Garrison.GetCurrencyTypes
-local C_Garrison_GetClassSpecCategoryInfo = C_Garrison.GetClassSpecCategoryInfo
-local C_Garrison_RequestClassSpecCategoryInfo = C_Garrison.RequestClassSpecCategoryInfo
-local LE_GARRISON_TYPE_7_0 = Enum.GarrisonType.Type_7_0
-local LE_FOLLOWER_TYPE_GARRISON_7_0 = Enum.GarrisonFollowerType.FollowerType_7_0
-
 local F, C, L = unpack(select(2, ...))
 local BLIZZARD = F:GetModule('Blizzard')
 
@@ -35,9 +19,13 @@ function BLIZZARD:OrderHall_CreateIcon()
 
     hall:SetScript('OnEnter', BLIZZARD.OrderHall_OnEnter)
     hall:SetScript('OnLeave', BLIZZARD.OrderHall_OnLeave)
-    hooksecurefunc(_G.OrderHallCommandBar, 'SetShown', function(_, state)
-        hall:SetShown(state)
-    end)
+    hooksecurefunc(
+        _G.OrderHallCommandBar,
+        'SetShown',
+        function(_, state)
+            hall:SetShown(state)
+        end
+    )
 
     -- Default objects
     F.HideOption(_G.OrderHallCommandBar)
@@ -45,14 +33,14 @@ function BLIZZARD:OrderHall_CreateIcon()
 end
 
 function BLIZZARD:OrderHall_Refresh()
-    C_Garrison_RequestClassSpecCategoryInfo(LE_FOLLOWER_TYPE_GARRISON_7_0)
-    local currency = C_Garrison_GetCurrencyTypes(LE_GARRISON_TYPE_7_0)
-    local info = C_CurrencyInfo_GetCurrencyInfo(currency)
+    C_Garrison.RequestClassSpecCategoryInfo(_G.Enum.GarrisonFollowerType.FollowerType_7_0)
+    local currency = C_Garrison.GetCurrencyTypes(_G.Enum.GarrisonType.Type_7_0)
+    local info = C_CurrencyInfo.GetCurrencyInfo(currency)
     self.name = info.name
     self.amount = info.quantity
     self.texture = info.iconFileID
 
-    local categoryInfo = C_Garrison_GetClassSpecCategoryInfo(LE_FOLLOWER_TYPE_GARRISON_7_0)
+    local categoryInfo = C_Garrison.GetClassSpecCategoryInfo(_G.Enum.GarrisonFollowerType.FollowerType_7_0)
     for index, info in ipairs(categoryInfo) do
         local category = self.Category
         if not category[index] then
@@ -74,7 +62,7 @@ function BLIZZARD:OrderHall_OnShiftDown(btn)
 end
 
 local function getIconString(texture)
-    return format('|T%s:12:12:0:0:64:64:5:59:5:59|t ', texture)
+    return string.format('|T%s:12:12:0:0:64:64:5:59:5:59|t ', texture)
 end
 
 function BLIZZARD:OrderHall_OnEnter()

@@ -1,24 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local tinsert = tinsert
-local CreateFrame = CreateFrame
-local GetLootSlotType = GetLootSlotType
-local CursorUpdate = CursorUpdate
-local CursorOnUpdate = CursorOnUpdate
-local ResetCursor = ResetCursor
-local GetCursorPosition = GetCursorPosition
-local IsModifiedClick = IsModifiedClick
-local HandleModifiedItemClick = HandleModifiedItemClick
-local GetLootSlotLink = GetLootSlotLink
-local StaticPopup_Hide = StaticPopup_Hide
-local LootSlot = LootSlot
-local CloseLoot = CloseLoot
-local GetNumLootItems = GetNumLootItems
-local GetLootSlotInfo = GetLootSlotInfo
-local ToggleDropDownMenu = ToggleDropDownMenu
-local MasterLooterFrame_UpdatePlayers = MasterLooterFrame_UpdatePlayers
-
 local F, C = unpack(select(2, ...))
 local BLIZZARD = F:GetModule('Blizzard')
 
@@ -40,7 +19,7 @@ local OnEnter = function(self)
     if GetLootSlotType(slot) == _G.LOOT_SLOT_ITEM then
         _G.GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
         _G.GameTooltip:SetLootItem(slot)
-        CursorUpdate(self)
+        _G.CursorUpdate(self)
     end
 end
 
@@ -51,19 +30,19 @@ end
 
 local OnClick = function(self)
     if (IsModifiedClick()) then
-        HandleModifiedItemClick(GetLootSlotLink(self:GetID()))
+        _G.HandleModifiedItemClick(GetLootSlotLink(self:GetID()))
     else
-        StaticPopup_Hide 'CONFIRM_LOOT_DISTRIBUTION'
+        _G.StaticPopup_Hide 'CONFIRM_LOOT_DISTRIBUTION'
         ss = self:GetID()
         sq = self.quality
         sn = self.name:GetText()
         st = self.icon:GetTexture()
 
-        _G.LootFrame.selectedLootButton = self:GetName();
-        _G.LootFrame.selectedSlot = ss;
-        _G.LootFrame.selectedQuality = sq;
-        _G.LootFrame.selectedItemName = sn;
-        _G.LootFrame.selectedTexture = st;
+        _G.LootFrame.selectedLootButton = self:GetName()
+        _G.LootFrame.selectedSlot = ss
+        _G.LootFrame.selectedQuality = sq
+        _G.LootFrame.selectedItemName = sn
+        _G.LootFrame.selectedTexture = st
 
         LootSlot(ss)
     end
@@ -73,7 +52,7 @@ local OnUpdate = function(self)
     if _G.GameTooltip:IsOwned(self) then
         _G.GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
         _G.GameTooltip:SetLootItem(self:GetID())
-        CursorOnUpdate(self)
+        _G.CursorOnUpdate(self)
     end
 end
 
@@ -141,7 +120,7 @@ local AnchorLootSlots = function(self)
 end
 
 lootFrame.LOOT_CLOSED = function(self)
-    StaticPopup_Hide 'LOOT_BIND'
+    _G.StaticPopup_Hide 'LOOT_BIND'
     self:Hide()
 
     for _, v in next, self.slots do
@@ -149,7 +128,7 @@ lootFrame.LOOT_CLOSED = function(self)
     end
 end
 
-lootFrame.LOOT_OPENED = function(self, event, autoloot)
+lootFrame.LOOT_OPENED = function(self, _, autoloot)
     self:Show()
 
     if (not self:IsShown()) then
@@ -229,7 +208,7 @@ lootFrame.LOOT_OPENED = function(self, event, autoloot)
     AnchorLootSlots(self)
 end
 
-lootFrame.LOOT_SLOT_CLEARED = function(self, event, slot)
+lootFrame.LOOT_SLOT_CLEARED = function(self, _, slot)
     if (not self:IsShown()) then
         return
     end
@@ -238,22 +217,28 @@ lootFrame.LOOT_SLOT_CLEARED = function(self, event, slot)
 end
 
 lootFrame.OPEN_MASTER_LOOT_LIST = function(self)
-    ToggleDropDownMenu(1, nil, _G.GroupLootDropDown, lootFrame.slots[ss], 0, 0)
+    _G.ToggleDropDownMenu(1, nil, _G.GroupLootDropDown, lootFrame.slots[ss], 0, 0)
 end
 
 lootFrame.UPDATE_MASTER_LOOT_LIST = function(self)
-    MasterLooterFrame_UpdatePlayers()
+    _G.MasterLooterFrame_UpdatePlayers()
 end
 
 function BLIZZARD:EnhancedLootFrame()
-    lootFrame:SetScript('OnHide', function(self)
-        StaticPopup_Hide 'CONFIRM_LOOT_DISTRIBUTION'
-        CloseLoot()
-    end)
+    lootFrame:SetScript(
+        'OnHide',
+        function(self)
+            _G.StaticPopup_Hide 'CONFIRM_LOOT_DISTRIBUTION'
+            CloseLoot()
+        end
+    )
 
-    lootFrame:SetScript('OnEvent', function(self, event, ...)
-        self[event](self, event, ...)
-    end)
+    lootFrame:SetScript(
+        'OnEvent',
+        function(self, event, ...)
+            self[event](self, event, ...)
+        end
+    )
 
     lootFrame:RegisterEvent 'LOOT_OPENED'
     lootFrame:RegisterEvent 'LOOT_SLOT_CLEARED'
@@ -262,7 +247,6 @@ function BLIZZARD:EnhancedLootFrame()
     lootFrame:RegisterEvent 'UPDATE_MASTER_LOOT_LIST'
 
     _G.LootFrame:UnregisterAllEvents()
-    tinsert(_G.UISpecialFrames, 'FreeUI_Loot')
+    table.insert(_G.UISpecialFrames, 'FreeUI_Loot')
 end
 BLIZZARD:RegisterBlizz('EnhancedLootFrame', BLIZZARD.EnhancedLootFrame)
-

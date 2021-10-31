@@ -43,7 +43,7 @@ local BOLD = C.Assets.Fonts.Bold
 local HEADER = C.Assets.Fonts.Header
 local COMBAT = C.Assets.Fonts.Combat
 
-local function SetFont(obj, font, size, flag, shadow)
+local function SetFont(obj, font, size)
     if not font then
         if C.IsDeveloper then
             F:Debug('UNKNOWN FONT.')

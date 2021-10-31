@@ -1,21 +1,9 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local ipairs = ipairs
-local CreateFrame = CreateFrame
-local IsAddOnLoaded = IsAddOnLoaded
-local PET_TYPE_SUFFIX = PET_TYPE_SUFFIX
-local IsShiftKeyDown = IsShiftKeyDown
-local C_PetJournal_SetPetTypeFilter = C_PetJournal.SetPetTypeFilter
-local C_PetJournal_IsPetTypeChecked = C_PetJournal.IsPetTypeChecked
-local C_PetJournal_SetAllPetTypesChecked = C_PetJournal.SetAllPetTypesChecked
-
 local F, C = unpack(select(2, ...))
 local BLIZZARD = F:GetModule('Blizzard')
 
 function BLIZZARD:PetTabs_Click(button)
     local activeCount = 0
-    for petType in ipairs(PET_TYPE_SUFFIX) do
+    for petType in ipairs(_G.PET_TYPE_SUFFIX) do
         local btn = _G['PetJournalQuickFilterButton' .. petType]
         if button == 'LeftButton' then
             if self == btn then
@@ -33,11 +21,11 @@ function BLIZZARD:PetTabs_Click(button)
         else
             F.SetBorderColor(btn.bg)
         end
-        C_PetJournal_SetPetTypeFilter(btn.petType, btn.isActive)
+        C_PetJournal.SetPetTypeFilter(btn.petType, btn.isActive)
     end
 
     if activeCount == 0 then
-        C_PetJournal_SetAllPetTypesChecked(true)
+        C_PetJournal.SetAllPetTypesChecked(true)
     end
 end
 
@@ -51,9 +39,9 @@ function BLIZZARD:PetTabs_Create()
         local btn = CreateFrame('Button', 'PetJournalQuickFilterButton' .. petIndex, _G.PetJournal, 'BackdropTemplate')
         btn:SetSize(24, 24)
         btn:SetPoint('TOPLEFT', _G.PetJournalLeftInset, 6 + 25 * (petIndex - 1), -33)
-        F.PixelIcon(btn, 'Interface\\ICONS\\Pet_Type_' .. PET_TYPE_SUFFIX[petType], true)
+        F.PixelIcon(btn, 'Interface\\ICONS\\Pet_Type_' .. _G.PET_TYPE_SUFFIX[petType], true)
 
-        if C_PetJournal_IsPetTypeChecked(petType) then
+        if C_PetJournal.IsPetTypeChecked(petType) then
             btn.isActive = true
             btn.bg:SetBackdropBorderColor(1, 1, 1)
             activeCount = activeCount + 1
@@ -64,8 +52,8 @@ function BLIZZARD:PetTabs_Create()
         btn:SetScript('OnMouseUp', BLIZZARD.PetTabs_Click)
     end
 
-    if activeCount == #PET_TYPE_SUFFIX then
-        for petIndex in ipairs(PET_TYPE_SUFFIX) do
+    if activeCount == #_G.PET_TYPE_SUFFIX then
+        for petIndex in ipairs(_G.PET_TYPE_SUFFIX) do
             local btn = _G['PetJournalQuickFilterButton' .. petIndex]
             btn.isActive = false
             F.SetBorderColor(btn.bg)

@@ -1,42 +1,14 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local CreateFrame = CreateFrame
-local InCombatLockdown = InCombatLockdown
-local hooksecurefunc = hooksecurefunc
-local UnitLevel = UnitLevel
-local UnitAura = UnitAura
-local GetRestrictedAccountData = GetRestrictedAccountData
-local GetMaxLevelForPlayerExpansion = GetMaxLevelForPlayerExpansion
-local ActionButton_ShowOverlayGlow = ActionButton_ShowOverlayGlow
-local ActionButton_HideOverlayGlow = ActionButton_HideOverlayGlow
-local GetSpecialization = GetSpecialization
-local GetSpecializationInfo = GetSpecializationInfo
-local GetNumSpecializations = GetNumSpecializations
-local GetItemInfo = GetItemInfo
-local GetItemCount = GetItemCount
-local SetSpecialization = SetSpecialization
-local C_EquipmentSet_GetEquipmentSetIDs = C_EquipmentSet.GetEquipmentSetIDs
-local C_EquipmentSet_GetEquipmentSetAssignedSpec = C_EquipmentSet.GetEquipmentSetAssignedSpec
-local C_EquipmentSet_GetEquipmentSetInfo = C_EquipmentSet.GetEquipmentSetInfo
-local C_EquipmentSet_GetNumEquipmentSets = C_EquipmentSet.GetNumEquipmentSets
-local C_EquipmentSet_AssignSpecToEquipmentSet = C_EquipmentSet.AssignSpecToEquipmentSet
-local C_EquipmentSet_UnassignEquipmentSetSpec = C_EquipmentSet.UnassignEquipmentSetSpec
-local C_EquipmentSet_GetEquipmentSetForSpec = C_EquipmentSet.GetEquipmentSetForSpec
-local C_Item_GetItemIconByID = C_Item.GetItemIconByID
-local C_EquipmentSet = C_EquipmentSet
-local GameTooltip_Hide = GameTooltip_Hide
-local KEY_NUMLOCK_MAC = KEY_NUMLOCK_MAC
-local ERR_AFFECTING_COMBAT = ERR_AFFECTING_COMBAT
-
 local F, C = unpack(select(2, ...))
 
 local Talentless = CreateFrame('Frame', (...), _G.UIParent)
 Talentless:RegisterEvent('ADDON_LOADED')
 Talentless:RegisterUnitEvent('PLAYER_SPECIALIZATION_CHANGED', 'player')
-Talentless:SetScript('OnEvent', function(self, event, ...)
-    self[event](self, ...)
-end)
+Talentless:SetScript(
+    'OnEvent',
+    function(self, event, ...)
+        self[event](self, ...)
+    end
+)
 
 local Dropdown = F.Libs.LDD:NewMenu(Talentless)
 Dropdown:SetStyle('MENU')
@@ -75,9 +47,9 @@ function Talentless:UNIT_AURA()
                         Button.Cooldown:SetCooldown(expiration - duration, duration)
                     end
 
-                    ActionButton_ShowOverlayGlow(Button)
+                    _G.ActionButton_ShowOverlayGlow(Button)
                 else
-                    ActionButton_HideOverlayGlow(Button)
+                    _G.ActionButton_HideOverlayGlow(Button)
                     Button.Cooldown:SetCooldown(0, 0)
                 end
             end
@@ -104,10 +76,10 @@ function Talentless:EQUIPMENT_SETS_CHANGED()
         Button.Set:Hide()
     end
 
-    for _, setID in next, C_EquipmentSet_GetEquipmentSetIDs() do
-        local Button = self.Specs[C_EquipmentSet_GetEquipmentSetAssignedSpec(setID)]
+    for _, setID in next, C_EquipmentSet.GetEquipmentSetIDs() do
+        local Button = self.Specs[C_EquipmentSet.GetEquipmentSetAssignedSpec(setID)]
         if (Button) then
-            Button.SetIcon:SetTexture(select(2, C_EquipmentSet_GetEquipmentSetInfo(setID)) or _G.QUESTION_MARK_ICON)
+            Button.SetIcon:SetTexture(select(2, C_EquipmentSet.GetEquipmentSetInfo(setID)) or _G.QUESTION_MARK_ICON)
             Button.Set:Show()
         end
     end
@@ -135,7 +107,7 @@ function Talentless:CreateSpecButtons()
         self:SetChecked(GetSpecialization() == index)
 
         if (button == 'RightButton') then
-            if (C_EquipmentSet_GetNumEquipmentSets() > 0) then
+            if (C_EquipmentSet.GetNumEquipmentSets() > 0) then
                 Talentless:UpdateDropdown(index)
                 Dropdown:SetAnchor('TOPLEFT', self, 'BOTTOMLEFT', 10, -10)
                 Dropdown:Toggle()
@@ -158,7 +130,7 @@ function Talentless:CreateSpecButtons()
         Button:SetSize(34, 34)
         Button:SetScript('OnClick', OnClick)
         Button:SetScript('OnEnter', OnEnter)
-        Button:SetScript('OnLeave', GameTooltip_Hide)
+        Button:SetScript('OnLeave', _G.GameTooltip_Hide)
         Button:SetChecked(GetSpecialization() == index)
         Button:SetID(index)
         Button:RegisterForClicks('LeftButtonUp', 'RightButtonUp')
@@ -241,14 +213,14 @@ function Talentless:CreateItemButtons()
             {itemID = 141446, min = 10, max = 50}, -- Tome of the Tranquil Mind
             {itemID = 141640, min = 10, max = 50}, -- Tome of the Clear Mind
             {itemID = 153647, min = 10, max = 59}, -- Tome of the Quiet Mind
-            {itemID = 173049, min = 51, max = 999}, -- Tome of the Still Mind
+            {itemID = 173049, min = 51, max = 999} -- Tome of the Still Mind
         },
         {
             {itemID = 141333, min = 10, max = 50}, -- Codex of the Tranquil Mind
             {itemID = 141641, min = 10, max = 50}, -- Codex of the Clear Mind
             {itemID = 153646, min = 10, max = 59}, -- Codex of the Quiet Mind
-            {itemID = 173048, min = 51, max = 999}, -- Codex of the Still Mind
-        },
+            {itemID = 173048, min = 51, max = 999} -- Codex of the Still Mind
+        }
     }
 
     for index, info in next, items do
@@ -258,7 +230,7 @@ function Talentless:CreateItemButtons()
         Button:SetAttribute('type', 'item')
         Button:SetScript('OnEnter', OnEnter)
         Button:SetScript('OnEvent', OnEvent)
-        Button:SetScript('OnLeave', GameTooltip_Hide)
+        Button:SetScript('OnLeave', _G.GameTooltip_Hide)
         Button.items = info
 
         local Icon = Button:CreateTexture('$parentIcon', 'OVERLAY')
@@ -293,9 +265,9 @@ end
 
 local function OnMenuClick(_, _, setID, spec)
     if (setID) then
-        C_EquipmentSet_AssignSpecToEquipmentSet(setID, spec)
+        C_EquipmentSet.AssignSpecToEquipmentSet(setID, spec)
     else
-        C_EquipmentSet_UnassignEquipmentSetSpec(C_EquipmentSet_GetEquipmentSetForSpec(spec))
+        C_EquipmentSet.UnassignEquipmentSetSpec(C_EquipmentSet.GetEquipmentSetForSpec(spec))
     end
 
     Talentless:EQUIPMENT_SETS_CHANGED()
@@ -305,15 +277,15 @@ function Talentless:UpdateDropdown(spec)
     Dropdown:ClearLines()
 
     local info = {func = OnMenuClick}
-    for _, setID in next, C_EquipmentSet_GetEquipmentSetIDs() do
-        local name, icon = C_EquipmentSet_GetEquipmentSetInfo(setID)
+    for _, setID in next, C_EquipmentSet.GetEquipmentSetIDs() do
+        local name, icon = C_EquipmentSet.GetEquipmentSetInfo(setID)
         info.text = string.format('|T%s:18|t %s', icon or _G.QUESTION_MARK_ICON, name)
         info.args = {setID, spec}
-        info.checked = C_EquipmentSet_GetEquipmentSetAssignedSpec(setID) == spec
+        info.checked = C_EquipmentSet.GetEquipmentSetAssignedSpec(setID) == spec
         Dropdown:AddLine(info)
     end
 
-    info.text = KEY_NUMLOCK_MAC -- "Clear"
+    info.text = _G.KEY_NUMLOCK_MAC -- "Clear"
     info.args = {nil, spec}
     info.checked = false
     Dropdown:AddLine(info)
@@ -358,7 +330,7 @@ function Talentless:UpdateItems()
             end
         end
 
-        Button.Icon:SetTexture(C_Item_GetItemIconByID(itemID))
+        Button.Icon:SetTexture(C_Item.GetItemIconByID(itemID))
         Button.Count:SetText(itemCount)
     end
 
@@ -368,7 +340,7 @@ end
 function Talentless:SetSpecialization(index)
     if (GetNumSpecializations() >= index) then
         if (InCombatLockdown()) then
-            _G.UIErrorsFrame:TryDisplayMessage(50, ERR_AFFECTING_COMBAT, 1, 0.1, 0.1)
+            _G.UIErrorsFrame:TryDisplayMessage(50, _G.ERR_AFFECTING_COMBAT, 1, 0.1, 0.1)
         elseif (GetSpecialization() ~= index) then
             SetSpecialization(index)
         end

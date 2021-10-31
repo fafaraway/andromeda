@@ -1,12 +1,3 @@
-local _G = getfenv(0)
-local unpack = _G.unpack
-local select = _G.select
-local tonumber = _G.tonumber
-local floor = _G.math.floor
-local strsub = _G.string.sub
-local format = _G.string.format
-local CreateFrame = _G.CreateFrame
-
 local F = unpack(select(2, ...))
 local ECP = F:RegisterModule('EnhancedColorPicker')
 
@@ -16,15 +7,15 @@ local editingText
 local function UpdateAlphaText()
     local a = _G.OpacitySliderFrame:GetValue()
     a = (1 - a) * 100
-    a = floor(a + 0.05)
-    _G.ColorPPBoxA:SetText(format('%d', a))
+    a = math.floor(a + 0.05)
+    _G.ColorPPBoxA:SetText(string.format('%d', a))
 end
 
 local function UpdateAlpha(tbox)
     local a = tbox:GetNumber()
     if a > 100 then
         a = 100
-        _G.ColorPPBoxA:SetText(format('%d', a))
+        _G.ColorPPBoxA:SetText(string.format('%d', a))
     end
     a = 1 - (a / 100)
     editingText = true
@@ -36,13 +27,13 @@ local function UpdateColorTexts(r, g, b)
     if not r then
         r, g, b = _G.ColorPickerFrame:GetColorRGB()
     end
-    r = floor(r * 255 + 0.5)
-    g = floor(g * 255 + 0.5)
-    b = floor(b * 255 + 0.5)
-    _G.ColorPPBoxR:SetText(format('%d', r))
-    _G.ColorPPBoxG:SetText(format('%d', g))
-    _G.ColorPPBoxB:SetText(format('%d', b))
-    _G.ColorPPBoxH:SetText(format('%.2x', r) .. format('%.2x', g) .. format('%.2x', b))
+    r = math.floor(r * 255 + 0.5)
+    g = math.floor(g * 255 + 0.5)
+    b = math.floor(b * 255 + 0.5)
+    _G.ColorPPBoxR:SetText(string.format('%d', r))
+    _G.ColorPPBoxG:SetText(string.format('%d', g))
+    _G.ColorPPBoxB:SetText(string.format('%d', b))
+    _G.ColorPPBoxH:SetText(string.format('%.2x', r) .. string.format('%.2x', g) .. string.format('%.2x', b))
 end
 
 local function UpdateColor(tbox)
@@ -50,19 +41,19 @@ local function UpdateColor(tbox)
     local id = tbox:GetID()
 
     if id == 1 then
-        r = format('%d', tbox:GetNumber())
+        r = string.format('%d', tbox:GetNumber())
         if not r then
             r = 0
         end
         r = r / 255
     elseif id == 2 then
-        g = format('%d', tbox:GetNumber())
+        g = string.format('%d', tbox:GetNumber())
         if not g then
             g = 0
         end
         g = g / 255
     elseif id == 3 then
-        b = format('%d', tbox:GetNumber())
+        b = string.format('%d', tbox:GetNumber())
         if not b then
             b = 0
         end
@@ -71,7 +62,7 @@ local function UpdateColor(tbox)
         -- hex values
         if tbox:GetNumLetters() == 6 then
             local rgb = tbox:GetText()
-            r, g, b = tonumber('0x' .. strsub(rgb, 0, 2)), tonumber('0x' .. strsub(rgb, 3, 4)), tonumber('0x' .. strsub(rgb, 5, 6))
+            r, g, b = tonumber('0x' .. string.sub(rgb, 0, 2)), tonumber('0x' .. string.sub(rgb, 3, 4)), tonumber('0x' .. string.sub(rgb, 5, 6))
             if not r then
                 r = 0
             else

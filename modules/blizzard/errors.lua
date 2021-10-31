@@ -1,10 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local CreateFrame = CreateFrame
-local InCombatLockdown = InCombatLockdown
-local FadingFrame_Show = FadingFrame_Show
-
 local F, C = unpack(select(2, ...))
 local BLIZZARD = F:GetModule('Blizzard')
 
@@ -38,7 +31,7 @@ local ignoredList = {
     [_G.SPELL_FAILED_NO_COMBO_POINTS] = true,
     [_G.SPELL_FAILED_SPELL_IN_PROGRESS] = true,
     [_G.SPELL_FAILED_TARGET_AURASTATE] = true,
-    [_G.ERR_NO_ATTACK_TARGET] = true,
+    [_G.ERR_NO_ATTACK_TARGET] = true
 }
 
 local function CreateErrorFrames()
@@ -78,11 +71,11 @@ local function OnEvent(_, _, msg)
 
     if state == 0 then
         BLIZZARD.ErrorFrame1.text:SetText(msg)
-        FadingFrame_Show(BLIZZARD.ErrorFrame1)
+        _G.FadingFrame_Show(BLIZZARD.ErrorFrame1)
         state = 1
     else
         BLIZZARD.ErrorFrame2.text:SetText(msg)
-        FadingFrame_Show(BLIZZARD.ErrorFrame2)
+        _G.FadingFrame_Show(BLIZZARD.ErrorFrame2)
         state = 0
     end
 end
