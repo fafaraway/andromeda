@@ -6,6 +6,7 @@ exclude_files = {'libs/'}
 ignore = {
     '113/_',
     '212/self', -- unused argument self
+    '213/i',
     '4', -- shadowing
     '631' -- line is too long
 }
@@ -25,7 +26,8 @@ read_globals = {
     table = {
         fields = {
             'removemulti',
-            'wipe'
+            'wipe',
+            'getn'
         }
     },
 
