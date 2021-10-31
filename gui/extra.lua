@@ -7,6 +7,7 @@ local CHAT = F:GetModule('Chat')
 local ANNOUNCEMENT = F:GetModule('Announcement')
 local MAP = F:GetModule('Minimap')
 local INVENTORY = F:GetModule("Inventory")
+local VIGNETTING = F:GetModule('Vignetting')
 
 local extraGUIs = {}
 
@@ -341,31 +342,6 @@ end
 
 local function UpdateBagSize()
     INVENTORY:UpdateBagSize()
-end
-
-function GUI:SetupInventoryMinItemLevelToShow(parent)
-    local guiName = 'FreeUI_GUI_Inventory_MinItemLevelToShow'
-    TogglePanel(guiName)
-    if extraGUIs[guiName] then
-        return
-    end
-
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
-
-    local values = C.DB.Inventory
-
-    local datas = {
-        key = 'MinItemLevelToShow',
-        value = values.MinItemLevelToShow,
-        text = L['Item Level Threshold'],
-        min = 1,
-        max = 300,
-        step = 1,
-    }
-
-    local offset = -30
-    CreateSlider(scroll, 'Inventory', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset)
 end
 
 function GUI:SetupInventoryFilter(parent)
@@ -2082,6 +2058,34 @@ function GUI:SetupCustomClassColor(parent)
 
         offset = offset - 30
     end
+end
+
+local function UpdateVignettingVisibility()
+    VIGNETTING:UpdateVisibility()
+end
+
+function GUI:SetupVignettingVisibility(parent)
+    local guiName = 'FreeUI_GUI_Vignetting'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local values = C.DB.General
+
+    local datas = {
+        key = 'VignettingAlpha',
+        value = values.VignettingAlpha,
+        text = L['Vignetting Alpha'],
+        min = 0,
+        max = 1,
+        step = .1,
+    }
+
+    local offset = -30
+    CreateSlider(scroll, 'General', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset, UpdateVignettingVisibility)
 end
 
 -- Chat

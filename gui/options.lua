@@ -10,6 +10,10 @@ local NAMEPLATE = F:GetModule('Nameplate')
 local ACTIONBAR = F:GetModule('ActionBar')
 local INVENTORY = F:GetModule('Inventory')
 local CHAT = F:GetModule('Chat')
+local VIGNETTING = F:GetModule('Vignetting')
+local BLIZZARD = F:GetModule('Blizzard')
+local CAMERA = F:GetModule('Camera')
+local INFOBAR = F:GetModule('InfoBar')
 
 -- Aura
 local function SetupAuraSize()
@@ -33,12 +37,8 @@ local function SetupInventorySize()
     GUI:SetupInventorySize(GUI.Page[9])
 end
 
-local function SetupInventoryMinItemLevelToShow()
-    GUI:SetupInventoryMinItemLevelToShow(GUI.Page[9])
-end
-
-local function UpdateBagSize()
-	INVENTORY:UpdateBagSize()
+local function UpdateInventorySortOrder()
+    SetSortBagsRightToLeft(C.DB.Inventory.SortMode == 1)
 end
 
 -- Actionbar
@@ -165,6 +165,13 @@ local function UpdateAllHeaders()
 end
 
 -- General
+local function UpdateVignettingVisibility()
+    VIGNETTING:UpdateVisibility()
+end
+local function SetupVignettingVisibility()
+    GUI:SetupVignettingVisibility(GUI.Page[1])
+end
+
 local function SetupAutoScreenshot()
     GUI:SetupAutoScreenshot(GUI.Page[1])
 end
@@ -174,8 +181,24 @@ local function SetupCustomClassColor()
 end
 
 local function UpdateActionCamera()
-    local EC = F:GetModule('EnhancedCamera')
-    EC:UpdateActionCamera()
+    CAMERA:UpdateActionCamera()
+end
+
+local function UpdateBossBanner()
+    BLIZZARD:UpdateBossBanner()
+end
+
+local function UpdateBossEmote()
+    BLIZZARD:UpdateBossEmote()
+end
+
+local function UpdateMawBuffsFrameVisibility()
+    BLIZZARD:UpdateMawBuffsFrameVisibility()
+end
+
+-- Infobar
+local function UpdateCombatPulse()
+    INFOBAR:UpdateCombatPulse()
 end
 
 -- Theme
@@ -219,27 +242,38 @@ end
 GUI.OptionsList = {
     [1] = { -- general
         {1, 'General', 'CursorTrail', L['Cursor trail']},
-        {1, 'General', 'Vignette', L['Vignette'], nil, nil, nil, L['Add shadowed overlay to screen corner.']},
-        {3, 'General', 'VignetteAlpha', L['Vignette Alpha'], true, {0, 1, .1}},
-        {1, 'ACCOUNT', 'UseCustomClassColor', L['Custom class color'], nil, SetupCustomClassColor},
-        {1, 'ACCOUNT', 'FontOutline', L['Font outline'], nil, nil, nil, L['|nAdd font outline globally, enable this if you run game on low resolution.']},
-        {3, 'ACCOUNT', 'UIScale', L['UI scale'], true, {.5, 2, .01}, nil, L['|nChange global scale for whole interface.|nRecommend 1080P set to 1, 1440P set to 1.2-1.4, 2160P set to 2.']},
-        {1, 'General', 'HideTalkingHead', L['Hide talking head']},
-        {1, 'General', 'HideBossBanner', L['Hide boss banner']},
-        {1, 'General', 'HideBossEmote', L['Hide boss emote'], true},
-        {1, 'General', 'HideMawBuffsFrame', L['Hide anima buffs frame']},
+        {1, 'General', 'Vignetting', L['Vignetting'], nil, SetupVignettingVisibility, UpdateVignettingVisibility, L['Add shadowed overlay to screen corner.']},
 
+        {3, 'ACCOUNT', 'UIScale', L['UI Scale'], true, {.5, 2, .01}, nil, L['Adjust UI scale for whole interface.|nIt is recommended to set 1080p to 1, 1440p to 1.2, and 2160p to 2.']},
+
+        {1, 'ACCOUNT', 'UseCustomClassColor', L['Custom Class Color'], nil, SetupCustomClassColor, nil, L['Use custom class colors.']},
+        {1, 'ACCOUNT', 'FontOutline', L['Font Outline'], nil, nil, nil, L['Add font outline globally, if you run the game with a low resolution, this option may improve the clarity of the interface text.']},
+        {1, 'General', 'HideTalkingHead', L['Hide Talking Head'], nil, nil, nil, L['Dismisses NPC Talking Head popups automatically before they appear.']},
+
+        {4, 'ACCOUNT', 'NumberFormat', L['Number Format'], true, {L['Standard: b/m/k'], L['Asian: y/w'], L['Full digitals']}},
+
+
+        {1, 'General', 'HideBossBanner', L['Hide Boss Banner'], nil, nil, UpdateBossBanner, L['Hide the banner and loot list after the boss is killed.']},
+        {1, 'General', 'HideBossEmote', L['Hide Boss Emote'], true, nil, UpdateBossEmote, L['Hide the emote and whisper from boss during battle.']},
+        {1, 'General', 'HideMawBuffsFrame', L['Hide Anima Buffs Frame'], nil, nil, UpdateMawBuffsFrameVisibility, L['Hide the anima buffs frame from Mythic+ Dungeon and Tarragrue.']},
+
+        {},
         {1, 'Quest', 'QuickQuest', L['Quick Quest'], nil, nil, nil, L['Automatically accept and deliver quests.|nHold ALT key to STOP automation.']},
-        {1, 'Quest', 'CompletedSound', L['Quest Complete Sound'], true, nil, nil, L['Play a sound when a quest is completed.']},
-        {1, 'Quest', 'AutoCollapseTracker', L['Auto Collapse Quest Tracker'], nil, nil, nil, L['Automatically collapse quest tracker when you are in the instance.']},
+        {1, 'Quest', 'CompletedSound', L['Quest Complete Sound'], true, nil, nil, L['When a quest is completed, a prompt sound effect will be played, including common quest and world quest.']},
+        {1, 'Quest', 'WowheadLink', L['Wowhead Link'], nil, nil, nil, L['Right-click the quest or achievement in the objective tracker to get the corresponding Wowhead link.']},
+        {1, 'Quest', 'AutoCollapseTracker', L['Auto Collapse Objective Tracker'], true, nil, nil, L['Collapse objective tracker automatically when you enter the instance, and restore it when you leave the instance.']},
+        {},
 
-        {1, 'General', 'SimplifyErrors', L['Simplify Errors'], nil, nil, nil, L['|nSimplify standard error messages when you in combat. It\'s the red text in the middle of your screen that constantly annoys you with things like, \'Your too far away!\', \'Not enough mana.\', etc.']},
-        {1, 'General', 'FasterMovieSkip', L['Faster movie skip'], true, nil, nil, L['|nIf enabled, allow space bar, escape key and enter key to cancel cinematic without confirmation.']},
-        {1, 'General', 'FasterZooming', L['Camera faster zooming'], nil, nil, nil, L['|nFaster and smoother camera zooming.']},
-        {1, 'General', 'ActionCamera', L['Camera action mode'], true, nil, UpdateActionCamera, L['|nEnable blizzard action camera.']},
-        {1, 'General', 'ScreenSaver', L['Screen saver']},
-        {1, 'General', 'AutoScreenshot', L['Auto screenshot'], true, SetupAutoScreenshot, nil, L['|nTake screenshots automatically based on specific events.']},
-        {4, 'ACCOUNT', 'NumberFormat', L['Number Format'], nil, {L['Standard: b/m/k'], L['Asian: y/w'], L['Full digitals']}},
+        {1, 'General', 'EnhancedMailBox', L['Enhanced Mailbox'], nil, nil, nil, L['Enhance the default Mailbox UI, and provide some additional convenience functions.']},
+        {1, 'General', 'EnhancedLFGList', L['Enhanced LFGList'], true, nil, nil, L['Enhance the default LFGList UI, including double-click to sign up, display the mythic plus score of the leader and applicants, etc.']},
+
+        {1, 'General', 'SimplifyErrors', L['Filter Error Messages'], nil, nil, nil, L['Filter error messages during battle, such as ability not ready yet, out of rage/mana/energy, etc.']},
+        {1, 'General', 'FasterMovieSkip', L['Faster Movie Skip'], true, nil, nil, L['If enabled, allow space bar, escape key and enter key to cancel cinematic without confirmation.']},
+        {1, 'General', 'FasterZooming', L['Smooth Camera Zooming'], nil, nil, nil, L['Faster and smoother camera zooming.']},
+        {1, 'General', 'ActionCamera', L['ActionCam Mode'], true, nil, UpdateActionCamera, L['Enable hidden ActionCam mode.']},
+        {1, 'General', 'ScreenSaver', L['AFK Mode'], nil, nil, nil, L['Enable screen saver during AFK.']},
+        {1, 'General', 'AutoScreenshot', L['Auto Screenshot'], true, SetupAutoScreenshot, nil, L['Take screenshots automatically based on specific events.']},
+
     },
     [2] = { -- notification
         {1, 'Notification', 'Enable', L['Enable Notification']},
@@ -252,8 +286,10 @@ GUI.OptionsList = {
     },
     [3] = { -- infobar
         {1, 'Infobar', 'Enable', L['Enable Infobar']},
-        {1, 'Infobar', 'AnchorTop', L['Anchor to top'], nil, nil, nil, L['|nInfobar will be anchored to the bottom of the screen if the option is disabled.']},
-        {1, 'Infobar', 'Mouseover', L['Show blocks by mouseover'], true},
+        {1, 'Infobar', 'AnchorTop', L['Anchor To Top'], nil, nil, nil, L['If disabled, infobar will be anchored to the bottom of the screen.']},
+        {1, 'Infobar', 'Mouseover', L['Blocks Fade Out'], true, nil, nil, L['The blocks are hidden by default, and fade in by mouseover.']},
+        {1, 'Infobar', 'CombatPulse', L['Combat Flashing'], nil, nil, UpdateCombatPulse, L['When entering the combat, the edge will turn red and flash.']},
+        {},
         {1, 'Infobar', 'Stats', L['System stats']},
         {1, 'Infobar', 'Report', L['Daily/weekly infomation'], true},
         {1, 'Infobar', 'Friends', L['Friends']},
@@ -356,14 +392,15 @@ GUI.OptionsList = {
     },
     [9] = { -- inventory
         {1, 'Inventory', 'Enable', L['Enable Inventory'], nil, SetupInventorySize},
-        {1, 'Inventory', 'CombineFreeSlots', L['Combine free slots'], nil, nil, UpdateInventoryStatus},
-        {4, 'Inventory', 'SortMode', L['Sort Mode'], true, {L['Forward'], L['Backward'], _G.DISABLE}},
-        {1, 'Inventory', 'MultiRows', L['Anchor by rows'], nil, nil, UpdateInventoryAnchor, L['If item filter enabled, every four bags will anchor into one row.']},
-        {1, 'Inventory', 'ItemFilter', L['Filter items'], true, SetupInventoryFilter, UpdateInventoryStatus},
-        {1, 'Inventory', 'SpecialBagsColor', L['Colorized special bags'], nil, nil, UpdateInventoryStatus, L['Show color for Herb bag, Mining bag, Gem bag, Enchanted mageweave pouch.']},
-        {1, 'Inventory', 'ItemLevel', L['Show item level'], true, SetupInventoryMinItemLevelToShow, UpdateInventoryStatus},
-        {1, 'Inventory', 'NewItemFlash', L['Flash new items'], nil},
-        {1, 'Inventory', 'BindType', L['Show BOE/BOA indicator'], true, nil, UpdateInventoryStatus},
+        {1, 'Inventory', 'CombineFreeSlots', L['Compact Mode'], nil, nil, UpdateInventoryStatus, L['Combine spare slots to save screen space.']},
+        {4, 'Inventory', 'SortMode', L['Sort Mode'], true, {L['Forward'], L['Backward'], _G.DISABLE}, UpdateInventorySortOrder, L['If you have empty slots after sort, please disable inventory module, and turn off all bags filter in default ui containers.']},
+        {1, 'Inventory', 'ItemFilter', L['Item Filter'], nil, SetupInventoryFilter, UpdateInventoryStatus, L['The items are stored separately according to the type of items.']},
+        {3, 'Inventory', 'BagsPerRow', L['Bags Per Row'], true, {1, 10, 1}, UpdateInventoryAnchor, L['If ItemFilter enabled, change the bags per row for anchoring.']},
+        {1, 'Inventory', 'SpecialBagsColor', L['Colorized Special Bags'], nil, nil, UpdateInventoryStatus, L['Show color for special bags, such as Herb bag, Mining bag, Gem bag, Enchanted mageweave pouch, etc.']},
+        {1, 'Inventory', 'ItemLevel', L['Show Item Level'], nil, nil, UpdateInventoryStatus},
+        {3, 'Inventory', 'MinItemLevelToShow', L['iLvl Threshold'], true, {1, 300, 1}, UpdateInventoryAnchor, L['Only show iLvl info if higher than threshold.']},
+        {1, 'Inventory', 'NewItemFlash', L['Show New Item Flash'], nil, nil, nil, L['Newly obtained items will flash slightly, and stop flashing after hovering the cursor.']},
+        {1, 'Inventory', 'BindType', L['Show BoE/BoA Indicator'], nil, nil, UpdateInventoryStatus, L['Show corresponding marks for BoE and BoA items.']},
     },
     [10] = { -- map
         {1, 'Map', 'Enable', L['Enable Map'], nil, SetupMapScale},

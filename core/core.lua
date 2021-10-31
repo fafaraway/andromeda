@@ -26,6 +26,8 @@ do
     F.Theme = F:RegisterModule('Theme')
     F.Blizzard = F:RegisterModule('Blizzard')
     F.Nameplate = F:RegisterModule('Nameplate')
+    F.Vignetting = F:RegisterModule('Vignetting')
+    F.Camera = F:RegisterModule('Camera')
 end
 
 -- Initialize settings

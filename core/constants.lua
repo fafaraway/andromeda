@@ -1,12 +1,6 @@
 
 local F, C = unpack(select(2, ...))
 
---[[ local addonVersion = '@project-version@'
-if (addonVersion:find('project%-version')) then
-    addonVersion = 'Development'
-end
-C.AddonVersion = addonVersion
-C.IsDeveloper = C.AddonVersion == 'Development' ]]
 
 C.IsRetail = _G.WOW_PROJECT_ID == _G.WOW_PROJECT_MAINLINE
 C.IsNewPatch = C.IsRetail and select(4, GetBuildInfo()) >= 90105 -- 9.1.5
@@ -80,6 +74,8 @@ C.Assets = {
         Norm = C.AssetsPath .. 'textures\\statusbar\\norm',
         Grad = C.AssetsPath .. 'textures\\statusbar\\grad',
         Flat = C.AssetsPath .. 'textures\\statusbar\\flat',
+
+
 
         Covenant = {
             Kyrian = C.AssetsPath .. 'textures\\covenants\\kyrian',

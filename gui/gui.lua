@@ -245,7 +245,7 @@ local function CreateOption(i)
 
             if tip then
                 eb.title = name
-                F.AddTooltip(eb, 'ANCHOR_TOPLEFT', tip, 'BLUE')
+                F.AddTooltip(eb, 'ANCHOR_TOPLEFT', tip, 'BLUE', true)
             end
         elseif optType == 3 then -- slider
             local min, max, step = unpack(data)
@@ -280,7 +280,7 @@ local function CreateOption(i)
 
             if tip then
                 s.title = name
-                F.AddTooltip(s, 'ANCHOR_TOPLEFT', tip, 'BLUE')
+                F.AddTooltip(s, 'ANCHOR_TOPLEFT', tip, 'BLUE', true)
             end
         elseif optType == 4 then -- dropdown
             if value == 'TextureStyle' then
@@ -333,7 +333,7 @@ local function CreateOption(i)
             dd.label = F.CreateFS(dd, C.Assets.Fonts.Regular, 11, nil, name, nil, true, 'CENTER', 0, 18)
             if tip then
                 dd.title = name
-                F.AddTooltip(dd, 'ANCHOR_RIGHT', tip, 'BLUE')
+                F.AddTooltip(dd, 'ANCHOR_RIGHT', tip, 'BLUE', true)
             end
         elseif optType == 5 then -- colorswatch
             local swatch = F.CreateColorSwatch(parent, name, UpdateValue(key, value))
@@ -428,7 +428,7 @@ local function CreateGUI()
         guiPage[i] = CreateFrame('ScrollFrame', nil, guiFrame, 'UIPanelScrollFrameTemplate')
         guiPage[i]:SetPoint('TOPLEFT', 170, -50)
         guiPage[i]:SetSize(500, 540)
-        guiPage[i].__bg = F.CreateBDFrame(guiPage[i])
+        guiPage[i].__bg = F.CreateBDFrame(guiPage[i], .3)
         --guiPage[i].__bg:SetBackdropColor(.04, .04, .04, .25)
         guiPage[i]:Hide()
 

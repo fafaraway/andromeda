@@ -37,16 +37,22 @@ C.CharacterSettings = {
         FasterZooming = true,
         ActionCamera = false,
         CursorTrail = true,
-        Vignette = true,
-        VignetteAlpha = .85,
+        Vignetting = true,
+        VignettingAlpha = .85,
         FasterMovieSkip = true,
         ScreenSaver = true,
         ProposalTimer = true,
+
         GroupTool = true,
-        RuneCheck = false,
-        Countdown = '10',
-        SaveRecipient = true,
-        RecipientName = ''
+            RuneCheck = false,
+            Countdown = '10',
+
+        EnhancedMailBox = true,
+            SaveRecipient = false,
+            RecipientList = '',
+
+        EnhancedLFGList = true,
+            ShortenScore = true,
     },
     Combat = {
         Enable = true,
@@ -106,7 +112,7 @@ C.CharacterSettings = {
         SlotSize = 44,
         BagColumns = 10,
         BankColumns = 10,
-        MultiRows = true,
+        BagsPerRow = 6,
         HideWidgets = true,
         SortMode = 2,
         ItemLevel = true,
@@ -384,7 +390,8 @@ C.CharacterSettings = {
         Friends = true,
         Report = true,
         Currencies = true,
-        Gold = true
+        Gold = true,
+        CombatPulse = true,
     },
     Notification = {
         Enable = true,
@@ -473,6 +480,7 @@ C.CharacterSettings = {
         QuickQuest = false,
         CompletedSound = true,
         AutoCollapseTracker = true,
+        WowheadLink = true,
     }
 }
 
@@ -527,5 +535,6 @@ C.AccountSettings = {
         MONK = {b = 0.6980392156862745, colorStr = 'ff33d9b2', g = 0.8509803921568627, r = 0.2},
         PALADIN = {b = 0.4588235294117647, colorStr = 'ffff7675', g = 0.4627450980392157, r = 1}
     },
-    ColorPickerPlus = {}
+    ColorPickerPlus = {},
+    ContactList = {},
 }

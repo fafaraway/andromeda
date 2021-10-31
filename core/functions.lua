@@ -421,8 +421,10 @@ do
             fs:SetTextColor(colour[1], colour[2], colour[3])
         elseif colour == 'CLASS' then
             fs:SetTextColor(C.r, C.g, C.b)
-        elseif colour == 'YELLOW' then
+        elseif colour == 'INFO' then
             fs:SetTextColor(.9, .82, .62)
+        elseif colour == 'YELLOW' then
+            fs:SetTextColor(1, .8, 0)
         elseif colour == 'RED' then
             fs:SetTextColor(1, .15, .21)
         elseif colour == 'GREEN' then
@@ -1321,19 +1323,23 @@ do
 
     -- Handle checkbox and radio
     local function CheckBox_OnEnter(self)
-        if self.shadow then
-            self.shadow:SetBackdropBorderColor(C.r, C.g, C.b, .25)
-        else
-            self.bg:SetBackdropBorderColor(C.r, C.g, C.b)
-        end
+        -- if self.shadow then
+        --     self.shadow:SetBackdropBorderColor(C.r, C.g, C.b, .25)
+        -- else
+        --     self.bg:SetBackdropBorderColor(C.r, C.g, C.b)
+        -- end
+
+        self.bg:SetBackdropColor(C.r, C.g, C.b, .3)
     end
 
     local function CheckBox_OnLeave(self)
-        if self.shadow then
-            self.shadow:SetBackdropBorderColor(0, 0, 0, .25)
-        else
-            F.SetBorderColor(self.bg)
-        end
+        -- if self.shadow then
+        --     self.shadow:SetBackdropBorderColor(0, 0, 0, .25)
+        -- else
+        --     F.SetBorderColor(self.bg)
+        -- end
+
+        self.bg:SetBackdropColor(0, 0, 0, 1)
     end
 
     function F:ReskinCheck(flat, forceSaturation)
@@ -2417,8 +2423,12 @@ do
 
             for i = 1, tip:NumLines() do
                 local line = _G[tip:GetName() .. 'TextLeft' .. i]
-                if line then
-                    local text = line:GetText() or ''
+                if not line then
+                    break
+                end
+
+                local text = line:GetText()
+                if text then
                     if i == 1 and text == _G.RETRIEVING_ITEM_INFO then
                         return 'tooSoon'
                     else
@@ -2450,14 +2460,16 @@ do
 
             for i = 2, 5 do
                 local line = _G[tip:GetName() .. 'TextLeft' .. i]
-                if line then
-                    local text = line:GetText() or ''
-                    local found = string.find(text, itemLevelString)
-                    if found then
-                        local level = string.match(text, '(%d+)%)?$')
-                        iLvlDB[link] = tonumber(level)
-                        break
-                    end
+                if not line then
+                    break
+                end
+
+                local text = line:GetText()
+                local found = text and string.find(text, itemLevelString)
+                if found then
+                    local level = string.match(text, '(%d+)%)?$')
+                    iLvlDB[link] = tonumber(level)
+                    break
                 end
             end
 
