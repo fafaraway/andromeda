@@ -186,13 +186,12 @@ local function scoreToColor(score)
 end
 
 local function scale(x)
-    -- local e = 0.1123091
-    -- local d = 0.7474169 * x
-    -- local c = 0.00002814465 * x * x
-    -- local b = 3.144654e-9 * x * x * x
-    -- local a = 2.578616e-11 * x * x * x * x
-    -- return math.floor(a + b + c + d + e)
-    return x
+    local e = 0.1123091
+    local d = 0.7474169 * x
+    local c = 0.00002814465 * x * x
+    local b = 3.144654e-9 * x * x * x
+    local a = 2.578616e-11 * x * x * x * x
+    return math.floor(a + b + c + d + e)
 end
 
 local function shortenScore(score)
@@ -278,6 +277,6 @@ function M:OnLogin()
     hooksecurefunc('LFGListInviteDialog_Show', M.HookDialogOnShow)
     hooksecurefunc('LFGListGroupDataDisplayEnumerate_Update', M.ReplaceGroupRoles)
 
-    hooksecurefunc('LFGListApplicationViewer_UpdateApplicantMember', UpdateApplicantMember)
+    -- hooksecurefunc('LFGListApplicationViewer_UpdateApplicantMember', UpdateApplicantMember)
     hooksecurefunc('LFGListSearchEntry_Update', SearchEntry_Update)
 end
