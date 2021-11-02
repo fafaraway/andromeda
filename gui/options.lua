@@ -93,12 +93,16 @@ local function SetupMapScale()
 end
 
 -- Nameplate
-local function SetupNameplateCVars()
-    GUI:SetupNameplateCVars(GUI.Page[14])
-end
-
 local function SetupNameplateSize()
     GUI:SetupNameplateSize(GUI.Page[14])
+end
+
+local function SetupNameplateCastbarSize()
+    GUI:SetupNameplateCastbarSize(GUI.Page[14])
+end
+
+local function SetupNPRaidTargetIndicator()
+    GUI:SetupRaidTargetIndicator(GUI.Page[14])
 end
 
 local function SetupAuraFilter()
@@ -130,12 +134,24 @@ local function SetupUnitFrameFader()
     GUI:SetupUnitFrameFader(GUI.Page[12])
 end
 
-local function SetupCastbar()
-    GUI:SetupCastbar(GUI.Page[12])
+local function SetupCastbarSize()
+    GUI:SetupCastbarSize(GUI.Page[12])
 end
 
-local function SetupClassPowerHeight()
-    GUI:SetupClassPowerHeight(GUI.Page[12])
+local function SetupCastbarColor()
+    GUI:SetupCastbarColor(GUI.Page[12])
+end
+
+local function SetupClassPowerSize()
+    GUI:SetupClassPowerSize(GUI.Page[12])
+end
+
+local function SetupUnitFrameRangeCheck()
+    GUI:SetupUnitFrameRangeCheck(GUI.Page[12])
+end
+
+local function SetupRaidTargetIndicator()
+    GUI:SetupRaidTargetIndicator(GUI.Page[12])
 end
 
 
@@ -268,7 +284,7 @@ GUI.OptionsList = {
         {1, 'General', 'EnhancedLFGList', L['Enhanced LFGList'], true, nil, nil, L['Enhance the default LFGList UI, including double-click to sign up, display the mythic plus score of the leader and applicants, etc.']},
 
         {1, 'General', 'SimplifyErrors', L['Filter Error Messages'], nil, nil, nil, L['Filter error messages during battle, such as ability not ready yet, out of rage/mana/energy, etc.']},
-        {1, 'General', 'FasterMovieSkip', L['Faster Movie Skip'], true, nil, nil, L['If enabled, allow space bar, escape key and enter key to cancel cinematic without confirmation.']},
+        {1, 'General', 'FasterMovieSkip', L['Faster Movie Skip'], true, nil, nil, L['Allow space bar, escape key and enter key to cancel cinematic without confirmation.']},
         {1, 'General', 'FasterZooming', L['Smooth Camera Zooming'], nil, nil, nil, L['Faster and smoother camera zooming.']},
         {1, 'General', 'ActionCamera', L['ActionCam Mode'], true, nil, UpdateActionCamera, L['Enable hidden ActionCam mode.']},
         {1, 'General', 'ScreenSaver', L['AFK Mode'], nil, nil, nil, L['Enable screen saver during AFK.']},
@@ -290,13 +306,13 @@ GUI.OptionsList = {
         {1, 'Infobar', 'Mouseover', L['Blocks Fade Out'], true, nil, nil, L['The blocks are hidden by default, and fade in by mouseover.']},
         {1, 'Infobar', 'CombatPulse', L['Combat Flashing'], nil, nil, UpdateCombatPulse, L['When entering the combat, the edge will turn red and flash.']},
         {},
-        {1, 'Infobar', 'Stats', L['System stats']},
-        {1, 'Infobar', 'Report', L['Daily/weekly infomation'], true},
+        {1, 'Infobar', 'Stats', L['System Stats'], nil, nil, nil, L['Show time latency and FPS, and also track the resource usage of addons.']},
+        {1, 'Infobar', 'Report', L['Daily/Weekly'], true, nil, nil, L['Track instance/raid lockouts and some daily/weekly stuffs.']},
         {1, 'Infobar', 'Friends', L['Friends']},
         {1, 'Infobar', 'Guild', L['Guild'], true},
         {1, 'Infobar', 'Durability', L['Durability']},
         {1, 'Infobar', 'Spec', L['Specialization'], true},
-        {1, 'Infobar', 'Gold', L['Gold']},
+        {1, 'Infobar', 'Gold', L['Finances']},
         {1, 'Infobar', 'Currencies', L['Currencies'], true},
     },
     [4] = { -- chat
@@ -436,36 +452,27 @@ GUI.OptionsList = {
     },
     [12] = { -- unitframe
         {1, 'Unitframe', 'Enable', L['Enable Unitframes'], nil, SetupUnitFrameSize},
-        {1, 'Unitframe', 'InvertedColorMode', L['Inverted Color Mode']},
+        {1, 'Unitframe', 'InvertedColorMode', L['Inverted Mode'], nil, nil, nil, L['The healthbar color and the background color are inverted.']},
         {4, 'Unitframe', 'TextureStyle', L['Texture Style'], true, {}},
 
-        {1, 'Unitframe', 'RangeCheck', L['Range check']},
+        {1, 'Unitframe', 'RangeCheck', L['Range Check'], nil, SetupUnitFrameRangeCheck, nil, L["Fade out unit frame based on whether the unit is in the player's range"]},
+        {1, 'Unitframe', 'Smooth', L['Smooth'], nil, nil, nil, L['Smoothly animate unit frame bars.']},
+        {4, 'Unitframe', 'ColorStyle', L['Health Bar Color'], true, {L['Default White'], L['Class Color'], L['Percentage Gradient']}},
+        {1, 'Unitframe', 'Portrait', L['Portrait'], nil, nil, nil, L['Show dynamic portrait on unit frame.']},
 
-        {1, 'Unitframe', 'Portrait', L['Portrait']},
-        {4, 'Unitframe', 'ColorStyle', L['Health bar style'], true, {L['Default white'], L['Class colored'], L['Percentage gradient']}},
         {1, 'Unitframe', 'Fader', L['Conditional fader'], nil, SetupUnitFrameFader},
         {1, 'Unitframe', 'OnlyShowPlayer', L['Shows only debuffs created by player'], true},
-        {1, 'Unitframe', 'RaidTargetIndicator', L['Raid target indicator']},
-        {1, 'Unitframe', 'GCDIndicator', L['GCD indicator'], true},
+        {1, 'Unitframe', 'RaidTargetIndicator', L['Raid Target Icon'], nil, SetupRaidTargetIndicator, nil, L['Show raid target icon on unit frame.']},
+        {1, 'Unitframe', 'GCDIndicator', L['Global Cooldown Ticker'], true, nil, nil, L['Show global cooldown ticker above the player frame.']},
         {},
-        {1, 'Unitframe', 'ClassPower', L['Class power bar']},
-        {1, 'Unitframe', 'RunesTimer', L['DK runes timer'], true},
-        {1, 'Unitframe', 'TotemsBar', L['Shaman totems bar']},
-        {1, 'Unitframe', 'StaggerBar', L['Monk stagger bar'], true},
+        {1, 'Unitframe', 'ClassPower', L['Class Power'], nil, SetupClassPowerSize, nil, L['Show special resources of the class, such as Combo Points, Holy Power, Chi, Runes, etc.']},
+        {1, 'Unitframe', 'RunesTimer', L['Runes Timer'], true, nil, nil, L['Show timer for DK Runes.']},
         {},
-        {1, 'Unitframe', 'Castbar', L['Enable Castbar'], nil, SetupCastbar},
-        {1, 'Unitframe', 'CompactCastbar', L['Compact style'], true},
-        {1, 'Unitframe', 'SpellName', L['Spell name']},
-        {1, 'Unitframe', 'SpellTime', L['Spell timer'], true},
-        {5, 'Unitframe', 'CastingColor', L['Normal']},
-        {5, 'Unitframe', 'CompleteColor', L['Complete'], 1},
-        {5, 'Unitframe', 'FailColor', L['Fail'], 2},
-        {5, 'Unitframe', 'UninterruptibleColor', L['Uninterruptible'], 3},
+        {1, 'Unitframe', 'Castbar', L['Enable Castbar'], nil, SetupCastbarColor, nil, L['Uncheck this if you want to use other castbar addon.']},
+        {1, 'Unitframe', 'SeparateCastbar', L['Separate Castbar'], true, SetupCastbarSize, nil, L['If disabled, the castbar will be overlapped on the healthbar.|nNote that the spell name and time are only available with separate castbar.']},
         {},
-        {1, 'Unitframe', 'Boss', L['Enable boss frames'], nil, SetupBossFrameSize},
-        {1, 'Unitframe', 'Arena', L['Enable arena frames'], true, SetupArenaFrameSize},
-
-
+        {1, 'Unitframe', 'Boss', L['Enable boss frames'], nil, SetupBossFrameSize, nil, L['Uncheck this if you want to use other BossFrame addon.']},
+        {1, 'Unitframe', 'Arena', L['Enable arena frames'], true, SetupArenaFrameSize, nil, L['Uncheck this if you want to use other ArenaFrame addon.']},
     },
     [13] = { -- groupframe
         {1, 'Unitframe', 'Group', L['Enable Groupframes'], nil, SetupGroupFrameSize},
@@ -488,25 +495,36 @@ GUI.OptionsList = {
     },
     [14] = { -- nameplate
         {1, 'Nameplate', 'Enable', L['Enable Nameplate'], nil, SetupNameplateSize},
+        {1, 'Nameplate', 'NameOnly', L['Name Only Mode'], nil, nil, nil, L['For friendly units, nameplate healthbar will be hidden and the name will be enlarged.']},
+        {4, 'Nameplate', 'TextureStyle', L['Texture Style'], true, {}},
+        {1, 'Nameplate', 'RaidTargetIndicator', L['Raid Target Indicator'], nil, SetupNPRaidTargetIndicator, nil, L['Show raid target icon on nameplate.']},
+
+        {1, 'Nameplate', 'QuestIndicator', L['Quest indicator']},
+        {1, 'Nameplate', 'ClassifyIndicator', L['Classify indicator'], true},
+        {1, 'Nameplate', 'TargetIndicator', L['Target indicator']},
+        {1, 'Nameplate', 'ThreatIndicator', L['Threat indicator'], true},
+        {1, 'Nameplate', 'TotemIcon', L['Totmes icon']},
+
+        {},
         {1, 'Nameplate', 'ShowAura', L['Show auras'], nil, SetupAuraFilter},
         {4, 'Nameplate', 'AuraFilterMode', L['Aura filter mode'], true, {L['BlackNWhite'], L['PlayerOnly'], L['IncludeCrowdControl']}},
-        {1, 'Nameplate', 'ControlCVars', L['Control CVars'], nil, SetupNameplateCVars},
-        {1, 'Nameplate', 'TargetIndicator', L['Target indicator']},
-        {3, 'Nameplate', 'ExecuteRatio', L['Excute ratio'], true, {1, 90, 1}},
-        {1, 'Nameplate', 'QuestIndicator', L['Quest indicator']},
-        {1, 'Nameplate', 'ClassifyIndicator', L['Classify indicator']},
-        {1, 'Nameplate', 'RaidTargetIndicator', L['Raid target indicator']},
-        {4, 'Nameplate', 'TextureStyle', L['Texture Style'], true, {}},
-        {1, 'Nameplate', 'ThreatIndicator', L['Threat indicator']},
-        {1, 'Nameplate', 'TotemIcon', L['Totmes icon']},
-        {1, 'Nameplate', 'NameOnly', L['Name only style'], true},
+
+
+        --{3, 'Nameplate', 'ExecuteRatio', L['Excute ratio'], nil, {1, 90, 1}, nil, L['If unit health percentage lower than the execute cap you set, its name text color turns into red.|nThe execute indicator would be disabled on 0.']},
+
+
+
+
+
+
+        {},
         {1, 'Nameplate', 'ExplosiveIndicator', L['Explosive indicator']},
         {1, 'Nameplate', 'SpitefulIndicator', L['Spiteful indicator'], true},
         {},
-        {1, 'Nameplate', 'CastbarCompact', L['Compact style']},
-        {1, 'Nameplate', 'MajorSpellsGlow', L['Major spell glow'], true, SetupMajorSpells},
-        {1, 'Nameplate', 'CastbarSpellName', L['Spell name']},
-        {1, 'Nameplate', 'CastbarSpellTime', L['Spell timer'], true},
+        {1, 'Nameplate', 'Castbar', L['Enable Castbar']},
+        {1, 'Nameplate', 'SeparateCastbar', L['Separate Castbar'], true, SetupNameplateCastbarSize, nil, L['If disabled, the castbar will be overlapped on the healthbar.|nNote that the spell name and time are only available with separate castbar.']},
+        {1, 'Nameplate', 'CastTarget', L['Show Spell Target'], nil, nil, nil, L['Show target of casting spell on nameplate.']},
+        {1, 'Nameplate', 'MajorSpellsGlow', L['Major Spells Glow'], true, SetupMajorSpells, nil, L['If unit is casting a major spell, highlight its castbar icon.|nClick the GEAR ICON to customize your list.']},
         {},
         {1, 'Nameplate', 'FriendlyClassColor', L['Friendly unit colored by class']},
         {1, 'Nameplate', 'HostileClassColor', L['Hostile unit colored by class'], true},

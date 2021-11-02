@@ -180,7 +180,7 @@ local function Update(self, isInRange)
     local unit = self.unit
 
     local insideAlpha = element.insideAlpha or 1
-    local outsideAlpha = element.outsideAlpha or 0.55
+    local outsideAlpha = element.outsideAlpha or 0.25
 
     if (element.PreUpdate) then
         element:PreUpdate()

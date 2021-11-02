@@ -8,8 +8,9 @@ function UNITFRAME:UpdateRaidTargetIndicator()
     local title = self.npcTitle
     local isNameOnly = self.isNameOnly
     local size = self:GetHeight()
-    -- local alpha = C.DB.Unitframe.RaidTargetIndicatorAlpha
-    local npSize = C.DB.Nameplate.RaidTargetIndicatorSize
+    local scale = C.DB.Unitframe.RaidTargetIndicatorScale
+    local alpha = C.DB.Unitframe.RaidTargetIndicatorAlpha
+    local npScale = C.DB.Nameplate.RaidTargetIndicatorScale
     local npAlpha = C.DB.Nameplate.RaidTargetIndicatorAlpha
 
     if style == 'nameplate' then
@@ -24,16 +25,19 @@ function UNITFRAME:UpdateRaidTargetIndicator()
         end
 
         raidTarget:SetAlpha(npAlpha)
-        raidTarget:SetSize(npSize, npSize)
+        raidTarget:SetSize(size, size)
+        raidTarget:SetScale(npScale)
     elseif style == 'party' or style == 'raid' or style == 'boss' then
         raidTarget:ClearAllPoints()
         raidTarget:SetPoint('CENTER')
-        raidTarget:SetAlpha(.2)
-        raidTarget:SetSize(size*.8, size*.8)
+        raidTarget:SetAlpha(alpha)
+        raidTarget:SetSize(size, size)
+        raidTarget:SetScale(scale)
     else
         raidTarget:SetPoint('CENTER')
-        raidTarget:SetAlpha(.2)
-        raidTarget:SetSize(size*2, size*2)
+        raidTarget:SetAlpha(alpha)
+        raidTarget:SetSize(size, size)
+        raidTarget:SetScale(scale)
     end
 end
 

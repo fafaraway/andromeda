@@ -28,8 +28,13 @@ function UNITFRAME:CreateBackdrop(self)
     self:HookScript('OnLeave', UF_OnLeave)
 
     self.backdrop = F.SetBD(self, 0)
-    self.backdrop:SetBackdropColor(.1, .1, .1, .8)
+    if C.DB.Unitframe.InvertedColorMode then
+        self.backdrop:SetBackdropColor(.1, .1, .1, .8)
+    else
+        self.backdrop:SetBackdropColor(.1, .1, .1, 0)
+    end
     self.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
+    self.backdrop:SetFrameStrata('BACKGROUND')
     self.shadow = self.backdrop.__shadow
 
     if not self.unitStyle == 'player' then

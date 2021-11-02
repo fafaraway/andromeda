@@ -30,7 +30,7 @@ for _, frame in ipairs(oUF.objects) do
 end
 oUF:RegisterInitCallback(hook)
 
-local f, min, max = CreateFrame('Frame'), math.min, math.max
+local f = CreateFrame('Frame')
 f:SetScript(
     'OnUpdate',
     function()
@@ -38,7 +38,7 @@ f:SetScript(
         for bar, value in pairs(smoothing) do
             local cur = bar:GetValue()
             local _, barmax = bar:GetMinMaxValues()
-            local new = cur + min((value - cur) / 20, max(value - cur, limit))
+            local new = cur + math.min((value - cur) / 20, math.max(value - cur, limit))
             if new ~= new then
                 new = value
             end

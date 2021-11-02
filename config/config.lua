@@ -144,9 +144,9 @@ C.CharacterSettings = {
         Enable = true,
             TextureStyle = 1,
             ColorStyle = 2,
-            HealthColor = {r = .3, g = .3, b = .3},
             InvertedColorMode = true,
             Smooth = true,
+            Portrait = true,
 
             FrequentHealth = false,
                 HealthFrequency = .2,
@@ -167,38 +167,32 @@ C.CharacterSettings = {
                 HavePower = false,
 
             RangeCheck = true,
-                RangeCheckAlpha = .4,
+                OutRangeAlpha = .2,
 
-            Portrait = false,
+
 
             GCDIndicator = true,
+
             RaidTargetIndicator = true,
-            RaidTargetIndicatorAlpha = .6,
-            RaidTargetIndicatorSize = 16,
-            CombatIndicator = true,
-            RestingIndicator = true,
+                RaidTargetIndicatorAlpha = .4,
+                RaidTargetIndicatorScale = 2,
+
+
             HidePlayerTags = true,
 
             ClassPower = true,
                 ClassPowerHeight = 2,
                 RunesTimer = false,
 
-            StaggerBar = true,
-            TotemsBar = true,
-            TotemsBarHeight = 2,
             OnlyShowPlayer = true,
             ShortenName = true,
-            TextScale = 1,
-            GroupTextScale = 1,
 
             Castbar = true,
-                CompactCastbar = true,
+                SeparateCastbar = true,
                 CastingColor = {r = .31, g = .48, b = .85},
                 UninterruptibleColor = {r = .66, g = .65, b = .65},
                 CompleteColor = {r = .25, g = .63, b = .49},
                 FailColor = {r = .73, g = .39, b = .43},
-                SpellName = false,
-                SpellTime = false,
                 PlayerCastbarWidth = 200,
                 PlayerCastbarHeight = 16,
                 TargetCastbarWidth = 160,
@@ -291,8 +285,10 @@ C.CharacterSettings = {
             TextureStyle = 2,
             Width = 120,
             Height = 12,
-            ControlCVars = true,
             NameOnly = true,
+
+
+
             TargetIndicator = true,
                 TargetIndicatorColor = {r = .73, g = .92, b = .99},
             ThreatIndicator = true,
@@ -304,7 +300,7 @@ C.CharacterSettings = {
             ExplosiveIndicator = true,
                 ExplosiveScale = 1.5,
             RaidTargetIndicator = true,
-                RaidTargetIndicatorSize = 24,
+                RaidTargetIndicatorScale = 2,
                 RaidTargetIndicatorAlpha = .6,
             FriendlyClassColor = false,
             HostileClassColor = true,
@@ -331,10 +327,9 @@ C.CharacterSettings = {
 
             Castbar = true,
                 CastbarHeight = 8,
-                CastbarCompact = true,
-                CastbarSpellName = false,
-                CastbarSpellTime = false,
+                SeparateCastbar = false,
                 MajorSpellsGlow = true,
+                CastTarget = true,
 
             InsideView = true,
             MinScale = .7,

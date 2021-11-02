@@ -43,10 +43,6 @@ function NAMEPLATE:UpdatePlateHorizontalSpacing()
 end
 
 function NAMEPLATE:SetupCVars()
-    if not C.DB.Nameplate.ControlCVars then
-        return
-    end
-
     NAMEPLATE:PlateInsideView()
 
     NAMEPLATE:UpdatePlateVerticalSpacing()
@@ -752,7 +748,7 @@ function NAMEPLATE:CreateNameplateStyle()
     NAMEPLATE:CreateClassifyIndicator(self)
     NAMEPLATE:CreateThreatIndicator(self)
     NAMEPLATE:CreateQuestIndicator(self)
-    UNITFRAME:CreateCastBar(self)
+    UNITFRAME:CreateNamePlateCastBar(self)
     UNITFRAME:CreateRaidTargetIndicator(self)
     UNITFRAME:CreateAuras(self)
     NAMEPLATE:CreateSpitefulIndicator(self)

@@ -37,8 +37,10 @@ local function SetHealthColor(health, index)
     health.colorSmooth = (index == 3)
 
     if index == 1 then
-        local color = C.DB.Unitframe.HealthColor
-        health:SetStatusBarColor(color.r, color.g, color.b)
+        health:SetStatusBarColor(.82, .8, .77)
+        if health.bg then
+            health.bg:SetVertexColor(.35, .35, .35)
+        end
     end
 end
 
@@ -158,15 +160,10 @@ function UNITFRAME:CreateHealthBar(self)
     if not inverted then
         local bg = health:CreateTexture(nil, 'BACKGROUND')
         bg:SetAllPoints(health)
-        bg:SetTexture(C.Assets.bd_tex)
-        bg:SetVertexColor(.1, .1, .1)
-        bg.multiplier = .2
+        bg:SetTexture(UNITFRAME.StatusBarTex)
+        bg.multiplier = .25
         health.bg = bg
     end
-
-    local font = C.Assets.Fonts.Condensed
-    local outline = _G.FREE_ADB.FontOutline
-    health.StatusText = F.CreateFS(health, font, 11, outline, nil, nil, outline or 'THICK')
 
     self.Health = health
     self.Health.PreUpdate = inverted and PreUpdateHealth

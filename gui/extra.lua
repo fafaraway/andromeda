@@ -6,14 +6,12 @@ local ACTIONBAR = F:GetModule('ActionBar')
 local CHAT = F:GetModule('Chat')
 local ANNOUNCEMENT = F:GetModule('Announcement')
 local MAP = F:GetModule('Minimap')
-local INVENTORY = F:GetModule("Inventory")
+local INVENTORY = F:GetModule('Inventory')
 local VIGNETTING = F:GetModule('Vignetting')
 
 local extraGUIs = {}
 
-
 --[[ Functions ]]
-
 local function TogglePanel(guiName)
     for name, frame in pairs(extraGUIs) do
         if name == guiName then
@@ -125,9 +123,7 @@ local function ClearEdit(options)
     end
 end
 
-
 --[[ Widgets ]]
-
 function GUI:CreateDropdown(parent, text, x, y, data, tip, width, height)
     local dd = F.CreateDropDown(parent, width or 90, height or 30, data)
     dd:SetPoint('TOPLEFT', x, y)
@@ -274,12 +270,10 @@ local function CreateSlider(parent, key, value, text, minV, maxV, step, defaultV
     slider:SetScript('OnValueChanged', Slider_OnValueChanged)
 end
 
-
 --[[ Module Extra GUI ]]
-
 -- Aura
 function GUI:SetupAuraSize(parent)
-    local guiName = 'FreeUI_GUI_Aura'
+    local guiName = 'FreeUIGUIAuraSize'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -345,7 +339,7 @@ local function UpdateBagSize()
 end
 
 function GUI:SetupInventoryFilter(parent)
-    local guiName = 'FreeUI_GUI_Inventory_Filter'
+    local guiName = 'FreeUIGUIInventoryFilter'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -398,7 +392,7 @@ function GUI:SetupInventoryFilter(parent)
         [11] = {
             value = 'FilterFavourite',
             text = _G.PREFERENCES
-        },
+        }
     }
 
     local offset = -10
@@ -410,7 +404,7 @@ function GUI:SetupInventoryFilter(parent)
 end
 
 function GUI:SetupInventorySize(parent)
-    local guiName = 'FreeUI_GUI_Inventory_Size'
+    local guiName = 'FreeUIGUIInventorySize'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -428,7 +422,7 @@ function GUI:SetupInventorySize(parent)
             text = L['Slot Size'],
             min = 20,
             max = 60,
-            step = 1,
+            step = 1
         },
         [2] = {
             key = 'Spacing',
@@ -436,7 +430,7 @@ function GUI:SetupInventorySize(parent)
             text = L['Slot Spacing'],
             min = 3,
             max = 6,
-            step = 1,
+            step = 1
         },
         [3] = {
             key = 'BagColumns',
@@ -444,7 +438,7 @@ function GUI:SetupInventorySize(parent)
             text = L['Bag Columns'],
             min = 8,
             max = 20,
-            step = 1,
+            step = 1
         },
         [4] = {
             key = 'BankColumns',
@@ -452,8 +446,8 @@ function GUI:SetupInventorySize(parent)
             text = L['Bank Columns'],
             min = 8,
             max = 20,
-            step = 1,
-        },
+            step = 1
+        }
     }
 
     local offset = -10
@@ -466,7 +460,7 @@ end
 
 -- Actionbar
 function GUI:SetupActionbarFade(parent)
-    local guiName = 'FreeUI_GUI_Actionbar_Fade'
+    local guiName = 'FreeUIGUIActionbarFader'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -542,7 +536,7 @@ function GUI:SetupActionbarFade(parent)
 end
 
 function GUI:SetupAdditionalbar(parent)
-    local guiName = 'FreeUI_GUI_Additionalbar'
+    local guiName = 'FreeUIGUIAdditionalBar'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -603,7 +597,7 @@ end
 
 -- Nameplate
 function GUI:SetupNPAuraFilter(parent)
-    local guiName = 'FreeUI_GUI_NamePlate_Aura_Filter'
+    local guiName = 'FreeUIGUINamePlateAuraFilter'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -614,13 +608,13 @@ function GUI:SetupNPAuraFilter(parent)
     local frameData = {
         [1] = {
             text = L['White List'],
-            tip = L['|nFill in SpellID, must be a number.|nYou can get ID from spell\'s GameTooltip.|nSpell name is not supported.'],
+            tip = L["|nFill in SpellID, must be a number.|nYou can get ID from spell's GameTooltip.|nSpell name is not supported."],
             offset = -25,
             barList = {}
         },
         [2] = {
             text = L['Black List'],
-            tip = L['|nFill in SpellID, must be a number.|nYou can get ID from spell\'s GameTooltip.|nSpell name is not supported.'],
+            tip = L["|nFill in SpellID, must be a number.|nYou can get ID from spell's GameTooltip.|nSpell name is not supported."],
             offset = -315,
             barList = {}
         }
@@ -703,7 +697,7 @@ function GUI:SetupNPAuraFilter(parent)
 end
 
 function GUI:SetupMajorSpells(parent)
-    local guiName = 'FreeUI_GUI_NamePlate_Castbar_Glow'
+    local guiName = 'FreeUIGUINamePlateCastbarGlow'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -724,7 +718,7 @@ function GUI:SetupMajorSpells(parent)
     parent.scroll = scroll
     scroll.box = GUI:CreateEditbox(frame, nil, 10, -10, nil, 110, 24)
     scroll.box.title = L['SpellID']
-    F.AddTooltip(scroll.box, 'ANCHOR_RIGHT', L['|nFill in SpellID, must be a number.|nYou can get ID from spell\'s GameTooltip.|nSpell name is not supported.'], 'BLUE')
+    F.AddTooltip(scroll.box, 'ANCHOR_RIGHT', L["|nFill in SpellID, must be a number.|nYou can get ID from spell's GameTooltip.|nSpell name is not supported."], 'BLUE')
 
     scroll.add = F.CreateButton(frame, 50, 24, _G.ADD)
     scroll.add:SetPoint('LEFT', scroll.box, 'RIGHT', 5, 0)
@@ -765,8 +759,17 @@ function GUI:SetupMajorSpells(parent)
     end
 end
 
+local function UpdateCVars()
+    NAMEPLATE:UpdatePlateVerticalSpacing()
+    NAMEPLATE:UpdatePlateHorizontalSpacing()
+    NAMEPLATE:UpdatePlateAlpha()
+    NAMEPLATE:UpdatePlateOccludedAlpha()
+    NAMEPLATE:UpdatePlateScale()
+    NAMEPLATE:UpdatePlateTargetScale()
+end
+
 function GUI:SetupNameplateSize(parent)
-    local guiName = 'FreeUI_GUI_NamePlate_Setup'
+    local guiName = 'FreeUIGUINamePlateSetup'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -793,35 +796,7 @@ function GUI:SetupNameplateSize(parent)
         }
     }
 
-    local offset = -10
-    for _, v in ipairs(datas) do
-        CreateGroupTitle(scroll, L['Nameplate Size'], offset)
-        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50)
-        offset = offset - 65
-    end
-end
-
-local function UpdateCVars()
-    NAMEPLATE:UpdatePlateVerticalSpacing()
-    NAMEPLATE:UpdatePlateHorizontalSpacing()
-    NAMEPLATE:UpdatePlateAlpha()
-    NAMEPLATE:UpdatePlateOccludedAlpha()
-    NAMEPLATE:UpdatePlateScale()
-    NAMEPLATE:UpdatePlateTargetScale()
-end
-
-function GUI:SetupNameplateCVars(parent)
-    local guiName = 'FreeUI_GUI_Nameplate_CVars'
-    TogglePanel(guiName)
-    if extraGUIs[guiName] then
-        return
-    end
-
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
-    local db = C.CharacterSettings.Nameplate
-
-    local cvarsDatas = {
+    local cvars = {
         [1] = {
             key = 'MinScale',
             value = db.MinScale,
@@ -873,24 +848,95 @@ function GUI:SetupNameplateCVars(parent)
     }
 
     local offset = -10
-    for _, v in ipairs(cvarsDatas) do
-        CreateGroupTitle(scroll, L['Nameplate CVars'], offset)
-        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateCVars)
+    for _, v in ipairs(datas) do
+        CreateGroupTitle(scroll, L['Nameplate Size'], offset)
+        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50)
+        offset = offset - 65
+    end
+
+    scroll.groupTitle = nil
+
+    for _, v in ipairs(cvars) do
+        CreateGroupTitle(scroll, L['Nameplate CVars'], offset - 50)
+        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 100, UpdateCVars)
+        offset = offset - 65
+    end
+end
+
+function GUI:SetupNameplateCastbarSize(parent)
+    local guiName = 'FreeUIGUINamePlateCastbarSize'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local db = C.CharacterSettings.Nameplate
+
+    local datas = {
+        key = 'CastbarHeight',
+        value = db.CastbarHeight,
+        text = L['Height'],
+        min = 6,
+        max = 20,
+        step = 1
+    }
+
+    local offset = -10
+    CreateGroupTitle(scroll, L['Nameplate Castbar'], offset)
+    CreateSlider(scroll, 'Nameplate', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset - 50)
+end
+
+function GUI:SetupNPRaidTargetIndicator(parent)
+    local guiName = 'FreeUIGUINPRaidTargetIndicator'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local db = C.CharacterSettings.Nameplate
+
+    local datas = {
+        [1] = {
+            key = 'RaidTargetIndicatorScale',
+            value = db.RaidTargetIndicatorScale,
+            text = L['Scale'],
+            min = 1,
+            max = 5,
+            step = .1,
+        },
+        [2] = {
+            key = 'RaidTargetIndicatorAlpha',
+            value = db.RaidTargetIndicatorAlpha,
+            text = L['Alpha'],
+            min = .1,
+            max = 1,
+            step = .1,
+        },
+
+    }
+
+    local offset = -10
+    for _, v in ipairs(datas) do
+        CreateGroupTitle(scroll, L['Raid Target Icon'], offset)
+        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50)
         offset = offset - 65
     end
 end
 
 -- Unitframe
 local function SetUnitFrameSize(self, unit)
-    local width = C.DB.Unitframe[unit.."Width"]
-    local healthHeight = C.DB.Unitframe[unit.."HealthHeight"]
-    local powerHeight = C.DB.Unitframe[unit.."PowerHeight"]
+    local width = C.DB.Unitframe[unit .. 'Width']
+    local healthHeight = C.DB.Unitframe[unit .. 'HealthHeight']
+    local powerHeight = C.DB.Unitframe[unit .. 'PowerHeight']
     local height = healthHeight + powerHeight + C.Mult
     self:SetSize(width, height)
     self.Health:SetHeight(healthHeight)
     self.Power:SetHeight(powerHeight)
 end
-
 
 local function UpdateUnitFrameSize()
     SetUnitFrameSize(_G.oUF_Player, 'Player')
@@ -902,7 +948,7 @@ local function UpdateUnitFrameSize()
 end
 
 function GUI:SetupUnitFrameSize(parent)
-    local guiName = 'FreeUI_GUI_Unitframe_Setup'
+    local guiName = 'FreeUIGUIUnitFrameSize'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1107,7 +1153,7 @@ function GUI:SetupUnitFrameSize(parent)
 end
 
 function GUI:SetupBossFrameSize(parent)
-    local guiName = 'FreeUI_GUI_Bossframe_Setup'
+    local guiName = 'FreeUIGUIBossFrameSize'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1159,7 +1205,7 @@ function GUI:SetupBossFrameSize(parent)
 end
 
 function GUI:SetupArenaFrameSize(parent)
-    local guiName = 'FreeUI_GUI_Arenaframe_Setup'
+    local guiName = 'FreeUIGUIArenaFrameSize'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1211,7 +1257,7 @@ function GUI:SetupArenaFrameSize(parent)
 end
 
 function GUI:SetupGroupFrameSize(parent)
-    local guiName = 'FreeUI_GUI_Groupframe_Setup'
+    local guiName = 'FreeUIGUIGroupFrameSize'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1301,8 +1347,8 @@ function GUI:SetupGroupFrameSize(parent)
     end
 end
 
-function GUI:SetupClassPowerHeight(parent)
-    local guiName = 'FreeUI_GUI_ClassPower_Setup'
+function GUI:SetupClassPowerSize(parent)
+    local guiName = 'FreeUIGUIClassPowerSize'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1310,30 +1356,24 @@ function GUI:SetupClassPowerHeight(parent)
 
     local panel = CreateExtraGUI(parent, guiName)
     local scroll = GUI:CreateScroll(panel, 220, 540)
-
-    local mKey = 'Unitframe'
     local db = C.CharacterSettings.Unitframe
 
-    local bossDatas = {
-        [1] = {
-            key = 'ClassPowerHeight',
-            value = db.ClassPowerHeight,
-            text = L['Height'],
-            min = 1,
-            max = 10
-        }
+    local datas = {
+        key = 'ClassPowerHeight',
+        value = db.ClassPowerHeight,
+        text = L['Height'],
+        min = 1,
+        max = 20,
+        step = 1
     }
 
     local offset = -10
-    for _, v in ipairs(bossDatas) do
-        CreateGroupTitle(scroll, L['Class Power'], offset)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50)
-        offset = offset - 65
-    end
+    CreateGroupTitle(scroll, L['ClassPower'], offset)
+    CreateSlider(scroll, 'Unitframe', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset - 50)
 end
 
 function GUI:SetupUnitFrameFader(parent)
-    local guiName = 'FreeUI_GUI_Unitframe_Fader'
+    local guiName = 'FreeUIGUIUnitFrameFader'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1416,8 +1456,73 @@ function GUI:SetupUnitFrameFader(parent)
     end
 end
 
-function GUI:SetupCastbar(parent)
-    local guiName = 'FreeUI_GUI_Castbar_Setup'
+function GUI:SetupUnitFrameRangeCheck(parent)
+    local guiName = 'FreeUIGUIRangeCheck'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local db = C.CharacterSettings.Unitframe
+
+    local datas = {
+        key = 'OutRangeAlpha',
+        value = db.RangeCheckAlpha,
+        text = L['Out Range Alpha'],
+        min = .1,
+        max = 1,
+        step = .1
+    }
+
+    local offset = -10
+    CreateGroupTitle(scroll, L['Range Check'], offset)
+    CreateSlider(scroll, 'Unitframe', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset - 50)
+end
+
+
+function GUI:SetupRaidTargetIndicator(parent)
+    local guiName = 'FreeUIGUIRaidTargetIndicator'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local db = C.CharacterSettings.Unitframe
+
+    local datas = {
+        [1] = {
+            key = 'RaidTargetIndicatorScale',
+            value = db.RaidTargetIndicatorScale,
+            text = L['Scale'],
+            min = 1,
+            max = 5,
+            step = .1,
+        },
+        [2] = {
+            key = 'RaidTargetIndicatorAlpha',
+            value = db.RaidTargetIndicatorAlpha,
+            text = L['Alpha'],
+            min = .1,
+            max = 1,
+            step = .1,
+        },
+
+    }
+
+    local offset = -10
+    for _, v in ipairs(datas) do
+        CreateGroupTitle(scroll, L['Raid Target Icon'], offset)
+        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50)
+        offset = offset - 65
+    end
+end
+
+function GUI:SetupCastbarSize(parent)
+    local guiName = 'FreeUIGUICastbarSize'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1504,12 +1609,55 @@ function GUI:SetupCastbar(parent)
     end
 end
 
+function GUI:SetupCastbarColor(parent)
+    local guiName = 'FreeUIGUICastbarColor'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local db = C.DB.Unitframe
+
+    local datas = {
+        [1] = {
+            key = 'CastingColor',
+            value = db.CastingColor,
+            text = L['Normal Casting']
+        },
+        [2] = {
+            key = 'UninterruptibleColor',
+            value = db.UninterruptibleColor,
+            text = L['Uninterruptible Casting']
+        },
+        [3] = {
+            key = 'CompleteColor',
+            value = db.CompleteColor,
+            text = L['Casting Complete']
+        },
+        [4] = {
+            key = 'FailColor',
+            value = db.FailColor,
+            text = L['Casting Fail']
+        }
+    }
+
+    local offset = -10
+    for _, v in ipairs(datas) do
+        CreateGroupTitle(scroll, L['Castbar Color'], offset)
+        CreateColorSwatch(scroll, v.value, v.text, C.CharacterSettings.Unitframe[v.key], offset - 30)
+
+        offset = offset - 30
+    end
+end
+
 local function UpdatePartyWatcherSpells()
     UNITFRAME:UpdatePartyWatcherSpells()
 end
 
 function GUI:SetupPartyWatcher(parent)
-    local guiName = 'FreeUI_GUI_PartySpell_Setup'
+    local guiName = 'FreeUIGUIPartySpellSetup'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1572,7 +1720,9 @@ function GUI:SetupPartyWatcher(parent)
         L['Spell Cooldown'],
         122,
         -30,
-        L["|nEnter the spell's cooldown duration.|nParty watcher only support regular spells and abilities.For spells like 'Aspect of the Wild' (BM Hunter), you need to sync cooldown with your party members."],
+        L[
+            "|nEnter the spell's cooldown duration.|nParty watcher only support regular spells and abilities.For spells like 'Aspect of the Wild' (BM Hunter), you need to sync cooldown with your party members."
+        ],
         108,
         24
     )
@@ -1700,7 +1850,7 @@ local function AddNewDungeon(dungeons, dungeonID)
 end
 
 function GUI:SetupRaidDebuffs(parent)
-    local guiName = 'FreeUI_GUI_RaidDebuffs'
+    local guiName = 'FreeUIGUIRaidDebuffs'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1741,7 +1891,7 @@ function GUI:SetupRaidDebuffs(parent)
 
     local raids = {
         [1] = EJ_GetInstanceInfo(1190),
-        [2] = EJ_GetInstanceInfo(1193),
+        [2] = EJ_GetInstanceInfo(1193)
     }
 
     options[1] = GUI:CreateDropdown(frame, _G.DUNGEONS, 123, -30, dungeons, nil, 107, 24)
@@ -1988,7 +2138,7 @@ end
 
 -- General
 function GUI:SetupAutoScreenshot(parent)
-    local guiName = 'FreeUI_GUI_Auto_Screenshot'
+    local guiName = 'FreeUIGUIAutoScreenshot'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -2025,7 +2175,7 @@ function GUI:SetupAutoScreenshot(parent)
 end
 
 function GUI:SetupCustomClassColor(parent)
-    local guiName = 'FreeUI_GUI_CustomClassColor'
+    local guiName = 'FreeUIGUICustomClassColor'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -2065,7 +2215,7 @@ local function UpdateVignettingVisibility()
 end
 
 function GUI:SetupVignettingVisibility(parent)
-    local guiName = 'FreeUI_GUI_Vignetting'
+    local guiName = 'FreeUIGUIVignetting'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -2081,7 +2231,7 @@ function GUI:SetupVignettingVisibility(parent)
         text = L['Vignetting Alpha'],
         min = 0,
         max = 1,
-        step = .1,
+        step = .1
     }
 
     local offset = -30
@@ -2094,7 +2244,7 @@ local function UpdateChatSize()
 end
 
 function GUI:SetupChatSize(parent)
-    local guiName = 'FreeUI_GUI_Chat_Size'
+    local guiName = 'FreeUIGUIChatSize'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -2130,7 +2280,7 @@ end
 
 -- Combat
 function GUI:SetupSimpleFloatingCombatText(parent)
-    local guiName = 'FreeUI_GUI_FCT'
+    local guiName = 'FreeUIGUIFCT'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -2171,7 +2321,7 @@ function GUI:SetupSimpleFloatingCombatText(parent)
 end
 
 function GUI:SetupSoundAlert(parent)
-    local guiName = 'FreeUI_GUI_SoundAlert'
+    local guiName = 'FreeUIGUISoundAlert'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -2221,7 +2371,7 @@ local function RefreshAnnounceableSpells()
 end
 
 function GUI:SetupAnnounceableSpells(parent)
-    local guiName = 'FreeUI_GUI_AnnounceableSpells'
+    local guiName = 'FreeUIGUIAnnounceableSpells'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -2237,7 +2387,7 @@ function GUI:SetupAnnounceableSpells(parent)
     local scroll = GUI:CreateScroll(frame, 200, 480)
     scroll.box = GUI:CreateEditbox(frame, nil, 10, -10, nil, 110, 24)
     scroll.box.title = L['SpellID']
-    F.AddTooltip(scroll.box, 'ANCHOR_RIGHT', L['|nFill in SpellID, must be a number.|nYou can get ID from spell\'s GameTooltip.|nSpell name is not supported.'], 'BLUE')
+    F.AddTooltip(scroll.box, 'ANCHOR_RIGHT', L["|nFill in SpellID, must be a number.|nYou can get ID from spell's GameTooltip.|nSpell name is not supported."], 'BLUE')
 
     scroll.add = F.CreateButton(frame, 50, 24, _G.ADD)
     scroll.add:SetPoint('LEFT', scroll.box, 'RIGHT', 5, 0)
@@ -2287,7 +2437,7 @@ local function UpdateMapScale()
 end
 
 function GUI:SetupMapScale(parent)
-    local guiName = 'FreeUI_GUI_Map_Scale'
+    local guiName = 'FreeUIGUIMapScale'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -2304,22 +2454,22 @@ function GUI:SetupMapScale(parent)
             value = values.WorldMapScale,
             text = L['World Map Scale'],
             min = .5,
-            max = 2,
+            max = 2
         },
         [2] = {
             key = 'MaxWorldMapScale',
             value = values.MaxWorldMapScale,
             text = L['Max World Map Scale'],
             min = .5,
-            max = 1,
+            max = 1
         },
         [3] = {
             key = 'MinimapScale',
             value = values.MinimapScale,
             text = L['Minimap Scale'],
             min = .5,
-            max = 2,
-        },
+            max = 2
+        }
     }
 
     local offset = -10

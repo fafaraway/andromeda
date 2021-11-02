@@ -63,7 +63,7 @@ function UNITFRAME.PostCreateIcon(element, button)
     local isGroup = style == 'party' or style == 'raid'
     local font = C.Assets.Fonts.Roadway
 
-    button.bg = F.CreateBDFrame(button)
+    button.bg = F.CreateBDFrame(button, .25)
     button.glow = F.CreateSD(button.bg)
 
     element.disableCooldown = true
