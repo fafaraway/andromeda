@@ -176,8 +176,8 @@ C.CharacterSettings = {
             GCDIndicator = true,
 
             RaidTargetIndicator = true,
-                RaidTargetIndicatorAlpha = .4,
-                RaidTargetIndicatorScale = 2,
+                RaidTargetIndicatorAlpha = .2,
+                RaidTargetIndicatorScale = 1,
 
 
             HidePlayerTags = true,
@@ -303,7 +303,7 @@ C.CharacterSettings = {
                 ExplosiveScale = 1.5,
             RaidTargetIndicator = true,
                 RaidTargetIndicatorScale = 2,
-                RaidTargetIndicatorAlpha = .6,
+                RaidTargetIndicatorAlpha = .4,
             FriendlyClassColor = false,
             HostileClassColor = true,
             TankMode = false,

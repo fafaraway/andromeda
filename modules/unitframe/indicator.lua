@@ -27,13 +27,8 @@ function UNITFRAME:UpdateRaidTargetIndicator()
         raidTarget:SetAlpha(npAlpha)
         raidTarget:SetSize(size, size)
         raidTarget:SetScale(npScale)
-    elseif style == 'party' or style == 'raid' or style == 'boss' then
-        raidTarget:ClearAllPoints()
-        raidTarget:SetPoint('CENTER')
-        raidTarget:SetAlpha(alpha)
-        raidTarget:SetSize(size, size)
-        raidTarget:SetScale(scale)
     else
+        raidTarget:ClearAllPoints()
         raidTarget:SetPoint('CENTER')
         raidTarget:SetAlpha(alpha)
         raidTarget:SetSize(size, size)
@@ -57,6 +52,7 @@ function UNITFRAME:CreateReadyCheckIndicator(self)
     local readyCheckIndicator = self:CreateTexture(nil, 'OVERLAY')
     readyCheckIndicator:SetPoint('CENTER')
     readyCheckIndicator:SetSize(self:GetHeight() * .8, self:GetHeight() * .8)
+
     self.ReadyCheckIndicator = readyCheckIndicator
 end
 
@@ -69,6 +65,7 @@ function UNITFRAME:CreatePhaseIndicator(self)
     local icon = phase:CreateTexture(nil, 'OVERLAY')
     icon:SetAllPoints()
     phase.Icon = icon
+
     self.PhaseIndicator = phase
 end
 

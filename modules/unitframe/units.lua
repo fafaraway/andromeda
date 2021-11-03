@@ -28,7 +28,6 @@ local function CreatePlayerStyle(self)
     UNITFRAME:CreateAltPowerTag(self)
     UNITFRAME:CreatePortrait(self)
     UNITFRAME:CreateCastBar(self)
-    UNITFRAME:CreateRaidTargetIndicator(self)
     UNITFRAME:CreateGCDTicker(self)
     UNITFRAME:CreateFader(self)
     UNITFRAME:CreateClassPowerBar(self)
@@ -55,7 +54,6 @@ local function CreatePetStyle(self)
     UNITFRAME:CreatePortrait(self)
     UNITFRAME:CreateCastBar(self)
     UNITFRAME:CreateAuras(self)
-    UNITFRAME:CreateRaidTargetIndicator(self)
 end
 
 function UNITFRAME:SpawnPet()
@@ -80,7 +78,6 @@ local function CreateTargetStyle(self)
     UNITFRAME:CreateHealthTag(self)
     UNITFRAME:CreateCastBar(self)
     UNITFRAME:CreateAuras(self)
-    UNITFRAME:CreateRaidTargetIndicator(self)
     UNITFRAME:CreateRangeCheck(self)
 end
 
@@ -101,7 +98,6 @@ local function CreateTargetTargetStyle(self)
     UNITFRAME:CreateHealthBar(self)
     UNITFRAME:CreatePowerBar(self)
     UNITFRAME:CreateNameTag(self)
-    UNITFRAME:CreateRaidTargetIndicator(self)
     UNITFRAME:CreateRangeCheck(self)
 end
 
@@ -125,7 +121,6 @@ local function CreateFocusStyle(self)
     UNITFRAME:CreateNameTag(self)
     UNITFRAME:CreateCastBar(self)
     UNITFRAME:CreateAuras(self)
-    UNITFRAME:CreateRaidTargetIndicator(self)
     UNITFRAME:CreateRangeCheck(self)
 end
 
@@ -147,7 +142,6 @@ local function CreateFocusTargetStyle(self)
     UNITFRAME:CreatePowerBar(self)
     UNITFRAME:CreateNameTag(self)
     UNITFRAME:CreateAuras(self)
-    UNITFRAME:CreateRaidTargetIndicator(self)
     UNITFRAME:CreateRangeCheck(self)
 end
 
