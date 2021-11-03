@@ -37,7 +37,8 @@ local function SetHealthColor(health, index)
     health.colorSmooth = (index == 3)
 
     if index == 1 then
-        health:SetStatusBarColor(.82, .8, .77)
+        local color = C.DB.Unitframe.HealthColor
+        health:SetStatusBarColor(color.r, color.g, color.b)
         if health.bg then
             health.bg:SetVertexColor(.35, .35, .35)
         end
