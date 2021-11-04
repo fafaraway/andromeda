@@ -708,7 +708,9 @@ do
 
     function F:HideBackdrop()
         if C.IsNewPatch then
-            self.NineSlice:SetAlpha(0)
+            if self.NineSlice then
+                self.NineSlice:SetAlpha(0)
+            end
         else
             if self.SetBackdrop then
                 self:SetBackdrop(nil)
@@ -2220,6 +2222,15 @@ do
         return _G[name .. childName .. (index or '')]
     end
 
+    local function HideBackdrop(frame)
+        if frame.NineSlice then
+            frame.NineSlice:SetAlpha(0)
+        end
+        if frame.SetBackdrop then
+            frame:SetBackdrop(nil)
+        end
+    end
+
     local function AddAPI(object)
         local mt = getmetatable(object).__index
         if not object.Kill then
@@ -2242,6 +2253,10 @@ do
         end
         if not object.SetOutside then
             mt.SetOutside = SetOutside
+        end
+
+        if not object.HideBackdrop then
+            mt.HideBackdrop = HideBackdrop
         end
 
         if not object.StripTextures then
