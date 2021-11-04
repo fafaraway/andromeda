@@ -211,9 +211,7 @@ function TOOLTIP:GameTooltip_OnUpdate(elapsed)
         self:Hide()
         return
     end
-    local color = _G.FREE_ADB.BackdropColor
-    local alpha = _G.FREE_ADB.BackdropAlpha
-    self:SetBackdropColor(color.r, color.g, color.b, alpha)
+
     self.tipUpdate = 0
 end
 
@@ -424,7 +422,7 @@ function TOOLTIP:OnLogin()
 
     _G.GameTooltip:HookScript('OnTooltipCleared', TOOLTIP.OnTooltipCleared)
     _G.GameTooltip:HookScript('OnTooltipSetUnit', TOOLTIP.OnTooltipSetUnit)
-    _G.GameTooltip:HookScript('OnTooltipSetUnit', TOOLTIP.ScanTargets)
+
     _G.GameTooltip:HookScript('OnUpdate', TOOLTIP.GameTooltip_OnUpdate)
 
     _G.GameTooltip.FadeOut = FadeOut
@@ -455,4 +453,6 @@ function TOOLTIP:OnLogin()
     TOOLTIP:DominationRank()
     TOOLTIP:Achievement()
     TOOLTIP:AzeriteArmor()
+
+    _G.GameTooltip:HookScript('OnTooltipSetUnit', TOOLTIP.ScanTargets)
 end
