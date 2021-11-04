@@ -169,7 +169,7 @@ C.CharacterSettings = {
                 HavePower = false,
 
             RangeCheck = true,
-                OutRangeAlpha = .2,
+                OutRangeAlpha = .4,
 
 
 
