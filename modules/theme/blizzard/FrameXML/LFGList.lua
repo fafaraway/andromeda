@@ -217,7 +217,6 @@ table.insert(
         F.ReskinInput(entryCreation.Name)
         F.ReskinInput(entryCreation.ItemLevel.EditBox)
         F.ReskinInput(entryCreation.VoiceChat.EditBox)
-        F.ReskinDropDown(entryCreation.CategoryDropDown)
         F.ReskinDropDown(entryCreation.GroupDropDown)
         F.ReskinDropDown(entryCreation.ActivityDropDown)
         F.ReskinDropDown(entryCreation.PlayStyleDropdown)
