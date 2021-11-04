@@ -67,6 +67,7 @@ function ACTIONBAR:CreateBar4()
         end
     end
 
+    frame.isDisable = not C.DB.Actionbar.Fader
     frame.buttonList = buttonList
     SetFrameSize(frame, size, num)
 

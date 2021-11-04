@@ -12,6 +12,20 @@ local barsList = {
     'FreeUI_ActionBarStance'
 }
 
+function ACTIONBAR:ToggleBarFader(name)
+    local frame = _G['FreeUI_Action' .. name]
+    if not frame then
+        return
+    end
+
+    frame.isDisable = not C.DB.Actionbar.Fader
+    if frame.isDisable then
+        ACTIONBAR:Bar_OnEnter(frame)
+    else
+        ACTIONBAR:Bar_OnLeave(frame)
+    end
+end
+
 function ACTIONBAR:Bar_OnEnter()
     local parent = ACTIONBAR.fadeParent
     if not parent.mouseLock then
@@ -27,6 +41,8 @@ function ACTIONBAR:Bar_OnLeave()
 end
 
 function ACTIONBAR:FadeParent_OnEvent()
+    if self.isDisable then return end
+
     local _, instanceType = IsInInstance()
     local isCombating = UnitAffectingCombat('player') and C.DB.Actionbar.ConditionCombat
     local isTargeting = (UnitExists('target') or UnitExists('focus')) and C.DB.Actionbar.ConditionTarget
@@ -70,7 +86,7 @@ local function DisableCooldownBling()
 end
 
 function ACTIONBAR:UpdateActionBarFade()
-    if not C.DB.Actionbar.DynamicFade then
+    if not C.DB.Actionbar.Fader then
         return
     end
 

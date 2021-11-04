@@ -179,6 +179,7 @@ local function CreateOption(i)
             cb:SetHitRectInsets(-5, -5, -5, -5)
 
             cb.label = F.CreateFS(cb, C.Assets.Fonts.Regular, 12, nil, name, nil, true, 'LEFT', 22, 0)
+            cb.__value = value
 
             if horizon then
                 cb:SetPoint('TOPLEFT', 250, -offset + 30)
@@ -187,15 +188,18 @@ local function CreateOption(i)
                 offset = offset + 30
             end
 
+            cb.label = F.CreateFS(cb, C.Assets.Fonts.Regular, 12, nil, name, nil, true, 'LEFT', 22, 0)
+            cb.__value = value
+
             cb:SetChecked(UpdateValue(key, value))
 
             cb:SetScript(
                 'OnClick',
-                function()
+                function(self)
                     UpdateValue(key, value, cb:GetChecked())
                     CheckUIReload(name)
                     if callback then
-                        callback()
+                        callback(self)
                     end
                 end
             )

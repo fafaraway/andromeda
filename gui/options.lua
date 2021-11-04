@@ -42,6 +42,10 @@ local function UpdateInventorySortOrder()
 end
 
 -- Actionbar
+local function ToggleActionBarFader()
+    ACTIONBAR:UpdateActionBarFade()
+end
+
 local function SetupActionbarFade()
     GUI:SetupActionbarFade(GUI.Page[6])
 end
@@ -115,6 +119,10 @@ end
 
 local function UpdateCustomUnitList()
     NAMEPLATE:CreateUnitTable()
+end
+
+local function RefreshAllPlates()
+	NAMEPLATE:RefreshAllPlates()
 end
 
 -- Unitframe
@@ -362,7 +370,7 @@ GUI.OptionsList = {
 
         {1, 'Actionbar', 'EquipColor', L['Equipped item border'], nil, nil, UpdateEquipColor},
         {1, 'Actionbar', 'ClassColor', L['Background colored by class'], true},
-        {1, 'Actionbar', 'DynamicFade', L['Conditional fader'], nil, SetupActionbarFade},
+        {1, 'Actionbar', 'Fader', L['Conditional fader'], nil, SetupActionbarFade, ToggleActionBarFader},
         {1, 'Actionbar', 'CooldownNotify', L['Cooldown notify'], true, nil, nil, L['|nYou can mouse wheel on actionbar button, and send its cooldown status to your group.']},
         {1, 'Actionbar', 'CooldownPulse', L['Cooldown pulse'], nil, nil, nil, L['|nTrack your spell cooldown using a pulse icon in the center of the screen.']},
         {1, 'Actionbar', 'CooldownDesaturate', L['Cooldown desaturate'], true, nil, nil, L['|nShow the action bar icons desaturated when they are on cooldown.']},
@@ -505,8 +513,7 @@ GUI.OptionsList = {
         {1, 'Nameplate', 'ThreatIndicator', L['Threat indicator'], true},
         {1, 'Nameplate', 'TotemIcon', L['Totmes icon']},
 
-        {},
-        {1, 'Nameplate', 'ShowAura', L['Show auras'], nil, SetupAuraFilter},
+        {1, 'Nameplate', 'ShowAura', L['Show Nameplate Auras'], nil, SetupAuraFilter, RefreshAllPlates},
         {4, 'Nameplate', 'AuraFilterMode', L['Aura filter mode'], true, {L['BlackNWhite'], L['PlayerOnly'], L['IncludeCrowdControl']}},
 
 

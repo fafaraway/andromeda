@@ -608,13 +608,15 @@ function GUI:SetupNPAuraFilter(parent)
     local frameData = {
         [1] = {
             text = L['White List'],
-            tip = L["|nFill in SpellID, must be a number.|nYou can get ID from spell's GameTooltip.|nSpell name is not supported."],
+            title = L['White List'],
+            tip = L["Fill in SpellID, must be a number.|nYou can get ID from spell's GameTooltip.|nSpell name is not supported."],
             offset = -25,
             barList = {}
         },
         [2] = {
             text = L['Black List'],
-            tip = L["|nFill in SpellID, must be a number.|nYou can get ID from spell's GameTooltip.|nSpell name is not supported."],
+            title = L['Black List'],
+            tip = L["Fill in SpellID, must be a number.|nYou can get ID from spell's GameTooltip.|nSpell name is not supported."],
             offset = -315,
             barList = {}
         }
@@ -676,11 +678,11 @@ function GUI:SetupNPAuraFilter(parent)
         local scroll = GUI:CreateScroll(frame, 200, 200)
         scroll:ClearAllPoints()
         scroll:SetPoint('BOTTOMLEFT', 10, 10)
-        -- scroll.bg = F.CreateBDFrame(scroll)
-        -- scroll.bg:SetBackdropColor(.04, .04, .04, .25)
+
         scroll.box = F.CreateEditBox(frame, 145, 25)
         scroll.box:SetPoint('TOPLEFT', 10, -10)
-        F.AddTooltip(scroll.box, 'ANCHOR_RIGHT', value.tip, 'BLUE')
+        scroll.box.title = value.title
+        F.AddTooltip(scroll.box, 'ANCHOR_RIGHT', value.tip, 'BLUE', true)
         scroll.add = F.CreateButton(frame, 70, 25, _G.ADD)
         scroll.add:SetPoint('TOPRIGHT', -8, -10)
         scroll.add:SetScript(

@@ -8,7 +8,7 @@ function NAMEPLATE:PlateInsideView()
     if C.DB.Nameplate.InsideView then
         SetCVar('nameplateOtherTopInset', .05)
         SetCVar('nameplateOtherBottomInset', .08)
-    elseif GetCVar("nameplateOtherTopInset") == "0.05" and GetCVar("nameplateOtherBottomInset") == "0.08" then
+    elseif GetCVar('nameplateOtherTopInset') == '0.05' and GetCVar('nameplateOtherBottomInset') == '0.08' then
         SetCVar('nameplateOtherTopInset', -1)
         SetCVar('nameplateOtherBottomInset', -1)
     end
@@ -770,7 +770,25 @@ function NAMEPLATE:UpdateClickableSize()
     C_NamePlate.SetNamePlateFriendlySize(width * scale, height * scale + 2)
 end
 
+function NAMEPLATE:ToggleNameplateAuras()
+    if C.DB.Nameplate.ShowAura then
+        if not self:IsElementEnabled('Auras') then
+            self:EnableElement('Auras')
+        end
+    else
+        if self:IsElementEnabled('Auras') then
+            self:DisableElement('Auras')
+        end
+    end
+end
+
 function NAMEPLATE:UpdateNameplateAuras()
+    NAMEPLATE.ToggleNameplateAuras(self)
+
+    if not C.DB.Nameplate.ShowAura then
+        return
+    end
+
     local element = self.Auras
     element:SetPoint('BOTTOM', self, 'TOP', 0, 8)
     element.numTotal = C.DB.Nameplate.AuraNumTotal
@@ -858,6 +876,7 @@ function NAMEPLATE:UpdatePlateByType()
 
     NAMEPLATE.UpdateTargetIndicator(self)
     UNITFRAME.UpdateRaidTargetIndicator(self)
+    NAMEPLATE.ToggleNameplateAuras(self)
 end
 
 function NAMEPLATE:RefreshPlateType(unit)
@@ -882,8 +901,6 @@ end
 function NAMEPLATE:RefreshPlateOnFactionChanged()
     F:RegisterEvent('UNIT_FACTION', NAMEPLATE.OnUnitFactionChanged)
 end
-
-
 
 function NAMEPLATE:PostUpdatePlates(event, unit)
     if not self then

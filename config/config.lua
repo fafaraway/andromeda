@@ -289,8 +289,6 @@ C.CharacterSettings = {
             Height = 12,
             NameOnly = true,
 
-
-
             TargetIndicator = true,
                 TargetIndicatorColor = {r = .73, g = .92, b = .99},
             ThreatIndicator = true,
@@ -320,11 +318,13 @@ C.CharacterSettings = {
                 CustomColor = {r = 1, g = .6, b = .2},
                 CustomUnitList = '',
             ShowPowerList = '',
+
             ShowAura = true,
                 AuraFilterMode = 3,
                 AuraPerRow = 6,
                 AuraSize = 22,
-                AuraNumTotal = 6,
+                AuraNumTotal = 12,
+
             TotemIcon = true,
 
             Castbar = true,
@@ -447,16 +447,18 @@ C.CharacterSettings = {
         PetBar = true,
         StanceBar = false,
         VehicleBar = true,
-        DynamicFade = true,
-        FadeOutAlpha = 0,
-        FadeInAlpha = 1,
-        FadeOutDuration = 1,
-        FadeInDuration = .3,
-        ConditionCombat = true,
-        ConditionTarget = false,
-        ConditionDungeon = true,
-        ConditionPvP = true,
-        ConditionVehicle = true,
+
+        Fader = true,
+            FadeOutAlpha = 0,
+            FadeInAlpha = 1,
+            FadeOutDuration = 1,
+            FadeInDuration = .3,
+            ConditionCombat = true,
+            ConditionTarget = false,
+            ConditionDungeon = true,
+            ConditionPvP = true,
+            ConditionVehicle = true,
+
         CustomBar = false,
         CBMargin = 3,
         CBPadding = 3,
