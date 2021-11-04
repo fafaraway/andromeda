@@ -171,7 +171,7 @@ function INFOBAR:GuildPanel_Init()
 
     gName = F.CreateFS(infoFrame, C.Assets.Fonts.Bold, 16, nil, 'Guild', nil, true, 'TOPLEFT', 15, -10)
     gOnline = F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, 'Online', nil, true, 'TOPLEFT', 15, -35)
-    gApps = F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, 'Applications', nil, true, 'TOPRIGHT', -15, -35)
+    -- gApps = F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, 'Applications', nil, true, 'TOPRIGHT', -15, -35)
     gRank = F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, 'Rank', nil, true, 'TOPLEFT', 15, -51)
 
     local bu = {}
@@ -256,7 +256,7 @@ function INFOBAR:GuildPanel_Refresh()
 
     gName:SetText(F:RGBToHex({.9, .8, .6}) .. '<' .. (guildName or '') .. '>')
     gOnline:SetText(string.format(C.InfoColor .. '%s:' .. ' %d/%d', _G.GUILD_ONLINE_LABEL, online, total))
-    gApps:SetText(string.format(C.InfoColor .. _G.GUILDINFOTAB_APPLICANTS, GetNumGuildApplicants()))
+    -- gApps:SetText(string.format(C.InfoColor .. _G.GUILDINFOTAB_APPLICANTS, GetNumGuildApplicants()))
     gRank:SetText(C.InfoColor .. _G.RANK .. ': ' .. (guildRank or ''))
 
     for i = 1, total do
