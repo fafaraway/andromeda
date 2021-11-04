@@ -5,7 +5,7 @@ C.Themes['Blizzard_AchievementUI'] = function()
 
     F.StripTextures(_G.AchievementFrame, true)
     F.SetBD(_G.AchievementFrame)
-    F.HideBackdrop(_G.AchievementFrameCategories) -- IsNewPatch
+    _G.AchievementFrameCategories:HideBackdrop()
     _G.AchievementFrameSummaryBackground:Hide()
     _G.AchievementFrameSummary:GetChildren():Hide()
     _G.AchievementFrameCategoriesContainerScrollBarBG:SetAlpha(0)
@@ -181,7 +181,7 @@ C.Themes['Blizzard_AchievementUI'] = function()
 
                 if not bu.styled then
                     bu:DisableDrawLayer('BORDER')
-                    F.HideBackdrop(bu) -- IsNewPatch
+                    bu:HideBackdrop()
 
                     local bd = bu.background
                     bd:SetTexture(C.Assets.bd_tex)
@@ -234,7 +234,7 @@ C.Themes['Blizzard_AchievementUI'] = function()
 
     local summaries = {_G.AchievementFrameComparisonSummaryPlayer, _G.AchievementFrameComparisonSummaryFriend}
     for _, frame in pairs(summaries) do
-        F.HideBackdrop(frame) -- IsNewPatch
+        frame:HideBackdrop()
         local bg = F.CreateBDFrame(frame, .25)
         bg:SetPoint('TOPLEFT', 2, -2)
         bg:SetPoint('BOTTOMRIGHT', -2, 0)
@@ -255,7 +255,7 @@ C.Themes['Blizzard_AchievementUI'] = function()
         for i = 1, 9 do
             local button = _G['AchievementFrameComparisonContainerButton' .. i .. name]
             button:DisableDrawLayer('BORDER')
-            F.HideBackdrop(button) -- isNewPatch
+            button:HideBackdrop()
             button.background:Hide()
             local bg = F.CreateBDFrame(button, .25)
             bg:SetPoint('TOPLEFT', 2, -1)

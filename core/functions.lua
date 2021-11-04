@@ -706,18 +706,6 @@ do
         self:SetBackdropBorderColor(borderColor.r, borderColor.g, borderColor.b, 1)
     end
 
-    function F:HideBackdrop()
-        if C.IsNewPatch then
-            if self.NineSlice then
-                self.NineSlice:SetAlpha(0)
-            end
-        else
-            if self.SetBackdrop then
-                self:SetBackdrop(nil)
-            end
-        end
-    end
-
     C.Frames = {}
     function F:CreateBD(alpha)
         local backdropColor = _G.FREE_ADB.BackdropColor

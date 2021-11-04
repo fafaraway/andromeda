@@ -43,7 +43,7 @@ C.Themes['Blizzard_ItemSocketingUI'] = function()
                 socket.bg:SetBackdropBorderColor(color.r, color.g, color.b)
             end
 
-            F.HideBackdrop(_G.ItemSocketingDescription) -- IsNewPatch
+            _G.ItemSocketingDescription:HideBackdrop()
         end
     )
 

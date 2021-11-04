@@ -86,9 +86,7 @@ table.insert(
 
         F.Reskin(searchPanel.RefreshButton)
         F.Reskin(searchPanel.BackButton)
-        if C.IsNewPatch then
-            F.Reskin(searchPanel.BackToGroupButton)
-        end
+        F.Reskin(searchPanel.BackToGroupButton)
         F.Reskin(searchPanel.SignUpButton)
         F.Reskin(searchPanel.ScrollFrame.ScrollChild.StartGroupButton)
         F.ReskinInput(searchPanel.SearchBox)
@@ -143,8 +141,7 @@ table.insert(
         applicationViewer.Inset:Hide()
 
         local prevHeader
-        local scoreHeader = C.IsNewPatch and 'RatingColumnHeader' or 'DungeonScoreColumnHeader'
-        for _, headerName in pairs({'NameColumnHeader', 'RoleColumnHeader', 'ItemLevelColumnHeader', scoreHeader}) do
+        for _, headerName in pairs({"NameColumnHeader", "RoleColumnHeader", "ItemLevelColumnHeader", "RatingColumnHeader"}) do
             local header = applicationViewer[headerName]
 
             F.StripTextures(header)
@@ -172,9 +169,7 @@ table.insert(
         F.Reskin(applicationViewer.RefreshButton)
         F.Reskin(applicationViewer.RemoveEntryButton)
         F.Reskin(applicationViewer.EditButton)
-        if C.IsNewPatch then
-            F.Reskin(applicationViewer.BrowseGroupsButton)
-        end
+        F.Reskin(applicationViewer.BrowseGroupsButton)
         F.ReskinCheck(applicationViewer.AutoAcceptButton)
         F.ReskinScroll(_G.LFGListApplicationViewerScrollFrameScrollBar)
 
@@ -222,21 +217,17 @@ table.insert(
         F.ReskinInput(entryCreation.Name)
         F.ReskinInput(entryCreation.ItemLevel.EditBox)
         F.ReskinInput(entryCreation.VoiceChat.EditBox)
-        if not C.IsNewPatch then
-            F.ReskinDropDown(entryCreation.CategoryDropDown)
-        end
+        F.ReskinDropDown(entryCreation.CategoryDropDown)
         F.ReskinDropDown(entryCreation.GroupDropDown)
         F.ReskinDropDown(entryCreation.ActivityDropDown)
-        if C.IsNewPatch then
-            F.ReskinDropDown(entryCreation.PlayStyleDropdown)
-            F.ReskinCheck(entryCreation.MythicPlusRating.CheckButton)
-            F.ReskinInput(entryCreation.MythicPlusRating.EditBox)
-            F.ReskinCheck(entryCreation.PVPRating.CheckButton)
-            F.ReskinInput(entryCreation.PVPRating.EditBox)
-            if entryCreation.PvpItemLevel then -- I do believe blizz will rename Pvp into PvP in future build
-                F.ReskinCheck(entryCreation.PvpItemLevel.CheckButton)
-                F.ReskinInput(entryCreation.PvpItemLevel.EditBox)
-            end
+        F.ReskinDropDown(entryCreation.PlayStyleDropdown)
+        F.ReskinCheck(entryCreation.MythicPlusRating.CheckButton)
+        F.ReskinInput(entryCreation.MythicPlusRating.EditBox)
+        F.ReskinCheck(entryCreation.PVPRating.CheckButton)
+        F.ReskinInput(entryCreation.PVPRating.EditBox)
+        if entryCreation.PvpItemLevel then -- I do believe blizz will rename Pvp into PvP in future build
+            F.ReskinCheck(entryCreation.PvpItemLevel.CheckButton)
+            F.ReskinInput(entryCreation.PvpItemLevel.EditBox)
         end
         F.ReskinCheck(entryCreation.ItemLevel.CheckButton)
         F.ReskinCheck(entryCreation.VoiceChat.CheckButton)

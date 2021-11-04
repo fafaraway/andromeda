@@ -30,7 +30,7 @@ table.insert(
         -- Battlenet toast frame
         _G.BNToastFrame:SetBackdrop(nil)
         F.SetBD(_G.BNToastFrame)
-        F.HideBackdrop(_G.BNToastFrame.TooltipFrame) -- IsNewPatch
+        _G.BNToastFrame.TooltipFrame:HideBackdrop()
         F.SetBD(_G.BNToastFrame.TooltipFrame)
         F.ReskinClose(_G.BNToastFrame.CloseButton)
 

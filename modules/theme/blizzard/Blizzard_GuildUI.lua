@@ -60,9 +60,9 @@ C.Themes['Blizzard_GuildUI'] = function()
     F.ReskinPortraitFrame(_G.GuildFrame)
     F.StripTextures(_G.GuildMemberDetailFrame)
     F.SetBD(_G.GuildMemberDetailFrame)
-    F.HideBackdrop(_G.GuildMemberNoteBackground) -- IsNewPatch
+    _G.GuildMemberNoteBackground:HideBackdrop()
     F.CreateBDFrame(_G.GuildMemberNoteBackground, .25)
-    F.HideBackdrop(_G.GuildMemberOfficerNoteBackground) -- IsNewPatch
+    _G.GuildMemberOfficerNoteBackground:HideBackdrop()
     F.CreateBDFrame(_G.GuildMemberOfficerNoteBackground, .25)
     F.SetBD(_G.GuildLogFrame)
     F.CreateBDFrame(_G.GuildLogContainer, .25)
@@ -154,16 +154,8 @@ C.Themes['Blizzard_GuildUI'] = function()
     F.ReskinScroll(_G.GuildInfoDetailsFrameScrollBar)
     F.ReskinScroll(_G.GuildLogScrollFrameScrollBar)
     F.ReskinScroll(_G.GuildTextEditScrollFrameScrollBar)
-    F.ReskinScroll(_G.GuildRecruitmentCommentInputFrameScrollFrameScrollBar)
-    F.ReskinScroll(_G.GuildInfoFrameApplicantsContainerScrollBar)
     F.ReskinDropDown(_G.GuildRosterViewDropdown)
     F.ReskinDropDown(_G.GuildMemberRankDropdown)
-    F.ReskinInput(_G.GuildRecruitmentCommentInputFrame)
-
-    _G.GuildRecruitmentCommentInputFrame:SetWidth(312)
-    _G.GuildRecruitmentCommentEditBox:SetWidth(284)
-    _G.GuildRecruitmentCommentFrame:ClearAllPoints()
-    _G.GuildRecruitmentCommentFrame:SetPoint('TOPLEFT', _G.GuildRecruitmentLevelFrame, 'BOTTOMLEFT', 0, 1)
 
     F.ReskinCheck(_G.GuildRosterShowOfflineButton)
     for i = 1, 7 do
@@ -183,22 +175,7 @@ C.Themes['Blizzard_GuildUI'] = function()
     _G.GuildLogFrame:SetPoint('TOPLEFT', _G.GuildFrame, 'TOPRIGHT', 3, 0)
     _G.GuildTextEditFrame:SetPoint('TOPLEFT', _G.GuildFrame, 'TOPRIGHT', 3, 0)
 
-    for i = 1, 5 do
-        local bu = _G['GuildInfoFrameApplicantsContainerButton' .. i]
-
-        F.HideBackdrop(bu) -- IsNewPatch
-        bu:SetHighlightTexture('')
-
-        local bg = F.CreateBDFrame(bu, .25)
-        bg:ClearAllPoints()
-        bg:SetPoint('TOPLEFT', 0, 0)
-        bg:SetPoint('BOTTOMRIGHT', 0, 1)
-
-        bu:GetRegions():SetTexture(C.Assets.bd_tex)
-        bu:GetRegions():SetVertexColor(r, g, b, .2)
-    end
-
-    _G.GuildFactionBarProgress:SetTexture(C.Assets.bd_tex)
+    _G.GuildFactionBarProgress:SetTexture(C.Assets.Textures.Norm)
     _G.GuildFactionBarLeft:Hide()
     _G.GuildFactionBarMiddle:Hide()
     _G.GuildFactionBarRight:Hide()
@@ -215,8 +192,8 @@ C.Themes['Blizzard_GuildUI'] = function()
         F.StripTextures(button)
         button.bg = F.CreateBDFrame(button, .25)
         button.bg:ClearAllPoints()
-        button.bg:SetPoint('TOPLEFT', button.icon, 0, C.Mult)
-        button.bg:SetPoint('BOTTOMLEFT', button.icon, 0, -C.Mult)
+        button.bg:SetPoint('TOPLEFT', button.icon, 0, C.mult)
+        button.bg:SetPoint('BOTTOMLEFT', button.icon, 0, -C.mult)
         button.bg:SetWidth(button:GetWidth())
     end
     _G.GuildPerksContainerButton1:SetPoint('LEFT', -1, 0)
@@ -263,30 +240,6 @@ C.Themes['Blizzard_GuildUI'] = function()
     }
     for i = 1, #gbuttons do
         F.Reskin(_G[gbuttons[i]])
-    end
-
-    local checkboxes = {
-        'GuildRecruitmentQuestButton',
-        'GuildRecruitmentDungeonButton',
-        'GuildRecruitmentRaidButton',
-        'GuildRecruitmentPvPButton',
-        'GuildRecruitmentRPButton',
-        'GuildRecruitmentWeekdaysButton',
-        'GuildRecruitmentWeekendsButton'
-    }
-    for i = 1, #checkboxes do
-        F.ReskinCheck(_G[checkboxes[i]])
-    end
-
-    F.ReskinCheck(_G.GuildRecruitmentTankButton:GetChildren())
-    F.ReskinCheck(_G.GuildRecruitmentHealerButton:GetChildren())
-    F.ReskinCheck(_G.GuildRecruitmentDamagerButton:GetChildren())
-
-    F.ReskinRadio(_G.GuildRecruitmentLevelAnyButton)
-    F.ReskinRadio(_G.GuildRecruitmentLevelMaxButton)
-
-    for i = 1, 3 do
-        F.StripTextures(_G['GuildInfoFrameTab' .. i])
     end
 
     -- Tradeskill View

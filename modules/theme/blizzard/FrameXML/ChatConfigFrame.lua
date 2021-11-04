@@ -47,7 +47,7 @@ table.insert(
                     local checkBoxName = nameString .. index
                     local checkbox = _G[checkBoxName]
                     if checkbox and not checkbox.styled then
-                        F.HideBackdrop(checkbox) -- IsNewPatch
+                        checkbox:HideBackdrop()
                         local bg = F.CreateBDFrame(checkbox, .25)
                         bg:SetInside()
                         F.ReskinCheck(_G[checkBoxName .. 'Check'])
@@ -167,9 +167,7 @@ table.insert(
         F.Reskin(_G.ChatConfigFrameOkayButton)
         F.Reskin(_G.ChatConfigFrameDefaultButton)
         F.Reskin(_G.ChatConfigFrameRedockButton)
-        if C.IsNewPatch then
-            F.Reskin(_G.ChatConfigFrame.ToggleChatButton)
-        end
+        F.Reskin(_G.ChatConfigFrame.ToggleChatButton)
         F.ReskinArrow(_G.ChatConfigMoveFilterUpButton, 'up')
         F.ReskinArrow(_G.ChatConfigMoveFilterDownButton, 'down')
         F.ReskinInput(_G.CombatConfigSettingsNameEditBox)
@@ -193,9 +191,7 @@ table.insert(
         F.Reskin(_G.TextToSpeechFramePlaySampleButton)
         F.Reskin(_G.TextToSpeechFramePlaySampleAlternateButton)
         F.Reskin(_G.TextToSpeechDefaultButton)
-        if C.IsNewPatch then
-            F.ReskinCheck(_G.TextToSpeechCharacterSpecificButton)
-        end
+        F.ReskinCheck(_G.TextToSpeechCharacterSpecificButton)
 
         F.ReskinDropDown(_G.TextToSpeechFrameTtsVoiceDropdown)
         F.ReskinDropDown(_G.TextToSpeechFrameTtsVoiceAlternateDropdown)

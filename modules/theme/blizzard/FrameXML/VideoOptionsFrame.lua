@@ -36,9 +36,9 @@ table.insert(
                 line:SetPoint('LEFT', 205, 30)
                 line:SetColorTexture(1, 1, 1, .25)
 
-                F.HideBackdrop(_G.Display_) -- IsNewPatch
-                F.HideBackdrop(_G.Graphics_) -- IsNewPatch
-                F.HideBackdrop(_G.RaidGraphics_) -- IsNewPatch
+                _G.Display_:HideBackdrop()
+                _G.Graphics_:HideBackdrop()
+                _G.RaidGraphics_:HideBackdrop()
 
                 _G.GraphicsButton:DisableDrawLayer('BACKGROUND')
                 _G.RaidButton:DisableDrawLayer('BACKGROUND')

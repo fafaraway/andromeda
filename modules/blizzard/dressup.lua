@@ -40,9 +40,7 @@ function BLIZZARD:EnhancedDressup()
 
     F.AddTooltip(button, 'ANCHOR_TOP', string.format(L['%sUndress all|n%sUndress tabard'], C.Assets.mouse_left, C.Assets.mouse_right))
 
-    if C.IsNewPatch then
-        _G.DressUpFrame.LinkButton:SetWidth(80)
-        _G.DressUpFrame.LinkButton:SetText(_G.SOCIAL_SHARE_TEXT)
-    end
+    _G.DressUpFrame.LinkButton:SetWidth(80)
+    _G.DressUpFrame.LinkButton:SetText(_G.SOCIAL_SHARE_TEXT)
 end
 BLIZZARD:RegisterBlizz('EnhancedDressup', BLIZZARD.EnhancedDressup)

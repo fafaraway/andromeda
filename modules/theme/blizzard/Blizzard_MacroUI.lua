@@ -8,7 +8,7 @@ C.Themes['Blizzard_MacroUI'] = function()
     F.StripTextures(_G.MacroPopupFrame)
     F.StripTextures(_G.MacroPopupFrame.BorderBox)
     F.StripTextures(_G.MacroPopupScrollFrame)
-    F.HideBackdrop(_G.MacroFrameTextBackground) -- IsNewPatch
+    _G.MacroFrameTextBackground:HideBackdrop()
 
     _G.MacroPopupFrame:SetHeight(525)
     _G.MacroNewButton:ClearAllPoints()

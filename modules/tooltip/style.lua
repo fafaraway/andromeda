@@ -28,7 +28,7 @@ function TOOLTIP:ReskinTooltip()
     self:SetScale(1)
 
     if not self.tipStyled then
-        F.HideBackdrop(self) -- IsNewPatch
+        self:HideBackdrop()
         self:DisableDrawLayer('BACKGROUND')
         self.bg = F.SetBD(self)
         self.bg:SetInside(self)
@@ -68,13 +68,6 @@ function TOOLTIP:ReskinTooltip()
             end
         end
     end
-end
-
-function TOOLTIP:SharedTooltip_SetBackdropStyle()
-    if not self.tipStyled then
-        return
-    end
-    self:SetBackdrop(nil)
 end
 
 local function TooltipSetFont(obj, font, size)
