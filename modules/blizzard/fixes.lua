@@ -3,31 +3,31 @@ local F = unpack(select(2, ...))
 -- Fix Drag Collections taint
 do
     local done
-    local function setupMisc(event, addon)
+    local function OnEvent(event, addon)
         if event == 'ADDON_LOADED' and addon == 'Blizzard_Collections' then
             _G.CollectionsJournal:HookScript('OnShow', function()
                 if not done then
                     if InCombatLockdown() then
-                        F:RegisterEvent('PLAYER_REGEN_ENABLED', setupMisc)
+                        F:RegisterEvent('PLAYER_REGEN_ENABLED', OnEvent)
                     else
                         F.CreateMF(_G.CollectionsJournal)
                     end
                     done = true
                 end
             end)
-            F:UnregisterEvent(event, setupMisc)
+            F:UnregisterEvent(event, OnEvent)
         elseif event == 'PLAYER_REGEN_ENABLED' then
             F.CreateMF(_G.CollectionsJournal)
-            F:UnregisterEvent(event, setupMisc)
+            F:UnregisterEvent(event, OnEvent)
         end
     end
 
-    F:RegisterEvent('ADDON_LOADED', setupMisc)
+    -- F:RegisterEvent('ADDON_LOADED', OnEvent) -- collections is not dragable atm
 end
 
 -- Select target when click on raid units
 do
-    local function fixRaidGroupButton()
+    local function FixRaidGroupButton()
         for i = 1, 40 do
             local bu = _G['RaidGroupButton' .. i]
             if bu and bu.unit and not bu.clickFixed then
@@ -39,67 +39,67 @@ do
         end
     end
 
-    local function setupMisc(event, addon)
+    local function OnEvent(event, addon)
         if event == 'ADDON_LOADED' and addon == 'Blizzard_RaidUI' then
             if not InCombatLockdown() then
-                fixRaidGroupButton()
+                FixRaidGroupButton()
             else
-                F:RegisterEvent('PLAYER_REGEN_ENABLED', setupMisc)
+                F:RegisterEvent('PLAYER_REGEN_ENABLED', OnEvent)
             end
-            F:UnregisterEvent(event, setupMisc)
+            F:UnregisterEvent(event, OnEvent)
         elseif event == 'PLAYER_REGEN_ENABLED' then
             if _G.RaidGroupButton1 and _G.RaidGroupButton1:GetAttribute('type') ~= 'target' then
-                fixRaidGroupButton()
-                F:UnregisterEvent(event, setupMisc)
+                FixRaidGroupButton()
+                F:UnregisterEvent(event, OnEvent)
             end
         end
     end
 
-    F:RegisterEvent('ADDON_LOADED', setupMisc)
+    F:RegisterEvent('ADDON_LOADED', OnEvent)
 end
 
 -- Fix blizz guild news hyperlink error
 do
-    local function fixGuildNews(event, addon)
+    local function FixGuildNews(event, addon)
         if addon ~= 'Blizzard_GuildUI' then
             return
         end
 
-        local _GuildNewsButton_OnEnter = GuildNewsButton_OnEnter
-        function GuildNewsButton_OnEnter(self)
+        local _GuildNewsButton_OnEnter = _G.GuildNewsButton_OnEnter
+        function _G.GuildNewsButton_OnEnter(self)
             if not (self.newsInfo and self.newsInfo.whatText) then
                 return
             end
             _GuildNewsButton_OnEnter(self)
         end
 
-        F:UnregisterEvent(event, fixGuildNews)
+        F:UnregisterEvent(event, FixGuildNews)
     end
 
-    local function fixCommunitiesNews(event, addon)
+    local function FixCommunitiesNews(event, addon)
         if addon ~= 'Blizzard_Communities' then
             return
         end
 
-        local _CommunitiesGuildNewsButton_OnEnter = CommunitiesGuildNewsButton_OnEnter
-        function CommunitiesGuildNewsButton_OnEnter(self)
+        local _CommunitiesGuildNewsButton_OnEnter = _G.CommunitiesGuildNewsButton_OnEnter
+        function _G.CommunitiesGuildNewsButton_OnEnter(self)
             if not (self.newsInfo and self.newsInfo.whatText) then
                 return
             end
             _CommunitiesGuildNewsButton_OnEnter(self)
         end
 
-        F:UnregisterEvent(event, fixCommunitiesNews)
+        F:UnregisterEvent(event, FixCommunitiesNews)
     end
 
-    F:RegisterEvent('ADDON_LOADED', fixGuildNews)
-    F:RegisterEvent('ADDON_LOADED', fixCommunitiesNews)
+    F:RegisterEvent('ADDON_LOADED', FixGuildNews)
+    F:RegisterEvent('ADDON_LOADED', FixCommunitiesNews)
 end
 
 -- Fix blizz bug in addon list
 do
-    local _AddonTooltip_Update = AddonTooltip_Update
-    function AddonTooltip_Update(owner)
+    local _AddonTooltip_Update = _G.AddonTooltip_Update
+    function _G.AddonTooltip_Update(owner)
         if not owner then
             return
         end
