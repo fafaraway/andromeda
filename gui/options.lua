@@ -41,6 +41,10 @@ local function UpdateInventorySortOrder()
     SetSortBagsRightToLeft(C.DB.Inventory.SortMode == 1)
 end
 
+local function SetupMinItemLevelToShow()
+    GUI:SetupMinItemLevelToShow(GUI.Page[9])
+end
+
 -- Actionbar
 local function ToggleActionBarFader()
     ACTIONBAR:UpdateActionBarFade()
@@ -122,7 +126,7 @@ local function UpdateCustomUnitList()
 end
 
 local function RefreshAllPlates()
-	NAMEPLATE:RefreshAllPlates()
+    NAMEPLATE:RefreshAllPlates()
 end
 
 -- Unitframe
@@ -419,11 +423,12 @@ GUI.OptionsList = {
         {1, 'Inventory', 'CombineFreeSlots', L['Compact Mode'], nil, nil, UpdateInventoryStatus, L['Combine spare slots to save screen space.']},
         {4, 'Inventory', 'SortMode', L['Sort Mode'], true, {L['Forward'], L['Backward'], _G.DISABLE}, UpdateInventorySortOrder, L['If you have empty slots after sort, please disable inventory module, and turn off all bags filter in default ui containers.']},
         {1, 'Inventory', 'ItemFilter', L['Item Filter'], nil, SetupInventoryFilter, UpdateInventoryStatus, L['The items are stored separately according to the type of items.']},
-        {3, 'Inventory', 'BagsPerRow', L['Bags Per Row'], true, {1, 10, 1}, UpdateInventoryAnchor, L['If ItemFilter enabled, change the bags per row for anchoring.']},
-        {1, 'Inventory', 'SpecialBagsColor', L['Colorized Special Bags'], nil, nil, UpdateInventoryStatus, L['Show color for special bags, such as Herb bag, Mining bag, Gem bag, Enchanted mageweave pouch, etc.']},
-        {1, 'Inventory', 'ItemLevel', L['Show Item Level'], nil, nil, UpdateInventoryStatus},
-        {3, 'Inventory', 'MinItemLevelToShow', L['iLvl Threshold'], true, {1, 300, 1}, UpdateInventoryAnchor, L['Only show iLvl info if higher than threshold.']},
-        {1, 'Inventory', 'NewItemFlash', L['Show New Item Flash'], nil, nil, nil, L['Newly obtained items will flash slightly, and stop flashing after hovering the cursor.']},
+
+        {1, 'Inventory', 'SpecialBagsColor', L['Colorized Special Bags'], true, nil, UpdateInventoryStatus, L['Show color for special bags, such as Herb bag, Mining bag, Gem bag, Enchanted mageweave pouch, etc.']},
+        {1, 'Inventory', 'ItemLevel', L['Show Item Level'], nil, SetupMinItemLevelToShow, UpdateInventoryStatus, L['Show item level on inventory slots.|nOnly show iLvl info if higher than threshold.']},
+
+        {1, 'Inventory', 'NewItemFlash', L['Show New Item Flash'], true, nil, nil, L['Newly obtained items will flash slightly, and stop flashing after hovering the cursor.']},
+
         {1, 'Inventory', 'BindType', L['Show BoE/BoA Indicator'], nil, nil, UpdateInventoryStatus, L['Show corresponding marks for BoE and BoA items.']},
     },
     [10] = { -- map

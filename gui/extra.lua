@@ -338,6 +338,14 @@ local function UpdateBagSize()
     INVENTORY:UpdateBagSize()
 end
 
+local function UpdateInventoryAnchor()
+    INVENTORY:UpdateAllAnchors()
+end
+
+local function UpdateInventoryStatus()
+    INVENTORY:UpdateAllBags()
+end
+
 function GUI:SetupInventoryFilter(parent)
     local guiName = 'FreeUIGUIInventoryFilter'
     TogglePanel(guiName)
@@ -415,7 +423,7 @@ function GUI:SetupInventorySize(parent)
 
     local values = C.DB.Inventory
 
-    local datas = {
+    local sizeDatas = {
         [1] = {
             key = 'SlotSize',
             value = values.SlotSize,
@@ -432,30 +440,93 @@ function GUI:SetupInventorySize(parent)
             max = 6,
             step = 1
         },
-        [3] = {
+    }
+
+    local colDatas = {
+        [1] = {
             key = 'BagColumns',
             value = values.BagColumns,
             text = L['Bag Columns'],
-            min = 8,
+            min = 6,
             max = 20,
             step = 1
         },
-        [4] = {
+        [2] = {
             key = 'BankColumns',
             value = values.BagColumns,
             text = L['Bank Columns'],
-            min = 8,
+            min = 6,
             max = 20,
+            step = 1
+        },
+    }
+
+    local rowDatas = {
+        [1] = {
+            key = 'BagsPerRow',
+            value = values.BagsPerRow,
+            text = L['Bags Per Row'],
+            min = 2,
+            max = 10,
+            step = 1
+        },
+        [2] = {
+            key = 'BankPerRow',
+            value = values.BankPerRow,
+            text = L['Bank Per Row'],
+            min = 2,
+            max = 10,
             step = 1
         }
     }
 
     local offset = -10
-    for _, v in ipairs(datas) do
-        CreateGroupTitle(scroll, L['Inventory Size'], offset)
+    for _, v in ipairs(sizeDatas) do
+        CreateGroupTitle(scroll, L['Size and Spacing'], offset)
         CreateSlider(scroll, 'Inventory', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateBagSize)
         offset = offset - 65
     end
+
+    scroll.groupTitle = nil
+
+    for _, v in ipairs(colDatas) do
+        CreateGroupTitle(scroll, L['Columns'], offset - 50)
+        CreateSlider(scroll, 'Inventory', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 100, UpdateBagSize)
+        offset = offset - 65
+    end
+
+    scroll.groupTitle = nil
+
+    for _, v in ipairs(rowDatas) do
+        CreateGroupTitle(scroll, L['Rows'], offset - 100)
+        CreateSlider(scroll, 'Inventory', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 150, UpdateInventoryAnchor)
+        offset = offset - 65
+    end
+end
+
+function GUI:SetupMinItemLevelToShow(parent)
+    local guiName = 'FreeUIGUIMinItemLevelToShow'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local values = C.DB.Inventory
+
+    local datas = {
+        key = 'MinItemLevelToShow',
+        value = values.MinItemLevelToShow,
+        text = L['Min'],
+        min = 0,
+        max = 1,
+        step = .1
+    }
+
+    local offset = -10
+    CreateGroupTitle(scroll, L['Item Level'], offset)
+    CreateSlider(scroll, 'Inventory', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset - 50, UpdateInventoryStatus)
 end
 
 -- Actionbar

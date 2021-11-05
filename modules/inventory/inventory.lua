@@ -37,35 +37,54 @@ function INVENTORY:ReverseSort()
 end
 
 local anchorCache = {}
-function INVENTORY:UpdateAnchors(parent, bags, isBank)
-    if not parent:IsShown() then
-        return
-    end
-
+function INVENTORY:UpdateBagsAnchor(parent, bags)
     table.wipe(anchorCache)
 
     local index = 1
     local perRow = C.DB.Inventory.BagsPerRow
     anchorCache[index] = parent
 
-    for _, bag in ipairs(bags) do
+    for i = 1, #bags do
+        local bag = bags[i]
         if bag:GetHeight() > 45 then
             bag:Show()
             index = index + 1
 
             bag:ClearAllPoints()
             if (index - 1) % perRow == 0 then
-                if isBank then
-                    bag:SetPoint('TOPLEFT', anchorCache[index - perRow], 'TOPRIGHT', 5, 0)
-                else
-                    bag:SetPoint('BOTTOMRIGHT', anchorCache[index - perRow], 'BOTTOMLEFT', -5, 0)
-                end
+                bag:SetPoint('BOTTOMRIGHT', anchorCache[index - perRow], 'BOTTOMLEFT', -5, 0)
             else
-                if isBank then
-                    bag:SetPoint('TOPLEFT', anchorCache[index - 1], 'BOTTOMLEFT', 0, -5)
-                else
-                    bag:SetPoint('BOTTOMLEFT', anchorCache[index - 1], 'TOPLEFT', 0, 5)
-                end
+                bag:SetPoint('BOTTOMLEFT', anchorCache[index - 1], 'TOPLEFT', 0, 5)
+            end
+            anchorCache[index] = bag
+        else
+            bag:Hide()
+        end
+    end
+end
+
+function INVENTORY:UpdateBankAnchor(parent, bags)
+    table.wipe(anchorCache)
+
+    local index = 1
+    local perRow = C.DB.Inventory.BankPerRow
+    anchorCache[index] = parent
+
+    for i = 1, #bags do
+        local bag = bags[i]
+        if bag:GetHeight() > 45 then
+            bag:Show()
+            index = index + 1
+
+            bag:ClearAllPoints()
+            if index <= perRow then
+                bag:SetPoint('BOTTOMLEFT', anchorCache[index - 1], 'TOPLEFT', 0, 5)
+            elseif index == perRow + 1 then
+                bag:SetPoint('BOTTOMLEFT', anchorCache[index - perRow], 'BOTTOMRIGHT', 5, 0)
+            elseif (index - 1) % perRow == 0 then
+                bag:SetPoint('BOTTOMLEFT', anchorCache[index - perRow], 'BOTTOMRIGHT', 5, 0)
+            else
+                bag:SetPoint('BOTTOMLEFT', anchorCache[index - 1], 'TOPLEFT', 0, -5)
             end
             anchorCache[index] = bag
         else
@@ -109,12 +128,10 @@ local function ToggleWidgetButtons(self)
     if C.DB['Inventory']['HideWidgets'] then
         -- self.tag:Show()
         self:SetPoint('RIGHT', buttons[2], 'LEFT', -1, 0)
-        -- F.SetupArrow(self.__texture, 'left')
         self.__texture:SetTexture(iconsList.Split)
     else
         -- self.tag:Hide()
         self:SetPoint('RIGHT', buttons[#buttons], 'LEFT', -1, 0)
-        -- F.SetupArrow(self.__texture, 'right')
         self.__texture:SetTexture(iconsList.Split)
     end
     self:Show()
@@ -125,16 +142,10 @@ function INVENTORY:CreateCollapseArrow()
     bu:SetSize(16, 16)
     local tex = bu:CreateTexture()
     tex:SetAllPoints()
-    -- F.SetupArrow(tex, 'right')
     tex:SetTexture(iconsList.Split)
     bu.__texture = tex
     bu:SetScript('OnEnter', F.Texture_OnEnter)
     bu:SetScript('OnLeave', F.Texture_OnLeave)
-
-    -- local tag = self:SpawnPlugin('TagDisplay', '[money]', self)
-    -- tag:SetFont(C.Assets.Fonts.Bold, 11, nil, '', nil, true)
-    -- tag:SetPoint('RIGHT', bu, 'LEFT', -12, -2)
-    -- bu.tag = tag
 
     bu.__owner = self
     C.DB['Inventory']['HideWidgets'] = not C.DB['Inventory']['HideWidgets'] -- reset before toggle
@@ -176,11 +187,11 @@ local function CloseOrRestoreBags(self, btn)
         C.DB['UIAnchorTemp'][reagent:GetName()] = nil
 
         bag:ClearAllPoints()
-        bag:SetPoint('BOTTOMRIGHT', -C.UIGap, C.UIGap)
+        bag:SetPoint(unpack(bag.__anchor))
         bank:ClearAllPoints()
-        bank:SetPoint('TOPLEFT', C.UIGap, -C.UIGap)
+        bank:SetPoint(unpack(bank.__anchor))
         reagent:ClearAllPoints()
-        reagent:SetPoint('TOPLEFT', bank)
+        reagent:SetPoint(unpack(reagent.__anchor))
         PlaySound(_G.SOUNDKIT.IG_MINIMAP_OPEN)
     else
         _G.CloseAllBags()
@@ -774,28 +785,31 @@ function INVENTORY:OnLogin()
         AddNewContainer('Bag', 10, 'BagRelic', filters.bagRelic)
 
         f.main = MyContainer:New('Bag', {Bags = 'bags', BagType = 'Bag'})
-        f.main:SetPoint('BOTTOMRIGHT', -C.UIGap, C.UIGap)
+        f.main.__anchor = {'BOTTOMRIGHT', -C.UIGap, C.UIGap}
+        f.main:SetPoint(unpack(f.main.__anchor))
         f.main:SetFilter(filters.onlyBags, true)
 
-        AddNewContainer('Bank', 1, 'BankFavourite', filters.bankFavourite)
-        AddNewContainer('Bank', 5, 'BankEquipSet', filters.bankEquipSet)
-        AddNewContainer('Bank', 3, 'BankAzeriteItem', filters.bankAzeriteItem)
-        AddNewContainer('Bank', 2, 'BankLegendary', filters.bankLegendary)
-        AddNewContainer('Bank', 4, 'BankEquipment', filters.bankEquipment)
-        AddNewContainer('Bank', 6, 'BankCollection', filters.bankCollection)
-        AddNewContainer('Bank', 7, 'BankConsumable', filters.bankConsumable)
-        AddNewContainer('Bank', 8, 'BankGoods', filters.bankGoods)
+        AddNewContainer('Bank', 10, 'BankFavourite', filters.bankFavourite)
+        AddNewContainer('Bank', 3, 'BankEquipSet', filters.bankEquipSet)
+        AddNewContainer('Bank', 1, 'BankAzeriteItem', filters.bankAzeriteItem)
+        AddNewContainer('Bank', 4, 'BankLegendary', filters.bankLegendary)
+        AddNewContainer('Bank', 2, 'BankEquipment', filters.bankEquipment)
+        AddNewContainer('Bank', 5, 'BankCollection', filters.bankCollection)
+        AddNewContainer('Bank', 8, 'BankConsumable', filters.bankConsumable)
+        AddNewContainer('Bank', 6, 'BankGoods', filters.bankGoods)
         AddNewContainer('Bank', 9, 'BankQuest', filters.bankQuest)
-        AddNewContainer('Bank', 10, 'BankAnima', filters.bankAnima)
+        AddNewContainer('Bank', 7, 'BankAnima', filters.bankAnima)
 
         f.bank = MyContainer:New('Bank', {Bags = 'bank', BagType = 'Bank'})
-        f.bank:SetPoint('TOPLEFT', C.UIGap, -C.UIGap)
+        f.bank.__anchor = {'BOTTOMLEFT', C.UIGap, C.UIGap}
+        f.bank:SetPoint(unpack(f.bank.__anchor))
         f.bank:SetFilter(filters.onlyBank, true)
         f.bank:Hide()
 
         f.reagent = MyContainer:New('Reagent', {Bags = 'bankreagent', BagType = 'Bank'})
         f.reagent:SetFilter(filters.onlyReagent, true)
-        f.reagent:SetPoint('TOPLEFT', f.bank)
+        f.reagent.__anchor = {'BOTTOMLEFT', f.bank}
+        f.reagent:SetPoint(unpack(f.reagent.__anchor))
         f.reagent:Hide()
 
         for bagType, groups in pairs(ContainerGroups) do
@@ -813,7 +827,7 @@ function INVENTORY:OnLogin()
         self:GetContainer('Bank'):Show()
 
         if not initBagType then
-            INVENTORY:UpdateBagSize()
+            INVENTORY:UpdateAllBags()
             INVENTORY:UpdateBagSize()
             initBagType = true
         end
@@ -1087,8 +1101,8 @@ function INVENTORY:OnLogin()
     end
 
     function INVENTORY:UpdateAllAnchors()
-        INVENTORY:UpdateAnchors(f.main, ContainerGroups['Bag'])
-        INVENTORY:UpdateAnchors(f.bank, ContainerGroups['Bank'], true)
+        INVENTORY:UpdateBagsAnchor(f.main, ContainerGroups['Bag'])
+        INVENTORY:UpdateBankAnchor(f.bank, ContainerGroups['Bank'])
     end
 
     function INVENTORY:GetContainerColumns(bagType)
