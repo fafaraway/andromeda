@@ -1158,7 +1158,7 @@ do
         local frameName = self.GetName and self:GetName()
         local down = self.Button or frameName and (_G[frameName .. 'Button'] or _G[frameName .. '_Button'])
 
-        local bg = F.CreateBDFrame(self)
+        local bg = F.CreateBDFrame(self, .45)
         bg:SetPoint('TOPLEFT', 16, -4)
         bg:SetPoint('BOTTOMRIGHT', -18, 8)
         F.CreateSD(bg, .25)
@@ -1816,7 +1816,7 @@ do
     function F:CreateDropDown(width, height, data)
         local dd = CreateFrame('Frame', nil, self, 'BackdropTemplate')
         dd:SetSize(width, height)
-        dd.bg = F.CreateBDFrame(dd)
+        dd.bg = F.CreateBDFrame(dd, .45)
         F.CreateSD(dd.bg, .25)
 
         dd.Text = F.CreateFS(dd, C.Assets.Fonts.Regular, 11, nil, '', nil, true, 'LEFT', 5, 0)
@@ -1836,7 +1836,7 @@ do
 
         local list = CreateFrame('Frame', nil, dd, 'BackdropTemplate')
         list:SetPoint('TOP', dd, 'BOTTOM', 0, -2)
-        F.CreateBD(list, 1)
+        F.CreateBD(list, .85)
         list:Hide()
         bu.__list = list
 
