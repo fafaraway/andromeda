@@ -1,14 +1,15 @@
 std = 'lua51'
 
-quiet = 1 -- suppress report output for files without warnings
+quiet = 1
 exclude_files = {'libs/'}
 
 ignore = {
     '113/_',
-    '212/self', -- unused argument self
+    '212/self',
     '213/i',
-    '4', -- shadowing
-    '631' -- line is too long
+    '311/i',
+    '4',
+    '631'
 }
 
 read_globals = {
