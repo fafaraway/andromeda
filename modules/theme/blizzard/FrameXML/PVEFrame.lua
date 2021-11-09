@@ -1,50 +1,51 @@
 local F, C = unpack(select(2, ...))
 
-tinsert(C.BlizzThemes, function()
-	if not _G.FREE_ADB.ReskinBlizz then return end
+table.insert(
+    C.BlizzThemes,
+    function()
+        local r, g, b = C.r, C.g, C.b
 
-	local r, g, b = C.r, C.g, C.b
+        _G.PVEFrameLeftInset:SetAlpha(0)
+        _G.PVEFrameBlueBg:SetAlpha(0)
+        _G.PVEFrame.shadows:SetAlpha(0)
 
-	PVEFrameLeftInset:SetAlpha(0)
-	PVEFrameBlueBg:SetAlpha(0)
-	PVEFrame.shadows:SetAlpha(0)
+        _G.PVEFrameTab1:ClearAllPoints()
+        _G.PVEFrameTab1:SetPoint('TOPLEFT', _G.PVEFrame, 'BOTTOMLEFT', 10, 0)
 
-	PVEFrameTab1:ClearAllPoints()
-	PVEFrameTab1:SetPoint('TOPLEFT', PVEFrame, 'BOTTOMLEFT', 10, 0)
+        _G.GroupFinderFrameGroupButton1.icon:SetTexture('Interface\\Icons\\INV_Helmet_08')
+        _G.GroupFinderFrameGroupButton2.icon:SetTexture('Interface\\Icons\\Icon_Scenarios')
+        _G.GroupFinderFrameGroupButton3.icon:SetTexture('Interface\\Icons\\inv_helmet_06')
 
-	GroupFinderFrameGroupButton1.icon:SetTexture("Interface\\Icons\\INV_Helmet_08")
-	GroupFinderFrameGroupButton2.icon:SetTexture("Interface\\Icons\\Icon_Scenarios")
-	GroupFinderFrameGroupButton3.icon:SetTexture("Interface\\Icons\\inv_helmet_06")
+        for i = 1, 3 do
+            local bu = _G.GroupFinderFrame['groupButton' .. i]
 
-	local iconSize = 60-2*C.Mult
-	for i = 1, 3 do
-		local bu = GroupFinderFrame["groupButton"..i]
+            bu.ring:Hide()
+            F.Reskin(bu)
+            bu.bg:SetColorTexture(r, g, b, .25)
+            bu.bg:SetInside(bu.__bg)
 
-		bu.ring:Hide()
-		F.Reskin(bu)
-		bu.bg:SetTexture(C.Assets.bd_tex)
-		bu.bg:SetVertexColor(r, g, b, .2)
-		bu.bg:SetInside(bu.__bg)
+            bu.icon:SetPoint('LEFT', bu, 'LEFT', 2, 0)
+            bu.icon:SetSize(bu:GetHeight() - 4, bu:GetHeight() - 4)
+            F.ReskinIcon(bu.icon)
+        end
 
-		bu.icon:SetPoint("LEFT", bu, "LEFT", 2, 0)
-		bu.icon:SetSize(bu:GetHeight()-4, bu:GetHeight()-4)
-		F.ReskinIcon(bu.icon)
-	end
+        hooksecurefunc(
+            'GroupFinderFrame_SelectGroupButton',
+            function(index)
+                for i = 1, 3 do
+                    local button = _G.GroupFinderFrame['groupButton' .. i]
+                    if i == index then
+                        button.bg:Show()
+                    else
+                        button.bg:Hide()
+                    end
+                end
+            end
+        )
 
-	hooksecurefunc("GroupFinderFrame_SelectGroupButton", function(index)
-		local self = GroupFinderFrame
-		for i = 1, 3 do
-			local button = self["groupButton"..i]
-			if i == index then
-				button.bg:Show()
-			else
-				button.bg:Hide()
-			end
-		end
-	end)
-
-	F.ReskinPortraitFrame(PVEFrame)
-	F.ReskinTab(PVEFrameTab1)
-	F.ReskinTab(PVEFrameTab2)
-	F.ReskinTab(PVEFrameTab3)
-end)
+        F.ReskinPortraitFrame(_G.PVEFrame)
+        F.ReskinTab(_G.PVEFrameTab1)
+        F.ReskinTab(_G.PVEFrameTab2)
+        F.ReskinTab(_G.PVEFrameTab3)
+    end
+)

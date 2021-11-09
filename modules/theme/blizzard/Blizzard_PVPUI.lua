@@ -1,11 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local hooksecurefunc = hooksecurefunc
-local GetItemInfo = GetItemInfo
-local C_CurrencyInfo_GetCurrencyInfo = C_CurrencyInfo.GetCurrencyInfo
-local CurrencyContainerUtil_GetCurrencyContainerInfo = CurrencyContainerUtil.GetCurrencyContainerInfo
-
 local F, C = unpack(select(2, ...))
 
 local function ReskinPvPFrame(frame)
@@ -51,6 +43,7 @@ C.Themes['Blizzard_PVPUI'] = function()
         F.Reskin(bu, true)
         bu.Background:SetInside(bu.__bg)
         bu.Background:SetColorTexture(r, g, b, .25)
+        bu.Background:SetAlpha(1)
 
         icon:SetPoint('LEFT', bu, 'LEFT')
         icon:SetSize(iconSize, iconSize)
@@ -73,13 +66,12 @@ C.Themes['Blizzard_PVPUI'] = function()
     hooksecurefunc(
         'PVPQueueFrame_SelectButton',
         function(index)
-            local self = PVPQueueFrame
             for i = 1, 3 do
-                local bu = self['CategoryButton' .. i]
+                local bu = PVPQueueFrame['CategoryButton' .. i]
                 if i == index then
-                    bu.Background:SetAlpha(1)
+                    bu.Background:Show()
                 else
-                    bu.Background:SetAlpha(0)
+                    bu.Background:Hide()
                 end
             end
         end
@@ -197,10 +189,10 @@ C.Themes['Blizzard_PVPUI'] = function()
 
             if currencyRewards then
                 for _, reward in ipairs(currencyRewards) do
-                    local info = C_CurrencyInfo_GetCurrencyInfo(reward.id)
+                    local info = C_CurrencyInfo.GetCurrencyInfo(reward.id)
                     local name, texture, quality = info.name, info.iconFileID, info.quality
                     if quality == _G.LE_ITEM_QUALITY_ARTIFACT then
-                        _, rewardTexture, _, rewardQuaility = CurrencyContainerUtil_GetCurrencyContainerInfo(reward.id, reward.quantity, name, texture, quality)
+                        _, rewardTexture, _, rewardQuaility = _G.CurrencyContainerUtil_GetCurrencyContainerInfo(reward.id, reward.quantity, name, texture, quality)
                     end
                 end
             end

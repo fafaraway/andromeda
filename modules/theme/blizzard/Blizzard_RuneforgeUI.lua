@@ -1,10 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local gsub = gsub
-local GetCurrencyString = GetCurrencyString
-local hooksecurefunc = hooksecurefunc
-
 local F, C = unpack(select(2, ...))
 
 local function UpdateSelectedTexture(texture, shown)
@@ -20,8 +13,8 @@ local function ReplaceCurrencyDisplay(self)
     if not self.currencyID then
         return
     end
-    local text = GetCurrencyString(self.currencyID, self.amount, self.colorCode, self.abbreviate)
-    local newText, count = gsub(text, '|T([^:]-):[%d+:]+|t', '|T%1:14:14:0:0:64:64:5:59:5:59|t')
+    local text = _G.GetCurrencyString(self.currencyID, self.amount, self.colorCode, self.abbreviate)
+    local newText, count = string.gsub(text, '|T([^:]-):[%d+:]+|t', '|T%1:14:14:0:0:64:64:5:59:5:59|t')
     if count > 0 then
         self:SetText(newText)
     end
@@ -39,6 +32,7 @@ local function SetCurrenciesHook(self)
         end
     end
 end
+F.SetCurrenciesHook = SetCurrenciesHook
 
 C.Themes['Blizzard_RuneforgeUI'] = function()
     local frame = _G.RuneforgeFrame
