@@ -179,7 +179,6 @@ C.CharacterSettings = {
                 RaidTargetIndicatorAlpha = .2,
                 RaidTargetIndicatorScale = 1,
 
-
             HidePlayerTags = true,
 
             ClassPower = true,
@@ -190,7 +189,7 @@ C.CharacterSettings = {
             ShortenName = true,
 
             Castbar = true,
-                SeparateCastbar = true,
+                SeparateCastbar = false,
                 CastingColor = {r = .31, g = .48, b = .85},
                 UninterruptibleColor = {r = .66, g = .65, b = .65},
                 CompleteColor = {r = .25, g = .63, b = .49},
@@ -329,7 +328,7 @@ C.CharacterSettings = {
 
             Castbar = true,
                 CastbarHeight = 8,
-                SeparateCastbar = false,
+                SeparateCastbar = true,
                 MajorSpellsGlow = true,
                 CastTarget = true,
 
