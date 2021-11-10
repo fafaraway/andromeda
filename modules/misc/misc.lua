@@ -1,4 +1,4 @@
-local F, C = unpack(select(2, ...))
+local F, C, L = unpack(select(2, ...))
 local MISC = F:RegisterModule('General')
 
 local MISC_LIST = {}
@@ -18,6 +18,7 @@ function MISC:OnLogin()
 
     MISC:ForceWarning()
     MISC:JerryWay()
+    MISC:BaudErrorFrameHelpTip()
 end
 
 -- Force warning
@@ -54,8 +55,6 @@ function MISC:ForceWarning()
 
     hooksecurefunc('ShowReadyCheck', ReadyCheckHook)
 end
-
-
 
 -- Support cmd /way if TomTom disabled
 
@@ -148,4 +147,79 @@ do
             self:UnregisterAllEvents()
         end
     )
+end
+
+do
+    local updater
+    local errorInfo = {
+        text = L['UI errors popup out, click the number below to check and report.'],
+        buttonStyle = _G.HelpTip.ButtonStyle.GotIt,
+        targetPoint = _G.HelpTip.Point.TopEdgeCenter,
+        alignment = _G.HelpTip.Alignment.Right,
+        offsetX = -15,
+        onAcknowledgeCallback = F.HelpInfoAcknowledge,
+        callbackArg = 'BaudError'
+    }
+
+    local function OnHide(button)
+        button:Hide()
+    end
+
+    local function OnShow(button)
+        button:Show()
+    end
+
+    local function OnSetText(self, text)
+        local button = _G.BaudErrorFrameMinimapButton
+        if not _G.FREE_ADB['HelpTips']['BaudError'] then
+            text = tonumber(text)
+            if text and text > 0 then
+                _G.HelpTip:Show(button, errorInfo)
+            end
+        end
+    end
+
+    local function OnUpdate(self, elapsed)
+        local r, g, b, mult = 10, 0, 0, 1
+        local count = _G.BaudErrorFrameMinimapCount
+        self.elapsed = (self.elapsed or 0) + elapsed
+        if self.elapsed > .08 then
+            if r == 0 and g > b then
+                b = b + mult
+            elseif g == 0 and b > r then
+                r = r + mult
+            elseif b == 0 and r > g then
+                g = g + mult
+            elseif r == 0 and g <= b then
+                g = g - mult
+            elseif g == 0 and b <= r then
+                b = b - mult
+            elseif b == 0 and r <= g then
+                r = r - mult
+            end
+            count:SetTextColor(r / 10, g / 10, b / 10)
+
+            self.elapsed = 0
+        end
+    end
+
+    function MISC:BaudErrorFrameHelpTip()
+        if not IsAddOnLoaded('!BaudErrorFrame') then
+            return
+        end
+
+        local button, count = _G.BaudErrorFrameMinimapButton, _G.BaudErrorFrameMinimapCount
+
+        if not button then
+            return
+        end
+
+        updater = CreateFrame('Frame')
+        updater:Hide()
+        updater:SetScript('OnUpdate', OnUpdate)
+
+        hooksecurefunc(button, 'Show', OnShow)
+        hooksecurefunc(button, 'Hide', OnHide)
+        hooksecurefunc(count, 'SetText', OnSetText)
+    end
 end
