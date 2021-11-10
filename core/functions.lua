@@ -821,6 +821,7 @@ do
                             region:SetAlpha(0)
                         elseif i ~= kill then
                             region:SetTexture('')
+                            region:SetAtlas('')
                         end
                     else
                         region:SetTexture('')
@@ -1049,6 +1050,7 @@ do
             region = buttonName and _G[buttonName .. region] or self[region]
             if region then
                 region:SetAlpha(0)
+                region:Hide()
             end
         end
 
@@ -1529,10 +1531,12 @@ do
     end
 
     function F:ReskinGarrisonPortrait()
+        self.squareBG = F.CreateBDFrame(self.Portrait, 1)
+
         local level = self.Level or self.LevelText
         if level then
             level:ClearAllPoints()
-            level:SetPoint('BOTTOM', self, 0, 15)
+            level:SetPoint('BOTTOM', self.squareBG)
             if self.LevelCircle then
                 self.LevelCircle:Hide()
             end
@@ -1540,8 +1544,6 @@ do
                 self.LevelBorder:SetScale(.0001)
             end
         end
-
-        self.squareBG = F.CreateBDFrame(self.Portrait, 1)
 
         if self.PortraitRing then
             self.PortraitRing:Hide()
@@ -1579,8 +1581,9 @@ do
             local background = self.HealthBar.Background
             background:SetAlpha(0)
             background:ClearAllPoints()
-            background:SetPoint('TOPLEFT', self.squareBG, 'BOTTOMLEFT', C.Mult, 6)
-            background:SetPoint('BOTTOMRIGHT', self.squareBG, 'BOTTOMRIGHT', -C.Mult, C.Mult)
+            background:SetPoint('TOPLEFT', self.squareBG, 'BOTTOMLEFT', 0, -2)
+            background:SetPoint('TOPRIGHT', self.squareBG, 'BOTTOMRIGHT', -2, -2)
+            background:SetHeight(2)
             self.HealthBar.Health:SetTexture(C.Assets.Textures.Norm)
         end
     end
