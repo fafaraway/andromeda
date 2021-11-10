@@ -56,12 +56,11 @@ function CHAT:UpdateChannelNames(text, ...)
 
     if C.DB.Chat.ShortenChannelName then
         -- Shorten world channel name
-        -- text = string.gsub(text, '|h%[(%d+)%. 大脚世界频道%]|h', '|h%[世%]|h')
-        -- text = string.gsub(text, '|h%[(%d+)%. 大腳世界頻道%]|h', '|h%[世%]|h')
-        -- text = string.gsub(text, '|h%[(%d+)%. BigfootWorldChannel%]|h', '|h%[世%]|h')
+        -- text = string.gsub(text, '|h%[(%d+)%. 大脚世界频道%]|h', '|h%[%1%. 世界%]|h')
+        -- text = string.gsub(text, '|h%[(%d+)%. 大腳世界頻道%]|h', '|h%[%1%. 世界%]|h')
 
         -- Shorten other channel name
-        text = string.gsub(text, '|h%[(%d+)%. .-%]|h', '|h%[1]|h')
+        text = string.gsub(text, '|h%[(%d+)%..-%]|h', '|h[%1]|h')
     end
 
     -- Remove brackets from player name
