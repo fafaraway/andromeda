@@ -151,6 +151,10 @@ function M:GetCovenantID(unit)
     return covenantID
 end
 
+local function msgChannel()
+    return IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY"
+end
+
 local cache = {}
 function M:UpdateRosterInfo()
     if not IsInGroup() then
@@ -161,7 +165,7 @@ function M:UpdateRosterInfo()
         for i = 1, GetNumGroupMembers() do
             local name = GetRaidRosterInfo(i)
             if name and name ~= C.MyName and not cache[name] then
-                C_ChatInfo.SendAddonMessage(DC_Prefix, string.format('ASK:%s', name), 'RAID')
+                C_ChatInfo.SendAddonMessage(DC_Prefix, string.format('ASK:%s', name), msgChannel())
                 cache[name] = true
             end
         end
@@ -182,9 +186,9 @@ function M:HandleAddonMessage(...)
     if prefix == ZT_Prefix then
         local version, type, guid, _, _, _, _, covenantID = string.split(':', msg)
         version = tonumber(version)
-        if (version and version > 3) and (type and type == 'H') and (guid and not memberCovenants[guid]) then
+        if (version and version > 3) and (type and type == 'H') and guid then
             covenantID = tonumber(covenantID)
-            if covenantID then
+            if covenantID and (not memberCovenants[guid] or memberCovenants[guid] ~= covenantID) then
                 memberCovenants[guid] = covenantID
 
                 if debug then
@@ -194,10 +198,10 @@ function M:HandleAddonMessage(...)
         end
     elseif prefix == OmniCD_Prefix then
         local header, guid, body = string.match(msg, '(.-),(.-),(.+)')
-        if (header and guid and body) and (header == 'INF' or header == 'REQ' or header == 'UPD') and (not memberCovenants[guid]) then
+        if (header and guid and body) and (header == 'INF' or header == 'REQ' or header == 'UPD') then
             local covenantID = select(15, string.split(',', body))
             covenantID = tonumber(covenantID)
-            if covenantID then
+            if covenantID and (not memberCovenants[guid] or memberCovenants[guid] ~= covenantID) then
                 memberCovenants[guid] = covenantID
 
                 if debug then
@@ -212,9 +216,9 @@ function M:HandleAddonMessage(...)
         end
 
         local guid = UnitGUID(sender)
-        if guid and not memberCovenants[guid] then
+        if guid then
             covenantID = tonumber(covenantID)
-            if covenantID then
+            if covenantID and (not memberCovenants[guid] or memberCovenants[guid] ~= covenantID) then
                 memberCovenants[guid] = covenantID
 
                 if debug then
@@ -229,7 +233,7 @@ function M:HandleSpellCast(unit, _, spellID)
     local covenantID = covenantSpells[spellID]
     if covenantID then
         local guid = UnitGUID(unit)
-        if guid and not memberCovenants[guid] then
+        if guid and (not memberCovenants[guid] or memberCovenants[guid] ~= covenantID) then
             memberCovenants[guid] = covenantID
 
             if debug then
