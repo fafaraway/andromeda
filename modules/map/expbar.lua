@@ -92,7 +92,7 @@ function M:ExpBar_UpdateTooltip()
                 barMax = barMin + 1e3
                 value = barMax - 1
             end
-            standingtext = GetText('FACTION_STANDING_LABEL' .. standing, UnitSex('player'))
+            standingtext = _G['FACTION_STANDING_LABEL' .. standing] or _G.UNKNOWN
         end
         _G.GameTooltip:AddLine(' ')
         _G.GameTooltip:AddLine(name, 0, .6, 1)
