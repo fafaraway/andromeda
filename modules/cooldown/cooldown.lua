@@ -1,15 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local pairs = pairs
-local strfind = strfind
-local CreateFrame = CreateFrame
-local hooksecurefunc = hooksecurefunc
-local SetCVar = SetCVar
-local GetTime = GetTime
-local GetActionCooldown = GetActionCooldown
-local ActionButton1Cooldown = ActionButton1Cooldown
-local ActionBarButtonEventsFrameMixin = ActionBarButtonEventsFrameMixin
 
 local F, C = unpack(select(2, ...))
 local COOLDOWN = F:GetModule('Cooldown')
@@ -79,6 +67,7 @@ function COOLDOWN:OnCreate()
 
     local scaler = CreateFrame('Frame', nil, self)
     scaler:SetAllPoints(self)
+    scaler:SetFrameStrata('HIGH')
 
     local timer = CreateFrame('Frame', nil, scaler)
     timer:Hide()
@@ -86,12 +75,12 @@ function COOLDOWN:OnCreate()
     timer:SetScript('OnUpdate', COOLDOWN.TimerOnUpdate)
     scaler.timer = timer
 
-    local text = timer:CreateFontString(nil, 'BACKGROUND')
+    local text = timer:CreateFontString(nil, 'OVERLAY')
     text:SetPoint('CENTER', 1, 0)
     text:SetJustifyH('CENTER')
     timer.text = text
 
-    if not C.DB.Cooldown.OverrideWA and C.IsDeveloper and strfind(frameName, 'WeakAurasCooldown') then
+    if not C.DB.Cooldown.OverrideWA and C.IsDeveloper and string.find(frameName, 'WeakAurasCooldown') then
         text:SetPoint('BOTTOM', 1, -6)
     end
 
@@ -111,7 +100,7 @@ function COOLDOWN:StartTimer(start, duration)
     end
 
     local frameName = self.GetName and self:GetName()
-    if C.DB.Cooldown.OverrideWA and frameName and strfind(frameName, 'WeakAuras') then
+    if C.DB.Cooldown.OverrideWA and frameName and string.find(frameName, 'WeakAuras') then
         self.noCooldownCount = true
         return
     end
@@ -201,19 +190,19 @@ function COOLDOWN:OnLogin()
         return
     end
 
-    local cooldownIndex = getmetatable(ActionButton1Cooldown).__index
+    local cooldownIndex = getmetatable(_G.ActionButton1Cooldown).__index
     hooksecurefunc(cooldownIndex, 'SetCooldown', COOLDOWN.StartTimer)
 
     hooksecurefunc('CooldownFrame_SetDisplayAsPercentage', COOLDOWN.HideCooldownNumbers)
 
-    hooksecurefunc(ActionBarButtonEventsFrameMixin, 'RegisterFrame', COOLDOWN.RegisterActionButton)
+    hooksecurefunc(_G.ActionBarButtonEventsFrameMixin, 'RegisterFrame', COOLDOWN.RegisterActionButton)
 
     if _G['ActionBarButtonEventsFrame'].frames then
         for _, frame in pairs(_G['ActionBarButtonEventsFrame'].frames) do
             COOLDOWN.RegisterActionButton(frame)
         end
     end
-    hooksecurefunc(ActionBarButtonEventsFrameMixin, 'RegisterFrame', COOLDOWN.RegisterActionButton)
+    hooksecurefunc(_G.ActionBarButtonEventsFrameMixin, 'RegisterFrame', COOLDOWN.RegisterActionButton)
 
     -- Hide Default Cooldown
     SetCVar('countdownForCooldowns', 0)
