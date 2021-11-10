@@ -68,7 +68,7 @@ local buttonInfo = {
         .25,
         _G.GUILD .. '/' .. _G.OFFICER,
         function(_, btn)
-            if btn == 'RightButton' and C_GuildInfo.CanEditOfficerNote() then
+            if btn == 'RightButton' and C_GuildInfo.IsGuildOfficer() then
                 _G.ChatFrame_OpenChat('/o ', chatFrame)
             else
                 _G.ChatFrame_OpenChat('/g ', chatFrame)
@@ -76,6 +76,21 @@ local buttonInfo = {
         end
     }
 }
+
+local chatSwitchInfo = {
+    text = L["Press Tab key to switch available channels, it's a bit silly to click on bars all the time."],
+    buttonStyle = _G.HelpTip.ButtonStyle.GotIt,
+    targetPoint = _G.HelpTip.Point.TopEdgeCenter,
+    offsetY = 50,
+    onAcknowledgeCallback = F.HelpInfoAcknowledge,
+    callbackArg = 'ChatSwitch'
+}
+
+local function SwitchTip()
+    if not _G.FREE_ADB['HelpTips']['ChatSwitch'] then
+        _G.HelpTip:Show(_G.ChatFrame1, chatSwitchInfo)
+    end
+end
 
 local function CreateButton(r, g, b, text, func)
     local bu = CreateFrame('Button', nil, CHAT.ChannelBar, 'SecureActionButtonTemplate, BackdropTemplate')
@@ -90,6 +105,7 @@ local function CreateButton(r, g, b, text, func)
     end
     if func then
         bu:SetScript('OnClick', func)
+        bu:HookScript('OnClick', SwitchTip)
     end
 
     table.insert(buttonList, bu)
