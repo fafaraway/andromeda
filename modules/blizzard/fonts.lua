@@ -43,7 +43,7 @@ local BOLD = C.Assets.Fonts.Bold
 local HEADER = C.Assets.Fonts.Header
 local COMBAT = C.Assets.Fonts.Combat
 
-local function SetFont(obj, font, size)
+local function SetFont(obj, font, size, flag)
     if not font then
         if C.IsDeveloper then
             F:Debug('UNKNOWN FONT.')
@@ -59,7 +59,12 @@ local function SetFont(obj, font, size)
     size = size or oldSize
     -- flag = flag and 'OUTLINE' or nil
 
-    obj:SetFont(font, size, outline and 'OUTLINE')
+    if type(flag) == 'boolean' then
+        obj:SetFont(font, size, 'OUTLINE')
+        obj:SetShadowColor(0, 0, 0, 0)
+    else
+        obj:SetFont(font, size, outline and 'OUTLINE')
+    end
 
     obj:SetShadowColor(0, 0, 0, outline and 0 or 1)
     obj:SetShadowOffset(1, -1)
@@ -175,26 +180,26 @@ local function ReskinBlizzFonts()
     SetFont(_G.Fancy32Font, HEADER, 32)
     SetFont(_G.Fancy48Font, HEADER, 48)
 
-    SetFont(_G.NumberFont_GameNormal, NORMAL, 12)
-    SetFont(_G.NumberFont_OutlineThick_Mono_Small, NORMAL, 11)
-    SetFont(_G.Number12Font_o1, NORMAL, 11)
-    SetFont(_G.NumberFont_Small, NORMAL, 11)
-    SetFont(_G.Number11Font, NORMAL, 10)
-    SetFont(_G.Number12Font, NORMAL, 11)
-    SetFont(_G.Number13Font, NORMAL, 12)
-    SetFont(_G.Number15Font, NORMAL, 14)
-    SetFont(_G.Number16Font, NORMAL, 15)
-    SetFont(_G.Number18Font, NORMAL, 17)
-    SetFont(_G.NumberFont_Normal_Med, NORMAL, 13)
-    SetFont(_G.NumberFont_Outline_Med, NORMAL, 13)
-    SetFont(_G.NumberFont_Outline_Large, NORMAL, 16)
-    SetFont(_G.NumberFont_Outline_Huge, HEADER, 20)
-    SetFont(_G.NumberFont_Shadow_Tiny, NORMAL, 10)
-    SetFont(_G.NumberFont_Shadow_Small, NORMAL, 12)
-    SetFont(_G.NumberFont_Shadow_Med, NORMAL, 14)
-    SetFont(_G.NumberFont_Shadow_Large, HEADER, 20)
-    SetFont(_G.PriceFont, NORMAL, 14)
-    SetFont(_G.NumberFontNormalLargeRight, NORMAL, 14)
+    SetFont(_G.NumberFont_GameNormal, NORMAL, 12, true)
+    SetFont(_G.NumberFont_OutlineThick_Mono_Small, NORMAL, 11, true)
+    SetFont(_G.Number12Font_o1, NORMAL, 11, true)
+    SetFont(_G.NumberFont_Small, NORMAL, 11, true)
+    SetFont(_G.Number11Font, NORMAL, 10, true)
+    SetFont(_G.Number12Font, NORMAL, 11, true)
+    SetFont(_G.Number13Font, NORMAL, 12, true)
+    SetFont(_G.Number15Font, NORMAL, 14, true)
+    SetFont(_G.Number16Font, NORMAL, 15, true)
+    SetFont(_G.Number18Font, NORMAL, 17, true)
+    SetFont(_G.NumberFont_Normal_Med, NORMAL, 13, true)
+    SetFont(_G.NumberFont_Outline_Med, NORMAL, 13, true)
+    SetFont(_G.NumberFont_Outline_Large, NORMAL, 16, true)
+    SetFont(_G.NumberFont_Outline_Huge, HEADER, 20, true)
+    SetFont(_G.NumberFont_Shadow_Tiny, NORMAL, 10, true)
+    SetFont(_G.NumberFont_Shadow_Small, NORMAL, 12, true)
+    SetFont(_G.NumberFont_Shadow_Med, NORMAL, 14, true)
+    SetFont(_G.NumberFont_Shadow_Large, HEADER, 20, true)
+    SetFont(_G.PriceFont, NORMAL, 14, true)
+    SetFont(_G.NumberFontNormalLargeRight, NORMAL, 14, true)
 
     SetFont(_G.SplashHeaderFont, HEADER, 24)
 
@@ -235,7 +240,7 @@ local function ReskinBlizzFonts()
     SetFont(_G.FriendsFont_Large, NORMAL, 15)
     SetFont(_G.FriendsFont_UserText, NORMAL, 11)
 
-    SetFont(_G.ChatBubbleFont, BOLD, 16)
+    SetFont(_G.ChatBubbleFont, BOLD, 14)
     -- ChatFontNormal
     -- ChatFontSmall
 
