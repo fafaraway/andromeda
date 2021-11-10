@@ -21,7 +21,8 @@ local events = {
     'CHAT_MSG_WHISPER',
     'CHAT_MSG_WHISPER_INFORM',
     'CHAT_MSG_YELL',
-    'CHAT_MSG_LOOT'
+    'CHAT_MSG_LOOT',
+    'CHAT_MSG_CURRENCY'
 }
 
 -- item level and gem
@@ -97,70 +98,62 @@ function CHAT:AddItemLevel()
 end
 
 -- icon for item/spell/achievement
-local function GetHyperlink(Hyperlink, texture)
+local function GetHyperlink(hyperlink, texture)
     if (not texture) then
-        return Hyperlink
+        return hyperlink
     else
-        return ' |T' .. texture .. ':12:14:0:0:64:64:5:59:5:59|t ' .. Hyperlink
+        return ' |T' .. texture .. ':12:14:0:0:64:64:5:59:5:59|t ' .. hyperlink
     end
 end
 
-local function AddChatIcon(Hyperlink)
-    local schema, id = string.match(Hyperlink, '|H(%w+):(%d+):')
-    if not id then
+local function AddChatIcon(hyperlink)
+    local linkType, id = string.match(hyperlink, '|H(%a+):(%d+)')
+    id = id and tonumber(id)
+    if not linkType or not id then
         return
     end
 
     local texture
-    if schema == 'item' then
-        texture = select(10, GetItemInfo(tonumber(id)))
-    elseif schema == 'spell' then
-        texture = select(3, GetSpellInfo(tonumber(id)))
-    elseif schema == 'achievement' then
-        texture = select(10, GetAchievementInfo(tonumber(id)))
+    if linkType == 'spell' or linkType == 'enchant' then
+        texture = GetSpellTexture(id)
+    elseif linkType == 'item' or linkType == 'keystone' then
+        texture = GetItemIcon(id)
+    elseif linkType == 'talent' then
+        texture = select(3, GetTalentInfoByID(id))
+    elseif linkType == 'pvptal' then
+        texture = select(3, GetPvpTalentInfoByID(id))
+    elseif linkType == 'achievement' then
+        texture = select(10, GetAchievementInfo(id))
+    elseif linkType == 'currency' then
+        local info = C_CurrencyInfo.GetCurrencyInfo(id)
+        texture = info and info.iconFileID
+    elseif linkType == 'battlepet' then
+        texture = select(2, C_PetJournal.GetPetInfoBySpeciesID(id))
+    elseif linkType == 'battlePetAbil' then
+        texture = select(3, C_PetBattles.GetAbilityInfoByID(id))
+    elseif linkType == 'azessence' then
+        local info = C_AzeriteEssence.GetEssenceInfo(id)
+        texture = info and info.icon
+    elseif linkType == 'conduit' then
+        local spell = C_Soulbinds.GetConduitSpellID(id, 1)
+        texture = spell and GetSpellTexture(spell)
     end
 
-    return GetHyperlink(Hyperlink, texture)
+    return GetHyperlink(hyperlink, texture)
 end
 
-local function AddEnchantIcon(Hyperlink)
-    local id = string.match(Hyperlink, 'Henchant:(%d-)|')
+local function AddTradeIcon(hyperlink)
+    local id = string.match(hyperlink, 'Htrade:[^:]-:(%d+)')
+    id = id and tonumber(id)
     if not id then
         return
     end
 
-    return GetHyperlink(Hyperlink, GetSpellTexture(tonumber(id)))
-end
-
-local function AddTalentIcon(Hyperlink)
-    local schema, id = string.match(Hyperlink, 'H(%w+):(%d-)|')
-    if not id then
-        return
-    end
-
-    local texture
-    if schema == 'talent' then
-        texture = select(3, GetTalentInfoByID(tonumber(id)))
-    elseif schema == 'pvptal' then
-        texture = select(3, GetPvpTalentInfoByID(tonumber(id)))
-    end
-
-    return GetHyperlink(Hyperlink, texture)
-end
-
-local function AddTradeIcon(Hyperlink)
-    local id = string.match(Hyperlink, 'Htrade:[^:]-:(%d+)')
-    if not id then
-        return
-    end
-
-    return GetHyperlink(Hyperlink, GetSpellTexture(tonumber(id)))
+    return GetHyperlink(hyperlink, GetSpellTexture(id))
 end
 
 function CHAT:UpdateLinkIcon(_, msg, ...)
-    msg = string.gsub(msg, '(|H%w+:%d+:.-|h.-|h)', AddChatIcon)
-    msg = string.gsub(msg, '(|Henchant:%d+|h.-|h)', AddEnchantIcon)
-    msg = string.gsub(msg, '(|H%w+:%d+|h.-|h)', AddTalentIcon)
+    msg = string.gsub(msg, '(|H%a+:%d+.-|h.-|h)', AddChatIcon)
     msg = string.gsub(msg, '(|Htrade:.+:%d+|h.-|h)', AddTradeIcon)
 
     return false, msg, ...
@@ -177,7 +170,7 @@ function CHAT:AddLinkIcon()
         function(self, userInput)
             local text = self:GetText()
             if userInput then
-                local newText, count = string.gsub(text, '|T.+|t', '')
+                local newText, count = string.gsub(text, '(|T[:%d]+|t)(|H.+|h.+|h)', '%2')
                 if count > 0 then
                     self:SetText(newText)
                 end
