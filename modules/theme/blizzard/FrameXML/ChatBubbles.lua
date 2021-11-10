@@ -1,12 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local pairs = pairs
-local tinsert = tinsert
-local GetCVarBool = GetCVarBool
-local CreateFrame = CreateFrame
-local C_ChatBubbles_GetAllChatBubbles = C_ChatBubbles.GetAllChatBubbles
-
 local F, C = unpack(select(2, ...))
 
 local function UpdateBorderColor(frame)
@@ -25,7 +16,7 @@ local function ReskinBubble(chatbubble)
     if frame and not frame:IsForbidden() then
         frame.__bg = F.CreateBDFrame(frame, .75)
         frame.__bg:SetScale(_G.UIParent:GetEffectiveScale())
-        frame.__bg:SetInside(frame, 6, 6)
+        frame.__bg:SetInside(frame, 10, 10)
         frame.__shadow = F.CreateSD(frame.__bg)
         F.CreateTex(frame.__bg)
         frame:HookScript('OnShow', UpdateBorderColor)
@@ -38,7 +29,7 @@ local function ReskinBubble(chatbubble)
     chatbubble.styled = true
 end
 
-tinsert(
+table.insert(
     C.BlizzThemes,
     function()
         local events = {
@@ -70,7 +61,7 @@ tinsert(
             function(self, elapsed)
                 self.elapsed = self.elapsed + elapsed
                 if self.elapsed > .1 then
-                    for _, chatbubble in pairs(C_ChatBubbles_GetAllChatBubbles()) do
+                    for _, chatbubble in pairs(C_ChatBubbles.GetAllChatBubbles()) do
                         ReskinBubble(chatbubble)
                     end
 
