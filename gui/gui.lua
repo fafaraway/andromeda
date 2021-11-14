@@ -231,9 +231,9 @@ local function CreateOption(i)
             eb.label = F.CreateFS(eb, C.Assets.Fonts.Regular, 11, nil, name, nil, true, 'CENTER', 0, 20)
 
             if horizon then
-                eb:SetPoint('TOPLEFT', 260, -offset + 46)
+                eb:SetPoint('TOPLEFT', 260, -offset + 42)
             else
-                eb:SetPoint('TOPLEFT', 20, -offset - 24)
+                eb:SetPoint('TOPLEFT', 20, -offset - 28)
                 offset = offset + 70
             end
 
@@ -305,9 +305,9 @@ local function CreateOption(i)
 
             local dd = F.CreateDropDown(parent, 170, 20, data)
             if horizon then
-                dd:SetPoint('TOPLEFT', 260, -offset + 30)
+                dd:SetPoint('TOPLEFT', 260, -offset + 42)
             else
-                dd:SetPoint('TOPLEFT', 26, -offset - 40)
+                dd:SetPoint('TOPLEFT', 26, -offset - 28)
                 offset = offset + 70
             end
 

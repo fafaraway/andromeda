@@ -829,17 +829,16 @@ function GUI:SetupMajorSpells(parent)
     end
 end
 
-local function UpdateCVars()
-    NAMEPLATE:UpdatePlateVerticalSpacing()
-    NAMEPLATE:UpdatePlateHorizontalSpacing()
-    NAMEPLATE:UpdatePlateAlpha()
-    NAMEPLATE:UpdatePlateOccludedAlpha()
-    NAMEPLATE:UpdatePlateScale()
-    NAMEPLATE:UpdatePlateTargetScale()
+local function UpdateNameplateSize()
+    NAMEPLATE:RefreshNameplats()
 end
 
-function GUI:SetupNameplateSize(parent)
-    local guiName = 'FreeUIGUINamePlateSetup'
+local function UpdateNameplateCVars()
+    NAMEPLATE:UpdateNameplateCVars()
+end
+
+function GUI:SetupNameplateCVars(parent)
+    local guiName = 'FreeUIGUINamePlateCvars'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -850,23 +849,6 @@ function GUI:SetupNameplateSize(parent)
     local db = C.CharacterSettings.Nameplate
 
     local datas = {
-        [1] = {
-            key = 'Width',
-            value = db.Width,
-            text = L['Width'],
-            min = 40,
-            max = 400
-        },
-        [2] = {
-            key = 'Height',
-            value = db.Height,
-            text = L['Height'],
-            min = 4,
-            max = 40
-        }
-    }
-
-    local cvars = {
         [1] = {
             key = 'MinScale',
             value = db.MinScale,
@@ -919,16 +901,84 @@ function GUI:SetupNameplateSize(parent)
 
     local offset = -10
     for _, v in ipairs(datas) do
-        CreateGroupTitle(scroll, L['Nameplate Size'], offset)
-        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50)
+        CreateGroupTitle(scroll, L['Nameplate CVars'], offset)
+        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateNameplateCVars)
         offset = offset - 65
     end
+end
 
-    scroll.groupTitle = nil
+function GUI:SetupNameplateSize(parent)
+    local guiName = 'FreeUIGUINamePlateSize'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
 
-    for _, v in ipairs(cvars) do
-        CreateGroupTitle(scroll, L['Nameplate CVars'], offset - 50)
-        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 100, UpdateCVars)
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local db = C.CharacterSettings.Nameplate
+
+    local datas = {
+        [1] = {
+            key = 'Width',
+            value = db.Width,
+            text = L['Width'],
+            min = 40,
+            max = 400,
+            step = 1,
+        },
+        [2] = {
+            key = 'Height',
+            value = db.Height,
+            text = L['Height'],
+            min = 4,
+            max = 40,
+            step = 1,
+        }
+    }
+
+    local offset = -10
+    for _, v in ipairs(datas) do
+        CreateGroupTitle(scroll, L['Nameplate Size'], offset)
+        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateNameplateSize)
+        offset = offset - 65
+    end
+end
+
+function GUI:SetupNameplateFriendlySize(parent)
+    local guiName = 'FreeUIGUINamePlateFriendlySize'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local db = C.CharacterSettings.Nameplate
+
+    local datas = {
+        [1] = {
+            key = 'FriendlyWidth',
+            value = db.FriendlyWidth,
+            text = L['Width'],
+            min = 20,
+            max = 200,
+            step = 1,
+        },
+        [2] = {
+            key = 'FriendlyHeight',
+            value = db.FriendlyHeight,
+            text = L['Height'],
+            min = 4,
+            max = 40,
+            step = 1,
+        }
+    }
+
+    local offset = -10
+    for _, v in ipairs(datas) do
+        CreateGroupTitle(scroll, L['Friendly Nameplate Size'], offset)
+        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateNameplateSize)
         offset = offset - 65
     end
 end
@@ -956,6 +1006,30 @@ function GUI:SetupNameplateCastbarSize(parent)
     local offset = -10
     CreateGroupTitle(scroll, L['Nameplate Castbar'], offset)
     CreateSlider(scroll, 'Nameplate', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset - 50)
+end
+
+function GUI:SetupNameplateExecuteIndicator(parent)
+    local guiName = 'FreeUIGUINameplateExecuteIndicator'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local values = C.DB.Nameplate
+
+    local datas = {
+        key = 'ExecuteRatio',
+        value = values.ExecuteRatio,
+        text = L['Execute Ratio'],
+        min = 1,
+        max = 90,
+        step = 1
+    }
+
+    local offset = -30
+    CreateSlider(scroll, 'Nameplate', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset)
 end
 
 function GUI:SetupNPRaidTargetIndicator(parent)

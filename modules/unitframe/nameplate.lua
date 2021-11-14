@@ -42,7 +42,20 @@ function NAMEPLATE:UpdatePlateHorizontalSpacing()
     SetCVar('nameplateOverlapH', C.DB.Nameplate.HorizontalSpacing)
 end
 
-function NAMEPLATE:SetupCVars()
+function NAMEPLATE:UpdatePlateClickThrough()
+    if InCombatLockdown() then
+        return
+    end
+
+    C_NamePlate.SetNamePlateEnemyClickThrough(C.DB.Nameplate.EnemyClickThrough)
+    C_NamePlate.SetNamePlateFriendlyClickThrough(C.DB.Nameplate.FriendlyClickThrough)
+end
+
+function NAMEPLATE:UpdateNameplateCVars()
+    if not C.DB.Nameplate.ForceCVars then
+        return
+    end
+
     NAMEPLATE:PlateInsideView()
 
     NAMEPLATE:UpdatePlateVerticalSpacing()
@@ -53,6 +66,8 @@ function NAMEPLATE:SetupCVars()
 
     NAMEPLATE:UpdatePlateScale()
     NAMEPLATE:UpdatePlateTargetScale()
+
+    NAMEPLATE:UpdatePlateClickThrough()
 
     SetCVar('nameplateShowSelf', 0)
     SetCVar('nameplateResourceOnTarget', 0)
@@ -183,6 +198,7 @@ function NAMEPLATE:UpdateColor(_, unit)
     local hostileClassColor = C.DB.Nameplate.HostileClassColor
     local friendlyClassColor = C.DB.Nameplate.FriendlyClassColor
     local tankMode = C.DB.Nameplate.TankMode
+    local executeIndicator = C.DB.Nameplate.ExecuteIndicator
     local executeRatio = C.DB.Nameplate.ExecuteRatio
     local healthPerc = UnitHealth(unit) / (UnitHealthMax(unit) + .0001) * 100
     local r, g, b
@@ -247,7 +263,7 @@ function NAMEPLATE:UpdateColor(_, unit)
         end
     end
 
-    if executeRatio > 0 and healthPerc <= executeRatio then
+    if executeIndicator and executeRatio > 0 and healthPerc <= executeRatio then
         self.NameTag:SetTextColor(1, 0, 0)
     else
         self.NameTag:SetTextColor(1, 1, 1)
@@ -307,7 +323,7 @@ end
 
 function NAMEPLATE:UpdateTargetIndicator()
     local element = self.TargetIndicator
-    local isNameOnly = self.isNameOnly
+    local isNameOnly = self.plateType == 'NameOnly'
 
     if C.DB.Nameplate.TargetIndicator then
         if isNameOnly then
@@ -577,7 +593,7 @@ function NAMEPLATE:UpdateExplosives(event, unit)
     end
 end
 
-local function checkInstance()
+local function CheckInstance()
     local name, _, instID = GetInstanceInfo()
     if name and instID == 8 then
         hasExplosives = true
@@ -586,25 +602,25 @@ local function checkInstance()
     end
 end
 
-local function checkAffixes(event)
+local function CheckAffixes(event)
     local affixes = C_MythicPlus.GetCurrentAffixes()
     if not affixes then
         return
     end
     if affixes[3] and affixes[3].id == 13 then
-        checkInstance()
-        F:RegisterEvent(event, checkInstance)
-        F:RegisterEvent('CHALLENGE_MODE_START', checkInstance)
+        CheckInstance()
+        F:RegisterEvent(event, CheckInstance)
+        F:RegisterEvent('CHALLENGE_MODE_START', CheckInstance)
     end
-    F:UnregisterEvent(event, checkAffixes)
+    F:UnregisterEvent(event, CheckAffixes)
 end
 
 function NAMEPLATE:CheckExplosives()
-    if not C.DB.Nameplate.ExplosiveEnlarge then
+    if not C.DB.Nameplate.ExplosiveIndicator then
         return
     end
 
-    F:RegisterEvent('PLAYER_ENTERING_WORLD', checkAffixes)
+    F:RegisterEvent('PLAYER_ENTERING_WORLD', CheckAffixes)
 end
 
 -- Major spells glow
@@ -765,9 +781,16 @@ function NAMEPLATE:UpdateClickableSize()
 
     local width = C.DB.Nameplate.Width
     local height = C.DB.Nameplate.Height
+    local friendlyWidth = width
+    local friendlyHeight = height
     local scale = _G.FREE_ADB.UIScale
-    C_NamePlate.SetNamePlateEnemySize(width * scale, height * scale + 2)
-    C_NamePlate.SetNamePlateFriendlySize(width * scale, height * scale + 2)
+
+    if C.DB.Nameplate.FriendlyPlate and not C.DB.Nameplate.NameOnlyMode then
+        friendlyWidth, friendlyHeight = C.DB.Nameplate.FriendlyWidth, C.DB.Nameplate.FriendlyHeight
+    end
+
+    C_NamePlate.SetNamePlateEnemySize(width * scale, height * scale + 10)
+    C_NamePlate.SetNamePlateFriendlySize(friendlyWidth * scale, friendlyHeight * scale + 10)
 end
 
 function NAMEPLATE:ToggleNameplateAuras()
@@ -798,9 +821,17 @@ function NAMEPLATE:UpdateNameplateAuras()
     element:ForceUpdate()
 end
 
+function NAMEPLATE:UpdateNameplateSize()
+    local isFriendly = C.DB.Nameplate.FriendlyPlate and not C.DB.Nameplate.NameOnlyMode and self.isFriendly
+    local width = isFriendly and C.DB.Nameplate.FriendlyWidth or C.DB.Nameplate.Width
+    local height = isFriendly and C.DB.Nameplate.FriendlyHeight or C.DB.Nameplate.Height
+
+    self:SetSize(width, height)
+end
+
 function NAMEPLATE:RefreshNameplats()
     for nameplate in pairs(platesList) do
-        nameplate:SetSize(C.DB.Nameplate.Width, C.DB.Nameplate.Height)
+        NAMEPLATE.UpdateNameplateSize(nameplate)
         NAMEPLATE.UpdateNameplateAuras(nameplate)
         NAMEPLATE.UpdateTargetIndicator(nameplate)
         NAMEPLATE.UpdateTargetChange(nameplate)
@@ -825,12 +856,11 @@ function NAMEPLATE:UpdatePlateByType()
     local normalName = self.NameTag
     local title = self.npcTitle
     local classify = self.ClassifyIndicator
-    local isNameOnly = self.isNameOnly
     local questIcon = self.questIcon
 
     normalName:SetShown(not self.widgetsOnly)
 
-    if isNameOnly then
+    if self.plateType == 'NameOnly' then
         for _, element in pairs(disabledElements) do
             if self:IsElementEnabled(element) then
                 self:DisableElement(element)
@@ -872,6 +902,8 @@ function NAMEPLATE:UpdatePlateByType()
             self.widgetContainer:ClearAllPoints()
             self.widgetContainer:SetPoint('TOP', self.Castbar, 'BOTTOM', 0, -5)
         end
+
+        NAMEPLATE.UpdateNameplateSize(self)
     end
 
     NAMEPLATE.UpdateTargetIndicator(self)
@@ -882,11 +914,18 @@ end
 function NAMEPLATE:RefreshPlateType(unit)
     self.reaction = UnitReaction(unit, 'player')
     self.isFriendly = self.reaction and self.reaction >= 5
-    self.isNameOnly = C.DB.Nameplate.NameOnly and self.isFriendly or self.widgetsOnly or false
 
-    if self.previousType == nil or self.previousType ~= self.isNameOnly then
+    if C.DB.Nameplate.NameOnlyMode and self.isFriendly or self.widgetsOnly then
+        self.plateType = 'NameOnly'
+    elseif C.DB.Nameplate.FriendlyPlate and self.isFriendly then
+        self.plateType = 'FriendPlate'
+    else
+        self.plateType = 'None'
+    end
+
+    if self.previousType == nil or self.previousType ~= self.plateType then
         NAMEPLATE.UpdatePlateByType(self)
-        self.previousType = self.isNameOnly
+        self.previousType = self.plateType
     end
 end
 
@@ -970,7 +1009,7 @@ function NAMEPLATE:OnLogin()
     NAMEPLATE:UpdateClickableSize()
     hooksecurefunc(_G.NamePlateDriverFrame, 'UpdateNamePlateOptions', NAMEPLATE.UpdateClickableSize)
 
-    NAMEPLATE:SetupCVars()
+    NAMEPLATE:UpdateNameplateCVars()
     NAMEPLATE:BlockAddons()
     NAMEPLATE:CreateUnitTable()
     NAMEPLATE:CreatePowerUnitTable()

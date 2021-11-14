@@ -101,8 +101,28 @@ local function SetupMapScale()
 end
 
 -- Nameplate
+local function UpdatePlateClickThrough()
+    NAMEPLATE:UpdatePlateClickThrough()
+end
+
 local function SetupNameplateSize()
     GUI:SetupNameplateSize(GUI.Page[14])
+end
+
+local function SetupNameplateFriendlySize()
+    GUI:SetupNameplateFriendlySize(GUI.Page[14])
+end
+
+local function UpdateNamePlateCVars()
+    NAMEPLATE:UpdateNameplateCVars()
+end
+
+local function SetupNameplateCVars()
+    GUI:SetupNameplateCVars(GUI.Page[14])
+end
+
+local function SetupNameplateExecuteIndicator()
+    GUI:SetupNameplateExecuteIndicator(GUI.Page[14])
 end
 
 local function SetupNameplateCastbarSize()
@@ -507,54 +527,50 @@ GUI.OptionsList = {
         {1, 'Unitframe', 'RaidReverse', L['Raid frames reverse grow'], true},
     },
     [14] = { -- nameplate
-        {1, 'Nameplate', 'Enable', L['Enable Nameplate'], nil, SetupNameplateSize},
-        {1, 'Nameplate', 'NameOnly', L['Name Only Mode'], nil, nil, nil, L['For friendly units, nameplate healthbar will be hidden and the name will be enlarged.']},
+        {1, 'Nameplate', 'Enable', L['Enable Nameplate'], nil, SetupNameplateSize, nil, L['Uncheck this if you want to use another nameplate addon.']},
+        {1, 'Nameplate', 'ForceCVars', L['Force CVars Setting'], nil, SetupNameplateCVars, UpdateNamePlateCVars, L['Force to set related cvars of nameplate.']},
         {4, 'Nameplate', 'TextureStyle', L['Texture Style'], true, {}},
-        {1, 'Nameplate', 'RaidTargetIndicator', L['Raid Target Indicator'], nil, SetupNPRaidTargetIndicator, nil, L['Show raid target icon on nameplate.']},
-
-        {1, 'Nameplate', 'QuestIndicator', L['Quest indicator']},
-        {1, 'Nameplate', 'ClassifyIndicator', L['Classify indicator'], true},
-        {1, 'Nameplate', 'TargetIndicator', L['Target indicator']},
-        {1, 'Nameplate', 'ThreatIndicator', L['Threat indicator'], true},
-        {1, 'Nameplate', 'TotemIcon', L['Totmes icon']},
-
-        {1, 'Nameplate', 'ShowAura', L['Show Nameplate Auras'], nil, SetupAuraFilter, RefreshAllPlates},
-        {4, 'Nameplate', 'AuraFilterMode', L['Aura filter mode'], true, {L['BlackNWhite'], L['PlayerOnly'], L['IncludeCrowdControl']}},
-
-
-        --{3, 'Nameplate', 'ExecuteRatio', L['Excute ratio'], nil, {1, 90, 1}, nil, L['If unit health percentage lower than the execute cap you set, its name text color turns into red.|nThe execute indicator would be disabled on 0.']},
-
-
-
-
-
-
+        {1, 'Nameplate', 'NameOnlyMode', L['Name Only Mode'], nil, nil, nil, L["Friendly nameplate only display the enlarged name and hide the health bar."]},
+        {1, 'Nameplate', 'FriendlyPlate', L['Friendly Nameplate Size'], true, SetupNameplateFriendlySize, RefreshAllPlates, L["Set size separately for friendly nameplate.|nIf disabled, friendly nameplate will use the same size setting as the enemy nameplate."]},
+        {1, 'Nameplate', 'FriendlyClickThrough', L['Friendly Click Through'], nil, nil, UpdatePlateClickThrough, L['Friendly nameplate ignore mouse clicks.']},
+        {1, 'Nameplate', 'EnemyClickThrough', L['Enemy Click Through'], true, nil, UpdatePlateClickThrough, L['Enemy nameplate ignore mouse clicks.']},
         {},
-        {1, 'Nameplate', 'ExplosiveIndicator', L['Explosive indicator']},
-        {1, 'Nameplate', 'SpitefulIndicator', L['Spiteful indicator'], true},
+        {1, 'Nameplate', 'ShowAura', L['Nameplate Auras'], nil, SetupAuraFilter, RefreshAllPlates, L['Display auras on nameplate.|nYou can use BLACKLIST and WHITELIST to show or hide specific auras.']},
+        {1, 'Nameplate', 'TotemIcon', L['Totme Indicator'], nil, nil, nil, L["Display the corresponding totem icon on the totem's nameplate."]},
+        {4, 'Nameplate', 'AuraFilterMode', L['Aura Filter Mode'], true, {L['BlackNWhite'], L['PlayerOnly'], L['IncludeCrowdControl']}},
+        {1, 'Nameplate', 'ExecuteIndicator', L['Execute Indicator'], nil, SetupNameplateExecuteIndicator, nil, L['If unit health percentage lower than the execute cap you set, its name text color turns into red.']},
+        {1, 'Nameplate', 'RaidTargetIndicator', L['Raid Target Indicator'], true, SetupNPRaidTargetIndicator, nil, L['Display raid target icon on nameplate.']},
+        {1, 'Nameplate', 'QuestIndicator', L['Quest Indicator'], nil, nil, nil, L['Display quest mark and progress on the right side of the nameplate.']},
+        {1, 'Nameplate', 'ClassifyIndicator', L['Classify Indicator'], true, nil, nil, L['Display the corresponding icon on the left side of the nameplate according to the mob type.|nSupport ELITE, RARE and BOSS.']},
+        {1, 'Nameplate', 'TargetIndicator', L['Target Indicator'], nil, nil, nil, L['Display white glow under the nameplate of the current target.']},
+        {1, 'Nameplate', 'ThreatIndicator', L['Threat Indicator'], true, nil, nil, L['The glow above the nameplate is colored according to the threat status.']},
         {},
-        {1, 'Nameplate', 'Castbar', L['Enable Castbar']},
+        {1, 'Nameplate', 'ExplosiveIndicator', L['Explosive Indicator'], nil, nil, nil, L['Enlarge the nameplate of explosives in M+ dungeons.']},
+        {1, 'Nameplate', 'SpitefulIndicator', L['Spiteful Indicator'], true, nil, nil, L["Display the target name of Spiteful Shade in M+ dungeons."]},
+        {},
+        {1, 'Nameplate', 'Castbar', L['Enable Castbar'], nil, nil, nil, L['Enable castbar on nameplate.']},
         {1, 'Nameplate', 'SeparateCastbar', L['Separate Castbar'], true, SetupNameplateCastbarSize, nil, L['If disabled, the castbar will be overlapped on the healthbar.|nNote that the spell name and time are only available with separate castbar.']},
-        {1, 'Nameplate', 'CastTarget', L['Show Spell Target'], nil, nil, nil, L['Show target of casting spell on nameplate.']},
-        {1, 'Nameplate', 'MajorSpellsGlow', L['Major Spells Glow'], true, SetupMajorSpells, nil, L['If unit is casting a major spell, highlight its castbar icon.|nClick the GEAR ICON to customize your list.']},
+        {1, 'Nameplate', 'CastTarget', L['Show Spell Target'], nil, nil, nil, L["Display the target name if unit is casting."]},
+        {1, 'Nameplate', 'MajorSpellsGlow', L['Major Spell Highlight'], true, SetupMajorSpells, nil, L['Highlight the castbar icon if unit is casting a major spell.']},
         {},
-        {1, 'Nameplate', 'FriendlyClassColor', L['Friendly unit colored by class']},
-        {1, 'Nameplate', 'HostileClassColor', L['Hostile unit colored by class'], true},
-        {1, 'Nameplate', 'ColoredTarget', L['Target unit colored']},
-        {5, 'Nameplate', 'TargetColor', L['Target color'], 2},
-        {1, 'Nameplate', 'ColoredFocus', L['Focus unit colored']},
-        {5, 'Nameplate', 'FocusColor', L['Focus color'], 2},
-        {1, 'Nameplate', 'TankMode', L['Tank mode']},
-        {1, 'Nameplate', 'RevertThreat', L['Revert threat'], true},
+        {1, 'Nameplate', 'FriendlyClassColor', L['Friendly Unit ClassColored'], nil, nil, nil, L['The nameplate of the friendly unit is colored by class.']},
+        {1, 'Nameplate', 'HostileClassColor', L['Hostile Unit ClassColored'], true, nil, nil, L['The nameplate of the hostile unit is colored by class.']},
+
+        {1, 'Nameplate', 'ColoredTarget', L['Colored Target'], nil, nil, nil, L['Dye your target nameplate, its priority is higher than custom color and threat color.']},
+        {1, 'Nameplate', 'ColoredFocus', L['Colored Focus'], true, nil, nil, L['Dye your focus nameplate, its priority is higher than custom color and threat color.']},
+        {5, 'Nameplate', 'TargetColor', L['Target Color']},
+
+        {5, 'Nameplate', 'FocusColor', L['Focus Color'], 2},
+
+        {1, 'Nameplate', 'TankMode', L['Force TankMode Colored'], nil, nil, nil, L['Nameplate health color present its threat status to you, instead of glow color.|nFor custom color units, the threat status remains on nameplate glow.']},
+        {1, 'Nameplate', 'RevertThreat', L['Revert Threat Color'], true, nil, nil, L["If 'Force TankMode Colored' enabled, swap their threat status color for non-tank classes."]},
         {5, 'Nameplate', 'SecureColor', L['Secure']},
         {5, 'Nameplate', 'TransColor', L['Transition'], 1},
         {5, 'Nameplate', 'InsecureColor', L['Insecure'], 2},
-        {5, 'Nameplate', 'OffTankColor', L['Off-Tank'], 3},
-        {1, 'Nameplate', 'CustomUnitColor', L['Custom unit colored'], nil, nil, UpdateCustomUnitList},
-        {5, 'Nameplate', 'CustomColor', L['Custom color']},
-        {2, 'Nameplate', 'CustomUnitList', L['Custom unit list'], true, nil, UpdateCustomUnitList},
-
-
+        {5, 'Nameplate', 'OffTankColor', L['Co-Tank'], 3},
+        {1, 'Nameplate', 'CustomUnitColor', L['Colored Custom Unit'], nil, nil, UpdateCustomUnitList, L["Dye units' nameplate by custom color.|nYou can customize the color and the units list to match your requirement."]},
+        {5, 'Nameplate', 'CustomColor', L['Custom Color']},
+        {2, 'Nameplate', 'CustomUnitList', L['Custom Unit List'], true, nil, UpdateCustomUnitList, L['Enter unit name or NPC ID. Use key SPACE between different units.']},
     },
     [15] = { -- theme
         {1, 'ACCOUNT', 'ShadowOutline', L['Shadow Border'], nil, nil, nil, L['Add shadow border to most of UI widgets.']},

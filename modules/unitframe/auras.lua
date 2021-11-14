@@ -196,7 +196,7 @@ function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, cast
             return true
         end
     elseif style == 'nameplate' or style == 'boss' or style == 'arena' then
-        if element.__owner.isNameOnly then
+        if element.__owner.plateType == 'NameOnly' then
             return _G.FREE_ADB['NPAuraFilter'][1][spellID] or C.AuraWhiteList[spellID]
         elseif _G.FREE_ADB['NPAuraFilter'][2][spellID] or C.AuraBlackList[spellID] then
             return false
