@@ -1117,7 +1117,7 @@ do
             return
         end
 
-        thumb.bg:SetBackdropColor(C.r, C.g, C.b)
+        thumb.bg:SetBackdropColor(C.r, C.g, C.b, .25)
         thumb.bg:SetBackdropBorderColor(C.r, C.g, C.b)
     end
 
@@ -1128,7 +1128,7 @@ do
         end
 
         local color = _G.FREE_ADB.ButtonBackdropColor
-        thumb.bg:SetBackdropColor(color.r, color.g, color.b)
+        thumb.bg:SetBackdropColor(color.r, color.g, color.b, .25)
         F.SetBorderColor(thumb.bg)
     end
 
@@ -1147,7 +1147,7 @@ do
             thumb:SetWidth(16)
             self.thumb = thumb
 
-            local bg = F.CreateBDFrame(self, .65)
+            local bg = F.CreateBDFrame(self, .25)
             bg:SetPoint('TOPLEFT', thumb, 0, -2)
             bg:SetPoint('BOTTOMRIGHT', thumb, 0, 4)
             thumb.bg = bg
