@@ -112,15 +112,25 @@ end
 
 local function SelectTab(i)
     local r, g, b = C.r, C.g, C.b
-    local color = _G.FREE_ADB.ButtonBackdropColor
+    local gradStyle = _G.FREE_ADB.GradientStyle
+    local buttonColor = _G.FREE_ADB.ButtonBackdropColor
+    local buttonAlpha = _G.FREE_ADB.ButtonBackdropAlpha
 
     for num = 1, #tabsList do
         if num == i then
-            guiTab[num].__gradient:SetVertexColor(r, g, b)
+            if gradStyle then
+                guiTab[num].__gradient:SetGradientAlpha('Vertical', 0, 0, 0, .25, r, g, b, buttonAlpha)
+            else
+                guiTab[num].__gradient:SetVertexColor(r, g, b)
+            end
             guiTab[num].checked = true
             guiPage[num]:Show()
         else
-            guiTab[num].__gradient:SetVertexColor(color.r, color.g, color.b)
+            if gradStyle then
+                guiTab[num].__gradient:SetGradientAlpha('Vertical', 0, 0, 0, .25, buttonColor.r, buttonColor.g, buttonColor.b, buttonAlpha)
+            else
+                guiTab[num].__gradient:SetVertexColor(buttonColor.r, buttonColor.g, buttonColor.b)
+            end
             guiTab[num].checked = false
             guiPage[num]:Hide()
         end
@@ -157,7 +167,7 @@ local function CreateTab(parent, i, name)
     tab.icon:SetTexture(iconsList[i])
     F.ReskinIcon(tab.icon)
 
-    tab.text = F.CreateFS(tab, C.Assets.Fonts.Bold, 13, 'OUTLINE', name, nil, true)
+    tab.text = F.CreateFS(tab, C.Assets.Fonts.Bold, 13, nil, name, nil, true)
     tab.text:SetPoint('LEFT', tab.icon, 'RIGHT', 6, 0)
 
     tab:HookScript('OnEnter', Tab_OnEnter)
@@ -432,8 +442,7 @@ local function CreateGUI()
         guiPage[i] = CreateFrame('ScrollFrame', nil, guiFrame, 'UIPanelScrollFrameTemplate')
         guiPage[i]:SetPoint('TOPLEFT', 170, -50)
         guiPage[i]:SetSize(500, 540)
-        guiPage[i].__bg = F.CreateBDFrame(guiPage[i], .3)
-        --guiPage[i].__bg:SetBackdropColor(.04, .04, .04, .25)
+        guiPage[i].__bg = F.CreateBDFrame(guiPage[i], .45)
         guiPage[i]:Hide()
 
         guiPage[i].child = CreateFrame('Frame', nil, guiPage[i])

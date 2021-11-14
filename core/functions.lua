@@ -689,13 +689,21 @@ do
 
     function F:CreateGradient()
         local gradStyle = _G.FREE_ADB.GradientStyle
-        local gradTex = C.AssetsPath .. 'textures\\gradient'
         local normTex = C.Assets.bd_tex
+        local buttonColor = _G.FREE_ADB.ButtonBackdropColor
+        local buttonAlpha = _G.FREE_ADB.ButtonBackdropAlpha
+        local backdropColor = _G.FREE_ADB.BackdropColor
+        local backdropAlpha = _G.FREE_ADB.BackdropAlpha
 
         local tex = self:CreateTexture(nil, 'BORDER')
         tex:SetAllPoints(self)
-        tex:SetTexture(gradStyle and gradTex or normTex)
-        tex:SetVertexColor(.065, .065, .065, .35)
+        tex:SetTexture(normTex)
+
+        if gradStyle then
+            tex:SetGradientAlpha('Vertical', 0, 0, 0, .25, buttonColor.r, buttonColor.g, buttonColor.b, buttonAlpha)
+        else
+            tex:SetVertexColor(backdropColor.r, backdropColor.g, backdropColor.b, backdropAlpha)
+        end
 
         return tex
     end
@@ -928,7 +936,7 @@ do
     end
 
     -- Handle button
-    local function UpdateGlow(frame)
+    local function UpdateGlow(frame, stop)
         local speed = .05
         local mult = 1
         local alpha = 1
@@ -937,18 +945,24 @@ do
         frame:SetScript(
             'OnUpdate',
             function(self, elapsed)
-                last = last + elapsed
-                if last > speed then
-                    last = 0
-                    self:SetAlpha(alpha)
-                end
+                if not stop then
+                    self:SetBackdropBorderColor(C.r, C.g, C.b)
+                    last = last + elapsed
+                    if last > speed then
+                        last = 0
+                        self:SetAlpha(alpha)
+                    end
 
-                alpha = alpha - elapsed * mult
-                if alpha < 0 and mult > 0 then
-                    mult = mult * -1
-                    alpha = 0
-                elseif alpha > 1 and mult < 0 then
-                    mult = mult * -1
+                    alpha = alpha - elapsed * mult
+                    if alpha < 0 and mult > 0 then
+                        mult = mult * -1
+                        alpha = 0
+                    elseif alpha > 1 and mult < 0 then
+                        mult = mult * -1
+                    end
+                else
+                    self:SetBackdropBorderColor(0, 0, 0)
+                    self:SetAlpha(.25)
                 end
             end
         )
@@ -963,8 +977,6 @@ do
             return
         end
 
-        self.__shadow:SetBackdropBorderColor(C.r, C.g, C.b, 1)
-
         UpdateGlow(self.__shadow)
     end
 
@@ -973,8 +985,7 @@ do
             return
         end
 
-        self.__shadow:SetBackdropBorderColor(0, 0, 0, .25)
-        self.__shadow:SetScript('OnUpdate', nil)
+        UpdateGlow(self.__shadow, true)
     end
 
     local function Button_OnEnter(self)
@@ -1066,7 +1077,7 @@ do
         self:HookScript('OnLeave', Button_OnLeave)
 
         if not noGlow then
-            F.CreateSD(self, .25, 6, 6)
+            self.__shadow = F.CreateSD(self.__bg, .25)
 
             self:HookScript('OnEnter', StartGlow)
             self:HookScript('OnLeave', StopGlow)
@@ -1106,10 +1117,8 @@ do
             return
         end
 
-        local alpha = _G.FREE_ADB.ButtonBackdropAlpha
-
-        thumb.bg:SetBackdropColor(C.r, C.g, C.b, alpha)
-        -- thumb.bg:SetBackdropBorderColor(C.r, C.g, C.b)
+        thumb.bg:SetBackdropColor(C.r, C.g, C.b)
+        thumb.bg:SetBackdropBorderColor(C.r, C.g, C.b)
     end
 
     local function Scroll_OnLeave(self)
@@ -1119,8 +1128,7 @@ do
         end
 
         local color = _G.FREE_ADB.ButtonBackdropColor
-        local alpha = _G.FREE_ADB.ButtonBackdropAlpha
-        thumb.bg:SetBackdropColor(color.r, color.g, color.b, alpha)
+        thumb.bg:SetBackdropColor(color.r, color.g, color.b)
         F.SetBorderColor(thumb.bg)
     end
 
@@ -1139,7 +1147,7 @@ do
             thumb:SetWidth(16)
             self.thumb = thumb
 
-            local bg = F.CreateBDFrame(self, 0, true)
+            local bg = F.CreateBDFrame(self, .65)
             bg:SetPoint('TOPLEFT', thumb, 0, -2)
             bg:SetPoint('BOTTOMRIGHT', thumb, 0, 4)
             thumb.bg = bg
@@ -1257,15 +1265,16 @@ do
     end
 
     function F:ReskinArrow(direction)
-        self:SetSize(16, 16)
-
         F.StripTextures(self)
+        self:SetSize(16, 16)
+        -- self:SetDisabledTexture(assets.bd_tex)
 
-        self:SetDisabledTexture(assets.bd_tex)
-        local dis = self:GetDisabledTexture()
-        dis:SetVertexColor(0, 0, 0, .3)
-        dis:SetDrawLayer('OVERLAY')
-        dis:SetAllPoints()
+        -- local dis = self:GetDisabledTexture()
+        -- dis:SetVertexColor(0, 0, 0, .3)
+        -- dis:SetDrawLayer('OVERLAY')
+        -- dis:SetAllPoints()
+
+        F.CreateBDFrame(self, .25)
 
         local tex = self:CreateTexture(nil, 'ARTWORK')
         tex:SetVertexColor(1, 1, 1)
@@ -1318,12 +1327,10 @@ do
         self:SetNormalTexture('')
         self:SetPushedTexture('')
 
-        local bg = F.CreateBDFrame(self)
-        bg:SetInside(self, 4, 4)
-        local shadow = F.CreateSD(bg, .25)
-
-        self.bg = bg
-        self.shadow = shadow
+        self.bg = F.CreateBDFrame(self)
+        F.SetBorderColor(self.bg)
+        self.bg:SetInside(self, 4, 4)
+        self.shadow = F.CreateSD(self.bg, .25)
 
         if self.SetHighlightTexture then
             local highligh = self:CreateTexture(nil, 'HIGHLIGHT')
@@ -1413,6 +1420,7 @@ do
         local bg = F.CreateBDFrame(self)
         bg:SetPoint('TOPLEFT', 14, -2)
         bg:SetPoint('BOTTOMRIGHT', -15, 3)
+        F.SetBorderColor(bg)
         F.CreateSD(bg, .25)
 
         local thumb = self:GetThumbTexture()
@@ -1760,6 +1768,7 @@ do
         eb:SetFont(C.Assets.Fonts.Regular, 11)
         eb.bg = F.CreateBDFrame(eb)
         eb.bg:SetAllPoints()
+        F.SetBorderColor(eb.bg)
         F.CreateSD(eb.bg, .25)
 
         eb:SetScript('OnEscapePressed', EditBoxClearFocus)
@@ -1820,6 +1829,7 @@ do
         local dd = CreateFrame('Frame', nil, self, 'BackdropTemplate')
         dd:SetSize(width, height)
         dd.bg = F.CreateBDFrame(dd, .45)
+        F.SetBorderColor(dd.bg)
         F.CreateSD(dd.bg, .25)
 
         dd.Text = F.CreateFS(dd, C.Assets.Fonts.Regular, 11, nil, '', nil, true, 'LEFT', 5, 0)
@@ -1921,6 +1931,7 @@ do
         local swatch = CreateFrame('Button', nil, self, 'BackdropTemplate')
         swatch:SetSize(20, 12)
         swatch.bg = F.CreateBDFrame(swatch, 1)
+        F.SetBorderColor(swatch.bg)
         F.CreateSD(swatch.bg, .25)
         swatch.text = F.CreateFS(swatch, C.Assets.Fonts.Regular, 12, nil, name, nil, true, 'LEFT', 24, 0)
         local tex = swatch:CreateTexture()

@@ -42,8 +42,7 @@ local function CreateExtraGUI(parent, name, title, bgFrame)
         frame.bg = CreateFrame('Frame', nil, frame, 'BackdropTemplate')
         frame.bg:SetSize(240, 540)
         frame.bg:SetPoint('TOPLEFT', 10, -50)
-        frame.bg.bg = F.CreateBDFrame(frame.bg, .25)
-        frame.bg.bg:SetBackdropColor(.04, .04, .04, .25)
+        frame.bg.bg = F.CreateBDFrame(frame.bg, .45)
     end
 
     if not parent.extraGUIHook then
@@ -164,8 +163,7 @@ function GUI:CreateScroll(parent, width, height, text)
         F.CreateFS(scroll, C.Assets.Fonts.Regular, 12, 'OUTLINE', text, nil, true, 'TOPLEFT', 5, 20)
     end
 
-    scroll.bg = F.CreateBDFrame(scroll)
-    scroll.bg:SetBackdropColor(.04, .04, .04, .25)
+    scroll.bg = F.CreateBDFrame(scroll, .45)
 
     scroll.child = CreateFrame('Frame', nil, scroll)
     scroll.child:SetSize(width, 1)
@@ -696,7 +694,7 @@ function GUI:SetupNPAuraFilter(parent)
     local function createBar(parent, index, spellID)
         local name, _, texture = GetSpellInfo(spellID)
         local bar = CreateFrame('Frame', nil, parent, 'BackdropTemplate')
-        bar:SetSize(180, 30)
+        bar:SetSize(200, 30)
         F.CreateBD(bar, .3)
         frameData[index].barList[spellID] = bar
 
@@ -743,8 +741,7 @@ function GUI:SetupNPAuraFilter(parent)
         local frame = CreateFrame('Frame', nil, panel, 'BackdropTemplate')
         frame:SetSize(240, 250)
         frame:SetPoint('TOPLEFT', 10, value.offset - 25)
-        frame.bg = F.CreateBDFrame(frame, .25)
-        frame.bg:SetBackdropColor(.04, .04, .04, .25)
+        frame.bg = F.CreateBDFrame(frame, .45)
 
         local scroll = GUI:CreateScroll(frame, 200, 200)
         scroll:ClearAllPoints()
