@@ -1,4 +1,4 @@
-local F, C = unpack(select(2, ...))
+local F = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('UnitFrame')
 
 local TIER = 9
@@ -161,6 +161,7 @@ function UNITFRAME:AddDungeonSpells()
     UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 323650) -- 萦绕锁定
     UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 326874) -- 脚踝撕咬
     UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 340446) -- 嫉妒之印
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 323437) -- 傲慢罪印
 
     INSTANCE = 1189 -- 赤红深渊
     RegisterSeasonSpells(INSTANCE)
