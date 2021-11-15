@@ -364,9 +364,10 @@ end
 
 function M:CollectGoldButton()
     _G.OpenAllMail:ClearAllPoints()
-    _G.OpenAllMail:SetPoint('TOPLEFT', _G.InboxFrame, 'TOPLEFT', 50, -35)
+    _G.OpenAllMail:SetPoint('BOTTOMRIGHT', _G.MailFrame, 'BOTTOM', -2, 16)
+    _G.OpenAllMail:SetSize(80, 20)
 
-    local button = M:MailBox_CreatButton(_G.InboxFrame, 120, 24, '', {'LEFT', _G.OpenAllMail, 'RIGHT', 3, 0})
+    local button = M:MailBox_CreatButton(_G.InboxFrame, 80, 20, '', {'BOTTOMLEFT', _G.MailFrame, 'BOTTOM', 2, 16})
     button:HookScript('OnClick', M.MailBox_CollectAllGold)
     button:HookScript('OnEnter', M.TotalCash_OnEnter)
     button:HookScript('OnLeave', M.TotalCash_OnLeave)
@@ -400,8 +401,18 @@ function M:MailBox_CollectCurrent()
 end
 
 function M:CollectCurrentButton()
-    local button = M:MailBox_CreatButton(_G.OpenMailFrame, 82, 22, L['Take All'], {'RIGHT', 'OpenMailReplyButton', 'LEFT', -1, 0})
+    local button = M:MailBox_CreatButton(_G.OpenMailFrame, 70, 20, L['Take All'], {'RIGHT', 'OpenMailReplyButton', 'LEFT', -6, 0})
     button:SetScript('OnClick', M.MailBox_CollectCurrent)
+
+    _G.OpenMailCancelButton:SetSize(70, 20)
+    _G.OpenMailCancelButton:ClearAllPoints()
+    _G.OpenMailCancelButton:SetPoint('BOTTOMRIGHT', _G.OpenMailFrame, 'BOTTOMRIGHT', -8, 8)
+    _G.OpenMailDeleteButton:SetSize(70, 20)
+    _G.OpenMailDeleteButton:ClearAllPoints()
+    _G.OpenMailDeleteButton:SetPoint('RIGHT', _G.OpenMailCancelButton, 'LEFT', -6, 0)
+    _G.OpenMailReplyButton:SetSize(70, 20)
+    _G.OpenMailReplyButton:ClearAllPoints()
+    _G.OpenMailReplyButton:SetPoint('RIGHT', _G.OpenMailDeleteButton, 'LEFT', -6, 0)
 end
 
 function M:LastMailSaver()
