@@ -3,7 +3,7 @@ local F, C = unpack(select(2, ...))
 
 
 C.IsRetail = _G.WOW_PROJECT_ID == _G.WOW_PROJECT_MAINLINE
-C.IsNewPatch = C.IsRetail and select(4, GetBuildInfo()) >= 90105 -- 9.1.5
+C.IsNewPatch = C.IsRetail and select(4, GetBuildInfo()) >= 90200 -- 9.2.0
 C.MaxLevel = GetMaxLevelForPlayerExpansion()
 C.MyClass = select(2, UnitClass('player'))
 C.MyName = UnitName('player')
