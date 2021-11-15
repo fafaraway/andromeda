@@ -458,7 +458,7 @@ end
 function NAMEPLATE:UpdateUnitClassify(unit)
     local isBoss = UnitLevel(unit) == -1
     local class = UnitClassification(unit)
-    local isNameOnly = self.isNameOnly
+    local isNameOnly = self.plateType == 'NameOnly'
 
     if self.ClassifyIndicator then
         if not isNameOnly and isBoss then
@@ -503,6 +503,8 @@ function NAMEPLATE:UpdateQuestUnit(_, unit)
         return
     end
 
+    local isNameOnly = self.plateType == 'NameOnly'
+
     if isInInstance then
         self.questIcon:Hide()
         self.questCount:SetText('')
@@ -546,7 +548,7 @@ function NAMEPLATE:UpdateQuestUnit(_, unit)
         end
     end
 
-    if questProgress then
+    if questProgress and not isNameOnly then
         self.questCount:SetText(questProgress)
         self.questIcon:SetAtlas('Warfronts-BaseMapIcons-Horde-Barracks-Minimap')
         self.questIcon:Show()
@@ -855,7 +857,6 @@ function NAMEPLATE:UpdatePlateByType()
     local nameOnlyName = self.nameOnlyName
     local normalName = self.NameTag
     local title = self.npcTitle
-    local classify = self.ClassifyIndicator
     local questIcon = self.questIcon
 
     normalName:SetShown(not self.widgetsOnly)
@@ -870,12 +871,6 @@ function NAMEPLATE:UpdatePlateByType()
         nameOnlyName:Show()
         normalName:Hide()
         title:Show()
-        classify:Hide()
-
-        if questIcon then
-            questIcon:ClearAllPoints()
-            questIcon:SetPoint('LEFT', nameOnlyName, 'RIGHT', 0, 0)
-        end
 
         if self.widgetContainer then
             self.widgetContainer:ClearAllPoints()
@@ -891,12 +886,6 @@ function NAMEPLATE:UpdatePlateByType()
         nameOnlyName:Hide()
         normalName:Show()
         title:Hide()
-        classify:Show()
-
-        if questIcon then
-            questIcon:ClearAllPoints()
-            questIcon:SetPoint('LEFT', self, 'RIGHT', 1, 0)
-        end
 
         if self.widgetContainer then
             self.widgetContainer:ClearAllPoints()
@@ -906,7 +895,7 @@ function NAMEPLATE:UpdatePlateByType()
         NAMEPLATE.UpdateNameplateSize(self)
     end
 
-    if self.plateType == 'FriendlyPlate' then
+    if self.plateType == 'FriendlyPlate' or self.plateType == 'NameOnly' then
         self:DisableElement('Castbar')
     else
         self:EnableElement('Castbar')
@@ -963,7 +952,7 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
         self.widgetContainer = blizzPlate and blizzPlate.WidgetContainer
         if self.widgetContainer then
             self.widgetContainer:SetParent(self)
-            self.widgetContainer:SetScale(1 / _G.FREE_ADB.UIScale)
+            self.widgetContainer:SetScale(_G.FREE_ADB.UIScale)
         end
 
         NAMEPLATE.RefreshPlateType(self, unit)
