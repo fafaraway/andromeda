@@ -560,12 +560,7 @@ end
 
 -- Disable profanity filter
 local function FixProfanityFilterSideEffects()
-    _G.HelpFrame:HookScript(
-        'OnShow',
-        function()
-            _G.UIErrorsFrame:AddMessage(C.InfoColor .. L['You need to uncheck Profanity Filter in GUI and restart your game client to get access into CN battleNet support.'])
-        end
-    )
+    F.CreateFS(_G.HelpFrame, C.Assets.Fonts.Bold, 14, nil, L["You need to uncheck 'Disable Profanity Filter' in GUI and restart your game client to get access into CN battleNet support."], "YELLOW", true,  "TOP", 0, 30)
 
     local Old_GetFriendGameAccountInfo = _G.C_BattleNet.GetFriendGameAccountInfo
     function _G.C_BattleNet.GetFriendGameAccountInfo(...)
