@@ -78,8 +78,8 @@ local function CreateBars(parent, spellID, table1, table2, table3)
     local texture = GetSpellTexture(spellID)
 
     local bar = CreateFrame('Frame', nil, parent.child, 'BackdropTemplate')
-    bar:SetSize(200, 32)
-    F.CreateBD(bar, .5)
+    bar:SetSize(200, 30)
+    F.CreateBD(bar, .25)
     table1[spellID] = bar
 
     local icon, close = GUI:CreateBarWidgets(bar, texture)
@@ -166,7 +166,7 @@ function GUI:CreateEditbox(parent, text, x, y, tip, width, height)
     return eb
 end
 
-function GUI:CreateScroll(parent, width, height, text)
+function GUI:CreateScroll(parent, width, height, text, noBg)
     local scroll = CreateFrame('ScrollFrame', nil, parent, 'UIPanelScrollFrameTemplate')
     scroll:SetSize(width, height)
     scroll:SetPoint('TOPLEFT', 10, -50)
@@ -175,7 +175,9 @@ function GUI:CreateScroll(parent, width, height, text)
         F.CreateFS(scroll, C.Assets.Fonts.Regular, 12, 'OUTLINE', text, nil, true, 'TOPLEFT', 5, 20)
     end
 
-    scroll.bg = F.CreateBDFrame(scroll, .45)
+    if not noBg then
+        scroll.bg = F.CreateBDFrame(scroll, .45)
+    end
 
     scroll.child = CreateFrame('Frame', nil, scroll)
     scroll.child:SetSize(width, 1)
@@ -689,15 +691,13 @@ function GUI:SetupNameplateAuraFilter(parent)
     local frameData = {
         [1] = {
             text = L['White List'],
-            title = L['White List'],
-            tip = L["Fill in SpellID, must be a number.|nYou can get ID from spell's GameTooltip.|nSpell name is not supported."],
+            tip = L['Fill in SpellID, must be a number.|nSpell name is not supported.'],
             offset = -25,
             barList = {}
         },
         [2] = {
             text = L['Black List'],
-            title = L['Black List'],
-            tip = L["Fill in SpellID, must be a number.|nYou can get ID from spell's GameTooltip.|nSpell name is not supported."],
+            tip = L['Fill in SpellID, must be a number.|nSpell name is not supported.'],
             offset = -315,
             barList = {}
         }
@@ -707,7 +707,7 @@ function GUI:SetupNameplateAuraFilter(parent)
         local name, _, texture = GetSpellInfo(spellID)
         local bar = CreateFrame('Frame', nil, parent, 'BackdropTemplate')
         bar:SetSize(200, 30)
-        F.CreateBD(bar, .3)
+        bar.bg = F.CreateBD(bar, .25)
         frameData[index].barList[spellID] = bar
 
         local icon, close = GUI:CreateBarWidgets(bar, texture)
@@ -755,13 +755,13 @@ function GUI:SetupNameplateAuraFilter(parent)
         frame:SetPoint('TOPLEFT', 10, value.offset - 25)
         frame.bg = F.CreateBDFrame(frame, .45)
 
-        local scroll = GUI:CreateScroll(frame, 200, 200)
+        local scroll = GUI:CreateScroll(frame, 200, 200, nil, true)
         scroll:ClearAllPoints()
         scroll:SetPoint('BOTTOMLEFT', 10, 10)
 
         scroll.box = F.CreateEditBox(frame, 145, 25)
         scroll.box:SetPoint('TOPLEFT', 10, -10)
-        scroll.box.title = value.title
+        scroll.box.title = value.text
         F.AddTooltip(scroll.box, 'ANCHOR_RIGHT', value.tip, 'BLUE', true)
         scroll.add = F.CreateButton(frame, 70, 25, _G.ADD)
         scroll.add:SetPoint('TOPRIGHT', -8, -10)
@@ -2538,7 +2538,7 @@ function GUI:SetupAnnounceableSpells(parent)
     local scroll = GUI:CreateScroll(frame, 200, 480)
     scroll.box = GUI:CreateEditbox(frame, nil, 10, -10, nil, 110, 24)
     scroll.box.title = L['SpellID']
-    F.AddTooltip(scroll.box, 'ANCHOR_RIGHT', L["|nFill in SpellID, must be a number.|nYou can get ID from spell's GameTooltip.|nSpell name is not supported."], 'BLUE')
+    F.AddTooltip(scroll.box, 'ANCHOR_RIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE', true)
 
     scroll.add = F.CreateButton(frame, 50, 24, _G.ADD)
     scroll.add:SetPoint('LEFT', scroll.box, 'RIGHT', 5, 0)
