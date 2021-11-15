@@ -561,11 +561,6 @@ C.PartyBuffsList = {
     [309658] = true, -- 死亡凶蛮战鼓
     [102364] = true, -- 青铜龙的祝福
     [292686] = true, -- 制皮鼓
-    -- Dungeon (Necrotic Wake)
-    [328325] = true,
-    [328126] = true,
-    [328399] = true,
-    [325189] = true,
     -- DH
     [212800] = true, -- Blur
     [196555] = true, -- Nether Walk
