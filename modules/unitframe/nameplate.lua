@@ -952,7 +952,7 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
         self.widgetContainer = blizzPlate and blizzPlate.WidgetContainer
         if self.widgetContainer then
             self.widgetContainer:SetParent(self)
-            self.widgetContainer:SetScale(_G.FREE_ADB.UIScale)
+            --self.widgetContainer:SetScale(_G.FREE_ADB.UIScale)
         end
 
         NAMEPLATE.RefreshPlateType(self, unit)
