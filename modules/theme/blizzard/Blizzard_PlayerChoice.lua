@@ -13,7 +13,7 @@ local function ReskinOptionButton(self)
     end
 
     F.StripTextures(self, true)
-    F.Reskin(self)
+    F.Reskin(self, true)
 end
 
 local function ReskinSpellWidget(spell)
