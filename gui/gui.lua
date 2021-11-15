@@ -105,9 +105,9 @@ local function CombatLockdown(event)
 end
 
 local function CheckUIReload(name)
-    if not string.find(name, '%*') then
+    --if not string.find(name, '%*') then
         GUI.NeedUIReload = true
-    end
+    --end
 end
 
 local function SelectTab(i)
@@ -216,7 +216,7 @@ local function CreateOption(i)
 
             if data and type(data) == 'function' then
                 local bu = CreateGearButton(parent)
-                bu:SetPoint('LEFT', cb.label, 'RIGHT', -2, 1)
+                bu:SetPoint('LEFT', cb.label, 'RIGHT', -2, 0)
                 bu:SetScript('OnClick', data)
             end
 
@@ -374,7 +374,7 @@ local function CreateOption(i)
     footer:SetPoint('TOPLEFT', 25, -offset)
 end
 
-local function ScrollBarHook(self, delta)
+local function ScrollBar_OnMouseWheel(self, delta)
     local scrollBar = self.ScrollBar
     scrollBar:SetValue(scrollBar:GetValue() - delta * 35)
 end
@@ -449,7 +449,7 @@ local function CreateGUI()
         guiPage[i].child:SetSize(500, 1)
         guiPage[i]:SetScrollChild(guiPage[i].child)
         F.ReskinScroll(guiPage[i].ScrollBar)
-        guiPage[i]:SetScript('OnMouseWheel', ScrollBarHook)
+        guiPage[i]:SetScript('OnMouseWheel', ScrollBar_OnMouseWheel)
 
         CreateOption(i)
     end
@@ -473,7 +473,45 @@ function F.ToggleGUI()
     _G.PlaySound(_G.SOUNDKIT.IG_MAINMENU_OPTION)
 end
 
-function GUI:OnLogin()
+local function MainMenu_OnShow(self)
+    _G.GameMenuButtonLogout:SetPoint('TOP', GUI.FreeUIButton, 'BOTTOM', 0, -14)
+    self:SetHeight(self:GetHeight() + GUI.FreeUIButton:GetHeight() + 15 + 20)
+
+    _G.GameMenuButtonStore:ClearAllPoints()
+    _G.GameMenuButtonStore:SetPoint('TOP', _G.GameMenuButtonHelp, 'BOTTOM', 0, -4)
+
+    _G.GameMenuButtonWhatsNew:ClearAllPoints()
+    _G.GameMenuButtonWhatsNew:SetPoint('TOP', _G.GameMenuButtonStore, 'BOTTOM', 0, -4)
+
+    _G.GameMenuButtonUIOptions:ClearAllPoints()
+    _G.GameMenuButtonUIOptions:SetPoint('TOP', _G.GameMenuButtonOptions, 'BOTTOM', 0, -4)
+
+    _G.GameMenuButtonKeybindings:ClearAllPoints()
+    _G.GameMenuButtonKeybindings:SetPoint('TOP', _G.GameMenuButtonUIOptions, 'BOTTOM', 0, -4)
+
+    _G.GameMenuButtonMacros:ClearAllPoints()
+    _G.GameMenuButtonMacros:SetPoint('TOP', _G.GameMenuButtonKeybindings, 'BOTTOM', 0, -4)
+
+    _G.GameMenuButtonAddons:ClearAllPoints()
+    _G.GameMenuButtonAddons:SetPoint('TOP', _G.GameMenuButtonMacros, 'BOTTOM', 0, -4)
+
+    _G.GameMenuButtonQuit:ClearAllPoints()
+    _G.GameMenuButtonQuit:SetPoint('TOP', _G.GameMenuButtonLogout, 'BOTTOM', 0, -4)
+end
+
+local function Button_OnClick()
+    if InCombatLockdown() then
+        _G.UIErrorsFrame:AddMessage(C.RedColor .. _G.ERR_NOT_IN_COMBAT)
+        return
+    end
+
+    CreateGUI()
+    _G.HideUIPanel(_G.GameMenuFrame)
+
+    PlaySound(_G.SOUNDKIT.IG_MAINMENU_OPTION)
+end
+
+local function CreateFreeUIButton()
     local bu = CreateFrame('Button', 'GameMenuFrameFreeUI', _G.GameMenuFrame, 'GameMenuButtonTemplate')
     bu:SetText(C.AddonName)
     bu:SetPoint('TOP', _G.GameMenuButtonAddons, 'BOTTOM', 0, -14)
@@ -481,47 +519,14 @@ function GUI:OnLogin()
         F.Reskin(bu)
     end
 
-    _G.GameMenuFrame:HookScript(
-        'OnShow',
-        function(self)
-            _G.GameMenuButtonLogout:SetPoint('TOP', bu, 'BOTTOM', 0, -14)
-            self:SetHeight(self:GetHeight() + bu:GetHeight() + 15 + 20)
+    GUI.FreeUIButton = bu
 
-            _G.GameMenuButtonStore:ClearAllPoints()
-            _G.GameMenuButtonStore:SetPoint('TOP', _G.GameMenuButtonHelp, 'BOTTOM', 0, -4)
+    _G.GameMenuFrame:HookScript('OnShow', MainMenu_OnShow)
+    bu:SetScript('OnClick', Button_OnClick)
+end
 
-            _G.GameMenuButtonWhatsNew:ClearAllPoints()
-            _G.GameMenuButtonWhatsNew:SetPoint('TOP', _G.GameMenuButtonStore, 'BOTTOM', 0, -4)
-
-            _G.GameMenuButtonUIOptions:ClearAllPoints()
-            _G.GameMenuButtonUIOptions:SetPoint('TOP', _G.GameMenuButtonOptions, 'BOTTOM', 0, -4)
-
-            _G.GameMenuButtonKeybindings:ClearAllPoints()
-            _G.GameMenuButtonKeybindings:SetPoint('TOP', _G.GameMenuButtonUIOptions, 'BOTTOM', 0, -4)
-
-            _G.GameMenuButtonMacros:ClearAllPoints()
-            _G.GameMenuButtonMacros:SetPoint('TOP', _G.GameMenuButtonKeybindings, 'BOTTOM', 0, -4)
-
-            _G.GameMenuButtonAddons:ClearAllPoints()
-            _G.GameMenuButtonAddons:SetPoint('TOP', _G.GameMenuButtonMacros, 'BOTTOM', 0, -4)
-
-            _G.GameMenuButtonQuit:ClearAllPoints()
-            _G.GameMenuButtonQuit:SetPoint('TOP', _G.GameMenuButtonLogout, 'BOTTOM', 0, -4)
-        end
-    )
-
-    bu:SetScript(
-        'OnClick',
-        function()
-            if InCombatLockdown() then
-                _G.UIErrorsFrame:AddMessage(C.RedColor .. _G.ERR_NOT_IN_COMBAT)
-                return
-            end
-            CreateGUI()
-            _G.HideUIPanel(_G.GameMenuFrame)
-            PlaySound(_G.SOUNDKIT.IG_MAINMENU_OPTION)
-        end
-    )
+function GUI:OnLogin()
+    CreateFreeUIButton()
 
     F:RegisterEvent('PLAYER_REGEN_DISABLED', CombatLockdown)
 end

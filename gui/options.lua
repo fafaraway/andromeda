@@ -54,8 +54,8 @@ local function SetupActionbarFade()
     GUI:SetupActionbarFade(GUI.Page[6])
 end
 
-local function SetupAdditionalbar()
-    GUI:SetupAdditionalbar(GUI.Page[6])
+local function SetupAdditionalBar()
+    GUI:SetupAdditionalBar(GUI.Page[6])
 end
 
 local function UpdateHotkeys()
@@ -134,11 +134,11 @@ local function SetupNPRaidTargetIndicator()
 end
 
 local function SetupAuraFilter()
-    GUI:SetupNPAuraFilter(GUI.Page[14])
+    GUI:SetupNameplateAuraFilter(GUI.Page[14])
 end
 
-local function SetupMajorSpells()
-    GUI:SetupMajorSpells(GUI.Page[14])
+local function SetupNameplateMajorSpells()
+    GUI:SetupNameplateMajorSpells(GUI.Page[14])
 end
 
 local function UpdateCustomUnitList()
@@ -405,7 +405,7 @@ GUI.OptionsList = {
         {1, 'Actionbar', 'PetBar', L['Enable pet bar']},
         {1, 'Actionbar', 'StanceBar', L['Enable stance bar'], true},
         {1, 'Actionbar', 'VehicleBar', L['Enable leave vehicle button']},
-        {1, 'Actionbar', 'CustomBar', L['Enable additional bar'], true, SetupAdditionalbar, nil, L['|nAdd an additional actionbar for you to customize.']},
+        {1, 'Actionbar', 'CustomBar', L['Enable additional bar'], true, SetupAdditionalBar, nil, L['|nAdd an additional actionbar for you to customize.']},
         {},
         {1, 'Cooldown', 'Enable', L['Enable cooldown count']},
         {1, 'Cooldown', 'Decimal', L['Decimal timer']},
@@ -551,7 +551,7 @@ GUI.OptionsList = {
         {1, 'Nameplate', 'Castbar', L['Enable Castbar'], nil, nil, nil, L['Enable castbar on nameplate.']},
         {1, 'Nameplate', 'SeparateCastbar', L['Separate Castbar'], true, SetupNameplateCastbarSize, nil, L['If disabled, the castbar will be overlapped on the healthbar.|nNote that the spell name and time are only available with separate castbar.']},
         {1, 'Nameplate', 'CastTarget', L['Show Spell Target'], nil, nil, nil, L["Display the target name if unit is casting."]},
-        {1, 'Nameplate', 'MajorSpellsGlow', L['Major Spell Highlight'], true, SetupMajorSpells, nil, L['Highlight the castbar icon if unit is casting a major spell.']},
+        {1, 'Nameplate', 'MajorSpellsGlow', L['Major Spell Highlight'], true, SetupNameplateMajorSpells, nil, L['Highlight the castbar icon if unit is casting a major spell.']},
         {},
         {1, 'Nameplate', 'FriendlyClassColor', L['Friendly Unit ClassColored'], nil, nil, nil, L['The nameplate of the friendly unit is colored by class.']},
         {1, 'Nameplate', 'HostileClassColor', L['Hostile Unit ClassColored'], true, nil, nil, L['The nameplate of the hostile unit is colored by class.']},

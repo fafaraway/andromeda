@@ -680,7 +680,7 @@ do
         shadow:SetOutside(self, m or 5, m or 5)
         shadow:SetBackdrop({edgeFile = assets.shadow_tex, edgeSize = s or 5})
         shadow:SetBackdropBorderColor(0, 0, 0, a or .25)
-        shadow:SetFrameLevel(1)
+        --shadow:SetFrameLevel(1)
         shadow:SetFrameStrata(frame:GetFrameStrata())
         self.__shadow = shadow
 

@@ -12,6 +12,7 @@ local VIGNETTING = F:GetModule('Vignetting')
 local extraGUIs = {}
 
 --[[ Functions ]]
+
 local function TogglePanel(guiName)
     for name, frame in pairs(extraGUIs) do
         if name == guiName then
@@ -54,6 +55,16 @@ local function CreateExtraGUI(parent, name, title, bgFrame)
     return frame
 end
 
+local function CreateButton(parent, width, height, text, anchor)
+    local button = CreateFrame('Button', nil, parent, 'UIPanelButtonTemplate')
+    button:SetSize(width, height)
+    button:SetPoint(unpack(anchor))
+    button:SetText('|cffffffff' .. text)
+    F.Reskin(button)
+
+    return button
+end
+
 local function SortBars(barTable)
     local num = 1
     for _, bar in pairs(barTable) do
@@ -62,7 +73,7 @@ local function SortBars(barTable)
     end
 end
 
-local function createBarTest(parent, spellID, table1, table2, table3)
+local function CreateBars(parent, spellID, table1, table2, table3)
     local spellName = GetSpellInfo(spellID)
     local texture = GetSpellTexture(spellID)
 
@@ -123,6 +134,7 @@ local function ClearEdit(options)
 end
 
 --[[ Widgets ]]
+
 function GUI:CreateDropdown(parent, text, x, y, data, tip, width, height)
     local dd = F.CreateDropDown(parent, width or 90, height or 30, data)
     dd:SetPoint('TOPLEFT', x, y)
@@ -269,6 +281,7 @@ local function CreateSlider(parent, key, value, text, minV, maxV, step, defaultV
 end
 
 --[[ Module Extra GUI ]]
+
 -- Aura
 function GUI:SetupAuraSize(parent)
     local guiName = 'FreeUIGUIAuraSize'
@@ -331,7 +344,6 @@ function GUI:SetupAuraSize(parent)
 end
 
 -- Inventory
-
 local function UpdateBagSize()
     INVENTORY:UpdateBagSize()
 end
@@ -437,7 +449,7 @@ function GUI:SetupInventorySize(parent)
             min = 3,
             max = 6,
             step = 1
-        },
+        }
     }
 
     local colDatas = {
@@ -456,7 +468,7 @@ function GUI:SetupInventorySize(parent)
             min = 6,
             max = 20,
             step = 1
-        },
+        }
     }
 
     local rowDatas = {
@@ -604,7 +616,7 @@ function GUI:SetupActionbarFade(parent)
     end
 end
 
-function GUI:SetupAdditionalbar(parent)
+function GUI:SetupAdditionalBar(parent)
     local guiName = 'FreeUIGUIAdditionalBar'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
@@ -665,7 +677,7 @@ function GUI:SetupAdditionalbar(parent)
 end
 
 -- Nameplate
-function GUI:SetupNPAuraFilter(parent)
+function GUI:SetupNameplateAuraFilter(parent)
     local guiName = 'FreeUIGUINamePlateAuraFilter'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
@@ -766,7 +778,7 @@ function GUI:SetupNPAuraFilter(parent)
     end
 end
 
-function GUI:SetupMajorSpells(parent)
+function GUI:SetupNameplateMajorSpells(parent)
     local guiName = 'FreeUIGUINamePlateCastbarGlow'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
@@ -788,34 +800,32 @@ function GUI:SetupMajorSpells(parent)
     parent.scroll = scroll
     scroll.box = GUI:CreateEditbox(frame, nil, 10, -10, nil, 110, 24)
     scroll.box.title = L['SpellID']
-    F.AddTooltip(scroll.box, 'ANCHOR_RIGHT', L["|nFill in SpellID, must be a number.|nYou can get ID from spell's GameTooltip.|nSpell name is not supported."], 'BLUE')
+    F.AddTooltip(scroll.box, 'ANCHOR_RIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE', true)
 
-    scroll.add = F.CreateButton(frame, 50, 24, _G.ADD)
-    scroll.add:SetPoint('LEFT', scroll.box, 'RIGHT', 5, 0)
+    scroll.add = CreateButton(scroll, 50, 22, _G.ADD, {'LEFT', scroll.box, 'RIGHT', 5, 0})
     scroll.add.__owner = scroll
-    scroll.add:SetScript(
+    scroll.add:HookScript(
         'OnClick',
         function(button)
             local parent = button.__owner
             local spellID = tonumber(parent.box:GetText())
             if not spellID or not GetSpellInfo(spellID) then
-                _G.UIErrorsFrame:AddMessage(C.InfoColor .. L['Incorrect SpellID'])
+                _G.UIErrorsFrame:AddMessage(C.RedColor .. L['The SpellID is incorrect.'])
                 return
             end
             local modValue = _G.FREE_ADB['NPMajorSpells'][spellID]
             if modValue or modValue == nil and C.NPMajorSpellsList[spellID] then
-                _G.UIErrorsFrame:AddMessage(C.InfoColor .. L['Existing ID'])
+                _G.UIErrorsFrame:AddMessage(C.RedColor .. L['The SpellID is existed.'])
                 return
             end
             _G.FREE_ADB['NPMajorSpells'][spellID] = true
-            createBarTest(scroll, spellID, barTable, 'NPMajorSpellsList', 'NPMajorSpells')
+            CreateBars(scroll, spellID, barTable, 'NPMajorSpellsList', 'NPMajorSpells')
             parent.box:SetText('')
         end
     )
 
-    scroll.reset = F.CreateButton(frame, 50, 24, _G.RESET)
-    scroll.reset:SetPoint('LEFT', scroll.add, 'RIGHT', 5, 0)
-    scroll.reset:SetScript(
+    scroll.reset = CreateButton(frame, 50, 22, _G.RESET, {'LEFT', scroll.add, 'RIGHT', 5, 0})
+    scroll.reset:HookScript(
         'OnClick',
         function()
             _G.StaticPopup_Show('FREEUI_RESET_MAJOR_SPELLS')
@@ -824,7 +834,7 @@ function GUI:SetupMajorSpells(parent)
 
     for spellID, value in pairs(NAMEPLATE.MajorSpellsList) do
         if value then
-            createBarTest(scroll, spellID, barTable, 'NPMajorSpellsList', 'NPMajorSpells')
+            CreateBars(scroll, spellID, barTable, 'NPMajorSpellsList', 'NPMajorSpells')
         end
     end
 end
@@ -925,7 +935,7 @@ function GUI:SetupNameplateSize(parent)
             text = L['Width'],
             min = 40,
             max = 400,
-            step = 1,
+            step = 1
         },
         [2] = {
             key = 'Height',
@@ -933,7 +943,7 @@ function GUI:SetupNameplateSize(parent)
             text = L['Height'],
             min = 4,
             max = 40,
-            step = 1,
+            step = 1
         }
     }
 
@@ -963,7 +973,7 @@ function GUI:SetupNameplateFriendlySize(parent)
             text = L['Width'],
             min = 20,
             max = 200,
-            step = 1,
+            step = 1
         },
         [2] = {
             key = 'FriendlyHeight',
@@ -971,7 +981,7 @@ function GUI:SetupNameplateFriendlySize(parent)
             text = L['Height'],
             min = 4,
             max = 40,
-            step = 1,
+            step = 1
         }
     }
 
@@ -1050,7 +1060,7 @@ function GUI:SetupNPRaidTargetIndicator(parent)
             text = L['Scale'],
             min = 1,
             max = 5,
-            step = .1,
+            step = .1
         },
         [2] = {
             key = 'RaidTargetIndicatorAlpha',
@@ -1058,9 +1068,8 @@ function GUI:SetupNPRaidTargetIndicator(parent)
             text = L['Alpha'],
             min = .1,
             max = 1,
-            step = .1,
-        },
-
+            step = .1
+        }
     }
 
     local offset = -10
@@ -1625,7 +1634,6 @@ function GUI:SetupUnitFrameRangeCheck(parent)
     CreateSlider(scroll, 'Unitframe', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset - 50)
 end
 
-
 function GUI:SetupRaidTargetIndicator(parent)
     local guiName = 'FreeUIGUIRaidTargetIndicator'
     TogglePanel(guiName)
@@ -1644,7 +1652,7 @@ function GUI:SetupRaidTargetIndicator(parent)
             text = L['Scale'],
             min = 1,
             max = 5,
-            step = .1,
+            step = .1
         },
         [2] = {
             key = 'RaidTargetIndicatorAlpha',
@@ -1652,9 +1660,8 @@ function GUI:SetupRaidTargetIndicator(parent)
             text = L['Alpha'],
             min = .1,
             max = 1,
-            step = .1,
-        },
-
+            step = .1
+        }
     }
 
     local offset = -10
@@ -2554,7 +2561,7 @@ function GUI:SetupAnnounceableSpells(parent)
             end
 
             _G.FREE_ADB['AnnounceableSpellsList'][spellID] = true
-            createBarTest(scroll, spellID, barTable, 'AnnounceableSpellsList', 'AnnounceableSpellsList')
+            CreateBars(scroll, spellID, barTable, 'AnnounceableSpellsList', 'AnnounceableSpellsList')
             parent.box:SetText('')
         end
     )
@@ -2570,7 +2577,7 @@ function GUI:SetupAnnounceableSpells(parent)
 
     for spellID, value in pairs(ANNOUNCEMENT.AnnounceableSpellsList) do
         if value then
-            createBarTest(scroll, spellID, barTable, 'AnnounceableSpellsList', 'AnnounceableSpellsList')
+            CreateBars(scroll, spellID, barTable, 'AnnounceableSpellsList', 'AnnounceableSpellsList')
         end
     end
 end
