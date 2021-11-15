@@ -550,18 +550,15 @@ GUI.OptionsList = {
         {},
         {1, 'Nameplate', 'Castbar', L['Enable Castbar'], nil, nil, nil, L['Enable castbar on nameplate.']},
         {1, 'Nameplate', 'SeparateCastbar', L['Separate Castbar'], true, SetupNameplateCastbarSize, nil, L['If disabled, the castbar will be overlapped on the healthbar.|nNote that the spell name and time are only available with separate castbar.']},
-        {1, 'Nameplate', 'CastTarget', L['Show Spell Target'], nil, nil, nil, L["Display the target name if unit is casting."]},
+        {1, 'Nameplate', 'CastTarget', L['Spell Target'], nil, nil, nil, L["Display the name of target if unit is casting."]},
         {1, 'Nameplate', 'MajorSpellsGlow', L['Major Spell Highlight'], true, SetupNameplateMajorSpells, nil, L['Highlight the castbar icon if unit is casting a major spell.']},
         {},
         {1, 'Nameplate', 'FriendlyClassColor', L['Friendly Unit ClassColored'], nil, nil, nil, L['The nameplate of the friendly unit is colored by class.']},
         {1, 'Nameplate', 'HostileClassColor', L['Hostile Unit ClassColored'], true, nil, nil, L['The nameplate of the hostile unit is colored by class.']},
-
         {1, 'Nameplate', 'ColoredTarget', L['Colored Target'], nil, nil, nil, L['Dye your target nameplate, its priority is higher than custom color and threat color.']},
         {1, 'Nameplate', 'ColoredFocus', L['Colored Focus'], true, nil, nil, L['Dye your focus nameplate, its priority is higher than custom color and threat color.']},
         {5, 'Nameplate', 'TargetColor', L['Target Color']},
-
         {5, 'Nameplate', 'FocusColor', L['Focus Color'], 2},
-
         {1, 'Nameplate', 'TankMode', L['Force TankMode Colored'], nil, nil, nil, L['Nameplate health color present its threat status to you, instead of glow color.|nFor custom color units, the threat status remains on nameplate glow.']},
         {1, 'Nameplate', 'RevertThreat', L['Revert Threat Color'], true, nil, nil, L["If 'Force TankMode Colored' enabled, swap their threat status color for non-tank classes."]},
         {5, 'Nameplate', 'SecureColor', L['Secure']},

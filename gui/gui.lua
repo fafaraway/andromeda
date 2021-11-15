@@ -188,18 +188,12 @@ local function CreateOption(i)
             cb:SetSize(20, 20)
             cb:SetHitRectInsets(-5, -5, -5, -5)
 
-            cb.label = F.CreateFS(cb, C.Assets.Fonts.Regular, 12, nil, name, nil, true, 'LEFT', 22, 0)
-            cb.__value = value
-
             if horizon then
                 cb:SetPoint('TOPLEFT', 250, -offset + 30)
             else
                 cb:SetPoint('TOPLEFT', 20, -offset)
                 offset = offset + 30
             end
-
-            cb.label = F.CreateFS(cb, C.Assets.Fonts.Regular, 12, nil, name, nil, true, 'LEFT', 22, 0)
-            cb.__value = value
 
             cb:SetChecked(UpdateValue(key, value))
 
@@ -214,9 +208,12 @@ local function CreateOption(i)
                 end
             )
 
+            cb.label = F.CreateFS(cb, C.Assets.Fonts.Regular, 12, nil, name, nil, true, 'LEFT', 22, -1)
+            cb.__value = value
+
             if data and type(data) == 'function' then
                 local bu = CreateGearButton(parent)
-                bu:SetPoint('LEFT', cb.label, 'RIGHT', -2, 0)
+                bu:SetPoint('LEFT', cb.label, 'RIGHT', -2, 1)
                 bu:SetScript('OnClick', data)
             end
 
@@ -266,9 +263,9 @@ local function CreateOption(i)
 
             local x, y
             if horizon then
-                x, y = 250, -offset + 25
+                x, y = 250, -offset + 42
             else
-                x, y = 10, -offset - 45
+                x, y = 10, -offset - 28
                 offset = offset + 70
             end
 
