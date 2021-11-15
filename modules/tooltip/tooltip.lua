@@ -291,7 +291,6 @@ end
 
 -- Add Targeted By line
 local targetTable = {}
-
 function TOOLTIP:ScanTargets()
     if not C.DB.Tooltip.TargetedBy then
         return
@@ -412,6 +411,12 @@ function TOOLTIP:GameTooltip_SetDefaultAnchor(parent)
     end
 end
 
+function TOOLTIP:ResetUnit(btn)
+    if (btn == 'LSHIFT' or btn == 'LALT') and UnitExists('mouseover') then
+        _G.GameTooltip:SetUnit('mouseover')
+    end
+end
+
 function TOOLTIP:OnLogin()
     if not C.DB.Tooltip.Enable then
         return
@@ -419,18 +424,17 @@ function TOOLTIP:OnLogin()
 
     _G.GameTooltip.StatusBar = _G.GameTooltipStatusBar
     _G.GameTooltip.StatusBar:SetScript('OnValueChanged', TOOLTIP.StatusBar_OnValueChanged)
-
-    _G.GameTooltip:HookScript('OnTooltipCleared', TOOLTIP.OnTooltipCleared)
-    _G.GameTooltip:HookScript('OnTooltipSetUnit', TOOLTIP.OnTooltipSetUnit)
-
-    _G.GameTooltip:HookScript('OnUpdate', TOOLTIP.GameTooltip_OnUpdate)
-
-    _G.GameTooltip.FadeOut = FadeOut
-
     hooksecurefunc('GameTooltip_ShowStatusBar', TOOLTIP.GameTooltip_ShowStatusBar)
     hooksecurefunc('GameTooltip_ShowProgressBar', TOOLTIP.GameTooltip_ShowProgressBar)
     hooksecurefunc('GameTooltip_SetDefaultAnchor', TOOLTIP.GameTooltip_SetDefaultAnchor)
     hooksecurefunc('GameTooltip_AnchorComparisonTooltips', TOOLTIP.GameTooltip_ComparisonFix)
+
+    _G.GameTooltip:HookScript('OnTooltipCleared', TOOLTIP.OnTooltipCleared)
+    _G.GameTooltip:HookScript('OnTooltipSetUnit', TOOLTIP.OnTooltipSetUnit)
+    _G.GameTooltip:HookScript('OnTooltipSetUnit', TOOLTIP.ScanTargets)
+    _G.GameTooltip:HookScript('OnUpdate', TOOLTIP.GameTooltip_OnUpdate)
+
+    _G.GameTooltip.FadeOut = FadeOut
 
     hooksecurefunc(_G.GameTooltip, 'SetUnitAura', TOOLTIP.SetUnitAura)
     hooksecurefunc(_G.GameTooltip, 'SetUnitBuff', TOOLTIP.SetUnitAura)
@@ -449,5 +453,5 @@ function TOOLTIP:OnLogin()
     TOOLTIP:Achievement()
     TOOLTIP:AzeriteArmor()
 
-    _G.GameTooltip:HookScript('OnTooltipSetUnit', TOOLTIP.ScanTargets)
+    F:RegisterEvent('MODIFIER_STATE_CHANGED', TOOLTIP.ResetUnit)
 end
