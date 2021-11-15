@@ -727,7 +727,7 @@ end
 local platesList = {}
 function NAMEPLATE:CreateNameplateStyle()
     self.unitStyle = 'nameplate'
-    local smooth = C.DB.Unitframe.Smooth
+
     self:SetSize(C.DB.Nameplate.Width, C.DB.Nameplate.Height)
     self:SetPoint('CENTER', 0, -10)
     self:SetScale(_G.UIParent:GetScale())
@@ -736,7 +736,7 @@ function NAMEPLATE:CreateNameplateStyle()
     health:SetAllPoints()
     health:SetStatusBarTexture(NAMEPLATE.StatusBarTex)
     health.backdrop = F.SetBD(health)
-    health.Smooth = smooth
+    health.Smooth = C.DB.Unitframe.Smooth
 
     self.Health = health
     self.Health.UpdateColor = NAMEPLATE.UpdateColor
@@ -906,6 +906,12 @@ function NAMEPLATE:UpdatePlateByType()
         NAMEPLATE.UpdateNameplateSize(self)
     end
 
+    if self.plateType == 'FriendlyPlate' then
+        self:DisableElement('Castbar')
+    else
+        self:EnableElement('Castbar')
+    end
+
     NAMEPLATE.UpdateTargetIndicator(self)
     UNITFRAME.UpdateRaidTargetIndicator(self)
     NAMEPLATE.ToggleNameplateAuras(self)
@@ -918,7 +924,7 @@ function NAMEPLATE:RefreshPlateType(unit)
     if C.DB.Nameplate.NameOnlyMode and self.isFriendly or self.widgetsOnly then
         self.plateType = 'NameOnly'
     elseif C.DB.Nameplate.FriendlyPlate and self.isFriendly then
-        self.plateType = 'FriendPlate'
+        self.plateType = 'FriendlyPlate'
     else
         self.plateType = 'None'
     end
