@@ -858,7 +858,6 @@ function NAMEPLATE:UpdatePlateByType()
     local nameOnlyName = self.nameOnlyName
     local normalName = self.NameTag
     local title = self.npcTitle
-    local questIcon = self.questIcon
 
     normalName:SetShown(not self.widgetsOnly)
 
