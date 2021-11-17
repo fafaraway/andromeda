@@ -1,16 +1,18 @@
-local F, C, L = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('UnitFrame')
+local NAMEPLATE = F:GetModule('Nameplate')
 local oUF = F.Libs.oUF
 
 local colors = oUF.colors
 local tags = oUF.Tags
 local tagMethods = tags.Methods
 local tagEvents = tags.Events
-local tagSharedEvents = tags.SharedEvents
+-- local tagSharedEvents = tags.SharedEvents
 
 local events = {
     healthvalue = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_CONNECTION UNIT_NAME_UPDATE',
     healthperc = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_CONNECTION UNIT_NAME_UPDATE',
+    nphp = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_CONNECTION',
     powervalue = 'UNIT_MAXPOWER UNIT_POWER_UPDATE UNIT_CONNECTION UNIT_DISPLAYPOWER',
     altpowerperc = 'UNIT_MAXPOWER UNIT_POWER_UPDATE',
     dead = 'UNIT_HEALTH',
@@ -34,6 +36,15 @@ local function AbbrName(string, i)
         return string.gsub(string, '%s?(.[\128-\191]*)%S+%s', '%1. ')
     else
         return string
+    end
+end
+
+local function GetUnitHealthPerc(unit)
+    local unitHealth, unitMaxHealth = UnitHealth(unit), UnitHealthMax(unit)
+    if unitMaxHealth == 0 then
+        return 0, unitHealth
+    else
+        return F:Round(unitHealth / unitMaxHealth * 100, 1), unitHealth
     end
 end
 
@@ -61,6 +72,14 @@ local _tags = {
 
         if cur ~= max then
             return string.format('|cff%02x%02x%02x%d%%|r', r, g, b, math.floor(cur / max * 100 + 0.5))
+        end
+    end,
+    -- nameplate health
+    nphp = function(unit)
+        local per = GetUnitHealthPerc(unit)
+
+        if per < 100 then
+            return string.format('%s%%', per)
         end
     end,
     -- power value
@@ -135,7 +154,6 @@ local _tags = {
         else
             return
         end
-
     end,
     -- raid name
     raidname = function(unit)
@@ -402,4 +420,20 @@ function UNITFRAME:CreatePlayerTags(self)
         self:HookScript('OnEnter', Player_OnEnter)
         self:HookScript('OnLeave', Player_OnLeave)
     end
+end
+
+function NAMEPLATE:CreateNameplateHealthTag(self)
+    if not C.DB.Nameplate.HealthPerc then
+        return
+    end
+
+    local font = C.Assets.Fonts.Condensed
+    local outline = _G.FREE_ADB.FontOutline
+
+    local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
+    text:SetPoint('CENTER', self, 'BOTTOM')
+
+    self:Tag(text, '[free:nphp]')
+
+    self.HealthTag = text
 end

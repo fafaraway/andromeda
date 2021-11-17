@@ -292,6 +292,7 @@ C.CharacterSettings = {
             FriendlyClickThrough = true,
             ForceCVars = true,
             NameOnlyMode = true,
+            HealthPerc = true,
             FriendlyPlate = true,
             TargetIndicator = true,
                 TargetIndicatorColor = {r = .73, g = .92, b = .99},

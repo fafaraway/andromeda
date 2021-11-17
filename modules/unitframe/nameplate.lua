@@ -760,6 +760,7 @@ function NAMEPLATE:CreateNameplateStyle()
     self.npcTitle = title
 
     UNITFRAME:CreateNameTag(self)
+    NAMEPLATE:CreateNameplateHealthTag(self)
     UNITFRAME:CreateHealPrediction(self)
     NAMEPLATE:CreateTargetIndicator(self)
     NAMEPLATE:CreateHighlight(self)

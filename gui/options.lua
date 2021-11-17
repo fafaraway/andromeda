@@ -544,6 +544,7 @@ GUI.OptionsList = {
         {1, 'Nameplate', 'ClassifyIndicator', L['Classify Indicator'], true, nil, nil, L['Display the corresponding icon on the left side of the nameplate according to the mob type.|nSupport ELITE, RARE and BOSS.']},
         {1, 'Nameplate', 'TargetIndicator', L['Target Indicator'], nil, nil, nil, L['Display white glow under the nameplate of the current target.']},
         {1, 'Nameplate', 'ThreatIndicator', L['Threat Indicator'], true, nil, nil, L['The glow above the nameplate is colored according to the threat status.']},
+        {1, 'Nameplate', 'HealthPerc', L['Health Percentage'], nil, nil, nil, L['Display the percentage of health on nameplate.']},
         {},
         {1, 'Nameplate', 'ExplosiveIndicator', L['Explosive Indicator'], nil, nil, nil, L['Enlarge the nameplate of explosives in M+ dungeons.']},
         {1, 'Nameplate', 'SpitefulIndicator', L['Spiteful Indicator'], true, nil, nil, L["Display the target name of Spiteful Shade in M+ dungeons."]},
