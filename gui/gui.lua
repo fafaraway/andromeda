@@ -114,22 +114,21 @@ local function SelectTab(i)
     local r, g, b = C.r, C.g, C.b
     local gradStyle = _G.FREE_ADB.GradientStyle
     local buttonColor = _G.FREE_ADB.ButtonBackdropColor
-    local buttonAlpha = _G.FREE_ADB.ButtonBackdropAlpha
 
     for num = 1, #tabsList do
         if num == i then
             if gradStyle then
-                guiTab[num].__gradient:SetGradientAlpha('Vertical', 0, 0, 0, .25, r, g, b, buttonAlpha)
+                guiTab[num].__gradient:SetGradientAlpha('Vertical', 0, 0, 0, .25, r, g, b, .25)
             else
-                guiTab[num].__gradient:SetVertexColor(r, g, b)
+                guiTab[num].__gradient:SetVertexColor(r, g, b, .25)
             end
             guiTab[num].checked = true
             guiPage[num]:Show()
         else
             if gradStyle then
-                guiTab[num].__gradient:SetGradientAlpha('Vertical', 0, 0, 0, .25, buttonColor.r, buttonColor.g, buttonColor.b, buttonAlpha)
+                guiTab[num].__gradient:SetGradientAlpha('Vertical', 0, 0, 0, .25, buttonColor.r, buttonColor.g, buttonColor.b, .25)
             else
-                guiTab[num].__gradient:SetVertexColor(buttonColor.r, buttonColor.g, buttonColor.b)
+                guiTab[num].__gradient:SetVertexColor(0, 0, 0, 0)
             end
             guiTab[num].checked = false
             guiPage[num]:Hide()
@@ -439,7 +438,7 @@ local function CreateGUI()
         guiPage[i] = CreateFrame('ScrollFrame', nil, guiFrame, 'UIPanelScrollFrameTemplate')
         guiPage[i]:SetPoint('TOPLEFT', 170, -50)
         guiPage[i]:SetSize(500, 540)
-        guiPage[i].__bg = F.CreateBDFrame(guiPage[i], .45)
+        guiPage[i].__bg = F.CreateBDFrame(guiPage[i], .25)
         guiPage[i]:Hide()
 
         guiPage[i].child = CreateFrame('Frame', nil, guiPage[i])

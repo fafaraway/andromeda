@@ -43,7 +43,7 @@ local function CreateExtraGUI(parent, name, title, bgFrame)
         frame.bg = CreateFrame('Frame', nil, frame, 'BackdropTemplate')
         frame.bg:SetSize(240, 540)
         frame.bg:SetPoint('TOPLEFT', 10, -50)
-        frame.bg.bg = F.CreateBDFrame(frame.bg, .45)
+        frame.bg.bg = F.CreateBDFrame(frame.bg, .25)
     end
 
     if not parent.extraGUIHook then
@@ -176,7 +176,7 @@ function GUI:CreateScroll(parent, width, height, text, noBg)
     end
 
     if not noBg then
-        scroll.bg = F.CreateBDFrame(scroll, .45)
+        scroll.bg = F.CreateBDFrame(scroll, .25)
     end
 
     scroll.child = CreateFrame('Frame', nil, scroll)
@@ -753,7 +753,7 @@ function GUI:SetupNameplateAuraFilter(parent)
         local frame = CreateFrame('Frame', nil, panel, 'BackdropTemplate')
         frame:SetSize(240, 250)
         frame:SetPoint('TOPLEFT', 10, value.offset - 25)
-        frame.bg = F.CreateBDFrame(frame, .45)
+        frame.bg = F.CreateBDFrame(frame, .25)
 
         local scroll = GUI:CreateScroll(frame, 200, 200, nil, true)
         scroll:ClearAllPoints()

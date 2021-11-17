@@ -691,18 +691,15 @@ do
         local gradStyle = _G.FREE_ADB.GradientStyle
         local normTex = C.Assets.bd_tex
         local buttonColor = _G.FREE_ADB.ButtonBackdropColor
-        local buttonAlpha = _G.FREE_ADB.ButtonBackdropAlpha
-        local backdropColor = _G.FREE_ADB.BackdropColor
-        local backdropAlpha = _G.FREE_ADB.BackdropAlpha
 
         local tex = self:CreateTexture(nil, 'BORDER')
         tex:SetAllPoints(self)
         tex:SetTexture(normTex)
 
         if gradStyle then
-            tex:SetGradientAlpha('Vertical', 0, 0, 0, .25, buttonColor.r, buttonColor.g, buttonColor.b, buttonAlpha)
+            tex:SetGradientAlpha('Vertical', 0, 0, 0, .25, buttonColor.r, buttonColor.g, buttonColor.b, .25)
         else
-            tex:SetVertexColor(backdropColor.r, backdropColor.g, backdropColor.b, backdropAlpha)
+            tex:SetVertexColor(0, 0, 0, 0)
         end
 
         return tex
