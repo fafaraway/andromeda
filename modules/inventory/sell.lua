@@ -1,12 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local wipe = wipe
-local GetContainerNumSlots = GetContainerNumSlots
-local GetContainerItemInfo = GetContainerItemInfo
-local UseContainerItem = UseContainerItem
-local IsAltKeyDown = IsAltKeyDown
-
 local F, C = unpack(select(2, ...))
 local INVENTORY = F:GetModule('Inventory')
 
@@ -45,7 +36,7 @@ local function UpdateSelling(event, ...)
             return
         end
         stop = false
-        wipe(cache)
+        table.wipe(cache)
         StartSelling()
         F:RegisterEvent('UI_ERROR_MESSAGE', UpdateSelling)
     elseif event == 'UI_ERROR_MESSAGE' and arg == errorText or event == 'MERCHANT_CLOSED' then
