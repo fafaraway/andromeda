@@ -317,6 +317,31 @@ do
         end
     end
 
+    -- Atlas info
+    function F:GetTextureStrByAtlas(info, sizeX, sizeY)
+        local file = info and info.file
+        if not file then
+            return
+        end
+
+        local width, height, txLeft, txRight, txTop, txBottom = info.width, info.height, info.leftTexCoord, info.rightTexCoord, info.topTexCoord, info.bottomTexCoord
+        local atlasWidth = width / (txRight - txLeft)
+        local atlasHeight = height / (txBottom - txTop)
+
+        return string.format(
+            '|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t',
+            file,
+            (sizeX or 0),
+            (sizeY or 0),
+            atlasWidth,
+            atlasHeight,
+            atlasWidth * txLeft,
+            atlasWidth * txRight,
+            atlasHeight * txTop,
+            atlasHeight * txBottom
+        )
+    end
+
     -- GUID to npcID
     function F:GetNPCID(guid)
         local id = tonumber(string.match((guid or ''), '%-(%d-)%-%x-$'))

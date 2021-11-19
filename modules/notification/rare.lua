@@ -23,21 +23,10 @@ function NOTIFICATION:RareAlert_Update(id)
             return
         end
 
-        local file = atlasInfo.file
-        local width = atlasInfo.width
-        local height = atlasInfo.height
-        local txLeft = atlasInfo.leftTexCoord
-        local txRight = atlasInfo.rightTexCoord
-        local txTop = atlasInfo.topTexCoord
-        local txBottom = atlasInfo.bottomTexCoord
-
-        if not file then
+        local tex = F:GetTextureStrByAtlas(atlasInfo)
+        if not tex then
             return
         end
-
-        local atlasWidth = width / (txRight - txLeft)
-        local atlasHeight = height / (txBottom - txTop)
-        local tex = string.format('|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t', file, 0, 0, atlasWidth, atlasHeight, atlasWidth * txLeft, atlasWidth * txRight, atlasHeight * txTop, atlasHeight * txBottom)
 
         F:CreateNotification(_G.GARRISON_MISSION_RARE, tex .. (info.name or ''), nil, 'Interface\\ICONS\\INV_Misc_Map_01')
 
