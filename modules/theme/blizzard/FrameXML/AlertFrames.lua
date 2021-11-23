@@ -15,10 +15,10 @@ local function fixBg(frame)
     end
 end
 
-local function fixParentbg(frame)
+local function fixParentbg(anim)
     local color = _G.FREE_ADB.BackdropColor
     local alpha = _G.FREE_ADB.BackdropAlpha
-    frame = frame:GetParent():GetParent()
+    local frame = anim.__owner
     if frame.bg then
         frame.bg:SetBackdropColor(color.r, color.g, color.b, alpha)
         if frame.bg.__shadow then
@@ -40,6 +40,7 @@ local function fixAnim(frame)
         frame.animArrows:HookScript('OnFinished', fixBg)
     end
     if frame.Arrows and frame.Arrows.ArrowsAnim then
+        frame.Arrows.ArrowsAnim.__owner = frame
         frame.Arrows.ArrowsAnim:HookScript('OnPlay', fixParentbg)
         frame.Arrows.ArrowsAnim:HookScript('OnFinished', fixParentbg)
     end
@@ -141,8 +142,8 @@ table.insert(
                 elseif frame.queue == _G.LootUpgradeAlertSystem then
                     if not frame.bg then
                         frame.bg = F.SetBD(frame)
-                        frame.bg:SetPoint('TOPLEFT', 10, -13)
-                        frame.bg:SetPoint('BOTTOMRIGHT', -12, 11)
+                        frame.bg:SetPoint('TOPLEFT', 10, -14)
+                        frame.bg:SetPoint('BOTTOMRIGHT', -10, 12)
 
                         F.ReskinIcon(frame.Icon)
                         frame.Icon:ClearAllPoints()
@@ -161,8 +162,7 @@ table.insert(
                 elseif frame.queue == _G.MoneyWonAlertSystem or frame.queue == _G.HonorAwardedAlertSystem then
                     if not frame.bg then
                         frame.bg = F.SetBD(frame)
-                        frame.bg:SetPoint('TOPLEFT', 7, -7)
-                        frame.bg:SetPoint('BOTTOMRIGHT', -7, 7)
+                        frame.bg:SetInside(frame, 7, 7)
 
                         F.ReskinIcon(frame.Icon)
                         frame.Background:SetTexture('')
@@ -192,11 +192,11 @@ table.insert(
                         frame:DisableDrawLayer('BORDER')
                         frame.ToastText:SetFontObject(_G.NumberFont_GameNormal)
                     end
-                elseif frame.queue == _G.GarrisonTalentAlertSystem then
+                elseif frame.queue == _G.GarrisonTalentAlertSystem or frame.queue == _G.GarrisonBuildingAlertSystem then
                     if not frame.bg then
                         frame.bg = F.SetBD(frame)
-                        frame.bg:SetPoint('TOPLEFT', 8, -8)
-                        frame.bg:SetPoint('BOTTOMRIGHT', -8, 11)
+                        frame.bg:SetPoint('TOPLEFT', 10, -10)
+                        frame.bg:SetPoint('BOTTOMRIGHT', -10, 13)
 
                         F.ReskinIcon(frame.Icon)
                         frame:GetRegions():Hide()
@@ -252,22 +252,10 @@ table.insert(
                             frame.Level:SetPoint('TOP', frame, 'TOP', -115, -28)
                         end
                     end
-                elseif frame.queue == _G.GarrisonBuildingAlertSystem then
-                    if not frame.bg then
-                        frame.bg = F.SetBD(frame)
-                        frame.bg:SetPoint('TOPLEFT', 9, -9)
-                        frame.bg:SetPoint('BOTTOMRIGHT', -9, 11)
-
-                        F.ReskinIcon(frame.Icon)
-                        frame:GetRegions():Hide()
-                        frame.glow:SetTexture('')
-                        frame.shine:SetTexture('')
-                    end
                 elseif frame.queue == _G.DigsiteCompleteAlertSystem then
                     if not frame.bg then
                         frame.bg = F.SetBD(frame)
-                        frame.bg:SetPoint('TOPLEFT', 8, -8)
-                        frame.bg:SetPoint('BOTTOMRIGHT', -8, 8)
+                        frame.bg:SetInside(frame, 8, 8)
 
                         frame:GetRegions():Hide()
                         frame.glow:SetTexture('')
@@ -276,7 +264,7 @@ table.insert(
                 elseif frame.queue == _G.GuildChallengeAlertSystem then
                     if not frame.bg then
                         frame.bg = F.SetBD(frame)
-                        frame.bg:SetPoint('TOPLEFT', 8, -12)
+                        frame.bg:SetPoint('TOPLEFT', 8, -13)
                         frame.bg:SetPoint('BOTTOMRIGHT', -8, 13)
 
                         select(2, frame:GetRegions()):SetTexture('')
@@ -298,8 +286,7 @@ table.insert(
                 elseif frame.queue == _G.ScenarioAlertSystem then
                     if not frame.bg then
                         frame.bg = F.SetBD(frame)
-                        frame.bg:SetPoint('TOPLEFT', 5, -5)
-                        frame.bg:SetPoint('BOTTOMRIGHT', -5, 5)
+                        frame.bg:SetInside(frame, 5, 5)
 
                         F.ReskinIcon(frame.dungeonTexture)
                         frame:GetRegions():Hide()
@@ -311,12 +298,12 @@ table.insert(
                     if not frame.bg then
                         frame.bg = F.SetBD(frame)
                         frame.bg:SetPoint('TOPLEFT', 25, -22)
-                        frame.bg:SetPoint('BOTTOMRIGHT', -25, 22)
+                        frame.bg:SetPoint('BOTTOMRIGHT', -25, 24)
                         frame:HookScript('OnUpdate', fixBg)
 
                         F.ReskinIcon(frame.Icon)
                         frame.Icon:ClearAllPoints()
-                        frame.Icon:SetPoint('TOPLEFT', frame.bg, 12, -12)
+                        frame.Icon:SetPoint('TOPLEFT', frame.bg, 10, -10)
 
                         frame.Background:SetTexture('')
                         frame.Background2:SetTexture('')
@@ -333,17 +320,33 @@ table.insert(
                         frame.IconBorder:Hide()
                         frame.Background:SetTexture('')
                         frame.shine:SetTexture('')
-                        frame.glow:SetTexture('')
                     end
                 elseif frame.queue == _G.InvasionAlertSystem then
                     if not frame.bg then
                         frame.bg = F.SetBD(frame)
-                        frame.bg:SetPoint('TOPLEFT', 6, -6)
-                        frame.bg:SetPoint('BOTTOMRIGHT', -6, 6)
+                        frame.bg:SetInside(frame, 5, 5)
 
                         local bg, icon = frame:GetRegions()
                         bg:Hide()
                         F.ReskinIcon(icon)
+                    end
+                elseif frame.queue == _G.EntitlementDeliveredAlertSystem then
+                    if not frame.bg then
+                        frame.bg = F.SetBD(frame)
+                        frame.bg:SetInside(frame, 12, 12)
+
+                        F.ReskinIcon(frame.Icon)
+                        frame.Title:SetTextColor(0, .6, 1)
+                        frame.Background:Hide()
+                    end
+                elseif frame.queue == _G.RafRewardDeliveredAlertSystem then
+                    if not frame.bg then
+                        frame.bg = F.SetBD(frame)
+                        frame.bg:SetPoint('TOPLEFT', 24, -14)
+                        frame.bg:SetPoint('BOTTOMRIGHT', -24, 8)
+
+                        F.ReskinIcon(frame.Icon)
+                        frame.StandardBackground:SetTexture('')
                     end
                 end
 
