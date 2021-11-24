@@ -14,8 +14,8 @@ local function styleRewardButton(button)
 
     button.bg = F.ReskinIcon(icon)
     local bg = F.CreateBDFrame(button, .25)
-    bg:SetPoint('TOPLEFT', button.bg, 'TOPRIGHT')
-    bg:SetPoint('BOTTOMRIGHT', button.bg, 'BOTTOMRIGHT', 100, 0)
+    bg:SetPoint('TOPLEFT', button.bg, 'TOPRIGHT', 1, 0)
+    bg:SetPoint('BOTTOMRIGHT', button.bg, 'BOTTOMRIGHT', 105, 0)
 
     if shortageBorder then
         shortageBorder:SetAlpha(0)
