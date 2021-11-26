@@ -109,7 +109,7 @@ function INVENTORY:CreateMoneyFrame()
     moneyFrame:SetPoint('TOPLEFT', 6, 0)
     moneyFrame:SetSize(140, 26)
 
-    local tag = self:SpawnPlugin('TagDisplay', '[money]', moneyFrame)
+    local tag = self:SpawnPlugin('TagDisplay', '[money] [currencies]', moneyFrame)
     F:SetFS(tag, C.Assets.Fonts.Bold, 11, nil, '', nil, 'THICK')
     tag:SetPoint('TOPLEFT', 0, -3)
 end

@@ -130,14 +130,21 @@ end
 tagEvents["currency"] = { "CURRENCY_DISPLAY_UPDATE" }
 
 tagPool["currencies"] = function(self)
-	local str
-	for i=1, GetNumWatchedTokens() do
-		local curr = self.tags["currency"](self, i)
-		if(curr) then
-			str = (str and str.." " or "")..curr
+	local watchedCurrencies = {}
+
+	for i = 1, GetNumWatchedTokens() do
+		local info = C_CurrencyInfo.GetBackpackCurrencyInfo(i)
+		local name, count, icon = info.name, info.quantity, info.iconFileID
+
+		if name and count then
+			local iconTexture = " |T"..icon..":12:12:0:0:50:50:4:46:4:46|t "
+			local str = iconTexture .. count
+
+			table.insert(watchedCurrencies, str)
 		end
 	end
-	return str
+
+	return table.concat(watchedCurrencies, " ")
 end
 tagEvents["currencies"] = tagEvents["currency"]
 
@@ -147,7 +154,7 @@ local function createAtlasCoin(coin)
 	if not str then
 		local info = C_Texture.GetAtlasInfo("coin-"..coin)
 		if info then
-			str = _G.FreeUI[1]:GetTextureStrByAtlas(info, 16, 16)
+			str = _G.FreeUI[1]:GetTextureStrByAtlas(info, 14, 14)
 			atlasCache[coin] = str
 		end
 	end
