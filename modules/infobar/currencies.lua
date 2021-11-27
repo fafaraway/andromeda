@@ -54,12 +54,8 @@ local function Button_OnEnter(self)
     for _, id in pairs(currPvE) do
         AddTitle('PvE')
         local info = C_CurrencyInfo.GetCurrencyInfo(id)
-        local amount
-        if info.maxQuantity > 0 then
-            amount = string.format('|cff20ff20%s|r |cff7f7f7f/|r |cffff2020%s|r', BreakUpLargeNumbers(info.quantity), BreakUpLargeNumbers(info.maxQuantity))
-        else
-            amount = string.format('|cff20ff20%s|r', BreakUpLargeNumbers(info.quantity))
-        end
+        local amount = string.format('|cff20ff20%s|r', BreakUpLargeNumbers(info.quantity))
+
         _G.GameTooltip:AddDoubleLine(AddIcon(info.iconFileID) .. info.name, amount, 1, 1, 1)
     end
 
@@ -67,12 +63,8 @@ local function Button_OnEnter(self)
     for _, id in pairs(currPvP) do
         AddTitle('PvP')
         local info = C_CurrencyInfo.GetCurrencyInfo(id)
-        local amount
-        if info.maxQuantity > 0 then
-            amount = string.format('|cff20ff20%s|r |cff7f7f7f/|r |cffff2020%s|r', BreakUpLargeNumbers(info.quantity), BreakUpLargeNumbers(info.maxQuantity))
-        else
-            amount = string.format('|cff20ff20%s|r', BreakUpLargeNumbers(info.quantity))
-        end
+        local amount = string.format('|cff20ff20%s|r', BreakUpLargeNumbers(info.quantity))
+
         _G.GameTooltip:AddDoubleLine(AddIcon(info.iconFileID) .. info.name, amount, 1, 1, 1)
     end
 
