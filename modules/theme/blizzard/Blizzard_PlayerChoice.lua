@@ -31,13 +31,15 @@ C.Themes['Blizzard_PlayerChoice'] = function()
         _G.PlayerChoiceFrame,
         'TryShow',
         function(self)
+            self.Header:Hide()
+
             if not self.bg then
                 self.BlackBackground:SetAlpha(0)
                 self.Background:SetAlpha(0)
                 self.NineSlice:SetAlpha(0)
                 self.Title:DisableDrawLayer('BACKGROUND')
                 self.Title.Text:SetTextColor(1, .8, 0)
-                self.Title.Text:SetFontObject(_G.SystemFont_Huge1)
+                self.Title.Text:SetFontObject(_G.SystemFont_Huge2)
                 F.CreateBDFrame(self.Title, .25)
                 F.ReskinClose(self.CloseButton)
                 self.bg = F.SetBD(self)
@@ -54,10 +56,11 @@ C.Themes['Blizzard_PlayerChoice'] = function()
                 if header then
                     ReskinOptionText(header.Text, 1, .8, 0)
                     if header.Contents then
-                        ReskinOptionText(header.Contents.Text, 1, .8, 0)
+                        ReskinOptionText(header.Contents.Text, 49/255, 26/255, 9/255)
+                        header.Contents.Text:SetFontObject(_G.SystemFont_Med3)
                     end
                 end
-                ReskinOptionText(optionFrame.OptionText, 1, 1, 1)
+                ReskinOptionText(optionFrame.OptionText, 49/255, 26/255, 9/255)
 
                 local optionButtonsContainer = optionFrame.OptionButtonsContainer
                 if optionButtonsContainer and optionButtonsContainer.buttonPool then
