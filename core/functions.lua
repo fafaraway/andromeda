@@ -1871,6 +1871,7 @@ do
 
         local list = CreateFrame('Frame', nil, dd, 'BackdropTemplate')
         list:SetPoint('TOP', dd, 'BOTTOM', 0, -2)
+        RaiseFrameLevel(list)
         F.CreateBD(list, .85)
         list:Hide()
         bu.__list = list
@@ -1891,6 +1892,7 @@ do
             local text = F.CreateFS(opt[i], C.Assets.Fonts.Regular, 11, nil, j, nil, true, 'LEFT', 5, 0)
             text:SetPoint('RIGHT', -5, 0)
             opt[i].text = j
+            opt[i].index = i
             opt[i].__owner = dd
             opt[i]:SetScript('OnClick', Option_OnClick)
             opt[i]:SetScript('OnEnter', Option_OnEnter)
@@ -2001,13 +2003,16 @@ do
         slider:SetHitRectInsets(0, 0, 0, 0)
         F.ReskinSlider(slider)
 
-        F:SetFS(slider.Low, C.Assets.Fonts.Regular, 11, nil, minValue, nil, true)
+        slider.Low:SetText(minValue)
+        slider.Low:SetFontObject(_G.Game11Font)
         slider.Low:SetPoint('TOPLEFT', slider, 'BOTTOMLEFT', 10, -2)
 
-        F:SetFS(slider.High, C.Assets.Fonts.Regular, 11, nil, maxValue, nil, true)
+        slider.High:SetText(maxValue)
+        slider.High:SetFontObject(_G.Game11Font)
         slider.High:SetPoint('TOPRIGHT', slider, 'BOTTOMRIGHT', -10, -2)
 
-        F:SetFS(slider.Text, C.Assets.Fonts.Regular, 11, nil, name, nil, true)
+        slider.Text:SetText(name)
+        slider.Text:SetFontObject(_G.Game11Font)
         slider.Text:ClearAllPoints()
         slider.Text:SetPoint('CENTER', 0, 16)
 
