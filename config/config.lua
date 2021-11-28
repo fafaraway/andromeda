@@ -187,6 +187,7 @@ C.CharacterSettings = {
                 RunesTimer = false,
 
             OnlyShowPlayer = true,
+            DesaturateIcon = true,
             ShortenName = true,
 
             Castbar = true,

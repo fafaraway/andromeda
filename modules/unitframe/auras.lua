@@ -111,11 +111,12 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
 
     local style = element.__owner.unitStyle
     local isParty = style == 'party'
+    local desaturate = C.DB.Unitframe.DesaturateIcon
     local _, _, _, _, _, _, _, canStealOrPurge = UnitAura(unit, index, button.filter)
 
     button:SetSize(element.size, isParty and element.size or element.size * .75)
 
-    if button.isDebuff and F:MultiCheck(style, 'target', 'boss', 'arena') and not button.isPlayer then
+    if desaturate and button.isDebuff and F:MultiCheck(style, 'target', 'boss', 'arena', 'nameplate') and not button.isPlayer then
         button.icon:SetDesaturated(true)
     else
         button.icon:SetDesaturated(false)

@@ -494,17 +494,26 @@ GUI.OptionsList = {
     [12] = { -- unitframe
         {1, 'Unitframe', 'Enable', L['Enable Unitframes'], nil, SetupUnitFrameSize},
         {1, 'Unitframe', 'InvertedColorMode', L['Inverted Mode'], nil, nil, nil, L['The healthbar color and the background color are inverted.']},
+
         {4, 'Unitframe', 'TextureStyle', L['Texture Style'], true, {}},
 
-        {1, 'Unitframe', 'RangeCheck', L['Range Check'], nil, SetupUnitFrameRangeCheck, nil, L["Fade out unit frame based on whether the unit is in the player's range"]},
         {1, 'Unitframe', 'Smooth', L['Smooth'], nil, nil, nil, L['Smoothly animate unit frame bars.']},
+        {1, 'Unitframe', 'Fader', L['Conditional fader'], nil, SetupUnitFrameFader},
+
+
         {4, 'Unitframe', 'ColorStyle', L['Health Bar Color'], true, {L['Default White'], L['Class Color'], L['Percentage Gradient']}},
         {1, 'Unitframe', 'Portrait', L['Portrait'], nil, nil, nil, L['Show dynamic portrait on unit frame.']},
+        {1, 'Unitframe', 'RangeCheck', L['Range Check'], true, SetupUnitFrameRangeCheck, nil, L["Fade out unit frame based on whether the unit is in the player's range"]},
 
-        {1, 'Unitframe', 'Fader', L['Conditional fader'], nil, SetupUnitFrameFader},
-        {1, 'Unitframe', 'OnlyShowPlayer', L['Shows only debuffs created by player'], true},
+
+
         {1, 'Unitframe', 'RaidTargetIndicator', L['Raid Target Icon'], nil, SetupRaidTargetIndicator, nil, L['Show raid target icon on unit frame.']},
         {1, 'Unitframe', 'GCDIndicator', L['Global Cooldown Ticker'], true, nil, nil, L['Show global cooldown ticker above the player frame.']},
+
+        {},
+        {1, 'Unitframe', 'DesaturateIcon', L['Desaturate Auras'], nil, nil, nil, L['If checked, only color auras from player, and desaturate auras from others.']},
+        {1, 'Unitframe', 'OnlyShowPlayer', L['Shows only debuffs created by player'], true},
+
         {},
         {1, 'Unitframe', 'ClassPower', L['Class Power'], nil, SetupClassPowerSize, nil, L['Show special resources of the class, such as Combo Points, Holy Power, Chi, Runes, etc.']},
         {1, 'Unitframe', 'RunesTimer', L['Runes Timer'], true, nil, nil, L['Show timer for DK Runes.']},
