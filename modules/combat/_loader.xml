@@ -1,10 +1,10 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
     <Script file="combat.lua"/>
-    <Script file="combat_alert.lua"/>
+    <Script file="alert.lua"/>
     <Script file="cooldown-pulse.lua"/>
     <Script file="fct.lua"/>
     <Script file="focuser.lua"/>
     <Script file="marker.lua"/>
-    <Script file="pvp_sound.lua"/>
+    <Script file="pvp-sound.lua"/>
     <Script file="tabber.lua"/>
 </Ui>

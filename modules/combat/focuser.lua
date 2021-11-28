@@ -1,13 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local next = next
-local strmatch = strmatch
-local CreateFrame = CreateFrame
-local hooksecurefunc = hooksecurefunc
-local InCombatLockdown = InCombatLockdown
-local SetOverrideBindingClick = SetOverrideBindingClick
-
 local F, C = unpack(select(2, ...))
 local COMBAT = F:GetModule('Combat')
 local oUF = F.Libs.oUF
@@ -21,7 +11,7 @@ function COMBAT:Focuser_Setup()
         return
     end
 
-    if self:GetName() and (not C.DB.Combat.EasyFocusOnUnitframe and strmatch(self:GetName(), 'oUF_')) then
+    if self:GetName() and (not C.DB.Combat.EasyFocusOnUnitframe and string.match(self:GetName(), 'oUF_')) then
         return
     end
 

@@ -4,7 +4,7 @@
     <Include file="aura\aura.xml"/>
     <Include file="blizzard\blizzard.xml"/>
     <Include file="chat\chat.xml"/>
-    <Include file="combat\combat.xml"/>
+    <Include file="combat\_loader.xml"/>
     <Include file="cooldown\cooldown.xml"/>
     <Include file="infobar\infobar.xml"/>
     <Include file="inventory\inventory.xml"/>
