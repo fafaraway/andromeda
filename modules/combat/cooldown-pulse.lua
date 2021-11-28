@@ -1,8 +1,8 @@
 local F, C, L = unpack(select(2, ...))
-local CDP = F:GetModule('CooldownPulse')
+local CDP = F:RegisterModule('CooldownPulse')
 
 local fadeInTime, fadeOutTime, maxAlpha, elapsed, runtimer = 0.3, 0.7, 1, 0, 0
-local animScale, iconSize, holdTime, threshold = 1.5, 32, 0, 3
+local animScale, iconSize, holdTime, threshold = 1.5, 32, 0.3, 3
 local cooldowns, animating, watching = {}, {}, {}
 local ignoredList = {}
 
@@ -215,14 +215,14 @@ function frame:PLAYER_ENTERING_WORLD()
 end
 
 function CDP:OnLogin()
-    if not C.DB.Actionbar.CooldownPulse then
+    if not C.DB.Combat.CooldownPulse then
         return
     end
 
     frame.bg = F.SetBD(frame)
     icon:SetTexCoord(unpack(C.TexCoord))
 
-    local mover = F.Mover(anchor, L['Cooldown Pulse'], 'CooldownPulse', {'CENTER', _G.UIParent, 0, 100}, iconSize, iconSize)
+    local mover = F.Mover(anchor, L['Cooldown Pulse'], 'CooldownPulse', {'CENTER', _G.UIParent}, iconSize, iconSize)
     anchor:ClearAllPoints()
     anchor:SetPoint('CENTER', mover)
 

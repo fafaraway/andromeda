@@ -81,6 +81,7 @@ C.CharacterSettings = {
             Merge = true,
             Incoming = true,
             Outgoing = false,
+        CooldownPulse = true,
     },
     Announcement = {
         Enable = true,
