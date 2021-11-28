@@ -9,10 +9,11 @@ local MAP = F:GetModule('Minimap')
 local INVENTORY = F:GetModule('Inventory')
 local VIGNETTING = F:GetModule('Vignetting')
 local BAR = F:GetModule('ActionBar')
+local oUF = F.Libs.oUF
 
 local extraGUIs = {}
 
---[[ Functions ]]
+-- Functions
 
 local function TogglePanel(guiName)
     for name, frame in pairs(extraGUIs) do
@@ -54,6 +55,27 @@ local function CreateExtraGUI(parent, name, title, bgFrame)
     extraGUIs[name] = frame
 
     return frame
+end
+
+function GUI:CreateScroll(parent, width, height, text, noBg)
+    local scroll = CreateFrame('ScrollFrame', nil, parent, 'UIPanelScrollFrameTemplate')
+    scroll:SetSize(width, height)
+    scroll:SetPoint('TOPLEFT', 10, -50)
+
+    if text then
+        F.CreateFS(scroll, C.Assets.Fonts.Regular, 12, 'OUTLINE', text, nil, true, 'TOPLEFT', 5, 20)
+    end
+
+    if not noBg then
+        scroll.bg = F.CreateBDFrame(scroll, .25)
+    end
+
+    scroll.child = CreateFrame('Frame', nil, scroll)
+    scroll.child:SetSize(width, 1)
+    scroll:SetScrollChild(scroll.child)
+    F.ReskinScroll(scroll.ScrollBar)
+
+    return scroll
 end
 
 local function CreateButton(parent, width, height, text, anchor)
@@ -128,22 +150,6 @@ local function CreateLabel(parent, text, tip)
     frame:SetScript('OnLeave', F.HideTooltip)
 end
 
-local function ClearEdit(options)
-    for i = 1, #options do
-        GUI:ClearEdit(options[i])
-    end
-end
-
---[[ Widgets ]]
-
-function GUI:CreateDropdown(parent, text, x, y, data, tip, width, height)
-    local dd = F.CreateDropDown(parent, width or 90, height or 30, data)
-    dd:SetPoint('TOPLEFT', x, y)
-    CreateLabel(dd, text, tip)
-
-    return dd
-end
-
 function GUI:ClearEdit(element)
     if element.Type == 'EditBox' then
         element:ClearFocus()
@@ -158,6 +164,14 @@ function GUI:ClearEdit(element)
     end
 end
 
+local function ClearEdit(options)
+    for i = 1, #options do
+        GUI:ClearEdit(options[i])
+    end
+end
+
+-- Widgets
+
 function GUI:CreateEditbox(parent, text, x, y, tip, width, height)
     local eb = F.CreateEditBox(parent, width or 90, height or 24)
     eb:SetPoint('TOPLEFT', x, y)
@@ -165,27 +179,6 @@ function GUI:CreateEditbox(parent, text, x, y, tip, width, height)
     CreateLabel(eb, text, tip)
 
     return eb
-end
-
-function GUI:CreateScroll(parent, width, height, text, noBg)
-    local scroll = CreateFrame('ScrollFrame', nil, parent, 'UIPanelScrollFrameTemplate')
-    scroll:SetSize(width, height)
-    scroll:SetPoint('TOPLEFT', 10, -50)
-
-    if text then
-        F.CreateFS(scroll, C.Assets.Fonts.Regular, 12, 'OUTLINE', text, nil, true, 'TOPLEFT', 5, 20)
-    end
-
-    if not noBg then
-        scroll.bg = F.CreateBDFrame(scroll, .25)
-    end
-
-    scroll.child = CreateFrame('Frame', nil, scroll)
-    scroll.child:SetSize(width, 1)
-    scroll:SetScrollChild(scroll.child)
-    F.ReskinScroll(scroll.ScrollBar)
-
-    return scroll
 end
 
 function GUI:CreateBarWidgets(parent, texture)
@@ -251,7 +244,7 @@ local function CreateColorSwatch(parent, value, text, defaultV, offset, x, y)
     if x and y then
         swatch:SetPoint('TOPLEFT', x, y)
     else
-        swatch:SetPoint('TOPLEFT', 10, offset)
+        swatch:SetPoint('TOPLEFT', 14, offset)
     end
 end
 
@@ -283,7 +276,54 @@ local function CreateSlider(parent, key, value, text, minV, maxV, step, defaultV
     slider:SetScript('OnValueChanged', Slider_OnValueChanged)
 end
 
---[[ Module Extra GUI ]]
+local function updateDropdownHighlight(self)
+    local dd = self.__owner
+    for i = 1, #dd.__options do
+        local option = dd.options[i]
+        if i == C.DB[dd.__key][dd.__value] then
+            option:SetBackdropColor(C.r, C.g, C.b, .25)
+            option.selected = true
+        else
+            option:SetBackdropColor(.1, .1, .1, .25)
+            option.selected = false
+        end
+    end
+end
+
+local function updateDropdownState(self)
+    local dd = self.__owner
+    C.DB[dd.__key][dd.__value] = self.index
+    if dd.__func then
+        dd.__func()
+    end
+end
+
+function GUI:CreateDropdown(parent, text, x, y, data, tip, width, height)
+    local dd = F.CreateDropDown(parent, width or 90, height or 30, data)
+    dd:SetPoint('TOPLEFT', x, y)
+    CreateLabel(dd, text, tip)
+
+    return dd
+end
+
+local function CreateOptionDropdown(parent, title, yOffset, options, tooltip, key, value, default, func)
+    local dd = GUI:CreateDropdown(parent, title, 40, yOffset, options, tooltip, 180, 28)
+    dd.__key = key
+    dd.__value = value
+    dd.__default = default
+    dd.__options = options
+    dd.__func = func
+    dd.Text:SetText(options[C.DB[key][value]])
+
+    dd.button.__owner = dd
+    dd.button:HookScript('OnClick', updateDropdownHighlight)
+
+    for i = 1, #options do
+        dd.options[i]:HookScript('OnClick', updateDropdownState)
+    end
+end
+
+-- Module Extra GUI
 
 -- Aura
 function GUI:SetupAuraSize(parent)
@@ -603,7 +643,7 @@ function GUI:SetupStanceBarSize(parent)
             min = 8,
             max = 24,
             step = 1
-        },
+        }
     }
 
     local offset = -10
@@ -1170,6 +1210,15 @@ local function UpdateUnitFrameSize()
     SetUnitFrameSize(_G.oUF_TargetTarget, 'TargetTarget')
     SetUnitFrameSize(_G.oUF_Focus, 'Focus')
     SetUnitFrameSize(_G.oUF_FocusTarget, 'FocusTarget')
+end
+
+local function UpdateBossFrameSize()
+    for _, frame in pairs(oUF.objects) do
+        if frame.unitStyle == 'boss' then
+            SetUnitFrameSize(frame, 'Boss')
+            UNITFRAME.UpdateFrameHealthTag(frame)
+        end
+    end
 end
 
 function GUI:SetupUnitFrameSize(parent)
@@ -1869,7 +1918,7 @@ function GUI:SetupCastbarColor(parent)
     local offset = -10
     for _, v in ipairs(datas) do
         CreateGroupTitle(scroll, L['Castbar Color'], offset)
-        CreateColorSwatch(scroll, v.value, v.text, C.CharacterSettings.Unitframe[v.key], offset - 30)
+        CreateColorSwatch(scroll, v.value, v.text, C.CharacterSettings.Unitframe[v.key], offset - 34)
 
         offset = offset - 30
     end
@@ -2427,7 +2476,7 @@ function GUI:SetupCustomClassColor(parent)
     local offset = -10
     for _, v in ipairs(datas) do
         CreateGroupTitle(scroll, L['Class Color Customization'], offset)
-        CreateColorSwatch(scroll, v.value, v.text, C.AccountSettings.CustomClassColors[v.text], offset - 30)
+        CreateColorSwatch(scroll, v.value, v.text, C.AccountSettings.CustomClassColors[v.text], offset - 34)
 
         offset = offset - 30
     end

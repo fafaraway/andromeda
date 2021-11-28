@@ -105,9 +105,9 @@ local function CombatLockdown(event)
 end
 
 local function CheckUIReload(name)
-    --if not string.find(name, '%*') then
+    if not string.find(name, '%*') then
         GUI.NeedUIReload = true
-    --end
+    end
 end
 
 local function SelectTab(i)
@@ -176,8 +176,60 @@ local function CreateTab(parent, i, name)
     return tab
 end
 
+local function Checkbox_OnClick(self)
+    UpdateValue(self.__key, self.__value, self:GetChecked())
+    CheckUIReload(self.__name)
+    if self.__callback then
+        self:__callback()
+    end
+end
+
+local function Editbox_OnEscapePressed(self)
+    self:SetText(UpdateValue(self.__key, self.__value))
+end
+
+local function Editbox_OnEnterPressed(self)
+    UpdateValue(self.__key, self.__value, self:GetText())
+    CheckUIReload(self.__name)
+    if self.__callback then
+        self:__callback()
+    end
+end
+
+local function Slider_OnValueChanged(self, v)
+    local current = F:Round(tonumber(v), 2)
+    UpdateValue(self.__key, self.__value, current)
+    CheckUIReload(self.__name)
+    self.value:SetText(current)
+    if self.__callback then
+        self:__callback()
+    end
+end
+
+local function updateDropdownSelection(self)
+    local dd = self.__owner
+    for i = 1, #dd.__options do
+        local option = dd.options[i]
+        if i == UpdateValue(dd.__key, dd.__value) then
+            option:SetBackdropColor(C.r, C.g, C.b, .25)
+            option.selected = true
+        else
+            option:SetBackdropColor(.1, .1, .1, .25)
+            option.selected = false
+        end
+    end
+end
+
+local function updateDropdownClick(self)
+    local dd = self.__owner
+    UpdateValue(dd.__key, dd.__value, self.index)
+    CheckUIReload(dd.__name)
+    if dd.__callback then
+        dd:__callback()
+    end
+end
+
 local function CreateOption(i)
-    local r, g, b = C.r, C.g, C.b
     local parent, offset = guiPage[i].child, 20
 
     for _, option in pairs(GUI.OptionsList[i]) do
@@ -188,27 +240,21 @@ local function CreateOption(i)
             cb:SetHitRectInsets(-5, -5, -5, -5)
 
             if horizon then
-                cb:SetPoint('TOPLEFT', 250, -offset + 30)
+                cb:SetPoint('TOPLEFT', 250, -offset + 35)
             else
                 cb:SetPoint('TOPLEFT', 20, -offset)
-                offset = offset + 30
+                offset = offset + 35
             end
 
-            cb:SetChecked(UpdateValue(key, value))
-
-            cb:SetScript(
-                'OnClick',
-                function(self)
-                    UpdateValue(key, value, cb:GetChecked())
-                    CheckUIReload(name)
-                    if callback then
-                        callback(self)
-                    end
-                end
-            )
+            cb.__key = key
+            cb.__value = value
+            cb.__name = name
+            cb.__callback = callback
 
             cb.label = F.CreateFS(cb, C.Assets.Fonts.Regular, 12, nil, name, nil, true, 'LEFT', 22, -1)
-            cb.__value = value
+
+            cb:SetChecked(UpdateValue(key, value))
+            cb:SetScript('OnClick', Checkbox_OnClick)
 
             if data and type(data) == 'function' then
                 local bu = CreateGearButton(parent)
@@ -224,34 +270,24 @@ local function CreateOption(i)
             local eb = F.CreateEditBox(parent, 170, 24)
             eb:SetMaxLetters(999)
 
-            eb.label = F.CreateFS(eb, C.Assets.Fonts.Regular, 11, nil, name, nil, true, 'CENTER', 0, 20)
-
             if horizon then
-                eb:SetPoint('TOPLEFT', 260, -offset + 42)
+                eb:SetPoint('TOPLEFT', 260, -offset + 45)
             else
-                eb:SetPoint('TOPLEFT', 20, -offset - 28)
+                eb:SetPoint('TOPLEFT', 20, -offset - 25)
                 offset = offset + 70
             end
 
+            eb.__key = key
+            eb.__value = value
+            eb.__name = name
+            eb.__callback = callback
+            eb.__default = (key == 'ACCOUNT' and C.AccountSettings[value]) or C.CharacterSettings[key][value]
+
+            eb.label = F.CreateFS(eb, C.Assets.Fonts.Regular, 11, nil, name, nil, true, 'CENTER', 0, 20)
             eb:SetText(UpdateValue(key, value))
 
-            eb:HookScript(
-                'OnEscapePressed',
-                function()
-                    eb:SetText(UpdateValue(key, value))
-                end
-            )
-
-            eb:HookScript(
-                'OnEnterPressed',
-                function()
-                    UpdateValue(key, value, eb:GetText())
-                    CheckUIReload(name)
-                    if callback then
-                        callback()
-                    end
-                end
-            )
+            eb:HookScript('OnEscapePressed', Editbox_OnEscapePressed)
+            eb:HookScript('OnEnterPressed', Editbox_OnEnterPressed)
 
             if tip then
                 eb.title = name
@@ -262,29 +298,21 @@ local function CreateOption(i)
 
             local x, y
             if horizon then
-                x, y = 250, -offset + 42
+                x, y = 250, -offset + 40
             else
-                x, y = 10, -offset - 28
+                x, y = 10, -offset - 30
                 offset = offset + 70
             end
 
-            local s = F.CreateSlider(parent, name, min, max, step, x, y, 190, tip)
+            local s = F.CreateSlider(parent, name, min, max, step, x, y, 190)
+            s.__key = key
+            s.__value = value
+            s.__name = name
+            s.__callback = callback
             s.__default = (key == 'ACCOUNT' and C.AccountSettings[value]) or C.CharacterSettings[key][value]
 
             s:SetValue(UpdateValue(key, value))
-
-            s:SetScript(
-                'OnValueChanged',
-                function(_, v)
-                    local current = F:Round(tonumber(v), 2)
-                    UpdateValue(key, value, current)
-                    CheckUIReload(name)
-                    s.value:SetText(current)
-                    if callback then
-                        callback()
-                    end
-                end
-            )
+            s:SetScript('OnValueChanged', Slider_OnValueChanged)
 
             s.value:SetText(F:Round(UpdateValue(key, value), 2))
 
@@ -301,42 +329,26 @@ local function CreateOption(i)
 
             local dd = F.CreateDropDown(parent, 170, 20, data)
             if horizon then
-                dd:SetPoint('TOPLEFT', 260, -offset + 30)
+                dd:SetPoint('TOPLEFT', 260, -offset + 35)
             else
-                dd:SetPoint('TOPLEFT', 26, -offset - 40)
+                dd:SetPoint('TOPLEFT', 26, -offset - 35)
                 offset = offset + 70
             end
 
             dd.Text:SetText(data[UpdateValue(key, value)])
 
-            local opt = dd.options
-            dd.button:HookScript(
-                'OnClick',
-                function()
-                    for num = 1, #data do
-                        if num == UpdateValue(key, value) then
-                            opt[num]:SetBackdropColor(r, g, b, .25)
-                            opt[num].selected = true
-                        else
-                            opt[num]:SetBackdropColor(.1, .1, .1, .25)
-                            opt[num].selected = false
-                        end
-                    end
-                end
-            )
-            for i in pairs(data) do
-                opt[i]:HookScript(
-                    'OnClick',
-                    function()
-                        UpdateValue(key, value, i)
-                        CheckUIReload(name)
-                        if callback then
-                            callback()
-                        end
-                    end
-                )
+            dd.__key = key
+            dd.__value = value
+            dd.__name = name
+            dd.__options = data
+            dd.__callback = callback
+            dd.button.__owner = dd
+            dd.button:HookScript('OnClick', updateDropdownSelection)
+
+            for i = 1, #data do
+                dd.options[i]:HookScript('OnClick', updateDropdownClick)
                 if value == 'TextureStyle' then
-                    AddTextureToOption(opt, i) -- texture preview
+                    AddTextureToOption(dd.options, i) -- texture preview
                 end
             end
 
@@ -349,10 +361,10 @@ local function CreateOption(i)
             local swatch = F.CreateColorSwatch(parent, name, UpdateValue(key, value))
             local width = 25 + (horizon or 0) * 115
             if horizon then
-                swatch:SetPoint('TOPLEFT', width, -offset + 27)
+                swatch:SetPoint('TOPLEFT', width, -offset + 30)
             else
                 swatch:SetPoint('TOPLEFT', width, -offset - 5)
-                offset = offset + 32
+                offset = offset + 35
             end
 
             swatch.__default = (key == 'ACCOUNT' and C.AccountSettings[value]) or C.CharacterSettings[key][value]
