@@ -50,6 +50,14 @@ local function ToggleActionBarFader()
     ACTIONBAR:UpdateActionBarFade()
 end
 
+local function SetupVehicleButtonSize()
+    GUI:SetupVehicleButtonSize(GUI.Page[6])
+end
+
+local function SetupStanceBarSize()
+    GUI:SetupStanceBarSize(GUI.Page[6])
+end
+
 local function SetupActionbarFade()
     GUI:SetupActionbarFade(GUI.Page[6])
 end
@@ -403,8 +411,8 @@ GUI.OptionsList = {
         {1, 'Actionbar', 'Bar4', L['Enable sidebar 1']},
         {1, 'Actionbar', 'Bar5', L['Enable sidebar 2'], true},
         {1, 'Actionbar', 'PetBar', L['Enable pet bar']},
-        {1, 'Actionbar', 'StanceBar', L['Enable stance bar'], true},
-        {1, 'Actionbar', 'VehicleBar', L['Enable leave vehicle button']},
+        {1, 'Actionbar', 'EnableStanceBar', L['Stance Bar'], true, SetupStanceBarSize},
+        {1, 'Actionbar', 'EnableVehicleBar', L['Leave Vehicle Button'], nil, SetupVehicleButtonSize},
         {1, 'Actionbar', 'CustomBar', L['Enable additional bar'], true, SetupAdditionalBar, nil, L['|nAdd an additional actionbar for you to customize.']},
         {},
         {1, 'Cooldown', 'Enable', L['Enable cooldown count']},

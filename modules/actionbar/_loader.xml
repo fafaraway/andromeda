@@ -1,0 +1,11 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="bars.lua"/>
+    <Script file="bind.lua"/>
+    <Script file="custombar.lua"/>
+    <Script file="desaturate.lua"/>
+    <Script file="fader.lua"/>
+    <Script file="flash.lua"/>
+    <Script file="notify.lua"/>
+    <Script file="range.lua"/>
+    <Script file="style.lua"/>
+</Ui>

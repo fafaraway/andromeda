@@ -8,6 +8,7 @@ local ANNOUNCEMENT = F:GetModule('Announcement')
 local MAP = F:GetModule('Minimap')
 local INVENTORY = F:GetModule('Inventory')
 local VIGNETTING = F:GetModule('Vignetting')
+local BAR = F:GetModule('ActionBar')
 
 local extraGUIs = {}
 
@@ -542,6 +543,77 @@ function GUI:SetupMinItemLevelToShow(parent)
 end
 
 -- Actionbar
+local function UpdateVehicleButton()
+    BAR:UpdateVehicleButton()
+end
+
+local function UpdateStanceBar()
+    BAR:UpdateStanceBar()
+end
+
+function GUI:SetupVehicleButtonSize(parent)
+    local guiName = 'FreeUIGUIVehicleButtonSize'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local values = C.DB.Actionbar
+
+    local datas = {
+        key = 'VehicleButtonSize',
+        value = values.VehicleButtonSize,
+        text = L['Button Size'],
+        min = 20,
+        max = 80,
+        step = 1
+    }
+
+    local offset = -10
+    CreateGroupTitle(scroll, L['Leave Vehicle Button'], offset)
+    CreateSlider(scroll, 'Actionbar', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset - 50, UpdateVehicleButton)
+end
+
+function GUI:SetupStanceBarSize(parent)
+    local guiName = 'FreeUIGUIStanceBarSize'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local values = C.DB.Actionbar
+
+    local datas = {
+        [1] = {
+            key = 'BarStanceSize',
+            value = values.BarStanceSize,
+            text = L['Button Size'],
+            min = 20,
+            max = 80,
+            step = 1
+        },
+        [2] = {
+            key = 'BarStanceFont',
+            value = values.BarStanceFont,
+            text = L['Font Size'],
+            min = 8,
+            max = 24,
+            step = 1
+        },
+    }
+
+    local offset = -10
+    for _, v in ipairs(datas) do
+        CreateGroupTitle(scroll, L['Stance Bar'], offset)
+        CreateSlider(scroll, 'Actionbar', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateStanceBar)
+        offset = offset - 65
+    end
+end
+
 function GUI:SetupActionbarFade(parent)
     local guiName = 'FreeUIGUIActionbarFader'
     TogglePanel(guiName)

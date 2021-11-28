@@ -1,15 +1,15 @@
 local F, C, L = unpack(select(2, ...))
-local ACTIONBAR = F:GetModule('ActionBar')
+local CDP = F:GetModule('CooldownPulse')
 
 local fadeInTime, fadeOutTime, maxAlpha, elapsed, runtimer = 0.3, 0.7, 1, 0, 0
 local animScale, iconSize, holdTime, threshold = 1.5, 32, 0, 3
 local cooldowns, animating, watching = {}, {}, {}
 local ignoredList = {}
 
-local anchor = CreateFrame('Frame', 'FreeUI_CDFlashAnchor', _G.UIParent, 'BackdropTemplate')
+local anchor = CreateFrame('Frame', 'FreeUICooldownPulseAnchor', _G.UIParent, 'BackdropTemplate')
 anchor:SetSize(iconSize, iconSize)
 
-local frame = CreateFrame('Frame', 'CDFlashFrame', anchor, 'BackdropTemplate')
+local frame = CreateFrame('Frame', 'FreeUICooldownPulseFrame', anchor, 'BackdropTemplate')
 frame:SetPoint('CENTER', anchor, 'CENTER')
 
 local icon = frame:CreateTexture(nil, 'ARTWORK')
@@ -214,7 +214,7 @@ function frame:PLAYER_ENTERING_WORLD()
     end
 end
 
-function ACTIONBAR:CooldownPulse()
+function CDP:OnLogin()
     if not C.DB.Actionbar.CooldownPulse then
         return
     end
@@ -222,7 +222,7 @@ function ACTIONBAR:CooldownPulse()
     frame.bg = F.SetBD(frame)
     icon:SetTexCoord(unpack(C.TexCoord))
 
-    local mover = F.Mover(anchor, L['Cooldown Icon'], 'CooldownFlash', {'CENTER', _G.UIParent, 0, 100}, iconSize, iconSize)
+    local mover = F.Mover(anchor, L['Cooldown Pulse'], 'CooldownPulse', {'CENTER', _G.UIParent, 0, 100}, iconSize, iconSize)
     anchor:ClearAllPoints()
     anchor:SetPoint('CENTER', mover)
 
@@ -271,8 +271,8 @@ function ACTIONBAR:CooldownPulse()
     )
 end
 
-_G.SlashCmdList.PULSECD = function()
+_G.SlashCmdList.CDPULSE = function()
     table.insert(animating, {GetSpellTexture(87214)})
     frame:SetScript('OnUpdate', OnUpdate)
 end
-_G.SLASH_PULSECD1 = '/cdflash'
+_G.SLASH_CDPULSE1 = '/cdpulse'
