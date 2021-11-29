@@ -188,6 +188,9 @@ C.CharacterSettings = {
 
             OnlyShowPlayer = true,
             DesaturateIcon = true,
+            DebuffTypeColorn = true,
+            PurgeableHighlightn = true,
+
             ShortenName = true,
 
             Castbar = true,
@@ -222,15 +225,20 @@ C.CharacterSettings = {
             TargetTargetWidth = 60,
             TargetTargetHealthHeight = 4,
             TargetTargetPowerHeight = 1,
+            TargetTargetAuras = true,
+            TargetTargetAurasPerRow = 3,
 
             FocusWidth = 60,
             FocusHealthHeight = 4,
             FocusPowerHeight = 1,
+            FocusAuras = true,
             FocusAurasPerRow = 3,
 
             FocusTargetWidth = 60,
             FocusTargetHealthHeight = 4,
             FocusTargetPowerHeight = 1,
+            FocusTargetAuras = true,
+            FocusTargetAurasPerRow = 3,
 
             Group = true,
                 GroupShowName = false,

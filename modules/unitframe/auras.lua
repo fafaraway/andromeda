@@ -112,6 +112,8 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
     local style = element.__owner.unitStyle
     local isParty = style == 'party'
     local desaturate = C.DB.Unitframe.DesaturateIcon
+    local purgeableHighlight = C.DB.Unitframe.PurgeableHighlight
+    local debuffTypeColor = C.DB.Unitframe.DebuffTypeColor
     local _, _, _, _, _, _, _, canStealOrPurge = UnitAura(unit, index, button.filter)
 
     button:SetSize(element.size, isParty and element.size or element.size * .75)
@@ -133,13 +135,13 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
         end
     end
 
-    if canStealOrPurge and element.showStealableBuffs then
+    if purgeableHighlight and canStealOrPurge and element.showStealableBuffs then
         button.bg:SetBackdropBorderColor(1, 1, 1)
 
         if button.glow then
             button.glow:SetBackdropBorderColor(1, 1, 1, .25)
         end
-    elseif button.isDebuff and element.showDebuffType then
+    elseif debuffTypeColor and button.isDebuff and element.showDebuffType then
         local color = oUF.colors.debuff[debuffType] or oUF.colors.debuff.none
 
         button.bg:SetBackdropBorderColor(color[1], color[2], color[3])
@@ -182,6 +184,9 @@ end
 function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, caster, isStealable, _, spellID, _, isBossAura, _, nameplateShowAll)
     local style = element.__owner.unitStyle
     local isMine = F:MultiCheck(caster, 'player', 'pet', 'vehicle')
+    local showToT = C.DB.Unitframe.TargetTargetAuras
+    local showFocus = C.DB.Unitframe.FocusAuras
+    local showToF = C.DB.Unitframe.FocusTargetAuras
 
     if name and spellID == 209859 then
         element.bolster = element.bolster + 1
@@ -204,8 +209,8 @@ function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, cast
         end
     elseif style == 'target' then
         return not button.isDebuff or (element.onlyShowPlayer and button.isPlayer) or (not element.onlyShowPlayer and name)
-    elseif style == 'focus' then
-        return button.isPlayer or isStealable or isBossAura or SpellIsPriorityAura(spellID)
+    elseif (showToT and style == 'targettarget') or (showFocus and style == 'focus') or (showToF and style == 'focustarget') then
+        return button.isDebuff or isStealable or isBossAura or SpellIsPriorityAura(spellID)
     else
         return (element.onlyShowPlayer and button.isPlayer) or (not element.onlyShowPlayer and name)
     end
@@ -272,13 +277,15 @@ function UNITFRAME:CreateAuras(self)
         bu:SetPoint('BOTTOM', self, 'TOP', 0, 24)
         bu['growth-y'] = 'UP'
         bu.iconsPerRow = C.DB.Unitframe.TargetAurasPerRow
-    elseif style == 'pet' or style == 'focus' or style == 'boss' or style == 'arena' then
+    elseif style == 'pet' or style == 'targettarget' or style == 'focus' or style == 'boss' or style == 'arena' then
         bu.initialAnchor = 'TOPLEFT'
         bu:SetPoint('TOP', self, 'BOTTOM', 0, -6)
         bu['growth-y'] = 'DOWN'
 
         if style == 'pet' then
             bu.iconsPerRow = C.DB.Unitframe.PetAurasPerRow
+        elseif style == 'targettarget' then
+            bu.iconsPerRow = C.DB.Unitframe.TargetTargetAurasPerRow
         elseif style == 'focus' then
             bu.iconsPerRow = C.DB.Unitframe.FocusAurasPerRow
         elseif style == 'boss' then
@@ -291,7 +298,7 @@ function UNITFRAME:CreateAuras(self)
         bu:SetPoint('TOP', self, 'BOTTOM', 0, -6)
         bu['growth-x'] = 'LEFT'
         bu['growth-y'] = 'DOWN'
-        bu.iconsPerRow = C.DB.Unitframe.FocusAurasPerRow
+        bu.iconsPerRow = C.DB.Unitframe.FocusTargetAurasPerRow
     elseif style == 'nameplate' then
         bu.initialAnchor = 'BOTTOMLEFT'
         bu:SetPoint('BOTTOM', self, 'TOP', 0, 12)

@@ -511,8 +511,22 @@ GUI.OptionsList = {
         {1, 'Unitframe', 'GCDIndicator', L['Global Cooldown Ticker'], true, nil, nil, L['Show global cooldown ticker above the player frame.']},
 
         {},
-        {1, 'Unitframe', 'DesaturateIcon', L['Desaturate Auras'], nil, nil, nil, L['If checked, only color auras from player, and desaturate auras from others.']},
-        {1, 'Unitframe', 'OnlyShowPlayer', L['Shows only debuffs created by player'], true},
+
+        {1, 'Unitframe', 'OnlyShowPlayer', L['Debuffs By Player Only'], nil, nil, nil, L['Display only debuffs created by player self.']},
+
+        {1, 'Unitframe', 'DesaturateIcon', L['Desaturate Auras'], true, nil, nil, L['Color only auras created by player, and desaturate auras created by others.']},
+
+        {1, 'Unitframe', 'DebuffTypeColorn', L['Debuffs Type Color'], nil, nil, nil, L['Color debuffs border by type.|nMagic is blue, Curse is purple, Poison is green, Disease is yellow, and others are red.']},
+
+        {1, 'Unitframe', 'PurgeableHighlightn', L['Purgeable Buffs Highlight'], true, nil, nil, L['Color Purgeable or Stealable buffs border as white.']},
+        {1, 'Unitframe', 'ShowToTDebuff', L['Target of Target Debuffs'], nil, nil, nil, L['Display debuffs on Target of Target frame.']},
+
+        {1, 'Unitframe', 'ShowFocusDebuff', L['Focus Debuffs'], true, nil, nil, L['Display debuffs on Focus frame.']},
+        {1, 'Unitframe', 'ShowToFDebuff', L['Target of Focus Debuffs'], nil, nil, nil, L['Display debuffs on Target of Focus frame.']},
+        {3, 'Unitframe', 'TargetAurasPerRow', L['Target Auras Per Row'], nil, {3, 10, 1}},
+        {3, 'Unitframe', 'TargetTargetAurasPerRow', L['ToT Auras Per Row'], true, {3, 10, 1}},
+        {3, 'Unitframe', 'FocusAurasPerRow', L['Focus Auras Per Row'], nil, {3, 10, 1}},
+        {3, 'Unitframe', 'FocusTargetAurasPerRow', L['ToF Auras Per Row'], true, {3, 10, 1}},
 
         {},
         {1, 'Unitframe', 'ClassPower', L['Class Power'], nil, SetupClassPowerSize, nil, L['Show special resources of the class, such as Combo Points, Holy Power, Chi, Runes, etc.']},
