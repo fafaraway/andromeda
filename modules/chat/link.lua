@@ -106,11 +106,14 @@ local function GetHyperlink(hyperlink, texture)
     end
 end
 
-local function AddChatIcon(hyperlink)
-    local linkType, id = string.match(hyperlink, '|H(%a+):(%d+)')
-    id = id and tonumber(id)
-    if not linkType or not id then
+local cache = {}
+local function AddChatIcon(link, linkType, id)
+    if not link then
         return
+    end
+
+    if cache[link] then
+        return cache[link]
     end
 
     local texture
@@ -139,22 +142,26 @@ local function AddChatIcon(hyperlink)
         texture = spell and GetSpellTexture(spell)
     end
 
-    return GetHyperlink(hyperlink, texture)
+    cache[link] = GetHyperlink(link, texture)
+
+    return cache[link]
 end
 
-local function AddTradeIcon(hyperlink)
-    local id = string.match(hyperlink, 'Htrade:[^:]-:(%d+)')
-    id = id and tonumber(id)
-    if not id then
+local function AddTradeIcon(link, id)
+    if not link then
         return
     end
 
-    return GetHyperlink(hyperlink, GetSpellTexture(id))
+    if not cache[link] then
+        cache[link] = GetHyperlink(link, GetSpellTexture(id))
+    end
+
+    return cache[link]
 end
 
 function CHAT:UpdateLinkIcon(_, msg, ...)
-    msg = string.gsub(msg, '(|H%a+:%d+.-|h.-|h)', AddChatIcon)
-    msg = string.gsub(msg, '(|Htrade:.+:%d+|h.-|h)', AddTradeIcon)
+    msg = string.gsub(msg, '(|c%x%x%x%x%x%x%x%x|H(%a+):(%d+).-|h.-|h|r)', AddChatIcon)
+    msg = string.gsub(msg, '(|c%x%x%x%x%x%x%x%x|Htrade:[^:]-:(%d+).-|h.-|h|r)', AddTradeIcon)
 
     return false, msg, ...
 end
@@ -163,20 +170,6 @@ function CHAT:AddLinkIcon()
     for _, event in pairs(events) do
         _G.ChatFrame_AddMessageEventFilter(event, CHAT.UpdateLinkIcon)
     end
-
-    -- fix send message
-    hooksecurefunc(
-        'ChatEdit_OnTextChanged',
-        function(self, userInput)
-            local text = self:GetText()
-            if userInput then
-                local newText, count = string.gsub(text, '(|T[:%d]+|t)(|H.+|h.+|h)', '%2')
-                if count > 0 then
-                    self:SetText(newText)
-                end
-            end
-        end
-    )
 end
 
 function CHAT:ExtendLink()

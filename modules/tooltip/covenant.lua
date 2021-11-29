@@ -8,6 +8,7 @@ local debug = false
 local ZT_Prefix = 'ZenTracker'
 local DC_Prefix = 'DCOribos'
 local OmniCD_Prefix = 'OmniCD'
+local MRT_Prefix = 'EXRTADD'
 
 local memberCovenants = {}
 
@@ -104,7 +105,8 @@ local covenantSpells = {
 local addonPrefixes = {
     [ZT_Prefix] = true,
     [DC_Prefix] = true,
-    [OmniCD_Prefix] = true
+    [OmniCD_Prefix] = true,
+    [MRT_Prefix] = true
 }
 
 local function GetCovenantIcon(covenantID)
@@ -152,7 +154,7 @@ function M:GetCovenantID(unit)
 end
 
 local function msgChannel()
-    return IsPartyLFG() and "INSTANCE_CHAT" or IsInRaid() and "RAID" or "PARTY"
+    return IsPartyLFG() and 'INSTANCE_CHAT' or IsInRaid() and 'RAID' or 'PARTY'
 end
 
 local cache = {}
@@ -161,13 +163,15 @@ function M:UpdateRosterInfo()
         return
     end
 
-    if not DCLoaded then
-        for i = 1, GetNumGroupMembers() do
-            local name = GetRaidRosterInfo(i)
-            if name and name ~= C.MyName and not cache[name] then
+    for i = 1, GetNumGroupMembers() do
+        local name = GetRaidRosterInfo(i)
+        if name and name ~= C.MyName and not cache[name] then
+            if not DCLoaded then
                 C_ChatInfo.SendAddonMessage(DC_Prefix, string.format('ASK:%s', name), msgChannel())
-                cache[name] = true
             end
+            C_ChatInfo.SendAddonMessage(MRT_Prefix, string.format('inspect\tREQ\tS\t%s', name), msgChannel())
+
+            cache[name] = true
         end
     end
 
@@ -216,14 +220,20 @@ function M:HandleAddonMessage(...)
         end
 
         local guid = UnitGUID(sender)
-        if guid then
+        covenantID = tonumber(covenantID)
+        if covenantID and guid and (not memberCovenants[guid] or memberCovenants[guid] ~= covenantID) then
+            memberCovenants[guid] = covenantID
+            F:Debug('%s 盟约：%s (by Details_Covenants)', sender, covenantList[covenantID] or 'None')
+        end
+    elseif prefix == MRT_Prefix then
+        local modPrefix, subPrefix, soulbinds = string.split('\t', msg)
+        if (modPrefix and modPrefix == 'inspect') and (subPrefix and subPrefix == 'R') and (soulbinds and string.sub(soulbinds, 1, 1) == 'S') then
+            local guid = UnitGUID(sender)
+            local covenantID = select(2, string.split(':', soulbinds))
             covenantID = tonumber(covenantID)
-            if covenantID and (not memberCovenants[guid] or memberCovenants[guid] ~= covenantID) then
+            if covenantID and guid and (not memberCovenants[guid] or memberCovenants[guid] ~= covenantID) then
                 memberCovenants[guid] = covenantID
-
-                if debug then
-                    F:Debug('%s 盟约：%s (by Details_Covenants)', sender, covenantList[covenantID] or 'None')
-                end
+                F:Debug('%s 盟约：%s (by MRT)', sender, covenantList[covenantID] or 'None')
             end
         end
     end
@@ -273,7 +283,7 @@ function M:AddCovenantInfo()
 end
 
 function M:Covenant()
-    LibRS = _G.LibStub and _G.LibStub('LibRaidStatus-1.0', true)
+    LibRS = _G.LibStub and _G.LibStub('LibOpenRaid-1.0', true)
     DCLoaded = IsAddOnLoaded('Details_Covenants')
 
     for prefix in pairs(addonPrefixes) do

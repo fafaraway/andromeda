@@ -249,13 +249,7 @@ local function CreateColorSwatch(parent, value, text, defaultV, offset, x, y)
 end
 
 local function Slider_OnValueChanged(self, v)
-    local current
-    if self.__step < 1 then
-        current = tonumber(string.format('%.1f', v))
-    else
-        current = tonumber(string.format('%.0f', v))
-    end
-
+    local current = F:Round(tonumber(v), 2)
     self.value:SetText(current)
     C.DB[self.__key][self.__value] = current
 

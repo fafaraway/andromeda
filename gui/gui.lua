@@ -298,9 +298,9 @@ local function CreateOption(i)
 
             local x, y
             if horizon then
-                x, y = 250, -offset + 40
+                x, y = 250, -offset + 45
             else
-                x, y = 10, -offset - 30
+                x, y = 15, -offset - 25
                 offset = offset + 70
             end
 
@@ -377,7 +377,7 @@ local function CreateOption(i)
         end
     end
 
-    local footer = CreateFrame('Frame', nil, parent)
+    local footer = CreateFrame('Frame', nil, parent) -- Fix bottom space
     footer:SetSize(20, 20)
     footer:SetPoint('TOPLEFT', 25, -offset)
 end
