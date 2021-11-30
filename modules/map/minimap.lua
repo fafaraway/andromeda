@@ -741,5 +741,4 @@ function MM:OnLogin()
     MM:WhoPings()
     MM:MouseFunc()
     MM:HideInCombat()
-    MM:AddExpBar()
 end

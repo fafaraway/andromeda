@@ -2,5 +2,5 @@
     <Script file="worldmap.lua"/>
     <Script file="reveal.lua"/>
     <Script file="minimap.lua"/>
-    <Script file="expbar.lua"/>
+    <Script file="tracker.lua"/>
 </Ui>

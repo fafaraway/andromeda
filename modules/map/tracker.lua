@@ -1,7 +1,29 @@
 local F, C, L = unpack(select(2, ...))
-local M = F:GetModule('Minimap')
+local M = F:RegisterModule('ExpTracker')
+local TOOLTIP = F:GetModule('Tooltip')
 
-function M:ExpBar_Update()
+local eventsList = {
+    'PLAYER_XP_UPDATE',
+    'PLAYER_LEVEL_UP',
+    'UPDATE_EXHAUSTION',
+    'PLAYER_ENTERING_WORLD',
+    'UPDATE_FACTION',
+    'ARTIFACT_XP_UPDATE',
+    'PLAYER_EQUIPMENT_CHANGED',
+    'ENABLE_XP_GAIN',
+    'DISABLE_XP_GAIN',
+    'AZERITE_ITEM_EXPERIENCE_CHANGED',
+    'HONOR_XP_UPDATE'
+}
+
+function M:UpdateRenownLevel()
+    local covenantID = C_Covenants.GetActiveCovenantID()
+    if covenantID and covenantID > 0 then
+        _G.FREE_DB['RenownLevels'][covenantID] = C_CovenantSanctumUI.GetRenownLevel() or 0
+    end
+end
+
+function M:Bar_Update()
     local rest = self.restBar
     if rest then
         rest:Hide()
@@ -55,7 +77,7 @@ function M:ExpBar_Update()
     end
 end
 
-function M:ExpBar_UpdateTooltip()
+function M:Bar_OnEnter()
     _G.GameTooltip:SetOwner(self, 'ANCHOR_LEFT')
     _G.GameTooltip:ClearLines()
     _G.GameTooltip:AddDoubleLine(C.MyName, _G.LEVEL .. ': ' .. UnitLevel('player'), C.r, C.g, C.b, 1, 1, 1)
@@ -133,52 +155,43 @@ function M:ExpBar_UpdateTooltip()
         _G.GameTooltip:AddDoubleLine(_G.LEVEL .. ' ' .. level, current .. ' / ' .. barMax, .8, .2, 0, 1, 1, 1)
     end
 
+    _G.GameTooltip:AddLine(' ')
+    _G.GameTooltip:AddLine(_G.LANDING_PAGE_RENOWN_LABEL, 0, .6, 1)
+    for index = 1, 4 do
+        local level = _G.FREE_DB['RenownLevels'][index] or 0
+        _G.GameTooltip:AddDoubleLine(string.format('%s %s', TOOLTIP:GetCovenantIcon(index, 16), TOOLTIP:GetCovenantName(index)), level == 0 and '' or level)
+    end
+
     _G.GameTooltip:Show()
 end
 
 function M:SetupScript(bar)
-    bar.eventList = {
-        'PLAYER_XP_UPDATE',
-        'PLAYER_LEVEL_UP',
-        'UPDATE_EXHAUSTION',
-        'PLAYER_ENTERING_WORLD',
-        'UPDATE_FACTION',
-        'ARTIFACT_XP_UPDATE',
-        'PLAYER_EQUIPMENT_CHANGED',
-        'ENABLE_XP_GAIN',
-        'DISABLE_XP_GAIN',
-        'AZERITE_ITEM_EXPERIENCE_CHANGED',
-        'HONOR_XP_UPDATE'
-    }
-    for _, event in pairs(bar.eventList) do
+    for _, event in pairs(eventsList) do
         bar:RegisterEvent(event)
     end
-    bar:SetScript('OnEvent', M.ExpBar_Update)
-    bar:SetScript('OnEnter', M.ExpBar_UpdateTooltip)
+
+    bar:SetScript('OnEvent', M.Bar_Update)
+    bar:SetScript('OnEnter', M.Bar_OnEnter)
     bar:SetScript('OnLeave', F.HideTooltip)
-    bar:SetScript(
-        'OnMouseUp',
-        function(_, btn)
-            if not HasArtifactEquipped() or btn ~= 'LeftButton' then
-                return
-            end
-            if not _G.ArtifactFrame or not _G.ArtifactFrame:IsShown() then
-                SocketInventoryItem(16)
-            else
-                F:TogglePanel(_G.ArtifactFrame)
-            end
-        end
-    )
+
     hooksecurefunc(
         _G.StatusTrackingBarManager,
         'UpdateBarsShown',
         function()
-            M.ExpBar_Update(bar)
+            M:UpdateRenownLevel()
+            M.Bar_Update(bar)
+        end
+    )
+
+    F:RegisterEvent(
+        'COVENANT_SANCTUM_RENOWN_LEVEL_CHANGED',
+        function()
+            F:Delay(1, M.UpdateRenownLevel)
         end
     )
 end
 
-function M:AddExpBar()
+function M:OnLogin()
     if not C.DB.Map.ExpBar then
         return
     end

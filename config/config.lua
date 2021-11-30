@@ -11,6 +11,7 @@ C.CharacterSettings = {
     UIAnchorTemp = {},
     SpellBinding = {},
     TalentManager = {},
+    RenownLevels = {},
     General = {
         HideTalkingHead = true,
         HideBossBanner = false,

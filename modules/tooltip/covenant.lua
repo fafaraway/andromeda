@@ -109,33 +109,25 @@ local addonPrefixes = {
     [MRT_Prefix] = true
 }
 
-local function GetCovenantIcon(covenantID)
+function M:GetCovenantIcon(covenantID, size)
     local covenant = covenantList[covenantID]
     if covenant then
         local tex = C.Assets.Textures.Covenant[covenant]
-        return string.format('|T' .. tex .. ':12:12|t')
+        return string.format('|T' .. tex .. ':%d|t', size)
     end
 
     return ''
 end
 
-local function GetCovenantName(covenantID)
-    local covenant = covenantList[covenantID]
+local covenantIDToName = {}
+function M:GetCovenantName(covenantID)
+    if not covenantIDToName[covenantID] then
+        local covenantData = C_Covenants.GetCovenantData(covenantID)
+
+        covenantIDToName[covenantID] = covenantData and covenantData.name
+    end
     local color = covenantColor[covenantID]
-    if covenant then
-        return '|cff' .. color .. covenant .. '|r'
-    end
-
-    return ''
-end
-
-local function GetFullName(unit)
-    local name, realm = UnitName(unit)
-    if realm and realm ~= '' then
-        name = name .. '-' .. realm
-    end
-
-    return name
+    return '|cff' .. color .. covenantIDToName[covenantID] .. '|r' or '|cff' .. color .. covenantList[covenantID] .. '|r'
 end
 
 function M:GetCovenantID(unit)
@@ -146,7 +138,7 @@ function M:GetCovenantID(unit)
 
     local covenantID = memberCovenants[guid]
     if not covenantID then
-        local playerInfo = LibRS and LibRS.playerInfoManager.GetPlayerInfo(GetFullName(unit))
+        local playerInfo = LibRS and LibRS.playerInfoManager.GetPlayerInfo(GetUnitName(unit, true))
         return playerInfo and playerInfo.covenantId
     end
 
@@ -246,9 +238,7 @@ function M:HandleSpellCast(unit, _, spellID)
         if guid and (not memberCovenants[guid] or memberCovenants[guid] ~= covenantID) then
             memberCovenants[guid] = covenantID
 
-            if debug then
-                F:Debug('%s 盟约：%s (by %s)', GetFullName(unit), covenantList[covenantID], GetSpellLink(spellID))
-            end
+            F:Debug('%s 盟约：%s (by %s)', GetUnitName(unit, true), covenantList[covenantID], GetSpellLink(spellID))
         end
     end
 end
@@ -278,7 +268,7 @@ function M:AddCovenantInfo()
     end
 
     if covenantID and covenantID ~= 0 then
-        _G.GameTooltip:AddLine(string.format('%s %s %s', C.WhiteColor .. L['Covenant'] .. ':|r', GetCovenantName(covenantID), GetCovenantIcon(covenantID)))
+        _G.GameTooltip:AddLine(string.format('%s %s %s', C.WhiteColor .. L['Covenant'] .. ':|r', M:GetCovenantName(covenantID), M:GetCovenantIcon(covenantID, 14)))
     end
 end
 
