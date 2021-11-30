@@ -108,7 +108,7 @@ def update_locales(keys, old: {str: str}, del_no_use: bool = True) -> {str: str}
 
 #
 
-addon_path = "Z:/_dev/FreeUI/"
+addon_path = "./"
 
 # Scan all locale strings
 files = get_files(addon_path, ignore=["git", "github", "vscode", "locales", "libs"])
