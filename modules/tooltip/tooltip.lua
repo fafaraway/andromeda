@@ -359,7 +359,7 @@ function TOOLTIP:AddMythicPlusScore(unit)
     local summary = C_PlayerInfo.GetPlayerMythicPlusRatingSummary(unit)
     local score = summary and summary.currentSeasonScore
     if score and score > 0 then
-        _G.GameTooltip:AddLine(string.format('%s: %s', '|cffffffff' .. L['MythicPlusRating'], TOOLTIP.GetDungeonScore(score)))
+        _G.GameTooltip:AddLine(string.format('%s: %s', '|cffffffff' .. _G.DUNGEON_SCORE, TOOLTIP.GetDungeonScore(score)))
     end
 end
 

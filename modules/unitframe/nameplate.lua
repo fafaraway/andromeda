@@ -385,6 +385,20 @@ function NAMEPLATE:IsMouseoverUnit()
     return false
 end
 
+function NAMEPLATE:HighlightOnUpdate(elapsed)
+    self.elapsed = (self.elapsed or 0) + elapsed
+    if self.elapsed > .1 then
+        if not NAMEPLATE.IsMouseoverUnit(self.__owner) then
+            self:Hide()
+        end
+        self.elapsed = 0
+    end
+end
+
+function NAMEPLATE:HighlightOnHide()
+    self.__owner.HighlightIndicator:Hide()
+end
+
 function NAMEPLATE:UpdateMouseoverShown()
     if not self or not self.unit then
         return
@@ -398,7 +412,7 @@ function NAMEPLATE:UpdateMouseoverShown()
     end
 end
 
-function NAMEPLATE:CreateHighlight(self)
+function NAMEPLATE:CreateMouseoverIndicator(self)
     local highlight = CreateFrame('Frame', nil, self.Health)
     highlight:SetAllPoints(self)
     highlight:Hide()
@@ -408,28 +422,13 @@ function NAMEPLATE:CreateHighlight(self)
 
     self:RegisterEvent('UPDATE_MOUSEOVER_UNIT', NAMEPLATE.UpdateMouseoverShown, true)
 
-    local f = CreateFrame('Frame', nil, self)
-    f:SetScript(
-        'OnUpdate',
-        function(_, elapsed)
-            f.elapsed = (f.elapsed or 0) + elapsed
-            if f.elapsed > .1 then
-                if not NAMEPLATE.IsMouseoverUnit(self) then
-                    f:Hide()
-                end
-                f.elapsed = 0
-            end
-        end
-    )
-    f:HookScript(
-        'OnHide',
-        function()
-            highlight:Hide()
-        end
-    )
+    local updater = CreateFrame('Frame', nil, self)
+    updater.__owner = self
+    updater:SetScript('OnUpdate', NAMEPLATE.HighlightOnUpdate)
+    updater:HookScript('OnHide', NAMEPLATE.HighlightOnHide)
 
     self.HighlightIndicator = highlight
-    self.HighlightUpdater = f
+    self.HighlightUpdater = updater
 end
 
 -- Unit classification
@@ -763,7 +762,7 @@ function NAMEPLATE:CreateNameplateStyle()
     NAMEPLATE:CreateNameplateHealthTag(self)
     UNITFRAME:CreateHealPrediction(self)
     NAMEPLATE:CreateTargetIndicator(self)
-    NAMEPLATE:CreateHighlight(self)
+    NAMEPLATE:CreateMouseoverIndicator(self)
     NAMEPLATE:CreateClassifyIndicator(self)
     NAMEPLATE:CreateThreatIndicator(self)
     NAMEPLATE:CreateQuestIndicator(self)
@@ -952,7 +951,7 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
         self.widgetContainer = blizzPlate and blizzPlate.WidgetContainer
         if self.widgetContainer then
             self.widgetContainer:SetParent(self)
-            --self.widgetContainer:SetScale(_G.FREE_ADB.UIScale)
+        --self.widgetContainer:SetScale(_G.FREE_ADB.UIScale)
         end
 
         NAMEPLATE.RefreshPlateType(self, unit)

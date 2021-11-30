@@ -2,7 +2,7 @@ local F, C = unpack(select(2, ...))
 local NOTIFICATION = F:GetModule('Notification')
 
 local cache = {}
-local rareString = '|Hworldmap:%d+:%d+:%d+|h[%s (%.1f, %.1f)%s]|h|r'
+local rareString = '|Hworldmap:%d+:%d+:%d+|h%s (%.1f, %.1f)%s|h|r'
 
 local function IsUsefulAtlas(info)
     local atlas = info.atlasName

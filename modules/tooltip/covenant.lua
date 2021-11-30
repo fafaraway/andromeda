@@ -283,5 +283,5 @@ function M:Covenant()
     M:UpdateRosterInfo()
     F:RegisterEvent('GROUP_ROSTER_UPDATE', M.UpdateRosterInfo)
     F:RegisterEvent('CHAT_MSG_ADDON', M.HandleAddonMessage)
-    F:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED', M.HandleSpellCast)
+    -- F:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED', M.HandleSpellCast)
 end
