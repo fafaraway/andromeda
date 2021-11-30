@@ -155,11 +155,16 @@ function M:Bar_OnEnter()
         _G.GameTooltip:AddDoubleLine(_G.LEVEL .. ' ' .. level, current .. ' / ' .. barMax, .8, .2, 0, 1, 1, 1)
     end
 
-    _G.GameTooltip:AddLine(' ')
-    _G.GameTooltip:AddLine(_G.LANDING_PAGE_RENOWN_LABEL, 0, .6, 1)
-    for index = 1, 4 do
-        local level = _G.FREE_DB['RenownLevels'][index] or 0
-        _G.GameTooltip:AddDoubleLine(string.format('%s %s', TOOLTIP:GetCovenantIcon(index, 16), TOOLTIP:GetCovenantName(index)), level == 0 and '' or level)
+    local covenantID = C_Covenants.GetActiveCovenantID()
+    if covenantID then
+        _G.GameTooltip:AddLine(' ')
+        _G.GameTooltip:AddLine(_G.LANDING_PAGE_RENOWN_LABEL, 0, .6, 1)
+        for index = 1, 4 do
+            local level = _G.FREE_DB['RenownLevels'][index] or 0
+            if level > 0 then
+                _G.GameTooltip:AddDoubleLine(string.format('%s %s', TOOLTIP:GetCovenantIcon(index, 16), TOOLTIP:GetCovenantName(index)), level == 0 and '' or level)
+            end
+        end
     end
 
     _G.GameTooltip:Show()
