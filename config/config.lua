@@ -215,6 +215,7 @@ C.CharacterSettings = {
             PetWidth = 60,
             PetHealthHeight = 4,
             PetPowerHeight = 1,
+            PetAuras = true,
             PetAurasPerRow = 3,
 
             TargetWidth = 160,

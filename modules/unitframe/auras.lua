@@ -187,6 +187,7 @@ function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, cast
     local showToT = C.DB.Unitframe.TargetTargetAuras
     local showFocus = C.DB.Unitframe.FocusAuras
     local showToF = C.DB.Unitframe.FocusTargetAuras
+    local showPet = C.DB.Unitframe.PetAuras
 
     if name and spellID == 209859 then
         element.bolster = element.bolster + 1
@@ -209,7 +210,7 @@ function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, cast
         end
     elseif style == 'target' then
         return not button.isDebuff or (element.onlyShowPlayer and button.isPlayer) or (not element.onlyShowPlayer and name)
-    elseif (showToT and style == 'targettarget') or (showFocus and style == 'focus') or (showToF and style == 'focustarget') then
+    elseif (showPet and style == 'pet') or (showToT and style == 'targettarget') or (showFocus and style == 'focus') or (showToF and style == 'focustarget') then
         return button.isDebuff or isStealable or isBossAura or SpellIsPriorityAura(spellID)
     else
         return (element.onlyShowPlayer and button.isPlayer) or (not element.onlyShowPlayer and name)
