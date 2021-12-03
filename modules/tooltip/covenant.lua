@@ -13,19 +13,17 @@ local MRT_Prefix = 'EXRTADD'
 local memberCovenants = {}
 
 local covenantList = {
-    [0] = 'None',
-    [1] = 'Kyrian',
-    [2] = 'Venthyr',
-    [3] = 'NightFae',
-    [4] = 'Necrolord'
+    [1] = 'kyrian',
+    [2] = 'venthyr',
+    [3] = 'nightfae',
+    [4] = 'necrolord'
 }
 
 local covenantColor = {
-    [0] = 'ffffff',
-    [1] = '2bd9f0', -- Kyrian
-    [2] = 'de1b14', -- Venthyr
-    [3] = '237dff', -- Night Fae
-    [4] = '2bb557' -- Necrolord
+    [1] = _G.COVENANT_COLORS.Kyrian,
+    [2] = _G.COVENANT_COLORS.Venthyr,
+    [3] = _G.COVENANT_COLORS.NightFae,
+    [4] = _G.COVENANT_COLORS.Necrolord
 }
 
 local covenantSpells = {
@@ -109,11 +107,10 @@ local addonPrefixes = {
     [MRT_Prefix] = true
 }
 
-function M:GetCovenantIcon(covenantID, size)
+function M:GetCovenantIcon(covenantID)
     local covenant = covenantList[covenantID]
     if covenant then
-        local tex = C.Assets.Textures.Covenant[covenant]
-        return string.format('|T' .. tex .. ':%d|t', size)
+        return string.format('|A:sanctumupgrades-' .. covenantList[covenantID] .. '-32x32:16:16|a')
     end
 
     return ''
@@ -127,7 +124,7 @@ function M:GetCovenantName(covenantID)
         covenantIDToName[covenantID] = covenantData and covenantData.name
     end
     local color = covenantColor[covenantID]
-    return '|cff' .. color .. covenantIDToName[covenantID] .. '|r' or '|cff' .. color .. covenantList[covenantID] .. '|r'
+    return color:WrapTextInColorCode(covenantIDToName[covenantID])
 end
 
 function M:GetCovenantID(unit)
@@ -268,7 +265,7 @@ function M:AddCovenantInfo()
     end
 
     if covenantID and covenantID ~= 0 then
-        _G.GameTooltip:AddLine(string.format('%s %s %s', C.WhiteColor .. L['Covenant'] .. ':|r', M:GetCovenantName(covenantID), M:GetCovenantIcon(covenantID, 14)))
+        _G.GameTooltip:AddLine(string.format('%s %s %s', C.WhiteColor .. L['Covenant'] .. ':|r', M:GetCovenantName(covenantID), M:GetCovenantIcon(covenantID)))
     end
 end
 

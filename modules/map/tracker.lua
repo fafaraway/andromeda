@@ -2,6 +2,63 @@ local F, C, L = unpack(select(2, ...))
 local M = F:RegisterModule('ExpTracker')
 local TOOLTIP = F:GetModule('Tooltip')
 
+function M:InitRenownLevel()
+    if not _G.FREE_ADB['RenownLevels'][C.MyRealm] then
+        _G.FREE_ADB['RenownLevels'][C.MyRealm] = {}
+    end
+
+    if not _G.FREE_ADB['RenownLevels'][C.MyRealm][C.MyName] then
+        _G.FREE_ADB['RenownLevels'][C.MyRealm][C.MyName] = {}
+
+        for i = 1, 4 do
+            _G.FREE_ADB['RenownLevels'][C.MyRealm][C.MyName][i] = 0
+        end
+    end
+end
+
+function M:CheckRenownLevel()
+    local level = C_CovenantSanctumUI.GetRenownLevel()
+    local CovenantID = C_Covenants.GetActiveCovenantID()
+
+    _G.FREE_ADB['RenownLevels'][C.MyRealm][C.MyName][CovenantID] = level
+end
+
+function M:UpdateRenownLevel()
+    F:RegisterEvent(
+        'PLAYER_ENTERING_WORLD',
+        function()
+            F:Delay(
+                1,
+                function()
+                    M:CheckRenownLevel()
+                end
+            )
+        end
+    )
+    F:RegisterEvent(
+        'COVENANT_CHOSEN',
+        function()
+            F:Delay(
+                3,
+                function()
+                    M:CheckRenownLevel()
+                end
+            )
+        end
+    )
+    F:RegisterEvent(
+        'COVENANT_SANCTUM_RENOWN_LEVEL_CHANGED',
+        function()
+            F:Delay(
+                3,
+                function()
+                    M:CheckRenownLevel()
+                end
+            )
+        end
+    )
+end
+
 local eventsList = {
     'PLAYER_XP_UPDATE',
     'PLAYER_LEVEL_UP',
@@ -16,11 +73,25 @@ local eventsList = {
     'HONOR_XP_UPDATE'
 }
 
-function M:UpdateRenownLevel()
-    local covenantID = C_Covenants.GetActiveCovenantID()
-    if covenantID and covenantID > 0 then
-        _G.FREE_DB['RenownLevels'][covenantID] = C_CovenantSanctumUI.GetRenownLevel() or 0
-    end
+function M:CreateBar()
+    local bar = CreateFrame('StatusBar', 'FreeUI_MinimapExpBar', _G.Minimap)
+    bar:SetPoint('TOPLEFT', 1, -(_G.Minimap:GetHeight() / 8) - 1)
+    bar:SetPoint('TOPRIGHT', -1, -(_G.Minimap:GetHeight() / 8) - 1)
+    bar:SetHeight(4)
+    bar:SetStatusBarTexture(C.Assets.norm_tex)
+    bar.bg = F.CreateBDFrame(bar)
+
+    bar:SetFrameLevel(_G.Minimap:GetFrameLevel() + 2)
+    bar:SetHitRectInsets(0, 0, 0, -10)
+
+    local rest = CreateFrame('StatusBar', nil, bar)
+    rest:SetAllPoints()
+    rest:SetStatusBarTexture(C.Assets.norm_tex)
+    rest:SetStatusBarColor(.34, .45, .86, .8)
+    rest:SetFrameLevel(bar:GetFrameLevel() - 1)
+    bar.restBar = rest
+
+    M.Bar = bar
 end
 
 function M:Bar_Update()
@@ -159,39 +230,30 @@ function M:Bar_OnEnter()
     if covenantID then
         _G.GameTooltip:AddLine(' ')
         _G.GameTooltip:AddLine(_G.LANDING_PAGE_RENOWN_LABEL, 0, .6, 1)
-        for index = 1, 4 do
-            local level = _G.FREE_DB['RenownLevels'][index] or 0
-            if level > 0 then
-                _G.GameTooltip:AddDoubleLine(string.format('%s %s', TOOLTIP:GetCovenantIcon(index, 16), TOOLTIP:GetCovenantName(index)), level == 0 and '' or level)
-            end
+
+        for i = 1, 4 do
+            local level = _G.FREE_ADB['RenownLevels'][C.MyRealm][C.MyName][i]
+            _G.GameTooltip:AddDoubleLine(TOOLTIP:GetCovenantIcon(i) .. TOOLTIP:GetCovenantName(i), level)
         end
     end
 
     _G.GameTooltip:Show()
 end
 
-function M:SetupScript(bar)
+function M:SetupScript()
     for _, event in pairs(eventsList) do
-        bar:RegisterEvent(event)
+        M.Bar:RegisterEvent(event)
     end
 
-    bar:SetScript('OnEvent', M.Bar_Update)
-    bar:SetScript('OnEnter', M.Bar_OnEnter)
-    bar:SetScript('OnLeave', F.HideTooltip)
+    M.Bar:SetScript('OnEvent', M.Bar_Update)
+    M.Bar:SetScript('OnEnter', M.Bar_OnEnter)
+    M.Bar:SetScript('OnLeave', F.HideTooltip)
 
     hooksecurefunc(
         _G.StatusTrackingBarManager,
         'UpdateBarsShown',
         function()
-            M:UpdateRenownLevel()
-            M.Bar_Update(bar)
-        end
-    )
-
-    F:RegisterEvent(
-        'COVENANT_SANCTUM_RENOWN_LEVEL_CHANGED',
-        function()
-            F:Delay(1, M.UpdateRenownLevel)
+            M.Bar_Update(M.Bar)
         end
     )
 end
@@ -201,22 +263,8 @@ function M:OnLogin()
         return
     end
 
-    local bar = CreateFrame('StatusBar', 'FreeUI_MinimapExpBar', _G.Minimap)
-    bar:SetPoint('TOPLEFT', 1, -(_G.Minimap:GetHeight() / 8) - 1)
-    bar:SetPoint('TOPRIGHT', -1, -(_G.Minimap:GetHeight() / 8) - 1)
-    bar:SetHeight(4)
-    bar:SetStatusBarTexture(C.Assets.norm_tex)
-    bar.bg = F.CreateBDFrame(bar)
-
-    bar:SetFrameLevel(_G.Minimap:GetFrameLevel() + 2)
-    bar:SetHitRectInsets(0, 0, 0, -10)
-
-    local rest = CreateFrame('StatusBar', nil, bar)
-    rest:SetAllPoints()
-    rest:SetStatusBarTexture(C.Assets.norm_tex)
-    rest:SetStatusBarColor(.34, .45, .86, .8)
-    rest:SetFrameLevel(bar:GetFrameLevel() - 1)
-    bar.restBar = rest
-
-    M:SetupScript(bar)
+    M:CreateBar()
+    M:SetupScript()
+    M:InitRenownLevel()
+    M:UpdateRenownLevel()
 end

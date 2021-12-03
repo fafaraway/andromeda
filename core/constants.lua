@@ -75,17 +75,6 @@ C.Assets = {
         Grad = C.AssetsPath .. 'textures\\statusbar\\grad',
         Flat = C.AssetsPath .. 'textures\\statusbar\\flat',
 
-
-
-        Covenant = {
-            Kyrian = C.AssetsPath .. 'textures\\covenants\\kyrian',
-            Necrolord = C.AssetsPath .. 'textures\\covenants\\necrolord',
-            NightFae = C.AssetsPath .. 'textures\\covenants\\nightfae',
-            Venthyr = C.AssetsPath .. 'textures\\covenants\\venthyr',
-        },
-
-
-
         Inventory = {
             Restore = C.AssetsPath .. 'textures\\inventory\\restore',
             Toggle = C.AssetsPath .. 'textures\\inventory\\toggle',
