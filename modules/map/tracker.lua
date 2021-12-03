@@ -227,7 +227,7 @@ function M:Bar_OnEnter()
     end
 
     local covenantID = C_Covenants.GetActiveCovenantID()
-    if covenantID then
+    if covenantID and covenantID > 0 then
         _G.GameTooltip:AddLine(' ')
         _G.GameTooltip:AddLine(_G.LANDING_PAGE_RENOWN_LABEL, 0, .6, 1)
 
