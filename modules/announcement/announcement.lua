@@ -1,4 +1,4 @@
-local F, C, L = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
 local ANNOUNCEMENT = F:GetModule('Announcement')
 
 C.AnnounceableSpellsList = {
@@ -117,7 +117,7 @@ function ANNOUNCEMENT:OnEvent()
     if eventType == 'SPELL_MISSED' and C.DB.Announcement.Reflect then
         local spellID, _, _, missType = select(12, CombatLogGetCurrentEventInfo())
         if missType == 'REFLECT' and destName == C.MyName then
-            SendChatMessage(string.format(L['Reflected -> %s'], GetSpellLink(spellID)), GetChannel())
+            SendChatMessage(string.format(_G.COMBAT_TEXT_REFLECT .. ' -> %s', GetSpellLink(spellID)), GetChannel())
         end
     end
 
@@ -128,17 +128,17 @@ function ANNOUNCEMENT:OnEvent()
     if eventType == 'SPELL_CAST_SUCCESS' then
         if ANNOUNCEMENT.AnnounceableSpellsList[spellID] and C.DB.Announcement.Spells then
             if destName == nil then
-                SendChatMessage(string.format(L['Used %s'], GetSpellLink(spellID)), GetChannel())
+                SendChatMessage(string.format(_G.ACTION_SPELL_CAST_SUCCESS .. ' %s', GetSpellLink(spellID)), GetChannel())
             else
-                SendChatMessage(string.format(L['Used %s -> %s'], GetSpellLink(spellID), destName), GetChannel())
+                SendChatMessage(string.format(_G.ACTION_SPELL_CAST_SUCCESS .. ' %s -> %s', GetSpellLink(spellID), destName), GetChannel())
             end
         end
     elseif eventType == 'SPELL_INTERRUPT' and C.DB.Announcement.Interrupt then
-        SendChatMessage(string.format(L['Interrupted -> %s'], GetSpellLink(extraSpellID)), GetChannel())
+        SendChatMessage(string.format(_G.ACTION_SPELL_INTERRUPT .. ' -> %s', GetSpellLink(extraSpellID)), GetChannel())
     elseif eventType == 'SPELL_DISPEL' and C.DB.Announcement.Dispel then
-        SendChatMessage(string.format(L['Dispelled -> %s'], GetSpellLink(extraSpellID)), GetChannel())
+        SendChatMessage(string.format(_G.ACTION_SPELL_DISPEL .. ' -> %s', GetSpellLink(extraSpellID)), GetChannel())
     elseif eventType == 'SPELL_STOLEN' and C.DB.Announcement.Stolen then
-        SendChatMessage(string.format(L['Stolen -> %s'], GetSpellLink(extraSpellID)), GetChannel())
+        SendChatMessage(string.format(_G.ACTION_SPELL_STOLEN .. ' -> %s', GetSpellLink(extraSpellID)), GetChannel())
     end
 end
 
