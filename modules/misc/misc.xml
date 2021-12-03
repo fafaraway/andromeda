@@ -18,7 +18,6 @@
     <Script file="reputation.lua"/>
     <Script file="screenshot.lua"/>
     <Script file="shared_media.lua"/>
-    <Script file="stats_report.lua"/>
     <Script file="talent_manager.lua"/>
     <Script file="vignetting.lua"/>
 </Ui>
