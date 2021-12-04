@@ -233,7 +233,9 @@ function M:Bar_OnEnter()
 
         for i = 1, 4 do
             local level = _G.FREE_ADB['RenownLevels'][C.MyRealm][C.MyName][i]
-            _G.GameTooltip:AddDoubleLine(TOOLTIP:GetCovenantIcon(i) .. TOOLTIP:GetCovenantName(i), level)
+            if level > 0 then
+                _G.GameTooltip:AddDoubleLine(TOOLTIP:GetCovenantIcon(i) .. TOOLTIP:GetCovenantName(i), level)
+            end
         end
     end
 
