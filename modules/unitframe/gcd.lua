@@ -15,23 +15,33 @@ local function UpdateGCDTicker(self)
     end
 end
 
+function UNITFRAME:ToggleGCDTicker()
+    local player = _G.oUF_Player
+    local ticker = player and player.GCDTicker
+    if not ticker then
+        return
+    end
+
+    ticker:SetShown(C.DB.Unitframe.GCDIndicator)
+end
+
 function UNITFRAME:CreateGCDTicker(self)
     local ticker = CreateFrame('StatusBar', nil, self)
     ticker:SetFrameLevel(self.Health:GetFrameLevel() + 1)
-    ticker:SetStatusBarTexture(C.Assets.norm_tex)
+    ticker:SetStatusBarTexture(C.Assets.bd_tex)
     ticker:GetStatusBarTexture():SetAlpha(0)
-    ticker:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 0)
-    ticker:SetWidth(self:GetWidth())
-    ticker:SetHeight(6)
+    ticker:SetAllPoints()
 
     local spark = ticker:CreateTexture(nil, 'OVERLAY')
     spark:SetTexture(C.Assets.spark_tex)
     spark:SetBlendMode('ADD')
-    spark:SetPoint('TOPLEFT', ticker:GetStatusBarTexture(), 'TOPRIGHT', -3, 3)
-    spark:SetPoint('BOTTOMRIGHT', ticker:GetStatusBarTexture(), 'BOTTOMRIGHT', 3, -3)
+    spark:SetPoint('TOPLEFT', ticker:GetStatusBarTexture(), 'TOPRIGHT', -10, 10)
+    spark:SetPoint('BOTTOMRIGHT', ticker:GetStatusBarTexture(), 'BOTTOMRIGHT', 10, -10)
 
     ticker.spark = spark
 
     ticker:SetScript('OnUpdate', UpdateGCDTicker)
     self.GCDTicker = ticker
+
+    UNITFRAME:ToggleGCDTicker()
 end

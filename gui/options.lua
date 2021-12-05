@@ -194,6 +194,9 @@ local function SetupRaidTargetIndicator()
     GUI:SetupRaidTargetIndicator(GUI.Page[12])
 end
 
+local function UpdateGCDTicker()
+    UNITFRAME:ToggleGCDTicker()
+end
 
 -- Groupframe
 local function SetupGroupFrameSize()
@@ -508,7 +511,7 @@ GUI.OptionsList = {
 
 
         {1, 'Unitframe', 'RaidTargetIndicator', L['Raid Target Icon'], nil, SetupRaidTargetIndicator, nil, L['Show raid target icon on unit frame.']},
-        {1, 'Unitframe', 'GCDIndicator', L['Global Cooldown Ticker'], true, nil, nil, L['Show global cooldown ticker above the player frame.']},
+        {1, 'Unitframe', 'GCDIndicator', L['Global Cooldown Ticker'], true, nil, UpdateGCDTicker, L['Show global cooldown ticker above the player frame.']},
 
         {},
 
