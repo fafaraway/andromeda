@@ -197,6 +197,7 @@ function UNITFRAME:OnLogin()
     UNITFRAME:AddDungeonSpells()
     UNITFRAME:AddDominationSpells()
     UNITFRAME:AddNathriaSpells()
+    UNITFRAME:AddSepulcherSpells()
 
     for instName, value in pairs(RaidDebuffs) do
         for spell, priority in pairs(value) do
