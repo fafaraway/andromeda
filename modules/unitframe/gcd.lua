@@ -30,13 +30,27 @@ function UNITFRAME:CreateGCDTicker(self)
     ticker:SetFrameLevel(self.Health:GetFrameLevel() + 1)
     ticker:SetStatusBarTexture(C.Assets.bd_tex)
     ticker:GetStatusBarTexture():SetAlpha(0)
-    ticker:SetAllPoints()
+
+    local separateCastbar = C.DB.Unitframe.SeparateCastbar
+    if separateCastbar then
+        ticker:SetAllPoints()
+    else
+        ticker:SetPoint('BOTTOMLEFT', self, 'TOPLEFT')
+        ticker:SetWidth(self:GetWidth())
+        ticker:SetHeight(6)
+    end
 
     local spark = ticker:CreateTexture(nil, 'OVERLAY')
     spark:SetTexture(C.Assets.spark_tex)
     spark:SetBlendMode('ADD')
-    spark:SetPoint('TOPLEFT', ticker:GetStatusBarTexture(), 'TOPRIGHT', -10, 10)
-    spark:SetPoint('BOTTOMRIGHT', ticker:GetStatusBarTexture(), 'BOTTOMRIGHT', 10, -10)
+
+    if separateCastbar then
+        spark:SetPoint('TOPLEFT', ticker:GetStatusBarTexture(), 'TOPRIGHT', -10, 10)
+        spark:SetPoint('BOTTOMRIGHT', ticker:GetStatusBarTexture(), 'BOTTOMRIGHT', 10, -10)
+    else
+        spark:SetPoint('TOPLEFT', ticker:GetStatusBarTexture(), 'TOPRIGHT', -3, 3)
+        spark:SetPoint('BOTTOMRIGHT', ticker:GetStatusBarTexture(), 'BOTTOMRIGHT', 3, -3)
+    end
 
     ticker.spark = spark
 
