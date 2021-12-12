@@ -34,6 +34,9 @@ table.insert(
         F.SetBD(_G.BNToastFrame.TooltipFrame)
         F.ReskinClose(_G.BNToastFrame.CloseButton)
 
+        _G.TimeAlertFrame:SetBackdrop(nil)
+        F.SetBD(_G.TimeAlertFrame)
+
         -- Battletag invite frame
         local border, send, cancel = _G.BattleTagInviteFrame:GetChildren()
         border:Hide()

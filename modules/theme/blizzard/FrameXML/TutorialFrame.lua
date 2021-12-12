@@ -1,33 +1,26 @@
 local F, C = unpack(select(2, ...))
 
-tinsert(C.BlizzThemes, function()
-	if not _G.FREE_ADB.ReskinBlizz then return end
+table.insert(
+    C.BlizzThemes,
+    function()
+        F.SetBD(_G.TutorialFrame)
 
-	F.SetBD(TutorialFrame)
+        _G.TutorialFrameBackground:Hide()
+        _G.TutorialFrameBackground.Show = F.Dummy
+        _G.TutorialFrame:DisableDrawLayer('BORDER')
 
-	TutorialFrameBackground:Hide()
-	TutorialFrameBackground.Show = F.Dummy
-	TutorialFrame:DisableDrawLayer("BORDER")
+        F.Reskin(_G.TutorialFrameOkayButton, true)
+        F.ReskinClose(_G.TutorialFrameCloseButton)
+        F.ReskinArrow(_G.TutorialFramePrevButton, 'left')
+        F.ReskinArrow(_G.TutorialFrameNextButton, 'right')
 
-	F.Reskin(TutorialFrameOkayButton, true)
-	F.ReskinClose(TutorialFrameCloseButton)
-	F.ReskinArrow(TutorialFramePrevButton, "left")
-	F.ReskinArrow(TutorialFrameNextButton, "right")
+        _G.TutorialFrameOkayButton:ClearAllPoints()
+        _G.TutorialFrameOkayButton:SetPoint('BOTTOMLEFT', _G.TutorialFrameNextButton, 'BOTTOMRIGHT', 10, 0)
 
-	TutorialFrameOkayButton:ClearAllPoints()
-	TutorialFrameOkayButton:SetPoint("BOTTOMLEFT", TutorialFrameNextButton, "BOTTOMRIGHT", 10, 0)
-
-	-- because gradient alpha and OnUpdate doesn't work for some reason...
-
-	if select(14, TutorialFrameOkayButton:GetRegions()) then
-		select(14, TutorialFrameOkayButton:GetRegions()):Hide()
-		select(15, TutorialFramePrevButton:GetRegions()):Hide()
-		select(15, TutorialFrameNextButton:GetRegions()):Hide()
-		select(14, TutorialFrameCloseButton:GetRegions()):Hide()
-	end
-	TutorialFramePrevButton:SetScript("OnEnter", nil)
-	TutorialFrameNextButton:SetScript("OnEnter", nil)
-	TutorialFrameOkayButton.__bg:SetBackdropColor(0, 0, 0, .25)
-	--TutorialFramePrevButton.__bg:SetBackdropColor(0, 0, 0, .25)
-	--TutorialFrameNextButton.__bg:SetBackdropColor(0, 0, 0, .25)
-end)
+        _G.TutorialFramePrevButton:SetScript('OnEnter', nil)
+        _G.TutorialFrameNextButton:SetScript('OnEnter', nil)
+        _G.TutorialFrameOkayButton.__bg:SetBackdropColor(0, 0, 0, .25)
+        _G.TutorialFramePrevButton.__bg:SetBackdropColor(0, 0, 0, .25)
+        _G.TutorialFrameNextButton.__bg:SetBackdropColor(0, 0, 0, .25)
+    end
+)

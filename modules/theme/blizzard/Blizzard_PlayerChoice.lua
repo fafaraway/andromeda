@@ -60,7 +60,7 @@ C.Themes['Blizzard_PlayerChoice'] = function()
                         header.Contents.Text:SetFontObject(_G.SystemFont_Med3)
                     end
                 end
-                ReskinOptionText(optionFrame.OptionText, 49/255, 26/255, 9/255)
+                ReskinOptionText(optionFrame.OptionText, 1, 1, 1)
 
                 local optionButtonsContainer = optionFrame.OptionButtonsContainer
                 if optionButtonsContainer and optionButtonsContainer.buttonPool then
