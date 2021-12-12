@@ -183,7 +183,7 @@ function M:AddCovenantInfo()
     end
 end
 
-function M:Covenant()
+function M:CovenantInfo()
     LibRS = _G.LibStub and _G.LibStub('LibOpenRaid-1.0', true)
     DCLoaded = IsAddOnLoaded('Details_Covenants')
 

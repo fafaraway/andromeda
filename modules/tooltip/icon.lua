@@ -64,7 +64,7 @@ function TOOLTIP:ReskinRewardIcon()
     F.ReskinIconBorder(self.IconBorder)
 end
 
-function TOOLTIP:ReskinTooltipIcons()
+function TOOLTIP:ReskinTipIcon()
     if not C.DB.Tooltip.Icon then
         return
     end

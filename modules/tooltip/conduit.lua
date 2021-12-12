@@ -36,7 +36,7 @@ function TOOLTIP:Conduit_CheckStatus()
     end
 end
 
-function TOOLTIP:ConduitCollectionData()
+function TOOLTIP:ConduitInfo()
     TOOLTIP.Conduit_UpdateCollection()
     if not next(TOOLTIP.ConduitData) then
         F:Delay(10, TOOLTIP.Conduit_UpdateCollection) -- might be empty on fist load

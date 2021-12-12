@@ -26,8 +26,6 @@ local function AddLines(self)
     local itemStackCount = select(8, GetItemInfo(link))
     local itemSellPrice = select(11, GetItemInfo(link))
 
-    self:AddLine(' ')
-
     if bankCount > 0 then
         self:AddDoubleLine(_G.BAGSLOT .. '/' .. _G.BANK .. ':', bagCount .. '/' .. bankCount, .5, .8, 1, 1, 1, 1)
     elseif bagCount > 1 then

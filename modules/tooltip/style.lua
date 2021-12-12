@@ -70,41 +70,10 @@ function TOOLTIP:ReskinTooltip()
     end
 end
 
-local function TooltipSetFont(obj, font, size)
+local function RestyleFont(obj, font, size)
     obj:SetFont(font, size)
     obj:SetShadowColor(0, 0, 0, 1)
     obj:SetShadowOffset(1, -1)
-end
-
-function TOOLTIP:SetTooltipFonts()
-    local textSize = 14
-    local headerSize = 16
-
-    TooltipSetFont(_G.GameTooltipHeaderText, C.Assets.Fonts.Bold, headerSize)
-    TooltipSetFont(_G.GameTooltipText, C.Assets.Fonts.Regular, textSize)
-    TooltipSetFont(_G.GameTooltipTextSmall, C.Assets.Fonts.Regular, textSize)
-
-    if not _G.GameTooltip.hasMoney then
-        _G.SetTooltipMoney(_G.GameTooltip, 1, nil, '', '')
-        _G.SetTooltipMoney(_G.GameTooltip, 1, nil, '', '')
-        _G.GameTooltip_ClearMoney(_G.GameTooltip)
-    end
-
-    if _G.GameTooltip.hasMoney then
-        for i = 1, _G.GameTooltip.numMoneyFrames do
-            TooltipSetFont(_G['GameTooltipMoneyFrame' .. i .. 'PrefixText'], C.Assets.Fonts.Regular, textSize)
-            TooltipSetFont(_G['GameTooltipMoneyFrame' .. i .. 'SuffixText'], C.Assets.Fonts.Regular, textSize)
-        end
-    end
-
-    for _, tt in ipairs(_G.GameTooltip.shoppingTooltips) do
-        for i = 1, tt:GetNumRegions() do
-            local region = select(i, tt:GetRegions())
-            if region:IsObjectType('FontString') then
-                TooltipSetFont(region, C.Assets.Fonts.Regular, textSize)
-            end
-        end
-    end
 end
 
 function TOOLTIP:FixRecipeItemNameWidth()
@@ -114,6 +83,39 @@ function TOOLTIP:FixRecipeItemNameWidth()
             line:SetWidth(line:GetWidth() + 1)
         end
     end
+end
+
+function TOOLTIP:SetupFonts()
+    local textSize = 14
+    local headerSize = 16
+
+    RestyleFont(_G.GameTooltipHeaderText, C.Assets.Fonts.Bold, headerSize)
+    RestyleFont(_G.GameTooltipText, C.Assets.Fonts.Regular, textSize)
+    RestyleFont(_G.GameTooltipTextSmall, C.Assets.Fonts.Regular, textSize)
+
+    if not _G.GameTooltip.hasMoney then
+        _G.SetTooltipMoney(_G.GameTooltip, 1, nil, '', '')
+        _G.SetTooltipMoney(_G.GameTooltip, 1, nil, '', '')
+        _G.GameTooltip_ClearMoney(_G.GameTooltip)
+    end
+
+    if _G.GameTooltip.hasMoney then
+        for i = 1, _G.GameTooltip.numMoneyFrames do
+            RestyleFont(_G['GameTooltipMoneyFrame' .. i .. 'PrefixText'], C.Assets.Fonts.Regular, textSize)
+            RestyleFont(_G['GameTooltipMoneyFrame' .. i .. 'SuffixText'], C.Assets.Fonts.Regular, textSize)
+        end
+    end
+
+    for _, tt in ipairs(_G.GameTooltip.shoppingTooltips) do
+        for i = 1, tt:GetNumRegions() do
+            local region = select(i, tt:GetRegions())
+            if region:IsObjectType('FontString') then
+                RestyleFont(region, C.Assets.Fonts.Regular, textSize)
+            end
+        end
+    end
+
+    _G.GameTooltip:HookScript('OnTooltipSetItem', TOOLTIP.FixRecipeItemNameWidth)
 end
 
 -- Tooltip Registration

@@ -103,7 +103,7 @@ local function HookCommunitiesFrame(event, addon)
     end
 end
 
-function TOOLTIP:LinkHover()
+function TOOLTIP:HyperLink()
     for i = 1, _G.NUM_CHAT_WINDOWS do
         local frame = _G['ChatFrame' .. i]
         orig1[frame] = frame:GetScript('OnHyperlinkEnter')

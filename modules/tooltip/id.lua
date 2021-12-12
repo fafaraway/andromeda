@@ -27,7 +27,7 @@ function TOOLTIP:AddLineForID(id, linkType)
     end
 
     self:AddLine(' ')
-    self:AddDoubleLine(linkType .. ':', id, 1, .5, .3, 1, 1, 1)
+    self:AddDoubleLine(linkType .. ':', id, .5, .8, 1, 1, 1, 1)
     self:Show()
 end
 
@@ -62,7 +62,7 @@ function TOOLTIP:SetItemID()
     end
 end
 
-function TOOLTIP:AddID()
+function TOOLTIP:VariousID()
     if not C.DB.Tooltip.IDs then
         return
     end
