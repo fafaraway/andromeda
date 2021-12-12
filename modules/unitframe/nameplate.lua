@@ -588,9 +588,9 @@ function NAMEPLATE:UpdateExplosives(event, unit)
 
     local npcID = self.npcID
     if event == 'NAME_PLATE_UNIT_ADDED' and npcID == id then
-        self:SetScale(_G.FREE_ADB.UIScale * C.DB.Nameplate.ExplosiveScale)
+        self:SetScale(C.DB.Nameplate.ExplosiveScale)
     elseif event == 'NAME_PLATE_UNIT_REMOVED' then
-        self:SetScale(_G.FREE_ADB.UIScale)
+        self:SetScale(1)
     end
 end
 
