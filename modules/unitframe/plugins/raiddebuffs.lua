@@ -7,7 +7,12 @@ local invalidPrio = -1
 
 local DispellColor = oUF.colors.debuff
 
-local DispellPriority = {['Magic'] = 4, ['Curse'] = 3, ['Disease'] = 2, ['Poison'] = 1}
+local DispellPriority = {
+    ['Magic'] = 4,
+    ['Curse'] = 3,
+    ['Disease'] = 2,
+    ['Poison'] = 1
+}
 
 local DispellFilter
 do

@@ -37,6 +37,8 @@ local function ButtonOnEnter(self)
 end
 
 function UNITFRAME:CreateRaidDebuff(self)
+    if not C.DB.Unitframe.InstanceDebuffs then return end
+
     local bu = CreateFrame('Frame', nil, self)
     bu:Size(self:GetHeight() * .6)
     bu:SetPoint('CENTER')
@@ -69,13 +71,11 @@ function UNITFRAME:CreateRaidDebuff(self)
     bu.ShowDispellableDebuff = true
     bu.ShowDebuffBorder = true
 
-    if C.DB.Unitframe.InstanceAuras then
-        if not next(debuffList) then
-            UNITFRAME:UpdateRaidDebuffs()
-        end
-
-        bu.Debuffs = debuffList
+    if not next(debuffList) then
+        UNITFRAME:UpdateRaidDebuffs()
     end
+
+    bu.Debuffs = debuffList
 
     self.RaidDebuffs = bu
 end
