@@ -1,12 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local strlower = strlower
-local hooksecurefunc = hooksecurefunc
-local CreateFrame = CreateFrame
-local C_Garrison_GetFollowerMissionCompleteInfo = C_Garrison.GetFollowerMissionCompleteInfo
-local IsAddOnLoaded = IsAddOnLoaded
-
 local F, C = unpack(select(2, ...))
 
 local function ReskinMissionPage(self)
@@ -248,10 +239,8 @@ local function UpdateFollowerList(self)
     end
 end
 
-local function UpdateSpellAbilities(self, followerInfo)
-    local autoSpellInfo = followerInfo.autoSpellAbilities
-    for _ in ipairs(autoSpellInfo) do
-        local abilityFrame = self.autoSpellPool:Acquire()
+local function UpdateSpellAbilities(self)
+    for abilityFrame in self.autoSpellPool:EnumerateActive() do
         if not abilityFrame.styled then
             F.ReskinIcon(abilityFrame.Icon)
             if abilityFrame.IconMask then
@@ -353,7 +342,7 @@ local function ReskinMissionFrame(self)
     ReskinMissionPage(self.MissionTab.MissionPage)
     F.StripTextures(self.FollowerTab)
     ReskinXPBar(self.FollowerTab)
-    hooksecurefunc(self.FollowerTab, 'UpdateCombatantStats', UpdateSpellAbilities)
+    hooksecurefunc(self.FollowerTab, 'UpdateAutoSpellAbilities', UpdateSpellAbilities)
 
     reskinFollowerItem(self.FollowerTab.ItemWeapon)
     reskinFollowerItem(self.FollowerTab.ItemArmor)
@@ -677,7 +666,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     -- Follower tab
     local followerTab = GarrisonLandingPage.FollowerTab
     ReskinXPBar(followerTab)
-    hooksecurefunc(followerTab, 'UpdateCombatantStats', UpdateSpellAbilities)
+    hooksecurefunc(followerTab, 'UpdateAutoSpellAbilities', UpdateSpellAbilities)
 
     -- Ship follower tab
     local followerTab = GarrisonLandingPage.ShipFollowerTab
@@ -849,7 +838,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
                         frame.bg:SetPoint('BOTTOMRIGHT', -10, 8)
                     end
 
-                    local quality = select(4, C_Garrison_GetFollowerMissionCompleteInfo(mission.followers[i]))
+                    local quality = select(4, C_Garrison.GetFollowerMissionCompleteInfo(mission.followers[i]))
                     if quality then
                         local color = C.QualityColors[quality]
                         frame.PortraitFrame.squareBG:SetBackdropBorderColor(color.r, color.g, color.b)
@@ -955,7 +944,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     for _, name in pairs({'Left', 'Right'}) do
         local button = GarrisonMonumentFrame[name .. 'Btn']
         button.Texture:Hide()
-        F.ReskinArrow(button, strlower(name))
+        F.ReskinArrow(button, string.lower(name))
         button:SetSize(35, 35)
         button.__texture:SetSize(16, 16)
     end
@@ -1247,7 +1236,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
                     local region = select(i, frame:GetRegions())
                     if region then
                         local width, height = region:GetSize()
-                        if width == 17 and height == 17 then
+                        if F:Round(width) == 17 and F:Round(height) == 17 then
                             if abilityIndex1 then
                                 abilityIndex2 = i
                             else
