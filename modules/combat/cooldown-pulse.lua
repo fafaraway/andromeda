@@ -1,8 +1,8 @@
 local F, C, L = unpack(select(2, ...))
 local CDP = F:RegisterModule('CooldownPulse')
 
-local fadeInTime, fadeOutTime, maxAlpha, elapsed, runtimer = 0.3, 0.7, 1, 0, 0
-local animScale, iconSize, holdTime, threshold = 1.5, 32, 0.3, 3
+local fadeInTime, fadeOutTime, maxAlpha, elapsed, runtimer = 0.3, 0.3, 1, 0, 0
+local animScale, iconSize, holdTime, threshold = 2, 24, 0.3, 3
 local cooldowns, animating, watching = {}, {}, {}
 local ignoredList = {}
 
@@ -186,11 +186,11 @@ end
 
 function frame:COMBAT_LOG_EVENT_UNFILTERED()
     local _, eventType, _, _, _, sourceFlags, _, _, _, _, _, spellID = CombatLogGetCurrentEventInfo()
+    local isPet = _G.bit.band(sourceFlags, _G.COMBATLOG_OBJECT_TYPE_PET) == _G.COMBATLOG_OBJECT_TYPE_PET
+    local isMine = _G.bit.band(sourceFlags, _G.COMBATLOG_OBJECT_AFFILIATION_MINE) == _G.COMBATLOG_OBJECT_AFFILIATION_MINE
+
     if eventType == 'SPELL_CAST_SUCCESS' then
-        if
-            (_G.bit.band(sourceFlags, _G.COMBATLOG_OBJECT_TYPE_PET) == _G.COMBATLOG_OBJECT_TYPE_PET and
-                _G.bit.band(sourceFlags, _G.COMBATLOG_OBJECT_AFFILIATION_MINE) == _G.COMBATLOG_OBJECT_AFFILIATION_MINE)
-         then
+        if isPet and isMine then
             local name = GetSpellInfo(spellID)
             local index = GetPetActionIndexByName(name)
             if index and not select(7, GetPetActionInfo(index)) then
