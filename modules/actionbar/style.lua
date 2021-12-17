@@ -277,10 +277,8 @@ end
 local function SetupBackdrop(icon)
     local bg = F.SetBD(icon, .25)
     if C.DB.Actionbar.ClassColor then
-        -- bg:SetBackdropBorderColor(C.r, C.g, C.b)
         bg:SetBackdropColor(C.r, C.g, C.b, .25)
     else
-        -- bg:SetBackdropBorderColor(0, 0, 0)
         bg:SetBackdropColor(.1, .1, .1, .25)
     end
 
