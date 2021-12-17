@@ -284,19 +284,17 @@ function CHAT:BlockTrashClub()
     hooksecurefunc(_G.BNToastFrame, 'ShowToast', CHAT.CheckClubName)
 end
 
---[[
-    '0', 'None',
-    '1', 'Common',
-    '2', 'Uncommon',
-    '3', 'Rare',
-    '4', 'Epic',
-    '5', 'Legendary',
-    '6', 'Artifact',
-    '7', 'Heirloom',
-    '8', 'All'
-]]
+-- Filter loot info from group members
+-- '0', 'None',
+-- '1', 'Common',
+-- '2', 'Uncommon',
+-- '3', 'Rare',
+-- '4', 'Epic',
+-- '5', 'Legendary',
+-- '6', 'Artifact',
+-- '7', 'Heirloom',
+-- '8', 'All'
 local activeplayer = (tostring(UnitName('player')) .. '-' .. tostring(GetRealmName()))
-
 function CHAT:CheckLoot(_, msg, looter)
     local itemID, itemRarity
     itemID = msg:match('item:(%d+):')
@@ -321,11 +319,33 @@ function CHAT:GroupLootFilter()
     _G.ChatFrame_AddMessageEventFilter('CHAT_MSG_LOOT', self.CheckLoot)
 end
 
+-- Filter azerite message on island expeditions
+local AZERITE_STR = _G.ISLANDS_QUEUE_WEEKLY_QUEST_PROGRESS:gsub('%%d/%%d ', '')
+local function filterAzeriteGain(_, _, msg)
+    if string.find(msg, AZERITE_STR) then
+        return true
+    end
+end
+
+local function IsPlayerOnIslands()
+    local _, instanceType, _, _, maxPlayers = GetInstanceInfo()
+    if instanceType == 'scenario' and (maxPlayers == 3 or maxPlayers == 6) then
+        _G.ChatFrame_AddMessageEventFilter('CHAT_MSG_SYSTEM', filterAzeriteGain)
+    else
+        _G.ChatFrame_RemoveMessageEventFilter('CHAT_MSG_SYSTEM', filterAzeriteGain)
+    end
+end
+
+function CHAT:AzeriteMessageFilter()
+    F:RegisterEvent('PLAYER_ENTERING_WORLD', IsPlayerOnIslands)
+end
+
 function CHAT:ChatFilter()
     CHAT:SpamFilter()
     CHAT:BlockAddonSpam()
     CHAT:BlockTrashClub()
     CHAT:ExtendLink()
     CHAT:GroupLootFilter()
+    CHAT:AzeriteMessageFilter()
     CHAT:DamageMeterFilter()
 end
