@@ -168,12 +168,12 @@ function QH:QuestTool_UpdateBinding()
 end
 
 function QH:OnLogin()
-    local handler = CreateFrame('Frame', nil, UIParent)
+    local handler = CreateFrame('Frame', nil, _G.UIParent)
     QH.QuestHandler = handler
 
-    local text = F.CreateFS(handler, C.Assets.Fonts.Bold, 20)
+    local text = F.CreateFS(handler, C.Assets.Fonts.Bold, 20, nil, nil, nil, 'THICK')
     text:ClearAllPoints()
-    text:SetPoint('TOP', UIParent, 0, -200)
+    text:SetPoint('TOP', _G.UIParent, 0, -200)
     text:SetWidth(800)
     text:SetWordWrap(true)
     text:Hide()
@@ -196,7 +196,7 @@ function QH:OnLogin()
     end
 
     -- Check npc in quests
-    GameTooltip:HookScript('OnTooltipSetUnit', QH.QuestTool_SetQuestUnit)
+    _G.GameTooltip:HookScript('OnTooltipSetUnit', QH.QuestTool_SetQuestUnit)
 
     -- Quest items
     QH.SavedKey = GetBindingFromClick('MOUSEWHEELUP')
