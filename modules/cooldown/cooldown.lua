@@ -67,7 +67,7 @@ function COOLDOWN:OnCreate()
 
     local scaler = CreateFrame('Frame', nil, self)
     scaler:SetAllPoints(self)
-    scaler:SetFrameStrata('HIGH')
+    --scaler:SetFrameStrata('HIGH')
 
     local timer = CreateFrame('Frame', nil, scaler)
     timer:Hide()
@@ -81,7 +81,7 @@ function COOLDOWN:OnCreate()
     timer.text = text
 
     if not C.DB.Cooldown.OverrideWA and C.IsDeveloper and string.find(frameName, 'WeakAurasCooldown') then
-        text:SetPoint('BOTTOM', 1, -6)
+        text:SetPoint('CENTER', timer, 'BOTTOM')
     end
 
     COOLDOWN.OnSizeChanged(timer, scaler:GetSize())
@@ -105,6 +105,8 @@ function COOLDOWN:StartTimer(start, duration)
         return
     end
 
+    local parent = self:GetParent()
+
     if start > 0 and duration > minDuration then
         local timer = self.timer or COOLDOWN.OnCreate(self)
         timer.start = start
@@ -113,7 +115,6 @@ function COOLDOWN:StartTimer(start, duration)
         timer.nextUpdate = 0
 
         -- wait for blizz to fix itself
-        local parent = self:GetParent()
         local charge = parent and parent.chargeCooldown
         local chargeTimer = charge and charge.timer
         if chargeTimer and chargeTimer ~= timer then
@@ -128,7 +129,7 @@ function COOLDOWN:StartTimer(start, duration)
     end
 
     -- hide cooldown flash if barFader enabled
-    if self:GetParent().__faderParent then
+    if parent and parent.__faderParent then
         if self:GetEffectiveAlpha() > 0 then
             self:Show()
         else
