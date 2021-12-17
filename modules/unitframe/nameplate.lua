@@ -586,11 +586,12 @@ function NAMEPLATE:UpdateExplosives(event, unit)
         return
     end
 
+    local scale = _G.UIParent:GetScale()
     local npcID = self.npcID
     if event == 'NAME_PLATE_UNIT_ADDED' and npcID == id then
-        self:SetScale(C.DB.Nameplate.ExplosiveScale)
+        self:SetScale(scale * 2)
     elseif event == 'NAME_PLATE_UNIT_REMOVED' then
-        self:SetScale(1)
+        self:SetScale(scale)
     end
 end
 
