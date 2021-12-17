@@ -238,24 +238,42 @@ end
 
 -- Swith channels by Tab
 local cycles = {
-    {chatType = 'SAY', IsActive = function()
+    {
+        chatType = 'SAY',
+        IsActive = function()
             return true
-        end},
-    {chatType = 'PARTY', IsActive = function()
+        end
+    },
+    {
+        chatType = 'PARTY',
+        IsActive = function()
             return IsInGroup()
-        end},
-    {chatType = 'RAID', IsActive = function()
+        end
+    },
+    {
+        chatType = 'RAID',
+        IsActive = function()
             return IsInRaid()
-        end},
-    {chatType = 'INSTANCE_CHAT', IsActive = function()
+        end
+    },
+    {
+        chatType = 'INSTANCE_CHAT',
+        IsActive = function()
             return IsPartyLFG()
-        end},
-    {chatType = 'GUILD', IsActive = function()
+        end
+    },
+    {
+        chatType = 'GUILD',
+        IsActive = function()
             return IsInGuild()
-        end},
-    {chatType = 'OFFICER', IsActive = function()
+        end
+    },
+    {
+        chatType = 'OFFICER',
+        IsActive = function()
             return C_GuildInfo.IsGuildOfficer()
-        end},
+        end
+    },
     {
         chatType = 'CHANNEL',
         IsActive = function(_, editbox)
@@ -265,9 +283,12 @@ local cycles = {
             end
         end
     },
-    {chatType = 'SAY', IsActive = function()
+    {
+        chatType = 'SAY',
+        IsActive = function()
             return true
-        end}
+        end
+    }
 }
 
 function CHAT:SwitchToChannel(chatType)
@@ -559,8 +580,14 @@ function _G.FCFManager_GetNumDedicatedFrames(...)
 end
 
 -- Disable profanity filter
-local function FixProfanityFilterSideEffects()
-    F.CreateFS(_G.HelpFrame, C.Assets.Fonts.Bold, 14, nil, L["You need to uncheck 'Disable Profanity Filter' in GUI and restart your game client to get access into CN battleNet support."], "YELLOW", true,  "TOP", 0, 30)
+local sideEffectFixed
+local function FixLanguageFilterSideEffects()
+    if sideEffectFixed then
+        return
+    end
+    sideEffectFixed = true
+
+    F.CreateFS(_G.HelpFrame, C.Assets.Fonts.Bold, 14, nil, L['You need to uncheck language filter in GUI and reload ui to get access into CN battlenet support.'], 'YELLOW', 'THICK', 'TOP', 0, 30)
 
     local Old_GetFriendGameAccountInfo = _G.C_BattleNet.GetFriendGameAccountInfo
     function _G.C_BattleNet.GetFriendGameAccountInfo(...)
@@ -581,21 +608,21 @@ local function FixProfanityFilterSideEffects()
     end
 end
 
-function CHAT:DisableProfanityFilter()
-    if not C.DB.Chat.DisableProfanityFilter then
-        return
+local hasCNFix
+function CHAT:UpdateLanguageFilter()
+    if C.DB.Chat.DisableProfanityFilter then
+        if GetCVar('portal') == 'CN' then
+            ConsoleExec('portal TW')
+            FixLanguageFilterSideEffects()
+            hasCNFix = true
+        end
+        SetCVar('profanityFilter', 0)
+    else
+        if hasCNFix then
+            ConsoleExec('portal CN')
+        end
+        SetCVar('profanityFilter', 1)
     end
-
-    if not BNFeaturesEnabledAndConnected() then
-        return
-    end
-
-    if GetCVar('portal') == 'CN' then
-        ConsoleExec('portal TW')
-
-        FixProfanityFilterSideEffects()
-    end
-    SetCVar('profanityFilter', 0)
 end
 
 function CHAT:OnLogin()
@@ -626,6 +653,6 @@ function CHAT:OnLogin()
     CHAT:WhisperInvite()
     CHAT:CreateChannelBar()
     CHAT:AddRoleIcon()
-    CHAT:DisableProfanityFilter()
+    CHAT:UpdateLanguageFilter()
     CHAT:HideInCombat()
 end
