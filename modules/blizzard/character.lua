@@ -132,6 +132,29 @@ function BLIZZARD:MissingStats()
             _G.CharacterStatsPane.ItemLevelFrame.Value:SetShadowOffset(1, -1)
         end
     )
+
+    hooksecurefunc(
+        'PaperDollFrame_SetLabelAndText',
+        function(statFrame, label, _, isPercentage)
+            if isPercentage or label == _G.STAT_HASTE then
+                statFrame.Value:SetFormattedText('%.2f%%', statFrame.numericValue)
+            end
+        end
+    )
+
+    hooksecurefunc(
+        'PaperDollFrame_UpdateStats',
+        function()
+            for statFrame in _G.CharacterStatsPane.statsFramePool:EnumerateActive() do
+                if not statFrame.styled then
+                    statFrame.Label:SetFontObject(_G.Game12Font)
+                    statFrame.Value:SetFontObject(_G.Game12Font)
+
+                    statFrame.styled = true
+                end
+            end
+        end
+    )
 end
 
 function BLIZZARD:NakedButton()
