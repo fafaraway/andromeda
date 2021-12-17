@@ -28,53 +28,10 @@ function BLIZZARD:OnLogin()
 end
 
 do
-    --[[ function BLIZZARD:TestBossBanner()
-        -- Requires you be in raid or party
-        BossBanner_OnEvent(BossBanner, "BOSS_KILL", 1128, "Kargath Bladefist")
-        BossBanner_OnEvent(BossBanner, "ENCOUNTER_LOOT_RECEIVED", 1128, 118308, ({GetItemInfo(118308)})[2], 1, "Cat", "DRUID")
-        BossBanner_OnEvent(BossBanner, "ENCOUNTER_LOOT_RECEIVED", 1128, 118309, ({GetItemInfo(118309)})[2], 1, "Cat", "DRUID")
-        BossBanner_OnEvent(BossBanner, "ENCOUNTER_LOOT_RECEIVED", 1128, 118310, ({GetItemInfo(118310)})[2], 1, "Cat", "DRUID")
-        BossBanner_OnEvent(BossBanner, "ENCOUNTER_LOOT_RECEIVED", 1128, 118311, ({GetItemInfo(118311)})[2], 1, "Cat", "DRUID")
-        BossBanner_OnEvent(BossBanner, "ENCOUNTER_LOOT_RECEIVED", 1128, 118312, ({GetItemInfo(118312)})[2], 1, "Cat", "DRUID")
-    end
-
-    SLASH_BOSSBANNER1 = '/bossbanner'
-    function SlashCmdList.BOSSBANNER()
-        BLIZZARD:TestBossBanner()
-    end
-
-    -- Old BossBanner_OnEvent function
-    local origBossBanner_OnEvent = BossBanner_OnEvent
-
-
-    local hideBossBanner = true
-    local hideLootList = true
-    local function OnEvent(...)
-        local _, event = ...
-        if event == "BOSS_KILL" then
-            if not hideBossBanner then
-                return origBossBanner_OnEvent(...)
-            end
-        end
-        if event == "ENCOUNTER_LOOT_RECEIVED" then
-            if not hideBossBanner or not hideLootList then
-                return origBossBanner_OnEvent(...)
-            end
-        end
-
-    end
-
-    -- Override BossBanner_OnEvent
-    BossBanner_OnEvent = OnEvent
-
-    -- Set script to new Function
-    BossBanner:SetScript("OnEvent", OnEvent) ]]
-
     function BLIZZARD:UpdateBossBanner()
         if C.DB.General.HideBossBanner then
-            _G.BossBanner:UnregisterAllEvents()
+            _G.BossBanner:UnregisterEvent('ENCOUNTER_LOOT_RECEIVED')
         else
-            _G.BossBanner:RegisterEvent('BOSS_KILL')
             _G.BossBanner:RegisterEvent('ENCOUNTER_LOOT_RECEIVED')
         end
     end
