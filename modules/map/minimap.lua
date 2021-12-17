@@ -414,10 +414,12 @@ function MM:UpdateDifficultyFlag()
     local numplayers = select(9, GetInstanceInfo())
     local mplusdiff = select(1, C_ChallengeMode.GetActiveKeystoneInfo()) or ''
 
-    local norm = string.format('|cff1eff00%s|r', 'N')
-    local hero = string.format('|cff0070dd%s|r', 'H')
-    local myth = string.format('|cffa335ee%s|r', 'M')
-    local lfr = string.format('|cffff8000s|r', 'LFR')
+    local norm = string.format(' |cff1eff00%s|r', 'N')
+    local hero = string.format(' |cff0070dd%s|r', 'H')
+    local myth = string.format(' |cffa335ee%s|r', 'M')
+    local lfr = string.format(' |cffff8000%s|r', 'LFR')
+    local mp = string.format(' |cffff0000%s|r', 'M+')
+    local pvp = string.format(' |cffff0007%s|r', 'PvP')
 
     if instanceType == 'party' or instanceType == 'raid' or instanceType == 'scenario' then
         if (difficulty == 1) then -- Normal
@@ -435,7 +437,7 @@ function MM:UpdateDifficultyFlag()
         elseif difficulty == 7 then -- LFR (Legacy)
             diffText:SetText(lfr)
         elseif difficulty == 8 then -- Mythic Keystone
-            diffText:SetText(string.format('|cffff0000%s|r', 'M+') .. mplusdiff)
+            diffText:SetText(mplusdiff .. mp)
         elseif difficulty == 9 then -- 40 Player
             -- elseif difficulty == 11 or difficulty == 39 then -- Heroic Scenario / Heroic
             --     diffText:SetText(string.format('%s %s', hero, 'Scen'))
@@ -461,14 +463,14 @@ function MM:UpdateDifficultyFlag()
         elseif difficulty == 25 or difficulty == 32 or difficulty == 34 or difficulty == 45 then -- World PvP Scenario / PvP / PvP Heroic
             -- elseif difficulty == 29 then -- PvEvP Scenario
             --     diffText:SetText('PvEvP')
-            diffText:SetText(string.format('|cffFFFF00%s |r', 'PvP'))
+            diffText:SetText(pvp)
         elseif difficulty == 147 then -- Normal Scenario (Warfronts)
             diffText:SetText('WF')
         elseif difficulty == 149 then -- Heroic Scenario (Warfronts)
-            diffText:SetText(string.format('|cffff7d0aH|r%s', 'WF'))
+            diffText:SetText(string.format('WF'))
         end
     elseif instanceType == 'pvp' or instanceType == 'arena' then
-        diffText:SetText(string.format('|cffff0007%s|r', 'PvP'))
+        diffText:SetText(pvp)
     else
         diffText:SetText('')
     end
@@ -483,14 +485,10 @@ end
 function MM:CreateDifficultyFlag()
     local diffFlag = CreateFrame('Frame', nil, map)
     diffFlag:SetSize(80, 40)
-    diffFlag:SetPoint('TOPLEFT', map, 0, -offset - 6)
+    diffFlag:SetPoint('TOPLEFT', map, 6, -offset - 14)
     diffFlag:SetFrameLevel(map:GetFrameLevel() + 2)
-    diffFlag.texture = diffFlag:CreateTexture(nil, 'OVERLAY')
-    diffFlag.texture:SetAllPoints(diffFlag)
-    diffFlag.texture:SetTexture(C.Assets.diff_tex)
-    diffFlag.texture:SetVertexColor(0, 0, 0)
-    diffFlag.text = F.CreateFS(diffFlag, C.Assets.Fonts.Bold, 10, nil, '', nil, 'THICK', 'CENTER', 0, 0)
-    diffFlag.text:SetJustifyH('CENTER')
+    diffFlag.text = F.CreateFS(diffFlag, C.Assets.Fonts.Bold, 10, true, '', nil, true, 'TOPLEFT', 0, 0)
+
     map.DiffFlag = diffFlag
     map.DiffText = diffFlag.text
 
@@ -699,7 +697,9 @@ function MM:UpdateMinimapScale()
     local scale = C.DB.Map.MinimapScale
     map:SetScale(scale)
     map.backdrop:SetSize(256 * scale, 190 * scale)
-    map.mover:SetSize(256 * scale, 190 * scale)
+    if map.mover then
+        map.mover:SetSize(256 * scale, 190 * scale)
+    end
 end
 
 function MM:HideInCombat()
@@ -721,6 +721,14 @@ function MM:HideInCombat()
             end
         end
     )
+end
+
+function _G.GetMinimapShape() -- LibDBIcon
+    if not MM.initialized then
+        MM:UpdateMinimapScale()
+        MM.initialized = true
+    end
+    return 'SQUARE'
 end
 
 function MM:OnLogin()
