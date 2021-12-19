@@ -410,7 +410,7 @@ function UNITFRAME:CreateNamePlateCastBar(self)
     castbar.Spark = spark
 
     local text = F.CreateFS(castbar, font, 11, outline, '', nil, outline or 'THICK')
-    text:SetPoint('CENTER')
+    text:SetPoint('CENTER', castbar, 'BOTTOM')
     text:SetShown(not compact)
     castbar.Text = text
 
