@@ -24,7 +24,6 @@ function LOGO:Logo_CheckStatus(isInitialLogin)
     if isInitialLogin and not (IsInInstance() and InCombatLockdown()) then
         needAnimation = true
         LOGO:Logo_Create()
-        F:Print(C.AddonVersion)
         F:RegisterEvent('PLAYER_STARTED_MOVING', LOGO.Logo_PlayAnimation)
         -- F:RegisterEvent('PLAYER_ENTERING_WORLD', LOGO.Logo_PlayAnimation)
     end
