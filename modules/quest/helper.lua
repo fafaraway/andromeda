@@ -158,7 +158,7 @@ function QH:QuestTool_UpdateBinding()
     if activeQuests[62459] and not IsResting() and C_QuestLog.GetDistanceSqToQuest(62459) < 35000 then
         SetBinding('MOUSEWHEELUP', 'EXTRAACTIONBUTTON1')
         QH.isBinding = true
-        QH.QuestTip:SetText(C.AddonName .. ': ' .. L['Get close to butterflies and mouse scroll up.'])
+        QH.QuestTip:SetText(C.ColoredAddonName .. ': ' .. L['Get close to butterflies and mouse scroll up.'])
         QH.QuestTip:Show()
     elseif QH.isBinding then
         SetBinding('MOUSEWHEELUP', QH.SavedKey)
