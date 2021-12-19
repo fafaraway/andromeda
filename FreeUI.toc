@@ -1,4 +1,4 @@
-## Interface: 90105
+## Interface: @toc-version-retail@
 ## Author: Solor
 ## Version: @project-version@
 ## Title: |cffffffffFreeUI|r

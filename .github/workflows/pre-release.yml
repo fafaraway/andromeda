@@ -14,7 +14,10 @@ jobs:
 
     steps:
       - name: Clone project
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
+
+      - name: Replace toc version
+        uses: Numynum/ToCVersions@master
 
       - name: Package and release
         uses: BigWigsMods/packager@master
