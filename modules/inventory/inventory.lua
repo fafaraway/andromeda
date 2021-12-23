@@ -1202,9 +1202,10 @@ function INVENTORY:OnLogin()
 
         local buttons = {}
         buttons[1] = INVENTORY.CreateRestoreButton(self, f)
+        buttons[2] = INVENTORY.CreateSortButton(self, name)
         if name == 'Bag' then
             INVENTORY.CreateBagBar(self, settings, 4)
-            buttons[2] = INVENTORY.CreateBagToggle(self)
+            buttons[3] = INVENTORY.CreateBagToggle(self)
             buttons[4] = INVENTORY.CreateRepairButton(self)
             buttons[5] = INVENTORY.CreateSellButton(self)
             buttons[6] = INVENTORY.CreateFavouriteButton(self)
@@ -1212,13 +1213,12 @@ function INVENTORY:OnLogin()
             buttons[8] = INVENTORY.CreateSearchButton(self)
         elseif name == 'Bank' then
             INVENTORY.CreateBagBar(self, settings, 7)
-            buttons[2] = INVENTORY.CreateReagentButton(self, f)
-            buttons[4] = INVENTORY.CreateBagToggle(self)
+            buttons[3] = INVENTORY.CreateBagToggle(self)
+            buttons[4] = INVENTORY.CreateReagentButton(self, f)
         elseif name == 'Reagent' then
-            buttons[2] = INVENTORY.CreateBankButton(self, f)
-            buttons[4] = INVENTORY.CreateDepositButton(self)
+            buttons[3] = INVENTORY.CreateDepositButton(self)
+            buttons[4] = INVENTORY.CreateBankButton(self, f)
         end
-        buttons[3] = INVENTORY.CreateSortButton(self, name)
 
         for i = 1, #buttons do
             local bu = buttons[i]
