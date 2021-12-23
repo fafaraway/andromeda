@@ -6,6 +6,7 @@
     <Script file="animation.lua"/>
     <Script file="layout.lua"/>
     <Script file="slash.lua"/>
+    <Script file="smooth.lua"/>
     <Script file="staticpopups.lua"/>
 
     <!--@debug@-->
