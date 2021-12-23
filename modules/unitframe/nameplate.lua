@@ -252,6 +252,12 @@ function NAMEPLATE:UpdateColor(_, unit)
         element:SetStatusBarColor(r, g, b)
     end
 
+    if isCustomUnit then
+        self.Overlay:Show()
+    else
+        self.Overlay:Hide()
+    end
+
     self.ThreatIndicator:Hide()
     if status and (isCustomUnit or (not tankMode and C.MyRole ~= 'Tank')) then
         if status == 3 then
@@ -580,7 +586,7 @@ end
 
 -- Scale plates for explosives
 local hasExplosives
-local id = 120651
+local explosiveID = 120651
 function NAMEPLATE:UpdateExplosives(event, unit)
     if not hasExplosives or unit ~= self.unit then
         return
@@ -588,33 +594,20 @@ function NAMEPLATE:UpdateExplosives(event, unit)
 
     local scale = _G.UIParent:GetScale()
     local npcID = self.npcID
-    if event == 'NAME_PLATE_UNIT_ADDED' and npcID == id then
+    if event == 'NAME_PLATE_UNIT_ADDED' and npcID == explosiveID then
         self:SetScale(scale * 2)
     elseif event == 'NAME_PLATE_UNIT_REMOVED' then
         self:SetScale(scale)
     end
 end
 
-local function CheckInstance()
-    local name, _, instID = GetInstanceInfo()
-    if name and instID == 8 then
+local function CheckAffixes()
+    local _, affixes = C_ChallengeMode.GetActiveKeystoneInfo()
+    if affixes[3] and affixes[3] == 13 then
         hasExplosives = true
     else
         hasExplosives = false
     end
-end
-
-local function CheckAffixes(event)
-    local affixes = C_MythicPlus.GetCurrentAffixes()
-    if not affixes then
-        return
-    end
-    if affixes[3] and affixes[3].id == 13 then
-        CheckInstance()
-        F:RegisterEvent(event, CheckInstance)
-        F:RegisterEvent('CHALLENGE_MODE_START', CheckInstance)
-    end
-    F:UnregisterEvent(event, CheckAffixes)
 end
 
 function NAMEPLATE:CheckExplosives()
@@ -622,7 +615,9 @@ function NAMEPLATE:CheckExplosives()
         return
     end
 
-    F:RegisterEvent('PLAYER_ENTERING_WORLD', CheckAffixes)
+    CheckAffixes()
+    F:RegisterEvent('ZONE_CHANGED_NEW_AREA', CheckAffixes)
+    F:RegisterEvent('CHALLENGE_MODE_START', CheckAffixes)
 end
 
 -- Major spells glow
@@ -742,6 +737,14 @@ function NAMEPLATE:CreateNameplateStyle()
 
     self.Health = health
     self.Health.UpdateColor = NAMEPLATE.UpdateColor
+
+    local overlay = health:CreateTexture(nil, 'OVERLAY')
+    overlay:SetAllPoints()
+    overlay:SetTexture(C.Assets.Textures.Overlay)
+    overlay:SetAlpha(.5)
+    overlay:SetBlendMode('ADD')
+    overlay:Hide()
+    self.Overlay = overlay
 
     local name = F.CreateFS(self, C.Assets.Fonts.Header, 16, nil, nil, nil, 'THICK')
     name:SetJustifyH('CENTER')
