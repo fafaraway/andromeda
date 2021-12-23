@@ -1,13 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local hooksecurefunc = hooksecurefunc
-local GetQuestItemInfo = GetQuestItemInfo
-local GetQuestCurrencyID = GetQuestCurrencyID
-local GetQuestCurrencyInfo = GetQuestCurrencyInfo
-local GetNumRewardSpells = GetNumRewardSpells
-local CurrencyContainerUtil = CurrencyContainerUtil
-
 local F, C = unpack(select(2, ...))
 local THEME = F:GetModule('Theme')
 
@@ -24,7 +14,7 @@ local function UpdateItemBorder(self)
         local name, texture, numItems, quality = GetQuestCurrencyInfo(self.type, self:GetID())
         local currencyID = GetQuestCurrencyID(self.type, self:GetID())
         if name and texture and numItems and quality and currencyID then
-            local currencyQuality = select(4, CurrencyContainerUtil.GetCurrencyContainerInfo(currencyID, numItems, name, texture, quality))
+            local currencyQuality = select(4, _G.CurrencyContainerUtil.GetCurrencyContainerInfo(currencyID, numItems, name, texture, quality))
             local color = C.QualityColors[currencyQuality or 1]
             self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
         end

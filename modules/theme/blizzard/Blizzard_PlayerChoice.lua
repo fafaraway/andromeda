@@ -61,6 +61,7 @@ C.Themes['Blizzard_PlayerChoice'] = function()
                     end
                 end
                 ReskinOptionText(optionFrame.OptionText, 1, 1, 1)
+                F.ReplaceIconString(optionFrame.OptionText.String)
 
                 local optionButtonsContainer = optionFrame.OptionButtonsContainer
                 if optionButtonsContainer and optionButtonsContainer.buttonPool then

@@ -1,11 +1,4 @@
-local _G = _G
-local select = select
-local unpack = unpack
-local pairs = pairs
-local IsAddOnLoaded = IsAddOnLoaded
-local hooksecurefunc = hooksecurefunc
-
-local F, C = unpack(select(2, ...))
+local F = unpack(select(2, ...))
 local THEME = F:GetModule('Theme')
 
 function THEME:ReskinPGF()

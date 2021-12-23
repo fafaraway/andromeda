@@ -1,9 +1,3 @@
-local _G = _G
-local select = select
-local unpack = unpack
-local pairs = pairs
-local hooksecurefunc = hooksecurefunc
-
 local F, C = unpack(select(2, ...))
 local THEME = F:GetModule('Theme')
 

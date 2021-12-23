@@ -1,6 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file="theme.lua"/>
-	<Include file="blizzard\Blizzard.xml"/>
-	<Include file="blizzard\FrameXML\FrameXML.xml"/>
-	<Include file="addons\addons.xml"/>
+    <Script file="theme.lua"/>
+    <Include file="blizzard\Blizzard.xml"/>
+    <Include file="blizzard\FrameXML\FrameXML.xml"/>
+    <Include file="addons\_loader.xml"/>
 </Ui>

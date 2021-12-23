@@ -111,9 +111,9 @@ function THEME:OnLogin()
     THEME:LoadAddOnSkins()
 
     THEME:ReskinBlizzBars()
-    THEME:ReskinABP()
     THEME:ReskinDBM()
     THEME:ReskinPGF()
     THEME:ReskinREHack()
     THEME:ReskinExtVendor()
+    THEME:ReskinMRT()
 end

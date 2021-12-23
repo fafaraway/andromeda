@@ -1,8 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local IsAddOnLoaded = IsAddOnLoaded
-
 local F = unpack(select(2, ...))
 local THEME = F:GetModule('Theme')
 
