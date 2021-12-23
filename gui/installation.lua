@@ -114,6 +114,13 @@ local function SetupCVars()
     -- mouse
     SetCVar('rawMouseEnable', 1)
 
+    -- actionbar
+    SetCVar('countdownForCooldowns', 0)
+    SetCVar('ActionButtonUseKeyDown', 1)
+    SetCVar('secureAbilityToggle', 1)
+    SetCVar('lockActionBars', 1)
+    SetCVar('alwaysShowActionBars', 1)
+
     if C.IsDeveloper then
         SetCVar('cursorsizepreferred', 2)
         SetCVar('worldPreloadNonCritical', 0)
@@ -131,20 +138,7 @@ local function UpdateUIScale()
 end
 
 local function SetupActionbars()
-    SetCVar('countdownForCooldowns', 0)
-    SetCVar('ActionButtonUseKeyDown', 1)
-    SetCVar('secureAbilityToggle', 1)
-    SetCVar('lockActionBars', 1)
-    SetCVar('alwaysShowActionBars', 1)
 
-    SetActionBarToggles(1, 1, 1, 1, 1)
-
-    _G.MultiActionBar_Update()
-
-    _G.MultiBarBottomLeft:SetShown(true)
-    _G.MultiBarRight:SetShown(true)
-    _G.MultiBarLeft:SetShown(true)
-    _G.MultiBarBottomRight:SetShown(true)
 end
 
 local function SetupChatFrame()
@@ -356,7 +350,7 @@ function INSTALL:HelloWorld()
     end
 
     headerText:SetText(L['Hello'])
-    bodyText:SetText(F:StyleAddonName(L['Welcome to %AddonName%!|n|nYou need to adjust some settings before you start using it.|n|nClick the install button to enter the installation step.']))
+    bodyText:SetText(F:StyleAddonName(L['Welcome to %ADDONNAME%!|n|nYou need to adjust some settings before you start using it.|n|nClick the install button to enter the installation step.']))
 
     leftButton:SetText(L['Cancel'])
     rightButton:SetText(L['Install'])

@@ -21,7 +21,7 @@ do
     end
 
     function F:Print(str, ...)
-        print(C.GreyColor .. '<|r' .. C.AddonName .. C.GreyColor .. '>|r ' .. str:format(...))
+        print(C.ColoredAddonName .. ': ' .. str:format(...))
     end
 
     function F:Debug(str, ...)
@@ -29,29 +29,14 @@ do
             return
         end
 
-        print(C.GreyColor .. '<|r' .. C.RedColor .. 'Debug|r' .. C.GreyColor .. '>|r ' .. str:format(...))
-    end
-
-    function F:ThrowError(err, msg)
-        if not err then
-            return
-        end
-
-        err = string.format('FreeUI: %s Error\n%s', msg, err)
-
-        if _G.BaudErrorFrameHandler then
-            _G.BaudErrorFrameHandler(err)
-        else
-            _G.ScriptErrorsFrame:OnError(err, false, false)
-        end
+        F:Print('[Debug] ' .. str:format(...))
     end
 end
 
 --[[ Math ]]
 do
-    local numCap = {CHINESE = {'兆', '亿', '万'}}
-
     -- Numberize
+    local numCap = {CHINESE = {'兆', '亿', '万'}}
     function F:Numb(n)
         if _G.FREE_ADB.NumberFormat == 1 then
             if n >= 1e12 then
@@ -135,30 +120,50 @@ do
         return r1 + (r2 - r1) * relperc, g1 + (g2 - g1) * relperc, b1 + (b2 - b1) * relperc
     end
 
-    -- Text Gradient by Simpy
-    function F:TextGradient(text, ...)
-        local msg, len, idx = '', string.utf8len(text), 0
-
-        for i = 1, len do
-            local x = string.utf8sub(text, i, i)
-            if string.match(x, '%s') then
-                msg = msg .. x
-                idx = idx + 1
-            else
-                local num = select('#', ...) / 3
-                local segment, relperc = math.modf((idx / len) * num)
-                local r1, g1, b1, r2, g2, b2 = select((segment * 3) + 1, ...)
-
-                if not r2 then
-                    msg = msg .. F:RGBToHex(r1, g1, b1, nil, x .. '|r')
-                else
-                    msg = msg .. F:RGBToHex(r1 + (r2 - r1) * relperc, g1 + (g2 - g1) * relperc, b1 + (b2 - b1) * relperc, nil, x .. '|r')
-                    idx = idx + 1
-                end
-            end
+    -- Text Gradient
+    local function GetColorCode(r, g, b)
+        r = math.floor(r * 255 + 0.5)
+        local rH = string.format('%x', r)
+        if #rH < 2 then
+            rH = '0' .. rH
         end
 
-        return msg
+        g = math.floor(g * 255 + 0.5)
+        local gH = string.format('%x', g)
+        if #gH < 2 then
+            gH = '0' .. gH
+        end
+
+        b = math.floor(b * 255 + 0.5)
+        local bH = string.format('%x', b)
+        if #bH < 2 then
+            bH = '0' .. bH
+        end
+
+        return '|cff' .. rH .. gH .. bH
+    end
+
+    function F:TextGradient(text, r, g, b, lR, lG, lB, lightPosition)
+        local length = #text
+        local newChar
+        local newText = ''
+        local lightPower
+        local cR, cG, cB
+        for i = 1, length do
+            if (length == 1) then
+                lightPower = 0
+            else
+                local fullLight = (i - 1) / (length - 1)
+                local delta = math.abs(lightPosition - fullLight)
+                lightPower = math.max(0, 1.00 - delta / 0.50)
+            end
+            cR = r + (lR - r) * lightPower
+            cG = g + (lG - g) * lightPower
+            cB = b + (lB - b) * lightPower
+            newChar = GetColorCode(cR, cG, cB) .. string.sub(text, i, i)
+            newText = newText .. newChar
+        end
+        return newText
     end
 
     -- Return rounded number
@@ -521,11 +526,6 @@ do
         end
     end
 
-    function F:StyleAddonName(msg)
-        msg = string.gsub(msg, '%%AddonName%%', C.AddonName)
-        return msg
-    end
-
     function F:CreateColorString(text, color)
         if not text or not type(text) == 'string' then
             return
@@ -586,6 +586,12 @@ do
                 return string
             end
         end
+    end
+
+    function F:StyleAddonName(msg)
+        msg = string.gsub(msg, '%%ADDONNAME%%', C.ColoredAddonName)
+
+        return msg
     end
 
     -- GameTooltip
@@ -1181,6 +1187,52 @@ do
 
         self:HookScript('OnEnter', Scroll_OnEnter)
         self:HookScript('OnLeave', Scroll_OnLeave)
+    end
+
+    -- WowTrimScrollBar
+    local function updateTrimScrollArrow(self, atlas)
+        local arrow = self.__owner
+        if not arrow.__texture then
+            return
+        end
+
+        if atlas == arrow.disabledTexture then
+            arrow.__texture:SetVertexColor(.5, .5, .5)
+        else
+            arrow.__texture:SetVertexColor(1, 1, 1)
+        end
+    end
+
+    local function reskinTrimScrollArrow(self, direction)
+        if not self then
+            return
+        end
+
+        self.Texture:SetAlpha(0)
+        self.Overlay:SetAlpha(0)
+        local tex = self:CreateTexture(nil, 'ARTWORK')
+        tex:SetAllPoints()
+        F.CreateBDFrame(tex, .25)
+        F.SetupArrow(tex, direction)
+        self.__texture = tex
+
+        self:HookScript('OnEnter', F.Texture_OnEnter)
+        self:HookScript('OnLeave', F.Texture_OnLeave)
+        self.Texture.__owner = self
+        hooksecurefunc(self.Texture, 'SetAtlas', updateTrimScrollArrow)
+        self.Texture:SetAtlas(self.Texture:GetAtlas())
+    end
+
+    function F:ReskinTrimScroll()
+        F.StripTextures(self)
+        reskinTrimScrollArrow(self.Back, 'up')
+        reskinTrimScrollArrow(self.Forward, 'down')
+
+        local thumb = self:GetThumb()
+        if thumb then
+            F.StripTextures(thumb, 0)
+            F.CreateBDFrame(thumb, 0, true)
+        end
     end
 
     -- Handle dropdown
@@ -1911,6 +1963,9 @@ do
         local swatch = _G.ColorPickerFrame.__swatch
         local r, g, b = _G.ColorPickerFrame:GetColorRGB()
         local colorStr = string.format('ff%02x%02x%02x', r * 255, g * 255, b * 255)
+        r = F:Round(r, 2)
+        g = F:Round(g, 2)
+        b = F:Round(b, 2)
         swatch.tex:SetVertexColor(r, g, b)
         swatch.color.r, swatch.color.g, swatch.color.b, swatch.color.colorStr = r, g, b, colorStr
         F.UpdateCustomClassColors()
@@ -1949,8 +2004,9 @@ do
         end
     end
 
+    local whiteColor = {r = 1, g = 1, b = 1, colorStr = 'ffffffff'}
     function F:CreateColorSwatch(name, color)
-        color = color or {r = 1, g = 1, b = 1, colorStr = 'ffffffff'}
+        color = color or whiteColor
 
         local swatch = CreateFrame('Button', nil, self, 'BackdropTemplate')
         swatch:SetSize(20, 12)

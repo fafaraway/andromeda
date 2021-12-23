@@ -1,7 +1,7 @@
 
 local F, C = unpack(select(2, ...))
 
-
+C.AddonName = 'FreeUI'
 C.IsRetail = _G.WOW_PROJECT_ID == _G.WOW_PROJECT_MAINLINE
 C.IsNewPatch = C.IsRetail and select(4, GetBuildInfo()) >= 90200 -- 9.2.0
 C.MaxLevel = GetMaxLevelForPlayerExpansion()
@@ -50,7 +50,7 @@ C.Assets = {
     ['button_pushed'] = C.AssetsPath .. 'button\\pushed',
     ['button_checked'] = C.AssetsPath .. 'button\\checked',
     ['mask_tex'] = C.AssetsPath .. 'textures\\minimap_mask',
-    ['diff_tex'] = C.AssetsPath .. 'textures\\minimap_diff',
+
     ['roles_icon'] = C.AssetsPath .. 'textures\\roles_icon',
     ['target_icon'] = C.AssetsPath .. 'textures\\UI-RaidTargetingIcons',
     ['vig_tex'] = C.AssetsPath .. 'textures\\vignetting',
@@ -74,6 +74,13 @@ C.Assets = {
         Norm = C.AssetsPath .. 'textures\\statusbar\\norm',
         Grad = C.AssetsPath .. 'textures\\statusbar\\grad',
         Flat = C.AssetsPath .. 'textures\\statusbar\\flat',
+        Stripe = C.AssetsPath .. 'textures\\statusbar\\stripe',
+        Overlay = C.AssetsPath .. 'textures\\statusbar\\overlay',
+
+        StatusBar = {
+            StripeRainbox = C.AssetsPath .. 'textures\\statusbar\\striped-tex',
+            StripedTex = C.AssetsPath .. 'textures\\statusbar\\striped-tex',
+        },
 
         Inventory = {
             Restore = C.AssetsPath .. 'textures\\inventory\\restore',
@@ -118,6 +125,7 @@ C.Assets = {
         Regular = C.AssetsPath .. 'fonts\\regular.ttf',
         Condensed = C.AssetsPath .. 'fonts\\condensed.ttf',
         Bold = C.AssetsPath .. 'fonts\\bold.ttf',
+        Heavy = C.AssetsPath .. 'fonts\\heavy.ttf',
         Header = C.AssetsPath .. 'fonts\\header.ttf',
         Combat = C.AssetsPath .. 'fonts\\combat.ttf',
         Pixel = C.AssetsPath .. 'fonts\\pixel.ttf',
@@ -147,7 +155,7 @@ function F.UpdateCustomClassColors()
     C.b = C.ClassColors[C.MyClass].b
 
     C.MyColor = string.format('|cff%02x%02x%02x', C.r * 255, C.g * 255, C.b * 255)
-    C.AddonName = 'Free' .. C.MyColor ..'UI|r'
+    C.ColoredAddonName = F:TextGradient(C.AddonName, C.r, C.g, C.b, 1, 1, 1, 1)
 end
 F:RegisterEvent('ADDON_LOADED', F.UpdateCustomClassColors)
 
@@ -224,3 +232,4 @@ function C:IsInMyGroup(flags)
 
     return inRaid or inParty
 end
+

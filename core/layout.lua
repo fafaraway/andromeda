@@ -78,6 +78,7 @@ function F:CreateMF(parent, saved)
             return
         end
         local orig, _, tar, x, y = frame:GetPoint()
+        x, y = F:Round(x), F:Round(y)
         C.DB['UIAnchorTemp'][frame:GetName()] = {orig, 'UIParent', tar, x, y}
     end)
 end
