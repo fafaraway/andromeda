@@ -3,5 +3,4 @@
     <Script file='partywatcher.lua'/>
     <Script file='raiddebuffs.lua'/>
     <Script file='rangecheck.lua'/>
-    <Script file='smooth.lua'/>
 </Ui>
