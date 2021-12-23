@@ -109,7 +109,15 @@ C.NPSpecialUnitsList = {
     [101008] = true, -- 黑鸦堡垒，针刺虫群
     -- Raids
     [175992] = true, -- 猩红议会，忠实的侍从
-    [GetSectionInfo(21953)] = true -- 凯子，灵能灌注者
+    [GetSectionInfo(21953)] = true, -- 凯子，灵能灌注者
+    -- Condemned Demon
+    [169430] = true,
+    [169428] = true,
+    [168932] = true,
+    [169425] = true,
+    [169429] = true,
+    [169421] = true,
+    [169426] = true
 }
 
 C.NPShowPowerUnitsList = {
