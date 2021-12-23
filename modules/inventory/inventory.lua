@@ -97,11 +97,12 @@ local function highlightFunction(button, match)
     button.searchOverlay:SetShown(not match)
 end
 
-local function IsItemMatched(type, text)
-    if not type or type == '' then
+local function IsItemMatched(str, text)
+    if not str or str == '' then
         return
     end
-    return string.match(type, text)
+
+    return string.match(string.lower(str), text)
 end
 
 function INVENTORY:CreateMoneyFrame()
