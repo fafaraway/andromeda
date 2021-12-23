@@ -80,6 +80,7 @@ function UNITFRAME:CreatePowerBar(self)
     power:SetPoint('RIGHT')
     power:SetPoint('TOP', self.Health, 'BOTTOM', 0, -C.Mult)
     power:SetStatusBarTexture(C.Assets.Textures.Norm)
+    F:SmoothBar(power)
 
     if isPlayer then
         power:SetHeight(C.DB.Unitframe.PlayerPowerHeight)
