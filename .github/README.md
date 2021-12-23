@@ -31,19 +31,20 @@
 *  Beta release on [Github](https://github.com/Solor/FreeUI/releases)
 
 ## Usage
-*  `/free` *list all available commands*
-*  `/free install` *open install panel*
-*  `/free config` *open config panel*
-*  `/free unlock` *unlock UI elements*
-*  `/free reset` *reset all saved options data*
+*  `/free`
+*  `/free --help`
+*  `/free --install`
+*  `/free --gui`
+*  `/free --unlock`
+*  `/free --reset`
 
 ## Additional
 *  [WeakAuras Collection](https://wago.io/WloMMMBpx) *WA collection*
-*  [Clean Icons - Mechagnome Edition](https://www.wowinterface.com/downloads/info25064-CleanIcons-MechagnomeEdition.html#info) *Icons replacement with high resolution*
+*  [Clean Icons - Mechagnome Edition](https://github.com/AcidWeb/Clean-Icons-Mechagnome-Edition) *Icons replacement with high resolution*
 *  [Chinese Fonts Pack](https://1drv.ms/u/s!AocaDk73Gt7sgrk6bdKqfZGZQMQA2Q?e=SdbUe5) *Fonts replacement for Chinese game client*
 *  [Interface Textures](https://1drv.ms/u/s!AocaDk73Gt7sgrlAYVUKxYvs3pCGFg?e=ijoI9E) *Textures replacement for chat bubble in protected area*
 
 ## Credits
-*  Haleth, siweia, Alza, Tukz, Gethe, Elv, Haste, Lightspark, Zork, Allez, AlleyKat, Caellian, p3lim, Shantalya, tekkub, Tuller, Wildbreath, aduth, silverwind, Nibelheim, humfras, aliluya555, Paojy, Rubgrsch, EKE, fang2hou, lilbitz95, Djamy, Hacktivist
+*  **Haleth**, **Siweia**, Alza, Tukz, Gethe, Elv, Haste, Lightspark, Zork, Allez, AlleyKat, Caellian, p3lim, Shantalya, tekkub, Tuller, Wildbreath, aduth, silverwind, Nibelheim, humfras, aliluya555, Paojy, Rubgrsch, EKE, fang2hou, lilbitz95, Djamy, Hacktivist
 *  NDui, NDui_Plus, ShestakUI, RealUI, ElvUI, ElvUI_WindTools
 
