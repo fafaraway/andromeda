@@ -7,6 +7,7 @@ local tempVec2D = _G.CreateVector2D(0, 0)
 local currentMapID, playerCoords, cursorCoords
 
 function MAP:GetPlayerMapPos(mapID)
+    if not mapID then return end
     tempVec2D.x, tempVec2D.y = UnitPosition('player')
     if not tempVec2D.x then
         return

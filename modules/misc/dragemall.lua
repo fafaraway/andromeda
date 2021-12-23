@@ -1,7 +1,5 @@
---[[
-    Make Blizzard frames moveable
-    Credit: DragEmAll by emelio
- ]]
+-- Make Blizzard frames moveable
+-- Credit: DragEmAll by emelio
 
 local F, C = unpack(select(2, ...))
 
@@ -55,7 +53,7 @@ local function IsFrameExists()
     for k in pairs(frames) do
         local name = _G[k]
         if not name and C.IsDeveloper then
-            F:Debug('(DragEmAll) Frame not found: ' .. k)
+            F:Debug('DragEmAll ( Frame not found ' .. k .. ')')
         end
     end
 end

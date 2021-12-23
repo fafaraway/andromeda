@@ -160,8 +160,8 @@ local function AddTradeIcon(link, id)
 end
 
 function CHAT:UpdateLinkIcon(_, msg, ...)
-    msg = string.gsub(msg, '(|c%x%x%x%x%x%x%x%x|H(%a+):(%d+).-|h.-|h|r)', AddChatIcon)
-    msg = string.gsub(msg, '(|c%x%x%x%x%x%x%x%x|Htrade:[^:]-:(%d+).-|h.-|h|r)', AddTradeIcon)
+    msg = string.gsub(msg, '(|c%x%x%x%x%x%x%x%x.-|H(%a+):(%d+).-|h.-|h.-|r)', AddChatIcon)
+    msg = string.gsub(msg, '(|c%x%x%x%x%x%x%x%x.-|Htrade:[^:]-:(%d+).-|h.-|h.-|r)', AddTradeIcon)
 
     return false, msg, ...
 end

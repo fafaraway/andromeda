@@ -86,7 +86,7 @@ function QH:QuestTool_SetAction()
                     SetOverrideBindingClick(QH.QuestHandler, true, 'MOUSEWHEELDOWN', GetOverrideButton(index2))
                 end
 
-                QH.QuestTip:SetText(C.AddonName .. ': ' .. messages[spellID])
+                QH.QuestTip:SetText(C.ColoredAddonName .. ': ' .. messages[spellID])
                 QH.QuestTip:Show()
                 QH.isHandling = true
 
@@ -150,7 +150,7 @@ function QH:QuestTool_SetQuestUnit()
     local guid = UnitGUID('mouseover')
     local npcID = guid and F.GetNPCID(guid)
     if questNPCs[npcID] then
-        self:AddLine(L['This is |cffff0000T|cffff7f00R|cffffff00U|cff00ff00E.'])
+        self:AddLine(L['This is TRUE.'])
     end
 end
 

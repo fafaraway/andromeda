@@ -8,34 +8,41 @@ function BAR:UpdateAllScale()
     if not C.DB['Actionbar']['Enable'] then
         return
     end
-    BAR:UpdateActionSize('Bar1')
-    BAR:UpdateActionSize('Bar2')
-    BAR:UpdateActionSize('Bar3')
-    BAR:UpdateActionSize('Bar4')
-    BAR:UpdateActionSize('Bar5')
-    BAR:UpdateActionSize('BarPet')
+    BAR:UpdateActionBarSize('Bar1')
+    BAR:UpdateActionBarSize('Bar2')
+    BAR:UpdateActionBarSize('Bar3')
+    BAR:UpdateActionBarSize('Bar4')
+    BAR:UpdateActionBarSize('Bar5')
+    BAR:UpdateActionBarSize('BarPet')
     BAR:UpdateStanceBar()
+    BAR:UpdateExtraBar()
     BAR:UpdateVehicleButton()
 end
 
 function BAR:UpdateFontSize(button, fontSize)
     local font = C.Assets.Fonts.Condensed
 
-    button.Name:SetFont(font, fontSize, 'OUTLINE')
-    button.Count:SetFont(font, fontSize, 'OUTLINE')
-    button.HotKey:SetFont(font, fontSize, 'OUTLINE')
+    if button.Name then
+        button.Name:SetFont(font, fontSize, 'OUTLINE')
+    end
+    if button.Count then
+        button.Count:SetFont(font, fontSize, 'OUTLINE')
+    end
+    if button.HotKey then
+        button.HotKey:SetFont(font, fontSize, 'OUTLINE')
+    end
 end
 
-function BAR:UpdateActionSize(name)
+function BAR:UpdateActionBarSize(name)
     local frame = _G['FreeUI_Action' .. name]
     if not frame then
         return
     end
 
     local size = C.DB['Actionbar'][name .. 'Size']
-    local fontSize = C.DB['Actionbar'][name .. 'Font']
     local num = C.DB['Actionbar'][name .. 'Num']
     local perRow = C.DB['Actionbar'][name .. 'PerRow']
+    local fontSize = math.floor(size / 30 * 10 + .5)
 
     if num == 0 then
         local column = 3
@@ -318,7 +325,7 @@ function BAR:CreateBar5()
     _G.RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
 end
 
-function BAR:CreatePetbar()
+function BAR:CreatePetBar()
     local num = _G.NUM_PET_ACTION_SLOTS
     local buttonList = {}
 
@@ -350,8 +357,8 @@ function BAR:UpdateStanceBar()
     end
 
     local size = C.DB['Actionbar']['BarStanceSize']
-    local fontSize = C.DB['Actionbar']['BarStanceFont']
     local perRow = C.DB['Actionbar']['BarStancePerRow']
+    local fontSize = math.floor(size / 30 * 10 + .5)
 
     for i = 1, 12 do
         local button = frame.buttons[i]
@@ -376,7 +383,7 @@ function BAR:UpdateStanceBar()
     frame.mover:SetSize(size, size)
 end
 
-function BAR:CreateStancebar()
+function BAR:CreateStanceBar()
     if not C.DB['Actionbar']['EnableStanceBar'] then
         return
     end
@@ -419,7 +426,22 @@ function BAR:CreateStancebar()
     _G.RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
 end
 
-function BAR:CreateExtrabar()
+function BAR:UpdateExtraBar()
+    local frame = _G['FreeUI_ActionBarExtra']
+    if not frame then
+        return
+    end
+
+    local size = C.DB['Actionbar']['BarExtraSize']
+    local fontSize = math.floor(size / 30 * 10 + .5)
+
+    local button = _G.ExtraActionButton1
+    button:SetSize(size, size)
+
+    BAR:UpdateFontSize(button, fontSize)
+end
+
+function BAR:CreateExtraBar()
     local buttonList = {}
     local size = C.DB.Actionbar.BarExtraSize
 
@@ -562,9 +584,9 @@ function BAR:OnLogin()
     BAR:CreateBar3()
     BAR:CreateBar4()
     BAR:CreateBar5()
-    BAR:CreatePetbar()
-    BAR:CreateStancebar()
-    BAR:CreateExtrabar()
+    BAR:CreatePetBar()
+    BAR:CreateStanceBar()
+    BAR:CreateExtraBar()
     BAR:CreateLeaveVehicleBar()
     -- BAR:CreateCustomBar()
 

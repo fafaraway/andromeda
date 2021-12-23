@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local BLIZZARD = F:GetModule('Blizzard')
+local EL = F:RegisterModule('EnhancedLoot')
 
 local iconsize = 32
 local width = 140
@@ -224,7 +224,9 @@ lootFrame.UPDATE_MASTER_LOOT_LIST = function(self)
     _G.MasterLooterFrame_UpdatePlayers()
 end
 
-function BLIZZARD:EnhancedLootFrame()
+function EL:OnLogin()
+    if not C.DB.General.EnhancedLoot then return end
+
     lootFrame:SetScript(
         'OnHide',
         function(self)
@@ -249,4 +251,3 @@ function BLIZZARD:EnhancedLootFrame()
     _G.LootFrame:UnregisterAllEvents()
     table.insert(_G.UISpecialFrames, 'FreeUI_Loot')
 end
-BLIZZARD:RegisterBlizz('EnhancedLootFrame', BLIZZARD.EnhancedLootFrame)

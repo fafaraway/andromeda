@@ -58,8 +58,8 @@ local function ReplaceFont(obj, font, size, flag)
     flag = flag or origFlag
 
     obj:SetFont(font, size, flag)
-    obj:SetShadowColor(0, 0, 0, 1)
-    obj:SetShadowOffset(1, -1)
+    -- obj:SetShadowColor(0, 0, 0, 1)
+    -- obj:SetShadowOffset(1, -1)
 end
 
 local function SetupBlizFonts()
