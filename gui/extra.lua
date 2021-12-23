@@ -9,6 +9,7 @@ local MAP = F:GetModule('Minimap')
 local INVENTORY = F:GetModule('Inventory')
 local VIGNETTING = F:GetModule('Vignetting')
 local BAR = F:GetModule('ActionBar')
+local AURA = F:GetModule('Aura')
 local oUF = F.Libs.oUF
 
 local extraGUIs = {}
@@ -320,6 +321,13 @@ end
 -- Module Extra GUI
 
 -- Aura
+local function UpdateAuraSize()
+    if not AURA.settings then return end
+    AURA:UpdateOptions()
+    AURA:UpdateHeader(AURA.BuffFrame)
+    AURA.BuffFrame.mover:SetSize(AURA.BuffFrame:GetSize())
+end
+
 function GUI:SetupAuraSize(parent)
     local guiName = 'FreeUIGUIAuraSize'
     TogglePanel(guiName)
@@ -329,53 +337,77 @@ function GUI:SetupAuraSize(parent)
 
     local panel = CreateExtraGUI(parent, guiName)
     local scroll = GUI:CreateScroll(panel, 220, 540)
+    local db = C.CharacterSettings.Aura
 
-    local buffDatas = {
-        [1] = {
-            key = 'BuffSize',
-            value = '40',
-            text = L['Size'],
-            min = 24,
-            max = 60
+    local datas = {
+        buff = {
+            [1] = {
+                key = 'BuffSize',
+                value = db.BuffSize,
+                text = L['Size'],
+                min = 20,
+                max = 50,
+                step = 1
+            },
+            [2] = {
+                key = 'BuffPerRow',
+                value = db.BuffPerRow,
+                text = L['Per Row'],
+                min = 6,
+                max = 20,
+                step = 1
+            }
         },
-        [2] = {
-            key = 'BuffPerRow',
-            value = '12',
-            text = L['Per Row'],
-            min = 6,
-            max = 20
-        }
-    }
-
-    local debuffDatas = {
-        [1] = {
-            key = 'DebuffSize',
-            value = '50',
-            text = L['Size'],
-            min = 24,
-            max = 60
+        debuff = {
+            [1] = {
+                key = 'DebuffSize',
+                value = db.DebuffSize,
+                text = L['Size'],
+                min = 20,
+                max = 50,
+                step = 1
+            },
+            [2] = {
+                key = 'DebuffPerRow',
+                value = db.DebuffSize,
+                text = L['Per Row'],
+                min = 6,
+                max = 20,
+                step = 1
+            }
         },
-        [2] = {
-            key = 'DebuffPerRow',
-            value = '12',
-            text = L['Per Row'],
-            min = 6,
-            max = 20
+        layout = {
+            [1] = {
+                value = 'BuffReverse',
+                text = L['Buffs Reverse Growth']
+            },
+            [2] = {
+                value = 'DebuffReverse',
+                text = L['Debuffs Reverse Growth']
+            },
         }
     }
 
     local offset = -10
-    for _, v in ipairs(buffDatas) do
-        CreateGroupTitle(scroll, L['Buff Icon'], offset)
-        CreateSlider(scroll, 'Aura', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50)
+    for _, v in ipairs(datas.layout) do
+        CreateGroupTitle(scroll, L['Layout'], offset)
+        CreateCheckbox(scroll, offset - 30, 'Actionbar', v.value, v.text, UpdateAuraSize)
+        offset = offset - 35
+    end
+
+    scroll.groupTitle = nil
+
+    for _, v in ipairs(datas.buff) do
+        CreateGroupTitle(scroll, L['Buff'], offset - 30)
+        CreateSlider(scroll, 'Aura', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 80, UpdateAuraSize)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
-    for _, v in ipairs(debuffDatas) do
-        CreateGroupTitle(scroll, L['Debuff Icon'], offset - 50)
-        CreateSlider(scroll, 'Aura', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 100)
+    for _, v in ipairs(datas.debuff) do
+        CreateGroupTitle(scroll, L['Debuff'], offset - 80)
+        CreateSlider(scroll, 'Aura', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 130, UpdateAuraSize)
         offset = offset - 65
     end
 end
@@ -577,6 +609,266 @@ function GUI:SetupMinItemLevelToShow(parent)
 end
 
 -- Actionbar
+local barsList = {
+    'Bar1',
+    'Bar2',
+    'Bar3',
+    'Bar4',
+    'Bar5',
+}
+local function UpdateActionBarSize()
+    for _, v in ipairs(barsList) do
+        BAR:UpdateActionBarSize(v)
+    end
+end
+
+local function UpdateExtraBar()
+    BAR:UpdateExtraBar()
+end
+
+function GUI:SetupActionBarSize(parent)
+    local guiName = 'FreeUIGUIActionBarSize'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local db = C.CharacterSettings.Actionbar
+    local mKey = 'Actionbar'
+
+    local datas = {
+        bar1 = {
+            [1] = {
+                key = 'Bar1Size',
+                value = db.Bar1Size,
+                text = L['Size'],
+                min = 20,
+                max = 60,
+                step = 1
+            },
+            [2] = {
+                key = 'Bar1Num',
+                value = db.Bar1Num,
+                text = L['Number'],
+                min = 1,
+                max = 12,
+                step = 1
+            },
+            [3] = {
+                key = 'Bar1PerRow',
+                value = db.Bar1PerRow,
+                text = L['Per Row'],
+                min = 1,
+                max = 12,
+                step = 1
+            },
+            [4] = {
+                key = 'Bar1Font',
+                value = db.Bar1Font,
+                text = L['Font Size'],
+                min = 8,
+                max = 16,
+                step = 1
+            }
+        },
+        bar2 = {
+            [1] = {
+                key = 'Bar2Size',
+                value = db.Bar2Size,
+                text = L['Size'],
+                min = 20,
+                max = 60,
+                step = 1
+            },
+            [2] = {
+                key = 'Bar2Num',
+                value = db.Bar2Num,
+                text = L['Number'],
+                min = 1,
+                max = 12,
+                step = 1
+            },
+            [3] = {
+                key = 'Bar2PerRow',
+                value = db.Bar2PerRow,
+                text = L['Per Row'],
+                min = 1,
+                max = 12,
+                step = 1
+            },
+            [4] = {
+                key = 'Bar2Font',
+                value = db.Bar2Font,
+                text = L['Font Size'],
+                min = 8,
+                max = 16,
+                step = 1
+            }
+        },
+        bar3 = {
+            [1] = {
+                key = 'Bar3Size',
+                value = db.Bar3Size,
+                text = L['Size'],
+                min = 20,
+                max = 60,
+                step = 1
+            },
+            [2] = {
+                key = 'Bar3Num',
+                value = db.Bar3Num,
+                text = L['Number'],
+                min = 1,
+                max = 12,
+                step = 1
+            },
+            [3] = {
+                key = 'Bar3PerRow',
+                value = db.Bar3PerRow,
+                text = L['Per Row'],
+                min = 1,
+                max = 12,
+                step = 1
+            },
+            [4] = {
+                key = 'Bar3Font',
+                value = db.Bar3Font,
+                text = L['Font Size'],
+                min = 8,
+                max = 16,
+                step = 1
+            }
+        },
+        bar4 = {
+            [1] = {
+                key = 'Bar4Size',
+                value = db.Bar4Size,
+                text = L['Size'],
+                min = 20,
+                max = 60,
+                step = 1
+            },
+            [2] = {
+                key = 'Bar4Num',
+                value = db.Bar4Num,
+                text = L['Number'],
+                min = 1,
+                max = 12,
+                step = 1
+            },
+            [3] = {
+                key = 'Bar4PerRow',
+                value = db.Bar4PerRow,
+                text = L['Per Row'],
+                min = 1,
+                max = 12,
+                step = 1
+            },
+            [4] = {
+                key = 'Bar4Font',
+                value = db.Bar4Font,
+                text = L['Font Size'],
+                min = 8,
+                max = 16,
+                step = 1
+            }
+        },
+        bar5 = {
+            [1] = {
+                key = 'Bar5Size',
+                value = db.Bar5Size,
+                text = L['Size'],
+                min = 20,
+                max = 60,
+                step = 1
+            },
+            [2] = {
+                key = 'Bar5Num',
+                value = db.Bar5Num,
+                text = L['Number'],
+                min = 1,
+                max = 12,
+                step = 1
+            },
+            [3] = {
+                key = 'Bar5PerRow',
+                value = db.Bar5PerRow,
+                text = L['Per Row'],
+                min = 1,
+                max = 12,
+                step = 1
+            },
+            [4] = {
+                key = 'Bar5Font',
+                value = db.Bar5Font,
+                text = L['Font Size'],
+                min = 8,
+                max = 16,
+                step = 1
+            }
+        },
+        extrabar = {
+            [1] = {
+                key = 'BarExtraSize',
+                value = db.BarExtraSize,
+                text = L['Size'],
+                min = 20,
+                max = 60,
+                step = 1
+            },
+        },
+    }
+
+    local offset = -10
+    for _, v in ipairs(datas.bar1) do
+        CreateGroupTitle(scroll, L['Bar 1'], offset)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateActionBarSize)
+        offset = offset - 65
+    end
+
+    scroll.groupTitle = nil
+
+    for _, v in ipairs(datas.bar2) do
+        CreateGroupTitle(scroll, L['Bar 2'], offset - 50)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 100, UpdateActionBarSize)
+        offset = offset - 65
+    end
+
+    scroll.groupTitle = nil
+
+    for _, v in ipairs(datas.bar3) do
+        CreateGroupTitle(scroll, L['Bar 3'], offset - 100)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 150, UpdateActionBarSize)
+        offset = offset - 65
+    end
+
+    scroll.groupTitle = nil
+
+    for _, v in ipairs(datas.bar4) do
+        CreateGroupTitle(scroll, L['SideBar 1'], offset - 150)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 200, UpdateActionBarSize)
+        offset = offset - 65
+    end
+
+    scroll.groupTitle = nil
+
+    for _, v in ipairs(datas.bar5) do
+        CreateGroupTitle(scroll, L['SideBar 2'], offset - 200)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 250, UpdateActionBarSize)
+        offset = offset - 65
+    end
+
+    scroll.groupTitle = nil
+
+    for _, v in ipairs(datas.extrabar) do
+        CreateGroupTitle(scroll, L['Extra Button'], offset - 250)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 300, UpdateExtraBar)
+        offset = offset - 65
+    end
+end
+
 local function UpdateVehicleButton()
     BAR:UpdateVehicleButton()
 end
@@ -594,11 +886,12 @@ function GUI:SetupVehicleButtonSize(parent)
 
     local panel = CreateExtraGUI(parent, guiName)
     local scroll = GUI:CreateScroll(panel, 220, 540)
-    local values = C.DB.Actionbar
+    local db = C.DB.Actionbar
+    local mKey = 'Actionbar'
 
     local datas = {
         key = 'VehicleButtonSize',
-        value = values.VehicleButtonSize,
+        value = db.VehicleButtonSize,
         text = L['Button Size'],
         min = 20,
         max = 80,
@@ -607,7 +900,7 @@ function GUI:SetupVehicleButtonSize(parent)
 
     local offset = -10
     CreateGroupTitle(scroll, L['Leave Vehicle Button'], offset)
-    CreateSlider(scroll, 'Actionbar', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset - 50, UpdateVehicleButton)
+    CreateSlider(scroll, mKey, datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset - 50, UpdateVehicleButton)
 end
 
 function GUI:SetupStanceBarSize(parent)
@@ -619,33 +912,30 @@ function GUI:SetupStanceBarSize(parent)
 
     local panel = CreateExtraGUI(parent, guiName)
     local scroll = GUI:CreateScroll(panel, 220, 540)
-    local values = C.DB.Actionbar
+    local db = C.DB.Actionbar
+    local mKey = 'Actionbar'
 
     local datas = {
         [1] = {
             key = 'BarStanceSize',
-            value = values.BarStanceSize,
+            value = db.BarStanceSize,
             text = L['Button Size'],
             min = 20,
             max = 80,
             step = 1
         },
-        [2] = {
-            key = 'BarStanceFont',
-            value = values.BarStanceFont,
-            text = L['Font Size'],
-            min = 8,
-            max = 24,
-            step = 1
-        }
     }
 
     local offset = -10
     for _, v in ipairs(datas) do
         CreateGroupTitle(scroll, L['Stance Bar'], offset)
-        CreateSlider(scroll, 'Actionbar', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateStanceBar)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateStanceBar)
         offset = offset - 65
     end
+end
+
+local function UpdateActionBarFade()
+    ACTIONBAR:UpdateActionBarFade()
 end
 
 function GUI:SetupActionbarFade(parent)
@@ -657,69 +947,68 @@ function GUI:SetupActionbarFade(parent)
 
     local panel = CreateExtraGUI(parent, guiName)
     local scroll = GUI:CreateScroll(panel, 220, 540)
+    local db = C.CharacterSettings.Actionbar
+    local mKey = 'Actionbar'
 
-    local function OnUpdate()
-        ACTIONBAR:UpdateActionBarFade()
-    end
-
-    local conditions = {
-        [1] = {
-            value = 'ConditionCombat',
-            text = L['Enter combat']
+    local datas = {
+        conditions = {
+            [1] = {
+                value = 'ConditionCombat',
+                text = L['Enter combat']
+            },
+            [2] = {
+                value = 'ConditionTarget',
+                text = L['Have target or focus']
+            },
+            [3] = {
+                value = 'ConditionDungeon',
+                text = L['Inside dungeon']
+            },
+            [4] = {
+                value = 'ConditionPvP',
+                text = L['Inside battlefield or arena']
+            },
+            [5] = {
+                value = 'ConditionVehicle',
+                text = L['Enter vehicle']
+            }
         },
-        [2] = {
-            value = 'ConditionTarget',
-            text = L['Have target or focus']
-        },
-        [3] = {
-            value = 'ConditionDungeon',
-            text = L['Inside dungeon']
-        },
-        [4] = {
-            value = 'ConditionPvP',
-            text = L['Inside battlefield or arena']
-        },
-        [5] = {
-            value = 'ConditionVehicle',
-            text = L['Enter vehicle']
-        }
-    }
-
-    local sliders = {
-        [1] = {
-            text = L['Fade out alpha'],
-            key = 'FadeOutAlpha',
-            value = C.CharacterSettings.Actionbar.FadeOutAlpha
-        },
-        [2] = {
-            text = L['Fade out duration'],
-            key = 'FadeOutDuration',
-            value = C.CharacterSettings.Actionbar.FadeOutDuration
-        },
-        [3] = {
-            text = L['Fade in alpha'],
-            key = 'FadeInAlpha',
-            value = C.CharacterSettings.Actionbar.FadeInAlpha
-        },
-        [4] = {
-            text = L['Fade in duration'],
-            key = 'FadeInDuration',
-            value = C.CharacterSettings.Actionbar.FadeInDuration
+        sliders = {
+            [1] = {
+                text = L['Fade out alpha'],
+                key = 'FadeOutAlpha',
+                value = db.FadeOutAlpha
+            },
+            [2] = {
+                text = L['Fade out duration'],
+                key = 'FadeOutDuration',
+                value = db.FadeOutDuration
+            },
+            [3] = {
+                text = L['Fade in alpha'],
+                key = 'FadeInAlpha',
+                value = db.FadeInAlpha
+            },
+            [4] = {
+                text = L['Fade in duration'],
+                key = 'FadeInDuration',
+                value = db.FadeInDuration
+            }
         }
     }
 
     local offset = -10
-    for _, v in ipairs(conditions) do
-        CreateGroupTitle(scroll, L['Condition'], offset)
-        CreateCheckbox(scroll, offset - 30, 'Actionbar', v.value, v.text, OnUpdate)
+    for _, v in ipairs(datas.conditions) do
+        CreateGroupTitle(scroll, L['Conditions'], offset)
+        CreateCheckbox(scroll, offset - 30, mKey, v.value, v.text, UpdateActionBarFade)
         offset = offset - 35
     end
 
     scroll.groupTitle = nil
 
-    for _, v in ipairs(sliders) do
+    for _, v in ipairs(datas.sliders) do
         CreateGroupTitle(scroll, L['Fading'], offset - 30)
-        CreateSlider(scroll, 'Actionbar', v.key, v.text, 0, 1, .1, v.value, 20, offset - 80, OnUpdate)
+        CreateSlider(scroll, mKey, v.key, v.text, 0, 1, .1, v.value, 20, offset - 80, UpdateActionBarFade)
         offset = offset - 65
     end
 end
@@ -733,6 +1022,8 @@ function GUI:SetupAdditionalBar(parent)
 
     local panel = CreateExtraGUI(parent, guiName)
     local scroll = GUI:CreateScroll(panel, 220, 540)
+    local db = C.CharacterSettings.Actionbar
+    local mKey = 'Actionbar'
 
     local function OnUpdate()
         ACTIONBAR:UpdateCustomBar()
@@ -779,8 +1070,39 @@ function GUI:SetupAdditionalBar(parent)
     local offset = -10
     for _, v in ipairs(datas) do
         CreateGroupTitle(scroll, L['Additional Bar Customization'], offset)
-        CreateSlider(scroll, 'Actionbar', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, OnUpdate)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, OnUpdate)
         offset = offset - 65
+    end
+end
+
+function GUI:SetupActionBarCooldown(parent)
+    local guiName = 'FreeUIGUIActionbarCooldown'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local db = C.CharacterSettings.Cooldown
+    local mKey = 'Cooldown'
+
+    local datas = {
+        [1] = {
+            value = 'Decimal',
+            text = L['Decimal Timer']
+        },
+        [2] = {
+            value = 'OverrideWA',
+            text = L['Override WeakAuras']
+        },
+    }
+
+    local offset = -10
+    for _, v in ipairs(datas) do
+        CreateGroupTitle(scroll, L['Cooldown'], offset)
+        CreateCheckbox(scroll, offset - 30, mKey, v.value, v.text)
+        offset = offset - 35
     end
 end
 
@@ -2159,6 +2481,9 @@ function GUI:SetupRaidDebuffs(parent)
         [1] = EJ_GetInstanceInfo(1190),
         [2] = EJ_GetInstanceInfo(1193)
     }
+    if C.IsNewPatch then
+        raids[3] = EJ_GetInstanceInfo(1195)
+    end
 
     options[1] = GUI:CreateDropdown(frame, _G.DUNGEONS, 123, -30, dungeons, nil, 107, 24)
     options[1]:Hide()

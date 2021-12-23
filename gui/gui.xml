@@ -2,6 +2,7 @@
     <Script file="options.lua"/>
     <Script file="gui.lua"/>
     <Script file="extra.lua"/>
+    <Script file="about.lua"/>
     <Script file="credits.lua"/>
     <Script file="profiles.lua"/>
     <Script file="data.lua"/>

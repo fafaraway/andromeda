@@ -12,7 +12,6 @@ local tabsList = {
     L['Notification'],
     L['Infobar'],
     L['Chat'],
-    L['Aura'],
     L['Actionbar'],
     L['Combat'],
     L['Announcement'],
@@ -24,19 +23,19 @@ local tabsList = {
     L['Nameplate'],
     L['Theme'],
     L['Profile'],
+    L['About'],
     L['Credit']
 }
 
 local iconsList = {
-    'Interface\\ICONS\\Ability_BossDarkVindicator_AuraofContempt',
+    'Interface\\ICONS\\Achievement_Raid_TrialOfValor',
     'Interface\\ICONS\\Ability_Mage_ColdAsIce',
     'Interface\\ICONS\\Ability_Paladin_LightoftheMartyr',
     'Interface\\ICONS\\Spell_Shadow_Seduction',
-    'Interface\\ICONS\\Spell_Shadow_Shadesofdarkness',
-    'Interface\\ICONS\\Ability_Warrior_BloodFrenzy',
-    'Interface\\ICONS\\Ability_Warrior_Challange',
+    'Interface\\ICONS\\Achievement_General_StayClassy',
+    'Interface\\ICONS\\Achievement_Garrison_Invasion',
     'Interface\\ICONS\\Ability_Warrior_RallyingCry',
-    'Interface\\ICONS\\INV_Misc_Bag_30',
+    'Interface\\ICONS\\Achievement_Boss_spoils_of_pandaria',
     'Interface\\ICONS\\Achievement_Ashran_Tourofduty',
     'Interface\\ICONS\\Ability_Priest_BindingPrayers',
     'Interface\\ICONS\\Spell_Priest_Pontifex',
@@ -44,7 +43,8 @@ local iconsList = {
     'Interface\\ICONS\\Ability_Paladin_BeaconsOfLight',
     'Interface\\ICONS\\Ability_Hunter_BeastWithin',
     'Interface\\ICONS\\INV_Misc_Blingtron',
-    'Interface\\ICONS\\Raf-Icon'
+    'Interface\\ICONS\\Achievement_WorldEvent_Brewmaster',
+    'Interface\\ICONS\\Achievement_Reputation_06'
 }
 
 GUI.TexturesList = {
@@ -108,6 +108,13 @@ local function CheckUIReload(name)
     if not string.find(name, '%*') then
         GUI.NeedUIReload = true
     end
+end
+
+function GUI:CreateGradientLine(frame, width, x, y, x2, y2)
+    local fll = F.SetGradient(frame, 'H', .7, .7, .7, 0, .5, width, C.Mult)
+    fll:SetPoint('TOP', x, y)
+    local flr = F.SetGradient(frame, 'H', .7, .7, .7, .5, 0, width, C.Mult)
+    flr:SetPoint('TOP', x2, y2)
 end
 
 local function SelectTab(i)
@@ -370,8 +377,12 @@ local function CreateOption(i)
             swatch.__default = (key == 'ACCOUNT' and C.AccountSettings[value]) or C.CharacterSettings[key][value]
         else -- blank, no optType
             if not key then
-                local line = F.SetGradient(parent, 'H', .5, .5, .5, .25, .25, 460, C.Mult)
-                line:SetPoint('TOPLEFT', 20, -offset - 12)
+                -- local line = F.SetGradient(parent, 'H', .5, .5, .5, .25, .25, 460, C.Mult)
+                -- line:SetPoint('TOPLEFT', 20, -offset - 12)
+
+
+
+                GUI:CreateGradientLine(parent, 230, -115, -offset - 12, 115, -offset - 12)
             end
             offset = offset + 35
         end
@@ -405,14 +416,10 @@ local function CreateGUI()
     local verticalLine = F.SetGradient(guiFrame, 'V', .5, .5, .5, .25, .25, C.Mult, 540)
     verticalLine:SetPoint('TOPLEFT', 160, -50)
 
-    F.CreateFS(guiFrame, C.AssetsPath .. 'fonts\\header.ttf', 22, nil, C.AddonName, nil, 'THICK', 'TOP', 0, -4)
+    F.CreateFS(guiFrame, C.AssetsPath .. 'fonts\\header.ttf', 22, nil, F:StyleAddonName('%ADDONNAME%'), nil, 'THICK', 'TOP', 0, -4)
     F.CreateFS(guiFrame, C.Assets.Fonts.Regular, 10, nil, 'Version: ' .. C.AddonVersion, {.7, .7, .7}, 'THICK', 'TOP', 0, -30)
 
-    local lineLeft = F.SetGradient(guiFrame, 'H', .7, .7, .7, 0, .7, 120, C.Mult)
-    lineLeft:SetPoint('TOP', -60, -26)
-
-    local lineRight = F.SetGradient(guiFrame, 'H', .7, .7, .7, .7, 0, 120, C.Mult)
-    lineRight:SetPoint('TOP', 60, -26)
+    GUI:CreateGradientLine(guiFrame, 120, -60, -26, 60, -26)
 
     local btnClose = CreateFrame('Button', nil, guiFrame, 'UIPanelButtonTemplate')
     btnClose:SetPoint('BOTTOMRIGHT', -6, 6)
@@ -462,7 +469,8 @@ local function CreateGUI()
         CreateOption(i)
     end
 
-    GUI:CreateProfileGUI(guiPage[16])
+    GUI:CreateProfileGUI(guiPage[15])
+    GUI:CreateAboutFrame(guiPage[16])
     GUI:CreateCreditsFrame(guiPage[17])
 
     SelectTab(1)
@@ -521,7 +529,8 @@ end
 
 local function CreateFreeUIButton()
     local bu = CreateFrame('Button', 'GameMenuFrameFreeUI', _G.GameMenuFrame, 'GameMenuButtonTemplate')
-    bu:SetText(C.AddonName)
+    bu:SetText(F:StyleAddonName('%ADDONNAME%'))
+    -- bu.Text:SetFont(C.Assets.Fonts.Bold, 13, _G.FREE_ADB.FontOutline and 'OUTLINE' or nil)
     bu:SetPoint('TOP', _G.GameMenuButtonAddons, 'BOTTOM', 0, -14)
     if _G.FREE_ADB.ReskinBlizz then
         F.Reskin(bu)
