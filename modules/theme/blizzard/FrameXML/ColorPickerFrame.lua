@@ -1,15 +1,23 @@
 local F, C = unpack(select(2, ...))
 
-tinsert(C.BlizzThemes, function()
-	if not _G.FREE_ADB.ReskinBlizz then return end
+table.insert(
+    C.BlizzThemes,
+    function()
+        local ColorPickerFrame = _G.ColorPickerFrame
 
-	F.StripTextures(ColorPickerFrame.Header)
-	ColorPickerFrame.Header:ClearAllPoints()
-	ColorPickerFrame.Header:SetPoint("TOP", ColorPickerFrame, 0, 0)
-	ColorPickerFrame.Border:Hide()
+        F.StripTextures(ColorPickerFrame.Header)
+        ColorPickerFrame.Header:ClearAllPoints()
+        ColorPickerFrame.Header:SetPoint('TOP', ColorPickerFrame, 0, 10)
+        ColorPickerFrame.Border:Hide()
 
-	F.SetBD(ColorPickerFrame)
-	F.Reskin(ColorPickerOkayButton)
-	F.Reskin(ColorPickerCancelButton)
-	F.ReskinSlider(OpacitySliderFrame, true)
-end)
+        F.SetBD(ColorPickerFrame)
+        F.Reskin(_G.ColorPickerOkayButton)
+        F.Reskin(_G.ColorPickerCancelButton)
+        F.ReskinSlider(_G.OpacitySliderFrame, true)
+
+        _G.ColorPickerCancelButton:ClearAllPoints()
+        _G.ColorPickerCancelButton:SetPoint('BOTTOMLEFT', ColorPickerFrame, 'BOTTOM', 1, 6)
+        _G.ColorPickerOkayButton:ClearAllPoints()
+        _G.ColorPickerOkayButton:SetPoint('BOTTOMRIGHT', ColorPickerFrame, 'BOTTOM', -1, 6)
+    end
+)
