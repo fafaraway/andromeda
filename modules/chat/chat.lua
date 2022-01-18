@@ -61,6 +61,25 @@ function CHAT:UpdateTabEventColors(event)
     end
 end
 
+local chatEditboxes = {}
+local function UpdateEditBoxAnchor(eb)
+    local parent = eb.__owner
+    eb:ClearAllPoints()
+    if C.DB.Chat.BottomEditBox then
+        eb:SetPoint('TOPLEFT', parent, 'BOTTOMLEFT', 4, -10)
+        eb:SetPoint('BOTTOMRIGHT', parent, 'BOTTOMRIGHT', -15, -34)
+    else
+        eb:SetPoint('BOTTOMLEFT', parent, 'TOPLEFT', 4, 26)
+        eb:SetPoint('TOPRIGHT', parent, 'TOPRIGHT', -15, 50)
+    end
+end
+
+function CHAT:ToggleEditBoxAnchor()
+    for _, eb in pairs(chatEditboxes) do
+        UpdateEditBoxAnchor(eb)
+    end
+end
+
 local function SetupChatFrame(self)
     if not self or self.styled then
         return
@@ -89,10 +108,11 @@ local function SetupChatFrame(self)
 
     local eb = _G[name .. 'EditBox']
     eb:SetAltArrowKeyMode(false)
-    eb:ClearAllPoints()
-    eb:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 4, 26)
-    eb:SetPoint('TOPRIGHT', self, 'TOPRIGHT', -17, 50)
+    eb:SetClampedToScreen(true)
+    eb.__owner = self
+    UpdateEditBoxAnchor(eb)
     eb.bd = F.SetBD(eb)
+    table.insert(chatEditboxes, eb)
 
     for i = 3, 8 do
         select(i, eb:GetRegions()):SetAlpha(0)
