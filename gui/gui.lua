@@ -359,7 +359,8 @@ local function CreateOption(i)
                 end
             end
 
-            dd.label = F.CreateFS(dd, C.Assets.Fonts.Regular, 11, nil, name, nil, true, 'CENTER', 0, 18)
+            dd.label = F.CreateFS(dd, C.Assets.Fonts.Regular, 11, nil, name, nil, true)
+            dd.label:SetPoint('BOTTOM', dd, 'TOP', 0, 4)
             if tip then
                 dd.title = name
                 F.AddTooltip(dd, 'ANCHOR_RIGHT', tip, 'BLUE', true)

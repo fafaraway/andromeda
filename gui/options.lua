@@ -14,15 +14,12 @@ local VIGNETTING = F:GetModule('Vignetting')
 local BLIZZARD = F:GetModule('Blizzard')
 local CAMERA = F:GetModule('Camera')
 local INFOBAR = F:GetModule('InfoBar')
+local oUF = F.Libs.oUF
 
 
 -- Inventory
 local function UpdateInventoryStatus()
     INVENTORY:UpdateAllBags()
-end
-
-local function UpdateInventoryAnchor()
-    INVENTORY:UpdateAllAnchors()
 end
 
 local function SetupInventoryFilter()
@@ -111,6 +108,10 @@ local function UpdateLanguageFilter()
     CHAT:UpdateLanguageFilter()
 end
 
+local function UpdateEditBoxAnchor()
+    CHAT:ToggleEditBoxAnchor()
+end
+
 -- Minimap
 local function SetupMapScale()
     GUI:SetupMapScale(GUI.Page[9])
@@ -145,8 +146,8 @@ local function SetupNameplateCastbarSize()
     GUI:SetupNameplateCastbarSize(GUI.Page[13])
 end
 
-local function SetupNPRaidTargetIndicator()
-    GUI:SetupRaidTargetIndicator(GUI.Page[13])
+local function SetupNameplateRaidTargetIndicator()
+    GUI:SetupNameplateRaidTargetIndicator(GUI.Page[13])
 end
 
 local function SetupAuraFilter()
@@ -166,6 +167,12 @@ local function RefreshAllPlates()
 end
 
 -- Unitframe
+local function UpdateHealthColor()
+    for _, frame in pairs(oUF.objects) do
+        UNITFRAME:UpdateHealthBarColor(frame, true)
+    end
+end
+
 local function SetupUnitFrameSize()
     GUI:SetupUnitFrameSize(GUI.Page[11])
 end
@@ -199,7 +206,7 @@ local function SetupUnitFrameRangeCheck()
 end
 
 local function SetupRaidTargetIndicator()
-    GUI:SetupRaidTargetIndicator(GUI.Page[11])
+    GUI:SetupRaidTargetIndicator(GUI.Page[13])
 end
 
 local function UpdateGCDTicker()
@@ -207,16 +214,33 @@ local function UpdateGCDTicker()
 end
 
 -- Groupframe
-local function SetupGroupFrameSize()
-    GUI:SetupGroupFrameSize(GUI.Page[12])
+local function UpdatePartyHeader()
+    if UNITFRAME.CreateAndUpdatePartyHeader then
+        UNITFRAME:CreateAndUpdatePartyHeader()
+    end
 end
 
-local function UpdateRaidDebuffSize()
-    UNITFRAME:UpdateRaidDebuffSize()
+local function UpdateRaidHeader()
+    if UNITFRAME.CreateAndUpdateRaidHeader then
+        UNITFRAME:CreateAndUpdateRaidHeader()
+        UNITFRAME:UpdateRaidTeamIndex()
+    end
 end
 
-local function UpdateRaidAuras()
-    UNITFRAME:UpdateRaidAuras()
+local function SetupPartyFrame()
+    GUI:SetupPartyFrame(GUI.Page[12])
+end
+
+local function SetupRaidFrame()
+    GUI:SetupRaidFrame(GUI.Page[12])
+end
+
+local function SetupSimpleRaidFrame()
+    GUI:SetupSimpleRaidFrame(GUI.Page[12])
+end
+
+local function UpdatePartyElements()
+    UNITFRAME:UpdatePartyElements()
 end
 
 local function SetupPartyWatcher()
@@ -229,6 +253,10 @@ end
 
 local function UpdateAllHeaders()
     UNITFRAME:UpdateAllHeaders()
+end
+
+local function UpdateGroupTags()
+    UNITFRAME:UpdateGroupTags()
 end
 
 -- General
@@ -377,6 +405,7 @@ GUI.OptionsList = {
         {1, 'Chat', 'WhisperSound', L['Whisper sound'], true, nil, nil, L['Play sound when the new whisper message is more than 60 seconds from previous one.']},
         {1, 'Chat', 'SmartChatBubble', L['Smart bubble'], nil, nil, nil, L['|nOnly show chat bubbles in raid.']},
         {1, 'Chat', 'ExtendLink', L['Extend link'], true},
+        {1, 'Chat', 'BottomEditBox', L['EditBox On Bottom'], nil, nil, UpdateEditBoxAnchor, L['Anchor the editbox to the bottom.']},
         {1, 'Chat', 'HideInCombat', L['Hide chat frame in combat']},
         {1, 'Chat', 'DisableProfanityFilter', L['Disable Profanity Filter'], true, nil, UpdateLanguageFilter},
         {},
@@ -496,7 +525,7 @@ GUI.OptionsList = {
         {1, 'Unitframe', 'Fader', L['Conditional fader'], nil, SetupUnitFrameFader},
 
 
-        {4, 'Unitframe', 'ColorStyle', L['Health Bar Color'], true, {L['Default White'], L['Class Color'], L['Percentage Gradient']}},
+        {4, 'Unitframe', 'ColorStyle', L['Health Color'], true, {L['Default White'], L['Class Color'], L['Percentage Gradient']}, UpdateHealthColor},
         {1, 'Unitframe', 'Portrait', L['Portrait'], nil, nil, nil, L['Show dynamic portrait on unit frame.']},
         {1, 'Unitframe', 'RangeCheck', L['Range Check'], true, SetupUnitFrameRangeCheck, nil, L["Fade out unit frame based on whether the unit is in the player's range"]},
 
@@ -534,23 +563,40 @@ GUI.OptionsList = {
         {1, 'Unitframe', 'Arena', L['Enable arena frames'], true, SetupArenaFrameSize, nil, L['Uncheck this if you want to use other ArenaFrame addon.']},
     },
     [12] = { -- groupframe
-        {1, 'Unitframe', 'Group', L['Enable Groupframes'], nil, SetupGroupFrameSize},
-        {1, 'Unitframe', 'SmartRaid', L['Smart layout'], nil, nil, UpdateAllHeaders, L['|nOnly show raid frames if there are more than 5 members in your group.|nIf disabled, show raid frames when in raid, show party frames when in party.']},
-        {3, 'Unitframe', 'GroupFilter', L['Group filter'], true, {4, 8, 1}},
-        {1, 'Unitframe', 'PositionBySpec', L['Save postion by spec']},
-        {1, 'Unitframe', 'GroupShowName', L['Show names'], true},
-        {1, 'Unitframe', 'ClickToCast', L['Enable click to cast'], nil, nil, nil, L['|nOpen your spell book to configure click to cast.']},
+        {1, 'Unitframe', 'RaidFrame', L['Enable RaidFrame'], nil, SetupRaidFrame},
+        {1, 'Unitframe', 'SimpleMode', L['Simple Mode'], nil, SetupSimpleRaidFrame, nil, L['Simple mode remove most of the elements, and only show unit health status.']},
+        {1, 'Unitframe', 'TeamIndex', L['Display Team Index'], true, nil, UpdateRaidHeader},
+        {},
+
+        {1, 'Unitframe', 'PartyFrame', L['Enable PartyFrame'], nil, SetupPartyFrame},
+        {1, 'Unitframe', 'ShowSolo', L['Display PartyFrame on Solo'], nil, nil, UpdateAllHeaders, L['If checked, the PartyFrame would be visible even you are solo.']},
+        {1, 'Unitframe', 'DescRole', L['Sort by Reverse Roles'], true, nil, UpdatePartyHeader, L['If checked, sort your party order by "Damager Healer Tank" within growth direction.|nIf unchecked, sort your party order by "Tank Healer Damager" within growth direction.']},
+        {1, 'Unitframe', 'PartyWatcher', L['Enable Party Watcher'], nil, SetupPartyWatcher, nil, L['If enabled, show spell cooldown for your group members on PartyFrames']},
+        {1, 'Unitframe', 'PartyWatcherOnRight', L['Swap Icons Side'], nil, nil, UpdatePartyElements},
+        {1, 'Unitframe', 'PartyWatcherSync', L['Sync Party Watcher'], true, nil, nil, L['If enabled, the cooldown status would sync with players who using party watcher or ZenTracker(WA).|nThis might decrease your performance.']},
+        {},
+
+
+        {1, 'Unitframe', 'GroupShowName', L['Display Members Name'], nil, nil, UpdateGroupTags},
+        {1, 'Unitframe', 'RoleIndicator', L['Role Indicator'], true, nil, UpdateGroupTags},
+        {1, 'Unitframe', 'LeaderIndicator', L['Leader Indicator'], nil, nil, UpdateGroupTags},
+        {1, 'Unitframe', 'RaidTargetIndicator', L['RaidTarget Indicator'], true, nil, UpdateGroupTags},
+
+
+
+
+        {1, 'Unitframe', 'SmartRaid', L['Raidframe by Group Counts'], nil, nil, UpdateAllHeaders, L['If enabled, only show RaidFrame if there are more than 5 members in your group.|nIf disabled, show RaidFrame when in raid, show PartyFrame when in party.']},
+
+        {1, 'Unitframe', 'PositionBySpec', L['Save Postion by Spec'], nil, nil, nil, L['If enabled, the PartyFrame and RaidFrame would save their anchors for each spec.']},
+
+        {1, 'Unitframe', 'ClickToCast', L['Enable Click to Cast'], nil, nil, nil, L['Open your spell book to configure click to cast.']},
 
         {1, 'Unitframe', 'InstanceDebuffs', L['Instance Debuffs'], true, SetupRaidDebuffs, nil, L['Display major debuffs in raid and dungeons.']},
 
         {1, 'Unitframe', 'CornerIndicator', L['Corner Indicator']},
-        {1, 'Unitframe', 'ThreatIndicator', L['Threat indicator'], true},
-        {1, 'Unitframe', 'PartyWatcher', L['Enable party watcher'], nil, SetupPartyWatcher},
-        {1, 'Unitframe', 'PartyWatcherSync', L['Sync party watcher'], true, nil, nil, L['|nIf enabled, the cooldown status would sync with players who using party watcher or ZenTracker(WA).|nThis might decrease your performance.']},
-        {1, 'Unitframe', 'PartyHorizon', L['Horizontal party frames']},
-        {1, 'Unitframe', 'PartyReverse', L['Party frames reverse grow'], true},
-        {1, 'Unitframe', 'RaidHorizon', L['Horizontal raid frames']},
-        {1, 'Unitframe', 'RaidReverse', L['Raid frames reverse grow'], true},
+        {1, 'Unitframe', 'ThreatIndicator', L['Threat Indicator'], true},
+
+
     },
     [13] = { -- nameplate
         {1, 'Nameplate', 'Enable', L['Enable Nameplate'], nil, SetupNameplateSize, nil, L['Uncheck this if you want to use another nameplate addon.']},
@@ -565,7 +611,7 @@ GUI.OptionsList = {
         {1, 'Nameplate', 'TotemIcon', L['Totme Indicator'], nil, nil, nil, L["Display the corresponding totem icon on the totem's nameplate."]},
         {4, 'Nameplate', 'AuraFilterMode', L['Aura Filter Mode'], true, {L['BlackNWhite'], L['PlayerOnly'], L['IncludeCrowdControl']}},
         {1, 'Nameplate', 'ExecuteIndicator', L['Execute Indicator'], nil, SetupNameplateExecuteIndicator, nil, L['If unit health percentage lower than the execute cap you set, its name text color turns into red.']},
-        {1, 'Nameplate', 'RaidTargetIndicator', L['Raid Target Indicator'], true, SetupNPRaidTargetIndicator, nil, L['Display raid target icon on nameplate.']},
+        {1, 'Nameplate', 'RaidTargetIndicator', L['Raid Target Indicator'], true, SetupRaidTargetIndicator, nil, L['Display raid target icon on nameplate.']},
         {1, 'Nameplate', 'QuestIndicator', L['Quest Indicator'], nil, nil, nil, L['Display quest mark and progress on the right side of the nameplate.']},
         {1, 'Nameplate', 'ClassifyIndicator', L['Classify Indicator'], true, nil, nil, L['Display the corresponding icon on the left side of the nameplate according to the mob type.|nSupport ELITE, RARE and BOSS.']},
         {1, 'Nameplate', 'TargetIndicator', L['Target Indicator'], nil, nil, nil, L['Display white glow under the nameplate of the current target.']},

@@ -133,13 +133,15 @@ local function Label_OnEnter(self)
     _G.GameTooltip:ClearLines()
     _G.GameTooltip:SetOwner(self:GetParent(), 'ANCHOR_RIGHT', 0, 3)
     _G.GameTooltip:AddLine(self.text)
+    _G.GameTooltip:AddLine(' ')
     _G.GameTooltip:AddLine(self.tip, .6, .8, 1, 1)
     _G.GameTooltip:Show()
 end
 
 local function CreateLabel(parent, text, tip)
     local font = C.Assets.Fonts.Regular
-    local label = F.CreateFS(parent, font, 11, nil, text, 'YELLOW', true, 'CENTER', 0, 22)
+    local label = F.CreateFS(parent, font, 11, nil, text, nil, true)
+    label:SetPoint('BOTTOM', parent, 'TOP', 0, 4)
     if not tip then
         return
     end
@@ -302,7 +304,7 @@ function GUI:CreateDropdown(parent, text, x, y, data, tip, width, height)
 end
 
 local function CreateOptionDropdown(parent, title, yOffset, options, tooltip, key, value, default, func)
-    local dd = GUI:CreateDropdown(parent, title, 40, yOffset, options, tooltip, 180, 28)
+    local dd = GUI:CreateDropdown(parent.child, title, 20, yOffset, options, tooltip, 180, 20)
     dd.__key = key
     dd.__value = value
     dd.__default = default
@@ -322,7 +324,9 @@ end
 
 -- Aura
 local function UpdateAuraSize()
-    if not AURA.settings then return end
+    if not AURA.settings then
+        return
+    end
     AURA:UpdateOptions()
     AURA:UpdateHeader(AURA.BuffFrame)
     AURA.BuffFrame.mover:SetSize(AURA.BuffFrame:GetSize())
@@ -384,7 +388,7 @@ function GUI:SetupAuraSize(parent)
             [2] = {
                 value = 'DebuffReverse',
                 text = L['Debuffs Reverse Growth']
-            },
+            }
         }
     }
 
@@ -614,7 +618,7 @@ local barsList = {
     'Bar2',
     'Bar3',
     'Bar4',
-    'Bar5',
+    'Bar5'
 }
 local function UpdateActionBarSize()
     for _, v in ipairs(barsList) do
@@ -817,8 +821,8 @@ function GUI:SetupActionBarSize(parent)
                 min = 20,
                 max = 60,
                 step = 1
-            },
-        },
+            }
+        }
     }
 
     local offset = -10
@@ -923,7 +927,7 @@ function GUI:SetupStanceBarSize(parent)
             min = 20,
             max = 80,
             step = 1
-        },
+        }
     }
 
     local offset = -10
@@ -1084,7 +1088,6 @@ function GUI:SetupActionBarCooldown(parent)
 
     local panel = CreateExtraGUI(parent, guiName)
     local scroll = GUI:CreateScroll(panel, 220, 540)
-    local db = C.CharacterSettings.Cooldown
     local mKey = 'Cooldown'
 
     local datas = {
@@ -1095,7 +1098,7 @@ function GUI:SetupActionBarCooldown(parent)
         [2] = {
             value = 'OverrideWA',
             text = L['Override WeakAuras']
-        },
+        }
     }
 
     local offset = -10
@@ -1470,7 +1473,9 @@ function GUI:SetupNameplateExecuteIndicator(parent)
     CreateSlider(scroll, 'Nameplate', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset)
 end
 
-function GUI:SetupNPRaidTargetIndicator(parent)
+
+
+function GUI:SetupNameplateRaidTargetIndicator(parent)
     local guiName = 'FreeUIGUINPRaidTargetIndicator'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
@@ -1503,7 +1508,7 @@ function GUI:SetupNPRaidTargetIndicator(parent)
     local offset = -10
     for _, v in ipairs(datas) do
         CreateGroupTitle(scroll, L['Raid Target Icon'], offset)
-        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50)
+        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateNameplateRaidTargetIndicator)
         offset = offset - 65
     end
 end
@@ -1528,13 +1533,226 @@ local function UpdateUnitFrameSize()
     SetUnitFrameSize(_G.oUF_FocusTarget, 'FocusTarget')
 end
 
-local function UpdateBossFrameSize()
+local function UpdatePartyFrameSize()
     for _, frame in pairs(oUF.objects) do
-        if frame.unitStyle == 'boss' then
-            SetUnitFrameSize(frame, 'Boss')
-            UNITFRAME.UpdateFrameHealthTag(frame)
+        if frame.raidType == 'party' then
+            SetUnitFrameSize(frame, 'Party')
+        --UNITFRAME.UpdateRaidNameAnchor(frame, frame.nameText)
         end
     end
+    if UNITFRAME.CreateAndUpdatePartyHeader then
+        UNITFRAME:CreateAndUpdatePartyHeader()
+    end
+    UNITFRAME:UpdatePartyElements()
+end
+
+function GUI:SetupPartyFrame(parent)
+    local guiName = 'FreeUIGUISetupPartyFrame'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+
+    local mKey = 'Unitframe'
+    local db = C.CharacterSettings.Unitframe
+
+    local datas = {
+        [1] = {
+            key = 'PartyWidth',
+            value = db.PartyWidth,
+            text = L['Width'],
+            min = 10,
+            max = 200
+        },
+        [2] = {
+            key = 'PartyHealthHeight',
+            value = db.PartyHealthHeight,
+            text = L['Health Height'],
+            min = 10,
+            max = 200
+        },
+        [3] = {
+            key = 'PartyPowerHeight',
+            value = db.PartyPowerHeight,
+            text = L['Power Height'],
+            min = 1,
+            max = 20
+        }
+    }
+
+    local offset = -10
+    for _, v in ipairs(datas) do
+        CreateGroupTitle(scroll, L['Party Frames'], offset)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdatePartyFrameSize)
+        offset = offset - 65
+    end
+
+    local options = {}
+    for i = 1, 4 do
+        options[i] = UNITFRAME.PartyDirections[i].name
+    end
+
+    CreateOptionDropdown(scroll, L['Growth Direction'], offset - 60, options, nil, mKey, 'PartyDirec', 1, UpdatePartyFrameSize)
+end
+
+local function UpdateRaidFrameDirection()
+    if UNITFRAME.CreateAndUpdateRaidHeader then
+        UNITFRAME:CreateAndUpdateRaidHeader()
+        UNITFRAME:UpdateRaidTeamIndex()
+    end
+end
+
+local function UpdateRaidFrameSize()
+    for _, frame in pairs(oUF.objects) do
+        if frame.unitStyle == 'raid' and not frame.raidType then
+            SetUnitFrameSize(frame, 'Raid')
+        end
+    end
+    if UNITFRAME.CreateAndUpdateRaidHeader then
+        UNITFRAME:CreateAndUpdateRaidHeader()
+        UNITFRAME:UpdateAllHeaders()
+    end
+end
+
+function GUI:SetupRaidFrame(parent)
+    local guiName = 'FreeUIGUISetupRaidFrame'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+
+    local mKey = 'Unitframe'
+    local db = C.CharacterSettings.Unitframe
+
+    local datas = {
+        [1] = {
+            key = 'RaidWidth',
+            value = db.RaidWidth,
+            text = L['Width'],
+            min = 10,
+            max = 200
+        },
+        [2] = {
+            key = 'RaidHealthHeight',
+            value = db.RaidHealthHeight,
+            text = L['Health Height'],
+            min = 10,
+            max = 200
+        },
+        [3] = {
+            key = 'RaidPowerHeight',
+            value = db.RaidPowerHeight,
+            text = L['Power Height'],
+            min = 1,
+            max = 20
+        },
+        [4] = {
+            key = 'NumGroups',
+            value = db.NumGroups,
+            text = L['Groups to Show'],
+            min = 1,
+            max = 8
+        },
+        [5] = {
+            key = 'RaidRows',
+            value = db.RaidRows,
+            text = L['Groups per row'],
+            min = 1,
+            max = 8
+        }
+    }
+
+    local offset = -10
+    for _, v in ipairs(datas) do
+        CreateGroupTitle(scroll, L['Raid Frames'], offset)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdateRaidFrameSize)
+        offset = offset - 65
+    end
+
+    local options = {}
+    for i = 1, 8 do
+        options[i] = UNITFRAME.RaidDirections[i].name
+    end
+
+    CreateOptionDropdown(scroll, L['Growth Direction'], offset - 60, options, L['Change the growth direction for RaidFrames.|nDirection on the left is the growth method within your group. Direction on the right is the growth method between groups.'], mKey, 'RaidDirec', 1, UpdateRaidFrameDirection)
+end
+
+local function UpdateSimpleRaidFrameSize()
+    for _, frame in pairs(oUF.objects) do
+        if frame.raidType == 'simple' then
+            local scale = C.DB.Unitframe.SMRScale / 10
+            local frameWidth = 100 * scale
+            local frameHeight = 20 * scale
+            local powerHeight = 2 * scale
+            local healthHeight = frameHeight - powerHeight
+            frame:SetSize(frameWidth, frameHeight)
+            frame.Health:SetHeight(healthHeight)
+            frame.Power:SetHeight(powerHeight)
+        end
+    end
+
+    if UNITFRAME.UpdateSimpleModeHeader then
+        UNITFRAME:UpdateSimpleModeHeader()
+    end
+end
+
+function GUI:SetupSimpleRaidFrame(parent)
+    local guiName = 'FreeUIGUISetupSimpleRaidFrame'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+
+    local mKey = 'Unitframe'
+    local db = C.CharacterSettings.Unitframe
+
+    local datas = {
+        [1] = {
+            key = 'SMRScale',
+            value = db.SMRScale,
+            text = L['Scale'],
+            min = 6,
+            max = 20
+        },
+        [2] = {
+            key = 'SMRPerCol',
+            value = db.SMRPerCol,
+            text = L['Units Per Column'],
+            min = 5,
+            max = 40
+        },
+        [3] = {
+            key = 'SMRGroups',
+            value = db.SMRGroups,
+            text = L['Groups to Show'],
+            min = 1,
+            max = 8
+        }
+    }
+
+    local offset = -10
+    for _, v in ipairs(datas) do
+        CreateGroupTitle(scroll, L['Simple Raid Frames'], offset)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdateSimpleRaidFrameSize)
+        offset = offset - 65
+    end
+
+    local options = {}
+    for i = 1, 4 do
+        options[i] = UNITFRAME.RaidDirections[i].name
+    end
+
+    CreateOptionDropdown(scroll, L['Growth Direction'], offset - 60, options, nil, mKey, 'SMRDirec', 1)
+    CreateOptionDropdown(scroll, L['Group By'], offset - 110, {_G.GROUP, _G.CLASS, _G.ROLE}, nil, mKey, 'SMRGroupBy', 1, UpdateSimpleRaidFrameSize)
 end
 
 function GUI:SetupUnitFrameSize(parent)
@@ -1846,97 +2064,6 @@ function GUI:SetupArenaFrameSize(parent)
     end
 end
 
-function GUI:SetupGroupFrameSize(parent)
-    local guiName = 'FreeUIGUIGroupFrameSize'
-    TogglePanel(guiName)
-    if extraGUIs[guiName] then
-        return
-    end
-
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
-
-    local mKey = 'Unitframe'
-    local db = C.CharacterSettings.Unitframe
-
-    local partyDatas = {
-        [1] = {
-            key = 'PartyWidth',
-            value = db.PartyWidth,
-            text = L['Width'],
-            min = 10,
-            max = 200
-        },
-        [2] = {
-            key = 'PartyHealthHeight',
-            value = db.PartyHealthHeight,
-            text = L['Health Height'],
-            min = 1,
-            max = 200
-        },
-        [3] = {
-            key = 'PartyPowerHeight',
-            value = db.PartyPowerHeight,
-            text = L['Power Height'],
-            min = 1,
-            max = 200
-        },
-        [4] = {
-            key = 'PartyGap',
-            value = '6',
-            text = L['Spacing'],
-            min = 4,
-            max = 20
-        }
-    }
-
-    local raidDatas = {
-        [1] = {
-            key = 'RaidWidth',
-            value = db.RaidWidth,
-            text = L['Width'],
-            min = 40,
-            max = 400
-        },
-        [2] = {
-            key = 'PartyHealthHeight',
-            value = db.PartyHealthHeight,
-            text = L['Health Height'],
-            min = 1,
-            max = 40
-        },
-        [3] = {
-            key = 'PartyPowerHeight',
-            value = db.PartyPowerHeight,
-            text = L['Power Height'],
-            min = 1,
-            max = 40
-        },
-        [4] = {
-            key = 'RaidGap',
-            value = db.RaidGap,
-            text = L['Spacing'],
-            min = 4,
-            max = 20
-        }
-    }
-
-    local offset = -10
-    for _, v in ipairs(partyDatas) do
-        CreateGroupTitle(scroll, L['Party Frame'], offset)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50)
-        offset = offset - 65
-    end
-
-    scroll.groupTitle = nil
-
-    for _, v in ipairs(raidDatas) do
-        CreateGroupTitle(scroll, L['Raid Frame'], offset - 50)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 100)
-        offset = offset - 65
-    end
-end
-
 function GUI:SetupClassPowerSize(parent)
     local guiName = 'FreeUIGUIClassPowerSize'
     TogglePanel(guiName)
@@ -2071,6 +2198,10 @@ function GUI:SetupUnitFrameRangeCheck(parent)
     CreateSlider(scroll, 'Unitframe', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset - 50)
 end
 
+local function UpdateRaidTargetIndicator()
+    UNITFRAME:UpdateRaidTargetIndicator()
+end
+
 function GUI:SetupRaidTargetIndicator(parent)
     local guiName = 'FreeUIGUIRaidTargetIndicator'
     TogglePanel(guiName)
@@ -2080,7 +2211,7 @@ function GUI:SetupRaidTargetIndicator(parent)
 
     local panel = CreateExtraGUI(parent, guiName)
     local scroll = GUI:CreateScroll(panel, 220, 540)
-    local db = C.CharacterSettings.Unitframe
+    local db = C.CharacterSettings.Nameplate
 
     local datas = {
         [1] = {
@@ -2104,7 +2235,7 @@ function GUI:SetupRaidTargetIndicator(parent)
     local offset = -10
     for _, v in ipairs(datas) do
         CreateGroupTitle(scroll, L['Raid Target Icon'], offset)
-        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50)
+        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateRaidTargetIndicator)
         offset = offset - 65
     end
 end
@@ -2301,19 +2432,8 @@ function GUI:SetupPartyWatcher(parent)
     local frame = panel.bg
     local options = {}
 
-    options[1] = GUI:CreateEditbox(frame, L['SpellID'], 10, -30, L["|nEnter spell ID, must be a number.|nYou can get ID on spell's tooltip.|nSpell name is not supported."], 107, 24)
-    options[2] =
-        GUI:CreateEditbox(
-        frame,
-        L['Spell Cooldown'],
-        122,
-        -30,
-        L[
-            "|nEnter the spell's cooldown duration.|nParty watcher only support regular spells and abilities.For spells like 'Aspect of the Wild' (BM Hunter), you need to sync cooldown with your party members."
-        ],
-        108,
-        24
-    )
+    options[1] = GUI:CreateEditbox(frame, L['SpellID'], 10, -30, L["Enter spell ID, must be a number.|nYou can get ID on spell's tooltip.|nSpell name is not supported."], 107, 24)
+    options[2] = GUI:CreateEditbox(frame, L['Spell Cooldown'], 122, -30, L["Enter the spell's cooldown duration.|nParty watcher only support regular spells and abilities.|nFor spells like 'Aspect of the Wild' (BM Hunter), you need to sync cooldown with your party members."], 108, 24)
 
     local scroll = GUI:CreateScroll(frame, 200, 440)
     scroll:ClearAllPoints()
@@ -2492,17 +2612,7 @@ function GUI:SetupRaidDebuffs(parent)
 
     options[3] = GUI:CreateEditbox(frame, L['SpellID'], 10, -90, L["|nEnter spell ID, must be a number.|nYou can get ID on spell's tooltip.|nSpell name is not supported."], 107, 24)
     options[4] =
-        GUI:CreateEditbox(
-        frame,
-        L['Priority'],
-        123,
-        -90,
-        L[
-            "|nSpell's priority when visible.|nWhen multiple spells exist, it only remain the one that owns highest priority.|nDefault priority is 2, if you leave it blank.|nThe maximun priority is 6, and the icon would flash if you set so."
-        ],
-        107,
-        24
-    )
+        GUI:CreateEditbox(frame, L['Priority'], 123, -90, L["|nSpell's priority when visible.|nWhen multiple spells exist, it only remain the one that owns highest priority.|nDefault priority is 2, if you leave it blank.|nThe maximun priority is 6, and the icon would flash if you set so."], 107, 24)
 
     local function analyzePrio(priority)
         priority = priority or 2
