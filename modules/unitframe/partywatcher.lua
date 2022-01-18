@@ -52,6 +52,17 @@ function UNITFRAME:HandleCDMessage(...)
     end
 end
 
+local function SendPartySyncMsg(text)
+    if IsInRaid() or not IsInGroup() then
+        return
+    end
+    if not IsInGroup(_G.LE_PARTY_CATEGORY_HOME) and IsInGroup(_G.LE_PARTY_CATEGORY_INSTANCE) then
+        C_ChatInfo.SendAddonMessage('ZenTracker', text, 'INSTANCE_CHAT')
+    else
+        C_ChatInfo.SendAddonMessage('ZenTracker', text, 'PARTY')
+    end
+end
+
 local lastUpdate = 0
 function UNITFRAME:SendCDMessage()
     local thisTime = GetTime()
@@ -65,8 +76,7 @@ function UNITFRAME:SendCDMessage()
                     if remaining < 0 then
                         remaining = 0
                     end
-                    C_ChatInfo.SendAddonMessage('ZenTracker', string.format('3:U:%s:%d:%.2f:%.2f:%s', UNITFRAME.myGUID, spellID, duration, remaining, '-'), IsPartyLFG() and 'INSTANCE_CHAT' or 'PARTY')
-                -- sync to others
+                    SendPartySyncMsg(string.format('3:U:%s:%d:%.2f:%.2f:%s', UNITFRAME.myGUID, spellID, duration, remaining, '-')) -- sync to others
                 end
             end
         end
@@ -76,11 +86,10 @@ end
 
 local lastSyncTime = 0
 function UNITFRAME:UpdateSyncStatus()
-    if IsInGroup() and not IsInRaid() and C.DB.Unitframe.PartyWatcherSync then
+    if IsInGroup() and not IsInRaid() and C.DB.Unitframe.PartyFrame then
         local thisTime = GetTime()
         if thisTime - lastSyncTime > 5 then
-            C_ChatInfo.SendAddonMessage('ZenTracker', string.format('3:H:%s:0::0:1', UNITFRAME.myGUID), IsPartyLFG() and 'INSTANCE_CHAT' or 'PARTY')
-            -- handshake to ZenTracker
+            SendPartySyncMsg(string.format('3:H:%s:0::0:1', UNITFRAME.myGUID)) -- handshake to ZenTracker
             lastSyncTime = thisTime
         end
         F:RegisterEvent('SPELL_UPDATE_COOLDOWN', UNITFRAME.SendCDMessage)
@@ -102,42 +111,68 @@ function UNITFRAME:SyncWithZenTracker()
     F:RegisterEvent('GROUP_ROSTER_UPDATE', UNITFRAME.UpdateSyncStatus)
 end
 
+local function UpdateWatcherAnchor(element)
+    local self = element.__owner
+    local horizon = C.DB.Unitframe.PartyDirec > 2
+    local otherSide = C.DB.Unitframe.PartyWatcherOnRight
+    local relF = horizon and 'BOTTOMLEFT' or 'RIGHT'
+    local relT = horizon and 'TOPLEFT' or 'LEFT'
+    local xOffset = horizon and 0 or -5
+    local yOffset = horizon and 5 or 0
+    local margin = horizon and 3 or -3
+    if otherSide then
+        relF = horizon and 'TOPLEFT' or 'LEFT'
+        relT = horizon and 'BOTTOMLEFT' or 'RIGHT'
+        xOffset = horizon and 0 or 5
+        yOffset = horizon and -5 or 0
+        margin = 3
+    end
+    local rel1 = not horizon and not otherSide and 'RIGHT' or 'LEFT'
+    local rel2 = not horizon and not otherSide and 'LEFT' or 'RIGHT'
+    local iconSize = horizon and (self:GetWidth() - 2 * math.abs(margin)) / 3 or self:GetHeight() * .8
+    if iconSize > 40 then
+        iconSize = 40
+    end
+
+    for i = 1, element.__max do
+        local bu = element[i]
+        bu:SetSize(iconSize, iconSize)
+        bu:ClearAllPoints()
+        if i == 1 then
+            bu:SetPoint(relF, self, relT, xOffset, yOffset)
+        elseif i == 4 and horizon then
+            bu:SetPoint(relF, element[i - 3], relT, 0, otherSide and -margin or margin)
+        else
+            bu:SetPoint(rel1, element[i - 1], rel2, margin, 0)
+        end
+    end
+end
+
 function UNITFRAME:CreatePartyWatcher(self)
     if not C.DB.Unitframe.PartyWatcher then
         return
     end
 
     local buttons = {}
-    local maxIcons = 4
-    local iconSize = (C.DB.Unitframe.PartyHealthHeight + C.DB.Unitframe.PartyPowerHeight + C.Mult) * .75
-    local partyHorizon = C.DB.Unitframe.PartyHorizon
+    local maxIcons = 6
 
     for i = 1, maxIcons do
         local bu = CreateFrame('Frame', nil, self)
-        bu:SetSize(iconSize, iconSize)
         F.AuraIcon(bu)
         bu.CD:SetReverse(false)
-        if i == 1 then
-            if partyHorizon then
-                bu:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -3)
-            else
-                bu:SetPoint('RIGHT', self, 'LEFT', -3, 0)
-            end
-        else
-            if partyHorizon then
-                bu:SetPoint('LEFT', buttons[i - 1], 'RIGHT', 3, 0)
-            else
-                bu:SetPoint('RIGHT', buttons[i - 1], 'LEFT', -3, 0)
-            end
-        end
         bu:Hide()
 
         buttons[i] = bu
     end
 
+    buttons.__owner = self
     buttons.__max = maxIcons
+
+    UpdateWatcherAnchor(buttons)
+    buttons.UpdateAnchor = UpdateWatcherAnchor
     buttons.PartySpells = UNITFRAME.PartySpellsList
     buttons.TalentCDFix = C.TalentCDFixList
+
     self.PartyWatcher = buttons
     if C.DB.Unitframe.PartyWatcherSync then
         self.PartyWatcher.PostUpdate = UNITFRAME.PartyWatcherPostUpdate

@@ -12,7 +12,7 @@
     <Script file="auras.lua"/>
     <Script file="cornerbuffs.lua"/>
     <Script file="indicator.lua"/>
-    <Script file="partycooldown.lua"/>
+    <Script file="partywatcher.lua"/>
     <Script file="portrait.lua"/>
     <Script file="raiddebuffs.lua"/>
     <Script file="range.lua"/>
