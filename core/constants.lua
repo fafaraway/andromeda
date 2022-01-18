@@ -125,14 +125,47 @@ C.Assets = {
         Regular = C.AssetsPath .. 'fonts\\regular.ttf',
         Condensed = C.AssetsPath .. 'fonts\\condensed.ttf',
         Bold = C.AssetsPath .. 'fonts\\bold.ttf',
-        Heavy = C.AssetsPath .. 'fonts\\heavy.ttf',
-        Header = C.AssetsPath .. 'fonts\\header.ttf',
         Combat = C.AssetsPath .. 'fonts\\combat.ttf',
+        Header = C.AssetsPath .. 'fonts\\header.ttf',
         Pixel = C.AssetsPath .. 'fonts\\pixel.ttf',
         Square = C.AssetsPath .. 'fonts\\square.ttf',
         Roadway = C.AssetsPath .. 'fonts\\roadway.ttf',
     },
 }
+
+do
+    if C.IsDeveloper then
+        C.Assets.Fonts.Regular = 'Fonts\\FreeUI\\regular.ttf'
+        C.Assets.Fonts.Condensed = 'Fonts\\FreeUI\\condensed.ttf'
+        C.Assets.Fonts.Bold = 'Fonts\\FreeUI\\bold.ttf'
+        C.Assets.Fonts.Combat = 'Fonts\\FreeUI\\combat.ttf'
+        C.Assets.Fonts.Header = 'Fonts\\FreeUI\\header.ttf'
+    elseif GetLocale() == 'zhCN' then
+        C.Assets.Fonts.Regular = 'Fonts\\ARKai_T.ttf'
+        C.Assets.Fonts.Condensed = 'Fonts\\ARKai_T.ttf'
+        C.Assets.Fonts.Bold = 'Fonts\\ARHei.ttf'
+        C.Assets.Fonts.Combat = 'Fonts\\ARHei.ttf'
+        C.Assets.Fonts.Header = 'Fonts\\ARKai_T.ttf'
+    elseif GetLocale() == 'zhTW' then
+        C.Assets.Fonts.Regular = 'Fonts\\blei00d.ttf'
+        C.Assets.Fonts.Condensed = 'Fonts\\blei00d.ttf'
+        C.Assets.Fonts.Bold = 'Fonts\\blei00d.ttf'
+        C.Assets.Fonts.Combat = 'Fonts\\blei00d.ttf'
+        C.Assets.Fonts.Header = 'Fonts\\blei00d.ttf'
+    elseif GetLocale() == 'koKR' then
+        C.Assets.Fonts.Regular = 'Fonts\\2002.ttf'
+        C.Assets.Fonts.Condensed = 'Fonts\\2002.ttf'
+        C.Assets.Fonts.Bold = 'Fonts\\2002B.ttf'
+        C.Assets.Fonts.Combat = 'Fonts\\2002B.ttf'
+        C.Assets.Fonts.Header = 'Fonts\\2002.ttf'
+    elseif GetLocale() == 'ruRU' then
+        C.Assets.Fonts.Regular = 'Fonts\\FRIZQT___CYR.ttf'
+        C.Assets.Fonts.Condensed = 'Fonts\\FRIZQT___CYR.ttf'
+        C.Assets.Fonts.Bold = 'Fonts\\FRIZQT___CYR.ttf'
+        C.Assets.Fonts.Combat = 'Fonts\\FRIZQT___CYR.ttf'
+        C.Assets.Fonts.Header = 'Fonts\\FRIZQT___CYR.ttf'
+    end
+end
 
 C.ClassList = {}
 for k, v in pairs(_G.LOCALIZED_CLASS_NAMES_MALE) do

@@ -1,50 +1,11 @@
 local F, C = unpack(select(2, ...))
 
-do
-    if C.IsDeveloper then
-        C.Assets.Fonts.Regular = 'Fonts\\FreeUI\\regular.ttf'
-        C.Assets.Fonts.Condensed = 'Fonts\\FreeUI\\condensed.ttf'
-        C.Assets.Fonts.Bold = 'Fonts\\FreeUI\\bold.ttf'
-        C.Assets.Fonts.Heavy = 'Fonts\\FreeUI\\heavy.ttf'
-        C.Assets.Fonts.Header = 'Fonts\\FreeUI\\header.ttf'
-        C.Assets.Fonts.Combat = 'Fonts\\FreeUI\\combat.ttf'
-    elseif GetLocale() == 'zhCN' then
-        C.Assets.Fonts.Regular = 'Fonts\\ARKai_T.ttf'
-        C.Assets.Fonts.Condensed = 'Fonts\\ARKai_T.ttf'
-        C.Assets.Fonts.Bold = 'Fonts\\ARHei.ttf'
-        C.Assets.Fonts.Heavy = 'Fonts\\ARHei.ttf'
-        C.Assets.Fonts.Header = 'Fonts\\ARKai_T.ttf'
-        C.Assets.Fonts.Combat = 'Fonts\\ARKai_C.ttf'
-    elseif GetLocale() == 'zhTW' then
-        C.Assets.Fonts.Regular = 'Fonts\\blei00d.ttf'
-        C.Assets.Fonts.Condensed = 'Fonts\\blei00d.ttf'
-        C.Assets.Fonts.Bold = 'Fonts\\blei00d.ttf'
-        C.Assets.Fonts.Heavy = 'Fonts\\blei00d.ttf'
-        C.Assets.Fonts.Header = 'Fonts\\blei00d.ttf'
-        C.Assets.Fonts.Combat = 'Fonts\\bKAI00M.ttf'
-    elseif GetLocale() == 'koKR' then
-        C.Assets.Fonts.Regular = 'Fonts\\2002.ttf'
-        C.Assets.Fonts.Condensed = 'Fonts\\2002.ttf'
-        C.Assets.Fonts.Bold = 'Fonts\\2002B.ttf'
-        C.Assets.Fonts.Heavy = 'Fonts\\2002B.ttf'
-        C.Assets.Fonts.Header = 'Fonts\\2002.ttf'
-        C.Assets.Fonts.Combat = 'Fonts\\K_Damage.ttf'
-    elseif GetLocale() == 'ruRU' then
-        C.Assets.Fonts.Regular = 'Fonts\\FRIZQT___CYR.ttf'
-        C.Assets.Fonts.Condensed = 'Fonts\\FRIZQT___CYR.ttf'
-        C.Assets.Fonts.Bold = 'Fonts\\FRIZQT___CYR.ttf'
-        C.Assets.Fonts.Heavy = 'Fonts\\FRIZQT___CYR.ttf'
-        C.Assets.Fonts.Header = 'Fonts\\FRIZQT___CYR.ttf'
-        C.Assets.Fonts.Combat = 'Fonts\\FRIZQT___CYR.ttf'
-    end
-end
-
 local NORMAL = C.Assets.Fonts.Regular
 local BOLD = C.Assets.Fonts.Bold
-local HEADER = C.Assets.Fonts.Header
 local COMBAT = C.Assets.Fonts.Combat
+local HEADER = C.Assets.Fonts.Header
 
-local function ReplaceFont(obj, font, size, flag)
+local function ReplaceFont(obj, font, size, flag, shadow)
     if not font then
         if C.IsDeveloper then
             F:Debug('UNKNOWN FONT.')
@@ -52,14 +13,24 @@ local function ReplaceFont(obj, font, size, flag)
         return
     end
 
-    local origFont, origSize, origFlag = obj:GetFont()
+    local outline = _G.FREE_ADB.FontOutline
+    local origFont, origSize = obj:GetFont()
     font = font or origFont
     size = size or origSize
-    flag = flag or origFlag
 
-    obj:SetFont(font, size, flag)
-    -- obj:SetShadowColor(0, 0, 0, 1)
-    -- obj:SetShadowOffset(1, -1)
+    if outline then
+        obj:SetFont(font, size, 'OUTLINE')
+    else
+        obj:SetFont(font, size, flag and 'OUTLINE')
+    end
+
+    if shadow then
+        obj:SetShadowColor(0, 0, 0, 1)
+        obj:SetShadowOffset(2, -2)
+    else
+        obj:SetShadowColor(0, 0, 0, 1)
+        obj:SetShadowOffset(1, -1)
+    end
 end
 
 local function SetupBlizFonts()
@@ -160,26 +131,26 @@ local function SetupBlizFonts()
     ReplaceFont(_G.Fancy32Font, HEADER, 32)
     ReplaceFont(_G.Fancy48Font, HEADER, 48)
 
-    ReplaceFont(_G.NumberFont_GameNormal, NORMAL, 12)
-    ReplaceFont(_G.NumberFont_OutlineThick_Mono_Small, NORMAL, 11)
-    ReplaceFont(_G.Number12Font_o1, NORMAL, 11)
-    ReplaceFont(_G.NumberFont_Small, NORMAL, 11)
-    ReplaceFont(_G.Number11Font, NORMAL, 10)
-    ReplaceFont(_G.Number12Font, NORMAL, 11)
-    ReplaceFont(_G.Number13Font, NORMAL, 12)
-    ReplaceFont(_G.Number15Font, NORMAL, 14)
-    ReplaceFont(_G.Number16Font, NORMAL, 15)
-    ReplaceFont(_G.Number18Font, NORMAL, 17)
-    ReplaceFont(_G.NumberFont_Normal_Med, NORMAL, 13)
-    ReplaceFont(_G.NumberFont_Outline_Med, NORMAL, 13)
-    ReplaceFont(_G.NumberFont_Outline_Large, NORMAL, 16)
-    ReplaceFont(_G.NumberFont_Outline_Huge, HEADER, 20)
-    ReplaceFont(_G.NumberFont_Shadow_Tiny, NORMAL, 10)
-    ReplaceFont(_G.NumberFont_Shadow_Small, NORMAL, 12)
-    ReplaceFont(_G.NumberFont_Shadow_Med, NORMAL, 14)
-    ReplaceFont(_G.NumberFont_Shadow_Large, HEADER, 20)
-    ReplaceFont(_G.PriceFont, NORMAL, 14)
-    ReplaceFont(_G.NumberFontNormalLargeRight, NORMAL, 14)
+    ReplaceFont(_G.NumberFont_GameNormal, NORMAL, 12, true)
+    ReplaceFont(_G.NumberFont_OutlineThick_Mono_Small, NORMAL, 11, true)
+    ReplaceFont(_G.Number12Font_o1, NORMAL, 11, true)
+    ReplaceFont(_G.NumberFont_Small, NORMAL, 11, true)
+    ReplaceFont(_G.Number11Font, NORMAL, 10, true)
+    ReplaceFont(_G.Number12Font, NORMAL, 11, true)
+    ReplaceFont(_G.Number13Font, NORMAL, 12, true)
+    ReplaceFont(_G.Number15Font, NORMAL, 14, true)
+    ReplaceFont(_G.Number16Font, NORMAL, 15, true)
+    ReplaceFont(_G.Number18Font, NORMAL, 17, true)
+    ReplaceFont(_G.NumberFont_Normal_Med, NORMAL, 13, true)
+    ReplaceFont(_G.NumberFont_Outline_Med, NORMAL, 13, true)
+    ReplaceFont(_G.NumberFont_Outline_Large, NORMAL, 16, true)
+    ReplaceFont(_G.NumberFont_Outline_Huge, HEADER, 20, true)
+    ReplaceFont(_G.NumberFont_Shadow_Tiny, NORMAL, 10, true)
+    ReplaceFont(_G.NumberFont_Shadow_Small, NORMAL, 12, true)
+    ReplaceFont(_G.NumberFont_Shadow_Med, NORMAL, 14, true)
+    ReplaceFont(_G.NumberFont_Shadow_Large, HEADER, 20, true)
+    ReplaceFont(_G.PriceFont, NORMAL, 14, true)
+    ReplaceFont(_G.NumberFontNormalLargeRight, NORMAL, 14, true)
 
     ReplaceFont(_G.SplashHeaderFont, HEADER, 24)
 
@@ -237,7 +208,7 @@ local function SetupBlizFonts()
     ReplaceFont(_G.SystemFont_NamePlateCastBar, NORMAL, 10)
 
     ReplaceFont(_G.ErrorFont, BOLD, 14)
-    ReplaceFont(_G.CombatTextFont, COMBAT, 200)
+    ReplaceFont(_G.CombatTextFont, COMBAT, 200) -- improved text quality at high resolution ???
 
     ReplaceFont(_G.RaidWarningFrame.slot1, BOLD, 20)
     ReplaceFont(_G.RaidWarningFrame.slot2, BOLD, 20)
