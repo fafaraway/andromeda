@@ -71,6 +71,7 @@ local function SetupCVars()
     SetCVar('breakUpLargeNumbers', 1)
     SetCVar('TargetNearestUseNew', 1)
     SetCVar('advancedCombatLogging', 1)
+    SetCVar('predictedHealth', 1)
 
     -- combat text
     SetCVar('enableFloatingCombatText', 0)
@@ -138,7 +139,6 @@ local function UpdateUIScale()
 end
 
 local function SetupActionbars()
-
 end
 
 local function SetupChatFrame()
@@ -244,7 +244,13 @@ function INSTALL:HelloWorld()
         progressBar:SetValue(600)
         PlaySoundFile('Sound\\Spells\\LevelUp.wav')
         headerText:SetText(L['Success!'])
-        bodyText:SetText(F:StyleAddonName(L['The installation has completed successfully.|n|nPlease click the Finish button below to reload the interface.|n|nKeep in mind, you can enter |cffe9c55d/free|r to get detailed help or directly enter |cffe9c55d/free config|r to open the config panel and change various settings.']))
+        bodyText:SetText(
+            F:StyleAddonName(
+                L[
+                    'The installation has completed successfully.|n|nPlease click the Finish button below to reload the interface.|n|nKeep in mind, you can enter |cffe9c55d/free|r to get detailed help or directly enter |cffe9c55d/free config|r to open the config panel and change various settings.'
+                ]
+            )
+        )
         progressBarText:SetText('6/6')
         leftButton:Hide()
         rightButton:SetText(L['Finish'])
@@ -332,7 +338,13 @@ function INSTALL:HelloWorld()
         progressBar:SetValue(100)
         progressBar:SetStatusBarColor(C.r, C.g, C.b)
         headerText:SetText(L['Basic Settings'])
-        bodyText:SetText(F:StyleAddonName(L['These installation steps will adjust various suitable settings for %AddonName%.|n|nThe first step will adjust some |cffe9c55dCVars|r settings.|n|nClick the continue button below to apply the settings, or click the skip button to skip these settings.']))
+        bodyText:SetText(
+            F:StyleAddonName(
+                L[
+                    'These installation steps will adjust various suitable settings for %AddonName%.|n|nThe first step will adjust some |cffe9c55dCVars|r settings.|n|nClick the continue button below to apply the settings, or click the skip button to skip these settings.'
+                ]
+            )
+        )
         progressBarText:SetText('1/6')
 
         leftButton:Show()

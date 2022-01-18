@@ -1363,10 +1363,16 @@ do
     function F:ReskinFilterButton()
         F.StripTextures(self)
         F.Reskin(self)
-        self.Text:SetPoint('CENTER')
-        F.SetupArrow(self.Icon, 'right')
-        self.Icon:SetPoint('RIGHT')
-        self.Icon:SetSize(14, 14)
+
+        if self.Text then
+            self.Text:SetPoint('CENTER')
+        end
+
+        if self.Icon then
+            F.SetupArrow(self.Icon, 'right')
+            self.Icon:SetPoint('RIGHT')
+            self.Icon:SetSize(14, 14)
+        end
     end
 
     function F:ReskinNavBar()
@@ -1738,7 +1744,8 @@ do
         if checkButton then
             checkButton:SetFrameLevel(self:GetFrameLevel() + 2)
             checkButton:SetPoint('BOTTOMLEFT', -2, -2)
-            F.ReskinCheck(checkButton)
+            checkButton:SetSize(20, 20)
+            F.ReskinCheck(checkButton, true)
         end
 
         local shortageBorder = self.shortageBorder
@@ -1806,6 +1813,29 @@ do
             self.Spark:SetAlpha(.8)
             self.Spark:SetPoint('TOPLEFT', self:GetStatusBarTexture(), 'TOPRIGHT', -10, 10)
             self.Spark:SetPoint('BOTTOMRIGHT', self:GetStatusBarTexture(), 'BOTTOMRIGHT', 10, -10)
+        end
+    end
+
+    function F:CreateAndUpdateBarTicks(bar, ticks, numTicks)
+        for i = 1, #ticks do
+            ticks[i]:Hide()
+        end
+
+        if numTicks and numTicks > 0 then
+            local width, height = bar:GetSize()
+            local delta = width / numTicks
+            for i = 1, numTicks - 1 do
+                if not ticks[i] then
+                    ticks[i] = bar:CreateTexture(nil, 'OVERLAY')
+                    ticks[i]:SetTexture(assets.statusbar_tex)
+                    ticks[i]:SetVertexColor(0, 0, 0, .7)
+                    ticks[i]:SetWidth(C.Mult)
+                    ticks[i]:SetHeight(height)
+                end
+                ticks[i]:ClearAllPoints()
+                ticks[i]:SetPoint('RIGHT', bar, 'LEFT', delta * i, 0)
+                ticks[i]:Show()
+            end
         end
     end
 
@@ -2133,40 +2163,6 @@ do
         end
     end
 
-    local function Size(frame, width, height, ...)
-        local w = F:Scale(width)
-        frame:SetSize(w, (height and F:Scale(height)) or w, ...)
-    end
-
-    local function Width(frame, width, ...)
-        frame:SetWidth(F:Scale(width), ...)
-    end
-
-    local function Height(frame, height, ...)
-        frame:SetHeight(F:Scale(height), ...)
-    end
-
-    local function Point(obj, arg1, arg2, arg3, arg4, arg5, ...)
-        if not arg2 then
-            arg2 = obj:GetParent()
-        end
-
-        if type(arg2) == 'number' then
-            arg2 = F:Scale(arg2)
-        end
-        if type(arg3) == 'number' then
-            arg3 = F:Scale(arg3)
-        end
-        if type(arg4) == 'number' then
-            arg4 = F:Scale(arg4)
-        end
-        if type(arg5) == 'number' then
-            arg5 = F:Scale(arg5)
-        end
-
-        obj:SetPoint(arg1, arg2, arg3, arg4, arg5, ...)
-    end
-
     local function SetOutside(obj, anchor, xOffset, yOffset, anchor2, noScale)
         if not anchor then
             anchor = obj:GetParent()
@@ -2178,8 +2174,8 @@ do
         if not yOffset then
             yOffset = C.Mult
         end
-        local x = (noScale and xOffset) or F:Scale(xOffset)
-        local y = (noScale and yOffset) or F:Scale(yOffset)
+        local x = (noScale and xOffset) or xOffset
+        local y = (noScale and yOffset) or yOffset
 
         if F:SetPointsRestricted(obj) or obj:GetPoint() then
             obj:ClearAllPoints()
@@ -2201,8 +2197,8 @@ do
         if not yOffset then
             yOffset = C.Mult
         end
-        local x = (noScale and xOffset) or F:Scale(xOffset)
-        local y = (noScale and yOffset) or F:Scale(yOffset)
+        local x = (noScale and xOffset) or xOffset
+        local y = (noScale and yOffset) or yOffset
 
         if F:SetPointsRestricted(obj) or obj:GetPoint() then
             obj:ClearAllPoints()

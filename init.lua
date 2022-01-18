@@ -183,6 +183,16 @@ end
 F:RegisterEvent(
     'PLAYER_LOGIN',
     function()
+        if C.DB.InstallationComplete then
+            F:SetupUIScale()
+            F:RegisterEvent('UI_SCALE_CHANGED', F.UpdatePixelScale)
+
+            _G.Display_UseUIScale:Kill()
+            _G.Display_UIScaleSlider:Kill()
+        else
+            F:SetupUIScale(true)
+        end
+
         for _, module in next, initQueue do
             if module.OnLogin then
                 module:OnLogin()

@@ -42,7 +42,7 @@ function GUI:CreateAboutFrame(parent)
     release:SetSize(360, 200)
     release:SetPoint('TOP', 0, -20)
 
-    F.CreateFS(release, C.Assets.Fonts.Bold, 14, nil, L['Stable Release'], nil, true, 'TOP', 0, -10)
+    F.CreateFS(release, C.Assets.Fonts.Header, 18, nil, L['Stable Release'], nil, true, 'TOP', 0, -10)
 
     GUI:CreateGradientLine(release, 160, -80, -32, 80, -32)
 
@@ -52,7 +52,7 @@ function GUI:CreateAboutFrame(parent)
     dev:SetSize(360, 200)
     dev:SetPoint('TOP', 0, -160)
 
-    F.CreateFS(dev, C.Assets.Fonts.Bold, 14, nil, L['Development Repository'], nil, true, 'TOP', 0, -10)
+    F.CreateFS(dev, C.Assets.Fonts.Header, 18, nil, L['Development Repository'], nil, true, 'TOP', 0, -10)
 
     GUI:CreateGradientLine(dev, 160, -80, -32, 80, -32)
 
@@ -62,7 +62,7 @@ function GUI:CreateAboutFrame(parent)
     feedback:SetSize(360, 200)
     feedback:SetPoint('TOP', 0, -300)
 
-    F.CreateFS(feedback, C.Assets.Fonts.Bold, 14, nil, L['Feedback'], nil, true, 'TOP', 0, -10)
+    F.CreateFS(feedback, C.Assets.Fonts.Header, 18, nil, L['Feedback'], nil, true, 'TOP', 0, -10)
 
     GUI:CreateGradientLine(feedback, 160, -80, -32, 80, -32)
 

@@ -25,29 +25,59 @@ local cmdList = {
     '/bind - Launch quick keybind mode'
 }
 
-local function PrintCommand()
-    for _, v in ipairs(cmdList) do
-        local command, desc = string.split('-', tostring(v))
-        print(string.format('%s|r - %s|r', C.YellowColor .. command, C.BlueColor .. desc))
-    end
+local function CreateHelpFrame()
+    local f = CreateFrame('Frame', 'FreeUIHelpFrame', _G.UIParent, 'BackdropTemplate')
+    f:SetSize(400, 400)
+    f:SetPoint('CENTER')
+    f:SetFrameStrata('HIGH')
+    F.SetBD(f)
+end
+
+local function Commands()
+    -- for _, v in ipairs(cmdList) do
+    --     local command, desc = string.split('-', tostring(v))
+    --     print(string.format('%s|r - %s|r', C.YellowColor .. command, C.BlueColor .. desc))
+    -- end
+
+    CreateHelpFrame()
+end
+
+local function Version()
+    print(string.format(C.AddonName .. C.MyColor.. '%s', C.AddonVersion))
+end
+
+local function Reset()
+    _G.StaticPopup_Show('FREEUI_RESET_ALL')
+end
+
+local function Install()
+    F:GetModule('Installation'):HelloWorld()
+end
+
+local function Unlock()
+    F:MoverConsole()
+end
+
+local function GUI()
+    F.ToggleGUI()
 end
 
 _G.SlashCmdList.FREEUI = function(str)
     local cmd, _ = string.split(' ', str:lower(), 2)
     if cmd == 'reset' then
-        _G.StaticPopup_Show('FREEUI_RESET_ALL')
+        Reset()
     elseif cmd == 'install' then
-        F:GetModule('Installation'):HelloWorld()
-    elseif cmd == 'unlock' then
-        F:MoverConsole()
-    elseif cmd == 'config' then
-        F.ToggleGUI()
+        Install()
+    elseif cmd == 'unlock' or cmd == 'layout' then
+        Unlock()
+    elseif cmd == 'gui' or cmd == 'config' then
+        GUI()
     elseif cmd == 'help' then
-        PrintCommand()
+        Commands()
     elseif cmd == 'ver' or cmd == 'version' then
-        F:Print(C.AddonVersion)
+        Version()
     else
-        PrintCommand()
+        Commands()
     end
 end
 _G.SLASH_FREEUI1 = '/freeui'
