@@ -44,7 +44,7 @@ tinsert(
             unit.HealthBarBG:Hide()
             unit.HealthBarFrame:Hide()
             unit.healthBarWidth = 250
-            unit.ActualHealthBar:SetTexture(C.Assets.Textures.Norm)
+            unit.ActualHealthBar:SetTexture(C.Assets.Textures.SBNormal)
             unit.healthBg = F.SetBD(unit.ActualHealthBar)
             unit.healthBg:ClearAllPoints()
             unit.healthBg:SetWidth(252)
@@ -118,7 +118,7 @@ tinsert(
             unit.healthBarWidth = 36
             unit.ActualHealthBar:ClearAllPoints()
             unit.ActualHealthBar:SetPoint('TOPLEFT', unit.Icon, 'BOTTOMLEFT', 1, -4)
-            unit.ActualHealthBar:SetTexture(C.Assets.Textures.Norm)
+            unit.ActualHealthBar:SetTexture(C.Assets.Textures.SBNormal)
             unit.healthBg = F.SetBD(unit.ActualHealthBar)
             unit.healthBg:SetPoint('TOPLEFT', unit.ActualHealthBar, -1, 1)
             unit.healthBg:SetPoint('BOTTOMRIGHT', unit.ActualHealthBar, 'TOPLEFT', 37, -8)
@@ -247,7 +247,7 @@ tinsert(
                     end
 
                     bu:SetNormalTexture('')
-                    bu:GetPushedTexture():SetTexture(C.Assets.button_checked)
+                    bu:GetPushedTexture():SetTexture(C.Assets.Textures.Button.Checked)
                     bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
                     if not bu.bg then
                         bu.bg = F.ReskinIcon(bu.Icon, true)
@@ -270,13 +270,13 @@ tinsert(
         F.PixelIcon(skipButton, 'Interface\\Icons\\Ability_Foundryraid_Dormant', true)
         F.CreateSD(skipButton)
         skipButton.HL:SetAllPoints(skipButton)
-        skipButton:SetPushedTexture(C.Assets.button_checked)
+        skipButton:SetPushedTexture(C.Assets.Textures.Button.Checked)
 
         local xpbar = _G.PetBattleFrameXPBar
         F.StripTextures(xpbar)
         xpbar:SetParent(bar)
         xpbar:SetWidth(bar:GetWidth())
-        xpbar:SetStatusBarTexture(C.Assets.Textures.Norm)
+        xpbar:SetStatusBarTexture(C.Assets.Textures.SBNormal)
         F.SetBD(xpbar)
 
         local turnTimer = bottomFrame.TurnTimer
@@ -320,7 +320,7 @@ tinsert(
             unit.Name:SetPoint('TOPLEFT', icon, 'TOPRIGHT', 3, -3)
 
             unit.ActualHealthBar:SetPoint('BOTTOMLEFT', icon, 'BOTTOMRIGHT', 5, 0)
-            unit.ActualHealthBar:SetTexture(C.Assets.Textures.Norm)
+            unit.ActualHealthBar:SetTexture(C.Assets.Textures.SBNormal)
             local bg = F.SetBD(unit.ActualHealthBar)
             bg:SetPoint('TOPLEFT', unit.ActualHealthBar, -1, 1)
             bg:SetPoint('BOTTOMRIGHT', unit.ActualHealthBar, 'BOTTOMLEFT', 129, -1)

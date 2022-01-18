@@ -71,7 +71,7 @@ C.Themes['Blizzard_GuildControlUI'] = function()
                         local box = ownedTab[name]
                         box:SetNormalTexture('')
                         box:SetPushedTexture('')
-                        box:SetHighlightTexture(C.Assets.bd_tex)
+                        box:SetHighlightTexture(C.Assets.Textures.Backdrop)
 
                         local check = box:GetCheckedTexture()
                         check:SetDesaturated(true)

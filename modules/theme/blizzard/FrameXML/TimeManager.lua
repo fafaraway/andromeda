@@ -6,7 +6,7 @@ tinsert(C.BlizzThemes, function()
 	TimeManagerGlobe:Hide()
 	TimeManagerStopwatchCheck:GetNormalTexture():SetTexCoord(unpack(C.TexCoord))
 	TimeManagerStopwatchCheck:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-	TimeManagerStopwatchCheck:SetCheckedTexture(C.Assets.button_checked)
+	TimeManagerStopwatchCheck:SetCheckedTexture(C.Assets.Textures.Button.Checked)
 	F.CreateBDFrame(TimeManagerStopwatchCheck)
 
 	TimeManagerAlarmHourDropDown:SetWidth(80)

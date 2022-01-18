@@ -51,7 +51,7 @@ C.Themes['Blizzard_GuildBankUI'] = function()
         button:SetNormalTexture('')
         button:SetPushedTexture('')
         button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-        button:SetCheckedTexture(C.Assets.button_checked)
+        button:SetCheckedTexture(C.Assets.Textures.Button.Checked)
         F.CreateBDFrame(button)
         icon:SetTexCoord(unpack(C.TexCoord))
 
@@ -78,7 +78,7 @@ C.Themes['Blizzard_GuildBankUI'] = function()
             for i = 1, NUM_GUILDBANK_ICONS_PER_ROW * NUM_GUILDBANK_ICON_ROWS do
                 local button = _G['GuildBankPopupButton' .. i]
                 if not button.styled then
-                    button:SetCheckedTexture(C.Assets.button_checked)
+                    button:SetCheckedTexture(C.Assets.Textures.Button.Checked)
                     select(2, button:GetRegions()):Hide()
                     F.ReskinIcon(button.Icon)
                     local hl = button:GetHighlightTexture()

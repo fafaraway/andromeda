@@ -480,7 +480,7 @@ function ACTIONBAR:StyleExtraActionButton(cfg)
     local buttonstyle = button.style -- artwork around the button
     local cooldown = _G[buttonName .. 'Cooldown']
 
-    button:SetPushedTexture(C.Assets.button_pushed) -- force it to gain a texture
+    button:SetPushedTexture(C.Assets.Textures.Button.Pushed) -- force it to gain a texture
     local normalTexture = button:GetNormalTexture()
     local pushedTexture = button:GetPushedTexture()
     local highlightTexture = button:GetHighlightTexture()
@@ -587,18 +587,18 @@ function ACTIONBAR:RestyleButtons()
         flyoutBorderShadow = {file = ''},
         border = {file = ''},
         normalTexture = {
-            file = C.Assets.button_normal,
+            file = C.Assets.Textures.Button.Normal,
             color = {.3, .3, .3},
             points = {{'TOPLEFT', C.Mult, -C.Mult}, {'BOTTOMRIGHT', -C.Mult, C.Mult}}
         },
-        flash = {file = C.Assets.button_flash},
+        flash = {file = C.Assets.Textures.Button.Flash},
         pushedTexture = {
-            file = C.Assets.button_pushed,
+            file = C.Assets.Textures.Button.Pushed,
             color = {C.r, C.g, C.b},
             points = {{'TOPLEFT', C.Mult, -C.Mult}, {'BOTTOMRIGHT', -C.Mult, C.Mult}}
         },
         checkedTexture = {
-            file = C.Assets.button_checked,
+            file = C.Assets.Textures.Button.Checked,
             color = {.2, 1, .2},
             points = {{'TOPLEFT', C.Mult, -C.Mult}, {'BOTTOMRIGHT', -C.Mult, C.Mult}}
         },

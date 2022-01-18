@@ -9,7 +9,7 @@ tinsert(C.BlizzThemes, function()
 	F.StripTextures(PVPReadyDialog)
 	PVPReadyDialogBackground:Hide()
 	F.SetBD(PVPReadyDialog)
-	PVPReadyDialogRoleIconTexture:SetTexture(C.Assets.roles_icon)
+	PVPReadyDialogRoleIconTexture:SetTexture(C.Assets.Textures.LfgRoles)
 	F.CreateBDFrame(PVPReadyDialogRoleIcon)
 
 	hooksecurefunc("PVPReadyDialog_Display", function(self, _, _, _, _, _, role)

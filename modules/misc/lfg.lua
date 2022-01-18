@@ -40,9 +40,9 @@ local roleOrder = {
 }
 
 local roleIcons = {
-    [1] = C.Assets.Textures.Tank,
-    [2] = C.Assets.Textures.Healer,
-    [3] = C.Assets.Textures.Damager
+    [1] = C.Assets.Textures.RoleTank,
+    [2] = C.Assets.Textures.RoleHealer,
+    [3] = C.Assets.Textures.RoleDamager
 }
 
 local function SortRoleOrder(a, b)
@@ -103,7 +103,7 @@ end
 local function SetClassIcon(button, class)
     local t = _G.CLASS_ICON_TCOORDS[class]
     if t then
-        button:SetTexture(C.Assets.Textures.Class)
+        button:SetTexture(C.Assets.Textures.ClassesCircles)
         button:SetTexCoord(unpack(t))
     end
 end

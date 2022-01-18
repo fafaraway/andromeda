@@ -26,7 +26,7 @@ C.Themes["Blizzard_TradeSkillUI"] = function()
 	TradeSkillFrame.DetailsInset:Hide()
 
 	local rankFrame = TradeSkillFrame.RankFrame
-	rankFrame:SetStatusBarTexture(C.Assets.bd_tex)
+	rankFrame:SetStatusBarTexture(C.Assets.Textures.Backdrop)
 	rankFrame.SetStatusBarColor = F.Dummy
 	rankFrame:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
 	rankFrame.BorderMid:Hide()
@@ -72,7 +72,7 @@ C.Themes["Blizzard_TradeSkillUI"] = function()
 				if button.SubSkillRankBar then
 					local bar = button.SubSkillRankBar
 					F.StripTextures(bar)
-					bar:SetStatusBarTexture(C.Assets.bd_tex)
+					bar:SetStatusBarTexture(C.Assets.Textures.Backdrop)
 					bar:SetPoint("RIGHT", -6, 0)
 					F.CreateBDFrame(bar, .25)
 				end
@@ -116,7 +116,7 @@ C.Themes["Blizzard_TradeSkillUI"] = function()
 
 	local levelBar = contents.RecipeLevel
 	F.StripTextures(levelBar)
-	levelBar:SetStatusBarTexture(C.Assets.bd_tex)
+	levelBar:SetStatusBarTexture(C.Assets.Textures.Backdrop)
 	F.CreateBDFrame(levelBar, .25)
 	F.ReskinFilterButton(contents.RecipeLevelSelector)
 

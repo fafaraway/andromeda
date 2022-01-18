@@ -95,7 +95,7 @@ end
 local function CreateButton(r, g, b, text, func)
     local bu = CreateFrame('Button', nil, CHAT.ChannelBar, 'SecureActionButtonTemplate, BackdropTemplate')
     bu:SetSize(30, 3)
-    F.PixelIcon(bu, C.Assets.norm_tex, true)
+    F.PixelIcon(bu, C.Assets.Textures.SBNormal, true)
     F.CreateSD(bu)
     bu.Icon:SetVertexColor(r, g, b)
     bu:SetHitRectInsets(0, 0, -8, -8)

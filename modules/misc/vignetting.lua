@@ -17,7 +17,7 @@ local function CreateVignetting()
     f:SetFrameLevel(0)
 
     f.tex = f:CreateTexture()
-    f.tex:SetTexture(C.Assets.vig_tex)
+    f.tex:SetTexture(C.Assets.Textures.Vignetting)
     f.tex:SetAllPoints(f)
 
     M.Frame = f

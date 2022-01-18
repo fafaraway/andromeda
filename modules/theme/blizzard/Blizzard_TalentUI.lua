@@ -97,7 +97,7 @@ C.Themes['Blizzard_TalentUI'] = function()
             F.ReskinIcon(bu.specIcon)
 
             local roleIcon = bu.roleIcon
-            roleIcon:SetTexture(C.Assets.roles_icon)
+            roleIcon:SetTexture(C.Assets.Textures.LfgRoles)
             F.CreateBDFrame(roleIcon):SetFrameLevel(2)
             if role then
                 roleIcon:SetTexCoord(F.GetRoleTexCoord(role))
@@ -109,7 +109,7 @@ C.Themes['Blizzard_TalentUI'] = function()
         F.ReskinIcon(scrollChild.specIcon)
 
         local roleIcon = scrollChild.roleIcon
-        roleIcon:SetTexture(C.Assets.roles_icon)
+        roleIcon:SetTexture(C.Assets.Textures.LfgRoles)
         F.CreateBDFrame(roleIcon)
     end
 

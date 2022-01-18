@@ -20,7 +20,7 @@ C.Themes['Blizzard_MacroUI'] = function()
         end
 
         button:DisableDrawLayer('BACKGROUND')
-        button:SetCheckedTexture(C.Assets.button_checked)
+        button:SetCheckedTexture(C.Assets.Textures.Button.Checked)
         local hl = button:GetHighlightTexture()
         hl:SetColorTexture(1, 1, 1, .25)
         hl:SetInside()

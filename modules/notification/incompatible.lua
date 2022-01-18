@@ -40,7 +40,7 @@ local function ConstructFrame()
     end
     frame:SetSize(300, 100 + offset)
 
-    local close = F.CreateButton(frame, 16, 16, true, C.Assets.close_tex)
+    local close = F.CreateButton(frame, 16, 16, true, C.Assets.Textures.Close)
     close:SetPoint('TOPRIGHT', -10, -10)
     close:SetScript('OnClick', function()
         frame:Hide()

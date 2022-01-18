@@ -235,7 +235,7 @@ function ExtraQuestButton:PLAYER_LOGIN()
     self.updateTimer = 0
     self.rangeTimer = 0
 
-    self:SetPushedTexture(C.Assets.button_pushed)
+    self:SetPushedTexture(C.Assets.Textures.Button.Pushed)
     local push = self:GetPushedTexture()
     push:SetBlendMode('ADD')
     push:SetInside()

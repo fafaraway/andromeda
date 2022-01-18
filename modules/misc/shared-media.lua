@@ -24,9 +24,9 @@ local function RegisterMediaAssets()
     LSM:Register(LSM.MediaType.FONT, '!Free_Square', C.Assets.Fonts.Square, LOCALE_MASK)
     LSM:Register(LSM.MediaType.FONT, '!Free_Roadway', C.Assets.Fonts.Roadway, LOCALE_MASK)
 
-    LSM:Register(LSM.MediaType.STATUSBAR, '!Free_Normal', C.Assets.Textures.Norm)
-    LSM:Register(LSM.MediaType.STATUSBAR, '!Free_Gradient', C.Assets.Textures.Grad)
-    LSM:Register(LSM.MediaType.STATUSBAR, '!Free_Flat', C.Assets.Textures.Flat)
+    LSM:Register(LSM.MediaType.STATUSBAR, '!Free_Normal', C.Assets.Textures.SBNormal)
+    LSM:Register(LSM.MediaType.STATUSBAR, '!Free_Gradient', C.Assets.Textures.SBGradient)
+    LSM:Register(LSM.MediaType.STATUSBAR, '!Free_Flat', C.Assets.Textures.SBFlat)
     LSM:Register(LSM.MediaType.STATUSBAR, '!Free_Melli', C.Assets.Textures.Melli)
 
     LSM:Register(LSM.MediaType.SOUND, '!Free_LowHealth', C.AssetsPath .. 'sounds\\lowhealth.ogg')

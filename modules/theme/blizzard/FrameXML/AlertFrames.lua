@@ -150,8 +150,8 @@ table.insert(
                         frame.Icon:SetPoint('CENTER', frame.BaseQualityBorder)
 
                         frame.BaseQualityBorder:SetSize(52, 52)
-                        frame.BaseQualityBorder:SetTexture(C.Assets.bd_tex)
-                        frame.UpgradeQualityBorder:SetTexture(C.Assets.bd_tex)
+                        frame.BaseQualityBorder:SetTexture(C.Assets.Textures.Backdrop)
+                        frame.UpgradeQualityBorder:SetTexture(C.Assets.Textures.Backdrop)
                         frame.UpgradeQualityBorder:SetSize(52, 52)
                         frame.Background:SetTexture('')
                         frame.Sheen:SetTexture('')

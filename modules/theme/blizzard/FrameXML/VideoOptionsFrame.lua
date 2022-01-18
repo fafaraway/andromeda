@@ -88,7 +88,7 @@ table.insert(
                 local testInputDevie = _G.AudioOptionsVoicePanelTestInputDevice
                 F.Reskin(testInputDevie.ToggleTest)
                 F.StripTextures(testInputDevie.VUMeter)
-                testInputDevie.VUMeter.Status:SetStatusBarTexture(C.Assets.bd_tex)
+                testInputDevie.VUMeter.Status:SetStatusBarTexture(C.Assets.Textures.Backdrop)
                 local bg = F.CreateBDFrame(testInputDevie.VUMeter, .3)
                 bg:SetInside(nil, 4, 4)
 

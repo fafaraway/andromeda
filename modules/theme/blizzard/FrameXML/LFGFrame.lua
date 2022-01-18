@@ -128,7 +128,7 @@ table.insert(
         F.ReskinRole(leaderIcon, 'LEADER')
 
         local iconTexture = _G.LFGDungeonReadyDialogRoleIconTexture
-        iconTexture:SetTexture(C.Assets.roles_icon)
+        iconTexture:SetTexture(C.Assets.Textures.LfgRoles)
         local bg = F.CreateBDFrame(iconTexture)
 
         hooksecurefunc(
@@ -227,7 +227,7 @@ table.insert(
             'SetCheckButtonIsRadio',
             function(button)
                 button:SetNormalTexture('')
-                button:SetHighlightTexture(C.Assets.bd_tex)
+                button:SetHighlightTexture(C.Assets.Textures.Backdrop)
                 button:SetCheckedTexture('Interface\\Buttons\\UI-CheckBox-Check')
                 button:GetCheckedTexture():SetTexCoord(0, 1, 0, 1)
                 button:SetPushedTexture('')
@@ -259,7 +259,7 @@ table.insert(
 
         for i = 1, 5 do
             local roleButton = _G['LFGDungeonReadyStatusIndividualPlayer' .. i]
-            roleButton.texture:SetTexture(C.Assets.roles_icon)
+            roleButton.texture:SetTexture(C.Assets.Textures.LfgRoles)
             F.CreateBDFrame(roleButton)
             if i == 1 then
                 roleButton:SetPoint('LEFT', 7, 0)

@@ -26,7 +26,7 @@ function UNITFRAME:CreateRaidTargetIndicator(self)
     local icon = self.Health:CreateTexture(nil, 'OVERLAY')
     icon:SetPoint('CENTER')
 
-    icon:SetTexture(C.Assets.target_icon)
+    icon:SetTexture(C.Assets.Textures.RaidTargetIcons)
 
     self.RaidTargetIndicator = icon
 
@@ -53,7 +53,7 @@ end
 function UNITFRAME:CreateNameplateRaidTargetIndicator(self)
     local size = C.DB.Nameplate.Height
     local icon = self.Health:CreateTexture(nil, 'OVERLAY')
-    icon:SetTexture(C.Assets.target_icon)
+    icon:SetTexture(C.Assets.Textures.RaidTargetIcons)
     icon:SetSize(size, size)
 
     self.RaidTargetIndicator = icon

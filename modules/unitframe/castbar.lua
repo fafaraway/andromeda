@@ -276,13 +276,13 @@ function UNITFRAME:CreateCastBar(self)
     local iconAmp = 4
 
     local castbar = CreateFrame('StatusBar', 'oUF_Castbar' .. style, self)
-    castbar:SetStatusBarTexture(C.Assets.Textures.Norm)
+    castbar:SetStatusBarTexture(C.Assets.Textures.SBNormal)
     castbar.Backdrop = F.CreateBDFrame(castbar, .45)
     castbar.Border = F.CreateSD(castbar.Backdrop, .35, 6, 6, true)
     self.Castbar = castbar
 
     local spark = castbar:CreateTexture(nil, 'OVERLAY')
-    spark:SetTexture(C.Assets.spark_tex)
+    spark:SetTexture(C.Assets.Textures.CastingSpark)
     spark:SetBlendMode('ADD')
     spark:SetAlpha(.7)
     spark:SetSize(12, castbar:GetHeight() * 2)
@@ -305,7 +305,7 @@ function UNITFRAME:CreateCastBar(self)
 
     if isPlayer then
         local safeZone = castbar:CreateTexture(nil, 'OVERLAY')
-        safeZone:SetTexture(C.Assets.Textures.Norm)
+        safeZone:SetTexture(C.Assets.Textures.SBNormal)
         safeZone:SetVertexColor(.87, .25, .42, .25)
         safeZone:SetPoint('TOPRIGHT')
         safeZone:SetPoint('BOTTOMRIGHT')
@@ -375,13 +375,13 @@ function UNITFRAME:CreateNamePlateCastBar(self)
     local iconAmp = 4
 
     local castbar = CreateFrame('StatusBar', 'oUF_Castbar' .. style, self)
-    castbar:SetStatusBarTexture(C.Assets.Textures.Norm)
+    castbar:SetStatusBarTexture(C.Assets.Textures.SBNormal)
     castbar.Backdrop = F.CreateBDFrame(castbar, .45)
     castbar.Border = F.CreateSD(castbar.Backdrop, .35, 6, 6, true)
     self.Castbar = castbar
 
     local spark = castbar:CreateTexture(nil, 'OVERLAY')
-    spark:SetTexture(C.Assets.spark_tex)
+    spark:SetTexture(C.Assets.Textures.CastingSpark)
     spark:SetBlendMode('ADD')
     spark:SetAlpha(.7)
     spark:SetSize(12, castbar:GetHeight() * 2)
@@ -405,7 +405,7 @@ function UNITFRAME:CreateNamePlateCastBar(self)
     castbar.Icon = icon
 
     local shield = castbar:CreateTexture(nil, 'OVERLAY')
-    shield:SetTexture(C.Assets.Textures.Shield)
+    shield:SetTexture(C.Assets.Textures.CastingShield)
     shield:SetSize(cbHeight + 4, cbHeight + 4)
     shield:SetPoint('CENTER', castbar, 'BOTTOMLEFT')
     castbar.Shield = shield

@@ -307,7 +307,7 @@ local function CreateConsole()
     header:SetSize(260, 30)
     header:SetPoint('TOP')
     F.CreateMF(header, f)
-    local tips = '|nCTRL +' .. C.Assets.mouse_right .. L['Reset default anchor'] .. '|nSHIFT +' .. C.Assets.mouse_right .. L['Hide the frame']
+    local tips = '|nCTRL +' .. C.Assets.Textures.MouseRightBtn .. L['Reset default anchor'] .. '|nSHIFT +' .. C.Assets.Textures.MouseRightBtn .. L['Hide the frame']
     header.title = L['Layout']
     F.AddTooltip(header, 'ANCHOR_TOP', tips, 'BLUE')
 

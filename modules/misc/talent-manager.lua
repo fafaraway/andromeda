@@ -326,7 +326,7 @@ function TM:CreateSaveFrame()
     frame:Hide()
     tinsert(_G.UISpecialFrames, 'FreeUI_TMSaveFrame')
 
-    local close = F.CreateButton(frame, 16, 16, true, C.Assets.close_tex)
+    local close = F.CreateButton(frame, 16, 16, true, C.Assets.Textures.Close)
     close:SetPoint('TOPRIGHT', -6, -6)
     close:SetScript(
         'OnClick',

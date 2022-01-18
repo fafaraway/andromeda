@@ -40,7 +40,7 @@ C.Themes["Blizzard_ArtifactUI"] = function()
 			slot.HighlightTexture:SetAllPoints()
 
 			slot.Selected:SetDrawLayer("BACKGROUND")
-			slot.Selected:SetTexture(C.Assets.bd_tex)
+			slot.Selected:SetTexture(C.Assets.Textures.Backdrop)
 			slot.Selected:SetVertexColor(1, 1, 0)
 			slot.Selected:SetOutside()
 		end

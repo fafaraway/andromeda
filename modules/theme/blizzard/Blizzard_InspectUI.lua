@@ -44,7 +44,7 @@ C.Themes["Blizzard_InspectUI"] = function()
 
 	inspectSpec.ring:Hide()
 	F.ReskinIcon(inspectSpec.specIcon)
-	inspectSpec.roleIcon:SetTexture(C.Assets.roles_icon)
+	inspectSpec.roleIcon:SetTexture(C.Assets.Textures.LfgRoles)
 	F.CreateBDFrame(inspectSpec.roleIcon)
 
 	for i = 1, 7 do

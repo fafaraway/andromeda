@@ -288,7 +288,7 @@ function MM:ReskinMinimap()
     backdrop.bg:SetBackdropBorderColor(0, 0, 0, 1)
     map.backdrop = backdrop
 
-    map:SetMaskTexture(C.Assets.mask_tex)
+    map:SetMaskTexture(C.Assets.Textures.MinimapMask)
     map:SetSize(256, 256)
     map:SetHitRectInsets(0, 0, map:GetHeight() / 8, map:GetHeight() / 8)
     map:SetClampRectInsets(0, 0, 0, 0)
@@ -344,7 +344,7 @@ function MM:CreateMailButton()
 
     mail:ClearAllPoints()
     mail:SetPoint('BOTTOM', map, 0, offset - 4)
-    icon:SetTexture(C.Assets.mail_tex)
+    icon:SetTexture(C.Assets.Textures.MinimapMail)
     icon:SetSize(21, 21)
     icon:SetVertexColor(1, .8, 0)
 end
@@ -683,7 +683,7 @@ function MM:SetupHybridMinimap()
     local mapCanvas = _G.HybridMinimap.MapCanvas
     local rectangleMask = _G.HybridMinimap:CreateMaskTexture()
 
-    rectangleMask:SetTexture(C.Assets.mask_tex)
+    rectangleMask:SetTexture(C.Assets.Textures.MinimapMask)
     rectangleMask:SetAllPoints(_G.HybridMinimap)
 
     _G.HybridMinimap.RectangleMask = rectangleMask

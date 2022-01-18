@@ -22,7 +22,7 @@ function COMBAT:CreateAnimationFrame()
     self.animationFrame = frame
 
     -- 盾
-    frame = F.CreateAnimationFrame(nil, self.animationFrame, 'HIGH', 3, true, C.Assets.shield_tex, false, {1, 1, 1})
+    frame = F.CreateAnimationFrame(nil, self.animationFrame, 'HIGH', 3, true, C.Assets.Textures.CombatShield, false, {1, 1, 1})
     anime = F.CreateAnimationGroup(frame, 'enter') -- 进入战斗
     F.AddTranslation(anime, 'moveToCenter')
     F.AddFadeIn(anime, 'fadeIn')
@@ -48,7 +48,7 @@ function COMBAT:CreateAnimationFrame()
     self.animationFrame.shield = frame
 
     -- 剑 ↗
-    frame = F.CreateAnimationFrame(nil, self.animationFrame, 'HIGH', 2, true, C.Assets.sword_tex, false, {1, 1, 1})
+    frame = F.CreateAnimationFrame(nil, self.animationFrame, 'HIGH', 2, true, C.Assets.Textures.CombatSword, false, {1, 1, 1})
     anime = F.CreateAnimationGroup(frame, 'enter') -- 进入战斗
     F.AddTranslation(anime, 'moveToCenter')
     F.AddFadeIn(anime, 'fadeIn')
@@ -78,7 +78,7 @@ function COMBAT:CreateAnimationFrame()
     self.animationFrame.swordLeftToRight = frame
 
     -- 剑 ↖
-    frame = F.CreateAnimationFrame(nil, self.animationFrame, 'HIGH', 2, true, C.Assets.sword_tex, true, {1, 1, 1})
+    frame = F.CreateAnimationFrame(nil, self.animationFrame, 'HIGH', 2, true, C.Assets.Textures.CombatSword, true, {1, 1, 1})
     anime = F.CreateAnimationGroup(frame, 'enter') -- 进入战斗
     F.AddTranslation(anime, 'moveToCenter')
     F.AddFadeIn(anime, 'fadeIn')

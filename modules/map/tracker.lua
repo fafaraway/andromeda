@@ -78,7 +78,7 @@ function M:CreateBar()
     bar:SetPoint('TOPLEFT', 1, -(_G.Minimap:GetHeight() / 8) - 1)
     bar:SetPoint('TOPRIGHT', -1, -(_G.Minimap:GetHeight() / 8) - 1)
     bar:SetHeight(4)
-    bar:SetStatusBarTexture(C.Assets.norm_tex)
+    bar:SetStatusBarTexture(C.Assets.Textures.SBNormal)
     bar.bg = F.CreateBDFrame(bar)
 
     bar:SetFrameLevel(_G.Minimap:GetFrameLevel() + 2)
@@ -86,7 +86,7 @@ function M:CreateBar()
 
     local rest = CreateFrame('StatusBar', nil, bar)
     rest:SetAllPoints()
-    rest:SetStatusBarTexture(C.Assets.norm_tex)
+    rest:SetStatusBarTexture(C.Assets.Textures.SBNormal)
     rest:SetStatusBarColor(.34, .45, .86, .8)
     rest:SetFrameLevel(bar:GetFrameLevel() - 1)
     bar.restBar = rest

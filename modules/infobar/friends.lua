@@ -213,9 +213,9 @@ function INFOBAR:FriendsPanel_Init()
     scrollBar:SetValue(0)
 
     F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, C.LineString, nil, true, 'BOTTOMRIGHT', -12, 42)
-    local whspInfo = C.InfoColor .. C.Assets.mouse_right .. L['Whisper']
+    local whspInfo = C.InfoColor .. C.Assets.Textures.MouseRightBtn .. L['Whisper']
     F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, whspInfo, nil, true, 'BOTTOMRIGHT', -15, 26)
-    local invtInfo = C.InfoColor .. 'ALT +' .. C.Assets.mouse_left .. L['Invite']
+    local invtInfo = C.InfoColor .. 'ALT +' .. C.Assets.Textures.MouseLeftBtn .. L['Invite']
     F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, invtInfo, nil, true, 'BOTTOMRIGHT', -15, 10)
 end
 

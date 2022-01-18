@@ -22,7 +22,7 @@ local atlasToRole = {
 local function ReplaceApplicantRoles(texture, atlas)
     local role = atlasToRole[atlas]
     if role then
-        texture:SetTexture(C.Assets.roles_icon)
+        texture:SetTexture(C.Assets.Textures.LfgRoles)
         texture:SetTexCoord(F.GetRoleTexCoord(role))
     end
 end
@@ -121,7 +121,7 @@ table.insert(
                     local bg = F.CreateBDFrame(result, .5)
                     local hl = result:CreateTexture(nil, 'BACKGROUND')
                     hl:SetInside(bg)
-                    hl:SetTexture(C.Assets.bd_tex)
+                    hl:SetTexture(C.Assets.Textures.Backdrop)
                     hl:SetVertexColor(r, g, b, .25)
                     hl:Hide()
                     result.hl = hl
@@ -152,7 +152,7 @@ table.insert(
             local bg = F.CreateBDFrame(header, .25)
             local hl = header:CreateTexture(nil, 'BACKGROUND')
             hl:SetInside(bg)
-            hl:SetTexture(C.Assets.bd_tex)
+            hl:SetTexture(C.Assets.Textures.Backdrop)
             hl:SetVertexColor(r, g, b, .25)
             hl:Hide()
             header.hl = hl
@@ -300,7 +300,7 @@ table.insert(
         F.Reskin(LFGListInviteDialog.AcknowledgeButton)
 
         local roleIcon = LFGListInviteDialog.RoleIcon
-        roleIcon:SetTexture(C.Assets.roles_icon)
+        roleIcon:SetTexture(C.Assets.Textures.LfgRoles)
         F.CreateBDFrame(roleIcon)
 
         hooksecurefunc(

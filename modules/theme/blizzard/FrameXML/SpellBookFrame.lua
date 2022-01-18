@@ -82,13 +82,14 @@ table.insert(
                     local nt = tab:GetNormalTexture()
                     if nt then
                         nt:SetTexCoord(unpack(C.TexCoord))
+                        nt:SetInside(tab)
                     end
 
                     if not tab.styled then
                         tab:GetRegions():Hide()
-                        tab:SetCheckedTexture(C.Assets.button_checked)
+                        tab:SetCheckedTexture(C.Assets.Textures.Button.Checked)
                         tab:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-                        F.CreateBDFrame(tab)
+                        F.SetBD(tab)
 
                         tab.styled = true
                     end
@@ -111,7 +112,7 @@ table.insert(
 
             F.StripTextures(bu.statusBar)
             bu.statusBar:SetHeight(10)
-            bu.statusBar:SetStatusBarTexture(C.Assets.bd_tex)
+            bu.statusBar:SetStatusBarTexture(C.Assets.Textures.Backdrop)
             bu.statusBar:GetStatusBarTexture():SetGradient('VERTICAL', 0, .6, 0, 0, .8, 0)
             bu.statusBar.rankText:SetPoint('CENTER')
             F.CreateBDFrame(bu.statusBar, .25)
@@ -147,7 +148,7 @@ table.insert(
 
             bu.highlightTexture:SetAllPoints(icon)
             local check = bu:GetCheckedTexture()
-            check:SetTexture(C.Assets.button_checked)
+            check:SetTexture(C.Assets.Textures.Button.Checked)
             check:SetAllPoints(icon)
         end
 

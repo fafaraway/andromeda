@@ -130,8 +130,8 @@ local function Button_OnEnter(self)
 
     _G.GameTooltip:AddLine(' ')
     _G.GameTooltip:AddDoubleLine(' ', C.LineString)
-    _G.GameTooltip:AddDoubleLine(' ', C.Assets.mouse_left .. L['Toggle Addons Panel'] .. ' ', 1, 1, 1, .9, .82, .62)
-    _G.GameTooltip:AddDoubleLine(' ', C.Assets.mouse_right .. L['Toggle Timer Panel'] .. ' ', 1, 1, 1, .9, .82, .62)
+    _G.GameTooltip:AddDoubleLine(' ', C.Assets.Textures.MouseLeftBtn .. L['Toggle Addons Panel'] .. ' ', 1, 1, 1, .9, .82, .62)
+    _G.GameTooltip:AddDoubleLine(' ', C.Assets.Textures.MouseRightBtn .. L['Toggle Timer Panel'] .. ' ', 1, 1, 1, .9, .82, .62)
     _G.GameTooltip:Show()
 end
 

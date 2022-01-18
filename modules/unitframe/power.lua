@@ -79,7 +79,7 @@ function UNITFRAME:CreatePowerBar(self)
     power:SetPoint('LEFT')
     power:SetPoint('RIGHT')
     power:SetPoint('TOP', self.Health, 'BOTTOM', 0, -C.Mult)
-    power:SetStatusBarTexture(C.Assets.Textures.Norm)
+    power:SetStatusBarTexture(C.Assets.Textures.SBNormal)
     F:SmoothBar(power)
 
     if isPlayer then
@@ -108,13 +108,13 @@ function UNITFRAME:CreatePowerBar(self)
     line:SetHeight(C.Mult)
     line:SetPoint('TOPLEFT', 0, C.Mult)
     line:SetPoint('TOPRIGHT', 0, C.Mult)
-    line:SetTexture(C.Assets.bd_tex)
+    line:SetTexture(C.Assets.Textures.Backdrop)
     line:SetVertexColor(0, 0, 0)
 
     if not inverted then
         local bg = power:CreateTexture(nil, 'BACKGROUND')
         bg:SetAllPoints()
-        bg:SetTexture(C.Assets.bd_tex)
+        bg:SetTexture(C.Assets.Textures.Backdrop)
         bg.multiplier = .1
         power.bg = bg
     end
@@ -178,7 +178,7 @@ end
 function UNITFRAME:CreateAlternativePowerBar(self)
     local smooth = C.DB.Unitframe.Smooth
     local altPower = CreateFrame('StatusBar', nil, self)
-    altPower:SetStatusBarTexture(C.Assets.Textures.Norm)
+    altPower:SetStatusBarTexture(C.Assets.Textures.SBNormal)
     altPower:SetPoint('TOP', self.Power, 'BOTTOM', 0, -2)
     altPower:SetSize(self:GetWidth(), C.DB.Unitframe.AltPowerHeight)
     altPower:EnableMouse(true)

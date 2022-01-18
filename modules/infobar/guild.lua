@@ -197,11 +197,11 @@ function INFOBAR:GuildPanel_Init()
     F.CreateFS(bu[4], C.Assets.Fonts.Regular, 13, nil, _G.ZONE, nil, true, 'RIGHT', -5, 0)
 
     F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, C.LineString, nil, true, 'BOTTOMRIGHT', -12, 58)
-    local whspInfo = C.InfoColor .. C.Assets.mouse_right .. L['Whisper']
+    local whspInfo = C.InfoColor .. C.Assets.Textures.MouseRightBtn .. L['Whisper']
     F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, whspInfo, nil, true, 'BOTTOMRIGHT', -15, 42)
-    local invtInfo = C.InfoColor .. 'ALT +' .. C.Assets.mouse_left .. L['Invite']
+    local invtInfo = C.InfoColor .. 'ALT +' .. C.Assets.Textures.MouseLeftBtn .. L['Invite']
     F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, invtInfo, nil, true, 'BOTTOMRIGHT', -15, 26)
-    local copyInfo = C.InfoColor .. 'SHIFT +' .. C.Assets.mouse_left .. L['Copy Name']
+    local copyInfo = C.InfoColor .. 'SHIFT +' .. C.Assets.Textures.MouseLeftBtn .. L['Copy Name']
     F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, copyInfo, nil, true, 'BOTTOMRIGHT', -15, 10)
 
     local scrollFrame = CreateFrame('ScrollFrame', 'FreeUIGuildInfobarScrollFrame', infoFrame, 'HybridScrollFrameTemplate')

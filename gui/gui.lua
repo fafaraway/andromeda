@@ -81,9 +81,9 @@ local function CreateGearButton(self, name)
     bu:SetSize(20, 20)
     bu.Icon = bu:CreateTexture(nil, 'ARTWORK')
     bu.Icon:SetAllPoints()
-    bu.Icon:SetTexture(C.Assets.gear_tex)
+    bu.Icon:SetTexture(C.Assets.Textures.Gear)
     bu.Icon:SetVertexColor(.6, .6, .6)
-    bu:SetHighlightTexture(C.Assets.gear_tex)
+    bu:SetHighlightTexture(C.Assets.Textures.Gear)
 
     return bu
 end

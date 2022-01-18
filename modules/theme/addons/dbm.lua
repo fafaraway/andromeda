@@ -72,7 +72,7 @@ local function ApplyStyle(self)
     ReskinBar(tbar, frame)
 
     if texture then
-        texture:SetTexture(C.Assets.Textures.Norm)
+        texture:SetTexture(C.Assets.Textures.SBNormal)
     end
 
     name:ClearAllPoints()

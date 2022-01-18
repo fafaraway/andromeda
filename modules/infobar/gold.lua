@@ -107,8 +107,8 @@ local function Button_OnEnter(self)
 
     _G.GameTooltip:AddLine(' ')
     _G.GameTooltip:AddDoubleLine(' ', C.LineString)
-    _G.GameTooltip:AddDoubleLine(' ', C.Assets.mouse_left .. L['Toggle Store Panel'] .. ' ', 1, 1, 1, .9, .8, .6)
-    _G.GameTooltip:AddDoubleLine(' ', C.Assets.mouse_right .. L['Reset Gold Statistics'] .. ' ', 1, 1, 1, .9, .8, .6)
+    _G.GameTooltip:AddDoubleLine(' ', C.Assets.Textures.MouseLeftBtn .. L['Toggle Store Panel'] .. ' ', 1, 1, 1, .9, .8, .6)
+    _G.GameTooltip:AddDoubleLine(' ', C.Assets.Textures.MouseRightBtn .. L['Reset Gold Statistics'] .. ' ', 1, 1, 1, .9, .8, .6)
     _G.GameTooltip:Show()
 end
 

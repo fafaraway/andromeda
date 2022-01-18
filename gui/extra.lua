@@ -195,7 +195,7 @@ function GUI:CreateBarWidgets(parent, texture)
     close:SetPoint('RIGHT', -5, 0)
     close.Icon = close:CreateTexture(nil, 'ARTWORK')
     close.Icon:SetAllPoints()
-    close.Icon:SetTexture(C.Assets.close_tex)
+    close.Icon:SetTexture(C.Assets.Textures.Close)
     close.Icon:SetVertexColor(1, 0, 0)
     close:SetHighlightTexture(close.Icon:GetTexture())
 

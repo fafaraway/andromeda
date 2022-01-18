@@ -77,7 +77,7 @@ function UNITFRAME:CreateClassPowerBar(self)
         bars[i] = CreateFrame('StatusBar', nil, self.ClassPowerBarHolder)
         bars[i]:SetHeight(barHeight)
         bars[i]:SetWidth((barWidth - 5 * gap) / 6)
-        bars[i]:SetStatusBarTexture(C.Assets.Textures.Norm)
+        bars[i]:SetStatusBarTexture(C.Assets.Textures.SBNormal)
         bars[i]:SetFrameLevel(self:GetFrameLevel() + 5)
 
         F.SetBD(bars[i])

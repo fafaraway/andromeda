@@ -185,8 +185,8 @@ function ECF:KeystoneInfo_Create()
                 _G.GameTooltip:AddDoubleLine(string.format(color .. '%s:|r', name), string.format('%s%s(%s)|r', factionColor, dungeon, level))
             end
             _G.GameTooltip:AddDoubleLine(' ', C.LineString)
-            _G.GameTooltip:AddDoubleLine(' ', C.Assets.mouse_left .. _G.GREAT_VAULT_REWARDS .. ' ', 1, 1, 1, .6, .8, 1)
-            _G.GameTooltip:AddDoubleLine(' ', C.Assets.mouse_middle .. L['Delete keystones info'] .. ' ', 1, 1, 1, .6, .8, 1)
+            _G.GameTooltip:AddDoubleLine(' ', C.Assets.Textures.MouseLeftBtn .. _G.GREAT_VAULT_REWARDS .. ' ', 1, 1, 1, .6, .8, 1)
+            _G.GameTooltip:AddDoubleLine(' ', C.Assets.Textures.MouseMiddleBtn .. L['Delete keystones info'] .. ' ', 1, 1, 1, .6, .8, 1)
             _G.GameTooltip:Show()
         end
     )

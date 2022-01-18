@@ -56,7 +56,7 @@ function INFOBAR:CreateInfoBar()
     bar.bg:SetOutside(bar, 2, 2)
     bar.bg:SetFrameStrata('BACKGROUND')
     bar.bg:SetFrameLevel(1) -- Make sure the frame level is higher than the vignetting
-    bar.bg:SetBackdrop({bgFile = C.Assets.bd_tex, edgeFile = C.Assets.bd_tex, edgeSize = 1})
+    bar.bg:SetBackdrop({bgFile = C.Assets.Textures.Backdrop, edgeFile = C.Assets.Textures.Backdrop, edgeSize = 1})
     bar.bg:SetBackdropColor(0, 0, 0, mouseover and .25 or .65)
     bar.bg:SetBackdropBorderColor(0, 0, 0)
 

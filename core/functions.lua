@@ -660,7 +660,7 @@ do
         end
 
         local tex = self:CreateTexture(nil, 'BACKGROUND')
-        tex:SetTexture(C.Assets.bd_tex)
+        tex:SetTexture(C.Assets.Textures.Backdrop)
         tex:SetGradientAlpha(orientation, r, g, b, a1, r, g, b, a2)
         if width then
             tex:SetWidth(width)
@@ -685,7 +685,7 @@ do
 
         local tex = frame:CreateTexture(nil, 'BACKGROUND', nil, 1)
         tex:SetAllPoints(self)
-        tex:SetTexture(assets.bg_tex, true, true)
+        tex:SetTexture(C.AssetsPath .. 'textures\\bg_tex', true, true)
         tex:SetHorizTile(true)
         tex:SetVertTile(true)
         tex:SetBlendMode('ADD')
@@ -709,7 +709,7 @@ do
 
         local shadow = CreateFrame('Frame', nil, frame, 'BackdropTemplate')
         shadow:SetOutside(self, m or 5, m or 5)
-        shadow:SetBackdrop({edgeFile = assets.shadow_tex, edgeSize = s or 5})
+        shadow:SetBackdrop({edgeFile = assets.Textures.Shadow, edgeSize = s or 5})
         shadow:SetBackdropBorderColor(0, 0, 0, a or .25)
         --shadow:SetFrameLevel(1)
         shadow:SetFrameStrata(frame:GetFrameStrata())
@@ -720,7 +720,7 @@ do
 
     function F:CreateGradient()
         local gradStyle = _G.FREE_ADB.GradientStyle
-        local normTex = C.Assets.bd_tex
+        local normTex = C.Assets.Textures.Backdrop
         local buttonColor = _G.FREE_ADB.ButtonBackdropColor
 
         local tex = self:CreateTexture(nil, 'BORDER')
@@ -747,7 +747,7 @@ do
         local backdropColor = _G.FREE_ADB.BackdropColor
         local backdropAlpha = _G.FREE_ADB.BackdropAlpha
 
-        self:SetBackdrop({bgFile = assets.bd_tex, edgeFile = assets.bd_tex, edgeSize = C.Mult})
+        self:SetBackdrop({bgFile = assets.Textures.Backdrop, edgeFile = assets.Textures.Backdrop, edgeSize = C.Mult})
         self:SetBackdropColor(backdropColor.r, backdropColor.g, backdropColor.b, alpha or backdropAlpha)
 
         F.SetBorderColor(self)
@@ -1122,7 +1122,7 @@ do
         F.CreateSD(bg)
         self.bg = bg
 
-        self:SetHighlightTexture(assets.bd_tex)
+        self:SetHighlightTexture(assets.Textures.Backdrop)
         local hl = self:GetHighlightTexture()
         hl:ClearAllPoints()
         hl:SetInside(bg)
@@ -1283,14 +1283,14 @@ do
         local bg = F.CreateBDFrame(self, 0, true)
         bg:SetAllPoints()
 
-        self:SetDisabledTexture(assets.bd_tex)
+        self:SetDisabledTexture(assets.Textures.Backdrop)
         local dis = self:GetDisabledTexture()
         dis:SetVertexColor(0, 0, 0, .4)
         dis:SetDrawLayer('OVERLAY')
         dis:SetAllPoints()
 
         local tex = self:CreateTexture()
-        tex:SetTexture(assets.close_tex)
+        tex:SetTexture(assets.Textures.Close)
         tex:SetVertexColor(1, 1, 1)
         tex:SetAllPoints()
 
@@ -1334,14 +1334,14 @@ do
     }
 
     function F:SetupArrow(direction)
-        self:SetTexture(assets.arrow_tex)
+        self:SetTexture(assets.Textures.Arrow)
         self:SetRotation(math.rad(arrowDegree[direction]))
     end
 
     function F:ReskinArrow(direction)
         F.StripTextures(self)
         self:SetSize(16, 16)
-        -- self:SetDisabledTexture(assets.bd_tex)
+        -- self:SetDisabledTexture(assets.Textures.Backdrop)
 
         -- local dis = self:GetDisabledTexture()
         -- dis:SetVertexColor(0, 0, 0, .3)
@@ -1437,8 +1437,8 @@ do
                 self:SetDisabledCheckedTexture(disabled)
             end
         else
-            self:SetCheckedTexture(assets.tick_tex)
-            self:SetDisabledCheckedTexture(assets.tick_tex)
+            self:SetCheckedTexture(assets.Textures.Tick)
+            self:SetDisabledCheckedTexture(assets.Textures.Tick)
 
             if self.SetCheckedTexture then
                 local checked = self:GetCheckedTexture()
@@ -1462,7 +1462,7 @@ do
     function F:ReskinRadio()
         self:SetNormalTexture('')
         self:SetHighlightTexture('')
-        self:SetCheckedTexture(assets.bd_tex)
+        self:SetCheckedTexture(assets.Textures.Backdrop)
 
         local ch = self:GetCheckedTexture()
         ch:SetPoint('TOPLEFT', 4, -4)
@@ -1488,7 +1488,7 @@ do
             swatchBg:SetInside(nil, 2, 2)
         end
 
-        self:SetNormalTexture(assets.bd_tex)
+        self:SetNormalTexture(assets.Textures.Backdrop)
         self:GetNormalTexture():SetInside(self, 3, 3)
     end
 
@@ -1504,7 +1504,7 @@ do
         F.CreateSD(bg, .25)
 
         local thumb = self:GetThumbTexture()
-        thumb:SetTexture(C.Assets.spark_tex)
+        thumb:SetTexture(C.Assets.Textures.CastingSpark)
         thumb:SetBlendMode('ADD')
 
         if vertical then
@@ -1672,7 +1672,7 @@ do
             background:SetPoint('TOPLEFT', self.squareBG, 'BOTTOMLEFT', 0, -2)
             background:SetPoint('TOPRIGHT', self.squareBG, 'BOTTOMRIGHT', -2, -2)
             background:SetHeight(2)
-            self.HealthBar.Health:SetTexture(C.Assets.Textures.Norm)
+            self.HealthBar.Health:SetTexture(C.Assets.Textures.SBNormal)
         end
     end
 
@@ -1683,7 +1683,7 @@ do
         end
         F.CreateBDFrame(self, .25)
 
-        self:SetHighlightTexture(assets.bd_tex)
+        self:SetHighlightTexture(assets.Textures.Backdrop)
         local hl = self:GetHighlightTexture()
         hl:SetVertexColor(C.r, C.g, C.b, .25)
         hl:SetInside()
@@ -1735,7 +1735,7 @@ do
         end
         local texture = self.GetNormalTexture and self:GetNormalTexture() or self.texture or self.Texture or (self.SetTexture and self) or self.Icon
         if texture then
-            texture:SetTexture(assets.roles_icon)
+            texture:SetTexture(assets.Textures.LfgRoles)
             texture:SetTexCoord(F.GetRoleTexCoord(role))
         end
         self.bg = F.CreateBDFrame(self)
@@ -1778,17 +1778,6 @@ do
         return bu
     end
 
-    function F:CreateWatermark()
-        local logo = self:CreateTexture(nil, 'BACKGROUND')
-        logo:SetPoint('CENTER')
-        logo:SetTexture(C.Assets.logo)
-        logo:SetTexCoord(0, 1, 0, .75)
-        logo:SetSize(256, 256)
-        logo:SetAlpha(.1)
-        logo:SetBlendMode('ADD')
-        logo:SetDesaturated(true)
-    end
-
     local CLASS_ICON_TCOORDS = _G.CLASS_ICON_TCOORDS
     function F:ClassIconTexCoord(class)
         local tcoords = CLASS_ICON_TCOORDS[class]
@@ -1796,7 +1785,7 @@ do
     end
 
     function F:CreateSB(spark, r, g, b)
-        self:SetStatusBarTexture(assets.statusbar_tex)
+        self:SetStatusBarTexture(assets.Textures.SBNormal)
         if r and g and b then
             self:SetStatusBarColor(r, g, b)
         else
@@ -1808,7 +1797,7 @@ do
 
         if spark then
             self.Spark = self:CreateTexture(nil, 'OVERLAY')
-            self.Spark:SetTexture(assets.spark_tex)
+            self.Spark:SetTexture(assets.Textures.CastingSpark)
             self.Spark:SetBlendMode('ADD')
             self.Spark:SetAlpha(.8)
             self.Spark:SetPoint('TOPLEFT', self:GetStatusBarTexture(), 'TOPRIGHT', -10, 10)
@@ -1827,7 +1816,7 @@ do
             for i = 1, numTicks - 1 do
                 if not ticks[i] then
                     ticks[i] = bar:CreateTexture(nil, 'OVERLAY')
-                    ticks[i]:SetTexture(assets.statusbar_tex)
+                    ticks[i]:SetTexture(assets.Textures.SBNormal)
                     ticks[i]:SetVertexColor(0, 0, 0, .7)
                     ticks[i]:SetWidth(C.Mult)
                     ticks[i]:SetHeight(height)
@@ -2046,7 +2035,7 @@ do
         swatch.text = F.CreateFS(swatch, C.Assets.Fonts.Regular, 12, nil, name, nil, true, 'LEFT', 24, 0)
         local tex = swatch:CreateTexture()
         tex:SetInside(swatch, 2, 2)
-        tex:SetTexture(C.Assets.bd_tex)
+        tex:SetTexture(C.Assets.Textures.Backdrop)
         tex:SetVertexColor(color.r, color.g, color.b)
         tex.GetColor = GetSwatchTexColor
 

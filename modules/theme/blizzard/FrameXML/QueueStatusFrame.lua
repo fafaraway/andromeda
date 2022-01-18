@@ -14,7 +14,7 @@ tinsert(C.BlizzThemes, function()
 
 		for i = 1, LFD_NUM_ROLES do
 			local roleIcon = self["RoleIcon"..i]
-			roleIcon:SetTexture(C.Assets.roles_icon)
+			roleIcon:SetTexture(C.Assets.Textures.LfgRoles)
 			roleIcon.bg = F.CreateBDFrame(roleIcon)
 			if i > 1 then
 				roleIcon:SetPoint("RIGHT", self["RoleIcon"..(i-1)], "LEFT", -4, 0)

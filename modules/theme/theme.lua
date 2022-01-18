@@ -62,9 +62,9 @@ local function ReskinTimerBar(bar)
     local statusbar = _G[bar:GetName() .. 'StatusBar']
     if statusbar then
         statusbar:SetAllPoints()
-        statusbar:SetStatusBarTexture(C.Assets.norm_tex)
+        statusbar:SetStatusBarTexture(C.Assets.Textures.SBNormal)
     else
-        bar:SetStatusBarTexture(C.Assets.norm_tex)
+        bar:SetStatusBarTexture(C.Assets.Textures.SBNormal)
     end
 
     bar.bg = F.SetBD(bar)

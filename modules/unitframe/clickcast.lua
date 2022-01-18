@@ -383,7 +383,7 @@ function UNITFRAME:ClickCast()
 
             if not tab.styled then
                 tab:GetRegions():Hide()
-                tab:SetCheckedTexture(C.Assets.button_checked)
+                tab:SetCheckedTexture(C.Assets.Textures.Button.Checked)
                 tab:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
                 F.CreateBDFrame(tab)
 

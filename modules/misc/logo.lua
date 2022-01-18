@@ -40,7 +40,7 @@ function LOGO:Logo_Create()
 
     local tex = frame:CreateTexture()
     tex:SetAllPoints()
-    tex:SetTexture(C.Assets.logo)
+    tex:SetTexture(C.Assets.Textures.UILogo)
     tex:SetBlendMode('ADD')
     tex:SetDesaturated(true)
     -- tex:SetGradientAlpha('Vertical', 1, 1, 1, .75, 1, 1, 1, .75)

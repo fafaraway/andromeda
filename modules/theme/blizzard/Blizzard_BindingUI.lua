@@ -33,7 +33,7 @@ C.Themes['Blizzard_BindingUI'] = function()
         function(_, button)
             if not button.styled then
                 local selected = button.selectedHighlight
-                selected:SetTexture(C.Assets.bd_tex)
+                selected:SetTexture(C.Assets.Textures.Backdrop)
                 selected:SetInside()
                 selected:SetColorTexture(r, g, b, .25)
                 F.Reskin(button)
