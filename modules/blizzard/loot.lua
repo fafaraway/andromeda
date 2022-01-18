@@ -11,6 +11,7 @@ lootFrame:SetClampedToScreen(true)
 lootFrame:SetWidth(width)
 lootFrame:SetHeight(64)
 lootFrame:Hide()
+table.insert(_G.UISpecialFrames, lootFrame)
 
 lootFrame.slots = {}
 
@@ -92,7 +93,7 @@ local CreateLootSlot = function(id)
 
     local outline = _G.FREE_ADB.FontOutline
 
-    local count = F.CreateFS(iconFrame, C.Assets.Fonts.Regular, 12, outline, nil, nil, outline or 'THICK', 'TOP', 1, -2)
+    local count = F.CreateFS(iconFrame, C.Assets.Fonts.Regular, 12, true, nil, nil, true, 'TOP', 1, -2)
     frame.count = count
 
     local name = F.CreateFS(frame, C.Assets.Fonts.Regular, 12, outline, nil, nil, outline or 'THICK')
@@ -249,5 +250,4 @@ function EL:OnLogin()
     lootFrame:RegisterEvent 'UPDATE_MASTER_LOOT_LIST'
 
     _G.LootFrame:UnregisterAllEvents()
-    table.insert(_G.UISpecialFrames, 'FreeUI_Loot')
 end

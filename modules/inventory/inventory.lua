@@ -111,8 +111,8 @@ function INVENTORY:CreateMoneyFrame()
     moneyFrame:SetSize(140, 26)
 
     local tag = self:SpawnPlugin('TagDisplay', '[money] [currencies]', moneyFrame)
-    F:SetFS(tag, C.Assets.Fonts.Bold, 11, nil, '', nil, 'THICK')
-    tag:SetPoint('TOPLEFT', 0, -3)
+    F:SetFS(tag, C.Assets.Fonts.Condensed, 12, nil, '', nil, true)
+    tag:SetPoint('TOPLEFT', 0, -4)
 end
 
 local function ToggleWidgetButtons(self)
@@ -546,7 +546,7 @@ function INVENTORY:CreateFreeSlots()
     slot.__name = name
 
     local tag = self:SpawnPlugin('TagDisplay', '[space]', slot)
-    F:SetFS(tag, C.Assets.Fonts.Regular, 11, nil, '', 'CLASS', 'THICK')
+    F:SetFS(tag, C.Assets.Fonts.Condensed, 11, nil, '', 'CLASS', true)
     tag:SetPoint('BOTTOMRIGHT', -2, 2)
     tag.__name = name
     slot.tag = tag
@@ -855,7 +855,7 @@ function INVENTORY:OnLogin()
 
         self.Icon:SetInside()
         self.Icon:SetTexCoord(unpack(C.TexCoord))
-        F:SetFS(self.Count, C.Assets.Fonts.Regular, 11, 'OUTLINE', '', nil, true, 'BOTTOMRIGHT', -2, 2)
+        F:SetFS(self.Count, C.Assets.Fonts.Condensed, 11, true, '', nil, true, 'BOTTOMRIGHT', -2, 2)
         self.Cooldown:SetInside()
         self.IconOverlay:SetInside()
         self.IconOverlay2:SetInside()
@@ -879,8 +879,8 @@ function INVENTORY:OnLogin()
         self.Quest:SetSize(24, 24)
         self.Quest:SetPoint('TOPLEFT', -2, -2)
 
-        self.iLvl = F.CreateFS(self, C.Assets.Fonts.Regular, 11, 'OUTLINE', '', nil, true, 'BOTTOMRIGHT', -2, 2)
-        self.BindType = F.CreateFS(self, C.Assets.Fonts.Regular, 11, 'OUTLINE', '', nil, true, 'TOPLEFT', 2, -2)
+        self.iLvl = F.CreateFS(self, C.Assets.Fonts.Condensed, 11, true, '', nil, true, 'BOTTOMRIGHT', -2, 2)
+        self.BindType = F.CreateFS(self, C.Assets.Fonts.Condensed, 11, true, '', nil, true, 'TOPLEFT', 2, -2)
 
         local flash = self:CreateTexture(nil, 'ARTWORK')
         flash:SetTexture('Interface\\Cooldown\\star4')
@@ -1192,7 +1192,7 @@ function INVENTORY:OnLogin()
         end
 
         if label then
-            self.label = F.CreateFS(self, C.Assets.Fonts.Regular, 12, nil, label, nil, 'THICK', 'TOPLEFT', 5, -4)
+            self.label = F.CreateFS(self, C.Assets.Fonts.Condensed, 11, nil, label, nil, true, 'TOPLEFT', 5, -4)
             return
         end
 

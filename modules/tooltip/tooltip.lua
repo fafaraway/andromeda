@@ -23,8 +23,12 @@ local function CanAccessObject(obj)
 end
 
 function TOOLTIP:GetUnit()
-    local unit =
-        (select(2, _G.GameTooltip:GetUnit())) or (GetMouseFocus() and GetMouseFocus().GetAttribute and GetMouseFocus():GetAttribute('unit')) or (UnitExists('mouseover') and 'mouseover') or nil
+    local _, unit = self:GetUnit()
+    if not unit then
+        local mFocus = GetMouseFocus()
+        unit = mFocus and (mFocus.unit or (mFocus.GetAttribute and mFocus:GetAttribute('unit')))
+    end
+
     return unit
 end
 
@@ -83,6 +87,7 @@ function TOOLTIP:OnTooltipSetUnit()
     if not CanAccessObject(self) then
         return
     end
+
     if C.DB.Tooltip.HideInCombat and InCombatLockdown() and not C_PetBattles.IsInBattle() then
         if not IsShiftKeyDown() then
             self:Hide()
@@ -93,114 +98,115 @@ function TOOLTIP:OnTooltipSetUnit()
     TOOLTIP.HideLines(self)
 
     local unit = TOOLTIP.GetUnit(self)
-    local isShiftKeyDown = IsShiftKeyDown()
-    if UnitExists(unit) then
-        self.tipUnit = unit
-        local r, g, b = F:UnitColor(unit)
-        local hexColor = F:RGBToHex(r, g, b)
-        local ricon = GetRaidTargetIndex(unit)
-        local text = _G.GameTooltipTextLeft1:GetText()
-        if ricon and ricon > 8 then
-            ricon = nil
-        end
-        if ricon and text then
-            _G.GameTooltipTextLeft1:SetFormattedText(('%s %s'), _G.ICON_LIST[ricon] .. '18|t', text)
-        end
-
-        local isPlayer = UnitIsPlayer(unit)
-        if isPlayer then
-            local name, realm = UnitName(unit)
-            local pvpName = UnitPVPName(unit)
-            local relationship = UnitRealmRelationship(unit)
-            if not C.DB.Tooltip.HideTitle and pvpName then
-                name = pvpName
-            end
-            if realm and realm ~= '' then
-                if isShiftKeyDown or not C.DB.Tooltip.HideRealm then
-                    name = name .. '-' .. realm
-                elseif relationship == _G.LE_REALM_RELATION_COALESCED then
-                    name = name .. _G.FOREIGN_SERVER_LABEL
-                elseif relationship == _G.LE_REALM_RELATION_VIRTUAL then
-                    name = name .. _G.INTERACTIVE_SERVER_LABEL
-                end
-            end
-
-            local status = (UnitIsAFK(unit) and _G.AFK) or (UnitIsDND(unit) and _G.DND) or (not UnitIsConnected(unit) and _G.PLAYER_OFFLINE)
-            if status then
-                status = string.format(' |cffffcc00[%s]|r', status)
-            end
-            _G.GameTooltipTextLeft1:SetFormattedText('%s', name .. (status or ''))
-
-            local guildName, rank, _, guildRealm = GetGuildInfo(unit)
-            local hasText = _G.GameTooltipTextLeft2:GetText()
-            if guildName and hasText then
-                local myGuild, _, _, myGuildRealm = GetGuildInfo('player')
-                if IsInGuild() and guildName == myGuild and guildRealm == myGuildRealm then
-                    _G.GameTooltipTextLeft2:SetTextColor(.25, 1, .25)
-                else
-                    _G.GameTooltipTextLeft2:SetTextColor(.6, .8, 1)
-                end
-
-                if C.DB.Tooltip.HideGuildRank then
-                    rank = ''
-                end
-                if guildRealm and isShiftKeyDown then
-                    guildName = guildName .. '-' .. guildRealm
-                end
-                if not isShiftKeyDown then
-                    if string.len(guildName) > 31 then
-                        guildName = '...'
-                    end
-                end
-                _G.GameTooltipTextLeft2:SetText('<' .. guildName .. '> ' .. rank)
-            end
-        end
-
-        local line1 = _G.GameTooltipTextLeft1:GetText()
-        _G.GameTooltipTextLeft1:SetFormattedText('%s', hexColor .. line1)
-
-        local alive = not UnitIsDeadOrGhost(unit)
-        local level
-        if UnitIsWildBattlePet(unit) or UnitIsBattlePetCompanion(unit) then
-            level = UnitBattlePetLevel(unit)
-        else
-            level = UnitLevel(unit)
-        end
-
-        if level then
-            local boss
-            if level == -1 then
-                boss = '|cffff0000??|r'
-            end
-
-            local diff = _G.GetCreatureDifficultyColor(level)
-            local classify = UnitClassification(unit)
-            local textLevel = string.format('%s%s%s|r', F:RGBToHex(diff), boss or string.format('%d', level), classification[classify] or '')
-            local tiptextLevel = TOOLTIP.GetLevelLine(self)
-            if tiptextLevel then
-                local pvpFlag = isPlayer and UnitIsPVP(unit) and string.format(' |cffff0000%s|r', _G.PVP) or ''
-                local unitClass = isPlayer and string.format('%s %s', UnitRace(unit) or '', hexColor .. (UnitClass(unit) or '') .. '|r') or UnitCreatureType(unit) or ''
-                tiptextLevel:SetFormattedText(('%s%s %s %s'), textLevel, pvpFlag, unitClass, (not alive and '|cffCCCCCC' .. _G.DEAD .. '|r' or ''))
-            end
-        end
-
-        if UnitExists(unit .. 'target') then
-            local tarRicon = GetRaidTargetIndex(unit .. 'target')
-            if tarRicon and tarRicon > 8 then
-                tarRicon = nil
-            end
-            local tar = string.format('%s%s', (tarRicon and _G.ICON_LIST[tarRicon] .. '10|t') or '', TOOLTIP:GetTarget(unit .. 'target'))
-            self:AddLine(_G.TARGET .. ': ' .. tar)
-        end
-
-        self.StatusBar:SetStatusBarColor(r, g, b)
-
-        TOOLTIP.InspectUnitSpecAndLevel(self, unit)
-        TOOLTIP.AddMythicPlusScore(self, unit)
-        TOOLTIP.AddCovenantInfo()
-    else
-        self.StatusBar:SetStatusBarColor(0, .9, 0)
+    if not unit or not UnitExists(unit) then
+        return
     end
+    self.tipUnit = unit
+
+    local isAltKeyDown = IsAltKeyDown()
+    local r, g, b = F:UnitColor(unit)
+    local hexColor = F:RGBToHex(r, g, b)
+    local ricon = GetRaidTargetIndex(unit)
+    local text = _G.GameTooltipTextLeft1:GetText()
+
+    if ricon and ricon > 8 then
+        ricon = nil
+    end
+    if ricon and text then
+        _G.GameTooltipTextLeft1:SetFormattedText(('%s %s'), _G.ICON_LIST[ricon] .. '18|t', text)
+    end
+
+    local isPlayer = UnitIsPlayer(unit)
+    if isPlayer then
+        local name, realm = UnitName(unit)
+        local pvpName = UnitPVPName(unit)
+        local relationship = UnitRealmRelationship(unit)
+        if not C.DB.Tooltip.HideTitle and pvpName then
+            name = pvpName
+        end
+        if realm and realm ~= '' then
+            if isAltKeyDown or not C.DB.Tooltip.HideRealm then
+                name = name .. '-' .. realm
+            elseif relationship == _G.LE_REALM_RELATION_COALESCED then
+                name = name .. _G.FOREIGN_SERVER_LABEL
+            elseif relationship == _G.LE_REALM_RELATION_VIRTUAL then
+                name = name .. _G.INTERACTIVE_SERVER_LABEL
+            end
+        end
+
+        local status = (UnitIsAFK(unit) and _G.AFK) or (UnitIsDND(unit) and _G.DND) or (not UnitIsConnected(unit) and _G.PLAYER_OFFLINE)
+        if status then
+            status = string.format(' |cffffcc00[%s]|r', status)
+        end
+        _G.GameTooltipTextLeft1:SetFormattedText('%s', name .. (status or ''))
+
+        local guildName, rank, _, guildRealm = GetGuildInfo(unit)
+        local hasText = _G.GameTooltipTextLeft2:GetText()
+        if guildName and hasText then
+            local myGuild, _, _, myGuildRealm = GetGuildInfo('player')
+            if IsInGuild() and guildName == myGuild and guildRealm == myGuildRealm then
+                _G.GameTooltipTextLeft2:SetTextColor(.25, 1, .25)
+            else
+                _G.GameTooltipTextLeft2:SetTextColor(.6, .8, 1)
+            end
+
+            if C.DB.Tooltip.HideGuildRank then
+                rank = ''
+            end
+            if guildRealm and isAltKeyDown then
+                guildName = guildName .. '-' .. guildRealm
+            end
+            if not isAltKeyDown then
+                if string.len(guildName) > 31 then
+                    guildName = '...'
+                end
+            end
+            _G.GameTooltipTextLeft2:SetText('<' .. guildName .. '> ' .. rank)
+        end
+    end
+
+    local line1 = _G.GameTooltipTextLeft1:GetText()
+    _G.GameTooltipTextLeft1:SetFormattedText('%s', hexColor .. line1)
+
+    local alive = not UnitIsDeadOrGhost(unit)
+    local level
+    if UnitIsWildBattlePet(unit) or UnitIsBattlePetCompanion(unit) then
+        level = UnitBattlePetLevel(unit)
+    else
+        level = UnitLevel(unit)
+    end
+
+    if level then
+        local boss
+        if level == -1 then
+            boss = '|cffff0000??|r'
+        end
+
+        local diff = _G.GetCreatureDifficultyColor(level)
+        local classify = UnitClassification(unit)
+        local textLevel = string.format('%s%s%s|r', F:RGBToHex(diff), boss or string.format('%d', level), classification[classify] or '')
+        local tiptextLevel = TOOLTIP.GetLevelLine(self)
+        if tiptextLevel then
+            local pvpFlag = isPlayer and UnitIsPVP(unit) and string.format(' |cffff0000%s|r', _G.PVP) or ''
+            local unitClass = isPlayer and string.format('%s %s', UnitRace(unit) or '', hexColor .. (UnitClass(unit) or '') .. '|r') or UnitCreatureType(unit) or ''
+            tiptextLevel:SetFormattedText(('%s%s %s %s'), textLevel, pvpFlag, unitClass, (not alive and '|cffCCCCCC' .. _G.DEAD .. '|r' or ''))
+        end
+    end
+
+    if UnitExists(unit .. 'target') then
+        local tarRicon = GetRaidTargetIndex(unit .. 'target')
+        if tarRicon and tarRicon > 8 then
+            tarRicon = nil
+        end
+        local tar = string.format('%s%s', (tarRicon and _G.ICON_LIST[tarRicon] .. '10|t') or '', TOOLTIP:GetTarget(unit .. 'target'))
+        self:AddLine(_G.TARGET .. ': ' .. tar)
+    end
+
+    self.StatusBar:SetStatusBarColor(r, g, b)
+
+    TOOLTIP.InspectUnitSpecAndLevel(self, unit)
+    TOOLTIP.AddMythicPlusScore(self, unit)
+    TOOLTIP.AddCovenantInfo()
 end
 
 function TOOLTIP:GameTooltip_OnUpdate(elapsed)
@@ -240,6 +246,7 @@ function TOOLTIP:StatusBar_OnValueChanged(value)
 
     if value > 0 and max == 1 then
         self.text:SetFormattedText('%d%%', value * 100)
+        self:SetStatusBarColor(.6, .6, .6) -- Wintergrasp building
     else
         self.text:SetText(F:Numb(value) .. ' | ' .. F:Numb(max))
     end

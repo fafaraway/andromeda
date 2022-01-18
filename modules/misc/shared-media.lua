@@ -1,29 +1,25 @@
-local _G = _G
-local unpack = unpack
-local select = select
-
 local F, C = unpack(select(2, ...))
 local LSM = F.Libs.LSM
 
-local function RegisterMediaAssets()
-    local LOCALE_MASK
-    if GetLocale() == 'koKR' then
-        LOCALE_MASK = 1
-    elseif GetLocale() == 'ruRU' then
-        LOCALE_MASK = 2
-    elseif GetLocale() == 'zhCN' then
-        LOCALE_MASK = 4
-    elseif GetLocale() == 'zhTW' then
-        LOCALE_MASK = 8
-    else
-        LOCALE_MASK = 128
-    end
+local LOCALE_MASK
+if GetLocale() == 'koKR' then
+    LOCALE_MASK = 1
+elseif GetLocale() == 'ruRU' then
+    LOCALE_MASK = 2
+elseif GetLocale() == 'zhCN' then
+    LOCALE_MASK = 4
+elseif GetLocale() == 'zhTW' then
+    LOCALE_MASK = 8
+else
+    LOCALE_MASK = 128
+end
 
+local function RegisterMediaAssets()
     LSM:Register(LSM.MediaType.FONT, '!Free_Regular', C.Assets.Fonts.Regular, LOCALE_MASK)
     LSM:Register(LSM.MediaType.FONT, '!Free_Condensed', C.Assets.Fonts.Condensed, LOCALE_MASK)
     LSM:Register(LSM.MediaType.FONT, '!Free_Bold', C.Assets.Fonts.Bold, LOCALE_MASK)
-    LSM:Register(LSM.MediaType.FONT, '!Free_Header', C.Assets.Fonts.Header, LOCALE_MASK)
     LSM:Register(LSM.MediaType.FONT, '!Free_Combat', C.Assets.Fonts.Combat, LOCALE_MASK)
+    LSM:Register(LSM.MediaType.FONT, '!Free_Header', C.Assets.Fonts.Header, LOCALE_MASK)
     LSM:Register(LSM.MediaType.FONT, '!Free_Pixel', C.Assets.Fonts.Pixel, LOCALE_MASK)
     LSM:Register(LSM.MediaType.FONT, '!Free_Square', C.Assets.Fonts.Square, LOCALE_MASK)
     LSM:Register(LSM.MediaType.FONT, '!Free_Roadway', C.Assets.Fonts.Roadway, LOCALE_MASK)
@@ -48,6 +44,8 @@ local function RegisterMediaAssets()
     LSM:Register(LSM.MediaType.SOUND, '!Free_Alarm', C.AssetsPath .. 'sounds\\alarm.ogg')
     LSM:Register(LSM.MediaType.SOUND, '!Free_Ding', C.AssetsPath .. 'sounds\\ding.ogg')
     LSM:Register(LSM.MediaType.SOUND, '!Free_Dang', C.AssetsPath .. 'sounds\\dang.ogg')
+
+    F:UnregisterEvent('ADDON_LOADED', RegisterMediaAssets)
 end
 
 F:RegisterEvent('ADDON_LOADED', RegisterMediaAssets)

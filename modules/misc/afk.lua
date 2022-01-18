@@ -105,7 +105,7 @@ end
 
 function M:CreateText()
     local self = M.Frame
-    local font = C.Assets.Fonts.Combat
+    local font = C.Assets.Fonts.Header
     self.text = F.CreateFS(self.galaxy, font, 18, 'OUTLINE', L['Double click to unlock!'], 'GREY', nil, 'TOPLEFT', 20, -20)
     self.timer = F.CreateFS(self.galaxy, font, 18, 'OUTLINE', '', 'CLASS', nil, 'TOPLEFT', 20, -40)
 end

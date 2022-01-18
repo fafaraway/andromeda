@@ -1,20 +1,6 @@
 local F, C = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 
-local fakeBg = CreateFrame('Frame', nil, _G.UIParent, 'BackdropTemplate')
-fakeBg:SetBackdrop({bgFile = C.Assets.bd_tex, edgeFile = C.Assets.bd_tex, edgeSize = 1})
-local function __GetBackdrop()
-    return fakeBg:GetBackdrop()
-end
-local function __GetBackdropColor()
-    local color = _G.FREE_ADB.BackdropColor
-    local alpha = C.DB.Tooltip.BackdropAlpha
-    return color.r, color.g, color.b, alpha
-end
-local function __GetBackdropBorderColor()
-    return 0, 0, 0
-end
-
 function TOOLTIP:ReskinTooltip()
     if not self then
         if C.IsDeveloper then
@@ -36,12 +22,6 @@ function TOOLTIP:ReskinTooltip()
 
         if self.StatusBar then
             TOOLTIP.ReskinStatusBar(self)
-        end
-
-        if self.GetBackdrop then
-            self.GetBackdrop = __GetBackdrop
-            self.GetBackdropColor = __GetBackdropColor
-            self.GetBackdropBorderColor = __GetBackdropBorderColor
         end
 
         self.tipStyled = true

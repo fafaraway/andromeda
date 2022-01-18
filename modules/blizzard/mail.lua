@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local M = F:RegisterModule('MailBox')
+local M = F:RegisterModule('EnhancedMailBox')
 
 local mailIndex, timeToWait, totalCash, inboxItems = 0, .15, 0, {}
 local isGoldCollecting

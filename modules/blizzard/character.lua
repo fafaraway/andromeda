@@ -1,7 +1,7 @@
 local F, C, L = unpack(select(2, ...))
-local BLIZZARD = F:GetModule('Blizzard')
+local M = F:RegisterModule('EnhancedCharacterFrame')
 
-function BLIZZARD:MissingStats()
+function M:MissingStats()
     if not C.DB.General.MissingStats then
         return
     end
@@ -157,7 +157,7 @@ function BLIZZARD:MissingStats()
     )
 end
 
-function BLIZZARD:NakedButton()
+function M:NakedButton()
     if not C.DB.General.NakedButton then
         return
     end
@@ -186,14 +186,14 @@ function BLIZZARD:NakedButton()
     )
 end
 
-function BLIZZARD:TitleFontSize()
+function M:TitleFontSize()
     hooksecurefunc(
         'PaperDollTitlesPane_UpdateScrollFrame',
         function()
             local bu = _G.PaperDollTitlesPane.buttons
             for i = 1, #bu do
                 if not bu[i].fontStyled then
-                    bu[i].text:SetFont(C.Assets.Fonts.Regular, 13)
+                    bu[i].text:SetFont(C.Assets.Fonts.Bold, 12)
                     bu[i].text:SetShadowColor(0, 0, 0, 1)
                     bu[i].text:SetShadowOffset(1, -1)
                     bu[i].fontStyled = true
@@ -203,6 +203,9 @@ function BLIZZARD:TitleFontSize()
     )
 end
 
-BLIZZARD:RegisterBlizz('MissingStats', BLIZZARD.MissingStats)
-BLIZZARD:RegisterBlizz('NakedButton', BLIZZARD.NakedButton)
-BLIZZARD:RegisterBlizz('TitleFontSize', BLIZZARD.TitleFontSize)
+function M:OnLogin()
+    M.MissingStats()
+    M.NakedButton()
+    M.TitleFontSize()
+end
+

@@ -414,12 +414,12 @@ function MM:UpdateDifficultyFlag()
     local numplayers = select(9, GetInstanceInfo())
     local mplusdiff = select(1, C_ChallengeMode.GetActiveKeystoneInfo()) or ''
 
-    local norm = string.format(' |cff1eff00%s|r', 'N')
-    local hero = string.format(' |cff0070dd%s|r', 'H')
-    local myth = string.format(' |cffa335ee%s|r', 'M')
-    local lfr = string.format(' |cffff8000%s|r', 'LFR')
-    local mp = string.format(' |cffff0000%s|r', 'M+')
-    local pvp = string.format(' |cffff0007%s|r', 'PvP')
+    local norm = string.format('|cff1eff00%s|r', 'N')
+    local hero = string.format('|cff0070dd%s|r', 'H')
+    local myth = string.format('|cffa335ee%s|r', 'M')
+    local lfr = string.format('|cffff8000%s|r', 'LFR')
+    local mp = string.format('|cffff0000%s|r', 'M+')
+    local pvp = string.format('|cffff0007%s|r', 'PvP')
 
     if instanceType == 'party' or instanceType == 'raid' or instanceType == 'scenario' then
         if (difficulty == 1) then -- Normal
@@ -485,9 +485,9 @@ end
 function MM:CreateDifficultyFlag()
     local diffFlag = CreateFrame('Frame', nil, map)
     diffFlag:SetSize(80, 40)
-    diffFlag:SetPoint('TOPLEFT', map, 6, -offset - 14)
+    diffFlag:SetPoint('TOPLEFT', map, 6, -offset - 11)
     diffFlag:SetFrameLevel(map:GetFrameLevel() + 2)
-    diffFlag.text = F.CreateFS(diffFlag, C.Assets.Fonts.Bold, 10, true, '', nil, true, 'TOPLEFT', 0, 0)
+    diffFlag.text = F.CreateFS(diffFlag, C.Assets.Fonts.Bold, 12, true, '', nil, true, 'TOPLEFT', 0, 0)
 
     map.DiffFlag = diffFlag
     map.DiffText = diffFlag.text

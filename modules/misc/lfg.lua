@@ -114,7 +114,7 @@ function M:ReplaceGroupRoles(numPlayers, _, disabled)
     for i = 1, 5 do
         local icon = self.Icons[i]
 
-        icon:Size(26)
+        icon:SetSize(26, 26)
 
         if not icon.role then
             if i == 1 then
