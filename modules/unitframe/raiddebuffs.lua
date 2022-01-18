@@ -40,7 +40,7 @@ function UNITFRAME:CreateRaidDebuff(self)
     if not C.DB.Unitframe.InstanceDebuffs then return end
 
     local bu = CreateFrame('Frame', nil, self)
-    bu:Size(self:GetHeight() * .6)
+    bu:SetSize(self:GetHeight() * .6, self:GetHeight() * .6)
     bu:SetPoint('CENTER')
     bu:SetFrameLevel(self.Health:GetFrameLevel() + 2)
     bu.bg = F.CreateBDFrame(bu)

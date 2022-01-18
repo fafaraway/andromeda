@@ -285,9 +285,6 @@ function UNITFRAME:ClickCast()
     if not C.DB.Unitframe.Enable then
         return
     end
-    if not C.DB.Unitframe.Group then
-        return
-    end
     if not C.DB.Unitframe.ClickToCast then
         return
     end

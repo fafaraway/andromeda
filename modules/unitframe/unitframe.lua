@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('UnitFrame')
 
---[[ Backdrop ]]
+-- Backdrop
 
 local function UF_OnEnter(self)
     _G.UnitFrame_OnEnter(self)
@@ -51,7 +51,7 @@ function UNITFRAME:CreateBackdrop(self)
     self.ClassPowerBarHolder = classPowerBarHolder
 end
 
---[[ Selected border ]]
+-- Selected border
 
 local function UpdateSelectedBorder(self)
     if UnitIsUnit('target', self.unit) then
@@ -73,7 +73,7 @@ function UNITFRAME:CreateSelectedBorder(self)
     self:RegisterEvent('GROUP_ROSTER_UPDATE', UpdateSelectedBorder, true)
 end
 
---[[ Sound effect for target/focus changed ]]
+-- Sound effect for target/focus changed
 
 function UNITFRAME:PLAYER_TARGET_CHANGED()
     if (UnitExists('target')) then
@@ -108,7 +108,7 @@ function UNITFRAME:CreateTargetSound()
     F:RegisterEvent('PLAYER_FOCUS_CHANGED', UNITFRAME.PLAYER_FOCUS_CHANGED)
 end
 
---[[ Remove blizz raid frame ]]
+-- Remove blizz raid frame
 
 local function HideBlizzPartyFrame(baseName, doNotReparent)
     local frame = _G[baseName]
@@ -161,7 +161,7 @@ function UNITFRAME:RemoveBlizzRaidFrame()
     end
 end
 
---[[  ]]
+--
 
 local RaidBuffs = {}
 function UNITFRAME:AddClassSpells(list)

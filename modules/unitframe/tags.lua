@@ -437,3 +437,11 @@ function NAMEPLATE:CreateNameplateHealthTag(self)
 
     self.HealthTag = text
 end
+
+function UNITFRAME:UpdateGroupTags()
+    for _, frame in pairs(oUF.objects) do
+        if frame.raidType == 'party' or frame.raidType == 'raid' then
+            frame:UpdateTags()
+        end
+    end
+end

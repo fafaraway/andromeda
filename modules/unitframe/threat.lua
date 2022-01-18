@@ -2,16 +2,16 @@ local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('UnitFrame')
 
 local function UpdateThreat(self, _, unit)
-    if not self.Glow or self.unit ~= unit then
+    if not self.shadow or self.unit ~= unit then
         return
     end
 
     local status = UnitThreatSituation(unit)
     if status and status > 0 then
         local r, g, b = GetThreatStatusColor(status)
-        self.Glow:SetBackdropBorderColor(r, g, b, .6)
+        self.shadow:SetBackdropBorderColor(r, g, b, .6)
     else
-        self.Glow:SetBackdropBorderColor(0, 0, 0, .35)
+        self.shadow:SetBackdropBorderColor(0, 0, 0, .35)
     end
 end
 

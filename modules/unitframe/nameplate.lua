@@ -530,7 +530,7 @@ function NAMEPLATE:UpdateQuestUnit(_, unit)
             break
         end
 
-        if text ~= '' then
+        if text ~= ' ' then
             if isInGroup and text == C.MyName or (not isInGroup and isQuestTitle(textLine)) then
                 startLooking = true
             elseif startLooking then
@@ -741,7 +741,7 @@ function NAMEPLATE:CreateNameplateStyle()
     local overlay = health:CreateTexture(nil, 'OVERLAY')
     overlay:SetAllPoints()
     overlay:SetTexture(C.Assets.Textures.Overlay)
-    overlay:SetAlpha(.5)
+    overlay:SetAlpha(.2)
     overlay:SetBlendMode('ADD')
     overlay:Hide()
     self.Overlay = overlay

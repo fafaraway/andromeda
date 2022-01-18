@@ -180,7 +180,7 @@ function UNITFRAME:CreateAlternativePowerBar(self)
     local altPower = CreateFrame('StatusBar', nil, self)
     altPower:SetStatusBarTexture(C.Assets.Textures.Norm)
     altPower:SetPoint('TOP', self.Power, 'BOTTOM', 0, -2)
-    altPower:Size(self:GetWidth(), C.DB.Unitframe.AltPowerHeight)
+    altPower:SetSize(self:GetWidth(), C.DB.Unitframe.AltPowerHeight)
     altPower:EnableMouse(true)
     altPower.Smooth = smooth
     altPower.bg = F.SetBD(altPower)

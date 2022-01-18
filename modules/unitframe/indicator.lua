@@ -4,49 +4,64 @@ local UNITFRAME = F:GetModule('UnitFrame')
 function UNITFRAME:UpdateRaidTargetIndicator()
     local style = self.unitStyle
     local raidTarget = self.RaidTargetIndicator
-    local nameOnlyName = self.nameOnlyName
-    local title = self.npcTitle
     local isNameOnly = self.isNameOnly
-    local size = self:GetHeight()
+    --local size = self:GetHeight()
     local scale = C.DB.Unitframe.RaidTargetIndicatorScale
     local alpha = C.DB.Unitframe.RaidTargetIndicatorAlpha
     local npScale = C.DB.Nameplate.RaidTargetIndicatorScale
     local npAlpha = C.DB.Nameplate.RaidTargetIndicatorAlpha
 
-    if style == 'nameplate' then
-        if isNameOnly then
-            raidTarget:SetParent(self)
-            raidTarget:ClearAllPoints()
-            raidTarget:SetPoint('TOP', title or nameOnlyName, 'BOTTOM')
-        else
-            raidTarget:SetParent(self.Health)
-            raidTarget:ClearAllPoints()
-            raidTarget:SetPoint('CENTER')
-        end
-
+    --if style == 'nameplate' then
         raidTarget:SetAlpha(npAlpha)
-        raidTarget:SetSize(size, size)
+        raidTarget:SetSize(C.DB.Nameplate.Height, C.DB.Nameplate.Height)
         raidTarget:SetScale(npScale)
-    else
-        raidTarget:ClearAllPoints()
-        raidTarget:SetPoint('CENTER')
-        raidTarget:SetAlpha(alpha)
-        raidTarget:SetSize(size, size)
-        raidTarget:SetScale(scale)
-    end
+    --else
+        -- raidTarget:SetAlpha(alpha)
+        -- raidTarget:SetSize(size, size)
+        -- raidTarget:SetScale(scale)
+    --end
 end
 
 function UNITFRAME:CreateRaidTargetIndicator(self)
     local icon = self.Health:CreateTexture(nil, 'OVERLAY')
     icon:SetPoint('CENTER')
-    icon:SetAlpha(1)
-    icon:SetSize(24, 24)
+
     icon:SetTexture(C.Assets.target_icon)
 
     self.RaidTargetIndicator = icon
 
     UNITFRAME.UpdateRaidTargetIndicator(self)
 end
+
+
+
+function UNITFRAME:UpdateNameplateRaidTargetIndicator()
+
+    local icon = self.RaidTargetIndicator
+
+    local size = C.DB.Nameplate.Height
+    local scale = C.DB.Nameplate.RaidTargetIndicatorScale
+    local alpha = C.DB.Nameplate.RaidTargetIndicatorAlpha
+
+        icon:SetPoint('CENTER')
+        icon:SetAlpha(alpha)
+
+        icon:SetScale(scale)
+
+end
+
+function UNITFRAME:CreateNameplateRaidTargetIndicator(self)
+    local size = C.DB.Nameplate.Height
+    local icon = self.Health:CreateTexture(nil, 'OVERLAY')
+    icon:SetTexture(C.Assets.target_icon)
+    icon:SetSize(size, size)
+
+    self.RaidTargetIndicator = icon
+
+    UNITFRAME.UpdateNameplateRaidTargetIndicator(self)
+end
+
+
 
 function UNITFRAME:CreateReadyCheckIndicator(self)
     local readyCheckIndicator = self:CreateTexture(nil, 'OVERLAY')

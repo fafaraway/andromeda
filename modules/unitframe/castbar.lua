@@ -10,6 +10,7 @@ local function CreateCastBarMover(bar, text, value, anchor)
     bar.mover = mover
 end
 
+local ticks = {}
 local channelingTicks = {
     [740] = 4, -- 宁静
     [755] = 5, -- 生命通道
@@ -45,29 +46,6 @@ if C.MyClass == 'PRIEST' then
     end
     F:RegisterEvent('PLAYER_LOGIN', updateTicks)
     F:RegisterEvent('PLAYER_TALENT_UPDATE', updateTicks)
-end
-
-local ticks = {}
-local function UpdateCastBarTicks(bar, numTicks)
-    if numTicks and numTicks > 0 then
-        local delta = bar:GetWidth() / numTicks
-        for i = 1, numTicks do
-            if not ticks[i] then
-                ticks[i] = bar:CreateTexture(nil, 'OVERLAY')
-                ticks[i]:SetTexture(C.Assets.bd_tex)
-                ticks[i]:SetVertexColor(0, 0, 0, .85)
-                ticks[i]:SetWidth(C.Mult)
-                ticks[i]:SetHeight(bar:GetHeight())
-            end
-            ticks[i]:ClearAllPoints()
-            ticks[i]:SetPoint('CENTER', bar, 'LEFT', delta * i, 0)
-            ticks[i]:Show()
-        end
-    else
-        for _, tick in pairs(ticks) do
-            tick:Hide()
-        end
-    end
 end
 
 function UNITFRAME:OnCastbarUpdate(elapsed)
@@ -195,7 +173,7 @@ function UNITFRAME:PostCastStart(unit)
         if self.channeling then
             numTicks = channelingTicks[self.spellID] or 0
         end
-        UpdateCastBarTicks(self, numTicks)
+        F:CreateAndUpdateBarTicks(self, ticks, numTicks)
     end
 
     if (style == 'nameplate' and npCompact) or (style ~= 'nameplate' and compact) then
