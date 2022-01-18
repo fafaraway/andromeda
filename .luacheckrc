@@ -2483,5 +2483,9 @@ read_globals = {
     'issecurevariable',
     'scrub',
     'securecall',
-    'seterrorhandler'
+    'seterrorhandler',
+
+    'RaiseFrameLevel',
+    'GetBindingFromClick',
+    'RegisterStateDriver'
 }
