@@ -235,7 +235,7 @@ function UNITFRAME:CreateHealPrediction(self)
     overAbsorb:SetPoint('TOP', self.Health, 'TOPRIGHT', -1, 4)
     overAbsorb:SetPoint('BOTTOM', self.Health, 'BOTTOMRIGHT', -1, -4)
     overAbsorb:SetWidth(12)
-    overAbsorb:SetTexture(C.AssetsPath .. 'textures\\Textures.CastingSpark')
+    overAbsorb:SetTexture(C.AssetsPath .. 'textures\\spark_tex')
     overAbsorb:SetBlendMode('ADD')
 
     self.HealthPrediction = {

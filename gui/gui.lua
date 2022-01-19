@@ -48,9 +48,9 @@ local iconsList = {
 }
 
 GUI.TexturesList = {
-    [1] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\norm_tex', name = L['Default']},
-    [2] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\grad_tex', name = L['Gradient']},
-    [3] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\flat_tex', name = L['Flat']}
+    [1] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\statusbar\\norm', name = L['Default']},
+    [2] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\statusbar\\grad', name = L['Gradient']},
+    [3] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\statusbar\\flat', name = L['Flat']}
 }
 
 local function AddTextureToOption(parent, index)
