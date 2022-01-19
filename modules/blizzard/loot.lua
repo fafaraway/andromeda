@@ -5,13 +5,13 @@ local iconsize = 32
 local width = 140
 local sq, ss, sn, st
 
-local lootFrame = CreateFrame('Button', 'FreeUI_LootFrame', _G.UIParent, 'BackdropTemplate')
+local lootFrame = CreateFrame('Button', 'FreeUILootFrame', _G.UIParent, 'BackdropTemplate')
 lootFrame:SetFrameStrata('HIGH')
 lootFrame:SetClampedToScreen(true)
 lootFrame:SetWidth(width)
 lootFrame:SetHeight(64)
 lootFrame:Hide()
-table.insert(_G.UISpecialFrames, lootFrame)
+table.insert(_G.UISpecialFrames, 'FreeUILootFrame')
 
 lootFrame.slots = {}
 
@@ -58,7 +58,7 @@ local OnUpdate = function(self)
 end
 
 local CreateLootSlot = function(id)
-    local frame = CreateFrame('Button', 'FreeUI_Loot_Slot' .. id, lootFrame, 'BackdropTemplate')
+    local frame = CreateFrame('Button', 'FreeUILootSlot' .. id, lootFrame, 'BackdropTemplate')
     frame:SetPoint('TOP', lootFrame, 0, -((id - 1) * (iconsize + 1)))
     frame:SetPoint('RIGHT')
     frame:SetPoint('LEFT')
@@ -192,7 +192,12 @@ lootFrame.LOOT_OPENED = function(self, _, autoloot)
                 slot.lootQuality = lootQuality
                 slot.isQuestItem = isQuestItem
 
-                slot.name:SetText(lootName)
+                if lootQuantity > 1 then
+                    slot.name:SetText(lootName .. ' (' .. lootQuantity .. ')')
+                else
+                    slot.name:SetText(lootName)
+                end
+
                 slot.name:SetWordWrap(false)
                 slot.icon:SetTexture(lootIcon)
 
@@ -226,7 +231,9 @@ lootFrame.UPDATE_MASTER_LOOT_LIST = function(self)
 end
 
 function EL:OnLogin()
-    if not C.DB.General.EnhancedLoot then return end
+    if not C.DB.General.EnhancedLoot then
+        return
+    end
 
     lootFrame:SetScript(
         'OnHide',
