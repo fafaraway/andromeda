@@ -378,11 +378,6 @@ local function CreateOption(i)
             swatch.__default = (key == 'ACCOUNT' and C.AccountSettings[value]) or C.CharacterSettings[key][value]
         else -- blank, no optType
             if not key then
-                -- local line = F.SetGradient(parent, 'H', .5, .5, .5, .25, .25, 460, C.Mult)
-                -- line:SetPoint('TOPLEFT', 20, -offset - 12)
-
-
-
                 GUI:CreateGradientLine(parent, 230, -115, -offset - 12, 115, -offset - 12)
             end
             offset = offset + 35
