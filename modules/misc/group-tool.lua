@@ -122,9 +122,9 @@ end
 
 function GT:RaidTool_RoleCount(parent)
     local roleIcons = {
-        C.AssetsPath .. 'textures\\roles_tank',
-        C.AssetsPath .. 'textures\\roles_healer',
-        C.AssetsPath .. 'textures\\roles_dps'
+        C.Assets.Textures.RoleTank,
+        C.Assets.Textures.RoleHealer,
+        C.Assets.Textures.RoleDamager
     }
 
     local frame = CreateFrame('Frame', nil, parent)

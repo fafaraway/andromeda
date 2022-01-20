@@ -561,11 +561,10 @@ local msgEvents = {
     CHAT_MSG_RAID_WARNING = 1
 }
 
-local texPath = 'Interface\\AddOns\\FreeUI\\assets\\textures\\'
 local roleIcons = {
-    TANK = '\124T' .. texPath .. 'roles_tank.tga' .. ':12:12:0:0:64:64:5:59:5:59\124t',
-    HEALER = '\124T' .. texPath .. 'roles_healer.tga' .. ':12:12:0:0:64:64:5:59:5:59\124t',
-    DAMAGER = '\124T' .. texPath .. 'roles_dps.tga' .. ':12:12:0:0:64:64:5:59:5:59\124t'
+    TANK = '\124T' .. C.Assets.Textures.RoleTank .. ':12:12:0:0:64:64:4:60:4:60\124t',
+    HEALER = '\124T' .. C.Assets.Textures.RoleHealer .. ':12:12:0:0:64:64:4:60:4:60\124t',
+    DAMAGER = '\124T' .. C.Assets.Textures.RoleDamager .. ':12:12:0:0:64:64:4:60:4:60\124t'
 }
 
 local GetColoredName_orig = _G.GetColoredName

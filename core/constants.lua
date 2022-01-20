@@ -31,9 +31,9 @@ C.UIGap = 33
 
 C.Assets = {
     Textures = { -- #TODO
-        RoleTank = C.AssetsPath .. 'textures\\roles_tank',
-        RoleHealer = C.AssetsPath .. 'textures\\roles_healer',
-        RoleDamager = C.AssetsPath .. 'textures\\roles_dps',
+        RoleTank = C.AssetsPath .. 'textures\\roles\\tank',
+        RoleHealer = C.AssetsPath .. 'textures\\roles\\healer',
+        RoleDamager = C.AssetsPath .. 'textures\\roles\\damager',
         ClassesCircles = C.AssetsPath .. 'textures\\UI-CLASSES-CIRCLES',
         LfgRoles = C.AssetsPath .. 'textures\\UI-LFG-ICON-ROLES',
         StateIcons = C.AssetsPath .. 'textures\\state_icons',
