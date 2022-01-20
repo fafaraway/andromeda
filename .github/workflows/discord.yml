@@ -1,0 +1,17 @@
+name: discord-notification
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Run Discord Webhook
+      uses: Mist3r-Robot/classic-discord-webhook@main
+      with:
+        id: ${{ secrets.DISCORD_WEBHOOK_ID }}
+        token: ${{ secrets.DISCORD_WEBHOOK_TOKEN }}
