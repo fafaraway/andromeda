@@ -517,7 +517,7 @@ GUI.OptionsList = {
     },
     [11] = { -- unitframe
         {1, 'Unitframe', 'Enable', L['Enable Unitframes'], nil, SetupUnitFrameSize},
-        {1, 'Unitframe', 'InvertedColorMode', L['Inverted Mode'], nil, nil, nil, L['The healthbar color and the background color are inverted.']},
+        {1, 'Unitframe', 'InvertedColorMode', L['Inverted Color Mode'], nil, nil, nil, L["The health bar color and the background color are inverted.|nFreeUI's unitframe module is designed based on the Inverted Color Mode, which may cause some visual problems if disabled."]},
 
         {4, 'Unitframe', 'TextureStyle', L['Texture Style'], true, {}},
 
@@ -570,7 +570,8 @@ GUI.OptionsList = {
 
         {1, 'Unitframe', 'PartyFrame', L['Enable PartyFrame'], nil, SetupPartyFrame},
         {1, 'Unitframe', 'ShowSolo', L['Display PartyFrame on Solo'], nil, nil, UpdateAllHeaders, L['If checked, the PartyFrame would be visible even you are solo.']},
-        {1, 'Unitframe', 'DescRole', L['Sort by Reverse Roles'], true, nil, UpdatePartyHeader, L['If checked, sort your party order by "Damager Healer Tank" within growth direction.|nIf unchecked, sort your party order by "Tank Healer Damager" within growth direction.']},
+        {1, 'Unitframe', 'DescRole', L['Sort by Reverse Roles'], true, nil, UpdatePartyHeader, L["If checked, sort your party order by 'Damager Healer Tank' within growth direction.|nIf unchecked, sort your party order by 'Tank Healer Damager' within growth direction."]},
+        {1, 'Unitframe', 'ThreatIndicator', L['Threat Indicator'], nil, nil, nil, L['The glow on the outside of the partyframe represents the threat status.']},
         {1, 'Unitframe', 'PartyWatcher', L['Enable Party Watcher'], nil, SetupPartyWatcher, nil, L['If enabled, show spell cooldown for your group members on PartyFrames']},
         {1, 'Unitframe', 'PartyWatcherOnRight', L['Swap Icons Side'], nil, nil, UpdatePartyElements},
         {1, 'Unitframe', 'PartyWatcherSync', L['Sync Party Watcher'], true, nil, nil, L['If enabled, the cooldown status would sync with players who using party watcher or ZenTracker(WA).|nThis might decrease your performance.']},
@@ -594,7 +595,7 @@ GUI.OptionsList = {
         {1, 'Unitframe', 'InstanceDebuffs', L['Instance Debuffs'], true, SetupRaidDebuffs, nil, L['Display major debuffs in raid and dungeons.']},
 
         {1, 'Unitframe', 'CornerIndicator', L['Corner Indicator']},
-        {1, 'Unitframe', 'ThreatIndicator', L['Threat Indicator'], true},
+
 
 
     },
