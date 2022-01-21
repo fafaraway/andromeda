@@ -1,31 +1,42 @@
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('UnitFrame')
+local NAMEPLATE = F:GetModule('Nameplate')
+local oUF = F.Libs.oUF
 
-function UNITFRAME:UpdateRaidTargetIndicator()
-    local style = self.unitStyle
-    local raidTarget = self.RaidTargetIndicator
-    local isNameOnly = self.isNameOnly
-    --local size = self:GetHeight()
+
+
+function UNITFRAME.UpdateRaidTargetIndicator(frame)
+
+    local style = frame.unitStyle
+    local isRaid = style == 'raid'
+    local partyHeight = C.DB.Unitframe.PartyHealthHeight + C.DB.Unitframe.PartyPowerHeight
+    local raidHeight = C.DB.Unitframe.RaidHealthHeight + C.DB.Unitframe.RaidPowerHeight
+    local icon = frame.RaidTargetIndicator
+    local size = isRaid and raidHeight or partyHeight
     local scale = C.DB.Unitframe.RaidTargetIndicatorScale
     local alpha = C.DB.Unitframe.RaidTargetIndicatorAlpha
-    local npScale = C.DB.Nameplate.RaidTargetIndicatorScale
-    local npAlpha = C.DB.Nameplate.RaidTargetIndicatorAlpha
+    local enable = C.DB.Unitframe.RaidTargetIndicator
 
-    --if style == 'nameplate' then
-        raidTarget:SetAlpha(npAlpha)
-        raidTarget:SetSize(C.DB.Nameplate.Height, C.DB.Nameplate.Height)
-        raidTarget:SetScale(npScale)
-    --else
-        -- raidTarget:SetAlpha(alpha)
-        -- raidTarget:SetSize(size, size)
-        -- raidTarget:SetScale(scale)
-    --end
+    icon:SetPoint('CENTER')
+    icon:SetAlpha(alpha)
+    icon:SetSize(size, size)
+    icon:SetScale(scale)
+    icon:SetShown(enable)
+
 end
+
+function UNITFRAME:UpdateGroupAllIndicator()
+    for _, frame in pairs(oUF.objects) do
+        if frame.unitStyle == 'party' or frame.unitStyle == 'raid' then
+            UNITFRAME.UpdateRaidTargetIndicator(frame)
+        end
+    end
+end
+
+
 
 function UNITFRAME:CreateRaidTargetIndicator(self)
     local icon = self.Health:CreateTexture(nil, 'OVERLAY')
-    icon:SetPoint('CENTER')
-
     icon:SetTexture(C.Assets.Textures.RaidTargetIcons)
 
     self.RaidTargetIndicator = icon
@@ -35,7 +46,7 @@ end
 
 
 
-function UNITFRAME:UpdateNameplateRaidTargetIndicator()
+function NAMEPLATE:UpdateRaidTargetIndicator()
 
     local icon = self.RaidTargetIndicator
 
@@ -50,7 +61,7 @@ function UNITFRAME:UpdateNameplateRaidTargetIndicator()
 
 end
 
-function UNITFRAME:CreateNameplateRaidTargetIndicator(self)
+function NAMEPLATE:CreateRaidTargetIndicator(self)
     local size = C.DB.Nameplate.Height
     local icon = self.Health:CreateTexture(nil, 'OVERLAY')
     icon:SetTexture(C.Assets.Textures.RaidTargetIcons)
@@ -58,7 +69,7 @@ function UNITFRAME:CreateNameplateRaidTargetIndicator(self)
 
     self.RaidTargetIndicator = icon
 
-    UNITFRAME.UpdateNameplateRaidTargetIndicator(self)
+    NAMEPLATE.UpdateRaidTargetIndicator(self)
 end
 
 

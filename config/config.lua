@@ -176,9 +176,7 @@ C.CharacterSettings = {
 
             GCDIndicator = true,
 
-            RaidTargetIndicator = true,
-                RaidTargetIndicatorAlpha = .1,
-                RaidTargetIndicatorScale = 1,
+
 
             HidePlayerTags = true,
 
@@ -191,7 +189,7 @@ C.CharacterSettings = {
             DebuffTypeColorn = true,
             PurgeableHighlightn = true,
 
-            ShortenName = true,
+            AbbrName = true,
 
             Castbar = true,
                 SeparateCastbar = false,
@@ -275,7 +273,13 @@ C.CharacterSettings = {
                 RaidNameLength = 2,
 
 
-            GroupShowName = false,
+            GroupName = false,
+            GroupRole = true,
+            GroupLeader = true,
+            RaidTargetIndicator = true,
+                RaidTargetIndicatorAlpha = .2,
+                RaidTargetIndicatorScale = 1,
+
             SmartRaid = true,
 
             ShowRaidBuff = false,

@@ -157,6 +157,8 @@ local function SetupNameplateRaidTargetIndicator()
     GUI:SetupNameplateRaidTargetIndicator(GUI.Page[13])
 end
 
+
+
 local function SetupAuraFilter()
     GUI:SetupNameplateAuraFilter(GUI.Page[13])
 end
@@ -214,12 +216,18 @@ local function SetupUnitFrameRangeCheck()
     GUI:SetupUnitFrameRangeCheck(GUI.Page[11])
 end
 
-local function SetupRaidTargetIndicator()
-    GUI:SetupRaidTargetIndicator(GUI.Page[13])
-end
+
 
 local function UpdateGCDTicker()
     UNITFRAME:ToggleGCDTicker()
+end
+
+local function SetupGroupRaidTargetIndicator()
+    GUI:SetupGroupRaidTargetIndicator(GUI.Page[12])
+end
+
+local function UpdateGroupAllIndicator()
+    UNITFRAME:UpdateGroupAllIndicator()
 end
 
 
@@ -264,6 +272,10 @@ end
 
 local function UpdateAllHeaders()
     UNITFRAME:UpdateAllHeaders()
+end
+
+local function UpdateUnitTags()
+    UNITFRAME:UpdateUnitTags()
 end
 
 local function UpdateGroupTags()
@@ -548,9 +560,8 @@ GUI.OptionsList = {
 
 
 
-        {1, 'Unitframe', 'RaidTargetIndicator', L['Raid Target Icon'], nil, SetupRaidTargetIndicator, nil, L['Show raid target icon on unit frame.']},
-        {1, 'Unitframe', 'GCDIndicator', L['Global Cooldown Ticker'], true, nil, UpdateGCDTicker, L['Show global cooldown ticker above the player frame.']},
-
+        {1, 'Unitframe', 'GCDIndicator', L['Global Cooldown Ticker'], nil, nil, UpdateGCDTicker, L['Show global cooldown ticker above the player frame.']},
+        {1, 'Unitframe', 'AbbrName', L['Abbreviate Name'], nil, nil, UpdateUnitTags},
         {},
 
         {1, 'Unitframe', 'OnlyShowPlayer', L['Debuffs By Player Only'], nil, nil, nil, L['Display only debuffs created by player self.']},
@@ -595,10 +606,10 @@ GUI.OptionsList = {
         {},
 
 
-        {1, 'Unitframe', 'GroupShowName', L['Display Name'], nil, SetupNameLength, UpdateGroupTags},
-        {1, 'Unitframe', 'RoleIndicator', L['Role Indicator'], true, nil, UpdateGroupTags},
-        {1, 'Unitframe', 'LeaderIndicator', L['Leader Indicator'], nil, nil, UpdateGroupTags},
-        {1, 'Unitframe', 'RaidTargetIndicator', L['RaidTarget Indicator'], true, nil, UpdateGroupTags},
+        {1, 'Unitframe', 'GroupName', L['Display Name'], nil, SetupNameLength, UpdateGroupTags},
+        {1, 'Unitframe', 'GroupRole', L['Display Role Indicator'], true, nil, UpdateGroupTags},
+        {1, 'Unitframe', 'GroupLeader', L['Display Leader Indicator'], nil, nil, UpdateGroupTags},
+        {1, 'Unitframe', 'RaidTargetIndicator', L['Display RaidTarget Indicator'], true, SetupGroupRaidTargetIndicator, UpdateGroupAllIndicator},
 
 
 

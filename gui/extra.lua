@@ -2200,11 +2200,11 @@ function GUI:SetupUnitFrameRangeCheck(parent)
     CreateSlider(scroll, 'Unitframe', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset - 50)
 end
 
-local function UpdateRaidTargetIndicator()
-    UNITFRAME:UpdateRaidTargetIndicator()
+local function UpdateGroupAllIndicator()
+    UNITFRAME:UpdateGroupAllIndicator()
 end
 
-function GUI:SetupRaidTargetIndicator(parent)
+function GUI:SetupGroupRaidTargetIndicator(parent)
     local guiName = 'FreeUIGUIRaidTargetIndicator'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
@@ -2213,15 +2213,15 @@ function GUI:SetupRaidTargetIndicator(parent)
 
     local panel = CreateExtraGUI(parent, guiName)
     local scroll = GUI:CreateScroll(panel, 220, 540)
-    local db = C.CharacterSettings.Nameplate
+    local db = C.CharacterSettings.Unitframe
 
     local datas = {
         [1] = {
             key = 'RaidTargetIndicatorScale',
             value = db.RaidTargetIndicatorScale,
             text = L['Scale'],
-            min = 1,
-            max = 5,
+            min = .5,
+            max = 2,
             step = .1
         },
         [2] = {
@@ -2236,8 +2236,8 @@ function GUI:SetupRaidTargetIndicator(parent)
 
     local offset = -10
     for _, v in ipairs(datas) do
-        CreateGroupTitle(scroll, L['Raid Target Icon'], offset)
-        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateRaidTargetIndicator)
+        CreateGroupTitle(scroll, L['Raid Target Indicator'], offset)
+        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateGroupAllIndicator)
         offset = offset - 65
     end
 end
