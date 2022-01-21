@@ -25,13 +25,7 @@ function UNITFRAME.UpdateRaidTargetIndicator(frame)
 
 end
 
-function UNITFRAME:UpdateGroupAllIndicator()
-    for _, frame in pairs(oUF.objects) do
-        if frame.unitStyle == 'party' or frame.unitStyle == 'raid' then
-            UNITFRAME.UpdateRaidTargetIndicator(frame)
-        end
-    end
-end
+
 
 
 
@@ -46,26 +40,25 @@ end
 
 
 
-function NAMEPLATE:UpdateRaidTargetIndicator()
+function NAMEPLATE.UpdateRaidTargetIndicator(frame)
 
-    local icon = self.RaidTargetIndicator
-
+    local icon = frame.RaidTargetIndicator
     local size = C.DB.Nameplate.Height
     local scale = C.DB.Nameplate.RaidTargetIndicatorScale
     local alpha = C.DB.Nameplate.RaidTargetIndicatorAlpha
+    local enable = C.DB.Nameplate.RaidTargetIndicator
 
-        icon:SetPoint('CENTER')
-        icon:SetAlpha(alpha)
-
-        icon:SetScale(scale)
+    icon:SetPoint('CENTER')
+    icon:SetAlpha(alpha)
+    icon:SetSize(size, size)
+    icon:SetScale(scale)
+    icon:SetShown(enable)
 
 end
 
 function NAMEPLATE:CreateRaidTargetIndicator(self)
-    local size = C.DB.Nameplate.Height
     local icon = self.Health:CreateTexture(nil, 'OVERLAY')
     icon:SetTexture(C.Assets.Textures.RaidTargetIcons)
-    icon:SetSize(size, size)
 
     self.RaidTargetIndicator = icon
 
@@ -109,4 +102,21 @@ function UNITFRAME:CreateResurrectIndicator(self)
     resurrectIndicator:SetPoint('CENTER')
 
     self.ResurrectIndicator = resurrectIndicator
+end
+
+
+function UNITFRAME:UpdateGroupIndicators()
+    for _, frame in pairs(oUF.objects) do
+        if frame.unitStyle == 'party' or frame.unitStyle == 'raid' then
+            UNITFRAME.UpdateRaidTargetIndicator(frame)
+        end
+    end
+end
+
+function NAMEPLATE:UpdateIndicators()
+    for _, frame in pairs(oUF.objects) do
+        if frame.unitStyle == 'nameplate' then
+            NAMEPLATE.UpdateRaidTargetIndicator(frame)
+        end
+    end
 end

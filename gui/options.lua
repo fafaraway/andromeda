@@ -175,6 +175,10 @@ local function RefreshAllPlates()
     NAMEPLATE:RefreshAllPlates()
 end
 
+local function UpdateIndicators()
+    NAMEPLATE:UpdateIndicators()
+end
+
 
 -- Unitframe
 
@@ -226,8 +230,8 @@ local function SetupGroupRaidTargetIndicator()
     GUI:SetupGroupRaidTargetIndicator(GUI.Page[12])
 end
 
-local function UpdateGroupAllIndicator()
-    UNITFRAME:UpdateGroupAllIndicator()
+local function UpdateGroupIndicators()
+    UNITFRAME:UpdateGroupIndicators()
 end
 
 
@@ -599,7 +603,7 @@ GUI.OptionsList = {
         {1, 'Unitframe', 'PartyFrame', L['Enable PartyFrame'], nil, SetupPartyFrame},
         {1, 'Unitframe', 'ShowSolo', L['Display PartyFrame on Solo'], nil, nil, UpdateAllHeaders, L['If checked, the PartyFrame would be visible even you are solo.']},
         {1, 'Unitframe', 'DescRole', L['Sort by Reverse Roles'], true, nil, UpdatePartyHeader, L["If checked, sort your party order by 'Damager Healer Tank' within growth direction.|nIf unchecked, sort your party order by 'Tank Healer Damager' within growth direction."]},
-        {1, 'Unitframe', 'ThreatIndicator', L['Threat Indicator'], nil, nil, nil, L['The glow on the outside of the partyframe represents the threat status.']},
+
         {1, 'Unitframe', 'PartyWatcher', L['Enable Party Watcher'], nil, SetupPartyWatcher, nil, L['If enabled, show spell cooldown for your group members on PartyFrames']},
         {1, 'Unitframe', 'PartyWatcherOnRight', L['Swap Icons Side'], nil, nil, UpdatePartyElements},
         {1, 'Unitframe', 'PartyWatcherSync', L['Sync Party Watcher'], true, nil, nil, L['If enabled, the cooldown status would sync with players who using party watcher or ZenTracker(WA).|nThis might decrease your performance.']},
@@ -607,29 +611,30 @@ GUI.OptionsList = {
 
 
         {1, 'Unitframe', 'GroupName', L['Display Name'], nil, SetupNameLength, UpdateGroupTags},
-        {1, 'Unitframe', 'GroupRole', L['Display Role Indicator'], true, nil, UpdateGroupTags},
-        {1, 'Unitframe', 'GroupLeader', L['Display Leader Indicator'], nil, nil, UpdateGroupTags},
-        {1, 'Unitframe', 'RaidTargetIndicator', L['Display RaidTarget Indicator'], true, SetupGroupRaidTargetIndicator, UpdateGroupAllIndicator},
+        {1, 'Unitframe', 'GroupRole', L['Display Role Indicator'], true, nil, UpdateGroupTags, L["The indicator at the bottom of the GroupFrame represents the role of that player.|nThe blue '#' is tank, the green '+' is healer, and the red '*' is damager."]},
+        {1, 'Unitframe', 'GroupLeader', L['Display Leader Indicator'], nil, nil, UpdateGroupTags, L['The indicator at the upper left corner of the GroupFrame indicates that the player is the leader.']},
+        {1, 'Unitframe', 'RaidTargetIndicator', L['Display RaidTarget Indicator'], true, SetupGroupRaidTargetIndicator, UpdateGroupIndicators, L['Display RaidTarget indicator on nameplate.']},
 
 
 
 
-        {1, 'Unitframe', 'SmartRaid', L['Raidframe by Group Counts'], nil, nil, UpdateAllHeaders, L['If enabled, only show RaidFrame if there are more than 5 members in your group.|nIf disabled, show RaidFrame when in raid, show PartyFrame when in party.']},
+        {1, 'Unitframe', 'SmartRaid', L['Smart GroupFrame'], nil, nil, UpdateAllHeaders, L['If enabled, only show RaidFrame if there are more than 5 members in your group.|nIf disabled, show RaidFrame when in raid, show PartyFrame when in party.']},
 
-        {1, 'Unitframe', 'PositionBySpec', L['Save Postion by Spec'], nil, nil, nil, L['If enabled, the PartyFrame and RaidFrame would save their anchors for each spec.']},
+        {1, 'Unitframe', 'PositionBySpec', L['Save Postion by Spec'], true, nil, nil, L['Save the position of the GroupFrame separately according to the specialization.']},
 
         {1, 'Unitframe', 'ClickToCast', L['Enable Click to Cast'], nil, nil, nil, L['Open your spell book to configure click to cast.']},
 
-        {1, 'Unitframe', 'InstanceDebuffs', L['Instance Debuffs'], true, SetupRaidDebuffs, nil, L['Display major debuffs in raid and dungeons.']},
+        {1, 'Unitframe', 'InstanceDebuffs', L['Instance Debuffs'], true, SetupRaidDebuffs, nil, L['Display major debuffs for raid and dungeons according to its importance.']},
 
-        {1, 'Unitframe', 'CornerIndicator', L['Corner Indicator']},
+        {1, 'Unitframe', 'CornerIndicator', L['Corner Indicator'], nil, nil, nil, L["Display important auras in color blocks at the corner of the GroupFrame, such as healer's hot Paladin's Forbearance and Priest's Weakened Soul, etc."]},
+        {1, 'Unitframe', 'ThreatIndicator', L['Threat Indicator'], true, nil, nil, L['The glow on the outside of the PartyFrame represents the threat status.']},
 
 
 
     },
     [13] = { -- nameplate
         {1, 'Nameplate', 'Enable', L['Enable Nameplate'], nil, SetupNameplateSize, nil, L['Uncheck this if you want to use another nameplate addon.']},
-        {1, 'Nameplate', 'ForceCVars', L['Force CVars Setting'], nil, SetupNameplateCVars, UpdateNamePlateCVars, L['Force to set related cvars of nameplate.']},
+        {1, 'Nameplate', 'ForceCVars', L['Override CVars'], nil, SetupNameplateCVars, UpdateNamePlateCVars, L['Forcefully override the CVars related to the nameplate.']},
         {4, 'Nameplate', 'TextureStyle', L['Texture Style'], true, {}},
         {1, 'Nameplate', 'NameOnlyMode', L['Name Only Mode'], nil, nil, nil, L["Friendly nameplate only display the enlarged name and hide the health bar."]},
         {1, 'Nameplate', 'FriendlyPlate', L['Friendly Nameplate Size'], true, SetupNameplateFriendlySize, RefreshAllPlates, L["Set size separately for friendly nameplate.|nIf disabled, friendly nameplate will use the same size setting as the enemy nameplate."]},
@@ -640,7 +645,7 @@ GUI.OptionsList = {
         {1, 'Nameplate', 'TotemIcon', L['Totme Indicator'], nil, nil, nil, L["Display the corresponding totem icon on the totem's nameplate."]},
         {4, 'Nameplate', 'AuraFilterMode', L['Aura Filter Mode'], true, {L['BlackNWhite'], L['PlayerOnly'], L['IncludeCrowdControl']}},
         {1, 'Nameplate', 'ExecuteIndicator', L['Execute Indicator'], nil, SetupNameplateExecuteIndicator, nil, L['If unit health percentage lower than the execute cap you set, its name text color turns into red.']},
-        {1, 'Nameplate', 'RaidTargetIndicator', L['Raid Target Indicator'], true, SetupRaidTargetIndicator, nil, L['Display raid target icon on nameplate.']},
+        {1, 'Nameplate', 'RaidTargetIndicator', L['Raid Target Indicator'], true, SetupNameplateRaidTargetIndicator, UpdateIndicators, L['Display RaidTarget indicator on nameplate.']},
         {1, 'Nameplate', 'QuestIndicator', L['Quest Indicator'], nil, nil, nil, L['Display quest mark and progress on the right side of the nameplate.']},
         {1, 'Nameplate', 'ClassifyIndicator', L['Classify Indicator'], true, nil, nil, L['Display the corresponding icon on the left side of the nameplate according to the mob type.|nSupport ELITE, RARE and BOSS.']},
         {1, 'Nameplate', 'TargetIndicator', L['Target Indicator'], nil, nil, nil, L['Display white glow under the nameplate of the current target.']},

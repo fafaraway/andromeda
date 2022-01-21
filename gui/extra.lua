@@ -1110,6 +1110,11 @@ function GUI:SetupActionBarCooldown(parent)
 end
 
 -- Nameplate
+
+local function RefreshAllPlates()
+    NAMEPLATE:RefreshAllPlates()
+end
+
 function GUI:SetupNameplateAuraFilter(parent)
     local guiName = 'FreeUIGUINamePlateAuraFilter'
     TogglePanel(guiName)
@@ -1270,8 +1275,8 @@ function GUI:SetupNameplateMajorSpells(parent)
     end
 end
 
-local function UpdateNameplateSize()
-    NAMEPLATE:RefreshNameplats()
+local function UpdateIndicators()
+    NAMEPLATE:UpdateIndicators()
 end
 
 local function UpdateNameplateCVars()
@@ -1381,7 +1386,7 @@ function GUI:SetupNameplateSize(parent)
     local offset = -10
     for _, v in ipairs(datas) do
         CreateGroupTitle(scroll, L['Nameplate Size'], offset)
-        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateNameplateSize)
+        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, RefreshAllPlates)
         offset = offset - 65
     end
 end
@@ -1419,7 +1424,7 @@ function GUI:SetupNameplateFriendlySize(parent)
     local offset = -10
     for _, v in ipairs(datas) do
         CreateGroupTitle(scroll, L['Friendly Nameplate Size'], offset)
-        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateNameplateSize)
+        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, RefreshAllPlates)
         offset = offset - 65
     end
 end
@@ -1491,8 +1496,8 @@ function GUI:SetupNameplateRaidTargetIndicator(parent)
             key = 'RaidTargetIndicatorScale',
             value = db.RaidTargetIndicatorScale,
             text = L['Scale'],
-            min = 1,
-            max = 5,
+            min = .5,
+            max = 3,
             step = .1
         },
         [2] = {
@@ -1507,8 +1512,8 @@ function GUI:SetupNameplateRaidTargetIndicator(parent)
 
     local offset = -10
     for _, v in ipairs(datas) do
-        CreateGroupTitle(scroll, L['Raid Target Icon'], offset)
-        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateNameplateRaidTargetIndicator)
+        CreateGroupTitle(scroll, L['Raid Target Indicator'], offset)
+        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateIndicators)
         offset = offset - 65
     end
 end
@@ -2200,8 +2205,8 @@ function GUI:SetupUnitFrameRangeCheck(parent)
     CreateSlider(scroll, 'Unitframe', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset - 50)
 end
 
-local function UpdateGroupAllIndicator()
-    UNITFRAME:UpdateGroupAllIndicator()
+local function UpdateGroupIndicators()
+    UNITFRAME:UpdateGroupIndicators()
 end
 
 function GUI:SetupGroupRaidTargetIndicator(parent)
@@ -2237,7 +2242,7 @@ function GUI:SetupGroupRaidTargetIndicator(parent)
     local offset = -10
     for _, v in ipairs(datas) do
         CreateGroupTitle(scroll, L['Raid Target Indicator'], offset)
-        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateGroupAllIndicator)
+        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateGroupIndicators)
         offset = offset - 65
     end
 end

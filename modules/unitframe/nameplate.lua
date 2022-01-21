@@ -746,24 +746,16 @@ function NAMEPLATE:CreateNameplateStyle()
     overlay:Hide()
     self.Overlay = overlay
 
-    local name = F.CreateFS(self, C.Assets.Fonts.Header, 16, nil, nil, nil, 'THICK')
-    name:SetJustifyH('CENTER')
-    name:ClearAllPoints()
-    name:SetPoint('CENTER', 0, 14)
-    name:Hide()
-    self:Tag(name, '[free:color][free:npname]')
-    self.nameOnlyName = name
-
     local title = F.CreateFS(self, C.Assets.Fonts.Condensed, 11, nil, nil, nil, 'THICK')
     title:SetJustifyH('CENTER')
     title:ClearAllPoints()
-    title:SetPoint('TOP', name, 'BOTTOM', 0, -4)
+    title:SetPoint('TOP', self, 'BOTTOM', 0, -10)
     title:Hide()
     self:Tag(title, '[free:nptitle]')
     self.npcTitle = title
 
-    UNITFRAME:CreateNameTag(self)
-    NAMEPLATE:CreateNameplateHealthTag(self)
+    NAMEPLATE:CreateNameTag(self)
+    NAMEPLATE:CreateHealthTag(self)
     UNITFRAME:CreateHealPrediction(self)
     NAMEPLATE:CreateTargetIndicator(self)
     NAMEPLATE:CreateMouseoverIndicator(self)
@@ -771,7 +763,7 @@ function NAMEPLATE:CreateNameplateStyle()
     NAMEPLATE:CreateThreatIndicator(self)
     NAMEPLATE:CreateQuestIndicator(self)
     UNITFRAME:CreateNamePlateCastBar(self)
-    UNITFRAME:CreateRaidTargetIndicator(self)
+    NAMEPLATE:CreateRaidTargetIndicator(self)
     UNITFRAME:CreateAuras(self)
     NAMEPLATE:CreateSpitefulIndicator(self)
 
@@ -858,11 +850,16 @@ local disabledElements = {
 }
 
 function NAMEPLATE:UpdatePlateByType()
-    local nameOnlyName = self.nameOnlyName
-    local normalName = self.NameTag
+    --local nameOnlyName = self.nameOnlyName
+    local name = self.NameTag
     local title = self.npcTitle
+    local raidtarget = self.RaidTargetIndicator
+    local questIcon = self.questIcon
+    local outline = _G.FREE_ADB.FontOutline
 
-    normalName:SetShown(not self.widgetsOnly)
+    name:SetShown(not self.widgetsOnly)
+    name:ClearAllPoints()
+    raidtarget:ClearAllPoints()
 
     if self.plateType == 'NameOnly' then
         for _, element in pairs(disabledElements) do
@@ -871,9 +868,20 @@ function NAMEPLATE:UpdatePlateByType()
             end
         end
 
-        nameOnlyName:Show()
-        normalName:Hide()
+        name:SetJustifyH('CENTER')
+        self:Tag(name, '[free:color][free:npname]')
+        self.__tagIndex = 6
+        name:UpdateTag()
+        name:SetParent(self)
+        name:SetPoint('CENTER', self, 'TOP', 0, 8)
+        F:SetFS(name, C.Assets.Fonts.Header, 16, nil, nil, nil, 'THICK')
         title:Show()
+
+        raidtarget:SetPoint('TOP', title, 'BOTTOM', 0, -5)
+        raidtarget:SetParent(self)
+        if questIcon then
+            questIcon:SetPoint('LEFT', name, 'RIGHT', -1, 0)
+        end
 
         if self.widgetContainer then
             self.widgetContainer:ClearAllPoints()
@@ -886,9 +894,19 @@ function NAMEPLATE:UpdatePlateByType()
             end
         end
 
-        nameOnlyName:Hide()
-        normalName:Show()
+        name:SetJustifyH('CENTER')
+        self:Tag(name, '[free:npname]')
+        name:UpdateTag()
+        name:SetParent(self.Health)
+        name:SetPoint('CENTER', self, 'TOP')
+        F:SetFS(name, C.Assets.Fonts.Bold, 11, outline, nil, nil, outline or 'THICK')
         title:Hide()
+
+        raidtarget:SetPoint('CENTER')
+        raidtarget:SetParent(self.Health)
+        if questIcon then
+            questIcon:SetPoint('LEFT', self, 'RIGHT', 3, 0)
+        end
 
         if self.widgetContainer then
             self.widgetContainer:ClearAllPoints()
@@ -898,14 +916,7 @@ function NAMEPLATE:UpdatePlateByType()
         NAMEPLATE.UpdateNameplateSize(self)
     end
 
-    if self.plateType == 'FriendlyPlate' or self.plateType == 'NameOnly' then
-        self:DisableElement('Castbar')
-    else
-        self:EnableElement('Castbar')
-    end
-
     NAMEPLATE.UpdateTargetIndicator(self)
-    UNITFRAME.UpdateRaidTargetIndicator(self)
     NAMEPLATE.ToggleNameplateAuras(self)
 end
 

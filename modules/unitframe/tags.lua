@@ -19,8 +19,8 @@ local events = {
     offline = 'UNIT_HEALTH UNIT_CONNECTION',
     ddg = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED',
     name = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED',
-    partyname = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED',
-    raidname = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED',
+    groupname = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED',
+
     npname = 'UNIT_NAME_UPDATE',
     tarname = 'UNIT_NAME_UPDATE UNIT_THREAT_SITUATION_UPDATE UNIT_HEALTH',
     color = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_FACTION UNIT_CONNECTION PLAYER_FLAGS_CHANGED',
@@ -130,7 +130,7 @@ local _tags = {
 
     -- name
     name = function(unit)
-        local shorten = C.DB.Unitframe.ShortenName
+        local shorten = C.DB.Unitframe.AbbrName
         local isTargted = (unit == 'targettarget' and UnitIsUnit('targettarget', 'player'))
         local isFocusTargeted = (unit == 'focustarget' and UnitIsUnit('focustarget', 'player'))
         local isNP = (unit:match('nameplate%d+$'))
@@ -156,59 +156,21 @@ local _tags = {
     end,
     -- group name
     groupname = function(unit)
-        local showName = C.DB.Unitframe.GroupShowName
-        local shorten = C.DB.Unitframe.ShortenName
-        local length = C.DB.Unitframe.PartyNameLength
+        local isRaid = unit:match('raid(%d)')
+        local showName = C.DB.Unitframe.GroupName
+        local partyLength = C.DB.Unitframe.PartyNameLength
+        local raidLength = C.DB.Unitframe.RaidNameLength
         local str = UnitName(unit)
 
         if showName then
-            return shorten and F.ShortenString(str, length) or str
-        elseif not UnitIsConnected(unit) then
-            return _G.PLAYER_OFFLINE
-        elseif UnitIsDeadOrGhost(unit) and UnitIsConnected(unit) then
-            return _G.DEAD
-        else
-            return
+            return F.ShortenString(str, isRaid and raidLength or partyLength)
         end
     end,
-    -- party name
-    partyname = function(unit)
-        local showName = C.DB.Unitframe.GroupShowName
-        local shorten = C.DB.Unitframe.ShortenName
-        local length = C.DB.Unitframe.PartyNameLength
-        local str = UnitName(unit)
 
-        if showName then
-            return shorten and F.ShortenString(str, length) or str
-        elseif not UnitIsConnected(unit) then
-            return _G.PLAYER_OFFLINE
-        elseif UnitIsDeadOrGhost(unit) and UnitIsConnected(unit) then
-            return _G.DEAD
-        else
-            return
-        end
-    end,
-    -- raid name
-    raidname = function(unit)
-        local showName = C.DB.Unitframe.GroupShowName
-        local shorten = C.DB.Unitframe.ShortenName
-        local length = C.DB.Unitframe.RaidNameLength
-        local str = UnitName(unit)
-
-        if showName then
-            return shorten and F.ShortenString(str, length) or str
-        elseif not UnitIsConnected(unit) then
-            return _G.PLAYER_OFFLINE
-        elseif UnitIsDeadOrGhost(unit) and UnitIsConnected(unit) then
-            return _G.DEAD
-        else
-            return
-        end
-    end,
     -- nameplate name
     npname = function(unit)
         local nameOnly = C.DB.Nameplate.NameOnlyMode
-        local shorten = C.DB.Unitframe.ShortenName
+        local shorten = C.DB.Unitframe.AbbrName
         local num = GetLocale() == 'zhCN' and 6 or 10
         local str = UnitName(unit)
         local newStr = AbbrName(str, num) or str
@@ -261,9 +223,12 @@ local _tags = {
     end,
     -- group role
     grouprole = function(unit)
+        local showRole = C.DB.Unitframe.GroupRole
         local role = UnitGroupRolesAssigned(unit)
 
-        if role == 'TANK' then
+        if not showRole then
+            return
+        elseif role == 'TANK' then
             return '|cff3884ff#|r'
         elseif role == 'HEALER' then
             return '|cff2aff3d+|r'
@@ -273,9 +238,14 @@ local _tags = {
     end,
     -- group leader
     groupleader = function(unit)
+        local showLeader = C.DB.Unitframe.GroupLeader
         local isLeader = (UnitInParty(unit) or UnitInRaid(unit)) and UnitIsGroupLeader(unit)
 
-        return isLeader and '|cffffffff!|r'
+        if not showLeader then
+            return
+        else
+            return isLeader and '|cffffffff!|r'
+        end
     end,
     -- player resting
     resting = function(unit)
@@ -329,16 +299,11 @@ function UNITFRAME:CreateGroupRoleTag(self)
 end
 
 function UNITFRAME:CreateGroupNameTag(self)
-    local style = self.unitStyle
     local font = C.Assets.Fonts.Condensed
     local outline = _G.FREE_ADB.FontOutline
     local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
 
-    if style == 'party' then
-        self:Tag(text, '[free:color][free:partyname]')
-    else
-        self:Tag(text, '[free:color][free:raidname]')
-    end
+    self:Tag(text, '[free:color][free:groupname] [free:ddg]')
 
     self.GroupNameTag = text
 end
@@ -346,11 +311,9 @@ end
 function UNITFRAME:CreateNameTag(self)
     local font = C.Assets.Fonts.Condensed
     local style = self.unitStyle
-    local isNP = style == 'nameplate'
     local outline = _G.FREE_ADB.FontOutline
-    local boldFont = C.Assets.Fonts.Bold
 
-    local text = F.CreateFS(self.Health, isNP and boldFont or font, 11, outline, nil, nil, outline or 'THICK')
+    local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
 
     if style == 'target' then
         text:SetJustifyH('RIGHT')
@@ -358,21 +321,29 @@ function UNITFRAME:CreateNameTag(self)
     elseif style == 'arena' or style == 'boss' then
         text:SetJustifyH('LEFT')
         text:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
-    elseif style == 'nameplate' then
-        text:SetJustifyH('CENTER')
-        text:SetPoint('BOTTOM', self, 'TOP', 0, -3)
     else
         text:SetJustifyH('CENTER')
         text:SetPoint('BOTTOM', self, 'TOP', 0, 3)
     end
 
-    if style == 'nameplate' then
-        self:Tag(text, '[free:npname]')
-    elseif style == 'arena' then
+    if style == 'arena' then
         self:Tag(text, '[free:color][free:name] [arenaspec]')
     else
         self:Tag(text, '[free:color][free:name]')
     end
+
+    self.NameTag = text
+end
+
+function NAMEPLATE:CreateNameTag(self)
+    local outline = _G.FREE_ADB.FontOutline
+    local font = C.Assets.Fonts.Bold
+
+    local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
+    text:SetJustifyH('CENTER')
+    text:SetPoint('CENTER', self, 'TOP')
+
+    self:Tag(text, '[free:npname]')
 
     self.NameTag = text
 end
@@ -456,7 +427,7 @@ function UNITFRAME:CreatePlayerTags(self)
     end
 end
 
-function NAMEPLATE:CreateNameplateHealthTag(self)
+function NAMEPLATE:CreateHealthTag(self)
     if not C.DB.Nameplate.HealthPerc then
         return
     end
@@ -472,9 +443,17 @@ function NAMEPLATE:CreateNameplateHealthTag(self)
     self.HealthTag = text
 end
 
+function UNITFRAME:UpdateUnitTags()
+    for _, frame in pairs(oUF.objects) do
+        if frame.unitStyle ~= 'party' and frame.unitStyle ~= 'raid' then
+            frame:UpdateTags()
+        end
+    end
+end
+
 function UNITFRAME:UpdateGroupTags()
     for _, frame in pairs(oUF.objects) do
-        if frame.raidType == 'party' or frame.raidType == 'raid' then
+        if frame.unitStyle == 'party' or frame.unitStyle == 'raid' then
             frame:UpdateTags()
         end
     end
