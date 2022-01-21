@@ -1,3 +1,7 @@
+# @project-date-iso@
+# @project-timestamp@
+# @project-hash@
+
 ## Interface: @toc-version-retail@
 ## Author: Solor
 ## Version: @project-version@
