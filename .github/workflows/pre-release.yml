@@ -13,8 +13,14 @@ jobs:
       GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      - name: Clone project
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+
+      - name: Check
+        run: |
+          echo ${{ github.event }}
+          echo ${{ github.event_name }}
+          echo ${{ github.event_path }}
+          echo ${{ github.ref }}
 
       - name: Replace toc version
         uses: Numynum/ToCVersions@master
@@ -22,9 +28,16 @@ jobs:
       - name: Package and release
         uses: BigWigsMods/packager@master
 
-      - name: Send status to Discord
+      - name: Discord notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        uses: Ilshidur/action-discord@0.3.2
+        with:
+          args: '@here {{ EVENT_PAYLOAD.repository.name }} {{ GITHUB_REF_NAME }} has been released. Please note that this is a test version and can only be downloaded from Github.'
+
+      - name: Failure notification
         uses: nebularg/actions-discord-webhook@v1
         with:
-          webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL_PRIVATE }}
           status: ${{ job.status }}
         if: failure()
