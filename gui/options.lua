@@ -18,6 +18,7 @@ local oUF = F.Libs.oUF
 
 
 -- Inventory
+
 local function UpdateInventoryStatus()
     INVENTORY:UpdateAllBags()
 end
@@ -83,7 +84,9 @@ local function SetupActionBarCooldown()
     GUI:SetupActionBarCooldown(GUI.Page[5])
 end
 
+
 -- Chat
+
 local function UpdateWhisperSticky()
     CHAT:ChatWhisperSticky()
 end
@@ -112,12 +115,16 @@ local function UpdateEditBoxAnchor()
     CHAT:ToggleEditBoxAnchor()
 end
 
+
 -- Minimap
+
 local function SetupMapScale()
     GUI:SetupMapScale(GUI.Page[9])
 end
 
+
 -- Nameplate
+
 local function UpdatePlateClickThrough()
     NAMEPLATE:UpdatePlateClickThrough()
 end
@@ -166,7 +173,9 @@ local function RefreshAllPlates()
     NAMEPLATE:RefreshAllPlates()
 end
 
+
 -- Unitframe
+
 local function UpdateHealthColor()
     for _, frame in pairs(oUF.objects) do
         UNITFRAME:UpdateHealthBarColor(frame, true)
@@ -213,7 +222,9 @@ local function UpdateGCDTicker()
     UNITFRAME:ToggleGCDTicker()
 end
 
+
 -- Groupframe
+
 local function UpdatePartyHeader()
     if UNITFRAME.CreateAndUpdatePartyHeader then
         UNITFRAME:CreateAndUpdatePartyHeader()
@@ -259,7 +270,13 @@ local function UpdateGroupTags()
     UNITFRAME:UpdateGroupTags()
 end
 
+local function SetupNameLength()
+    GUI:SetupNameLength(GUI.Page[12])
+end
+
+
 -- General
+
 local function UpdateVignettingVisibility()
     VIGNETTING:UpdateVisibility()
 end
@@ -578,7 +595,7 @@ GUI.OptionsList = {
         {},
 
 
-        {1, 'Unitframe', 'GroupShowName', L['Display Members Name'], nil, nil, UpdateGroupTags},
+        {1, 'Unitframe', 'GroupShowName', L['Display Name'], nil, SetupNameLength, UpdateGroupTags},
         {1, 'Unitframe', 'RoleIndicator', L['Role Indicator'], true, nil, UpdateGroupTags},
         {1, 'Unitframe', 'LeaderIndicator', L['Leader Indicator'], nil, nil, UpdateGroupTags},
         {1, 'Unitframe', 'RaidTargetIndicator', L['RaidTarget Indicator'], true, nil, UpdateGroupTags},

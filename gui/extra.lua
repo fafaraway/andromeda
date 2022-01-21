@@ -1513,7 +1513,9 @@ function GUI:SetupNameplateRaidTargetIndicator(parent)
     end
 end
 
+
 -- Unitframe
+
 local function SetUnitFrameSize(self, unit)
     local width = C.DB.Unitframe[unit .. 'Width']
     local healthHeight = C.DB.Unitframe[unit .. 'HealthHeight']
@@ -2837,7 +2839,51 @@ function GUI:SetupRaidDebuffs(parent)
     panel:HookScript('OnShow', autoSelectInstance)
 end
 
+local function UpdateGroupTags()
+    UNITFRAME:UpdateGroupTags()
+end
+
+function GUI:SetupNameLength(parent)
+    local guiName = 'FreeUIGUISetupNameLength'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+
+    local mKey = 'Unitframe'
+    local db = C.CharacterSettings.Unitframe
+
+    local datas = {
+        [1] = {
+            key = 'PartyNameLength',
+            value = db.PartyNameLength,
+            text = L['Party Name Length'],
+            min = 0,
+            max = 10
+        },
+        [2] = {
+            key = 'RaidNameLength',
+            value = db.RaidNameLength,
+            text = L['Raid Name Length'],
+            min = 0,
+            max = 10
+        }
+    }
+
+    local offset = -10
+    for _, v in ipairs(datas) do
+        CreateGroupTitle(scroll, L['Name Length'], offset)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdateGroupTags)
+        offset = offset - 65
+    end
+end
+
+
 -- General
+
 function GUI:SetupAutoScreenshot(parent)
     local guiName = 'FreeUIGUIAutoScreenshot'
     TogglePanel(guiName)

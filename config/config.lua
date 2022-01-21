@@ -261,6 +261,7 @@ C.CharacterSettings = {
                 PartyWatcher = true,
                 PartyWatcherSync = true,
                 PartyWatcherOnRight = false,
+                PartyNameLength = 4,
 
             RaidFrame = true,
                 RaidColorStyle = 2,
@@ -271,6 +272,7 @@ C.CharacterSettings = {
                 RaidWidth = 38,
                 RaidHealthHeight = 30,
                 RaidPowerHeight = 2,
+                RaidNameLength = 2,
 
 
             GroupShowName = false,

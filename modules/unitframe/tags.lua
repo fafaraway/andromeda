@@ -1,4 +1,4 @@
-local F, C = unpack(select(2, ...))
+local F, C, L = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('UnitFrame')
 local NAMEPLATE = F:GetModule('Nameplate')
 local oUF = F.Libs.oUF
@@ -17,6 +17,7 @@ local events = {
     altpowerperc = 'UNIT_MAXPOWER UNIT_POWER_UPDATE',
     dead = 'UNIT_HEALTH',
     offline = 'UNIT_HEALTH UNIT_CONNECTION',
+    ddg = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED',
     name = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED',
     partyname = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED',
     raidname = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED',
@@ -31,6 +32,8 @@ local events = {
     classification = 'UNIT_CLASSIFICATION_CHANGED'
 }
 
+-- abbreviate the name
+-- aaa.bbbbb -> a.bbbbb
 local function AbbrName(string, i)
     if string.len(string) > i then
         return string.gsub(string, '%s?(.[\128-\191]*)%S+%s', '%1. ')
@@ -100,6 +103,18 @@ local _tags = {
             return ('%s%%'):format(math.floor(cur / max * 100 + .5))
         end
     end,
+
+    -- offline ghost dead
+    ddg = function(unit)
+        if not UnitIsConnected(unit) and GetNumArenaOpponentSpecs() == 0 then
+            return "|cffcccccc".._G.PLAYER_OFFLINE.."|r"
+        elseif UnitIsGhost(unit) then
+            return "|cffcccccc"..L["Ghost"].."|r"
+        elseif UnitIsDead(unit) then
+            return "|cffcccccc".._G.DEAD.."|r"
+        end
+    end,
+
     -- dead
     dead = function(unit)
         if UnitIsDeadOrGhost(unit) and UnitIsConnected(unit) then
@@ -112,6 +127,7 @@ local _tags = {
             return '|cffcccccc' .. _G.PLAYER_OFFLINE
         end
     end,
+
     -- name
     name = function(unit)
         local shorten = C.DB.Unitframe.ShortenName
@@ -138,15 +154,32 @@ local _tags = {
             return shorten and F.ShortenString(newStr, num, true) or str
         end
     end,
+    -- group name
+    groupname = function(unit)
+        local showName = C.DB.Unitframe.GroupShowName
+        local shorten = C.DB.Unitframe.ShortenName
+        local length = C.DB.Unitframe.PartyNameLength
+        local str = UnitName(unit)
+
+        if showName then
+            return shorten and F.ShortenString(str, length) or str
+        elseif not UnitIsConnected(unit) then
+            return _G.PLAYER_OFFLINE
+        elseif UnitIsDeadOrGhost(unit) and UnitIsConnected(unit) then
+            return _G.DEAD
+        else
+            return
+        end
+    end,
     -- party name
     partyname = function(unit)
         local showName = C.DB.Unitframe.GroupShowName
         local shorten = C.DB.Unitframe.ShortenName
+        local length = C.DB.Unitframe.PartyNameLength
         local str = UnitName(unit)
-        local num = GetLocale() == 'zhCN' and 4 or 6
 
         if showName then
-            return shorten and F.ShortenString(str, num) or str
+            return shorten and F.ShortenString(str, length) or str
         elseif not UnitIsConnected(unit) then
             return _G.PLAYER_OFFLINE
         elseif UnitIsDeadOrGhost(unit) and UnitIsConnected(unit) then
@@ -159,11 +192,11 @@ local _tags = {
     raidname = function(unit)
         local showName = C.DB.Unitframe.GroupShowName
         local shorten = C.DB.Unitframe.ShortenName
+        local length = C.DB.Unitframe.RaidNameLength
         local str = UnitName(unit)
-        local num = GetLocale() == 'zhCN' and 2 or 4
 
         if showName then
-            return shorten and F.ShortenString(str, num) or str
+            return shorten and F.ShortenString(str, length) or str
         elseif not UnitIsConnected(unit) then
             return _G.PLAYER_OFFLINE
         elseif UnitIsDeadOrGhost(unit) and UnitIsConnected(unit) then
@@ -275,6 +308,7 @@ for tag, func in next, _tags do
     tagMethods['free:' .. tag] = func
     tagEvents['free:' .. tag] = events[tag]
 end
+
 
 function UNITFRAME:CreateGroupLeaderTag(self)
     local font = C.Assets.Fonts.Pixel
