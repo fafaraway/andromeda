@@ -2306,18 +2306,6 @@ do
         if not object.Kill then
             mt.Kill = Kill
         end
-        if not object.Size then
-            mt.Size = Size
-        end
-        if not object.Width then
-            mt.Width = Width
-        end
-        if not object.Height then
-            mt.Height = Height
-        end
-        if not object.Point then
-            mt.Point = Point
-        end
         if not object.SetInside then
             mt.SetInside = SetInside
         end

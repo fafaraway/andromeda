@@ -225,7 +225,7 @@ end
 
 function UNITFRAME:UpdatePartyElements()
     for _, frame in pairs(oUF.objects) do
-        if frame.raidType == 'party' then
+        if frame.unitStyle == 'party' then
             if frame.PartyWatcher then
                 frame.PartyWatcher:UpdateAnchor()
             end
@@ -308,7 +308,6 @@ end
 
 local function CreatePartyStyle(self)
     self.unitStyle = 'party'
-    self.raidType = 'party'
 
     UNITFRAME:CreateBackdrop(self)
     UNITFRAME:CreateHealthBar(self)
@@ -416,7 +415,6 @@ UNITFRAME.RaidDirections = {
 
 local function CreateSimpleRaidStyle(self)
     self.unitStyle = 'simple'
-    self.raidType = 'simple'
 
     UNITFRAME:CreateBackdrop(self)
     UNITFRAME:CreateHealthBar(self)
@@ -659,6 +657,7 @@ function UNITFRAME:SpawnRaid()
     UNITFRAME:CreateAndUpdateRaidHeader(true)
     UNITFRAME:UpdateRaidTeamIndex()
 end
+
 
 
 
