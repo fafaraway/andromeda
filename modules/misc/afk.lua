@@ -3,6 +3,9 @@ local M = F:RegisterModule('ScreenSaver')
 
 function M:Enable()
     local self = M.Frame
+    if not self then
+        return
+    end
     if self.isActive then
         return
     end
@@ -13,6 +16,9 @@ end
 
 function M:Disable()
     local self = M.Frame
+    if not self then
+        return
+    end
     if not self.isActive then
         return
     end
@@ -103,6 +109,17 @@ function M:UpdateTimer()
     end
 end
 
+function M:CreateScreenSaverFrame()
+    local f = CreateFrame('Button', nil, _G.UIParent)
+    f:SetFrameStrata('FULLSCREEN')
+    f:SetAllPoints()
+    f:EnableMouse(true)
+    f:SetAlpha(0)
+    f:Hide()
+
+    M.Frame = f
+end
+
 function M:CreateText()
     local self = M.Frame
     local font = C.Assets.Fonts.Header
@@ -111,28 +128,33 @@ function M:CreateText()
 end
 
 function M:SetupScreenSaver()
-    local f = CreateFrame('Button', nil, _G.UIParent)
-    f:SetFrameStrata('FULLSCREEN')
-    f:SetAllPoints()
-    f:EnableMouse(true)
-    f:SetAlpha(0)
-    f:Hide()
+    M.Frame:SetScript('OnUpdate', M.UpdateTimer)
+    M.Frame:SetScript('OnEvent', M.OnEvent)
+    M.Frame:SetScript('OnDoubleClick', M.OnDoubleClick)
 
-    f:SetScript('OnUpdate', M.UpdateTimer)
-    f:SetScript('OnEvent', M.OnEvent)
-    f:SetScript('OnDoubleClick', M.OnDoubleClick)
+    M.Frame:RegisterEvent('PLAYER_FLAGS_CHANGED')
+    M.Frame:RegisterEvent('PLAYER_ENTERING_WORLD')
+    M.Frame:RegisterEvent('PLAYER_LEAVING_WORLD')
+end
 
-    f:RegisterEvent('PLAYER_FLAGS_CHANGED')
-    f:RegisterEvent('PLAYER_ENTERING_WORLD')
-    f:RegisterEvent('PLAYER_LEAVING_WORLD')
+function M:UpdateScreenSaver()
+    if C.DB.General.ScreenSaver then
+        M.Frame:SetScript('OnUpdate', M.UpdateTimer)
+        M.Frame:SetScript('OnEvent', M.OnEvent)
+        M.Frame:SetScript('OnDoubleClick', M.OnDoubleClick)
 
-    M.Frame = f
+        M.Frame:RegisterEvent('PLAYER_FLAGS_CHANGED')
+        M.Frame:RegisterEvent('PLAYER_ENTERING_WORLD')
+        M.Frame:RegisterEvent('PLAYER_LEAVING_WORLD')
+    else
+        M.Frame:SetScript('OnUpdate', nil)
+        M.Frame:SetScript('OnEvent', nil)
+        M.Frame:SetScript('OnDoubleClick', nil)
 
-    M:CreateAnimation()
-    M:CreateBackdrop()
-    M:CreateGalaxy()
-    M:CreatePlayerModel()
-    M:CreateText()
+        M.Frame:UnregisterEvent('PLAYER_FLAGS_CHANGED')
+        M.Frame:UnregisterEvent('PLAYER_ENTERING_WORLD')
+        M.Frame:UnregisterEvent('PLAYER_LEAVING_WORLD')
+    end
 end
 
 function M:OnLogin()
@@ -140,5 +162,11 @@ function M:OnLogin()
         return
     end
 
+    M:CreateScreenSaverFrame()
+    M:CreateAnimation()
+    M:CreateBackdrop()
+    M:CreateGalaxy()
+    M:CreatePlayerModel()
+    M:CreateText()
     M:SetupScreenSaver()
 end

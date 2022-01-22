@@ -328,7 +328,13 @@ local function SetupAuraSize()
     GUI:SetupAuraSize(GUI.Page[1])
 end
 
+local function UpdateScreenSaver()
+    F:GetModule('ScreenSaver'):UpdateScreenSaver()
+end
+
+
 -- Infobar
+
 local function UpdateCombatPulse()
     INFOBAR:UpdateCombatPulse()
 end
@@ -397,7 +403,7 @@ GUI.OptionsList = {
         {1, 'General', 'FasterMovieSkip', L['Faster Movie Skip'], true, nil, nil, L['Allow space bar, escape key and enter key to cancel cinematic without confirmation.']},
         {1, 'General', 'FasterZooming', L['Smooth Camera Zooming'], nil, nil, nil, L['Faster and smoother camera zooming.']},
         {1, 'General', 'ActionCamera', L['ActionCam Mode'], true, nil, UpdateActionCamera, L['Enable hidden ActionCam mode.']},
-        {1, 'General', 'ScreenSaver', L['AFK Mode'], nil, nil, nil, L['Enable screen saver during AFK.']},
+        {1, 'General', 'ScreenSaver', L['AFK Mode'], nil, nil, UpdateScreenSaver, L['Enable screen saver during AFK.']},
         {1, 'General', 'AutoScreenshot', L['Auto Screenshot'], true, SetupAutoScreenshot, nil, L['Take screenshots automatically based on specific events.']},
     },
     [2] = { -- notification
