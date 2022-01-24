@@ -1,0 +1,4 @@
+{
+    "lua.format.singleQuote": true,
+    "lua.preferLuaCheckErrors": true
+}

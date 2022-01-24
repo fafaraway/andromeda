@@ -6,6 +6,8 @@ exclude_files = {'libs/'}
 ignore = {
     '113/_',
     '212/self',
+    '212/unit',
+    '212/event',
     '213/i',
     '311/i',
     '4',

@@ -1,6 +1,4 @@
 /__pycache__/
-/.vscode/
-*.code-workspace
 *.psd
 /core/dev.lua
 
