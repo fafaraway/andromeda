@@ -10,9 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Clone project
-      uses: actions/checkout@v2
-
     - name: Push commit message to discord
       uses: Mist3r-Robot/classic-discord-webhook@main
       with:

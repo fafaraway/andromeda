@@ -28,16 +28,26 @@ jobs:
       - name: Package and release
         uses: BigWigsMods/packager@master
 
-      - name: Discord notification
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        uses: Ilshidur/action-discord@0.3.2
+      - name: failure notification
+        uses: rjstone/discord-webhook-notify@v1
         with:
-          args: '@here {{ EVENT_PAYLOAD.repository.name }} {{ GITHUB_REF_NAME }} has been released. Please note that this is a test version and can only be downloaded from Github.'
-
-      - name: Failure notification
-        uses: nebularg/actions-discord-webhook@v1
-        with:
-          webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL_PRIVATE }}
-          status: ${{ job.status }}
+            severity: error
+            username: Rick Bot
+            avatarUrl: https://cdn.discordapp.com/attachments/751929844920614932/934170534755860560/rick.png
+            description: 'FAILURE'
+            webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL_PRIVATE }}
         if: failure()
+
+      - name: Release notification
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+            severity: warn
+            username: Rick Bot
+            avatarUrl: https://cdn.discordapp.com/attachments/751929844920614932/934170534755860560/rick.png
+            text: '@here update available'
+            description: '${{ github.event.repository.name }} ${{ github.ref_name }} has been released.'
+            details: 'Please note that this is a BETA version and can only be downloaded from Github. https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}/releases/download/${{ github.ref_name }}/${{ github.event.repository.name }}-${{ github.ref_name }}.zip'
+            footer: '⚡ Beta Release'
+            webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+

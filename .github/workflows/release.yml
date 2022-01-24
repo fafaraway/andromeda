@@ -32,16 +32,24 @@ jobs:
       - name: Package and release
         uses: BigWigsMods/packager@master
 
-      - name: Discord notification
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        uses: Ilshidur/action-discord@0.3.2
+      - name: failure notification
+        uses: rjstone/discord-webhook-notify@v1
         with:
-          args: '@here {{ EVENT_PAYLOAD.repository.name }} {{ GITHUB_REF_NAME }} has been released.'
-
-      - name: Failure notification
-        uses: nebularg/actions-discord-webhook@v1
-        with:
-          webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL_PRIVATE }}
-          status: ${{ job.status }}
+            severity: error
+            username: Rick Bot
+            avatarUrl: https://cdn.discordapp.com/attachments/751929844920614932/934170534755860560/rick.png
+            description: 'FAILURE'
+            webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL_PRIVATE }}
         if: failure()
+
+      - name: Release notification
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+            severity: info
+            username: Morty Bot
+            avatarUrl: https://cdn.discordapp.com/attachments/751929844920614932/934170534458056804/morty.png
+            text: '@here update available'
+            description: '${{ github.event.repository.name }} ${{ github.ref_name }} has been released.'
+            details: 'Please note that this is a STABLE version and it is recommended to update it as soon as possible.'
+            footer: '⭐ Stable Release'
+            webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
