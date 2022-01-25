@@ -746,14 +746,6 @@ function NAMEPLATE:CreateNameplateStyle()
     overlay:Hide()
     self.Overlay = overlay
 
-    local title = F.CreateFS(self, C.Assets.Fonts.Condensed, 11, nil, nil, nil, 'THICK')
-    title:SetJustifyH('CENTER')
-    title:ClearAllPoints()
-    title:SetPoint('TOP', self, 'BOTTOM', 0, -10)
-    title:Hide()
-    self:Tag(title, '[free:nptitle]')
-    self.npcTitle = title
-
     NAMEPLATE:CreateNameTag(self)
     NAMEPLATE:CreateHealthTag(self)
     UNITFRAME:CreateHealPrediction(self)
@@ -852,7 +844,7 @@ local disabledElements = {
 function NAMEPLATE:UpdatePlateByType()
     --local nameOnlyName = self.nameOnlyName
     local name = self.NameTag
-    local title = self.npcTitle
+
     local raidtarget = self.RaidTargetIndicator
     local questIcon = self.questIcon
     local outline = _G.FREE_ADB.FontOutline
@@ -875,9 +867,9 @@ function NAMEPLATE:UpdatePlateByType()
         name:SetParent(self)
         name:SetPoint('CENTER', self, 'TOP', 0, 8)
         F:SetFS(name, C.Assets.Fonts.Header, 16, nil, nil, nil, 'THICK')
-        title:Show()
 
-        raidtarget:SetPoint('TOP', title, 'BOTTOM', 0, -5)
+
+        raidtarget:SetPoint('BOTTOM', name, 'TOP', 0, -5)
         raidtarget:SetParent(self)
         if questIcon then
             questIcon:SetPoint('LEFT', name, 'RIGHT', -1, 0)
@@ -885,7 +877,7 @@ function NAMEPLATE:UpdatePlateByType()
 
         if self.widgetContainer then
             self.widgetContainer:ClearAllPoints()
-            self.widgetContainer:SetPoint('TOP', title, 'BOTTOM', 0, -5)
+            self.widgetContainer:SetPoint('TOP', name, 'BOTTOM', 0, -5)
         end
     else
         for _, element in pairs(disabledElements) do
@@ -900,7 +892,7 @@ function NAMEPLATE:UpdatePlateByType()
         name:SetParent(self.Health)
         name:SetPoint('CENTER', self, 'TOP')
         F:SetFS(name, C.Assets.Fonts.Bold, 11, outline, nil, nil, outline or 'THICK')
-        title:Hide()
+
 
         raidtarget:SetPoint('CENTER')
         raidtarget:SetParent(self.Health)

@@ -24,7 +24,7 @@ local events = {
     npname = 'UNIT_NAME_UPDATE',
     tarname = 'UNIT_NAME_UPDATE UNIT_THREAT_SITUATION_UPDATE UNIT_HEALTH',
     color = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_FACTION UNIT_CONNECTION PLAYER_FLAGS_CHANGED',
-    nptitle = 'UNIT_NAME_UPDATE',
+
     grouprole = 'PLAYER_ROLES_ASSIGNED GROUP_ROSTER_UPDATE',
     groupleader = 'PARTY_LEADER_CHANGED GROUP_ROSTER_UPDATE',
     resting = 'PLAYER_UPDATE_RESTING',
@@ -207,20 +207,7 @@ local _tags = {
             return F:RGBToHex(1, 1, 1)
         end
     end,
-    -- nameplate title (name only mode)
-    nptitle = function(unit)
-        if UnitIsPlayer(unit) then
-            return
-        end
 
-        F.ScanTip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
-        F.ScanTip:SetUnit(unit)
-
-        local title = _G[string.format('FreeUI_ScanTooltipTextLeft%d', GetCVarBool('colorblindmode') and 3 or 2)]:GetText()
-        if title and not string.find(title, '^' .. _G.LEVEL) then
-            return title
-        end
-    end,
     -- group role
     grouprole = function(unit)
         local showRole = C.DB.Unitframe.GroupRole
