@@ -209,7 +209,7 @@ local function UpdateFriendButton(button)
 
     if button.Favorite:IsShown() then
         button.Favorite:ClearAllPoints()
-        button.Favorite:Point('LEFT', button.name, 'LEFT', button.name:GetStringWidth(), 0)
+        button.Favorite:SetPoint('LEFT', button.name, 'LEFT', button.name:GetStringWidth(), 0)
     end
 end
 
