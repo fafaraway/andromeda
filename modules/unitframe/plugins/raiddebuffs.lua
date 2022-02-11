@@ -128,6 +128,7 @@ local function checkInstance()
     end
 end
 
+local emptyDebuffs = {}
 local function Update(self, _, unit)
     if unit ~= self.unit then
         return
@@ -138,7 +139,7 @@ local function Update(self, _, unit)
     rd.filter = 'HARMFUL'
 
     local _name, _icon, _count, _debuffType, _duration, _expiration
-    local debuffs = rd.Debuffs or {}
+    local debuffs = rd.Debuffs or emptyDebuffs
     local isCharmed = UnitIsCharmed(unit)
     local canAttack = UnitCanAttack('player', unit)
     local prio
