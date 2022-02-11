@@ -723,14 +723,6 @@ function MM:HideInCombat()
     )
 end
 
-function _G.GetMinimapShape() -- LibDBIcon
-    if not MM.initialized then
-        MM:UpdateMinimapScale()
-        MM.initialized = true
-    end
-    return 'SQUARE'
-end
-
 function MM:OnLogin()
     if not C.DB.Map.Minimap then
         return
@@ -749,4 +741,12 @@ function MM:OnLogin()
     MM:WhoPings()
     MM:MouseFunc()
     MM:HideInCombat()
+
+    function _G.GetMinimapShape() -- LibDBIcon
+        if not MM.initialized then
+            MM:UpdateMinimapScale()
+            MM.initialized = true
+        end
+        return 'SQUARE'
+    end
 end
