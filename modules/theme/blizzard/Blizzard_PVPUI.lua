@@ -63,19 +63,16 @@ C.Themes['Blizzard_PVPUI'] = function()
     PVPQueueFrame.CategoryButton2.Icon:SetTexture('Interface\\Icons\\achievement_bg_killxenemies_generalsroom')
     PVPQueueFrame.CategoryButton3.Icon:SetTexture('Interface\\Icons\\ability_warrior_offensivestance')
 
-    hooksecurefunc(
-        'PVPQueueFrame_SelectButton',
-        function(index)
-            for i = 1, 3 do
-                local bu = PVPQueueFrame['CategoryButton' .. i]
-                if i == index then
-                    bu.Background:Show()
-                else
-                    bu.Background:Hide()
-                end
+    hooksecurefunc('PVPQueueFrame_SelectButton', function(index)
+        for i = 1, 3 do
+            local bu = PVPQueueFrame['CategoryButton' .. i]
+            if i == index then
+                bu.Background:Show()
+            else
+                bu.Background:Hide()
             end
         end
-    )
+    end)
 
     PVPQueueFrame.CategoryButton1.Background:SetAlpha(1)
     F.StripTextures(PVPQueueFrame.HonorInset)
@@ -86,14 +83,11 @@ C.Themes['Blizzard_PVPUI'] = function()
     popup.NewSeason:SetTextColor(1, .8, 0)
     popup.SeasonRewardText:SetTextColor(1, .8, 0)
     popup.SeasonDescriptionHeader:SetTextColor(1, 1, 1)
-    popup:HookScript(
-        'OnShow',
-        function(self)
-            for _, description in pairs(self.SeasonDescriptions) do
-                description:SetTextColor(1, 1, 1)
-            end
+    popup:HookScript('OnShow', function(self)
+        for _, description in pairs(self.SeasonDescriptions) do
+            description:SetTextColor(1, 1, 1)
         end
-    )
+    end)
 
     local SeasonRewardFrame = popup.SeasonRewardFrame
     SeasonRewardFrame.CircleMask:Hide()
@@ -118,9 +112,9 @@ C.Themes['Blizzard_PVPUI'] = function()
     bonusFrame.WorldBattlesTexture:Hide()
     bonusFrame.ShadowOverlay:Hide()
 
-    for _, bonusButton in pairs({'RandomBGButton', 'RandomEpicBGButton', 'Arena1Button', 'BrawlButton', 'SpecialEventButton'}) do
+    for _, bonusButton in pairs({'RandomBGButton', 'RandomEpicBGButton', 'Arena1Button', 'BrawlButton', 'SpecialEventButton', 'BrawlButton2'}) do
         local bu = bonusFrame[bonusButton]
-        if bu then -- IsNewPatch, SpecialEventButton removed in 9.2
+        if bu then -- IsNewPatch, SpecialEventButton renamed to BrawlButton2 removed in 9.2
             F.Reskin(bu, true)
             bu.SelectedTexture:SetDrawLayer('BACKGROUND')
             bu.SelectedTexture:SetColorTexture(r, g, b, .25)
@@ -184,33 +178,30 @@ C.Themes['Blizzard_PVPUI'] = function()
 
     -- Item Borders for HonorFrame & ConquestFrame
 
-    hooksecurefunc(
-        'PVPUIFrame_ConfigureRewardFrame',
-        function(rewardFrame, _, _, itemRewards, currencyRewards)
-            local rewardTexture, rewardQuaility = nil, 1
+    hooksecurefunc('PVPUIFrame_ConfigureRewardFrame', function(rewardFrame, _, _, itemRewards, currencyRewards)
+        local rewardTexture, rewardQuaility = nil, 1
 
-            if currencyRewards then
-                for _, reward in ipairs(currencyRewards) do
-                    local info = C_CurrencyInfo.GetCurrencyInfo(reward.id)
-                    local name, texture, quality = info.name, info.iconFileID, info.quality
-                    if quality == _G.LE_ITEM_QUALITY_ARTIFACT then
-                        _, rewardTexture, _, rewardQuaility = _G.CurrencyContainerUtil_GetCurrencyContainerInfo(reward.id, reward.quantity, name, texture, quality)
-                    end
+        if currencyRewards then
+            for _, reward in ipairs(currencyRewards) do
+                local info = C_CurrencyInfo.GetCurrencyInfo(reward.id)
+                local name, texture, quality = info.name, info.iconFileID, info.quality
+                if quality == _G.LE_ITEM_QUALITY_ARTIFACT then
+                    _, rewardTexture, _, rewardQuaility = _G.CurrencyContainerUtil_GetCurrencyContainerInfo(reward.id, reward.quantity, name, texture, quality)
                 end
-            end
-
-            if not rewardTexture and itemRewards then
-                local reward = itemRewards[1]
-                if reward then
-                    _, _, rewardQuaility, _, _, _, _, _, _, rewardTexture = GetItemInfo(reward.id)
-                end
-            end
-
-            if rewardTexture then
-                rewardFrame.Icon:SetTexture(rewardTexture)
-                local color = C.QualityColors[rewardQuaility]
-                rewardFrame.Icon.bg:SetBackdropBorderColor(color.r, color.g, color.b)
             end
         end
-    )
+
+        if not rewardTexture and itemRewards then
+            local reward = itemRewards[1]
+            if reward then
+                _, _, rewardQuaility, _, _, _, _, _, _, rewardTexture = GetItemInfo(reward.id)
+            end
+        end
+
+        if rewardTexture then
+            rewardFrame.Icon:SetTexture(rewardTexture)
+            local color = C.QualityColors[rewardQuaility]
+            rewardFrame.Icon.bg:SetBackdropBorderColor(color.r, color.g, color.b)
+        end
+    end)
 end
