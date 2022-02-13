@@ -21,7 +21,7 @@ do
     end
 
     function F:Print(str, ...)
-        print(C.ColoredAddonName .. ': ' .. str:format(...))
+        print(F:TextGradient('[' .. C.AddonName .. '] ', C.r, C.g, C.b, 1, 1, 1, 1) .. str:format(...))
     end
 
     function F:Debug(str, ...)

@@ -201,6 +201,6 @@ F:RegisterEvent(
             end
         end
 
-        F:Print(C.AddonVersion)
+        F:Print('Version: ' .. C.AddonVersion)
     end
 )
