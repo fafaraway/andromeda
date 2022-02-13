@@ -1,5 +1,3 @@
--- Credit Cloudy Unit Info by Cloudyfa
-
 local F, C, L = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 
@@ -25,11 +23,17 @@ local updater = CreateFrame('Frame')
 updater:SetScript('OnUpdate', TOOLTIP.InspectOnUpdate)
 updater:Hide()
 
+local lastTime = 0
 function TOOLTIP:GetInspectInfo(...)
     if self == 'UNIT_INVENTORY_CHANGED' then
-        local unit = ...
-        if UnitGUID(unit) == currentGUID then
-            TOOLTIP:InspectUnit(unit, true)
+        local thisTime = GetTime()
+        if thisTime - lastTime > .1 then
+            lastTime = thisTime
+
+            local unit = ...
+            if UnitGUID(unit) == currentGUID then
+                TOOLTIP:InspectUnit(unit, true)
+            end
         end
     elseif self == 'INSPECT_READY' then
         local guid = ...

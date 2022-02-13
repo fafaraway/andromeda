@@ -1,18 +1,3 @@
-local _G = _G
-local select = select
-local unpack = unpack
-local format = format
-local strsplit = strsplit
-local gsub = gsub
-local Ambiguate = Ambiguate
-local IsPartyLFG = IsPartyLFG
-local IsInRaid = IsInRaid
-local IsInGroup = IsInGroup
-local IsInGuild = IsInGuild
-local GetTime = GetTime
-local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
-local C_ChatInfo_RegisterAddonMessagePrefix = C_ChatInfo.RegisterAddonMessagePrefix
-
 local F, C, L = unpack(select(2, ...))
 local NOTIFICATION = F:GetModule('Notification')
 
@@ -22,10 +7,10 @@ end
 
 local lastVCTime, isVCInit = 0
 function NOTIFICATION:VersionCheck_Compare(new, old)
-    local new1, new2 = strsplit('.', new)
+    local new1, new2 = string.split('.', new)
     new1, new2 = tonumber(new1), tonumber(new2)
 
-    local old1, old2 = strsplit('.', old)
+    local old1, old2 = string.split('.', old)
     old1, old2 = tonumber(old1), tonumber(old2)
 
     if not old1 then return end
@@ -50,8 +35,8 @@ function NOTIFICATION:VersionCheck_Init()
     if not isVCInit then
         local status = NOTIFICATION:VersionCheck_Compare(_G.FREE_ADB.DetectVersion, C.AddonVersion)
         if status == 'IsNew' then
-            local release = gsub(_G.FREE_ADB.DetectVersion, '(%d+)$', '0')
-            NOTIFICATION:VersionCheck_Create(format(L['Addon has been out of date, the latest release is |cffff0000%s|r.'], release))
+            local release = string.gsub(_G.FREE_ADB.DetectVersion, '(%d+)$', '0')
+            NOTIFICATION:VersionCheck_Create(string.format(L['Addon has been out of date, the latest release is |cffff0000%s|r.'], release))
         elseif status == 'IsOld' then
             _G.FREE_ADB.DetectVersion = C.AddonVersion
         end
@@ -62,7 +47,7 @@ end
 
 function NOTIFICATION:VersionCheck_Send(channel)
     if GetTime() - lastVCTime >= 10 then
-        C_ChatInfo_SendAddonMessage('FreeUIVersionCheck', _G.FREE_ADB.DetectVersion, channel)
+        C_ChatInfo.SendAddonMessage('FreeUIVersionCheck', _G.FREE_ADB.DetectVersion, channel)
         lastVCTime = GetTime()
     end
 end
@@ -95,11 +80,11 @@ end
 
 function NOTIFICATION:VersionCheck()
     NOTIFICATION:VersionCheck_Init()
-    C_ChatInfo_RegisterAddonMessagePrefix('FreeUIVersionCheck')
+    C_ChatInfo.RegisterAddonMessagePrefix('FreeUIVersionCheck')
     F:RegisterEvent('CHAT_MSG_ADDON', NOTIFICATION.VersionCheck_Update)
 
     if IsInGuild() then
-        C_ChatInfo_SendAddonMessage('FreeUIVersionCheck', C.AddonVersion, 'GUILD')
+        C_ChatInfo.SendAddonMessage('FreeUIVersionCheck', C.AddonVersion, 'GUILD')
         lastVCTime = GetTime()
     end
 
