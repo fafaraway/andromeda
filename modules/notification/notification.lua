@@ -1,13 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local tinsert = tinsert
-local CreateFrame = CreateFrame
-local PlaySoundFile = PlaySoundFile
-local UnitIsAFK = UnitIsAFK
-local GetScreenWidth = GetScreenWidth
-local IsShiftKeyDown = IsShiftKeyDown
-
 local F, C = unpack(select(2, ...))
 local NOTIFICATION = F:GetModule('Notification')
 
@@ -169,10 +159,10 @@ function F:CreateNotification(name, message, clickFunc, texture)
     end
 
     if UnitIsAFK('player') then
-        tinsert(incoming, {name, message, clickFunc, texture})
+        table.insert(incoming, {name, message, clickFunc, texture})
         handler:RegisterEvent('PLAYER_FLAGS_CHANGED')
     elseif bannerShown or #incoming ~= 0 then
-        tinsert(incoming, {name, message, clickFunc, texture})
+        table.insert(incoming, {name, message, clickFunc, texture})
         if not processing then
             HandleIncoming()
         end
