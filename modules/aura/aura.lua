@@ -27,20 +27,8 @@ function AURA:BuildBuffFrame()
 
     -- Config
     AURA.settings = {
-        Buffs = {
-            offset = 12,
-            size = C.DB.Aura.BuffSize,
-            wrapAfter = C.DB.Aura.BuffPerRow,
-            maxWraps = 3,
-            reverseGrow = C.DB.Aura.BuffReverse
-        },
-        Debuffs = {
-            offset = 12,
-            size = C.DB.Aura.DebuffSize,
-            wrapAfter = C.DB.Aura.DebuffPerRow,
-            maxWraps = 1,
-            reverseGrow = C.DB.Aura.DebuffReverse
-        }
+        Buffs = {offset = 12, size = C.DB.Aura.BuffSize, wrapAfter = C.DB.Aura.BuffPerRow, maxWraps = 3, reverseGrow = C.DB.Aura.BuffReverse},
+        Debuffs = {offset = 12, size = C.DB.Aura.DebuffSize, wrapAfter = C.DB.Aura.DebuffPerRow, maxWraps = 1, reverseGrow = C.DB.Aura.DebuffReverse}
     }
 
     -- Movers
@@ -79,18 +67,13 @@ end
 function AURA:UpdateTimer(elapsed)
     local onTooltip = _G.GameTooltip:IsOwned(self)
 
-    if not (self.timeLeft or self.offset or onTooltip) then
+    if not (self.timeLeft or self.expiration or onTooltip) then
         self:SetScript('OnUpdate', nil)
         return
     end
 
-    if self.offset then
-        local expiration = select(self.offset, GetWeaponEnchantInfo())
-        if expiration then
-            self.timeLeft = expiration / 1e3
-        else
-            self.timeLeft = 0
-        end
+    if self.expiration then
+        self.timeLeft = self.expiration / 1e3
     elseif self.timeLeft then
         self.timeLeft = self.timeLeft - elapsed
     end
@@ -155,31 +138,23 @@ function AURA:UpdateAuras(button, index)
 
     button.spellID = spellID
     button.icon:SetTexture(texture)
-    button.offset = nil
+    button.expiration = nil
 end
 
 function AURA:UpdateTempEnchant(button, index)
-    local quality = GetInventoryItemQuality('player', index)
-    button.icon:SetTexture(GetInventoryItemTexture('player', index))
-
-    local offset = 2
-    local weapon = button:GetName():sub(-1)
-    if string.match(weapon, '2') then
-        offset = 6
-    end
-
-    if quality then
-        button:SetBackdropBorderColor(GetItemQualityColor(quality))
-    end
-
-    local expirationTime = select(offset, GetWeaponEnchantInfo())
+    local expirationTime = select(button.enchantOffset, GetWeaponEnchantInfo())
     if expirationTime then
-        button.offset = offset
+        local quality = GetInventoryItemQuality('player', index)
+        local color = C.QualityColors[quality or 1]
+        button:SetBackdropBorderColor(color.r, color.g, color.b)
+        button.icon:SetTexture(GetInventoryItemTexture('player', index))
+
+        button.expiration = expirationTime
         button:SetScript('OnUpdate', AURA.UpdateTimer)
         button.nextUpdate = -1
         AURA.UpdateTimer(button, 0)
     else
-        button.offset = nil
+        button.expiration = nil
         button.timeLeft = nil
         button.timer:SetText('')
     end
@@ -235,7 +210,7 @@ function AURA:UpdateHeader(header)
         child.count:SetFont(C.Assets.Fonts.Roadway, fontSize, 'OUTLINE')
         child.timer:SetFont(C.Assets.Fonts.Roadway, fontSize, 'OUTLINE')
 
-        --Blizzard bug fix, icons arent being hidden when you reduce the amount of maximum buttons
+        -- Blizzard bug fix, icons arent being hidden when you reduce the amount of maximum buttons
         if index > (cfg.maxWraps * cfg.wrapAfter) and child:IsShown() then
             child:Hide()
         end
@@ -253,6 +228,8 @@ function AURA:CreateAuraHeader(filter)
 
     local header = CreateFrame('Frame', name, _G.UIParent, 'SecureAuraHeaderTemplate')
     header:SetClampedToScreen(true)
+    header:UnregisterEvent('UNIT_AURA') -- we only need to watch player and vehicle
+    header:RegisterUnitEvent('UNIT_AURA', 'player', 'vehicle')
     header:SetAttribute('unit', 'player')
     header:SetAttribute('filter', filter)
     header.filter = filter
@@ -285,9 +262,14 @@ function AURA:Button_OnEnter()
     self:SetScript('OnUpdate', AURA.UpdateTimer)
 end
 
+local indexToOffset = {2, 6, 10}
+
 function AURA:CreateAuraIcon(button)
     button.header = button:GetParent()
     button.filter = button.header.filter
+    button.name = button:GetName()
+    local enchantIndex = tonumber(string.match(button.name, 'TempEnchant(%d)$'))
+    button.enchantOffset = indexToOffset[enchantIndex]
 
     local cfg = AURA.settings.Debuffs
     if button.filter == 'HELPFUL' then
