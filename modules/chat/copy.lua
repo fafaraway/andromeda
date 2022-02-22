@@ -13,13 +13,10 @@ local function IsMessageProtected(msg)
     return msg and (msg ~= string.gsub(msg, '(:?|?)|K(.-)|k', CanChangeMessage))
 end
 
-local function ColorReplace(msg, r, g, b)
+local function replaceMessage(msg, r, g, b)
     local hexRGB = F:RGBToHex(r, g, b)
-    local hexReplace = string.format('|r%s', hexRGB)
-    msg = string.gsub(msg, '|r', hexReplace)
-    msg = string.format('%s%s|r', hexRGB, msg)
-
-    return msg
+    msg = string.gsub(msg, '(|TInterface(.*)|t)', '')
+    return string.format('%s%s|r', hexRGB, msg)
 end
 
 local function EnableCombatLogging()
@@ -108,7 +105,6 @@ local function CreateCopyButton()
     button:SetSize(20, 20)
     F.Reskin(button)
 
-
     button.icon = button:CreateTexture(nil, 'ARTWORK')
     button.icon:SetPoint('TOPLEFT', 2, -2)
     button.icon:SetPoint('BOTTOMRIGHT', -2, 2)
@@ -135,7 +131,7 @@ function CHAT:GetChatLines()
         local msg, r, g, b = self:GetMessageInfo(i)
         if msg and not IsMessageProtected(msg) then
             r, g, b = r or 1, g or 1, b or 1
-            msg = ColorReplace(msg, r, g, b)
+            msg = replaceMessage(msg, r, g, b)
             lines[index] = tostring(msg)
             index = index + 1
         end
@@ -152,7 +148,7 @@ function CHAT:ChatCopy_OnClick()
         frame:Show()
 
         local lineCt = CHAT.GetChatLines(chatframe)
-        local text = table.concat(lines, ' \n', 1, lineCt)
+        local text = table.concat(lines, '\n', 1, lineCt)
         _G.FCF_SetChatWindowFontSize(chatframe, chatframe, fontSize)
         editBox:SetText(text)
     else
@@ -239,8 +235,3 @@ function CHAT:ChatCopy()
 
     self:ChatCopy_Create()
 end
-
-
-
-
-
