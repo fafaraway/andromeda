@@ -685,17 +685,19 @@ function UNITFRAME:SpawnUnits()
         UNITFRAME:SpawnArena()
     end
 
+    if C.DB.Unitframe.RaidFrame then
+        UNITFRAME:RemoveBlizzRaidFrame()
 
+        if C.DB.Unitframe.SimpleMode then
+            UNITFRAME:SpawnSimpleRaid()
+        else
+            UNITFRAME:SpawnRaid()
+        end
 
-    UNITFRAME:RemoveBlizzRaidFrame()
-
-    if C.DB.Unitframe.SimpleMode then
-        UNITFRAME:SpawnSimpleRaid()
-    else
-        UNITFRAME:SpawnRaid()
+        if C.DB.Unitframe.PartyFrame then
+            UNITFRAME:SpawnParty()
+        end
     end
-
-    UNITFRAME:SpawnParty()
 
     UNITFRAME:UpdateRaidHealthMethod()
     UNITFRAME:ClickCast()
