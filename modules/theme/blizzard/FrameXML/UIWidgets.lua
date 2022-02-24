@@ -21,6 +21,12 @@ function F:ReplaceWidgetBarTexture(atlas)
     end
 end
 
+local function ResetLabelColor(text, _, _, _, force)
+    if not force then
+        text:SetTextColor(1, 1, 1, true)
+    end
+end
+
 local function ReskinWidgetStatusBar(bar)
     if bar and not bar.styled then
         if bar.BG then
@@ -56,10 +62,12 @@ local function ReskinWidgetStatusBar(bar)
         if bar.Label then
             bar.Label:SetPoint('CENTER')
             bar.Label:SetFontObject(_G.Game12Font)
+            ResetLabelColor(bar.Label)
+            hooksecurefunc(bar.Label, 'SetTextColor', ResetLabelColor)
         end
         F.SetBD(bar)
         F.ReplaceWidgetBarTexture(bar, bar:GetStatusBarAtlas())
-        _G.hooksecurefunc(bar, 'SetStatusBarAtlas', F.ReplaceWidgetBarTexture)
+        hooksecurefunc(bar, 'SetStatusBarAtlas', F.ReplaceWidgetBarTexture)
 
         bar.styled = true
     end
@@ -106,90 +114,59 @@ local function ReskinSpellDisplayWidget(spell)
     spell.IconMask:Hide()
 end
 
-_G.tinsert(
-    C.BlizzThemes,
-    function()
-        _G.hooksecurefunc(
-            _G.UIWidgetTopCenterContainerFrame,
-            'UpdateWidgetLayout',
-            function(self)
-                for _, widgetFrame in pairs(self.widgetFrames) do
-                    local widgetType = widgetFrame.widgetType
-                    if widgetType == Type_DoubleStatusBar then
-                        ReskinDoubleStatusBarWidget(widgetFrame)
-                    elseif widgetType == Type_SpellDisplay then
-                        ReskinSpellDisplayWidget(widgetFrame.Spell)
-                    elseif widgetType == Type_StatusBar then
-                        ReskinWidgetStatusBar(widgetFrame.Bar)
-                    end
-                end
+table.insert(C.BlizzThemes, function()
+    hooksecurefunc(_G.UIWidgetTopCenterContainerFrame, 'UpdateWidgetLayout', function(self)
+        for _, widgetFrame in pairs(self.widgetFrames) do
+            local widgetType = widgetFrame.widgetType
+            if widgetType == Type_DoubleStatusBar then
+                ReskinDoubleStatusBarWidget(widgetFrame)
+            elseif widgetType == Type_SpellDisplay then
+                ReskinSpellDisplayWidget(widgetFrame.Spell)
+            elseif widgetType == Type_StatusBar then
+                ReskinWidgetStatusBar(widgetFrame.Bar)
             end
-        )
+        end
+    end)
 
-        _G.hooksecurefunc(
-            _G.UIWidgetBelowMinimapContainerFrame,
-            'UpdateWidgetLayout',
-            function(self)
-                for _, widgetFrame in pairs(self.widgetFrames) do
-                    if widgetFrame.widgetType == Type_CaptureBar then
-                        ReskinPVPCaptureBar(widgetFrame)
-                    end
-                end
+    hooksecurefunc(_G.UIWidgetBelowMinimapContainerFrame, 'UpdateWidgetLayout', function(self)
+        for _, widgetFrame in pairs(self.widgetFrames) do
+            if widgetFrame.widgetType == Type_CaptureBar then
+                ReskinPVPCaptureBar(widgetFrame)
             end
-        )
+        end
+    end)
 
-        _G.hooksecurefunc(
-            _G.UIWidgetPowerBarContainerFrame,
-            'UpdateWidgetLayout',
-            function(self)
-                for _, widgetFrame in pairs(self.widgetFrames) do
-                    if widgetFrame.widgetType == Type_StatusBar then
-                        ReskinWidgetStatusBar(widgetFrame.Bar)
-                    end
-                end
+    hooksecurefunc(_G.UIWidgetPowerBarContainerFrame, 'UpdateWidgetLayout', function(self)
+        for _, widgetFrame in pairs(self.widgetFrames) do
+            if widgetFrame.widgetType == Type_StatusBar then
+                ReskinWidgetStatusBar(widgetFrame.Bar)
             end
-        )
+        end
+    end)
 
-        _G.hooksecurefunc(
-            _G.TopScenarioWidgetContainerBlock.WidgetContainer,
-            'UpdateWidgetLayout',
-            function(self)
-                for _, widgetFrame in pairs(self.widgetFrames) do
-                    if widgetFrame.widgetType == Type_StatusBar then
-                        ReskinWidgetStatusBar(widgetFrame.Bar)
-                    end
-                end
+    hooksecurefunc(_G.TopScenarioWidgetContainerBlock.WidgetContainer, 'UpdateWidgetLayout', function(self)
+        for _, widgetFrame in pairs(self.widgetFrames) do
+            if widgetFrame.widgetType == Type_StatusBar then
+                ReskinWidgetStatusBar(widgetFrame.Bar)
             end
-        )
+        end
+    end)
 
-        _G.hooksecurefunc(
-            _G.BottomScenarioWidgetContainerBlock.WidgetContainer,
-            'UpdateWidgetLayout',
-            function(self)
-                for _, widgetFrame in pairs(self.widgetFrames) do
-                    if widgetFrame.widgetType == Type_SpellDisplay then
-                        ReskinSpellDisplayWidget(widgetFrame.Spell)
-                    end
-                end
+    hooksecurefunc(_G.BottomScenarioWidgetContainerBlock.WidgetContainer, 'UpdateWidgetLayout', function(self)
+        for _, widgetFrame in pairs(self.widgetFrames) do
+            if widgetFrame.widgetType == Type_SpellDisplay then
+                ReskinSpellDisplayWidget(widgetFrame.Spell)
             end
-        )
+        end
+    end)
 
-        -- if font outline enabled in tooltip, fix text shows in two lines on Torghast info
-        hooksecurefunc(
-            _G.UIWidgetTemplateTextWithStateMixin,
-            'Setup',
-            function(self)
-                self.Text:SetWidth(self.Text:GetStringWidth() + 2)
-            end
-        )
+    -- if font outline enabled in tooltip, fix text shows in two lines on Torghast info
+    hooksecurefunc(_G.UIWidgetTemplateTextWithStateMixin, 'Setup', function(self)
+        self.Text:SetWidth(self.Text:GetStringWidth() + 2)
+    end)
 
-        -- needs review, might remove this in the future
-        _G.hooksecurefunc(
-            _G.UIWidgetTemplateStatusBarMixin,
-            'Setup',
-            function(self)
-                ReskinWidgetStatusBar(self.Bar)
-            end
-        )
-    end
-)
+    -- needs review, might remove this in the future
+    hooksecurefunc(_G.UIWidgetTemplateStatusBarMixin, 'Setup', function(self)
+        ReskinWidgetStatusBar(self.Bar)
+    end)
+end)
