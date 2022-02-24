@@ -61,10 +61,6 @@ local function ReskinPortraitIcon(button, texture)
 end
 
 C.Themes['Blizzard_ClickBindingUI'] = function()
-    if not C.IsNewPatch then
-        return
-    end
-
     local frame = _G.ClickBindingFrame
 
     F.ReskinPortraitFrame(frame)

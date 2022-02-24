@@ -2606,11 +2606,9 @@ function GUI:SetupRaidDebuffs(parent)
 
     local raids = {
         [1] = EJ_GetInstanceInfo(1190),
-        [2] = EJ_GetInstanceInfo(1193)
+        [2] = EJ_GetInstanceInfo(1193),
+        [3] = EJ_GetInstanceInfo(1195)
     }
-    if C.IsNewPatch then
-        raids[3] = EJ_GetInstanceInfo(1195)
-    end
 
     options[1] = GUI:CreateDropdown(frame, _G.DUNGEONS, 123, -30, dungeons, nil, 107, 24)
     options[1]:Hide()

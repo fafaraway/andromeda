@@ -66,7 +66,7 @@ table.insert(
                     ic.bg:SetShown(ic:IsShown())
                 end
 
-                if self.ClickBindingIconCover and self.ClickBindingIconCover:IsShown() then -- IsNewPatch, clickcast in 9.2
+                if self.ClickBindingIconCover and self.ClickBindingIconCover:IsShown() then
                     self.SpellName:SetTextColor(.7, .7, .7)
                 end
             end

@@ -6,10 +6,6 @@ local INSTANCE = 1195 -- 初诞者圣墓
 local BOSS
 
 function UNITFRAME:AddSepulcherSpells()
-    if not C.IsNewPatch then
-        return
-    end
-
     BOSS = 2458 -- 警戒卫士
     UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 360458) -- 不稳定的核心
     UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 364881) -- 物质分解
