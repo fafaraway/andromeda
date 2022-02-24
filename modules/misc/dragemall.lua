@@ -45,7 +45,7 @@ local frames = {
     ['VideoOptionsFrame'] = false,
 
     -- Addon Frames
-    ['BindPadFrame'] = false,
+    ['BindPadFrame'] = false
 }
 
 -- Frame Existing Check
@@ -74,7 +74,8 @@ local lodFrames = {
     Blizzard_BlackMarketUI = {['BlackMarketFrame'] = false},
     Blizzard_Calendar = {['CalendarFrame'] = false, ['CalendarCreateEventFrame'] = true, ['CalendarEventPickerFrame'] = false},
     Blizzard_ChallengesUI = {['ChallengesKeystoneFrame'] = false},
-    Blizzard_Collections = {['WardrobeFrame'] = false, ['WardrobeOutfitEditFrame'] = false},
+    Blizzard_ClickBindingUI = {['ClickBindingFrame'] = false},
+    -- Blizzard_Collections = {['WardrobeFrame'] = false, ['WardrobeOutfitEditFrame'] = false},
     Blizzard_CovenantRenown = {['CovenantRenownFrame'] = false},
     Blizzard_CovenantSanctum = {['CovenantSanctumFrame'] = false},
     Blizzard_Communities = {
@@ -136,13 +137,10 @@ local function HookScript(frame, script, handler)
     end
     local oldHandler = frame:GetScript(script)
     if oldHandler then
-        frame:SetScript(
-            script,
-            function(...)
-                handler(...)
-                oldHandler(...)
-            end
-        )
+        frame:SetScript(script, function(...)
+            handler(...)
+            oldHandler(...)
+        end)
     else
         frame:SetScript(script, handler)
     end
