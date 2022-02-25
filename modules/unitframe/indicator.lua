@@ -3,10 +3,7 @@ local UNITFRAME = F:GetModule('UnitFrame')
 local NAMEPLATE = F:GetModule('Nameplate')
 local oUF = F.Libs.oUF
 
-
-
 function UNITFRAME.UpdateRaidTargetIndicator(frame)
-
     local style = frame.unitStyle
     local isRaid = style == 'raid'
     local partyHeight = C.DB.Unitframe.PartyHealthHeight + C.DB.Unitframe.PartyPowerHeight
@@ -22,12 +19,7 @@ function UNITFRAME.UpdateRaidTargetIndicator(frame)
     icon:SetSize(size, size)
     icon:SetScale(scale)
     icon:SetShown(enable)
-
 end
-
-
-
-
 
 function UNITFRAME:CreateRaidTargetIndicator(self)
     local icon = self.Health:CreateTexture(nil, 'OVERLAY')
@@ -38,10 +30,7 @@ function UNITFRAME:CreateRaidTargetIndicator(self)
     UNITFRAME.UpdateRaidTargetIndicator(self)
 end
 
-
-
 function NAMEPLATE.UpdateRaidTargetIndicator(frame)
-
     local icon = frame.RaidTargetIndicator
     local size = C.DB.Nameplate.Height
     local scale = C.DB.Nameplate.RaidTargetIndicatorScale
@@ -53,7 +42,6 @@ function NAMEPLATE.UpdateRaidTargetIndicator(frame)
     icon:SetSize(size, size)
     icon:SetScale(scale)
     icon:SetShown(enable)
-
 end
 
 function NAMEPLATE:CreateRaidTargetIndicator(self)
@@ -64,8 +52,6 @@ function NAMEPLATE:CreateRaidTargetIndicator(self)
 
     NAMEPLATE.UpdateRaidTargetIndicator(self)
 end
-
-
 
 function UNITFRAME:CreateReadyCheckIndicator(self)
     local readyCheckIndicator = self:CreateTexture(nil, 'OVERLAY')
@@ -103,7 +89,6 @@ function UNITFRAME:CreateResurrectIndicator(self)
 
     self.ResurrectIndicator = resurrectIndicator
 end
-
 
 function UNITFRAME:UpdateGroupIndicators()
     for _, frame in pairs(oUF.objects) do
