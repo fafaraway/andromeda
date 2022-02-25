@@ -235,6 +235,13 @@ local function UpdateGroupIndicators()
 end
 
 
+local function UpdateGroupElements()
+    UNITFRAME:UpdateGroupElements()
+end
+
+
+
+
 -- Groupframe
 
 local function UpdatePartyHeader()
@@ -565,7 +572,7 @@ GUI.OptionsList = {
 
 
         {4, 'Unitframe', 'ColorStyle', L['Health Color'], true, {L['Default White'], L['Class Color'], L['Percentage Gradient']}, UpdateHealthColor},
-        {1, 'Unitframe', 'Portrait', L['Portrait'], nil, nil, nil, L['Show dynamic portrait on unit frame.']},
+        {1, 'Unitframe', 'Portrait', L['Portrait'], nil, nil, UpdateGroupElements, L['Show dynamic portrait on unit frame.']},
         {1, 'Unitframe', 'RangeCheck', L['Range Check'], true, SetupUnitFrameRangeCheck, nil, L["Fade out unit frame based on whether the unit is in the player's range"]},
 
 
@@ -619,7 +626,7 @@ GUI.OptionsList = {
         {1, 'Unitframe', 'GroupName', L['Display Name'], nil, SetupNameLength, UpdateGroupTags},
         {1, 'Unitframe', 'GroupRole', L['Display Role Indicator'], true, nil, UpdateGroupTags, L["The indicator at the bottom of the GroupFrame represents the role of that player.|nThe blue '#' is tank, the green '+' is healer, and the red '*' is damager."]},
         {1, 'Unitframe', 'GroupLeader', L['Display Leader Indicator'], nil, nil, UpdateGroupTags, L['The indicator at the upper left corner of the GroupFrame indicates that the player is the leader.']},
-        {1, 'Unitframe', 'RaidTargetIndicator', L['Display RaidTarget Indicator'], true, SetupGroupRaidTargetIndicator, UpdateGroupIndicators, L['Display RaidTarget indicator on nameplate.']},
+        {1, 'Unitframe', 'RaidTargetIndicator', L['Display RaidTarget Indicator'], true, SetupGroupRaidTargetIndicator, UpdateGroupElements, L['Display RaidTarget indicator on nameplate.']},
 
 
 

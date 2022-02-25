@@ -223,6 +223,35 @@ end
 
 -- Group Frames
 
+function UNITFRAME:UpdateGroupElements()
+    for _, frame in pairs(oUF.objects) do
+        if frame.unitStyle == 'party' or frame.unitStyle == 'raid' then
+
+            if C.DB.Unitframe.Portrait then
+                if not frame:IsElementEnabled('Portrait') then
+                    frame:EnableElement('Portrait')
+                end
+            else
+                if frame:IsElementEnabled('Portrait') then
+                    frame:DisableElement('Portrait')
+                end
+            end
+
+            if C.DB.Unitframe.RaidTargetIndicator then
+                if not frame:IsElementEnabled('RaidTargetIndicator') then
+                    frame:EnableElement('RaidTargetIndicator')
+                end
+            else
+                if frame:IsElementEnabled('RaidTargetIndicator') then
+                    frame:DisableElement('RaidTargetIndicator')
+                end
+            end
+
+            frame:UpdateAllElements('FreeUI_UpdateAllElements') -- this is a FAKE event
+        end
+    end
+end
+
 function UNITFRAME:UpdatePartyElements()
     for _, frame in pairs(oUF.objects) do
         if frame.unitStyle == 'party' then
