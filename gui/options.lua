@@ -115,6 +115,14 @@ local function UpdateEditBoxAnchor()
     CHAT:ToggleEditBoxAnchor()
 end
 
+local function UpdateTextFading()
+    CHAT:UpdateTextFading()
+end
+
+local function SetupChatTextFading()
+    GUI:SetupChatTextFading(GUI.Page[4])
+end
+
 
 -- Minimap
 
@@ -440,7 +448,7 @@ GUI.OptionsList = {
     [4] = { -- chat
         {1, 'Chat', 'Enable', L['Enable Chat']},
         {1, 'Chat', 'LockPosition', L['Lock position and size'], nil, SetupChatSize, nil, L['|nLock postion and size of chat frame.|nDisable this if you want to adjust chat frame.']},
-        {1, 'Chat', 'FadeOut', L['Message fading'], true, nil, nil, L['|nThe text will fade out after not receiving a new message for 2 minutes.']},
+        {1, 'Chat', 'TextFading', L['Text Fade Out'], true, SetupChatTextFading, UpdateTextFading, L['Text will fade out after a period of time without receiving new messages.']},
         {1, 'Chat', 'CopyButton', L['Copy button']},
         {1, 'Chat', 'VoiceButton', L['Voice button'], true},
         {1, 'Chat', 'ShortenChannelName', L['Shorten channel name'], nil, nil, nil, L['|nSimplify channels name.|ne.g. [1: General] to [1] [Guild] to [G]']},

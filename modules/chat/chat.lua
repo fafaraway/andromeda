@@ -80,6 +80,18 @@ function CHAT:ToggleEditBoxAnchor()
     end
 end
 
+local function UpdateTextFading(self)
+    self:SetFading(C.DB.Chat.TextFading)
+    self:SetTimeVisible(C.DB.Chat.TimeVisible)
+    self:SetFadeDuration(C.DB.Chat.FadeDuration)
+end
+
+function CHAT:UpdateTextFading()
+    for i = 1, _G.NUM_CHAT_WINDOWS do
+        UpdateTextFading(_G['ChatFrame' .. i])
+    end
+end
+
 local function SetupChatFrame(self)
     if not self or self.styled then
         return
@@ -87,12 +99,6 @@ local function SetupChatFrame(self)
 
     local name = self:GetName()
     local maxLines = 1024
-
-    if C.DB.Chat.FadeOut then
-        self:SetFading(true)
-        self:SetTimeVisible(C.DB.Chat.TimeVisible)
-        self:SetFadeDuration(C.DB.Chat.FadeDuration)
-    end
 
     local font = C.Assets.Fonts.Bold
     local outline = _G.FREE_ADB.FontOutline
@@ -247,13 +253,10 @@ function CHAT:ResizeChatFrame()
 end
 
 function CHAT:UpdateChatFrame()
-    if not C.DB.Chat.LockPosition then
-        return
-    end
-
     hooksecurefunc('FCF_SavePositionAndDimensions', CHAT.UpdateChatSize)
     F:RegisterEvent('UI_SCALE_CHANGED', CHAT.UpdateChatSize)
     CHAT:UpdateChatSize()
+    CHAT:UpdateTextFading()
 end
 
 -- Swith channels by Tab

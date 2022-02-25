@@ -3028,6 +3028,48 @@ function GUI:SetupChatSize(parent)
     end
 end
 
+local function UpdateTextFading()
+    CHAT:UpdateTextFading()
+end
+
+function GUI:SetupChatTextFading(parent)
+    local guiName = 'FreeUIGUIChatTextFading'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+
+    local mKey = 'Chat'
+    local db = C.CharacterSettings.Chat
+
+    local datas = {
+        [1] = {
+            key = 'TimeVisible',
+            value = db.TimeVisible,
+            text = L['Time Visible'],
+            min = 10,
+            max = 300
+        },
+        [2] = {
+            key = 'FadeDuration',
+            value = db.FadeDuration,
+            text = L['Fade Duration'],
+            min = 1,
+            max = 6
+        }
+    }
+
+    local offset = -10
+    for _, v in ipairs(datas) do
+        CreateGroupTitle(scroll, L['Chat Text Fading'], offset)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdateTextFading)
+        offset = offset - 65
+    end
+end
+
 -- Combat
 function GUI:SetupSimpleFloatingCombatText(parent)
     local guiName = 'FreeUIGUIFCT'
