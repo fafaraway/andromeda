@@ -141,6 +141,9 @@ local ignoreGossipNPC = {
     [175513] = true, -- 纳斯利亚审判官，傲慢
     [165196] = true, -- 灰烬王庭
     [180458] = true, -- 灰烬王庭，大帝幻象
+    [182681] = true, -- 扎雷殁提斯，强化控制台
+    [183262] = true, -- 扎雷殁提斯，回声机若源生体
+    [184587] = true, -- 集市，塔皮克斯
 }
 
 local rogueClassHallInsignia = {
