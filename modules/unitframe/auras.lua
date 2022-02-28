@@ -100,6 +100,13 @@ function UNITFRAME.PostCreateIcon(element, button)
     )
 end
 
+local replaceEncryptedIcons = {
+    [368078] = 348567, -- 移速
+    [368079] = 348567, -- 移速
+    [368103] = 648208, -- 急速
+    [368243] = 237538, -- CD
+}
+
 function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, expiration, debuffType)
     if duration then
         button.bg:Show()
@@ -166,6 +173,11 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
         button.timer:SetJustifyH('CENTER')
         button.timer:ClearAllPoints()
         button.timer:SetPoint('BOTTOM', 1, -6)
+    end
+
+    local newTexture = replaceEncryptedIcons[button.spellID]
+    if newTexture then
+        button.icon:SetTexture(newTexture)
     end
 end
 
