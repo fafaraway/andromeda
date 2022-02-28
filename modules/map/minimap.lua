@@ -629,9 +629,7 @@ function MM:WhoPings()
     F:RegisterEvent(
         'MINIMAP_PING',
         function(_, unit)
-            if unit == 'player' then
-                return
-            end
+            if UnitIsUnit(unit, 'player') then return end -- ignore player ping
 
             local r, g, b = F:ClassColor(C.MyClass)
             local name = GetUnitName(unit)
