@@ -26,6 +26,12 @@ local function ReskinSpellWidget(spell)
     spell.Text:SetTextColor(1, 1, 1)
 end
 
+
+local ignoredTextureKit = {
+    ["jailerstower"] = true,
+    ["cypherchoice"] = true,
+}
+
 C.Themes['Blizzard_PlayerChoice'] = function()
     _G.hooksecurefunc(
         _G.PlayerChoiceFrame,
@@ -49,7 +55,7 @@ C.Themes['Blizzard_PlayerChoice'] = function()
             if self.CloseButton.Border then
                 self.CloseButton.Border:SetAlpha(0)
             end -- no border for some templates
-            self.bg:SetShown(self.uiTextureKit ~= 'jailerstower')
+            self.bg:SetShown(not ignoredTextureKit[self.uiTextureKit])
 
             for optionFrame in self.optionPools:EnumerateActiveByTemplate(self.optionFrameTemplate) do
                 local header = optionFrame.Header
