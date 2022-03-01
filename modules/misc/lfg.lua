@@ -259,6 +259,20 @@ local function HidePvEFrame()
     end
 end
 
+do -- Fix duplicate application entry
+    hooksecurefunc("LFGListSearchPanel_UpdateResultList", function(self)
+        if next(self.results) and next(self.applications) then
+            for _, value in ipairs(self.applications) do
+                tDeleteItem(self.results, value)
+            end
+
+            self.totalResults = #self.results
+
+            _G.LFGListSearchPanel_UpdateResults(self)
+        end
+    end)
+end
+
 function M:OnLogin()
     if not C.DB.General.EnhancedLFGList then
         return
