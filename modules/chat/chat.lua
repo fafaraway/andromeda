@@ -609,38 +609,20 @@ local function FixLanguageFilterSideEffects()
     end
     sideEffectFixed = true
 
-    F.CreateFS(_G.HelpFrame, C.Assets.Fonts.Bold, 14, nil, L['You need to uncheck language filter in GUI and reload ui to get access into CN battlenet support.'], 'YELLOW', 'THICK', 'TOP', 0, 30)
+    F.CreateFS(_G.HelpFrame, C.Assets.Fonts.Bold, 14, nil, L['You need to uncheck language filter in GUI and reload UI to get access into CN BattleNet support.'], 'YELLOW', 'THICK', 'TOP', 0, 30)
 
-    local Old_GetFriendGameAccountInfo = _G.C_BattleNet.GetFriendGameAccountInfo
-    function _G.C_BattleNet.GetFriendGameAccountInfo(...)
-        local gameAccountInfo = Old_GetFriendGameAccountInfo(...)
-        if gameAccountInfo then
-            gameAccountInfo.isInCurrentRegion = true
-        end
-        return gameAccountInfo
-    end
-
-    local Old_GetFriendAccountInfo = _G.C_BattleNet.GetFriendAccountInfo
-    function _G.C_BattleNet.GetFriendAccountInfo(...)
-        local accountInfo = Old_GetFriendAccountInfo(...)
-        if accountInfo and accountInfo.gameAccountInfo then
-            accountInfo.gameAccountInfo.isInCurrentRegion = true
-        end
-        return accountInfo
-    end
+    CHAT:CNLanguageFilterFix()
 end
 
-local hasCNFix
 function CHAT:UpdateLanguageFilter()
     if C.DB.Chat.DisableProfanityFilter then
         if GetCVar('portal') == 'CN' then
             ConsoleExec('portal TW')
             FixLanguageFilterSideEffects()
-            hasCNFix = true
         end
         SetCVar('profanityFilter', 0)
     else
-        if hasCNFix then
+        if sideEffectFixed then
             ConsoleExec('portal CN')
         end
         SetCVar('profanityFilter', 1)
