@@ -724,7 +724,7 @@ function GUI:SetupActionBarSize(parent)
                 key = 'Bar3Num',
                 value = db.Bar3Num,
                 text = L['Number'],
-                min = 1,
+                min = 0,
                 max = 12,
                 step = 1
             },
