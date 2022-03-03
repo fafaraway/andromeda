@@ -5,7 +5,6 @@
     <Script file="copy.lua"/>
     <Script file="fader.lua"/>
     <Script file="filters.lua"/>
-    <Script file="fix.lua"/>
     <Script file="link.lua"/>
     <Script file="meter.lua"/>
     <Script file="url.lua"/>

@@ -209,47 +209,38 @@ function CHAT:SetupTemporaryWindow()
 end
 
 function CHAT:UpdateEditBoxBorderColor()
-    hooksecurefunc(
-        'ChatEdit_UpdateHeader',
-        function()
-            local editBox = _G.ChatEdit_ChooseBoxForSend()
-            local mType = editBox:GetAttribute('chatType')
-            if mType == 'CHANNEL' then
-                local id = GetChannelName(editBox:GetAttribute('channelTarget'))
-                if id == 0 then
-                    editBox.bd:SetBackdropBorderColor(0, 0, 0)
-                else
-                    editBox.bd:SetBackdropBorderColor(_G.ChatTypeInfo[mType .. id].r, _G.ChatTypeInfo[mType .. id].g, _G.ChatTypeInfo[mType .. id].b)
-                end
-            elseif mType == 'SAY' then
+    hooksecurefunc('ChatEdit_UpdateHeader', function()
+        local editBox = _G.ChatEdit_ChooseBoxForSend()
+        local mType = editBox:GetAttribute('chatType')
+        if mType == 'CHANNEL' then
+            local id = GetChannelName(editBox:GetAttribute('channelTarget'))
+            if id == 0 then
                 editBox.bd:SetBackdropBorderColor(0, 0, 0)
             else
-                editBox.bd:SetBackdropBorderColor(_G.ChatTypeInfo[mType].r, _G.ChatTypeInfo[mType].g, _G.ChatTypeInfo[mType].b)
+                editBox.bd:SetBackdropBorderColor(_G.ChatTypeInfo[mType .. id].r, _G.ChatTypeInfo[mType .. id].g, _G.ChatTypeInfo[mType .. id].b)
             end
+        elseif mType == 'SAY' then
+            editBox.bd:SetBackdropBorderColor(0, 0, 0)
+        else
+            editBox.bd:SetBackdropBorderColor(_G.ChatTypeInfo[mType].r, _G.ChatTypeInfo[mType].g, _G.ChatTypeInfo[mType].b)
         end
-    )
+    end)
 end
 
 function CHAT:ResizeChatFrame()
-    _G.ChatFrame1Tab:HookScript(
-        'OnMouseDown',
-        function(_, btn)
-            if btn == 'LeftButton' then
-                if select(8, GetChatWindowInfo(1)) then
-                    _G.ChatFrame1:StartSizing('TOP')
-                end
+    _G.ChatFrame1Tab:HookScript('OnMouseDown', function(_, btn)
+        if btn == 'LeftButton' then
+            if select(8, GetChatWindowInfo(1)) then
+                _G.ChatFrame1:StartSizing('TOP')
             end
         end
-    )
-    _G.ChatFrame1Tab:SetScript(
-        'OnMouseUp',
-        function(_, btn)
-            if btn == 'LeftButton' then
-                _G.ChatFrame1:StopMovingOrSizing()
-                _G.FCF_SavePositionAndDimensions(_G.ChatFrame1)
-            end
+    end)
+    _G.ChatFrame1Tab:SetScript('OnMouseUp', function(_, btn)
+        if btn == 'LeftButton' then
+            _G.ChatFrame1:StopMovingOrSizing()
+            _G.FCF_SavePositionAndDimensions(_G.ChatFrame1)
         end
-    )
+    end)
 end
 
 function CHAT:UpdateChatFrame()
@@ -521,17 +512,14 @@ end
 
 -- (、) -> (/)
 function CHAT:PauseToSlash()
-    hooksecurefunc(
-        'ChatEdit_OnTextChanged',
-        function(self, userInput)
-            local text = self:GetText()
-            if userInput then
-                if text == '、' then
-                    self:SetText('/')
-                end
+    hooksecurefunc('ChatEdit_OnTextChanged', function(self, userInput)
+        local text = self:GetText()
+        if userInput then
+            if text == '、' then
+                self:SetText('/')
             end
         end
-    )
+    end)
 end
 
 -- Save slash command typo
@@ -611,7 +599,23 @@ local function FixLanguageFilterSideEffects()
 
     F.CreateFS(_G.HelpFrame, C.Assets.Fonts.Bold, 14, nil, L['You need to uncheck language filter in GUI and reload UI to get access into CN BattleNet support.'], 'YELLOW', 'THICK', 'TOP', 0, 30)
 
-    CHAT:CNLanguageFilterFix()
+    local OLD_GetFriendGameAccountInfo = C_BattleNet.GetFriendGameAccountInfo
+    function _G.C_BattleNet.GetFriendGameAccountInfo(...)
+        local gameAccountInfo = OLD_GetFriendGameAccountInfo(...)
+        if gameAccountInfo then
+            gameAccountInfo.isInCurrentRegion = true
+        end
+        return gameAccountInfo
+    end
+
+    local OLD_GetFriendAccountInfo = C_BattleNet.GetFriendAccountInfo
+    function _G.C_BattleNet.GetFriendAccountInfo(...)
+        local accountInfo = OLD_GetFriendAccountInfo(...)
+        if accountInfo and accountInfo.gameAccountInfo then
+            accountInfo.gameAccountInfo.isInCurrentRegion = true
+        end
+        return accountInfo
+    end
 end
 
 function CHAT:UpdateLanguageFilter()
