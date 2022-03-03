@@ -117,20 +117,21 @@ end ]]
 -- Events
 local events = {}
 local host = CreateFrame('Frame')
-host:SetScript(
-    'OnEvent',
-    function(_, event, ...)
-        for func in pairs(events[event]) do
-            if event == 'COMBAT_LOG_EVENT_UNFILTERED' then
-                func(event, CombatLogGetCurrentEventInfo())
-            else
-                func(event, ...)
-            end
+host:SetScript('OnEvent', function(_, event, ...)
+    for func in pairs(events[event]) do
+        if event == 'COMBAT_LOG_EVENT_UNFILTERED' then
+            func(event, CombatLogGetCurrentEventInfo())
+        else
+            func(event, ...)
         end
     end
-)
+end)
 
 function F:RegisterEvent(event, func, unit1, unit2)
+    if event == 'CLEU' then
+        event = 'COMBAT_LOG_EVENT_UNFILTERED'
+    end
+
     if not events[event] then
         events[event] = {}
         if unit1 then
@@ -144,6 +145,10 @@ function F:RegisterEvent(event, func, unit1, unit2)
 end
 
 function F:UnregisterEvent(event, func)
+    if event == 'CLEU' then
+        event = 'COMBAT_LOG_EVENT_UNFILTERED'
+    end
+
     local funcs = events[event]
     if funcs and funcs[func] then
         funcs[func] = nil
@@ -180,27 +185,24 @@ function F:GetModule(name)
     return modules[name]
 end
 
-F:RegisterEvent(
-    'PLAYER_LOGIN',
-    function()
-        if C.DB.InstallationComplete then
-            F:SetupUIScale()
-            F:RegisterEvent('UI_SCALE_CHANGED', F.UpdatePixelScale)
+F:RegisterEvent('PLAYER_LOGIN', function()
+    if C.DB.InstallationComplete then
+        F:SetupUIScale()
+        F:RegisterEvent('UI_SCALE_CHANGED', F.UpdatePixelScale)
 
-            _G.Display_UseUIScale:Kill()
-            _G.Display_UIScaleSlider:Kill()
-        else
-            F:SetupUIScale(true)
-        end
-
-        for _, module in next, initQueue do
-            if module.OnLogin then
-                module:OnLogin()
-            else
-                F:Print('Module <' .. module.name .. '> does not loaded.')
-            end
-        end
-
-        F:Print('Version: ' .. C.AddonVersion)
+        _G.Display_UseUIScale:Kill()
+        _G.Display_UIScaleSlider:Kill()
+    else
+        F:SetupUIScale(true)
     end
-)
+
+    for _, module in next, initQueue do
+        if module.OnLogin then
+            module:OnLogin()
+        else
+            F:Print('Module <' .. module.name .. '> does not loaded.')
+        end
+    end
+
+    F:Print('Version: ' .. C.AddonVersion)
+end)
