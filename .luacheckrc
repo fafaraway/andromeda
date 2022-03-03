@@ -2489,5 +2489,7 @@ read_globals = {
 
     'RaiseFrameLevel',
     'GetBindingFromClick',
-    'RegisterStateDriver'
+    'RegisterStateDriver',
+    'tDeleteItem',
+    'Enum'
 }
