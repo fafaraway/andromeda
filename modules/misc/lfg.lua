@@ -1,5 +1,9 @@
 local F, C = unpack(select(2, ...))
 local M = F:RegisterModule('LFGList')
+local TT = F:GetModule('Tooltip')
+
+local LE_PARTY_CATEGORY_HOME = _G.LE_PARTY_CATEGORY_HOME or 1
+local scoreFormat = C.GreyColor .. '(%s) |r%s'
 
 function M:HookApplicationClick()
     if _G.LFGListFrame.SearchPanel.SignUpButton:IsEnabled() then
@@ -31,19 +35,17 @@ function M:HookDialogOnShow()
     F:Delay(1, M.DialogHideInSecond)
 end
 
+local function HidePvEFrame()
+    if _G.PVEFrame:IsShown() then
+        _G.HideUIPanel(_G.PVEFrame)
+    end
+end
+
 local roleCache = {}
 
-local roleOrder = {
-    ['TANK'] = 1,
-    ['HEALER'] = 2,
-    ['DAMAGER'] = 3
-}
+local roleOrder = {['TANK'] = 1, ['HEALER'] = 2, ['DAMAGER'] = 3}
 
-local roleIcons = {
-    [1] = C.Assets.Textures.RoleTank,
-    [2] = C.Assets.Textures.RoleHealer,
-    [3] = C.Assets.Textures.RoleDamager
-}
+local roleIcons = {[1] = C.Assets.Textures.RoleTank, [2] = C.Assets.Textures.RoleHealer, [3] = C.Assets.Textures.RoleDamager}
 
 local function SortRoleOrder(a, b)
     if a and b then
@@ -94,6 +96,7 @@ local function UpdateGroupRoles(self)
             end
             roleCache[count][1] = roleIndex
             roleCache[count][2] = class
+            roleCache[count][3] = i == 1
         end
     end
 
@@ -126,7 +129,13 @@ function M:ReplaceGroupRoles(numPlayers, _, disabled)
 
             icon.role = self:CreateTexture(nil, 'OVERLAY')
             icon.role:SetSize(14, 14)
-            icon.role:SetPoint('TOPLEFT', icon, -4, 5)
+            icon.role:SetPoint('TOPLEFT', icon, -6, 2)
+
+            icon.leader = self:CreateTexture(nil, 'OVERLAY')
+            icon.leader:SetSize(14, 14)
+            icon.leader:SetPoint('TOP', icon, 0, 8)
+            icon.leader:SetTexture('Interface\\GroupFrame\\UI-Group-LeaderIcon')
+            -- icon.leader:SetRotation(_G.rad(-15))
         end
 
         if i > numPlayers then
@@ -135,7 +144,12 @@ function M:ReplaceGroupRoles(numPlayers, _, disabled)
             icon.role:Show()
             icon.role:SetDesaturated(disabled)
             icon.role:SetAlpha(disabled and .5 or 1)
+
+            icon.leader:SetDesaturated(disabled)
+            icon.leader:SetAlpha(disabled and .5 or 1)
         end
+
+        icon.leader:Hide()
     end
 
     local iconIndex = numPlayers
@@ -146,7 +160,7 @@ function M:ReplaceGroupRoles(numPlayers, _, disabled)
             icon.role:SetTexture(roleIcons[roleInfo[1]])
             SetClassIcon(icon, roleInfo[2])
             icon:Show()
-
+            icon.leader:SetShown(roleInfo[3])
             iconIndex = iconIndex - 1
         end
     end
@@ -157,110 +171,60 @@ function M:ReplaceGroupRoles(numPlayers, _, disabled)
     end
 end
 
-local colors = {}
-
-for i = 1, 5 do
-    local r, g, b = GetItemQualityColor(i)
-    colors[i] = {r * 255, g * 255, b * 255}
-end
-
-colors[6] = {230, 25, 25}
-
-local function gradient(perc, col1, col2)
-    local r = col1[1] + perc * (col2[1] - col1[1])
-    local g = col1[2] + perc * (col2[2] - col1[2])
-    local b = col1[3] + perc * (col2[3] - col1[3])
-    return string.format('|cff%02x%02x%02x', r, g, b)
-end
-
-local function scoreToColor(score)
-    local perc = score / 4500
-    if perc > 1 then
-        perc = 1
+function M:ShowLeaderOverallScore()
+    local resultID = self.resultID
+    local searchResultInfo = resultID and C_LFGList.GetSearchResultInfo(resultID)
+    if searchResultInfo then
+        local activityInfo = C_LFGList.GetActivityInfoTable(searchResultInfo.activityID, nil, searchResultInfo.isWarMode)
+        local leaderOverallScore = searchResultInfo.leaderOverallDungeonScore
+        if activityInfo and activityInfo.isMythicPlusActivity and leaderOverallScore then
+            local oldName = self.ActivityName:GetText()
+            oldName = string.gsub(oldName, '.-' .. _G.HEADER_COLON, '') -- Tazavesh
+            self.ActivityName:SetFormattedText(scoreFormat, TT.GetDungeonScore(leaderOverallScore), oldName)
+        end
     end
-
-    local brackets = 1 / (table.getn(colors) - 1)
-    local currentBracket = math.ceil(perc / brackets)
-    local relativePerc = perc / brackets - (currentBracket - 1)
-    return gradient(relativePerc, colors[currentBracket], colors[currentBracket + 1])
 end
 
-local function scale(x)
-    local e = 0.1123091
-    local d = 0.7474169 * x
-    local c = 0.00002814465 * x * x
-    local b = 3.144654e-9 * x * x * x
-    local a = 2.578616e-11 * x * x * x * x
-    return math.floor(a + b + c + d + e)
-end
+function M:AddAutoAcceptButton()
+    local bu = F.CreateCheckbox(_G.LFGListFrame.SearchPanel, true)
+    bu:SetSize(20, 20)
+    bu:SetHitRectInsets(0, -130, 0, 0)
+    bu:SetPoint('RIGHT', _G.LFGListFrame.SearchPanel.RefreshButton, 'LEFT', -130, 0)
+    F.CreateFS(bu, C.Assets.Fonts.Regular, 12, nil, _G.LFG_LIST_AUTO_ACCEPT, 'YELLOW', true, 'LEFT', 24, 0)
 
-local function shortenScore(score)
-    if not C.DB.General.ShortenScore then
-        return score
-    end
+    local lastTime = 0
+    F:RegisterEvent('LFG_LIST_APPLICANT_LIST_UPDATED', function()
+        if not bu:GetChecked() then
+            return
+        end
+        if not UnitIsGroupLeader('player', _G.LE_PARTY_CATEGORY_HOME) then
+            return
+        end
 
-    score = math.floor((score + 50) / 100)
-    return score / 10.0 .. 'k'
-end
+        local buttons = _G.ApplicationViewerFrame.ScrollFrame.buttons
+        for i = 1, #buttons do
+            local button = buttons[i]
+            if button.applicantID and button.InviteButton:IsEnabled() then
+                button.InviteButton:Click()
+            end
+        end
 
-local escapes = {
-    ['|c%x%x%x%x%x%x%x%x'] = '', -- color start
-    ['|r'] = '', -- color end
-    ['|H.-|h(.-)|h'] = '%1', -- links
-    ['|T.-|t'] = '', -- textures
-    ['{.-}'] = '' -- raid target icons
-}
+        if _G.ApplicationViewerFrame:IsShown() then
+            local now = GetTime()
+            if now - lastTime > 1 then
+                lastTime = now
+                _G.ApplicationViewerFrame.RefreshButton:Click()
+            end
+        end
+    end)
 
-local function unescape(str)
-    for k, v in pairs(escapes) do
-        str = string.gsub(str, k, v)
-    end
-    return str
-end
-
-local function getDisplayScore(score)
-    return score
-end
-
-local UpdateApplicantMember = function(member)
-    local score = tonumber(unescape(member.DungeonScore:GetText()))
-    if score == 0 then
-        return
-    end
-
-    local scaled = scale(score)
-    local displayScore = getDisplayScore(score)
-    local replacementString = string.format('%s%s\124r', scoreToColor(scaled), shortenScore(displayScore))
-    member.DungeonScore:SetText(replacementString)
-end
-
-local SearchEntry_Update = function(group)
-    local result = C_LFGList.GetSearchResultInfo(group.resultID)
-    local categoryID = select(3, C_LFGList.GetActivityInfo(result.activityID))
-
-    if categoryID ~= 2 then
-        return
-    end
-
-    local score = result.leaderOverallDungeonScore
-    if score == nil or score <= 0 then
-        return
-    end
-
-    local scaled = scale(result.leaderOverallDungeonScore)
-    local displayScore = getDisplayScore(score)
-    local newGrpText = string.format('%s(%s)\124r %s', scoreToColor(scaled), shortenScore(displayScore), group.Name:GetText())
-    group.Name:SetText(newGrpText)
-end
-
-local function HidePvEFrame()
-    if _G.PVEFrame:IsShown() then
-        _G.HideUIPanel(_G.PVEFrame)
-    end
+    hooksecurefunc('LFGListApplicationViewer_UpdateInfo', function(self)
+        bu:SetShown(UnitIsGroupLeader('player', LE_PARTY_CATEGORY_HOME) and not self.AutoAcceptButton:IsShown())
+    end)
 end
 
 do -- Fix duplicate application entry
-    hooksecurefunc("LFGListSearchPanel_UpdateResultList", function(self)
+    hooksecurefunc('LFGListSearchPanel_UpdateResultList', function(self)
         if next(self.results) and next(self.applications) then
             for _, value in ipairs(self.applications) do
                 tDeleteItem(self.results, value)
@@ -281,16 +245,17 @@ function M:OnLogin()
     for i = 1, 10 do
         local bu = _G['LFGListSearchPanelScrollFrameButton' .. i]
         if bu then
+            bu.Name:SetFontObject(_G.Game14Font)
+            bu.ActivityName:SetFontObject(_G.Game12Font)
             bu:HookScript('OnDoubleClick', M.HookApplicationClick)
         end
     end
 
     hooksecurefunc('LFGListInviteDialog_Accept', HidePvEFrame)
-
     hooksecurefunc('StaticPopup_Show', M.HookDialogOnShow)
     hooksecurefunc('LFGListInviteDialog_Show', M.HookDialogOnShow)
     hooksecurefunc('LFGListGroupDataDisplayEnumerate_Update', M.ReplaceGroupRoles)
+    hooksecurefunc('LFGListSearchEntry_Update', M.ShowLeaderOverallScore)
 
-    -- hooksecurefunc('LFGListApplicationViewer_UpdateApplicantMember', UpdateApplicantMember)
-    hooksecurefunc('LFGListSearchEntry_Update', SearchEntry_Update)
+    M:AddAutoAcceptButton()
 end

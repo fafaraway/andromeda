@@ -1843,6 +1843,7 @@ do
 
     function F:CreateCheckbox(flat)
         local cb = CreateFrame('CheckButton', nil, self, 'InterfaceOptionsCheckButtonTemplate')
+        cb:SetScript('OnClick', nil) -- reset onclick handler
         F.ReskinCheck(cb, flat, true, true)
 
         cb.Type = 'CheckBox'

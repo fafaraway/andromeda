@@ -78,6 +78,10 @@ function THEME:ReskinPGF()
         styled = true
     end)
 
-    F.ReskinCheck(_G.UsePFGButton)
+    _G.UsePFGButton:ClearAllPoints()
+    _G.UsePFGButton:SetPoint('RIGHT', _G.LFGListFrame.SearchPanel.RefreshButton, 'LEFT', -40, 0)
+    _G.UsePFGButton:SetSize(20, 20)
+    F.ReskinCheck(_G.UsePFGButton, true)
     _G.UsePFGButton.text:SetWidth(35)
+    _G.UsePFGButton.text:SetFontObject(_G.Game12Font)
 end

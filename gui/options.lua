@@ -413,7 +413,7 @@ GUI.OptionsList = {
         {1, 'Aura', 'Enable', L['Enhanced Aura'], nil, SetupAuraSize, nil, L['Enhance the default aura frame.']},
         {1, 'General', 'EnhancedLoot', L['Enhanced Loot'], true, nil, nil, L['Enhance the default loot frame.']},
         {1, 'General', 'EnhancedMailBox', L['Enhanced Mailbox'], nil, nil, nil, L['Enhance the default mailbox frame, and provide some additional convenience functions.']},
-        {1, 'General', 'EnhancedLFGList', L['Enhanced LFGList'], true, nil, nil, L['Enhance the default LFG list frame, including double-click to sign up, display the mythic plus score of the leader and applicants, etc.']},
+        {1, 'General', 'EnhancedLFGList', L['Enhanced Premade'], true, nil, nil, L['Enhance the premade, including quick apply by double click, hide group join notice, styled group roles, auto invite applicants, show leader overall score, abbr keystone name for Tazavesh.']},
         {1, 'General', 'SimplifyErrors', L['Filter Error Messages'], nil, nil, nil, L['Filter error messages during battle, such as ability not ready yet, out of rage/mana/energy, etc.']},
         {1, 'General', 'FasterMovieSkip', L['Faster Movie Skip'], true, nil, nil, L['Allow space bar, escape key and enter key to cancel cinematic without confirmation.']},
         {1, 'General', 'FasterZooming', L['Smooth Camera Zooming'], nil, nil, nil, L['Faster and smoother camera zooming.']},
