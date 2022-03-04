@@ -342,6 +342,7 @@ function GUI:SetupAuraSize(parent)
     local panel = CreateExtraGUI(parent, guiName)
     local scroll = GUI:CreateScroll(panel, 220, 540)
     local db = C.CharacterSettings.Aura
+    local mKey = 'Aura'
 
     local datas = {
         buff = {
@@ -395,7 +396,7 @@ function GUI:SetupAuraSize(parent)
     local offset = -10
     for _, v in ipairs(datas.layout) do
         CreateGroupTitle(scroll, L['Layout'], offset)
-        CreateCheckbox(scroll, offset - 30, 'Actionbar', v.value, v.text, UpdateAuraSize)
+        CreateCheckbox(scroll, offset - 30, mKey, v.value, v.text, UpdateAuraSize)
         offset = offset - 35
     end
 
@@ -403,7 +404,7 @@ function GUI:SetupAuraSize(parent)
 
     for _, v in ipairs(datas.buff) do
         CreateGroupTitle(scroll, L['Buff'], offset - 30)
-        CreateSlider(scroll, 'Aura', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 80, UpdateAuraSize)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 80, UpdateAuraSize)
         offset = offset - 65
     end
 
@@ -411,7 +412,7 @@ function GUI:SetupAuraSize(parent)
 
     for _, v in ipairs(datas.debuff) do
         CreateGroupTitle(scroll, L['Debuff'], offset - 80)
-        CreateSlider(scroll, 'Aura', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 130, UpdateAuraSize)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 130, UpdateAuraSize)
         offset = offset - 65
     end
 end
