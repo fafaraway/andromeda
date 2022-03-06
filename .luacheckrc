@@ -2491,5 +2491,6 @@ read_globals = {
     'GetBindingFromClick',
     'RegisterStateDriver',
     'tDeleteItem',
-    'Enum'
+    'Enum',
+    'SOUNDKIT'
 }
