@@ -39,7 +39,7 @@ function THEME:ReskinPGF()
         end
 
         F.StripTextures(self)
-        F.SetBD(self)
+        F.SetBD(self):SetAllPoints()
         F.ReskinClose(self.CloseButton)
         F.Reskin(self.ResetButton)
         F.Reskin(self.RefreshButton)
@@ -60,7 +60,17 @@ function THEME:ReskinPGF()
             self.MaximizeButton:SetPoint('RIGHT', self.CloseButton, 'LEFT', -3, 0)
         end
 
-        local names = {'Difficulty', 'Ilvl', 'Noilvl', 'Defeated', 'Members', 'Tanks', 'Heals', 'Dps'}
+        local names = {
+            'Difficulty',
+            'Ilvl',
+            'Noilvl',
+            'Defeated',
+            'Members',
+            'Tanks',
+            'Heals',
+            'Dps'
+        }
+
         for _, name in pairs(names) do
             local check = self[name].Act
             if check then
@@ -76,6 +86,12 @@ function THEME:ReskinPGF()
         end
 
         styled = true
+    end)
+
+    hooksecurefunc(_G.PremadeGroupsFilterDialog, 'SetSize', function(self, width, height)
+        if height == 427 then
+            self:SetSize(width, 428)
+        end
     end)
 
     _G.UsePFGButton:ClearAllPoints()

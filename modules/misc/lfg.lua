@@ -43,9 +43,17 @@ end
 
 local roleCache = {}
 
-local roleOrder = {['TANK'] = 1, ['HEALER'] = 2, ['DAMAGER'] = 3}
+local roleOrder = {
+    ['TANK'] = 1,
+    ['HEALER'] = 2,
+    ['DAMAGER'] = 3
+}
 
-local roleIcons = {[1] = C.Assets.Textures.RoleTank, [2] = C.Assets.Textures.RoleHealer, [3] = C.Assets.Textures.RoleDamager}
+local roleIcons = {
+    [1] = C.Assets.Textures.RoleTank,
+    [2] = C.Assets.Textures.RoleHealer,
+    [3] = C.Assets.Textures.RoleDamager
+}
 
 local function SortRoleOrder(a, b)
     if a and b then
@@ -176,11 +184,14 @@ function M:ShowLeaderOverallScore()
     local searchResultInfo = resultID and C_LFGList.GetSearchResultInfo(resultID)
     if searchResultInfo then
         local activityInfo = C_LFGList.GetActivityInfoTable(searchResultInfo.activityID, nil, searchResultInfo.isWarMode)
-        local leaderOverallScore = searchResultInfo.leaderOverallDungeonScore
-        if activityInfo and activityInfo.isMythicPlusActivity and leaderOverallScore then
-            local oldName = self.ActivityName:GetText()
-            oldName = string.gsub(oldName, '.-' .. _G.HEADER_COLON, '') -- Tazavesh
-            self.ActivityName:SetFormattedText(scoreFormat, TT.GetDungeonScore(leaderOverallScore), oldName)
+        if activityInfo then
+            local showScore = activityInfo.isMythicPlusActivity and searchResultInfo.leaderOverallDungeonScore or activityInfo.isRatedPvpActivity and searchResultInfo.leaderPvpRatingInfo and
+                                  searchResultInfo.leaderPvpRatingInfo.rating
+            if showScore then
+                local oldName = self.ActivityName:GetText()
+                oldName = string.gsub(oldName, '.-' .. _G.HEADER_COLON, '') -- Tazavesh
+                self.ActivityName:SetFormattedText(scoreFormat, TT.GetDungeonScore(showScore), oldName)
+            end
         end
     end
 end
@@ -223,18 +234,91 @@ function M:AddAutoAcceptButton()
     end)
 end
 
-do -- Fix duplicate application entry
-    hooksecurefunc('LFGListSearchPanel_UpdateResultList', function(self)
-        if next(self.results) and next(self.applications) then
-            for _, value in ipairs(self.applications) do
-                tDeleteItem(self.results, value)
-            end
+function M:ReplaceFindGroupButton()
+    if not IsAddOnLoaded('PremadeGroupsFilter') then
+        return
+    end
 
-            self.totalResults = #self.results
+    local searchPanel = _G.LFGListFrame.SearchPanel
+    local categorySelection = _G.LFGListFrame.CategorySelection
+    categorySelection.FindGroupButton:Hide()
 
-            _G.LFGListSearchPanel_UpdateResults(self)
+    local bu = CreateFrame('Button', nil, categorySelection, 'LFGListMagicButtonTemplate')
+    bu:SetText(_G.LFG_LIST_FIND_A_GROUP)
+    bu:SetSize(135, 22)
+    bu:SetPoint('BOTTOMRIGHT', -3, 4)
+
+    local lastCategory = 0
+    bu:SetScript('OnClick', function()
+        local selectedCategory = categorySelection.selectedCategory
+        if not selectedCategory then
+            return
         end
+
+        if lastCategory ~= selectedCategory then
+            categorySelection.FindGroupButton:Click()
+        else
+            PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+            _G.LFGListSearchPanel_SetCategory(searchPanel, selectedCategory, categorySelection.selectedFilters, _G.LFGListFrame.baseFilters)
+            _G.LFGListSearchPanel_DoSearch(searchPanel)
+            _G.LFGListFrame_SetActivePanel(_G.LFGListFrame, searchPanel)
+        end
+        lastCategory = selectedCategory
     end)
+
+    if _G.FREE_ADB.ReskinBlizz then
+        F.Reskin(bu)
+    end
+end
+
+local function ClickSortButton(self)
+    self.__owner.Sorting.SortingExpression:SetText(self.sortStr)
+    self.__owner.RefreshButton:Click()
+end
+
+local function CreateSortButton(parent, texture, sortStr)
+    local bu = F.CreateButton(parent, 24, 24, true, texture)
+    bu.sortStr = sortStr
+    bu.__owner = parent
+    bu:SetScript('OnClick', ClickSortButton)
+    F.AddTooltip(bu, 'ANCHOR_RIGHT', _G.CLUB_FINDER_SORT_BY)
+
+    table.insert(parent.__sortBu, bu)
+end
+
+function M:AddPGFSortingExpression()
+    if not IsAddOnLoaded('PremadeGroupsFilter') then
+        return
+    end
+
+    local PGFDialog = _G.PremadeGroupsFilterDialog
+    PGFDialog.__sortBu = {}
+
+    CreateSortButton(PGFDialog, 525134, 'mprating desc')
+    CreateSortButton(PGFDialog, 1455894, 'pvprating desc')
+    CreateSortButton(PGFDialog, 237538, 'age asc')
+
+    for i = 1, #PGFDialog.__sortBu do
+        local bu = PGFDialog.__sortBu[i]
+        if i == 1 then
+            bu:SetPoint('BOTTOMLEFT', PGFDialog, 'BOTTOMRIGHT', 3, 0)
+        else
+            bu:SetPoint('BOTTOM', PGFDialog.__sortBu[i - 1], 'TOP', 0, 3)
+        end
+    end
+end
+
+-- Fix duplicate application entry
+local function Fix(self)
+    if next(self.results) and next(self.applications) then
+        for _, value in ipairs(self.applications) do
+            tDeleteItem(self.results, value)
+        end
+
+        self.totalResults = #self.results
+
+        _G.LFGListSearchPanel_UpdateResults(self)
+    end
 end
 
 function M:OnLogin()
@@ -256,6 +340,9 @@ function M:OnLogin()
     hooksecurefunc('LFGListInviteDialog_Show', M.HookDialogOnShow)
     hooksecurefunc('LFGListGroupDataDisplayEnumerate_Update', M.ReplaceGroupRoles)
     hooksecurefunc('LFGListSearchEntry_Update', M.ShowLeaderOverallScore)
+    hooksecurefunc('LFGListSearchPanel_UpdateResultList', Fix)
 
     M:AddAutoAcceptButton()
+    M:ReplaceFindGroupButton()
+    M:AddPGFSortingExpression()
 end
