@@ -333,18 +333,8 @@ do
         local atlasWidth = width / (txRight - txLeft)
         local atlasHeight = height / (txBottom - txTop)
 
-        return string.format(
-            '|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t',
-            file,
-            (sizeX or 0),
-            (sizeY or 0),
-            atlasWidth,
-            atlasHeight,
-            atlasWidth * txLeft,
-            atlasWidth * txRight,
-            atlasHeight * txTop,
-            atlasHeight * txBottom
-        )
+        return string.format('|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t', file, (sizeX or 0), (sizeY or 0), atlasWidth, atlasHeight, atlasWidth * txLeft, atlasWidth * txRight, atlasHeight * txTop,
+                             atlasHeight * txBottom)
     end
 
     -- GUID to npcID
@@ -711,7 +701,7 @@ do
         shadow:SetOutside(self, m or 5, m or 5)
         shadow:SetBackdrop({edgeFile = assets.Textures.Shadow, edgeSize = s or 5})
         shadow:SetBackdropBorderColor(0, 0, 0, a or .25)
-        --shadow:SetFrameLevel(1)
+        -- shadow:SetFrameLevel(1)
         shadow:SetFrameStrata(frame:GetFrameStrata())
         self.__shadow = shadow
 
@@ -970,30 +960,27 @@ do
         local alpha = 1
         local last = 0
 
-        frame:SetScript(
-            'OnUpdate',
-            function(self, elapsed)
-                if not stop then
-                    self:SetBackdropBorderColor(C.r, C.g, C.b)
-                    last = last + elapsed
-                    if last > speed then
-                        last = 0
-                        self:SetAlpha(alpha)
-                    end
-
-                    alpha = alpha - elapsed * mult
-                    if alpha < 0 and mult > 0 then
-                        mult = mult * -1
-                        alpha = 0
-                    elseif alpha > 1 and mult < 0 then
-                        mult = mult * -1
-                    end
-                else
-                    self:SetBackdropBorderColor(0, 0, 0)
-                    self:SetAlpha(.25)
+        frame:SetScript('OnUpdate', function(self, elapsed)
+            if not stop then
+                self:SetBackdropBorderColor(C.r, C.g, C.b)
+                last = last + elapsed
+                if last > speed then
+                    last = 0
+                    self:SetAlpha(alpha)
                 end
+
+                alpha = alpha - elapsed * mult
+                if alpha < 0 and mult > 0 then
+                    mult = mult * -1
+                    alpha = 0
+                elseif alpha > 1 and mult < 0 then
+                    mult = mult * -1
+                end
+            else
+                self:SetBackdropBorderColor(0, 0, 0)
+                self:SetAlpha(.25)
             end
-        )
+        end)
     end
 
     local function StartGlow(self)
@@ -1709,19 +1696,19 @@ do
     -- Role Icons
     function F:GetRoleTexCoord()
         if self == 'TANK' then
-            return .34 / 9.03, 2.86 / 9.03, 3.16 / 9.03, 5.68 / 9.03
+            return .34 / 9.03, 2.85 / 9.03, 3.16 / 9.03, 5.67 / 9.03
         elseif self == 'DPS' or self == 'DAMAGER' then
-            return 3.26 / 9.03, 5.78 / 9.03, 3.16 / 9.03, 5.68 / 9.03
+            return 3.27 / 9.03, 5.78 / 9.03, 3.16 / 9.03, 5.67 / 9.03
         elseif self == 'HEALER' then
-            return 3.26 / 9.03, 5.78 / 9.03, .28 / 9.03, 2.78 / 9.03
+            return 3.27 / 9.03, 5.78 / 9.03, .27 / 9.03, 2.78 / 9.03
         elseif self == 'LEADER' then
-            return .34 / 9.03, 2.86 / 9.03, .28 / 9.03, 2.78 / 9.03
+            return .34 / 9.03, 2.85 / 9.03, .27 / 9.03, 2.78 / 9.03
         elseif self == 'READY' then
-            return 6.17 / 9.03, 8.75 / 9.03, .28 / 9.03, 2.78 / 9.03
+            return 6.17 / 9.03, 8.68 / 9.03, .27 / 9.03, 2.78 / 9.03
         elseif self == 'PENDING' then
-            return 6.17 / 9.03, 8.75 / 9.03, 3.16 / 9.03, 5.68 / 9.03
+            return 6.17 / 9.03, 8.68 / 9.03, 3.16 / 9.03, 5.67 / 9.03
         elseif self == 'REFUSE' then
-            return 3.26 / 9.03, 5.78 / 9.03, 6.03 / 9.03, 8.61 / 9.03
+            return 3.27 / 9.03, 5.78 / 9.03, 6.04 / 9.03, 8.55 / 9.03
         end
     end
 
