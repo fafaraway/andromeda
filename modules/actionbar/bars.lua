@@ -261,18 +261,15 @@ function BAR:UpdateFrameClickThru()
         _G.FreeUI_ActionBar5:EnableMouse((not showBar4 and showBar4) or (showBar4 and showBar5))
     end
 
-    hooksecurefunc(
-        'SetActionBarToggles',
-        function(_, _, bar3, bar4)
-            showBar4 = not (not bar3)
-            showBar5 = not (not bar4)
-            if InCombatLockdown() then
-                F:RegisterEvent('PLAYER_REGEN_ENABLED', updateClickThru)
-            else
-                updateClickThru()
-            end
+    hooksecurefunc('SetActionBarToggles', function(_, _, bar3, bar4)
+        showBar4 = not (not bar3)
+        showBar5 = not (not bar4)
+        if InCombatLockdown() then
+            F:RegisterEvent('PLAYER_REGEN_ENABLED', updateClickThru)
+        else
+            updateClickThru()
         end
-    )
+    end)
 end
 
 function BAR:CreateBar4()
@@ -286,6 +283,12 @@ function BAR:CreateBar4()
     _G.MultiBarRight:SetParent(frame)
     _G.MultiBarRight:EnableMouse(false)
     _G.MultiBarRight.QuickKeybindGlow:SetTexture('')
+
+    hooksecurefunc(_G.MultiBarRight, 'SetScale', function(self, scale, force)
+        if not force and scale ~= 1 then
+            self:SetScale(1, true)
+        end
+    end)
 
     for i = 1, num do
         local button = _G['MultiBarRightButton' .. i]
@@ -313,6 +316,12 @@ function BAR:CreateBar5()
     _G.MultiBarLeft:SetParent(frame)
     _G.MultiBarLeft:EnableMouse(false)
     _G.MultiBarLeft.QuickKeybindGlow:SetTexture('')
+
+    hooksecurefunc(_G.MultiBarLeft, 'SetScale', function(self, scale, force)
+        if not force and scale ~= 1 then
+            self:SetScale(1, true)
+        end
+    end)
 
     for i = 1, num do
         local button = _G['MultiBarLeftButton' .. i]
@@ -477,34 +486,26 @@ function BAR:CreateExtraBar()
     _G.ZoneAbilityFrame.ignoreFramePositionManager = true
     _G.ZoneAbilityFrame.Style:SetAlpha(0)
 
-    hooksecurefunc(
-        _G.ZoneAbilityFrame,
-        'UpdateDisplayedZoneAbilities',
-        function(self)
-            for spellButton in self.SpellButtonContainer:EnumerateActive() do
-                if spellButton and not spellButton.styled then
-                    spellButton.NormalTexture:SetAlpha(0)
-                    spellButton:SetPushedTexture(C.Assets.Textures.Button.Pushed) -- force it to gain a texture
-                    spellButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-                    spellButton:GetHighlightTexture():SetInside()
-                    spellButton.Icon:SetInside()
-                    F.ReskinIcon(spellButton.Icon, true)
-                    spellButton.styled = true
-                end
+    hooksecurefunc(_G.ZoneAbilityFrame, 'UpdateDisplayedZoneAbilities', function(self)
+        for spellButton in self.SpellButtonContainer:EnumerateActive() do
+            if spellButton and not spellButton.styled then
+                spellButton.NormalTexture:SetAlpha(0)
+                spellButton:SetPushedTexture(C.Assets.Textures.Button.Pushed) -- force it to gain a texture
+                spellButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+                spellButton:GetHighlightTexture():SetInside()
+                spellButton.Icon:SetInside()
+                F.ReskinIcon(spellButton.Icon, true)
+                spellButton.styled = true
             end
         end
-    )
+    end)
 
     -- Fix button visibility
-    hooksecurefunc(
-        _G.ZoneAbilityFrame,
-        'SetParent',
-        function(self, parent)
-            if parent == _G.ExtraAbilityContainer then
-                self:SetParent(zoneFrame)
-            end
+    hooksecurefunc(_G.ZoneAbilityFrame, 'SetParent', function(self, parent)
+        if parent == _G.ExtraAbilityContainer then
+            self:SetParent(zoneFrame)
         end
-    )
+    end)
 end
 
 function BAR:UpdateVehicleButton()
@@ -541,23 +542,17 @@ function BAR:CreateLeaveVehicleBar()
 
     button:SetScript('OnEnter', _G.MainMenuBarVehicleLeaveButton_OnEnter)
     button:SetScript('OnLeave', F.HideTooltip)
-    button:SetScript(
-        'OnClick',
-        function(self)
-            if UnitOnTaxi('player') then
-                TaxiRequestEarlyLanding()
-            else
-                VehicleExit()
-            end
-            self:SetChecked(true)
+    button:SetScript('OnClick', function(self)
+        if UnitOnTaxi('player') then
+            TaxiRequestEarlyLanding()
+        else
+            VehicleExit()
         end
-    )
-    button:SetScript(
-        'OnShow',
-        function(self)
-            self:SetChecked(false)
-        end
-    )
+        self:SetChecked(true)
+    end)
+    button:SetScript('OnShow', function(self)
+        self:SetChecked(false)
+    end)
 
     frame.buttons = buttonList
 
