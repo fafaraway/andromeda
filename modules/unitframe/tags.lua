@@ -171,7 +171,7 @@ local _tags = {
     npname = function(unit)
         local nameOnly = C.DB.Nameplate.NameOnlyMode
         local shorten = C.DB.Unitframe.AbbrName
-        local num = GetLocale() == 'zhCN' and 6 or 10
+        local num = GetLocale() == 'zhCN' and 6 or 6
         local str = UnitName(unit)
         local newStr = AbbrName(str, num) or str
 
