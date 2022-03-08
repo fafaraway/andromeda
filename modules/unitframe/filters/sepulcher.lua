@@ -72,7 +72,7 @@ function UNITFRAME:AddSepulcherSpells()
     UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 365297) -- 挤压棱镜[可驱散]
 
     BOSS = 2469 -- 安度因·乌瑞恩
-    UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 361817) -- 灭愿者[常驻优先级请设定低于其他DEBUFF或者不监控]
+    -- UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 361817) -- 灭愿者[常驻优先级请设定低于其他DEBUFF或者不监控]
     UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 366849) -- 御言术：痛
     UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 365293) -- 亵渎屏障
     UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 361993) -- 绝望
