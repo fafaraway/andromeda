@@ -135,11 +135,11 @@ function M:ReplaceGroupRoles(numPlayers, _, disabled)
                 icon:SetPoint('RIGHT', self.Icons[i - 1], 'LEFT', -1, 0)
             end
 
-            icon.role = self:CreateTexture(nil, 'OVERLAY')
+            icon.role = self:CreateTexture(nil, 'OVERLAY', nil, 2)
             icon.role:SetSize(14, 14)
             icon.role:SetPoint('TOPLEFT', icon, -6, 2)
 
-            icon.leader = self:CreateTexture(nil, 'OVERLAY')
+            icon.leader = self:CreateTexture(nil, 'OVERLAY', nil, 1)
             icon.leader:SetSize(14, 14)
             icon.leader:SetPoint('TOP', icon, 0, 8)
             icon.leader:SetTexture('Interface\\GroupFrame\\UI-Group-LeaderIcon')
@@ -185,8 +185,7 @@ function M:ShowLeaderOverallScore()
     if searchResultInfo then
         local activityInfo = C_LFGList.GetActivityInfoTable(searchResultInfo.activityID, nil, searchResultInfo.isWarMode)
         if activityInfo then
-            local showScore = activityInfo.isMythicPlusActivity and searchResultInfo.leaderOverallDungeonScore or activityInfo.isRatedPvpActivity and searchResultInfo.leaderPvpRatingInfo and
-                                  searchResultInfo.leaderPvpRatingInfo.rating
+            local showScore = activityInfo.isMythicPlusActivity and searchResultInfo.leaderOverallDungeonScore or activityInfo.isRatedPvpActivity and searchResultInfo.leaderPvpRatingInfo and searchResultInfo.leaderPvpRatingInfo.rating
             if showScore then
                 local oldName = self.ActivityName:GetText()
                 oldName = string.gsub(oldName, '.-' .. _G.HEADER_COLON, '') -- Tazavesh
