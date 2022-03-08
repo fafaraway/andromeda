@@ -133,19 +133,15 @@ local _tags = {
         local shorten = C.DB.Unitframe.AbbrName
         local isTargted = (unit == 'targettarget' and UnitIsUnit('targettarget', 'player'))
         local isFocusTargeted = (unit == 'focustarget' and UnitIsUnit('focustarget', 'player'))
-        local isNP = (unit:match('nameplate%d+$'))
         local isBoss = (unit:match('boss%d?$'))
         local num = GetLocale() == 'zhCN' and 8 or 10
         local numBoss = GetLocale() == 'zhCN' and 6 or 8
         local numTar = GetLocale() == 'zhCN' and 5 or 8
-        local numNP = GetLocale() == 'zhCN' and 6 or 8
         local str = UnitName(unit)
         local newStr = AbbrName(str, num) or str
 
         if isTargted or isFocusTargeted then
             return '<' .. _G.YOU .. '>'
-        elseif isNP then
-            return shorten and F.ShortenString(newStr, numNP, true) or str
         elseif unit == 'targettarget' or unit == 'focus' or unit == 'focustarget' then
             return shorten and F.ShortenString(newStr, numTar, true) or str
         elseif isBoss then
@@ -169,13 +165,20 @@ local _tags = {
 
     -- nameplate name
     npname = function(unit)
-        local nameOnly = C.DB.Nameplate.NameOnlyMode
-        local shorten = C.DB.Unitframe.AbbrName
+        local abbr = C.DB.Nameplate.AbbrName
         local num = GetLocale() == 'zhCN' and 6 or 6
         local str = UnitName(unit)
-        local newStr = AbbrName(str, num) or str
 
-        return shorten and not nameOnly and F.ShortenString(newStr, num, true) or str
+        if abbr then
+            return F.ShortenString(str, num, true)
+        else
+            return str
+        end
+    end,
+    -- nameplate name (name only mode)
+    npnamelong = function(unit)
+        local str = UnitName(unit)
+        return str
     end,
     -- target name
     tarname = function(unit)
@@ -330,7 +333,7 @@ function NAMEPLATE:CreateNameTag(self)
     text:SetJustifyH('CENTER')
     text:SetPoint('CENTER', self, 'TOP')
 
-    self:Tag(text, '[free:npname]')
+    self:Tag(text, '[free:color][free:npname]')
 
     self.NameTag = text
 end

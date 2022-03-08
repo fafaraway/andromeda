@@ -329,6 +329,7 @@ C.CharacterSettings = {
             FriendlyClickThrough = true,
             ForceCVars = true,
             NameOnlyMode = true,
+            AbbrName = true,
             HealthPerc = true,
             FriendlyPlate = true,
             TargetIndicator = true,

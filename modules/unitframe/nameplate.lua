@@ -861,7 +861,7 @@ function NAMEPLATE:UpdatePlateByType()
         end
 
         name:SetJustifyH('CENTER')
-        self:Tag(name, '[free:color][free:npname]')
+        self:Tag(name, '[free:color][free:npnamelong]')
         self.__tagIndex = 6
         name:UpdateTag()
         name:SetParent(self)
