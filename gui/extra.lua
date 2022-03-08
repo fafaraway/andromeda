@@ -350,7 +350,7 @@ function GUI:SetupAuraSize(parent)
                 key = 'BuffSize',
                 value = db.BuffSize,
                 text = L['Size'],
-                min = 20,
+                min = 24,
                 max = 50,
                 step = 1
             },
@@ -368,7 +368,7 @@ function GUI:SetupAuraSize(parent)
                 key = 'DebuffSize',
                 value = db.DebuffSize,
                 text = L['Size'],
-                min = 20,
+                min = 24,
                 max = 50,
                 step = 1
             },
