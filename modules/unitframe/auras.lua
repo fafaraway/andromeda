@@ -352,7 +352,7 @@ function UNITFRAME:CreateGroupBuffs(self)
     bu.showStealableBuffs = true
     bu.disableMouse = true
     bu.disableCooldown = true
-    -- bu.CustomFilter = UNITFRAME.GroupBuffFilter
+    bu.CustomFilter = UNITFRAME.GroupBuffFilter
 
     UNITFRAME:UpdateAuraContainer(self, bu, bu.num)
 
