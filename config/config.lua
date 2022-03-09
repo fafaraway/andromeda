@@ -260,6 +260,10 @@ C.CharacterSettings = {
                 PartyWatcherSync = true,
                 PartyWatcherOnRight = false,
                 PartyNameLength = 4,
+                PartyBuff = true,
+                    PartyBuffSize = 16,
+                PartyDebuff = true,
+                    PartyDebuffSize = 16,
 
             RaidFrame = true,
                 RaidColorStyle = 2,
@@ -271,7 +275,10 @@ C.CharacterSettings = {
                 RaidHealthHeight = 30,
                 RaidPowerHeight = 2,
                 RaidNameLength = 2,
-
+                RaidBuff = false,
+                    RaidBuffSize = 12,
+                RaidDebuff = false,
+                    RaidDebuffSize = 12,
 
             GroupName = false,
             GroupRole = true,
@@ -282,12 +289,7 @@ C.CharacterSettings = {
 
             SmartRaid = true,
 
-            ShowRaidBuff = false,
-                RaidBuffSize = 8,
 
-            ShowRaidDebuff = false,
-                RaidDebuffSize = 12,
-                RaidDebuffsScale = 1,
 
             PositionBySpec = false,
             ClickToCast = true,

@@ -531,7 +531,7 @@ C.PartyDebuffsBlackList = {
     [294720] = true -- 瓶装谜团
 }
 
-C.PartyBuffsList = {
+C.PartyImportantAurasList = {
     -- All
     [160029] = true, -- Resurrecting
     -- Racial

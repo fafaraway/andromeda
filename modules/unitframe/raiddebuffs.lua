@@ -68,7 +68,7 @@ function UNITFRAME:CreateRaidDebuff(self)
         bu:SetScript('OnLeave', F.HideTooltip)
     end
 
-    bu.ShowDispellableDebuff = true -- 副本外仍然显示可驱散的减益
+    bu.ShowDispellableDebuff = false -- 副本外仍然显示可驱散的减益
     bu.ShowDebuffBorder = true
 
     if not next(debuffList) then

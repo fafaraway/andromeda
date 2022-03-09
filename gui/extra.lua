@@ -2885,6 +2885,141 @@ function GUI:SetupNameLength(parent)
     end
 end
 
+local function UpdateGroupAuras()
+    UNITFRAME:UpdateGroupAuras()
+end
+
+
+
+function GUI:SetupPartyBuffSize(parent)
+    local guiName = 'FreeUIGUISetupPartyBuffSize'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+
+    local mKey = 'Unitframe'
+    local db = C.CharacterSettings.Unitframe
+
+    local datas = {
+        [1] = {
+            key = 'PartyBuffSize',
+            value = db.PartyBuffSize,
+            text = L['Icon Size'],
+            min = 12,
+            max = 36,
+            step = 1
+        }
+    }
+
+    local offset = -10
+    for _, v in ipairs(datas) do
+        CreateGroupTitle(scroll, L['Party Buff'], offset)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateGroupAuras)
+        offset = offset - 65
+    end
+end
+
+function GUI:SetupPartyDebuffSize(parent)
+    local guiName = 'FreeUIGUISetupPartyDebuffSize'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+
+    local mKey = 'Unitframe'
+    local db = C.CharacterSettings.Unitframe
+
+    local datas = {
+        [1] = {
+            key = 'PartyDebuffSize',
+            value = db.PartyDebuffSize,
+            text = L['Icon Size'],
+            min = 12,
+            max = 36,
+            step = 1
+        },
+    }
+
+    local offset = -10
+    for _, v in ipairs(datas) do
+        CreateGroupTitle(scroll, L['Party Debuff'], offset)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateGroupAuras)
+        offset = offset - 65
+    end
+end
+
+
+function GUI:SetupRaidBuffSize(parent)
+    local guiName = 'FreeUIGUISetupRaidBuffSize'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+
+    local mKey = 'Unitframe'
+    local db = C.CharacterSettings.Unitframe
+
+    local datas = {
+        [1] = {
+            key = 'RaidBuffSize',
+            value = db.RaidBuffSize,
+            text = L['Icon Size'],
+            min = 12,
+            max = 36,
+            step = 1
+        }
+    }
+
+    local offset = -10
+    for _, v in ipairs(datas) do
+        CreateGroupTitle(scroll, L['Raid Buff'], offset)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateGroupAuras)
+        offset = offset - 65
+    end
+end
+
+function GUI:SetupRaidDebuffSize(parent)
+    local guiName = 'FreeUIGUISetupRaidDebuffSize'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+
+    local mKey = 'Unitframe'
+    local db = C.CharacterSettings.Unitframe
+
+    local datas = {
+        [1] = {
+            key = 'RaidDebuffSize',
+            value = db.RaidDebuffSize,
+            text = L['Icon Size'],
+            min = 12,
+            max = 36,
+            step = 1
+        }
+    }
+
+    local offset = -10
+    for _, v in ipairs(datas) do
+        CreateGroupTitle(scroll, L['Raid Debuff'], offset)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateGroupAuras)
+        offset = offset - 65
+    end
+end
+
 
 -- General
 

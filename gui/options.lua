@@ -305,6 +305,26 @@ local function SetupNameLength()
     GUI:SetupNameLength(GUI.Page[12])
 end
 
+local function SetupPartyBuffSize()
+    GUI:SetupPartyBuffSize(GUI.Page[12])
+end
+
+local function SetupPartyDebuffSize()
+    GUI:SetupPartyDebuffSize(GUI.Page[12])
+end
+
+local function SetupRaidBuffSize()
+    GUI:SetupRaidBuffSize(GUI.Page[12])
+end
+
+local function SetupRaidDebuffSize()
+    GUI:SetupRaidDebuffSize(GUI.Page[12])
+end
+
+local function UpdateGroupAuras()
+    UNITFRAME:UpdateGroupAuras()
+end
+
 
 -- General
 
@@ -619,11 +639,17 @@ GUI.OptionsList = {
         {1, 'Unitframe', 'RaidFrame', L['Enable RaidFrame'], nil, SetupRaidFrame},
         {1, 'Unitframe', 'SimpleMode', L['Simple Mode'], nil, SetupSimpleRaidFrame, nil, L['Simple mode remove most of the elements, and only show unit health status.']},
         {1, 'Unitframe', 'TeamIndex', L['Display Team Index'], true, nil, UpdateRaidHeader},
+
+        {1, 'Unitframe', 'RaidBuff', L['Display Buffs'], nil, SetupRaidBuffSize, UpdateGroupAuras, L['Display buffs on RaidFrame by blizzard API logic, up to 3 icons.|nThis may overlap with the Corner Indicator and is best not enabled at the same time.']},
+        {1, 'Unitframe', 'RaidDebuff', L['Display Debuffs'], true, SetupRaidDebuffSize, UpdateGroupAuras, L['Display debuffs on RaidFrame by blizzard API logic, up to 3 icons.|nThis may overlap with the Corner Indicator and is best not enabled at the same time.']},
         {},
 
         {1, 'Unitframe', 'PartyFrame', L['Enable PartyFrame'], nil, SetupPartyFrame},
         {1, 'Unitframe', 'ShowSolo', L['Display PartyFrame on Solo'], nil, nil, UpdateAllHeaders, L['If checked, the PartyFrame would be visible even you are solo.']},
         {1, 'Unitframe', 'DescRole', L['Sort by Reverse Roles'], true, nil, UpdatePartyHeader, L["If checked, sort your party order by 'Damager Healer Tank' within growth direction.|nIf unchecked, sort your party order by 'Tank Healer Damager' within growth direction."]},
+
+        {1, 'Unitframe', 'PartyBuff', L['Display Buffs'], nil, SetupPartyBuffSize, UpdateGroupAuras, L['Display buffs on PartyFrame by blizzard API logic, up to 3 icons.|nThis may overlap with the Corner Indicator and is best not enabled at the same time.']},
+        {1, 'Unitframe', 'PartyDebuff', L['Display Debuffs'], true, SetupPartyDebuffSize, UpdateGroupAuras, L['Display debuffs on PartyFrame by blizzard API logic, up to 3 icons.|nThis may overlap with the Corner Indicator and is best not enabled at the same time.']},
 
         {1, 'Unitframe', 'PartyWatcher', L['Enable Party Watcher'], nil, SetupPartyWatcher, nil, L['If enabled, show spell cooldown for your group members on PartyFrames']},
         {1, 'Unitframe', 'PartyWatcherOnRight', L['Swap Icons Side'], nil, nil, UpdatePartyElements},
