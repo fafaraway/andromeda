@@ -168,9 +168,10 @@ local _tags = {
         local abbr = C.DB.Nameplate.AbbrName
         local num = GetLocale() == 'zhCN' and 6 or 6
         local str = UnitName(unit)
+        local newStr = AbbrName(str, num) or str
 
         if abbr then
-            return F.ShortenString(str, num, true)
+            return F.ShortenString(newStr, num, true)
         else
             return str
         end
