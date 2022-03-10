@@ -63,6 +63,7 @@ function TOOLTIP:HyperLink_SetJournal(link)
 end
 
 function TOOLTIP:HyperLink_SetTypes(link)
+    _G.GameTooltip.__isHoverTip = true
     _G.GameTooltip:SetOwner(self, 'ANCHOR_TOPRIGHT', -3, 5)
     _G.GameTooltip:SetHyperlink(link)
     _G.GameTooltip:Show()
@@ -88,6 +89,7 @@ end
 function TOOLTIP:HyperLink_OnLeave(_, ...)
     _G.BattlePetTooltip:Hide()
     _G.GameTooltip:Hide()
+    _G.GameTooltip.__isHoverTip = nil
 
     if orig2[self] then
         return orig2[self](self, ...)
