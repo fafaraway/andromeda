@@ -109,7 +109,7 @@ local menuList = {
                 _G.UIErrorsFrame:AddMessage('|cffff0000' .. _G.ERR_NOT_IN_COMBAT .. '|r')
                 return
             end
-            securecall(_G.ToggleLFDParentFrame) --OR securecall(PVEFrame_ToggleFrame, "GroupFinderFrame")
+            securecall(_G.ToggleLFDParentFrame) -- OR securecall(PVEFrame_ToggleFrame, "GroupFinderFrame")
         end,
         notCheckable = true
     },
@@ -295,7 +295,7 @@ function MM:ReskinMinimap()
     map:SetFrameLevel(map:GetFrameLevel() + 2)
     map:ClearAllPoints()
     map:SetPoint('CENTER', backdrop)
-    --map:SetParent(map.backdrop)
+    -- map:SetParent(map.backdrop)
 
     local pos = {'BOTTOMRIGHT', _G.UIParent, 'BOTTOMRIGHT', -C.UIGap, C.UIGap}
     local mover = F.Mover(backdrop, _G.MINIMAP_LABEL, 'Minimap', pos)
@@ -394,17 +394,14 @@ function MM:CreateCalendar()
     F:RegisterEvent('CALENDAR_UPDATE_PENDING_INVITES', updateInviteVisibility)
     F:RegisterEvent('PLAYER_ENTERING_WORLD', updateInviteVisibility)
 
-    Invt:SetScript(
-        'OnClick',
-        function(_, btn)
-            Invt:Hide()
-            if btn == 'LeftButton' then
-                _G.ToggleCalendar()
-            end
-            F:UnregisterEvent('CALENDAR_UPDATE_PENDING_INVITES', updateInviteVisibility)
-            F:UnregisterEvent('PLAYER_ENTERING_WORLD', updateInviteVisibility)
+    Invt:SetScript('OnClick', function(_, btn)
+        Invt:Hide()
+        if btn == 'LeftButton' then
+            _G.ToggleCalendar()
         end
-    )
+        F:UnregisterEvent('CALENDAR_UPDATE_PENDING_INVITES', updateInviteVisibility)
+        F:UnregisterEvent('PLAYER_ENTERING_WORLD', updateInviteVisibility)
+    end)
 end
 
 function MM:UpdateDifficultyFlag()
@@ -504,13 +501,10 @@ end
 
 function MM:CreateGarrisonButton()
     _G.GarrisonLandingPageMinimapButton:SetScale(.5)
-    hooksecurefunc(
-        'GarrisonLandingPageMinimapButton_UpdateIcon',
-        function(self)
-            self:ClearAllPoints()
-            self:SetPoint('BOTTOMLEFT', map, 0, offset + 30)
-        end
-    )
+    hooksecurefunc('GarrisonLandingPageMinimapButton_UpdateIcon', function(self)
+        self:ClearAllPoints()
+        self:SetPoint('BOTTOMLEFT', map, 0, offset + 30)
+    end)
 end
 
 local function UpdateZoneText()
@@ -538,26 +532,17 @@ function MM:CreateZoneText()
 
     map.ZoneText = zoneText
 
-    map:HookScript(
-        'OnUpdate',
-        function()
-            UpdateZoneText()
-        end
-    )
+    map:HookScript('OnUpdate', function()
+        UpdateZoneText()
+    end)
 
-    map:HookScript(
-        'OnEnter',
-        function()
-            map.ZoneText:Show()
-        end
-    )
+    map:HookScript('OnEnter', function()
+        map.ZoneText:Show()
+    end)
 
-    map:HookScript(
-        'OnLeave',
-        function()
-            map.ZoneText:Hide()
-        end
-    )
+    map:HookScript('OnLeave', function()
+        map.ZoneText:Hide()
+    end)
 end
 
 function MM:CreateQueueStatusButton()
@@ -577,24 +562,15 @@ function MM:CreateQueueStatusButton()
     anim.rota = anim:CreateAnimation('Rotation')
     anim.rota:SetDuration(2)
     anim.rota:SetDegrees(360)
-    hooksecurefunc(
-        'QueueStatusFrame_Update',
-        function()
-            queueIcon:SetShown(_G.QueueStatusMinimapButton:IsShown())
-        end
-    )
-    hooksecurefunc(
-        'EyeTemplate_StartAnimating',
-        function()
-            anim:Play()
-        end
-    )
-    hooksecurefunc(
-        'EyeTemplate_StopAnimating',
-        function()
-            anim:Stop()
-        end
-    )
+    hooksecurefunc('QueueStatusFrame_Update', function()
+        queueIcon:SetShown(_G.QueueStatusMinimapButton:IsShown())
+    end)
+    hooksecurefunc('EyeTemplate_StartAnimating', function()
+        anim:Play()
+    end)
+    hooksecurefunc('EyeTemplate_StopAnimating', function()
+        anim:Stop()
+    end)
 end
 
 function MM:WhoPings()
@@ -607,18 +583,12 @@ function MM:WhoPings()
     f.text = F.CreateFS(f, C.Assets.Fonts.Regular, 14, 'OUTLINE', '', 'CLASS', false, 'TOP', 0, -4)
 
     local anim = f:CreateAnimationGroup()
-    anim:SetScript(
-        'OnPlay',
-        function()
-            f:SetAlpha(1)
-        end
-    )
-    anim:SetScript(
-        'OnFinished',
-        function()
-            f:SetAlpha(0)
-        end
-    )
+    anim:SetScript('OnPlay', function()
+        f:SetAlpha(1)
+    end)
+    anim:SetScript('OnFinished', function()
+        f:SetAlpha(0)
+    end)
     anim.fader = anim:CreateAnimation('Alpha')
     anim.fader:SetFromAlpha(1)
     anim.fader:SetToAlpha(0)
@@ -626,20 +596,19 @@ function MM:WhoPings()
     anim.fader:SetSmoothing('OUT')
     anim.fader:SetStartDelay(3)
 
-    F:RegisterEvent(
-        'MINIMAP_PING',
-        function(_, unit)
-            if UnitIsUnit(unit, 'player') then return end -- ignore player ping
+    F:RegisterEvent('MINIMAP_PING', function(_, unit)
+        if UnitIsUnit(unit, 'player') then
+            return
+        end -- ignore player ping
 
-            local r, g, b = F:ClassColor(C.MyClass)
-            local name = GetUnitName(unit)
+        local r, g, b = F:ClassColor(C.MyClass)
+        local name = GetUnitName(unit)
 
-            anim:Stop()
-            f.text:SetText(name)
-            f.text:SetTextColor(r, g, b)
-            anim:Play()
-        end
-    )
+        anim:Stop()
+        f.text:SetText(name)
+        f.text:SetTextColor(r, g, b)
+        anim:Play()
+    end)
 end
 
 function MM:Minimap_OnMouseWheel(zoom)
@@ -651,13 +620,13 @@ function MM:Minimap_OnMouseWheel(zoom)
 end
 
 function MM:Minimap_OnMouseUp(btn)
-    if btn == 'MiddleButton' then
+    if btn == 'RightButton' then
         if InCombatLockdown() then
             _G.UIErrorsFrame:AddMessage(C.InfoColor .. _G.ERR_NOT_IN_COMBAT)
             return
         end
         _G.EasyMenu(menuList, F.EasyMenu, 'cursor', 0, 0, 'MENU', 3)
-    elseif btn == 'RightButton' then
+    elseif btn == 'MiddleButton' then
         _G.ToggleDropDownMenu(1, nil, _G.MiniMapTrackingDropDown, self)
     else
         _G.Minimap_OnClick(self)
@@ -707,18 +676,15 @@ function MM:HideInCombat()
 
     _G.Minimap.backdrop:RegisterEvent('PLAYER_REGEN_ENABLED')
     _G.Minimap.backdrop:RegisterEvent('PLAYER_REGEN_DISABLED')
-    _G.Minimap.backdrop:HookScript(
-        'OnEvent',
-        function(self, event)
-            if event == 'PLAYER_REGEN_ENABLED' then
-                F:UIFrameFadeIn(self, .1, self:GetAlpha(), 1)
-                F:UIFrameFadeIn(_G.Minimap, .1, self:GetAlpha(), 1)
-            elseif event == 'PLAYER_REGEN_DISABLED' then
-                F:UIFrameFadeOut(self, .1, self:GetAlpha(), 0)
-                F:UIFrameFadeOut(_G.Minimap, .1, self:GetAlpha(), 0)
-            end
+    _G.Minimap.backdrop:HookScript('OnEvent', function(self, event)
+        if event == 'PLAYER_REGEN_ENABLED' then
+            F:UIFrameFadeIn(self, .1, self:GetAlpha(), 1)
+            F:UIFrameFadeIn(_G.Minimap, .1, self:GetAlpha(), 1)
+        elseif event == 'PLAYER_REGEN_DISABLED' then
+            F:UIFrameFadeOut(self, .1, self:GetAlpha(), 0)
+            F:UIFrameFadeOut(_G.Minimap, .1, self:GetAlpha(), 0)
         end
-    )
+    end)
 end
 
 function MM:OnLogin()
