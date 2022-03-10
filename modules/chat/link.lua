@@ -140,6 +140,11 @@ local function AddChatIcon(link, linkType, id)
     elseif linkType == 'conduit' then
         local spell = C_Soulbinds.GetConduitSpellID(id, 1)
         texture = spell and GetSpellTexture(spell)
+    elseif linkType == 'transmogappearance' then
+        texture = select(4, C_TransmogCollection.GetAppearanceSourceInfo(id))
+    elseif linkType == 'transmogillusion' then
+        local info = C_TransmogCollection.GetIllusionInfo(id)
+        texture = info and info.icon
     end
 
     cache[link] = GetHyperlink(link, texture)
