@@ -2492,5 +2492,6 @@ read_globals = {
     'RegisterStateDriver',
     'tDeleteItem',
     'Enum',
-    'SOUNDKIT'
+    'SOUNDKIT',
+    'EasyMenu'
 }
