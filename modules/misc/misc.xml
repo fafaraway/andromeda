@@ -9,11 +9,11 @@
     <Script file="dragemall.lua"/>
     <Script file="group-tool.lua"/>
     <Script file="itemlevel.lua"/>
-    <Script file="lfg.lua"/>
     <Script file="logo.lua"/>
     <Script file="merchant.lua"/>
     <Script file="movie-skip.lua"/>
     <Script file="mute-sounds.lua"/>
+    <Script file="premade.lua"/>
     <Script file="proposal-timer.lua"/>
     <Script file="reputation.lua"/>
     <Script file="screenshot.lua"/>
