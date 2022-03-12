@@ -45,7 +45,7 @@ local frames = {
     ['VideoOptionsFrame'] = false,
 
     -- Addon Frames
-    ['BindPadFrame'] = false
+    -- ['BindPadFrame'] = false
 }
 
 -- Frame Existing Check
