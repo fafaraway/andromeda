@@ -9,7 +9,6 @@ C.CharacterSettings = {
     InstallationComplete = false,
     UIAnchor = {},
     UIAnchorTemp = {},
-    SpellBinding = {},
     TalentManager = {},
     General = {
         HideTalkingHead = true,
@@ -292,7 +291,6 @@ C.CharacterSettings = {
 
 
             PositionBySpec = false,
-            ClickToCast = true,
             DebuffHighlight = true,
             CornerIndicator = true,
                 CornerIndicatorScale = 1,
@@ -587,7 +585,7 @@ C.AccountSettings = {
     RepairType = 1,
     CustomJunkList = {},
     NPAuraFilter = {[1] = {}, [2] = {}},
-    RaidDebuffsList = {},
+    AuraWatcherList = {},
     RaidAuraWatch = {},
     NPMajorSpells = {},
     CornerSpellsList = {},

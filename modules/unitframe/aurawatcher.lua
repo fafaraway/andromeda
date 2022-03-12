@@ -2,11 +2,11 @@ local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('UnitFrame')
 
 local debuffList = {}
-function UNITFRAME:UpdateRaidDebuffs()
+function UNITFRAME:UpdateAuraWatcher()
     table.wipe(debuffList)
-    for instName, value in pairs(C.RaidDebuffsList) do
+    for instName, value in pairs(C.AuraWatcherList) do
         for spell, priority in pairs(value) do
-            if not (_G.FREE_ADB['RaidDebuffsList'][instName] and _G.FREE_ADB['RaidDebuffsList'][instName][spell]) then
+            if not (_G.FREE_ADB['AuraWatcherList'][instName] and _G.FREE_ADB['AuraWatcherList'][instName][spell]) then
                 if not debuffList[instName] then
                     debuffList[instName] = {}
                 end
@@ -14,7 +14,7 @@ function UNITFRAME:UpdateRaidDebuffs()
             end
         end
     end
-    for instName, value in pairs(_G.FREE_ADB['RaidDebuffsList']) do
+    for instName, value in pairs(_G.FREE_ADB['AuraWatcherList']) do
         for spell, priority in pairs(value) do
             if priority > 0 then
                 if not debuffList[instName] then
@@ -36,7 +36,7 @@ local function ButtonOnEnter(self)
     _G.GameTooltip:Show()
 end
 
-function UNITFRAME:CreateRaidDebuff(self)
+function UNITFRAME:CreateAuraWatcher(self)
     if not C.DB.Unitframe.InstanceDebuffs then return end
 
     local bu = CreateFrame('Frame', nil, self)
@@ -72,7 +72,7 @@ function UNITFRAME:CreateRaidDebuff(self)
     bu.ShowDebuffBorder = true
 
     if not next(debuffList) then
-        UNITFRAME:UpdateRaidDebuffs()
+        UNITFRAME:UpdateAuraWatcher()
     end
 
     bu.Debuffs = debuffList

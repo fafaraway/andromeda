@@ -338,17 +338,33 @@ function UNITFRAME.GroupBuffFilter(_, _, _, _, _, _, _, _, _, caster, _, _, spel
     end
 end
 
-function UNITFRAME:CreateGroupBuffs(self)
-    if not C.DB.Unitframe.PartyBuff then
-        return
-    end
-
+function UNITFRAME:CreatePartyBuffs(self)
     local bu = CreateFrame('Frame', nil, self)
     bu:SetPoint('TOPLEFT', self.Health, 'TOPLEFT', 2, -2)
     bu.initialAnchor = 'TOPLEFT'
     bu.spacing = 3
-    bu.size = self.unitStyle == 'raid' and  C.DB.Unitframe.RaidBuffSize or C.DB.Unitframe.PartyBuffSize
-    bu.num = (self.unitStyle == 'simple' or not C.DB.Unitframe.PartyBuff) and 0 or 3
+    bu.size = C.DB.Unitframe.PartyBuffSize
+    bu.num = not C.DB.Unitframe.PartyBuff and 0 or 3
+    bu.showStealableBuffs = true
+    bu.disableMouse = true
+    bu.disableCooldown = true
+    bu.CustomFilter = UNITFRAME.GroupBuffFilter
+
+    UNITFRAME:UpdateAuraContainer(self, bu, bu.num)
+
+    bu.PostCreateIcon = UNITFRAME.PostCreateIcon
+    bu.PostUpdateIcon = UNITFRAME.PostUpdateIcon
+
+    self.Buffs = bu
+end
+
+function UNITFRAME:CreateRaidBuffs(self)
+    local bu = CreateFrame('Frame', nil, self)
+    bu:SetPoint('TOPLEFT', self.Health, 'TOPLEFT', 2, -2)
+    bu.initialAnchor = 'TOPLEFT'
+    bu.spacing = 3
+    bu.size = C.DB.Unitframe.RaidBuffSize
+    bu.num = not C.DB.Unitframe.RaidBuff and 0 or 3
     bu.showStealableBuffs = true
     bu.disableMouse = true
     bu.disableCooldown = true
@@ -386,18 +402,35 @@ function UNITFRAME.GroupDebuffFilter(element, _, _, _, _, _, _, _, _, caster, _,
     end
 end
 
-function UNITFRAME:CreateGroupDebuffs(self)
-    if not C.DB.Unitframe.PartyDebuff then
-        return
-    end
-
+function UNITFRAME:CreatePartyDebuffs(self)
     local bu = CreateFrame('Frame', nil, self)
     bu:SetPoint('BOTTOMRIGHT', self.Health, 'BOTTOMRIGHT', -2, 2)
     bu.initialAnchor = 'BOTTOMRIGHT'
     bu['growth-x'] = 'LEFT'
     bu.spacing = 3
-    bu.size = self.unitStyle == 'raid' and  C.DB.Unitframe.RaidDebuffSize or C.DB.Unitframe.PartyDebuffSize
-    bu.num = (self.unitStyle == 'simple' or not C.DB.Unitframe.PartyDebuff) and 0 or 3
+    bu.size = C.DB.Unitframe.PartyDebuffSize
+    bu.num = not C.DB.Unitframe.PartyDebuff and 0 or 3
+    bu.disableMouse = true
+    bu.disableCooldown = true
+    bu.showDebuffType = true
+
+    UNITFRAME:UpdateAuraContainer(self, bu, bu.num)
+
+    bu.CustomFilter = UNITFRAME.GroupDebuffFilter
+    bu.PostCreateIcon = UNITFRAME.PostCreateIcon
+    bu.PostUpdateIcon = UNITFRAME.PostUpdateIcon
+
+    self.Debuffs = bu
+end
+
+function UNITFRAME:CreateRaidDebuffs(self)
+    local bu = CreateFrame('Frame', nil, self)
+    bu:SetPoint('BOTTOMRIGHT', self.Health, 'BOTTOMRIGHT', -2, 2)
+    bu.initialAnchor = 'BOTTOMRIGHT'
+    bu['growth-x'] = 'LEFT'
+    bu.spacing = 3
+    bu.size =  C.DB.Unitframe.RaidDebuffSize
+    bu.num = not C.DB.Unitframe.RaidDebuff and 0 or 3
     bu.disableMouse = true
     bu.disableCooldown = true
     bu.showDebuffType = true
@@ -431,7 +464,7 @@ function UNITFRAME:UpdateGroupAuras()
                 UNITFRAME:UpdateAuraContainer(frame, buffs, buffs.num)
                 buffs:ForceUpdate()
             end
-        else
+        elseif frame.unitStyle == 'raid' then
             if debuffs then
                 debuffs.num = not C.DB.Unitframe.RaidDebuff and 0 or 3
                 debuffs.size = C.DB.Unitframe.RaidDebuffSize

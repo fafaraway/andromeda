@@ -201,19 +201,19 @@ function UNITFRAME:OnLogin()
 
     for instName, value in pairs(RaidDebuffs) do
         for spell, priority in pairs(value) do
-            if _G.FREE_ADB['RaidDebuffsList'][instName] and _G.FREE_ADB['RaidDebuffsList'][instName][spell] and _G.FREE_ADB['RaidDebuffsList'][instName][spell] == priority then
-                _G.FREE_ADB['RaidDebuffsList'][instName][spell] = nil
+            if _G.FREE_ADB['AuraWatcherList'][instName] and _G.FREE_ADB['AuraWatcherList'][instName][spell] and _G.FREE_ADB['AuraWatcherList'][instName][spell] == priority then
+                _G.FREE_ADB['AuraWatcherList'][instName][spell] = nil
             end
         end
     end
-    for instName, value in pairs(_G.FREE_ADB['RaidDebuffsList']) do
+    for instName, value in pairs(_G.FREE_ADB['AuraWatcherList']) do
         if not next(value) then
-            _G.FREE_ADB['RaidDebuffsList'][instName] = nil
+            _G.FREE_ADB['AuraWatcherList'][instName] = nil
         end
     end
 
     C.RaidBuffsList = RaidBuffs
-    C.RaidDebuffsList = RaidDebuffs
+    C.AuraWatcherList = RaidDebuffs
 
     UNITFRAME:SpawnUnits()
 end

@@ -65,7 +65,7 @@ _G.StaticPopupDialogs.FREEUI_RESET_RAID_DEBUFFS = {
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
-        _G.FREE_ADB['RaidDebuffsList'] = {}
+        _G.FREE_ADB['AuraWatcherList'] = {}
         _G.ReloadUI()
     end,
     whileDead = 1

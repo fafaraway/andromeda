@@ -2554,8 +2554,8 @@ function GUI:SetupPartyWatcher(parent)
     end
 end
 
-local function UpdateRaidDebuffs()
-    UNITFRAME:UpdateRaidDebuffs()
+local function UpdateAuraWatcher()
+    UNITFRAME:UpdateAuraWatcher()
 end
 
 local function AddNewDungeon(dungeons, dungeonID)
@@ -2573,7 +2573,7 @@ function GUI:SetupRaidDebuffs(parent)
     end
 
     local panel = CreateExtraGUI(parent, guiName, nil, true)
-    panel:SetScript('OnHide', UpdateRaidDebuffs)
+    panel:SetScript('OnHide', UpdateAuraWatcher)
 
     local setupBars
     local frame = panel.bg
@@ -2630,9 +2630,9 @@ function GUI:SetupRaidDebuffs(parent)
     local function isAuraExisted(instName, spellID)
         print(instName)
         print(spellID)
-        print(C.RaidDebuffsList[instName][spellID])
-        local localPrio = C.RaidDebuffsList[instName][spellID]
-        local savedPrio = _G.FREE_ADB['RaidDebuffsList'][instName] and _G.FREE_ADB['RaidDebuffsList'][instName][spellID]
+        print(C.AuraWatcherList[instName][spellID])
+        local localPrio = C.AuraWatcherList[instName][spellID]
+        local savedPrio = _G.FREE_ADB['AuraWatcherList'][instName] and _G.FREE_ADB['AuraWatcherList'][instName][spellID]
         if (localPrio and savedPrio and savedPrio == 0) or (not localPrio and not savedPrio) then
             return false
         end
@@ -2659,10 +2659,10 @@ function GUI:SetupRaidDebuffs(parent)
         end
 
         priority = analyzePrio(priority)
-        if not _G.FREE_ADB['RaidDebuffsList'][instName] then
-            _G.FREE_ADB['RaidDebuffsList'][instName] = {}
+        if not _G.FREE_ADB['AuraWatcherList'][instName] then
+            _G.FREE_ADB['AuraWatcherList'][instName] = {}
         end
-        _G.FREE_ADB['RaidDebuffsList'][instName][spellID] = priority
+        _G.FREE_ADB['AuraWatcherList'][instName][spellID] = priority
         setupBars(instName)
         GUI:ClearEdit(options[3])
         GUI:ClearEdit(options[4])
@@ -2723,13 +2723,13 @@ function GUI:SetupRaidDebuffs(parent)
             'OnClick',
             function()
                 bar:Hide()
-                if C.RaidDebuffsList[bar.instName][bar.spellID] then
-                    if not _G.FREE_ADB['RaidDebuffsList'][bar.instName] then
-                        _G.FREE_ADB['RaidDebuffsList'][bar.instName] = {}
+                if C.AuraWatcherList[bar.instName][bar.spellID] then
+                    if not _G.FREE_ADB['AuraWatcherList'][bar.instName] then
+                        _G.FREE_ADB['AuraWatcherList'][bar.instName] = {}
                     end
-                    _G.FREE_ADB['RaidDebuffsList'][bar.instName][bar.spellID] = 0
+                    _G.FREE_ADB['AuraWatcherList'][bar.instName][bar.spellID] = 0
                 else
-                    _G.FREE_ADB['RaidDebuffsList'][bar.instName][bar.spellID] = nil
+                    _G.FREE_ADB['AuraWatcherList'][bar.instName][bar.spellID] = nil
                 end
                 setupBars(bar.instName)
             end
@@ -2756,10 +2756,10 @@ function GUI:SetupRaidDebuffs(parent)
             'OnEnterPressed',
             function(self)
                 local prio = analyzePrio(tonumber(self:GetText()))
-                if not _G.FREE_ADB['RaidDebuffsList'][bar.instName] then
-                    _G.FREE_ADB['RaidDebuffsList'][bar.instName] = {}
+                if not _G.FREE_ADB['AuraWatcherList'][bar.instName] then
+                    _G.FREE_ADB['AuraWatcherList'][bar.instName] = {}
                 end
-                _G.FREE_ADB['RaidDebuffsList'][bar.instName][bar.spellID] = prio
+                _G.FREE_ADB['AuraWatcherList'][bar.instName][bar.spellID] = prio
                 self:SetText(prio)
             end
         )
@@ -2788,17 +2788,17 @@ function GUI:SetupRaidDebuffs(parent)
         local instName = self.text or self
         local index = 0
 
-        if C.RaidDebuffsList[instName] then
-            for spellID, priority in pairs(C.RaidDebuffsList[instName]) do
-                if not (_G.FREE_ADB['RaidDebuffsList'][instName] and _G.FREE_ADB['RaidDebuffsList'][instName][spellID]) then
+        if C.AuraWatcherList[instName] then
+            for spellID, priority in pairs(C.AuraWatcherList[instName]) do
+                if not (_G.FREE_ADB['AuraWatcherList'][instName] and _G.FREE_ADB['AuraWatcherList'][instName][spellID]) then
                     index = index + 1
                     applyData(index, instName, spellID, priority)
                 end
             end
         end
 
-        if _G.FREE_ADB['RaidDebuffsList'][instName] then
-            for spellID, priority in pairs(_G.FREE_ADB['RaidDebuffsList'][instName]) do
+        if _G.FREE_ADB['AuraWatcherList'][instName] then
+            for spellID, priority in pairs(_G.FREE_ADB['AuraWatcherList'][instName]) do
                 if priority > 0 then
                     index = index + 1
                     applyData(index, instName, spellID, priority)

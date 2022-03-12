@@ -355,9 +355,9 @@ local function CreatePartyStyle(self)
     UNITFRAME:CreateSelectedBorder(self)
     UNITFRAME:CreateRangeCheck(self)
     UNITFRAME:CreateAuras(self)
-    UNITFRAME:CreateGroupBuffs(self)
-    UNITFRAME:CreateGroupDebuffs(self)
-    UNITFRAME:CreateRaidDebuff(self)
+    UNITFRAME:CreatePartyBuffs(self)
+    UNITFRAME:CreatePartyDebuffs(self)
+    UNITFRAME:CreateAuraWatcher(self)
     UNITFRAME:RefreshAurasByCombat(self)
     UNITFRAME:CreateCornerIndicator(self)
     UNITFRAME:CreatePartyWatcher(self)
@@ -538,9 +538,9 @@ local function CreateRaidStyle(self)
     UNITFRAME:CreateSelectedBorder(self)
     UNITFRAME:CreateRangeCheck(self)
     UNITFRAME:CreateCornerIndicator(self)
-    UNITFRAME:CreateGroupBuffs(self)
-    UNITFRAME:CreateGroupDebuffs(self)
-    UNITFRAME:CreateRaidDebuff(self)
+    UNITFRAME:CreateRaidBuffs(self)
+    UNITFRAME:CreateRaidDebuffs(self)
+    UNITFRAME:CreateAuraWatcher(self)
     UNITFRAME:RefreshAurasByCombat(self)
 end
 
@@ -733,7 +733,6 @@ function UNITFRAME:SpawnUnits()
     end
 
     UNITFRAME:UpdateRaidHealthMethod()
-    UNITFRAME:ClickCast()
 
     if C.DB.Unitframe.PositionBySpec then
         local function UpdateSpecPos(event, ...)
