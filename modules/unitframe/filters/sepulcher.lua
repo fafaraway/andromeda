@@ -1,4 +1,4 @@
-local F, C = unpack(select(2, ...))
+local F = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('UnitFrame')
 
 local TIER = 9
@@ -87,8 +87,34 @@ function UNITFRAME:AddSepulcherSpells()
     UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 364020) -- 诅咒进军
 
     BOSS = 2457 -- 恐惧双王
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 360287) -- 苦痛打击[坦的常驻DEBUFF]
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 359963) -- 开裂静脉[坦的常驻DEBUFF]
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 360012) -- 腐臭之云
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 360008) -- 腐臭之云
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 360241) -- 不安梦境
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 360146) -- 恐惧战栗
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 364985) -- 啃噬伤口
 
     BOSS = 2467 -- 莱葛隆
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 362172) -- 腐蚀伤口
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 362137) -- 腐蚀伤口
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 361548) -- 黑暗之蚀
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 362806) -- 黑暗之蚀
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 362206) -- 事件视界
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 362081) -- 宇宙喷射
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 363598) -- 不稳定的反物质
 
     BOSS = 2464 -- 典狱长
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 360281) -- 咒罚符文
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 362401) -- 折磨
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 363893) -- 殉难
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 363886) -- 禁锢
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 366545) -- 残害
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 362397) -- 强迫
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 369868) -- 粉碎冲击
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 360425) -- 秽邪之地
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 365150) -- 统御符文
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 365219) -- 痛苦之链
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 365222) -- 痛苦之链
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 365153) -- 统御意志
 end
