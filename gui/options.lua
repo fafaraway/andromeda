@@ -660,6 +660,7 @@ GUI.OptionsList = {
         {1, 'Unitframe', 'CornerIndicator', L['Corner Indicator'], nil, nil, nil, L["Display important auras in color blocks at the corner of the GroupFrame, such as healer's hot Paladin's Forbearance and Priest's Weakened Soul, etc."]},
         {1, 'Unitframe', 'ThreatIndicator', L['Threat Indicator'], true, nil, nil, L['The glow on the outside of the PartyFrame represents the threat status.']},
         {1, 'Unitframe', 'InstanceDebuffs', L['Instance Debuffs'], nil, SetupRaidDebuffs, nil, L['Display custom major debuffs in raid and dungeons.']},
+        {1, 'Unitframe', 'DispellableOnly', L['Dispellable Spells Only'], true, nil, nil, L['Display only debuffs you can dispel.']},
     },
     [13] = { -- nameplate
         {1, 'Nameplate', 'Enable', L['Enable Nameplate'], nil, SetupNameplateSize, nil, L['Uncheck this if you want to use another nameplate addon.']},

@@ -2,6 +2,7 @@ local F, C = unpack(select(2, ...))
 local oUF = F.Libs.oUF
 local LBG = F.Libs.LBG
 
+local debugMode = false
 local RaidDebuffsIgnore = {}
 local invalidPrio = -1
 
@@ -175,6 +176,12 @@ local function Update(self, _, unit)
             rd.priority, rd.index, rd.spellID = instPrio, i, spellId
             _name, _icon, _count, _debuffType, _duration, _expiration = name, icon, count, debuffType, duration, expiration
         end
+    end
+
+    if debugMode then
+        rd.priority = 6
+        _name, _, _icon = GetSpellInfo(47540)
+        _count, _debuffType, _duration, _expiration = 2, 'Curse', 10, GetTime() + 10
     end
 
     if rd.priority == invalidPrio then

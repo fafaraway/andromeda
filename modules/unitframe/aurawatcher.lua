@@ -37,7 +37,7 @@ local function ButtonOnEnter(self)
 end
 
 function UNITFRAME:CreateAuraWatcher(self)
-    if not C.DB.Unitframe.InstanceDebuffs then return end
+
 
     local bu = CreateFrame('Frame', nil, self)
     bu:SetSize(self:GetHeight() * .6, self:GetHeight() * .6)
@@ -68,14 +68,16 @@ function UNITFRAME:CreateAuraWatcher(self)
         bu:SetScript('OnLeave', F.HideTooltip)
     end
 
-    bu.ShowDispellableDebuff = false -- 副本外仍然显示可驱散的减益
+    bu.ShowDispellableDebuff = true -- 副本外仍然显示可驱散的减益
     bu.ShowDebuffBorder = true
 
-    if not next(debuffList) then
-        UNITFRAME:UpdateAuraWatcher()
-    end
+    if C.DB.Unitframe.InstanceDebuffs then
+        if not next(debuffList) then
+            UNITFRAME:UpdateAuraWatcher()
+        end
 
-    bu.Debuffs = debuffList
+        bu.Debuffs = debuffList
+    end
 
     self.RaidDebuffs = bu
 end
