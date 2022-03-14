@@ -1,11 +1,5 @@
 local F, C = unpack(select(2, ...))
-local M = F:RegisterModule('General')
-
-
-
-
-
-
+local M = F:GetModule('General')
 
 -- Force warning
 do
@@ -111,31 +105,24 @@ end
 do
     local f = CreateFrame('Frame')
     f:RegisterEvent('ADDON_LOADED')
-    f:SetScript(
-        'OnEvent',
-        function(self, _, addon)
-            if addon ~= 'Blizzard_TradeSkillUI' then
-                return
+    f:SetScript('OnEvent', function(self, _, addon)
+        if addon ~= 'Blizzard_TradeSkillUI' then
+            return
+        end
+
+        hooksecurefunc(_G.TradeSkillFrame.RecipeList, 'OnDataSourceChanged', function(self)
+            self.tradeSkillChanged = nil
+            self.collapsedCategories = {}
+
+            for _, categoryID in ipairs({_G.C_TradeSkillUI.GetCategories()}) do
+                self.collapsedCategories[categoryID] = true
             end
 
-            hooksecurefunc(
-                _G.TradeSkillFrame.RecipeList,
-                'OnDataSourceChanged',
-                function(self)
-                    self.tradeSkillChanged = nil
-                    self.collapsedCategories = {}
+            self:Refresh()
+        end)
 
-                    for _, categoryID in ipairs({_G.C_TradeSkillUI.GetCategories()}) do
-                        self.collapsedCategories[categoryID] = true
-                    end
-
-                    self:Refresh()
-                end
-            )
-
-            self:UnregisterAllEvents()
-        end
-    )
+        self:UnregisterAllEvents()
+    end)
 end
 
 function M:OnLogin()
