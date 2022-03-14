@@ -56,7 +56,6 @@ do
     F:AddLib('ACL', 'AceLocale-3.0')
     F:AddLib('LBG', 'LibButtonGlow-1.0')
     F:AddLib('LRC', 'LibRangeCheck-2.0')
-    F:AddLib('LRI', 'LibRealmInfo')
     F:AddLib('LSM', 'LibSharedMedia-3.0')
     F:AddLib('LDD', 'LibDropDown')
     F:AddLib('Base64', 'LibBase64-1.0')
@@ -204,5 +203,6 @@ F:RegisterEvent('PLAYER_LOGIN', function()
         end
     end
 
+    F.Modules = modules
     F:Print('Version: ' .. C.AddonVersion)
 end)
