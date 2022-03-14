@@ -1,4 +1,3 @@
-
 local F, C, L = unpack(select(2, ...))
 local INFOBAR = F:GetModule('InfoBar')
 
@@ -16,9 +15,7 @@ local broadcastString = '|TInterface\\FriendsFrame\\BroadcastIcon:12|t %s (%s)'
 local onlineString = string.gsub(_G.ERR_FRIEND_ONLINE_SS, '.+h', '')
 local offlineString = string.gsub(_G.ERR_FRIEND_OFFLINE_S, '%%s', '')
 
-local menuList = {
-    [1] = {text = L['Join or Invite'], isTitle = true, notCheckable = true}
-}
+local menuList = {[1] = {text = L['Join or Invite'], isTitle = true, notCheckable = true}}
 
 local function sortFriends(a, b)
     if a[1] and b[1] then
@@ -166,20 +163,14 @@ function INFOBAR:FriendsPanel_Init()
     infoFrame:SetFrameStrata('DIALOG')
     F.SetBD(infoFrame)
 
-    infoFrame:SetScript(
-        'OnLeave',
-        function(self)
-            self:SetScript('OnUpdate', isPanelCanHide)
+    infoFrame:SetScript('OnLeave', function(self)
+        self:SetScript('OnUpdate', isPanelCanHide)
+    end)
+    infoFrame:SetScript('OnHide', function()
+        if F.EasyMenu:IsShown() then
+            F.EasyMenu:Hide()
         end
-    )
-    infoFrame:SetScript(
-        'OnHide',
-        function()
-            if F.EasyMenu:IsShown() then
-                F.EasyMenu:Hide()
-            end
-        end
-    )
+    end)
 
     F.CreateFS(infoFrame, C.Assets.Fonts.Bold, 16, nil, F:RGBToHex({.9, .8, .6}) .. _G.FRIENDS_LIST, nil, true, 'TOPLEFT', 15, -10)
     infoFrame.friendCountText = F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 14, nil, '-/-', nil, true, 'TOPRIGHT', -15, -12)
@@ -401,7 +392,9 @@ function INFOBAR:FriendsPanel_UpdateButton(button)
     local onlineFriends = INFOBAR.onlineFriends
 
     if index <= onlineFriends then
-        if next(friendTable) == nil then return end
+        if next(friendTable) == nil then
+            return
+        end
         local name, level, class, area, status = unpack(friendTable[index])
         button.status:SetTexture(status)
         local zoneColor = GetRealZoneText() == area and activeZone or inactiveZone
@@ -497,7 +490,7 @@ local function delayLeave()
     infoFrame:Hide()
 end
 
-local function Button_OnMouseUp(self, btn)
+local function Block_OnMouseUp(self, btn)
     if infoFrame then
         infoFrame:Hide()
     end
@@ -510,7 +503,7 @@ local function Button_OnMouseUp(self, btn)
     end
 end
 
-local function Button_OnEnter(self)
+local function Block_OnEnter(self)
     local thisTime = GetTime()
     if not prevTime or (thisTime - prevTime > 5) then
         INFOBAR:FriendsPanel_Refresh()
@@ -548,7 +541,7 @@ local function Button_OnEnter(self)
     infoFrame.friendCountText:SetText(string.format('%s: %s/%s', _G.GUILD_ONLINE_LABEL, totalOnline, totalFriends))
 end
 
-local function Button_OnLeave(self)
+local function Block_OnLeave(self)
     F:HideTooltip()
     if not infoFrame then
         return
@@ -556,7 +549,7 @@ local function Button_OnLeave(self)
     F:Delay(.1, delayLeave)
 end
 
-local function Button_OnEvent(self, event, arg1)
+local function Block_OnEvent(self, event, arg1)
     if event == 'CHAT_MSG_SYSTEM' then
         if not string.find(arg1, onlineString) and not string.find(arg1, offlineString) then
             return
@@ -564,11 +557,11 @@ local function Button_OnEvent(self, event, arg1)
     end
 
     INFOBAR:FriendsPanel_Refresh()
-    self.Text:SetText(string.format('%s: ' .. C.MyColor .. '%d', _G.FRIENDS, INFOBAR.totalOnline))
+    self.text:SetText(string.format('%s: ' .. C.MyColor .. '%d', _G.FRIENDS, INFOBAR.totalOnline))
 
     updateRequest = false
     if infoFrame and infoFrame:IsShown() then
-        Button_OnEnter(self)
+        Block_OnEnter(self)
     end
 end
 
@@ -577,18 +570,12 @@ function INFOBAR:CreateFriendsBlock()
         return
     end
 
-    local bu = INFOBAR:AddBlock('', 'RIGHT', 100)
-    bu:HookScript('OnEvent', Button_OnEvent)
-    bu:HookScript('OnEnter', Button_OnEnter)
-    bu:HookScript('OnLeave', Button_OnLeave)
-    bu:HookScript('OnMouseUp', Button_OnMouseUp)
+    local friend = INFOBAR:RegisterNewBlock('friend', 'RIGHT', 150)
+    friend.onEvent = Block_OnEvent
+    friend.onEnter = Block_OnEnter
+    friend.onLeave = Block_OnLeave
+    friend.onMouseUp = Block_OnMouseUp
+    friend.eventList = {'PLAYER_ENTERING_WORLD', 'CHAT_MSG_SYSTEM', 'FRIENDLIST_UPDATE', 'BN_FRIEND_ACCOUNT_ONLINE', 'BN_FRIEND_ACCOUNT_OFFLINE'}
 
-    bu:RegisterEvent('BN_FRIEND_ACCOUNT_ONLINE')
-    bu:RegisterEvent('BN_FRIEND_ACCOUNT_OFFLINE')
-    bu:RegisterEvent('BN_FRIEND_INFO_CHANGED')
-    bu:RegisterEvent('FRIENDLIST_UPDATE')
-    bu:RegisterEvent('PLAYER_ENTERING_WORLD')
-    bu:RegisterEvent('CHAT_MSG_SYSTEM')
-
-    INFOBAR.FriendsBlock = bu
+    INFOBAR.FriendsBlock = friend
 end

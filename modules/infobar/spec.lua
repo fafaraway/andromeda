@@ -27,7 +27,7 @@ local function ClickFunc(i, isLoot)
     _G.DropDownList1:Hide()
 end
 
-local function Button_OnMouseUp(self, btn)
+local function Block_OnMouseUp(self, btn)
     local specIndex = GetSpecialization()
     if not specIndex or specIndex == 5 then
         return
@@ -82,12 +82,11 @@ local function Button_OnMouseUp(self, btn)
     end
 end
 
-local function Button_OnEvent(self)
+local function Block_OnEvent(self)
     local currentSpec = GetSpecialization()
     local lootSpecID = GetLootSpecialization()
 
     if currentSpec then
-        -- INFOBAR:ShowButton(self)
         local _, name = GetSpecializationInfo(currentSpec)
         if not name then
             return
@@ -97,17 +96,16 @@ local function Button_OnEvent(self)
         -- local lootrole = GetSpecializationRoleByID(lootSpecID)
 
         if not lootname or name == lootname then
-            self.Text:SetText(string.format(L['Spec'] .. ': ' .. C.MyColor .. '%s  |r' .. L['Loot'] .. ':' .. C.MyColor .. ' %s', name, name))
+            self.text:SetText(string.format(L['Spec'] .. ': ' .. C.MyColor .. '%s  |r' .. L['Loot'] .. ':' .. C.MyColor .. ' %s', name, name))
         else
-            self.Text:SetText(string.format(L['Spec'] .. ': ' .. C.MyColor .. '%s  |r' .. L['Loot'] .. ':' .. C.MyColor .. ' %s', name, lootname))
+            self.text:SetText(string.format(L['Spec'] .. ': ' .. C.MyColor .. '%s  |r' .. L['Loot'] .. ':' .. C.MyColor .. ' %s', name, lootname))
         end
     else
-        -- INFOBAR:HideButton(self)
-        self.Text:SetText(string.format(L['Spec'] .. ': ' .. C.MyColor .. '%s  |r', _G.NONE))
+        self.text:SetText(string.format(L['Spec'] .. ': ' .. C.MyColor .. '%s  |r', _G.NONE))
     end
 end
 
-local function Button_OnEnter(self)
+local function Block_OnEnter(self)
     if not GetSpecialization() then
         return
     end
@@ -153,7 +151,7 @@ local function Button_OnEnter(self)
     _G.GameTooltip:Show()
 end
 
-local function Button_OnLeave(self)
+local function Block_OnLeave(self)
     F:HideTooltip()
 end
 
@@ -162,13 +160,10 @@ function INFOBAR:CreateSpecBlock()
         return
     end
 
-    local bu = INFOBAR:AddBlock('', 'RIGHT', 220)
-    bu:HookScript('OnMouseUp', Button_OnMouseUp)
-    bu:HookScript('OnEvent', Button_OnEvent)
-    bu:HookScript('OnEnter', Button_OnEnter)
-    bu:HookScript('OnLeave', Button_OnLeave)
-
-    bu:RegisterEvent('PLAYER_ENTERING_WORLD')
-    bu:RegisterEvent('ACTIVE_TALENT_GROUP_CHANGED')
-    bu:RegisterEvent('PLAYER_LOOT_SPEC_UPDATED')
+    local spec = INFOBAR:RegisterNewBlock('specialization', 'RIGHT', 200)
+    spec.onEvent = Block_OnEvent
+    spec.onEnter = Block_OnEnter
+    spec.onLeave = Block_OnLeave
+    spec.onMouseUp = Block_OnMouseUp
+    spec.eventList = {'PLAYER_ENTERING_WORLD', 'ACTIVE_TALENT_GROUP_CHANGED', 'PLAYER_LOOT_SPEC_UPDATED'}
 end

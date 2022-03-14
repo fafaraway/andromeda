@@ -162,12 +162,9 @@ function INFOBAR:GuildPanel_Init()
     infoFrame:SetFrameStrata('TOOLTIP')
     F.SetBD(infoFrame)
 
-    infoFrame:SetScript(
-        'OnLeave',
-        function(self)
-            self:SetScript('OnUpdate', isPanelCanHide)
-        end
-    )
+    infoFrame:SetScript('OnLeave', function(self)
+        self:SetScript('OnUpdate', isPanelCanHide)
+    end)
 
     gName = F.CreateFS(infoFrame, C.Assets.Fonts.Bold, 16, nil, 'Guild', nil, true, 'TOPLEFT', 15, -10)
     gOnline = F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, 'Online', nil, true, 'TOPLEFT', 15, -35)
@@ -233,14 +230,11 @@ function INFOBAR:GuildPanel_Init()
     scrollBar:SetValue(0)
 end
 
-F:Delay(
-    5,
-    function()
-        if IsInGuild() then
-            C_GuildInfo.GuildRoster()
-        end
+F:Delay(5, function()
+    if IsInGuild() then
+        C_GuildInfo.GuildRoster()
     end
-)
+end)
 
 function INFOBAR:GuildPanel_Refresh()
     local thisTime = GetTime()
@@ -307,7 +301,7 @@ local function delayLeave()
     infoFrame:Hide()
 end
 
-local function Button_OnMouseUp(self, btn)
+local function Block_OnMouseUp(self, btn)
     if infoFrame then
         infoFrame:Hide()
     end
@@ -331,9 +325,9 @@ local function Button_OnMouseUp(self, btn)
     end
 end
 
-local function Button_OnEvent(self, event, arg1)
+local function Block_OnEvent(self, event, arg1)
     if not IsInGuild() then
-        self.Text:SetText(_G.GUILD .. ': ' .. C.MyColor .. _G.NONE)
+        self.text:SetText(_G.GUILD .. ': ' .. C.MyColor .. _G.NONE)
         return
     end
 
@@ -344,7 +338,7 @@ local function Button_OnEvent(self, event, arg1)
     end
 
     local online = select(3, GetNumGuildMembers())
-    self.Text:SetText(_G.GUILD .. ': ' .. C.MyColor .. online)
+    self.text:SetText(_G.GUILD .. ': ' .. C.MyColor .. online)
 
     if infoFrame and infoFrame:IsShown() then
         INFOBAR:GuildPanel_Refresh()
@@ -352,7 +346,7 @@ local function Button_OnEvent(self, event, arg1)
     end
 end
 
-local function Button_OnEnter(self)
+local function Block_OnEnter(self)
     if not IsInGuild() then
         return
     end
@@ -365,7 +359,7 @@ local function Button_OnEnter(self)
     INFOBAR:GuildPanel_SortUpdate()
 end
 
-local function Button_OnLeave(self)
+local function Block_OnLeave(self)
     if not infoFrame then
         return
     end
@@ -377,15 +371,13 @@ function INFOBAR:CreateGuildBlock()
         return
     end
 
-    local bu = INFOBAR:AddBlock('', 'RIGHT', 100)
-    bu:HookScript('OnEvent', Button_OnEvent)
-    bu:HookScript('OnMouseUp', Button_OnMouseUp)
-    bu:HookScript('OnEnter', Button_OnEnter)
-    bu:HookScript('OnLeave', Button_OnLeave)
+    local guild = INFOBAR:RegisterNewBlock('guild', 'RIGHT', 150)
+    guild.onEvent = Block_OnEvent
+    guild.onEnter = Block_OnEnter
+    guild.onLeave = Block_OnLeave
+    guild.onMouseUp = Block_OnMouseUp
+    guild.eventList = {'PLAYER_ENTERING_WORLD', 'GUILD_ROSTER_UPDATE', 'PLAYER_GUILD_UPDATE'}
 
-    bu:RegisterEvent('PLAYER_ENTERING_WORLD')
-    bu:RegisterEvent('GUILD_ROSTER_UPDATE')
-    bu:RegisterEvent('PLAYER_GUILD_UPDATE')
 
-    INFOBAR.GuildBlock = bu
+    INFOBAR.GuildBlock = guild
 end

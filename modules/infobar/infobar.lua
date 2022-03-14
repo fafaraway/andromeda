@@ -1,8 +1,201 @@
 ﻿local F, C = unpack(select(2, ...))
 local INFOBAR = F:GetModule('InfoBar')
 
-INFOBAR.Buttons = {}
-local barAlpha, buttonAlpha
+INFOBAR.Modules = {}
+INFOBAR.Blocks = {}
+local barAlpha, blockAlpha
+
+local function FadeIn(self, elapsed)
+    local bar = INFOBAR.Bar
+    if barAlpha < 0.5 then
+        barAlpha = barAlpha + elapsed
+        blockAlpha = blockAlpha + (elapsed * 4)
+    else
+        barAlpha = 0.5
+        blockAlpha = 1
+        bar:SetScript('OnUpdate', nil)
+    end
+
+    bar.bg:SetBackdropColor(0, 0, 0, barAlpha)
+
+    for _, block in pairs(INFOBAR.Blocks) do
+        if not block.noFade then
+            block:SetAlpha(blockAlpha)
+        end
+    end
+end
+
+local function FadeOut(self, elapsed)
+    local bar = INFOBAR.Bar
+    if barAlpha > .25 then
+        barAlpha = barAlpha - elapsed
+        blockAlpha = blockAlpha - (elapsed * 4)
+    else
+        barAlpha = .25
+        blockAlpha = 0
+        bar:SetScript('OnUpdate', nil)
+    end
+
+    bar.bg:SetBackdropColor(0, 0, 0, barAlpha)
+
+    for _, block in pairs(INFOBAR.Blocks) do
+        if not block.noFade then
+            block:SetAlpha(blockAlpha)
+        end
+    end
+end
+
+local function Bar_OnEnter()
+    if not C.DB.Infobar.Mouseover then
+        return
+    end
+    local bar = INFOBAR.Bar
+    bar:SetScript('OnUpdate', FadeIn)
+end
+
+local function Bar_OnLeave(self)
+    if not C.DB.Infobar.Mouseover then
+        return
+    end
+
+    local bar = INFOBAR.Bar
+    bar:SetScript('OnUpdate', FadeOut)
+end
+
+local function Block_OnEnter(block)
+    Bar_OnEnter()
+    block:SetBackdropColor(C.r, C.g, C.b, .25)
+end
+
+local function Block_OnLeave(block)
+    Bar_OnLeave()
+    block:SetBackdropColor(0, 0, 0, 0)
+end
+
+local function ArrangeBlocks()
+    local bar = INFOBAR.Bar
+    local leftOffset, rightOffset = 0, 0
+
+    for i = 1, #INFOBAR.Blocks do
+        local block = INFOBAR.Blocks[i]
+
+        if block:IsShown() then
+            if block.position == 'LEFT' then
+                block:SetPoint('LEFT', bar, 'LEFT', leftOffset, 0)
+                leftOffset = leftOffset + (block:GetWidth() - C.Mult)
+            elseif block.position == 'RIGHT' then
+                block:SetPoint('RIGHT', bar, 'RIGHT', rightOffset, 0)
+                rightOffset = rightOffset - (block:GetWidth() - C.Mult)
+            else
+                block:SetPoint('CENTER', bar)
+            end
+        end
+
+
+    end
+end
+
+function INFOBAR:RegisterNewBlock(name, position, width, noFade)
+	local block = CreateFrame('Button', nil, INFOBAR.Bar, 'BackdropTemplate')
+	block:SetPoint('TOP', INFOBAR.Bar, 'TOP')
+    block:SetPoint('BOTTOM', INFOBAR.Bar, 'BOTTOM')
+    block:SetWidth(width)
+    F.CreateBD(block)
+    block:SetBackdropColor(0, 0, 0, 0)
+    block:SetBackdropBorderColor(0, 0, 0, 0)
+
+	block.text = F.CreateFS(block, C.Assets.Fonts.Condensed, 11, nil, '', nil, true, 'CENTER', 0, 0)
+    block.position = position
+
+    if C.DB.Infobar.Mouseover and not noFade then
+        block:SetAlpha(0)
+    end
+
+    block:SetScript('OnEnter', Block_OnEnter)
+        block:SetScript('OnLeave', Block_OnLeave)
+
+    if not noFade then
+
+    else
+        block.noFade = true
+    end
+
+	INFOBAR.Modules[string.lower(name)] = block
+
+    table.insert(INFOBAR.Blocks, block)
+
+    ArrangeBlocks()
+
+	return block
+end
+
+
+
+function INFOBAR:CreateInfoBar()
+    local mouseover = C.DB.Infobar.Mouseover
+    local anchorTop = C.DB.Infobar.AnchorTop
+
+    local bar = CreateFrame('Frame', 'FreeUIInfobar', _G.UIParent, 'BackdropTemplate')
+    bar:SetFrameStrata('BACKGROUND')
+    bar:SetHeight(C.DB.Infobar.Height)
+    bar:SetPoint(anchorTop and 'TOPLEFT' or 'BOTTOMLEFT', 0, 0)
+    bar:SetPoint(anchorTop and 'TOPRIGHT' or 'BOTTOMRIGHT', 0, 0)
+
+    barAlpha = mouseover and .25 or .65
+    blockAlpha = mouseover and 0 or 1
+
+    bar:SetScript('OnEnter', Bar_OnEnter)
+    bar:SetScript('OnLeave', Bar_OnLeave)
+
+    _G.RegisterStateDriver(bar, 'visibility', '[petbattle] hide; show')
+
+    INFOBAR.Bar = bar
+
+    bar.bg = CreateFrame('Frame', nil, bar, 'BackdropTemplate')
+    bar.bg:SetOutside(bar, 2, 2)
+    bar.bg:SetFrameStrata('BACKGROUND')
+    bar.bg:SetFrameLevel(1) -- Make sure the frame level is higher than the vignetting
+    bar.bg:SetBackdrop({bgFile = C.Assets.Textures.Backdrop, edgeFile = C.Assets.Textures.Backdrop, edgeSize = 1})
+    bar.bg:SetBackdropColor(0, 0, 0, mouseover and .25 or .65)
+    bar.bg:SetBackdropBorderColor(0, 0, 0)
+
+    bar.anim = bar.bg:CreateAnimationGroup()
+    bar.anim:SetLooping('BOUNCE')
+    bar.anim.fader = bar.anim:CreateAnimation('Alpha')
+    bar.anim.fader:SetFromAlpha(1)
+    bar.anim.fader:SetToAlpha(.2)
+    bar.anim.fader:SetDuration(1)
+    bar.anim.fader:SetSmoothing('OUT')
+end
+
+local function Block_OnEvent(self, ...)
+	self:onEvent(...)
+end
+
+function INFOBAR:LoadInfobar(block)
+	if block.eventList then
+		for _, event in pairs(block.eventList) do
+			block:RegisterEvent(event)
+		end
+		block:HookScript("OnEvent", Block_OnEvent)
+	end
+	if block.onEnter then
+		block:HookScript("OnEnter", block.onEnter)
+	end
+	if block.onLeave then
+		block:HookScript("OnLeave", block.onLeave)
+	end
+	if block.onMouseUp then
+		block:HookScript("OnMouseUp", block.onMouseUp)
+	end
+	if block.onUpdate then
+		block:HookScript("OnUpdate", block.onUpdate)
+	end
+
+end
+
+
+
 
 local function BorderAnim_OnEvent(event)
     local bar = INFOBAR.Bar
@@ -32,6 +225,7 @@ function INFOBAR:UpdateCombatPulse()
     end
 end
 
+--[[ INFOBAR.Buttons = {}
 function INFOBAR:CreateInfoBar()
     local mouseover = C.DB.Infobar.Mouseover
     local anchorTop = C.DB.Infobar.AnchorTop
@@ -82,7 +276,9 @@ function INFOBAR:FadeIn(elapsed)
     self.bg:SetBackdropColor(0, 0, 0, barAlpha)
 
     for _, button in pairs(INFOBAR.Buttons) do
-        button:SetAlpha(buttonAlpha)
+        if not button.noFade then
+            button:SetAlpha(buttonAlpha)
+        end
     end
 end
 
@@ -99,7 +295,9 @@ function INFOBAR:FadeOut(elapsed)
     self.bg:SetBackdropColor(0, 0, 0, barAlpha)
 
     for _, button in pairs(INFOBAR.Buttons) do
-        button:SetAlpha(buttonAlpha)
+        if not button.noFade then
+            button:SetAlpha(buttonAlpha)
+        end
     end
 end
 
@@ -150,17 +348,7 @@ local function ReanchorButtons()
     end
 end
 
-function INFOBAR:ShowButton(button)
-    button:Show()
-    ReanchorButtons()
-end
-
-function INFOBAR:HideButton(button)
-    button:Hide()
-    ReanchorButtons()
-end
-
-function INFOBAR:AddBlock(text, position, width)
+function INFOBAR:AddBlock(text, position, width, noFade)
     local bar = INFOBAR.Bar
     local bu = CreateFrame('Button', nil, bar, 'BackdropTemplate')
     bu:SetPoint('TOP', bar, 'TOP')
@@ -170,15 +358,19 @@ function INFOBAR:AddBlock(text, position, width)
     bu:SetBackdropColor(0, 0, 0, 0)
     bu:SetBackdropBorderColor(0, 0, 0, 0)
 
-    if C.DB.Infobar.Mouseover then
+    if C.DB.Infobar.Mouseover and not noFade then
         bu:SetAlpha(0)
     end
 
     local text = F.CreateFS(bu, C.Assets.Fonts.Condensed, 11, nil, text, nil, true, 'CENTER', 0, 0)
     bu.Text = text
 
-    bu:SetScript('OnEnter', INFOBAR.Button_OnEnter)
-    bu:SetScript('OnLeave', INFOBAR.Button_OnLeave)
+    if not noFade then
+        bu:SetScript('OnEnter', INFOBAR.Button_OnEnter)
+        bu:SetScript('OnLeave', INFOBAR.Button_OnLeave)
+    else
+        bu.noFade = true
+    end
 
     bu.position = position
 
@@ -187,7 +379,7 @@ function INFOBAR:AddBlock(text, position, width)
     ReanchorButtons()
 
     return bu
-end
+end ]]
 
 function INFOBAR:OnLogin()
     if not C.DB.Infobar.Enable then
@@ -196,12 +388,30 @@ function INFOBAR:OnLogin()
 
     INFOBAR:CreateInfoBar()
     INFOBAR:UpdateCombatPulse()
-    INFOBAR:CreateStatsBlock()
-    INFOBAR:CreateSpecBlock()
+
+
+
+    INFOBAR:CreateSystemBlock()
     INFOBAR:CreateDurabilityBlock()
+    INFOBAR:CreateCurrencyBlock()
+    INFOBAR:CreateGoldBlock()
+    INFOBAR:CreateSpecBlock()
+
     INFOBAR:CreateGuildBlock()
     INFOBAR:CreateFriendsBlock()
-    INFOBAR:CreateReportBlock()
-    INFOBAR:CreateCurrenciesBlock()
-    INFOBAR:CreateGoldBlock()
+    INFOBAR:CreateDailyBlock()
+
+
+    for _, block in pairs(INFOBAR.Modules) do
+		INFOBAR:LoadInfobar(block)
+
+	end
+
+    INFOBAR.loginTime = GetTime()
+
+
+
+
+
+
 end

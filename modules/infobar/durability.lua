@@ -1,107 +1,104 @@
 local F, C, L = unpack(select(2, ...))
 local INFOBAR = F:GetModule('InfoBar')
+local oUF = F.Libs.oUF
 
-local showRepair = true
-local slots = {
+local repairCostString = string.gsub(_G.REPAIR_COST, _G.HEADER_COLON, ' ')
+local lowDurabilityCap = .25
+
+local localSlots = {
     [1] = {1, _G.INVTYPE_HEAD, 1000},
     [2] = {3, _G.INVTYPE_SHOULDER, 1000},
-    [3] = {5, _G.INVTYPE_ROBE, 1000},
+    [3] = {5, _G.INVTYPE_CHEST, 1000},
     [4] = {6, _G.INVTYPE_WAIST, 1000},
     [5] = {9, _G.INVTYPE_WRIST, 1000},
-    [6] = {10, _G.INVTYPE_HAND, 1000},
+    [6] = {10, L['Hands'], 1000},
     [7] = {7, _G.INVTYPE_LEGS, 1000},
-    [8] = {8, _G.INVTYPE_FEET, 1000},
+    [8] = {8, L['Feet'], 1000},
     [9] = {16, _G.INVTYPE_WEAPONMAINHAND, 1000},
-    [10] = {17, _G.INVTYPE_WEAPONOFFHAND, 1000},
-    [11] = {18, _G.INVTYPE_RANGED, 1000}
+    [10] = {17, _G.INVTYPE_WEAPONOFFHAND, 1000}
 }
 
-local function GetItemDurability()
+local function sortSlots(a, b)
+    if a and b then
+        return (a[3] == b[3] and a[1] < b[1]) or (a[3] < b[3])
+    end
+end
+
+local function UpdateAllSlots()
     local numSlots = 0
-    for i = 1, 11 do
-        if GetInventoryItemLink('player', slots[i][1]) then
-            local current, max = GetInventoryItemDurability(slots[i][1])
+    for i = 1, 10 do
+        localSlots[i][3] = 1000
+        local index = localSlots[i][1]
+        if GetInventoryItemLink('player', index) then
+            local current, max = GetInventoryItemDurability(index)
             if current then
-                slots[i][3] = current / max
+                localSlots[i][3] = current / max
                 numSlots = numSlots + 1
             end
-        else
-            slots[i][3] = 1000
+            local iconTexture = GetInventoryItemTexture('player', index) or 134400
+            localSlots[i][4] = '|T' .. iconTexture .. ':13:15:0:0:50:50:4:46:4:46|t ' or ''
         end
     end
-    table.sort(
-        slots,
-        function(a, b)
-            return a[3] < b[3]
-        end
-    )
+    table.sort(localSlots, sortSlots)
 
     return numSlots
 end
 
-local function IsLowDurability()
-    for i = 1, 11 do
-        if slots[i][3] < .20 then
+local function isLowDurability()
+    for i = 1, 10 do
+        if localSlots[i][3] < lowDurabilityCap then
             return true
         end
     end
 end
 
-local function GradientColor(perc)
-    perc = perc > 1 and 1 or perc < 0 and 0 or perc -- Stay between 0-1
-    local seg, relperc = math.modf(perc * 2)
-    local r1, g1, b1, r2, g2, b2 = select(seg * 3 + 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0) -- R -> Y -> G
-    local r, g, b = r1 + (r2 - r1) * relperc, g1 + (g2 - g1) * relperc, b1 + (b2 - b1) * relperc
-    return string.format('|cff%02x%02x%02x', r * 255, g * 255, b * 255), r, g, b
+local function getDurabilityColor(cur, max)
+    local r, g, b = oUF:RGBColorGradient(cur, max, 1, 0, 0, 1, 1, 0, 0, 1, 0)
+    return r, g, b
 end
 
-local function ResetRepairNotify()
-    showRepair = true
-end
-
-function INFOBAR:RepairNotify()
-    if showRepair and IsLowDurability() then
-        showRepair = false
-        F:Delay(180, ResetRepairNotify)
-        F:CreateNotification(_G.MINIMAP_TRACKING_REPAIR, L['The durability of the equipment is low.'], nil, 'Interface\\ICONS\\Ability_Repair')
-    end
-end
-
-local function Button_OnEvent(self)
-    local numSlots = GetItemDurability()
-
-    if numSlots > 0 then
-        self.Text:SetText(string.format(string.gsub(L['Durability'] .. ': [color]%d|r%%', '%[color%]', (GradientColor(math.floor(slots[1][3] * 100) / 100))), math.floor(slots[1][3] * 100)))
+local function Block_OnEvent(self, event)
+    if UpdateAllSlots() > 0 then
+        local r, g, b = getDurabilityColor(math.floor(localSlots[1][3] * 100), 100)
+        self.text:SetText(string.format('%s: %s%s', L['Durability'], F:RGBToHex(r, g, b) .. math.floor(localSlots[1][3] * 100), '%'))
     else
-        self.Text:SetText(L['Durability'] .. ': ' .. C.InfoColor .. _G.NONE)
+        self.text:SetText(string.format('%s: %s', L['Durability'], C.InfoColor .. _G.NONE))
+    end
+
+    if C.DB.Notification.Enable and C.DB.Notification.LowDurability and not InCombatLockdown() then
+        if isLowDurability() then
+            F:CreateNotification(_G.MINIMAP_TRACKING_REPAIR, L['You have slots in low durability!'], nil, 'Interface\\ICONS\\Ability_Repair')
+        end
     end
 end
 
-local function Button_OnMouseUp(self, btn)
-    -- #TODO
-    if btn == 'LeftButton' then
-        F:Debug('left')
-    elseif btn == 'RightButton' then
-        F:Debug('right')
-    elseif btn == 'MiddleButton' then
-        F:Debug('middle')
-    end
+local function Block_OnMouseUp(self)
+    ToggleCharacter('PaperDollFrame')
 end
 
-local function Button_OnEnter(self)
+local function Block_OnEnter(self)
     local anchorTop = C.DB.Infobar.AnchorTop
     _G.GameTooltip:SetOwner(self, (anchorTop and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (anchorTop and -6) or 6)
     _G.GameTooltip:ClearLines()
     _G.GameTooltip:AddLine(_G.DURABILITY, .9, .8, .6)
     _G.GameTooltip:AddLine(' ')
 
+    local totalCost = 0
     for i = 1, 10 do
-        if slots[i][3] ~= 1000 then
-            local green = slots[i][3] * 2
-            local red = 1 - green
-            local slotIcon = '|T' .. GetInventoryItemTexture('player', slots[i][1]) .. ':13:15:0:0:50:50:4:46:4:46|t ' or ''
-            _G.GameTooltip:AddDoubleLine(slotIcon .. slots[i][2], math.floor(slots[i][3] * 100) .. '%', 1, 1, 1, red + 1, green, 0)
+        if localSlots[i][3] ~= 1000 then
+            local slot = localSlots[i][1]
+            local cur = math.floor(localSlots[i][3] * 100)
+            local slotIcon = localSlots[i][4]
+            _G.GameTooltip:AddDoubleLine(slotIcon .. localSlots[i][2], cur .. '%', 1, 1, 1, getDurabilityColor(cur, 100))
+
+            F.ScanTip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
+            totalCost = totalCost + select(3, F.ScanTip:SetInventoryItem('player', slot))
         end
+    end
+
+    if totalCost > 0 then
+        _G.GameTooltip:AddLine(' ')
+        _G.GameTooltip:AddDoubleLine(repairCostString, GetMoneyString(totalCost), .6, .8, 1, 1, 1, 1)
     end
 
     _G.GameTooltip:AddLine(' ')
@@ -110,7 +107,7 @@ local function Button_OnEnter(self)
     _G.GameTooltip:Show()
 end
 
-local function Button_OnLeave(self)
+local function Block_OnLeave(self)
     F:HideTooltip()
 end
 
@@ -119,12 +116,12 @@ function INFOBAR:CreateDurabilityBlock()
         return
     end
 
-    local bu = INFOBAR:AddBlock('', 'LEFT', 150)
-    bu:HookScript('OnEvent', Button_OnEvent)
-    bu:HookScript('OnMouseUp', Button_OnMouseUp)
-    bu:HookScript('OnEnter', Button_OnEnter)
-    bu:HookScript('OnLeave', Button_OnLeave)
+    local du = INFOBAR:RegisterNewBlock('durability', 'LEFT', 150)
+    du.onEvent = Block_OnEvent
+    du.onEnter = Block_OnEnter
+    du.onLeave = Block_OnLeave
+    du.onMouseUp = Block_OnMouseUp
+    du.eventList = {'PLAYER_ENTERING_WORLD', 'UPDATE_INVENTORY_DURABILITY', 'PLAYER_REGEN_ENABLED'}
 
-    bu:RegisterEvent('PLAYER_ENTERING_WORLD')
-    bu:RegisterEvent('UPDATE_INVENTORY_DURABILITY')
+    INFOBAR.Durabiliy = du
 end

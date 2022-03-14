@@ -1,5 +1,15 @@
 local F, C, L = unpack(select(2, ...))
 
+_G.StaticPopupDialogs.FREEUI_RELOADUI_REQUIRED = {
+    text = C.RedColor .. L['ReloadUI Required'],
+    button1 = _G.APPLY,
+    button2 = _G.CLASS_TRIAL_THANKS_DIALOG_CLOSE_BUTTON,
+    OnAccept = function()
+        ReloadUI()
+    end,
+    whileDead = 1
+}
+
 -- Layout
 _G.StaticPopupDialogs.FREEUI_RESET_LAYOUT = {
     text = C.RedColor .. L['Are you sure to reset the Interface Layout?'],

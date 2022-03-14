@@ -33,18 +33,18 @@ local function AddTitle(text)
     end
 end
 
-local function Button_OnEvent(self)
+local function Block_OnEvent(self)
     local info = C_CurrencyInfo.GetCurrencyInfo(1828)
-    self.Text:SetText(string.format('%s: |cffdf5ed9%s|r', info.name, BreakUpLargeNumbers(info.quantity)))
+    self.text:SetText(string.format('%s: |cffdf5ed9%s|r', info.name, BreakUpLargeNumbers(info.quantity)))
 end
 
-local function Button_OnMouseUp(self, btn)
+local function Block_OnMouseUp(self, btn)
     if btn == 'LeftButton' then
         securecall(_G.ToggleCharacter, 'TokenFrame')
     end
 end
 
-local function Button_OnEnter(self)
+local function Block_OnEnter(self)
     local anchorTop = C.DB.Infobar.AnchorTop
     _G.GameTooltip:SetOwner(self, (anchorTop and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (anchorTop and -6) or 6)
     _G.GameTooltip:ClearLines()
@@ -74,21 +74,24 @@ local function Button_OnEnter(self)
     _G.GameTooltip:Show()
 end
 
-local function Button_OnLeave(self)
+local function Block_OnLeave(self)
     F:HideTooltip()
 end
 
-function INFOBAR:CreateCurrenciesBlock()
-    if not C.DB.Infobar.Currencies then
+function INFOBAR:CreateCurrencyBlock()
+    if not C.DB.Infobar.Currency then
         return
     end
 
-    local bu = INFOBAR:AddBlock('', 'LEFT', 150)
-    bu:HookScript('OnEvent', Button_OnEvent)
-    bu:HookScript('OnMouseUp', Button_OnMouseUp)
-    bu:HookScript('OnEnter', Button_OnEnter)
-    bu:HookScript('OnLeave', Button_OnLeave)
+    local cur = INFOBAR:RegisterNewBlock("currency", 'LEFT', 150)
 
-    bu:RegisterEvent('PLAYER_ENTERING_WORLD')
-    bu:RegisterEvent('CURRENCY_DISPLAY_UPDATE')
+
+    cur.onEvent = Block_OnEvent
+    cur.onEnter = Block_OnEnter
+    cur.onLeave = Block_OnLeave
+    cur.onMouseUp = Block_OnMouseUp
+
+    cur.eventList = {'PLAYER_ENTERING_WORLD', 'CURRENCY_DISPLAY_UPDATE'}
+
+
 end

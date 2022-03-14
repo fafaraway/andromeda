@@ -2,7 +2,7 @@ local F, C, L = unpack(select(2, ...))
 local INFOBAR = F:GetModule('InfoBar')
 
 local function FormatMoney(money)
-    return string.format('%s: |cffeddf6a%s|r', L['Gold'], BreakUpLargeNumbers(money * .0001))
+    return string.format('%s: %s', L['Gold'], GetMoneyString(money))
 end
 
 local function GetClassIcon(class)
@@ -39,7 +39,7 @@ local function Button_OnEvent(self, event)
         profit = profit + change
     end
 
-    self.Text:SetText(FormatMoney(newMoney))
+    self.text:SetText(FormatMoney(newMoney))
 
     if not _G.FREE_ADB['GoldStatistic'][C.MyRealm] then
         _G.FREE_ADB['GoldStatistic'][C.MyRealm] = {}
@@ -121,17 +121,17 @@ function INFOBAR:CreateGoldBlock()
         return
     end
 
-    local bu = INFOBAR:AddBlock('', 'LEFT', 150)
-    bu:HookScript('OnEvent', Button_OnEvent)
-    bu:HookScript('OnMouseUp', Button_OnMouseUp)
-    bu:HookScript('OnEnter', Button_OnEnter)
-    bu:HookScript('OnLeave', Button_OnLeave)
+    local gold = INFOBAR:RegisterNewBlock("gold", 'LEFT', 200)
+    gold:HookScript('OnEvent', Button_OnEvent)
+    gold:HookScript('OnMouseUp', Button_OnMouseUp)
+    gold:HookScript('OnEnter', Button_OnEnter)
+    gold:HookScript('OnLeave', Button_OnLeave)
 
-    bu:RegisterEvent('PLAYER_ENTERING_WORLD')
-    bu:RegisterEvent('PLAYER_MONEY')
-    bu:RegisterEvent('SEND_MAIL_MONEY_CHANGED')
-    bu:RegisterEvent('SEND_MAIL_COD_CHANGED')
-    bu:RegisterEvent('PLAYER_TRADE_MONEY')
-    bu:RegisterEvent('TRADE_MONEY_CHANGED')
-    bu:RegisterEvent('TOKEN_MARKET_PRICE_UPDATED')
+    gold:RegisterEvent('PLAYER_ENTERING_WORLD')
+    gold:RegisterEvent('PLAYER_MONEY')
+    gold:RegisterEvent('SEND_MAIL_MONEY_CHANGED')
+    gold:RegisterEvent('SEND_MAIL_COD_CHANGED')
+    gold:RegisterEvent('PLAYER_TRADE_MONEY')
+    gold:RegisterEvent('TRADE_MONEY_CHANGED')
+    gold:RegisterEvent('TOKEN_MARKET_PRICE_UPDATED')
 end

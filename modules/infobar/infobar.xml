@@ -1,11 +1,11 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
     <Script file="infobar.lua"/>
-    <Script file="stats.lua"/>
-    <Script file="spec.lua"/>
+    <Script file="system.lua"/>
     <Script file="durability.lua"/>
+    <Script file="currency.lua"/>
+    <Script file="gold.lua"/>
+    <Script file="spec.lua"/>
     <Script file="guild.lua"/>
     <Script file="friends.lua"/>
-    <Script file="report.lua"/>
-    <Script file="currencies.lua"/>
-    <Script file="gold.lua"/>
+    <Script file="daily.lua"/>
 </Ui>

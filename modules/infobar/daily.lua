@@ -43,7 +43,7 @@ local questlist = {
     {name = L['Timewarped Badge Reward'], id = 40786, texture = 1304688}, -- Cata
     {name = L['Timewarped Badge Reward'], id = 45799, texture = 1530590}, -- MoP
     {name = L['Timewarped Badge Reward'], id = 55499, texture = 1129683}, -- WoD
-    {name = L['Timewarped Badge Reward'], id = 64710, texture = 1467047}, -- Legion
+    {name = L['Timewarped Badge Reward'], id = 64710, texture = 1467047} -- Legion
 }
 
 -- Torghast
@@ -70,7 +70,7 @@ local function AddTitle(text)
     end
 end
 
-local function Button_OnMouseUp(self, btn)
+local function Block_OnMouseUp(self, btn)
     if btn == 'RightButton' then
         if not _G.WeeklyRewardsFrame then
             LoadAddOn('Blizzard_WeeklyRewards')
@@ -81,7 +81,7 @@ local function Button_OnMouseUp(self, btn)
     end
 end
 
-local function Button_OnEnter(self)
+local function Block_OnEnter(self)
     RequestRaidInfo()
 
     local r, g, b
@@ -171,19 +171,28 @@ local function Button_OnEnter(self)
     _G.GameTooltip:Show()
 end
 
-local function Button_OnLeave(self)
+local function Block_OnLeave(self)
     F.HideTooltip()
 end
 
-function INFOBAR:CreateReportBlock()
-    if not C.DB.Infobar.Report then
+local function Block_OnEvent(self, event)
+    if event == 'PLAYER_ENTERING_WORLD' then
+        self.text:SetText(L['Daily/Weekly'])
+        self:UnregisterEvent(event)
+    end
+end
+
+function INFOBAR:CreateDailyBlock()
+    if not C.DB.Infobar.Daily then
         return
     end
 
     F:RegisterEvent('PLAYER_ENTERING_WORLD', CheckTimeWalker)
 
-    local bu = INFOBAR:AddBlock(L['Daily/Weekly'], 'RIGHT', 100)
-    bu:HookScript('OnMouseUp', Button_OnMouseUp)
-    bu:HookScript('OnEnter', Button_OnEnter)
-    bu:HookScript('OnLeave', Button_OnLeave)
+    local daily = INFOBAR:RegisterNewBlock('daily', 'RIGHT', 150)
+    daily.onEnter = Block_OnEnter
+    daily.onLeave = Block_OnLeave
+    daily.onMouseUp = Block_OnMouseUp
+    daily.onEvent = Block_OnEvent
+    daily.eventList = {'PLAYER_ENTERING_WORLD'}
 end
