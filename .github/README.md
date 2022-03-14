@@ -19,8 +19,8 @@
 *  https://imgur.com/a/0JfIGql
 
 ## Videos
-*  https://www.youtube.com/channel/UCC4m4mhVtB9d_jaeON8ui7A
-*  https://space.bilibili.com/13263810/channel/seriesdetail?sid=392529
+*  https://www.youtube.com/watch?v=ntiwQZEg-i8
+*  https://www.bilibili.com/video/BV1uR4y1V7VY/
 
 ## Feedback
 *  Report issues on [GitHub](https://github.com/Solor/FreeUI/issues)
