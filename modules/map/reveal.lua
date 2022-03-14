@@ -2,7 +2,7 @@
 -- Leatrix Maps by Leatix
 
 local F, C = unpack(select(2, ...))
-local M = F:NewModule('RemoveMapFog')
+local M = F:RegisterModule('RemoveMapFog')
 
 local LeaMapsData = {
     [2] = {
@@ -2115,7 +2115,7 @@ local function TexturePool_ResetVertexColor(pool, texture)
     return _G.TexturePool_HideAndClearAnchors(pool, texture)
 end
 
-function M:OnEnable()
+function M:OnLogin()
     if IsAddOnLoaded('Leatrix_Maps') then
         return
     end
