@@ -2493,5 +2493,10 @@ read_globals = {
     'tDeleteItem',
     'Enum',
     'SOUNDKIT',
-    'EasyMenu'
+    'EasyMenu',
+    'ReloadUI',
+    'gcinfo',
+    'StaticPopup_Hide',
+    'StaticPopup_Show',
+    'ToggleCharacter'
 }
