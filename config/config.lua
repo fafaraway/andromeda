@@ -295,12 +295,14 @@ C.CharacterSettings = {
             CornerIndicator = true,
                 CornerIndicatorScale = 1,
 
-            AurasClickThrough = true,
+
 
             ThreatIndicator = true,
 
-            InstanceDebuffs = true,
+            DebuffWatcher = true,
+                InstanceDebuffs = true,
                 DispellableOnly = false,
+                DebuffClickThrough = true,
 
 
 

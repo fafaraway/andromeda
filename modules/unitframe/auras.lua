@@ -267,7 +267,7 @@ function UNITFRAME:CreateAuras(self)
         bu:SetPoint('LEFT', self, 'RIGHT', 4, 0)
         bu.size = self:GetHeight() * .7
         bu.numTotal = 4
-        bu.disableMouse = C.DB.Unitframe.AurasClickThrough
+        bu.disableMouse = false
         bu.disableCooldown = true
     elseif style == 'target' then
         bu.initialAnchor = 'BOTTOMLEFT'
