@@ -13,7 +13,10 @@ jobs:
       GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Clone project
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Check
         run: |
