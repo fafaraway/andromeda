@@ -6,6 +6,5 @@
     <Script file="mail.lua"/>
     <Script file="paragon.lua"/>
     <Script file="rare.lua"/>
-    <Script file="repair.lua"/>
     <Script file="version.lua"/>
 </Ui>
