@@ -5,6 +5,89 @@ local isPending = _G.LFG_LIST_LOADING
 local resetTime, frequency = 900, .5
 local cache, weapon, currentUNIT, currentGUID = {}, {}
 
+local T29Sets = {
+    -- HUNTER
+    [188856] = true,
+    [188858] = true,
+    [188859] = true,
+    [188860] = true,
+    [188861] = true,
+    -- WARRIOR
+    [188937] = true,
+    [188938] = true,
+    [188940] = true,
+    [188941] = true,
+    [188942] = true,
+    -- PALADIN
+    [188928] = true,
+    [188929] = true,
+    [188931] = true,
+    [188932] = true,
+    [188933] = true,
+    -- ROGUE
+    [188901] = true,
+    [188902] = true,
+    [188903] = true,
+    [188905] = true,
+    [188907] = true,
+    -- PRIEST
+    [188875] = true,
+    [188878] = true,
+    [188879] = true,
+    [188880] = true,
+    [188881] = true,
+    -- DK
+    [188863] = true,
+    [188864] = true,
+    [188866] = true,
+    [188867] = true,
+    [188868] = true,
+    -- SHAMAN
+    [188920] = true,
+    [188922] = true,
+    [188923] = true,
+    [188924] = true,
+    [188925] = true,
+    -- MAGE
+    [188839] = true,
+    [188842] = true,
+    [188843] = true,
+    [188844] = true,
+    [188845] = true,
+    -- WARLOCK
+    [188884] = true,
+    [188887] = true,
+    [188888] = true,
+    [188889] = true,
+    [188890] = true,
+    -- MONK
+    [188910] = true,
+    [188911] = true,
+    [188912] = true,
+    [188914] = true,
+    [188916] = true,
+    -- DRUID
+    [188847] = true,
+    [188848] = true,
+    [188849] = true,
+    [188851] = true,
+    [188853] = true,
+    -- DH
+    [188892] = true,
+    [188893] = true,
+    [188894] = true,
+    [188896] = true,
+    [188898] = true
+}
+
+local formatSets = {
+    [1] = ' |cff14b200(1/4)', -- green
+    [2] = ' |cff0091f2(2/4)', -- blue
+    [3] = ' |cff0091f2(3/4)', -- blue
+    [4] = ' |cffc745f9(4/4)', -- purple
+    [5] = ' |cffc745f9(5/5)' -- purple
+}
+
 function TOOLTIP:InspectOnUpdate(elapsed)
     self.elapsed = (self.elapsed or frequency) + elapsed
     if self.elapsed > frequency then
@@ -94,7 +177,7 @@ function TOOLTIP:GetUnitItemLevel(unit)
 
     local class = select(2, UnitClass(unit))
     local ilvl
-    local boa, total, haveWeapon, twohand = 0, 0, 0, 0
+    local boa, total, haveWeapon, twohand, sets = 0, 0, 0, 0, 0
     local delay, mainhand, offhand, hasArtifact
     weapon[1], weapon[2] = 0, 0
 
@@ -114,6 +197,11 @@ function TOOLTIP:GetUnitItemLevel(unit)
                     else
                         if quality == _G.LE_ITEM_QUALITY_HEIRLOOM then
                             boa = boa + 1
+                        end
+
+                        local itemID = GetItemInfoFromHyperlink(itemLink)
+                        if T29Sets[itemID] then
+                            sets = sets + 1
                         end
 
                         if unit ~= 'player' then
@@ -186,6 +274,9 @@ function TOOLTIP:GetUnitItemLevel(unit)
         end
         if boa > 0 then
             ilvl = ilvl .. ' |cff00ccff(' .. boa .. _G.HEIRLOOMS .. ')'
+        end
+        if sets > 0 then
+            ilvl = ilvl .. formatSets[sets]
         end
     else
         ilvl = nil
