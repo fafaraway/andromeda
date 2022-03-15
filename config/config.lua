@@ -185,7 +185,7 @@ C.CharacterSettings = {
 
             OnlyShowPlayer = true,
             DesaturateIcon = true,
-            DebuffTypeColorn = true,
+            DebuffTypeColor = true,
             PurgeableHighlightn = true,
 
             AbbrName = true,
@@ -325,8 +325,12 @@ C.CharacterSettings = {
             TextureStyle = 2,
             Width = 120,
             Height = 12,
+            ClickableWidth = 120,
+            ClickableHeight = 12,
             FriendlyWidth = 120,
             FriendlyHeight = 12,
+            FriendlyClickableWidth = 120,
+            FriendlyClickableHeight = 12,
             EnemyClickThrough = false,
             FriendlyClickThrough = true,
             ForceCVars = true,

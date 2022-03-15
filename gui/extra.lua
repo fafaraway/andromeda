@@ -1354,6 +1354,10 @@ function GUI:SetupNameplateCVars(parent)
     end
 end
 
+local function UpdateClickableSize()
+    NAMEPLATE:UpdateClickableSize()
+end
+
 function GUI:SetupNameplateSize(parent)
     local guiName = 'FreeUIGUINamePlateSize'
     TogglePanel(guiName)
@@ -1364,30 +1368,59 @@ function GUI:SetupNameplateSize(parent)
     local panel = CreateExtraGUI(parent, guiName)
     local scroll = GUI:CreateScroll(panel, 220, 540)
     local db = C.CharacterSettings.Nameplate
+    local mKey = 'Nameplate'
 
     local datas = {
-        [1] = {
-            key = 'Width',
-            value = db.Width,
-            text = L['Width'],
-            min = 40,
-            max = 400,
-            step = 1
+        size = {
+            [1] = {
+                key = 'Width',
+                value = db.Width,
+                text = L['Width'],
+                min = 40,
+                max = 400,
+                step = 1
+            },
+            [2] = {
+                key = 'Height',
+                value = db.Height,
+                text = L['Height'],
+                min = 4,
+                max = 40,
+                step = 1
+            }
         },
-        [2] = {
-            key = 'Height',
-            value = db.Height,
-            text = L['Height'],
-            min = 4,
-            max = 40,
-            step = 1
+        clickableSize = {
+            [1] = {
+                key = 'ClickableWidth',
+                value = db.ClickableWidth,
+                text = L['Width'],
+                min = 40,
+                max = 400,
+                step = 1
+            },
+            [2] = {
+                key = 'ClickableHeight',
+                value = db.ClickableHeight,
+                text = L['Height'],
+                min = 4,
+                max = 40,
+                step = 1
+            }
         }
     }
 
     local offset = -10
-    for _, v in ipairs(datas) do
+    for _, v in ipairs(datas.size) do
         CreateGroupTitle(scroll, L['Nameplate Size'], offset)
-        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, RefreshAllPlates)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, RefreshAllPlates)
+        offset = offset - 65
+    end
+
+    scroll.groupTitle = nil
+
+    for _, v in ipairs(datas.clickableSize) do
+        CreateGroupTitle(scroll, L['Clickable Size'], offset - 50)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 100, UpdateClickableSize)
         offset = offset - 65
     end
 end
@@ -1402,30 +1435,59 @@ function GUI:SetupNameplateFriendlySize(parent)
     local panel = CreateExtraGUI(parent, guiName)
     local scroll = GUI:CreateScroll(panel, 220, 540)
     local db = C.CharacterSettings.Nameplate
+    local mKey = 'Nameplate'
 
     local datas = {
-        [1] = {
-            key = 'FriendlyWidth',
-            value = db.FriendlyWidth,
-            text = L['Width'],
-            min = 20,
-            max = 200,
-            step = 1
+        size = {
+            [1] = {
+                key = 'FriendlyWidth',
+                value = db.FriendlyWidth,
+                text = L['Width'],
+                min = 1,
+                max = 200,
+                step = 1
+            },
+            [2] = {
+                key = 'FriendlyHeight',
+                value = db.FriendlyHeight,
+                text = L['Height'],
+                min = 1,
+                max = 40,
+                step = 1
+            }
         },
-        [2] = {
-            key = 'FriendlyHeight',
-            value = db.FriendlyHeight,
-            text = L['Height'],
-            min = 4,
-            max = 40,
-            step = 1
-        }
+        clickableSize = {
+            [1] = {
+                key = 'FriendlyClickableWidth',
+                value = db.FriendlyClickableWidth,
+                text = L['Width'],
+                min = 1,
+                max = 200,
+                step = 1
+            },
+            [2] = {
+                key = 'FriendlyClickableHeight',
+                value = db.FriendlyClickableHeight,
+                text = L['Height'],
+                min = 1,
+                max = 40,
+                step = 1
+            }
+        },
     }
 
     local offset = -10
-    for _, v in ipairs(datas) do
+    for _, v in ipairs(datas.size) do
         CreateGroupTitle(scroll, L['Friendly Nameplate Size'], offset)
         CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, RefreshAllPlates)
+        offset = offset - 65
+    end
+
+    scroll.groupTitle = nil
+
+    for _, v in ipairs(datas.clickableSize) do
+        CreateGroupTitle(scroll, L['Clickable Size'], offset - 50)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 100, UpdateClickableSize)
         offset = offset - 65
     end
 end
@@ -1543,7 +1605,7 @@ end
 
 local function UpdatePartyFrameSize()
     for _, frame in pairs(oUF.objects) do
-        if frame.raidType == 'party' then
+        if frame.unitStyle == 'party' then
             SetUnitFrameSize(frame, 'Party')
         --UNITFRAME.UpdateRaidNameAnchor(frame, frame.nameText)
         end

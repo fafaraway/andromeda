@@ -67,10 +67,13 @@ function NAMEPLATE:UpdateNameplateCVars()
     NAMEPLATE:UpdatePlateScale()
     NAMEPLATE:UpdatePlateTargetScale()
 
+    NAMEPLATE:UpdateClickableSize()
+    hooksecurefunc(_G.NamePlateDriverFrame, 'UpdateNamePlateOptions', NAMEPLATE.UpdateClickableSize)
     NAMEPLATE:UpdatePlateClickThrough()
 
     SetCVar('nameplateShowSelf', 0)
     SetCVar('nameplateResourceOnTarget', 0)
+    SetCVar('predictedHealth', 1)
 
     F.HideOption(_G.InterfaceOptionsNamesPanelUnitNameplatesPersonalResource)
     F.HideOption(_G.InterfaceOptionsNamesPanelUnitNameplatesPersonalResourceOnEnemy)
@@ -769,18 +772,12 @@ function NAMEPLATE:UpdateClickableSize()
         return
     end
 
-    local width = C.DB.Nameplate.Width
-    local height = C.DB.Nameplate.Height
-    local friendlyWidth = width
-    local friendlyHeight = height
     local scale = _G.FREE_ADB.UIScale
+    local harmWidth, harmHeight = C.DB.Nameplate.ClickableWidth, C.DB.Nameplate.ClickableHeight
+    local helpWidth, helpHeight = C.DB.Nameplate.FriendlyClickableWidth, C.DB.Nameplate.FriendlyClickableHeight
 
-    if C.DB.Nameplate.FriendlyPlate and not C.DB.Nameplate.NameOnlyMode then
-        friendlyWidth, friendlyHeight = C.DB.Nameplate.FriendlyWidth, C.DB.Nameplate.FriendlyHeight
-    end
-
-    C_NamePlate.SetNamePlateEnemySize(width * scale, height * scale + 10)
-    C_NamePlate.SetNamePlateFriendlySize(friendlyWidth * scale, friendlyHeight * scale + 10)
+    C_NamePlate.SetNamePlateEnemySize(harmWidth * scale, harmHeight * scale)
+    C_NamePlate.SetNamePlateFriendlySize(helpWidth * scale, helpHeight * scale)
 end
 
 function NAMEPLATE:ToggleNameplateAuras()
@@ -914,7 +911,7 @@ end
 
 function NAMEPLATE:RefreshPlateType(unit)
     self.reaction = UnitReaction(unit, 'player')
-    self.isFriendly = self.reaction and self.reaction >= 5
+    self.isFriendly = self.reaction and self.reaction >= 4 and not UnitCanAttack('player', unit)
 
     if C.DB.Nameplate.NameOnlyMode and self.isFriendly or self.widgetsOnly then
         self.plateType = 'NameOnly'
