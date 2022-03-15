@@ -4,9 +4,9 @@ local NOTIFICATION = F:GetModule('Notification')
 local playSounds = true
 local animations = true
 local duration = 5
-local bannerWidth = 300
-local bannerHeight = 60
-local padding = 10
+local bannerWidth = 240
+local bannerHeight = 50
+local padding = 4
 local interval = .1
 
 local function ConstructFrame()
@@ -33,15 +33,16 @@ local function ConstructFrame()
     sep:SetColorTexture(0, 0, 0)
 
     local title = F.CreateFS(f, C.Assets.Fonts.Bold, 14, nil, '', 'YELLOW', true)
-    title:SetPoint('TOPLEFT', sep, padding, -padding)
-    title:SetPoint('TOPRIGHT', f, -padding, 0)
+    title:SetPoint('TOPLEFT', sep, padding, -padding - 4)
+    title:SetPoint('TOPRIGHT', f, -padding, -4)
     title:SetJustifyH('LEFT')
     NOTIFICATION.Title = title
 
     local text = F.CreateFS(f, C.Assets.Fonts.Regular, 12, nil, '', nil, true)
-    text:SetPoint('BOTTOMLEFT', sep, padding, padding)
-    text:SetPoint('BOTTOMRIGHT', f, -padding, 0)
+    text:SetPoint('BOTTOMLEFT', sep, padding, padding + 4)
+    text:SetPoint('BOTTOMRIGHT', f, -padding, 4)
     text:SetJustifyH('LEFT')
+    text:SetWordWrap(false)
     NOTIFICATION.Text = text
 end
 
