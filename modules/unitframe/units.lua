@@ -181,13 +181,17 @@ function UNITFRAME:SpawnBoss()
     oUF:RegisterStyle('Boss', CreateBossStyle)
     oUF:SetActiveStyle 'Boss'
 
-    for i = 1, _G.MAX_BOSS_FRAMES do
+    for i = 1, 8 do -- MAX_BOSS_FRAMES, 8 in 9.2?
         boss[i] = oUF:Spawn('boss' .. i, 'oUF_Boss' .. i)
         local moverWidth, moverHeight = boss[i]:GetWidth(), boss[i]:GetHeight()
+        local title = i > 5 and 'Boss' .. i or L['Boss Frame'] .. i
+
         if i == 1 then
-            boss[i].mover = F.Mover(boss[i], L['Boss Frame'], 'Boss1', UNITFRAME.Positions.boss, moverWidth, moverHeight)
+            boss[i].mover = F.Mover(boss[i], title, 'Boss1', UNITFRAME.Positions.boss, moverWidth, moverHeight)
+        elseif i == 6 then
+            boss[i].mover = F.Mover(boss[i], title, 'Boss' .. i, {'BOTTOMLEFT', boss[1].mover, 'BOTTOMRIGHT', 50, 0}, moverWidth, moverHeight)
         else
-            boss[i].mover = F.Mover(boss[i], L['Boss Frame'] .. i, 'Boss' .. i, {'BOTTOM', boss[i - 1], 'TOP', 0, 60}, moverWidth, moverHeight)
+            boss[i].mover = F.Mover(boss[i], title, 'Boss' .. i, {'BOTTOMLEFT', boss[i - 1], 'TOPLEFT', 0, 60}, moverWidth, moverHeight)
         end
     end
 end
@@ -376,6 +380,7 @@ local ascRole = 'TANK,HEALER,DAMAGER,NONE'
 local descRole = 'NONE,DAMAGER,HEALER,TANK'
 
 local function CreatePartyHeader(name, width, height)
+    -- LuaFormatter off
     local group = oUF:SpawnHeader(name, nil, nil,
         'showPlayer', true,
         'showSolo', true,
@@ -386,9 +391,10 @@ local function CreatePartyHeader(name, width, height)
         'oUF-initialConfigFunction', ([[
             self:SetWidth(%d)
             self:SetHeight(%d)
-        ]]):format(width, height)
-    )
+        ]]):format(width, height))
+
     return group
+    -- LuaFormatter on
 end
 
 function UNITFRAME:CreateAndUpdatePartyHeader()
@@ -396,7 +402,6 @@ function UNITFRAME:CreateAndUpdatePartyHeader()
     local sortData = UNITFRAME.PartyDirections[index]
     local partyWidth = C.DB.Unitframe.PartyWidth
     local partyHeight = C.DB.Unitframe.PartyHealthHeight + C.DB.Unitframe.PartyPowerHeight + C.Mult
-
 
     if not party then
         party = CreatePartyHeader('oUF_Party', partyWidth, partyHeight)
@@ -491,6 +496,7 @@ function UNITFRAME:SpawnSimpleRaid()
     local sortData = UNITFRAME.RaidDirections[C.DB['Unitframe']['SMRDirec']]
 
     local function CreateGroup(name)
+        -- LuaFormatter off
         simpleRaid = oUF:SpawnHeader(name, nil, nil,
             'showPlayer', true,
             'showSolo', true,
@@ -505,7 +511,9 @@ function UNITFRAME:SpawnSimpleRaid()
                 self:SetWidth(%d)
                 self:SetHeight(%d)
             ]]):format(100 * scale, 20 * scale))
+
         return simpleRaid
+        -- LuaFormatter on
     end
 
     local group = CreateGroup('oUF_Raid')
@@ -518,7 +526,6 @@ function UNITFRAME:SpawnSimpleRaid()
 
     UNITFRAME:UpdateSimpleModeHeader()
 end
-
 
 local function CreateRaidStyle(self)
     self.unitStyle = 'raid'
@@ -591,6 +598,7 @@ function UNITFRAME:UpdateRaidTeamIndex()
 end
 
 local function CreateRaid(name, i, width, height)
+    -- LuaFormatter off
     local group = oUF:SpawnHeader(name, nil, nil,
         'showPlayer', true,
         'showSolo', true,
@@ -610,6 +618,7 @@ local function CreateRaid(name, i, width, height)
         ]]):format(width, height))
 
     return group
+    -- LuaFormatter on
 end
 
 local groups = {}
@@ -691,8 +700,80 @@ function UNITFRAME:SpawnRaid()
     UNITFRAME:UpdateRaidTeamIndex()
 end
 
+-- save group position by spec
 
+local function UpdatePosBySpec(event, ...)
+    local unit, _, spellID = ...
+    if (event == 'UNIT_SPELLCAST_SUCCEEDED' and unit == 'player' and spellID == 200749) or event == 'ON_LOGIN' then
+        local specIndex = GetSpecialization()
+        if not specIndex then
+            return
+        end
 
+        if not C.DB['UIAnchor']['raid_position' .. specIndex] then
+            C.DB['UIAnchor']['raid_position' .. specIndex] = {'TOPLEFT', 'oUF_Target', 'BOTTOMLEFT', 0, -10}
+        end
+
+        UNITFRAME.RaidMover:ClearAllPoints()
+        UNITFRAME.RaidMover:SetPoint(unpack(C.DB['UIAnchor']['raid_position' .. specIndex]))
+
+        if UNITFRAME.RaidMover then
+            UNITFRAME.RaidMover:ClearAllPoints()
+            UNITFRAME.RaidMover:SetPoint(unpack(C.DB['UIAnchor']['raid_position' .. specIndex]))
+        end
+
+        if not C.DB['UIAnchor']['party_position' .. specIndex] then
+            C.DB['UIAnchor']['party_position' .. specIndex] = {'BOTTOMRIGHT', 'oUF_Player', 'TOPLEFT', -100, 60}
+        end
+        if UNITFRAME.PartyMover then
+            UNITFRAME.PartyMover:ClearAllPoints()
+            UNITFRAME.PartyMover:SetPoint(unpack(C.DB['UIAnchor']['party_position' .. specIndex]))
+        end
+    end
+end
+
+function UNITFRAME:SetGroupFramePos()
+    if not C.DB.Unitframe.PositionBySpec then
+        return
+    end
+
+    UpdatePosBySpec('ON_LOGIN')
+    F:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED', UpdatePosBySpec)
+
+    if UNITFRAME.RaidMover then
+        UNITFRAME.RaidMover:HookScript('OnDragStop', function()
+            local specIndex = GetSpecialization()
+            if not specIndex then
+                return
+            end
+            C.DB['UIAnchor']['raid_position' .. specIndex] = C.DB['UIAnchor']['RaidFrame']
+        end)
+    end
+
+    if UNITFRAME.PartyMover then
+        UNITFRAME.PartyMover:HookScript('OnDragStop', function()
+            local specIndex = GetSpecialization()
+            if not specIndex then
+                return
+            end
+            C.DB['UIAnchor']['party_position' .. specIndex] = C.DB['UIAnchor']['PartyFrame']
+        end)
+    end
+end
+
+-- set health update frequency
+
+function UNITFRAME:UpdateRaidHealthMethod()
+    for _, frame in pairs(oUF.objects) do
+        if frame.unitStyle == 'raid' then
+            frame:SetHealthUpdateMethod(C.DB.Unitframe.FrequentHealth)
+            frame:SetHealthUpdateSpeed(C.DB.Unitframe.HealthFrequency)
+            frame.Health:ForceUpdate()
+        end
+    end
+end
+
+--
 
 function UNITFRAME:SpawnUnits()
     if not C.DB.Unitframe.Enable then
@@ -730,67 +811,8 @@ function UNITFRAME:SpawnUnits()
         if C.DB.Unitframe.PartyFrame then
             UNITFRAME:SpawnParty()
         end
-    end
 
-    UNITFRAME:UpdateRaidHealthMethod()
-
-    if C.DB.Unitframe.PositionBySpec then
-        local function UpdateSpecPos(event, ...)
-            local unit, _, spellID = ...
-            if (event == 'UNIT_SPELLCAST_SUCCEEDED' and unit == 'player' and spellID == 200749) or event == 'ON_LOGIN' then
-                local specIndex = GetSpecialization()
-                if not specIndex then
-                    return
-                end
-
-                if not C.DB['UIAnchor']['raid_position' .. specIndex] then
-                    C.DB['UIAnchor']['raid_position' .. specIndex] = {'TOPLEFT', 'oUF_Target', 'BOTTOMLEFT', 0, -10}
-                end
-
-                UNITFRAME.RaidMover:ClearAllPoints()
-                UNITFRAME.RaidMover:SetPoint(unpack(C.DB['UIAnchor']['raid_position' .. specIndex]))
-
-                if UNITFRAME.RaidMover then
-                    UNITFRAME.RaidMover:ClearAllPoints()
-                    UNITFRAME.RaidMover:SetPoint(unpack(C.DB['UIAnchor']['raid_position' .. specIndex]))
-                end
-
-                if not C.DB['UIAnchor']['party_position' .. specIndex] then
-                    C.DB['UIAnchor']['party_position' .. specIndex] = {'BOTTOMRIGHT', 'oUF_Player', 'TOPLEFT', -100, 60}
-                end
-                if UNITFRAME.PartyMover then
-                    UNITFRAME.PartyMover:ClearAllPoints()
-                    UNITFRAME.PartyMover:SetPoint(unpack(C.DB['UIAnchor']['party_position' .. specIndex]))
-                end
-            end
-        end
-        UpdateSpecPos('ON_LOGIN')
-        F:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED', UpdateSpecPos)
-
-        if UNITFRAME.RaidMover then
-            UNITFRAME.RaidMover:HookScript(
-                'OnDragStop',
-                function()
-                    local specIndex = GetSpecialization()
-                    if not specIndex then
-                        return
-                    end
-                    C.DB['UIAnchor']['raid_position' .. specIndex] = C.DB['UIAnchor']['RaidFrame']
-                end
-            )
-        end
-
-        if UNITFRAME.PartyMover then
-            UNITFRAME.PartyMover:HookScript(
-                'OnDragStop',
-                function()
-                    local specIndex = GetSpecialization()
-                    if not specIndex then
-                        return
-                    end
-                    C.DB['UIAnchor']['party_position' .. specIndex] = C.DB['UIAnchor']['PartyFrame']
-                end
-            )
-        end
+        UNITFRAME:UpdateRaidHealthMethod()
+        UNITFRAME:SetGroupFramePos()
     end
 end
