@@ -31,6 +31,18 @@ do
 
         F:Print('[Debug] ' .. str:format(...))
     end
+
+    function F:HookAddOn(addonName, callback)
+        self:RegisterEvent('ADDON_LOADED', function(_, name)
+            if name == addonName then
+                callback()
+                return true
+            elseif name == 'FreeUI' and IsAddOnLoaded(addonName) then
+                callback()
+                return true
+            end
+        end)
+    end
 end
 
 --[[ Math ]]

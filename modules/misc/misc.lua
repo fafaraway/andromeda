@@ -103,26 +103,73 @@ end
 
 -- Auto collapse TradeSkillFrame RecipeList
 do
-    local f = CreateFrame('Frame')
-    f:RegisterEvent('ADDON_LOADED')
-    f:SetScript('OnEvent', function(self, _, addon)
-        if addon ~= 'Blizzard_TradeSkillUI' then
+    local function CollapseTradeSkills(self)
+        self.tradeSkillChanged = nil
+        self.collapsedCategories = {}
+
+        for _, categoryID in ipairs({_G.C_TradeSkillUI.GetCategories()}) do
+            self.collapsedCategories[categoryID] = true
+        end
+
+        self:Refresh()
+    end
+
+    F:HookAddOn('Blizzard_TradeSkillUI', function(self)
+        hooksecurefunc(_G.TradeSkillFrame.RecipeList, 'OnDataSourceChanged', CollapseTradeSkills)
+    end)
+end
+
+-- automatically select the talent tab
+do
+    local function SelectTalentTab()
+        if not InCombatLockdown() then
+            PlayerTalentTab_OnClick(_G['PlayerTalentFrameTab' .. _G.TALENTS_TAB])
+        end
+    end
+
+    F:HookAddOn('Blizzard_TalentUI', function()
+        hooksecurefunc('PlayerTalentFrame_Toggle', SelectTalentTab)
+    end)
+end
+
+-- setup font shadow for Details
+do
+    local function refreshDetailsRows(instance)
+        if not C.IsDeveloper then
             return
         end
 
-        hooksecurefunc(_G.TradeSkillFrame.RecipeList, 'OnDataSourceChanged', function(self)
-            self.tradeSkillChanged = nil
-            self.collapsedCategories = {}
+        if not instance.barras or not instance.barras[1] then
+            return
+        end
 
-            for _, categoryID in ipairs({_G.C_TradeSkillUI.GetCategories()}) do
-                self.collapsedCategories[categoryID] = true
-            end
+        local font, size = C.Assets.Fonts.Condensed, 11
+        for _, row in next, instance.barras do
+            row.lineText1:SetFont(font, size)
+            row.lineText2:SetFont(font, size)
+            row.lineText3:SetFont(font, size)
+            row.lineText4:SetFont(font, size)
+            row.lineText1:SetShadowColor(0, 0, 0, 1)
+            row.lineText1:SetShadowOffset(2, -2)
+            row.lineText2:SetShadowColor(0, 0, 0, 1)
+            row.lineText2:SetShadowOffset(2, -2)
+            row.lineText3:SetShadowColor(0, 0, 0, 1)
+            row.lineText3:SetShadowOffset(2, -2)
+            row.lineText4:SetShadowColor(0, 0, 0, 1)
+            row.lineText4:SetShadowOffset(2, -2)
+        end
+    end
 
-            self:Refresh()
-        end)
-
-        self:UnregisterAllEvents()
+    F:HookAddOn('Details', function()
+        hooksecurefunc(_G._detalhes, 'InstanceRefreshRows', refreshDetailsRows)
     end)
+end
+
+do
+    if C.IsDeveloper then
+        SetCVar('nameplateShowOnlyNames', 1)
+        C_NamePlate.SetNamePlateFriendlySize(1, 1)
+    end
 end
 
 function M:OnLogin()
