@@ -2498,5 +2498,6 @@ read_globals = {
     'gcinfo',
     'StaticPopup_Hide',
     'StaticPopup_Show',
-    'ToggleCharacter'
+    'ToggleCharacter',
+    'PlayerTalentTab_OnClick'
 }
