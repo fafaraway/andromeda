@@ -40,7 +40,6 @@ local function UpdateAllSlots()
         end
     end
     table.sort(localSlots, sortSlots)
-
     return numSlots
 end
 
@@ -65,7 +64,7 @@ local function Block_OnEvent(self, event)
         self.text:SetText(string.format('%s: %s', L['Durability'], C.InfoColor .. _G.NONE))
     end
 
-    if C.DB.Notification.Enable and C.DB.Notification.LowDurability and not InCombatLockdown() then
+    if event == 'PLAYER_ENTERING_WORLD' or event == 'PLAYER_REGEN_ENABLED' and C.DB.Notification.Enable and C.DB.Notification.LowDurability and not InCombatLockdown() then
         if isLowDurability() then
             F:CreateNotification(_G.MINIMAP_TRACKING_REPAIR, L['You have slots in low durability!'], nil, 'Interface\\ICONS\\Ability_Repair')
         end
