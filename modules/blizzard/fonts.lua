@@ -203,7 +203,7 @@ local function SetupBlizFonts()
 
     ReplaceFont(_G.SystemFont_NamePlateFixed, NORMAL, 14)
     ReplaceFont(_G.SystemFont_LargeNamePlateFixed, NORMAL, 20)
-    ReplaceFont(_G.SystemFont_NamePlate, NORMAL, 9)
+    ReplaceFont(_G.SystemFont_NamePlate, HEADER, 16, true, true) -- 副本里友方姓名板的字体
     ReplaceFont(_G.SystemFont_LargeNamePlate, NORMAL, 12)
     ReplaceFont(_G.SystemFont_NamePlateCastBar, NORMAL, 10)
 
