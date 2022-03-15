@@ -1,8 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local hooksecurefunc = hooksecurefunc
-
 local F, C = unpack(select(2, ...))
 
 local function OnEnable(self)
@@ -172,31 +167,25 @@ C.Themes['Blizzard_EncounterJournal'] = function()
     hooksecurefunc('EncounterJournal_DisplayInstance', ReskinBossButtons)
     hooksecurefunc('EncounterJournal_ToggleHeaders', ReskinSectionHeader)
 
-    hooksecurefunc(
-        'EncounterJournal_SetUpOverview',
-        function(self, _, index)
-            local header = self.overviews[index]
-            if not header.styled then
-                ReskinHeader(header)
-                header.styled = true
-            end
+    hooksecurefunc('EncounterJournal_SetUpOverview', function(self, _, index)
+        local header = self.overviews[index]
+        if not header.styled then
+            ReskinHeader(header)
+            header.styled = true
         end
-    )
+    end)
 
-    hooksecurefunc(
-        'EncounterJournal_SetBullets',
-        function(object)
-            local parent = object:GetParent()
-            if parent.Bullets then
-                for _, bullet in pairs(parent.Bullets) do
-                    if not bullet.styled then
-                        bullet.Text:SetTextColor(1, 1, 1)
-                        bullet.styled = true
-                    end
+    hooksecurefunc('EncounterJournal_SetBullets', function(object)
+        local parent = object:GetParent()
+        if parent.Bullets then
+            for _, bullet in pairs(parent.Bullets) do
+                if not bullet.styled then
+                    bullet.Text:SetTextColor(1, 1, 1)
+                    bullet.styled = true
                 end
             end
         end
-    )
+    end)
 
     local items = _G.EncounterJournal.encounter.info.lootScroll.buttons
     for i = 1, #items do
@@ -314,14 +303,28 @@ C.Themes['Blizzard_EncounterJournal'] = function()
     end
 
     -- Hook functions
-    hooksecurefunc(
-        'EJSuggestFrame_RefreshDisplay',
-        function()
-            local self = suggestFrame
+    hooksecurefunc('EJSuggestFrame_RefreshDisplay', function()
+        local self = suggestFrame
 
-            if #self.suggestions > 0 then
-                local suggestion = self.Suggestion1
-                local data = self.suggestions[1]
+        if #self.suggestions > 0 then
+            local suggestion = self.Suggestion1
+            local data = self.suggestions[1]
+            suggestion.iconRing:Hide()
+
+            if data.iconPath then
+                suggestion.icon:SetMask(nil)
+                suggestion.icon:SetTexCoord(unpack(C.TexCoord))
+            end
+        end
+
+        if #self.suggestions > 1 then
+            for i = 2, #self.suggestions do
+                local suggestion = self['Suggestion' .. i]
+                if not suggestion then
+                    break
+                end
+
+                local data = self.suggestions[i]
                 suggestion.iconRing:Hide()
 
                 if data.iconPath then
@@ -329,36 +332,16 @@ C.Themes['Blizzard_EncounterJournal'] = function()
                     suggestion.icon:SetTexCoord(unpack(C.TexCoord))
                 end
             end
-
-            if #self.suggestions > 1 then
-                for i = 2, #self.suggestions do
-                    local suggestion = self['Suggestion' .. i]
-                    if not suggestion then
-                        break
-                    end
-
-                    local data = self.suggestions[i]
-                    suggestion.iconRing:Hide()
-
-                    if data.iconPath then
-                        suggestion.icon:SetMask(nil)
-                        suggestion.icon:SetTexCoord(unpack(C.TexCoord))
-                    end
-                end
-            end
         end
-    )
+    end)
 
-    hooksecurefunc(
-        'EJSuggestFrame_UpdateRewards',
-        function(suggestion)
-            local rewardData = suggestion.reward.data
-            if rewardData then
-                suggestion.reward.icon:SetMask('')
-                suggestion.reward.icon:SetTexCoord(unpack(C.TexCoord))
-            end
+    hooksecurefunc('EJSuggestFrame_UpdateRewards', function(suggestion)
+        local rewardData = suggestion.reward.data
+        if rewardData then
+            suggestion.reward.icon:SetMask('')
+            suggestion.reward.icon:SetTexCoord(unpack(C.TexCoord))
         end
-    )
+    end)
 
     -- LootJournal
 
@@ -369,30 +352,62 @@ C.Themes['Blizzard_EncounterJournal'] = function()
     ReskinFilterToggle(lootJournal.ClassDropDownButton)
 
     local iconColor = C.QualityColors[_G.LE_ITEM_QUALITY_LEGENDARY or 5] -- legendary color
-    hooksecurefunc(
-        lootJournal.PowersFrame,
-        'RefreshListDisplay',
-        function(self)
-            if not self.elements then
-                return
-            end
+    hooksecurefunc(lootJournal.PowersFrame, 'RefreshListDisplay', function(self)
+        if not self.elements then
+            return
+        end
 
-            for i = 1, self:GetNumElementFrames() do
-                local button = self.elements[i]
-                if button and not button.bg then
-                    button.Background:SetAlpha(0)
-                    button.BackgroundOverlay:SetAlpha(0)
-                    button.UnavailableOverlay:SetAlpha(0)
-                    button.UnavailableBackground:SetAlpha(0)
-                    button.CircleMask:Hide()
-                    button.bg = F.ReskinIcon(button.Icon)
-                    button.bg:SetBackdropBorderColor(iconColor.r, iconColor.g, iconColor.b)
+        for i = 1, self:GetNumElementFrames() do
+            local button = self.elements[i]
+            if button and not button.bg then
+                button.Background:SetAlpha(0)
+                button.BackgroundOverlay:SetAlpha(0)
+                button.UnavailableOverlay:SetAlpha(0)
+                button.UnavailableBackground:SetAlpha(0)
+                button.CircleMask:Hide()
+                button.bg = F.ReskinIcon(button.Icon)
+                button.bg:SetBackdropBorderColor(iconColor.r, iconColor.g, iconColor.b)
 
-                    local bg = F.CreateBDFrame(button, .25)
-                    bg:SetPoint('TOPLEFT', 3, 0)
-                    bg:SetPoint('BOTTOMRIGHT', -2, 1)
-                end
+                local bg = F.CreateBDFrame(button, .25)
+                bg:SetPoint('TOPLEFT', 3, 0)
+                bg:SetPoint('BOTTOMRIGHT', -2, 1)
             end
         end
-    )
+    end)
+
+    -- ItemSetsFrame
+
+    if _G.EncounterJournal.LootJournalItems then
+        F.StripTextures(_G.EncounterJournal.LootJournalItems)
+        F.ReskinDropDown(_G.EncounterJournal.LootJournalViewDropDown)
+
+        local itemSetsFrame = _G.EncounterJournal.LootJournalItems.ItemSetsFrame
+        F.ReskinScroll(itemSetsFrame.scrollBar)
+        ReskinFilterToggle(itemSetsFrame.ClassButton)
+
+        hooksecurefunc(itemSetsFrame, 'UpdateList', function(self)
+            local buttons = self.buttons
+            for i = 1, #buttons do
+                local button = buttons[i]
+                if not button.styled then
+                    button.ItemLevel:SetTextColor(1, 1, 1)
+                    button.Background:Hide()
+                    F.CreateBDFrame(button, .25)
+
+                    button.styled = true
+                end
+            end
+        end)
+
+        hooksecurefunc(itemSetsFrame, 'ConfigureItemButton', function(_, button)
+            if not button.bg then
+                button.Border:SetAlpha(0)
+                button.bg = F.ReskinIcon(button.Icon)
+            end
+
+            local quality = select(3, GetItemInfo(button.itemID))
+            local color = C.QualityColors[quality or 1]
+            button.bg:SetBackdropBorderColor(color.r, color.g, color.b)
+        end)
+    end
 end
