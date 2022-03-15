@@ -4,5 +4,5 @@
     <Script file="nathria.lua"/>
     <Script file="domination.lua"/>
     <Script file="sepulcher.lua"/>
-    <Script file="player.lua"/>
+    <Script file="party.lua"/>
 </Ui>

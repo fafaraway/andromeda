@@ -1,8 +1,163 @@
-local _G = getfenv(0)
-local unpack = _G.unpack
-local select = _G.select
+local _, C = unpack(select(2, ...))
 
-local F, C = unpack(select(2, ...))
+C.PartyDebuffsBlackList = {
+    [206151] = true,
+    [296847] = true,
+    [338906] = true
+}
+
+C.PartyAurasList = {
+    -- All
+    [160029] = true, -- Resurrecting
+    -- Racial
+    [65116] = true, -- Stoneform
+    -- Covenant
+    [324867] = true, -- Fleshcraft
+    [319217] = true, -- Podtender
+    [320224] = true, -- Podtender
+    -- Potion
+    [307159] = true, -- 幽魂敏捷药水
+    [307162] = true, -- 幽魂智力药水
+    [307163] = true, -- 幽魂耐力药水
+    [307164] = true, -- 幽魂力量药水
+    [307494] = true, -- 强化驱魔药水
+    [307495] = true, -- 幻影火焰药水
+    [307496] = true, -- 神圣觉醒药水
+    [307497] = true, -- 死亡偏执药水
+    [344314] = true, -- 心华之速药水
+    -- Bloodlust
+    [2825] = true, -- 嗜血
+    [32182] = true, -- 英勇
+    [80353] = true, -- 时间扭曲
+    [264667] = true, -- 原始狂怒
+    [178207] = true, -- 狂怒战鼓
+    [230935] = true, -- 高山战鼓
+    [256740] = true, -- 漩涡战鼓
+    [309658] = true, -- 死亡凶蛮战鼓
+    [102364] = true, -- 青铜龙的祝福
+    [292686] = true, -- 制皮鼓
+    -- DH
+    [212800] = true, -- Blur
+    [196555] = true, -- Nether Walk
+    [187827] = true, -- Metamorphosis (Tank)
+    [203819] = true, -- Demon Spikes
+    [209261] = true, -- Uncontained Fel
+    -- Warrior
+    [871] = true, -- Shield Wall
+    [107574] = true, -- Avatar
+    [1719] = true, -- Recklessness
+    [118038] = true, -- Die by the Sword
+    [97463] = true, -- Rallying Cry
+    [147833] = true, -- Intervene
+    [190456] = true, -- Ignore Pain
+    [213915] = true, -- Mass Spell Reflection
+    [23920] = true, -- Spell Reflection (Prot)
+    [216890] = true, -- Spell Reflection (Arms/Fury)
+    [12975] = true, -- Last Stand
+    [197690] = true, -- Defensive Stance
+    [184364] = true, -- Enraged Regeneration
+    [132404] = true, -- Shield Block
+    [335198] = true, -- Safeguard
+    -- Warlock
+    [113860] = true, -- Dark Soul: Misery
+    [104773] = true, -- Unending Resolve
+    [108416] = true, -- Dark Pact
+    [132413] = true, -- Shadow Bulwark
+    -- Shaman
+    [114051] = true, -- Ascendance
+    [108271] = true, -- Astral Shift
+    [974] = true, -- Earth Shield
+    [98007] = true, -- Spirit Link Totem
+    [325174] = true, -- Spirit Link Totem
+    [207498] = true, -- Ancestral Protection
+    [118337] = true, -- Harden Skin
+    -- Rogue
+    [1966] = true, -- Feint
+    [31224] = true, -- Cloak of Shadows
+    [5277] = true, -- Evasion
+    [199754] = true, -- Riposte
+    [45182] = true, -- Cheating Death
+    [114018] = true, -- Shroud of Concealment
+    -- Paladin
+    [31884] = true, -- Avenging Wrath
+    [31850] = true, -- Ardent Defender
+    [1044] = true, -- Blessing of Freedom
+    [31821] = true, -- Aura Mastery
+    [1022] = true, -- Blessing of Protection
+    [6940] = true, -- Blessing of Sacrifice
+    [199448] = true, -- Blessing of Sacrifice
+    [204018] = true, -- Blessing of Spellwarding
+    [498] = true, -- Divine Protection
+    [642] = true, -- Divine Shield
+    [184662] = true, -- Shield of Vengeance
+    [86659] = true, -- Guardian of Ancient Kings
+    [212641] = true, -- Guardian of Ancient Kings (Glyph)
+    [132403] = true, -- Shield of the Righteous
+    [205191] = true, -- Eye for an Eye
+    [228050] = true, -- Divine Shield
+    -- Monk
+    [122470] = true, -- 业报之触
+    [122783] = true, -- 散魔功
+    [243435] = true, -- 壮胆酒（织雾和踏风）
+    [120954] = true, -- 壮胆酒（酒仙）
+    [322507] = true, -- 天神酒
+    [132578] = true, -- 玄牛下凡
+    [115176] = true, -- Zen Meditation
+    [137639] = true, -- Storm, Earth, and Fire
+    [116849] = true, -- Life Cocoon
+    [122278] = true, -- Dampen Harm
+    [125174] = true, -- Touch of Karma
+    [115203] = true, -- Fortifying Brew
+    [215479] = true, -- Shuffle
+    [115295] = true, -- Guard
+    -- Mage
+    [12472] = true, -- Icy Veins
+    [190319] = true, -- Combustion
+    [12042] = true, -- Arcane Power
+    [110909] = true, -- Alter Time
+    [342245] = true, -- Alter Time
+    [45438] = true, -- Iceblock
+    [87023] = true, -- Cauterize
+    -- Hunter
+    [199483] = true, -- Camouflage
+    [186265] = true, -- Aspect of the Turtle
+    [264735] = true, -- Survival of the Fittest (Command Pet)
+    [281195] = true, -- Survival of the Fittest (Lone Wolf)
+    -- Druid
+    [158792] = true, -- Pulverize
+    [106951] = true, -- Berserk
+    [194223] = true, -- Celestial Alignment
+    [102560] = true, -- Incarnation: Chosen of Elune
+    [102558] = true, -- Incarnation: Guardian of Ursoc
+    [61336] = true, -- Survival Instincts
+    [22812] = true, -- Barkskin
+    [22842] = true, -- Frenzied Regeneration
+    [29166] = true, -- Innervate
+    [102342] = true, -- Ironbark
+    [192081] = true, -- Ironfur
+    -- DK
+    [194679] = true, -- Rune Tap
+    [48792] = true, -- Icebound Fortitude
+    [194844] = true, -- Bonestorm
+    [48265] = true, -- Death's Advance
+    [212552] = true, -- Wraith Walk
+    [123981] = true, -- Perdition
+    [55233] = true, -- Vampiric Blood
+    [334547] = true, -- Vampiric Aura
+    [81256] = true, -- Dancing Rune Weapon
+    [48707] = true, -- Anti-Magic Shell
+    [145629] = true, -- Anti-Magic Zone
+    [49039] = true, -- Lichborne
+    -- Priest
+    [19236] = true, -- Desperate Prayer
+    [47585] = true, -- Dispersion
+    [47788] = true, -- Guardian Spirit
+    [33206] = true, -- Pain Suppression
+    [81782] = true, -- Power Word: Barrier
+    [62618] = true, -- Power Word: Barrier
+    [15286] = true, -- Vampiric Embrace
+    [10060] = true -- Power Infusion
+}
 
 -- Bloodlust buffs
 C.BloodlustList = {
@@ -511,175 +666,4 @@ C.PartySpellsDB = {
         [307865] = 60, -- 晋升堡垒之矛，格里恩
         [324143] = 180 -- 征服者战旗，通灵
     }
-}
-
--- Ignore these debuffs on RaidFrames #TODO
-C.PartyDebuffsBlackList = {
-    [8326] = true, -- 鬼魂
-    [160029] = true, -- 正在复活
-    [57723] = true, -- 筋疲力尽
-    [57724] = true, -- 心满意足
-    [80354] = true, -- 时空错位
-    [264689] = true, -- 疲倦
-    [206151] = true, -- 挑战者的负担
-    [195776] = true, -- 月羽疫病
-    [352562] = true, -- 起伏机动
-    [356419] = true, -- 审判灵魂
-    [331154] = true, -- 折磨：上层区域之力
-    [296847] = true, -- 压迫光环
-    [338906] = true, -- 典狱长之链
-    [294720] = true -- 瓶装谜团
-}
-
-C.PartyImportantAurasList = {
-    -- All
-    [160029] = true, -- Resurrecting
-    -- Racial
-    [65116] = true, -- Stoneform
-    -- Covenant
-    [324867] = true, -- Fleshcraft
-    [319217] = true, -- Podtender
-    [320224] = true, -- Podtender
-    -- Potion
-    [307159] = true, -- 幽魂敏捷药水
-    [307162] = true, -- 幽魂智力药水
-    [307163] = true, -- 幽魂耐力药水
-    [307164] = true, -- 幽魂力量药水
-    [307494] = true, -- 强化驱魔药水
-    [307495] = true, -- 幻影火焰药水
-    [307496] = true, -- 神圣觉醒药水
-    [307497] = true, -- 死亡偏执药水
-    [344314] = true, -- 心华之速药水
-    -- Bloodlust
-    [2825] = true, -- 嗜血
-    [32182] = true, -- 英勇
-    [80353] = true, -- 时间扭曲
-    [264667] = true, -- 原始狂怒
-    [178207] = true, -- 狂怒战鼓
-    [230935] = true, -- 高山战鼓
-    [256740] = true, -- 漩涡战鼓
-    [309658] = true, -- 死亡凶蛮战鼓
-    [102364] = true, -- 青铜龙的祝福
-    [292686] = true, -- 制皮鼓
-    -- DH
-    [212800] = true, -- Blur
-    [196555] = true, -- Nether Walk
-    [187827] = true, -- Metamorphosis (Tank)
-    [203819] = true, -- Demon Spikes
-    [209261] = true, -- Uncontained Fel
-    -- Warrior
-    [871] = true, -- Shield Wall
-    [107574] = true, -- Avatar
-    [1719] = true, -- Recklessness
-    [118038] = true, -- Die by the Sword
-    [97463] = true, -- Rallying Cry
-    [147833] = true, -- Intervene
-    [190456] = true, -- Ignore Pain
-    [213915] = true, -- Mass Spell Reflection
-    [23920] = true, -- Spell Reflection (Prot)
-    [216890] = true, -- Spell Reflection (Arms/Fury)
-    [12975] = true, -- Last Stand
-    [197690] = true, -- Defensive Stance
-    [184364] = true, -- Enraged Regeneration
-    [132404] = true, -- Shield Block
-    [335198] = true, -- Safeguard
-    -- Warlock
-    [113860] = true, -- Dark Soul: Misery
-    [104773] = true, -- Unending Resolve
-    [108416] = true, -- Dark Pact
-    [132413] = true, -- Shadow Bulwark
-    -- Shaman
-    [114051] = true, -- Ascendance
-    [108271] = true, -- Astral Shift
-    [974] = true, -- Earth Shield
-    [98007] = true, -- Spirit Link Totem
-    [325174] = true, -- Spirit Link Totem
-    [207498] = true, -- Ancestral Protection
-    [118337] = true, -- Harden Skin
-    -- Rogue
-    [1966] = true, -- Feint
-    [31224] = true, -- Cloak of Shadows
-    [5277] = true, -- Evasion
-    [199754] = true, -- Riposte
-    [45182] = true, -- Cheating Death
-    [114018] = true, -- Shroud of Concealment
-    -- Paladin
-    [31884] = true, -- Avenging Wrath
-    [31850] = true, -- Ardent Defender
-    [1044] = true, -- Blessing of Freedom
-    [31821] = true, -- Aura Mastery
-    [1022] = true, -- Blessing of Protection
-    [6940] = true, -- Blessing of Sacrifice
-    [199448] = true, -- Blessing of Sacrifice
-    [204018] = true, -- Blessing of Spellwarding
-    [498] = true, -- Divine Protection
-    [642] = true, -- Divine Shield
-    [184662] = true, -- Shield of Vengeance
-    [86659] = true, -- Guardian of Ancient Kings
-    [212641] = true, -- Guardian of Ancient Kings (Glyph)
-    [132403] = true, -- Shield of the Righteous
-    [205191] = true, -- Eye for an Eye
-    [228050] = true, -- Divine Shield
-    -- Monk
-    [122470] = true, -- 业报之触
-    [122783] = true, -- 散魔功
-    [243435] = true, -- 壮胆酒（织雾和踏风）
-    [120954] = true, -- 壮胆酒（酒仙）
-    [322507] = true, -- 天神酒
-    [132578] = true, -- 玄牛下凡
-    [115176] = true, -- Zen Meditation
-    [137639] = true, -- Storm, Earth, and Fire
-    [116849] = true, -- Life Cocoon
-    [122278] = true, -- Dampen Harm
-    [125174] = true, -- Touch of Karma
-    [115203] = true, -- Fortifying Brew
-    [215479] = true, -- Shuffle
-    [115295] = true, -- Guard
-    -- Mage
-    [12472] = true, -- Icy Veins
-    [190319] = true, -- Combustion
-    [12042] = true, -- Arcane Power
-    [110909] = true, -- Alter Time
-    [342245] = true, -- Alter Time
-    [45438] = true, -- Iceblock
-    [87023] = true, -- Cauterize
-    -- Hunter
-    [199483] = true, -- Camouflage
-    [186265] = true, -- Aspect of the Turtle
-    [264735] = true, -- Survival of the Fittest (Command Pet)
-    [281195] = true, -- Survival of the Fittest (Lone Wolf)
-    -- Druid
-    [158792] = true, -- Pulverize
-    [106951] = true, -- Berserk
-    [194223] = true, -- Celestial Alignment
-    [102560] = true, -- Incarnation: Chosen of Elune
-    [102558] = true, -- Incarnation: Guardian of Ursoc
-    [61336] = true, -- Survival Instincts
-    [22812] = true, -- Barkskin
-    [22842] = true, -- Frenzied Regeneration
-    [29166] = true, -- Innervate
-    [102342] = true, -- Ironbark
-    [192081] = true, -- Ironfur
-    -- DK
-    [194679] = true, -- Rune Tap
-    [48792] = true, -- Icebound Fortitude
-    [194844] = true, -- Bonestorm
-    [48265] = true, -- Death's Advance
-    [212552] = true, -- Wraith Walk
-    [123981] = true, -- Perdition
-    [55233] = true, -- Vampiric Blood
-    [334547] = true, -- Vampiric Aura
-    [81256] = true, -- Dancing Rune Weapon
-    [48707] = true, -- Anti-Magic Shell
-    [145629] = true, -- Anti-Magic Zone
-    [49039] = true, -- Lichborne
-    -- Priest
-    [19236] = true, -- Desperate Prayer
-    [47585] = true, -- Dispersion
-    [47788] = true, -- Guardian Spirit
-    [33206] = true, -- Pain Suppression
-    [81782] = true, -- Power Word: Barrier
-    [62618] = true, -- Power Word: Barrier
-    [15286] = true, -- Vampiric Embrace
-    [10060] = true -- Power Infusion
 }

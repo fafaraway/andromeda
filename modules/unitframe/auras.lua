@@ -122,7 +122,6 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
     local isRaid = style == 'raid'
     local desaturate = C.DB.Unitframe.DesaturateIcon
     local purgeableHighlight = C.DB.Unitframe.PurgeableHighlight
-    local debuffTypeColor = C.DB.Unitframe.DebuffTypeColor
     local _, _, _, _, _, _, _, canStealOrPurge = UnitAura(unit, index, button.filter)
 
     button:SetSize(element.size, (isParty or isRaid) and element.size or element.size * .75)
@@ -150,7 +149,7 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
         if button.glow then
             button.glow:SetBackdropBorderColor(1, 1, 1, .25)
         end
-    elseif debuffTypeColor and button.isDebuff and element.showDebuffType then
+    elseif button.isDebuff and element.showDebuffType then
         local color = oUF.colors.debuff[debuffType] or oUF.colors.debuff.none
 
         button.bg:SetBackdropBorderColor(color[1], color[2], color[3])
@@ -171,8 +170,8 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
         fontSize = 12
     end
 
-    button.count:SetFont(C.Assets.Fonts.Square, fontSize, 'OUTLINE')
-    button.timer:SetFont(C.Assets.Fonts.Square, fontSize, 'OUTLINE')
+    button.count:SetFont(C.Assets.Fonts.Roadway, fontSize, 'OUTLINE')
+    button.timer:SetFont(C.Assets.Fonts.Roadway, fontSize, 'OUTLINE')
 
     local newTexture = replaceEncryptedIcons[button.spellID]
     if newTexture then
@@ -207,7 +206,7 @@ function UNITFRAME.AuraFilter(element, unit, button, name, _, _, _, _, _, caster
             return true
         end
     elseif style == 'party' then
-        if C.PartyImportantAurasList[spellID] then
+        if C.PartyAurasList[spellID] then
             return true
         else
             return false
@@ -269,6 +268,7 @@ function UNITFRAME:CreateAuras(self)
         bu.numTotal = 4
         bu.disableMouse = false
         bu.disableCooldown = true
+        bu.partyAura = true
     elseif style == 'target' then
         bu.initialAnchor = 'BOTTOMLEFT'
         bu:SetPoint('BOTTOM', self, 'TOP', 0, 24)
@@ -310,7 +310,7 @@ function UNITFRAME:CreateAuras(self)
     UNITFRAME:UpdateAuraContainer(self, bu, bu.numTotal or bu.numBuffs + bu.numDebuffs)
 
     bu.onlyShowPlayer = C.DB.Unitframe.OnlyShowPlayer
-    bu.showDebuffType = true
+    bu.showDebuffType = C.DB.Unitframe.DebuffTypeColor
     bu.showStealableBuffs = true
     bu.CustomFilter = UNITFRAME.AuraFilter
     bu.PostCreateIcon = UNITFRAME.PostCreateIcon
@@ -378,15 +378,9 @@ function UNITFRAME:CreateRaidBuffs(self)
     self.Buffs = bu
 end
 
-local debuffBlackList = {
-    [206151] = true,
-    [296847] = true,
-    [338906] = true
-}
-
 function UNITFRAME.GroupDebuffFilter(element, _, _, _, _, _, _, _, _, caster, _, _, spellID, _, isBossAura)
     local parent = element.__owner
-    if debuffBlackList[spellID] then
+    if C.PartyDebuffsBlackList[spellID] then
         return false
     elseif (C.DB.Unitframe.CornerIndicator and UNITFRAME.CornerSpellsList[spellID]) or parent.RaidDebuffs.spellID == spellID or parent.rawSpellID == spellID then
         return false
@@ -412,7 +406,7 @@ function UNITFRAME:CreatePartyDebuffs(self)
     bu.num = not C.DB.Unitframe.PartyDebuff and 0 or 3
     bu.disableMouse = true
     bu.disableCooldown = true
-    bu.showDebuffType = true
+    bu.showDebuffType = C.DB.Unitframe.DebuffTypeColor
 
     UNITFRAME:UpdateAuraContainer(self, bu, bu.num)
 
@@ -433,7 +427,7 @@ function UNITFRAME:CreateRaidDebuffs(self)
     bu.num = not C.DB.Unitframe.RaidDebuff and 0 or 3
     bu.disableMouse = true
     bu.disableCooldown = true
-    bu.showDebuffType = true
+    bu.showDebuffType = C.DB.Unitframe.DebuffTypeColor
 
     UNITFRAME:UpdateAuraContainer(self, bu, bu.num)
 
