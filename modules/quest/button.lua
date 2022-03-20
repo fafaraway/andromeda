@@ -1,7 +1,6 @@
 -- Extra Quest Button
 -- Credit: p3lim
 -- https://github.com/p3lim-wow/ExtraQuestButton
-
 local F, C, L = unpack(select(2, ...))
 local ACTIONBAR = F:GetModule('ActionBar')
 
@@ -9,11 +8,7 @@ local onlyCurrentZone = true
 local maxDistanceYards = 1e4 -- needs review
 
 -- Warlords of Draenor intro quest items which inspired this addon
-local blacklist = {
-    [113191] = true,
-    [110799] = true,
-    [109164] = true
-}
+local blacklist = {[113191] = true, [110799] = true, [109164] = true}
 
 -- quests that doesn't have a defined area on the map (questID = bool/mapID/{mapID,...})
 -- these have low priority during collision
@@ -109,27 +104,24 @@ local completeHiddenItems = {
     [180899] = true, -- Riding Hook
     [184876] = true, -- Cohesion Crystal
     [186199] = true, -- Lady Moonberry's Wand
-    [187012] = true -- Unbalanced Riftstone
+    [187012] = true, -- Unbalanced Riftstone
+    [187516] = true -- 菲历姆的锻炉阀门
 }
 
 local ExtraQuestButton = CreateFrame('Button', 'ExtraQuestButton', _G.UIParent, 'SecureActionButtonTemplate, SecureHandlerStateTemplate, SecureHandlerAttributeTemplate')
 ExtraQuestButton:SetMovable(true)
 ExtraQuestButton:RegisterEvent('PLAYER_LOGIN')
 ExtraQuestButton:Hide()
-ExtraQuestButton:SetScript(
-    'OnEvent',
-    function(self, event, ...)
-        if self[event] then
-            self[event](self, event, ...)
-        else
-            self:Update()
-        end
+ExtraQuestButton:SetScript('OnEvent', function(self, event, ...)
+    if self[event] then
+        self[event](self, event, ...)
+    else
+        self:Update()
     end
-)
+end)
 
 local visibilityState = '[extrabar][petbattle] hide; show'
-local onAttributeChanged =
-    [[
+local onAttributeChanged = [[
     if name == 'item' then
         if value and not self:IsShown() and not HasExtraActionBar() then
             self:Show()
@@ -280,87 +272,75 @@ function ExtraQuestButton:PLAYER_LOGIN()
     self:RegisterEvent('ZONE_CHANGED_NEW_AREA')
 end
 
-ExtraQuestButton:SetScript(
-    'OnEnter',
-    function(self)
-        if not self.itemLink then
-            return
-        end
-        _G.GameTooltip:SetOwner(self, 'ANCHOR_LEFT')
-        _G.GameTooltip:SetHyperlink(self.itemLink)
+ExtraQuestButton:SetScript('OnEnter', function(self)
+    if not self.itemLink then
+        return
     end
-)
+    _G.GameTooltip:SetOwner(self, 'ANCHOR_LEFT')
+    _G.GameTooltip:SetHyperlink(self.itemLink)
+end)
 
-ExtraQuestButton:SetScript(
-    'OnUpdate',
-    function(self, elapsed)
-        if self.updateRange then
-            if (self.rangeTimer or 0) > _G.TOOLTIP_UPDATE_TIME then
-                local HotKey = self.HotKey
-                local Icon = self.Icon
+ExtraQuestButton:SetScript('OnUpdate', function(self, elapsed)
+    if self.updateRange then
+        if (self.rangeTimer or 0) > _G.TOOLTIP_UPDATE_TIME then
+            local HotKey = self.HotKey
+            local Icon = self.Icon
 
-                -- BUG: IsItemInRange() is broken versus friendly npcs (and possibly others)
-                local inRange = IsItemInRange(self.itemLink, 'target')
-                if HotKey:GetText() == _G.RANGE_INDICATOR then
-                    if inRange == false then
-                        HotKey:SetTextColor(1, .1, .1)
-                        HotKey:Show()
-                        Icon:SetVertexColor(1, .1, .1)
-                    elseif inRange then
-                        HotKey:SetTextColor(.6, .6, .6)
-                        HotKey:Show()
-                        Icon:SetVertexColor(1, 1, 1)
-                    else
-                        HotKey:Hide()
-                    end
+            -- BUG: IsItemInRange() is broken versus friendly npcs (and possibly others)
+            local inRange = IsItemInRange(self.itemLink, 'target')
+            if HotKey:GetText() == _G.RANGE_INDICATOR then
+                if inRange == false then
+                    HotKey:SetTextColor(1, .1, .1)
+                    HotKey:Show()
+                    Icon:SetVertexColor(1, .1, .1)
+                elseif inRange then
+                    HotKey:SetTextColor(.6, .6, .6)
+                    HotKey:Show()
+                    Icon:SetVertexColor(1, 1, 1)
                 else
-                    if inRange == false then
-                        HotKey:SetTextColor(1, .1, .1)
-                        Icon:SetVertexColor(1, .1, .1)
-                    else
-                        HotKey:SetTextColor(.6, .6, .6)
-                        Icon:SetVertexColor(1, 1, 1)
-                    end
+                    HotKey:Hide()
                 end
-
-                self.rangeTimer = 0
             else
-                self.rangeTimer = (self.rangeTimer or 0) + elapsed
+                if inRange == false then
+                    HotKey:SetTextColor(1, .1, .1)
+                    Icon:SetVertexColor(1, .1, .1)
+                else
+                    HotKey:SetTextColor(.6, .6, .6)
+                    Icon:SetVertexColor(1, 1, 1)
+                end
             end
-        end
 
-        if (self.updateTimer or 0) > 5 then
-            self:Update()
-            self.updateTimer = 0
+            self.rangeTimer = 0
         else
-            self.updateTimer = (self.updateTimer or 0) + elapsed
+            self.rangeTimer = (self.rangeTimer or 0) + elapsed
         end
     end
-)
 
-ExtraQuestButton:SetScript(
-    'OnEnable',
-    function(self)
-        _G.RegisterStateDriver(self, 'visible', visibilityState)
-        self:SetAttribute('_onattributechanged', onAttributeChanged)
+    if (self.updateTimer or 0) > 5 then
         self:Update()
-        self:SetItem()
+        self.updateTimer = 0
+    else
+        self.updateTimer = (self.updateTimer or 0) + elapsed
     end
-)
+end)
 
-ExtraQuestButton:SetScript(
-    'OnDisable',
-    function(self)
-        if not self:IsMovable() then
-            self:SetMovable(true)
-        end
+ExtraQuestButton:SetScript('OnEnable', function(self)
+    _G.RegisterStateDriver(self, 'visible', visibilityState)
+    self:SetAttribute('_onattributechanged', onAttributeChanged)
+    self:Update()
+    self:SetItem()
+end)
 
-        _G.RegisterStateDriver(self, 'visible', 'show')
-        self:SetAttribute('_onattributechanged', nil)
-        self.Icon:SetTexture([[Interface\Icons\INV_Misc_Wrench_01]])
-        self.HotKey:Hide()
+ExtraQuestButton:SetScript('OnDisable', function(self)
+    if not self:IsMovable() then
+        self:SetMovable(true)
     end
-)
+
+    _G.RegisterStateDriver(self, 'visible', 'show')
+    self:SetAttribute('_onattributechanged', nil)
+    self.Icon:SetTexture([[Interface\Icons\INV_Misc_Wrench_01]])
+    self.HotKey:Hide()
+end)
 
 function ExtraQuestButton:SetItem(itemLink)
     if HasExtraActionBar() then
