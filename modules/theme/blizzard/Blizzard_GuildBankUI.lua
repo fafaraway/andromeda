@@ -56,7 +56,7 @@ C.Themes['Blizzard_GuildBankUI'] = function()
         icon:SetTexCoord(unpack(C.TexCoord))
 
         local a1, p, a2, x, y = button:GetPoint()
-        button:SetPoint(a1, p, a2, x + C.mult, y)
+        button:SetPoint(a1, p, a2, x + C.Mult, y)
     end
 
     local NUM_GUILDBANK_ICONS_PER_ROW = 10
