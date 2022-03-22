@@ -1324,7 +1324,7 @@ function INVENTORY:OnLogin()
     _G.BankFrame.GetRight = function()
         return f.bank:GetRight()
     end
-    _G.BankFrameItemButton_Update = F.Dummy
+    _G.BankFrameItemButton_Update = nop
 
     -- Shift key alert
     local function onUpdate(self, elapsed)

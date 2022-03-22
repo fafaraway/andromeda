@@ -47,7 +47,7 @@ C.Themes["Blizzard_BlackMarketUI"] = function()
 				bu:SetHighlightTexture(C.Assets.Textures.Backdrop)
 				local hl = bu:GetHighlightTexture()
 				hl:SetVertexColor(r, g, b, .2)
-				hl.SetAlpha = F.Dummy
+				hl.SetAlpha = nop
 				hl:ClearAllPoints()
 				hl:SetAllPoints(bg)
 

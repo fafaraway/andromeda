@@ -246,7 +246,7 @@ function EOT:OnLogin()
     EOT:RestyleObjectiveTrackerText()
 
     -- Kill reward animation when finished dungeon or bonus objectives
-    _G.ObjectiveTrackerScenarioRewardsFrame.Show = F.Dummy
+    _G.ObjectiveTrackerScenarioRewardsFrame.Show = nop
 
     hooksecurefunc(
         'BonusObjectiveTracker_AnimateReward',

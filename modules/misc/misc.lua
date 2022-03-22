@@ -165,12 +165,6 @@ do
     end)
 end
 
-do
-    if C.IsDeveloper then
-        SetCVar('nameplateShowOnlyNames', 1)
-        C_NamePlate.SetNamePlateFriendlySize(1, 1)
-    end
-end
 
 function M:OnLogin()
     M:ForceWarning()

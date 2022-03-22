@@ -7,22 +7,22 @@ C.Themes["Blizzard_TalkingHeadUI"] = function()
 	local portraitFrame = TalkingHeadFrame.PortraitFrame
 	F.StripTextures(portraitFrame)
 	portraitFrame.Portrait:SetAtlas(nil)
-	portraitFrame.Portrait.SetAtlas = F.Dummy
+	portraitFrame.Portrait.SetAtlas = nop
 
 	local model = TalkingHeadFrame.MainFrame.Model
 	model:SetPoint("TOPLEFT", 30, -27)
 	model:SetSize(100, 100)
 	model.PortraitBg:SetAtlas(nil)
-	model.PortraitBg.SetAtlas = F.Dummy
+	model.PortraitBg.SetAtlas = nop
 
 	local name = TalkingHeadFrame.NameFrame.Name
 	name:SetTextColor(1, .8, 0)
-	name.SetTextColor = F.Dummy
+	name.SetTextColor = nop
 	name:SetShadowColor(0, 0, 0, 0)
 
 	local text = TalkingHeadFrame.TextFrame.Text
 	text:SetTextColor(1, 1, 1)
-	text.SetTextColor = F.Dummy
+	text.SetTextColor = nop
 	text:SetShadowColor(0, 0, 0, 0)
 
 	local closeButton = TalkingHeadFrame.MainFrame.CloseButton

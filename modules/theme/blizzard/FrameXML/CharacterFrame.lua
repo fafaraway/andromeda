@@ -145,7 +145,7 @@ tinsert(C.BlizzThemes, function()
 			for i = 1, 4 do
 				local region = select(i, tab:GetRegions())
 				region:SetTexCoord(.16, .86, .16, .86)
-				region.SetTexCoord = F.Dummy
+				region.SetTexCoord = nop
 			end
 		end
 
@@ -283,9 +283,9 @@ tinsert(C.BlizzThemes, function()
 			if not bu.styled then
 				bu.highlight:SetPoint("TOPLEFT", 1, 0)
 				bu.highlight:SetPoint("BOTTOMRIGHT", -1, 0)
-				bu.highlight.SetPoint = F.Dummy
+				bu.highlight.SetPoint = nop
 				bu.highlight:SetColorTexture(r, g, b, .2)
-				bu.highlight.SetTexture = F.Dummy
+				bu.highlight.SetTexture = nop
 
 				bu.categoryMiddle:SetAlpha(0)
 				bu.categoryLeft:SetAlpha(0)

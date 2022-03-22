@@ -59,7 +59,7 @@ local function CreateTip(link)
     )
 
     tip:SetBackdrop(nil)
-    tip.SetBackdrop = F.Dummy
+    tip.SetBackdrop = nop
     if tip.BackdropFrame then
         tip.BackdropFrame:SetBackdrop(nil)
     end

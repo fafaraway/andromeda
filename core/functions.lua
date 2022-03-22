@@ -7,10 +7,6 @@ do
         _G.FREE_ADB['HelpTips'][callbackArg] = true
     end
 
-    function F:Dummy()
-        return
-    end
-
     function F:MultiCheck(check, ...)
         for i = 1, select('#', ...) do
             if check == select(i, ...) then

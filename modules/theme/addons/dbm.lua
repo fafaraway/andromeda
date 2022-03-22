@@ -10,7 +10,7 @@ local function ReskinIcon(icon, frame)
 
     if not icon.styled then
         icon:SetSize(buttonSize, buttonSize)
-        icon.SetSize = F.Dummy
+        icon.SetSize = nop
 
         local bg = F.ReskinIcon(icon, true)
         bg.icon = bg:CreateTexture(nil, 'ARTWORK')

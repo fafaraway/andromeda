@@ -34,7 +34,7 @@ C.Themes["Blizzard_TrainerUI"] = function()
 				bu:SetNormalTexture("")
 				bu:SetHighlightTexture("")
 				bu.disabledBG:Hide()
-				bu.disabledBG.Show = F.Dummy
+				bu.disabledBG.Show = nop
 				bu.selectedTex:SetAllPoints(bg)
 				bu.selectedTex:SetColorTexture(r, g, b, .25)
 

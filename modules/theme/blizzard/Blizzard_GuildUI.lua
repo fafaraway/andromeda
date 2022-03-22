@@ -209,7 +209,7 @@ C.Themes['Blizzard_GuildUI'] = function()
                     bu:SetHighlightTexture('')
                     F.ReskinIcon(bu.icon)
                     bu.disabledBG:Hide()
-                    bu.disabledBG.Show = F.Dummy
+                    bu.disabledBG.Show = nop
 
                     bu.bg = F.CreateBDFrame(bu, .25)
                     bu.bg:ClearAllPoints()

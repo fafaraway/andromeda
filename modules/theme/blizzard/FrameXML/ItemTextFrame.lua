@@ -17,5 +17,5 @@ tinsert(C.BlizzThemes, function()
 	F.ReskinArrow(ItemTextNextPageButton, "right")
 	ItemTextFramePageBg:SetAlpha(0)
 	ItemTextPageText:SetTextColor(1, 1, 1)
-	ItemTextPageText.SetTextColor = F.Dummy
+	ItemTextPageText.SetTextColor = nop
 end)

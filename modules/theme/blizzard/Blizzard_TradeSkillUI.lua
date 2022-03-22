@@ -27,7 +27,7 @@ C.Themes["Blizzard_TradeSkillUI"] = function()
 
 	local rankFrame = TradeSkillFrame.RankFrame
 	rankFrame:SetStatusBarTexture(C.Assets.Textures.Backdrop)
-	rankFrame.SetStatusBarColor = F.Dummy
+	rankFrame.SetStatusBarColor = nop
 	rankFrame:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
 	rankFrame.BorderMid:Hide()
 	rankFrame.BorderLeft:Hide()

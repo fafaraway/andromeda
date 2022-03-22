@@ -24,7 +24,7 @@ C.Themes['Blizzard_Calendar'] = function()
         local hl = bu:GetHighlightTexture()
         hl:SetVertexColor(r, g, b, .25)
         hl:SetInside(bg)
-        hl.SetAlpha = F.Dummy
+        hl.SetAlpha = nop
 
         _G[dayButtonName .. 'DarkFrame']:SetAlpha(.5)
         _G[dayButtonName .. 'EventTexture']:SetInside(bg)
@@ -51,7 +51,7 @@ C.Themes['Blizzard_Calendar'] = function()
     _G.CalendarCreateEventMassInviteButtonBorder:Hide()
     _G.CalendarCreateEventCreateButtonBorder:Hide()
     F.ReskinIcon(_G.CalendarCreateEventIcon)
-    _G.CalendarCreateEventIcon.SetTexCoord = F.Dummy
+    _G.CalendarCreateEventIcon.SetTexCoord = nop
     _G.CalendarEventPickerCloseButtonBorder:Hide()
     _G.CalendarCreateEventRaidInviteButtonBorder:Hide()
     _G.CalendarMonthBackground:SetAlpha(0)

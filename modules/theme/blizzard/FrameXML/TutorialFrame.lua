@@ -6,7 +6,7 @@ table.insert(
         F.SetBD(_G.TutorialFrame)
 
         _G.TutorialFrameBackground:Hide()
-        _G.TutorialFrameBackground.Show = F.Dummy
+        _G.TutorialFrameBackground.Show = nop
         _G.TutorialFrame:DisableDrawLayer('BORDER')
 
         F.Reskin(_G.TutorialFrameOkayButton, true)

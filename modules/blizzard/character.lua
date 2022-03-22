@@ -15,7 +15,7 @@ function M:MissingStats()
     local scrollFrame = CreateFrame('ScrollFrame', nil, statPanel, 'UIPanelScrollFrameTemplate')
     scrollFrame:SetAllPoints()
     scrollFrame.ScrollBar:Hide()
-    scrollFrame.ScrollBar.Show = F.Dummy
+    scrollFrame.ScrollBar.Show = nop
     local stat = CreateFrame('Frame', nil, scrollFrame)
     stat:SetSize(200, 1)
     scrollFrame:SetScrollChild(stat)

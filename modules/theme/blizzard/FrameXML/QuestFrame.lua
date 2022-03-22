@@ -83,16 +83,16 @@ _G.tinsert(
         _G.QuestProgressRequiredItemsText:SetShadowColor(0, 0, 0)
         _G.QuestProgressTitleText:SetTextColor(1, .8, 0)
         _G.QuestProgressTitleText:SetShadowColor(0, 0, 0)
-        _G.QuestProgressTitleText.SetTextColor = F.Dummy
+        _G.QuestProgressTitleText.SetTextColor = nop
         _G.QuestProgressText:SetTextColor(1, 1, 1)
-        _G.QuestProgressText.SetTextColor = F.Dummy
+        _G.QuestProgressText.SetTextColor = nop
         _G.GreetingText:SetTextColor(1, 1, 1)
-        _G.GreetingText.SetTextColor = F.Dummy
+        _G.GreetingText.SetTextColor = nop
         _G.AvailableQuestsText:SetTextColor(1, .8, 0)
-        _G.AvailableQuestsText.SetTextColor = F.Dummy
+        _G.AvailableQuestsText.SetTextColor = nop
         _G.AvailableQuestsText:SetShadowColor(0, 0, 0)
         _G.CurrentQuestsText:SetTextColor(1, 1, 1)
-        _G.CurrentQuestsText.SetTextColor = F.Dummy
+        _G.CurrentQuestsText.SetTextColor = nop
         _G.CurrentQuestsText:SetShadowColor(0, 0, 0)
 
         -- Quest NPC model

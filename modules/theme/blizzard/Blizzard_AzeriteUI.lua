@@ -35,7 +35,7 @@ C.Themes['Blizzard_AzeriteEssenceUI'] = function()
     for _, milestoneFrame in pairs(_G.AzeriteEssenceUI.Milestones) do
         if milestoneFrame.LockedState then
             milestoneFrame.LockedState.UnlockLevelText:SetTextColor(.6, .8, 1)
-            milestoneFrame.LockedState.UnlockLevelText.SetTextColor = F.Dummy
+            milestoneFrame.LockedState.UnlockLevelText.SetTextColor = nop
         end
     end
 

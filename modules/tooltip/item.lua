@@ -4,7 +4,7 @@ local TOOLTIP = F:GetModule('Tooltip')
 local function RemoveLines()
     _G.ITEM_CREATED_BY = '' -- Remove creator name
     _G.PVP_ENABLED = '' -- Remove PvP text
-    _G.GameTooltip:SetScript('OnTooltipAddMoney', F.Dummy) -- Remove sell price
+    _G.GameTooltip:SetScript('OnTooltipAddMoney', nop) -- Remove sell price
 end
 
 local function AddLines(self)
