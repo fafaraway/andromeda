@@ -212,6 +212,9 @@ table.insert(C.BlizzThemes, function()
     F.ReskinCheck(entryCreation.ItemLevel.CheckButton)
     F.ReskinCheck(entryCreation.VoiceChat.CheckButton)
     F.ReskinCheck(entryCreation.PrivateGroup.CheckButton)
+    if C.IsNewPatch then
+        F.ReskinCheck(entryCreation.CrossFactionGroup.CheckButton)
+    end
 
     -- [[ Role count ]]
 

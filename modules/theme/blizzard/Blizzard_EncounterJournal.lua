@@ -27,7 +27,7 @@ local function ReskinBossButtons()
         hl:SetInside(button.__bg)
 
         button.text:SetTextColor(1, 1, 1)
-        button.text.SetTextColor = F.Dummy
+        button.text.SetTextColor = nop
         button.creature:SetPoint('TOPLEFT', 0, -4)
 
         bossIndex = bossIndex + 1
@@ -55,7 +55,7 @@ local function ReskinInstanceButton()
 end
 
 local function ReskinHeader(header)
-    header.flashAnim.Play = F.Dummy
+    header.flashAnim.Play = nop
     for i = 4, 18 do
         select(i, header.button:GetRegions()):SetTexture('')
     end
@@ -64,10 +64,10 @@ local function ReskinHeader(header)
     header.descriptionBGBottom:SetAlpha(0)
     header.description:SetTextColor(1, 1, 1)
     header.button.title:SetTextColor(1, 1, 1)
-    header.button.title.SetTextColor = F.Dummy
+    header.button.title.SetTextColor = nop
     header.button.expandedIcon:SetWidth(20) -- don't wrap the text
-    header.button.expandedIcon.SetTextColor = F.Dummy
-    header.button.expandedIcon.SetTextColor = F.Dummy
+    header.button.expandedIcon.SetTextColor = nop
+    header.button.expandedIcon.SetTextColor = nop
 end
 
 local function ReskinSectionHeader()
@@ -224,7 +224,7 @@ C.Themes['Blizzard_EncounterJournal'] = function()
             local bu = _G['EncounterJournalSearchResultsScrollFrameButton' .. i]
             F.StripTextures(bu)
             F.ReskinIcon(bu.icon)
-            bu.icon.SetTexCoord = F.Dummy
+            bu.icon.SetTexCoord = nop
             local bg = F.CreateBDFrame(bu, .25)
             bg:SetInside()
             bu:SetHighlightTexture(C.Assets.Textures.Backdrop)
@@ -401,13 +401,9 @@ C.Themes['Blizzard_EncounterJournal'] = function()
 
         hooksecurefunc(itemSetsFrame, 'ConfigureItemButton', function(_, button)
             if not button.bg then
-                button.Border:SetAlpha(0)
                 button.bg = F.ReskinIcon(button.Icon)
+                F.ReskinIconBorder(button.Border, true, true)
             end
-
-            local quality = select(3, GetItemInfo(button.itemID))
-            local color = C.QualityColors[quality or 1]
-            button.bg:SetBackdropBorderColor(color.r, color.g, color.b)
         end)
     end
 end

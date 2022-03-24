@@ -1321,12 +1321,7 @@ do
     F.ReskinInput = F.ReskinEditBox -- Deprecated
 
     -- Handle arrows
-    local arrowDegree = {
-        ['up'] = 0,
-        ['down'] = 180,
-        ['left'] = 90,
-        ['right'] = -90
-    }
+    local arrowDegree = {['up'] = 0, ['down'] = 180, ['left'] = 90, ['right'] = -90}
 
     function F:SetupArrow(direction)
         self:SetTexture(assets.Textures.Arrow)
@@ -1355,6 +1350,17 @@ do
         self:HookScript('OnLeave', F.Texture_OnLeave)
     end
 
+    function F:ReskinFilterReset()
+        F.StripTextures(self)
+        self:ClearAllPoints()
+        self:SetPoint('TOPRIGHT', -5, 10)
+
+        local tex = self:CreateTexture(nil, 'ARTWORK')
+        tex:SetInside(nil, 2, 2)
+        tex:SetTexture(C.Assets.Textures.Close)
+        tex:SetVertexColor(1, 0, 0)
+    end
+
     function F:ReskinFilterButton()
         F.StripTextures(self)
         F.Reskin(self)
@@ -1367,6 +1373,9 @@ do
             F.SetupArrow(self.Icon, 'right')
             self.Icon:SetPoint('RIGHT')
             self.Icon:SetSize(14, 14)
+        end
+        if C.IsNewPatch and self.ResetButton then
+            F.ReskinFilterReset(self.ResetButton)
         end
     end
 

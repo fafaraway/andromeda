@@ -1,16 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local hooksecurefunc = hooksecurefunc
-local InCombatLockdown = InCombatLockdown
-local GetItemQualityColor = GetItemQualityColor
-local GetItemInfo = GetItemInfo
-local PlayerHasToy = PlayerHasToy
-local C_PetJournal_GetPetInfoByIndex = C_PetJournal.GetPetInfoByIndex
-local C_PetJournal_GetPetStats = C_PetJournal.GetPetStats
-local C_TransmogCollection_GetSourceInfo = C_TransmogCollection.GetSourceInfo
-local IsAddOnLoaded = IsAddOnLoaded
-
 local F, C = unpack(select(2, ...))
 
 C.Themes['Blizzard_Collections'] = function()
@@ -148,10 +135,10 @@ C.Themes['Blizzard_Collections'] = function()
 
                 local index = bu.index
                 if index then
-                    local petID, _, isOwned = C_PetJournal_GetPetInfoByIndex(index)
+                    local petID, _, isOwned = C_PetJournal.GetPetInfoByIndex(index)
 
                     if petID and isOwned then
-                        local rarity = select(5, C_PetJournal_GetPetStats(petID))
+                        local rarity = select(5, C_PetJournal.GetPetStats(petID))
                         if rarity then
                             bu.name:SetTextColor(GetItemQualityColor(rarity - 1))
                         else
@@ -202,15 +189,12 @@ C.Themes['Blizzard_Collections'] = function()
     reskinToolButton(_G.MountJournalSummonRandomFavoriteButton)
 
     local movedButton
-    MountJournal:HookScript(
-        'OnShow',
-        function()
-            if not InCombatLockdown() and not movedButton then
-                _G.MountJournalSummonRandomFavoriteButton:SetPoint('TOPRIGHT', -10, -26)
-                movedButton = true
-            end
+    MountJournal:HookScript('OnShow', function()
+        if not InCombatLockdown() and not movedButton then
+            _G.MountJournalSummonRandomFavoriteButton:SetPoint('TOPRIGHT', -10, -26)
+            movedButton = true
         end
-    )
+    end)
 
     -- Pet card
 
@@ -250,21 +234,18 @@ C.Themes['Blizzard_Collections'] = function()
         F.ReskinIcon(bu.icon)
     end
 
-    hooksecurefunc(
-        'PetJournal_UpdatePetCard',
-        function(self)
-            local border = self.PetInfo.qualityBorder
-            local r, g, b
+    hooksecurefunc('PetJournal_UpdatePetCard', function(self)
+        local border = self.PetInfo.qualityBorder
+        local r, g, b
 
-            if border:IsShown() then
-                r, g, b = self.PetInfo.qualityBorder:GetVertexColor()
-            else
-                r, g, b = 0, 0, 0
-            end
-
-            self.PetInfo.icon.bg:SetBackdropBorderColor(r, g, b)
+        if border:IsShown() then
+            r, g, b = self.PetInfo.qualityBorder:GetVertexColor()
+        else
+            r, g, b = 0, 0, 0
         end
-    )
+
+        self.PetInfo.icon.bg:SetBackdropBorderColor(r, g, b)
+    end)
 
     -- Pet loadout
 
@@ -317,19 +298,16 @@ C.Themes['Blizzard_Collections'] = function()
         end
     end
 
-    hooksecurefunc(
-        'PetJournal_UpdatePetLoadOut',
-        function()
-            for i = 1, 3 do
-                local bu = PetJournal.Loadout['Pet' .. i]
+    hooksecurefunc('PetJournal_UpdatePetLoadOut', function()
+        for i = 1, 3 do
+            local bu = PetJournal.Loadout['Pet' .. i]
 
-                bu.icon.bg:SetShown(not bu.helpFrame:IsShown())
-                bu.icon.bg:SetBackdropBorderColor(bu.qualityBorder:GetVertexColor())
+            bu.icon.bg:SetShown(not bu.helpFrame:IsShown())
+            bu.icon.bg:SetBackdropBorderColor(bu.qualityBorder:GetVertexColor())
 
-                bu.dragButton:SetEnabled(not bu.helpFrame:IsShown())
-            end
+            bu.dragButton:SetEnabled(not bu.helpFrame:IsShown())
         end
-    )
+    end)
 
     PetJournal.SpellSelect.BgEnd:Hide()
     PetJournal.SpellSelect.BgTiled:Hide()
@@ -415,18 +393,18 @@ C.Themes['Blizzard_Collections'] = function()
     F.StripTextures(icons)
     F.ReskinInput(_G.HeirloomsJournalSearchBox)
     F.ReskinDropDown(_G.HeirloomsJournalClassDropDown)
-    F.ReskinFilterButton(_G.HeirloomsJournalFilterButton)
+    if C.IsNewPatch then
+        F.ReskinFilterButton(HeirloomsJournal.FilterButton)
+    else
+        F.ReskinFilterButton(_G.HeirloomsJournalFilterButton)
+    end
     F.ReskinArrow(HeirloomsJournal.PagingFrame.PrevPageButton, 'left')
     F.ReskinArrow(HeirloomsJournal.PagingFrame.NextPageButton, 'right')
 
-    hooksecurefunc(
-        HeirloomsJournal,
-        'UpdateButton',
-        function(_, button)
-            button.level:SetFontObject('GameFontWhiteSmall')
-            button.special:SetTextColor(1, .8, 0)
-        end
-    )
+    hooksecurefunc(HeirloomsJournal, 'UpdateButton', function(_, button)
+        button.level:SetFontObject('GameFontWhiteSmall')
+        button.special:SetTextColor(1, .8, 0)
+    end)
 
     -- Progress bar
 
@@ -441,84 +419,77 @@ C.Themes['Blizzard_Collections'] = function()
 
     -- Buttons
 
-    hooksecurefunc(
-        'HeirloomsJournal_UpdateButton',
-        function(button)
-            if not button.styled then
-                local ic = button.iconTexture
+    hooksecurefunc('HeirloomsJournal_UpdateButton', function(button)
+        if not button.styled then
+            local ic = button.iconTexture
 
-                button.slotFrameCollected:SetTexture('')
-                button.slotFrameUncollected:SetTexture('')
-                button.levelBackground:SetAlpha(0)
-                button:SetPushedTexture('')
-                button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-                button:GetHighlightTexture():SetAllPoints(ic)
+            button.slotFrameCollected:SetTexture('')
+            button.slotFrameUncollected:SetTexture('')
+            button.levelBackground:SetAlpha(0)
+            button:SetPushedTexture('')
+            button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+            button:GetHighlightTexture():SetAllPoints(ic)
 
-                button.iconTextureUncollected:SetTexCoord(unpack(C.TexCoord))
-                button.bg = F.ReskinIcon(ic)
+            button.iconTextureUncollected:SetTexCoord(unpack(C.TexCoord))
+            button.bg = F.ReskinIcon(ic)
 
-                button.level:ClearAllPoints()
-                button.level:SetPoint('BOTTOM', 0, 1)
+            button.level:ClearAllPoints()
+            button.level:SetPoint('BOTTOM', 0, 1)
 
-                local newLevelBg = button:CreateTexture(nil, 'OVERLAY')
-                newLevelBg:SetColorTexture(0, 0, 0, .5)
-                newLevelBg:SetPoint('BOTTOMLEFT', button, 'BOTTOMLEFT', 4, 5)
-                newLevelBg:SetPoint('BOTTOMRIGHT', button, 'BOTTOMRIGHT', -4, 5)
-                newLevelBg:SetHeight(11)
-                button.newLevelBg = newLevelBg
+            local newLevelBg = button:CreateTexture(nil, 'OVERLAY')
+            newLevelBg:SetColorTexture(0, 0, 0, .5)
+            newLevelBg:SetPoint('BOTTOMLEFT', button, 'BOTTOMLEFT', 4, 5)
+            newLevelBg:SetPoint('BOTTOMRIGHT', button, 'BOTTOMRIGHT', -4, 5)
+            newLevelBg:SetHeight(11)
+            button.newLevelBg = newLevelBg
 
-                button.styled = true
+            button.styled = true
+        end
+
+        if button.iconTexture:IsShown() then
+            button.name:SetTextColor(1, 1, 1)
+            button.bg:SetBackdropBorderColor(0, .8, 1)
+            button.newLevelBg:Show()
+        else
+            button.name:SetTextColor(.5, .5, .5)
+            button.bg:SetBackdropBorderColor(0, 0, 0)
+            button.newLevelBg:Hide()
+        end
+    end)
+
+    hooksecurefunc(HeirloomsJournal, 'LayoutCurrentPage', function()
+        for i = 1, #HeirloomsJournal.heirloomHeaderFrames do
+            local header = HeirloomsJournal.heirloomHeaderFrames[i]
+            if not header.styled then
+                header.text:SetTextColor(1, 1, 1)
+                header.text:SetFont(C.Assets.Fonts.Bold, 16, 'OUTLINE')
+
+                header.styled = true
             end
+        end
+
+        for i = 1, #HeirloomsJournal.heirloomEntryFrames do
+            local button = HeirloomsJournal.heirloomEntryFrames[i]
 
             if button.iconTexture:IsShown() then
                 button.name:SetTextColor(1, 1, 1)
-                button.bg:SetBackdropBorderColor(0, .8, 1)
-                button.newLevelBg:Show()
+                if button.bg then
+                    button.bg:SetBackdropBorderColor(0, .8, 1)
+                end
+                if button.newLevelBg then
+                    button.newLevelBg:Show()
+                end
             else
                 button.name:SetTextColor(.5, .5, .5)
-                button.bg:SetBackdropBorderColor(0, 0, 0)
-                button.newLevelBg:Hide()
-            end
-        end
-    )
-
-    hooksecurefunc(
-        HeirloomsJournal,
-        'LayoutCurrentPage',
-        function()
-            for i = 1, #HeirloomsJournal.heirloomHeaderFrames do
-                local header = HeirloomsJournal.heirloomHeaderFrames[i]
-                if not header.styled then
-                    header.text:SetTextColor(1, 1, 1)
-                    header.text:SetFont(C.Assets.Fonts.Bold, 16, 'OUTLINE')
-
-                    header.styled = true
+                if button.bg then
+                    button.bg:SetBackdropBorderColor(0, 0, 0)
                 end
-            end
-
-            for i = 1, #HeirloomsJournal.heirloomEntryFrames do
-                local button = HeirloomsJournal.heirloomEntryFrames[i]
-
-                if button.iconTexture:IsShown() then
-                    button.name:SetTextColor(1, 1, 1)
-                    if button.bg then
-                        button.bg:SetBackdropBorderColor(0, .8, 1)
-                    end
-                    if button.newLevelBg then
-                        button.newLevelBg:Show()
-                    end
-                else
-                    button.name:SetTextColor(.5, .5, .5)
-                    if button.bg then
-                        button.bg:SetBackdropBorderColor(0, 0, 0)
-                    end
-                    if button.newLevelBg then
-                        button.newLevelBg:Hide()
-                    end
+                if button.newLevelBg then
+                    button.newLevelBg:Hide()
                 end
             end
         end
-    )
+    end)
 
     -- [[ WardrobeCollectionFrame ]]
 
@@ -541,19 +512,16 @@ C.Themes['Blizzard_Collections'] = function()
         tab.bg:SetPoint('BOTTOMRIGHT', -3, -1)
     end
 
-    hooksecurefunc(
-        'WardrobeCollectionFrame_SetTab',
-        function(tabID)
-            for index = 1, 2 do
-                local tab = _G['WardrobeCollectionFrameTab' .. index]
-                if tabID == index then
-                    tab.bg:SetBackdropColor(r, g, b, .2)
-                else
-                    tab.bg:SetBackdropColor(0, 0, 0, .2)
-                end
+    hooksecurefunc('WardrobeCollectionFrame_SetTab', function(tabID)
+        for index = 1, 2 do
+            local tab = _G['WardrobeCollectionFrameTab' .. index]
+            if tabID == index then
+                tab.bg:SetBackdropColor(r, g, b, .2)
+            else
+                tab.bg:SetBackdropColor(0, 0, 0, .2)
             end
         end
-    )
+    end)
 
     F.ReskinArrow(ItemsCollectionFrame.PagingFrame.PrevPageButton, 'left')
     F.ReskinArrow(ItemsCollectionFrame.PagingFrame.NextPageButton, 'right')
@@ -597,25 +565,21 @@ C.Themes['Blizzard_Collections'] = function()
     DetailsFrame.IconRowBackground:Hide()
     F.ReskinFilterButton(DetailsFrame.VariantSetsButton, 'Down')
 
-    hooksecurefunc(
-        SetsCollectionFrame,
-        'SetItemFrameQuality',
-        function(_, itemFrame)
-            local ic = itemFrame.Icon
-            if not ic.bg then
-                ic.bg = F.ReskinIcon(ic)
-            end
-            itemFrame.IconBorder:SetTexture('')
-
-            if itemFrame.collected then
-                local quality = C_TransmogCollection_GetSourceInfo(itemFrame.sourceID).quality
-                local color = C.QualityColors[quality or 1]
-                ic.bg:SetBackdropBorderColor(color.r, color.g, color.b)
-            else
-                ic.bg:SetBackdropBorderColor(0, 0, 0)
-            end
+    hooksecurefunc(SetsCollectionFrame, 'SetItemFrameQuality', function(_, itemFrame)
+        local ic = itemFrame.Icon
+        if not ic.bg then
+            ic.bg = F.ReskinIcon(ic)
         end
-    )
+        itemFrame.IconBorder:SetTexture('')
+
+        if itemFrame.collected then
+            local quality = C_TransmogCollection.GetSourceInfo(itemFrame.sourceID).quality
+            local color = C.QualityColors[quality or 1]
+            ic.bg:SetBackdropBorderColor(color.r, color.g, color.b)
+        else
+            ic.bg:SetBackdropBorderColor(0, 0, 0)
+        end
+    end)
 
     local SetsTransmogFrame = WardrobeCollectionFrame.SetsTransmogFrame
     F.StripTextures(SetsTransmogFrame)
@@ -659,31 +623,28 @@ C.Themes['Blizzard_Collections'] = function()
 
     -- HPetBattleAny
     local reskinHPet
-    _G.CollectionsJournal:HookScript(
-        'OnShow',
-        function()
-            if not IsAddOnLoaded('HPetBattleAny') then
-                return
-            end
-            if not reskinHPet then
-                if _G.HPetInitOpenButton then
-                    F.Reskin(_G.HPetInitOpenButton)
-                end
-                if _G.HPetAllInfoButton then
-                    F.StripTextures(_G.HPetAllInfoButton)
-                    F.Reskin(_G.HPetAllInfoButton)
-                end
-
-                if _G.PetJournalBandageButton then
-                    _G.PetJournalBandageButton:SetPushedTexture('')
-                    _G.PetJournalBandageButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-                    _G.PetJournalBandageButtonBorder:Hide()
-                    _G.PetJournalBandageButton:SetPoint('TOPRIGHT', _G.PetJournalHealPetButton, 'TOPLEFT', -3, 0)
-                    _G.PetJournalBandageButton:SetPoint('BOTTOMLEFT', _G.PetJournalHealPetButton, 'BOTTOMLEFT', -35, 0)
-                    F.ReskinIcon(_G.PetJournalBandageButtonIcon)
-                end
-                reskinHPet = true
-            end
+    _G.CollectionsJournal:HookScript('OnShow', function()
+        if not IsAddOnLoaded('HPetBattleAny') then
+            return
         end
-    )
+        if not reskinHPet then
+            if _G.HPetInitOpenButton then
+                F.Reskin(_G.HPetInitOpenButton)
+            end
+            if _G.HPetAllInfoButton then
+                F.StripTextures(_G.HPetAllInfoButton)
+                F.Reskin(_G.HPetAllInfoButton)
+            end
+
+            if _G.PetJournalBandageButton then
+                _G.PetJournalBandageButton:SetPushedTexture('')
+                _G.PetJournalBandageButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+                _G.PetJournalBandageButtonBorder:Hide()
+                _G.PetJournalBandageButton:SetPoint('TOPRIGHT', _G.PetJournalHealPetButton, 'TOPLEFT', -3, 0)
+                _G.PetJournalBandageButton:SetPoint('BOTTOMLEFT', _G.PetJournalHealPetButton, 'BOTTOMLEFT', -35, 0)
+                F.ReskinIcon(_G.PetJournalBandageButtonIcon)
+            end
+            reskinHPet = true
+        end
+    end)
 end
