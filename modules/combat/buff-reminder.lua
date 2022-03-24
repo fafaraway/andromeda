@@ -22,13 +22,14 @@ local buffsList = {
             disable = true
         },
         {
-            itemID = 185818, -- 究极秘术
+            itemID = 190958, -- 究极秘术
             spells = {
-                [351952] = true
+                [368512] = true
             },
             equip = true,
             instance = true,
-            combat = true
+            combat = true,
+            inGroup = true
         }
     },
     MAGE = {
@@ -146,15 +147,17 @@ function BR:Reminder_Update(cfg)
     local pvp = cfg.pvp
     local itemID = cfg.itemID
     local equip = cfg.equip
-    local isPlayerSpell, isRightSpec, isEquipped, isInCombat, isInInst, isInPVP = true, true, true
+    local inGroup = cfg.inGroup
+    local isPlayerSpell, isRightSpec, isEquipped, isGrouped, isInCombat, isInInst, isInPVP = true, true, true, true
     local inInst, instType = IsInInstance()
     local weaponIndex = cfg.weaponIndex
 
     if itemID then
+        if inGroup and GetNumGroupMembers() < 2 then isGrouped = false end
         if equip and not IsEquippedItem(itemID) then
             isEquipped = false
         end
-        if GetItemCount(itemID) == 0 or (not isEquipped) or GetItemCooldown(itemID) > 0 then -- check item cooldown
+        if GetItemCount(itemID) == 0 or (not isEquipped) or (not isGrouped) or GetItemCooldown(itemID) > 0 then -- check item cooldown
             frame:Hide()
             return
         end
