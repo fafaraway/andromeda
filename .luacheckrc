@@ -2501,5 +2501,10 @@ read_globals = {
     'ToggleCharacter',
     'PlayerTalentTab_OnClick',
     'nop',
-    'Mixin'
+    'Mixin',
+    'ChatFrame_AddMessageEventFilter',
+    'FauxScrollFrame_GetOffset',
+    'getglobal',
+    'GetPvpTalentSlotInfo',
+    'GetAllSelectedPvpTalentIDs'
 }
