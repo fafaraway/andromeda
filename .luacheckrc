@@ -2499,5 +2499,7 @@ read_globals = {
     'StaticPopup_Hide',
     'StaticPopup_Show',
     'ToggleCharacter',
-    'PlayerTalentTab_OnClick'
+    'PlayerTalentTab_OnClick',
+    'nop',
+    'Mixin'
 }
