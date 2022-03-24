@@ -3,12 +3,9 @@ local F, C = unpack(select(2, ...))
 local Talentless = CreateFrame('Frame', (...), _G.UIParent)
 Talentless:RegisterEvent('ADDON_LOADED')
 Talentless:RegisterUnitEvent('PLAYER_SPECIALIZATION_CHANGED', 'player')
-Talentless:SetScript(
-    'OnEvent',
-    function(self, event, ...)
-        self[event](self, ...)
-    end
-)
+Talentless:SetScript('OnEvent', function(self, event, ...)
+    self[event](self, ...)
+end)
 
 local Dropdown = F.Libs.LDD:NewMenu(Talentless)
 Dropdown:SetStyle('MENU')
@@ -152,8 +149,8 @@ function Talentless:CreateSpecButtons()
         -- Border:SetTexture([[Interface\Buttons\UI-Quickslot2]])
 
         -- Button:SetNormalTexture(Border)
-        -- Button:SetPushedTexture([[Interface\Buttons\UI-Quickslot-Depress]])
-        Button:SetCheckedTexture('Interface\\AddOns\\FreeUI\\assets\\textures\\checked')
+        Button:SetPushedTexture(C.Assets.Textures.Button.Pushed)
+        Button:SetCheckedTexture(C.Assets.Textures.Button.Checked)
         -- Button:SetHighlightTexture([[Interface\Buttons\ButtonHilight-Square]])
 
         local Set = CreateFrame('CheckButton', '$parentSetButton', Button)
@@ -213,14 +210,14 @@ function Talentless:CreateItemButtons()
             {itemID = 141446, min = 10, max = 50}, -- Tome of the Tranquil Mind
             {itemID = 141640, min = 10, max = 50}, -- Tome of the Clear Mind
             {itemID = 153647, min = 10, max = 59}, -- Tome of the Quiet Mind
-            {itemID = 173049, min = 51, max = 999} -- Tome of the Still Mind
+            {itemID = 173049, min = 51, max = 999}, -- Tome of the Still Mind
         },
         {
             {itemID = 141333, min = 10, max = 50}, -- Codex of the Tranquil Mind
             {itemID = 141641, min = 10, max = 50}, -- Codex of the Clear Mind
             {itemID = 153646, min = 10, max = 59}, -- Codex of the Quiet Mind
-            {itemID = 173048, min = 51, max = 999} -- Codex of the Still Mind
-        }
+            {itemID = 173048, min = 51, max = 999}, -- Codex of the Still Mind
+        },
     }
 
     for index, info in next, items do

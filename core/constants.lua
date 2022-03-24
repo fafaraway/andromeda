@@ -67,10 +67,10 @@ C.Assets = {
         MouseMiddleBtn = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:127:204|t ',
 
         Button = {
-            Normal = C.AssetsPath .. 'button\\normal',
-            Flash = C.AssetsPath .. 'button\\flash',
-            Pushed = C.AssetsPath .. 'button\\pushed',
-            Checked = C.AssetsPath .. 'button\\checked',
+            Normal = C.AssetsPath .. 'textures\\button\\normal',
+            Flash = C.AssetsPath .. 'textures\\button\\flash',
+            Pushed = C.AssetsPath .. 'textures\\button\\pushed',
+            Checked = C.AssetsPath .. 'textures\\button\\checked',
         },
 
         Inventory = {
