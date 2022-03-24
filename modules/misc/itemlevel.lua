@@ -335,11 +335,11 @@ function IL.ItemLevel_ScrappingShow(event, addon)
 end
 
 function IL:ItemLevel_UpdateMerchant(link)
+    if not self.iLvl then
+        self.iLvl = F.CreateFS(self.ItemButton, C.Assets.Fonts.Condensed, 11, true, '', nil, true, 'BOTTOMRIGHT', -1, 1)
+    end
     local quality = link and select(3, GetItemInfo(link)) or nil
-    if quality then
-        if not self.iLvl then
-            self.iLvl = F.CreateFS(self.ItemButton, C.Assets.Fonts.Condensed, 11, true, '', nil, true, 'BOTTOMRIGHT', -1, 1)
-        end
+    if quality and quality > 1 then
         local level = F.GetItemLevel(link)
         local color = C.QualityColors[quality]
         self.iLvl:SetText(level)
