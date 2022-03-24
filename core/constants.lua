@@ -3,7 +3,7 @@ local F, C = unpack(select(2, ...))
 
 C.AddonName = 'FreeUI'
 C.IsRetail = _G.WOW_PROJECT_ID == _G.WOW_PROJECT_MAINLINE
-C.IsNewPatch = C.IsRetail and select(4, GetBuildInfo()) >= 90200 -- 9.2.0
+C.IsNewPatch = C.IsRetail and select(4, GetBuildInfo()) >= 90205 -- 9.2.5
 C.MaxLevel = GetMaxLevelForPlayerExpansion()
 C.MyClass = select(2, UnitClass('player'))
 C.MyName = UnitName('player')
