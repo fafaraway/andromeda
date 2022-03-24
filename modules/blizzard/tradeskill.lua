@@ -13,7 +13,7 @@ local onlyPrimary = {
     [202] = true, -- Engineering
     [182] = true, -- Herbalism
     [393] = true, -- Skinning
-    [356] = true -- Fishing
+    [356] = true, -- Fishing
 }
 
 function BLIZZARD:UpdateProfessions()
@@ -140,7 +140,7 @@ end
 function BLIZZARD:TradeTabs_FilterIcons()
     local buttonList = {
         [1] = {'Atlas:bags-greenarrow', _G.TRADESKILL_FILTER_HAS_SKILL_UP, C_TradeSkillUI.GetOnlyShowSkillUpRecipes, C_TradeSkillUI.SetOnlyShowSkillUpRecipes},
-        [2] = {'Interface\\RAIDFRAME\\ReadyCheck-Ready', _G.CRAFT_IS_MAKEABLE, C_TradeSkillUI.GetOnlyShowMakeableRecipes, C_TradeSkillUI.SetOnlyShowMakeableRecipes}
+        [2] = {'Interface\\RAIDFRAME\\ReadyCheck-Ready', _G.CRAFT_IS_MAKEABLE, C_TradeSkillUI.GetOnlyShowMakeableRecipes, C_TradeSkillUI.SetOnlyShowMakeableRecipes},
     }
 
     local function filterClick(self)
@@ -233,14 +233,11 @@ function BLIZZARD:TradeTabs_QuickEnchanting()
 
     local createButton = detailsFrame.CreateButton
     createButton:RegisterForClicks('AnyUp')
-    createButton:HookScript(
-        'OnClick',
-        function(self, btn)
-            if btn == 'RightButton' and isEnchanting then
-                UseItemByName(ENCHANTING_VELLUM)
-            end
+    createButton:HookScript('OnClick', function(self, btn)
+        if btn == 'RightButton' and isEnchanting then
+            UseItemByName(ENCHANTING_VELLUM)
         end
-    )
+    end)
 end
 
 function BLIZZARD:TradeTabs()
