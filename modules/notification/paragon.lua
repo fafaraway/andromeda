@@ -1,11 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local GetFactionInfoByID = GetFactionInfoByID
-local GetQuestLogCompletionText = GetQuestLogCompletionText
-local C_QuestLog_GetLogIndexForQuestID = C_QuestLog.GetLogIndexForQuestID
-local UNKNOWN = UNKNOWN
-
 local F, C = unpack(select(2, ...))
 local NOTIFICATION = F:GetModule('Notification')
 
@@ -45,6 +37,10 @@ local idList = {
     [61097] = {2407}, -- The Ascended
     [61095] = {2410}, -- The Undying Army
     [61098] = {2465}, -- The Wild Hunt
+    [64267] = {2432}, -- Ve'nari
+    [64266] = {2472}, -- The Archivist's Codex
+    [64012] = {2470}, -- Death's Advance
+    [64867] = {2478}, -- The Enlightened
 }
 
 local function ParagonNotify(event, questID)
@@ -52,8 +48,8 @@ local function ParagonNotify(event, questID)
         return
     end
 
-    local name = GetFactionInfoByID(idList[questID][1]) or UNKNOWN
-    local text = GetQuestLogCompletionText(C_QuestLog_GetLogIndexForQuestID(questID))
+    local name = GetFactionInfoByID(idList[questID][1]) or _G.UNKNOWN
+    local text = GetQuestLogCompletionText(C_QuestLog.GetLogIndexForQuestID(questID))
 
     F:CreateNotification(name, C.BlueColor .. text, nil, 'Interface\\ICONS\\Achievement_Quests_Completed_08')
 end
