@@ -20,5 +20,6 @@
     <Script file="screenshot.lua"/>
     <Script file="shared-media.lua"/>
     <Script file="talent-manager.lua"/>
+    <Script file="vendor.lua"/>
     <Script file="vignetting.lua"/>
 </Ui>

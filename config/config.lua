@@ -42,6 +42,7 @@ C.CharacterSettings = {
         FasterMovieSkip = true,
         ScreenSaver = true,
         ProposalTimer = true,
+        ExtVendorUI = true,
 
         GroupTool = true,
             RuneCheck = false,
