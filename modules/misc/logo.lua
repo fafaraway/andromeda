@@ -1,12 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local CreateFrame = CreateFrame
-local PlaySoundFile = PlaySoundFile
-local IsInInstance = IsInInstance
-local InCombatLockdown = InCombatLockdown
-local GetScreenHeight = GetScreenHeight
-
 local F, C = unpack(select(2, ...))
 local LOGO = F:RegisterModule('Logo')
 

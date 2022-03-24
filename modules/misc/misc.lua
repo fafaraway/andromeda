@@ -1,4 +1,4 @@
-local F, C = unpack(select(2, ...))
+local F, C, L = unpack(select(2, ...))
 local M = F:GetModule('General')
 
 -- Force warning
@@ -130,6 +130,37 @@ do
     F:HookAddOn('Blizzard_TalentUI', function()
         hooksecurefunc('PlayerTalentFrame_Toggle', SelectTalentTab)
     end)
+end
+
+-- alt+click to buy a stack
+do
+    local str = '\n|cffff0000<' .. L['Alt+Click to buy a stack'] .. '>|r'
+    _G.ITEM_VENDOR_STACK_BUY = _G.ITEM_VENDOR_STACK_BUY .. str
+
+    local function OnModifiedClick(self)
+        if not IsAltKeyDown() then
+            return
+        end
+
+        local id = self:GetID()
+        local itemLink = GetMerchantItemLink(id)
+
+        if not itemLink then
+            return
+        end
+
+        local maxStack = select(8, GetItemInfo(itemLink))
+        if maxStack and maxStack > 1 then
+            local numAvailable = select(5, GetMerchantItemInfo(id))
+            if numAvailable > -1 then
+                BuyMerchantItem(id, numAvailable)
+            else
+                BuyMerchantItem(id, GetMerchantItemMaxStack(id))
+            end
+        end
+    end
+
+    hooksecurefunc('MerchantItemButton_OnModifiedClick', OnModifiedClick)
 end
 
 -- setup font shadow for Details
