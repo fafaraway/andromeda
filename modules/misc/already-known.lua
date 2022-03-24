@@ -1,10 +1,6 @@
-local F, C = unpack(select(2, ...))
+local F = unpack(select(2, ...))
 
-local COLOR = {
-    r = .1,
-    g = 1,
-    b = .1
-}
+local COLOR = {r = .1, g = 1, b = .1}
 local knowables = {
     [_G.LE_ITEM_CLASS_CONSUMABLE] = true,
     [_G.LE_ITEM_CLASS_RECIPE] = true,
@@ -181,19 +177,16 @@ end
 local hookCount = 0
 local f = CreateFrame('Frame')
 f:RegisterEvent('ADDON_LOADED')
-f:SetScript(
-    'OnEvent',
-    function(_, event, addon)
-        if addon == 'Blizzard_AuctionHouseUI' then
-            hooksecurefunc(_G.AuctionHouseFrame.BrowseResultsFrame.ItemList, 'RefreshScrollFrame', Hook_UpdateAuctionHouse)
-            hookCount = hookCount + 1
-        elseif addon == 'Blizzard_GuildBankUI' then
-            hooksecurefunc(_G.GuildBankFrame, 'Update', GuildBankFrame_Update)
-            hookCount = hookCount + 1
-        end
-
-        if hookCount >= 2 then
-            f:UnregisterEvent(event)
-        end
+f:SetScript('OnEvent', function(_, event, addon)
+    if addon == 'Blizzard_AuctionHouseUI' then
+        hooksecurefunc(_G.AuctionHouseFrame.BrowseResultsFrame.ItemList, 'RefreshScrollFrame', Hook_UpdateAuctionHouse)
+        hookCount = hookCount + 1
+    elseif addon == 'Blizzard_GuildBankUI' then
+        hooksecurefunc(_G.GuildBankFrame, 'Update', GuildBankFrame_Update)
+        hookCount = hookCount + 1
     end
-)
+
+    if hookCount >= 2 then
+        f:UnregisterEvent(event)
+    end
+end)

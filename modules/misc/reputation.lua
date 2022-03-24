@@ -1,20 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local format = format
-local floor = floor
-local mod = mod
-local getglobal = getglobal
-local GetNumFactions = GetNumFactions
-local GetFactionInfo = GetFactionInfo
-local C_Reputation_GetFactionParagonInfo = C_Reputation.GetFactionParagonInfo
-local C_Reputation_IsFactionParagon = C_Reputation.IsFactionParagon
-local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
-local FauxScrollFrame_GetOffset = FauxScrollFrame_GetOffset
-local BreakUpLargeNumbers = BreakUpLargeNumbers
-local GetSelectedFaction = GetSelectedFaction
-local hooksecurefunc = hooksecurefunc
-
 local F, C, L = unpack(select(2, ...))
 local ER = F:RegisterModule('EnhancedReputation')
 
@@ -39,7 +22,7 @@ local function CreateMessage(msg)
 end
 
 local function InitExtraRep(factionID, name)
-    local currentValue, threshold, _, hasRewardPending = C_Reputation_GetFactionParagonInfo(factionID)
+    local currentValue, threshold, _, hasRewardPending = C_Reputation.GetFactionParagonInfo(factionID)
     if not extraRep[name] then
         extraRep[name] = currentValue % threshold
         if hasRewardPending then
@@ -58,10 +41,10 @@ local function UpdateRep(self)
         local name, _, _, barMin, barMax, barValue, _, _, isHeader, _, hasRep, _, _, factionID = GetFactionInfo(i)
 
         if barValue >= 42000 then
-            local hasParagon = C_Reputation_IsFactionParagon(factionID)
+            local hasParagon = C_Reputation.IsFactionParagon(factionID)
             if hasParagon then
                 InitExtraRep(factionID, name)
-                local currentValue, threshold, _, hasRewardPending = C_Reputation_GetFactionParagonInfo(factionID)
+                local currentValue, threshold, _, hasRewardPending = C_Reputation.GetFactionParagonInfo(factionID)
                 value = currentValue % threshold
                 if hasRewardPending then
                     value = value + threshold
@@ -69,12 +52,12 @@ local function UpdateRep(self)
                 local extraChange = value - extraRep[name]
                 if extraChange > 0 and value < 10000 then
                     extraRep[name] = value
-                    local extra_msg = format(paraMsg, name, value, extraChange)
+                    local extra_msg = string.format(paraMsg, name, value, extraChange)
                     CreateMessage(extra_msg)
                 end
                 if extraChange ~= 0 and value > 10000 then
                     extraRep[name] = value
-                    local extra_msg2 = format(cacheMsg, name, value, extraChange)
+                    local extra_msg2 = string.format(cacheMsg, name, value, extraChange)
                     CreateMessage(extra_msg2)
                 end
             end
@@ -86,7 +69,7 @@ local function UpdateRep(self)
             local change = barValue - rep[name]
             if (change > 0) then
                 rep[name] = barValue
-                local msg = format(repMsg, name, barValue - barMin, barMax - barMin, change)
+                local msg = string.format(repMsg, name, barValue - barMin, barMax - barMin, change)
                 CreateMessage(msg)
             end
         end
@@ -105,13 +88,13 @@ local function HookParagonRep()
 
         if factionIndex <= numFactions then
             local name, _, _, _, _, _, _, _, _, _, _, _, _, factionID = GetFactionInfo(factionIndex)
-            if factionID and C_Reputation_IsFactionParagon(factionID) then
-                local currentValue, threshold, rewardQuestID, hasRewardPending = C_Reputation_GetFactionParagonInfo(factionID)
+            if factionID and C_Reputation.IsFactionParagon(factionID) then
+                local currentValue, threshold, rewardQuestID, hasRewardPending = C_Reputation.GetFactionParagonInfo(factionID)
                 factionRow.questID = rewardQuestID
                 local r, g, b = .9, .8, .6
 
                 if currentValue then
-                    local barValue = mod(currentValue, threshold)
+                    local barValue = math.fmod(currentValue, threshold)
                     if hasRewardPending then
                         local paragonFrame = _G.ReputationFrame.paragonFramesPool:Acquire()
                         paragonFrame.factionID = factionID
@@ -125,7 +108,7 @@ local function HookParagonRep()
                     factionBar:SetMinMaxValues(0, threshold)
                     factionBar:SetValue(barValue)
                     factionBar:SetStatusBarColor(r, g, b)
-                    factionRow.rolloverText = C.InfoColor .. format(_G.REPUTATION_PROGRESS_FORMAT, barValue, threshold)
+                    factionRow.rolloverText = C.InfoColor .. string.format(_G.REPUTATION_PROGRESS_FORMAT, barValue, threshold)
 
                     if hasRewardPending then
                         barValue = barValue - threshold
@@ -139,7 +122,7 @@ local function HookParagonRep()
                     factionRow.rolloverText = nil
 
                     if factionIndex == GetSelectedFaction() and _G.ReputationDetailFrame:IsShown() then
-                        local count = floor(currentValue / threshold)
+                        local count = math.floor(currentValue / threshold)
                         if hasRewardPending then
                             count = count - 1
                         end
@@ -160,12 +143,9 @@ end
 function ER:OnLogin()
     F:RegisterEvent('UPDATE_FACTION', UpdateRep)
 
-    ChatFrame_AddMessageEventFilter(
-        'CHAT_MSG_COMBAT_FACTION_CHANGE',
-        function()
-            return true
-        end
-    )
+    ChatFrame_AddMessageEventFilter('CHAT_MSG_COMBAT_FACTION_CHANGE', function()
+        return true
+    end)
 
     hooksecurefunc('ReputationFrame_Update', HookParagonRep)
 end

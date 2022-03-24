@@ -1,29 +1,3 @@
---[[
-    Credit ElvUI_WindTools, Talented
-]]
-
-local _G = _G
-local unpack = unpack
-local select = select
-local type = type
-local tinsert = tinsert
-local tremove = tremove
-local format = format
-local gsub = gsub
-local CreateFrame = CreateFrame
-local GetTalentInfo = GetTalentInfo
-local GetPvpTalentInfoByID = GetPvpTalentInfoByID
-local GetSpecializationInfo = GetSpecializationInfo
-local GetSpecialization = GetSpecialization
-local GetTalentTierInfo = GetTalentTierInfo
-local LearnTalents = LearnTalents
-local LearnPvpTalent = LearnPvpTalent
-local IsAddOnLoaded = IsAddOnLoaded
-local UnitIsUnit = UnitIsUnit
-local GetPvpTalentSlotInfo = C_SpecializationInfo.GetPvpTalentSlotInfo
-local GetAllSelectedPvpTalentIDs = C_SpecializationInfo.GetAllSelectedPvpTalentIDs
-local EasyMenu = EasyMenu
-
 local F, C, L = unpack(select(2, ...))
 local TM = F:RegisterModule('TalentManager')
 
@@ -55,7 +29,7 @@ function TM:SaveSet(setName)
 
     for _, data in pairs(self.db.sets[self.specID]) do
         if data.setName == setName then
-            _G.UIErrorsFrame:AddMessage(C.InfoColor .. format(L['Already have a set named %s.'], setName))
+            _G.UIErrorsFrame:AddMessage(C.InfoColor .. string.format(L['Already have a set named %s.'], setName))
             return
         end
     end
@@ -68,7 +42,7 @@ function TM:SaveSet(setName)
     local talentString = TM:ProcessPvEIgnore(self.SaveFrame.TalentString, self.SaveFrame.PveIgnore)
     local pvpTalentTable = TM:ProcessPvPIgnore(self.SaveFrame.PvpTalentTable, self.SaveFrame.PvpIgnore)
 
-    tinsert(self.db.sets[self.specID], {setName = setName, talentString = talentString, pvpTalentTable = pvpTalentTable})
+    table.insert(self.db.sets[self.specID], {setName = setName, talentString = talentString, pvpTalentTable = pvpTalentTable})
     self:UpdateSetButtons()
     self.SaveFrame:Hide()
 end
@@ -76,20 +50,16 @@ end
 function TM:SetTalent(talentString, pvpTalentTable)
     if talentString and talentString ~= '' then
         local talentTable = {}
-        gsub(
-            talentString,
-            '[0-9]',
-            function(char)
-                tinsert(talentTable, char)
-            end
-        )
+        string.gsub(talentString, '[0-9]', function(char)
+            table.insert(talentTable, char)
+        end)
 
         local talentIDs = {}
         for tier = 1, _G.MAX_TALENT_TIERS do
             local isAvilable, column = GetTalentTierInfo(tier, 1)
             if isAvilable and talentTable[tier] and talentTable[tier] ~= 0 and talentTable[tier] ~= column then
                 local talentID = GetTalentInfo(tier, talentTable[tier], 1)
-                tinsert(talentIDs, talentID)
+                table.insert(talentIDs, talentID)
             end
         end
 
@@ -125,7 +95,7 @@ end
 function TM:EditSet(index, setName)
     for key, data in pairs(self.db.sets[self.specID]) do
         if key ~= index and data.setName == setName then
-            _G.UIErrorsFrame:AddMessage(C.InfoColor .. format(L['Already have a set named %s.'], setName))
+            _G.UIErrorsFrame:AddMessage(C.InfoColor .. string.format(L['Already have a set named %s.'], setName))
             return
         end
     end
@@ -165,7 +135,7 @@ function TM:DeleteSet(specID, setName)
 
     for key, data in pairs(self.db.sets[specID]) do
         if data.setName == setName then
-            tremove(self.db.sets[specID], key)
+            table.remove(self.db.sets[specID], key)
             self:UpdateSetButtons()
             return
         end
@@ -174,21 +144,25 @@ end
 
 function TM:ShowContextText(button)
     local menu = {
-        {text = button.setName, isTitle = true, notCheckable = true},
+        {
+            text = button.setName,
+            isTitle = true,
+            notCheckable = true
+        },
         {
             text = _G.EDIT,
             func = function()
                 TM:UpdateSet(button.index, button.setName)
             end,
-            notCheckable = true
+            notCheckable = true,
         },
         {
             text = _G.DELETE,
             func = function()
                 TM:DeleteSet(button.specID, button.setName)
             end,
-            notCheckable = true
-        }
+            notCheckable = true,
+        },
     }
 
     EasyMenu(menu, F.EasyMenu, 'cursor', 0, 0, 'MENU')
@@ -232,31 +206,27 @@ local iconString = '|T%s:0:0:0:0:64:64:5:59:5:59|t %s'
 
 function TM:GetTalentName(tier, column)
     if column == 0 then
-        return format(iconString, 134400, L['Not set'])
+        return string.format(iconString, 134400, L['Not set'])
     else
         local _, name, icon = GetTalentInfo(tier, column, 1)
-        return format(iconString, icon, name)
+        return string.format(iconString, icon, name)
     end
 end
 
 function TM:GetPvPTalentName(id)
     if not id or id == 0 then
-        return format(iconString, 134400, L['Not set'])
+        return string.format(iconString, 134400, L['Not set'])
     else
         local _, name, icon = GetPvpTalentInfoByID(id)
-        return format(iconString, icon, name)
+        return string.format(iconString, icon, name)
     end
 end
 
 function TM:SetButtonTooltip(button)
     local talentTable = {}
-    gsub(
-        button.talentString,
-        '[0-9]',
-        function(char)
-            tinsert(talentTable, tonumber(char))
-        end
-    )
+    string.gsub(button.talentString, '[0-9]', function(char)
+        table.insert(talentTable, tonumber(char))
+    end)
     _G.GameTooltip:SetOwner(button, 'ANCHOR_BOTTOMRIGHT', 12, 20)
     _G.GameTooltip:SetText(button.setName)
 
@@ -324,16 +294,13 @@ function TM:CreateSaveFrame()
     frame:SetWidth(180)
     frame:SetHeight(TM.SetFrame:GetHeight())
     frame:Hide()
-    tinsert(_G.UISpecialFrames, 'FreeUI_TMSaveFrame')
+    table.insert(_G.UISpecialFrames, 'FreeUI_TMSaveFrame')
 
     local close = F.CreateButton(frame, 16, 16, true, C.Assets.Textures.Close)
     close:SetPoint('TOPRIGHT', -6, -6)
-    close:SetScript(
-        'OnClick',
-        function()
-            frame:Hide()
-        end
-    )
+    close:SetScript('OnClick', function()
+        frame:Hide()
+    end)
     F.ReskinClose(close)
 
     frame.Title = F.CreateFS(frame, C.Assets.Fonts.Regular, 12, nil, '', nil, nil, 'TOP', 0, -8)
@@ -358,19 +325,16 @@ function TM:CreateSaveFrame()
         else
             bu:SetPoint('TOPLEFT', frame.PveButtons[i - 1], 'TOPLEFT', 0, -26)
         end
-        bu:SetScript(
-            'OnClick',
-            function(self)
-                frame.PveIgnore[i] = not frame.PveIgnore[i]
-                if frame.PveIgnore[i] then
-                    bu:SetText(format('Tier %d ', i) .. L['Ignored'])
-                else
-                    bu:SetText(self.TalentName)
-                end
+        bu:SetScript('OnClick', function(self)
+            frame.PveIgnore[i] = not frame.PveIgnore[i]
+            if frame.PveIgnore[i] then
+                bu:SetText(string.format('Tier %d ', i) .. L['Ignored'])
+            else
+                bu:SetText(self.TalentName)
             end
-        )
+        end)
 
-        tinsert(frame.PveButtons, bu)
+        table.insert(frame.PveButtons, bu)
     end
 
     frame.PvpHeader = CreateHeader(frame, 'PvP', 160, 22)
@@ -387,38 +351,32 @@ function TM:CreateSaveFrame()
         else
             bu:SetPoint('TOPLEFT', frame.PvpButtons[i - 1], 'TOPLEFT', 0, -26)
         end
-        bu:SetScript(
-            'OnClick',
-            function(self)
-                frame.PvpIgnore[i] = not frame.PvpIgnore[i]
-                if frame.PvpIgnore[i] then
-                    bu:SetText(format('Slot %d ', i) .. L['Ignored'])
-                else
-                    bu:SetText(self.TalentName)
-                end
+        bu:SetScript('OnClick', function(self)
+            frame.PvpIgnore[i] = not frame.PvpIgnore[i]
+            if frame.PvpIgnore[i] then
+                bu:SetText(string.format('Slot %d ', i) .. L['Ignored'])
+            else
+                bu:SetText(self.TalentName)
             end
-        )
+        end)
 
-        tinsert(frame.PvpButtons, bu)
+        table.insert(frame.PvpButtons, bu)
     end
 
     local save = TM.CreateButton(frame, 160, 22, _G.SAVE)
     save:SetPoint('BOTTOM', frame, 'BOTTOM', 0, 10)
-    save:SetScript(
-        'OnClick',
-        function()
-            local setName = frame.EditBox:GetText()
-            if setName and setName ~= '' then
-                if frame.Editing then
-                    TM:EditSet(frame.Editing, setName)
-                else
-                    TM:SaveSet(setName)
-                end
+    save:SetScript('OnClick', function()
+        local setName = frame.EditBox:GetText()
+        if setName and setName ~= '' then
+            if frame.Editing then
+                TM:EditSet(frame.Editing, setName)
             else
-                _G.UIErrorsFrame:AddMessage(C.InfoColor .. L['You must enter a set name.'])
+                TM:SaveSet(setName)
             end
+        else
+            _G.UIErrorsFrame:AddMessage(C.InfoColor .. L['You must enter a set name.'])
         end
-    )
+    end)
     frame.SaveButton = save
 
     TM.SaveFrame = frame
@@ -446,12 +404,9 @@ function TM:CreateSetFrame()
 
     local newButton = TM.CreateButton(frame, 130, 22, _G.NEW)
     newButton:SetPoint('BOTTOM', frame, 0, 10)
-    newButton:SetScript(
-        'OnClick',
-        function()
-            TM:NewSet()
-        end
-    )
+    newButton:SetScript('OnClick', function()
+        TM:NewSet()
+    end)
 
     frame.SetButtons = {}
     for i = 1, MAX_SETS do
@@ -463,23 +418,17 @@ function TM:CreateSetFrame()
         end
         button.index = i
         button:RegisterForClicks('LeftButtonDown', 'RightButtonDown')
-        button:SetScript(
-            'OnClick',
-            function(self, button)
-                if button == 'LeftButton' then
-                    TM:SetTalent(self.talentString, self.pvpTalentTable)
-                elseif button == 'RightButton' then
-                    TM:ShowContextText(self)
-                end
+        button:SetScript('OnClick', function(self, button)
+            if button == 'LeftButton' then
+                TM:SetTalent(self.talentString, self.pvpTalentTable)
+            elseif button == 'RightButton' then
+                TM:ShowContextText(self)
             end
-        )
+        end)
 
-        button:HookScript(
-            'OnEnter',
-            function(self)
-                TM:SetButtonTooltip(self)
-            end
-        )
+        button:HookScript('OnEnter', function(self)
+            TM:SetButtonTooltip(self)
+        end)
         button:HookScript('OnLeave', F.HideTooltip)
 
         button:Hide()
@@ -488,12 +437,9 @@ function TM:CreateSetFrame()
 
     local toggle = TM.CreateButton(_G.PlayerTalentFrameTalents, 120, 22, L['Talent Manager'])
     toggle:SetPoint('BOTTOMRIGHT', -10, -16)
-    toggle:SetScript(
-        'OnClick',
-        function()
-            F:TogglePanel(frame)
-        end
-    )
+    toggle:SetScript('OnClick', function()
+        F:TogglePanel(frame)
+    end)
 
     TM.SetFrame = frame
     TM:UpdateSetButtons(true)
@@ -584,23 +530,17 @@ function TM:OnLogin()
         F:RegisterEvent('ADDON_LOADED', TM.TalentUI_Load)
     end
 
-    F:RegisterEvent(
-        'PLAYER_ENTERING_WORLD',
-        function()
+    F:RegisterEvent('PLAYER_ENTERING_WORLD', function()
+        TM:UpdatePlayerInfo()
+        TM:UpdateSetButtons(true)
+    end)
+
+    F:RegisterEvent('PLAYER_SPECIALIZATION_CHANGED', function(_, unit)
+        if unit and UnitIsUnit('player', unit) then
             TM:UpdatePlayerInfo()
             TM:UpdateSetButtons(true)
         end
-    )
-
-    F:RegisterEvent(
-        'PLAYER_SPECIALIZATION_CHANGED',
-        function(_, unit)
-            if unit and UnitIsUnit('player', unit) then
-                TM:UpdatePlayerInfo()
-                TM:UpdateSetButtons(true)
-            end
-        end
-    )
+    end)
 
     F:RegisterEvent('PLAYER_TALENT_UPDATE', TM.UpdateSaveFrame)
 end

@@ -1,7 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-
 local F, C = unpack(select(2, ...))
 local AS = F:RegisterModule('AutoScreenshot')
 
@@ -24,12 +20,9 @@ local function ChallengeModeCompleted()
         return
     end
 
-    _G.ChallengeModeCompleteBanner:HookScript(
-        'OnShow',
-        function()
-            F:Delay(1, _G.Screenshot)
-        end
-    )
+    _G.ChallengeModeCompleteBanner:HookScript('OnShow', function()
+        F:Delay(1, _G.Screenshot)
+    end)
 end
 
 local function PlayerLevelUp()

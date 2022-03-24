@@ -1,15 +1,3 @@
---[[
-    Display how much time is left on your LFG Proposal
-    Based on LFG_ProposalTime by freebaser
-    https://www.curseforge.com/wow/addons/lfg_proposaltime
-]]
-
-local _G = _G
-local unpack = unpack
-local select = select
-local CreateFrame = CreateFrame
-local GetTime = GetTime
-
 local F, C = unpack(select(2, ...))
 local PT = F:RegisterModule('ProposalTimer')
 

@@ -1,23 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local wipe = wipe
-local mod = mod
-local floor = floor
-local CreateFrame = CreateFrame
-local hooksecurefunc = hooksecurefunc
-local PickupContainerItem = PickupContainerItem
-local ClickSocketButton = ClickSocketButton
-local ClearCursor = ClearCursor
-local GetContainerNumSlots = GetContainerNumSlots
-local GetContainerItemID = GetContainerItemID
-local GetContainerItemLink = GetContainerItemLink
-local GetItemIcon = GetItemIcon
-local GetItemCount = GetItemCount
-local InCombatLockdown = InCombatLockdown
-local GetSocketTypes = GetSocketTypes
-local GetExistingSocketInfo = GetExistingSocketInfo
-
 local F, C, L = unpack(select(2, ...))
 local DS = F:RegisterModule('DominationShards')
 local TOOLTIP = F:GetModule('Tooltip')
@@ -47,7 +27,7 @@ function DS:DomiShard_ShowTooltip()
 end
 
 function DS:DomiShards_Refresh()
-    wipe(foundShards)
+    table.wipe(foundShards)
 
     for bagID = 0, 4 do
         for slotID = 1, GetContainerNumSlots(bagID) do
@@ -98,7 +78,7 @@ function DS:DomiShards_ListFrame()
         for itemID in pairs(value) do
             local button = CreateFrame('Button', nil, frame)
             button:SetSize(iconSize, iconSize)
-            button:SetPoint('TOPLEFT', mod(index - 1, 3) * iconSize, -floor((index - 1) / 3) * iconSize)
+            button:SetPoint('TOPLEFT', math.fmod(index - 1, 3) * iconSize, -math.floor((index - 1) / 3) * iconSize)
             F.PixelIcon(button, GetItemIcon(itemID), true)
             button:SetScript('OnClick', DS.DomiShard_Equip)
             button:SetScript('OnEnter', DS.DomiShard_ShowTooltip)
@@ -144,25 +124,22 @@ function DS:DomiShards_ExtractButton()
 end
 
 function DS:DominationShards()
-    hooksecurefunc(
-        'ItemSocketingFrame_LoadUI',
-        function()
-            if not _G.ItemSocketingFrame then
-                return
-            end
-
-            DS:DomiShards_ListFrame()
-            DS:DomiShards_ExtractButton()
-
-            if DS.DomiShardsFrame then
-                DS.DomiShardsFrame:SetShown(GetSocketTypes(1) == 'Domination' and not GetExistingSocketInfo(1))
-            end
-
-            if DS.DomiExtButton then
-                DS.DomiExtButton:SetAlpha(GetSocketTypes(1) == 'Domination' and GetExistingSocketInfo(1) and 1 or 0)
-            end
+    hooksecurefunc('ItemSocketingFrame_LoadUI', function()
+        if not _G.ItemSocketingFrame then
+            return
         end
-    )
+
+        DS:DomiShards_ListFrame()
+        DS:DomiShards_ExtractButton()
+
+        if DS.DomiShardsFrame then
+            DS.DomiShardsFrame:SetShown(GetSocketTypes(1) == 'Domination' and not GetExistingSocketInfo(1))
+        end
+
+        if DS.DomiExtButton then
+            DS.DomiExtButton:SetAlpha(GetSocketTypes(1) == 'Domination' and GetExistingSocketInfo(1) and 1 or 0)
+        end
+    end)
 end
 
 function DS:OnLogin()

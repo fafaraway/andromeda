@@ -6,31 +6,31 @@ local buffsList = {
         -- 合剂
         307166, -- 大锅
         307185, -- 通用合剂
-        307187 -- 耐力合剂
+        307187, -- 耐力合剂
     },
     [2] = {
         -- 进食充分
-        104273 -- 250敏捷，BUFF名一致
+        104273, -- 250敏捷，BUFF名一致
     },
     [3] = {
         -- 10%智力
         1459,
-        264760
+        264760,
     },
     [4] = {
         -- 10%耐力
         21562,
-        264764
+        264764,
     },
     [5] = {
         -- 10%攻强
         6673,
-        264761
+        264761,
     },
     [6] = {
         -- 符文
-        270058
-    }
+        270058,
+    },
 }
 
 function GT:RaidTool_Visibility(frame)
@@ -49,42 +49,33 @@ function GT:RaidTool_Header()
     F.Mover(frame, L['Group Tool'], 'GroupTool', {'TOP', 0, -30})
 
     GT:RaidTool_Visibility(frame)
-    F:RegisterEvent(
-        'GROUP_ROSTER_UPDATE',
-        function()
-            GT:RaidTool_Visibility(frame)
-        end
-    )
+    F:RegisterEvent('GROUP_ROSTER_UPDATE', function()
+        GT:RaidTool_Visibility(frame)
+    end)
 
     frame:RegisterForClicks('AnyUp')
-    frame:SetScript(
-        'OnClick',
-        function(self, btn)
-            if btn == 'LeftButton' then
-                local menu = self.menu
-                F:TogglePanel(menu)
+    frame:SetScript('OnClick', function(self, btn)
+        if btn == 'LeftButton' then
+            local menu = self.menu
+            F:TogglePanel(menu)
 
-                if menu:IsShown() then
-                    menu:ClearAllPoints()
-                    if GT:IsFrameOnTop(self) then
-                        menu:SetPoint('TOP', self, 'BOTTOM', 0, -3)
-                    else
-                        menu:SetPoint('BOTTOM', self, 'TOP', 0, 3)
-                    end
-
-                    self.buttons[2].text:SetText(IsInRaid() and _G.CONVERT_TO_PARTY or _G.CONVERT_TO_RAID)
+            if menu:IsShown() then
+                menu:ClearAllPoints()
+                if GT:IsFrameOnTop(self) then
+                    menu:SetPoint('TOP', self, 'BOTTOM', 0, -3)
+                else
+                    menu:SetPoint('BOTTOM', self, 'TOP', 0, 3)
                 end
+
+                self.buttons[2].text:SetText(IsInRaid() and _G.CONVERT_TO_PARTY or _G.CONVERT_TO_RAID)
             end
         end
-    )
-    frame:SetScript(
-        'OnDoubleClick',
-        function(_, btn)
-            if btn == 'RightButton' and (IsPartyLFG() and IsLFGComplete() or not IsInInstance()) then
-                C_PartyInfo.LeaveParty()
-            end
+    end)
+    frame:SetScript('OnDoubleClick', function(_, btn)
+        if btn == 'RightButton' and (IsPartyLFG() and IsLFGComplete() or not IsInInstance()) then
+            C_PartyInfo.LeaveParty()
         end
-    )
+    end)
     -- frame:SetScript('OnHide', function(self)
     -- 	self.bg:SetBackdropColor(0, 0, 0, .5)
     -- 	self.bg:SetBackdropBorderColor(0, 0, 0, 1)
@@ -120,13 +111,19 @@ function GT:GetRaidMaxGroup()
     end
 end
 
+local roleIcons = {
+    C.Assets.Textures.RoleTank,
+    C.Assets.Textures.RoleHealer,
+    C.Assets.Textures.RoleDamager
+}
+local eventList = {
+    'GROUP_ROSTER_UPDATE',
+    'UPDATE_ACTIVE_BATTLEFIELD',
+    'UNIT_FLAGS',
+    'PLAYER_FLAGS_CHANGED',
+    'PLAYER_ENTERING_WORLD'
+}
 function GT:RaidTool_RoleCount(parent)
-    local roleIcons = {
-        C.Assets.Textures.RoleTank,
-        C.Assets.Textures.RoleHealer,
-        C.Assets.Textures.RoleDamager
-    }
-
     local frame = CreateFrame('Frame', nil, parent)
     frame:SetAllPoints()
     local role = {}
@@ -160,13 +157,6 @@ function GT:RaidTool_RoleCount(parent)
         role[3].text:SetText(raidCounts.totalDAMAGER)
     end
 
-    local eventList = {
-        'GROUP_ROSTER_UPDATE',
-        'UPDATE_ACTIVE_BATTLEFIELD',
-        'UNIT_FLAGS',
-        'PLAYER_FLAGS_CHANGED',
-        'PLAYER_ENTERING_WORLD'
-    }
     for _, event in next, eventList do
         F:RegisterEvent(event, updateRoleCount)
     end
@@ -226,12 +216,9 @@ function GT:RaidTool_ReadyCheck(parent)
     frame:SetPoint('TOP', parent, 'BOTTOM', 0, -3)
     frame:SetSize(120, 50)
     frame:Hide()
-    frame:SetScript(
-        'OnMouseUp',
-        function(self)
-            self:Hide()
-        end
-    )
+    frame:SetScript('OnMouseUp', function(self)
+        self:Hide()
+    end)
     F.SetBD(frame)
     F.CreateFS(frame, C.Assets.Fonts.Regular, 14, 'OUTLINE', _G.READY_CHECK, nil, true, 'TOP', 0, -8)
     local rc = F.CreateFS(frame, C.Assets.Fonts.Regular, 14, 'OUTLINE', '', nil, true, 'TOP', 0, -28)
@@ -307,15 +294,12 @@ function GT:RaidTool_Marker(parent)
         F.Reskin(markerButton)
         markerButton:SetNormalTexture('Interface\\RaidFrame\\Raid-WorldPing')
         markerButton:GetNormalTexture():SetVertexColor(.2, 1, .2)
-        markerButton:HookScript(
-            'OnMouseUp',
-            function()
-                if (IsInGroup() and not IsInRaid()) or UnitIsGroupLeader('player') or UnitIsGroupAssistant('player') then
-                    return
-                end
-                _G.UIErrorsFrame:AddMessage(C.RedColor .. _G.ERR_NOT_LEADER)
+        markerButton:HookScript('OnMouseUp', function()
+            if (IsInGroup() and not IsInRaid()) or UnitIsGroupLeader('player') or UnitIsGroupAssistant('player') then
+                return
             end
-        )
+            _G.UIErrorsFrame:AddMessage(C.RedColor .. _G.ERR_NOT_LEADER)
+        end)
     end
 end
 
@@ -417,79 +401,70 @@ function GT:RaidTool_BuffChecker(parent)
 
     local potionCheck = IsAddOnLoaded('MRT')
 
-    frame:HookScript(
-        'OnEnter',
-        function(self)
-            _G.GameTooltip:SetOwner(self, 'ANCHOR_BOTTOM', 0, -3)
-            _G.GameTooltip:ClearLines()
-            _G.GameTooltip:AddLine(L['Group Tool'])
-            _G.GameTooltip:AddLine(' ')
-            _G.GameTooltip:AddLine(C.Assets.Textures.MouseLeftBtn .. _G.READY_CHECK, 0, .6, 1)
-            _G.GameTooltip:AddLine(C.Assets.Textures.MouseMiddleBtn .. L['Start/Cancel count down'], 0, .6, 1)
-            _G.GameTooltip:AddLine(C.Assets.Textures.MouseRightBtn .. C.RedColor .. '(Ctrl)|r ' .. L['Check Flask & Food'], 0, .6, 1)
-            if potionCheck then
-                _G.GameTooltip:AddLine(C.Assets.Textures.MouseRightBtn .. C.RedColor .. '(Alt)|r ' .. L['MRT Potion Check'], 0, .6, 1)
-            end
-            _G.GameTooltip:Show()
+    frame:HookScript('OnEnter', function(self)
+        _G.GameTooltip:SetOwner(self, 'ANCHOR_BOTTOM', 0, -3)
+        _G.GameTooltip:ClearLines()
+        _G.GameTooltip:AddLine(L['Group Tool'])
+        _G.GameTooltip:AddLine(' ')
+        _G.GameTooltip:AddLine(C.Assets.Textures.MouseLeftBtn .. _G.READY_CHECK, 0, .6, 1)
+        _G.GameTooltip:AddLine(C.Assets.Textures.MouseMiddleBtn .. L['Start/Cancel count down'], 0, .6, 1)
+        _G.GameTooltip:AddLine(C.Assets.Textures.MouseRightBtn .. C.RedColor .. '(Ctrl)|r ' .. L['Check Flask & Food'], 0, .6, 1)
+        if potionCheck then
+            _G.GameTooltip:AddLine(C.Assets.Textures.MouseRightBtn .. C.RedColor .. '(Alt)|r ' .. L['MRT Potion Check'], 0, .6, 1)
         end
-    )
+        _G.GameTooltip:Show()
+    end)
     frame:HookScript('OnLeave', F.HideTooltip)
 
     local reset = true
-    F:RegisterEvent(
-        'PLAYER_REGEN_ENABLED',
-        function()
-            reset = true
-        end
-    )
+    F:RegisterEvent('PLAYER_REGEN_ENABLED', function()
+        reset = true
+    end)
 
-    frame:HookScript(
-        'OnMouseDown',
-        function(_, btn)
-            if btn == 'RightButton' then
-                if IsAltKeyDown() and potionCheck then
-                    _G.SlashCmdList['mrtSlash']('potionchat')
-                elseif IsControlKeyDown() then
-                    scanBuff()
-                end
-            elseif btn == 'LeftButton' then
-                if InCombatLockdown() then
-                    _G.UIErrorsFrame:AddMessage(C.RedColor .. _G.ERR_NOT_IN_COMBAT)
-                    return
-                end
-                if IsInGroup() and (UnitIsGroupLeader('player') or (UnitIsGroupAssistant('player') and IsInRaid())) then
-                    DoReadyCheck()
+    frame:HookScript('OnMouseDown', function(_, btn)
+        if btn == 'RightButton' then
+            if IsAltKeyDown() and potionCheck then
+                _G.SlashCmdList['mrtSlash']('potionchat')
+            elseif IsControlKeyDown() then
+                scanBuff()
+            end
+        elseif btn == 'LeftButton' then
+            if InCombatLockdown() then
+                _G.UIErrorsFrame:AddMessage(C.RedColor .. _G.ERR_NOT_IN_COMBAT)
+                return
+            end
+            if IsInGroup() and (UnitIsGroupLeader('player') or (UnitIsGroupAssistant('player') and IsInRaid())) then
+                DoReadyCheck()
+            else
+                _G.UIErrorsFrame:AddMessage(C.RedColor .. _G.ERR_NOT_LEADER)
+            end
+        else
+            if IsInGroup() and (UnitIsGroupLeader('player') or (UnitIsGroupAssistant('player') and IsInRaid())) then
+                if IsAddOnLoaded('DBM-Core') then
+                    if reset then
+                        _G.SlashCmdList['DEADLYBOSSMODS']('pull ' .. C.DB.General.Countdown)
+                    else
+                        _G.SlashCmdList['DEADLYBOSSMODS']('pull 0')
+                    end
+                    reset = not reset
+                elseif IsAddOnLoaded('BigWigs') then
+                    if not _G.SlashCmdList['BIGWIGSPULL'] then
+                        LoadAddOn('BigWigs_Plugins')
+                    end
+                    if reset then
+                        _G.SlashCmdList['BIGWIGSPULL'](C.DB.General.Countdown)
+                    else
+                        _G.SlashCmdList['BIGWIGSPULL']('0')
+                    end
+                    reset = not reset
                 else
-                    _G.UIErrorsFrame:AddMessage(C.RedColor .. _G.ERR_NOT_LEADER)
+                    _G.UIErrorsFrame:AddMessage(C.RedColor .. L['You can not do it without DBM or BigWigs!'])
                 end
             else
-                if IsInGroup() and (UnitIsGroupLeader('player') or (UnitIsGroupAssistant('player') and IsInRaid())) then
-                    if IsAddOnLoaded('DBM-Core') then
-                        if reset then
-                            _G.SlashCmdList['DEADLYBOSSMODS']('pull ' .. C.DB.General.Countdown)
-                        else
-                            _G.SlashCmdList['DEADLYBOSSMODS']('pull 0')
-                        end
-                        reset = not reset
-                    elseif IsAddOnLoaded('BigWigs') then
-                        if not _G.SlashCmdList['BIGWIGSPULL'] then
-                            LoadAddOn('BigWigs_Plugins')
-                        end
-                        if reset then
-                            _G.SlashCmdList['BIGWIGSPULL'](C.DB.General.Countdown)
-                        else
-                            _G.SlashCmdList['BIGWIGSPULL']('0')
-                        end
-                        reset = not reset
-                    else
-                        _G.UIErrorsFrame:AddMessage(C.RedColor .. L['You can not do it without DBM or BigWigs!'])
-                    end
-                else
-                    _G.UIErrorsFrame:AddMessage(C.RedColor .. _G.ERR_NOT_LEADER)
-                end
+                _G.UIErrorsFrame:AddMessage(C.RedColor .. _G.ERR_NOT_LEADER)
             end
         end
-    )
+    end)
 end
 
 function GT:RaidTool_CreateMenu(parent)
@@ -511,12 +486,9 @@ function GT:RaidTool_CreateMenu(parent)
         end
     end
 
-    frame:SetScript(
-        'OnLeave',
-        function(self)
-            self:SetScript('OnUpdate', updateDelay)
-        end
-    )
+    frame:SetScript('OnLeave', function(self)
+        self:SetScript('OnUpdate', updateDelay)
+    end)
 
     local buttons = {
         {
@@ -527,7 +499,7 @@ function GT:RaidTool_CreateMenu(parent)
                 else
                     _G.UIErrorsFrame:AddMessage(C.RedColor .. _G.ERR_NOT_LEADER)
                 end
-            end
+            end,
         },
         {
             _G.CONVERT_TO_RAID,
@@ -543,7 +515,7 @@ function GT:RaidTool_CreateMenu(parent)
                 else
                     _G.UIErrorsFrame:AddMessage(C.RedColor .. _G.ERR_NOT_LEADER)
                 end
-            end
+            end,
         },
         {
             _G.ROLE_POLL,
@@ -553,14 +525,14 @@ function GT:RaidTool_CreateMenu(parent)
                 else
                     _G.UIErrorsFrame:AddMessage(C.RedColor .. _G.ERR_NOT_LEADER)
                 end
-            end
+            end,
         },
         {
             _G.RAID_CONTROL,
             function()
                 _G.ToggleFriendsFrame(3)
-            end
-        }
+            end,
+        },
     }
 
     local bu = {}
