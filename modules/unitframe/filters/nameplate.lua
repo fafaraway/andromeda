@@ -92,6 +92,7 @@ C.ShowTargetNPCs = {
 -- 无效目标
 C.TrashUnits = {
     [166589] = true, -- 活化武器，赤红
+    [175677] = true, -- 走私来的生物，集市
 }
 
 C.NPSpecialUnitsList = {
@@ -165,4 +166,5 @@ C.NPMajorSpellsList = {
     [356031] = true, -- 集市，静滞射线
     [357226] = true, -- 集市，游移之星
     [357284] = true, -- 集市，重唤活力
+    [357260] = true, -- 集市，不稳定的裂隙
 }
