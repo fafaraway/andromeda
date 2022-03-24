@@ -513,6 +513,7 @@ function TOOLTIP:OnLogin()
     TOOLTIP:DominationRank()
     TOOLTIP:Achievement()
     TOOLTIP:AzeriteArmor()
+    TOOLTIP:AlreadyUsed()
 
     F:RegisterEvent('MODIFIER_STATE_CHANGED', TOOLTIP.ResetUnit)
 end
