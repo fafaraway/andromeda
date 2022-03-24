@@ -126,11 +126,11 @@ function ACTIONBAR:UpdateActionBarFade()
 
     -- Completely remove cooldown bling
     DisableCooldownBling()
-    hooksecurefunc(
-        getmetatable(_G.ActionButton1Cooldown).__index,
-        'SetCooldown',
-        function(self)
-            self:SetDrawBling(false)
-        end
-    )
+    -- hooksecurefunc( -- taint nameplate aura, WTF!!!
+    --     getmetatable(_G.ActionButton1Cooldown).__index,
+    --     'SetCooldown',
+    --     function(self)
+    --         self:SetDrawBling(false)
+    --     end
+    -- )
 end
