@@ -78,7 +78,9 @@ function COMBAT:EasyFocus()
     f:SetAttribute('macrotext', '/focus mouseover')
     SetOverrideBindingClick(_G.FocuserButton, true, modifier .. '-BUTTON' .. mouseButton, 'FocuserButton')
 
-    hooksecurefunc('CreateFrame', COMBAT.Focuser_CreateFrameHook)
+    if not C.IsNewPatch then -- cause client crash in 9.2.5.42850
+        hooksecurefunc('CreateFrame', COMBAT.Focuser_CreateFrameHook)
+    end
 
     COMBAT:Focuser_OnEvent()
     F:RegisterEvent('PLAYER_REGEN_ENABLED', COMBAT.Focuser_OnEvent)

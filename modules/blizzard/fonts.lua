@@ -201,11 +201,11 @@ local function SetupBlizFonts()
 
     ReplaceFont(_G.System_IME, BOLD, 16)
 
-    ReplaceFont(_G.SystemFont_NamePlateFixed, NORMAL, 14)
-    ReplaceFont(_G.SystemFont_LargeNamePlateFixed, NORMAL, 20)
-    ReplaceFont(_G.SystemFont_NamePlate, HEADER, 16, true, true) -- 副本里友方姓名板的字体
-    ReplaceFont(_G.SystemFont_LargeNamePlate, NORMAL, 12)
-    ReplaceFont(_G.SystemFont_NamePlateCastBar, NORMAL, 10)
+    ReplaceFont(_G.SystemFont_NamePlateFixed, HEADER, 9, nil, true)
+    ReplaceFont(_G.SystemFont_LargeNamePlateFixed, HEADER, 9, nil, true)
+    ReplaceFont(_G.SystemFont_NamePlate, HEADER, 9, nil, true)
+    ReplaceFont(_G.SystemFont_LargeNamePlate, HEADER, 9, nil, true)
+    ReplaceFont(_G.SystemFont_NamePlateCastBar, HEADER, 9, nil, true)
 
     ReplaceFont(_G.ErrorFont, BOLD, 14)
     ReplaceFont(_G.CombatTextFont, COMBAT, 200) -- improved text quality at high resolution ???
