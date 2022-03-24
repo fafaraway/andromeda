@@ -47,6 +47,7 @@ function UNITFRAME:AddDungeonSpells()
     UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 347744) -- 迅斩
     UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 350134) -- 永恒吐息
     UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 355465) -- 投掷巨石
+    UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 354334, 6) -- 被钩住
 
     INSTANCE = 1187 -- 伤逝剧场
     RegisterSeasonSpells(INSTANCE)
