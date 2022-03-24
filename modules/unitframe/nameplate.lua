@@ -759,7 +759,7 @@ function NAMEPLATE:CreateNameplateStyle()
     NAMEPLATE:CreateQuestIndicator(self)
     UNITFRAME:CreateNamePlateCastBar(self)
     NAMEPLATE:CreateRaidTargetIndicator(self)
-    UNITFRAME:CreateAuras(self)
+    NAMEPLATE:CreateAuras(self)
     NAMEPLATE:CreateSpitefulIndicator(self)
 
     self:RegisterEvent('PLAYER_FOCUS_CHANGED', NAMEPLATE.UpdateFocusColor, true)

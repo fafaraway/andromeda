@@ -183,10 +183,7 @@ C.CharacterSettings = {
                 ClassPowerHeight = 2,
                 RunesTimer = false,
 
-            OnlyShowPlayer = true,
-            DesaturateIcon = true,
-            DebuffTypeColor = true,
-            PurgeableHighlightn = true,
+
 
             AbbrName = true,
 
@@ -208,37 +205,37 @@ C.CharacterSettings = {
             PlayerWidth = 160,
             PlayerHealthHeight = 4,
             PlayerPowerHeight = 1,
+            PlayerAuraPerRow = 6,
 
             PetWidth = 60,
             PetHealthHeight = 4,
             PetPowerHeight = 1,
-            PetAuras = true,
-            PetAurasPerRow = 3,
+            PetAuraPerRow = 3,
 
             TargetWidth = 160,
             TargetHealthHeight = 4,
             TargetPowerHeight = 1,
-            TargetAurasPerRow = 6,
+            TargetAuraPerRow = 6,
 
             TargetTargetWidth = 60,
             TargetTargetHealthHeight = 4,
             TargetTargetPowerHeight = 1,
-            TargetTargetAuras = true,
-            TargetTargetAurasPerRow = 3,
+            TargetTargetAuraPerRow = 3,
 
             FocusWidth = 60,
             FocusHealthHeight = 4,
             FocusPowerHeight = 1,
-            FocusAuras = true,
-            FocusAurasPerRow = 3,
+            FocusAuraPerRow = 3,
 
             FocusTargetWidth = 60,
             FocusTargetHealthHeight = 4,
             FocusTargetPowerHeight = 1,
-            FocusTargetAuras = true,
-            FocusTargetAurasPerRow = 3,
 
 
+            OnlyShowPlayer = true,
+            DesaturateIcon = true,
+            DebuffTypeColor = true,
+            StealableBuffs = true,
 
 
             SimpleMode = false,
@@ -261,8 +258,10 @@ C.CharacterSettings = {
                 PartyNameLength = 4,
                 PartyBuff = true,
                     PartyBuffSize = 16,
+                    PartyBuffNum = 3,
                 PartyDebuff = true,
                     PartyDebuffSize = 16,
+                    PartyDebuffNum = 3,
 
             RaidFrame = true,
                 RaidColorStyle = 2,
@@ -276,8 +275,10 @@ C.CharacterSettings = {
                 RaidNameLength = 2,
                 RaidBuff = false,
                     RaidBuffSize = 12,
+                    RaidBuffNum = 3,
                 RaidDebuff = false,
                     RaidDebuffSize = 12,
+                    RaidDebuffNum = 3,
 
             GroupName = false,
             GroupRole = true,
@@ -291,7 +292,6 @@ C.CharacterSettings = {
 
 
             PositionBySpec = false,
-            DebuffHighlight = true,
             CornerIndicator = true,
                 CornerIndicatorScale = 1,
 
@@ -311,14 +311,14 @@ C.CharacterSettings = {
                 BossHealthHeight = 18,
                 BossPowerHeight = 2,
                 BossGap = 60,
-                BossAurasPerRow = 5,
+                BossAuraPerRow = 6,
 
             Arena = true,
                 ArenaWidth = 100,
                 ArenaHealthHeight = 18,
                 ArenaPowerHeight = 2,
                 ArenaGap = 60,
-                ArenaAurasPerRow = 6
+                ArenaAuraPerRow = 6
     },
     Nameplate = {
         Enable = true,
@@ -369,9 +369,10 @@ C.CharacterSettings = {
 
             ShowAura = true,
                 AuraFilterMode = 3,
-                AuraPerRow = 6,
-                AuraSize = 22,
-                AuraNumTotal = 12,
+                AuraPerRow = 5,
+                DesaturateIcon = true,
+                DebuffTypeColor = true,
+                DisableMouse = true,
 
             TotemIcon = true,
 

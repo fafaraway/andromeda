@@ -2951,9 +2951,7 @@ local function UpdateGroupAuras()
     UNITFRAME:UpdateGroupAuras()
 end
 
-
-
-function GUI:SetupPartyBuffSize(parent)
+function GUI:SetupPartyBuff(parent)
     local guiName = 'FreeUIGUISetupPartyBuffSize'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
@@ -2974,6 +2972,14 @@ function GUI:SetupPartyBuffSize(parent)
             min = 12,
             max = 36,
             step = 1
+        },
+        [2] = {
+            key = 'PartyBuffNum',
+            value = db.PartyBuffNum,
+            text = L['Icon Number'],
+            min = 1,
+            max = 6,
+            step = 1
         }
     }
 
@@ -2985,7 +2991,7 @@ function GUI:SetupPartyBuffSize(parent)
     end
 end
 
-function GUI:SetupPartyDebuffSize(parent)
+function GUI:SetupPartyDebuff(parent)
     local guiName = 'FreeUIGUISetupPartyDebuffSize'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
@@ -3007,6 +3013,14 @@ function GUI:SetupPartyDebuffSize(parent)
             max = 36,
             step = 1
         },
+        [2] = {
+            key = 'PartyDebuffNum',
+            value = db.PartyDebuffNum,
+            text = L['Icon Number'],
+            min = 1,
+            max = 6,
+            step = 1
+        },
     }
 
     local offset = -10
@@ -3017,8 +3031,7 @@ function GUI:SetupPartyDebuffSize(parent)
     end
 end
 
-
-function GUI:SetupRaidBuffSize(parent)
+function GUI:SetupRaidBuff(parent)
     local guiName = 'FreeUIGUISetupRaidBuffSize'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
@@ -3039,6 +3052,14 @@ function GUI:SetupRaidBuffSize(parent)
             min = 12,
             max = 36,
             step = 1
+        },
+        [2] = {
+            key = 'RaidBuffNum',
+            value = db.RaidBuffNum,
+            text = L['Icon Number'],
+            min = 1,
+            max = 6,
+            step = 1
         }
     }
 
@@ -3050,7 +3071,7 @@ function GUI:SetupRaidBuffSize(parent)
     end
 end
 
-function GUI:SetupRaidDebuffSize(parent)
+function GUI:SetupRaidDebuff(parent)
     local guiName = 'FreeUIGUISetupRaidDebuffSize'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
@@ -3070,6 +3091,14 @@ function GUI:SetupRaidDebuffSize(parent)
             text = L['Icon Size'],
             min = 12,
             max = 36,
+            step = 1
+        },
+        [2] = {
+            key = 'RaidDebuffNum',
+            value = db.RaidDebuffNum,
+            text = L['Icon Number'],
+            min = 1,
+            max = 6,
             step = 1
         }
     }

@@ -305,20 +305,20 @@ local function SetupNameLength()
     GUI:SetupNameLength(GUI.Page[12])
 end
 
-local function SetupPartyBuffSize()
-    GUI:SetupPartyBuffSize(GUI.Page[12])
+local function SetupPartyBuff()
+    GUI:SetupPartyBuff(GUI.Page[12])
 end
 
-local function SetupPartyDebuffSize()
-    GUI:SetupPartyDebuffSize(GUI.Page[12])
+local function SetupPartyDebuff()
+    GUI:SetupPartyDebuff(GUI.Page[12])
 end
 
-local function SetupRaidBuffSize()
-    GUI:SetupRaidBuffSize(GUI.Page[12])
+local function SetupRaidBuff()
+    GUI:SetupRaidBuff(GUI.Page[12])
 end
 
-local function SetupRaidDebuffSize()
-    GUI:SetupRaidDebuffSize(GUI.Page[12])
+local function SetupRaidDebuff()
+    GUI:SetupRaidDebuff(GUI.Page[12])
 end
 
 local function UpdateGroupAuras()
@@ -609,21 +609,10 @@ GUI.OptionsList = {
         {1, 'Unitframe', 'AbbrName', L['Abbreviate Name'], true, nil, UpdateUnitTags},
         {},
 
-        {1, 'Unitframe', 'OnlyShowPlayer', L['Debuffs By Player Only'], nil, nil, nil, L['Display only debuffs created by player self.']},
-
-        {1, 'Unitframe', 'DesaturateIcon', L['Desaturate Auras'], true, nil, nil, L['Color only auras created by player, and desaturate auras created by others.']},
-
-        {1, 'Unitframe', 'DebuffTypeColorn', L['Debuffs Type Color'], nil, nil, nil, L['Color debuffs border by type.|nMagic is blue, Curse is purple, Poison is green, Disease is yellow, and others are red.']},
-
-        {1, 'Unitframe', 'PurgeableHighlightn', L['Purgeable Buffs Highlight'], true, nil, nil, L['Color Purgeable or Stealable buffs border as white.']},
-        {1, 'Unitframe', 'ShowToTDebuff', L['Target of Target Debuffs'], nil, nil, nil, L['Display debuffs on Target of Target frame.']},
-
-        {1, 'Unitframe', 'ShowFocusDebuff', L['Focus Debuffs'], true, nil, nil, L['Display debuffs on Focus frame.']},
-        {1, 'Unitframe', 'ShowToFDebuff', L['Target of Focus Debuffs'], nil, nil, nil, L['Display debuffs on Target of Focus frame.']},
-        {3, 'Unitframe', 'TargetAurasPerRow', L['Target Auras Per Row'], nil, {3, 10, 1}},
-        {3, 'Unitframe', 'TargetTargetAurasPerRow', L['ToT Auras Per Row'], true, {3, 10, 1}},
-        {3, 'Unitframe', 'FocusAurasPerRow', L['Focus Auras Per Row'], nil, {3, 10, 1}},
-        {3, 'Unitframe', 'FocusTargetAurasPerRow', L['ToF Auras Per Row'], true, {3, 10, 1}},
+        {1, 'Unitframe', 'DesaturateIcon', L['Desaturate Debuffs'], nil, nil, nil, L['Desaturate debuffs cast by others.']},
+        {1, 'Unitframe', 'OnlyShowPlayer', L['Player Debuffs Only'], true, nil, nil, L['Display debuffs cast by player only.']},
+        {1, 'Unitframe', 'DebuffTypeColor', L['Debuffs Type Color'], nil, nil, nil, L['Coloring debuffs border by type.|nMagic is blue, Curse is purple, Poison is green, Disease is yellow, and others are red.']},
+        {1, 'Unitframe', 'StealableBuffs', L['Purgeable Buffs'], true, nil, nil, L['Display purgeable buffs.']},
 
         {},
         {1, 'Unitframe', 'ClassPower', L['Class Power'], nil, SetupClassPowerSize, nil, L['Show special resources of the class, such as Combo Points, Holy Power, Chi, Runes, etc.']},
@@ -639,14 +628,14 @@ GUI.OptionsList = {
         {1, 'Unitframe', 'RaidFrame', L['Enable RaidFrame'], nil, SetupRaidFrame},
         {1, 'Unitframe', 'SimpleMode', L['Simple Mode'], nil, SetupSimpleRaidFrame, nil, L['Simple mode remove most of the elements, and only show unit health status.']},
         {1, 'Unitframe', 'TeamIndex', L['Display Team Index'], true, nil, UpdateRaidHeader},
-        {1, 'Unitframe', 'RaidBuff', L['Display Buffs'], nil, SetupRaidBuffSize, UpdateGroupAuras, L['Display buffs on RaidFrame by blizzard API logic, up to 3 icons.|nThis may overlap with the Corner Indicator and is best not enabled at the same time.']},
-        {1, 'Unitframe', 'RaidDebuff', L['Display Debuffs'], true, SetupRaidDebuffSize, UpdateGroupAuras, L['Display debuffs on RaidFrame by blizzard API logic, up to 3 icons.|nThis may overlap with the Corner Indicator and is best not enabled at the same time.']},
+        {1, 'Unitframe', 'RaidBuff', L['Display Buffs'], nil, SetupRaidBuff, UpdateGroupAuras, L['Display buffs on RaidFrame by blizzard API logic, up to 3 icons.|nThis may overlap with the Corner Indicator and is best not enabled at the same time.']},
+        {1, 'Unitframe', 'RaidDebuff', L['Display Debuffs'], true, SetupRaidDebuff, UpdateGroupAuras, L['Display debuffs on RaidFrame by blizzard API logic, up to 3 icons.|nThis may overlap with the Corner Indicator and is best not enabled at the same time.']},
         {},
         {1, 'Unitframe', 'PartyFrame', L['Enable PartyFrame'], nil, SetupPartyFrame},
         {1, 'Unitframe', 'ShowSolo', L['Display PartyFrame on Solo'], nil, nil, UpdateAllHeaders, L['If checked, the PartyFrame would be visible even you are solo.']},
         {1, 'Unitframe', 'DescRole', L['Sort by Reverse Roles'], true, nil, UpdatePartyHeader, L["If checked, sort your party order by 'Damager Healer Tank' within growth direction.|nIf unchecked, sort your party order by 'Tank Healer Damager' within growth direction."]},
-        {1, 'Unitframe', 'PartyBuff', L['Display Buffs'], nil, SetupPartyBuffSize, UpdateGroupAuras, L['Display buffs on PartyFrame by blizzard API logic, up to 3 icons.|nThis may overlap with the Corner Indicator and is best not enabled at the same time.']},
-        {1, 'Unitframe', 'PartyDebuff', L['Display Debuffs'], true, SetupPartyDebuffSize, UpdateGroupAuras, L['Display debuffs on PartyFrame by blizzard API logic, up to 3 icons.|nThis may overlap with the Corner Indicator and is best not enabled at the same time.']},
+        {1, 'Unitframe', 'PartyBuff', L['Display Buffs'], nil, SetupPartyBuff, UpdateGroupAuras, L['Display buffs on PartyFrame by blizzard API logic, up to 3 icons.|nThis may overlap with the Corner Indicator and is best not enabled at the same time.']},
+        {1, 'Unitframe', 'PartyDebuff', L['Display Debuffs'], true, SetupPartyDebuff, UpdateGroupAuras, L['Display debuffs on PartyFrame by blizzard API logic, up to 3 icons.|nThis may overlap with the Corner Indicator and is best not enabled at the same time.']},
         {1, 'Unitframe', 'PartyWatcher', L['Enable Party Watcher'], nil, SetupPartyWatcher, nil, L['If enabled, show spell cooldown for your group members on PartyFrames']},
         {1, 'Unitframe', 'PartyWatcherOnRight', L['Swap Icons Side'], nil, nil, UpdatePartyElements},
         {1, 'Unitframe', 'PartyWatcherSync', L['Sync Party Watcher'], true, nil, nil, L['If enabled, the cooldown status would sync with players who using party watcher or ZenTracker(WA).|nThis might decrease your performance.']},
@@ -676,16 +665,21 @@ GUI.OptionsList = {
         {1, 'Nameplate', 'FriendlyClickThrough', L['Friendly Click Through'], true, nil, UpdatePlateClickThrough, L["Friendly units' nameplate ignore mouse clicks."]},
         {1, 'Nameplate', 'EnemyClickThrough', L['Enemy Click Through'], nil, nil, UpdatePlateClickThrough, L["Hostile units' nameplate ignore mouse clicks."]},
         {},
-        {1, 'Nameplate', 'ShowAura', L['Nameplate Auras'], nil, SetupAuraFilter, RefreshAllPlates, L['Display auras on nameplate.|nYou can use BLACKLIST and WHITELIST to filter specific auras.']},
-        {1, 'Nameplate', 'TotemIcon', L['Totme Indicator'], nil, nil, nil, L["Display its icon on the totem's nameplate."]},
+        {1, 'Nameplate', 'ShowAura', L['Display Auras'], nil, SetupAuraFilter, RefreshAllPlates, L['Display auras on nameplate.|nYou can use BLACKLIST and WHITELIST to filter specific auras.']},
+        {1, 'Nameplate', 'DesaturateIcon', L['Desaturate Debuffs'], true, nil, nil, L['Desaturate debuffs cast by others.']},
+        {1, 'Nameplate', 'DebuffTypeColor', L['Debuffs Type Color'], nil, nil, nil, L['Coloring debuffs border by type.|nMagic is blue, Curse is purple, Poison is green, Disease is yellow, and others are red.']},
+        {1, 'Nameplate', 'DisableMouse', L['Disable Mouse'], true, nil, nil, L['Disable tooltip on auras.']},
+        {3, 'Nameplate', 'AuraPerRow', L['Auras Per Row'], nil, {4, 10, 1}},
         {4, 'Nameplate', 'AuraFilterMode', L['Aura Filter Mode'], true, {L['BlackNWhite'], L['PlayerOnly'], L['IncludeCrowdControl']}},
+        {},
         {1, 'Nameplate', 'ExecuteIndicator', L['Execute Indicator'], nil, SetupNameplateExecuteIndicator, nil, L["If the unit's health percentage falls below the threshold you set, the color of its name will change to red."]},
         {1, 'Nameplate', 'RaidTargetIndicator', L['Raid Target Indicator'], true, SetupNameplateRaidTargetIndicator, UpdateIndicators, L['Display RaidTarget indicator on nameplate.']},
         {1, 'Nameplate', 'QuestIndicator', L['Quest Indicator'], nil, nil, nil, L['Display quest mark and quest progress on the right side of the nameplate.']},
         {1, 'Nameplate', 'ClassifyIndicator', L['Classify Indicator'], true, nil, nil, L['The mob type indicator is displayed on the left side of the nameplate, and the supported types are BOSS, ELITE and RARE.']},
         {1, 'Nameplate', 'TargetIndicator', L['Target Indicator'], nil, nil, nil, L['A white glow is displayed below the nameplate of the current target.']},
         {1, 'Nameplate', 'ThreatIndicator', L['Threat Indicator'], true, nil, nil, L['The color of the glow above the nameplate represents the threat status of the unit.']},
-        {1, 'Nameplate', 'HealthPerc', L['Health Percentage'], nil, nil, nil, L['Display the health percentage on the nameplate and hides it when it is full.']},
+        {1, 'Nameplate', 'TotemIcon', L['Totme Indicator'], nil, nil, nil, L["Display its icon on the totem's nameplate."]},
+        {1, 'Nameplate', 'HealthPerc', L['Health Percentage'], true, nil, nil, L['Display the health percentage on the nameplate and hides it when it is full.']},
         {},
         {1, 'Nameplate', 'ExplosiveIndicator', L['Explosive Indicator'], nil, nil, nil, L['Magnifies the nameplate of Explosive when in a mythic plus dungeon.']},
         {1, 'Nameplate', 'SpitefulIndicator', L['Spiteful Indicator'], true, nil, nil, L["Displays the name of the target Spiteful Shade is currently tracking when in mythic plus dungeon."]},
