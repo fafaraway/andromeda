@@ -940,7 +940,7 @@ function GUI:SetupStanceBarSize(parent)
 end
 
 local function UpdateActionBarFade()
-    ACTIONBAR:UpdateActionBarFade()
+    ACTIONBAR:UpdateFaderState()
 end
 
 function GUI:SetupActionbarFade(parent)
@@ -956,46 +956,80 @@ function GUI:SetupActionbarFade(parent)
     local mKey = 'Actionbar'
 
     local datas = {
-        conditions = {
+        bars = {
             [1] = {
-                value = 'ConditionCombat',
-                text = L['Enter combat']
+                value = 'FadeBar1',
+                text = L['Enable Fade on Bar1']
             },
             [2] = {
-                value = 'ConditionTarget',
-                text = L['Have target or focus']
+                value = 'FadeBar2',
+                text = L['Enable Fade on Bar2']
             },
             [3] = {
-                value = 'ConditionDungeon',
-                text = L['Inside dungeon']
+                value = 'FadeBar3',
+                text = L['Enable Fade on Bar3']
             },
             [4] = {
-                value = 'ConditionPvP',
-                text = L['Inside battlefield or arena']
+                value = 'FadeBar4',
+                text = L['Enable Fade on SideBar1']
             },
             [5] = {
-                value = 'ConditionVehicle',
-                text = L['Enter vehicle']
+                value = 'FadeBar5',
+                text = L['Enable Fade on SideBar2']
+            },
+            [6] = {
+                value = 'FadePetBar',
+                text = L['Enable Fade on PetBar']
+            },
+            [7] = {
+                value = 'FadeStanceBar',
+                text = L['Enable Fade on StanceBar']
+            }
+        },
+        conditions = {
+            [1] = {
+                value = 'Instance',
+                text = L['Inside Instance']
+            },
+            [2] = {
+                value = 'Combat',
+                text = L['Enter Combat']
+            },
+            [3] = {
+                value = 'Target',
+                text = L['Have Target or Focus']
+            },
+            [4] = {
+                value = 'Casting',
+                text = L['Casting']
+            },
+            [5] = {
+                value = 'Health',
+                text = L['Injured']
+            },
+            [6] = {
+                value = 'Vehicle',
+                text = L['Enter Vehicle']
             }
         },
         sliders = {
             [1] = {
-                text = L['Fade out alpha'],
+                text = L['Fade Out Alpha'],
                 key = 'FadeOutAlpha',
                 value = db.FadeOutAlpha
             },
             [2] = {
-                text = L['Fade out duration'],
+                text = L['Fade Out Duration'],
                 key = 'FadeOutDuration',
                 value = db.FadeOutDuration
             },
             [3] = {
-                text = L['Fade in alpha'],
+                text = L['Fade In Alpha'],
                 key = 'FadeInAlpha',
                 value = db.FadeInAlpha
             },
             [4] = {
-                text = L['Fade in duration'],
+                text = L['Fade In Duration'],
                 key = 'FadeInDuration',
                 value = db.FadeInDuration
             }
@@ -1003,6 +1037,15 @@ function GUI:SetupActionbarFade(parent)
     }
 
     local offset = -10
+    for _, v in ipairs(datas.bars) do
+        CreateGroupTitle(scroll, L['Bars'], offset)
+        CreateCheckbox(scroll, offset - 30, mKey, v.value, v.text, UpdateActionBarFade)
+        offset = offset - 35
+    end
+
+    offset = offset - 35
+    scroll.groupTitle = nil
+
     for _, v in ipairs(datas.conditions) do
         CreateGroupTitle(scroll, L['Conditions'], offset)
         CreateCheckbox(scroll, offset - 30, mKey, v.value, v.text, UpdateActionBarFade)
@@ -1012,7 +1055,7 @@ function GUI:SetupActionbarFade(parent)
     scroll.groupTitle = nil
 
     for _, v in ipairs(datas.sliders) do
-        CreateGroupTitle(scroll, L['Fading'], offset - 30)
+        CreateGroupTitle(scroll, L['Fading Parameters'], offset - 30)
         CreateSlider(scroll, mKey, v.key, v.text, 0, 1, .1, v.value, 20, offset - 80, UpdateActionBarFade)
         offset = offset - 65
     end
