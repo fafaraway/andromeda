@@ -33,7 +33,7 @@ local framesToDisable = {
     _G.OverrideActionBarExpBar,
     _G.OverrideActionBarHealthBar,
     _G.OverrideActionBarPowerBar,
-    _G.OverrideActionBarPitchFrame
+    _G.OverrideActionBarPitchFrame,
 }
 
 local function DisableAllScripts(frame)
@@ -306,7 +306,7 @@ local replaces = {
     {'(SHIFT%-)', 's'},
     {'MOUSEWHEELUP', 'MU'},
     {'MOUSEWHEELDOWN', 'MD'},
-    {'SPACE', 'Sp'}
+    {'SPACE', 'Sp'},
 }
 
 function ACTIONBAR:UpdateHotKey()
@@ -391,7 +391,7 @@ function ACTIONBAR:StyleActionButton(button, cfg)
     -- checkedTexture:SetVertexColor(C.r, C.g, C.b, 1)
     local floatingBG = _G[buttonName .. 'FloatingBG']
 
-    --pet stuff
+    -- pet stuff
     local petShine = _G[buttonName .. 'Shine']
     if petShine then
         petShine:SetInside()
@@ -586,43 +586,16 @@ function ACTIONBAR:RestyleButtons()
         flyoutBorder = {file = ''},
         flyoutBorderShadow = {file = ''},
         border = {file = ''},
-        normalTexture = {
-            file = C.Assets.Textures.Button.Normal,
-            color = {.3, .3, .3},
-            points = {{'TOPLEFT', C.Mult, -C.Mult}, {'BOTTOMRIGHT', -C.Mult, C.Mult}}
-        },
+        normalTexture = {file = C.Assets.Textures.Button.Normal, color = {.3, .3, .3}, points = {{'TOPLEFT', C.Mult, -C.Mult}, {'BOTTOMRIGHT', -C.Mult, C.Mult}}},
         flash = {file = C.Assets.Textures.Button.Flash},
-        pushedTexture = {
-            file = C.Assets.Textures.Button.Pushed,
-            color = {C.r, C.g, C.b},
-            points = {{'TOPLEFT', C.Mult, -C.Mult}, {'BOTTOMRIGHT', -C.Mult, C.Mult}}
-        },
-        checkedTexture = {
-            file = C.Assets.Textures.Button.Checked,
-            color = {.2, 1, .2},
-            points = {{'TOPLEFT', C.Mult, -C.Mult}, {'BOTTOMRIGHT', -C.Mult, C.Mult}}
-        },
-        highlightTexture = {file = '', points = {{'TOPLEFT', C.Mult, -C.Mult}, {'BOTTOMRIGHT', -C.Mult, C.Mult}}},
+        pushedTexture = {file = C.Assets.Textures.Button.Pushed, color = {C.r, C.g, C.b}, points = {{'TOPLEFT', C.Mult, -C.Mult}, {'BOTTOMRIGHT', -C.Mult, C.Mult}}},
+        checkedTexture = {file = C.Assets.Textures.Button.Checked, color = {.2, 1, .2}, points = {{'TOPLEFT', C.Mult, -C.Mult}, {'BOTTOMRIGHT', -C.Mult, C.Mult}}},
+        highlightTexture = {file = C.Assets.Textures.Button.Highlight, points = {{'TOPLEFT', C.Mult, -C.Mult}, {'BOTTOMRIGHT', -C.Mult, C.Mult}}},
         cooldown = {points = {{'TOPLEFT', 0, 0}, {'BOTTOMRIGHT', 0, 0}}},
-        name = {
-            font = {C.Assets.Fonts.Condensed, 10, 'OUTLINE'},
-            points = {{'BOTTOMLEFT', 0, 2}},
-            color = {.5, .5, .5},
-            shadow = {0, 0, 0, 1, 1, -1}
-        },
-        hotkey = {
-            font = {C.Assets.Fonts.Condensed, 10, 'OUTLINE'},
-            points = {{'TOPRIGHT', -2, -2}},
-            color = {1, 1, 1},
-            shadow = {0, 0, 0, 1, 1, -1}
-        },
-        count = {
-            font = {C.Assets.Fonts.Condensed, 10, 'OUTLINE'},
-            points = {{'BOTTOMLEFT', 2, 2}},
-            color = {.19, .75, 1},
-            shadow = {0, 0, 0, 1, 1, -1}
-        },
-        buttonstyle = {file = ''}
+        name = {font = {C.Assets.Fonts.Condensed, 10, 'OUTLINE'}, points = {{'BOTTOMLEFT', 0, 2}}, color = {.5, .5, .5}, shadow = {0, 0, 0, 1, 1, -1}},
+        hotkey = {font = {C.Assets.Fonts.Condensed, 10, 'OUTLINE'}, points = {{'TOPRIGHT', -2, -2}}, color = {1, 1, 1}, shadow = {0, 0, 0, 1, 1, -1}},
+        count = {font = {C.Assets.Fonts.Condensed, 10, 'OUTLINE'}, points = {{'BOTTOMLEFT', 2, 2}}, color = {.19, .75, 1}, shadow = {0, 0, 0, 1, 1, -1}},
+        buttonstyle = {file = ''},
     }
 
     ACTIONBAR:StyleAllActionButtons(cfg)

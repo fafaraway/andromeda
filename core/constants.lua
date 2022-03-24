@@ -48,6 +48,7 @@ C.Assets = {
         Close = C.AssetsPath .. 'textures\\close_tex',
         Arrow = C.AssetsPath .. 'textures\\arrow_tex',
         Tick = C.AssetsPath .. 'textures\\tick_tex',
+        Blank = C.AssetsPath .. 'textures\\blank',
 
         CombatShield = C.AssetsPath .. 'textures\\shield_tex',
         CombatSword = C.AssetsPath .. 'textures\\sword_tex',
@@ -71,6 +72,7 @@ C.Assets = {
             Flash = C.AssetsPath .. 'textures\\button\\flash',
             Pushed = C.AssetsPath .. 'textures\\button\\pushed',
             Checked = C.AssetsPath .. 'textures\\button\\checked',
+            Highlight = C.AssetsPath .. 'textures\\button\\highlight',
         },
 
         Inventory = {
