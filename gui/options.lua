@@ -669,6 +669,7 @@ GUI.OptionsList = {
         {1, 'Nameplate', 'DesaturateIcon', L['Desaturate Debuffs'], true, nil, nil, L['Desaturate debuffs cast by others.']},
         {1, 'Nameplate', 'DebuffTypeColor', L['Debuffs Type Color'], nil, nil, nil, L['Coloring debuffs border by type.|nMagic is blue, Curse is purple, Poison is green, Disease is yellow, and others are red.']},
         {1, 'Nameplate', 'DisableMouse', L['Disable Mouse'], true, nil, nil, L['Disable tooltip on auras.']},
+        {1, 'Nameplate', 'StealableBuffs', L['Purgeable Buffs'], nil, nil, nil, L['Display purgeable buffs.']},
         {3, 'Nameplate', 'AuraPerRow', L['Auras Per Row'], nil, {4, 10, 1}},
         {4, 'Nameplate', 'AuraFilterMode', L['Aura Filter Mode'], true, {L['BlackNWhite'], L['PlayerOnly'], L['IncludeCrowdControl']}},
         {},
