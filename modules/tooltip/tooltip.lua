@@ -514,6 +514,7 @@ function TOOLTIP:OnLogin()
     TOOLTIP:Achievement()
     TOOLTIP:AzeriteArmor()
     TOOLTIP:AlreadyUsed()
+    TOOLTIP:ParagonRewards()
 
     F:RegisterEvent('MODIFIER_STATE_CHANGED', TOOLTIP.ResetUnit)
 end

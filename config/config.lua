@@ -412,6 +412,7 @@ C.CharacterSettings = {
                 IDsByAlt = true,
             ItemInfo = true,
                 ItemInfoByAlt = true,
+            ParagonRewards = true,
     },
     Map = {
         Enable = true,
