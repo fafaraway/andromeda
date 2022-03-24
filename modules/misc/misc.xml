@@ -13,6 +13,7 @@
     <Script file="merchant.lua"/>
     <Script file="movie-skip.lua"/>
     <Script file="mute-sounds.lua"/>
+    <Script file="opie.lua"/>
     <Script file="premade.lua"/>
     <Script file="proposal-timer.lua"/>
     <Script file="reputation.lua"/>
