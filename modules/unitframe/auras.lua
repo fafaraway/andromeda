@@ -283,7 +283,6 @@ function UNITFRAME:CreateAuras(self)
     bu.gap = true
     bu.spacing = 4
     bu.numTotal = 32
-    bu.tooltipAnchor = 'ANCHOR_BOTTOMLEFT'
     bu.disableCooldown = true
 
     if style == 'pet' then
@@ -362,7 +361,6 @@ function UNITFRAME:CreatePartyAuras(self)
     bu.gap = true
     bu.spacing = 4
     bu.numTotal = 32
-    bu.tooltipAnchor = 'ANCHOR_BOTTOMLEFT'
     bu.initialAnchor = 'LEFT'
     bu:SetPoint('LEFT', self, 'RIGHT', 4, 0)
     bu.size = self:GetHeight() * .7
@@ -389,7 +387,6 @@ function NAMEPLATE:CreateAuras(self)
     bu.gap = true
     bu.spacing = 4
     bu.numTotal = 32
-    bu.tooltipAnchor = 'ANCHOR_BOTTOMLEFT'
     bu.initialAnchor = 'BOTTOMLEFT'
     bu:SetPoint('BOTTOM', self, 'TOP', 0, 12)
     bu['growth-x'] = 'RIGHT'
