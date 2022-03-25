@@ -30,7 +30,6 @@ local function CreatePlayerStyle(self)
     UNITFRAME:CreatePortrait(self)
     UNITFRAME:CreateCastBar(self)
     UNITFRAME:CreateGCDTicker(self)
-    UNITFRAME:CreateFader(self)
     UNITFRAME:CreateClassPowerBar(self)
     UNITFRAME:CreatePlayerTags(self)
 end
@@ -793,6 +792,8 @@ function UNITFRAME:SpawnUnits()
     UNITFRAME:SpawnFocus()
     UNITFRAME:SpawnFocusTarget()
     UNITFRAME:SpawnBoss()
+
+    UNITFRAME:UpdateFader()
 
     if C.DB.Unitframe.Arena then
         UNITFRAME:SpawnArena()

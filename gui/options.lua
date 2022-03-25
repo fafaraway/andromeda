@@ -587,29 +587,22 @@ GUI.OptionsList = {
     },
     [11] = { -- unitframe
         {1, 'Unitframe', 'Enable', L['Enable Unitframes'], nil, SetupUnitFrameSize},
-        {1, 'Unitframe', 'InvertedColorMode', L['Inverted Color Mode'], nil, nil, nil, L["The health bar color and the background color are inverted.|nFreeUI's unitframe module is designed based on the Inverted Color Mode, which may cause some visual problems if disabled."]},
 
-        {4, 'Unitframe', 'TextureStyle', L['Texture Style'], true, {}},
-
-        {1, 'Unitframe', 'Smooth', L['Smooth'], nil, nil, nil, L['Smoothly animate unit frame bars.']},
-        {1, 'Unitframe', 'Fader', L['Conditional fader'], nil, SetupUnitFrameFader},
-
-
+        {4, 'Unitframe', 'TextureStyle', L['Texture Style'], nil, {}},
         {4, 'Unitframe', 'ColorStyle', L['Health Color'], true, {L['Default White'], L['Class Color'], L['Percentage Gradient']}, UpdateHealthColor},
-        {1, 'Unitframe', 'Portrait', L['Portrait'], nil, nil, UpdateGroupElements, L['Show dynamic portrait on unit frame.']},
+        {1, 'Unitframe', 'InvertedColorMode', L['Inverted Color Mode'], nil, nil, nil, L["The health bar color and the background color are inverted.|nFreeUI's unitframe module is designed based on the Inverted Color Mode, which may cause some visual problems if disabled."]},
+        {1, 'Unitframe', 'Smooth', L['Smooth'], true, nil, nil, L['Smoothly animate unit frame bars.']},
+
+        {1, 'Unitframe', 'Fader', L['Conditional Visibility'], nil, SetupUnitFrameFader, nil, L['The unitframe is hidden by default and shown according to specific conditions.']},
         {1, 'Unitframe', 'RangeCheck', L['Range Check'], true, SetupUnitFrameRangeCheck, nil, L["Fade out unit frame based on whether the unit is in the player's range"]},
-
-
-
-        {1, 'Unitframe', 'GCDIndicator', L['GCD Indicator'], nil, nil, UpdateGCDTicker, L['Show global cooldown ticker above the player frame.']},
-        {1, 'Unitframe', 'AbbrName', L['Abbreviate Name'], true, nil, UpdateUnitTags},
+        {1, 'Unitframe', 'Portrait', L['Portrait'], nil, nil, UpdateGroupElements, L['Show dynamic portrait on unit frame.']},
+        {1, 'Unitframe', 'GCDIndicator', L['GCD Indicator'], true, nil, UpdateGCDTicker, L['Show global cooldown ticker above the player frame.']},
+        {1, 'Unitframe', 'AbbrName', L['Abbreviate Name'], nil, nil, UpdateUnitTags},
         {},
-
         {1, 'Unitframe', 'DesaturateIcon', L['Desaturate Debuffs'], nil, nil, nil, L['Desaturate debuffs cast by others.']},
         {1, 'Unitframe', 'OnlyShowPlayer', L['Player Debuffs Only'], true, nil, nil, L['Display debuffs cast by player only.']},
         {1, 'Unitframe', 'DebuffTypeColor', L['Debuffs Type Color'], nil, nil, nil, L['Coloring debuffs border by type.|nMagic is blue, Curse is purple, Poison is green, Disease is yellow, and others are red.']},
         {1, 'Unitframe', 'StealableBuffs', L['Purgeable Buffs'], true, nil, nil, L['Display purgeable buffs.']},
-
         {},
         {1, 'Unitframe', 'ClassPower', L['Class Power'], nil, SetupClassPowerSize, nil, L['Show special resources of the class, such as Combo Points, Holy Power, Chi, Runes, etc.']},
         {1, 'Unitframe', 'RunesTimer', L['Runes Timer'], true, nil, nil, L['Show timer for DK Runes.']},

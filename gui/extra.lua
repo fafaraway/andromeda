@@ -2211,77 +2211,61 @@ function GUI:SetupUnitFrameFader(parent)
 
     local panel = CreateExtraGUI(parent, guiName)
     local scroll = GUI:CreateScroll(panel, 220, 540)
+    local mKey = 'Unitframe'
 
-    local checkboxDatas = {
-        [1] = {
-            value = 'InInstance',
-            text = L['Inside dungeon']
+    local datas = {
+        conditions = {
+            [1] = {
+                value = 'Instance',
+                text = L['Inside Instance']
+            },
+            [2] = {
+                value = 'Combat',
+                text = L['Enter Combat']
+            },
+            [3] = {
+                value = 'Target',
+                text = L['Have Target or Focus']
+            },
+            [4] = {
+                value = 'Health',
+                text = L['Injured']
+            },
+            [5] = {
+                value = 'Casting',
+                text = L['Casting']
+            },
+            [6] = {
+                value = 'Vehicle',
+                text = L['Enter Vehicle']
+            }
         },
-        [2] = {
-            value = 'InPvP',
-            text = L['Inside battlefield or arena']
-        },
-        [3] = {
-            value = 'InCombat',
-            text = L['Enter combat']
-        },
-        [4] = {
-            value = 'Targeting',
-            text = L['Have target or focus']
-        },
-        [5] = {
-            value = 'Casting',
-            text = L['Casting']
-        },
-        [6] = {
-            value = 'Injured',
-            text = L['Injured']
-        },
-        [7] = {
-            value = 'ManaNotFull',
-            text = L['Mana not full']
-        },
-        [8] = {
-            value = 'HavePower',
-            text = L['Have power(rage/energy)']
-        }
-    }
-
-    local sliderDatas = {
-        [1] = {
-            key = 'MinAlpha',
-            value = '0',
-            text = L['Fade out alpha']
-        },
-        [2] = {
-            key = 'MaxAlpha',
-            value = '1',
-            text = L['Fade in alpha']
-        },
-        [3] = {
-            key = 'OutDuration',
-            value = '.3',
-            text = L['Fade out duration']
-        },
-        [4] = {
-            key = 'InDuration',
-            value = '.3',
-            text = L['Fade in duration']
+        fader = {
+            [1] = {
+                key = 'MinAlpha',
+                value = '0',
+                text = L['Fade Out Alpha']
+            },
+            [2] = {
+                key = 'MaxAlpha',
+                value = '1',
+                text = L['Fade In Alpha']
+            },
         }
     }
 
     local offset = -10
-    for _, v in ipairs(checkboxDatas) do
-        CreateGroupTitle(scroll, L['Condition'], offset)
-        CreateCheckbox(scroll, offset - 30, 'Unitframe', v.value, v.text)
+    for _, v in ipairs(datas.conditions) do
+        CreateGroupTitle(scroll, L['Conditions'], offset)
+        CreateCheckbox(scroll, offset - 30, mKey, v.value, v.text)
         offset = offset - 35
     end
 
     scroll.groupTitle = nil
 
-    for _, v in ipairs(sliderDatas) do
-        CreateGroupTitle(scroll, L['Fading'], offset - 30)
-        CreateSlider(scroll, 'Unitframe', v.key, v.text, 0, 1, .1, v.value, 20, offset - 80)
+    for _, v in ipairs(datas.fader) do
+        CreateGroupTitle(scroll, L['Fading Parameters'], offset - 30)
+        CreateSlider(scroll, mKey, v.key, v.text, 0, 1, .1, v.value, 20, offset - 80)
         offset = offset - 65
     end
 end

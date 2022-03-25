@@ -1,26 +1,51 @@
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('UnitFrame')
+local oUF = F.Libs.oUF
 
-function UNITFRAME:CreateFader(self)
-    if not C.DB.Unitframe.Fader then
-        return
+local unitFrames = {
+    ['player'] = true,
+    ['pet'] = true
+}
+
+function UNITFRAME:ConfigureFader(frame)
+    if C.DB.Unitframe.Fader then
+        if not frame:IsElementEnabled('Fader') then
+            frame:EnableElement('Fader')
+        end
+
+        frame.Fader:SetOption('Instance', C.DB.Unitframe['Instance'])
+        frame.Fader:SetOption('Hover', C.DB.Unitframe['Hover'])
+        frame.Fader:SetOption('Combat', C.DB.Unitframe['Combat'])
+        frame.Fader:SetOption('PlayerTarget', C.DB.Unitframe['Target'])
+        frame.Fader:SetOption('Focus', C.DB.Unitframe['Target'])
+        frame.Fader:SetOption('Power', C.DB.Unitframe['Power'])
+        frame.Fader:SetOption('Health', C.DB.Unitframe['Health'])
+        frame.Fader:SetOption('Vehicle', C.DB.Unitframe['Vehicle'])
+        frame.Fader:SetOption('Casting', C.DB.Unitframe['Casting'])
+        frame.Fader:SetOption('MinAlpha', C.DB.Unitframe['MinAlpha'])
+        frame.Fader:SetOption('MaxAlpha', C.DB.Unitframe['MaxAlpha'])
+
+        if frame ~= _G.oUF_Player then
+            frame.Fader:SetOption('UnitTarget', C.DB.Unitframe['Target'])
+        end
+
+        frame.Fader:SetOption('Smooth', .3)
+        frame.Fader:SetOption('Delay', C.DB.Unitframe['Delay'])
+
+        frame.Fader:ClearTimers()
+        frame.Fader.configTimer = F:ScheduleTimer(frame.Fader.ForceUpdate, .3, frame.Fader, true)
+    elseif frame:IsElementEnabled('Fader') then
+        frame:DisableElement('Fader')
+        F:UIFrameFadeIn(frame, 1, frame:GetAlpha(), 1)
     end
+end
 
-    if not self.Fader then
-        self.Fader = {
-            maxAlhpa = C.DB.Unitframe.MaxAlpha,
-            minAlpha = C.DB.Unitframe.MinAlpha,
-            outDuration = C.DB.Unitframe.OutDuration,
-            inDuration = C.DB.Unitframe.InDuration,
-            hover = C.DB.Unitframe.MouseOver,
-            arena = C.DB.Unitframe.InPvP,
-            instance = C.DB.Unitframe.InInstance,
-            combat = C.DB.Unitframe.InCombat,
-            target = C.DB.Unitframe.Targeting,
-            casting = C.DB.Unitframe.Casting,
-            injured = C.DB.Unitframe.Injured,
-            mana = C.DB.Unitframe.ManaNotFull,
-            power = C.DB.Unitframe.HavePower,
-        }
+function UNITFRAME:UpdateFader()
+    for _, frame in pairs(oUF.objects) do
+        local style = frame.unitStyle
+        if style and unitFrames[style] then
+            frame.Fader = frame.Fader or {}
+            UNITFRAME:ConfigureFader(frame)
+        end
     end
 end
