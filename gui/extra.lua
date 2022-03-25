@@ -939,11 +939,11 @@ function GUI:SetupStanceBarSize(parent)
     end
 end
 
-local function UpdateActionBarFade()
+local function UpdateActionBarFader()
     ACTIONBAR:UpdateFaderState()
 end
 
-function GUI:SetupActionbarFade(parent)
+function GUI:SetupActionbarFader(parent)
     local guiName = 'FreeUIGUIActionbarFader'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
@@ -1039,7 +1039,7 @@ function GUI:SetupActionbarFade(parent)
     local offset = -10
     for _, v in ipairs(datas.bars) do
         CreateGroupTitle(scroll, L['Bars'], offset)
-        CreateCheckbox(scroll, offset - 30, mKey, v.value, v.text, UpdateActionBarFade)
+        CreateCheckbox(scroll, offset - 30, mKey, v.value, v.text, UpdateActionBarFader)
         offset = offset - 35
     end
 
@@ -1048,7 +1048,7 @@ function GUI:SetupActionbarFade(parent)
 
     for _, v in ipairs(datas.conditions) do
         CreateGroupTitle(scroll, L['Conditions'], offset)
-        CreateCheckbox(scroll, offset - 30, mKey, v.value, v.text, UpdateActionBarFade)
+        CreateCheckbox(scroll, offset - 30, mKey, v.value, v.text, UpdateActionBarFader)
         offset = offset - 35
     end
 
@@ -1056,7 +1056,7 @@ function GUI:SetupActionbarFade(parent)
 
     for _, v in ipairs(datas.sliders) do
         CreateGroupTitle(scroll, L['Fading Parameters'], offset - 30)
-        CreateSlider(scroll, mKey, v.key, v.text, 0, 1, .1, v.value, 20, offset - 80, UpdateActionBarFade)
+        CreateSlider(scroll, mKey, v.key, v.text, 0, 1, .1, v.value, 20, offset - 80, UpdateActionBarFader)
         offset = offset - 65
     end
 end
@@ -2228,17 +2228,13 @@ function GUI:SetupUnitFrameFader(parent)
                 text = L['Have Target or Focus']
             },
             [4] = {
-                value = 'Health',
-                text = L['Injured']
-            },
-            [5] = {
                 value = 'Casting',
                 text = L['Casting']
             },
-            [6] = {
-                value = 'Vehicle',
-                text = L['Enter Vehicle']
-            }
+            [5] = {
+                value = 'Health',
+                text = L['Injured']
+            },
         },
         fader = {
             [1] = {

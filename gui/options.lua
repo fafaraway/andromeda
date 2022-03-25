@@ -52,12 +52,8 @@ local function SetupStanceBarSize()
     GUI:SetupStanceBarSize(GUI.Page[5])
 end
 
-local function SetupActionbarFade()
-    GUI:SetupActionbarFade(GUI.Page[5])
-end
-
-local function SetupAdditionalBar()
-    GUI:SetupAdditionalBar(GUI.Page[5])
+local function SetupActionbarFader()
+    GUI:SetupActionbarFader(GUI.Page[5])
 end
 
 local function UpdateHotkeys()
@@ -501,7 +497,7 @@ GUI.OptionsList = {
         {1, 'Actionbar', 'ButtonFlash', L['Flash Animation'], true, nil, nil, L['Add flash animation to the pressed actionbar buttons.']},
         {1, 'Actionbar', 'EquipColor', L['Equipped Item Border'], nil, nil, UpdateEquipColor, L['Dyeing the button border of equipped items.']},
         {1, 'Actionbar', 'ClassColor', L['Button Class Color'], true, nil, nil, L['Dyeing the buttons backdrop of actionbar.']},
-        {1, 'Actionbar', 'Fader', L['Conditional Visibility'], nil, SetupActionbarFade, nil, L['The actionbar is hidden by default and shown according to specific conditions.']},
+        {1, 'Actionbar', 'Fader', L['Conditional Visibility'], nil, SetupActionbarFader, nil, L['The actionbar is hidden by default and shown according to specific conditions.']},
         {1, 'Cooldown', 'Enable', L['Cooldown Count'], true, SetupActionBarCooldown, nil, L['Display cooldown count on the actionbar buttons.']},
         {1, 'Actionbar', 'CooldownNotify', L['Spell Cooldown Notify'], nil, nil, nil, L['You can mouse wheel on actionbar buttons, and send its cooldown status to your group.']},
         {1, 'Actionbar', 'CooldownDesaturate', L['Desaturate Icon'], true, nil, nil, L['Desaturate actionbar buttons when they are on cooldown.']},

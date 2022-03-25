@@ -27,14 +27,14 @@ local function ToggleAlpha(self, element, endAlpha)
     end
 end
 
-local function Update(self, _, unit)
+local function Update(self)
     local element = self.Fader
     if self.isForced or (not element or not element.count or element.count <= 0) then
         self:SetAlpha(1)
         return
     end
 
-    unit = unit or self.unit
+    local unit = self.unit
 
     -- range fader
     if element.Range then
@@ -55,14 +55,13 @@ local function Update(self, _, unit)
 
     if
         (element.Instance and IsInInstance()) or
-        (element.Casting and (UnitCastingInfo(unit) or UnitChannelInfo(unit))) or
         (element.Combat and UnitAffectingCombat(unit)) or
+        (element.Casting and (UnitCastingInfo(unit) or UnitChannelInfo(unit))) or
         (element.PlayerTarget and UnitExists('target')) or
         (element.UnitTarget and UnitExists(unit..'target')) or
         (element.Focus and UnitExists('focus')) or
         (element.Health and UnitHealth(unit) < UnitHealthMax(unit)) or
         (element.Power and (PowerTypesFull[powerType] and UnitPower(unit) < UnitPowerMax(unit))) or
-        (element.Vehicle and UnitHasVehicleUI(unit)) or
         (element.Hover and GetMouseFocus() == (self.__faderobject or self))
     then
         ToggleAlpha(self, element, element.MaxAlpha)
@@ -217,23 +216,25 @@ local options = {
         end,
         events = {'UNIT_POWER_UPDATE', 'UNIT_MAXPOWER'},
     },
-    Vehicle = {
-        enable = function(self)
-            self:RegisterEvent('UNIT_ENTERED_VEHICLE', Update, true)
-            self:RegisterEvent('UNIT_EXITED_VEHICLE', Update, true)
-        end,
-        events = {'UNIT_ENTERED_VEHICLE', 'UNIT_EXITED_VEHICLE'},
-    },
     Casting = {
         enable = function(self)
-            self:RegisterEvent('UNIT_SPELLCAST_START', Update)
-            self:RegisterEvent('UNIT_SPELLCAST_FAILED', Update)
-            self:RegisterEvent('UNIT_SPELLCAST_STOP', Update)
-            self:RegisterEvent('UNIT_SPELLCAST_INTERRUPTED', Update)
-            self:RegisterEvent('UNIT_SPELLCAST_CHANNEL_START', Update)
-            self:RegisterEvent('UNIT_SPELLCAST_CHANNEL_STOP', Update)
+            self:RegisterEvent('UNIT_SPELLCAST_START', Update, true)
+            self:RegisterEvent('UNIT_SPELLCAST_FAILED', Update, true)
+            self:RegisterEvent('UNIT_SPELLCAST_STOP', Update, true)
+            self:RegisterEvent('UNIT_SPELLCAST_INTERRUPTED', Update, true)
+            self:RegisterEvent('UNIT_SPELLCAST_CHANNEL_START', Update, true)
+            self:RegisterEvent('UNIT_SPELLCAST_CHANNEL_UPDATE', Update, true)
+            self:RegisterEvent('UNIT_SPELLCAST_CHANNEL_STOP', Update, true)
         end,
-        events = {'UNIT_SPELLCAST_START', 'UNIT_SPELLCAST_FAILED', 'UNIT_SPELLCAST_STOP', 'UNIT_SPELLCAST_INTERRUPTED', 'UNIT_SPELLCAST_CHANNEL_START', 'UNIT_SPELLCAST_CHANNEL_STOP'},
+        events = {
+            'UNIT_SPELLCAST_START',
+            'UNIT_SPELLCAST_FAILED',
+            'UNIT_SPELLCAST_STOP',
+            'UNIT_SPELLCAST_INTERRUPTED',
+            'UNIT_SPELLCAST_CHANNEL_START',
+            'UNIT_SPELLCAST_CHANNEL_UPDATE',
+            'UNIT_SPELLCAST_CHANNEL_STOP'
+        },
     },
     MinAlpha = {
         countIgnored = true,

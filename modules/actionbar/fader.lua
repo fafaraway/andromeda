@@ -61,12 +61,10 @@ function ACTIONBAR:Button_OnLeave()
 end
 
 function ACTIONBAR:FadeParent_OnEvent(event)
-    local inInstance, _ = IsInInstance()
-
     if
         (event == 'ACTIONBAR_SHOWGRID') or
-        (C.DB.Actionbar.Instance and inInstance) or
-        (C.DB.Actionbar.Vehicle and UnitHasVehicleUI('player')) or
+        (C.DB.Actionbar.Instance and IsInInstance()) or
+        (C.DB.Actionbar.Vehicle and ((HasVehicleActionBar() and UnitVehicleSkin('player') and UnitVehicleSkin('player') ~= '') or (HasOverrideActionBar() and GetOverrideBarSkin() and GetOverrideBarSkin() ~= ''))) or
         (C.DB.Actionbar.Combat and UnitAffectingCombat('player')) or
         (C.DB.Actionbar.Target and (UnitExists('target') or UnitExists('focus'))) or
         (C.DB.Actionbar.Casting and (UnitCastingInfo('player') or UnitChannelInfo('player'))) or
@@ -95,11 +93,13 @@ local options = {
     },
     Vehicle = {
         enable = function(self)
-            self:RegisterEvent('UNIT_ENTERED_VEHICLE')
-            self:RegisterEvent('UNIT_EXITED_VEHICLE')
-            self:RegisterEvent('VEHICLE_UPDATE')
+            self:RegisterEvent('PLAYER_ENTERING_WORLD')
+            self:RegisterEvent('UPDATE_BONUS_ACTIONBAR')
+            self:RegisterEvent('UPDATE_VEHICLE_ACTIONBAR')
+            self:RegisterEvent('UPDATE_OVERRIDE_ACTIONBAR')
+            self:RegisterEvent('ACTIONBAR_PAGE_CHANGED')
         end,
-        events = {'UNIT_ENTERED_VEHICLE', 'UNIT_EXITED_VEHICLE', 'VEHICLE_UPDATE'},
+        events = {'PLAYER_ENTERING_WORLD', 'UPDATE_BONUS_ACTIONBAR', 'UPDATE_VEHICLE_ACTIONBAR', 'UPDATE_OVERRIDE_ACTIONBAR', 'ACTIONBAR_PAGE_CHANGED'},
     },
     Combat = {
         enable = function(self)

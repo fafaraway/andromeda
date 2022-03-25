@@ -164,9 +164,8 @@ C.CharacterSettings = {
                 Target = true,
                 Focus = true,
                 Health = true,
-                Power = false,
                 Casting = true,
-                Vehicle = false,
+
 
             RangeCheck = true,
                 OutRangeAlpha = .4,
@@ -543,7 +542,7 @@ C.CharacterSettings = {
                 FadeInDuration = .3,
                 Delay = 0,
                 Instance = false,
-                Vehicle = false,
+                Vehicle = true,
                 Combat = false,
                 Target = false,
                 Casting = false,
