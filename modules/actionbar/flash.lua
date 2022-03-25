@@ -83,6 +83,8 @@ function ACTIONBAR:HookActionEvents()
 end
 
 function ACTIONBAR:ButtonFlash()
+    if C.DB.Actionbar.Fader then return end
+
     if not C.DB.Actionbar.ButtonFlash then
         return
     end

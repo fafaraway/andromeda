@@ -176,8 +176,16 @@ function ACTIONBAR:UpdateFaderState()
     end
 end
 
+local function DisableCooldownBling()
+    for _, v in pairs(_G) do
+        if type(v) == 'table' and type(v.SetDrawBling) == 'function' then
+            v:SetDrawBling(false)
+        end
+    end
+end
+
 function ACTIONBAR:BarFade()
-    if not C.DB.Actionbar.Fade then
+    if not C.DB.Actionbar.Fader then
         return
     end
 
@@ -190,4 +198,6 @@ function ACTIONBAR:BarFade()
 
     ACTIONBAR:UpdateFaderSettings()
     ACTIONBAR:UpdateFaderState()
+
+    DisableCooldownBling()
 end

@@ -536,14 +536,14 @@ C.CharacterSettings = {
 
             BarExtraSize = 40,
 
-            Fade = true,
+            Fader = true,
                 FadeOutAlpha = 0,
                 FadeInAlpha = 1,
                 FadeOutDuration = 1,
                 FadeInDuration = .3,
                 Delay = 0,
                 Instance = false,
-                Vehicle = true,
+                Vehicle = false,
                 Combat = false,
                 Target = false,
                 Casting = false,
