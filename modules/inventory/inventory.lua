@@ -1073,7 +1073,7 @@ function INVENTORY:OnLogin()
         end
 
         -- Hide empty tooltip
-        if _G.GameTooltip:GetOwner() == self and not GetContainerItemInfo(item.bagID, item.slotID) then
+        if not item.texture and _G.GameTooltip:GetOwner() == self then
             _G.GameTooltip:Hide()
         end
 
