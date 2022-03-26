@@ -7,9 +7,9 @@ local TOY = _G.TOY
 local ITEM_COSMETIC = _G.ITEM_COSMETIC
 local BINDING_HEADER_OTHER = _G.BINDING_HEADER_OTHER
 
--- if GetLocale() == 'zhCN' then
---     _G.MOUNT = _G.MOUNTS
--- end
+if GetLocale() == 'zhCN' then
+    MOUNT = _G.MOUNTS
+end
 
 local PARAGON_DATA = {
     -- Legion
