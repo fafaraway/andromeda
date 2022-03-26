@@ -114,6 +114,5 @@ function THEME:OnLogin()
     THEME:ReskinDBM()
     THEME:ReskinPGF()
     THEME:ReskinREHack()
-    THEME:ReskinExtVendor()
     THEME:ReskinMRT()
 end
