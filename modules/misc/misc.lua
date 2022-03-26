@@ -254,7 +254,7 @@ do
     end
 end
 
---
+-- -- faster movie skip
 do
     local function CinematicFrame_OnKeyDown(self, key)
         if key == 'ESCAPE' then
