@@ -1,29 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 local INVENTORY = F:GetModule('Inventory')
 
-function INVENTORY:GetMoneyString(money, full)
-    if money >= 1e6 and not full then
-        return string.format(' %.0f%s', money / 1e4, _G.GOLD_AMOUNT)
-    else
-        if money > 0 then
-            local moneyString = ''
-            local gold, silver, copper = math.floor(money / 1e4), math.floor(money / 100) % 100, money % 100
-            if gold > 0 then
-                moneyString = ' ' .. gold .. _G.GOLD_AMOUNT
-            end
-            if silver > 0 then
-                moneyString = moneyString .. ' ' .. silver .. _G.SILVER_AMOUNT
-            end
-            if copper > 0 then
-                moneyString = moneyString .. ' ' .. copper .. _G.COPPER_AMOUNT
-            end
-            return moneyString
-        else
-            return ' 0' .. _G.COPPER_AMOUNT
-        end
-    end
-end
-
 local isShown, isBankEmpty, autoRepair, repairAllCost, canRepair
 
 local function delayFunc()
@@ -61,6 +38,8 @@ function autoRepair(override)
 
         F:Delay(.5, delayFunc)
     end
+
+    PlaySound(SOUNDKIT.ITEM_REPAIR)
 end
 
 local function checkBankFund(_, msgType)
