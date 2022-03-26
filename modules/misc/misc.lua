@@ -254,7 +254,7 @@ do
     end
 end
 
--- -- faster movie skip
+-- faster movie skip
 do
     local function CinematicFrame_OnKeyDown(self, key)
         if key == 'ESCAPE' then
@@ -293,6 +293,59 @@ do
         _G.CinematicFrame:HookScript('OnKeyUp', CinematicFrame_OnKeyUp)
         _G.MovieFrame:HookScript('OnKeyUp', MovieFrame_OnKeyUp)
     end
+end
+
+-- automatically place keystones in the font of power
+do
+    local function autoKeystone()
+        for bagID = _G.BACKPACK_CONTAINER, _G.NUM_BAG_SLOTS do
+            for slotID = 1, GetContainerNumSlots(bagID) do
+                local itemLink = GetContainerItemLink(bagID, slotID)
+                if itemLink and itemLink:match('|Hkeystone:') then
+                    PickupContainerItem(bagID, slotID)
+                    if CursorHasItem() then
+                        C_ChallengeMode.SlotKeystone()
+                        return
+                    end
+                end
+            end
+        end
+    end
+
+    F:RegisterEvent('CHALLENGE_MODE_KEYSTONE_RECEPTABLE_OPEN', autoKeystone)
+end
+
+-- track repair vendors if we're severely damaged
+do
+    local function trackRepair()
+        local alert = 0
+        for index in next, _G.INVENTORY_ALERT_STATUS_SLOTS do
+            local status = GetInventoryAlertStatus(index)
+            if status > alert then
+                alert = status
+            end
+        end
+
+        for index = 1, GetNumTrackingTypes() do
+            if GetTrackingInfo(index) == _G.MINIMAP_TRACKING_REPAIR then
+                return SetTracking(index, alert > 0)
+            end
+        end
+    end
+    F:RegisterEvent('UPDATE_INVENTORY_DURABILITY', trackRepair)
+end
+
+-- track mailbox if we have pending mail
+do
+    local function trackMailbox()
+        for index = 1, GetNumTrackingTypes() do
+            local name, _, active = GetTrackingInfo(index)
+            if name == _G.MINIMAP_TRACKING_MAILBOX then
+                return SetTracking(index, HasNewMail() and not active)
+            end
+        end
+    end
+    F:RegisterEvent('UPDATE_INVENTORY_DURABILITY', trackMailbox)
 end
 
 -- setup font shadow for Details
