@@ -116,9 +116,6 @@ function F:SetSmoothingAmount(amount)
     AMOUNT = clamp(amount, .15, .6)
 end
 
-F:RegisterEvent(
-    'PLAYER_LOGIN',
-    function()
-        F:SetSmoothingAmount(_G.FREE_ADB['SmoothAmount'])
-    end
-)
+F:RegisterEvent('PLAYER_LOGIN', function()
+    F:SetSmoothingAmount(_G.FREE_ADB['SmoothAmount'])
+end)

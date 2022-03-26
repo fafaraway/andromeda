@@ -1,9 +1,4 @@
--- Animation functions
--- Credits Elvui ElvUI_WindTool RayUI
-
 local F = unpack(select(2, ...))
-
--- From ElvUI
 
 local animShake = {
     {-9, 7, -7, 12},
@@ -81,38 +76,26 @@ function F:SetUpAnimGroup(obj, Type, ...)
             obj.elastic[i] = anim
         end
 
-        obj.elastic[1]:SetScript(
-            'OnFinished',
-            function(anim)
-                anim:Stop()
-                obj.elastic[2]:Play()
+        obj.elastic[1]:SetScript('OnFinished', function(anim)
+            anim:Stop()
+            obj.elastic[2]:Play()
+        end)
+        obj.elastic[3]:SetScript('OnFinished', function(anim)
+            anim:Stop()
+            obj.elastic[4]:Play()
+        end)
+        obj.elastic[2]:SetScript('OnFinished', function(anim)
+            anim:Stop()
+            if loop then
+                obj.elastic[1]:Play()
             end
-        )
-        obj.elastic[3]:SetScript(
-            'OnFinished',
-            function(anim)
-                anim:Stop()
-                obj.elastic[4]:Play()
+        end)
+        obj.elastic[4]:SetScript('OnFinished', function(anim)
+            anim:Stop()
+            if loop then
+                obj.elastic[3]:Play()
             end
-        )
-        obj.elastic[2]:SetScript(
-            'OnFinished',
-            function(anim)
-                anim:Stop()
-                if loop then
-                    obj.elastic[1]:Play()
-                end
-            end
-        )
-        obj.elastic[4]:SetScript(
-            'OnFinished',
-            function(anim)
-                anim:Stop()
-                if loop then
-                    obj.elastic[3]:Play()
-                end
-            end
-        )
+        end)
     elseif Type == 'Number' then
         local endingNumber, duration = ...
         obj.NumberAnimGroup = _G.CreateAnimationGroup(obj)
@@ -141,12 +124,9 @@ function F:SetUpAnimGroup(obj, Type, ...)
         anim.in2:SetOffset(-x, -y)
 
         anim.out1 = obj:CreateAnimationGroup('Move_Out')
-        anim.out1:SetScript(
-            'OnFinished',
-            function()
-                obj:Hide()
-            end
-        )
+        anim.out1:SetScript('OnFinished', function()
+            obj:Hide()
+        end)
 
         anim.out2 = anim.out1:CreateAnimation('Translation')
         anim.out2:SetDuration(duration)
@@ -406,41 +386,6 @@ function F:UIFrameFadeRemoveFrame(frame)
     end
 end
 
--- From RayUI
-
-local function Smooth(mode, x, y, z)
-    return mode == true and 1 or math.max((10 + math.abs(x - y)) / (88.88888 * z), .2) * 1.1
-end
-
-function F.Simple_Move(self, t)
-    self.pos = self.pos + t * self.speed * Smooth(self.smode, self.limit, self.pos, .5)
-    self:SetPoint(self.point_1, self.parent, self.point_2, self.hor and self.pos or self.alt or 0, not (self.hor) and self.pos or self.alt or 0)
-    if self.pos * self.mod >= self.limit * self.mod then
-        self:SetPoint(self.point_1, self.parent, self.point_2, self.hor and self.limit or self.alt or 0, not (self.hor) and self.limit or self.alt or 0)
-        self.pos = self.limit
-        self:SetScript('OnUpdate', nil)
-        if self.finish_hide then
-            self:Hide()
-        end
-        if self.finish_function then
-            self:finish_function()
-        end
-    end
-end
-
-function F:Slide(frame, direction, length, speed)
-    local p1, _, p2, x, y = frame:GetPoint()
-    frame.mod = (direction == 'LEFT' or direction == 'DOWN') and -1 or 1
-    frame.hor = (direction == 'LEFT' or direction == 'RIGHT') and true or false
-    frame.pos = frame.hor and x or y
-    frame.alt = frame.hor and y or x
-    frame.limit = (frame.hor and x or y) + frame.mod * length
-    frame.speed = frame.mod * speed
-    frame.point_1 = p1
-    frame.point_2 = p2
-    frame:SetScript('OnUpdate', F.Simple_Move)
-end
-
 -- From ElvUI_WindTool
 
 --[[
@@ -629,12 +574,9 @@ function F.PlayAnimationOnShow(frame, animationGroup)
         return
     end
 
-    frame:SetScript(
-        'OnShow',
-        function()
-            animationGroup:Play()
-        end
-    )
+    frame:SetScript('OnShow', function()
+        animationGroup:Play()
+    end)
 end
 
 --[[
@@ -653,15 +595,12 @@ function F.CloseAnimationOnHide(frame, animationGroup, callback)
         return
     end
 
-    animationGroup:SetScript(
-        'OnFinished',
-        function()
-            frame:Hide()
-            if callback then
-                callback()
-            end
+    animationGroup:SetScript('OnFinished', function()
+        frame:Hide()
+        if callback then
+            callback()
         end
-    )
+    end)
 end
 
 --[[
