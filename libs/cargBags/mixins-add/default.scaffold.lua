@@ -45,7 +45,7 @@ end
 	@callback OnUpdate(item)
 ]]
 local function AbbrNumb(n)
-	if n >= 1e3 then
+	if n == 1e3 then
 		return ('%.0fk'):format(n / 1e3)
 	else
 		return ('%.0f'):format(n)
@@ -56,7 +56,8 @@ local function ItemButton_Update(self, item)
 	self.Icon:SetTexture(item.texture or self.bgTex)
 
 	if(item.count and item.count > 1) then
-		self.Count:SetText(AbbrNumb(item.count > 1e3 and "*" or item.count))
+		-- self.Count:SetText(item.count > 1e3 and "*" or item.count)
+		self.Count:SetText(AbbrNumb(item.count))
 		self.Count:Show()
 	else
 		self.Count:Hide()
