@@ -310,7 +310,7 @@ C.CharacterSettings = {
                 BossHealthHeight = 18,
                 BossPowerHeight = 2,
                 BossGap = 60,
-                BossAuraPerRow = 6,
+                BossAuraPerRow = 4,
 
             Arena = true,
                 ArenaWidth = 100,
