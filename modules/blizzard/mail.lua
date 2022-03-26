@@ -490,30 +490,6 @@ function M:ArrangeDefaultElements()
     _G.SendMailMailButton:HookScript('OnLeave', F.HideTooltip)
 end
 
-local function OnTextChanged(self)
-    if self:GetText() ~= '' and _G.SendMailSubjectEditBox:GetText() == '' then
-        _G.SendMailSubjectEditBox:SetText(_G.MONEY)
-    end
-end
-
-function M:AutoSetSubject()
-    if not C.DB.General.AutoSetSubject then
-        return
-    end
-    _G.SendMailMoneyGold:HookScript('OnTextChanged', OnTextChanged)
-    _G.SendMailMoneySilver:HookScript('OnTextChanged', OnTextChanged)
-    _G.SendMailMoneyCopper:HookScript('OnTextChanged', OnTextChanged)
-end
-
-function M:TrackMailBox()
-    for index = 1, GetNumTrackingTypes() do
-        local name, _, active = GetTrackingInfo(index)
-        if name == _G.MINIMAP_TRACKING_MAILBOX then
-            return SetTracking(index, HasNewMail() and not active)
-        end
-    end
-end
-
 function M:OnLogin()
     if not C.DB.General.EnhancedMailBox then
         return
@@ -534,17 +510,9 @@ function M:OnLogin()
     -- Custom contact list
     M:MailBox_ContactList()
 
-    -- auto set subject when sending/requesting money
-    M:AutoSetSubject()
-
     -- Elements
     M:ArrangeDefaultElements()
     M:CollectGoldButton()
     M:CollectCurrentButton()
     M:LastMailSaver()
-
-    -- track mailbox if we have pending mail
-    if C.DB.General.AutoTrackMailbox then
-        F:RegisterEvent('UPDATE_PENDING_MAIL', M.TrackMailBox)
-    end
 end

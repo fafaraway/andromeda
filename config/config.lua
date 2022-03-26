@@ -49,8 +49,6 @@ C.CharacterSettings = {
             Countdown = '10',
 
         EnhancedMailBox = true,
-            AutoSetSubject = true,
-            AutoTrackMailbox = true,
             SaveRecipient = false,
             RecipientList = '',
 
