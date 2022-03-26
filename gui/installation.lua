@@ -50,7 +50,7 @@ local function SetupCVars()
     -- names
     SetCVar('UnitNameOwn', 0)
     SetCVar('UnitNameNonCombatCreatureName', 0)
-    SetCVar('UnitNameNPC', 1)
+    -- SetCVar('UnitNameNPC', 1)
     SetCVar('UnitNameFriendlyPlayerName', 1)
     SetCVar('UnitNameFriendlyPetName', 0)
     SetCVar('UnitNameFriendlyGuardianName', 0)
