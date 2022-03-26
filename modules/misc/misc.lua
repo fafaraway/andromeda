@@ -348,39 +348,6 @@ do
     F:RegisterEvent('UPDATE_INVENTORY_DURABILITY', trackMailbox)
 end
 
--- setup font shadow for Details
-do
-    local function refreshDetailsRows(instance)
-        if not C.IsDeveloper then
-            return
-        end
-
-        if not instance.barras or not instance.barras[1] then
-            return
-        end
-
-        local font, size = C.Assets.Fonts.Condensed, 11
-        for _, row in next, instance.barras do
-            row.lineText1:SetFont(font, size)
-            row.lineText2:SetFont(font, size)
-            row.lineText3:SetFont(font, size)
-            row.lineText4:SetFont(font, size)
-            row.lineText1:SetShadowColor(0, 0, 0, 1)
-            row.lineText1:SetShadowOffset(2, -2)
-            row.lineText2:SetShadowColor(0, 0, 0, 1)
-            row.lineText2:SetShadowOffset(2, -2)
-            row.lineText3:SetShadowColor(0, 0, 0, 1)
-            row.lineText3:SetShadowOffset(2, -2)
-            row.lineText4:SetShadowColor(0, 0, 0, 1)
-            row.lineText4:SetShadowOffset(2, -2)
-        end
-    end
-
-    F:HookAddOn('Details', function()
-        hooksecurefunc(_G._detalhes, 'InstanceRefreshRows', refreshDetailsRows)
-    end)
-end
-
 
 function M:OnLogin()
     M:ForceWarning()

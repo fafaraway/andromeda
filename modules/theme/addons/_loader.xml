@@ -1,7 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
     <Script file="bw.lua"/>
     <Script file="dbm.lua"/>
-    <Script file="extvendor.lua"/>
+    <Script file="details.lua"/>
     <Script file="immersion.lua"/>
     <Script file="mrt.lua"/>
     <Script file="pgf.lua"/>
