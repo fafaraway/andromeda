@@ -60,8 +60,8 @@ function UNITFRAME:PLAYER_ENTERING_WORLD()
 end
 
 function UNITFRAME.PostCreateIcon(element, button)
-    local style = element.__owner.unitStyle
-    local isGroup = style == 'party' or style == 'raid'
+    -- local style = element.__owner.unitStyle
+    -- local isGroup = style == 'party' or style == 'raid'
     local isPartyAura = element.partyAura
     local font = C.Assets.Fonts.Roadway
     local fontSize = math.max(element.size * .4, 12)
@@ -83,15 +83,11 @@ function UNITFRAME.PostCreateIcon(element, button)
 
     button.count = F.CreateFS(button, font, fontSize, true, nil, nil, true)
     button.count:ClearAllPoints()
-    --button.count:SetPoint(isGroup and 'TOP' or 'TOPRIGHT', button, isGroup and 0 or 2, 4)
     button.count:SetPoint('RIGHT', button, 'TOPRIGHT')
 
-    --if element.disableCooldown then
-        button.timer = F.CreateFS(button, font, fontSize, true, nil, nil, true)
-        button.timer:ClearAllPoints()
-        --button.timer:SetPoint(isGroup and 'BOTTOM' or 'BOTTOMLEFT', button, isGroup and 0 or 2, -4)
-        button.timer:SetPoint(isPartyAura and 'CENTER' or 'LEFT', button, isPartyAura and 'CENTER' or 'BOTTOMLEFT')
-    --end
+    button.timer = F.CreateFS(button, font, fontSize, true, nil, nil, true)
+    button.timer:ClearAllPoints()
+    button.timer:SetPoint(isPartyAura and 'CENTER' or 'LEFT', button, isPartyAura and 'CENTER' or 'BOTTOMLEFT')
 
     button.UpdateTooltip = UpdateAuraTooltip
     button:SetScript('OnEnter', Aura_OnEnter)
@@ -363,8 +359,8 @@ function UNITFRAME:CreatePartyAuras(self)
     bu.numTotal = 32
     bu.initialAnchor = 'LEFT'
     bu:SetPoint('LEFT', self, 'RIGHT', 4, 0)
-    bu.size = self:GetHeight() * .7
-    bu.numTotal = 4
+    bu.size = C.DB.Unitframe.PartyAuraSize
+    bu.numTotal = C.DB.Unitframe.PartyAura and C.DB.Unitframe.PartyAuraNum or 0
     bu.partyAura = true
 
     UNITFRAME:UpdateAuraContainer(self, bu, bu.numTotal)
@@ -378,8 +374,6 @@ function UNITFRAME:CreatePartyAuras(self)
     bu.PostUpdateGapIcon = UNITFRAME.PostUpdateGapIcon
 
     self.Auras = bu
-
-    F:RegisterEvent('PLAYER_ENTERING_WORLD', UNITFRAME.PLAYER_ENTERING_WORLD)
 end
 
 function NAMEPLATE:CreateAuras(self)

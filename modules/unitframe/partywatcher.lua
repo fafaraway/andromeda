@@ -129,10 +129,7 @@ local function UpdateWatcherAnchor(element)
     end
     local rel1 = not horizon and not otherSide and 'RIGHT' or 'LEFT'
     local rel2 = not horizon and not otherSide and 'LEFT' or 'RIGHT'
-    local iconSize = horizon and (self:GetWidth() - 2 * math.abs(margin)) / 3 or self:GetHeight() * .8
-    if iconSize > 40 then
-        iconSize = 40
-    end
+    local iconSize = C.DB.Unitframe.PartyAuraSize
 
     for i = 1, element.__max do
         local bu = element[i]

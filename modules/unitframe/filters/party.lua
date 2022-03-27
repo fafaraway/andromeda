@@ -7,24 +7,15 @@ C.PartyDebuffsBlackList = {
 }
 
 C.PartyAurasList = {
-    -- All
-    [160029] = true, -- Resurrecting
     -- Racial
     [65116] = true, -- Stoneform
-    -- Covenant
-    [324867] = true, -- Fleshcraft
-    [319217] = true, -- Podtender
-    [320224] = true, -- Podtender
-    -- Potion
-    [307159] = true, -- 幽魂敏捷药水
-    [307162] = true, -- 幽魂智力药水
-    [307163] = true, -- 幽魂耐力药水
-    [307164] = true, -- 幽魂力量药水
-    [307494] = true, -- 强化驱魔药水
-    [307495] = true, -- 幻影火焰药水
-    [307496] = true, -- 神圣觉醒药水
-    [307497] = true, -- 死亡偏执药水
-    [344314] = true, -- 心华之速药水
+    [58984] = true, -- Shadowmeld
+
+    -- Trinkets
+    [344916] = true, -- Tuft of Smoldering Plumage
+    [344384] = true, -- Bargast's Leash (Target)
+    [344388] = true, -- Bargast's Leash (Source)
+
     -- Bloodlust
     [2825] = true, -- 嗜血
     [32182] = true, -- 英勇
@@ -36,127 +27,169 @@ C.PartyAurasList = {
     [309658] = true, -- 死亡凶蛮战鼓
     [102364] = true, -- 青铜龙的祝福
     [292686] = true, -- 制皮鼓
-    -- DH
-    [212800] = true, -- Blur
-    [196555] = true, -- Nether Walk
-    [187827] = true, -- Metamorphosis (Tank)
+
+    -- Potion
+    [307195] = true, -- Potion of the Hidden Spirit
+
+    -- Engineering
+    [321422] = true, -- Dimensional Shifter
+
+    -- Dungeon Buffs
+    [342189] = true, -- Stoneborn Boon (Halls of Atonement gargoyle)
+    [328737] = true, -- Fragment of Radiance (Sanguine Depths 3rd boss orbs)
+    [335161] = true, -- Anima Exhaust (Necrotic Wake orbs)
+
+    -- Covenant Abilities
+    [311648] = true, -- Swarming Mist: Death Knight, Venthyr
+    [338018] = true, -- Lone Protection: Druid (Guardian), Kyrian
+    [327037] = true, -- Kindred Protection: Druid (Guardian), Kyrian
+    [327071] = true, -- Kindred Focus: Druid (Resto), Kyrian
+    [325727] = true, -- Adaptive Swarm: Druid, Necrolord
+    [310454] = true, -- Weapons of Order: Monk, Kyrian
+    [328282] = true, -- Blessing of Spring: Paladin, Night Fae
+
+    -- Kyrian Soulbinds
+    [330749] = true, -- Phial of Patience: Pelagos
+    -- [328900] = true,-- Let Go of the Past: Pelagos; too noisy
+    [330752] = true, -- Ascendant Phial: Kleia
+    -- [334067] = true,-- Mentorship: Kleia; probably too noisy
+    [337697] = true, -- Resilient Plumage: Mikanikos
+
+    -- Necrolord Soulbinds
+    [323507] = true, -- Volatile Solvent: Mechanical; Marileth
+    [323524] = true, -- Ultimate Form: Marileth
+    [328210] = true, -- Emeni's Magnificent Skin: Emeni
+    [326946] = true, -- Heirmir's Arsenal: Ravenous Pendant; Heirmir
+
+    -- Night Fae Soulbinds
+    [320224] = true, -- Podtender: Dreamweaver
+    [325613] = true, -- Hold the Line: Korayn
+    [325612] = true, -- Hold the Line: Korayn [I don't know which one it is]
+
+    -- Venthyr Soulbinds
+    [333089] = true, -- Hold Your Ground: Draven
+
+    -- Monk
+    [120954] = true, -- Fortifying Brew
+    [243435] = true, -- Fortifying Brew
+    [115176] = true, -- Zen Meditation
+    [122278] = true, -- Dampen Harm
+    [116849] = true, -- Life Cocoon
+    [122783] = true, -- Diffuse Magic
+    [125174] = true, -- Touch of Karma
+    [261769] = true, -- Inner Strength
+    [132578] = true, -- Invoke Niuzo, the Black Ox
+
+    -- Demon Hunter
+    [187827] = true, -- Metamorphosis
+    [162264] = true, -- Metamorphosis
     [203819] = true, -- Demon Spikes
-    [209261] = true, -- Uncontained Fel
+    [196555] = true, -- Netherwalk
+    [212800] = true, -- Blur
+    [209426] = true, -- Darkness
+
     -- Warrior
+    [132404] = true, -- Shield Block
+    [12975] = true, -- Last Stand
     [871] = true, -- Shield Wall
     [107574] = true, -- Avatar
-    [1719] = true, -- Recklessness
-    [118038] = true, -- Die by the Sword
     [97463] = true, -- Rallying Cry
-    [147833] = true, -- Intervene
-    [190456] = true, -- Ignore Pain
-    [213915] = true, -- Mass Spell Reflection
-    [23920] = true, -- Spell Reflection (Prot)
-    [216890] = true, -- Spell Reflection (Arms/Fury)
-    [12975] = true, -- Last Stand
-    [197690] = true, -- Defensive Stance
+    [18499] = true, -- Berserker Rage
+    [23920] = true, -- Spell Reflection
     [184364] = true, -- Enraged Regeneration
-    [132404] = true, -- Shield Block
-    [335198] = true, -- Safeguard
-    -- Warlock
-    [113860] = true, -- Dark Soul: Misery
-    [104773] = true, -- Unending Resolve
-    [108416] = true, -- Dark Pact
-    [132413] = true, -- Shadow Bulwark
-    -- Shaman
-    [114051] = true, -- Ascendance
-    [108271] = true, -- Astral Shift
-    [974] = true, -- Earth Shield
-    [98007] = true, -- Spirit Link Totem
-    [325174] = true, -- Spirit Link Totem
-    [207498] = true, -- Ancestral Protection
-    [118337] = true, -- Harden Skin
+    [118038] = true, -- Die by the Sword
+    [197690] = true, -- Defensive Stance
+    [147833] = true, -- Intervene
+
+    -- Druid
+    [192081] = true, -- Ironfur
+    [22842] = true, -- Frenzied Regeneration
+    [22812] = true, -- Barkskin
+    [61336] = true, -- Survival Instincts
+    [102342] = true, -- Ironbark
+    [102558] = true, -- Incarnation: Guardian of Ursoc
+    [203975] = true, -- Earthwarden
+    [5215] = true, -- Prowl
+    [50334] = true, -- Berserk
+    [29166] = true, -- Innervate
+
+    -- Death Knight
+    [195181] = true, -- Bone Shield
+    [48707] = true, -- Anti-Magic Shell
+    [81256] = true, -- Dancing Rune Weapon
+    [55233] = true, -- Vampiric Blood
+    [48792] = true, -- Icebound Fortitude
+    [194679] = true, -- Rune Tap
+    [194844] = true, -- Bonestorm
+    [49039] = true, -- Lichborne
+    [145629] = true, -- Anti-Magic Zone
+
+    -- Paladin
+    [280375] = true, -- Redoubt
+    [132403] = true, -- Shield of the Righteous
+    [86659] = true, -- Guardian of Ancient Kings
+    [31850] = true, -- Ardent Defender
+    [31884] = true, -- Avenging Wrath
+    [642] = true, -- Divine Shield
+    [188370] = true, -- Consecration
+    [1022] = true, -- Blessing of Protection
+    [204018] = true, -- Blessing of Spellwarding
+    [6940] = true, -- Blessing of Sacrifice
+    [152262] = true, -- Seraphim
+    [205191] = true, -- Eye for an Eye
+    [498] = true, -- Divine Protection
+
     -- Rogue
+    [185311] = true, -- Crimson Vial
+    [5277] = true, -- Evasion
     [1966] = true, -- Feint
     [31224] = true, -- Cloak of Shadows
-    [5277] = true, -- Evasion
-    [199754] = true, -- Riposte
-    [45182] = true, -- Cheating Death
-    [114018] = true, -- Shroud of Concealment
-    -- Paladin
-    [31884] = true, -- Avenging Wrath
-    [31850] = true, -- Ardent Defender
-    [1044] = true, -- Blessing of Freedom
-    [31821] = true, -- Aura Mastery
-    [1022] = true, -- Blessing of Protection
-    [6940] = true, -- Blessing of Sacrifice
-    [199448] = true, -- Blessing of Sacrifice
-    [204018] = true, -- Blessing of Spellwarding
-    [498] = true, -- Divine Protection
-    [642] = true, -- Divine Shield
-    [184662] = true, -- Shield of Vengeance
-    [86659] = true, -- Guardian of Ancient Kings
-    [212641] = true, -- Guardian of Ancient Kings (Glyph)
-    [132403] = true, -- Shield of the Righteous
-    [205191] = true, -- Eye for an Eye
-    [228050] = true, -- Divine Shield
-    -- Monk
-    [122470] = true, -- 业报之触
-    [122783] = true, -- 散魔功
-    [243435] = true, -- 壮胆酒（织雾和踏风）
-    [120954] = true, -- 壮胆酒（酒仙）
-    [322507] = true, -- 天神酒
-    [132578] = true, -- 玄牛下凡
-    [115176] = true, -- Zen Meditation
-    [137639] = true, -- Storm, Earth, and Fire
-    [116849] = true, -- Life Cocoon
-    [122278] = true, -- Dampen Harm
-    [125174] = true, -- Touch of Karma
-    [115203] = true, -- Fortifying Brew
-    [215479] = true, -- Shuffle
-    [115295] = true, -- Guard
+    [1784] = true, -- Stealth
+
     -- Mage
-    [12472] = true, -- Icy Veins
-    [190319] = true, -- Combustion
-    [12042] = true, -- Arcane Power
+    [45438] = true, -- Ice Block
+    [32612] = true, -- Invisibility
     [110909] = true, -- Alter Time
-    [342245] = true, -- Alter Time
-    [45438] = true, -- Iceblock
-    [87023] = true, -- Cauterize
+    [342246] = true, -- Alter Time
+    [235450] = true, -- Prismatic Barrier
+    [11426] = true, -- Ice Barrier (Increases armor with talent)
+    [110960] = true, -- Greater Invisibility
+    [113862] = true, -- Greater Invisibility (Damage Reduction)
+    [190319] = true, -- Combustion
+    [12472] = true, -- Icy Veins
+    [12042] = true, -- Arcane Power
+
     -- Hunter
-    [199483] = true, -- Camouflage
     [186265] = true, -- Aspect of the Turtle
-    [264735] = true, -- Survival of the Fittest (Command Pet)
-    [281195] = true, -- Survival of the Fittest (Lone Wolf)
-    -- Druid
-    [158792] = true, -- Pulverize
-    [106951] = true, -- Berserk
-    [194223] = true, -- Celestial Alignment
-    [102560] = true, -- Incarnation: Chosen of Elune
-    [102558] = true, -- Incarnation: Guardian of Ursoc
-    [61336] = true, -- Survival Instincts
-    [22812] = true, -- Barkskin
-    [22842] = true, -- Frenzied Regeneration
-    [29166] = true, -- Innervate
-    [102342] = true, -- Ironbark
-    [192081] = true, -- Ironfur
-    -- DK
-    [194679] = true, -- Rune Tap
-    [48792] = true, -- Icebound Fortitude
-    [194844] = true, -- Bonestorm
-    [48265] = true, -- Death's Advance
-    [212552] = true, -- Wraith Walk
-    [123981] = true, -- Perdition
-    [55233] = true, -- Vampiric Blood
-    [334547] = true, -- Vampiric Aura
-    [81256] = true, -- Dancing Rune Weapon
-    [48707] = true, -- Anti-Magic Shell
-    [145629] = true, -- Anti-Magic Zone
-    [49039] = true, -- Lichborne
+    [5384] = true, -- Feign Death
+    [264735] = true, -- Survival of the Fittest
+    [281195] = true, -- Survival of the Fittest
+    [199483] = true, -- Camouflage
+
     -- Priest
-    [19236] = true, -- Desperate Prayer
-    [47585] = true, -- Dispersion
-    [47788] = true, -- Guardian Spirit
     [33206] = true, -- Pain Suppression
     [81782] = true, -- Power Word: Barrier
-    [62618] = true, -- Power Word: Barrier
+    [586] = true, -- Fade
+    [19236] = true, -- Desperate Prayer
+    [47788] = true, -- Guardian Spirit
+    [47585] = true, -- Dispersion
     [15286] = true, -- Vampiric Embrace
-    [10060] = true -- Power Infusion
+    [45242] = true, -- Focused Will
+    [193065] = true, -- Masochism
+    [10060] = true, -- Power Infusion
+
+    -- Shaman
+    [108271] = true, -- Astral Shift
+    [325174] = true, -- Spirit Link Totem
+    [974] = true, -- Earth Shield
+    [207498] = true, -- Ancestral Protection
+    [108281] = true, -- Ancestral Guidance
+    -- [207400] = true,-- Ancestral Vigor; too noisy
+
+    -- Warlock
+    [104773] = true, -- Unending Resolve
+    [132413] = true, -- Shadow Bulwark
+    [108416] = true, -- Dark Pact
 }
 
 -- Bloodlust buffs
@@ -179,7 +212,7 @@ C.CornerSpellsList = {
         [17] = {'TOPLEFT', {.7, .7, .7}}, -- 真言术盾
         [47788] = {'LEFT', {.86, .45, 0}, true}, -- 守护之魂
         [33206] = {'LEFT', {.47, .35, .74}, true}, -- 痛苦压制
-        [6788] = {'TOP', {.86, .11, .11}, true} -- 虚弱灵魂
+        [6788] = {'TOP', {.86, .11, .11}, true}, -- 虚弱灵魂
     },
     ['DRUID'] = {
         [774] = {'TOPRIGHT', {.8, .4, .8}}, -- 回春
@@ -191,7 +224,7 @@ C.CornerSpellsList = {
         [29166] = {'TOP', {0, .4, 1}}, -- 激活
         [102351] = {'BOTTOM', {.2, .8, .8}}, -- 结界
         [102352] = {'BOTTOM', {.2, .8, .8}}, -- 结界(HoT)
-        [200389] = {'BOTTOM', {1, 1, .4}} -- 栽培
+        [200389] = {'BOTTOM', {1, 1, .4}}, -- 栽培
     },
     ['PALADIN'] = {
         [287280] = {'TOPLEFT', {1, .8, 0}}, -- 圣光闪烁
@@ -204,34 +237,34 @@ C.CornerSpellsList = {
         [6940] = {'BOTTOMRIGHT', {.89, .1, .1}, true},
         -- 牺牲
         [223306] = {'BOTTOM', {.7, .7, .3}}, -- 赋予信仰
-        [25771] = {'TOP', {.86, .11, .11}, true} -- 自律
+        [25771] = {'TOP', {.86, .11, .11}, true}, -- 自律
     },
     ['SHAMAN'] = {
         [61295] = {'TOPRIGHT', {.2, .8, .8}}, -- 激流
-        [974] = {'BOTTOMRIGHT', {1, .8, 0}} -- 大地之盾
+        [974] = {'BOTTOMRIGHT', {1, .8, 0}}, -- 大地之盾
     },
     ['MONK'] = {
         [119611] = {'TOPLEFT', {.3, .8, .6}}, -- 复苏之雾
         [116849] = {'TOP', {.2, .8, .2}, true}, -- 作茧缚命
         [124682] = {'TOPRIGHT', {.8, .8, .25}}, -- 氤氲之雾
-        [191840] = {'BOTTOMRIGHT', {.27, .62, .7}} -- 精华之泉
+        [191840] = {'BOTTOMRIGHT', {.27, .62, .7}}, -- 精华之泉
     },
     ['ROGUE'] = {
-        [57934] = {'BOTTOMRIGHT', {.9, .1, .1}} -- 嫁祸
+        [57934] = {'BOTTOMRIGHT', {.9, .1, .1}}, -- 嫁祸
     },
     ['WARRIOR'] = {
-        [114030] = {'TOPLEFT', {.2, .2, 1}} -- 警戒
+        [114030] = {'TOPLEFT', {.2, .2, 1}}, -- 警戒
     },
     ['HUNTER'] = {
         [34477] = {'BOTTOMRIGHT', {.9, .1, .1}}, -- 误导
-        [90361] = {'TOPLEFT', {.4, .8, .2}} -- 灵魂治愈
+        [90361] = {'TOPLEFT', {.4, .8, .2}}, -- 灵魂治愈
     },
     ['WARLOCK'] = {
-        [20707] = {'BOTTOMRIGHT', {.8, .4, .8}, true} -- 灵魂石
+        [20707] = {'BOTTOMRIGHT', {.8, .4, .8}, true}, -- 灵魂石
     },
     ['DEMONHUNTER'] = {},
     ['MAGE'] = {},
-    ['DEATHKNIGHT'] = {}
+    ['DEATHKNIGHT'] = {},
 }
 
 -- Party watcher spells
@@ -287,7 +320,7 @@ C.PartySpellsList = {
     [129597] = 120,
     [155145] = 120,
     [202719] = 120,
-    [232633] = 120
+    [232633] = 120,
 }
 
 -- Talent modification
@@ -305,7 +338,7 @@ C.TalentCDFixList = {
     [109304] = 105, -- 意气风发
     [116849] = 100, -- 作茧缚命
     [119381] = 40, -- 扫堂腿
-    [179057] = 40 -- 混乱新星
+    [179057] = 40, -- 混乱新星
 }
 
 -- Party watcher spells db
@@ -329,7 +362,7 @@ C.PartySpellsDB = {
         [315443] = 120, -- 憎恶附肢，通灵
         [324631] = 120, -- 血肉铸造，通灵
         [312202] = 60, -- 失格者之梏，格里恩
-        [311648] = 60 -- 云集之雾，温西尔
+        [311648] = 60, -- 云集之雾，温西尔
     },
     ['DEMONHUNTER'] = {
         [179057] = 60, -- 混乱新星
@@ -345,7 +378,7 @@ C.PartySpellsDB = {
         [306830] = 60, -- 极乐赦令，格里恩
         [329554] = 120, -- 燃焰饲魂，通灵
         [317009] = 60, -- 罪孽烙印，温西尔
-        [323639] = 90 -- 恶魔追击，法夜
+        [323639] = 90, -- 恶魔追击，法夜
     },
     ['DRUID'] = {
         [99] = 30, -- 夺魂咆哮
@@ -375,7 +408,7 @@ C.PartySpellsDB = {
         [325727] = 25, -- 畸变蜂群，通灵
         [323764] = 120, -- 万灵之召，法夜
         [338142] = 60, -- 自省强化，格里恩
-        [323546] = 180 -- 饕餮狂乱，温西尔
+        [323546] = 180, -- 饕餮狂乱，温西尔
     },
     ['HUNTER'] = {
         [5384] = 30, -- 假死
@@ -403,7 +436,7 @@ C.PartySpellsDB = {
         [325028] = 45, -- 死亡飞轮，通灵
         [324149] = 30, -- 劫掠射击，温西尔
         [308491] = 60, -- 共鸣箭，格里恩
-        [328231] = 120 -- 野性之魂，法夜
+        [328231] = 120, -- 野性之魂，法夜
     },
     ['MAGE'] = {
         [66] = 300, -- 隐形术
@@ -426,7 +459,7 @@ C.PartySpellsDB = {
         [324220] = 180, -- 死亡飞轮，通灵
         [314793] = 90, -- 劫掠射击，温西尔
         [307443] = 30, -- 共鸣箭，格里恩
-        [314791] = 60 -- 野性之魂，法夜
+        [314791] = 60, -- 野性之魂，法夜
     },
     ['MONK'] = {
         [116705] = 15, -- 切喉手
@@ -464,7 +497,7 @@ C.PartySpellsDB = {
         [325216] = 60, -- 骨尘酒，通灵
         [327104] = 30, -- 妖魂踏，法夜
         [326860] = 180, -- 陨落僧众，温西尔
-        [310454] = 120 -- 精序兵戈，格里恩
+        [310454] = 120, -- 精序兵戈，格里恩
     },
     ['PALADIN'] = {
         [498] = 60, -- 圣佑术
@@ -507,7 +540,7 @@ C.PartySpellsDB = {
         [316958] = 240, -- 红烬圣土，温西尔
         [328278] = 45, -- 四级祝福，法夜
         [304971] = 60, -- 圣洁鸣钟，格里恩
-        [328204] = 30 -- 征服者之锤，通灵
+        [328204] = 30, -- 征服者之锤，通灵
     },
     ['PRIEST'] = {
         [527] = 8, -- 纯净术
@@ -550,7 +583,7 @@ C.PartySpellsDB = {
         [327661] = 90, -- 法夜守护者，法夜
         [323673] = 45, -- 控心术，温西尔
         [324724] = 60, -- 邪恶新星，通灵
-        [325013] = 180 -- 晋升者之赐，格里恩
+        [325013] = 180, -- 晋升者之赐，格里恩
     },
     ['ROGUE'] = {
         [408] = 20, -- 肾击
@@ -579,7 +612,7 @@ C.PartySpellsDB = {
         [323547] = 45, -- 申斥回响，格里恩
         [323654] = 25, -- 狂热鞭笞，温西尔
         [328305] = 90, -- 败血刃伤，法夜
-        [328547] = 30 -- 锯齿骨刺，通灵
+        [328547] = 30, -- 锯齿骨刺，通灵
     },
     ['SHAMAN'] = {
         [16191] = 180, -- 法力之潮
@@ -599,7 +632,7 @@ C.PartySpellsDB = {
         [320674] = 90, -- 收割链，温西尔
         [328923] = 120, -- 法夜输灵，法夜
         [326059] = 45, -- 始源之潮，通灵
-        [324386] = 60 -- 暮钟图腾，格里恩
+        [324386] = 60, -- 暮钟图腾，格里恩
     },
     ['WARLOCK'] = {
         [1122] = 180, -- 召唤地狱火
@@ -630,7 +663,7 @@ C.PartySpellsDB = {
         [325289] = 45, -- 屠戮箭，通灵
         [321792] = 60, -- 灾祸降临，温西尔
         [312321] = 40, -- 碎魂奉纳，格里恩
-        [325640] = 60 -- 灵魂腐化，法夜
+        [325640] = 60, -- 灵魂腐化，法夜
     },
     ['WARRIOR'] = {
         [355] = 8, -- 嘲讽
@@ -664,6 +697,6 @@ C.PartySpellsDB = {
         [317320] = 6, -- 判罪，温西尔
         [325886] = 90, -- 上古余震，法夜
         [307865] = 60, -- 晋升堡垒之矛，格里恩
-        [324143] = 180 -- 征服者战旗，通灵
-    }
+        [324143] = 180, -- 征服者战旗，通灵
+    },
 }
