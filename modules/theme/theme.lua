@@ -37,22 +37,19 @@ function THEME:LoadAddOnSkins()
     THEME:LoadSkins(C.Themes) -- blizzard ui
     THEME:LoadSkins(C.AddonThemes) -- other addons
 
-    F:RegisterEvent(
-        'ADDON_LOADED',
-        function(_, addonName)
-            local func = C.Themes[addonName]
-            if func then
-                func()
-                C.Themes[addonName] = nil
-            end
-
-            local func = C.AddonThemes[addonName]
-            if func then
-                func()
-                C.AddonThemes[addonName] = nil
-            end
+    F:RegisterEvent('ADDON_LOADED', function(_, addonName)
+        local func = C.Themes[addonName]
+        if func then
+            func()
+            C.Themes[addonName] = nil
         end
-    )
+
+        local func = C.AddonThemes[addonName]
+        if func then
+            func()
+            C.AddonThemes[addonName] = nil
+        end
+    end)
 end
 
 local function ReskinTimerBar(bar)
