@@ -260,6 +260,10 @@ function UNITFRAME:UpdatePartyElements()
             if frame.PartyWatcher then
                 frame.PartyWatcher:UpdateAnchor()
             end
+            if frame.Auras then
+                frame.Auras:UpdateAnchor()
+                frame.Auras:ForceUpdate()
+            end
         end
     end
 end

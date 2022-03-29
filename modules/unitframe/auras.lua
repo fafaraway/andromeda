@@ -352,17 +352,29 @@ function UNITFRAME.PartyAuraFilter(_, _, _, _, _, _, _, _, _, _, _, _, spellID)
     end
 end
 
+function UNITFRAME.UpdatePartyAuraAnchor(element)
+    local self = element:GetParent()
+    local horizon = C.DB.Unitframe.PartyDirec > 2
+
+    if horizon then
+        element:ClearAllPoints()
+        element.initialAnchor = 'TOPLEFT'
+        element:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -5)
+    else
+        element:ClearAllPoints()
+        element.initialAnchor = 'LEFT'
+        element:SetPoint('LEFT', self, 'RIGHT', 5, 0)
+    end
+end
+
 function UNITFRAME:CreatePartyAuras(self)
     local bu = CreateFrame('Frame', nil, self)
-    bu.gap = true
     bu.spacing = 4
-    bu.numTotal = 32
-    bu.initialAnchor = 'LEFT'
-    bu:SetPoint('LEFT', self, 'RIGHT', 4, 0)
     bu.size = C.DB.Unitframe.PartyAuraSize
     bu.numTotal = C.DB.Unitframe.PartyAura and C.DB.Unitframe.PartyAuraNum or 0
     bu.partyAura = true
 
+    UNITFRAME.UpdatePartyAuraAnchor(bu)
     UNITFRAME:UpdateAuraContainer(self, bu, bu.numTotal)
 
     bu.gap = false
@@ -372,6 +384,7 @@ function UNITFRAME:CreatePartyAuras(self)
     bu.PostCreateIcon = UNITFRAME.PostCreateIcon
     bu.PostUpdateIcon = UNITFRAME.PostUpdateIcon
     bu.PostUpdateGapIcon = UNITFRAME.PostUpdateGapIcon
+    bu.UpdateAnchor = UNITFRAME.UpdatePartyAuraAnchor
 
     self.Auras = bu
 end

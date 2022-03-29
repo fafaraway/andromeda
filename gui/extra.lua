@@ -1650,7 +1650,6 @@ local function UpdatePartyFrameSize()
     for _, frame in pairs(oUF.objects) do
         if frame.unitStyle == 'party' then
             SetUnitFrameSize(frame, 'Party')
-        --UNITFRAME.UpdateRaidNameAnchor(frame, frame.nameText)
         end
     end
     if UNITFRAME.CreateAndUpdatePartyHeader then

@@ -230,11 +230,11 @@ C.CharacterSettings = {
             FocusTargetHealthHeight = 4,
             FocusTargetPowerHeight = 1,
 
-
-            OnlyShowPlayer = true,
-            DesaturateIcon = true,
-            DebuffTypeColor = true,
-            StealableBuffs = true,
+            ShowAura = true,
+                OnlyShowPlayer = true,
+                DesaturateIcon = true,
+                DebuffTypeColor = true,
+                StealableBuffs = true,
 
 
             SimpleMode = false,
@@ -255,7 +255,7 @@ C.CharacterSettings = {
                 PartyWatcher = true,
                     PartyWatcherSync = true,
                     PartyWatcherOnRight = false,
-                    PartyWatcherSize = 28,
+                    PartyWatcherSize = 26,
                 PartyBuff = true,
                     PartyBuffSize = 16,
                     PartyBuffNum = 3,
@@ -263,7 +263,7 @@ C.CharacterSettings = {
                     PartyDebuffSize = 16,
                     PartyDebuffNum = 3,
                 PartyAura = true,
-                    PartyAuraSize = 28,
+                    PartyAuraSize = 26,
                     PartyAuraNum = 4,
 
             RaidFrame = true,
