@@ -88,29 +88,6 @@ local function ApplyStyle(self)
     timer:SetJustifyH('RIGHT')
 end
 
-local function ForceSetting()
-    if not _G.DBM_AllSavedOptions['Default'] then
-        _G.DBM_AllSavedOptions['Default'] = {}
-    end
-
-    _G.DBM_AllSavedOptions['Default']['BlockVersionUpdateNotice'] = true
-    _G.DBM_AllSavedOptions['Default']['EventSoundVictory'] = 'None'
-
-    if IsAddOnLoaded('DBM-VPYike') then
-        _G.DBM_AllSavedOptions['Default']['CountdownVoice'] = 'VP:Yike'
-        _G.DBM_AllSavedOptions['Default']['ChosenVoicePack'] = 'Yike'
-    end
-
-    if not _G.DBT_AllPersistentOptions['Default'] then
-        _G.DBT_AllPersistentOptions['Default'] = {}
-    end
-
-    _G.DBT_AllPersistentOptions['Default']['DBM'].BarYOffset = 10
-    _G.DBT_AllPersistentOptions['Default']['DBM'].HugeBarYOffset = 10
-    _G.DBT_AllPersistentOptions['Default']['DBM'].ExpandUpwards = true
-    _G.DBT_AllPersistentOptions['Default']['DBM'].ExpandUpwardsLarge = true
-end
-
 function THEME:ReskinDBM()
     -- Default notice message
     local RaidNotice_AddMessage_ = _G.RaidNotice_AddMessage
@@ -166,6 +143,4 @@ function THEME:ReskinDBM()
         _G.DBM.InfoFrame:Hide()
         _G.DBMInfoFrame:HookScript('OnShow', F:GetModule('Tooltip').ReskinTooltip)
     end
-
-    ForceSetting()
 end
