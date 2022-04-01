@@ -2506,5 +2506,6 @@ read_globals = {
     'FauxScrollFrame_GetOffset',
     'getglobal',
     'GetPvpTalentSlotInfo',
-    'GetAllSelectedPvpTalentIDs'
+    'GetAllSelectedPvpTalentIDs',
+    'TexturePool_HideAndClearAnchors'
 }
