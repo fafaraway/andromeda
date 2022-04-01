@@ -15,7 +15,7 @@ local classification = {
     elite = ' |cffcc8800' .. _G.ELITE .. '|r',
     rare = ' |cffff99cc' .. L['Rare'] .. '|r',
     rareelite = ' |cffff99cc' .. L['Rare'] .. '|r ' .. '|cffcc8800' .. _G.ELITE .. '|r',
-    worldboss = ' |cffff0000' .. _G.BOSS .. '|r'
+    worldboss = ' |cffff0000' .. _G.BOSS .. '|r',
 }
 
 local function CanAccessObject(obj)
@@ -104,18 +104,6 @@ function TOOLTIP:OnTooltipSetUnit()
     self.tipUnit = unit
 
     local isAltKeyDown = IsAltKeyDown()
-    local r, g, b = F:UnitColor(unit)
-    local hexColor = F:RGBToHex(r, g, b)
-    local ricon = GetRaidTargetIndex(unit)
-    local text = _G.GameTooltipTextLeft1:GetText()
-
-    if ricon and ricon > 8 then
-        ricon = nil
-    end
-    if ricon and text then
-        _G.GameTooltipTextLeft1:SetFormattedText(('%s %s'), _G.ICON_LIST[ricon] .. '18|t', text)
-    end
-
     local isPlayer = UnitIsPlayer(unit)
     if isPlayer then
         local name, realm = UnitName(unit)
@@ -165,8 +153,17 @@ function TOOLTIP:OnTooltipSetUnit()
         end
     end
 
-    local line1 = _G.GameTooltipTextLeft1:GetText()
-    _G.GameTooltipTextLeft1:SetFormattedText('%s', hexColor .. line1)
+    local r, g, b = F:UnitColor(unit)
+    local hexColor = F:RGBToHex(r, g, b)
+    local text = _G.GameTooltipTextLeft1:GetText()
+    if text then
+        local ricon = GetRaidTargetIndex(unit)
+        if ricon and ricon > 8 then
+            ricon = nil
+        end
+        ricon = ricon and _G.ICON_LIST[ricon] .. '18|t ' or ''
+        _G.GameTooltipTextLeft1:SetFormattedText(('%s%s%s'), ricon, hexColor, text)
+    end
 
     local alive = not UnitIsDeadOrGhost(unit)
     local level
@@ -369,13 +366,9 @@ local funcs = {
 
 function TOOLTIP:AuraSource()
     for k, v in pairs(funcs) do
-        hooksecurefunc(
-            _G.GameTooltip,
-            k,
-            function(self, unit, index, filter)
-                AuraSource(self, v, unit, index, filter)
-            end
-        )
+        hooksecurefunc(_G.GameTooltip, k, function(self, unit, index, filter)
+            AuraSource(self, v, unit, index, filter)
+        end)
     end
 end
 
