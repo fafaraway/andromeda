@@ -186,7 +186,7 @@ function UNITFRAME:CheckPartySpells()
             end
         else
             if C.IsDeveloper then
-                F:Debug('Invalid Party Spell ID: ' .. spellID)
+                F:DebugPrint('Invalid Party Spell ID: ' .. spellID)
             end
         end
     end

@@ -142,8 +142,8 @@ function UNITFRAME:PostCastStart(unit)
     local color = self.notInterruptible and uninterruptibleColor or normalColor
     local textColor = self.notInterruptible and {1, 0, 0} or {1, 1, 1}
 
-    -- F:Debug(self.name)
-    -- F:Debug(self.spellID)
+    -- F:DebugPrint(self.name)
+    -- F:DebugPrint(self.spellID)
 
     self:SetAlpha(1)
     self.Spark:Show()

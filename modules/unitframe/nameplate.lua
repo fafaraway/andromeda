@@ -654,7 +654,7 @@ function NAMEPLATE:CheckMajorSpells()
             end
         else
             if C.IsDeveloper then
-                F:Debug('Invalid Nameplate Major Spells ID: ' .. spellID)
+                F:DebugPrint('Invalid Nameplate Major Spells ID: ' .. spellID)
             end
         end
     end

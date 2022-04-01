@@ -20,12 +20,12 @@ do
         print(F:TextGradient('[' .. C.AddonName .. '] ', C.r, C.g, C.b, 1, 1, 1, 1) .. str:format(...))
     end
 
-    function F:Debug(str, ...)
+    function F:DebugPrint(str, ...)
         if not C.IsDeveloper then
             return
         end
 
-        F:Print('[Debug] ' .. str:format(...))
+        print(F:TextGradient('[Debug] ', C.r, C.g, C.b, 1, 1, 1, 1) .. str:format(...))
     end
 
     function F:HookAddOn(addonName, callback)

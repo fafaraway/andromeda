@@ -445,7 +445,7 @@ end
 ]]
 function F.CreateAnimationGroup(frame, name)
     if not frame then
-        F:DebugMessage('动画', '[1]父窗体缺失')
+        F:DebugPrintMessage('动画', '[1]父窗体缺失')
         return
     end
 
@@ -467,7 +467,7 @@ function F.AddTranslation(animationGroup, name)
         return
     end
     if not name then
-        F:DebugMessage('动画', '[1]动画名缺失')
+        F:DebugPrintMessage('动画', '[1]动画名缺失')
         return
     end
 
@@ -483,12 +483,12 @@ end
 ]]
 function F.AddFadeIn(animationGroup, name)
     if not (animationGroup and animationGroup:IsObjectType('AnimationGroup')) then
-        F:DebugMessage('动画', '[1]找不到动画组')
+        F:DebugPrintMessage('动画', '[1]找不到动画组')
         return
     end
 
     if not name then
-        F:DebugMessage('动画', '[2]动画名缺失')
+        F:DebugPrintMessage('动画', '[2]动画名缺失')
         return
     end
 
@@ -507,12 +507,12 @@ end
 ]]
 function F.AddFadeOut(animationGroup, name)
     if not (animationGroup and animationGroup:IsObjectType('AnimationGroup')) then
-        F:DebugMessage('动画', '[2]找不到动画组')
+        F:DebugPrintMessage('动画', '[2]找不到动画组')
         return
     end
 
     if not name then
-        F:DebugMessage('动画', '[3]动画名缺失')
+        F:DebugPrintMessage('动画', '[3]动画名缺失')
         return
     end
 
@@ -533,22 +533,22 @@ end
 ]]
 function F.AddScale(animationGroup, name, fromScale, toScale)
     if not (animationGroup and animationGroup:IsObjectType('AnimationGroup')) then
-        F:DebugMessage('动画', '[3]找不到动画组')
+        F:DebugPrintMessage('动画', '[3]找不到动画组')
         return
     end
 
     if not name then
-        F:DebugMessage('动画', '[4]动画名缺失')
+        F:DebugPrintMessage('动画', '[4]动画名缺失')
         return
     end
 
     if not fromScale or type(fromScale) ~= 'table' or #(fromScale) < 2 then
-        F:DebugMessage('动画', '[1]缩放动画初始x,y错误')
+        F:DebugPrintMessage('动画', '[1]缩放动画初始x,y错误')
         return
     end
 
     if not toScale or type(toScale) ~= 'table' or #(toScale) < 2 then
-        F:DebugMessage('动画', '[1]缩放动画目标x,y错误')
+        F:DebugPrintMessage('动画', '[1]缩放动画目标x,y错误')
         return
     end
 
@@ -570,7 +570,7 @@ function F.PlayAnimationOnShow(frame, animationGroup)
     end
 
     if not (animationGroup and animationGroup:IsObjectType('AnimationGroup')) then
-        F:DebugMessage('动画', '[3]找不到动画组')
+        F:DebugPrintMessage('动画', '[3]找不到动画组')
         return
     end
 
@@ -591,7 +591,7 @@ function F.CloseAnimationOnHide(frame, animationGroup, callback)
     end
 
     if not (animationGroup and animationGroup:IsObjectType('AnimationGroup')) then
-        F:DebugMessage('动画', '[3]找不到动画组')
+        F:DebugPrintMessage('动画', '[3]找不到动画组')
         return
     end
 
@@ -610,17 +610,17 @@ end
 ]]
 function F.SpeedAnimationGroup(animationGroup, speed)
     if not speed or type(speed) ~= 'number' then
-        F:DebugMessage('动画', '[1]找不到速度')
+        F:DebugPrintMessage('动画', '[1]找不到速度')
         return
     end
 
     if not (animationGroup and animationGroup:IsObjectType('AnimationGroup')) then
-        F:DebugMessage('动画', '[4]找不到动画组')
+        F:DebugPrintMessage('动画', '[4]找不到动画组')
         return
     end
 
     if not animationGroup.GetAnimations then
-        F:DebugMessage('动画', '[1]无法找到动画组的子成员')
+        F:DebugPrintMessage('动画', '[1]无法找到动画组的子成员')
         return
     end
 
