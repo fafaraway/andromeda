@@ -59,7 +59,7 @@ end
 local function Block_OnEvent(self, event)
     if UpdateAllSlots() > 0 then
         local r, g, b = getDurabilityColor(math.floor(localSlots[1][3] * 100), 100)
-        self.text:SetText(string.format('%s: %s%s', L['Durability'], F:RGBToHex(r, g, b) .. math.floor(localSlots[1][3] * 100), '%'))
+        self.text:SetText(string.format('%s: %s%s', L['Durability'], F:RgbToHex(r, g, b) .. math.floor(localSlots[1][3] * 100), '%'))
     else
         self.text:SetText(string.format('%s: %s', L['Durability'], C.INFO_COLOR .. _G.NONE))
     end

@@ -172,7 +172,7 @@ function INFOBAR:FriendsPanel_Init()
         end
     end)
 
-    F.CreateFS(infoFrame, C.Assets.Font.Bold, 16, nil, F:RGBToHex({.9, .8, .6}) .. _G.FRIENDS_LIST, nil, true, 'TOPLEFT', 15, -10)
+    F.CreateFS(infoFrame, C.Assets.Font.Bold, 16, nil, F:RgbToHex({.9, .8, .6}) .. _G.FRIENDS_LIST, nil, true, 'TOPLEFT', 15, -10)
     infoFrame.friendCountText = F.CreateFS(infoFrame, C.Assets.Font.Regular, 14, nil, '-/-', nil, true, 'TOPRIGHT', -15, -12)
 
     local scrollFrame = CreateFrame('ScrollFrame', 'FreeUIFriendsInfobarScrollFrame', infoFrame, 'HybridScrollFrameTemplate')
@@ -240,7 +240,7 @@ local function buttonOnClick(self, btn)
                             if not menuList[index] then
                                 menuList[index] = {}
                             end
-                            menuList[index].text = F:RGBToHex(F:ClassColor(C.ClassList[class])) .. charName
+                            menuList[index].text = F:RgbToHex(F:ClassColor(C.ClassList[class])) .. charName
                             menuList[index].notCheckable = true
                             menuList[index].arg1 = bnetIDGameAccount
                             menuList[index].arg2 = guid
@@ -309,7 +309,7 @@ local function buttonOnEnter(self)
                     end
 
                     class = C.ClassList[class]
-                    local classColor = F:RGBToHex(F:ClassColor(class))
+                    local classColor = F:RgbToHex(F:ClassColor(class))
                     if faction == 'Horde' then
                         clientString = '|TInterface\\FriendsFrame\\PlusManz-Horde:16:|t'
                     elseif faction == 'Alliance' then
@@ -343,7 +343,7 @@ local function buttonOnEnter(self)
         _G.GameTooltip:AddLine(L['WoW'], 1, .8, 0)
         _G.GameTooltip:AddLine(' ')
         local name, level, class, area = unpack(self.data)
-        local classColor = F:RGBToHex(F:ClassColor(class))
+        local classColor = F:RgbToHex(F:ClassColor(class))
         _G.GameTooltip:AddLine(string.format('%s %s%s', level, classColor, name))
         _G.GameTooltip:AddLine(string.format('%s%s', inactiveZone, area))
     end
@@ -398,9 +398,9 @@ function INFOBAR:FriendsPanel_UpdateButton(button)
         local name, level, class, area, status = unpack(friendTable[index])
         button.status:SetTexture(status)
         local zoneColor = GetRealZoneText() == area and activeZone or inactiveZone
-        local levelColor = F:RGBToHex(GetQuestDifficultyColor(level))
+        local levelColor = F:RgbToHex(GetQuestDifficultyColor(level))
         local classColor = C.ClassColors[class] or levelColor
-        button.name:SetText(string.format('%s%s|r %s%s', levelColor, level, F:RGBToHex(classColor), name))
+        button.name:SetText(string.format('%s%s|r %s%s', levelColor, level, F:RgbToHex(classColor), name))
         button.zone:SetText(string.format('%s%s', zoneColor, area))
         button.gameIcon:SetTexture(_G.BNet_GetClientTexture(_G.BNET_CLIENT_WOW))
 
@@ -416,7 +416,7 @@ function INFOBAR:FriendsPanel_UpdateButton(button)
         if client == _G.BNET_CLIENT_WOW then
             if canCooperate then
                 local color = C.ClassColors[class] or GetQuestDifficultyColor(1)
-                name = F:RGBToHex(color) .. charName
+                name = F:RgbToHex(color) .. charName
             end
             zoneColor = GetRealZoneText() == infoText and activeZone or inactiveZone
         end

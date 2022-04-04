@@ -65,7 +65,7 @@ function TOOLTIP:GetTarget(unit)
     if UnitIsUnit(unit, 'player') then
         return string.format('|cffff0000%s|r', '>' .. string.upper(_G.YOU) .. '<')
     else
-        return F:RGBToHex(F:UnitColor(unit)) .. UnitName(unit) .. '|r'
+        return F:RgbToHex(F:UnitColor(unit)) .. UnitName(unit) .. '|r'
     end
 end
 
@@ -154,7 +154,7 @@ function TOOLTIP:OnTooltipSetUnit()
     end
 
     local r, g, b = F:UnitColor(unit)
-    local hexColor = F:RGBToHex(r, g, b)
+    local hexColor = F:RgbToHex(r, g, b)
     local text = _G.GameTooltipTextLeft1:GetText()
     if text then
         local ricon = GetRaidTargetIndex(unit)
@@ -181,7 +181,7 @@ function TOOLTIP:OnTooltipSetUnit()
 
         local diff = _G.GetCreatureDifficultyColor(level)
         local classify = UnitClassification(unit)
-        local textLevel = string.format('%s%s%s|r', F:RGBToHex(diff), boss or string.format('%d', level), classification[classify] or '')
+        local textLevel = string.format('%s%s%s|r', F:RgbToHex(diff), boss or string.format('%d', level), classification[classify] or '')
         local tiptextLevel = TOOLTIP.GetLevelLine(self)
         if tiptextLevel then
             local pvpFlag = isPlayer and UnitIsPVP(unit) and string.format(' |cffff0000%s|r', _G.PVP) or ''
@@ -314,7 +314,7 @@ function TOOLTIP:ScanTargets()
     for i = 1, GetNumGroupMembers() do
         local member = (IsInRaid() and 'raid' .. i or 'party' .. i)
         if UnitIsUnit(unit, member .. 'target') and not UnitIsUnit('player', member) and not UnitIsDeadOrGhost(member) then
-            local color = F:RGBToHex(F:UnitColor(member))
+            local color = F:RgbToHex(F:UnitColor(member))
             local name = color .. UnitName(member) .. '|r'
             table.insert(targetTable, name)
         end

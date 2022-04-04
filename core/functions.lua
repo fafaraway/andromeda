@@ -200,7 +200,7 @@ do
             return
         end
 
-        local hex = color.r and color.g and color.b and F:RGBToHex(color.r, color.g, color.b) or '|cffffffff'
+        local hex = color.r and color.g and color.b and F:RgbToHex(color.r, color.g, color.b) or '|cffffffff'
 
         return hex .. text .. '|r'
     end
@@ -215,7 +215,7 @@ do
         end
 
         local r, g, b = F:ClassColor(class)
-        local hex = r and g and b and F:RGBToHex(r, g, b) or '|cffffffff'
+        local hex = r and g and b and F:RgbToHex(r, g, b) or '|cffffffff'
 
         return hex .. text .. '|r'
     end

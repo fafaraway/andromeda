@@ -16,7 +16,7 @@ local function classColor(class, showRGB)
 end
 
 local function diffColor(level)
-    return F:RGBToHex(GetQuestDifficultyColor(level))
+    return F:RgbToHex(GetQuestDifficultyColor(level))
 end
 
 local rankColor = {1, 0, 0, 1, 1, 0, 0, 1, 0}
@@ -25,7 +25,7 @@ local repColor = {1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1}
 
 local function smoothColor(cur, max, color)
     local r, g, b = oUF:RGBColorGradient(cur, max, unpack(color))
-    return F:RGBToHex(r, g, b)
+    return F:RgbToHex(r, g, b)
 end
 
 -- Guild

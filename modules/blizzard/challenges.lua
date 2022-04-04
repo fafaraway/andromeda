@@ -16,7 +16,7 @@ function ECF:GuildBest_UpdateTooltip()
     _G.GameTooltip:SetText(name, 1, 1, 1)
     _G.GameTooltip:AddLine(string.format(_G.CHALLENGE_MODE_POWER_LEVEL, leaderInfo.keystoneLevel))
     for i = 1, #leaderInfo.members do
-        local classColorStr = string.sub(F:RGBToHex(F:ClassColor(leaderInfo.members[i].classFileName)), 3, 10)
+        local classColorStr = string.sub(F:RgbToHex(F:ClassColor(leaderInfo.members[i].classFileName)), 3, 10)
         _G.GameTooltip:AddLine(string.format(_G.CHALLENGE_MODE_GUILD_BEST_LINE, classColorStr, leaderInfo.members[i].name))
     end
     _G.GameTooltip:Show()
@@ -65,7 +65,7 @@ function ECF:GuildBest_SetUp(leaderInfo)
         str = _G.CHALLENGE_MODE_GUILD_BEST_LINE_YOU
     end
 
-    local classColorStr = string.sub(F:RGBToHex(F:ClassColor(leaderInfo.classFileName)), 3, 10)
+    local classColorStr = string.sub(F:RgbToHex(F:ClassColor(leaderInfo.classFileName)), 3, 10)
     self.CharacterName:SetText(string.format(str, classColorStr, leaderInfo.name))
     self.Level:SetText(leaderInfo.keystoneLevel)
 end
@@ -88,15 +88,11 @@ function ECF:GuildBest_Update()
     end
 
     if not resize and hasAngryKeystones then
-        hooksecurefunc(
-            self.WeeklyInfo.Child.WeeklyChest,
-            'SetPoint',
-            function(frame, _, x, y)
-                if x == 100 and y == -30 then
-                    frame:SetPoint('LEFT', 105, -5)
-                end
+        hooksecurefunc(self.WeeklyInfo.Child.WeeklyChest, 'SetPoint', function(frame, _, x, y)
+            if x == 100 and y == -30 then
+                frame:SetPoint('LEFT', 105, -5)
             end
-        )
+        end)
         self.WeeklyInfo.Child.ThisWeekLabel:SetPoint('TOP', -135, -25)
 
         local schedule = _G.AngryKeystones.Modules.Schedule
@@ -140,12 +136,14 @@ end
 function ECF:KeystoneInfo_WeeklyRuns()
     local runHistory = C_MythicPlus.GetRunHistory(false, true)
     local numRuns = runHistory and #runHistory
+
     if numRuns > 0 then
         _G.GameTooltip:AddLine(' ')
         _G.GameTooltip:AddDoubleLine(string.format(_G.WEEKLY_REWARDS_MYTHIC_TOP_RUNS, WeeklyRunsThreshold), '(' .. numRuns .. ')', .6, .8, 1)
         table.sort(runHistory, sortHistory)
 
-        for i = 1, WeeklyRunsThreshold do
+        local isShiftKeyDown = IsShiftKeyDown()
+        for i = 1, isShiftKeyDown and numRuns or WeeklyRunsThreshold do
             local runInfo = runHistory[i]
             if not runInfo then
                 break
@@ -158,6 +156,11 @@ function ECF:KeystoneInfo_WeeklyRuns()
             end
             _G.GameTooltip:AddDoubleLine(name, 'Lv.' .. runInfo.level, 1, 1, 1, r, g, b)
         end
+
+        if not isShiftKeyDown then
+            _G.GameTooltip:AddLine(L['Hold Shift'], .6, .8, 1)
+        end
+
         _G.GameTooltip:Show()
     end
 end
@@ -170,41 +173,35 @@ function ECF:KeystoneInfo_Create()
     button:SetSize(35, 35)
     F.PixelIcon(button, texture, true)
     button.bg:SetBackdropBorderColor(iconColor.r, iconColor.g, iconColor.b)
-    button:SetScript(
-        'OnEnter',
-        function(self)
-            _G.GameTooltip:ClearLines()
-            _G.GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
-            _G.GameTooltip:AddLine(L['Account Keystones'])
-            for name, info in pairs(_G.FREE_ADB.KeystoneInfo) do
-                local name = Ambiguate(name, 'none')
-                local mapID, level, class, faction = string.split(':', info)
-                local color = F:RGBToHex(F:ClassColor(class))
-                local factionColor = faction == 'Horde' and '|cffff5040' or '|cff00adf0'
-                local dungeon = C_ChallengeMode.GetMapUIInfo(tonumber(mapID))
-                _G.GameTooltip:AddDoubleLine(string.format(color .. '%s:|r', name), string.format('%s%s(%s)|r', factionColor, dungeon, level))
-            end
-            _G.GameTooltip:AddDoubleLine(' ', C.LINE_STRING)
-            _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_LEFT_BUTTON .. _G.GREAT_VAULT_REWARDS .. ' ', 1, 1, 1, .6, .8, 1)
-            _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_MIDDLE_BUTTON .. L['Delete keystones info'] .. ' ', 1, 1, 1, .6, .8, 1)
-            _G.GameTooltip:Show()
+    button:SetScript('OnEnter', function(self)
+        _G.GameTooltip:ClearLines()
+        _G.GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
+        _G.GameTooltip:AddLine(L['Account Keystones'])
+        for name, info in pairs(_G.FREE_ADB.KeystoneInfo) do
+            local name = Ambiguate(name, 'none')
+            local mapID, level, class, faction = string.split(':', info)
+            local color = F:RgbToHex(F:ClassColor(class))
+            local factionColor = faction == 'Horde' and '|cffff5040' or '|cff00adf0'
+            local dungeon = C_ChallengeMode.GetMapUIInfo(tonumber(mapID))
+            _G.GameTooltip:AddDoubleLine(string.format(color .. '%s:|r', name), string.format('%s%s(%s)|r', factionColor, dungeon, level))
         end
-    )
+        _G.GameTooltip:AddDoubleLine(' ', C.LINE_STRING)
+        _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_LEFT_BUTTON .. _G.GREAT_VAULT_REWARDS .. ' ', 1, 1, 1, .6, .8, 1)
+        _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_MIDDLE_BUTTON .. L['Delete keystones info'] .. ' ', 1, 1, 1, .6, .8, 1)
+        _G.GameTooltip:Show()
+    end)
     button:SetScript('OnLeave', F.HideTooltip)
-    button:SetScript(
-        'OnMouseUp',
-        function(_, btn)
-            if btn == 'LeftButton' then
-                if not _G.WeeklyRewardsFrame then
-                    _G.WeeklyRewards_LoadUI()
-                end
-                F:TogglePanel(_G.WeeklyRewardsFrame)
-            elseif btn == 'MiddleButton' then
-                table.wipe(_G.FREE_ADB.KeystoneInfo)
-                ECF:KeystoneInfo_Update() -- update own keystone info after reset
+    button:SetScript('OnMouseUp', function(_, btn)
+        if btn == 'LeftButton' then
+            if not _G.WeeklyRewardsFrame then
+                _G.WeeklyRewards_LoadUI()
             end
+            F:TogglePanel(_G.WeeklyRewardsFrame)
+        elseif btn == 'MiddleButton' then
+            table.wipe(_G.FREE_ADB.KeystoneInfo)
+            ECF:KeystoneInfo_Update() -- update own keystone info after reset
         end
-    )
+    end)
 end
 
 function ECF:KeystoneInfo_UpdateBag()

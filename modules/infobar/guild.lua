@@ -62,12 +62,12 @@ function INFOBAR:GuildPanel_UpdateButton(button)
     local index = button.index
     local level, class, name, zone, status = unpack(INFOBAR.GuildTable[index])
 
-    local levelcolor = F:RGBToHex(GetQuestDifficultyColor(level))
+    local levelcolor = F:RgbToHex(GetQuestDifficultyColor(level))
     button.level:SetText(levelcolor .. level)
 
     F.ClassIconTexCoord(button.class, class)
 
-    local namecolor = F:RGBToHex(F:ClassColor(class))
+    local namecolor = F:RgbToHex(F:ClassColor(class))
     button.name:SetText(namecolor .. name .. status)
 
     local zonecolor = C.GREY_COLOR
@@ -248,7 +248,7 @@ function INFOBAR:GuildPanel_Refresh()
     local total, _, online = GetNumGuildMembers()
     local guildName, guildRank = GetGuildInfo('player')
 
-    gName:SetText(F:RGBToHex({.9, .8, .6}) .. '<' .. (guildName or '') .. '>')
+    gName:SetText(F:RgbToHex({.9, .8, .6}) .. '<' .. (guildName or '') .. '>')
     gOnline:SetText(string.format(C.INFO_COLOR .. '%s:' .. ' %d/%d', _G.GUILD_ONLINE_LABEL, online, total))
     -- gApps:SetText(string.format(C.INFO_COLOR .. _G.GUILDINFOTAB_APPLICANTS, GetNumGuildApplicants()))
     gRank:SetText(C.INFO_COLOR .. _G.RANK .. ': ' .. (guildRank or ''))

@@ -186,7 +186,7 @@ local _tags = {
         local tarUnit = unit .. 'target'
         if UnitExists(tarUnit) then
             local tarClass = select(2, UnitClass(tarUnit))
-            return '<' .. F:RGBToHex(colors.class[tarClass]) .. UnitName(tarUnit) .. '|r>'
+            return '<' .. F:RgbToHex(colors.class[tarClass]) .. UnitName(tarUnit) .. '|r>'
         end
     end,
     -- name color
@@ -198,17 +198,17 @@ local _tags = {
         local isDead = UnitIsDeadOrGhost(unit)
 
         if (unit == 'targettarget' and UnitIsUnit('targettarget', 'player')) or (unit == 'focustarget' and UnitIsUnit('focustarget', 'player')) then
-            return F:RGBToHex(1, 0, 0)
+            return F:RgbToHex(1, 0, 0)
         elseif isTapped or isOffline then
-            return F:RGBToHex(colors.tapped)
+            return F:RgbToHex(colors.tapped)
         elseif isDead then
-            return F:RGBToHex(1, 0, 0)
+            return F:RgbToHex(1, 0, 0)
         elseif UnitIsPlayer(unit) then
-            return F:RGBToHex(colors.class[class])
+            return F:RgbToHex(colors.class[class])
         elseif reaction then
-            return F:RGBToHex(colors.reaction[reaction])
+            return F:RgbToHex(colors.reaction[reaction])
         else
-            return F:RGBToHex(1, 1, 1)
+            return F:RgbToHex(1, 1, 1)
         end
     end,
 

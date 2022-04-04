@@ -125,7 +125,7 @@ local function UpdateSpellTarget(self, unit)
         if UnitIsUnit(unitTarget, 'player') then
             nameString = string.format('|cffff0000%s|r', '>' .. string.upper(_G.YOU) .. '<')
         else
-            nameString = F:RGBToHex(F:UnitColor(unitTarget)) .. UnitName(unitTarget)
+            nameString = F:RgbToHex(F:UnitColor(unitTarget)) .. UnitName(unitTarget)
         end
         self.spellTarget:SetText(nameString)
     else

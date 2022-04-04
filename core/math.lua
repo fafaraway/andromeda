@@ -1,4 +1,4 @@
-local F, C = unpack(select(2, ...))
+local F = unpack(select(2, ...))
 
 -- Numberize
 local numCap = {CHINESE = {'兆', '亿', '万'}}
@@ -31,7 +31,7 @@ function F:Numb(n)
 end
 
 -- RGB to Hex
-function F:RGBToHex(r, g, b, header, ending)
+function F:RgbToHex(r, g, b, header, ending)
     if r then
         if type(r) == 'table' then
             if r.r then
@@ -45,7 +45,7 @@ function F:RGBToHex(r, g, b, header, ending)
 end
 
 -- Hex to RGB
-function F:HexToRGB(rgb)
+function F:HexToRgb(rgb)
     if string.len(rgb) == 6 then
         local r, g, b
         r, g, b = tonumber('0x' .. string.sub(rgb, 0, 2)), tonumber('0x' .. string.sub(rgb, 3, 4)), tonumber('0x' .. string.sub(rgb, 5, 6))

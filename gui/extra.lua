@@ -2569,7 +2569,7 @@ function GUI:SetupPartyWatcher(parent)
 
     local index = 1
     for class, value in pairs(C.PartySpellsDB) do
-        local color = F:RGBToHex(F:ClassColor(class))
+        local color = F:RgbToHex(F:ClassColor(class))
         local localClassName = _G.LOCALIZED_CLASS_NAMES_MALE[class]
         menuList[index] = {
             text = color .. localClassName,
@@ -3108,6 +3108,8 @@ function GUI:SetupRaidDebuff(parent)
         offset = offset - 65
     end
 end
+
+
 
 
 -- General

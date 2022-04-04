@@ -101,7 +101,7 @@ local function CreateButton(r, g, b, text, func)
     bu:SetHitRectInsets(0, 0, -8, -8)
     bu:RegisterForClicks('AnyUp')
     if text then
-        F.AddTooltip(bu, 'ANCHOR_TOP', F:RGBToHex(r, g, b) .. text)
+        F.AddTooltip(bu, 'ANCHOR_TOP', F:RgbToHex(r, g, b) .. text)
     end
     if func then
         bu:SetScript('OnClick', func)
