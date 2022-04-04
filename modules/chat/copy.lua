@@ -15,7 +15,7 @@ end
 
 local function replaceMessage(msg, r, g, b)
     local hexRGB = F:RGBToHex(r, g, b)
-    msg = string.gsub(msg, '(|T%d+(.*)|t)', '')
+    msg = string.gsub(msg, '|T(.-):.-|t', '%1') -- accept texture path or id
     return string.format('%s%s|r', hexRGB, msg)
 end
 
