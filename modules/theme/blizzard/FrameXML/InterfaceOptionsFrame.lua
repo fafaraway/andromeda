@@ -39,7 +39,7 @@ tinsert(
                 end
 
                 local line = _G.InterfaceOptionsFrame:CreateTexture(nil, 'ARTWORK')
-                line:SetSize(C.Mult, 546)
+                line:SetSize(C.MULT, 546)
                 line:SetPoint('LEFT', 205, 10)
                 line:SetColorTexture(1, 1, 1, .25)
 

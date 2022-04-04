@@ -78,7 +78,7 @@ function COMBAT:EasyFocus()
     f:SetAttribute('macrotext', '/focus mouseover')
     SetOverrideBindingClick(_G.FocuserButton, true, modifier .. '-BUTTON' .. mouseButton, 'FocuserButton')
 
-    if not C.IsNewPatch then -- cause client crash in 9.2.5.42850
+    if not C.NEW_PATCH then -- cause client crash in 9.2.5.42850
         hooksecurefunc('CreateFrame', COMBAT.Focuser_CreateFrameHook)
     end
 

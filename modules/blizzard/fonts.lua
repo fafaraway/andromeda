@@ -1,9 +1,9 @@
 local F, C = unpack(select(2, ...))
 
-local NORMAL = C.Assets.Fonts.Regular
-local BOLD = C.Assets.Fonts.Bold
-local COMBAT = C.Assets.Fonts.Combat
-local HEADER = C.Assets.Fonts.Header
+local NORMAL = C.Assets.Font.Regular
+local BOLD = C.Assets.Font.Bold
+local COMBAT = C.Assets.Font.Combat
+local HEADER = C.Assets.Font.Header
 
 local function ReplaceFont(obj, font, size, flag, shadow)
     if not font then

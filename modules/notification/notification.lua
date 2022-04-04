@@ -28,17 +28,17 @@ local function ConstructFrame()
     NOTIFICATION.Icon = icon
 
     local sep = f:CreateTexture(nil, 'BACKGROUND')
-    sep:SetSize(C.Mult, bannerHeight)
+    sep:SetSize(C.MULT, bannerHeight)
     sep:SetPoint('LEFT', icon, 'RIGHT', padding, 0)
     sep:SetColorTexture(0, 0, 0)
 
-    local title = F.CreateFS(f, C.Assets.Fonts.Bold, 14, nil, '', 'YELLOW', true)
+    local title = F.CreateFS(f, C.Assets.Font.Bold, 14, nil, '', 'YELLOW', true)
     title:SetPoint('TOPLEFT', sep, padding, -padding - 4)
     title:SetPoint('TOPRIGHT', f, -padding, -4)
     title:SetJustifyH('LEFT')
     NOTIFICATION.Title = title
 
-    local text = F.CreateFS(f, C.Assets.Fonts.Regular, 12, nil, '', nil, true)
+    local text = F.CreateFS(f, C.Assets.Font.Regular, 12, nil, '', nil, true)
     text:SetPoint('BOTTOMLEFT', sep, padding, padding + 4)
     text:SetPoint('BOTTOMRIGHT', f, -padding, 4)
     text:SetJustifyH('LEFT')
@@ -121,13 +121,13 @@ local function Display(name, message, clickFunc, texture)
         NOTIFICATION.Icon:SetTexture('Interface\\ICONS\\WoW_Store')
     end
 
-    NOTIFICATION.Title:SetText(C.YellowColor .. name)
-    NOTIFICATION.Text:SetText(C.BlueColor .. message)
+    NOTIFICATION.Title:SetText(C.YELLOW_COLOR .. name)
+    NOTIFICATION.Text:SetText(C.BLUE_COLOR .. message)
 
     ShowBanner()
 
     if playSounds then
-        PlaySoundFile(C.Assets.Sounds.Notification)
+        PlaySoundFile(C.Assets.Sound.Notification)
     end
 end
 

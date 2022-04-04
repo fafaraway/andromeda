@@ -34,7 +34,7 @@ function M:MailBox_DelectClick()
     if InboxItemCanDelete(selectedID) then
         DeleteInboxItem(selectedID)
     else
-        _G.UIErrorsFrame:AddMessage(C.RedColor .. _G.ERR_MAIL_DELETE_ITEM_ERROR)
+        _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. _G.ERR_MAIL_DELETE_ITEM_ERROR)
     end
 end
 
@@ -104,7 +104,7 @@ function M:ContactButton_Create(parent, index)
     button.HL:SetAllPoints()
     button.HL:SetColorTexture(1, 1, 1, .25)
 
-    button.name = F.CreateFS(button, C.Assets.Fonts.Bold, 12, nil, 'Name', nil, true, 'LEFT', 0, 0)
+    button.name = F.CreateFS(button, C.Assets.Font.Bold, 12, nil, 'Name', nil, true, 'LEFT', 0, 0)
     button.name:SetPoint('RIGHT', button, 'LEFT', 155, 0)
     button.name:SetJustifyH('LEFT')
 
@@ -145,10 +145,10 @@ function M:ContactList_Refresh()
         contactListByRealm[realm][name] = color
     end
 
-    GenerateDataByRealm(C.MyRealm)
+    GenerateDataByRealm(C.REALM)
 
     for realm in pairs(contactListByRealm) do
-        if realm ~= C.MyRealm then
+        if realm ~= C.REALM then
             GenerateDataByRealm(realm)
         end
     end
@@ -204,17 +204,17 @@ function M:MailBox_ContactList()
     bu:SetSize(20, 20)
     bu.Icon = bu:CreateTexture(nil, 'ARTWORK')
     bu.Icon:SetAllPoints()
-    bu.Icon:SetTexture(C.Assets.Textures.Gear)
+    bu.Icon:SetTexture(C.Assets.Texture.Gear)
     bu.Icon:SetVertexColor(.6, .6, .6)
-    bu:SetHighlightTexture(C.Assets.Textures.Gear)
+    bu:SetHighlightTexture(C.Assets.Texture.Gear)
     bu:SetPoint('LEFT', _G.SendMailNameEditBox, 'RIGHT', 20, 0)
 
     local list = CreateFrame('Frame', nil, bu)
     list:SetSize(200, 422)
-    list:SetPoint('TOPLEFT', _G.MailFrame, 'TOPRIGHT', 3, -C.Mult)
+    list:SetPoint('TOPLEFT', _G.MailFrame, 'TOPRIGHT', 3, -C.MULT)
     list:SetFrameStrata('Tooltip')
     F.SetBD(list)
-    F.CreateFS(list, C.Assets.Fonts.Regular, 12, nil, L['Contact List'], 'YELLOW', true, 'TOP', 0, -5)
+    F.CreateFS(list, C.Assets.Font.Regular, 12, nil, L['Contact List'], 'YELLOW', true, 'TOP', 0, -5)
 
     bu:SetScript(
         'OnClick',
@@ -246,7 +246,7 @@ function M:MailBox_ContactList()
                 return
             end -- incorrect input
             if not string.find(text, '-') then
-                text = text .. '-' .. C.MyRealm
+                text = text .. '-' .. C.REALM
             end -- complete player realm name
             if _G.FREE_ADB['ContactList'][text] then
                 return
@@ -389,7 +389,7 @@ end
 
 function M:MailBox_CollectCurrent()
     if _G.OpenMailFrame.cod then
-        _G.UIErrorsFrame:AddMessage(C.InfoColor .. L["You can't auto collect Cash on Delivery"])
+        _G.UIErrorsFrame:AddMessage(C.INFO_COLOR .. L["You can't auto collect Cash on Delivery"])
         return
     end
 

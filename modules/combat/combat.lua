@@ -13,20 +13,20 @@ function COMBAT:COMBAT_LOG_EVENT_UNFILTERED()
 
     if eventType == 'SPELL_INTERRUPT' and C.DB.Combat.Interrupt then
         if srcGUID == UnitGUID('player') or srcGUID == UnitGUID('pet') then
-            PlaySoundFile(C.Assets.Sounds.Interrupt, 'Master')
+            PlaySoundFile(C.Assets.Sound.Interrupt, 'Master')
         end
     elseif eventType == 'SPELL_DISPEL' and C.DB.Combat.Dispel then
         if srcGUID == UnitGUID('player') or srcGUID == UnitGUID('pet') then
-            PlaySoundFile(C.Assets.Sounds.Dispel, 'Master')
+            PlaySoundFile(C.Assets.Sound.Dispel, 'Master')
         end
     elseif eventType == 'SPELL_STOLEN' and C.DB.Combat.SpellSteal then
         if srcGUID == UnitGUID('player') then
-            PlaySoundFile(C.Assets.Sounds.Dispel, 'Master')
+            PlaySoundFile(C.Assets.Sound.Dispel, 'Master')
         end
     elseif eventType == 'SPELL_MISSED' and C.DB.Combat.SpellMiss then
         local missType, _, _ = select(15, CombatLogGetCurrentEventInfo())
         if missType == 'REFLECT' and destGUID == UnitGUID('player') then
-            PlaySoundFile(C.Assets.Sounds.Missed, 'Master')
+            PlaySoundFile(C.Assets.Sound.Missed, 'Master')
         end
     end
 end
@@ -41,7 +41,7 @@ function COMBAT:UNIT_HEALTH(unit)
     end
 
     local threshold = C.DB.Combat.LowHealthThreshold
-    local sound = C.Assets.Sounds.LowHealth
+    local sound = C.Assets.Sound.LowHealth
 
     if (UnitHealth('player') / UnitHealthMax('player')) <= threshold then
         if not playedLowHealth then
@@ -63,7 +63,7 @@ function COMBAT:UNIT_POWER_UPDATE(unit)
     end
 
     local threshold = C.DB.Combat.LowManaThreshold
-    local sound = C.Assets.Sounds.LowMana
+    local sound = C.Assets.Sound.LowMana
 
     if UnitPowerType('player') == 0 then
         local cur = UnitPower('player', 0)

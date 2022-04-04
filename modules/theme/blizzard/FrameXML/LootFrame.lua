@@ -69,7 +69,7 @@ table.insert(
 
         local promptFrame = _G.BonusRollFrame.PromptFrame
         F.ReskinIcon(promptFrame.Icon)
-        promptFrame.Timer.Bar:SetTexture(C.Assets.Textures.SBNormal)
+        promptFrame.Timer.Bar:SetTexture(C.Assets.Statusbar.Normal)
         F.CreateBDFrame(promptFrame.Timer, .25)
 
         local from, to = '|T.+|t', '|T%%s:14:14:0:0:64:64:5:59:5:59|t'
@@ -87,7 +87,7 @@ table.insert(
                         frame.Background:SetAlpha(0)
                         frame.bg = F.SetBD(frame)
 
-                        frame.Timer.Bar:SetTexture(C.Assets.Textures.Backdrop)
+                        frame.Timer.Bar:SetTexture(C.Assets.Texture.Backdrop)
                         frame.Timer.Bar:SetVertexColor(1, .8, 0)
                         frame.Timer.Background:SetAlpha(0)
                         F.CreateBDFrame(frame.Timer, .25)
@@ -119,7 +119,7 @@ table.insert(
                 if not iconHitBox.bg then
                     iconHitBox.bg = F.CreateBDFrame(iconHitBox)
                     iconHitBox.bg:SetOutside(lootFrame.Icon)
-                    lootFrame.Icon:SetTexCoord(unpack(C.TexCoord))
+                    lootFrame.Icon:SetTexCoord(unpack(C.TEX_COORD))
                     F.ReskinIconBorder(iconHitBox.IconBorder, true)
                 end
 

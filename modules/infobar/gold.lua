@@ -14,7 +14,7 @@ end
 
 local crossRealms = GetAutoCompleteRealms()
 if not crossRealms or #crossRealms == 0 then
-    crossRealms = {[1] = C.MyRealm}
+    crossRealms = {[1] = C.REALM}
 end
 
 local profit, spent, oldMoney = 0, 0, 0
@@ -41,14 +41,14 @@ local function Button_OnEvent(self, event)
 
     self.text:SetText(FormatMoney(newMoney))
 
-    if not _G.FREE_ADB['GoldStatistic'][C.MyRealm] then
-        _G.FREE_ADB['GoldStatistic'][C.MyRealm] = {}
+    if not _G.FREE_ADB['GoldStatistic'][C.REALM] then
+        _G.FREE_ADB['GoldStatistic'][C.REALM] = {}
     end
-    if not _G.FREE_ADB['GoldStatistic'][C.MyRealm][C.MyName] then
-        _G.FREE_ADB['GoldStatistic'][C.MyRealm][C.MyName] = {}
+    if not _G.FREE_ADB['GoldStatistic'][C.REALM][C.NAME] then
+        _G.FREE_ADB['GoldStatistic'][C.REALM][C.NAME] = {}
     end
-    _G.FREE_ADB['GoldStatistic'][C.MyRealm][C.MyName][1] = GetMoney()
-    _G.FREE_ADB['GoldStatistic'][C.MyRealm][C.MyName][2] = C.MyClass
+    _G.FREE_ADB['GoldStatistic'][C.REALM][C.NAME][1] = GetMoney()
+    _G.FREE_ADB['GoldStatistic'][C.REALM][C.NAME][2] = C.CLASS
 
     oldMoney = newMoney
 end
@@ -106,9 +106,9 @@ local function Button_OnEnter(self)
     _G.GameTooltip:AddDoubleLine(_G.AUCTION_HOUSE_BROWSE_HEADER_PRICE, GetMoneyString(tokenPrice, true), 1, 1, 1, 1, 1, 1)
 
     _G.GameTooltip:AddLine(' ')
-    _G.GameTooltip:AddDoubleLine(' ', C.LineString)
-    _G.GameTooltip:AddDoubleLine(' ', C.Assets.Textures.MouseLeftBtn .. L['Toggle Store Panel'] .. ' ', 1, 1, 1, .9, .8, .6)
-    _G.GameTooltip:AddDoubleLine(' ', C.Assets.Textures.MouseRightBtn .. L['Reset Gold Statistics'] .. ' ', 1, 1, 1, .9, .8, .6)
+    _G.GameTooltip:AddDoubleLine(' ', C.LINE_STRING)
+    _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_LEFT_BUTTON .. L['Toggle Store Panel'] .. ' ', 1, 1, 1, .9, .8, .6)
+    _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_RIGHT_BUTTON .. L['Reset Gold Statistics'] .. ' ', 1, 1, 1, .9, .8, .6)
     _G.GameTooltip:Show()
 end
 

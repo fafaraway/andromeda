@@ -1,7 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 
 _G.StaticPopupDialogs.FREEUI_RELOADUI_REQUIRED = {
-    text = C.RedColor .. L['ReloadUI Required'],
+    text = C.RED_COLOR .. L['ReloadUI Required'],
     button1 = _G.APPLY,
     button2 = _G.CLASS_TRIAL_THANKS_DIALOG_CLOSE_BUTTON,
     OnAccept = function()
@@ -12,7 +12,7 @@ _G.StaticPopupDialogs.FREEUI_RELOADUI_REQUIRED = {
 
 -- Layout
 _G.StaticPopupDialogs.FREEUI_RESET_LAYOUT = {
-    text = C.RedColor .. L['Are you sure to reset the Interface Layout?'],
+    text = C.RED_COLOR .. L['Are you sure to reset the Interface Layout?'],
     button1 = _G.OKAY,
     button2 = _G.CANCEL,
     OnAccept = function()
@@ -26,7 +26,7 @@ _G.StaticPopupDialogs.FREEUI_RESET_LAYOUT = {
 
 -- GUI
 _G.StaticPopupDialogs.FREEUI_RELOADUI = {
-    text = C.RedColor .. L['Are you sure to reload the Interface to apply settings?'],
+    text = C.RED_COLOR .. L['Are you sure to reload the Interface to apply settings?'],
     button1 = _G.APPLY,
     button2 = _G.CLASS_TRIAL_THANKS_DIALOG_CLOSE_BUTTON,
     OnAccept = function()
@@ -38,7 +38,7 @@ _G.StaticPopupDialogs.FREEUI_RELOADUI = {
 }
 
 _G.StaticPopupDialogs.FREEUI_RESET_MAJOR_SPELLS = {
-    text = C.RedColor .. L['Are you sure to restore default Major Spells List?'],
+    text = C.RED_COLOR .. L['Are you sure to restore default Major Spells List?'],
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
@@ -49,7 +49,7 @@ _G.StaticPopupDialogs.FREEUI_RESET_MAJOR_SPELLS = {
 }
 
 _G.StaticPopupDialogs.FREEUI_RESET_ANNOUNCEABLE_SPELLS = {
-    text = C.RedColor .. L['Are you sure to restore default Announceable Spells List?'],
+    text = C.RED_COLOR .. L['Are you sure to restore default Announceable Spells List?'],
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
@@ -60,7 +60,7 @@ _G.StaticPopupDialogs.FREEUI_RESET_ANNOUNCEABLE_SPELLS = {
 }
 
 _G.StaticPopupDialogs.FREEUI_RESET_PARTY_SPELLS = {
-    text = C.RedColor .. L['Are you sure to restore default Party Spells List?'],
+    text = C.RED_COLOR .. L['Are you sure to restore default Party Spells List?'],
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
@@ -71,7 +71,7 @@ _G.StaticPopupDialogs.FREEUI_RESET_PARTY_SPELLS = {
 }
 
 _G.StaticPopupDialogs.FREEUI_RESET_RAID_DEBUFFS = {
-    text = C.RedColor .. L['Are you sure to restore default Raid Debuffs List?'],
+    text = C.RED_COLOR .. L['Are you sure to restore default Raid Debuffs List?'],
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
@@ -83,7 +83,7 @@ _G.StaticPopupDialogs.FREEUI_RESET_RAID_DEBUFFS = {
 
 -- Profile Management
 _G.StaticPopupDialogs.FREEUI_IMPORT_PROFILE = {
-    text = C.RedColor .. L['Are you sure to import the settings?'],
+    text = C.RED_COLOR .. L['Are you sure to import the settings?'],
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
@@ -97,7 +97,7 @@ _G.StaticPopupDialogs.FREEUI_IMPORT_PROFILE = {
 }
 
 _G.StaticPopupDialogs.FREEUI_RESET_ALL = {
-    text = C.RedColor .. L['Are you sure to reset ALL the settings?'],
+    text = C.RED_COLOR .. L['Are you sure to reset ALL the settings?'],
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
@@ -112,7 +112,7 @@ _G.StaticPopupDialogs.FREEUI_RESET_ALL = {
 }
 
 _G.StaticPopupDialogs.FREEUI_RESET_CURRENT_PROFILE = {
-    text = C.RedColor .. L['Are you sure to reset your current profile?'],
+    text = C.RED_COLOR .. L['Are you sure to reset your current profile?'],
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
@@ -125,12 +125,12 @@ _G.StaticPopupDialogs.FREEUI_RESET_CURRENT_PROFILE = {
 }
 
 _G.StaticPopupDialogs.FREEUI_APPLY_PROFILE = {
-    text = C.RedColor .. L['Are you sure to switch to the selected profile?'],
+    text = C.RED_COLOR .. L['Are you sure to switch to the selected profile?'],
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
         local GUI = F:GetModule('GUI')
-        _G.FREE_ADB['ProfileIndex'][C.MyFullName] = GUI.currentProfile
+        _G.FREE_ADB['ProfileIndex'][C.FULL_NAME] = GUI.currentProfile
         _G.ReloadUI()
     end,
     timeout = 0,
@@ -139,12 +139,12 @@ _G.StaticPopupDialogs.FREEUI_APPLY_PROFILE = {
 }
 
 _G.StaticPopupDialogs.FREEUI_REPLACE_CURRENT_PROFILE = {
-    text = C.RedColor .. L['Are you sure to replace your current profile with the selected one?'],
+    text = C.RED_COLOR .. L['Are you sure to replace your current profile with the selected one?'],
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
         local GUI = F:GetModule('GUI')
-        local profileIndex = _G.FREE_ADB['ProfileIndex'][C.MyFullName]
+        local profileIndex = _G.FREE_ADB['ProfileIndex'][C.FULL_NAME]
         if GUI.currentProfile == 1 then
             _G.FREE_PDB[profileIndex - 1] = _G.FREE_DB
         elseif profileIndex == 1 then
@@ -160,7 +160,7 @@ _G.StaticPopupDialogs.FREEUI_REPLACE_CURRENT_PROFILE = {
 }
 
 _G.StaticPopupDialogs.FREEUI_REPLACE_SELECTED_PROFILE = {
-    text = C.RedColor .. L['Are you sure to replace the selected profile with your current one?'],
+    text = C.RED_COLOR .. L['Are you sure to replace the selected profile with your current one?'],
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
@@ -195,7 +195,7 @@ _G.StaticPopupDialogs.FREEUI_DELETE_UNIT_PROFILE = {
         else
             r, g, b = F:ClassColor(class)
         end
-        self.text:SetText(string.format(C.RedColor .. L['Are you sure to delete %s%s|r profile?'], F:RGBToHex(r, g, b), self.text.text_arg1))
+        self.text:SetText(string.format(C.RED_COLOR .. L['Are you sure to delete %s%s|r profile?'], F:RGBToHex(r, g, b), self.text.text_arg1))
     end,
     timeout = 0,
     whileDead = 1,
@@ -205,11 +205,11 @@ _G.StaticPopupDialogs.FREEUI_DELETE_UNIT_PROFILE = {
 -- Infobar Gold Statistics
 local crossRealms = GetAutoCompleteRealms()
 if not crossRealms or #crossRealms == 0 then
-    crossRealms = {[1] = C.MyRealm}
+    crossRealms = {[1] = C.REALM}
 end
 
 _G.StaticPopupDialogs.FREEUI_RESET_GOLD = {
-    text = C.RedColor .. L['Are you sure to reset All Gold Statistics?'],
+    text = C.RED_COLOR .. L['Are you sure to reset All Gold Statistics?'],
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
@@ -219,7 +219,7 @@ _G.StaticPopupDialogs.FREEUI_RESET_GOLD = {
             end
         end
 
-        _G.FREE_ADB['GoldStatistic'][C.MyRealm][C.MyName] = {GetMoney(), C.MyClass}
+        _G.FREE_ADB['GoldStatistic'][C.REALM][C.NAME] = {GetMoney(), C.CLASS}
     end,
     timeout = 0,
     whileDead = 1,
@@ -228,7 +228,7 @@ _G.StaticPopupDialogs.FREEUI_RESET_GOLD = {
 
 -- Inventory Custom Junk List
 _G.StaticPopupDialogs.FREEUI_RESET_JUNK_LIST = {
-    text = C.RedColor .. L['Are you sure to reset Junk Items List?'],
+    text = C.RED_COLOR .. L['Are you sure to reset Junk Items List?'],
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
@@ -241,19 +241,19 @@ _G.StaticPopupDialogs.FREEUI_RESET_JUNK_LIST = {
 
 -- Group Tool
 _G.StaticPopupDialogs['FREEUI_DISBAND_GROUP'] = {
-    text = C.RedColor .. L['Are you sure to disband your group?'],
+    text = C.RED_COLOR .. L['Are you sure to disband your group?'],
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
         if InCombatLockdown() then
-            _G.UIErrorsFrame:AddMessage(C.RedColor .. _G.ERR_NOT_IN_COMBAT)
+            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. _G.ERR_NOT_IN_COMBAT)
             return
         end
         if IsInRaid() then
             SendChatMessage(_G.TEAM_DISBAND .. '...', 'RAID')
             for i = 1, GetNumGroupMembers() do
                 local name, _, _, _, _, _, _, online = GetRaidRosterInfo(i)
-                if online and name ~= C.MyName then
+                if online and name ~= C.NAME then
                     UninviteUnit(name)
                 end
             end

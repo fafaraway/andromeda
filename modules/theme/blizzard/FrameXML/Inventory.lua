@@ -39,7 +39,7 @@ end
 
 local function ReplaceSortTexture(texture)
     texture:SetTexture('Interface\\Icons\\INV_Pet_Broom') -- HD version
-    texture:SetTexCoord(unpack(C.TexCoord))
+    texture:SetTexCoord(unpack(C.TEX_COORD))
 end
 
 local function ReskinSortButton(button)
@@ -58,7 +58,7 @@ local function ReskinBagSlot(bu)
     bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
     bu.searchOverlay:SetOutside()
 
-    bu.icon:SetTexCoord(unpack(C.TexCoord))
+    bu.icon:SetTexCoord(unpack(C.TEX_COORD))
     bu.bg = F.CreateBDFrame(bu.icon, .25)
     F.ReskinIconBorder(bu.IconBorder)
 

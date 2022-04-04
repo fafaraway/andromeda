@@ -77,7 +77,7 @@ function UNITFRAME:CreateClassPowerBar(self)
         bars[i] = CreateFrame('StatusBar', nil, self.ClassPowerBarHolder)
         bars[i]:SetHeight(barHeight)
         bars[i]:SetWidth((barWidth - 5 * gap) / 6)
-        bars[i]:SetStatusBarTexture(C.Assets.Textures.SBNormal)
+        bars[i]:SetStatusBarTexture(C.Assets.Statusbar.Normal)
         bars[i]:SetFrameLevel(self:GetFrameLevel() + 5)
 
         F.SetBD(bars[i])
@@ -88,12 +88,12 @@ function UNITFRAME:CreateClassPowerBar(self)
             bars[i]:SetPoint('LEFT', bars[i - 1], 'RIGHT', gap, 0)
         end
 
-        if C.MyClass == 'DEATHKNIGHT' and C.DB.Unitframe.RunesTimer then
-            bars[i].timer = F.CreateFS(bars[i], C.Assets.Fonts.Regular, 11, nil, '')
+        if C.CLASS == 'DEATHKNIGHT' and C.DB.Unitframe.RunesTimer then
+            bars[i].timer = F.CreateFS(bars[i], C.Assets.Font.Regular, 11, nil, '')
         end
     end
 
-    if C.MyClass == 'DEATHKNIGHT' then
+    if C.CLASS == 'DEATHKNIGHT' then
         bars.colorSpec = true
         bars.sortOrder = 'asc'
         bars.PostUpdate = PostUpdateRunes

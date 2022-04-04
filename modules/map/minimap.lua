@@ -288,7 +288,7 @@ function MM:ReskinMinimap()
     backdrop.bg:SetBackdropBorderColor(0, 0, 0, 1)
     map.backdrop = backdrop
 
-    map:SetMaskTexture(C.Assets.Textures.MinimapMask)
+    map:SetMaskTexture(C.Assets.Texture.MinimapMask)
     map:SetSize(256, 256)
     map:SetHitRectInsets(0, 0, map:GetHeight() / 8, map:GetHeight() / 8)
     map:SetClampRectInsets(0, 0, 0, 0)
@@ -297,7 +297,7 @@ function MM:ReskinMinimap()
     map:SetPoint('CENTER', backdrop)
     -- map:SetParent(map.backdrop)
 
-    local pos = {'BOTTOMRIGHT', _G.UIParent, 'BOTTOMRIGHT', -C.UIGap, C.UIGap}
+    local pos = {'BOTTOMRIGHT', _G.UIParent, 'BOTTOMRIGHT', -C.UI_GAP, C.UI_GAP}
     local mover = F.Mover(backdrop, _G.MINIMAP_LABEL, 'Minimap', pos)
     map.mover = mover
 
@@ -344,7 +344,7 @@ function MM:CreateMailButton()
 
     mail:ClearAllPoints()
     mail:SetPoint('BOTTOM', map, 0, offset - 4)
-    icon:SetTexture(C.Assets.Textures.MinimapMail)
+    icon:SetTexture(C.Assets.Texture.Mail)
     icon:SetSize(21, 21)
     icon:SetVertexColor(1, .8, 0)
 end
@@ -367,7 +367,7 @@ function MM:CreateCalendar()
             if region.SetTextColor then
                 region:SetTextColor(147 / 255, 211 / 255, 231 / 255)
                 region:SetJustifyH('RIGHT')
-                F:SetFS(region, C.Assets.Fonts.Bold, 12, 'OUTLINE')
+                F:SetFS(region, C.Assets.Font.Bold, 12, 'OUTLINE')
                 break
             end
         end
@@ -386,7 +386,7 @@ function MM:CreateCalendar()
     Invt:SetSize(300, 80)
     Invt:Hide()
     F.SetBD(Invt)
-    F.CreateFS(Invt, C.Assets.Fonts.Regular, 14, 'OUTLINE', _G.GAMETIME_TOOLTIP_CALENDAR_INVITES, 'BLUE')
+    F.CreateFS(Invt, C.Assets.Font.Regular, 14, 'OUTLINE', _G.GAMETIME_TOOLTIP_CALENDAR_INVITES, 'BLUE')
 
     local function updateInviteVisibility()
         Invt:SetShown(C_Calendar.GetNumPendingInvites() > 0)
@@ -484,7 +484,7 @@ function MM:CreateDifficultyFlag()
     diffFlag:SetSize(80, 40)
     diffFlag:SetPoint('TOPLEFT', map, 6, -offset - 11)
     diffFlag:SetFrameLevel(map:GetFrameLevel() + 2)
-    diffFlag.text = F.CreateFS(diffFlag, C.Assets.Fonts.Bold, 12, true, '', nil, true, 'TOPLEFT', 0, 0)
+    diffFlag.text = F.CreateFS(diffFlag, C.Assets.Font.Bold, 12, true, '', nil, true, 'TOPLEFT', 0, 0)
 
     map.DiffFlag = diffFlag
     map.DiffText = diffFlag.text
@@ -519,12 +519,12 @@ end
 function MM:CreateZoneText()
     _G.ZoneTextString:ClearAllPoints()
     _G.ZoneTextString:SetPoint('TOP', map, 0, -offset - 10)
-    _G.ZoneTextString:SetFont(C.Assets.Fonts.Header, 22)
-    _G.SubZoneTextString:SetFont(C.Assets.Fonts.Header, 22)
-    _G.PVPInfoTextString:SetFont(C.Assets.Fonts.Header, 22)
-    _G.PVPArenaTextString:SetFont(C.Assets.Fonts.Header, 22)
+    _G.ZoneTextString:SetFont(C.Assets.Font.Header, 22)
+    _G.SubZoneTextString:SetFont(C.Assets.Font.Header, 22)
+    _G.PVPInfoTextString:SetFont(C.Assets.Font.Header, 22)
+    _G.PVPArenaTextString:SetFont(C.Assets.Font.Header, 22)
 
-    local zoneText = F.CreateFS(map, C.Assets.Fonts.Header, 16, nil, '', nil, 'THICK')
+    local zoneText = F.CreateFS(map, C.Assets.Font.Header, 16, nil, '', nil, 'THICK')
     zoneText:SetPoint('TOP', map, 0, -offset - 10)
     zoneText:SetSize(map:GetWidth(), 30)
     zoneText:SetJustifyH('CENTER')
@@ -580,7 +580,7 @@ function MM:WhoPings()
 
     local f = CreateFrame('Frame', nil, map)
     f:SetAllPoints()
-    f.text = F.CreateFS(f, C.Assets.Fonts.Regular, 14, 'OUTLINE', '', 'CLASS', false, 'TOP', 0, -4)
+    f.text = F.CreateFS(f, C.Assets.Font.Regular, 14, 'OUTLINE', '', 'CLASS', false, 'TOP', 0, -4)
 
     local anim = f:CreateAnimationGroup()
     anim:SetScript('OnPlay', function()
@@ -601,7 +601,7 @@ function MM:WhoPings()
             return
         end -- ignore player ping
 
-        local r, g, b = F:ClassColor(C.MyClass)
+        local r, g, b = F:ClassColor(C.CLASS)
         local name = GetUnitName(unit)
 
         anim:Stop()
@@ -622,7 +622,7 @@ end
 function MM:Minimap_OnMouseUp(btn)
     if btn == 'RightButton' then
         if InCombatLockdown() then
-            _G.UIErrorsFrame:AddMessage(C.InfoColor .. _G.ERR_NOT_IN_COMBAT)
+            _G.UIErrorsFrame:AddMessage(C.INFO_COLOR .. _G.ERR_NOT_IN_COMBAT)
             return
         end
         _G.EasyMenu(menuList, F.EasyMenu, 'cursor', 0, 0, 'MENU', 3)
@@ -650,7 +650,7 @@ function MM:SetupHybridMinimap()
     local mapCanvas = _G.HybridMinimap.MapCanvas
     local rectangleMask = _G.HybridMinimap:CreateMaskTexture()
 
-    rectangleMask:SetTexture(C.Assets.Textures.MinimapMask)
+    rectangleMask:SetTexture(C.Assets.Texture.MinimapMask)
     rectangleMask:SetAllPoints(_G.HybridMinimap)
 
     _G.HybridMinimap.RectangleMask = rectangleMask

@@ -23,7 +23,7 @@ local atlasToRole = {
 local function ReplaceApplicantRoles(texture, atlas)
     local role = atlasToRole[atlas]
     if role then
-        texture:SetTexture(C.Assets.Textures.LfgRoles)
+        texture:SetTexture(C.Assets.Texture.LfgRole)
         texture:SetTexCoord(F.GetRoleTexCoord(role))
     end
 end
@@ -109,7 +109,7 @@ table.insert(C.BlizzThemes, function()
             local bg = F.CreateBDFrame(result, .5)
             local hl = result:CreateTexture(nil, 'BACKGROUND')
             hl:SetInside(bg)
-            hl:SetTexture(C.Assets.Textures.Backdrop)
+            hl:SetTexture(C.Assets.Texture.Backdrop)
             hl:SetVertexColor(r, g, b, .25)
             hl:Hide()
             result.hl = hl
@@ -132,14 +132,14 @@ table.insert(C.BlizzThemes, function()
         local header = applicationViewer[headerName]
 
         F.StripTextures(header)
-        header.Label:SetFont(C.Assets.Fonts.Regular, 14, 'OUTLINE')
+        header.Label:SetFont(C.Assets.Font.Regular, 14, 'OUTLINE')
         header.Label:SetShadowColor(0, 0, 0, 0)
         header:SetHighlightTexture('')
 
         local bg = F.CreateBDFrame(header, .25)
         local hl = header:CreateTexture(nil, 'BACKGROUND')
         hl:SetInside(bg)
-        hl:SetTexture(C.Assets.Textures.Backdrop)
+        hl:SetTexture(C.Assets.Texture.Backdrop)
         hl:SetVertexColor(r, g, b, .25)
         hl:Hide()
         header.hl = hl
@@ -212,7 +212,7 @@ table.insert(C.BlizzThemes, function()
     F.ReskinCheck(entryCreation.ItemLevel.CheckButton)
     F.ReskinCheck(entryCreation.VoiceChat.CheckButton)
     F.ReskinCheck(entryCreation.PrivateGroup.CheckButton)
-    if C.IsNewPatch then
+    if C.NEW_PATCH then
         F.ReskinCheck(entryCreation.CrossFactionGroup.CheckButton)
     end
 
@@ -278,7 +278,7 @@ table.insert(C.BlizzThemes, function()
     F.Reskin(LFGListInviteDialog.AcknowledgeButton)
 
     local roleIcon = LFGListInviteDialog.RoleIcon
-    roleIcon:SetTexture(C.Assets.Textures.LfgRoles)
+    roleIcon:SetTexture(C.Assets.Texture.LfgRole)
     F.CreateBDFrame(roleIcon)
 
     hooksecurefunc('LFGListInviteDialog_Show', function(self, resultID)

@@ -22,7 +22,7 @@ C.Themes['Blizzard_ItemSocketingUI'] = function()
         F.StripTextures(socket)
         socket:SetPushedTexture('')
         socket:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-        socket.icon:SetTexCoord(unpack(C.TexCoord))
+        socket.icon:SetTexCoord(unpack(C.TEX_COORD))
         socket.bg = F.ReskinIcon(socket.icon)
 
         shine:ClearAllPoints()

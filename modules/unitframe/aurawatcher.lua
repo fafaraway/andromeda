@@ -54,14 +54,14 @@ function UNITFRAME:CreateAuraWatcher(self)
 
     bu.icon = bu:CreateTexture(nil, 'ARTWORK')
     bu.icon:SetAllPoints()
-    bu.icon:SetTexCoord(unpack(C.TexCoord))
+    bu.icon:SetTexCoord(unpack(C.TEX_COORD))
 
     local parentFrame = CreateFrame('Frame', nil, bu)
     parentFrame:SetAllPoints()
     parentFrame:SetFrameLevel(bu:GetFrameLevel() + 6)
 
-    bu.count = F.CreateFS(parentFrame, C.Assets.Fonts.Square, 12, true, '', nil, true, 'TOPRIGHT', 2, 4)
-    bu.timer = F.CreateFS(bu, C.Assets.Fonts.Square, 12, true, '', nil, true, 'BOTTOMLEFT', 2, -4)
+    bu.count = F.CreateFS(parentFrame, C.Assets.Font.Square, 12, true, '', nil, true, 'TOPRIGHT', 2, 4)
+    bu.timer = F.CreateFS(bu, C.Assets.Font.Square, 12, true, '', nil, true, 'BOTTOMLEFT', 2, -4)
 
     bu.glowFrame = F.CreateGlowFrame(bu, bu:GetHeight())
 

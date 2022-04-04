@@ -28,7 +28,7 @@ end
 function UNITFRAME:CreateGCDTicker(self)
     local ticker = CreateFrame('StatusBar', nil, self)
     ticker:SetFrameLevel(self.Health:GetFrameLevel() + 1)
-    ticker:SetStatusBarTexture(C.Assets.Textures.Backdrop)
+    ticker:SetStatusBarTexture(C.Assets.Texture.Backdrop)
     ticker:GetStatusBarTexture():SetAlpha(0)
 
     local separateCastbar = C.DB.Unitframe.SeparateCastbar
@@ -41,7 +41,7 @@ function UNITFRAME:CreateGCDTicker(self)
     end
 
     local spark = ticker:CreateTexture(nil, 'OVERLAY')
-    spark:SetTexture(C.Assets.Textures.CastingSpark)
+    spark:SetTexture(C.Assets.Texture.Spark)
     spark:SetBlendMode('ADD')
 
     if separateCastbar then

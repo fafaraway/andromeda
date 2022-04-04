@@ -44,7 +44,7 @@ tinsert(
             unit.HealthBarBG:Hide()
             unit.HealthBarFrame:Hide()
             unit.healthBarWidth = 250
-            unit.ActualHealthBar:SetTexture(C.Assets.Textures.SBNormal)
+            unit.ActualHealthBar:SetTexture(C.Assets.Statusbar.Normal)
             unit.healthBg = F.SetBD(unit.ActualHealthBar)
             unit.healthBg:ClearAllPoints()
             unit.healthBg:SetWidth(252)
@@ -118,7 +118,7 @@ tinsert(
             unit.healthBarWidth = 36
             unit.ActualHealthBar:ClearAllPoints()
             unit.ActualHealthBar:SetPoint('TOPLEFT', unit.Icon, 'BOTTOMLEFT', 1, -4)
-            unit.ActualHealthBar:SetTexture(C.Assets.Textures.SBNormal)
+            unit.ActualHealthBar:SetTexture(C.Assets.Statusbar.Normal)
             unit.healthBg = F.SetBD(unit.ActualHealthBar)
             unit.healthBg:SetPoint('TOPLEFT', unit.ActualHealthBar, -1, 1)
             unit.healthBg:SetPoint('BOTTOMRIGHT', unit.ActualHealthBar, 'TOPLEFT', 37, -8)
@@ -158,7 +158,7 @@ tinsert(
                     if petOwner == LE_BATTLE_PET_ALLY then
                         self.Icon:SetTexCoord(.92, .08, .08, .92)
                     else
-                        self.Icon:SetTexCoord(unpack(C.TexCoord))
+                        self.Icon:SetTexCoord(unpack(C.TEX_COORD))
                     end
                 end
                 if self.glow then
@@ -247,14 +247,14 @@ tinsert(
                     end
 
                     bu:SetNormalTexture('')
-                    bu:GetPushedTexture():SetTexture(C.Assets.Textures.Button.Checked)
+                    bu:GetPushedTexture():SetTexture(C.Assets.Button.Checked)
                     bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
                     if not bu.bg then
                         bu.bg = F.ReskinIcon(bu.Icon, true)
                         bu.Icon:SetInside()
                     end
 
-                    bu.Cooldown:SetFont(C.Assets.Fonts.Regular, 11, 'OUTLINE')
+                    bu.Cooldown:SetFont(C.Assets.Font.Regular, 11, 'OUTLINE')
                     bu.SelectedHighlight:ClearAllPoints()
                     bu.SelectedHighlight:SetPoint('TOPLEFT', bu, -12, 12)
                     bu.SelectedHighlight:SetPoint('BOTTOMRIGHT', bu, 12, -12)
@@ -270,13 +270,13 @@ tinsert(
         F.PixelIcon(skipButton, 'Interface\\Icons\\Ability_Foundryraid_Dormant', true)
         F.CreateSD(skipButton)
         skipButton.HL:SetAllPoints(skipButton)
-        skipButton:SetPushedTexture(C.Assets.Textures.Button.Checked)
+        skipButton:SetPushedTexture(C.Assets.Button.Checked)
 
         local xpbar = _G.PetBattleFrameXPBar
         F.StripTextures(xpbar)
         xpbar:SetParent(bar)
         xpbar:SetWidth(bar:GetWidth())
-        xpbar:SetStatusBarTexture(C.Assets.Textures.SBNormal)
+        xpbar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
         F.SetBD(xpbar)
 
         local turnTimer = bottomFrame.TurnTimer
@@ -320,7 +320,7 @@ tinsert(
             unit.Name:SetPoint('TOPLEFT', icon, 'TOPRIGHT', 3, -3)
 
             unit.ActualHealthBar:SetPoint('BOTTOMLEFT', icon, 'BOTTOMRIGHT', 5, 0)
-            unit.ActualHealthBar:SetTexture(C.Assets.Textures.SBNormal)
+            unit.ActualHealthBar:SetTexture(C.Assets.Statusbar.Normal)
             local bg = F.SetBD(unit.ActualHealthBar)
             bg:SetPoint('TOPLEFT', unit.ActualHealthBar, -1, 1)
             bg:SetPoint('BOTTOMRIGHT', unit.ActualHealthBar, 'BOTTOMLEFT', 129, -1)
@@ -339,7 +339,7 @@ tinsert(
             frame:SetFrameLevel(0)
             local tex = F.SetGradient(frame, 'H', 0, 0, 0, v[1], v[2], width, height)
             tex:SetPoint('CENTER')
-            local line = F.SetGradient(frame, 'H', r, g, b, v[1], v[2], width, C.Mult)
+            local line = F.SetGradient(frame, 'H', r, g, b, v[1], v[2], width, C.MULT)
             line:SetPoint('BOTTOM', frame, 'TOP')
 
             RegisterStateDriver(frame, 'visibility', visibleState)

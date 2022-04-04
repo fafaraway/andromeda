@@ -37,7 +37,7 @@ local statusIcons = {
 local maxLevel = {
     [_G.BNET_CLIENT_WOW .. 'C'] = 60,
     [_G.BNET_CLIENT_WOW .. 'C_TBC'] = 70,
-    [_G.BNET_CLIENT_WOW] = C.MaxLevel
+    [_G.BNET_CLIENT_WOW] = GetMaxLevelForPlayerExpansion()
 }
 
 local clientColor = {
@@ -181,7 +181,7 @@ local function UpdateFriendButton(button)
 
         -- 地区
         if area then
-            if server and server ~= C.MyRealm then
+            if server and server ~= C.REALM then
                 buttonText = F:CreateColorString(area .. ' - ' .. server, {r = .8, g = .8, b = .8})
             else
                 buttonText = F:CreateColorString(area, {r = .8, g = .8, b = .8})
@@ -204,8 +204,8 @@ local function UpdateFriendButton(button)
         end
     end
 
-    F:SetFS(button.name, C.Assets.Fonts.Bold, 13, nil, nil, nil, true)
-    F:SetFS(button.info, C.Assets.Fonts.Condensed, 12, nil, nil, nil, true)
+    F:SetFS(button.name, C.Assets.Font.Bold, 13, nil, nil, nil, true)
+    F:SetFS(button.info, C.Assets.Font.Condensed, 12, nil, nil, nil, true)
 
     if button.Favorite:IsShown() then
         button.Favorite:ClearAllPoints()

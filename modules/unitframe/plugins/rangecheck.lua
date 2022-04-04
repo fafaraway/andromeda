@@ -136,9 +136,9 @@ local function IsUnitInRange(unit)
 
     if isVisible then
         if canAttack then
-            rangeSpells = HarmSpells[C.MyClass]
+            rangeSpells = HarmSpells[C.CLASS]
         elseif canHelp then
-            rangeSpells = FriendSpells[C.MyClass]
+            rangeSpells = FriendSpells[C.CLASS]
         end
         if canHelp or canAttack then
             for i = 1, #rangeSpells do

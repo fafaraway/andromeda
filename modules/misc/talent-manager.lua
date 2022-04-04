@@ -4,7 +4,7 @@ local TM = F:RegisterModule('TalentManager')
 function TM:CreateButton(width, height, text, discolor, fontSize)
     local bu = CreateFrame('Button', nil, self, 'UIPanelButtonTemplate')
     bu:SetSize(width, height)
-    bu.Text:SetFont(C.Assets.Fonts.Regular, fontSize or 12)
+    bu.Text:SetFont(C.Assets.Font.Regular, fontSize or 12)
     bu.Text:SetWidth(width - 20)
     bu.Text:SetWordWrap(false)
     if discolor and type(discolor) == 'boolean' then
@@ -29,13 +29,13 @@ function TM:SaveSet(setName)
 
     for _, data in pairs(self.db.sets[self.specID]) do
         if data.setName == setName then
-            _G.UIErrorsFrame:AddMessage(C.InfoColor .. string.format(L['Already have a set named %s.'], setName))
+            _G.UIErrorsFrame:AddMessage(C.INFO_COLOR .. string.format(L['Already have a set named %s.'], setName))
             return
         end
     end
 
     if #self.db.sets[self.specID] == MAX_SETS then
-        _G.UIErrorsFrame:AddMessage(C.InfoColor .. L['Too many sets here, please delete one of them and try again.'])
+        _G.UIErrorsFrame:AddMessage(C.INFO_COLOR .. L['Too many sets here, please delete one of them and try again.'])
         return
     end
 
@@ -95,7 +95,7 @@ end
 function TM:EditSet(index, setName)
     for key, data in pairs(self.db.sets[self.specID]) do
         if key ~= index and data.setName == setName then
-            _G.UIErrorsFrame:AddMessage(C.InfoColor .. string.format(L['Already have a set named %s.'], setName))
+            _G.UIErrorsFrame:AddMessage(C.INFO_COLOR .. string.format(L['Already have a set named %s.'], setName))
             return
         end
     end
@@ -275,10 +275,10 @@ end
 local function CreateHeader(parent, title, width, height)
     local frame = CreateFrame('Frame', nil, parent)
     frame:SetSize(width, height)
-    frame.Title = F.CreateFS(frame, C.Assets.Fonts.Bold, 13, nil, title, nil, nil, 'CENTER', 0, 0)
+    frame.Title = F.CreateFS(frame, C.Assets.Font.Bold, 13, nil, title, nil, nil, 'CENTER', 0, 0)
 
     local line = frame:CreateTexture(nil, 'ARTWORK')
-    line:SetSize(frame:GetWidth(), C.Mult)
+    line:SetSize(frame:GetWidth(), C.MULT)
     line:SetPoint('BOTTOM', 0, 0)
     line:SetColorTexture(1, 1, 1, .25)
 
@@ -296,16 +296,16 @@ function TM:CreateSaveFrame()
     frame:Hide()
     table.insert(_G.UISpecialFrames, 'FreeUI_TMSaveFrame')
 
-    local close = F.CreateButton(frame, 16, 16, true, C.Assets.Textures.Close)
+    local close = F.CreateButton(frame, 16, 16, true, C.Assets.Texture.Close)
     close:SetPoint('TOPRIGHT', -6, -6)
     close:SetScript('OnClick', function()
         frame:Hide()
     end)
     F.ReskinClose(close)
 
-    frame.Title = F.CreateFS(frame, C.Assets.Fonts.Regular, 12, nil, '', nil, nil, 'TOP', 0, -8)
+    frame.Title = F.CreateFS(frame, C.Assets.Font.Regular, 12, nil, '', nil, nil, 'TOP', 0, -8)
 
-    local label = F.CreateFS(frame, C.Assets.Fonts.Regular, 12, nil, L['Set Name'] .. ' :', nil, nil, 'TOPLEFT', 10, -32)
+    local label = F.CreateFS(frame, C.Assets.Font.Regular, 12, nil, L['Set Name'] .. ' :', nil, nil, 'TOPLEFT', 10, -32)
     local editBox = F.CreateEditBox(frame, 160, 22)
     editBox.bg:SetBackdropColor(0, 0, 0, 0)
     editBox:SetPoint('TOPLEFT', label, 'BOTTOMLEFT', 0, -5)
@@ -374,7 +374,7 @@ function TM:CreateSaveFrame()
                 TM:SaveSet(setName)
             end
         else
-            _G.UIErrorsFrame:AddMessage(C.InfoColor .. L['You must enter a set name.'])
+            _G.UIErrorsFrame:AddMessage(C.INFO_COLOR .. L['You must enter a set name.'])
         end
     end)
     frame.SaveButton = save

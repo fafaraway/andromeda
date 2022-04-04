@@ -6,7 +6,7 @@ C.Themes["Blizzard_GMChatUI"] = function()
 	frame:SetClampRectInsets(0, 0, 0, 0)
 	F.StripTextures(frame)
 	local bg = F.SetBD(frame)
-	bg:SetPoint("BOTTOMRIGHT", C.Mult, -5)
+	bg:SetPoint("BOTTOMRIGHT", C.MULT, -5)
 
 	local eb = frame.editBox
 	eb:SetAltArrowKeyMode(false)

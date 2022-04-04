@@ -9,7 +9,7 @@ local CLIENT_WOW_DIFF = 'WoV' -- for sorting
 local infoFrame, updateRequest, prevTime
 local friendTable = {}
 local bnetTable = {}
-local activeZone, inactiveZone = '|cff4cff4c', C.GreyColor
+local activeZone, inactiveZone = '|cff4cff4c', C.GREY_COLOR
 local noteString = '|TInterface\\Buttons\\UI-GuildButton-PublicNote-Up:12|t %s'
 local broadcastString = '|TInterface\\FriendsFrame\\BroadcastIcon:12|t %s (%s)'
 local onlineString = string.gsub(_G.ERR_FRIEND_ONLINE_SS, '.+h', '')
@@ -50,7 +50,7 @@ local function sortBNFriends(a, b)
 end
 
 local function CanCooperateWithUnit(gameAccountInfo)
-    return gameAccountInfo.playerGuid and (gameAccountInfo.factionName == C.MyFaction) and (gameAccountInfo.realmID ~= 0)
+    return gameAccountInfo.playerGuid and (gameAccountInfo.factionName == C.FACTION) and (gameAccountInfo.realmID ~= 0)
 end
 
 local function GetOnlineInfoText(client, isMobile, rafLinkType, locationText)
@@ -172,8 +172,8 @@ function INFOBAR:FriendsPanel_Init()
         end
     end)
 
-    F.CreateFS(infoFrame, C.Assets.Fonts.Bold, 16, nil, F:RGBToHex({.9, .8, .6}) .. _G.FRIENDS_LIST, nil, true, 'TOPLEFT', 15, -10)
-    infoFrame.friendCountText = F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 14, nil, '-/-', nil, true, 'TOPRIGHT', -15, -12)
+    F.CreateFS(infoFrame, C.Assets.Font.Bold, 16, nil, F:RGBToHex({.9, .8, .6}) .. _G.FRIENDS_LIST, nil, true, 'TOPLEFT', 15, -10)
+    infoFrame.friendCountText = F.CreateFS(infoFrame, C.Assets.Font.Regular, 14, nil, '-/-', nil, true, 'TOPRIGHT', -15, -12)
 
     local scrollFrame = CreateFrame('ScrollFrame', 'FreeUIFriendsInfobarScrollFrame', infoFrame, 'HybridScrollFrameTemplate')
     scrollFrame:SetSize(370, 400)
@@ -203,11 +203,11 @@ function INFOBAR:FriendsPanel_Init()
     scrollBar:SetMinMaxValues(0, numButtons * buttonHeight)
     scrollBar:SetValue(0)
 
-    F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, C.LineString, nil, true, 'BOTTOMRIGHT', -12, 42)
-    local whspInfo = C.InfoColor .. C.Assets.Textures.MouseRightBtn .. L['Whisper']
-    F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, whspInfo, nil, true, 'BOTTOMRIGHT', -15, 26)
-    local invtInfo = C.InfoColor .. 'ALT +' .. C.Assets.Textures.MouseLeftBtn .. L['Invite']
-    F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, invtInfo, nil, true, 'BOTTOMRIGHT', -15, 10)
+    F.CreateFS(infoFrame, C.Assets.Font.Regular, 13, nil, C.LINE_STRING, nil, true, 'BOTTOMRIGHT', -12, 42)
+    local whspInfo = C.INFO_COLOR .. C.MOUSE_RIGHT_BUTTON .. L['Whisper']
+    F.CreateFS(infoFrame, C.Assets.Font.Regular, 13, nil, whspInfo, nil, true, 'BOTTOMRIGHT', -15, 26)
+    local invtInfo = C.INFO_COLOR .. 'ALT +' .. C.MOUSE_LEFT_BUTTON .. L['Invite']
+    F.CreateFS(infoFrame, C.Assets.Font.Regular, 13, nil, invtInfo, nil, true, 'BOTTOMRIGHT', -15, 10)
 end
 
 local function inviteFunc(_, bnetIDGameAccount, guid)
@@ -298,7 +298,7 @@ local function buttonOnEnter(self)
             local clientString = _G.BNet_GetClientEmbeddedTexture(client, 16)
             if client == _G.BNET_CLIENT_WOW then
                 if charName ~= '' then -- fix for weird account
-                    realmName = (C.MyRealm == realmName or realmName == '') and '' or '-' .. realmName
+                    realmName = (C.REALM == realmName or realmName == '') and '' or '-' .. realmName
 
                     -- Get TBC realm name from richPresence
                     if wowProjectID == WOW_PROJECT_TBC then
@@ -362,13 +362,13 @@ function INFOBAR:FriendsPanel_CreateButton(parent, index)
     button.status:SetPoint('LEFT', button, 5, 0)
     button.status:SetSize(16, 16)
 
-    button.name = F.CreateFS(button, C.Assets.Fonts.Regular, 13, nil, 'Tag (name)', nil, true, 'LEFT', 25, 0)
+    button.name = F.CreateFS(button, C.Assets.Font.Regular, 13, nil, 'Tag (name)', nil, true, 'LEFT', 25, 0)
     button.name:SetPoint('RIGHT', button, 'LEFT', 230, 0)
     button.name:SetJustifyH('LEFT')
     button.name:SetTextColor(.5, .7, 1)
     button.name:SetWordWrap(false)
 
-    button.zone = F.CreateFS(button, C.Assets.Fonts.Regular, 13, nil, 'Zone', nil, true, 'RIGHT', -28, 0)
+    button.zone = F.CreateFS(button, C.Assets.Font.Regular, 13, nil, 'Zone', nil, true, 'RIGHT', -28, 0)
     button.zone:SetPoint('LEFT', button, 'RIGHT', -130, 0)
     button.zone:SetJustifyH('RIGHT')
     button.zone:SetWordWrap(false)
@@ -420,7 +420,7 @@ function INFOBAR:FriendsPanel_UpdateButton(button)
             end
             zoneColor = GetRealZoneText() == infoText and activeZone or inactiveZone
         end
-        button.name:SetText(string.format('%s%s|r (%s|r)', C.InfoColor, accountName, name))
+        button.name:SetText(string.format('%s%s|r (%s|r)', C.INFO_COLOR, accountName, name))
         button.zone:SetText(string.format('%s%s', zoneColor, infoText))
         if client == CLIENT_WOW_DIFF then
             button.gameIcon:SetTexture(_G.BNet_GetClientTexture(_G.BNET_CLIENT_WOW))
@@ -557,7 +557,7 @@ local function Block_OnEvent(self, event, arg1)
     end
 
     INFOBAR:FriendsPanel_Refresh()
-    self.text:SetText(string.format('%s: ' .. C.MyColor .. '%d', _G.FRIENDS, INFOBAR.totalOnline))
+    self.text:SetText(string.format('%s: ' .. C.CLASS_COLOR .. '%d', _G.FRIENDS, INFOBAR.totalOnline))
 
     updateRequest = false
     if infoFrame and infoFrame:IsShown() then

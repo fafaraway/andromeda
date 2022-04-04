@@ -14,7 +14,7 @@ local function UpdatePowerColor(power, unit)
     end
 
     local spec = GetSpecialization() or 0
-    if C.MyClass == 'DEMONHUNTER' then
+    if C.CLASS == 'DEMONHUNTER' then
         if spec == 1 then -- Havoc
             -- ChaosStrike needs 40 power
             -- BladeDance needs 35 power or 15 power with FirstBlood
@@ -78,8 +78,8 @@ function UNITFRAME:CreatePowerBar(self)
     local power = CreateFrame('StatusBar', nil, self)
     power:SetPoint('LEFT')
     power:SetPoint('RIGHT')
-    power:SetPoint('TOP', self.Health, 'BOTTOM', 0, -C.Mult)
-    power:SetStatusBarTexture(C.Assets.Textures.SBNormal)
+    power:SetPoint('TOP', self.Health, 'BOTTOM', 0, -C.MULT)
+    power:SetStatusBarTexture(C.Assets.Statusbar.Normal)
     F:SmoothBar(power)
 
     if isPlayer then
@@ -105,16 +105,16 @@ function UNITFRAME:CreatePowerBar(self)
     end
 
     local line = power:CreateTexture(nil, 'OVERLAY')
-    line:SetHeight(C.Mult)
-    line:SetPoint('TOPLEFT', 0, C.Mult)
-    line:SetPoint('TOPRIGHT', 0, C.Mult)
-    line:SetTexture(C.Assets.Textures.Backdrop)
+    line:SetHeight(C.MULT)
+    line:SetPoint('TOPLEFT', 0, C.MULT)
+    line:SetPoint('TOPRIGHT', 0, C.MULT)
+    line:SetTexture(C.Assets.Texture.Backdrop)
     line:SetVertexColor(0, 0, 0)
 
     if not inverted then
         local bg = power:CreateTexture(nil, 'BACKGROUND')
         bg:SetAllPoints()
-        bg:SetTexture(C.Assets.Textures.Backdrop)
+        bg:SetTexture(C.Assets.Texture.Backdrop)
         bg.multiplier = .1
         power.bg = bg
     end
@@ -178,7 +178,7 @@ end
 function UNITFRAME:CreateAlternativePowerBar(self)
     local smooth = C.DB.Unitframe.Smooth
     local altPower = CreateFrame('StatusBar', nil, self)
-    altPower:SetStatusBarTexture(C.Assets.Textures.SBNormal)
+    altPower:SetStatusBarTexture(C.Assets.Statusbar.Normal)
     altPower:SetPoint('TOP', self.Power, 'BOTTOM', 0, -2)
     altPower:SetSize(self:GetWidth(), C.DB.Unitframe.AltPowerHeight)
     altPower:EnableMouse(true)

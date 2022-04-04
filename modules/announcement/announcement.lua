@@ -63,12 +63,12 @@ function ANNOUNCEMENT:OnEvent()
 
     if eventType == 'SPELL_MISSED' and C.DB.Announcement.Reflect then
         local spellID, _, _, missType = select(12, CombatLogGetCurrentEventInfo())
-        if missType == 'REFLECT' and destName == C.MyName then
+        if missType == 'REFLECT' and destName == C.NAME then
             SendChatMessage(string.format(_G.COMBAT_TEXT_REFLECT .. ' %s %s', arrowStr, GetSpellLink(spellID)), GetChannel())
         end
     end
 
-    if srcName ~= C.MyName and not C:IsMyPet(srcFlags) then
+    if srcName ~= C.NAME and not C:IsMyPet(srcFlags) then
         return
     end
 

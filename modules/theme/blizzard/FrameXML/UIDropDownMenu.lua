@@ -45,8 +45,8 @@ tinsert(C.BlizzThemes, function()
 				end
 
                 bu.bg:Hide()
-				hl:SetPoint("TOPLEFT", -x + C.Mult, 0)
-				hl:SetPoint("BOTTOMRIGHT", listFrame:GetWidth() - bu:GetWidth() - x - C.Mult, 0)
+				hl:SetPoint("TOPLEFT", -x + C.MULT, 0)
+				hl:SetPoint("BOTTOMRIGHT", listFrame:GetWidth() - bu:GetWidth() - x - C.MULT, 0)
 				if uncheck then uncheck:SetTexture("") end
 
 				if not bu.notCheckable then
@@ -73,7 +73,7 @@ tinsert(C.BlizzThemes, function()
 	hooksecurefunc("UIDropDownMenu_SetIconImage", function(icon, texture)
 		if texture:find("Divider") then
 			icon:SetColorTexture(1, 1, 1, .2)
-			icon:SetHeight(C.Mult)
+			icon:SetHeight(C.MULT)
 		end
 	end)
 end)

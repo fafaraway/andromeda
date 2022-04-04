@@ -48,7 +48,7 @@ local function ReskinMissionPage(self)
     env.bg = F.ReskinIcon(env.Texture)
 
     if self.CostFrame then
-        self.CostFrame.CostIcon:SetTexCoord(unpack(C.TexCoord))
+        self.CostFrame.CostIcon:SetTexCoord(unpack(C.TEX_COORD))
     end
 end
 
@@ -72,7 +72,7 @@ local function ReskinXPBar(self)
         xpBar.XPLeft:Hide()
         xpBar.XPRight:Hide()
         select(4, xpBar:GetRegions()):Hide()
-        xpBar:SetStatusBarTexture(C.Assets.Textures.Backdrop)
+        xpBar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
         F.CreateBDFrame(xpBar, .25)
     end
 end
@@ -119,7 +119,7 @@ local function ReskinMissionList(self)
             end
             if rareOverlay then
                 rareOverlay:SetDrawLayer('BACKGROUND')
-                rareOverlay:SetTexture(C.Assets.Textures.Backdrop)
+                rareOverlay:SetTexture(C.Assets.Texture.Backdrop)
                 rareOverlay:SetAllPoints()
                 rareOverlay:SetVertexColor(.098, .537, .969, .2)
             end
@@ -1307,7 +1307,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
                     F.Reskin(peek('UnButton'))
                     F.Reskin(peek('StartButton'))
                     if peek('StartButton'):GetWidth() < 50 then -- only adjust the unmodified VP
-                        peek('StartButton'):SetText('|T' .. C.Assets.Textures.Arrow .. ':16|t')
+                        peek('StartButton'):SetText('|T' .. C.Assets.Texture.Arrow .. ':16|t')
                     end
                 elseif otype == 'ILButton' then
                     widget:DisableDrawLayer('BACKGROUND')
@@ -1319,7 +1319,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
                     F.ReskinIcon(widget:GetNormalTexture())
                     widget:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
                     widget:SetPushedTexture(nil)
-                    widget.Icon:SetTexCoord(unpack(C.TexCoord))
+                    widget.Icon:SetTexCoord(unpack(C.TEX_COORD))
                     widget:SetSize(46, 46)
                     table.insert(VPBooks, widget)
                 elseif otype == 'FollowerList' then
@@ -1363,7 +1363,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
                     peek('HealthBG'):SetPoint('BOTTOMRIGHT', peek('Portrait'), 'BOTTOMRIGHT')
                     local line = widget:CreateTexture(nil, 'ARTWORK')
                     line:SetColorTexture(0, 0, 0)
-                    line:SetSize(peek('HealthBG'):GetWidth(), C.Mult)
+                    line:SetSize(peek('HealthBG'):GetWidth(), C.MULT)
                     line:SetPoint('BOTTOM', peek('HealthBG'), 'TOP')
 
                     peek('Health'):SetHeight(10)

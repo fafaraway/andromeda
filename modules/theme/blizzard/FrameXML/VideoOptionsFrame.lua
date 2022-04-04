@@ -32,7 +32,7 @@ table.insert(
                 F.Reskin(_G.VideoOptionsFrameApply)
 
                 local line = _G.VideoOptionsFrame:CreateTexture(nil, 'ARTWORK')
-                line:SetSize(C.Mult, 512)
+                line:SetSize(C.MULT, 512)
                 line:SetPoint('LEFT', 205, 30)
                 line:SetColorTexture(1, 1, 1, .25)
 
@@ -48,7 +48,7 @@ table.insert(
                 reskinPanelSection(_G.AudioOptionsSoundPanelVolume)
 
                 local hline = _G.Display_:CreateTexture(nil, 'ARTWORK')
-                hline:SetSize(580, C.Mult)
+                hline:SetSize(580, C.MULT)
                 hline:SetPoint('TOPLEFT', _G.GraphicsButton, 'BOTTOMLEFT', 14, -4)
                 hline:SetColorTexture(1, 1, 1, .2)
 
@@ -88,7 +88,7 @@ table.insert(
                 local testInputDevie = _G.AudioOptionsVoicePanelTestInputDevice
                 F.Reskin(testInputDevie.ToggleTest)
                 F.StripTextures(testInputDevie.VUMeter)
-                testInputDevie.VUMeter.Status:SetStatusBarTexture(C.Assets.Textures.Backdrop)
+                testInputDevie.VUMeter.Status:SetStatusBarTexture(C.Assets.Texture.Backdrop)
                 local bg = F.CreateBDFrame(testInputDevie.VUMeter, .3)
                 bg:SetInside(nil, 4, 4)
 

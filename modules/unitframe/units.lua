@@ -13,13 +13,13 @@ UNITFRAME.Positions = {
     arena = {'LEFT', 'oUF_Target', 'RIGHT', 120, 120},
     party = {'BOTTOMRIGHT', 'oUF_Player', 'TOPLEFT', -100, 60},
     raid = {'TOPRIGHT', 'Minimap', 'TOPLEFT', -6, -42},
-    simple = {'TOPLEFT', C.UIGap, -100}
+    simple = {'TOPLEFT', C.UI_GAP, -100}
 }
 
 local function CreatePlayerStyle(self)
     self.unitStyle = 'player'
     self:SetWidth(C.DB.Unitframe.PlayerWidth)
-    self:SetHeight(C.DB.Unitframe.PlayerHealthHeight + C.DB.Unitframe.PlayerPowerHeight + C.Mult)
+    self:SetHeight(C.DB.Unitframe.PlayerHealthHeight + C.DB.Unitframe.PlayerPowerHeight + C.MULT)
 
     UNITFRAME:CreateBackdrop(self)
     UNITFRAME:CreateHealthBar(self)
@@ -45,7 +45,7 @@ end
 local function CreatePetStyle(self)
     self.unitStyle = 'pet'
     self:SetWidth(C.DB.Unitframe.PetWidth)
-    self:SetHeight(C.DB.Unitframe.PetHealthHeight + C.DB.Unitframe.PetPowerHeight + C.Mult)
+    self:SetHeight(C.DB.Unitframe.PetHealthHeight + C.DB.Unitframe.PetPowerHeight + C.MULT)
 
     UNITFRAME:CreateBackdrop(self)
     UNITFRAME:CreateHealthBar(self)
@@ -67,7 +67,7 @@ end
 local function CreateTargetStyle(self)
     self.unitStyle = 'target'
     self:SetWidth(C.DB.Unitframe.TargetWidth)
-    self:SetHeight(C.DB.Unitframe.TargetHealthHeight + C.DB.Unitframe.TargetPowerHeight + C.Mult)
+    self:SetHeight(C.DB.Unitframe.TargetHealthHeight + C.DB.Unitframe.TargetPowerHeight + C.MULT)
 
     UNITFRAME:CreateBackdrop(self)
     UNITFRAME:CreateHealthBar(self)
@@ -92,7 +92,7 @@ end
 local function CreateTargetTargetStyle(self)
     self.unitStyle = 'targettarget'
     self:SetWidth(C.DB.Unitframe.TargetTargetWidth)
-    self:SetHeight(C.DB.Unitframe.TargetTargetHealthHeight + C.DB.Unitframe.TargetTargetPowerHeight + C.Mult)
+    self:SetHeight(C.DB.Unitframe.TargetTargetHealthHeight + C.DB.Unitframe.TargetTargetPowerHeight + C.MULT)
 
     UNITFRAME:CreateBackdrop(self)
     UNITFRAME:CreateHealthBar(self)
@@ -113,7 +113,7 @@ end
 local function CreateFocusStyle(self)
     self.unitStyle = 'focus'
     self:SetWidth(C.DB.Unitframe.FocusWidth)
-    self:SetHeight(C.DB.Unitframe.FocusHealthHeight + C.DB.Unitframe.FocusPowerHeight + C.Mult)
+    self:SetHeight(C.DB.Unitframe.FocusHealthHeight + C.DB.Unitframe.FocusPowerHeight + C.MULT)
 
     UNITFRAME:CreateBackdrop(self)
     UNITFRAME:CreateHealthBar(self)
@@ -136,7 +136,7 @@ end
 local function CreateFocusTargetStyle(self)
     self.unitStyle = 'focustarget'
     self:SetWidth(C.DB.Unitframe.FocusTargetWidth)
-    self:SetHeight(C.DB.Unitframe.FocusTargetHealthHeight + C.DB.Unitframe.FocusTargetPowerHeight + C.Mult)
+    self:SetHeight(C.DB.Unitframe.FocusTargetHealthHeight + C.DB.Unitframe.FocusTargetPowerHeight + C.MULT)
 
     UNITFRAME:CreateBackdrop(self)
     UNITFRAME:CreateHealthBar(self)
@@ -156,7 +156,7 @@ end
 local function CreateBossStyle(self)
     self.unitStyle = 'boss'
     self:SetWidth(C.DB.Unitframe.BossWidth)
-    self:SetHeight(C.DB.Unitframe.BossHealthHeight + C.DB.Unitframe.BossPowerHeight + C.Mult)
+    self:SetHeight(C.DB.Unitframe.BossHealthHeight + C.DB.Unitframe.BossPowerHeight + C.MULT)
 
     UNITFRAME:CreateBackdrop(self)
     UNITFRAME:CreateHealthBar(self)
@@ -199,7 +199,7 @@ end
 local function CreateArenaStyle(self)
     self.unitStyle = 'arena'
     self:SetWidth(C.DB.Unitframe.ArenaWidth)
-    self:SetHeight(C.DB.Unitframe.ArenaHealthHeight + C.DB.Unitframe.ArenaPowerHeight + C.Mult)
+    self:SetHeight(C.DB.Unitframe.ArenaHealthHeight + C.DB.Unitframe.ArenaPowerHeight + C.MULT)
 
     UNITFRAME:CreateBackdrop(self)
     UNITFRAME:CreateHealthBar(self)
@@ -403,7 +403,7 @@ function UNITFRAME:CreateAndUpdatePartyHeader()
     local index = C.DB.Unitframe.PartyDirec
     local sortData = UNITFRAME.PartyDirections[index]
     local partyWidth = C.DB.Unitframe.PartyWidth
-    local partyHeight = C.DB.Unitframe.PartyHealthHeight + C.DB.Unitframe.PartyPowerHeight + C.Mult
+    local partyHeight = C.DB.Unitframe.PartyHealthHeight + C.DB.Unitframe.PartyPowerHeight + C.MULT
 
     if not party then
         party = CreatePartyHeader('oUF_Party', partyWidth, partyHeight)
@@ -581,7 +581,7 @@ local function CreateTeamIndex(header)
     local direc = C.DB.Unitframe.RaidDirec
     local parent = _G[header:GetName() .. 'UnitButton1']
     if parent and not parent.teamIndex then
-        local teamIndex = F.CreateFS(parent, C.Assets.Fonts.Bold, 11, nil, header.index, nil, true)
+        local teamIndex = F.CreateFS(parent, C.Assets.Font.Bold, 11, nil, header.index, nil, true)
         teamIndex:SetTextColor(.6, .8, 1)
         teamIndex.__owner = parent
         UpdateTeamIndex(teamIndex, showIndex, direc)
@@ -629,7 +629,7 @@ function UNITFRAME:CreateAndUpdateRaidHeader(direction)
     local rows = C.DB.Unitframe.RaidRows
     local numGroups = C.DB.Unitframe.NumGroups
     local raidWidth = C.DB.Unitframe.RaidWidth
-    local raidHeight = C.DB.Unitframe.RaidHealthHeight + C.DB.Unitframe.RaidPowerHeight + C.Mult
+    local raidHeight = C.DB.Unitframe.RaidHealthHeight + C.DB.Unitframe.RaidPowerHeight + C.MULT
     local indexSpacing = C.DB.Unitframe.TeamIndex and 20 or 0
 
     local sortData = UNITFRAME.RaidDirections[index]

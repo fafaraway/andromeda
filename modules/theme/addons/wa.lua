@@ -16,7 +16,7 @@ local function UpdateIconTexCoord(icon)
 
     local width, height = icon:GetSize()
     if width ~= 0 and height ~= 0 then
-        local left, right, top, bottom = unpack(C.TexCoord) -- normal icon
+        local left, right, top, bottom = unpack(C.TEX_COORD) -- normal icon
         local ratio = width / height
         if ratio > 1 then -- fat icon
             local offset = (1 - 1 / ratio) / 2

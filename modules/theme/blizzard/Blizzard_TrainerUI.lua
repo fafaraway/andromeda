@@ -45,7 +45,7 @@ C.Themes["Blizzard_TrainerUI"] = function()
 
 	F.StripTextures(ClassTrainerStatusBar)
 	ClassTrainerStatusBar:SetPoint("TOPLEFT", ClassTrainerFrame, "TOPLEFT", 64, -35)
-	ClassTrainerStatusBar:SetStatusBarTexture(C.Assets.Textures.Backdrop)
+	ClassTrainerStatusBar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
 	ClassTrainerStatusBar:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
 	F.CreateBDFrame(ClassTrainerStatusBar, .25)
 

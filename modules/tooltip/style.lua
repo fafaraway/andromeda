@@ -69,9 +69,9 @@ function TOOLTIP:SetupFonts()
     local textSize = 14
     local headerSize = 16
 
-    RestyleFont(_G.GameTooltipHeaderText, C.Assets.Fonts.Bold, headerSize)
-    RestyleFont(_G.GameTooltipText, C.Assets.Fonts.Regular, textSize)
-    RestyleFont(_G.GameTooltipTextSmall, C.Assets.Fonts.Regular, textSize)
+    RestyleFont(_G.GameTooltipHeaderText, C.Assets.Font.Bold, headerSize)
+    RestyleFont(_G.GameTooltipText, C.Assets.Font.Regular, textSize)
+    RestyleFont(_G.GameTooltipTextSmall, C.Assets.Font.Regular, textSize)
 
     if not _G.GameTooltip.hasMoney then
         _G.SetTooltipMoney(_G.GameTooltip, 1, nil, '', '')
@@ -81,8 +81,8 @@ function TOOLTIP:SetupFonts()
 
     if _G.GameTooltip.hasMoney then
         for i = 1, _G.GameTooltip.numMoneyFrames do
-            RestyleFont(_G['GameTooltipMoneyFrame' .. i .. 'PrefixText'], C.Assets.Fonts.Regular, textSize)
-            RestyleFont(_G['GameTooltipMoneyFrame' .. i .. 'SuffixText'], C.Assets.Fonts.Regular, textSize)
+            RestyleFont(_G['GameTooltipMoneyFrame' .. i .. 'PrefixText'], C.Assets.Font.Regular, textSize)
+            RestyleFont(_G['GameTooltipMoneyFrame' .. i .. 'SuffixText'], C.Assets.Font.Regular, textSize)
         end
     end
 
@@ -90,7 +90,7 @@ function TOOLTIP:SetupFonts()
         for i = 1, tt:GetNumRegions() do
             local region = select(i, tt:GetRegions())
             if region:IsObjectType('FontString') then
-                RestyleFont(region, C.Assets.Fonts.Regular, textSize)
+                RestyleFont(region, C.Assets.Font.Regular, textSize)
             end
         end
     end
@@ -175,7 +175,7 @@ TOOLTIP:RegisterTooltips(
                     if self.glow then
                         self.glow:Hide()
                     end
-                    self.Icon:SetTexCoord(unpack(C.TexCoord))
+                    self.Icon:SetTexCoord(unpack(C.TEX_COORD))
                     self.iconStyled = true
                 end
             end
@@ -190,14 +190,14 @@ TOOLTIP:RegisterTooltips(
                     if isBuff and self.Buffs then
                         local frame = self.Buffs.frames[nextBuff]
                         if frame and frame.Icon then
-                            frame.Icon:SetTexCoord(unpack(C.TexCoord))
+                            frame.Icon:SetTexCoord(unpack(C.TEX_COORD))
                         end
                         nextBuff = nextBuff + 1
                     elseif (not isBuff) and self.Debuffs then
                         local frame = self.Debuffs.frames[nextDebuff]
                         if frame and frame.Icon then
                             frame.DebuffBorder:Hide()
-                            frame.Icon:SetTexCoord(unpack(C.TexCoord))
+                            frame.Icon:SetTexCoord(unpack(C.TEX_COORD))
                         end
                         nextDebuff = nextDebuff + 1
                     end
@@ -329,7 +329,7 @@ TOOLTIP:RegisterTooltips(
     'Blizzard_Contribution',
     function()
         _G.ContributionBuffTooltip:HookScript('OnShow', TOOLTIP.ReskinTooltip)
-        _G.ContributionBuffTooltip.Icon:SetTexCoord(unpack(C.TexCoord))
+        _G.ContributionBuffTooltip.Icon:SetTexCoord(unpack(C.TEX_COORD))
         _G.ContributionBuffTooltip.Border:SetAlpha(0)
     end
 )
@@ -338,9 +338,9 @@ TOOLTIP:RegisterTooltips(
     'Blizzard_EncounterJournal',
     function()
         _G.EncounterJournalTooltip:HookScript('OnShow', TOOLTIP.ReskinTooltip)
-        _G.EncounterJournalTooltip.Item1.icon:SetTexCoord(unpack(C.TexCoord))
+        _G.EncounterJournalTooltip.Item1.icon:SetTexCoord(unpack(C.TEX_COORD))
         _G.EncounterJournalTooltip.Item1.IconBorder:SetAlpha(0)
-        _G.EncounterJournalTooltip.Item2.icon:SetTexCoord(unpack(C.TexCoord))
+        _G.EncounterJournalTooltip.Item2.icon:SetTexCoord(unpack(C.TEX_COORD))
         _G.EncounterJournalTooltip.Item2.IconBorder:SetAlpha(0)
     end
 )

@@ -176,12 +176,12 @@ local function Block_OnEnter(self)
     end
 
     _G.GameTooltip:AddLine(' ')
-    _G.GameTooltip:AddDoubleLine(' ', C.LineString)
-    _G.GameTooltip:AddDoubleLine(' ', C.Assets.Textures.MouseLeftBtn .. L['Collect Memory'] .. ' ', 1, 1, 1, .9, .82, .62)
+    _G.GameTooltip:AddDoubleLine(' ', C.LINE_STRING)
+    _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_LEFT_BUTTON .. L['Collect Memory'] .. ' ', 1, 1, 1, .9, .82, .62)
     if scriptProfileStatus then
-        _G.GameTooltip:AddDoubleLine(' ', C.Assets.Textures.MouseRightBtn .. L['Switch Mode'] .. ' ', 1, 1, 1, .6, .8, 1)
+        _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_RIGHT_BUTTON .. L['Switch Mode'] .. ' ', 1, 1, 1, .6, .8, 1)
     end
-    _G.GameTooltip:AddDoubleLine(' ', C.Assets.Textures.MouseMiddleBtn .. L['CPU Usage'] .. ': ' .. (GetCVarBool('scriptProfile') and enableString or disableString) .. ' ', 1, 1, 1, .6, .8, 1)
+    _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_MIDDLE_BUTTON .. L['CPU Usage'] .. ': ' .. (GetCVarBool('scriptProfile') and enableString or disableString) .. ' ', 1, 1, 1, .6, .8, 1)
     _G.GameTooltip:Show()
 end
 

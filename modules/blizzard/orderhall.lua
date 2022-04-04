@@ -14,7 +14,7 @@ function BLIZZARD:OrderHall_CreateIcon()
     hall.Icon = hall:CreateTexture(nil, 'ARTWORK')
     hall.Icon:SetAllPoints()
     hall.Icon:SetTexture('Interface\\TargetingFrame\\UI-Classes-Circles')
-    hall.Icon:SetTexCoord(unpack(_G.CLASS_ICON_TCOORDS[C.MyClass]))
+    hall.Icon:SetTexCoord(unpack(_G.CLASS_ICON_TCOORDS[C.CLASS]))
     hall.Category = {}
 
     hall:SetScript('OnEnter', BLIZZARD.OrderHall_OnEnter)
@@ -70,7 +70,7 @@ function BLIZZARD:OrderHall_OnEnter()
 
     _G.GameTooltip:SetOwner(self, 'ANCHOR_BOTTOMRIGHT', 5, -5)
     _G.GameTooltip:ClearLines()
-    _G.GameTooltip:AddLine(C.MyColor .. _G['ORDER_HALL_' .. C.MyClass])
+    _G.GameTooltip:AddLine(C.CLASS_COLOR .. _G['ORDER_HALL_' .. C.CLASS])
     _G.GameTooltip:AddLine(' ')
     _G.GameTooltip:AddDoubleLine(getIconString(self.texture) .. self.name, self.amount, 1, 1, 1, 1, 1, 1)
 
@@ -89,7 +89,7 @@ function BLIZZARD:OrderHall_OnEnter()
         end
     end
 
-    _G.GameTooltip:AddDoubleLine(' ', C.LineString)
+    _G.GameTooltip:AddDoubleLine(' ', C.LINE_STRING)
     _G.GameTooltip:AddDoubleLine(' ', L['Hold SHIFT for details'], 1, 1, 1, .6, .8, 1)
     _G.GameTooltip:Show()
 

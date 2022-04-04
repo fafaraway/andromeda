@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 local function restyFont(obj)
-    local font, size = C.Assets.Fonts.Condensed, 11
+    local font, size = C.Assets.Font.Condensed, 11
     obj:SetFont(font, size)
     obj:SetShadowColor(0, 0, 0, 1)
     obj:SetShadowOffset(2, -2)

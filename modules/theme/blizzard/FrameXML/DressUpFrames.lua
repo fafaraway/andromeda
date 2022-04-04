@@ -1,10 +1,10 @@
 local F, C = unpack(select(2, ...))
 
 local function ResetToggleTexture(button, texture)
-    button:GetNormalTexture():SetTexCoord(unpack(C.TexCoord))
+    button:GetNormalTexture():SetTexCoord(unpack(C.TEX_COORD))
     button:GetNormalTexture():SetInside()
     button:SetNormalTexture(texture)
-    button:GetPushedTexture():SetTexCoord(unpack(C.TexCoord))
+    button:GetPushedTexture():SetTexCoord(unpack(C.TEX_COORD))
     button:GetPushedTexture():SetInside()
     button:SetPushedTexture(texture)
 end

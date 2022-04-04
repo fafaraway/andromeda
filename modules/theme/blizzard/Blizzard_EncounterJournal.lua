@@ -227,7 +227,7 @@ C.Themes['Blizzard_EncounterJournal'] = function()
             bu.icon.SetTexCoord = nop
             local bg = F.CreateBDFrame(bu, .25)
             bg:SetInside()
-            bu:SetHighlightTexture(C.Assets.Textures.Backdrop)
+            bu:SetHighlightTexture(C.Assets.Texture.Backdrop)
             local hl = bu:GetHighlightTexture()
             hl:SetVertexColor(r, g, b, .25)
             hl:SetInside(bg)
@@ -313,7 +313,7 @@ C.Themes['Blizzard_EncounterJournal'] = function()
 
             if data.iconPath then
                 suggestion.icon:SetMask(nil)
-                suggestion.icon:SetTexCoord(unpack(C.TexCoord))
+                suggestion.icon:SetTexCoord(unpack(C.TEX_COORD))
             end
         end
 
@@ -329,7 +329,7 @@ C.Themes['Blizzard_EncounterJournal'] = function()
 
                 if data.iconPath then
                     suggestion.icon:SetMask(nil)
-                    suggestion.icon:SetTexCoord(unpack(C.TexCoord))
+                    suggestion.icon:SetTexCoord(unpack(C.TEX_COORD))
                 end
             end
         end
@@ -339,7 +339,7 @@ C.Themes['Blizzard_EncounterJournal'] = function()
         local rewardData = suggestion.reward.data
         if rewardData then
             suggestion.reward.icon:SetMask('')
-            suggestion.reward.icon:SetTexCoord(unpack(C.TexCoord))
+            suggestion.reward.icon:SetTexCoord(unpack(C.TEX_COORD))
         end
     end)
 

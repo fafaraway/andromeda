@@ -51,7 +51,7 @@ local function ParagonNotify(event, questID)
     local name = GetFactionInfoByID(idList[questID][1]) or _G.UNKNOWN
     local text = GetQuestLogCompletionText(C_QuestLog.GetLogIndexForQuestID(questID))
 
-    F:CreateNotification(name, C.BlueColor .. text, nil, 'Interface\\ICONS\\Achievement_Quests_Completed_08')
+    F:CreateNotification(name, C.BLUE_COLOR .. text, nil, 'Interface\\ICONS\\Achievement_Quests_Completed_08')
 end
 
 function NOTIFICATION:ParagonNotify()

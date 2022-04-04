@@ -127,7 +127,7 @@ function M:MissingStats()
             end
             _G.PaperDollFrame_SetLabelAndText(statFrame, _G.STAT_AVERAGE_ITEM_LEVEL, displayItemLevel, false, displayItemLevel)
 
-            _G.CharacterStatsPane.ItemLevelFrame.Value:SetFont(C.Assets.Fonts.Header, 18)
+            _G.CharacterStatsPane.ItemLevelFrame.Value:SetFont(C.Assets.Font.Header, 18)
             _G.CharacterStatsPane.ItemLevelFrame.Value:SetShadowColor(0, 0, 0, 1)
             _G.CharacterStatsPane.ItemLevelFrame.Value:SetShadowOffset(1, -1)
         end
@@ -193,7 +193,7 @@ function M:TitleFontSize()
             local bu = _G.PaperDollTitlesPane.buttons
             for i = 1, #bu do
                 if not bu[i].fontStyled then
-                    bu[i].text:SetFont(C.Assets.Fonts.Bold, 12)
+                    bu[i].text:SetFont(C.Assets.Font.Bold, 12)
                     bu[i].text:SetShadowColor(0, 0, 0, 1)
                     bu[i].text:SetShadowOffset(1, -1)
                     bu[i].fontStyled = true

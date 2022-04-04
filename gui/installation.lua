@@ -131,9 +131,9 @@ local function SetupCVars()
 end
 
 local function UpdateUIScale()
-    if C.IsHighRes then
+    if C.SCREEN_HEIGHT > 1440 then
         _G.FREE_ADB.UIScale = 2
-    elseif C.IsMedRes then
+    elseif C.SCREEN_HEIGHT > 1080 and C.SCREEN_HEIGHT < 1440 then
         _G.FREE_ADB.UIScale = 1.4
     else
         _G.FREE_ADB.UIScale = 1
@@ -184,13 +184,13 @@ function INSTALL:HelloWorld()
     f:SetFrameStrata('HIGH')
     F.SetBD(f)
 
-    f.logo = F.CreateFS(f, C.AssetsPath .. 'fonts\\header.ttf', 22, nil, C.AddonName, nil, true, 'TOP', 0, -4)
-    f.desc = F.CreateFS(f, C.Assets.Fonts.Regular, 10, nil, 'installation', {.7, .7, .7}, true, 'TOP', 0, -30)
+    f.logo = F.CreateFS(f, C.ASSET_PATH .. 'fonts\\header.ttf', 22, nil, C.ADDON_NAME, nil, true, 'TOP', 0, -4)
+    f.desc = F.CreateFS(f, C.Assets.Font.Regular, 10, nil, 'installation', {.7, .7, .7}, true, 'TOP', 0, -30)
 
-    local lineLeft = F.SetGradient(f, 'H', .7, .7, .7, 0, .7, 120, C.Mult)
+    local lineLeft = F.SetGradient(f, 'H', .7, .7, .7, 0, .7, 120, C.MULT)
     lineLeft:SetPoint('TOP', -60, -26)
 
-    local lineRight = F.SetGradient(f, 'H', .7, .7, .7, .7, 0, 120, C.Mult)
+    local lineRight = F.SetGradient(f, 'H', .7, .7, .7, .7, 0, 120, C.MULT)
     lineRight:SetPoint('TOP', 60, -26)
 
     f.body = CreateFrame('Frame', nil, f, 'BackdropTemplate')
@@ -199,10 +199,10 @@ function INSTALL:HelloWorld()
     f.body.__bg = F.CreateBDFrame(f.body)
     f.body.__bg:SetBackdropColor(.04, .04, .04, .25)
 
-    local headerText = F.CreateFS(f.body, C.Assets.Fonts.Regular, 18, nil, nil, 'YELLOW', true, 'TOPLEFT', 10, -20)
+    local headerText = F.CreateFS(f.body, C.Assets.Font.Regular, 18, nil, nil, 'YELLOW', true, 'TOPLEFT', 10, -20)
     headerText:SetWidth(360)
 
-    local bodyText = F.CreateFS(f.body, C.Assets.Fonts.Regular, 14, nil, nil, 'GREY', true, 'TOPLEFT', 10, -50)
+    local bodyText = F.CreateFS(f.body, C.Assets.Font.Regular, 14, nil, nil, 'GREY', true, 'TOPLEFT', 10, -50)
     bodyText:SetJustifyH('LEFT')
     bodyText:SetWordWrap(true)
     bodyText:SetWidth(360)
@@ -210,7 +210,7 @@ function INSTALL:HelloWorld()
     local progressBar = CreateFrame('StatusBar', nil, f.body)
     progressBar:SetPoint('BOTTOM', f.body, 'BOTTOM', 0, 10)
     progressBar:SetSize(320, 20)
-    progressBar:SetStatusBarTexture(C.Assets.Textures.SBNormal)
+    progressBar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
     progressBar:Hide()
     F:SmoothBar(progressBar)
 
@@ -220,7 +220,7 @@ function INSTALL:HelloWorld()
         progressBar.shadow:SetBackdropBorderColor(C.r, C.g, C.b)
     end
 
-    local progressBarText = F.CreateFS(progressBar, C.Assets.Fonts.Regular, 11, nil, '', nil, 'THICK', 'CENTER', 0, 0)
+    local progressBarText = F.CreateFS(progressBar, C.Assets.Font.Regular, 11, nil, '', nil, 'THICK', 'CENTER', 0, 0)
 
     local leftButton = CreateFrame('Button', 'FreeUI_Install_LeftButton', f, 'UIPanelButtonTemplate')
     leftButton:SetPoint('BOTTOM', -52, 10)

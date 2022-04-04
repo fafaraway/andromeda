@@ -39,14 +39,14 @@ table.insert(
 
         _G.NPCFriendshipStatusBar.icon:SetPoint('TOPLEFT', -30, 7)
         F.StripTextures(_G.NPCFriendshipStatusBar, 4)
-        _G.NPCFriendshipStatusBar:SetStatusBarTexture(C.Assets.Textures.SBNormal)
+        _G.NPCFriendshipStatusBar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
         F.CreateBDFrame(_G.NPCFriendshipStatusBar, .25)
 
         for i = 1, 4 do
             local notch = _G.NPCFriendshipStatusBar['Notch' .. i]
             if notch then
                 notch:SetColorTexture(0, 0, 0)
-                notch:SetSize(C.Mult, 16)
+                notch:SetSize(C.MULT, 16)
             end
         end
 

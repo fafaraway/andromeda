@@ -6,15 +6,15 @@ UNITFRAME.CornerSpellsList = {}
 function UNITFRAME:UpdateCornerSpells()
     table.wipe(UNITFRAME.CornerSpellsList)
 
-    for spellID, value in pairs(C.CornerSpellsList[C.MyClass]) do
-        local modData = _G.FREE_ADB['CornerSpellsList'][C.MyClass]
+    for spellID, value in pairs(C.CornerSpellsList[C.CLASS]) do
+        local modData = _G.FREE_ADB['CornerSpellsList'][C.CLASS]
         if not (modData and modData[spellID]) then
             local r, g, b = unpack(value[2])
             UNITFRAME.CornerSpellsList[spellID] = {value[1], {r, g, b}, value[3]}
         end
     end
 
-    for spellID, value in pairs(_G.FREE_ADB['CornerSpellsList'][C.MyClass]) do
+    for spellID, value in pairs(_G.FREE_ADB['CornerSpellsList'][C.CLASS]) do
         if next(value) then
             local r, g, b = unpack(value[2])
             UNITFRAME.CornerSpellsList[spellID] = {value[1], {r, g, b}, value[3]}
@@ -76,7 +76,7 @@ end
 
 function UNITFRAME:RefreshCornerIndicator(bu)
     bu:SetScript('OnUpdate', nil)
-    bu.icon:SetTexture(C.Assets.Textures.Backdrop)
+    bu.icon:SetTexture(C.Assets.Texture.Backdrop)
     bu.icon:Show()
     bu.cd:Show()
     bu.bg:Show()
@@ -104,7 +104,7 @@ function UNITFRAME:CreateCornerIndicator(self)
         bu.bg = F.CreateBDFrame(bu)
         bu.icon = bu:CreateTexture(nil, 'BORDER')
         bu.icon:SetInside(bu.bg)
-        bu.icon:SetTexCoord(unpack(C.TexCoord))
+        bu.icon:SetTexCoord(unpack(C.TEX_COORD))
         bu.cd = CreateFrame('Cooldown', nil, bu, 'CooldownFrameTemplate')
         bu.cd:SetAllPoints(bu.bg)
         bu.cd:SetReverse(true)
@@ -138,10 +138,10 @@ function UNITFRAME:RefreshRaidFrameIcons()
 end
 
 function UNITFRAME:CheckCornerSpells()
-    if not _G.FREE_ADB['CornerSpellsList'][C.MyClass] then
-        _G.FREE_ADB['CornerSpellsList'][C.MyClass] = {}
+    if not _G.FREE_ADB['CornerSpellsList'][C.CLASS] then
+        _G.FREE_ADB['CornerSpellsList'][C.CLASS] = {}
     end
-    local data = C.CornerSpellsList[C.MyClass]
+    local data = C.CornerSpellsList[C.CLASS]
     if not data then
         return
     end
@@ -155,9 +155,9 @@ function UNITFRAME:CheckCornerSpells()
         end
     end
 
-    for spellID, value in pairs(_G.FREE_ADB['CornerSpellsList'][C.MyClass]) do
-        if not next(value) and C.CornerBuffs[C.MyClass][spellID] == nil then
-            _G.FREE_ADB['CornerSpellsList'][C.MyClass][spellID] = nil
+    for spellID, value in pairs(_G.FREE_ADB['CornerSpellsList'][C.CLASS]) do
+        if not next(value) and C.CornerBuffs[C.CLASS][spellID] == nil then
+            _G.FREE_ADB['CornerSpellsList'][C.CLASS][spellID] = nil
         end
     end
 end

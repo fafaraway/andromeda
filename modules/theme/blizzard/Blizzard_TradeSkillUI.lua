@@ -5,8 +5,8 @@ local function ReskinReagentButton(reagent)
 	reagent.NameFrame:Hide()
 	F.ReskinIconBorder(reagent.IconBorder)
 	local bg = F.CreateBDFrame(reagent.NameFrame, .2)
-	bg:SetPoint("TOPLEFT", reagent.Icon, "TOPRIGHT", 2, C.Mult)
-	bg:SetPoint("BOTTOMRIGHT", -4, C.Mult)
+	bg:SetPoint("TOPLEFT", reagent.Icon, "TOPRIGHT", 2, C.MULT)
+	bg:SetPoint("BOTTOMRIGHT", -4, C.MULT)
 	if reagent.SelectedTexture then
 		reagent.SelectedTexture:SetColorTexture(1, 1, 1, .25)
 		reagent.SelectedTexture:SetInside(reagent.bg)
@@ -26,7 +26,7 @@ C.Themes["Blizzard_TradeSkillUI"] = function()
 	TradeSkillFrame.DetailsInset:Hide()
 
 	local rankFrame = TradeSkillFrame.RankFrame
-	rankFrame:SetStatusBarTexture(C.Assets.Textures.Backdrop)
+	rankFrame:SetStatusBarTexture(C.Assets.Texture.Backdrop)
 	rankFrame.SetStatusBarColor = nop
 	rankFrame:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
 	rankFrame.BorderMid:Hide()
@@ -72,7 +72,7 @@ C.Themes["Blizzard_TradeSkillUI"] = function()
 				if button.SubSkillRankBar then
 					local bar = button.SubSkillRankBar
 					F.StripTextures(bar)
-					bar:SetStatusBarTexture(C.Assets.Textures.Backdrop)
+					bar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
 					bar:SetPoint("RIGHT", -6, 0)
 					F.CreateBDFrame(bar, .25)
 				end
@@ -116,7 +116,7 @@ C.Themes["Blizzard_TradeSkillUI"] = function()
 
 	local levelBar = contents.RecipeLevel
 	F.StripTextures(levelBar)
-	levelBar:SetStatusBarTexture(C.Assets.Textures.Backdrop)
+	levelBar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
 	F.CreateBDFrame(levelBar, .25)
 	F.ReskinFilterButton(contents.RecipeLevelSelector)
 
@@ -167,7 +167,7 @@ C.Themes["Blizzard_TradeSkillUI"] = function()
 
 				button.NameFrame:Hide()
 				local bg = F.CreateBDFrame(button.NameFrame, .2)
-				bg:SetPoint("TOPLEFT", button.Icon, "TOPRIGHT", 2, C.Mult)
+				bg:SetPoint("TOPLEFT", button.Icon, "TOPRIGHT", 2, C.MULT)
 				bg:SetPoint("BOTTOMRIGHT", -4, 5)
 			end
 		end

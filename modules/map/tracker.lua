@@ -3,15 +3,15 @@ local M = F:RegisterModule('ExpTracker')
 local TOOLTIP = F:GetModule('Tooltip')
 
 function M:InitRenownLevel()
-    if not _G.FREE_ADB['RenownLevels'][C.MyRealm] then
-        _G.FREE_ADB['RenownLevels'][C.MyRealm] = {}
+    if not _G.FREE_ADB['RenownLevels'][C.REALM] then
+        _G.FREE_ADB['RenownLevels'][C.REALM] = {}
     end
 
-    if not _G.FREE_ADB['RenownLevels'][C.MyRealm][C.MyName] then
-        _G.FREE_ADB['RenownLevels'][C.MyRealm][C.MyName] = {}
+    if not _G.FREE_ADB['RenownLevels'][C.REALM][C.NAME] then
+        _G.FREE_ADB['RenownLevels'][C.REALM][C.NAME] = {}
 
         for i = 1, 4 do
-            _G.FREE_ADB['RenownLevels'][C.MyRealm][C.MyName][i] = 0
+            _G.FREE_ADB['RenownLevels'][C.REALM][C.NAME][i] = 0
         end
     end
 end
@@ -20,7 +20,7 @@ function M:CheckRenownLevel()
     local level = C_CovenantSanctumUI.GetRenownLevel()
     local CovenantID = C_Covenants.GetActiveCovenantID()
 
-    _G.FREE_ADB['RenownLevels'][C.MyRealm][C.MyName][CovenantID] = level
+    _G.FREE_ADB['RenownLevels'][C.REALM][C.NAME][CovenantID] = level
 end
 
 function M:UpdateRenownLevel()
@@ -78,7 +78,7 @@ function M:CreateBar()
     bar:SetPoint('TOPLEFT', 1, -(_G.Minimap:GetHeight() / 8) - 1)
     bar:SetPoint('TOPRIGHT', -1, -(_G.Minimap:GetHeight() / 8) - 1)
     bar:SetHeight(4)
-    bar:SetStatusBarTexture(C.Assets.Textures.SBNormal)
+    bar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
     bar.bg = F.CreateBDFrame(bar)
 
     bar:SetFrameLevel(_G.Minimap:GetFrameLevel() + 2)
@@ -86,7 +86,7 @@ function M:CreateBar()
 
     local rest = CreateFrame('StatusBar', nil, bar)
     rest:SetAllPoints()
-    rest:SetStatusBarTexture(C.Assets.Textures.SBNormal)
+    rest:SetStatusBarTexture(C.Assets.Statusbar.Normal)
     rest:SetStatusBarColor(.34, .45, .86, .8)
     rest:SetFrameLevel(bar:GetFrameLevel() - 1)
     bar.restBar = rest
@@ -151,7 +151,7 @@ end
 function M:Bar_OnEnter()
     _G.GameTooltip:SetOwner(self, 'ANCHOR_LEFT')
     _G.GameTooltip:ClearLines()
-    _G.GameTooltip:AddDoubleLine(C.MyName, _G.LEVEL .. ': ' .. UnitLevel('player'), C.r, C.g, C.b, 1, 1, 1)
+    _G.GameTooltip:AddDoubleLine(C.NAME, _G.LEVEL .. ': ' .. UnitLevel('player'), C.r, C.g, C.b, 1, 1, 1)
 
     if not IsPlayerAtEffectiveMaxLevel() then
         _G.GameTooltip:AddLine(' ')
@@ -232,7 +232,7 @@ function M:Bar_OnEnter()
         _G.GameTooltip:AddLine(_G.LANDING_PAGE_RENOWN_LABEL, 0, .6, 1)
 
         for i = 1, 4 do
-            local level = _G.FREE_ADB['RenownLevels'][C.MyRealm][C.MyName][i]
+            local level = _G.FREE_ADB['RenownLevels'][C.REALM][C.NAME][i]
             if level > 0 then
                 _G.GameTooltip:AddDoubleLine(TOOLTIP:GetCovenantIcon(i) .. TOOLTIP:GetCovenantName(i), level)
             end

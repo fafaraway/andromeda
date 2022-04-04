@@ -10,7 +10,7 @@ local function ReskinPvPFrame(frame)
     local bar = frame.ConquestBar
     F.StripTextures(bar)
     F.CreateBDFrame(bar, .25)
-    bar:SetStatusBarTexture(C.Assets.Textures.Backdrop)
+    bar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
     bar:GetStatusBarTexture():SetGradient('VERTICAL', 1, .8, 0, 6, .4, 0)
 
     local reward = bar.Reward
@@ -33,7 +33,7 @@ C.Themes['Blizzard_PVPUI'] = function()
 
     -- Category buttons
 
-    local iconSize = 60 - 2 * C.Mult
+    local iconSize = 60 - 2 * C.MULT
     for i = 1, 3 do
         local bu = PVPQueueFrame['CategoryButton' .. i]
         local icon = bu.Icon

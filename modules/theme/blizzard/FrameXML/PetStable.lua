@@ -26,10 +26,10 @@ tinsert(C.BlizzThemes, function()
 		bu.Border:Hide()
 		bu:SetNormalTexture("")
 		bu:SetPushedTexture("")
-		bu.Checked:SetTexture(C.Assets.Textures.Button.Checked)
+		bu.Checked:SetTexture(C.Assets.Button.Checked)
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
-		_G["PetStableActivePet"..i.."IconTexture"]:SetTexCoord(unpack(C.TexCoord))
+		_G["PetStableActivePet"..i.."IconTexture"]:SetTexCoord(unpack(C.TEX_COORD))
 		F.CreateBDFrame(bu, .25)
 	end
 
@@ -37,11 +37,11 @@ tinsert(C.BlizzThemes, function()
 		local bu = _G["PetStableStabledPet"..i]
 		bu:SetNormalTexture("")
 		bu:SetPushedTexture("")
-		bu.Checked:SetTexture(C.Assets.Textures.Button.Checked)
+		bu.Checked:SetTexture(C.Assets.Button.Checked)
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		bu:DisableDrawLayer("BACKGROUND")
 
-		_G["PetStableStabledPet"..i.."IconTexture"]:SetTexCoord(unpack(C.TexCoord))
+		_G["PetStableStabledPet"..i.."IconTexture"]:SetTexCoord(unpack(C.TEX_COORD))
 		F.CreateBDFrame(bu, .25)
 	end
 end)

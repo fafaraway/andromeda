@@ -27,7 +27,7 @@ function COOLDOWN:OnSizeChanged(width, height)
     self.fontScale = fontScale
 
     local outline = _G.FREE_ADB.FontOutline
-    local font = C.Assets.Fonts.Bold
+    local font = C.Assets.Font.Bold
 
     if fontScale < minScale then
         self:Hide()

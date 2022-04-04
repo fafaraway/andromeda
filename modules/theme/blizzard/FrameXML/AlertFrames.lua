@@ -145,8 +145,8 @@ table.insert(C.BlizzThemes, function()
                 frame.Icon:SetPoint('CENTER', frame.BaseQualityBorder)
 
                 frame.BaseQualityBorder:SetSize(52, 52)
-                frame.BaseQualityBorder:SetTexture(C.Assets.Textures.Backdrop)
-                frame.UpgradeQualityBorder:SetTexture(C.Assets.Textures.Backdrop)
+                frame.BaseQualityBorder:SetTexture(C.Assets.Texture.Backdrop)
+                frame.UpgradeQualityBorder:SetTexture(C.Assets.Texture.Backdrop)
                 frame.UpgradeQualityBorder:SetSize(52, 52)
                 frame.Background:SetTexture('')
                 frame.Sheen:SetTexture('')
@@ -175,7 +175,7 @@ table.insert(C.BlizzThemes, function()
                 frame.shine:SetTexture('')
             end
             frame.Icon:SetMask(nil)
-            frame.Icon:SetTexCoord(unpack(C.TexCoord))
+            frame.Icon:SetTexCoord(unpack(C.TEX_COORD))
         elseif frame.queue == _G.WorldQuestCompleteAlertSystem then
             if not frame.bg then
                 frame.bg = F.SetBD(frame)

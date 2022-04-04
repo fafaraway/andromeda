@@ -81,9 +81,9 @@ local function CreateGearButton(self, name)
     bu:SetSize(20, 20)
     bu.Icon = bu:CreateTexture(nil, 'ARTWORK')
     bu.Icon:SetAllPoints()
-    bu.Icon:SetTexture(C.Assets.Textures.Gear)
+    bu.Icon:SetTexture(C.Assets.Texture.Gear)
     bu.Icon:SetVertexColor(.6, .6, .6)
-    bu:SetHighlightTexture(C.Assets.Textures.Gear)
+    bu:SetHighlightTexture(C.Assets.Texture.Gear)
 
     return bu
 end
@@ -111,9 +111,9 @@ local function CheckUIReload(name)
 end
 
 function GUI:CreateGradientLine(frame, width, x, y, x2, y2)
-    local fll = F.SetGradient(frame, 'H', .7, .7, .7, 0, .5, width, C.Mult)
+    local fll = F.SetGradient(frame, 'H', .7, .7, .7, 0, .5, width, C.MULT)
     fll:SetPoint('TOP', x, y)
-    local flr = F.SetGradient(frame, 'H', .7, .7, .7, .5, 0, width, C.Mult)
+    local flr = F.SetGradient(frame, 'H', .7, .7, .7, .5, 0, width, C.MULT)
     flr:SetPoint('TOP', x2, y2)
 end
 
@@ -173,7 +173,7 @@ local function CreateTab(parent, i, name)
     tab.icon:SetTexture(iconsList[i])
     F.ReskinIcon(tab.icon)
 
-    tab.text = F.CreateFS(tab, C.Assets.Fonts.Bold, 13, nil, name, nil, true)
+    tab.text = F.CreateFS(tab, C.Assets.Font.Bold, 13, nil, name, nil, true)
     tab.text:SetPoint('LEFT', tab.icon, 'RIGHT', 6, 0)
 
     tab:HookScript('OnEnter', Tab_OnEnter)
@@ -258,7 +258,7 @@ local function CreateOption(i)
             cb.__name = name
             cb.__callback = callback
 
-            cb.label = F.CreateFS(cb, C.Assets.Fonts.Regular, 12, nil, name, nil, true, 'LEFT', 22, -1)
+            cb.label = F.CreateFS(cb, C.Assets.Font.Regular, 12, nil, name, nil, true, 'LEFT', 22, -1)
 
             cb:SetChecked(UpdateValue(key, value))
             cb:SetScript('OnClick', Checkbox_OnClick)
@@ -290,7 +290,7 @@ local function CreateOption(i)
             eb.__callback = callback
             eb.__default = (key == 'ACCOUNT' and C.AccountSettings[value]) or C.CharacterSettings[key][value]
 
-            eb.label = F.CreateFS(eb, C.Assets.Fonts.Regular, 11, nil, name, nil, true, 'CENTER', 0, 20)
+            eb.label = F.CreateFS(eb, C.Assets.Font.Regular, 11, nil, name, nil, true, 'CENTER', 0, 20)
             eb:SetText(UpdateValue(key, value))
 
             eb:HookScript('OnEscapePressed', Editbox_OnEscapePressed)
@@ -359,7 +359,7 @@ local function CreateOption(i)
                 end
             end
 
-            dd.label = F.CreateFS(dd, C.Assets.Fonts.Regular, 11, nil, name, nil, true)
+            dd.label = F.CreateFS(dd, C.Assets.Font.Regular, 11, nil, name, nil, true)
             dd.label:SetPoint('BOTTOM', dd, 'TOP', 0, 4)
             if tip then
                 dd.title = name
@@ -409,11 +409,11 @@ local function CreateGUI()
     F.CreateMF(guiFrame)
     F.SetBD(guiFrame)
 
-    local verticalLine = F.SetGradient(guiFrame, 'V', .5, .5, .5, .25, .25, C.Mult, 540)
+    local verticalLine = F.SetGradient(guiFrame, 'V', .5, .5, .5, .25, .25, C.MULT, 540)
     verticalLine:SetPoint('TOPLEFT', 160, -50)
 
-    F.CreateFS(guiFrame, C.AssetsPath .. 'fonts\\header.ttf', 22, nil, F:StyleAddonName('%ADDONNAME%'), nil, 'THICK', 'TOP', 0, -4)
-    F.CreateFS(guiFrame, C.Assets.Fonts.Regular, 10, nil, 'Version: ' .. C.AddonVersion, {.7, .7, .7}, 'THICK', 'TOP', 0, -30)
+    F.CreateFS(guiFrame, C.ASSET_PATH .. 'fonts\\header.ttf', 22, nil, F:StyleAddonName('%ADDONNAME%'), nil, 'THICK', 'TOP', 0, -4)
+    F.CreateFS(guiFrame, C.Assets.Font.Regular, 10, nil, 'Version: ' .. C.AddonVersion, {.7, .7, .7}, 'THICK', 'TOP', 0, -30)
 
     GUI:CreateGradientLine(guiFrame, 120, -60, -26, 60, -26)
 
@@ -513,7 +513,7 @@ end
 
 local function Button_OnClick()
     if InCombatLockdown() then
-        _G.UIErrorsFrame:AddMessage(C.RedColor .. _G.ERR_NOT_IN_COMBAT)
+        _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. _G.ERR_NOT_IN_COMBAT)
         return
     end
 
@@ -526,7 +526,7 @@ end
 local function CreateFreeUIButton()
     local bu = CreateFrame('Button', 'GameMenuFrameFreeUI', _G.GameMenuFrame, 'GameMenuButtonTemplate')
     bu:SetText(F:StyleAddonName('%ADDONNAME%'))
-    -- bu.Text:SetFont(C.Assets.Fonts.Bold, 13, _G.FREE_ADB.FontOutline and 'OUTLINE' or nil)
+    -- bu.Text:SetFont(C.Assets.Font.Bold, 13, _G.FREE_ADB.FontOutline and 'OUTLINE' or nil)
     bu:SetPoint('TOP', _G.GameMenuButtonAddons, 'BOTTOM', 0, -14)
     if _G.FREE_ADB.ReskinBlizz then
         F.Reskin(bu)

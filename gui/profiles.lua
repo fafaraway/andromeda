@@ -183,7 +183,7 @@ function GUI:Delete_OnEnter()
     end
     local name, realm = string.split('-', text)
     if not realm then
-        realm = C.MyRealm
+        realm = C.REALM
         text = name .. '-' .. realm
         self:SetText(text)
     end
@@ -191,7 +191,7 @@ function GUI:Delete_OnEnter()
     if _G.FREE_ADB['ProfileIndex'][text] or (_G.FREE_ADB['GoldStatistic'][realm] and _G.FREE_ADB['GoldStatistic'][realm][name]) then
         _G.StaticPopup_Show('FREEUI_DELETE_UNIT_PROFILE', text, GUI:GetClassFromGoldInfo(name, realm))
     else
-        _G.UIErrorsFrame:AddMessage(C.RedColor .. L['Invalid character name.'])
+        _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Invalid character name.'])
     end
 end
 
@@ -245,13 +245,13 @@ function GUI:CreateProfileGUI(parent)
     delete.title = L['Delete unit profile']
     F.AddTooltip(delete, 'ANCHOR_TOP', L['|nEnter the character name that you intend to delete its profile, the input format is \'UnitName-RealmName\'. You only need to enter name if unit is in the same realm with you.|n|nThis will delete unit gold info as well.|n|nPress key ESC to clear editbox, press key Enter to confirm.'], 'BLUE')
 
-    F.CreateFS(parent, C.Assets.Fonts.Bold, 14, nil, L['Profile Management'], 'YELLOW', 'THICK', 'TOPLEFT', 20, -20)
-    local description = F.CreateFS(parent, C.Assets.Fonts.Regular, 13, nil, L['You can manage your addon profile, please backup your settings before start. The default settings is based on your character, won\'t share within the same account. You can switch to the shared profile to share between your characters, and get rid of data transfer.|nData export and import only support the current profile.'], nil, 'THICK', 'TOPLEFT', 20, -40)
+    F.CreateFS(parent, C.Assets.Font.Bold, 14, nil, L['Profile Management'], 'YELLOW', 'THICK', 'TOPLEFT', 20, -20)
+    local description = F.CreateFS(parent, C.Assets.Font.Regular, 13, nil, L['You can manage your addon profile, please backup your settings before start. The default settings is based on your character, won\'t share within the same account. You can switch to the shared profile to share between your characters, and get rid of data transfer.|nData export and import only support the current profile.'], nil, 'THICK', 'TOPLEFT', 20, -40)
     description:SetPoint('TOPRIGHT', -20, -40)
     description:SetWordWrap(true)
     description:SetJustifyH('LEFT')
 
-    GUI.currentProfile = _G.FREE_ADB['ProfileIndex'][C.MyFullName]
+    GUI.currentProfile = _G.FREE_ADB['ProfileIndex'][C.FULL_NAME]
 
     local numBars = 6
     local panel = F.CreateBDFrame(parent, .25)

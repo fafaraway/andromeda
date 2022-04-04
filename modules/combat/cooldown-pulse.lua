@@ -220,7 +220,7 @@ function CDP:OnLogin()
     end
 
     frame.bg = F.SetBD(frame)
-    icon:SetTexCoord(unpack(C.TexCoord))
+    icon:SetTexCoord(unpack(C.TEX_COORD))
 
     local mover = F.Mover(anchor, L['Cooldown Pulse'], 'CooldownPulse', {'CENTER', _G.UIParent}, iconSize, iconSize)
     anchor:ClearAllPoints()

@@ -1,7 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 local INVENTORY = F:GetModule('Inventory')
 local cargBags = F.Libs.cargBags
-local iconsList = C.Assets.Textures.Inventory
+local iconsList = C.Assets.Inventory
 
 local iconColor = {.5, .5, .5}
 local bagTypeColor = {
@@ -111,7 +111,7 @@ function INVENTORY:CreateMoneyFrame()
     moneyFrame:SetSize(140, 26)
 
     local tag = self:SpawnPlugin('TagDisplay', '[money] [currencies]', moneyFrame)
-    F:SetFS(tag, C.Assets.Fonts.Condensed, 12, nil, '', nil, true)
+    F:SetFS(tag, C.Assets.Font.Condensed, 12, nil, '', nil, true)
     tag:SetPoint('TOPLEFT', 0, -4)
 end
 
@@ -334,7 +334,7 @@ function INVENTORY:CreateSortButton(name)
         'OnClick',
         function()
             if C.DB.Inventory.SortMode == 3 then
-                _G.UIErrorsFrame:AddMessage(C.InfoColor .. L['Inventory sort disabled!'])
+                _G.UIErrorsFrame:AddMessage(C.INFO_COLOR .. L['Inventory sort disabled!'])
                 return
             end
 
@@ -347,7 +347,7 @@ function INVENTORY:CreateSortButton(name)
                     SortBags()
                 elseif C.DB.Inventory.SortMode == 2 then
                     if InCombatLockdown() then
-                        _G.UIErrorsFrame:AddMessage(C.InfoColor .. _G.ERR_NOT_IN_COMBAT)
+                        _G.UIErrorsFrame:AddMessage(C.INFO_COLOR .. _G.ERR_NOT_IN_COMBAT)
                     else
                         SortBags()
                         table.wipe(sortCache)
@@ -369,15 +369,15 @@ local function updateRepairButtonStatus(bu)
     if _G.FREE_ADB['RepairType'] == 1 then
         bu.Icon:SetVertexColor(C.r, C.g, C.b)
         bu.text = L['Repair your equipment automatically when you visit an able vendor.|nPriority use of guild funds.']
-        bu.title = L['Auto Repair'] .. ': ' .. C.GreenColor .. _G.VIDEO_OPTIONS_ENABLED
+        bu.title = L['Auto Repair'] .. ': ' .. C.GREEN_COLOR .. _G.VIDEO_OPTIONS_ENABLED
     elseif _G.FREE_ADB['RepairType'] == 2 then
         bu.Icon:SetVertexColor(C.r, C.g, C.b)
         bu.text = L['Repair your equipment automatically when you visit an able vendor.|nDo not use guild funds.']
-        bu.title = L['Auto Repair'] .. ': ' .. C.GreenColor .. _G.VIDEO_OPTIONS_ENABLED
+        bu.title = L['Auto Repair'] .. ': ' .. C.GREEN_COLOR .. _G.VIDEO_OPTIONS_ENABLED
     else
         bu.Icon:SetVertexColor(unpack(iconColor))
         bu.text = nil
-        bu.title = L['Auto Repair'] .. ': ' .. C.GreenColor .. _G.VIDEO_OPTIONS_DISABLED
+        bu.title = L['Auto Repair'] .. ': ' .. C.GREEN_COLOR .. _G.VIDEO_OPTIONS_DISABLED
     end
 end
 
@@ -403,11 +403,11 @@ local function updateSellButtonStatus(bu)
     if C.DB.Inventory.AutoSellJunk then
         bu.Icon:SetVertexColor(C.r, C.g, C.b)
         bu.text = L['Sell junk items automtically when you visit an able vendor.']
-        bu.title = L['Auto Sell Junk'] .. ': ' .. C.GreenColor .. _G.VIDEO_OPTIONS_ENABLED
+        bu.title = L['Auto Sell Junk'] .. ': ' .. C.GREEN_COLOR .. _G.VIDEO_OPTIONS_ENABLED
     else
         bu.Icon:SetVertexColor(unpack(iconColor))
         bu.text = nil
-        bu.title = L['Auto Sell Junk'] .. ': ' .. C.GreenColor .. _G.VIDEO_OPTIONS_DISABLED
+        bu.title = L['Auto Sell Junk'] .. ': ' .. C.GREEN_COLOR .. _G.VIDEO_OPTIONS_DISABLED
     end
 end
 
@@ -534,7 +534,7 @@ function INVENTORY:CreateFreeSlots()
 
     local slot = CreateFrame('Button', name .. 'FreeSlot', self, 'BackdropTemplate')
     slot:SetSize(self.iconSize, self.iconSize)
-    slot:SetHighlightTexture(C.Assets.Textures.Backdrop)
+    slot:SetHighlightTexture(C.Assets.Texture.Backdrop)
     slot:GetHighlightTexture():SetVertexColor(1, 1, 1, .25)
     slot:GetHighlightTexture():SetInside()
     F.CreateBD(slot, .25)
@@ -546,7 +546,7 @@ function INVENTORY:CreateFreeSlots()
     slot.__name = name
 
     local tag = self:SpawnPlugin('TagDisplay', '[space]', slot)
-    F:SetFS(tag, C.Assets.Fonts.Condensed, 11, nil, '', 'CLASS', true)
+    F:SetFS(tag, C.Assets.Font.Condensed, 11, nil, '', 'CLASS', true)
     tag:SetPoint('BOTTOMRIGHT', -2, 2)
     tag.__name = name
     slot.tag = tag
@@ -786,7 +786,7 @@ function INVENTORY:OnLogin()
         AddNewContainer('Bag', 10, 'BagRelic', filters.bagRelic)
 
         f.main = MyContainer:New('Bag', {Bags = 'bags', BagType = 'Bag'})
-        f.main.__anchor = {'BOTTOMRIGHT', -C.UIGap, C.UIGap}
+        f.main.__anchor = {'BOTTOMRIGHT', -C.UI_GAP, C.UI_GAP}
         f.main:SetPoint(unpack(f.main.__anchor))
         f.main:SetFilter(filters.onlyBags, true)
 
@@ -802,7 +802,7 @@ function INVENTORY:OnLogin()
         AddNewContainer('Bank', 7, 'BankAnima', filters.bankAnima)
 
         f.bank = MyContainer:New('Bank', {Bags = 'bank', BagType = 'Bank'})
-        f.bank.__anchor = {'BOTTOMLEFT', C.UIGap, C.UIGap}
+        f.bank.__anchor = {'BOTTOMLEFT', C.UI_GAP, C.UI_GAP}
         f.bank:SetPoint(unpack(f.bank.__anchor))
         f.bank:SetFilter(filters.onlyBank, true)
         f.bank:Hide()
@@ -848,14 +848,14 @@ function INVENTORY:OnLogin()
     function MyButton:OnCreate()
         self:SetNormalTexture(nil)
         self:SetPushedTexture(nil)
-        self:SetHighlightTexture(C.Assets.Textures.Backdrop)
+        self:SetHighlightTexture(C.Assets.Texture.Backdrop)
         self:GetHighlightTexture():SetVertexColor(1, 1, 1, .25)
         self:GetHighlightTexture():SetInside()
         self:SetSize(iconSize, iconSize)
 
         self.Icon:SetInside()
-        self.Icon:SetTexCoord(unpack(C.TexCoord))
-        F:SetFS(self.Count, C.Assets.Fonts.Condensed, 11, true, '', nil, true, 'BOTTOMRIGHT', -2, 2)
+        self.Icon:SetTexCoord(unpack(C.TEX_COORD))
+        F:SetFS(self.Count, C.Assets.Font.Condensed, 11, true, '', nil, true, 'BOTTOMRIGHT', -2, 2)
         self.Cooldown:SetInside()
         self.IconOverlay:SetInside()
         self.IconOverlay2:SetInside()
@@ -868,19 +868,19 @@ function INVENTORY:OnLogin()
         parentFrame:SetFrameLevel(5)
 
         self.Favourite = parentFrame:CreateTexture(nil, 'ARTWORK')
-        self.Favourite:SetTexture(C.Assets.Textures.StateIcons)
+        self.Favourite:SetTexture(C.Assets.Texture.StateIcon)
         self.Favourite:SetTexCoord(.5, 1, .5, 1)
         self.Favourite:SetSize(16, 16)
         self.Favourite:SetPoint('TOPLEFT')
 
         self.Quest = parentFrame:CreateTexture(nil, 'ARTWORK')
-        self.Quest:SetTexture(C.Assets.Textures.StateIcons)
+        self.Quest:SetTexture(C.Assets.Texture.StateIcon)
         self.Quest:SetTexCoord(.5, 1, 0, .5)
         self.Quest:SetSize(24, 24)
         self.Quest:SetPoint('TOPLEFT', -2, -2)
 
-        self.iLvl = F.CreateFS(self, C.Assets.Fonts.Condensed, 11, true, '', nil, true, 'BOTTOMRIGHT', -2, 2)
-        self.BindType = F.CreateFS(self, C.Assets.Fonts.Condensed, 11, true, '', nil, true, 'TOPLEFT', 2, -2)
+        self.iLvl = F.CreateFS(self, C.Assets.Font.Condensed, 11, true, '', nil, true, 'BOTTOMRIGHT', -2, 2)
+        self.BindType = F.CreateFS(self, C.Assets.Font.Condensed, 11, true, '', nil, true, 'TOPLEFT', 2, -2)
 
         local flash = self:CreateTexture(nil, 'ARTWORK')
         flash:SetTexture('Interface\\Cooldown\\star4')
@@ -1192,7 +1192,7 @@ function INVENTORY:OnLogin()
         end
 
         if label then
-            self.label = F.CreateFS(self, C.Assets.Fonts.Condensed, 11, nil, label, nil, true, 'TOPLEFT', 5, -4)
+            self.label = F.CreateFS(self, C.Assets.Font.Condensed, 11, nil, label, nil, true, 'TOPLEFT', 5, -4)
             return
         end
 
@@ -1273,13 +1273,13 @@ function INVENTORY:OnLogin()
     function BagButton:OnCreate()
         self:SetNormalTexture(nil)
         self:SetPushedTexture(nil)
-        self:SetHighlightTexture(C.Assets.Textures.Backdrop)
+        self:SetHighlightTexture(C.Assets.Texture.Backdrop)
         self:GetHighlightTexture():SetVertexColor(1, 1, 1, .25)
 
         self:SetSize(iconSize, iconSize)
         F.CreateBD(self, .25)
         self.Icon:SetInside()
-        self.Icon:SetTexCoord(unpack(C.TexCoord))
+        self.Icon:SetTexCoord(unpack(C.TEX_COORD))
     end
 
     function BagButton:OnUpdate()
@@ -1331,7 +1331,7 @@ function INVENTORY:OnLogin()
         if IsShiftKeyDown() then
             self.elapsed = (self.elapsed or 0) + elapsed
             if self.elapsed > 5 then
-                _G.UIErrorsFrame:AddMessage(C.RedColor .. L['Your SHIFT key may be stuck.'])
+                _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Your SHIFT key may be stuck.'])
                 self.elapsed = 0
             end
         end

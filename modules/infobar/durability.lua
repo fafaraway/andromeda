@@ -61,7 +61,7 @@ local function Block_OnEvent(self, event)
         local r, g, b = getDurabilityColor(math.floor(localSlots[1][3] * 100), 100)
         self.text:SetText(string.format('%s: %s%s', L['Durability'], F:RGBToHex(r, g, b) .. math.floor(localSlots[1][3] * 100), '%'))
     else
-        self.text:SetText(string.format('%s: %s', L['Durability'], C.InfoColor .. _G.NONE))
+        self.text:SetText(string.format('%s: %s', L['Durability'], C.INFO_COLOR .. _G.NONE))
     end
 
     if event == 'PLAYER_ENTERING_WORLD' or event == 'PLAYER_REGEN_ENABLED' and C.DB.Notification.Enable and C.DB.Notification.LowDurability and not InCombatLockdown() then
@@ -101,8 +101,8 @@ local function Block_OnEnter(self)
     end
 
     _G.GameTooltip:AddLine(' ')
-    _G.GameTooltip:AddDoubleLine(' ', C.LineString)
-    _G.GameTooltip:AddDoubleLine(' ', C.Assets.Textures.MouseLeftBtn .. L['Toggle Character Panel'] .. ' ', 1, 1, 1, .9, .8, .6)
+    _G.GameTooltip:AddDoubleLine(' ', C.LINE_STRING)
+    _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_LEFT_BUTTON .. L['Toggle Character Panel'] .. ' ', 1, 1, 1, .9, .8, .6)
     _G.GameTooltip:Show()
 end
 

@@ -20,13 +20,13 @@ C.Themes['Blizzard_MacroUI'] = function()
         end
 
         button:DisableDrawLayer('BACKGROUND')
-        button:SetCheckedTexture(C.Assets.Textures.Button.Checked)
+        button:SetCheckedTexture(C.Assets.Button.Checked)
         local hl = button:GetHighlightTexture()
         hl:SetColorTexture(1, 1, 1, .25)
         hl:SetInside()
 
         local icon = _G[button:GetName() .. 'Icon']
-        icon:SetTexCoord(unpack(C.TexCoord))
+        icon:SetTexCoord(unpack(C.TEX_COORD))
         icon:SetInside()
         F.CreateBDFrame(icon, .25)
 

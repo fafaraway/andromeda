@@ -29,7 +29,7 @@ _G.tinsert(
 
         local line = _G.QuestFrameGreetingPanel:CreateTexture()
         line:SetColorTexture(1, 1, 1, .25)
-        line:SetSize(256, C.Mult)
+        line:SetSize(256, C.MULT)
         line:SetPoint('CENTER', _G.QuestGreetingFrameHorizontalBreak)
         _G.QuestGreetingFrameHorizontalBreak:SetTexture('')
         _G.QuestFrameGreetingPanel:HookScript(

@@ -96,12 +96,12 @@ local function Block_OnEvent(self)
         -- local lootrole = GetSpecializationRoleByID(lootSpecID)
 
         if not lootname or name == lootname then
-            self.text:SetText(string.format(L['Spec'] .. ': ' .. C.MyColor .. '%s  |r' .. L['Loot'] .. ':' .. C.MyColor .. ' %s', name, name))
+            self.text:SetText(string.format(L['Spec'] .. ': ' .. C.CLASS_COLOR .. '%s  |r' .. L['Loot'] .. ':' .. C.CLASS_COLOR .. ' %s', name, name))
         else
-            self.text:SetText(string.format(L['Spec'] .. ': ' .. C.MyColor .. '%s  |r' .. L['Loot'] .. ':' .. C.MyColor .. ' %s', name, lootname))
+            self.text:SetText(string.format(L['Spec'] .. ': ' .. C.CLASS_COLOR .. '%s  |r' .. L['Loot'] .. ':' .. C.CLASS_COLOR .. ' %s', name, lootname))
         end
     else
-        self.text:SetText(string.format(L['Spec'] .. ': ' .. C.MyColor .. '%s  |r', _G.NONE))
+        self.text:SetText(string.format(L['Spec'] .. ': ' .. C.CLASS_COLOR .. '%s  |r', _G.NONE))
     end
 end
 
@@ -145,9 +145,9 @@ local function Block_OnEnter(self)
     end
 
     _G.GameTooltip:AddLine(' ')
-    _G.GameTooltip:AddDoubleLine(' ', C.LineString)
-    _G.GameTooltip:AddDoubleLine(' ', C.Assets.Textures.MouseLeftBtn .. L['Toggle Talent Panel'] .. ' ', 1, 1, 1, .9, .8, .6)
-    _G.GameTooltip:AddDoubleLine(' ', C.Assets.Textures.MouseRightBtn .. L['Change Specialization & Loot'] .. ' ', 1, 1, 1, .9, .8, .6)
+    _G.GameTooltip:AddDoubleLine(' ', C.LINE_STRING)
+    _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_LEFT_BUTTON .. L['Toggle Talent Panel'] .. ' ', 1, 1, 1, .9, .8, .6)
+    _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_RIGHT_BUTTON .. L['Change Specialization & Loot'] .. ' ', 1, 1, 1, .9, .8, .6)
     _G.GameTooltip:Show()
 end
 

@@ -47,9 +47,9 @@ table.insert(
             F.ReskinClose(close)
 
             close.minimize = close:CreateTexture(nil, 'OVERLAY')
-            close.minimize:SetSize(9, C.Mult)
+            close.minimize:SetSize(9, C.MULT)
             close.minimize:SetPoint('CENTER')
-            close.minimize:SetTexture(C.Assets.Textures.Backdrop)
+            close.minimize:SetTexture(C.Assets.Texture.Backdrop)
             close.minimize:SetVertexColor(1, 1, 1)
             close:HookScript('OnEnter', colorMinimize)
             close:HookScript('OnLeave', clearMinimize)

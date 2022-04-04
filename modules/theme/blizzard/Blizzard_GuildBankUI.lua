@@ -34,7 +34,7 @@ C.Themes['Blizzard_GuildBankUI'] = function()
             button:SetNormalTexture('')
             button:SetPushedTexture('')
             button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-            button.icon:SetTexCoord(unpack(C.TexCoord))
+            button.icon:SetTexCoord(unpack(C.TEX_COORD))
             button.bg = F.CreateBDFrame(button, .3)
             button.bg:SetBackdropColor(.3, .3, .3, .3)
             button.searchOverlay:SetOutside()
@@ -51,12 +51,12 @@ C.Themes['Blizzard_GuildBankUI'] = function()
         button:SetNormalTexture('')
         button:SetPushedTexture('')
         button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-        button:SetCheckedTexture(C.Assets.Textures.Button.Checked)
+        button:SetCheckedTexture(C.Assets.Button.Checked)
         F.CreateBDFrame(button)
-        icon:SetTexCoord(unpack(C.TexCoord))
+        icon:SetTexCoord(unpack(C.TEX_COORD))
 
         local a1, p, a2, x, y = button:GetPoint()
-        button:SetPoint(a1, p, a2, x + C.Mult, y)
+        button:SetPoint(a1, p, a2, x + C.MULT, y)
     end
 
     local NUM_GUILDBANK_ICONS_PER_ROW = 10
@@ -78,7 +78,7 @@ C.Themes['Blizzard_GuildBankUI'] = function()
             for i = 1, NUM_GUILDBANK_ICONS_PER_ROW * NUM_GUILDBANK_ICON_ROWS do
                 local button = _G['GuildBankPopupButton' .. i]
                 if not button.styled then
-                    button:SetCheckedTexture(C.Assets.Textures.Button.Checked)
+                    button:SetCheckedTexture(C.Assets.Button.Checked)
                     select(2, button:GetRegions()):Hide()
                     F.ReskinIcon(button.Icon)
                     local hl = button:GetHighlightTexture()

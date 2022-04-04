@@ -238,7 +238,7 @@ function TOOLTIP:StatusBar_OnValueChanged(value)
     end
 
     if not self.text then
-        self.text = F.CreateFS(self, C.Assets.Fonts.Bold, 11, nil, '')
+        self.text = F.CreateFS(self, C.Assets.Font.Bold, 11, nil, '')
     end
 
     if value > 0 and max == 1 then
@@ -253,7 +253,7 @@ function TOOLTIP:ReskinStatusBar()
     self.StatusBar:ClearAllPoints()
     self.StatusBar:SetPoint('BOTTOMLEFT', _G.GameTooltip, 'TOPLEFT', 1, -4)
     self.StatusBar:SetPoint('BOTTOMRIGHT', _G.GameTooltip, 'TOPRIGHT', -1, -4)
-    self.StatusBar:SetStatusBarTexture(C.Assets.Textures.SBNormal)
+    self.StatusBar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
     self.StatusBar:SetHeight(3)
     F.CreateBDFrame(self.StatusBar)
 end
@@ -270,7 +270,7 @@ function TOOLTIP:GameTooltip_ShowStatusBar()
     if bar and not bar.styled then
         F.StripTextures(bar)
         F.CreateBDFrame(bar, .25)
-        bar:SetStatusBarTexture(C.Assets.Textures.SBNormal)
+        bar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
 
         bar.styled = true
     end
@@ -288,7 +288,7 @@ function TOOLTIP:GameTooltip_ShowProgressBar()
     if bar and not bar.styled then
         F.StripTextures(bar.Bar)
         F.CreateBDFrame(bar.Bar, .25)
-        bar.Bar:SetStatusBarTexture(C.Assets.Textures.SBNormal)
+        bar.Bar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
 
         bar.styled = true
     end
@@ -321,7 +321,7 @@ function TOOLTIP:ScanTargets()
     end
 
     if #targetTable > 0 then
-        _G.GameTooltip:AddLine(L['TargetedBy'] .. ': ' .. C.InfoColor .. '(' .. #targetTable .. ')|r ' .. table.concat(targetTable, ', '), nil, nil, nil, 1)
+        _G.GameTooltip:AddLine(L['TargetedBy'] .. ': ' .. C.INFO_COLOR .. '(' .. #targetTable .. ')|r ' .. table.concat(targetTable, ', '), nil, nil, nil, 1)
     end
 end
 
@@ -461,7 +461,7 @@ function TOOLTIP:GameTooltip_SetDefaultAnchor(parent)
         self:SetOwner(parent, 'ANCHOR_CURSOR_RIGHT')
     else
         if not mover then
-            mover = F.Mover(self, L['Tooltip'], 'GameTooltip', {'BOTTOMRIGHT', _G.UIParent, 'BOTTOMRIGHT', -C.UIGap, 260}, 240, 120)
+            mover = F.Mover(self, L['Tooltip'], 'GameTooltip', {'BOTTOMRIGHT', _G.UIParent, 'BOTTOMRIGHT', -C.UI_GAP, 260}, 240, 120)
         end
         self:SetOwner(parent, 'ANCHOR_NONE')
         self:ClearAllPoints()

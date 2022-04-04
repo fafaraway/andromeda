@@ -23,7 +23,7 @@ end
 
 function UNITFRAME:CreateRaidTargetIndicator(self)
     local icon = self.Health:CreateTexture(nil, 'OVERLAY')
-    icon:SetTexture(C.Assets.Textures.RaidTargetIcons)
+    icon:SetTexture(C.Assets.Texture.RaidTargetingIcon)
 
     self.RaidTargetIndicator = icon
 
@@ -46,7 +46,7 @@ end
 
 function NAMEPLATE:CreateRaidTargetIndicator(self)
     local icon = self.Health:CreateTexture(nil, 'OVERLAY')
-    icon:SetTexture(C.Assets.Textures.RaidTargetIcons)
+    icon:SetTexture(C.Assets.Texture.RaidTargetingIcon)
 
     self.RaidTargetIndicator = icon
 

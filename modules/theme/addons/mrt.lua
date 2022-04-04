@@ -16,7 +16,7 @@ local function ReskinMRTWidget(self)
 
         self.styled = true
     end
-    iconTexture:SetTexCoord(unpack(C.TexCoord))
+    iconTexture:SetTexCoord(unpack(C.TEX_COORD))
     self.__bg:SetShown(parent.optionAlphaTimeLine ~= 0)
 
     if parent.optionIconPosition == 3 or parent.optionIconTitles then

@@ -44,7 +44,7 @@ local function CreateCodeBox(width, index, text)
     box:SetTextInsets(0, 0, 0, 0)
     box:SetPoint('TOPLEFT', _G.ColorSwatch, 'BOTTOMLEFT', 0, -index * 24 + 2)
     box:SetJustifyH('CENTER')
-    F.CreateFS(box, C.Assets.Fonts.Bold, 12, true, text, 'YELLOW', true, 'LEFT', -15, 0)
+    F.CreateFS(box, C.Assets.Font.Bold, 12, true, text, 'YELLOW', true, 'LEFT', -15, 0)
     if index == 4 then
         box:HookScript('OnEnterPressed', UpdateColorStr)
     else

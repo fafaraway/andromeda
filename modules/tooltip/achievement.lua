@@ -23,9 +23,9 @@ local function SetHyperlink(tooltip, refString)
                 tooltip:AddLine(string.format(_G.ACHIEVEMENT_EARNED_BY, earnedBy))
             end
             if not wasEarnedByMe then
-                tooltip:AddLine(string.format(_G.ACHIEVEMENT_NOT_COMPLETED_BY, C.MyName))
-            elseif C.MyName ~= earnedBy then
-                tooltip:AddLine(string.format(_G.ACHIEVEMENT_COMPLETED_BY, C.MyName))
+                tooltip:AddLine(string.format(_G.ACHIEVEMENT_NOT_COMPLETED_BY, C.NAME))
+            elseif C.NAME ~= earnedBy then
+                tooltip:AddLine(string.format(_G.ACHIEVEMENT_COMPLETED_BY, C.NAME))
             end
         end
     end

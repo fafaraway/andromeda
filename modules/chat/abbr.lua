@@ -41,7 +41,7 @@ local function FormatPlayerName(info, name)
 end
 
 local function RemoveRealmName(self, _, msg, author, ...)
-    local realm = string.gsub(C.MyRealm, ' ', '')
+    local realm = string.gsub(C.REALM, ' ', '')
     if msg:find('-' .. realm) then
         return false, string.gsub(msg, '%-' .. realm, ''), author, ...
     end

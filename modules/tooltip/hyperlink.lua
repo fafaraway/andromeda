@@ -58,7 +58,7 @@ function TOOLTIP:HyperLink_SetJournal(link)
     _G.GameTooltip:AddDoubleLine(name, GetDifficultyInfo(diffID))
     _G.GameTooltip:AddLine(description, 1, 1, 1, 1)
     _G.GameTooltip:AddLine(' ')
-    _G.GameTooltip:AddDoubleLine(idString, C.InfoColor .. id)
+    _G.GameTooltip:AddDoubleLine(idString, C.INFO_COLOR .. id)
     _G.GameTooltip:Show()
 end
 

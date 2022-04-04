@@ -39,7 +39,7 @@ local function CreateExtraGUI(parent, name, title, bgFrame)
     F.SetBD(frame)
 
     if title then
-        F.CreateFS(frame, C.Assets.Fonts.Regular, 14, nil, title, 'YELLOW', true, 'TOPLEFT', 10, -25)
+        F.CreateFS(frame, C.Assets.Font.Regular, 14, nil, title, 'YELLOW', true, 'TOPLEFT', 10, -25)
     end
 
     if bgFrame then
@@ -64,7 +64,7 @@ function GUI:CreateScroll(parent, width, height, text, noBg)
     scroll:SetPoint('TOPLEFT', 10, -50)
 
     if text then
-        F.CreateFS(scroll, C.Assets.Fonts.Regular, 12, 'OUTLINE', text, nil, true, 'TOPLEFT', 5, 20)
+        F.CreateFS(scroll, C.Assets.Font.Regular, 12, 'OUTLINE', text, nil, true, 'TOPLEFT', 5, 20)
     end
 
     if not noBg then
@@ -122,7 +122,7 @@ local function CreateBars(parent, spellID, table1, table2, table3)
         end
     )
 
-    local name = F.CreateFS(bar, C.Assets.Fonts.Regular, 12, nil, spellName, nil, true, 'LEFT', 30, 0)
+    local name = F.CreateFS(bar, C.Assets.Font.Regular, 12, nil, spellName, nil, true, 'LEFT', 30, 0)
     name:SetWidth(120)
     name:SetJustifyH('LEFT')
 
@@ -139,7 +139,7 @@ local function Label_OnEnter(self)
 end
 
 local function CreateLabel(parent, text, tip)
-    local font = C.Assets.Fonts.Regular
+    local font = C.Assets.Font.Regular
     local label = F.CreateFS(parent, font, 11, nil, text, nil, true)
     label:SetPoint('BOTTOM', parent, 'TOP', 0, 4)
     if not tip then
@@ -195,7 +195,7 @@ function GUI:CreateBarWidgets(parent, texture)
     close:SetPoint('RIGHT', -5, 0)
     close.Icon = close:CreateTexture(nil, 'ARTWORK')
     close.Icon:SetAllPoints()
-    close.Icon:SetTexture(C.Assets.Textures.Close)
+    close.Icon:SetTexture(C.Assets.Texture.Close)
     close.Icon:SetVertexColor(1, 0, 0)
     close:SetHighlightTexture(close.Icon:GetTexture())
 
@@ -207,8 +207,8 @@ local function CreateGroupTitle(parent, text, offset)
         return
     end
 
-    F.CreateFS(parent.child, C.Assets.Fonts.Regular, 13, nil, text, 'YELLOW', true, 'TOP', 0, offset)
-    local line = F.SetGradient(parent.child, 'H', .5, .5, .5, .25, .25, 200, C.Mult)
+    F.CreateFS(parent.child, C.Assets.Font.Regular, 13, nil, text, 'YELLOW', true, 'TOP', 0, offset)
+    local line = F.SetGradient(parent.child, 'H', .5, .5, .5, .25, .25, 200, C.MULT)
     line:SetPoint('TOPLEFT', 10, offset - 20)
 
     parent.groupTitle = true
@@ -229,7 +229,7 @@ local function CreateCheckbox(parent, offset, key, value, text, func)
     box:SetSize(20, 20)
     box:SetHitRectInsets(-5, -5, -5, -5)
     box:SetPoint('TOPLEFT', 10, offset)
-    F.CreateFS(box, C.Assets.Fonts.Regular, 12, nil, text, nil, true, 'LEFT', 22, 0)
+    F.CreateFS(box, C.Assets.Font.Regular, 12, nil, text, nil, true, 'LEFT', 22, 0)
 
     box:SetChecked(C.DB[key][value])
     box.__value = value
@@ -1202,7 +1202,7 @@ function GUI:SetupNameplateAuraFilter(parent)
             end
         )
 
-        local spellName = F.CreateFS(bar, C.Assets.Fonts.Regular, 12, nil, name, nil, true, 'LEFT', 30, 0)
+        local spellName = F.CreateFS(bar, C.Assets.Font.Regular, 12, nil, name, nil, true, 'LEFT', 30, 0)
         spellName:SetWidth(180)
         spellName:SetJustifyH('LEFT')
         if index == 2 then
@@ -1215,11 +1215,11 @@ function GUI:SetupNameplateAuraFilter(parent)
     local function addClick(parent, index)
         local spellID = tonumber(parent.box:GetText())
         if not spellID or not GetSpellInfo(spellID) then
-            _G.UIErrorsFrame:AddMessage(C.RedColor .. L['Incorrect SpellID.'])
+            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Incorrect SpellID.'])
             return
         end
         if _G.FREE_ADB['NPAuraFilter'][index][spellID] then
-            _G.UIErrorsFrame:AddMessage(C.RedColor .. L['The SpellID is existed.'])
+            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is existed.'])
             return
         end
 
@@ -1229,7 +1229,7 @@ function GUI:SetupNameplateAuraFilter(parent)
     end
 
     for index, value in ipairs(frameData) do
-        F.CreateFS(panel, C.Assets.Fonts.Regular, 14, nil, value.text, 'YELLOW', true, 'TOPLEFT', 20, value.offset)
+        F.CreateFS(panel, C.Assets.Font.Regular, 14, nil, value.text, 'YELLOW', true, 'TOPLEFT', 20, value.offset)
         local frame = CreateFrame('Frame', nil, panel, 'BackdropTemplate')
         frame:SetSize(240, 250)
         frame:SetPoint('TOPLEFT', 10, value.offset - 25)
@@ -1290,12 +1290,12 @@ function GUI:SetupNameplateMajorSpells(parent)
             local parent = button.__owner
             local spellID = tonumber(parent.box:GetText())
             if not spellID or not GetSpellInfo(spellID) then
-                _G.UIErrorsFrame:AddMessage(C.RedColor .. L['The SpellID is incorrect.'])
+                _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is incorrect.'])
                 return
             end
             local modValue = _G.FREE_ADB['NPMajorSpells'][spellID]
             if modValue or modValue == nil and C.NPMajorSpellsList[spellID] then
-                _G.UIErrorsFrame:AddMessage(C.RedColor .. L['The SpellID is existed.'])
+                _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is existed.'])
                 return
             end
             _G.FREE_ADB['NPMajorSpells'][spellID] = true
@@ -1631,7 +1631,7 @@ local function SetUnitFrameSize(self, unit)
     local width = C.DB.Unitframe[unit .. 'Width']
     local healthHeight = C.DB.Unitframe[unit .. 'HealthHeight']
     local powerHeight = C.DB.Unitframe[unit .. 'PowerHeight']
-    local height = healthHeight + powerHeight + C.Mult
+    local height = healthHeight + powerHeight + C.MULT
     self:SetSize(width, height)
     self.Health:SetHeight(healthHeight)
     self.Power:SetHeight(powerHeight)
@@ -2508,7 +2508,7 @@ function GUI:SetupPartyWatcher(parent)
             end
         )
 
-        local font = C.Assets.Fonts.Regular
+        local font = C.Assets.Font.Regular
         local name = F.CreateFS(bar, font, 12, nil, spellName, nil, true, 'LEFT', 30, 0)
         name:SetWidth(120)
         name:SetJustifyH('LEFT')
@@ -2545,19 +2545,19 @@ function GUI:SetupPartyWatcher(parent)
     local function addClick(scroll, options)
         local spellID, duration = tonumber(options[1]:GetText()), tonumber(options[2]:GetText())
         if not spellID or not duration then
-            _G.UIErrorsFrame:AddMessage(C.RedColor .. L['You need to complete all * optinos.'])
+            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['You need to complete all * optinos.'])
             return
         end
 
         if not GetSpellInfo(spellID) then
-            _G.UIErrorsFrame:AddMessage(C.RedColor .. L['Incorrect SpellID.'])
+            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Incorrect SpellID.'])
             return
         end
 
         local modDuration = _G.FREE_ADB['PartySpellsList'][spellID]
 
         if modDuration and modDuration ~= 0 or C.PartySpellsList[spellID] and not modDuration then
-            _G.UIErrorsFrame:AddMessage(C.RedColor .. L['The SpellID is existed.'])
+            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is existed.'])
             return
         end
 
@@ -2730,15 +2730,15 @@ function GUI:SetupRaidDebuffs(parent)
         local priority = tonumber(options[4]:GetText())
         local instName = dungeonName or raidName
         if not instName or not spellID then
-            _G.UIErrorsFrame:AddMessage(C.RedColor .. L['You need to complete all optinos.'])
+            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['You need to complete all optinos.'])
             return
         end
         if spellID and not GetSpellInfo(spellID) then
-            _G.UIErrorsFrame:AddMessage(C.RedColor .. L['Incorrect SpellID.'])
+            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Incorrect SpellID.'])
             return
         end
         if isAuraExisted(instName, spellID) then
-            _G.UIErrorsFrame:AddMessage(C.RedColor .. L['The SpellID is existed.'])
+            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is existed.'])
             return
         end
 
@@ -2819,7 +2819,7 @@ function GUI:SetupRaidDebuffs(parent)
             end
         )
 
-        local spellName = F.CreateFS(bar, C.Assets.Fonts.Regular, 11, nil, '', nil, true, 'LEFT', 26, 0)
+        local spellName = F.CreateFS(bar, C.Assets.Font.Regular, 11, nil, '', nil, true, 'LEFT', 26, 0)
         spellName:SetWidth(120)
         spellName:SetJustifyH('LEFT')
         bar.spellName = spellName
@@ -3440,13 +3440,13 @@ function GUI:SetupAnnounceableSpells(parent)
             local spellID = tonumber(parent.box:GetText())
 
             if not spellID or not GetSpellInfo(spellID) then
-                _G.UIErrorsFrame:AddMessage(C.InfoColor .. L['Incorrect SpellID'])
+                _G.UIErrorsFrame:AddMessage(C.INFO_COLOR .. L['Incorrect SpellID'])
                 return
             end
 
             local modValue = _G.FREE_ADB['AnnounceableSpellsList'][spellID]
             if modValue or modValue == nil and C.AnnounceableSpellsList[spellID] then
-                _G.UIErrorsFrame:AddMessage(C.InfoColor .. L['Existing ID'])
+                _G.UIErrorsFrame:AddMessage(C.INFO_COLOR .. L['Existing ID'])
                 return
             end
 

@@ -73,15 +73,15 @@ local function ReskinReward(self)
                 reward.textBg = F.CreateBDFrame(reward, .25)
                 reward.textBg:SetPoint('TOPLEFT', 0, -3)
                 reward.textBg:SetPoint('BOTTOMRIGHT', 2, 7)
-                reward.Class:SetPoint('TOPRIGHT', reward.textBg, 'TOPRIGHT', -C.Mult, -C.Mult)
-                reward.Class:SetPoint('BOTTOMRIGHT', reward.textBg, 'BOTTOMRIGHT', -C.Mult, C.Mult)
+                reward.Class:SetPoint('TOPRIGHT', reward.textBg, 'TOPRIGHT', -C.MULT, -C.MULT)
+                reward.Class:SetPoint('BOTTOMRIGHT', reward.textBg, 'BOTTOMRIGHT', -C.MULT, C.MULT)
 
                 reward.styled = true
             end
 
             local color = C.QualityColors[portrait.quality or 1]
             portrait.squareBG:SetBackdropBorderColor(color.r, color.g, color.b)
-            reward.Class:SetTexCoord(unpack(C.TexCoord))
+            reward.Class:SetTexCoord(unpack(C.TEX_COORD))
         end
 
         -- spell
@@ -152,14 +152,14 @@ local function ReskinImmersion()
     local reputationBar = talkBox.ReputationBar
     reputationBar.icon:SetPoint('TOPLEFT', -30, 6)
     F.StripTextures(reputationBar)
-    reputationBar:SetStatusBarTexture(C.Assets.Textures.SBNormal)
+    reputationBar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
     F.CreateBDFrame(reputationBar, .25)
 
     for i = 1, 4 do
         local notch = _G['ImmersionFrameNotch' .. i]
         if notch then
             notch:SetColorTexture(0, 0, 0)
-            notch:SetSize(C.Mult, 16)
+            notch:SetSize(C.MULT, 16)
         end
     end
 

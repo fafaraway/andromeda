@@ -46,7 +46,7 @@ end
 
 local function CoordsFormat(owner, none)
     local text = none and ': --, --' or ': %.1f, %.1f'
-    return owner .. C.InfoColor .. text
+    return owner .. C.INFO_COLOR .. text
 end
 
 function MAP:UpdateCoords(elapsed)
@@ -87,8 +87,8 @@ function MAP:AddCoords()
         return
     end
 
-    playerCoords = F.CreateFS(mapFrame.BorderFrame, C.Assets.Fonts.Bold, 12, nil, '', nil, 'THICK', 'BOTTOMLEFT', 10, 10)
-    cursorCoords = F.CreateFS(mapFrame.BorderFrame, C.Assets.Fonts.Bold, 12, nil, '', nil, 'THICK', 'BOTTOMLEFT', 130, 10)
+    playerCoords = F.CreateFS(mapFrame.BorderFrame, C.Assets.Font.Bold, 12, nil, '', nil, 'THICK', 'BOTTOMLEFT', 10, 10)
+    cursorCoords = F.CreateFS(mapFrame.BorderFrame, C.Assets.Font.Bold, 12, nil, '', nil, 'THICK', 'BOTTOMLEFT', 130, 10)
 
     F.HideObject(mapFrame.BorderFrame.Tutorial)
 

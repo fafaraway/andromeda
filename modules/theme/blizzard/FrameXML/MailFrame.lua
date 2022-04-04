@@ -3,7 +3,7 @@ local F, C = unpack(select(2, ...))
 tinsert(C.BlizzThemes, function()
 	if not _G.FREE_ADB.ReskinBlizz then return end
 
-	local texL, texR, texT, texB = unpack(C.TexCoord)
+	local texL, texR, texT, texB = unpack(C.TEX_COORD)
 
 	SendMailMoneyInset:DisableDrawLayer("BORDER")
 	InboxFrame:GetRegions():Hide()
@@ -70,7 +70,7 @@ tinsert(C.BlizzThemes, function()
 		local button = _G["MailItem"..i.."Button"]
 		F.StripTextures(item)
 		F.StripTextures(button)
-		button:SetCheckedTexture(C.Assets.Textures.Button.Checked)
+		button:SetCheckedTexture(C.Assets.Button.Checked)
 		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		button.Icon:SetTexCoord(texL, texR, texT, texB)
 		button.IconBorder:SetAlpha(0)

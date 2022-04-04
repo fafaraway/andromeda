@@ -20,9 +20,9 @@ function BLIZZARD:UpdateProfessions()
     local prof1, prof2, _, fish, cook = GetProfessions()
     local profs = {prof1, prof2, fish, cook}
 
-    if C.MyClass == 'DEATHKNIGHT' then
+    if C.CLASS == 'DEATHKNIGHT' then
         BLIZZARD:TradeTabs_Create(RUNEFORGING_ID)
-    elseif C.MyClass == 'ROGUE' and IsPlayerSpell(PICK_LOCK) then
+    elseif C.CLASS == 'ROGUE' and IsPlayerSpell(PICK_LOCK) then
         BLIZZARD:TradeTabs_Create(PICK_LOCK)
     end
 
@@ -88,12 +88,12 @@ function BLIZZARD:TradeTabs_Reskin()
     end
 
     for _, tab in pairs(tabList) do
-        tab:SetCheckedTexture(C.Assets.Textures.Button.Checked)
+        tab:SetCheckedTexture(C.Assets.Button.Checked)
         tab:GetRegions():Hide()
         F.CreateBDFrame(tab)
         local texture = tab:GetNormalTexture()
         if texture then
-            texture:SetTexCoord(unpack(C.TexCoord))
+            texture:SetTexCoord(unpack(C.TEX_COORD))
         end
     end
 end

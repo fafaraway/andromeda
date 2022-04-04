@@ -20,7 +20,7 @@ function CHAT:UpdateChatSize()
     end
 
     _G.ChatFrame1:ClearAllPoints()
-    _G.ChatFrame1:SetPoint('BOTTOMLEFT', _G.UIParent, 'BOTTOMLEFT', C.UIGap, C.UIGap)
+    _G.ChatFrame1:SetPoint('BOTTOMLEFT', _G.UIParent, 'BOTTOMLEFT', C.UI_GAP, C.UI_GAP)
     _G.ChatFrame1:SetSize(C.DB.Chat.Width, C.DB.Chat.Height)
 
     isScaling = false
@@ -100,13 +100,13 @@ local function SetupChatFrame(self)
     local name = self:GetName()
     local maxLines = 1024
 
-    local font = C.Assets.Fonts.Bold
+    local font = C.Assets.Font.Bold
     local outline = _G.FREE_ADB.FontOutline
     local fontSize = select(2, self:GetFont())
     F:SetFS(self, font, fontSize, outline, nil, nil, outline or 'THICK')
 
     self:SetClampedToScreen(false)
-    self:SetMaxResize(C.ScreenWidth, C.ScreenHeight)
+    self:SetMaxResize(C.SCREEN_WIDTH, C.SCREEN_HEIGHT)
     self:SetMinResize(100, 50)
     if self:GetMaxLines() < maxLines then
         self:SetMaxLines(maxLines)
@@ -132,7 +132,7 @@ local function SetupChatFrame(self)
 
     local tab = _G[name .. 'Tab']
     tab:SetAlpha(1)
-    tab.Text:SetFont(C.Assets.Fonts.Bold, 12, C.DB.Chat.FontOutline and 'OUTLINE')
+    tab.Text:SetFont(C.Assets.Font.Bold, 12, C.DB.Chat.FontOutline and 'OUTLINE')
     tab.Text:SetShadowColor(0, 0, 0, C.DB.Chat.FontOutline and 0 or 1)
     tab.Text:SetShadowOffset(2, -2)
     F.StripTextures(tab, 7)
@@ -177,16 +177,16 @@ end
 
 function CHAT:SetupToastFrame()
     _G.BNToastFrame:SetClampedToScreen(true)
-    _G.BNToastFrame:SetClampRectInsets(-C.UIGap, C.UIGap, C.UIGap, -C.UIGap)
+    _G.BNToastFrame:SetClampRectInsets(-C.UI_GAP, C.UI_GAP, C.UI_GAP, -C.UI_GAP)
 
     _G.VoiceChatPromptActivateChannel:SetClampedToScreen(true)
-    _G.VoiceChatPromptActivateChannel:SetClampRectInsets(-C.UIGap, C.UIGap, C.UIGap, -C.UIGap)
+    _G.VoiceChatPromptActivateChannel:SetClampRectInsets(-C.UI_GAP, C.UI_GAP, C.UI_GAP, -C.UI_GAP)
 
     _G.VoiceChatChannelActivatedNotification:SetClampedToScreen(true)
-    _G.VoiceChatChannelActivatedNotification:SetClampRectInsets(-C.UIGap, C.UIGap, C.UIGap, -C.UIGap)
+    _G.VoiceChatChannelActivatedNotification:SetClampRectInsets(-C.UI_GAP, C.UI_GAP, C.UI_GAP, -C.UI_GAP)
 
     _G.ChatAlertFrame:SetClampedToScreen(true)
-    _G.ChatAlertFrame:SetClampRectInsets(-C.UIGap, C.UIGap, C.UIGap, -C.UIGap)
+    _G.ChatAlertFrame:SetClampRectInsets(-C.UI_GAP, C.UI_GAP, C.UI_GAP, -C.UI_GAP)
 end
 
 function CHAT:SetupChatFrame()
@@ -466,9 +466,9 @@ function CHAT:PlayWhisperSound(event, _, author)
 
         if not self.soundTimer or currentTime > self.soundTimer then
             if event == 'CHAT_MSG_WHISPER' then
-                PlaySoundFile(C.Assets.Sounds.Whisper, 'Master')
+                PlaySoundFile(C.Assets.Sound.Whisper, 'Master')
             elseif event == 'CHAT_MSG_BN_WHISPER' then
-                PlaySoundFile(C.Assets.Sounds.WhisperBattleNet, 'Master')
+                PlaySoundFile(C.Assets.Sound.WhisperBattleNet, 'Master')
             end
         end
 
@@ -553,9 +553,9 @@ local msgEvents = {
 }
 
 local roleIcons = {
-    TANK = '\124T' .. C.Assets.Textures.RoleTank .. ':12:12:0:0:64:64:4:60:4:60\124t',
-    HEALER = '\124T' .. C.Assets.Textures.RoleHealer .. ':12:12:0:0:64:64:4:60:4:60\124t',
-    DAMAGER = '\124T' .. C.Assets.Textures.RoleDamager .. ':12:12:0:0:64:64:4:60:4:60\124t'
+    TANK = '\124T' .. C.Assets.Texture.Tank .. ':12:12:0:0:64:64:4:60:4:60\124t',
+    HEALER = '\124T' .. C.Assets.Texture.Healer .. ':12:12:0:0:64:64:4:60:4:60\124t',
+    DAMAGER = '\124T' .. C.Assets.Texture.Damager .. ':12:12:0:0:64:64:4:60:4:60\124t'
 }
 
 local GetColoredName_orig = _G.GetColoredName
@@ -597,7 +597,7 @@ local function FixLanguageFilterSideEffects()
     end
     sideEffectFixed = true
 
-    F.CreateFS(_G.HelpFrame, C.Assets.Fonts.Bold, 14, nil, L['You need to uncheck language filter in GUI and reload UI to get access into CN BattleNet support.'], 'YELLOW', 'THICK', 'TOP', 0, 30)
+    F.CreateFS(_G.HelpFrame, C.Assets.Font.Bold, 14, nil, L['You need to uncheck language filter in GUI and reload UI to get access into CN BattleNet support.'], 'YELLOW', 'THICK', 'TOP', 0, 30)
 
     local OLD_GetFriendGameAccountInfo = C_BattleNet.GetFriendGameAccountInfo
     function _G.C_BattleNet.GetFriendGameAccountInfo(...)

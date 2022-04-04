@@ -300,7 +300,7 @@ function NAMEPLATE:CreateThreatIndicator(self)
     threat:SetPoint('BOTTOMLEFT', frame, 'TOPLEFT', 0, 0)
     threat:SetPoint('BOTTOMRIGHT', frame, 'TOPRIGHT', 0, 0)
     threat:SetHeight(8)
-    threat:SetTexture(C.Assets.Textures.Glow)
+    threat:SetTexture(C.Assets.Texture.Glow)
     threat:Hide()
 
     self.ThreatIndicator = threat
@@ -365,7 +365,7 @@ function NAMEPLATE:CreateTargetIndicator(self)
     frame.Glow:SetPoint('TOPLEFT', frame, 'BOTTOMLEFT')
     frame.Glow:SetPoint('TOPRIGHT', frame, 'BOTTOMRIGHT')
     frame.Glow:SetHeight(12)
-    frame.Glow:SetTexture(C.Assets.Textures.Glow)
+    frame.Glow:SetTexture(C.Assets.Texture.Glow)
     frame.Glow:SetRotation(math.rad(180))
     frame.Glow:SetVertexColor(r, g, b)
 
@@ -534,7 +534,7 @@ function NAMEPLATE:UpdateQuestUnit(_, unit)
         end
 
         if text ~= ' ' then
-            if isInGroup and text == C.MyName or (not isInGroup and isQuestTitle(textLine)) then
+            if isInGroup and text == C.NAME or (not isInGroup and isQuestTitle(textLine)) then
                 startLooking = true
             elseif startLooking then
                 local current, goal = string.match(text, '(%d+)/(%d+)')
@@ -578,7 +578,7 @@ function NAMEPLATE:CreateQuestIndicator(self)
     qicon:SetAtlas('adventureguide-microbutton-alert')
     qicon:Hide()
 
-    local count = F.CreateFS(self, C.Assets.Fonts.Condensed, 12, nil, '', nil, true)
+    local count = F.CreateFS(self, C.Assets.Font.Condensed, 12, nil, '', nil, true)
     count:SetPoint('LEFT', qicon, 'RIGHT', -3, 0)
     count:SetTextColor(.6, .8, 1)
 
@@ -668,7 +668,7 @@ end
 
 -- Spiteful indicator
 function NAMEPLATE:CreateSpitefulIndicator(self)
-    local font = C.Assets.Fonts.Condensed
+    local font = C.Assets.Font.Condensed
     local outline = _G.FREE_ADB.FontOutline
 
     local tarName = F.CreateFS(self, font, 12, outline, nil, nil, outline or 'THICK')
@@ -715,7 +715,7 @@ local function CreateTotemIcon(self)
     icon:SetPoint('BOTTOM', self, 'TOP', 0, self.isNameOnly and 12 or 6)
 
     icon.texure = icon:CreateTexture(nil, 'ARTWORK')
-    icon.texure:SetTexCoord(unpack(C.TexCoord))
+    icon.texure:SetTexCoord(unpack(C.TEX_COORD))
     icon.texure:SetAllPoints()
 
     F.SetBD(icon)
@@ -743,7 +743,7 @@ function NAMEPLATE:CreateNameplateStyle()
 
     local overlay = health:CreateTexture(nil, 'OVERLAY')
     overlay:SetAllPoints()
-    overlay:SetTexture(C.Assets.Textures.SBOverlay)
+    overlay:SetTexture(C.Assets.Statusbar.Overlay)
     overlay:SetAlpha(.2)
     overlay:SetBlendMode('ADD')
     overlay:Hide()
@@ -863,7 +863,7 @@ function NAMEPLATE:UpdatePlateByType()
         name:UpdateTag()
         name:SetParent(self)
         name:SetPoint('CENTER', self, 'TOP', 0, 8)
-        F:SetFS(name, C.Assets.Fonts.Header, 16, nil, nil, nil, 'THICK')
+        F:SetFS(name, C.Assets.Font.Header, 16, nil, nil, nil, 'THICK')
 
 
         raidtarget:SetPoint('BOTTOM', name, 'TOP', 0, -5)
@@ -888,7 +888,7 @@ function NAMEPLATE:UpdatePlateByType()
         name:UpdateTag()
         name:SetParent(self.Health)
         name:SetPoint('CENTER', self, 'TOP')
-        F:SetFS(name, C.Assets.Fonts.Bold, 11, outline, nil, nil, outline or 'THICK')
+        F:SetFS(name, C.Assets.Font.Bold, 11, outline, nil, nil, outline or 'THICK')
 
 
         raidtarget:SetPoint('CENTER')

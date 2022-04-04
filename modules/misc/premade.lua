@@ -7,7 +7,7 @@ local searchPanel = _G.LFGListFrame.SearchPanel
 local categorySelection = _G.LFGListFrame.CategorySelection
 
 local LE_PARTY_CATEGORY_HOME = _G.LE_PARTY_CATEGORY_HOME or 1
-local scoreFormat = C.GreyColor .. '(%s) |r%s'
+local scoreFormat = C.GREY_COLOR .. '(%s) |r%s'
 
 function M:HookApplicationClick()
     if _G.LFGListFrame.SearchPanel.SignUpButton:IsEnabled() then
@@ -54,9 +54,9 @@ local roleOrder = {
 }
 
 local roleIcons = {
-    [1] = C.Assets.Textures.RoleTank,
-    [2] = C.Assets.Textures.RoleHealer,
-    [3] = C.Assets.Textures.RoleDamager
+    [1] = C.Assets.Texture.Tank,
+    [2] = C.Assets.Texture.Healer,
+    [3] = C.Assets.Texture.Damager
 }
 
 local function SortRoleOrder(a, b)
@@ -118,7 +118,7 @@ end
 local function SetClassIcon(button, class)
     local t = _G.CLASS_ICON_TCOORDS[class]
     if t then
-        button:SetTexture(C.Assets.Textures.ClassesCircles)
+        button:SetTexture(C.Assets.Texture.ClassCircle)
         button:SetTexCoord(unpack(t))
     end
 end
@@ -205,7 +205,7 @@ function M:AddAutoAcceptButton()
     bu:SetSize(20, 20)
     bu:SetHitRectInsets(0, -130, 0, 0)
     bu:SetPoint('RIGHT', searchPanel.RefreshButton, 'LEFT', -130, 0)
-    F.CreateFS(bu, C.Assets.Fonts.Regular, 12, nil, _G.LFG_LIST_AUTO_ACCEPT, 'YELLOW', true, 'LEFT', 24, 0)
+    F.CreateFS(bu, C.Assets.Font.Regular, 12, nil, _G.LFG_LIST_AUTO_ACCEPT, 'YELLOW', true, 'LEFT', 24, 0)
 
     local lastTime = 0
     F:RegisterEvent('LFG_LIST_APPLICANT_LIST_UPDATED', function()
@@ -338,7 +338,7 @@ function M:AddDungeonsFilter()
     end)
 
     searchPanel.RefreshButton:HookScript('OnEnter', function()
-        _G.GameTooltip:AddLine(C.Assets.Textures.MouseRightBtn .. _G.SPECIFIC_DUNGEONS)
+        _G.GameTooltip:AddLine(C.MOUSE_RIGHT_BUTTON .. _G.SPECIFIC_DUNGEONS)
         _G.GameTooltip:Show()
     end)
 

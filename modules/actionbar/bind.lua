@@ -204,7 +204,7 @@ function ACTIONBAR:Bind_Listener(key)
                 SetBinding(frame.bindings[i])
             end
         end
-        F:Print(string.format(L['All keybinds cleared for %s.'], C.GreenColor .. (frame.tipName or frame.name) .. '|r'))
+        F:Print(string.format(L['All keybinds cleared for %s.'], C.GREEN_COLOR .. (frame.tipName or frame.name) .. '|r'))
 
         ACTIONBAR:Bind_Update(frame.button, frame.spellmacro)
 
@@ -232,7 +232,7 @@ function ACTIONBAR:Bind_Listener(key)
     else
         SetBinding(alt .. ctrl .. shift .. key, frame.spellmacro .. ' ' .. frame.name)
     end
-    F:Print(C.GreenColor .. (frame.tipName or frame.name) .. ' |r' .. L['bound to'] .. ' ' .. C.RedColor .. alt .. ctrl .. shift .. key)
+    F:Print(C.GREEN_COLOR .. (frame.tipName or frame.name) .. ' |r' .. L['bound to'] .. ' ' .. C.RED_COLOR .. alt .. ctrl .. shift .. key)
 
     ACTIONBAR:Bind_Update(frame.button, frame.spellmacro)
 end
@@ -254,10 +254,10 @@ end
 function ACTIONBAR:Bind_Deactivate(save)
     if save == true then
         SaveBindings(C.DB.Actionbar.BindType)
-        F:Print(C.BlueColor .. L['Keybinds saved.'])
+        F:Print(C.BLUE_COLOR .. L['Keybinds saved.'])
     else
         LoadBindings(C.DB.Actionbar.BindType)
-        F:Print(C.BlueColor .. L['Keybinds discarded.'])
+        F:Print(C.BLUE_COLOR .. L['Keybinds discarded.'])
     end
 
     ACTIONBAR:Bind_HideFrame()
@@ -278,7 +278,7 @@ function ACTIONBAR:Bind_CreateDialog()
     frame:SetPoint('TOP', 0, -135)
     F.SetBD(frame)
 
-    local font = C.Assets.Fonts.Bold
+    local font = C.Assets.Font.Bold
     F.CreateFS(frame, font, 14, nil, _G.QUICK_KEYBIND_MODE, false, true, 'TOP', 0, -10)
 
     local helpInfo = F.CreateHelpInfo(frame, '|n' .. _G.QUICK_KEYBIND_DESCRIPTION .. '|n|n' .. L['You can even keybind your spellbook spells or macros without placing them to your actionbars.'])
@@ -321,7 +321,7 @@ _G.SlashCmdList['FREEUI_KEYBIND'] = function(msg)
         return
     end -- don't mess up with this
     if InCombatLockdown() then
-        _G.UIErrorsFrame:AddMessage(C.RedColor .. _G.ERR_NOT_IN_COMBAT)
+        _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. _G.ERR_NOT_IN_COMBAT)
         return
     end
 

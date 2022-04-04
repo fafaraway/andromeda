@@ -40,7 +40,7 @@ end
 
 -- Support cmd /way if TomTom disabled
 do
-    local pointString = C.InfoColor .. '|Hworldmap:%d+:%d+:%d+|h[|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a%s (%s, %s)%s]|h|r'
+    local pointString = C.INFO_COLOR .. '|Hworldmap:%d+:%d+:%d+|h[|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a%s (%s, %s)%s]|h|r'
 
     local function GetCorrectCoord(x)
         x = tonumber(x)

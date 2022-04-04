@@ -82,10 +82,10 @@ local function ArrangeBlocks()
         if block:IsShown() then
             if block.position == 'LEFT' then
                 block:SetPoint('LEFT', bar, 'LEFT', leftOffset, 0)
-                leftOffset = leftOffset + (block:GetWidth() - C.Mult)
+                leftOffset = leftOffset + (block:GetWidth() - C.MULT)
             elseif block.position == 'RIGHT' then
                 block:SetPoint('RIGHT', bar, 'RIGHT', rightOffset, 0)
-                rightOffset = rightOffset - (block:GetWidth() - C.Mult)
+                rightOffset = rightOffset - (block:GetWidth() - C.MULT)
             else
                 block:SetPoint('CENTER', bar)
             end
@@ -104,7 +104,7 @@ function INFOBAR:RegisterNewBlock(name, position, width, noFade)
     block:SetBackdropColor(0, 0, 0, 0)
     block:SetBackdropBorderColor(0, 0, 0, 0)
 
-	block.text = F.CreateFS(block, C.Assets.Fonts.Condensed, 11, nil, '', nil, true, 'CENTER', 0, 0)
+	block.text = F.CreateFS(block, C.Assets.Font.Condensed, 11, nil, '', nil, true, 'CENTER', 0, 0)
     block.position = position
 
     if C.DB.Infobar.Mouseover and not noFade then
@@ -155,7 +155,7 @@ function INFOBAR:CreateInfoBar()
     bar.bg:SetOutside(bar, 2, 2)
     bar.bg:SetFrameStrata('BACKGROUND')
     bar.bg:SetFrameLevel(1) -- Make sure the frame level is higher than the vignetting
-    bar.bg:SetBackdrop({bgFile = C.Assets.Textures.Backdrop, edgeFile = C.Assets.Textures.Backdrop, edgeSize = 1})
+    bar.bg:SetBackdrop({bgFile = C.Assets.Texture.Backdrop, edgeFile = C.Assets.Texture.Backdrop, edgeSize = 1})
     bar.bg:SetBackdropColor(0, 0, 0, mouseover and .25 or .65)
     bar.bg:SetBackdropBorderColor(0, 0, 0)
 
@@ -250,7 +250,7 @@ function INFOBAR:CreateInfoBar()
     bar.bg:SetOutside(bar, 2, 2)
     bar.bg:SetFrameStrata('BACKGROUND')
     bar.bg:SetFrameLevel(1) -- Make sure the frame level is higher than the vignetting
-    bar.bg:SetBackdrop({bgFile = C.Assets.Textures.Backdrop, edgeFile = C.Assets.Textures.Backdrop, edgeSize = 1})
+    bar.bg:SetBackdrop({bgFile = C.Assets.Texture.Backdrop, edgeFile = C.Assets.Texture.Backdrop, edgeSize = 1})
     bar.bg:SetBackdropColor(0, 0, 0, mouseover and .25 or .65)
     bar.bg:SetBackdropBorderColor(0, 0, 0)
 
@@ -337,10 +337,10 @@ local function ReanchorButtons()
         if bu:IsShown() then
             if bu.position == 'LEFT' then
                 bu:SetPoint('LEFT', bar, 'LEFT', leftOffset, 0)
-                leftOffset = leftOffset + (bu:GetWidth() - C.Mult)
+                leftOffset = leftOffset + (bu:GetWidth() - C.MULT)
             elseif bu.position == 'RIGHT' then
                 bu:SetPoint('RIGHT', bar, 'RIGHT', rightOffset, 0)
-                rightOffset = rightOffset - (bu:GetWidth() - C.Mult)
+                rightOffset = rightOffset - (bu:GetWidth() - C.MULT)
             else
                 bu:SetPoint('CENTER', bar)
             end
@@ -362,7 +362,7 @@ function INFOBAR:AddBlock(text, position, width, noFade)
         bu:SetAlpha(0)
     end
 
-    local text = F.CreateFS(bu, C.Assets.Fonts.Condensed, 11, nil, text, nil, true, 'CENTER', 0, 0)
+    local text = F.CreateFS(bu, C.Assets.Font.Condensed, 11, nil, text, nil, true, 'CENTER', 0, 0)
     bu.Text = text
 
     if not noFade then

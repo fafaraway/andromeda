@@ -4,12 +4,12 @@ local EOT = F:RegisterModule('EnhancedObjectiveTracker')
 function EOT:ObjectiveTrackerMover()
     local frame = CreateFrame('Frame', 'ObjectiveTrackerMover', _G.UIParent)
     frame:SetSize(240, 50)
-    F.Mover(frame, L['Objective Tracker'], 'QuestTracker', {'TOPRIGHT', _G.UIParent, 'TOPRIGHT', -C.UIGap, -60})
+    F.Mover(frame, L['Objective Tracker'], 'QuestTracker', {'TOPRIGHT', _G.UIParent, 'TOPRIGHT', -C.UI_GAP, -60})
 
     local tracker = _G.ObjectiveTrackerFrame
     tracker:ClearAllPoints()
     tracker:SetPoint('TOPRIGHT', frame)
-    tracker:SetHeight(C.ScreenHeight / 1.5 * C.Mult)
+    tracker:SetHeight(C.SCREEN_HEIGHT / 1.5 * C.MULT)
     tracker:SetScale(1)
     tracker:SetClampedToScreen(false)
     tracker:SetMovable(true)
@@ -65,13 +65,13 @@ function EOT:HandleHeaderText()
     for i = 1, #frame do
         local modules = frame[i]
         if modules and modules.Header and modules.Header.Text then
-            F:SetFS(modules.Header.Text, C.Assets.Fonts.Header, 15, nil, nil, nil, 'THICK')
+            F:SetFS(modules.Header.Text, C.Assets.Font.Header, 15, nil, nil, nil, 'THICK')
         end
     end
 end
 
 function EOT:HandleTitleText(text)
-    local font = C.Assets.Fonts.Bold
+    local font = C.Assets.Font.Bold
     local outline = _G.FREE_ADB.FontOutline
     F:SetFS(text, font, 14, outline, nil, nil, outline or 'THICK')
 
@@ -86,7 +86,7 @@ end
 function EOT:HandleInfoText(text)
     self:ColorfulProgression(text)
 
-    local font = C.Assets.Fonts.Regular
+    local font = C.Assets.Font.Regular
     local outline = _G.FREE_ADB.FontOutline
     F:SetFS(text, font, 13, outline, nil, nil, outline or 'THICK')
     text:SetHeight(text:GetStringHeight())

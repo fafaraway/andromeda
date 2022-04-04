@@ -16,7 +16,7 @@ local function ReskinIcon(icon, frame)
         bg.icon = bg:CreateTexture(nil, 'ARTWORK')
         bg.icon:SetInside()
         bg.icon:SetTexture(icon:GetTexture())
-        bg.icon:SetTexCoord(unpack(C.TexCoord))
+        bg.icon:SetTexCoord(unpack(C.TEX_COORD))
 
         icon.styled = true
     end
@@ -72,19 +72,19 @@ local function ApplyStyle(self)
     ReskinBar(tbar, frame)
 
     if texture then
-        texture:SetTexture(C.Assets.Textures.SBNormal)
+        texture:SetTexture(C.Assets.Statusbar.Normal)
     end
 
     name:ClearAllPoints()
     name:SetPoint('LEFT', frame, 'LEFT', 2, 6)
     name:SetPoint('RIGHT', frame, 'LEFT', tbar:GetWidth() * .85, 6)
-    name:SetFont(C.Assets.Fonts.Bold, 12, nil, nil, nil, nil, 'THICK')
+    name:SetFont(C.Assets.Font.Bold, 12, nil, nil, nil, nil, 'THICK')
     name:SetJustifyH('LEFT')
     name:SetWordWrap(false)
 
     timer:ClearAllPoints()
     timer:SetPoint('RIGHT', frame, 'RIGHT', -2, 6)
-    timer:SetFont(C.Assets.Fonts.Bold, 12, nil, nil, nil, nil, 'THICK')
+    timer:SetFont(C.Assets.Font.Bold, 12, nil, nil, nil, nil, 'THICK')
     timer:SetJustifyH('RIGHT')
 end
 

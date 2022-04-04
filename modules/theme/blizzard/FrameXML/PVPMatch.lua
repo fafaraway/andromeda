@@ -7,7 +7,7 @@ table.insert(C.BlizzThemes, function()
     F.StripTextures(PVPReadyDialog)
     _G.PVPReadyDialogBackground:Hide()
     F.SetBD(PVPReadyDialog)
-    _G.PVPReadyDialogRoleIconTexture:SetTexture(C.Assets.Textures.LfgRoles)
+    _G.PVPReadyDialogRoleIconTexture:SetTexture(C.Assets.Texture.LfgRole)
     F.CreateBDFrame(_G.PVPReadyDialogRoleIcon)
 
     hooksecurefunc('PVPReadyDialog_Display', function(self, _, _, _, _, _, role)

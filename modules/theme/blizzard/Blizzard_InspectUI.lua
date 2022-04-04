@@ -19,7 +19,7 @@ C.Themes["Blizzard_InspectUI"] = function()
 	for i = 1, #slots do
 		local slot = _G["Inspect"..slots[i].."Slot"]
 		F.StripTextures(slot)
-		slot.icon:SetTexCoord(unpack(C.TexCoord))
+		slot.icon:SetTexCoord(unpack(C.TEX_COORD))
 		slot.icon:SetInside()
 		slot.bg = F.CreateBDFrame(slot.icon, .25)
 		slot:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
@@ -44,7 +44,7 @@ C.Themes["Blizzard_InspectUI"] = function()
 
 	inspectSpec.ring:Hide()
 	F.ReskinIcon(inspectSpec.specIcon)
-	inspectSpec.roleIcon:SetTexture(C.Assets.Textures.LfgRoles)
+	inspectSpec.roleIcon:SetTexture(C.Assets.Texture.LfgRole)
 	F.CreateBDFrame(inspectSpec.roleIcon)
 
 	for i = 1, 7 do

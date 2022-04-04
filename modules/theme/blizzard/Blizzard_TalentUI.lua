@@ -22,8 +22,8 @@ local function ReskinPvPTalent(self)
     if not self.styled then
         F.ReskinIcon(self.Icon)
         local bg = F.CreateBDFrame(self, .25)
-        bg:SetPoint('TOPLEFT', self.Icon, 'TOPRIGHT', 0, C.Mult)
-        bg:SetPoint('BOTTOMRIGHT', -1, C.Mult)
+        bg:SetPoint('TOPLEFT', self.Icon, 'TOPRIGHT', 0, C.MULT)
+        bg:SetPoint('BOTTOMRIGHT', -1, C.MULT)
         local hl = self:GetHighlightTexture()
         hl:SetColorTexture(1, 1, 1, .1)
         hl:SetInside(bg)
@@ -97,7 +97,7 @@ C.Themes['Blizzard_TalentUI'] = function()
             F.ReskinIcon(bu.specIcon)
 
             local roleIcon = bu.roleIcon
-            roleIcon:SetTexture(C.Assets.Textures.LfgRoles)
+            roleIcon:SetTexture(C.Assets.Texture.LfgRole)
             F.CreateBDFrame(roleIcon):SetFrameLevel(2)
             if role then
                 roleIcon:SetTexCoord(F.GetRoleTexCoord(role))
@@ -109,7 +109,7 @@ C.Themes['Blizzard_TalentUI'] = function()
         F.ReskinIcon(scrollChild.specIcon)
 
         local roleIcon = scrollChild.roleIcon
-        roleIcon:SetTexture(C.Assets.Textures.LfgRoles)
+        roleIcon:SetTexture(C.Assets.Texture.LfgRole)
         F.CreateBDFrame(roleIcon)
     end
 

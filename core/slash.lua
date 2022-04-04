@@ -36,14 +36,14 @@ end
 local function Commands()
     -- for _, v in ipairs(cmdList) do
     --     local command, desc = string.split('-', tostring(v))
-    --     print(string.format('%s|r - %s|r', C.YellowColor .. command, C.BlueColor .. desc))
+    --     print(string.format('%s|r - %s|r', C.YELLOW_COLOR .. command, C.BLUE_COLOR .. desc))
     -- end
 
     CreateHelpFrame()
 end
 
 local function Version()
-    print(string.format(C.AddonName .. C.MyColor.. '%s', C.AddonVersion))
+    print(string.format(C.ADDON_NAME .. C.CLASS_COLOR.. '%s', C.AddonVersion))
 end
 
 local function Reset()
@@ -112,8 +112,8 @@ _G.SLASH_ENABLE_ADDON2 = '/enable'
 _G.SlashCmdList.ONLY_UI = function()
     for i = 1, GetNumAddOns() do
         local name = GetAddOnInfo(i)
-        if name ~= 'FreeUI' and name ~= '!BaudErrorFrame' and GetAddOnEnableState(C.MyName, name) == 2 then
-            DisableAddOn(name, C.MyName)
+        if name ~= 'FreeUI' and name ~= '!BaudErrorFrame' and GetAddOnEnableState(C.NAME, name) == 2 then
+            DisableAddOn(name, C.NAME)
         end
     end
     _G.ReloadUI()

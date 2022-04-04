@@ -141,7 +141,7 @@ function Talentless:CreateSpecButtons()
         local Icon = Button:CreateTexture('$parentIcon', 'OVERLAY')
         Icon:SetAllPoints()
         Icon:SetTexture(select(4, GetSpecializationInfo(index)))
-        Icon:SetTexCoord(unpack(C.TexCoord))
+        Icon:SetTexCoord(unpack(C.TEX_COORD))
 
         -- local Border = Button:CreateTexture('$parentNormalTexture')
         -- Border:SetPoint('CENTER')
@@ -149,8 +149,8 @@ function Talentless:CreateSpecButtons()
         -- Border:SetTexture([[Interface\Buttons\UI-Quickslot2]])
 
         -- Button:SetNormalTexture(Border)
-        Button:SetPushedTexture(C.Assets.Textures.Button.Pushed)
-        Button:SetCheckedTexture(C.Assets.Textures.Button.Checked)
+        Button:SetPushedTexture(C.Assets.Button.Pushed)
+        Button:SetCheckedTexture(C.Assets.Button.Checked)
         -- Button:SetHighlightTexture([[Interface\Buttons\ButtonHilight-Square]])
 
         local Set = CreateFrame('CheckButton', '$parentSetButton', Button)
@@ -162,7 +162,7 @@ function Talentless:CreateSpecButtons()
 
         local SetIcon = Set:CreateTexture('$parentIcon')
         SetIcon:SetAllPoints()
-        SetIcon:SetTexCoord(unpack(C.TexCoord))
+        SetIcon:SetTexCoord(unpack(C.TEX_COORD))
         Button.SetIcon = SetIcon
 
         -- local SetBorder = Set:CreateTexture('$parentNormalTexture')
@@ -233,7 +233,7 @@ function Talentless:CreateItemButtons()
         local Icon = Button:CreateTexture('$parentIcon', 'OVERLAY')
         Icon:SetAllPoints()
         Icon:SetTexture(index == 1 and 1495827 or 134915)
-        Icon:SetTexCoord(unpack(C.TexCoord))
+        Icon:SetTexCoord(unpack(C.TEX_COORD))
         Button.Icon = Icon
 
         -- local Normal = Button:CreateTexture('$parentNormalTexture')

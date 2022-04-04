@@ -5,8 +5,8 @@ local rep = {}
 local extraRep = {}
 
 local repMsg = '%s (%d/%d): %+d ' .. L['Reputation']
-local paraMsg = C.GreenColor .. '%s (%d/10000): %+d ' .. L['Paragon Reputation'] .. '|r'
-local cacheMsg = C.RedColor .. '%s (%d/10000): %+d ' .. L['Paragon Reputation'] .. ' (' .. L['Max Reputation - Receive Reward.'] .. ')|r'
+local paraMsg = C.GREEN_COLOR .. '%s (%d/10000): %+d ' .. L['Paragon Reputation'] .. '|r'
+local cacheMsg = C.RED_COLOR .. '%s (%d/10000): %+d ' .. L['Paragon Reputation'] .. ' (' .. L['Max Reputation - Receive Reward.'] .. ')|r'
 
 local function CreateMessage(msg)
     local info = _G.ChatTypeInfo['COMBAT_FACTION_CHANGE']
@@ -108,7 +108,7 @@ local function HookParagonRep()
                     factionBar:SetMinMaxValues(0, threshold)
                     factionBar:SetValue(barValue)
                     factionBar:SetStatusBarColor(r, g, b)
-                    factionRow.rolloverText = C.InfoColor .. string.format(_G.REPUTATION_PROGRESS_FORMAT, barValue, threshold)
+                    factionRow.rolloverText = C.INFO_COLOR .. string.format(_G.REPUTATION_PROGRESS_FORMAT, barValue, threshold)
 
                     if hasRewardPending then
                         barValue = barValue - threshold

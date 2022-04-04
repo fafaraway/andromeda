@@ -78,7 +78,7 @@ tinsert(C.BlizzThemes, function()
 		local cooldown = _G["Character"..slots[i].."SlotCooldown"]
 
 		F.StripTextures(slot)
-		slot.icon:SetTexCoord(unpack(C.TexCoord))
+		slot.icon:SetTexCoord(unpack(C.TEX_COORD))
 		slot.icon:SetInside()
 		slot.bg = F.CreateBDFrame(slot.icon, .25)
 		slot.bg:SetFrameLevel(3)
@@ -182,7 +182,7 @@ tinsert(C.BlizzThemes, function()
 		local bu = _G["GearManagerDialogPopupButton"..i]
 		local ic = _G["GearManagerDialogPopupButton"..i.."Icon"]
 
-		bu:SetCheckedTexture(C.Assets.Textures.Button.Checked)
+		bu:SetCheckedTexture(C.Assets.Button.Checked)
 		select(2, bu:GetRegions()):Hide()
 		local hl = bu:GetHighlightTexture()
 		hl:SetColorTexture(1, 1, 1, .25)
@@ -230,7 +230,7 @@ tinsert(C.BlizzThemes, function()
 		for i = 1, GetNumFactions() do
 			local statusbar = _G["ReputationBar"..i.."ReputationBar"]
 			if statusbar then
-				statusbar:SetStatusBarTexture(C.Assets.Textures.SBNormal)
+				statusbar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
 
 				if not statusbar.reskinned then
 					F.CreateBDFrame(statusbar, .25)

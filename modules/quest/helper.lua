@@ -86,7 +86,7 @@ function QH:QuestTool_SetAction()
                     SetOverrideBindingClick(QH.QuestHandler, true, 'MOUSEWHEELDOWN', GetOverrideButton(index2))
                 end
 
-                QH.QuestTip:SetText(C.ColoredAddonName .. ': ' .. messages[spellID])
+                QH.QuestTip:SetText(C.COLORED_ADDON_NAME .. ': ' .. messages[spellID])
                 QH.QuestTip:Show()
                 QH.isHandling = true
 
@@ -158,7 +158,7 @@ function QH:QuestTool_UpdateBinding()
     if activeQuests[62459] and not IsResting() and C_QuestLog.GetDistanceSqToQuest(62459) < 35000 then
         SetBinding('MOUSEWHEELUP', 'EXTRAACTIONBUTTON1')
         QH.isBinding = true
-        QH.QuestTip:SetText(C.ColoredAddonName .. ': ' .. L['Get close to butterflies and mouse scroll up.'])
+        QH.QuestTip:SetText(C.COLORED_ADDON_NAME .. ': ' .. L['Get close to butterflies and mouse scroll up.'])
         QH.QuestTip:Show()
     elseif QH.isBinding then
         SetBinding('MOUSEWHEELUP', QH.SavedKey)
@@ -171,7 +171,7 @@ function QH:OnLogin()
     local handler = CreateFrame('Frame', nil, _G.UIParent)
     QH.QuestHandler = handler
 
-    local text = F.CreateFS(handler, C.Assets.Fonts.Bold, 20, nil, nil, nil, 'THICK')
+    local text = F.CreateFS(handler, C.Assets.Font.Bold, 20, nil, nil, nil, 'THICK')
     text:ClearAllPoints()
     text:SetPoint('TOP', _G.UIParent, 0, -200)
     text:SetWidth(800)

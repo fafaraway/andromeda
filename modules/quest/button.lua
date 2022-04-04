@@ -227,7 +227,7 @@ function ExtraQuestButton:PLAYER_LOGIN()
     self.updateTimer = 0
     self.rangeTimer = 0
 
-    self:SetPushedTexture(C.Assets.Textures.Button.Pushed)
+    self:SetPushedTexture(C.Assets.Button.Pushed)
     local push = self:GetPushedTexture()
     push:SetBlendMode('ADD')
     push:SetInside()
@@ -241,12 +241,12 @@ function ExtraQuestButton:PLAYER_LOGIN()
     self.Icon = Icon
 
     local HotKey = self:CreateFontString('$parentHotKey')
-    HotKey:SetFont(C.Assets.Fonts.Condensed, 10, 'OUTLINE')
+    HotKey:SetFont(C.Assets.Font.Condensed, 10, 'OUTLINE')
     HotKey:SetPoint('TOPRIGHT', -2, -2)
     self.HotKey = HotKey
 
     local Count = self:CreateFontString('$parentCount')
-    Count:SetFont(C.Assets.Fonts.Condensed, 10, 'OUTLINE')
+    Count:SetFont(C.Assets.Font.Condensed, 10, 'OUTLINE')
     Count:SetPoint('BOTTOMLEFT', 2, 2)
     self.Count = Count
 

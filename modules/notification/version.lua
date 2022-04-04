@@ -27,7 +27,7 @@ function NOTIFICATION:VersionCheck_Create(text)
         return
     end
 
-    F:CreateNotification(C.AddonName, text, nil, 'Interface\\ICONS\\ability_warlock_soulswap')
+    F:CreateNotification(C.ADDON_NAME, text, nil, 'Interface\\ICONS\\ability_warlock_soulswap')
     F:Print(text)
 end
 
@@ -57,7 +57,7 @@ function NOTIFICATION:VersionCheck_Update(...)
     if prefix ~= 'FreeUIVersionCheck' then
         return
     end
-    if Ambiguate(author, 'none') == C.MyName then
+    if Ambiguate(author, 'none') == C.NAME then
         return
     end
 

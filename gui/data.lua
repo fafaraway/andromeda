@@ -5,7 +5,7 @@ local LibBase64 = F.Libs.Base64
 local dataFrame
 
 function GUI:ExportData()
-    local text = 'FreeUISettings:' .. C.AddonVersion .. ':' .. C.MyName .. ':' .. C.MyClass
+    local text = 'FreeUISettings:' .. C.AddonVersion .. ':' .. C.NAME .. ':' .. C.CLASS
     for KEY, VALUE in pairs(C.DB) do
         if type(VALUE) == 'table' then
             for key, value in pairs(VALUE) do
@@ -78,7 +78,7 @@ function GUI:ImportData()
     local options = {string.split(';', profile)}
     local title, _, _, class = string.split(':', options[1])
     if title ~= 'FreeUISettings' then
-        _G.UIErrorsFrame:AddMessage(C.RedColor .. L['Import failed, due to data exception.'])
+        _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Import failed, due to data exception.'])
         return
     end
 
@@ -149,7 +149,7 @@ function GUI:CreateDataFrame()
     dataFrame:SetFrameStrata('DIALOG')
     F.CreateMF(dataFrame)
     F.SetBD(dataFrame)
-    dataFrame.Header = F.CreateFS(dataFrame, C.Assets.Fonts.Regular, 14, nil, L['Export settings'], 'YELLOW', true, 'TOP', 0, -5)
+    dataFrame.Header = F.CreateFS(dataFrame, C.Assets.Font.Regular, 14, nil, L['Export settings'], 'YELLOW', true, 'TOP', 0, -5)
 
     local scrollArea = CreateFrame('ScrollFrame', nil, dataFrame, 'UIPanelScrollFrameTemplate')
     scrollArea:SetPoint('TOPLEFT', 10, -30)
@@ -163,7 +163,7 @@ function GUI:CreateDataFrame()
     editBox:EnableMouse(true)
     editBox:SetAutoFocus(true)
     editBox:SetTextInsets(5, 5, 5, 5)
-    editBox:SetFont(C.Assets.Fonts.Regular, 12)
+    editBox:SetFont(C.Assets.Font.Regular, 12)
     editBox:SetWidth(scrollArea:GetWidth())
     editBox:SetHeight(scrollArea:GetHeight())
     editBox:SetScript(

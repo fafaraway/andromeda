@@ -7,7 +7,7 @@ C.Themes["Blizzard_BlackMarketUI"] = function()
 	BlackMarketFrame.MoneyFrameBorder:SetAlpha(0)
 	F.StripTextures(BlackMarketFrame.HotDeal)
 	F.CreateBDFrame(BlackMarketFrame.HotDeal.Item)
-	BlackMarketFrame.HotDeal.Item.IconTexture:SetTexCoord(unpack(C.TexCoord))
+	BlackMarketFrame.HotDeal.Item.IconTexture:SetTexCoord(unpack(C.TEX_COORD))
 
 	local headers = {"ColumnName", "ColumnLevel", "ColumnType", "ColumnDuration", "ColumnHighBidder", "ColumnCurrentBid"}
 	for _, header in pairs(headers) do
@@ -30,7 +30,7 @@ C.Themes["Blizzard_BlackMarketUI"] = function()
 		for i = 1, #buttons do
 			local bu = buttons[i]
 
-			bu.Item.IconTexture:SetTexCoord(unpack(C.TexCoord))
+			bu.Item.IconTexture:SetTexCoord(unpack(C.TEX_COORD))
 			if not bu.reskinned then
 				F.StripTextures(bu)
 
@@ -41,10 +41,10 @@ C.Themes["Blizzard_BlackMarketUI"] = function()
 				bu.Item.IconBorder:SetAlpha(0)
 
 				local bg = F.CreateBDFrame(bu, .25)
-				bg:SetPoint("TOPLEFT", bu.Item, "TOPRIGHT", 3, C.Mult)
+				bg:SetPoint("TOPLEFT", bu.Item, "TOPRIGHT", 3, C.MULT)
 				bg:SetPoint("BOTTOMRIGHT", 0, 4)
 
-				bu:SetHighlightTexture(C.Assets.Textures.Backdrop)
+				bu:SetHighlightTexture(C.Assets.Texture.Backdrop)
 				local hl = bu:GetHighlightTexture()
 				hl:SetVertexColor(r, g, b, .2)
 				hl.SetAlpha = nop
@@ -53,7 +53,7 @@ C.Themes["Blizzard_BlackMarketUI"] = function()
 
 				bu.Selection:ClearAllPoints()
 				bu.Selection:SetAllPoints(bg)
-				bu.Selection:SetTexture(C.Assets.Textures.Backdrop)
+				bu.Selection:SetTexture(C.Assets.Texture.Backdrop)
 				bu.Selection:SetVertexColor(r, g, b, .1)
 
 				bu.reskinned = true

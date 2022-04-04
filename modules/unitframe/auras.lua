@@ -63,7 +63,7 @@ function UNITFRAME.PostCreateIcon(element, button)
     -- local style = element.__owner.unitStyle
     -- local isGroup = style == 'party' or style == 'raid'
     local isPartyAura = element.partyAura
-    local font = C.Assets.Fonts.Roadway
+    local font = C.Assets.Font.Roadway
     local fontSize = math.max(element.size * .4, 12)
 
     button.bg = F.CreateBDFrame(button, .25)
@@ -75,7 +75,7 @@ function UNITFRAME.PostCreateIcon(element, button)
     button.stealable:SetTexture(nil)
     button.cd:SetReverse(true)
     button.icon:SetDrawLayer('ARTWORK')
-    button.icon:SetTexCoord(unpack(C.TexCoord))
+    button.icon:SetTexCoord(unpack(C.TEX_COORD))
 
     button.HL = button:CreateTexture(nil, 'HIGHLIGHT')
     button.HL:SetColorTexture(1, 1, 1, .25)
@@ -170,7 +170,7 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
     end
 
     local fontSize = math.max(element.size * .4, 12)
-    local font = C.Assets.Fonts.Roadway
+    local font = C.Assets.Font.Roadway
     if button.count then
         button.count:SetFont(font, fontSize, 'OUTLINE')
     end

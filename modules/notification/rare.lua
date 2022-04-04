@@ -37,7 +37,7 @@ function NOTIFICATION:RareAlert_Update(id)
             local x, y = position:GetXY()
             nameString = string.format(rareString, mapID, x * 10000, y * 10000, info.name, x * 100, y * 100, '')
         end
-        F:Print(tex .. C.InfoColor .. (nameString or info.name or ''))
+        F:Print(tex .. C.INFO_COLOR .. (nameString or info.name or ''))
 
         cache[id] = true
     end

@@ -24,7 +24,7 @@ tinsert(C.BlizzThemes, function()
 		local ic = bu.gameIcon
 
 		bu.background:Hide()
-		bu:SetHighlightTexture(C.Assets.Textures.Backdrop)
+		bu:SetHighlightTexture(C.Assets.Texture.Backdrop)
 		bu:GetHighlightTexture():SetVertexColor(.24, .56, 1, .2)
 		ic:SetSize(22, 22)
 		ic:SetTexCoord(.17, .83, .17, .83)
@@ -101,7 +101,7 @@ tinsert(C.BlizzThemes, function()
 
 	for _, button in pairs({FriendsTabHeaderSoRButton, FriendsTabHeaderRecruitAFriendButton}) do
 		button:SetPushedTexture("")
-		button:GetRegions():SetTexCoord(unpack(C.TexCoord))
+		button:GetRegions():SetTexCoord(unpack(C.TEX_COORD))
 		F.CreateBDFrame(button)
 	end
 

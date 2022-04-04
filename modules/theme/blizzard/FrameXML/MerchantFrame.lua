@@ -87,7 +87,7 @@ tinsert(
         reskinMerchantInteract(_G.MerchantRepairItemButton)
         local ic = _G.MerchantRepairItemButton:GetRegions()
         ic:SetTexture('Interface\\Icons\\INV_Hammer_20')
-        ic:SetTexCoord(unpack(C.TexCoord))
+        ic:SetTexCoord(unpack(C.TEX_COORD))
 
         hooksecurefunc(
             'MerchantFrame_UpdateCurrencies',

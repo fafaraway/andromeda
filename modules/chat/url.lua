@@ -4,7 +4,7 @@ local CHAT = F:GetModule('Chat')
 local foundurl = false
 
 local function convertLink(text, value)
-    return '|Hurl:' .. tostring(value) .. '|h' .. C.InfoColor .. text .. '|r|h'
+    return '|Hurl:' .. tostring(value) .. '|h' .. C.INFO_COLOR .. text .. '|r|h'
 end
 
 local function highlightURL(_, url)
@@ -119,7 +119,7 @@ function CHAT.SetItemRefHook(link, _, button)
 
             if fullname and string.len(fullname) > 0 then
                 local name, server = string.split('-', fullname)
-                if server and server ~= C.MyRealm then
+                if server and server ~= C.REALM then
                     name = fullname
                 end
 

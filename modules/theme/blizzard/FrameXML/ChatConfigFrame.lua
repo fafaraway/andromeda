@@ -100,7 +100,7 @@ table.insert(
         end
 
         local line = _G.ChatConfigFrame:CreateTexture()
-        line:SetSize(C.Mult, 460)
+        line:SetSize(C.MULT, 460)
         line:SetPoint('TOPLEFT', _G.ChatConfigCategoryFrame, 'TOPRIGHT')
         line:SetColorTexture(1, 1, 1, .25)
 

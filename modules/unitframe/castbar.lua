@@ -35,7 +35,7 @@ local channelingTicks = {
     [324631] = 8 -- 血肉铸造，盟约
 }
 
-if C.MyClass == 'PRIEST' then
+if C.CLASS == 'PRIEST' then
     local function updateTicks()
         local numTicks = 3
         if IsPlayerSpell(193134) then
@@ -272,24 +272,24 @@ function UNITFRAME:CreateCastBar(self)
     local focusWidth = C.DB.Unitframe.FocusCastbarWidth
     local focusHeight = C.DB.Unitframe.FocusCastbarHeight
     local outline = _G.FREE_ADB.FontOutline
-    local font = C.Assets.Fonts.Condensed
+    local font = C.Assets.Font.Condensed
     local iconAmp = 4
 
     local castbar = CreateFrame('StatusBar', 'oUF_Castbar' .. style, self)
-    castbar:SetStatusBarTexture(C.Assets.Textures.SBNormal)
+    castbar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
     castbar.Backdrop = F.CreateBDFrame(castbar, .45)
     castbar.Border = F.CreateSD(castbar.Backdrop, .35, 6, 6, true)
     self.Castbar = castbar
 
     local spark = castbar:CreateTexture(nil, 'OVERLAY')
-    spark:SetTexture(C.Assets.Textures.CastingSpark)
+    spark:SetTexture(C.Assets.Texture.Spark)
     spark:SetBlendMode('ADD')
     spark:SetAlpha(.7)
     spark:SetSize(12, castbar:GetHeight() * 2)
     castbar.Spark = spark
 
     local icon = castbar:CreateTexture(nil, 'ARTWORK')
-    icon:SetTexCoord(unpack(C.TexCoord))
+    icon:SetTexCoord(unpack(C.TEX_COORD))
     F.SetBD(icon, .25)
     icon.__bg:SetBackdropBorderColor(0, 0, 0)
     castbar.Icon = icon
@@ -305,7 +305,7 @@ function UNITFRAME:CreateCastBar(self)
 
     if isPlayer then
         local safeZone = castbar:CreateTexture(nil, 'OVERLAY')
-        safeZone:SetTexture(C.Assets.Textures.SBNormal)
+        safeZone:SetTexture(C.Assets.Statusbar.Normal)
         safeZone:SetVertexColor(.87, .25, .42, .25)
         safeZone:SetPoint('TOPRIGHT')
         safeZone:SetPoint('BOTTOMRIGHT')
@@ -366,7 +366,7 @@ function UNITFRAME:CreateNamePlateCastBar(self)
 
     local style = self.unitStyle
     local outline = _G.FREE_ADB.FontOutline
-    local font = C.Assets.Fonts.Condensed
+    local font = C.Assets.Font.Condensed
     local color = C.DB.Unitframe.CastingColor
     local compact = not C.DB.Nameplate.SeparateCastbar
     local cbHeight = C.DB.Nameplate.CastbarHeight
@@ -375,13 +375,13 @@ function UNITFRAME:CreateNamePlateCastBar(self)
     local iconAmp = 4
 
     local castbar = CreateFrame('StatusBar', 'oUF_Castbar' .. style, self)
-    castbar:SetStatusBarTexture(C.Assets.Textures.SBNormal)
+    castbar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
     castbar.Backdrop = F.CreateBDFrame(castbar, .45)
     castbar.Border = F.CreateSD(castbar.Backdrop, .35, 6, 6, true)
     self.Castbar = castbar
 
     local spark = castbar:CreateTexture(nil, 'OVERLAY')
-    spark:SetTexture(C.Assets.Textures.CastingSpark)
+    spark:SetTexture(C.Assets.Texture.Spark)
     spark:SetBlendMode('ADD')
     spark:SetAlpha(.7)
     spark:SetSize(12, castbar:GetHeight() * 2)
@@ -399,13 +399,13 @@ function UNITFRAME:CreateNamePlateCastBar(self)
     castbar.Decimal = '%.1f'
 
     local icon = castbar:CreateTexture(nil, 'ARTWORK')
-    icon:SetTexCoord(unpack(C.TexCoord))
+    icon:SetTexCoord(unpack(C.TEX_COORD))
     F.SetBD(icon, .25)
     icon.__bg:SetBackdropBorderColor(0, 0, 0)
     castbar.Icon = icon
 
     local shield = castbar:CreateTexture(nil, 'OVERLAY')
-    shield:SetTexture(C.Assets.Textures.CastingShield)
+    shield:SetTexture(C.Assets.Texture.Uninterruptible)
     shield:SetSize(cbHeight + 4, cbHeight + 4)
     shield:SetPoint('CENTER', castbar, 'BOTTOMLEFT')
     castbar.Shield = shield
@@ -433,7 +433,7 @@ function UNITFRAME:CreateNamePlateCastBar(self)
     castbar.glowFrame:SetPoint('CENTER', castbar.Icon)
 
     -- Spell target
-    local spellTarget = F.CreateFS(castbar, C.Assets.Fonts.Bold, 11, outline, '', nil, outline or 'THICK')
+    local spellTarget = F.CreateFS(castbar, C.Assets.Font.Bold, 11, outline, '', nil, outline or 'THICK')
     spellTarget:ClearAllPoints()
     spellTarget:SetJustifyH('CENTER')
     spellTarget:SetPoint('TOP', castbar, 'BOTTOM', 0, -4)

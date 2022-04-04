@@ -95,7 +95,7 @@ end
 local function CreateButton(r, g, b, text, func)
     local bu = CreateFrame('Button', nil, CHAT.ChannelBar, 'SecureActionButtonTemplate, BackdropTemplate')
     bu:SetSize(30, 3)
-    F.PixelIcon(bu, C.Assets.Textures.SBNormal, true)
+    F.PixelIcon(bu, C.Assets.Statusbar.Normal, true)
     F.CreateSD(bu)
     bu.Icon:SetVertexColor(r, g, b)
     bu:SetHitRectInsets(0, 0, -8, -8)
@@ -159,7 +159,7 @@ local function WorldChannelButton_OnClick(self, btn)
     if CHAT.InWorldChannel then
         if btn == 'RightButton' then
             LeaveChannelByName(channelName)
-            F:Print('|cffd82026' .. _G.QUIT .. '|r ' .. C.InfoColor .. L['World Channel'])
+            F:Print('|cffd82026' .. _G.QUIT .. '|r ' .. C.INFO_COLOR .. L['World Channel'])
             CHAT.InWorldChannel = false
         elseif CHAT.WorldChannelID then
             _G.ChatFrame_OpenChat('/' .. CHAT.WorldChannelID, chatFrame)
@@ -167,7 +167,7 @@ local function WorldChannelButton_OnClick(self, btn)
     else
         JoinPermanentChannel(channelName, nil, 1)
         _G.ChatFrame_AddChannel(_G.ChatFrame1, channelName)
-        F:Print('|cff27ba24' .. _G.JOIN .. '|r ' .. C.InfoColor .. L['World Channel'])
+        F:Print('|cff27ba24' .. _G.JOIN .. '|r ' .. C.INFO_COLOR .. L['World Channel'])
         CHAT.InWorldChannel = true
     end
 end

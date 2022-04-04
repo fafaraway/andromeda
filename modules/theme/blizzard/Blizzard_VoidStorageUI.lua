@@ -21,7 +21,7 @@ C.Themes["Blizzard_VoidStorageUI"] = function()
 			bu.bg:SetBackdropColor(.3, .3, .3, .3)
 			local bg, icon, _, search = bu:GetRegions()
 			bg:Hide()
-			icon:SetTexCoord(unpack(C.TexCoord))
+			icon:SetTexCoord(unpack(C.TEX_COORD))
 			search:SetAllPoints(bu.bg)
 		end
 
@@ -58,9 +58,9 @@ C.Themes["Blizzard_VoidStorageUI"] = function()
 	for i = 1, 2 do
 		local tab = VoidStorageFrame["Page"..i]
 		tab:GetRegions():Hide()
-		tab:SetCheckedTexture(C.Assets.Textures.Button.Checked)
+		tab:SetCheckedTexture(C.Assets.Button.Checked)
 		tab:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-		tab:GetNormalTexture():SetTexCoord(unpack(C.TexCoord))
+		tab:GetNormalTexture():SetTexCoord(unpack(C.TEX_COORD))
 		F.CreateBDFrame(tab)
 	end
 

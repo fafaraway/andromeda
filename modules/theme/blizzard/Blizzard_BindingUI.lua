@@ -31,7 +31,7 @@ C.Themes['Blizzard_BindingUI'] = function()
         function(_, button)
             if not button.styled then
                 local selected = button.selectedHighlight
-                selected:SetTexture(C.Assets.Textures.Backdrop)
+                selected:SetTexture(C.Assets.Texture.Backdrop)
                 selected:SetInside()
                 selected:SetColorTexture(r, g, b, .25)
                 F.Reskin(button)
@@ -42,7 +42,7 @@ C.Themes['Blizzard_BindingUI'] = function()
     )
 
     local line = KeyBindingFrame:CreateTexture(nil, 'ARTWORK')
-    line:SetSize(C.Mult, 546)
+    line:SetSize(C.MULT, 546)
     line:SetPoint('LEFT', 205, 10)
     line:SetColorTexture(1, 1, 1, .25)
 

@@ -48,7 +48,7 @@ function BLIZZARD:UpdateBossEmote()
 end
 
 function BLIZZARD:TradeTargetInfo()
-    local infoText = F.CreateFS(_G.TradeFrame, C.Assets.Fonts.Regular, 14, true)
+    local infoText = F.CreateFS(_G.TradeFrame, C.Assets.Font.Regular, 14, true)
     infoText:ClearAllPoints()
     infoText:SetPoint('TOP', _G.TradeFrameRecipientNameText, 'BOTTOM', 0, -5)
 
@@ -60,11 +60,11 @@ function BLIZZARD:TradeTargetInfo()
         if not guid then
             return
         end
-        local text = C.RedColor .. L['Stranger']
+        local text = C.RED_COLOR .. L['Stranger']
         if C_BattleNet.GetGameAccountInfoByGUID(guid) or C_FriendList.IsFriend(guid) then
-            text = C.GreenColor .. _G.FRIEND
+            text = C.GREEN_COLOR .. _G.FRIEND
         elseif IsGuildMember(guid) then
-            text = C.BlueColor .. _G.GUILD
+            text = C.BLUE_COLOR .. _G.GUILD
         end
         infoText:SetText(text)
     end

@@ -38,16 +38,16 @@ function INFOBAR:GuildPanel_CreateButton(parent, index)
     button.HL:SetAllPoints()
     button.HL:SetColorTexture(C.r, C.g, C.b, .2)
 
-    button.level = F.CreateFS(button, C.Assets.Fonts.Regular, 13, nil, 'Level', nil, true)
+    button.level = F.CreateFS(button, C.Assets.Font.Regular, 13, nil, 'Level', nil, true)
     button.level:SetPoint('TOP', button, 'TOPLEFT', 16, -4)
     button.class = button:CreateTexture(nil, 'ARTWORK')
     button.class:SetPoint('LEFT', 40, 0)
     button.class:SetSize(16, 16)
     button.class:SetTexture('Interface\\GLUES\\CHARACTERCREATE\\UI-CHARACTERCREATE-CLASSES')
-    button.name = F.CreateFS(button, C.Assets.Fonts.Regular, 13, nil, 'Name', nil, true, 'LEFT', 70, 0)
+    button.name = F.CreateFS(button, C.Assets.Font.Regular, 13, nil, 'Name', nil, true, 'LEFT', 70, 0)
     button.name:SetPoint('RIGHT', button, 'LEFT', 185, 0)
     button.name:SetJustifyH('LEFT')
-    button.zone = F.CreateFS(button, C.Assets.Fonts.Regular, 13, nil, 'Zone', nil, true, 'RIGHT', -2, 0)
+    button.zone = F.CreateFS(button, C.Assets.Font.Regular, 13, nil, 'Zone', nil, true, 'RIGHT', -2, 0)
     button.zone:SetPoint('LEFT', button, 'RIGHT', -120, 0)
     button.zone:SetJustifyH('RIGHT')
     button.zone:SetWordWrap(false)
@@ -70,7 +70,7 @@ function INFOBAR:GuildPanel_UpdateButton(button)
     local namecolor = F:RGBToHex(F:ClassColor(class))
     button.name:SetText(namecolor .. name .. status)
 
-    local zonecolor = C.GreyColor
+    local zonecolor = C.GREY_COLOR
     if UnitInRaid(name) or UnitInParty(name) then
         zonecolor = '|cff4c4cff'
     elseif GetRealZoneText() == zone then
@@ -166,10 +166,10 @@ function INFOBAR:GuildPanel_Init()
         self:SetScript('OnUpdate', isPanelCanHide)
     end)
 
-    gName = F.CreateFS(infoFrame, C.Assets.Fonts.Bold, 16, nil, 'Guild', nil, true, 'TOPLEFT', 15, -10)
-    gOnline = F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, 'Online', nil, true, 'TOPLEFT', 15, -35)
-    -- gApps = F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, 'Applications', nil, true, 'TOPRIGHT', -15, -35)
-    gRank = F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, 'Rank', nil, true, 'TOPLEFT', 15, -51)
+    gName = F.CreateFS(infoFrame, C.Assets.Font.Bold, 16, nil, 'Guild', nil, true, 'TOPLEFT', 15, -10)
+    gOnline = F.CreateFS(infoFrame, C.Assets.Font.Regular, 13, nil, 'Online', nil, true, 'TOPLEFT', 15, -35)
+    -- gApps = F.CreateFS(infoFrame, C.Assets.Font.Regular, 13, nil, 'Applications', nil, true, 'TOPRIGHT', -15, -35)
+    gRank = F.CreateFS(infoFrame, C.Assets.Font.Regular, 13, nil, 'Rank', nil, true, 'TOPLEFT', 15, -51)
 
     local bu = {}
     local width = {30, 35, 126, 126}
@@ -188,18 +188,18 @@ function INFOBAR:GuildPanel_Init()
         bu[i].index = i
         bu[i]:SetScript('OnClick', sortHeaderOnClick)
     end
-    F.CreateFS(bu[1], C.Assets.Fonts.Regular, 13, nil, _G.LEVEL)
-    F.CreateFS(bu[2], C.Assets.Fonts.Regular, 13, nil, _G.CLASS)
-    F.CreateFS(bu[3], C.Assets.Fonts.Regular, 13, nil, _G.NAME, nil, true, 'LEFT', 5, 0)
-    F.CreateFS(bu[4], C.Assets.Fonts.Regular, 13, nil, _G.ZONE, nil, true, 'RIGHT', -5, 0)
+    F.CreateFS(bu[1], C.Assets.Font.Regular, 13, nil, _G.LEVEL)
+    F.CreateFS(bu[2], C.Assets.Font.Regular, 13, nil, _G.CLASS)
+    F.CreateFS(bu[3], C.Assets.Font.Regular, 13, nil, _G.NAME, nil, true, 'LEFT', 5, 0)
+    F.CreateFS(bu[4], C.Assets.Font.Regular, 13, nil, _G.ZONE, nil, true, 'RIGHT', -5, 0)
 
-    F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, C.LineString, nil, true, 'BOTTOMRIGHT', -12, 58)
-    local whspInfo = C.InfoColor .. C.Assets.Textures.MouseRightBtn .. L['Whisper']
-    F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, whspInfo, nil, true, 'BOTTOMRIGHT', -15, 42)
-    local invtInfo = C.InfoColor .. 'ALT +' .. C.Assets.Textures.MouseLeftBtn .. L['Invite']
-    F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, invtInfo, nil, true, 'BOTTOMRIGHT', -15, 26)
-    local copyInfo = C.InfoColor .. 'SHIFT +' .. C.Assets.Textures.MouseLeftBtn .. L['Copy Name']
-    F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, copyInfo, nil, true, 'BOTTOMRIGHT', -15, 10)
+    F.CreateFS(infoFrame, C.Assets.Font.Regular, 13, nil, C.LINE_STRING, nil, true, 'BOTTOMRIGHT', -12, 58)
+    local whspInfo = C.INFO_COLOR .. C.MOUSE_RIGHT_BUTTON .. L['Whisper']
+    F.CreateFS(infoFrame, C.Assets.Font.Regular, 13, nil, whspInfo, nil, true, 'BOTTOMRIGHT', -15, 42)
+    local invtInfo = C.INFO_COLOR .. 'ALT +' .. C.MOUSE_LEFT_BUTTON .. L['Invite']
+    F.CreateFS(infoFrame, C.Assets.Font.Regular, 13, nil, invtInfo, nil, true, 'BOTTOMRIGHT', -15, 26)
+    local copyInfo = C.INFO_COLOR .. 'SHIFT +' .. C.MOUSE_LEFT_BUTTON .. L['Copy Name']
+    F.CreateFS(infoFrame, C.Assets.Font.Regular, 13, nil, copyInfo, nil, true, 'BOTTOMRIGHT', -15, 10)
 
     local scrollFrame = CreateFrame('ScrollFrame', 'FreeUIGuildInfobarScrollFrame', infoFrame, 'HybridScrollFrameTemplate')
     scrollFrame:SetSize(305, 320)
@@ -249,9 +249,9 @@ function INFOBAR:GuildPanel_Refresh()
     local guildName, guildRank = GetGuildInfo('player')
 
     gName:SetText(F:RGBToHex({.9, .8, .6}) .. '<' .. (guildName or '') .. '>')
-    gOnline:SetText(string.format(C.InfoColor .. '%s:' .. ' %d/%d', _G.GUILD_ONLINE_LABEL, online, total))
-    -- gApps:SetText(string.format(C.InfoColor .. _G.GUILDINFOTAB_APPLICANTS, GetNumGuildApplicants()))
-    gRank:SetText(C.InfoColor .. _G.RANK .. ': ' .. (guildRank or ''))
+    gOnline:SetText(string.format(C.INFO_COLOR .. '%s:' .. ' %d/%d', _G.GUILD_ONLINE_LABEL, online, total))
+    -- gApps:SetText(string.format(C.INFO_COLOR .. _G.GUILDINFOTAB_APPLICANTS, GetNumGuildApplicants()))
+    gRank:SetText(C.INFO_COLOR .. _G.RANK .. ': ' .. (guildRank or ''))
 
     for i = 1, total do
         local name, _, _, level, _, zone, _, _, connected, status, class, _, _, mobile = GetGuildRosterInfo(i)
@@ -327,7 +327,7 @@ end
 
 local function Block_OnEvent(self, event, arg1)
     if not IsInGuild() then
-        self.text:SetText(_G.GUILD .. ': ' .. C.MyColor .. _G.NONE)
+        self.text:SetText(_G.GUILD .. ': ' .. C.CLASS_COLOR .. _G.NONE)
         return
     end
 
@@ -338,7 +338,7 @@ local function Block_OnEvent(self, event, arg1)
     end
 
     local online = select(3, GetNumGuildMembers())
-    self.text:SetText(_G.GUILD .. ': ' .. C.MyColor .. online)
+    self.text:SetText(_G.GUILD .. ': ' .. C.CLASS_COLOR .. online)
 
     if infoFrame and infoFrame:IsShown() then
         INFOBAR:GuildPanel_Refresh()

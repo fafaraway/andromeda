@@ -480,7 +480,7 @@ function ACTIONBAR:StyleExtraActionButton(cfg)
     local buttonstyle = button.style -- artwork around the button
     local cooldown = _G[buttonName .. 'Cooldown']
 
-    button:SetPushedTexture(C.Assets.Textures.Button.Pushed) -- force it to gain a texture
+    button:SetPushedTexture(C.Assets.Button.Pushed) -- force it to gain a texture
     local normalTexture = button:GetNormalTexture()
     local pushedTexture = button:GetPushedTexture()
     local highlightTexture = button:GetHighlightTexture()
@@ -507,7 +507,7 @@ function ACTIONBAR:StyleExtraActionButton(cfg)
 
     hotkey:SetParent(overlay)
     ACTIONBAR:HookHotKey(button)
-    -- cfg.hotkey.font = {C.Assets.Fonts.Pixel, 8, 'OUTLINE, MONOCHROME'}
+    -- cfg.hotkey.font = {C.Assets.Font.Pixel, 8, 'OUTLINE, MONOCHROME'}
     SetupFontString(hotkey, cfg.hotkey)
 
     if C.DB.Actionbar.CountNumber then
@@ -582,19 +582,19 @@ end
 
 function ACTIONBAR:RestyleButtons()
     local cfg = {
-        icon = {texCoord = C.TexCoord, points = {{'TOPLEFT', C.Mult, -C.Mult}, {'BOTTOMRIGHT', -C.Mult, C.Mult}}},
+        icon = {texCoord = C.TEX_COORD, points = {{'TOPLEFT', C.MULT, -C.MULT}, {'BOTTOMRIGHT', -C.MULT, C.MULT}}},
         flyoutBorder = {file = ''},
         flyoutBorderShadow = {file = ''},
         border = {file = ''},
-        normalTexture = {file = C.Assets.Textures.Button.Normal, color = {.3, .3, .3}, points = {{'TOPLEFT', C.Mult, -C.Mult}, {'BOTTOMRIGHT', -C.Mult, C.Mult}}},
-        flash = {file = C.Assets.Textures.Button.Flash},
-        pushedTexture = {file = C.Assets.Textures.Button.Pushed, color = {C.r, C.g, C.b}, points = {{'TOPLEFT', C.Mult, -C.Mult}, {'BOTTOMRIGHT', -C.Mult, C.Mult}}},
-        checkedTexture = {file = C.Assets.Textures.Button.Checked, color = {.2, 1, .2}, points = {{'TOPLEFT', C.Mult, -C.Mult}, {'BOTTOMRIGHT', -C.Mult, C.Mult}}},
-        highlightTexture = {file = C.Assets.Textures.Button.Highlight, points = {{'TOPLEFT', C.Mult, -C.Mult}, {'BOTTOMRIGHT', -C.Mult, C.Mult}}},
+        normalTexture = {file = C.Assets.Button.Normal, color = {.3, .3, .3}, points = {{'TOPLEFT', C.MULT, -C.MULT}, {'BOTTOMRIGHT', -C.MULT, C.MULT}}},
+        flash = {file = C.Assets.Button.Flash},
+        pushedTexture = {file = C.Assets.Button.Pushed, color = {C.r, C.g, C.b}, points = {{'TOPLEFT', C.MULT, -C.MULT}, {'BOTTOMRIGHT', -C.MULT, C.MULT}}},
+        checkedTexture = {file = C.Assets.Button.Checked, color = {.2, 1, .2}, points = {{'TOPLEFT', C.MULT, -C.MULT}, {'BOTTOMRIGHT', -C.MULT, C.MULT}}},
+        highlightTexture = {file = C.Assets.Button.Highlight, points = {{'TOPLEFT', C.MULT, -C.MULT}, {'BOTTOMRIGHT', -C.MULT, C.MULT}}},
         cooldown = {points = {{'TOPLEFT', 0, 0}, {'BOTTOMRIGHT', 0, 0}}},
-        name = {font = {C.Assets.Fonts.Condensed, 10, 'OUTLINE'}, points = {{'BOTTOMLEFT', 0, 2}}, color = {.5, .5, .5}, shadow = {0, 0, 0, 1, 1, -1}},
-        hotkey = {font = {C.Assets.Fonts.Condensed, 10, 'OUTLINE'}, points = {{'TOPRIGHT', -2, -2}}, color = {1, 1, 1}, shadow = {0, 0, 0, 1, 1, -1}},
-        count = {font = {C.Assets.Fonts.Condensed, 10, 'OUTLINE'}, points = {{'BOTTOMLEFT', 2, 2}}, color = {.19, .75, 1}, shadow = {0, 0, 0, 1, 1, -1}},
+        name = {font = {C.Assets.Font.Condensed, 10, 'OUTLINE'}, points = {{'BOTTOMLEFT', 0, 2}}, color = {.5, .5, .5}, shadow = {0, 0, 0, 1, 1, -1}},
+        hotkey = {font = {C.Assets.Font.Condensed, 10, 'OUTLINE'}, points = {{'TOPRIGHT', -2, -2}}, color = {1, 1, 1}, shadow = {0, 0, 0, 1, 1, -1}},
+        count = {font = {C.Assets.Font.Condensed, 10, 'OUTLINE'}, points = {{'BOTTOMLEFT', 2, 2}}, color = {.19, .75, 1}, shadow = {0, 0, 0, 1, 1, -1}},
         buttonstyle = {file = ''},
     }
 

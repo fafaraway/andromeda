@@ -35,7 +35,7 @@ local ignoredList = {
 }
 
 local function CreateErrorFrames()
-    local font = C.Assets.Fonts.Bold
+    local font = C.Assets.Font.Bold
     local outline = _G.FREE_ADB.FontOutline
 
     local frame1 = CreateFrame('Frame', 'FreeUI_ErrorFrame1', _G.UIParent)

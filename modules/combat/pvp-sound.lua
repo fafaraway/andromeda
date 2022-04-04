@@ -33,22 +33,22 @@ local deathsTable, killsTable = {}, {}
 local debugMode = false
 
 local soundsList = {
-    ['firstblood'] = C.AssetsPath .. 'sounds\\killingblows\\kill\\firstblood.ogg',
-    ['killingspree'] = C.AssetsPath .. 'sounds\\killingblows\\kill\\killingspree.ogg',
-    ['rampage'] = C.AssetsPath .. 'sounds\\killingblows\\kill\\rampage.ogg',
-    ['dominating'] = C.AssetsPath .. 'sounds\\killingblows\\kill\\dominating.ogg',
-    ['unstoppable'] = C.AssetsPath .. 'sounds\\killingblows\\kill\\unstoppable.ogg',
-    ['godlike'] = C.AssetsPath .. 'sounds\\killingblows\\kill\\godlike.ogg',
-    ['wickedsick'] = C.AssetsPath .. 'sounds\\killingblows\\kill\\wickedsick.ogg',
-    ['doublekill'] = C.AssetsPath .. 'sounds\\killingblows\\multikill\\doublekill.ogg',
-    ['multikill'] = C.AssetsPath .. 'sounds\\killingblows\\multikill\\multikill.ogg',
-    ['megakill'] = C.AssetsPath .. 'sounds\\killingblows\\multikill\\megakill.ogg',
-    ['ultrakill'] = C.AssetsPath .. 'sounds\\killingblows\\multikill\\ultrakill.ogg',
-    ['monsterkill'] = C.AssetsPath .. 'sounds\\killingblows\\multikill\\monsterkill.ogg',
-    ['ludicrouskill'] = C.AssetsPath .. 'sounds\\killingblows\\multikill\\ludicrouskill.ogg',
-    ['holyshit'] = C.AssetsPath .. 'sounds\\killingblows\\multikill\\holyshit.ogg',
-    ['denied'] = C.AssetsPath .. 'sounds\\killingblows\\revenge\\denied.ogg',
-    ['retribution'] = C.AssetsPath .. 'sounds\\killingblows\\revenge\\retribution.ogg'
+    ['firstblood'] = C.ASSET_PATH .. 'sounds\\killingblows\\kill\\firstblood.ogg',
+    ['killingspree'] = C.ASSET_PATH .. 'sounds\\killingblows\\kill\\killingspree.ogg',
+    ['rampage'] = C.ASSET_PATH .. 'sounds\\killingblows\\kill\\rampage.ogg',
+    ['dominating'] = C.ASSET_PATH .. 'sounds\\killingblows\\kill\\dominating.ogg',
+    ['unstoppable'] = C.ASSET_PATH .. 'sounds\\killingblows\\kill\\unstoppable.ogg',
+    ['godlike'] = C.ASSET_PATH .. 'sounds\\killingblows\\kill\\godlike.ogg',
+    ['wickedsick'] = C.ASSET_PATH .. 'sounds\\killingblows\\kill\\wickedsick.ogg',
+    ['doublekill'] = C.ASSET_PATH .. 'sounds\\killingblows\\multikill\\doublekill.ogg',
+    ['multikill'] = C.ASSET_PATH .. 'sounds\\killingblows\\multikill\\multikill.ogg',
+    ['megakill'] = C.ASSET_PATH .. 'sounds\\killingblows\\multikill\\megakill.ogg',
+    ['ultrakill'] = C.ASSET_PATH .. 'sounds\\killingblows\\multikill\\ultrakill.ogg',
+    ['monsterkill'] = C.ASSET_PATH .. 'sounds\\killingblows\\multikill\\monsterkill.ogg',
+    ['ludicrouskill'] = C.ASSET_PATH .. 'sounds\\killingblows\\multikill\\ludicrouskill.ogg',
+    ['holyshit'] = C.ASSET_PATH .. 'sounds\\killingblows\\multikill\\holyshit.ogg',
+    ['denied'] = C.ASSET_PATH .. 'sounds\\killingblows\\revenge\\denied.ogg',
+    ['retribution'] = C.ASSET_PATH .. 'sounds\\killingblows\\revenge\\retribution.ogg'
 }
 
 local function PlaySound(file)

@@ -31,16 +31,16 @@ local function ConstructFrame()
     frame:SetFrameStrata('HIGH')
     F.CreateMF(frame)
     F.SetBD(frame)
-    F.CreateFS(frame, C.Assets.Fonts.Bold, 18, nil, L['Incompatible AddOns:'], 'RED', true, 'TOPLEFT', 10, -10)
+    F.CreateFS(frame, C.Assets.Font.Bold, 18, nil, L['Incompatible AddOns:'], 'RED', true, 'TOPLEFT', 10, -10)
 
     local offset = 0
     for _, addon in pairs(IncompatibleList) do
-        F.CreateFS(frame, C.Assets.Fonts.Regular, 14, nil, addon, false, true, 'TOPLEFT', 10, -(50 + offset))
+        F.CreateFS(frame, C.Assets.Font.Regular, 14, nil, addon, false, true, 'TOPLEFT', 10, -(50 + offset))
         offset = offset + 24
     end
     frame:SetSize(300, 100 + offset)
 
-    local close = F.CreateButton(frame, 16, 16, true, C.Assets.Textures.Close)
+    local close = F.CreateButton(frame, 16, 16, true, C.Assets.Texture.Close)
     close:SetPoint('TOPRIGHT', -10, -10)
     close:SetScript('OnClick', function()
         frame:Hide()

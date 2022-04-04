@@ -20,7 +20,7 @@ function BAR:UpdateAllScale()
 end
 
 function BAR:UpdateFontSize(button, fontSize)
-    local font = C.Assets.Fonts.Condensed
+    local font = C.Assets.Font.Condensed
 
     if button.Name then
         button.Name:SetFont(font, fontSize, 'OUTLINE')
@@ -126,7 +126,7 @@ function BAR:CreateBar1()
     local buttonList = {}
 
     local frame = CreateFrame('Frame', 'FreeUI_ActionBar1', _G.UIParent, 'SecureHandlerStateTemplate')
-    frame.mover = F.Mover(frame, L['Actionbar'] .. '1', 'Bar1', {'BOTTOM', _G.UIParent, 'BOTTOM', 0, C.UIGap})
+    frame.mover = F.Mover(frame, L['Actionbar'] .. '1', 'Bar1', {'BOTTOM', _G.UIParent, 'BOTTOM', 0, C.UI_GAP})
     BAR.movers[1] = frame.mover
 
     for i = 1, num do
@@ -490,7 +490,7 @@ function BAR:CreateExtraBar()
         for spellButton in self.SpellButtonContainer:EnumerateActive() do
             if spellButton and not spellButton.styled then
                 spellButton.NormalTexture:SetAlpha(0)
-                spellButton:SetPushedTexture(C.Assets.Textures.Button.Pushed) -- force it to gain a texture
+                spellButton:SetPushedTexture(C.Assets.Button.Pushed) -- force it to gain a texture
                 spellButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
                 spellButton:GetHighlightTexture():SetInside()
                 spellButton.Icon:SetInside()

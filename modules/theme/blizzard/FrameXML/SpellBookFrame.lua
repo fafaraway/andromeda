@@ -81,13 +81,13 @@ table.insert(
                     local tab = _G['SpellBookSkillLineTab' .. i]
                     local nt = tab:GetNormalTexture()
                     if nt then
-                        nt:SetTexCoord(unpack(C.TexCoord))
+                        nt:SetTexCoord(unpack(C.TEX_COORD))
                         nt:SetInside(tab)
                     end
 
                     if not tab.styled then
                         tab:GetRegions():Hide()
-                        tab:SetCheckedTexture(C.Assets.Textures.Button.Checked)
+                        tab:SetCheckedTexture(C.Assets.Button.Checked)
                         tab:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
                         F.SetBD(tab)
 
@@ -112,7 +112,7 @@ table.insert(
 
             F.StripTextures(bu.statusBar)
             bu.statusBar:SetHeight(10)
-            bu.statusBar:SetStatusBarTexture(C.Assets.Textures.Backdrop)
+            bu.statusBar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
             bu.statusBar:GetStatusBarTexture():SetGradient('VERTICAL', 0, .6, 0, 0, .8, 0)
             bu.statusBar.rankText:SetPoint('CENTER')
             F.CreateBDFrame(bu.statusBar, .25)
@@ -148,7 +148,7 @@ table.insert(
 
             bu.highlightTexture:SetAllPoints(icon)
             local check = bu:GetCheckedTexture()
-            check:SetTexture(C.Assets.Textures.Button.Checked)
+            check:SetTexture(C.Assets.Button.Checked)
             check:SetAllPoints(icon)
         end
 

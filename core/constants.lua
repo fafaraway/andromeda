@@ -1,164 +1,25 @@
 
 local F, C = unpack(select(2, ...))
 
-C.AddonName = 'FreeUI'
-C.IsRetail = _G.WOW_PROJECT_ID == _G.WOW_PROJECT_MAINLINE
-C.IsNewPatch = C.IsRetail and select(4, GetBuildInfo()) >= 90205 -- 9.2.5
-C.MaxLevel = GetMaxLevelForPlayerExpansion()
-C.MyClass = select(2, UnitClass('player'))
-C.MyName = UnitName('player')
-C.MyLevel = UnitLevel('player')
-C.MyFaction = select(2, UnitFactionGroup('player'))
-C.MyGUID = UnitGUID('player')
-C.MyRace = select(2, UnitRace('player'))
-C.MyRealm = GetRealmName()
-C.MyFullName = C.MyName .. '-' .. C.MyRealm
+C.ADDON_NAME = 'FreeUI'
+C.NEW_PATCH = select(4, GetBuildInfo()) >= 90205 -- 9.2.5
 
-local playerGUID = UnitGUID('player')
-local _, serverID = string.split('-', playerGUID)
-C.ServerID = tonumber(serverID)
-C.MyGuid = playerGUID
+C.REALM = GetRealmName()
+C.CLASS = select(2, UnitClass('player'))
+C.NAME = UnitName('player')
+C.FULL_NAME = C.NAME .. '-' .. C.REALM
+C.FACTION = select(2, UnitFactionGroup('player'))
 
-C.ScreenWidth, C.ScreenHeight = GetPhysicalScreenSize()
-C.IsLowRes =C.ScreenHeight < 1080
-C.IsMedRes = C.ScreenHeight > 1080 and C.ScreenHeight < 1440
-C.IsHighRes = C.ScreenHeight > 1440
+C.SCREEN_WIDTH, C.SCREEN_HEIGHT = GetPhysicalScreenSize()
+C.ASSET_PATH = 'Interface\\AddOns\\FreeUI\\assets\\'
+C.TEX_COORD = {.08, .92, .08, .92}
+C.UI_GAP = 33
 
-C.AssetsPath = 'Interface\\AddOns\\FreeUI\\assets\\'
-C.TexCoord = {.08, .92, .08, .92}
-C.UIGap = 33
+C.MOUSE_LEFT_BUTTON = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:230:307|t '
+C.MOUSE_RIGHT_BUTTON = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:333:410|t '
+C.MOUSE_MIDDLE_BUTTON = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:127:204|t '
+C.LINE_STRING = '|cff7f7f7f---------------|r'
 
-
-C.Assets = {
-    Textures = { -- #TODO
-        RoleTank = C.AssetsPath .. 'textures\\roles\\tank',
-        RoleHealer = C.AssetsPath .. 'textures\\roles\\healer',
-        RoleDamager = C.AssetsPath .. 'textures\\roles\\damager',
-        ClassesCircles = C.AssetsPath .. 'textures\\UI-CLASSES-CIRCLES',
-        LfgRoles = C.AssetsPath .. 'textures\\UI-LFG-ICON-ROLES',
-        StateIcons = C.AssetsPath .. 'textures\\state_icons',
-        UILogo = C.AssetsPath .. 'textures\\logo_tex',
-        MinimapMail = C.AssetsPath .. 'textures\\mail_tex',
-        MinimapMask = C.AssetsPath .. 'textures\\minimap_mask',
-        RaidTargetIcons = C.AssetsPath .. 'textures\\UI-RaidTargetingIcons',
-        Vignetting = C.AssetsPath .. 'textures\\vignetting',
-        CastingSpark = 'Interface\\CastingBar\\UI-CastingBar-Spark',
-        CastingShield = C.AssetsPath .. 'textures\\uninterrupted-shield',
-        Gear = C.AssetsPath .. 'textures\\gear_tex',
-        Close = C.AssetsPath .. 'textures\\close_tex',
-        Arrow = C.AssetsPath .. 'textures\\arrow_tex',
-        Tick = C.AssetsPath .. 'textures\\tick_tex',
-        Blank = C.AssetsPath .. 'textures\\blank',
-
-        CombatShield = C.AssetsPath .. 'textures\\shield_tex',
-        CombatSword = C.AssetsPath .. 'textures\\sword_tex',
-
-        Backdrop = 'Interface\\ChatFrame\\ChatFrameBackground',
-        Shadow = C.AssetsPath .. 'textures\\shadow_tex',
-        Glow = C.AssetsPath .. 'textures\\glow_tex',
-
-        SBNormal = C.AssetsPath .. 'textures\\statusbar\\norm',
-        SBGradient = C.AssetsPath .. 'textures\\statusbar\\grad',
-        SBFlat = C.AssetsPath .. 'textures\\statusbar\\flat',
-        SBStripe = C.AssetsPath .. 'textures\\statusbar\\stripe',
-        SBOverlay = C.AssetsPath .. 'textures\\statusbar\\overlay',
-
-        MouseLeftBtn = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:230:307|t ',
-        MouseRightBtn = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:333:410|t ',
-        MouseMiddleBtn = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:127:204|t ',
-
-        Button = {
-            Normal = C.AssetsPath .. 'textures\\button\\normal',
-            Flash = C.AssetsPath .. 'textures\\button\\flash',
-            Pushed = C.AssetsPath .. 'textures\\button\\pushed',
-            Checked = C.AssetsPath .. 'textures\\button\\checked',
-            Highlight = C.AssetsPath .. 'textures\\button\\highlight',
-        },
-
-        Inventory = {
-            Restore = C.AssetsPath .. 'textures\\inventory\\restore',
-            Toggle = C.AssetsPath .. 'textures\\inventory\\toggle',
-            Sort = C.AssetsPath .. 'textures\\inventory\\sort',
-            Reagen = C.AssetsPath .. 'textures\\inventory\\reagen',
-            Deposit = C.AssetsPath .. 'textures\\inventory\\deposit',
-            Delete = C.AssetsPath .. 'textures\\inventory\\delete',
-            Favourite = C.AssetsPath .. 'textures\\inventory\\favourite',
-            Split = C.AssetsPath .. 'textures\\inventory\\split',
-            Repair = C.AssetsPath .. 'textures\\inventory\\repair',
-            Sell = C.AssetsPath .. 'textures\\inventory\\sell',
-            Search = C.AssetsPath .. 'textures\\inventory\\search',
-            Junk = C.AssetsPath .. 'textures\\inventory\\junk'
-        },
-
-    },
-
-    Sounds = {
-        Intro = C.AssetsPath .. 'sounds\\intro.ogg',
-        Whisper = C.AssetsPath .. 'sounds\\whisper_normal.ogg',
-        WhisperBattleNet = C.AssetsPath .. 'sounds\\whisper_battlenet.ogg',
-        Notification = C.AssetsPath .. 'sounds\\notification.ogg',
-        LowHealth = C.AssetsPath .. 'sounds\\lowhealth.ogg',
-        LowMana = C.AssetsPath .. 'sounds\\lowmana.ogg',
-        Interrupt = C.AssetsPath .. 'sounds\\interrupt.ogg',
-        Dispel = C.AssetsPath .. 'sounds\\dispel.ogg',
-        Missed = C.AssetsPath .. 'sounds\\missed.ogg',
-        Proc = C.AssetsPath .. 'sounds\\proc.ogg',
-        Exec = C.AssetsPath .. 'sounds\\exec.ogg',
-        Pulse = C.AssetsPath .. 'sounds\\pulse.ogg',
-        Error = C.AssetsPath .. 'sounds\\error.ogg',
-        Warning = C.AssetsPath .. 'sounds\\warning.ogg',
-        ForTheHorde = C.AssetsPath .. 'sounds\\forthehorde.ogg',
-        Mario = C.AssetsPath .. 'sounds\\mario.ogg',
-        Alarm = C.AssetsPath .. 'sounds\\alarm.ogg',
-        Ding = C.AssetsPath .. 'sounds\\ding.ogg',
-        Dang = C.AssetsPath .. 'sounds\\dang.ogg',
-    },
-
-    Fonts = {
-        Regular = C.AssetsPath .. 'fonts\\regular.ttf',
-        Condensed = C.AssetsPath .. 'fonts\\condensed.ttf',
-        Bold = C.AssetsPath .. 'fonts\\bold.ttf',
-        Combat = C.AssetsPath .. 'fonts\\combat.ttf',
-        Header = C.AssetsPath .. 'fonts\\header.ttf',
-        Pixel = C.AssetsPath .. 'fonts\\pixel.ttf',
-        Square = C.AssetsPath .. 'fonts\\square.ttf',
-        Roadway = C.AssetsPath .. 'fonts\\roadway.ttf',
-    },
-}
-
-do
-    if C.IsDeveloper then
-        C.Assets.Fonts.Regular = 'Fonts\\FreeUI\\regular.ttf'
-        C.Assets.Fonts.Condensed = 'Fonts\\FreeUI\\condensed.ttf'
-        C.Assets.Fonts.Bold = 'Fonts\\FreeUI\\bold.ttf'
-        C.Assets.Fonts.Combat = 'Fonts\\FreeUI\\combat.ttf'
-        C.Assets.Fonts.Header = 'Fonts\\FreeUI\\header.ttf'
-    elseif GetLocale() == 'zhCN' then
-        C.Assets.Fonts.Regular = 'Fonts\\ARKai_T.ttf'
-        C.Assets.Fonts.Condensed = 'Fonts\\ARKai_T.ttf'
-        C.Assets.Fonts.Bold = 'Fonts\\ARHei.ttf'
-        C.Assets.Fonts.Combat = 'Fonts\\ARHei.ttf'
-        C.Assets.Fonts.Header = 'Fonts\\ARKai_T.ttf'
-    elseif GetLocale() == 'zhTW' then
-        C.Assets.Fonts.Regular = 'Fonts\\blei00d.ttf'
-        C.Assets.Fonts.Condensed = 'Fonts\\blei00d.ttf'
-        C.Assets.Fonts.Bold = 'Fonts\\blei00d.ttf'
-        C.Assets.Fonts.Combat = 'Fonts\\blei00d.ttf'
-        C.Assets.Fonts.Header = 'Fonts\\blei00d.ttf'
-    elseif GetLocale() == 'koKR' then
-        C.Assets.Fonts.Regular = 'Fonts\\2002.ttf'
-        C.Assets.Fonts.Condensed = 'Fonts\\2002.ttf'
-        C.Assets.Fonts.Bold = 'Fonts\\2002B.ttf'
-        C.Assets.Fonts.Combat = 'Fonts\\2002B.ttf'
-        C.Assets.Fonts.Header = 'Fonts\\2002.ttf'
-    elseif GetLocale() == 'ruRU' then
-        C.Assets.Fonts.Regular = 'Fonts\\FRIZQT___CYR.ttf'
-        C.Assets.Fonts.Condensed = 'Fonts\\FRIZQT___CYR.ttf'
-        C.Assets.Fonts.Bold = 'Fonts\\FRIZQT___CYR.ttf'
-        C.Assets.Fonts.Combat = 'Fonts\\FRIZQT___CYR.ttf'
-        C.Assets.Fonts.Header = 'Fonts\\FRIZQT___CYR.ttf'
-    end
-end
 
 C.ClassList = {}
 for k, v in pairs(_G.LOCALIZED_CLASS_NAMES_MALE) do
@@ -176,25 +37,25 @@ function F.UpdateCustomClassColors()
         C.ClassColors[class].colorStr = value.colorStr
     end
 
-    C.r = C.ClassColors[C.MyClass].r
-    C.g = C.ClassColors[C.MyClass].g
-    C.b = C.ClassColors[C.MyClass].b
+    C.r = C.ClassColors[C.CLASS].r
+    C.g = C.ClassColors[C.CLASS].g
+    C.b = C.ClassColors[C.CLASS].b
 
-    C.MyColor = string.format('|cff%02x%02x%02x', C.r * 255, C.g * 255, C.b * 255)
-    C.ColoredAddonName = F:TextGradient(C.AddonName, C.r, C.g, C.b, 1, 1, 1, 1)
+    C.CLASS_COLOR = string.format('|cff%02x%02x%02x', C.r * 255, C.g * 255, C.b * 255)
+    C.COLORED_ADDON_NAME = F:TextGradient(C.ADDON_NAME, C.r, C.g, C.b, 1, 1, 1, 1)
 end
 F:RegisterEvent('ADDON_LOADED', F.UpdateCustomClassColors)
 
-C.InfoColor = '|cffe9c55d' -- .9, .8, .4
-C.YellowColor = '|cffffff00'
-C.GreyColor = '|cff7f7f7f'
-C.WhiteColor = '|cffffffff'
-C.RedColor = '|cffff2020'
-C.GreenColor = '|cff20ff20'
-C.BlueColor = '|cff82c5ff' -- .5, .8, 1
-C.OrangeColor = '|cffff7f3f' -- 1, .5, .3
-C.PurpleColor = '|cffa571df'
-C.LineString = C.GreyColor .. '---------------'
+C.INFO_COLOR = '|cffe9c55d' -- .9, .8, .4
+C.YELLOW_COLOR = '|cffffff00'
+C.GREY_COLOR = '|cff7f7f7f'
+C.WHITE_COLOR = '|cffffffff'
+C.RED_COLOR = '|cffff2020'
+C.GREEN_COLOR = '|cff20ff20'
+C.BLUE_COLOR = '|cff82c5ff' -- .5, .8, 1
+
+
+
 
 -- Deprecated
 _G.LE_ITEM_QUALITY_POOR = _G.Enum.ItemQuality.Poor

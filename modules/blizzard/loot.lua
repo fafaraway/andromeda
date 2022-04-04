@@ -87,16 +87,16 @@ local CreateLootSlot = function(id)
     frame.iconFrame = iconFrame
 
     local icon = iconFrame:CreateTexture(nil, 'ARTWORK')
-    icon:SetTexCoord(unpack(C.TexCoord))
+    icon:SetTexCoord(unpack(C.TEX_COORD))
     icon:SetInside(iconFrame)
     frame.icon = icon
 
     local outline = _G.FREE_ADB.FontOutline
 
-    local count = F.CreateFS(iconFrame, C.Assets.Fonts.Regular, 12, true, nil, nil, true, 'TOP', 1, -2)
+    local count = F.CreateFS(iconFrame, C.Assets.Font.Regular, 12, true, nil, nil, true, 'TOP', 1, -2)
     frame.count = count
 
-    local name = F.CreateFS(frame, C.Assets.Fonts.Regular, 12, outline, nil, nil, outline or 'THICK')
+    local name = F.CreateFS(frame, C.Assets.Font.Regular, 12, outline, nil, nil, outline or 'THICK')
     name:SetPoint('RIGHT', frame)
     name:SetPoint('LEFT', icon, 'RIGHT', 8, 0)
     name:SetJustifyH('LEFT')

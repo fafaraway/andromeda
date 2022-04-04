@@ -80,7 +80,7 @@ function M:UpdateRosterInfo()
 
     for i = 1, GetNumGroupMembers() do
         local name = GetRaidRosterInfo(i)
-        if name and name ~= C.MyName and not cache[name] then
+        if name and name ~= C.NAME and not cache[name] then
             if not DCLoaded then
                 C_ChatInfo.SendAddonMessage(DC_Prefix, string.format('ASK:%s', name), msgChannel())
             end
@@ -98,7 +98,7 @@ end
 function M:HandleAddonMessage(...)
     local prefix, msg, _, sender = ...
     sender = Ambiguate(sender, 'none')
-    if sender == C.MyName then
+    if sender == C.NAME then
         return
     end
 
@@ -179,7 +179,7 @@ function M:AddCovenantInfo()
     end
 
     if covenantID and covenantID ~= 0 then
-        _G.GameTooltip:AddLine(string.format('%s %s %s', C.WhiteColor .. L['Covenant'] .. ':|r', M:GetCovenantName(covenantID), M:GetCovenantIcon(covenantID)))
+        _G.GameTooltip:AddLine(string.format('%s %s %s', C.WHITE_COLOR .. L['Covenant'] .. ':|r', M:GetCovenantName(covenantID), M:GetCovenantIcon(covenantID)))
     end
 end
 

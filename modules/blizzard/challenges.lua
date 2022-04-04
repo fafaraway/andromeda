@@ -27,7 +27,7 @@ function ECF:GuildBest_Create()
     frame:SetPoint('BOTTOMRIGHT', -8, 75)
     frame:SetSize(170, 105)
     F.CreateBD(frame, .3)
-    F.CreateFS(frame, C.Assets.Fonts.Regular, 14, true, _G.GUILD, nil, nil, 'TOPLEFT', 16, -6)
+    F.CreateFS(frame, C.Assets.Font.Regular, 14, true, _G.GUILD, nil, nil, 'TOPLEFT', 16, -6)
 
     frame.entries = {}
     for i = 1, 4 do
@@ -35,10 +35,10 @@ function ECF:GuildBest_Create()
         entry:SetPoint('LEFT', 10, 0)
         entry:SetPoint('RIGHT', -10, 0)
         entry:SetHeight(18)
-        entry.CharacterName = F.CreateFS(entry, C.Assets.Fonts.Regular, 12, true, '', nil, nil, 'LEFT', 6, 0)
+        entry.CharacterName = F.CreateFS(entry, C.Assets.Font.Regular, 12, true, '', nil, nil, 'LEFT', 6, 0)
         entry.CharacterName:SetPoint('RIGHT', -30, 0)
         entry.CharacterName:SetJustifyH('LEFT')
-        entry.Level = F.CreateFS(entry, C.Assets.Fonts.Regular, 12, true)
+        entry.Level = F.CreateFS(entry, C.Assets.Font.Regular, 12, true)
         entry.Level:SetJustifyH('LEFT')
         entry.Level:ClearAllPoints()
         entry.Level:SetPoint('LEFT', entry, 'RIGHT', -22, 0)
@@ -184,9 +184,9 @@ function ECF:KeystoneInfo_Create()
                 local dungeon = C_ChallengeMode.GetMapUIInfo(tonumber(mapID))
                 _G.GameTooltip:AddDoubleLine(string.format(color .. '%s:|r', name), string.format('%s%s(%s)|r', factionColor, dungeon, level))
             end
-            _G.GameTooltip:AddDoubleLine(' ', C.LineString)
-            _G.GameTooltip:AddDoubleLine(' ', C.Assets.Textures.MouseLeftBtn .. _G.GREAT_VAULT_REWARDS .. ' ', 1, 1, 1, .6, .8, 1)
-            _G.GameTooltip:AddDoubleLine(' ', C.Assets.Textures.MouseMiddleBtn .. L['Delete keystones info'] .. ' ', 1, 1, 1, .6, .8, 1)
+            _G.GameTooltip:AddDoubleLine(' ', C.LINE_STRING)
+            _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_LEFT_BUTTON .. _G.GREAT_VAULT_REWARDS .. ' ', 1, 1, 1, .6, .8, 1)
+            _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_MIDDLE_BUTTON .. L['Delete keystones info'] .. ' ', 1, 1, 1, .6, .8, 1)
             _G.GameTooltip:Show()
         end
     )
@@ -217,9 +217,9 @@ end
 function ECF:KeystoneInfo_Update()
     local mapID, keystoneLevel = ECF:KeystoneInfo_UpdateBag()
     if mapID then
-        _G.FREE_ADB['KeystoneInfo'][C.MyFullName] = mapID .. ':' .. keystoneLevel .. ':' .. C.MyClass .. ':' .. C.MyFaction
+        _G.FREE_ADB['KeystoneInfo'][C.FULL_NAME] = mapID .. ':' .. keystoneLevel .. ':' .. C.CLASS .. ':' .. C.FACTION
     else
-        _G.FREE_ADB['KeystoneInfo'][C.MyFullName] = nil
+        _G.FREE_ADB['KeystoneInfo'][C.FULL_NAME] = nil
     end
 end
 
