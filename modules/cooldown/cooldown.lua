@@ -1,4 +1,3 @@
-
 local F, C = unpack(select(2, ...))
 local COOLDOWN = F:GetModule('Cooldown')
 
@@ -8,6 +7,28 @@ local minDuration = 2.5
 local minScale = 0.5
 
 local hideNumbers, active, hooked = {}, {}, {}
+
+local day, hour, minute = 86400, 3600, 60
+function COOLDOWN.FormattedTimer(s)
+    if s >= day then
+        return string.format('%d' .. C.INFO_COLOR .. 'd', s / day + .5), s % day
+    elseif s > hour then
+        return string.format('%d' .. C.INFO_COLOR .. 'h', s / hour + .5), s % hour
+    elseif s >= minute then
+        if s < C.DB.Cooldown.MmssTH then
+            return string.format('%d:%.2d', s / minute, s % minute), s - math.floor(s)
+        else
+            return string.format('%d' .. C.INFO_COLOR .. 'm', s / minute + .5), s % minute
+        end
+    else
+        local colorStr = (s < 3 and '|cffff0000') or (s < 10 and '|cffffff00') or '|cffcccc33'
+        if s < C.DB.Cooldown.TenthTH then
+            return string.format(colorStr .. '%.1f|r', s), s - string.format('%.1f', s)
+        else
+            return string.format(colorStr .. '%d|r', s + .5), s - math.floor(s)
+        end
+    end
+end
 
 function COOLDOWN:StopTimer()
     self.enabled = nil
@@ -49,7 +70,7 @@ function COOLDOWN:TimerOnUpdate(elapsed)
     else
         local remain = self.duration - (GetTime() - self.start)
         if remain > 0 then
-            local getTime, nextUpdate = F:FormatTime(remain)
+            local getTime, nextUpdate = COOLDOWN.FormattedTimer(remain)
             self.text:SetText(getTime)
             self.nextUpdate = nextUpdate
         else
@@ -67,7 +88,7 @@ function COOLDOWN:OnCreate()
 
     local scaler = CreateFrame('Frame', nil, self)
     scaler:SetAllPoints(self)
-    --scaler:SetFrameStrata('HIGH')
+    -- scaler:SetFrameStrata('HIGH')
 
     local timer = CreateFrame('Frame', nil, scaler)
     timer:Hide()
@@ -80,7 +101,7 @@ function COOLDOWN:OnCreate()
     text:SetJustifyH('CENTER')
     timer.text = text
 
-    if not C.DB.Cooldown.OverrideWA and C.IsDeveloper and string.find(frameName, 'WeakAurasCooldown') then
+    if not C.DB.Cooldown.IgnoreWA and C.IsDeveloper and string.find(frameName, 'WeakAurasCooldown') then
         text:SetPoint('CENTER', timer, 'BOTTOM')
     end
 
@@ -100,12 +121,14 @@ function COOLDOWN:StartTimer(start, duration)
     end
 
     local frameName = self.GetName and self:GetName()
-    if C.DB.Cooldown.OverrideWA and frameName and string.find(frameName, 'WeakAuras') then
+    if C.DB.Cooldown.IgnoreWA and frameName and string.find(frameName, 'WeakAuras') then
         self.noCooldownCount = true
         return
     end
 
     local parent = self:GetParent()
+    start = tonumber(start) or 0
+    duration = tonumber(duration) or 0
 
     if start > 0 and duration > minDuration then
         local timer = self.timer or COOLDOWN.OnCreate(self)

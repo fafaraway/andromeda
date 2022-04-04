@@ -224,7 +224,7 @@ local function Checkbox_OnClick(self)
     end
 end
 
-local function CreateCheckbox(parent, offset, key, value, text, func)
+local function CreateCheckbox(parent, offset, key, value, text, func, tip)
     local box = F.CreateCheckbox(parent.child, true)
     box:SetSize(20, 20)
     box:SetHitRectInsets(-5, -5, -5, -5)
@@ -236,6 +236,11 @@ local function CreateCheckbox(parent, offset, key, value, text, func)
     box.__key = key
     box:SetScript('OnClick', Checkbox_OnClick)
     box.__func = func
+
+    if tip then
+        box.title = text
+        F.AddTooltip(box, 'ANCHOR_TOPLEFT', tip, 'BLUE', true)
+    end
 
     return box
 end
@@ -261,7 +266,7 @@ local function Slider_OnValueChanged(self, v)
     end
 end
 
-local function CreateSlider(parent, key, value, text, minV, maxV, step, defaultV, x, y, func)
+local function CreateSlider(parent, key, value, text, minV, maxV, step, defaultV, x, y, func, tip)
     local slider = F.CreateSlider(parent.child, text, minV, maxV, step, x, y, 180)
     slider:SetValue(C.DB[key][value])
     slider.value:SetText(C.DB[key][value])
@@ -271,6 +276,11 @@ local function CreateSlider(parent, key, value, text, minV, maxV, step, defaultV
     slider.__default = defaultV
     slider.__step = step
     slider:SetScript('OnValueChanged', Slider_OnValueChanged)
+
+    if tip then
+        slider.title = tostring(key)
+        F.AddTooltip(slider, 'ANCHOR_TOPLEFT', tip, 'BLUE', true)
+    end
 end
 
 local function updateDropdownHighlight(self)
@@ -1061,8 +1071,8 @@ function GUI:SetupActionbarFader(parent)
     end
 end
 
-function GUI:SetupAdditionalBar(parent)
-    local guiName = 'FreeUIGUIAdditionalBar'
+function GUI:SetupCooldownCount(parent)
+    local guiName = 'FreeUIGUICooldownCount'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1070,86 +1080,52 @@ function GUI:SetupAdditionalBar(parent)
 
     local panel = CreateExtraGUI(parent, guiName)
     local scroll = GUI:CreateScroll(panel, 220, 540)
-    local db = C.CharacterSettings.Actionbar
-    local mKey = 'Actionbar'
-
-    local function OnUpdate()
-        ACTIONBAR:UpdateCustomBar()
-    end
-
-    local datas = {
-        [1] = {
-            key = 'CBButtonNumber',
-            value = '12',
-            text = L['Maximum Number'],
-            min = 1,
-            max = 12
-        },
-        [2] = {
-            key = 'CBButtonPerRow',
-            value = '12',
-            text = L['Per Row'],
-            min = 1,
-            max = 12
-        },
-        [3] = {
-            key = 'CBButtonSize',
-            value = '34',
-            text = L['Size'],
-            min = 20,
-            max = 60
-        },
-        [4] = {
-            key = 'CBMargin',
-            value = '3',
-            text = L['Margin'],
-            min = 1,
-            max = 10
-        },
-        [5] = {
-            key = 'CBPadding',
-            value = '3',
-            text = L['Pading'],
-            min = 1,
-            max = 10
-        }
-    }
-
-    local offset = -10
-    for _, v in ipairs(datas) do
-        CreateGroupTitle(scroll, L['Additional Bar Customization'], offset)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, OnUpdate)
-        offset = offset - 65
-    end
-end
-
-function GUI:SetupActionBarCooldown(parent)
-    local guiName = 'FreeUIGUIActionbarCooldown'
-    TogglePanel(guiName)
-    if extraGUIs[guiName] then
-        return
-    end
-
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local db = C.CharacterSettings.Cooldown
     local mKey = 'Cooldown'
 
     local datas = {
-        [1] = {
-            value = 'Decimal',
-            text = L['Decimal Timer']
+        checkbox = {
+            [1] = {
+                value = 'IgnoreWA',
+                text = L['Ignore WeakAuras'],
+                tip = L['Hide cooldown count on WeakAuras.']
+            }
         },
-        [2] = {
-            value = 'OverrideWA',
-            text = L['Override WeakAuras']
+        slider = {
+            [1] = {
+                key = 'MmssTH',
+                value = db.MmssTH,
+                min = 60,
+                max = 600,
+                step = 1,
+                text = L['MMSS Threshold'],
+                tip = L['If cooldown less than current threhold, show cooldown in format MM:SS.|nEg. 2 mins and half presents as 2:30.']
+            },
+            [2] = {
+                key = 'TenthTH',
+                value = db.TenthTH,
+                min = 0,
+                max = 60,
+                step = 1,
+                text = L['Tenth Threshold'],
+                tip = L['If cooldown less than current threhold, show cooldown in format decimal.|nEg. 3 secs will show as 3.0.']
+            }
         }
     }
 
     local offset = -10
-    for _, v in ipairs(datas) do
+    for _, v in ipairs(datas.checkbox) do
         CreateGroupTitle(scroll, L['Cooldown'], offset)
-        CreateCheckbox(scroll, offset - 30, mKey, v.value, v.text)
+        CreateCheckbox(scroll, offset - 30, mKey, v.value, v.text, nil, v.tip)
         offset = offset - 35
+    end
+
+    scroll.groupTitle = nil
+
+    for _, v in ipairs(datas.slider) do
+        CreateGroupTitle(scroll, L['Threhold'], offset - 30)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 80, nil, v.tip)
+        offset = offset - 65
     end
 end
 

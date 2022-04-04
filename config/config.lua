@@ -562,8 +562,9 @@ C.CharacterSettings = {
     },
     Cooldown = {
         Enable = true,
-            Decimal = true,
-            OverrideWA = false
+            IgnoreWA = false,
+            MmssTH = 60,
+            TenthTH = 3,
     },
     Quest = {
         QuickQuest = false,

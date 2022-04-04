@@ -72,8 +72,8 @@ local function UpdateEquipColor()
     end
 end
 
-local function SetupActionBarCooldown()
-    GUI:SetupActionBarCooldown(GUI.Page[5])
+local function SetupCooldownCount()
+    GUI:SetupCooldownCount(GUI.Page[5])
 end
 
 
@@ -498,14 +498,13 @@ GUI.OptionsList = {
         {1, 'Actionbar', 'EquipColor', L['Equipped Item Border'], nil, nil, UpdateEquipColor, L['Dyeing the button border of equipped items.']},
         {1, 'Actionbar', 'ClassColor', L['Button Class Color'], true, nil, nil, L['Dyeing the buttons backdrop of actionbar.']},
         {1, 'Actionbar', 'Fader', L['Conditional Visibility'], nil, SetupActionbarFader, nil, L['The actionbar is hidden by default and shown according to specific conditions.']},
-        {1, 'Cooldown', 'Enable', L['Cooldown Count'], true, SetupActionBarCooldown, nil, L['Display cooldown count on the actionbar buttons.']},
+        {1, 'Cooldown', 'Enable', L['Cooldown Count'], true, SetupCooldownCount, nil, L['Display cooldown count on the actionbar buttons.']},
         {1, 'Actionbar', 'CooldownNotify', L['Spell Cooldown Notify'], nil, nil, nil, L['You can mouse wheel on actionbar buttons, and send its cooldown status to your group.']},
         {1, 'Actionbar', 'CooldownDesaturate', L['Desaturate Icon'], true, nil, nil, L['Desaturate actionbar buttons when they are on cooldown.']},
         {},
         {1, 'Actionbar', 'EnablePetBar', L['Pet Bar'], nil, nil, nil, L['Enable pet actionbar.']},
         {1, 'Actionbar', 'EnableStanceBar', L['Stance Bar'], true, SetupStanceBarSize, nil, L['Enable stance bar.']},
         {1, 'Actionbar', 'EnableVehicleBar', L['Leave Vehicle Button'], nil, SetupVehicleButtonSize, nil, L['Enable leave vehicle button.']},
-        --{1, 'Actionbar', 'CustomBar', L['Additional Bar'], true, SetupAdditionalBar, nil, L['Add an additional actionbar for you to customize.']},
     },
     [6] = { -- combat
         {1, 'Combat', 'Enable', L['Enable Combat']},
