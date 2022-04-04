@@ -46,17 +46,17 @@ end
 local day, hour, minute = 86400, 3600, 60
 function AURA:FormatAuraTime(s)
     if s >= day then
-        return string.format('|cffbebfb3%d|r' .. C.INFO_COLOR .. 'd', s / day), s % day
+        return string.format('|cffbebfb3%d|r' .. C.INFO_COLOR .. 'd', s / day + .5), s % day
     elseif s >= hour then
-        return string.format('|cff4fcd35%d|r' .. C.INFO_COLOR .. 'h', F:Round(s / hour, 1)), s % hour
+        return string.format('|cff4fcd35%d|r' .. C.INFO_COLOR .. 'h', s / hour + .5), s % hour
     elseif s >= 2 * hour then
-        return string.format('|cff4fcd35%d|r' .. C.INFO_COLOR .. 'h', s / hour), s % hour
+        return string.format('|cff4fcd35%d|r' .. C.INFO_COLOR .. 'h', s / hour + .5), s % hour
     elseif s >= 10 * minute then
-        return string.format('|cff21c8de%d|r' .. C.INFO_COLOR .. 'm', s / minute), s % minute
+        return string.format('|cff21c8de%d|r' .. C.INFO_COLOR .. 'm', s / minute + .5), s % minute
     elseif s >= minute then
         return string.format('|cff21c8de%d:%.2d|r', s / minute, s % minute), s - math.floor(s)
     elseif s > 10 then
-        return string.format('|cffffe700%d|r' .. C.INFO_COLOR .. 's', s), s - math.floor(s)
+        return string.format('|cffffe700%d|r' .. C.INFO_COLOR .. 's', s + .5), s - math.floor(s)
     elseif s > 5 then
         return string.format('|cffffff00%.1f|r', s), s - string.format('%.1f', s)
     else

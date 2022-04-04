@@ -210,33 +210,27 @@ end
 local day, hour, minute = 86400, 3600, 60
 function F:FormatTime(s)
     if s >= day then
-        return string.format('|cffbebfb3%d|r', s / day), s % day -- grey
+        return string.format('|cffbebfb3%d|r', s / day + .5), s % day -- grey
     elseif s >= hour then
-        return string.format('|cff4fcd35%d|r', s / hour), s % hour -- white
+        return string.format('|cff4fcd35%d|r', s / hour + .5), s % hour -- white
     elseif s >= minute then
-        return string.format('|cff21c8de%d|r', s / minute), s % minute -- blue
+        return string.format('|cff21c8de%d|r', s / minute + .5), s % minute -- blue
     elseif s > 3 then
-        return string.format('|cffffe700%d|r', s), s - math.floor(s) -- yellow
+        return string.format('|cffffe700%d|r', s + .5), s - math.floor(s) -- yellow
     else
-        if C.DB.Cooldown.Decimal then
-            return string.format('|cfffd3612%.1f|r', s), s - string.format('%.1f', s) -- red
-        else
-            return string.format('|cfffd3612%d|r', s + .5), s - math.floor(s)
-        end
+        return string.format('|cfffd3612%.1f|r', s), s - string.format('%.1f', s)
     end
 end
 
 function F:FormatTimeRaw(s)
     if s >= day then
-        return string.format('%dd', s / day)
+        return string.format('%dd', s / day + .5)
     elseif s >= hour then
-        return string.format('%dh', s / hour)
+        return string.format('%dh', s / hour + .5)
     elseif s >= minute then
-        return string.format('%dm', s / minute)
-    elseif s >= 3 then
-        return math.floor(s)
+        return string.format('%dm', s / minute + .5)
     else
-        return string.format('%d', s)
+        return string.format('%d', s + .5)
     end
 end
 
@@ -287,7 +281,6 @@ function F:SplitList(list, variable, cleanup)
     end
 end
 
-
 -- Timer
 F.WaitTable = {}
 F.WaitFrame = CreateFrame('Frame', 'FreeUIWaitFrame', _G.UIParent)
@@ -311,16 +304,18 @@ function F:WaitFunc(elapse)
 end
 
 function F:Delay(delay, func, ...)
-    if type(delay) ~= "number" or type(func) ~= "function" then
+    if type(delay) ~= 'number' or type(func) ~= 'function' then
         return false
     end
 
-    if delay < 0.01 then delay = 0.01 end
+    if delay < 0.01 then
+        delay = 0.01
+    end
 
-    if select("#", ...) <= 0 then
+    if select('#', ...) <= 0 then
         C_Timer.After(delay, func)
     else
-        table.insert(F.WaitTable,{delay,func,{...}})
+        table.insert(F.WaitTable, {delay, func, {...}})
         F.WaitFrame:Show()
     end
 
