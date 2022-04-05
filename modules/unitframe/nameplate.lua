@@ -440,50 +440,6 @@ function NAMEPLATE:CreateMouseoverIndicator(self)
     self.HighlightUpdater = updater
 end
 
--- Unit classification
-local classify = {
-    elite = {'VignetteKill'},
-    rare = {'VignetteKill', true},
-    rareelite = {'VignetteKill', true},
-    worldboss = {'VignetteKillElite'}
-}
-
-function NAMEPLATE:CreateClassifyIndicator(self)
-    if not C.DB.Nameplate.ClassifyIndicator then
-        return
-    end
-
-    local height = C.DB.Nameplate.Height
-    local icon = self:CreateTexture(nil, 'BACKGROUND')
-    icon:SetPoint('RIGHT', self, 'LEFT')
-    icon:SetSize(height + 10, height + 10)
-    icon:SetAtlas('')
-    icon:Hide()
-
-    self.ClassifyIndicator = icon
-end
-
-function NAMEPLATE:UpdateUnitClassify(unit)
-    local isBoss = UnitLevel(unit) == -1
-    local class = UnitClassification(unit)
-    local isNameOnly = self.plateType == 'NameOnly'
-
-    if self.ClassifyIndicator then
-        if not isNameOnly and isBoss then
-            self.ClassifyIndicator:SetAtlas('VignetteKillElite')
-            self.ClassifyIndicator:Show()
-        elseif not isNameOnly and class and classify[class] then
-            local atlas, desature = unpack(classify[class])
-            self.ClassifyIndicator:SetAtlas(atlas)
-            self.ClassifyIndicator:SetDesaturated(desature)
-            self.ClassifyIndicator:Show()
-        else
-            self.ClassifyIndicator:SetAtlas('')
-            self.ClassifyIndicator:Hide()
-        end
-    end
-end
-
 -- Quest progress
 local isInInstance
 local function CheckInstanceStatus()
@@ -866,8 +822,11 @@ function NAMEPLATE:UpdatePlateByType()
         F:SetFS(name, C.Assets.Font.Header, 16, nil, nil, nil, 'THICK')
 
 
-        raidtarget:SetPoint('BOTTOM', name, 'TOP', 0, -5)
-        raidtarget:SetParent(self)
+        -- raidtarget:SetPoint('BOTTOM', name, 'TOP', 0, -5)
+        -- raidtarget:SetParent(self)
+
+        NAMEPLATE.UpdateRaidTargetIndicator(self)
+
         if questIcon then
             questIcon:SetPoint('LEFT', name, 'RIGHT', -1, 0)
         end
@@ -891,8 +850,11 @@ function NAMEPLATE:UpdatePlateByType()
         F:SetFS(name, C.Assets.Font.Bold, 11, outline, nil, nil, outline or 'THICK')
 
 
-        raidtarget:SetPoint('CENTER')
-        raidtarget:SetParent(self.Health)
+        -- raidtarget:SetPoint('CENTER')
+        -- raidtarget:SetParent(self.Health)
+
+        NAMEPLATE.UpdateRaidTargetIndicator(self)
+
         if questIcon then
             questIcon:SetPoint('LEFT', self, 'RIGHT', 3, 0)
         end

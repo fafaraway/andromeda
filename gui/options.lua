@@ -153,12 +153,6 @@ local function SetupNameplateCastbarSize()
     GUI:SetupNameplateCastbarSize(GUI.Page[13])
 end
 
-local function SetupNameplateRaidTargetIndicator()
-    GUI:SetupNameplateRaidTargetIndicator(GUI.Page[13])
-end
-
-
-
 local function SetupAuraFilter()
     GUI:SetupNameplateAuraFilter(GUI.Page[13])
 end
@@ -173,10 +167,6 @@ end
 
 local function RefreshAllPlates()
     NAMEPLATE:RefreshAllPlates()
-end
-
-local function UpdateIndicators()
-    NAMEPLATE:UpdateIndicators()
 end
 
 
@@ -220,8 +210,6 @@ local function SetupUnitFrameRangeCheck()
     GUI:SetupUnitFrameRangeCheck(GUI.Page[11])
 end
 
-
-
 local function UpdateGCDTicker()
     UNITFRAME:ToggleGCDTicker()
 end
@@ -234,10 +222,11 @@ local function UpdateGroupIndicators()
     UNITFRAME:UpdateGroupIndicators()
 end
 
-
 local function UpdateGroupElements()
     UNITFRAME:UpdateGroupElements()
 end
+
+
 
 
 
@@ -594,9 +583,9 @@ GUI.OptionsList = {
         {1, 'Unitframe', 'GCDIndicator', L['GCD Indicator'], true, nil, UpdateGCDTicker, L['Show global cooldown ticker above the player frame.']},
         {1, 'Unitframe', 'AbbrName', L['Abbreviate Name'], nil, nil, UpdateUnitTags},
         {},
-        {1, 'Unitframe', 'DesaturateIcon', L['Desaturate Debuffs'], nil, nil, nil, L['Desaturate debuffs cast by others.']},
-        {1, 'Unitframe', 'OnlyShowPlayer', L['Player Debuffs Only'], true, nil, nil, L['Display debuffs cast by player only.']},
-        {1, 'Unitframe', 'DebuffTypeColor', L['Debuffs Type Color'], nil, nil, nil, L['Coloring debuffs border by type.|nMagic is blue, Curse is purple, Poison is green, Disease is yellow, and others are red.']},
+        {1, 'Unitframe', 'OnlyShowPlayer', L['Player Debuffs Only'], nil, nil, nil, L['Display debuffs cast by player only.']},
+        {1, 'Unitframe', 'DesaturateIcon', L['Desaturate Debuffs'], true, nil, nil, L['Desaturate debuffs cast by others.']},
+        {1, 'Unitframe', 'DebuffTypeColor', L['Debuffs Type Color'], nil, nil, nil, L['Color debuffs border by type.|nMagic is blue, Curse is purple, Poison is green, Disease is yellow, and others are red.']},
         {1, 'Unitframe', 'StealableBuffs', L['Purgeable Buffs'], true, nil, nil, L['Display purgeable buffs.']},
         {},
         {1, 'Unitframe', 'ClassPower', L['Class Power'], nil, SetupClassPowerSize, nil, L['Show special resources of the class, such as Combo Points, Holy Power, Chi, Runes, etc.']},
@@ -628,11 +617,10 @@ GUI.OptionsList = {
         {1, 'Unitframe', 'GroupName', L['Display Name'], nil, SetupNameLength, UpdateGroupTags},
         {1, 'Unitframe', 'GroupRole', L['Display Role Indicator'], true, nil, UpdateGroupTags, L["The indicator at the bottom of the GroupFrame represents the role of that player.|nThe blue '#' is tank, the green '+' is healer, and the red '*' is damager."]},
         {1, 'Unitframe', 'GroupLeader', L['Display Leader Indicator'], nil, nil, UpdateGroupTags, L['The indicator at the upper left corner of the GroupFrame indicates that the player is the leader.']},
-        {1, 'Unitframe', 'RaidTargetIndicator', L['Display RaidTarget Indicator'], true, SetupGroupRaidTargetIndicator, UpdateGroupElements, L['Display RaidTarget indicator on nameplate.']},
-        {1, 'Unitframe', 'SmartRaid', L['Smart GroupFrame'], nil, nil, UpdateAllHeaders, L['If enabled, only show RaidFrame if there are more than 5 members in your group.|nIf disabled, show RaidFrame when in raid, show PartyFrame when in party.']},
-        {1, 'Unitframe', 'PositionBySpec', L['Save Postion by Spec'], true, nil, nil, L['Save the position of the GroupFrame separately according to the specialization.']},
+        {1, 'Unitframe', 'SmartRaid', L['Smart GroupFrame'], true, nil, UpdateAllHeaders, L['If enabled, only show RaidFrame if there are more than 5 members in your group.|nIf disabled, show RaidFrame when in raid, show PartyFrame when in party.']},
         {1, 'Unitframe', 'CornerIndicator', L['Corner Indicator'], nil, nil, nil, L["Display important auras in color blocks at the corner of the GroupFrame, such as healer's hot Paladin's Forbearance and Priest's Weakened Soul, etc."]},
         {1, 'Unitframe', 'ThreatIndicator', L['Threat Indicator'], true, nil, nil, L['The glow on the outside of the PartyFrame represents the threat status.']},
+        {1, 'Unitframe', 'PositionBySpec', L['Save Postion by Spec'], nil, nil, nil, L['Save the position of the GroupFrame separately according to the specialization.']},
         {},
         {1, 'Unitframe', 'DebuffWatcher', L['Enable Debuff Watcher']},
         {1, 'Unitframe', 'InstanceDebuffs', L['Instance Debuffs'], true, SetupRaidDebuffs, nil, L['Display custom major debuffs in raid and dungeons.']},
@@ -659,13 +647,12 @@ GUI.OptionsList = {
         {4, 'Nameplate', 'AuraFilterMode', L['Aura Filter Mode'], true, {L['BlackNWhite'], L['PlayerOnly'], L['IncludeCrowdControl']}},
         {},
         {1, 'Nameplate', 'ExecuteIndicator', L['Execute Indicator'], nil, SetupNameplateExecuteIndicator, nil, L["If the unit's health percentage falls below the threshold you set, the color of its name will change to red."]},
-        {1, 'Nameplate', 'RaidTargetIndicator', L['Raid Target Indicator'], true, SetupNameplateRaidTargetIndicator, UpdateIndicators, L['Display RaidTarget indicator on nameplate.']},
+        {1, 'Nameplate', 'HealthPerc', L['Health Percentage'], true, nil, nil, L['Display the health percentage on the nameplate and hides it when it is full.']},
         {1, 'Nameplate', 'QuestIndicator', L['Quest Indicator'], nil, nil, nil, L['Display quest mark and quest progress on the right side of the nameplate.']},
         {1, 'Nameplate', 'ClassifyIndicator', L['Classify Indicator'], true, nil, nil, L['The mob type indicator is displayed on the left side of the nameplate, and the supported types are BOSS, ELITE and RARE.']},
         {1, 'Nameplate', 'TargetIndicator', L['Target Indicator'], nil, nil, nil, L['A white glow is displayed below the nameplate of the current target.']},
         {1, 'Nameplate', 'ThreatIndicator', L['Threat Indicator'], true, nil, nil, L['The color of the glow above the nameplate represents the threat status of the unit.']},
         {1, 'Nameplate', 'TotemIcon', L['Totme Indicator'], nil, nil, nil, L["Display its icon on the totem's nameplate."]},
-        {1, 'Nameplate', 'HealthPerc', L['Health Percentage'], true, nil, nil, L['Display the health percentage on the nameplate and hides it when it is full.']},
         {},
         {1, 'Nameplate', 'ExplosiveIndicator', L['Explosive Indicator'], nil, nil, nil, L['Magnifies the nameplate of Explosive when in a mythic plus dungeon.']},
         {1, 'Nameplate', 'SpitefulIndicator', L['Spiteful Indicator'], true, nil, nil, L["Displays the name of the target Spiteful Shade is currently tracking when in mythic plus dungeon."]},

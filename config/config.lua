@@ -236,7 +236,6 @@ C.CharacterSettings = {
                 DebuffTypeColor = true,
                 StealableBuffs = true,
 
-
             SimpleMode = false,
                 SMRScale = 10,
                 SMRPerCol = 20,
@@ -283,31 +282,19 @@ C.CharacterSettings = {
                     RaidDebuffSize = 12,
                     RaidDebuffNum = 3,
 
+            RaidTargetIndicator = true,
+            ThreatIndicator = true,
             GroupName = false,
             GroupRole = true,
             GroupLeader = true,
-            RaidTargetIndicator = true,
-                RaidTargetIndicatorAlpha = .2,
-                RaidTargetIndicatorScale = 1,
-
             SmartRaid = true,
-
-
-
             PositionBySpec = false,
             CornerIndicator = true,
                 CornerIndicatorScale = 1,
-
-
-
-            ThreatIndicator = true,
-
             DebuffWatcher = true,
                 InstanceDebuffs = true,
                 DispellableOnly = false,
                 DebuffClickThrough = true,
-
-
 
             Boss = true,
                 BossWidth = 100,
@@ -351,8 +338,6 @@ C.CharacterSettings = {
             SpitefulIndicator = true,
             ExplosiveIndicator = true,
             RaidTargetIndicator = true,
-                RaidTargetIndicatorScale = 2,
-                RaidTargetIndicatorAlpha = .6,
             FriendlyClassColor = false,
             HostileClassColor = true,
             TankMode = false,

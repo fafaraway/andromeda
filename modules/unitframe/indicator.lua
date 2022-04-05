@@ -4,25 +4,18 @@ local NAMEPLATE = F:GetModule('Nameplate')
 local oUF = F.Libs.oUF
 
 function UNITFRAME.UpdateRaidTargetIndicator(frame)
-    local style = frame.unitStyle
-    local isRaid = style == 'raid'
-    local partyHeight = C.DB.Unitframe.PartyHealthHeight + C.DB.Unitframe.PartyPowerHeight
-    local raidHeight = C.DB.Unitframe.RaidHealthHeight + C.DB.Unitframe.RaidPowerHeight
     local icon = frame.RaidTargetIndicator
-    local size = isRaid and raidHeight or partyHeight
-    local scale = C.DB.Unitframe.RaidTargetIndicatorScale
-    local alpha = C.DB.Unitframe.RaidTargetIndicatorAlpha
     local enable = C.DB.Unitframe.RaidTargetIndicator
 
-    icon:SetPoint('CENTER')
-    icon:SetAlpha(alpha)
-    icon:SetSize(size, size)
-    icon:SetScale(scale)
+    icon:SetPoint('LEFT', frame, 'RIGHT', 4, 0)
+    icon:SetAlpha(1)
+    icon:SetSize(frame:GetHeight(), frame:GetHeight())
+    icon:SetScale(1)
     icon:SetShown(enable)
 end
 
 function UNITFRAME:CreateRaidTargetIndicator(self)
-    local icon = self.Health:CreateTexture(nil, 'OVERLAY')
+    local icon = self:CreateTexture(nil, 'OVERLAY')
     icon:SetTexture(C.Assets.Texture.RaidTargetingIcon)
 
     self.RaidTargetIndicator = icon
@@ -30,22 +23,73 @@ function UNITFRAME:CreateRaidTargetIndicator(self)
     UNITFRAME.UpdateRaidTargetIndicator(self)
 end
 
+local classify = {
+    elite = {'VignetteKill'},
+    rare = {'VignetteKill', true},
+    rareelite = {'VignetteKill', true},
+    worldboss = {'VignetteKillElite'}
+}
+
+function NAMEPLATE:CreateClassifyIndicator(self)
+    if not C.DB.Nameplate.ClassifyIndicator then
+        return
+    end
+
+    local height = C.DB.Nameplate.Height
+    local icon = self:CreateTexture(nil, 'BACKGROUND')
+    icon:SetPoint('RIGHT', self, 'LEFT')
+    icon:SetSize(height + 10, height + 10)
+    icon:SetAtlas('')
+    icon:Hide()
+
+    self.ClassifyIndicator = icon
+end
+
+function NAMEPLATE:UpdateUnitClassify(unit)
+    local isBoss = UnitLevel(unit) == -1
+    local class = UnitClassification(unit)
+    local isNameOnly = self.plateType == 'NameOnly'
+
+    if self.ClassifyIndicator then
+        if isNameOnly then
+            self.ClassifyIndicator:SetAtlas('')
+            self.ClassifyIndicator:Hide()
+        elseif isBoss then
+            self.ClassifyIndicator:SetAtlas('VignetteKillElite')
+            self.ClassifyIndicator:Show()
+        elseif class and classify[class] then
+            local atlas, desature = unpack(classify[class])
+            self.ClassifyIndicator:SetAtlas(atlas)
+            self.ClassifyIndicator:SetDesaturated(desature)
+            self.ClassifyIndicator:Show()
+        else
+            self.ClassifyIndicator:SetAtlas('')
+            self.ClassifyIndicator:Hide()
+        end
+    end
+end
+
 function NAMEPLATE.UpdateRaidTargetIndicator(frame)
     local icon = frame.RaidTargetIndicator
-    local size = C.DB.Nameplate.Height
-    local scale = C.DB.Nameplate.RaidTargetIndicatorScale
-    local alpha = C.DB.Nameplate.RaidTargetIndicatorAlpha
     local enable = C.DB.Nameplate.RaidTargetIndicator
+    local nameOnly = frame.plateType == 'NameOnly'
+    local name = frame.NameTag
 
-    icon:SetPoint('CENTER')
-    icon:SetAlpha(alpha)
-    icon:SetSize(size, size)
-    icon:SetScale(scale)
+    if nameOnly then
+        icon:SetPoint('BOTTOM', name, 'TOP')
+    else
+        icon:ClearAllPoints()
+        icon:SetPoint('LEFT', frame, 'RIGHT', 4, 0)
+    end
+
+    icon:SetAlpha(1)
+    icon:SetSize(frame:GetHeight(), frame:GetHeight())
+    icon:SetScale(2)
     icon:SetShown(enable)
 end
 
 function NAMEPLATE:CreateRaidTargetIndicator(self)
-    local icon = self.Health:CreateTexture(nil, 'OVERLAY')
+    local icon = self:CreateTexture(nil, 'OVERLAY')
     icon:SetTexture(C.Assets.Texture.RaidTargetingIcon)
 
     self.RaidTargetIndicator = icon
