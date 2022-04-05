@@ -3,7 +3,7 @@ local oUF = F.Libs.oUF
 local LBG = F.Libs.LBG
 
 local debugMode = false
-local RaidDebuffsIgnore = {}
+local debuffsIgnore = {}
 local invalidPrio = -1
 
 local DispellColor = oUF.colors.debuff
@@ -58,7 +58,7 @@ local function checkSpecs()
 end
 
 local function UpdateDebuffFrame(self, name, icon, count, debuffType, duration, expiration)
-    local rd = self.RaidDebuffs
+    local rd = self.DebuffWatcher
     if name then
         if rd.icon then
             rd.icon:SetTexture(icon)
@@ -135,7 +135,7 @@ local function Update(self, _, unit)
         return
     end
 
-    local rd = self.RaidDebuffs
+    local rd = self.DebuffWatcher
     rd.priority = invalidPrio
     rd.filter = 'HARMFUL'
 
@@ -168,11 +168,12 @@ local function Update(self, _, unit)
         end
 
         local instPrio
-        if instName and debuffs[instName] then
-            instPrio = debuffs[instName][spellId]
+        local debuffList = instName and debuffs[instName] or debuffs[0]
+        if debuffList then
+            instPrio = debuffList[spellId]
         end
 
-        if not RaidDebuffsIgnore[spellId] and instPrio and (instPrio == 6 or instPrio > rd.priority) then
+        if not debuffsIgnore[spellId] and instPrio and (instPrio == 6 or instPrio > rd.priority) then
             rd.priority, rd.index, rd.spellID = instPrio, i, spellId
             _name, _icon, _count, _debuffType, _duration, _expiration = name, icon, count, debuffType, duration, expiration
         end
@@ -192,7 +193,7 @@ local function Update(self, _, unit)
 end
 
 local function Path(self, ...)
-    return (self.RaidDebuffs.Override or Update)(self, ...)
+    return (self.DebuffWatcher.Override or Update)(self, ...)
 end
 
 local function ForceUpdate(element)
@@ -200,7 +201,7 @@ local function ForceUpdate(element)
 end
 
 local function Enable(self)
-    local rd = self.RaidDebuffs
+    local rd = self.DebuffWatcher
     if rd then
         self:RegisterEvent('UNIT_AURA', Path)
         rd.ForceUpdate = ForceUpdate
@@ -215,14 +216,14 @@ local function Enable(self)
 end
 
 local function Disable(self)
-    if self.RaidDebuffs then
+    if self.DebuffWatcher then
         self:UnregisterEvent('UNIT_AURA', Path)
-        self.RaidDebuffs:Hide()
-        self.RaidDebuffs.__owner = nil
+        self.DebuffWatcher:Hide()
+        self.DebuffWatcher.__owner = nil
     end
 
     self:UnregisterEvent('PLAYER_TALENT_UPDATE', checkSpecs)
     self:UnregisterEvent('PLAYER_ENTERING_WORLD', checkInstance)
 end
 
-oUF:AddElement('RaidDebuffs', Update, Enable, Disable)
+oUF:AddElement('DebuffWatcher', Update, Enable, Disable)

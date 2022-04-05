@@ -214,14 +214,6 @@ local function UpdateGCDTicker()
     UNITFRAME:ToggleGCDTicker()
 end
 
-local function SetupGroupRaidTargetIndicator()
-    GUI:SetupGroupRaidTargetIndicator(GUI.Page[12])
-end
-
-local function UpdateGroupIndicators()
-    UNITFRAME:UpdateGroupIndicators()
-end
-
 local function UpdateGroupElements()
     UNITFRAME:UpdateGroupElements()
 end
@@ -266,8 +258,8 @@ local function SetupPartyWatcher()
     GUI:SetupPartyWatcher(GUI.Page[12])
 end
 
-local function SetupRaidDebuffs()
-    GUI:SetupRaidDebuffs(GUI.Page[12])
+local function SetupDebuffWatcher()
+    GUI:SetupDebuffWatcher(GUI.Page[12])
 end
 
 local function UpdateAllHeaders()
@@ -623,7 +615,7 @@ GUI.OptionsList = {
         {1, 'Unitframe', 'PositionBySpec', L['Save Postion by Spec'], nil, nil, nil, L['Save the position of the GroupFrame separately according to the specialization.']},
         {},
         {1, 'Unitframe', 'DebuffWatcher', L['Enable Debuff Watcher']},
-        {1, 'Unitframe', 'InstanceDebuffs', L['Instance Debuffs'], true, SetupRaidDebuffs, nil, L['Display custom major debuffs in raid and dungeons.']},
+        {1, 'Unitframe', 'InstanceDebuffs', L['Instance Debuffs'], true, SetupDebuffWatcher, nil, L['Display custom major debuffs in raid and dungeons.']},
         {1, 'Unitframe', 'DispellableOnly', L['Dispellable Debuffs Only'], nil, nil, nil, L['Display only debuffs you can dispel.']},
         {1, 'Unitframe', 'DebuffClickThrough', L['Disable Debuff Tooltip'], true, nil, nil, L["If enabled, the icon would be uninteractable, you can't select or mouseover them."]},
     },

@@ -14,7 +14,7 @@
     <Script file="indicator.lua"/>
     <Script file="partywatcher.lua"/>
     <Script file="portrait.lua"/>
-    <Script file="aurawatcher.lua"/>
+    <Script file="debuffwatcher.lua"/>
     <Script file="range.lua"/>
     <Script file="tags.lua"/>
     <Script file="threat.lua"/>

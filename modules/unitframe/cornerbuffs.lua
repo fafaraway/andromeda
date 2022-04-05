@@ -1,6 +1,5 @@
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('UnitFrame')
-local oUF = F.Libs.oUF
 
 UNITFRAME.CornerSpellsList = {}
 function UNITFRAME:UpdateCornerSpells()
@@ -119,22 +118,6 @@ function UNITFRAME:CreateCornerIndicator(self)
     self.BuffIndicator = buttons
     self:RegisterEvent('UNIT_AURA', UNITFRAME.UpdateCornerIndicator)
     self:RegisterEvent('GROUP_ROSTER_UPDATE', UNITFRAME.UpdateCornerIndicator, true)
-end
-
-function UNITFRAME:RefreshRaidFrameIcons()
-    for _, frame in pairs(oUF.objects) do
-        if frame.unitStyle == 'raid' then
-            if frame.RaidDebuffs then
-                frame.RaidDebuffs:SetScale(C.DB.Unitframe.RaidDebuffsScale)
-            end
-            if frame.BuffIndicator then
-                for _, bu in pairs(frame.BuffIndicator) do
-                    bu:SetScale(C.DB.Unitframe.CornerIndicatorScale)
-                    UNITFRAME:RefreshCornerIndicator(bu)
-                end
-            end
-        end
-    end
 end
 
 function UNITFRAME:CheckCornerSpells()

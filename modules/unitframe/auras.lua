@@ -475,7 +475,7 @@ function UNITFRAME.GroupDebuffFilter(element, _, _, _, _, _, _, _, _, caster, _,
     local parent = element.__owner
     if C.PartyDebuffsBlackList[spellID] then
         return false
-    elseif (C.DB.Unitframe.CornerIndicator and UNITFRAME.CornerSpellsList[spellID]) or parent.RaidDebuffs.spellID == spellID or parent.rawSpellID == spellID then
+    elseif (C.DB.Unitframe.CornerIndicator and UNITFRAME.CornerSpellsList[spellID]) or parent.DebuffWatcher.spellID == spellID or parent.rawSpellID == spellID then
         return false
     elseif isBossAura or SpellIsPriorityAura(spellID) then
         return true

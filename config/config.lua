@@ -166,25 +166,16 @@ C.CharacterSettings = {
                 Health = true,
                 Casting = true,
 
-
+            AbbrName = true,
             RangeCheck = true,
                 OutRangeAlpha = .4,
-
-
-
             GCDIndicator = true,
-
-
 
             HidePlayerTags = true,
 
             ClassPower = true,
                 ClassPowerHeight = 2,
                 RunesTimer = false,
-
-
-
-            AbbrName = true,
 
             Castbar = true,
                 SeparateCastbar = false,
@@ -586,7 +577,7 @@ C.AccountSettings = {
     RepairType = 1,
     CustomJunkList = {},
     NPAuraFilter = {[1] = {}, [2] = {}},
-    AuraWatcherList = {},
+    DebuffWatcherList = {},
     RaidAuraWatch = {},
     NPMajorSpells = {},
     CornerSpellsList = {},

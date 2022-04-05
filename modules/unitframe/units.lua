@@ -363,7 +363,7 @@ local function CreatePartyStyle(self)
     UNITFRAME:CreatePartyAuras(self)
     UNITFRAME:CreatePartyBuffs(self)
     UNITFRAME:CreatePartyDebuffs(self)
-    UNITFRAME:CreateAuraWatcher(self)
+    UNITFRAME:CreateDebuffWatcher(self)
     UNITFRAME:RefreshAurasByCombat(self)
     UNITFRAME:CreateCornerIndicator(self)
     UNITFRAME:CreatePartyWatcher(self)
@@ -548,7 +548,7 @@ local function CreateRaidStyle(self)
     UNITFRAME:CreateCornerIndicator(self)
     UNITFRAME:CreateRaidBuffs(self)
     UNITFRAME:CreateRaidDebuffs(self)
-    UNITFRAME:CreateAuraWatcher(self)
+    UNITFRAME:CreateDebuffWatcher(self)
     UNITFRAME:RefreshAurasByCombat(self)
 end
 
@@ -774,7 +774,6 @@ function UNITFRAME:UpdateRaidHealthMethod()
     end
 end
 
---
 
 function UNITFRAME:SpawnUnits()
     if not C.DB.Unitframe.Enable then
@@ -787,6 +786,7 @@ function UNITFRAME:SpawnUnits()
     UNITFRAME:CheckPartySpells()
     UNITFRAME:CheckCornerSpells()
     UNITFRAME:UpdateCornerSpells()
+    UNITFRAME:InitDebuffWatcher()
 
     UNITFRAME:SpawnPlayer()
     UNITFRAME:SpawnPet()

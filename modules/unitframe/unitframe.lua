@@ -161,59 +161,11 @@ function UNITFRAME:RemoveBlizzRaidFrame()
     end
 end
 
---
-
-local RaidBuffs = {}
-function UNITFRAME:AddClassSpells(list)
-    for class, value in pairs(list) do
-        RaidBuffs[class] = value
-    end
-end
-
-local RaidDebuffs = {}
-function UNITFRAME:RegisterDebuff(_, instID, _, spellID, level)
-    local instName = EJ_GetInstanceInfo(instID)
-    if not instName then
-        if C.IsDeveloper then
-            print('Invalid instance ID: ' .. instID)
-        end
-        return
-    end
-
-    if not RaidDebuffs[instName] then
-        RaidDebuffs[instName] = {}
-    end
-    if not level then
-        level = 2
-    end
-    if level > 6 then
-        level = 6
-    end
-
-    RaidDebuffs[instName][spellID] = level
-end
 
 function UNITFRAME:OnLogin()
     UNITFRAME:AddDungeonSpells()
     UNITFRAME:AddDominationSpells()
     UNITFRAME:AddNathriaSpells()
     UNITFRAME:AddSepulcherSpells()
-
-    for instName, value in pairs(RaidDebuffs) do
-        for spell, priority in pairs(value) do
-            if _G.FREE_ADB['AuraWatcherList'][instName] and _G.FREE_ADB['AuraWatcherList'][instName][spell] and _G.FREE_ADB['AuraWatcherList'][instName][spell] == priority then
-                _G.FREE_ADB['AuraWatcherList'][instName][spell] = nil
-            end
-        end
-    end
-    for instName, value in pairs(_G.FREE_ADB['AuraWatcherList']) do
-        if not next(value) then
-            _G.FREE_ADB['AuraWatcherList'][instName] = nil
-        end
-    end
-
-    C.RaidBuffsList = RaidBuffs
-    C.AuraWatcherList = RaidDebuffs
-
     UNITFRAME:SpawnUnits()
 end
