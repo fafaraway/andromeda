@@ -167,6 +167,7 @@ function UNITFRAME:UpdateAllElements()
     UNITFRAME:UpdatePortrait()
     UNITFRAME:UpdateGCDTicker()
     UNITFRAME:UpdateAuras()
+    UNITFRAME:UpdateFader()
 end
 
 function UNITFRAME:OnLogin()

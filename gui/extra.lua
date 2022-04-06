@@ -1435,6 +1435,10 @@ function GUI:SetupClassPower(parent)
     end
 end
 
+local function UpdateFader()
+    UNITFRAME:UpdateFader()
+end
+
 function GUI:SetupUnitFrameFader(parent)
     local guiName = 'FreeUIGUIUnitFrameFader'
     TogglePanel(guiName)
@@ -1460,7 +1464,7 @@ function GUI:SetupUnitFrameFader(parent)
     local offset = -10
     for _, v in ipairs(datas.conditions) do
         CreateGroupTitle(scroll, L['Conditions'], offset)
-        CreateCheckbox(scroll, offset - 30, mKey, v.value, v.text)
+        CreateCheckbox(scroll, offset - 30, mKey, v.value, v.text, UpdateFader)
         offset = offset - 35
     end
 
@@ -1468,7 +1472,7 @@ function GUI:SetupUnitFrameFader(parent)
 
     for _, v in ipairs(datas.fader) do
         CreateGroupTitle(scroll, L['Fading Parameters'], offset - 30)
-        CreateSlider(scroll, mKey, v.key, v.text, 0, 1, .1, v.value, 20, offset - 80)
+        CreateSlider(scroll, mKey, v.key, v.text, 0, 1, .1, v.value, 20, offset - 80, UpdateFader)
         offset = offset - 65
     end
 end

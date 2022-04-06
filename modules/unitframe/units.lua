@@ -771,8 +771,6 @@ function UNITFRAME:SpawnUnits()
     UNITFRAME:SpawnFocusTarget()
     UNITFRAME:SpawnBoss()
 
-    UNITFRAME:UpdateFader()
-
     if C.DB.Unitframe.Arena then
         UNITFRAME:SpawnArena()
     end

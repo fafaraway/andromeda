@@ -218,6 +218,9 @@ local function UpdatePortrait()
     UNITFRAME:UpdatePortrait()
 end
 
+local function UpdateFader()
+    UNITFRAME:UpdateFader()
+end
 
 
 -- Groupframe
@@ -566,7 +569,7 @@ GUI.OptionsList = {
         {1, 'Unitframe', 'InvertedColorMode', L['Inverted Color Mode'], nil, nil, nil, L["The health bar color and the background color are inverted.|nFreeUI's unitframe module is designed based on the Inverted Color Mode, which may cause some visual problems if disabled."]},
         {1, 'Unitframe', 'Smooth', L['Smooth'], true, nil, nil, L['Smoothly animate unit frame bars.']},
 
-        {1, 'Unitframe', 'Fader', L['Conditional Visibility'], nil, SetupUnitFrameFader, nil, L['The unitframe is hidden by default and shown according to specific conditions.']},
+        {1, 'Unitframe', 'Fader', L['Conditional Visibility'], nil, SetupUnitFrameFader, UpdateFader, L['The unitframe is hidden by default and shown according to specific conditions.']},
         {1, 'Unitframe', 'RangeCheck', L['Range Check'], true, SetupUnitFrameRangeCheck, nil, L["Fade out unit frame based on whether the unit is in the player's range"]},
         {1, 'Unitframe', 'Portrait', L['Portrait'], nil, nil, UpdatePortrait, L['Show dynamic portrait on unit frame.']},
         {1, 'Unitframe', 'GCDIndicator', L['GCD Indicator'], true, nil, UpdateGCDTicker, L['Show global cooldown ticker above the player frame.']},
