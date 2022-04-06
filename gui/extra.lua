@@ -919,10 +919,6 @@ function GUI:SetupNameplateMajorSpells(parent)
     end
 end
 
-local function UpdateIndicators()
-    NAMEPLATE:UpdateIndicators()
-end
-
 local function UpdateNameplateCVars()
     NAMEPLATE:UpdateNameplateCVars()
 end
@@ -1401,7 +1397,7 @@ function GUI:SetupArenaFrameSize(parent)
 end
 
 function GUI:SetupClassPowerSize(parent)
-    local guiName = 'FreeUIGUIClassPowerSize'
+    local guiName = 'FreeUIGUIClassPower'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1410,12 +1406,26 @@ function GUI:SetupClassPowerSize(parent)
     local panel = CreateExtraGUI(parent, guiName)
     local scroll = GUI:CreateScroll(panel, 220, 540)
     local db = C.CharacterSettings.Unitframe
+    local mKey = 'Unitframe'
 
-    local datas = {key = 'ClassPowerHeight', value = db.ClassPowerHeight, text = L['Height'], min = 1, max = 20, step = 1}
+    local datas = {
+        slider = {[1] = {key = 'ClassPowerHeight', value = db.ClassPowerHeight, text = L['Height'], min = 1, max = 20, step = 1}},
+        checkbox = {[1] = {value = 'RunesTimer', text = L['Runes Timer'], tip = L['Display timer for DK Runes.']}},
+    }
 
     local offset = -10
-    CreateGroupTitle(scroll, L['ClassPower'], offset)
-    CreateSlider(scroll, 'Unitframe', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset - 50)
+    for _, v in ipairs(datas.slider) do
+        CreateGroupTitle(scroll, L['Class Power'], offset)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50)
+    end
+
+    scroll.groupTitle = nil
+
+    for _, v in ipairs(datas.checkbox) do
+        CreateGroupTitle(scroll, L['Runes'], offset - 100)
+        CreateCheckbox(scroll, offset - 130, mKey, v.value, v.text, nil, v.tip)
+        offset = offset - 35
+    end
 end
 
 function GUI:SetupUnitFrameFader(parent)
