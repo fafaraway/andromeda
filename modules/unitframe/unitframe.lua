@@ -161,6 +161,12 @@ function UNITFRAME:RemoveBlizzRaidFrame()
     end
 end
 
+-- Make sure the state of each element is reliable #TODO
+
+function UNITFRAME:UpdateAllElements()
+    UNITFRAME:UpdatePortrait()
+    UNITFRAME:UpdateAuras()
+end
 
 function UNITFRAME:OnLogin()
     UNITFRAME:AddDungeonSpells()
@@ -168,4 +174,5 @@ function UNITFRAME:OnLogin()
     UNITFRAME:AddNathriaSpells()
     UNITFRAME:AddSepulcherSpells()
     UNITFRAME:SpawnUnits()
+    UNITFRAME:UpdateAllElements()
 end
