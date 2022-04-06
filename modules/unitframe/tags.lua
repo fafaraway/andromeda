@@ -35,7 +35,7 @@ local events = {
 -- abbreviate the name
 -- aaa.bbbbb -> a.bbbbb
 local function AbbrName(string, i)
-    if string.len(string) > i then
+    if string and string.len(string) > i then
         return string.gsub(string, '%s?(.[\128-\191]*)%S+%s', '%1. ')
     else
         return string
@@ -389,8 +389,27 @@ local function Player_OnEnter(self)
 end
 
 local function Player_OnLeave(self)
-    self.LeftTag:Hide()
-    self.RightTag:Hide()
+    if C.DB.Unitframe.HidePlayerTags then
+        self.LeftTag:Hide()
+        self.RightTag:Hide()
+    else
+        self.LeftTag:Show()
+        self.RightTag:Show()
+    end
+end
+
+local function UpdatePlayerTags(self)
+    if C.DB.Unitframe.HidePlayerTags then
+        self.LeftTag:Hide()
+        self.RightTag:Hide()
+        self:HookScript('OnEnter', Player_OnEnter)
+        self:HookScript('OnLeave', Player_OnLeave)
+    else
+        self.LeftTag:Show()
+        self.RightTag:Show()
+        self:HookScript('OnEnter', Player_OnEnter)
+        self:HookScript('OnLeave', Player_OnLeave)
+    end
 end
 
 function UNITFRAME:CreatePlayerTags(self)
@@ -410,12 +429,7 @@ function UNITFRAME:CreatePlayerTags(self)
     self.LeftTag = leftTag
     self.RightTag = rightTag
 
-    if C.DB.Unitframe.HidePlayerTags then
-        self.LeftTag:Hide()
-        self.RightTag:Hide()
-        self:HookScript('OnEnter', Player_OnEnter)
-        self:HookScript('OnLeave', Player_OnLeave)
-    end
+
 end
 
 function NAMEPLATE:CreateHealthTag(self)
@@ -437,6 +451,9 @@ end
 function UNITFRAME:UpdateUnitTags()
     for _, frame in pairs(oUF.objects) do
         if frame.unitStyle ~= 'party' and frame.unitStyle ~= 'raid' then
+            if frame.unitStyle == 'player' then
+                UpdatePlayerTags(frame)
+            end
             frame:UpdateTags()
         end
     end
