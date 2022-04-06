@@ -7,7 +7,7 @@ local function SetupCVars()
     SetCVar('uiscale', '1')
     SetCVar('missingTransmogSourceInItemTooltips', 1)
     SetCVar('movieSubtitle', 1)
-    SetCVar('scriptErrors', C.IsDeveloper and 0 or 1)
+    SetCVar('scriptErrors', C.DEV_MODE and 0 or 1)
 
     -- map
     SetCVar('rotateMinimap', 0)
@@ -123,7 +123,7 @@ local function SetupCVars()
     SetCVar('lockActionBars', 1)
     SetCVar('alwaysShowActionBars', 1)
 
-    if C.IsDeveloper then
+    if C.DEV_MODE then
         SetCVar('nameplateShowOnlyNames', 1)
         SetCVar('cursorsizepreferred', 2)
         SetCVar('worldPreloadNonCritical', 0)

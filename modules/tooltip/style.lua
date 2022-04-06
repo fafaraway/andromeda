@@ -3,7 +3,7 @@ local TOOLTIP = F:GetModule('Tooltip')
 
 function TOOLTIP:ReskinTooltip()
     if not self then
-        if C.IsDeveloper then
+        if C.DEV_MODE then
             F:DebugPrint('Unknown tooltip spotted.')
         end
         return

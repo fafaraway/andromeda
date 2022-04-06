@@ -101,7 +101,7 @@ function COOLDOWN:OnCreate()
     text:SetJustifyH('CENTER')
     timer.text = text
 
-    if not C.DB.Cooldown.IgnoreWA and C.IsDeveloper and string.find(frameName, 'WeakAurasCooldown') then
+    if not C.DB.Cooldown.IgnoreWA and C.DEV_MODE and string.find(frameName, 'WeakAurasCooldown') then
         text:SetPoint('CENTER', timer, 'BOTTOM')
     end
 

@@ -77,7 +77,7 @@ tinsert(
                             end
                         end
                     else
-                        if C.IsDeveloper then
+                        if C.DEV_MODE then
                             print(name, 'not found.')
                         end
                     end

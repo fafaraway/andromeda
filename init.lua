@@ -31,8 +31,8 @@ local addonVersion = '@project-version@'
 if (addonVersion:find('project%-version')) then
     addonVersion = 'Development'
 end
-C.AddonVersion = addonVersion
-C.IsDeveloper = C.AddonVersion == 'Development'
+C.ADDON_VERSION = addonVersion
+C.DEV_MODE = C.ADDON_VERSION == 'Development'
 
 -- Libraries
 do
@@ -204,5 +204,5 @@ F:RegisterEvent('PLAYER_LOGIN', function()
     end
 
     F.Modules = modules
-    F:Print('Version: ' .. C.AddonVersion)
+    F:Print('Version: ' .. C.ADDON_VERSION)
 end)

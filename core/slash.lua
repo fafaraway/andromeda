@@ -43,7 +43,7 @@ local function Commands()
 end
 
 local function Version()
-    print(string.format(C.ADDON_NAME .. C.CLASS_COLOR.. '%s', C.AddonVersion))
+    print(string.format(C.ADDON_NAME .. C.CLASS_COLOR.. '%s', C.ADDON_VERSION))
 end
 
 local function Reset()

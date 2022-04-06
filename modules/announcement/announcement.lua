@@ -101,7 +101,7 @@ function ANNOUNCEMENT:CheckAnnounceableSpells()
                 _G.FREE_ADB['AnnounceableSpellsList'][spellID] = nil
             end
         else
-            if C.IsDeveloper then
+            if C.DEV_MODE then
                 F:DebugPrint('Invalid Announceable Spells ID: ' .. spellID)
             end
         end

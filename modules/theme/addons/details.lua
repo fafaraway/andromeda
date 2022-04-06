@@ -8,7 +8,7 @@ local function restyFont(obj)
 end
 
 local function refreshRows(instance)
-    if not C.IsDeveloper then
+    if not C.DEV_MODE then
         return
     end
 

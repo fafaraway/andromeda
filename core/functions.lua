@@ -20,7 +20,7 @@ do
     end
 
     function F:DebugPrint(str, ...)
-        if not C.IsDeveloper then
+        if not C.DEV_MODE then
             return
         end
 

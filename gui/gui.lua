@@ -413,7 +413,7 @@ local function CreateGUI()
     verticalLine:SetPoint('TOPLEFT', 160, -50)
 
     F.CreateFS(guiFrame, C.ASSET_PATH .. 'fonts\\header.ttf', 22, nil, F:StyleAddonName('%ADDONNAME%'), nil, 'THICK', 'TOP', 0, -4)
-    F.CreateFS(guiFrame, C.Assets.Font.Regular, 10, nil, 'Version: ' .. C.AddonVersion, {.7, .7, .7}, 'THICK', 'TOP', 0, -30)
+    F.CreateFS(guiFrame, C.Assets.Font.Regular, 10, nil, 'Version: ' .. C.ADDON_VERSION, {.7, .7, .7}, 'THICK', 'TOP', 0, -30)
 
     GUI:CreateGradientLine(guiFrame, 120, -60, -26, 60, -26)
 

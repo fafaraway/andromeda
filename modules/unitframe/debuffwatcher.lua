@@ -92,7 +92,7 @@ local instanceDebuffs = {}
 function UNITFRAME:RegisterInstanceDebuff(_, instID, _, spellID, level)
     local instName = EJ_GetInstanceInfo(instID)
     if not instName then
-        if C.IsDeveloper then
+        if C.DEV_MODE then
             print('Invalid instance ID: ' .. instID)
         end
         return

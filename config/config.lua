@@ -551,7 +551,7 @@ C.CharacterSettings = {
 }
 
 C.AccountSettings = {
-    DetectVersion = C.AddonVersion,
+    DetectVersion = C.ADDON_VERSION,
     VersionCheck = true,
     UIScale = 1,
     HelpTips = {},

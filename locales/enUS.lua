@@ -2,7 +2,7 @@
 -- https://github.com/fang2hou/WindToolsScripts/tree/master/MergeLocales
 
 local F, C = unpack(select(2, ...))
-local L = F.Libs.ACL:NewLocale("FreeUI", "enUS", true, not C.IsDeveloper)
+local L = F.Libs.ACL:NewLocale("FreeUI", "enUS", true, not C.DEV_MODE)
 if not L then return end
 
 L["%s cooldown remaining %s."] = true

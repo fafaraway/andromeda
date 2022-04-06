@@ -33,12 +33,12 @@ end
 
 function NOTIFICATION:VersionCheck_Init()
     if not isVCInit then
-        local status = NOTIFICATION:VersionCheck_Compare(_G.FREE_ADB.DetectVersion, C.AddonVersion)
+        local status = NOTIFICATION:VersionCheck_Compare(_G.FREE_ADB.DetectVersion, C.ADDON_VERSION)
         if status == 'IsNew' then
             local release = string.gsub(_G.FREE_ADB.DetectVersion, '(%d+)$', '0')
             NOTIFICATION:VersionCheck_Create(string.format(L['Addon has been out of date, the latest release is |cffff0000%s|r.'], release))
         elseif status == 'IsOld' then
-            _G.FREE_ADB.DetectVersion = C.AddonVersion
+            _G.FREE_ADB.DetectVersion = C.ADDON_VERSION
         end
 
         isVCInit = true
@@ -84,7 +84,7 @@ function NOTIFICATION:VersionCheck()
     F:RegisterEvent('CHAT_MSG_ADDON', NOTIFICATION.VersionCheck_Update)
 
     if IsInGuild() then
-        C_ChatInfo.SendAddonMessage('FreeUIVersionCheck', C.AddonVersion, 'GUILD')
+        C_ChatInfo.SendAddonMessage('FreeUIVersionCheck', C.ADDON_VERSION, 'GUILD')
         lastVCTime = GetTime()
     end
 

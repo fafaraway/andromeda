@@ -11,7 +11,7 @@ local msgList = {
 }
 
 local function SendMessage(msg)
-    if debugMode and C.IsDeveloper then
+    if debugMode and C.DEV_MODE then
         F:DebugPrint(msg)
     elseif IsPartyLFG() then
         SendChatMessage(msg, 'INSTANCE_CHAT')

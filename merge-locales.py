@@ -138,7 +138,7 @@ for lang_code, path in locale_files.items():
     file.write('local L = F.Libs.ACL:NewLocale("FreeUI", ')
 
     if lang_code == "enUS":
-        file.write('"enUS", true, not C.IsDeveloper)\n')
+        file.write('"enUS", true, not C.DEV_MODE)\n')
     else:
         file.write('"{}")\n'.format(lang_code))
 

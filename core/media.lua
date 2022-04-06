@@ -107,7 +107,7 @@ C.Assets.Font = {
 -- Overwrite fonts
 
 do
-    if C.IsDeveloper then
+    if C.DEV_MODE then
         C.Assets.Font.Regular = 'Fonts\\FreeUI\\regular.ttf'
         C.Assets.Font.Condensed = 'Fonts\\FreeUI\\condensed.ttf'
         C.Assets.Font.Bold = 'Fonts\\FreeUI\\bold.ttf'
