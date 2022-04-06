@@ -41,7 +41,7 @@ function COMBAT:UNIT_HEALTH(unit)
     end
 
     local threshold = C.DB.Combat.LowHealthThreshold
-    local sound = C.Assets.Sound.LowHealth
+    local sound = C.Assets.Sound.SekiroLowHealth
 
     if (UnitHealth('player') / UnitHealthMax('player')) <= threshold then
         if not playedLowHealth then
