@@ -34,7 +34,11 @@ read_globals = {
         }
     },
 
+    -- CONSTANTS
+    -- API
     -- FrameXML
+    -- Widgets
+    -- Namespaces
 
     -- Namespace
     'C_AccountInfo',
