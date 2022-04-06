@@ -1084,6 +1084,8 @@ local function UpdateUnitFrameSize()
     SetUnitFrameSize(_G.oUF_TargetTarget, 'TargetTarget')
     SetUnitFrameSize(_G.oUF_Focus, 'Focus')
     SetUnitFrameSize(_G.oUF_FocusTarget, 'FocusTarget')
+
+    UNITFRAME:UpdateAuras()
 end
 
 local function UpdatePartyFrameSize()

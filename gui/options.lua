@@ -214,12 +214,9 @@ local function UpdateGCDTicker()
     UNITFRAME:ToggleGCDTicker()
 end
 
-local function UpdateGroupElements()
-    UNITFRAME:UpdateGroupElements()
+local function UpdatePortrait()
+    UNITFRAME:UpdatePortrait()
 end
-
-
-
 
 
 
@@ -571,7 +568,7 @@ GUI.OptionsList = {
 
         {1, 'Unitframe', 'Fader', L['Conditional Visibility'], nil, SetupUnitFrameFader, nil, L['The unitframe is hidden by default and shown according to specific conditions.']},
         {1, 'Unitframe', 'RangeCheck', L['Range Check'], true, SetupUnitFrameRangeCheck, nil, L["Fade out unit frame based on whether the unit is in the player's range"]},
-        {1, 'Unitframe', 'Portrait', L['Portrait'], nil, nil, UpdateGroupElements, L['Show dynamic portrait on unit frame.']},
+        {1, 'Unitframe', 'Portrait', L['Portrait'], nil, nil, UpdatePortrait, L['Show dynamic portrait on unit frame.']},
         {1, 'Unitframe', 'GCDIndicator', L['GCD Indicator'], true, nil, UpdateGCDTicker, L['Show global cooldown ticker above the player frame.']},
         {1, 'Unitframe', 'AbbrName', L['Abbreviate Name'], nil, nil, UpdateUnitTags},
         {1, 'Unitframe', 'ClassPower', L['Class Power'], true, SetupClassPower, nil, L['Show special resources of the class, such as Combo Points, Holy Power, Chi, Runes, etc.']},

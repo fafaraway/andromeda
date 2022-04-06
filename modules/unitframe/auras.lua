@@ -270,7 +270,49 @@ end
 
 function UNITFRAME:ConfigureAuras(element)
     local value = element.__value
+
     element.iconsPerRow = C.DB['Unitframe'][value .. 'AuraPerRow']
+
+    element.onlyShowPlayer = C.DB.Unitframe.OnlyShowPlayer
+    element.showDebuffType = C.DB.Unitframe.DebuffTypeColor
+    element.desaturateDebuff = C.DB.Unitframe.DesaturateIcon
+    element.showStealableBuffs = C.DB.Unitframe.StealableBuffs
+end
+
+function UNITFRAME:RefreshAuras(frame)
+    if not (frame and frame.Auras) then
+        return
+    end
+    local element = frame.Auras
+
+    UNITFRAME:ConfigureAuras(element)
+    UNITFRAME:UpdateAuraContainer(frame, element, element.numTotal)
+
+    if element.iconsPerRow > 0 then
+        if not frame:IsElementEnabled('Auras') then
+            frame:EnableElement('Auras')
+        end
+    else
+        if frame:IsElementEnabled('Auras') then
+            frame:DisableElement('Auras')
+        end
+    end
+
+    element:ForceUpdate()
+end
+
+function UNITFRAME:UpdateAuras()
+    UNITFRAME:RefreshAuras(_G.oUF_Player)
+    UNITFRAME:RefreshAuras(_G.oUF_Pet)
+    UNITFRAME:RefreshAuras(_G.oUF_Target)
+    UNITFRAME:RefreshAuras(_G.oUF_TargetTarget)
+    UNITFRAME:RefreshAuras(_G.oUF_Focus)
+    UNITFRAME:RefreshAuras(_G.oUF_FocusTarget)
+
+    for i = 1, 5 do
+        UNITFRAME:RefreshAuras(_G['oUF_Boss' .. i])
+        UNITFRAME:RefreshAuras(_G['oUF_Arena' .. i])
+    end
 end
 
 function UNITFRAME:CreateAuras(self)
