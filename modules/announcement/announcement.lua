@@ -77,7 +77,7 @@ function ANNOUNCEMENT:OnEvent()
             if destName == nil then
                 SendChatMessage(string.format(_G.ACTION_SPELL_CAST_SUCCESS .. ' %s', GetSpellLink(spellID)), GetChannel())
             else
-                SendChatMessage(string.format(_G.ACTION_SPELL_CAST_SUCCESS .. ' %s %s %s', GetSpellLink(spellID), destName), arrowStr, GetChannel())
+                SendChatMessage(string.format(_G.ACTION_SPELL_CAST_SUCCESS .. ' %s %s %s', GetSpellLink(spellID), arrowStr, destName), GetChannel())
             end
         end
     elseif eventType == 'SPELL_INTERRUPT' and C.DB.Announcement.Interrupt then
