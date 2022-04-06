@@ -102,7 +102,7 @@ local function Button_OnEnter(self)
 
     _G.GameTooltip:AddLine(' ')
     _G.GameTooltip:AddLine(_G.ITEM_QUALITY8_DESC, .6, .8, 1)
-    local tokenPrice = C_WowTokenPublic.GetCurrentMarketPrice()
+    local tokenPrice = C_WowTokenPublic.GetCurrentMarketPrice() or 0
     _G.GameTooltip:AddDoubleLine(_G.AUCTION_HOUSE_BROWSE_HEADER_PRICE, GetMoneyString(tokenPrice, true), 1, 1, 1, 1, 1, 1)
 
     _G.GameTooltip:AddLine(' ')
