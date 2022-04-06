@@ -41,7 +41,7 @@ cargBags.itemKeys["bindOn"] = function(i)
 	tip:SetBagItem(i.bagID, i.slotID)
 
 	for j = 2, 5 do
-		local line = _G["FreeUI_ScanTooltipTextLeft"..j]
+		local line = _G["FreeUIScanTooltipTextLeft"..j]
 		local lineText = line and line:GetText()
 		if not lineText then break end
 

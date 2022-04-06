@@ -1,6 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 
---[[ Functions ]]
+-- Functions
+
 do
     function F.HelpInfoAcknowledge(callbackArg)
         _G.FREE_ADB['HelpTips'][callbackArg] = true
@@ -39,32 +40,26 @@ do
         end)
     end
 
-    -- Atlas info
-    function F:GetTextureStrByAtlas(info, sizeX, sizeY)
-        local file = info and info.file
-        if not file then
-            return
+    function F:RegisterSlash(...)
+        local name = 'FreeUI' .. 'Slash' .. math.random()
+
+        local numArgs = select('#', ...)
+        local callback = select(numArgs, ...)
+        if type(callback) ~= 'function' or numArgs < 2 then
+            error('Syntax: RegisterSlash("/slash1"[, "/slash2"], slashFunction)')
         end
 
-        local width, height, txLeft, txRight, txTop, txBottom = info.width, info.height, info.leftTexCoord, info.rightTexCoord, info.topTexCoord, info.bottomTexCoord
-        local atlasWidth = width / (txRight - txLeft)
-        local atlasHeight = height / (txBottom - txTop)
+        for index = 1, numArgs - 1 do
+            local str = select(index, ...)
+            if type(str) ~= 'string' then
+                error('Syntax: RegisterSlash("/slash1"[, "/slash2"], slashFunction)')
+            end
 
-        return string.format('|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t', file, (sizeX or 0), (sizeY or 0), atlasWidth, atlasHeight, atlasWidth * txLeft, atlasWidth * txRight, atlasHeight * txTop,
-                                atlasHeight * txBottom)
+            _G['SLASH_' .. name .. index] = str
+        end
+
+        _G.SlashCmdList[name] = callback
     end
-
-    -- GUID to npcID
-    function F:GetNPCID(guid)
-        local id = tonumber(string.match((guid or ''), '%-(%d-)%-%x-$'))
-        return id
-    end
-end
-
---[[ UI widgets ]]
-do
-    -- Dropdown menu
-    F.EasyMenu = CreateFrame('Frame', 'FreeUI_EasyMenu', _G.UIParent, 'UIDropDownMenuTemplate')
 
     -- Color
     function F:ClassColor(class)
@@ -94,7 +89,62 @@ do
         return r, g, b
     end
 
-    -- Fontstring
+    -- Table
+    function F:CopyTable(source, target)
+        for key, value in pairs(source) do
+            if type(value) == 'table' then
+                if not target[key] then
+                    target[key] = {}
+                end
+                for k in pairs(value) do
+                    target[key][k] = value[k]
+                end
+            else
+                target[key] = value
+            end
+        end
+    end
+
+    function F:SplitList(list, variable, cleanup)
+        if cleanup then
+            table.wipe(list)
+        end
+
+        for word in variable:gmatch('%S+') do
+            word = tonumber(word) or word -- use number if exists, needs review
+            list[word] = true
+        end
+    end
+
+    -- Atlas info
+    function F:GetTextureStrByAtlas(info, sizeX, sizeY)
+        local file = info and info.file
+        if not file then
+            return
+        end
+
+        local width, height, txLeft, txRight, txTop, txBottom = info.width, info.height, info.leftTexCoord, info.rightTexCoord, info.topTexCoord, info.bottomTexCoord
+        local atlasWidth = width / (txRight - txLeft)
+        local atlasHeight = height / (txBottom - txTop)
+        local str = '|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t'
+
+        return string.format(str, file, (sizeX or 0), (sizeY or 0), atlasWidth, atlasHeight, atlasWidth * txLeft, atlasWidth * txRight, atlasHeight * txTop, atlasHeight * txBottom)
+    end
+
+    -- GUID to npcID
+    function F:GetNPCID(guid)
+        local id = tonumber(string.match((guid or ''), '%-(%d-)%-%x-$'))
+        return id
+    end
+end
+
+-- Widgets
+
+do
+    -- Dropdown menu
+    F.EasyMenu = CreateFrame('Frame', 'FreeUIEasyMenu', _G.UIParent, 'UIDropDownMenuTemplate')
+
+    -- Font string
     function F:CreateFS(font, size, flag, text, colour, shadow, anchor, x, y)
         local fs = self:CreateFontString(nil, 'OVERLAY')
 
@@ -453,9 +503,363 @@ do
 
         return bg
     end
+
+    -- GUI
+    function F:CreateHelpInfo(tooltip)
+        local bu = CreateFrame('Button', nil, self)
+        bu:SetSize(40, 40)
+        bu.Icon = bu:CreateTexture(nil, 'ARTWORK')
+        bu.Icon:SetAllPoints()
+        bu.Icon:SetTexture(616343)
+        bu:SetHighlightTexture(616343)
+        if tooltip then
+            bu.title = L['Hint']
+            F.AddTooltip(bu, 'ANCHOR_BOTTOMLEFT', tooltip, 'BLUE')
+        end
+
+        return bu
+    end
+
+    local CLASS_ICON_TCOORDS = _G.CLASS_ICON_TCOORDS
+    function F:ClassIconTexCoord(class)
+        local tcoords = CLASS_ICON_TCOORDS[class]
+        self:SetTexCoord(tcoords[1] + .022, tcoords[2] - .025, tcoords[3] + .022, tcoords[4] - .025)
+    end
+
+    function F:CreateSB(spark, r, g, b)
+        self:SetStatusBarTexture(C.Assets.Statusbar.Normal)
+        if r and g and b then
+            self:SetStatusBarColor(r, g, b)
+        else
+            self:SetStatusBarColor(C.r, C.g, C.b)
+        end
+
+        local bg = F.SetBD(self)
+        self.__shadow = bg.__shadow
+
+        if spark then
+            self.Spark = self:CreateTexture(nil, 'OVERLAY')
+            self.Spark:SetTexture(C.Assets.Texture.Spark)
+            self.Spark:SetBlendMode('ADD')
+            self.Spark:SetAlpha(.8)
+            self.Spark:SetPoint('TOPLEFT', self:GetStatusBarTexture(), 'TOPRIGHT', -10, 10)
+            self.Spark:SetPoint('BOTTOMRIGHT', self:GetStatusBarTexture(), 'BOTTOMRIGHT', 10, -10)
+        end
+    end
+
+    function F:CreateAndUpdateBarTicks(bar, ticks, numTicks)
+        for i = 1, #ticks do
+            ticks[i]:Hide()
+        end
+
+        if numTicks and numTicks > 0 then
+            local width, height = bar:GetSize()
+            local delta = width / numTicks
+            for i = 1, numTicks - 1 do
+                if not ticks[i] then
+                    ticks[i] = bar:CreateTexture(nil, 'OVERLAY')
+                    ticks[i]:SetTexture(C.Assets.Statusbar.Normal)
+                    ticks[i]:SetVertexColor(0, 0, 0, .7)
+                    ticks[i]:SetWidth(C.MULT)
+                    ticks[i]:SetHeight(height)
+                end
+                ticks[i]:ClearAllPoints()
+                ticks[i]:SetPoint('RIGHT', bar, 'LEFT', delta * i, 0)
+                ticks[i]:Show()
+            end
+        end
+    end
+
+    function F:CreateButton(width, height, text, fontSize)
+        local bu = CreateFrame('Button', nil, self, 'BackdropTemplate')
+        bu:SetSize(width, height)
+        if type(text) == 'boolean' then
+            F.PixelIcon(bu, fontSize, true)
+        else
+            F.Reskin(bu)
+            bu.text = F.CreateFS(bu, C.Assets.Font.Regular, fontSize or 12, nil, text, nil, true)
+        end
+
+        return bu
+    end
+
+    function F:CreateCheckbox(flat)
+        local cb = CreateFrame('CheckButton', nil, self, 'InterfaceOptionsCheckButtonTemplate')
+        cb:SetScript('OnClick', nil) -- reset onclick handler
+        F.ReskinCheck(cb, flat, true, true)
+
+        cb.Type = 'CheckBox'
+        return cb
+    end
+
+    local function EditBoxClearFocus(self)
+        self:ClearFocus()
+    end
+
+    function F:CreateEditBox(width, height)
+        local eb = CreateFrame('EditBox', nil, self)
+        eb:SetSize(width, height)
+        eb:SetAutoFocus(false)
+        eb:SetTextInsets(5, 5, 5, 5)
+        eb:SetFont(C.Assets.Font.Regular, 11)
+        eb.bg = F.CreateBDFrame(eb)
+        eb.bg:SetAllPoints()
+        F.SetBorderColor(eb.bg)
+        F.CreateSD(eb.bg, .25)
+
+        eb:SetScript('OnEscapePressed', EditBoxClearFocus)
+        eb:SetScript('OnEnterPressed', EditBoxClearFocus)
+
+        eb.Type = 'EditBox'
+        return eb
+    end
+
+    local function Option_OnClick(self)
+        PlaySound(_G.SOUNDKIT.GS_TITLE_OPTION_OK)
+        local opt = self.__owner.options
+        for i = 1, #opt do
+            if self == opt[i] then
+                opt[i]:SetBackdropColor(C.r, C.g, C.b, .25)
+                opt[i].selected = true
+            else
+                opt[i]:SetBackdropColor(.1, .1, .1, .25)
+                opt[i].selected = false
+            end
+        end
+        self.__owner.Text:SetText(self.text)
+        self:GetParent():Hide()
+    end
+
+    local function Option_OnEnter(self)
+        if self.selected then
+            return
+        end
+        self:SetBackdropColor(1, 1, 1, .25)
+    end
+
+    local function Option_OnLeave(self)
+        if self.selected then
+            return
+        end
+        self:SetBackdropColor(.1, .1, .1, .25)
+    end
+
+    local function DD_OnShow(self)
+        self.__list:Hide()
+    end
+
+    local function DD_OnClick(self)
+        PlaySound(_G.SOUNDKIT.GS_TITLE_OPTION_OK)
+        F:TogglePanel(self.__list)
+    end
+
+    local function DD_OnEnter(self)
+        self.arrow:SetVertexColor(C.r, C.g, C.b)
+    end
+
+    local function DD_OnLeave(self)
+        self.arrow:SetVertexColor(1, 1, 1)
+    end
+
+    function F:CreateDropDown(width, height, data)
+        local dd = CreateFrame('Frame', nil, self, 'BackdropTemplate')
+        dd:SetSize(width, height)
+        dd.bg = F.CreateBDFrame(dd, .45)
+        F.SetBorderColor(dd.bg)
+        F.CreateSD(dd.bg, .25)
+
+        dd.Text = F.CreateFS(dd, C.Assets.Font.Regular, 11, nil, '', nil, true, 'LEFT', 5, 0)
+        dd.Text:SetPoint('RIGHT', -5, 0)
+        dd.options = {}
+
+        local bu = CreateFrame('Button', nil, dd)
+        bu:SetPoint('RIGHT', -5, 0)
+        bu:SetSize(18, 18)
+        dd.button = bu
+
+        local tex = bu:CreateTexture(nil, 'ARTWORK')
+        tex:SetVertexColor(1, 1, 1)
+        tex:SetAllPoints()
+        F.SetupArrow(tex, 'down')
+        bu.arrow = tex
+
+        local list = CreateFrame('Frame', nil, dd, 'BackdropTemplate')
+        list:SetPoint('TOP', dd, 'BOTTOM', 0, -2)
+        RaiseFrameLevel(list)
+        F.CreateBD(list, .85)
+        list:Hide()
+        bu.__list = list
+
+        bu:SetScript('OnShow', DD_OnShow)
+        bu:SetScript('OnClick', DD_OnClick)
+
+        bu:HookScript('OnEnter', DD_OnEnter)
+        bu:HookScript('OnLeave', DD_OnLeave)
+
+        local opt, index = {}, 0
+        for i, j in pairs(data) do
+            opt[i] = CreateFrame('Button', nil, list, 'BackdropTemplate')
+            opt[i]:SetPoint('TOPLEFT', 4, -4 - (i - 1) * (height + 2))
+            opt[i]:SetSize(width - 8, height)
+            F.CreateBD(opt[i])
+
+            local text = F.CreateFS(opt[i], C.Assets.Font.Regular, 11, nil, j, nil, true, 'LEFT', 5, 0)
+            text:SetPoint('RIGHT', -5, 0)
+            opt[i].text = j
+            opt[i].index = i
+            opt[i].__owner = dd
+            opt[i]:SetScript('OnClick', Option_OnClick)
+            opt[i]:SetScript('OnEnter', Option_OnEnter)
+            opt[i]:SetScript('OnLeave', Option_OnLeave)
+
+            dd.options[i] = opt[i]
+            index = index + 1
+        end
+        list:SetSize(width, index * (height + 2) + 6)
+
+        dd.Type = 'DropDown'
+        return dd
+    end
+
+    local function UpdatePicker()
+        local swatch = _G.ColorPickerFrame.__swatch
+        local r, g, b = _G.ColorPickerFrame:GetColorRGB()
+        local colorStr = string.format('ff%02x%02x%02x', r * 255, g * 255, b * 255)
+        r = F:Round(r, 2)
+        g = F:Round(g, 2)
+        b = F:Round(b, 2)
+        swatch.tex:SetVertexColor(r, g, b)
+        swatch.color.r, swatch.color.g, swatch.color.b, swatch.color.colorStr = r, g, b, colorStr
+        F.UpdateCustomClassColors()
+    end
+
+    local function CancelPicker()
+        local swatch = _G.ColorPickerFrame.__swatch
+        local r, g, b = _G.ColorPicker_GetPreviousValues()
+        local colorStr = string.format('ff%02x%02x%02x', r * 255, g * 255, b * 255)
+        swatch.tex:SetVertexColor(r, g, b)
+        swatch.color.r, swatch.color.g, swatch.color.b, swatch.color.colorStr = r, g, b, colorStr
+    end
+
+    local function OpenColorPicker(self)
+        local r, g, b, colorStr = self.color.r, self.color.g, self.color.b, self.color.colorStr
+        _G.ColorPickerFrame.__swatch = self
+        _G.ColorPickerFrame.func = UpdatePicker
+        _G.ColorPickerFrame.previousValues = {r = r, g = g, b = b, colorStr = colorStr}
+        _G.ColorPickerFrame.cancelFunc = CancelPicker
+        _G.ColorPickerFrame:SetColorRGB(r, g, b)
+        _G.ColorPickerFrame:Show()
+    end
+
+    local function GetSwatchTexColor(tex)
+        local r, g, b = tex:GetVertexColor()
+        r = F:Round(r, 2)
+        g = F:Round(g, 2)
+        b = F:Round(b, 2)
+        return r, g, b
+    end
+
+    local function ResetColorPicker(swatch)
+        local defaultColor = swatch.__default
+        if defaultColor then
+            _G.ColorPickerFrame:SetColorRGB(defaultColor.r, defaultColor.g, defaultColor.b)
+        end
+    end
+
+    local whiteColor = {r = 1, g = 1, b = 1, colorStr = 'ffffffff'}
+    function F:CreateColorSwatch(name, color)
+        color = color or whiteColor
+
+        local swatch = CreateFrame('Button', nil, self, 'BackdropTemplate')
+        swatch:SetSize(20, 12)
+        swatch.bg = F.CreateBDFrame(swatch, 1)
+        F.SetBorderColor(swatch.bg)
+        F.CreateSD(swatch.bg, .25)
+        swatch.text = F.CreateFS(swatch, C.Assets.Font.Regular, 12, nil, name, nil, true, 'LEFT', 24, 0)
+        local tex = swatch:CreateTexture()
+        tex:SetInside(swatch, 2, 2)
+        tex:SetTexture(C.Assets.Texture.Backdrop)
+        tex:SetVertexColor(color.r, color.g, color.b)
+        tex.GetColor = GetSwatchTexColor
+
+        swatch.tex = tex
+        swatch.color = color
+        swatch:SetScript('OnClick', OpenColorPicker)
+        swatch:SetScript('OnDoubleClick', ResetColorPicker)
+
+        return swatch
+    end
+
+    local function UpdateSliderEditBox(self)
+        local slider = self.__owner
+        local minValue, maxValue = slider:GetMinMaxValues()
+        local text = tonumber(self:GetText())
+        if not text then
+            return
+        end
+        text = math.min(maxValue, text)
+        text = math.max(minValue, text)
+        slider:SetValue(text)
+        self:SetText(text)
+        self:ClearFocus()
+    end
+
+    local function ResetSliderValue(self)
+        local slider = self.__owner
+        if slider.__default then
+            slider:SetValue(slider.__default)
+        end
+    end
+
+    function F:CreateSlider(name, minValue, maxValue, step, x, y, width)
+        local slider = CreateFrame('Slider', nil, self, 'OptionsSliderTemplate')
+        slider:SetPoint('TOPLEFT', x, y)
+        slider:SetWidth(width or 140)
+        slider:SetMinMaxValues(minValue, maxValue)
+        slider:SetValueStep(step)
+        slider:SetObeyStepOnDrag(true)
+        slider:SetHitRectInsets(0, 0, 0, 0)
+        F.ReskinSlider(slider)
+
+        slider.Low:SetText(minValue)
+        slider.Low:SetFontObject(_G.Game11Font)
+        slider.Low:SetPoint('TOPLEFT', slider, 'BOTTOMLEFT', 10, -2)
+
+        slider.High:SetText(maxValue)
+        slider.High:SetFontObject(_G.Game11Font)
+        slider.High:SetPoint('TOPRIGHT', slider, 'BOTTOMRIGHT', -10, -2)
+
+        slider.Text:SetText(name)
+        slider.Text:SetFontObject(_G.Game11Font)
+        slider.Text:ClearAllPoints()
+        slider.Text:SetPoint('CENTER', 0, 16)
+
+        slider.value = F.CreateEditBox(slider, 50, 20)
+        slider.value:SetPoint('TOP', slider, 'BOTTOM', 0, -2)
+        slider.value:SetJustifyH('CENTER')
+        slider.value:SetFont(C.Assets.Font.Regular, 11)
+        slider.value.__owner = slider
+        slider.value:SetScript('OnEnterPressed', UpdateSliderEditBox)
+
+        slider.clicker = CreateFrame('Button', nil, slider)
+        slider.clicker:SetAllPoints(slider.Text)
+        slider.clicker.__owner = slider
+        slider.clicker:SetScript('OnDoubleClick', ResetSliderValue)
+
+        return slider
+    end
+
+    function F:TogglePanel(frame)
+        if frame:IsShown() then
+            frame:Hide()
+        else
+            frame:Show()
+        end
+    end
 end
 
---[[ UI skins ]]
+-- UI Skins
+
 do
     -- Kill regions
     F.HiddenFrame = CreateFrame('Frame')
@@ -499,7 +903,7 @@ do
         'portrait',
         'ScrollFrameBorder',
         'ScrollUpBorder',
-        'ScrollDownBorder'
+        'ScrollDownBorder',
     }
 
     function F:StripTextures(kill)
@@ -584,7 +988,7 @@ do
         ['purple'] = _G.LE_ITEM_QUALITY_EPIC,
         ['orange'] = _G.LE_ITEM_QUALITY_LEGENDARY,
         ['artifact'] = _G.LE_ITEM_QUALITY_ARTIFACT,
-        ['account'] = _G.LE_ITEM_QUALITY_HEIRLOOM
+        ['account'] = _G.LE_ITEM_QUALITY_HEIRLOOM,
     }
 
     local function UpdateIconBorderColorByAtlas(self, atlas)
@@ -729,7 +1133,7 @@ do
         'BottomRightTex',
         'RightTex',
         'MiddleTex',
-        'Center'
+        'Center',
     }
 
     function F:Reskin(noGlow)
@@ -1279,7 +1683,7 @@ do
         ['Adventures-Tank'] = 'Soulbinds_Tree_Conduit_Icon_Protect',
         ['Adventures-Healer'] = 'ui_adv_health',
         ['Adventures-DPS'] = 'ui_adv_atk',
-        ['Adventures-DPS-Ranged'] = 'Soulbinds_Tree_Conduit_Icon_Utility'
+        ['Adventures-DPS-Ranged'] = 'Soulbinds_Tree_Conduit_Icon_Utility',
     }
 
     local function ReplaceFollowerRole(roleIcon, atlas)
@@ -1449,362 +1853,8 @@ do
     end
 end
 
---[[ GUI elements ]]
-do
-    function F:CreateHelpInfo(tooltip)
-        local bu = CreateFrame('Button', nil, self)
-        bu:SetSize(40, 40)
-        bu.Icon = bu:CreateTexture(nil, 'ARTWORK')
-        bu.Icon:SetAllPoints()
-        bu.Icon:SetTexture(616343)
-        bu:SetHighlightTexture(616343)
-        if tooltip then
-            bu.title = L['Hint']
-            F.AddTooltip(bu, 'ANCHOR_BOTTOMLEFT', tooltip, 'BLUE')
-        end
+-- Add APIs
 
-        return bu
-    end
-
-    local CLASS_ICON_TCOORDS = _G.CLASS_ICON_TCOORDS
-    function F:ClassIconTexCoord(class)
-        local tcoords = CLASS_ICON_TCOORDS[class]
-        self:SetTexCoord(tcoords[1] + .022, tcoords[2] - .025, tcoords[3] + .022, tcoords[4] - .025)
-    end
-
-    function F:CreateSB(spark, r, g, b)
-        self:SetStatusBarTexture(C.Assets.Statusbar.Normal)
-        if r and g and b then
-            self:SetStatusBarColor(r, g, b)
-        else
-            self:SetStatusBarColor(C.r, C.g, C.b)
-        end
-
-        local bg = F.SetBD(self)
-        self.__shadow = bg.__shadow
-
-        if spark then
-            self.Spark = self:CreateTexture(nil, 'OVERLAY')
-            self.Spark:SetTexture(C.Assets.Texture.Spark)
-            self.Spark:SetBlendMode('ADD')
-            self.Spark:SetAlpha(.8)
-            self.Spark:SetPoint('TOPLEFT', self:GetStatusBarTexture(), 'TOPRIGHT', -10, 10)
-            self.Spark:SetPoint('BOTTOMRIGHT', self:GetStatusBarTexture(), 'BOTTOMRIGHT', 10, -10)
-        end
-    end
-
-    function F:CreateAndUpdateBarTicks(bar, ticks, numTicks)
-        for i = 1, #ticks do
-            ticks[i]:Hide()
-        end
-
-        if numTicks and numTicks > 0 then
-            local width, height = bar:GetSize()
-            local delta = width / numTicks
-            for i = 1, numTicks - 1 do
-                if not ticks[i] then
-                    ticks[i] = bar:CreateTexture(nil, 'OVERLAY')
-                    ticks[i]:SetTexture(C.Assets.Statusbar.Normal)
-                    ticks[i]:SetVertexColor(0, 0, 0, .7)
-                    ticks[i]:SetWidth(C.MULT)
-                    ticks[i]:SetHeight(height)
-                end
-                ticks[i]:ClearAllPoints()
-                ticks[i]:SetPoint('RIGHT', bar, 'LEFT', delta * i, 0)
-                ticks[i]:Show()
-            end
-        end
-    end
-
-    function F:CreateButton(width, height, text, fontSize)
-        local bu = CreateFrame('Button', nil, self, 'BackdropTemplate')
-        bu:SetSize(width, height)
-        if type(text) == 'boolean' then
-            F.PixelIcon(bu, fontSize, true)
-        else
-            F.Reskin(bu)
-            bu.text = F.CreateFS(bu, C.Assets.Font.Regular, fontSize or 12, nil, text, nil, true)
-        end
-
-        return bu
-    end
-
-    function F:CreateCheckbox(flat)
-        local cb = CreateFrame('CheckButton', nil, self, 'InterfaceOptionsCheckButtonTemplate')
-        cb:SetScript('OnClick', nil) -- reset onclick handler
-        F.ReskinCheck(cb, flat, true, true)
-
-        cb.Type = 'CheckBox'
-        return cb
-    end
-
-    local function EditBoxClearFocus(self)
-        self:ClearFocus()
-    end
-
-    function F:CreateEditBox(width, height)
-        local eb = CreateFrame('EditBox', nil, self)
-        eb:SetSize(width, height)
-        eb:SetAutoFocus(false)
-        eb:SetTextInsets(5, 5, 5, 5)
-        eb:SetFont(C.Assets.Font.Regular, 11)
-        eb.bg = F.CreateBDFrame(eb)
-        eb.bg:SetAllPoints()
-        F.SetBorderColor(eb.bg)
-        F.CreateSD(eb.bg, .25)
-
-        eb:SetScript('OnEscapePressed', EditBoxClearFocus)
-        eb:SetScript('OnEnterPressed', EditBoxClearFocus)
-
-        eb.Type = 'EditBox'
-        return eb
-    end
-
-    local function Option_OnClick(self)
-        PlaySound(_G.SOUNDKIT.GS_TITLE_OPTION_OK)
-        local opt = self.__owner.options
-        for i = 1, #opt do
-            if self == opt[i] then
-                opt[i]:SetBackdropColor(C.r, C.g, C.b, .25)
-                opt[i].selected = true
-            else
-                opt[i]:SetBackdropColor(.1, .1, .1, .25)
-                opt[i].selected = false
-            end
-        end
-        self.__owner.Text:SetText(self.text)
-        self:GetParent():Hide()
-    end
-
-    local function Option_OnEnter(self)
-        if self.selected then
-            return
-        end
-        self:SetBackdropColor(1, 1, 1, .25)
-    end
-
-    local function Option_OnLeave(self)
-        if self.selected then
-            return
-        end
-        self:SetBackdropColor(.1, .1, .1, .25)
-    end
-
-    local function DD_OnShow(self)
-        self.__list:Hide()
-    end
-
-    local function DD_OnClick(self)
-        PlaySound(_G.SOUNDKIT.GS_TITLE_OPTION_OK)
-        F:TogglePanel(self.__list)
-    end
-
-    local function DD_OnEnter(self)
-        self.arrow:SetVertexColor(C.r, C.g, C.b)
-    end
-
-    local function DD_OnLeave(self)
-        self.arrow:SetVertexColor(1, 1, 1)
-    end
-
-    function F:CreateDropDown(width, height, data)
-        local dd = CreateFrame('Frame', nil, self, 'BackdropTemplate')
-        dd:SetSize(width, height)
-        dd.bg = F.CreateBDFrame(dd, .45)
-        F.SetBorderColor(dd.bg)
-        F.CreateSD(dd.bg, .25)
-
-        dd.Text = F.CreateFS(dd, C.Assets.Font.Regular, 11, nil, '', nil, true, 'LEFT', 5, 0)
-        dd.Text:SetPoint('RIGHT', -5, 0)
-        dd.options = {}
-
-        local bu = CreateFrame('Button', nil, dd)
-        bu:SetPoint('RIGHT', -5, 0)
-        bu:SetSize(18, 18)
-        dd.button = bu
-
-        local tex = bu:CreateTexture(nil, 'ARTWORK')
-        tex:SetVertexColor(1, 1, 1)
-        tex:SetAllPoints()
-        F.SetupArrow(tex, 'down')
-        bu.arrow = tex
-
-        local list = CreateFrame('Frame', nil, dd, 'BackdropTemplate')
-        list:SetPoint('TOP', dd, 'BOTTOM', 0, -2)
-        RaiseFrameLevel(list)
-        F.CreateBD(list, .85)
-        list:Hide()
-        bu.__list = list
-
-        bu:SetScript('OnShow', DD_OnShow)
-        bu:SetScript('OnClick', DD_OnClick)
-
-        bu:HookScript('OnEnter', DD_OnEnter)
-        bu:HookScript('OnLeave', DD_OnLeave)
-
-        local opt, index = {}, 0
-        for i, j in pairs(data) do
-            opt[i] = CreateFrame('Button', nil, list, 'BackdropTemplate')
-            opt[i]:SetPoint('TOPLEFT', 4, -4 - (i - 1) * (height + 2))
-            opt[i]:SetSize(width - 8, height)
-            F.CreateBD(opt[i])
-
-            local text = F.CreateFS(opt[i], C.Assets.Font.Regular, 11, nil, j, nil, true, 'LEFT', 5, 0)
-            text:SetPoint('RIGHT', -5, 0)
-            opt[i].text = j
-            opt[i].index = i
-            opt[i].__owner = dd
-            opt[i]:SetScript('OnClick', Option_OnClick)
-            opt[i]:SetScript('OnEnter', Option_OnEnter)
-            opt[i]:SetScript('OnLeave', Option_OnLeave)
-
-            dd.options[i] = opt[i]
-            index = index + 1
-        end
-        list:SetSize(width, index * (height + 2) + 6)
-
-        dd.Type = 'DropDown'
-        return dd
-    end
-
-    local function UpdatePicker()
-        local swatch = _G.ColorPickerFrame.__swatch
-        local r, g, b = _G.ColorPickerFrame:GetColorRGB()
-        local colorStr = string.format('ff%02x%02x%02x', r * 255, g * 255, b * 255)
-        r = F:Round(r, 2)
-        g = F:Round(g, 2)
-        b = F:Round(b, 2)
-        swatch.tex:SetVertexColor(r, g, b)
-        swatch.color.r, swatch.color.g, swatch.color.b, swatch.color.colorStr = r, g, b, colorStr
-        F.UpdateCustomClassColors()
-    end
-
-    local function CancelPicker()
-        local swatch = _G.ColorPickerFrame.__swatch
-        local r, g, b = _G.ColorPicker_GetPreviousValues()
-        local colorStr = string.format('ff%02x%02x%02x', r * 255, g * 255, b * 255)
-        swatch.tex:SetVertexColor(r, g, b)
-        swatch.color.r, swatch.color.g, swatch.color.b, swatch.color.colorStr = r, g, b, colorStr
-    end
-
-    local function OpenColorPicker(self)
-        local r, g, b, colorStr = self.color.r, self.color.g, self.color.b, self.color.colorStr
-        _G.ColorPickerFrame.__swatch = self
-        _G.ColorPickerFrame.func = UpdatePicker
-        _G.ColorPickerFrame.previousValues = {r = r, g = g, b = b, colorStr = colorStr}
-        _G.ColorPickerFrame.cancelFunc = CancelPicker
-        _G.ColorPickerFrame:SetColorRGB(r, g, b)
-        _G.ColorPickerFrame:Show()
-    end
-
-    local function GetSwatchTexColor(tex)
-        local r, g, b = tex:GetVertexColor()
-        r = F:Round(r, 2)
-        g = F:Round(g, 2)
-        b = F:Round(b, 2)
-        return r, g, b
-    end
-
-    local function ResetColorPicker(swatch)
-        local defaultColor = swatch.__default
-        if defaultColor then
-            _G.ColorPickerFrame:SetColorRGB(defaultColor.r, defaultColor.g, defaultColor.b)
-        end
-    end
-
-    local whiteColor = {r = 1, g = 1, b = 1, colorStr = 'ffffffff'}
-    function F:CreateColorSwatch(name, color)
-        color = color or whiteColor
-
-        local swatch = CreateFrame('Button', nil, self, 'BackdropTemplate')
-        swatch:SetSize(20, 12)
-        swatch.bg = F.CreateBDFrame(swatch, 1)
-        F.SetBorderColor(swatch.bg)
-        F.CreateSD(swatch.bg, .25)
-        swatch.text = F.CreateFS(swatch, C.Assets.Font.Regular, 12, nil, name, nil, true, 'LEFT', 24, 0)
-        local tex = swatch:CreateTexture()
-        tex:SetInside(swatch, 2, 2)
-        tex:SetTexture(C.Assets.Texture.Backdrop)
-        tex:SetVertexColor(color.r, color.g, color.b)
-        tex.GetColor = GetSwatchTexColor
-
-        swatch.tex = tex
-        swatch.color = color
-        swatch:SetScript('OnClick', OpenColorPicker)
-        swatch:SetScript('OnDoubleClick', ResetColorPicker)
-
-        return swatch
-    end
-
-    local function UpdateSliderEditBox(self)
-        local slider = self.__owner
-        local minValue, maxValue = slider:GetMinMaxValues()
-        local text = tonumber(self:GetText())
-        if not text then
-            return
-        end
-        text = math.min(maxValue, text)
-        text = math.max(minValue, text)
-        slider:SetValue(text)
-        self:SetText(text)
-        self:ClearFocus()
-    end
-
-    local function ResetSliderValue(self)
-        local slider = self.__owner
-        if slider.__default then
-            slider:SetValue(slider.__default)
-        end
-    end
-
-    function F:CreateSlider(name, minValue, maxValue, step, x, y, width)
-        local slider = CreateFrame('Slider', nil, self, 'OptionsSliderTemplate')
-        slider:SetPoint('TOPLEFT', x, y)
-        slider:SetWidth(width or 140)
-        slider:SetMinMaxValues(minValue, maxValue)
-        slider:SetValueStep(step)
-        slider:SetObeyStepOnDrag(true)
-        slider:SetHitRectInsets(0, 0, 0, 0)
-        F.ReskinSlider(slider)
-
-        slider.Low:SetText(minValue)
-        slider.Low:SetFontObject(_G.Game11Font)
-        slider.Low:SetPoint('TOPLEFT', slider, 'BOTTOMLEFT', 10, -2)
-
-        slider.High:SetText(maxValue)
-        slider.High:SetFontObject(_G.Game11Font)
-        slider.High:SetPoint('TOPRIGHT', slider, 'BOTTOMRIGHT', -10, -2)
-
-        slider.Text:SetText(name)
-        slider.Text:SetFontObject(_G.Game11Font)
-        slider.Text:ClearAllPoints()
-        slider.Text:SetPoint('CENTER', 0, 16)
-
-        slider.value = F.CreateEditBox(slider, 50, 20)
-        slider.value:SetPoint('TOP', slider, 'BOTTOM', 0, -2)
-        slider.value:SetJustifyH('CENTER')
-        slider.value:SetFont(C.Assets.Font.Regular, 11)
-        slider.value.__owner = slider
-        slider.value:SetScript('OnEnterPressed', UpdateSliderEditBox)
-
-        slider.clicker = CreateFrame('Button', nil, slider)
-        slider.clicker:SetAllPoints(slider.Text)
-        slider.clicker.__owner = slider
-        slider.clicker:SetScript('OnDoubleClick', ResetSliderValue)
-
-        return slider
-    end
-
-    function F:TogglePanel(frame)
-        if frame:IsShown() then
-            frame:Hide()
-        else
-            frame:Show()
-        end
-    end
-end
-
---[[ Add APIs ]]
 do
     function F:SetPointsRestricted(frame)
         if frame and not pcall(frame.GetPoint, frame) then
@@ -1920,7 +1970,7 @@ do
         'portrait',
         'ScrollFrameBorder',
         'ScrollUpBorder',
-        'ScrollDownBorder'
+        'ScrollDownBorder',
     }
 
     local STRIP_TEX = 'Texture'
@@ -2059,162 +2109,4 @@ do
         object = _G.EnumerateFrames(object)
     end
 end
-
---[[ Itemlevel ]]
-do
-    local iLvlDB = {}
-    local itemLevelString = '^' .. string.gsub(_G.ITEM_LEVEL, '%%d', '')
-    local enchantString = string.gsub(_G.ENCHANTED_TOOLTIP_LINE, '%%s', '(.+)')
-    local essenceTextureID = 2975691
-    local essenceDescription = GetSpellDescription(277253)
-
-    local tip = CreateFrame('GameTooltip', 'FreeUI_ScanTooltip', nil, 'GameTooltipTemplate')
-    F.ScanTip = tip
-
-    function F:InspectItemTextures()
-        if not tip.gems then
-            tip.gems = {}
-        else
-            table.wipe(tip.gems)
-        end
-
-        if not tip.essences then
-            tip.essences = {}
-        else
-            for _, essences in pairs(tip.essences) do
-                table.wipe(essences)
-            end
-        end
-
-        local step = 1
-        for i = 1, 10 do
-            local tex = _G[tip:GetName() .. 'Texture' .. i]
-            local texture = tex and tex:IsShown() and tex:GetTexture()
-            if texture then
-                if texture == essenceTextureID then
-                    local selected = (tip.gems[i - 1] ~= essenceTextureID and tip.gems[i - 1]) or nil
-                    if not tip.essences[step] then
-                        tip.essences[step] = {}
-                    end
-                    tip.essences[step][1] = selected -- essence texture if selected or nil
-                    tip.essences[step][2] = tex:GetAtlas() -- atlas place 'tooltip-heartofazerothessence-major' or 'tooltip-heartofazerothessence-minor'
-                    tip.essences[step][3] = texture -- border texture placed by the atlas
-
-                    step = step + 1
-                    if selected then
-                        tip.gems[i - 1] = nil
-                    end
-                else
-                    tip.gems[i] = texture
-                end
-            end
-        end
-
-        return tip.gems, tip.essences
-    end
-
-    function F:InspectItemInfo(text, slotInfo)
-        local itemLevel = string.find(text, itemLevelString) and string.match(text, '(%d+)%)?$')
-        if itemLevel then
-            slotInfo.iLvl = tonumber(itemLevel)
-        end
-
-        local enchant = string.match(text, enchantString)
-        if enchant then
-            slotInfo.enchantText = enchant
-        end
-    end
-
-    function F:CollectEssenceInfo(index, lineText, slotInfo)
-        local step = 1
-        local essence = slotInfo.essences[step]
-        if essence and next(essence) and (string.find(lineText, _G.ITEM_SPELL_TRIGGER_ONEQUIP, nil, true) and string.find(lineText, essenceDescription, nil, true)) then
-            for i = 5, 2, -1 do
-                local line = _G[tip:GetName() .. 'TextLeft' .. index - i]
-                local text = line and line:GetText()
-
-                if text and (not string.match(text, '^[ +]')) and essence and next(essence) then
-                    local r, g, b = line:GetTextColor()
-                    essence[4] = r
-                    essence[5] = g
-                    essence[6] = b
-
-                    step = step + 1
-                    essence = slotInfo.essences[step]
-                end
-            end
-        end
-    end
-
-    function F.GetItemLevel(link, arg1, arg2, fullScan)
-        if fullScan then
-            tip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
-            tip:SetInventoryItem(arg1, arg2)
-
-            if not tip.slotInfo then
-                tip.slotInfo = {}
-            else
-                table.wipe(tip.slotInfo)
-            end
-
-            local slotInfo = tip.slotInfo
-            slotInfo.gems, slotInfo.essences = F:InspectItemTextures()
-
-            for i = 1, tip:NumLines() do
-                local line = _G[tip:GetName() .. 'TextLeft' .. i]
-                if not line then
-                    break
-                end
-
-                local text = line:GetText()
-                if text then
-                    if i == 1 and text == _G.RETRIEVING_ITEM_INFO then
-                        return 'tooSoon'
-                    else
-                        F:InspectItemInfo(text, slotInfo)
-                        F:CollectEssenceInfo(i, text, slotInfo)
-                    end
-                end
-            end
-
-            return slotInfo
-        else
-            if iLvlDB[link] then
-                return iLvlDB[link]
-            end
-
-            tip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
-            if arg1 and type(arg1) == 'string' then
-                tip:SetInventoryItem(arg1, arg2)
-            elseif arg1 and type(arg1) == 'number' then
-                tip:SetBagItem(arg1, arg2)
-            else
-                tip:SetHyperlink(link)
-            end
-
-            local firstLine = _G.FreeUI_ScanTooltipTextLeft1:GetText()
-            if firstLine == _G.RETRIEVING_ITEM_INFO then
-                return 'tooSoon'
-            end
-
-            for i = 2, 5 do
-                local line = _G[tip:GetName() .. 'TextLeft' .. i]
-                if not line then
-                    break
-                end
-
-                local text = line:GetText()
-                local found = text and string.find(text, itemLevelString)
-                if found then
-                    local level = string.match(text, '(%d+)%)?$')
-                    iLvlDB[link] = tonumber(level)
-                    break
-                end
-            end
-
-            return iLvlDB[link]
-        end
-    end
-end
-
 

@@ -254,33 +254,6 @@ function F:CooldownOnUpdate(elapsed, raw)
     end
 end
 
--- Table
-function F:CopyTable(source, target)
-    for key, value in pairs(source) do
-        if type(value) == 'table' then
-            if not target[key] then
-                target[key] = {}
-            end
-            for k in pairs(value) do
-                target[key][k] = value[k]
-            end
-        else
-            target[key] = value
-        end
-    end
-end
-
-function F:SplitList(list, variable, cleanup)
-    if cleanup then
-        table.wipe(list)
-    end
-
-    for word in variable:gmatch('%S+') do
-        word = tonumber(word) or word -- use number if exists, needs review
-        list[word] = true
-    end
-end
-
 -- Timer
 F.WaitTable = {}
 F.WaitFrame = CreateFrame('Frame', 'FreeUIWaitFrame', _G.UIParent)
