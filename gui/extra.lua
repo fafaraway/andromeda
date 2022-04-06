@@ -1243,8 +1243,8 @@ function GUI:SetupSimpleRaidFrame(parent)
     CreateOptionDropdown(scroll, L['Group By'], offset - 110, {_G.GROUP, _G.CLASS, _G.ROLE}, nil, mKey, 'SMRGroupBy', 1, UpdateSimpleRaidFrameSize)
 end
 
-function GUI:SetupUnitFrameSize(parent)
-    local guiName = 'FreeUIGUIUnitFrameSize'
+function GUI:SetupUnitFrame(parent)
+    local guiName = 'FreeUIGUISetupUnitFrame'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1256,92 +1256,95 @@ function GUI:SetupUnitFrameSize(parent)
     local mKey = 'Unitframe'
     local db = C.CharacterSettings.Unitframe
 
-    local playerDatas = {
-        [1] = {key = 'PlayerWidth', value = db.PlayerWidth, text = L['Width'], min = 10, max = 400},
-        [2] = {key = 'PlayerHealthHeight', value = db.PlayerHealthHeight, text = L['Health Height'], min = 1, max = 40},
-        [3] = {key = 'PlayerPowerHeight', value = db.PlayerPowerHeight, text = L['Power Height'], min = 1, max = 40},
-    }
-
-    local petDatas = {
-        [1] = {key = 'PetWidth', value = db.PetWidth, text = L['Width'], min = 10, max = 400},
-        [2] = {key = 'PetHealthHeight', value = db.PetHealthHeight, text = L['Health Height'], min = 1, max = 40},
-        [3] = {key = 'PetPowerHeight', value = db.PetPowerHeight, text = L['Power Height'], min = 1, max = 40},
-    }
-
-    local targetDatas = {
-        [1] = {key = 'TargetWidth', value = db.TargetWidth, text = L['Width'], min = 10, max = 400},
-        [2] = {key = 'TargetHealthHeight', value = db.TargetHealthHeight, text = L['Health Height'], min = 1, max = 40},
-        [3] = {key = 'TargetPowerHeight', value = db.TargetPowerHeight, text = L['Power Height'], min = 1, max = 40},
-    }
-
-    local totDatas = {
-        [1] = {key = 'TargetTargetWidth', value = db.TargetTargetWidth, text = L['Width'], min = 10, max = 400},
-        [2] = {key = 'TargetTargetHealthHeight', value = db.TargetTargetHealthHeight, text = L['Health Height'], min = 1, max = 40},
-        [3] = {key = 'TargetTargetPowerHeight', value = db.TargetTargetPowerHeight, text = L['Power Height'], min = 1, max = 40},
-    }
-
-    local focusDatas = {
-        [1] = {key = 'FocusWidth', value = db.FocusWidth, text = L['Width'], min = 10, max = 400},
-        [2] = {key = 'FocusHealthHeight', value = db.FocusHealthHeight, text = L['Health Height'], min = 1, max = 40},
-        [3] = {key = 'FocusPowerHeight', value = db.FocusPowerHeight, text = L['Power Height'], min = 1, max = 40},
-    }
-
-    local tofDatas = {
-        [1] = {key = 'FocusTargetWidth', value = db.FocusTargetWidth, text = L['Width'], min = 10, max = 400},
-        [2] = {key = 'FocusTargetHealthHeight', value = db.FocusTargetHealthHeight, text = L['Health Height'], min = 1, max = 40},
-        [3] = {key = 'FocusTargetPowerHeight', value = db.FocusTargetPowerHeight, text = L['Power Height'], min = 1, max = 40},
+    local datas = {
+        player = {
+            [1] = {key = 'PlayerWidth', value = db.PlayerWidth, text = L['Width'], min = 10, max = 400, step = 1},
+            [2] = {key = 'PlayerHealthHeight', value = db.PlayerHealthHeight, text = L['Health Height'], min = 1, max = 40, step = 1},
+            [3] = {key = 'PlayerPowerHeight', value = db.PlayerPowerHeight, text = L['Power Height'], min = 1, max = 40, step = 1},
+            [4] = {key = 'PlayerAuraPerRow' , value = db.PlayerAuraPerRow, text = L['Aura Per Row'], min = 0, max = 10, step = 1}
+        },
+        pet = {
+            [1] = {key = 'PetWidth', value = db.PetWidth, text = L['Width'], min = 10, max = 400, step = 1},
+            [2] = {key = 'PetHealthHeight', value = db.PetHealthHeight, text = L['Health Height'], min = 1, max = 40, step = 1},
+            [3] = {key = 'PetPowerHeight', value = db.PetPowerHeight, text = L['Power Height'], min = 1, max = 40, step = 1},
+            [4] = {key = 'PetAuraPerRow' , value = db.PetAuraPerRow, text = L['Aura Per Row'], min = 0, max = 10, step = 1}
+        },
+        target = {
+            [1] = {key = 'TargetWidth', value = db.TargetWidth, text = L['Width'], min = 10, max = 400, step = 1},
+            [2] = {key = 'TargetHealthHeight', value = db.TargetHealthHeight, text = L['Health Height'], min = 1, max = 40, step = 1},
+            [3] = {key = 'TargetPowerHeight', value = db.TargetPowerHeight, text = L['Power Height'], min = 1, max = 40, step = 1},
+            [4] = {key = 'TargetAuraPerRow' , value = db.TargetAuraPerRow, text = L['Aura Per Row'], min = 0, max = 10, step = 1}
+        },
+        tot = {
+            [1] = {key = 'TargetTargetWidth', value = db.TargetTargetWidth, text = L['Width'], min = 10, max = 400, step = 1},
+            [2] = {key = 'TargetTargetHealthHeight', value = db.TargetTargetHealthHeight, text = L['Health Height'], min = 1, max = 40, step = 1},
+            [3] = {key = 'TargetTargetPowerHeight', value = db.TargetTargetPowerHeight, text = L['Power Height'], min = 1, max = 40, step = 1},
+            [4] = {key = 'TargetTargetAuraPerRow' , value = db.TargetTargetAuraPerRow, text = L['Aura Per Row'], min = 0, max = 10, step = 1}
+        },
+        focus = {
+            [1] = {key = 'FocusWidth', value = db.FocusWidth, text = L['Width'], min = 10, max = 400, step = 1},
+            [2] = {key = 'FocusHealthHeight', value = db.FocusHealthHeight, text = L['Health Height'], min = 1, max = 40, step = 1},
+            [3] = {key = 'FocusPowerHeight', value = db.FocusPowerHeight, text = L['Power Height'], min = 1, max = 40, step = 1},
+            [4] = {key = 'FocusAuraPerRow' , value = db.FocusAuraPerRow, text = L['Aura Per Row'], min = 0, max = 10, step = 1}
+        },
+        tof = {
+            [1] = {key = 'FocusTargetWidth', value = db.FocusTargetWidth, text = L['Width'], min = 10, max = 400, step = 1},
+            [2] = {key = 'FocusTargetHealthHeight', value = db.FocusTargetHealthHeight, text = L['Health Height'], min = 1, max = 40, step = 1},
+            [3] = {key = 'FocusTargetPowerHeight', value = db.FocusTargetPowerHeight, text = L['Power Height'], min = 1, max = 40, step = 1},
+            [4] = {key = 'FocusTargetAuraPerRow' , value = db.FocusTargetAuraPerRow, text = L['Aura Per Row'], min = 0, max = 10, step = 1}
+        }
     }
 
     local offset = -10
-    for _, v in ipairs(playerDatas) do
+    for _, v in ipairs(datas.player) do
         CreateGroupTitle(scroll, L['Player Frame'], offset)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdateUnitFrameSize)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateUnitFrameSize)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
-    for _, v in ipairs(petDatas) do
+    for _, v in ipairs(datas.pet) do
         CreateGroupTitle(scroll, L['Pet Frame'], offset - 50)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 100, UpdateUnitFrameSize)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 100, UpdateUnitFrameSize)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
-    for _, v in ipairs(targetDatas) do
+    for _, v in ipairs(datas.target) do
         CreateGroupTitle(scroll, L['Target Frame'], offset - 100)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 150, UpdateUnitFrameSize)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 150, UpdateUnitFrameSize)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
-    for _, v in ipairs(totDatas) do
+    for _, v in ipairs(datas.tot) do
         CreateGroupTitle(scroll, L['Target of Target Frame'], offset - 150)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 200, UpdateUnitFrameSize)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 200, UpdateUnitFrameSize)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
-    for _, v in ipairs(focusDatas) do
+    for _, v in ipairs(datas.focus) do
         CreateGroupTitle(scroll, L['Focus Frame'], offset - 200)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 250, UpdateUnitFrameSize)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 250, UpdateUnitFrameSize)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
-    for _, v in ipairs(tofDatas) do
+    for _, v in ipairs(datas.tof) do
         CreateGroupTitle(scroll, L['Target of Focus Frame'], offset - 250)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 300, UpdateUnitFrameSize)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 300, UpdateUnitFrameSize)
         offset = offset - 65
     end
 end
 
-function GUI:SetupBossFrameSize(parent)
-    local guiName = 'FreeUIGUIBossFrameSize'
+function GUI:SetupBossFrame(parent)
+    local guiName = 'FreeUIGUISetupBossFrame'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1354,22 +1357,23 @@ function GUI:SetupBossFrameSize(parent)
     local db = C.CharacterSettings.Unitframe
 
     local bossDatas = {
-        [1] = {key = 'BossWidth', value = db.BossWidth, text = L['Width'], min = 10, max = 400},
-        [2] = {key = 'BossHealthHeight', value = db.BossHealthHeight, text = L['Health Height'], min = 1, max = 40},
-        [3] = {key = 'BossPowerHeight', value = db.BossPowerHeight, text = L['Power Height'], min = 1, max = 40},
-        [4] = {key = 'BossGap', value = db.BossGap, text = L['Spacing'], min = 10, max = 40},
+        [1] = {key = 'BossWidth', value = db.BossWidth, text = L['Width'], min = 10, max = 400, step = 1},
+        [2] = {key = 'BossHealthHeight', value = db.BossHealthHeight, text = L['Health Height'], min = 1, max = 40, step = 1},
+        [3] = {key = 'BossPowerHeight', value = db.BossPowerHeight, text = L['Power Height'], min = 1, max = 40, step = 1},
+        [4] = {key = 'BossAuraPerRow' , value = db.BossAuraPerRow, text = L['Aura Per Row'], min = 0, max = 10, step = 1},
+        [5] = {key = 'BossGap', value = db.BossGap, text = L['Gap'], min = 10, max = 100, step = 1},
     }
 
     local offset = -10
     for _, v in ipairs(bossDatas) do
         CreateGroupTitle(scroll, L['Boss Frame'], offset)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50)
         offset = offset - 65
     end
 end
 
-function GUI:SetupArenaFrameSize(parent)
-    local guiName = 'FreeUIGUIArenaFrameSize'
+function GUI:SetupArenaFrame(parent)
+    local guiName = 'FreeUIGUISetupArenaFrame'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1382,22 +1386,23 @@ function GUI:SetupArenaFrameSize(parent)
     local db = C.CharacterSettings.Unitframe
 
     local bossDatas = {
-        [1] = {key = 'ArenaWidth', value = db.ArenaWidth, text = L['Width'], min = 10, max = 400},
-        [2] = {key = 'ArenaHealthHeight', value = db.ArenaHealthHeight, text = L['Health Height'], min = 1, max = 40},
-        [3] = {key = 'ArenaPowerHeight', value = db.ArenaPowerHeight, text = L['Power Height'], min = 1, max = 40},
-        [4] = {key = 'ArenaGap', value = db.ArenaGap, text = L['Spacing'], min = 10, max = 40},
+        [1] = {key = 'ArenaWidth', value = db.ArenaWidth, text = L['Width'], min = 10, max = 400, step = 1},
+        [2] = {key = 'ArenaHealthHeight', value = db.ArenaHealthHeight, text = L['Health Height'], min = 1, max = 40, step = 1},
+        [3] = {key = 'ArenaPowerHeight', value = db.ArenaPowerHeight, text = L['Power Height'], min = 1, max = 40, step = 1},
+        [4] = {key = 'ArenaAuraPerRow' , value = db.ArenaAuraPerRow, text = L['Aura Per Row'], min = 0, max = 10, step = 1},
+        [5] = {key = 'ArenaGap', value = db.ArenaGap, text = L['Gap'], min = 10, max = 100, step = 1},
     }
 
     local offset = -10
     for _, v in ipairs(bossDatas) do
         CreateGroupTitle(scroll, L['Arena Frame'], offset)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50)
         offset = offset - 65
     end
 end
 
-function GUI:SetupClassPowerSize(parent)
-    local guiName = 'FreeUIGUIClassPower'
+function GUI:SetupClassPower(parent)
+    local guiName = 'FreeUIGUISetupClassPower'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1484,8 +1489,8 @@ function GUI:SetupUnitFrameRangeCheck(parent)
     CreateSlider(scroll, 'Unitframe', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset - 50)
 end
 
-function GUI:SetupCastbarSize(parent)
-    local guiName = 'FreeUIGUICastbarSize'
+function GUI:SetupCastbar(parent)
+    local guiName = 'FreeUIGUISetupCastbar'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1497,41 +1502,41 @@ function GUI:SetupCastbarSize(parent)
     local mKey = 'Unitframe'
     local db = C.CharacterSettings.Unitframe
 
-    local playerDatas = {
-        [1] = {key = 'PlayerCastbarWidth', value = db.PlayerCastbarWidth, text = L['Width'], min = 60, max = 400},
-        [2] = {key = 'PlayerCastbarHeight', value = db.PlayerCastbarHeight, text = L['Height'], min = 6, max = 40},
-    }
-
-    local targetDatas = {
-        [1] = {key = 'TargetCastbarWidth', value = db.TargetCastbarWidth, text = L['Width'], min = 60, max = 400},
-        [2] = {key = 'TargetCastbarHeight', value = db.TargetCastbarHeight, text = L['Height'], min = 6, max = 40},
-    }
-
-    local focusDatas = {
-        [1] = {key = 'FocusCastbarWidth', value = db.FocusCastbarWidth, text = L['Width'], min = 60, max = 400},
-        [2] = {key = 'FocusCastbarHeight', value = db.FocusCastbarHeight, text = L['Height'], min = 6, max = 40},
+    local datas = {
+        player = {
+            [1] = {key = 'PlayerCastbarWidth', value = db.PlayerCastbarWidth, text = L['Width'], min = 60, max = 400, step = 1},
+            [2] = {key = 'PlayerCastbarHeight', value = db.PlayerCastbarHeight, text = L['Height'], min = 6, max = 40, step = 1},
+        },
+        target = {
+            [1] = {key = 'TargetCastbarWidth', value = db.TargetCastbarWidth, text = L['Width'], min = 60, max = 400, step = 1},
+            [2] = {key = 'TargetCastbarHeight', value = db.TargetCastbarHeight, text = L['Height'], min = 6, max = 40, step = 1},
+        },
+        focus = {
+            [1] = {key = 'FocusCastbarWidth', value = db.FocusCastbarWidth, text = L['Width'], min = 60, max = 400, step = 1},
+            [2] = {key = 'FocusCastbarHeight', value = db.FocusCastbarHeight, text = L['Height'], min = 6, max = 40, step = 1},
+        }
     }
 
     local offset = -10
-    for _, v in ipairs(playerDatas) do
+    for _, v in ipairs(datas.player) do
         CreateGroupTitle(scroll, L['Player Castbar'], offset)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
-    for _, v in ipairs(targetDatas) do
+    for _, v in ipairs(datas.target) do
         CreateGroupTitle(scroll, L['Target Castbar'], offset - 50)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 100)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 100)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
-    for _, v in ipairs(focusDatas) do
+    for _, v in ipairs(datas.focus) do
         CreateGroupTitle(scroll, L['Focus Castbar'], offset - 100)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 150)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 150)
         offset = offset - 65
     end
 end

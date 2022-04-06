@@ -195,7 +195,7 @@ C.CharacterSettings = {
             PlayerWidth = 160,
             PlayerHealthHeight = 4,
             PlayerPowerHeight = 1,
-            PlayerAuraPerRow = 6,
+            PlayerAuraPerRow = 0,
 
             PetWidth = 60,
             PetHealthHeight = 4,
@@ -220,12 +220,12 @@ C.CharacterSettings = {
             FocusTargetWidth = 60,
             FocusTargetHealthHeight = 4,
             FocusTargetPowerHeight = 1,
+            FocusTargetAuraPerRow = 0,
 
-            ShowAura = true,
-                OnlyShowPlayer = true,
-                DesaturateIcon = true,
-                DebuffTypeColor = true,
-                StealableBuffs = true,
+            OnlyShowPlayer = true,
+            DesaturateIcon = true,
+            DebuffTypeColor = true,
+            StealableBuffs = true,
 
             SimpleMode = false,
                 SMRScale = 10,

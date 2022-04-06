@@ -178,32 +178,32 @@ local function UpdateHealthColor()
     end
 end
 
-local function SetupUnitFrameSize()
-    GUI:SetupUnitFrameSize(GUI.Page[11])
+local function SetupUnitFrame()
+    GUI:SetupUnitFrame(GUI.Page[11])
 end
 
-local function SetupBossFrameSize()
-    GUI:SetupBossFrameSize(GUI.Page[11])
+local function SetupBossFrame()
+    GUI:SetupBossFrame(GUI.Page[11])
 end
 
-local function SetupArenaFrameSize()
-    GUI:SetupArenaFrameSize(GUI.Page[11])
+local function SetupArenaFrame()
+    GUI:SetupArenaFrame(GUI.Page[11])
 end
 
 local function SetupUnitFrameFader()
     GUI:SetupUnitFrameFader(GUI.Page[11])
 end
 
-local function SetupCastbarSize()
-    GUI:SetupCastbarSize(GUI.Page[11])
+local function SetupCastbar()
+    GUI:SetupCastbar(GUI.Page[11])
 end
 
 local function SetupCastbarColor()
     GUI:SetupCastbarColor(GUI.Page[11])
 end
 
-local function SetupClassPowerSize()
-    GUI:SetupClassPowerSize(GUI.Page[11])
+local function SetupClassPower()
+    GUI:SetupClassPower(GUI.Page[11])
 end
 
 local function SetupUnitFrameRangeCheck()
@@ -562,7 +562,7 @@ GUI.OptionsList = {
         {1, 'Tooltip', 'DomiRank', L['Show Rank of Domination Shards']},
     },
     [11] = { -- unitframe
-        {1, 'Unitframe', 'Enable', L['Enable Unitframes'], nil, SetupUnitFrameSize},
+        {1, 'Unitframe', 'Enable', L['Enable Unitframes'], nil, SetupUnitFrame},
 
         {4, 'Unitframe', 'TextureStyle', L['Texture Style'], nil, {}},
         {4, 'Unitframe', 'ColorStyle', L['Health Color'], true, {L['Default White'], L['Class Color'], L['Percentage Gradient']}, UpdateHealthColor},
@@ -574,7 +574,7 @@ GUI.OptionsList = {
         {1, 'Unitframe', 'Portrait', L['Portrait'], nil, nil, UpdateGroupElements, L['Show dynamic portrait on unit frame.']},
         {1, 'Unitframe', 'GCDIndicator', L['GCD Indicator'], true, nil, UpdateGCDTicker, L['Show global cooldown ticker above the player frame.']},
         {1, 'Unitframe', 'AbbrName', L['Abbreviate Name'], nil, nil, UpdateUnitTags},
-        {1, 'Unitframe', 'ClassPower', L['Class Power'], true, SetupClassPowerSize, nil, L['Show special resources of the class, such as Combo Points, Holy Power, Chi, Runes, etc.']},
+        {1, 'Unitframe', 'ClassPower', L['Class Power'], true, SetupClassPower, nil, L['Show special resources of the class, such as Combo Points, Holy Power, Chi, Runes, etc.']},
         {},
         {1, 'Unitframe', 'OnlyShowPlayer', L['Player Debuffs Only'], nil, nil, nil, L['Display debuffs cast by player only.']},
         {1, 'Unitframe', 'DesaturateIcon', L['Desaturate Debuffs'], true, nil, nil, L['Desaturate debuffs cast by others.']},
@@ -582,10 +582,10 @@ GUI.OptionsList = {
         {1, 'Unitframe', 'StealableBuffs', L['Purgeable Buffs'], true, nil, nil, L['Display purgeable buffs.']},
         {},
         {1, 'Unitframe', 'Castbar', L['Enable Castbar'], nil, SetupCastbarColor, nil, L['Uncheck this if you want to use other castbar addon.']},
-        {1, 'Unitframe', 'SeparateCastbar', L['Separate Castbar'], true, SetupCastbarSize, nil, L['If disabled, the castbar will be overlapped on the healthbar.|nNote that the spell name and time are only available with separate castbar.']},
+        {1, 'Unitframe', 'SeparateCastbar', L['Separate Castbar'], true, SetupCastbar, nil, L['If disabled, the castbar will be overlapped on the healthbar.|nNote that the spell name and time are only available with separate castbar.']},
         {},
-        {1, 'Unitframe', 'Boss', L['Enable boss frames'], nil, SetupBossFrameSize, nil, L['Uncheck this if you want to use other BossFrame addon.']},
-        {1, 'Unitframe', 'Arena', L['Enable arena frames'], true, SetupArenaFrameSize, nil, L['Uncheck this if you want to use other ArenaFrame addon.']},
+        {1, 'Unitframe', 'Boss', L['Enable boss frames'], nil, SetupBossFrame, nil, L['Uncheck this if you want to use other BossFrame addon.']},
+        {1, 'Unitframe', 'Arena', L['Enable arena frames'], true, SetupArenaFrame, nil, L['Uncheck this if you want to use other ArenaFrame addon.']},
     },
     [12] = { -- groupframe
         {1, 'Unitframe', 'RaidFrame', L['Enable RaidFrame'], nil, SetupRaidFrame},

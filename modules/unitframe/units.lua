@@ -32,6 +32,7 @@ local function CreatePlayerStyle(self)
     UNITFRAME:CreateGCDTicker(self)
     UNITFRAME:CreateClassPowerBar(self)
     UNITFRAME:CreatePlayerTags(self)
+    UNITFRAME:CreateAuras(self)
 end
 
 function UNITFRAME:SpawnPlayer()
@@ -143,6 +144,7 @@ local function CreateFocusTargetStyle(self)
     UNITFRAME:CreatePowerBar(self)
     UNITFRAME:CreateNameTag(self)
     UNITFRAME:CreateRangeCheck(self)
+    UNITFRAME:CreateAuras(self)
 end
 
 function UNITFRAME:SpawnFocusTarget()

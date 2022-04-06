@@ -281,7 +281,14 @@ function UNITFRAME:CreateAuras(self)
     bu.numTotal = 32
     bu.disableCooldown = true
 
-    if style == 'pet' then
+    if style == 'player' then
+        bu.initialAnchor = 'TOPLEFT'
+        bu:SetPoint('TOP', self.Power, 'BOTTOM', 0, -4)
+        bu['growth-x'] = 'RIGHT'
+        bu['growth-y'] = 'DOWN'
+        bu.__value = 'Player'
+        UNITFRAME:ConfigureAuras(bu)
+    elseif style == 'pet' then
         bu.initialAnchor = 'TOPLEFT'
         bu:SetPoint('TOP', self.Power, 'BOTTOM', 0, -4)
         bu['growth-x'] = 'RIGHT'
@@ -308,6 +315,13 @@ function UNITFRAME:CreateAuras(self)
         bu['growth-x'] = 'RIGHT'
         bu['growth-y'] = 'DOWN'
         bu.__value = 'Focus'
+        UNITFRAME:ConfigureAuras(bu)
+    elseif style == 'focustarget' then
+        bu.initialAnchor = 'TOPRIGHT'
+        bu:SetPoint('TOP', self.Power, 'BOTTOM', 0, -4)
+        bu['growth-x'] = 'LEFT'
+        bu['growth-y'] = 'DOWN'
+        bu.__value = 'FocusTarget'
         UNITFRAME:ConfigureAuras(bu)
     elseif style == 'boss' then
         bu.initialAnchor = 'TOPLEFT'
