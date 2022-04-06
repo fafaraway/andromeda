@@ -211,7 +211,7 @@ local function SetupUnitFrameRangeCheck()
 end
 
 local function UpdateGCDTicker()
-    UNITFRAME:ToggleGCDTicker()
+    UNITFRAME:UpdateGCDTicker()
 end
 
 local function UpdatePortrait()

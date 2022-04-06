@@ -165,6 +165,7 @@ end
 
 function UNITFRAME:UpdateAllElements()
     UNITFRAME:UpdatePortrait()
+    UNITFRAME:UpdateGCDTicker()
     UNITFRAME:UpdateAuras()
 end
 
