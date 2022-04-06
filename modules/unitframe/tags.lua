@@ -429,7 +429,7 @@ function UNITFRAME:CreatePlayerTags(self)
     self.LeftTag = leftTag
     self.RightTag = rightTag
 
-
+    UpdatePlayerTags(self)
 end
 
 function NAMEPLATE:CreateHealthTag(self)
