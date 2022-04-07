@@ -219,7 +219,7 @@ function F:FormatTime(s)
     elseif s > 3 then
         return string.format('|cffffe700%d|r', s + .5), s - math.floor(s) -- yellow
     else
-        return string.format('|cfffd3612%.1f|r', s), s - string.format('%.1f', s)
+        return string.format('|cfffd3612%.1f|r', s), s - string.format('%.1f', s) -- red
     end
 end
 

@@ -736,7 +736,18 @@ function GUI:SetupCooldownCount(parent)
     local mKey = 'Cooldown'
 
     local datas = {
-        checkbox = {[1] = {value = 'IgnoreWA', text = L['Ignore WeakAuras'], tip = L['Hide cooldown count on WeakAuras.']}},
+        checkbox = {
+            [1] = {
+                value = 'OnlyNumbers',
+                text = L['Only Numbers'],
+                tip = L["Display only numbers, hide the 'd/h/m' suffix.|nEg. 2 mins presents as 2 instead of 2m."]
+            },
+            [2] = {
+                value = 'IgnoreWA',
+                text = L['Ignore WeakAuras'],
+                tip = L['Hide cooldown count on WeakAuras.']
+            },
+        },
         slider = {
             [1] = {
                 key = 'MmssTH',
@@ -745,7 +756,7 @@ function GUI:SetupCooldownCount(parent)
                 max = 600,
                 step = 1,
                 text = L['MMSS Threshold'],
-                tip = L['If cooldown less than current threhold, show cooldown in format MM:SS.|nEg. 2 mins and half presents as 2:30.'],
+                tip = L['If cooldown less than current threhold, display cooldown in format MM:SS.|nEg. 2 mins and half presents as 2:30.'],
             },
             [2] = {
                 key = 'TenthTH',
@@ -754,7 +765,7 @@ function GUI:SetupCooldownCount(parent)
                 max = 60,
                 step = 1,
                 text = L['Tenth Threshold'],
-                tip = L['If cooldown less than current threhold, show cooldown in format decimal.|nEg. 3 secs will show as 3.0.'],
+                tip = L['If cooldown less than current threhold, display cooldown in format decimal.|nEg. 3 secs will display as 3.0.'],
             },
         },
     }

@@ -541,6 +541,7 @@ C.CharacterSettings = {
             IgnoreWA = false,
             MmssTH = 60,
             TenthTH = 3,
+            OnlyNumbers = true,
     },
     Quest = {
         QuickQuest = false,

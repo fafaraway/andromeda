@@ -10,18 +10,19 @@ local hideNumbers, active, hooked = {}, {}, {}
 
 local day, hour, minute = 86400, 3600, 60
 function COOLDOWN.FormattedTimer(s)
+    local onlyNumbers = C.DB.Cooldown.OnlyNumbers
     if s >= day then
-        return string.format('%d' .. C.INFO_COLOR .. 'd', s / day + .5), s % day
+        return string.format(onlyNumbers and '|cffbebfb3%d|r' or '|cffbebfb3%d|r|cffa28d7bd|r', s / day + .5), s % day -- grey
     elseif s > hour then
-        return string.format('%d' .. C.INFO_COLOR .. 'h', s / hour + .5), s % hour
+        return string.format(onlyNumbers and '|cff4fcd35%d|r' or '|cff4fcd35%d|r|cffa28d7bh|r', s / hour + .5), s % hour -- white
     elseif s >= minute then
         if s < C.DB.Cooldown.MmssTH then
-            return string.format('%d:%.2d', s / minute, s % minute), s - math.floor(s)
+            return string.format('|cff21c8de%d:%.2d|r', s / minute, s % minute), s - math.floor(s) -- blue
         else
-            return string.format('%d' .. C.INFO_COLOR .. 'm', s / minute + .5), s % minute
+            return string.format(onlyNumbers and '|cff21c8de%d|r' or '|cff21c8de%d|r|cffa28d7bm|r', s / minute + .5), s % minute -- blue
         end
     else
-        local colorStr = (s < 3 and '|cffff0000') or (s < 10 and '|cffffff00') or '|cffcccc33'
+        local colorStr = (s < 3 and '|cfffd3612') or (s < 10 and '|cfffd3612') or '|cffffe700' -- red / yellow
         if s < C.DB.Cooldown.TenthTH then
             return string.format(colorStr .. '%.1f|r', s), s - string.format('%.1f', s)
         else
