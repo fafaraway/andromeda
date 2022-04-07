@@ -128,6 +128,7 @@ function F:TextGradient(text, r, g, b, lR, lG, lB, lightPosition)
         newChar = GetColorCode(cR, cG, cB) .. string.sub(text, i, i)
         newText = newText .. newChar
     end
+
     return newText
 end
 
