@@ -16,16 +16,14 @@ do
         return false
     end
 
-    function F:Print(str, ...)
-        print(F:TextGradient('[' .. C.ADDON_NAME .. '] ', C.r, C.g, C.b, 1, 1, 1, 1) .. str:format(...))
-    end
+    function F:Print(msg, debug, plain)
+        local prefix = F:TextGradient('[FreeUI]', C.r, C.g, C.b, 1, 1, 1, 1)
+        local prefix2 = F:TextGradient('[DEBUG]', C.r, C.g, C.b, 1, 1, 1, 1)
+        local str = '%s %s'
+        local out = plain and msg or string.format(str, debug and prefix2 or prefix, msg)
+        local chatFrame = (_G.SELECTED_CHAT_FRAME or _G.DEFAULT_CHAT_FRAME)
 
-    function F:DebugPrint(str, ...)
-        if not C.DEV_MODE then
-            return
-        end
-
-        print(F:TextGradient('[Debug] ', C.r, C.g, C.b, 1, 1, 1, 1) .. str:format(...))
+        chatFrame:AddMessage(out)
     end
 
     function F:HookAddOn(addonName, callback)
@@ -132,7 +130,7 @@ do
     end
 
     -- GUID to npcID
-    function F:GetNPCID(guid)
+    function F:GetNpcId(guid)
         local id = tonumber(string.match((guid or ''), '%-(%d-)%-%x-$'))
         return id
     end

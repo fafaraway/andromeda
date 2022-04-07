@@ -452,7 +452,7 @@ function TM:CheckPvpTalentID(pvpTalent)
             local _, name = GetPvpTalentInfoByID(id)
             if not name then
                 pvpTalent[i] = 0
-                F:DebugPrint('Remove Invalid TalentID: %d', id)
+                F:Print(string.format('Remove Invalid TalentID: %d', id), true)
             end
         end
     end

@@ -5,7 +5,7 @@ local debugMode = false
 
 local function SendNotifyMessage(msg)
     if debugMode and C.DEV_MODE then
-        F:DebugPrint(msg)
+        F:Print(msg, true)
     elseif IsPartyLFG() then
         SendChatMessage(msg, 'INSTANCE_CHAT')
     elseif IsInRaid() then

@@ -111,7 +111,7 @@ function M:HandleAddonMessage(...)
                 memberCovenants[guid] = covenantID
 
                 if debug then
-                    F:DebugPrint('%s Covenant: %s (by ZenTracker)', sender, covenantList[covenantID] or 'None')
+                    F:Print(string.format('%s Covenant: %s (by ZenTracker)', sender, covenantList[covenantID] or 'None'), true)
                 end
             end
         end
@@ -124,7 +124,7 @@ function M:HandleAddonMessage(...)
                 memberCovenants[guid] = covenantID
 
                 if debug then
-                    F:DebugPrint('%s Covenant: %s (by OmniCD)', sender, covenantList[covenantID] or 'None')
+                    F:Print(string.format('%s Covenant: %s (by OmniCD)', sender, covenantList[covenantID] or 'None'), true)
                 end
             end
         end
@@ -138,7 +138,10 @@ function M:HandleAddonMessage(...)
         covenantID = tonumber(covenantID)
         if covenantID and guid and (not memberCovenants[guid] or memberCovenants[guid] ~= covenantID) then
             memberCovenants[guid] = covenantID
-            F:DebugPrint('%s Covenant: %s (by Details_Covenants)', sender, covenantList[covenantID] or 'None')
+
+            if debug then
+                F:Print(string.format('%s Covenant: %s (by Details_Covenants)', sender, covenantList[covenantID] or 'None'), true)
+            end
         end
     elseif prefix == MRT_Prefix then
         local modPrefix, subPrefix, soulbinds = string.split('\t', msg)
@@ -148,7 +151,10 @@ function M:HandleAddonMessage(...)
             covenantID = tonumber(covenantID)
             if covenantID and guid and (not memberCovenants[guid] or memberCovenants[guid] ~= covenantID) then
                 memberCovenants[guid] = covenantID
-                F:DebugPrint('%s Covenant: %s (by MRT)', sender, covenantList[covenantID] or 'None')
+
+                if debug then
+                    F:Print(string.format('%s Covenant: %s (by MRT)', sender, covenantList[covenantID] or 'None'), true)
+                end
             end
         end
     end

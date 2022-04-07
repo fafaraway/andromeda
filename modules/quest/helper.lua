@@ -148,7 +148,7 @@ function QH:QuestTool_SetQuestUnit()
     end
 
     local guid = UnitGUID('mouseover')
-    local npcID = guid and F.GetNPCID(guid)
+    local npcID = guid and F.GetNpcId(guid)
     if questNPCs[npcID] then
         self:AddLine(L['This is TRUE.'])
     end
@@ -210,7 +210,7 @@ function QH:OnLogin()
         'GOSSIP_SHOW',
         function()
             local guid = UnitGUID('npc')
-            local npcID = guid and F.GetNPCID(guid)
+            local npcID = guid and F.GetNpcId(guid)
             if npcID == 174498 then
                 C_GossipInfo.SelectOption(3)
             elseif npcID == 174371 then

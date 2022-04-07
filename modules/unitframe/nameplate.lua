@@ -610,7 +610,7 @@ function NAMEPLATE:CheckMajorSpells()
             end
         else
             if C.DEV_MODE then
-                F:DebugPrint('Invalid Nameplate Major Spells ID: ' .. spellID)
+                F:Print('Invalid Nameplate Major Spells ID: ' .. spellID, true)
             end
         end
     end
@@ -910,7 +910,7 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
         self.unitName = UnitName(unit)
         self.unitGUID = UnitGUID(unit)
         self.isPlayer = UnitIsPlayer(unit)
-        self.npcID = F:GetNPCID(self.unitGUID)
+        self.npcID = F:GetNpcId(self.unitGUID)
         self.widgetsOnly = UnitNameplateShowsWidgetsOnly(unit)
 
         local blizzPlate = self:GetParent().UnitFrame

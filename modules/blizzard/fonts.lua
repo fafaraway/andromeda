@@ -8,7 +8,7 @@ local HEADER = C.Assets.Font.Header
 local function ReplaceFont(obj, font, size, flag, shadow)
     if not font then
         if C.DEV_MODE then
-            F:DebugPrint('UNKNOWN FONT.')
+            F:Print('UNKNOWN FONT.', true)
         end
         return
     end
