@@ -348,6 +348,32 @@ do
     F:RegisterEvent('UPDATE_INVENTORY_DURABILITY', trackMailbox)
 end
 
+-- ensure max camera distance
+do
+    local function SetMaxZoomFactor()
+        if C_CVar.GetCVar('cameraDistanceMaxZoomFactor') ~= '2.6' then
+            C_CVar.SetCVar('cameraDistanceMaxZoomFactor', '2.6')
+        end
+
+        C_Timer.After(60, function()
+            if C_CVar.GetCVar('cameraDistanceMaxZoomFactor') ~= '2.6' then
+                C_CVar.SetCVar('cameraDistanceMaxZoomFactor', '2.6')
+            end
+        end)
+
+        F:UnregisterEvent('PLAYER_ENTERING_WORLD', SetMaxZoomFactor)
+    end
+
+    F:RegisterEvent('PLAYER_ENTERING_WORLD', SetMaxZoomFactor)
+end
+
+-- disable spells are automatically added to actionbar
+do
+    if C.DEV_MODE then
+        _G.IconIntroTracker:UnregisterEvent('SPELL_PUSHED_TO_ACTIONBAR')
+    end
+end
+
 
 function M:OnLogin()
     M:ForceWarning()
