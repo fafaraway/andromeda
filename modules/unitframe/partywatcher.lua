@@ -154,9 +154,12 @@ function UNITFRAME:CreatePartyWatcher(self)
     local maxIcons = 6
 
     for i = 1, maxIcons do
-        local bu = CreateFrame('Frame', nil, self)
-        F.AuraIcon(bu)
+        local bu = CreateFrame('Frame', 'FreeUIPartyWatcherButton'..i, self)
+        bu.CD = CreateFrame('Cooldown', 'FreeUIPartyWatcherButtonCooldown'..i, bu, 'CooldownFrameTemplate')
+        bu.CD:SetInside()
         bu.CD:SetReverse(false)
+        F.PixelIcon(bu)
+        F.CreateSD(bu)
         bu:Hide()
 
         buttons[i] = bu

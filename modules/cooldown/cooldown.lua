@@ -102,8 +102,10 @@ function COOLDOWN:OnCreate()
     text:SetJustifyH('CENTER')
     timer.text = text
 
-    if not C.DB.Cooldown.IgnoreWA and C.DEV_MODE and string.find(frameName, 'WeakAurasCooldown') then
-        text:SetPoint('CENTER', timer, 'BOTTOM')
+    if C.DEV_MODE then
+        if (not C.DB.Cooldown.IgnoreWA and string.find(frameName, 'WeakAurasCooldown')) or string.find(frameName, 'FreeUIPartyWatcher') then
+            text:SetPoint('CENTER', timer, 'BOTTOM')
+        end
     end
 
     COOLDOWN.OnSizeChanged(timer, scaler:GetSize())
