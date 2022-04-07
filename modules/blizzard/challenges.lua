@@ -138,11 +138,12 @@ function ECF:KeystoneInfo_WeeklyRuns()
     local numRuns = runHistory and #runHistory
 
     if numRuns > 0 then
+        local isShiftKeyDown = IsShiftKeyDown()
+
         _G.GameTooltip:AddLine(' ')
-        _G.GameTooltip:AddDoubleLine(string.format(_G.WEEKLY_REWARDS_MYTHIC_TOP_RUNS, WeeklyRunsThreshold), '(' .. numRuns .. ')', .6, .8, 1)
+        _G.GameTooltip:AddDoubleLine(isShiftKeyDown and _G.CHALLENGE_MODE_THIS_WEEK or string.format(_G.WEEKLY_REWARDS_MYTHIC_TOP_RUNS, WeeklyRunsThreshold), '(' .. numRuns .. ')', .6, .8, 1)
         table.sort(runHistory, sortHistory)
 
-        local isShiftKeyDown = IsShiftKeyDown()
         for i = 1, isShiftKeyDown and numRuns or WeeklyRunsThreshold do
             local runInfo = runHistory[i]
             if not runInfo then
