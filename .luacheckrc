@@ -37,6 +37,7 @@ read_globals = {
     -- CONSTANTS
     -- API
     -- FrameXML
+    'WorldMapFrame',
     -- Widgets
     -- Namespaces
 
@@ -2511,5 +2512,6 @@ read_globals = {
     'getglobal',
     'GetPvpTalentSlotInfo',
     'GetAllSelectedPvpTalentIDs',
-    'TexturePool_HideAndClearAnchors'
+    'TexturePool_HideAndClearAnchors',
+    'ChatEdit_ParseText'
 }
