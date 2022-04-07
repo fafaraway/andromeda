@@ -60,12 +60,6 @@ function UNITFRAME:PLAYER_ENTERING_WORLD()
 end
 
 function UNITFRAME.PostCreateIcon(element, button)
-    -- local style = element.__owner.unitStyle
-    -- local isGroup = style == 'party' or style == 'raid'
-    local isPartyAura = element.partyAura
-    local font = C.Assets.Font.Roadway
-    local fontSize = math.max(element.size * .4, 12)
-
     button.bg = F.CreateBDFrame(button, .25)
     button.glow = F.CreateSD(button.bg)
 
@@ -75,19 +69,26 @@ function UNITFRAME.PostCreateIcon(element, button)
     button.stealable:SetTexture(nil)
     button.cd:SetReverse(true)
     button.icon:SetDrawLayer('ARTWORK')
-    button.icon:SetTexCoord(unpack(C.TEX_COORD))
+
+    local style = element.__owner.unitStyle
+    local isGroup = style == 'party' or style == 'raid'
+
+    if isGroup then
+        button.icon:SetTexCoord(unpack(C.TEX_COORD))
+    else
+        button.icon:SetTexCoord(.1, .9, .22, .78) -- precise texcoord for rectangular icons
+    end
 
     button.HL = button:CreateTexture(nil, 'HIGHLIGHT')
     button.HL:SetColorTexture(1, 1, 1, .25)
     button.HL:SetAllPoints()
 
+    local font = C.Assets.Font.Roadway
+    local fontSize = math.max((element.width or element.size) * .4, 12)
     button.count = F.CreateFS(button, font, fontSize, true, nil, nil, true)
-    button.count:ClearAllPoints()
     button.count:SetPoint('RIGHT', button, 'TOPRIGHT')
-
     button.timer = F.CreateFS(button, font, fontSize, true, nil, nil, true)
-    button.timer:ClearAllPoints()
-    button.timer:SetPoint(isPartyAura and 'CENTER' or 'LEFT', button, isPartyAura and 'CENTER' or 'BOTTOMLEFT')
+    button.timer:SetPoint('LEFT', button, 'BOTTOMLEFT')
 
     button.UpdateTooltip = UpdateAuraTooltip
     button:SetScript('OnEnter', Aura_OnEnter)
@@ -126,10 +127,14 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
 
     local style = element.__owner.unitStyle
     local isGroup = style == 'party' or style == 'raid'
-    local _, _, _, _, _, _, _, canStealOrPurge = UnitAura(unit, index, button.filter)
-
     button:SetSize(element.size, isGroup and element.size or element.size * .7)
 
+    --[[ local squareness = .7
+    element.icon_height = element.size * squareness
+    element.icon_ratio = (1 - (element.icon_height / element.size)) / 2.5
+    element.tex_coord = {.1,.9,.1+element.icon_ratio,.9-element.icon_ratio} ]]
+
+    local _, _, _, _, _, _, _, canStealOrPurge = UnitAura(unit, index, button.filter)
     if element.desaturateDebuff and button.isDebuff and filteredUnits[style] and not button.isPlayer then
         button.icon:SetDesaturated(true)
     else
@@ -169,12 +174,21 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
         end
     end
 
-    local fontSize = math.max(element.size * .4, 12)
+    local fontSize = math.max((element.width or element.size) * .4, 12)
     local font = C.Assets.Font.Roadway
     if button.count then
         button.count:SetFont(font, fontSize, 'OUTLINE')
     end
     if button.timer then
+        button.timer:SetFont(font, fontSize, 'OUTLINE')
+    end
+
+    local isPartyAura = element.partyAura
+    if isPartyAura then
+        button.count:ClearAllPoints()
+        button.count:SetPoint('CENTER', button, 'TOP')
+        button.timer:ClearAllPoints()
+        button.timer:SetPoint('CENTER', button, 'BOTTOM')
         button.timer:SetFont(font, fontSize, 'OUTLINE')
     end
 
@@ -263,6 +277,7 @@ function UNITFRAME:UpdateAuraContainer(parent, element, maxAuras)
     local width = parent:GetWidth()
     local iconsPerRow = element.iconsPerRow
     local maxLines = iconsPerRow and F:Round(maxAuras / iconsPerRow) or 2
+
     element.size = iconsPerRow and GetIconSize(width, iconsPerRow, element.spacing) or element.size
     element:SetWidth(width)
     element:SetHeight((element.size + element.spacing) * maxLines)
@@ -435,7 +450,7 @@ function UNITFRAME:CreatePartyAuras(self)
 
     bu.gap = false
     bu.disableMouse = false
-    bu.disableCooldown = false
+    bu.disableCooldown = true
     bu.CustomFilter = UNITFRAME.PartyAuraFilter
     bu.PostCreateIcon = UNITFRAME.PostCreateIcon
     bu.PostUpdateIcon = UNITFRAME.PostUpdateIcon
