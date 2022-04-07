@@ -13,6 +13,6 @@
     <Script file="staticpopups.lua"/>
 
     <!--@debug@-->
-    <Script file="dev.lua"/>
+    <Script file="private.lua"/>
     <!--@end-debug@-->
 </Ui>
