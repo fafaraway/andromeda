@@ -5,108 +5,103 @@ local buffsList = {
     ITEMS = {
         {
             itemID = 178742, -- 瓶装毒素饰品
-            spells = {
-                [345545] = true
-            },
-            equip = true,
-            instance = true,
-            combat = true
-        },
-        {
-            itemID = 174906, -- 属性符文
-            spells = {
-                [317065] = true,
-                [270058] = true
-            },
-            instance = true,
-            disable = true
-        },
-        {
-            itemID = 190958, -- 究极秘术
-            spells = {
-                [368512] = true
-            },
+            spells = {[345545] = true},
             equip = true,
             instance = true,
             combat = true,
-            inGroup = true
-        }
+        },
+        {
+            itemID = 190384, -- 9.0永久属性符文
+            spells = {
+                [347901] = true, -- 普通符文buff
+                [367405] = true, -- 永久符文buff
+            },
+            instance = true,
+        },
+        {
+            itemID = 190958, -- 究极秘术
+            spells = {[368512] = true},
+            equip = true,
+            instance = true,
+            combat = true,
+            inGroup = true,
+        },
     },
     MAGE = {
         {
             spells = {
                 -- 奥术魔宠
-                [210126] = true
+                [210126] = true,
             },
             depend = 205022,
             spec = 1,
             combat = true,
             instance = true,
-            pvp = true
+            pvp = true,
         },
         {
             spells = {
                 -- 奥术智慧
-                [1459] = true
+                [1459] = true,
             },
             depend = 1459,
-            instance = true
-        }
+            instance = true,
+        },
     },
     PRIEST = {
         {
             spells = {
                 -- 真言术耐
-                [21562] = true
+                [21562] = true,
             },
             depend = 21562,
-            instance = true
-        }
+            instance = true,
+        },
     },
     WARRIOR = {
         {
             spells = {
                 -- 战斗怒吼
-                [6673] = true
+                [6673] = true,
             },
             depend = 6673,
-            instance = true
-        }
+            instance = true,
+        },
     },
     SHAMAN = {
         {
             spells = {
                 [192106] = true, -- 闪电之盾
                 [974] = true, -- 大地之盾
-                [52127] = true -- 水之护盾
+                [52127] = true, -- 水之护盾
             },
             depend = 192106,
             combat = true,
             instance = true,
-            pvp = true
+            pvp = true,
         },
         {
             spells = {
-                [33757] = true -- 风怒武器
+                [33757] = true, -- 风怒武器
             },
             depend = 33757,
             combat = true,
             instance = true,
             pvp = true,
             weaponIndex = 1,
-            spec = 2
+            spec = 2,
         },
         {
             spells = {
-                [318038] = true -- 火舌武器
+                [318038] = true, -- 火舌武器
             },
             depend = 318038,
             combat = true,
             instance = true,
             pvp = true,
             weaponIndex = 2,
-            spec = 2
-        }
+            spec = 2,
+        },
     },
     ROGUE = {
         {
@@ -114,24 +109,24 @@ local buffsList = {
                 -- 伤害类毒药
                 [2823] = true, -- 致命药膏
                 [8679] = true, -- 致伤药膏
-                [315584] = true -- 速效药膏
+                [315584] = true, -- 速效药膏
             },
             texture = 132273,
             depend = 315584,
             combat = true,
             instance = true,
-            pvp = true
+            pvp = true,
         },
         {
             spells = {
                 -- 效果类毒药
                 [3408] = true, -- 减速药膏
-                [5761] = true -- 迟钝药膏
+                [5761] = true, -- 迟钝药膏
             },
             depend = 3408,
-            pvp = true
-        }
-    }
+            pvp = true,
+        },
+    },
 }
 
 local groups = buffsList[C.CLASS]
@@ -153,7 +148,9 @@ function BR:Reminder_Update(cfg)
     local weaponIndex = cfg.weaponIndex
 
     if itemID then
-        if inGroup and GetNumGroupMembers() < 2 then isGrouped = false end
+        if inGroup and GetNumGroupMembers() < 2 then
+            isGrouped = false
+        end
         if equip and not IsEquippedItem(itemID) then
             isEquipped = false
         end
