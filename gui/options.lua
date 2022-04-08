@@ -541,7 +541,7 @@ GUI.OptionsList = {
     [9] = { -- map
         {1, 'Map', 'Enable', L['Enable Map'], nil, SetupMapScale},
         {1, 'Map', 'MapReveal', L['Map Reveal'], nil, nil, UpdateWorldMapReveal, L['Display unexplored areas on the world map.']},
-        {1, 'Map', 'Coords', L['Coords'], true, nil, nil, L["Display the coordinates of the player's location and the mouse's current position on the world map."]},
+        {1, 'Map', 'Coords', L['Coordinates'], true, nil, nil, L["Display the coordinates of the player's location and the mouse's current position on the world map."]},
         {1, 'Map', 'WhoPings', L['Who Pings'], nil, nil, nil, L['When you are in group, display the name of the group member who is clicking on the minimap.']},
         {1, 'Map', 'ProgressBar', L['Progress Bar'], true, nil, nil, L["Track the progress of player's level, experience, reputation, honor, renown, etc."]},
         {1, 'Map', 'HiddenInCombat', L['Hidden in Combat'], nil, nil, UpdateMinimapFader, L['Hide minimap automatically after enter combat and restores it after leave combat.']},
