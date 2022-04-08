@@ -2513,5 +2513,6 @@ read_globals = {
     'GetPvpTalentSlotInfo',
     'GetAllSelectedPvpTalentIDs',
     'TexturePool_HideAndClearAnchors',
-    'ChatEdit_ParseText'
+    'ChatEdit_ParseText',
+    'tostringall'
 }
