@@ -102,7 +102,7 @@ function ANNOUNCEMENT:CheckAnnounceableSpells()
             end
         else
             if C.DEV_MODE then
-                F:Print('Invalid Announceable Spells ID: ' .. spellID, true)
+                F:Debug('Invalid Announceable Spells ID', spellID)
             end
         end
     end

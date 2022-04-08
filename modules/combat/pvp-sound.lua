@@ -60,7 +60,7 @@ local function PrtMsg(str)
         return
     end
 
-    F:Print(str)
+    F:Debug(str)
 end
 
 local function OnEvent(self, event)

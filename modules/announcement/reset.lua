@@ -12,7 +12,7 @@ local msgList = {
 
 local function SendMessage(msg)
     if debugMode and C.DEV_MODE then
-        F:Print(msg, true)
+        F:Debug(msg)
     elseif IsPartyLFG() then
         SendChatMessage(msg, 'INSTANCE_CHAT')
     elseif IsInRaid() then

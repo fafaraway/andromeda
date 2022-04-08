@@ -242,9 +242,8 @@ F:RegisterSlash('/mapid', function()
     else
         mapID = C_Map.GetBestMapForUnit('player')
     end
-    local str = 'Map ID: |cffe9c55d' .. mapID .. '|r - ' .. C_Map.GetMapInfo(mapID).name
 
-    F:Print(str)
+    F:Printf('Map ID: |cffe9c55d%s|r (%s)', mapID, C_Map.GetMapInfo(mapID).name)
 end)
 
 -- Print instance info

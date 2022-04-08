@@ -16,14 +16,36 @@ do
         return false
     end
 
-    function F:Print(msg, debug, plain)
+    local tmp = {}
+    local function myPrint(...)
         local prefix = F:TextGradient('[FreeUI]', C.r, C.g, C.b, 1, 1, 1, 1)
-        local prefix2 = F:TextGradient('[DEBUG]', C.r, C.g, C.b, 1, 1, 1, 1)
-        local str = '%s %s'
-        local out = plain and msg or string.format(str, debug and prefix2 or prefix, msg)
-        local chatFrame = (_G.SELECTED_CHAT_FRAME or _G.DEFAULT_CHAT_FRAME)
+        local n = 0
 
-        chatFrame:AddMessage(out)
+        n = n + 1
+        tmp[n] = prefix
+
+        for i = 1, select('#', ...) do
+            n = n + 1
+            tmp[n] = tostring(select(i, ...))
+        end
+
+        local frame = (_G.SELECTED_CHAT_FRAME or _G.DEFAULT_CHAT_FRAME)
+        frame:AddMessage(table.concat(tmp, ' ', 1, n))
+    end
+
+    function F:Print(...)
+        return myPrint(...)
+    end
+
+    function F:Printf(...)
+        return myPrint(string.format(...))
+    end
+
+    function F:Debug(...)
+        local prefix = F:TextGradient('[DEBUG]', C.r, C.g, C.b, 1, 1, 1, 1)
+        local frame = (_G.SELECTED_CHAT_FRAME or _G.DEFAULT_CHAT_FRAME)
+
+        frame:AddMessage(prefix .. ' ' .. string.join(', ', tostringall(...)))
     end
 
     function F:HookAddOn(addonName, callback)

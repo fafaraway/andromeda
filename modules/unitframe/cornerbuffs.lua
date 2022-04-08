@@ -133,7 +133,7 @@ function UNITFRAME:CheckCornerSpells()
         local name = GetSpellInfo(spellID)
         if not name then
             if C.DEV_MODE then
-                F:Print('Invalid Corner Spell ID: ' .. spellID, true)
+                F:Debug('Invalid Corner Spell ID', spellID)
             end
         end
     end

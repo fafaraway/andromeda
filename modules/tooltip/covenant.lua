@@ -111,7 +111,7 @@ function M:HandleAddonMessage(...)
                 memberCovenants[guid] = covenantID
 
                 if debug then
-                    F:Print(string.format('%s Covenant: %s (by ZenTracker)', sender, covenantList[covenantID] or 'None'), true)
+                    F:Debug('%s Covenant: %s (by ZenTracker)', sender, covenantList[covenantID] or 'None')
                 end
             end
         end
@@ -124,7 +124,7 @@ function M:HandleAddonMessage(...)
                 memberCovenants[guid] = covenantID
 
                 if debug then
-                    F:Print(string.format('%s Covenant: %s (by OmniCD)', sender, covenantList[covenantID] or 'None'), true)
+                    F:Debug('%s Covenant: %s (by OmniCD)', sender, covenantList[covenantID] or 'None')
                 end
             end
         end
@@ -140,7 +140,7 @@ function M:HandleAddonMessage(...)
             memberCovenants[guid] = covenantID
 
             if debug then
-                F:Print(string.format('%s Covenant: %s (by Details_Covenants)', sender, covenantList[covenantID] or 'None'), true)
+                F:Debug('%s Covenant: %s (by Details_Covenants)', sender, covenantList[covenantID] or 'None')
             end
         end
     elseif prefix == MRT_Prefix then
@@ -153,7 +153,7 @@ function M:HandleAddonMessage(...)
                 memberCovenants[guid] = covenantID
 
                 if debug then
-                    F:Print(string.format('%s Covenant: %s (by MRT)', sender, covenantList[covenantID] or 'None'), true)
+                    F:Debug('%s Covenant: %s (by MRT)', sender, covenantList[covenantID] or 'None')
                 end
             end
         end

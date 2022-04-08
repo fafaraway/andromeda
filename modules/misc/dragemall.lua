@@ -53,7 +53,7 @@ local function IsFrameExists()
     for k in pairs(frames) do
         local name = _G[k]
         if not name and C.DEV_MODE then
-            F:Print(string.format('DragEmAll Frame not found (%s)', k), true)
+            F:Debug('(DragEmAll) Frame not found', k)
         end
     end
 end
