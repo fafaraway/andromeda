@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local M = F:RegisterModule('ExpTracker')
+local M = F:GetModule('Map')
 local TOOLTIP = F:GetModule('Tooltip')
 
 function M:InitRenownLevel()
@@ -24,39 +24,21 @@ function M:CheckRenownLevel()
 end
 
 function M:UpdateRenownLevel()
-    F:RegisterEvent(
-        'PLAYER_ENTERING_WORLD',
-        function()
-            F:Delay(
-                1,
-                function()
-                    M:CheckRenownLevel()
-                end
-            )
-        end
-    )
-    F:RegisterEvent(
-        'COVENANT_CHOSEN',
-        function()
-            F:Delay(
-                3,
-                function()
-                    M:CheckRenownLevel()
-                end
-            )
-        end
-    )
-    F:RegisterEvent(
-        'COVENANT_SANCTUM_RENOWN_LEVEL_CHANGED',
-        function()
-            F:Delay(
-                3,
-                function()
-                    M:CheckRenownLevel()
-                end
-            )
-        end
-    )
+    F:RegisterEvent('PLAYER_ENTERING_WORLD', function()
+        F:Delay(1, function()
+            M:CheckRenownLevel()
+        end)
+    end)
+    F:RegisterEvent('COVENANT_CHOSEN', function()
+        F:Delay(3, function()
+            M:CheckRenownLevel()
+        end)
+    end)
+    F:RegisterEvent('COVENANT_SANCTUM_RENOWN_LEVEL_CHANGED', function()
+        F:Delay(3, function()
+            M:CheckRenownLevel()
+        end)
+    end)
 end
 
 local eventsList = {
@@ -70,15 +52,16 @@ local eventsList = {
     'ENABLE_XP_GAIN',
     'DISABLE_XP_GAIN',
     'AZERITE_ITEM_EXPERIENCE_CHANGED',
-    'HONOR_XP_UPDATE'
+    'HONOR_XP_UPDATE',
 }
 
 function M:CreateBar()
-    local bar = CreateFrame('StatusBar', 'FreeUI_MinimapExpBar', _G.Minimap)
-    bar:SetPoint('TOPLEFT', 1, -(_G.Minimap:GetHeight() / 8) - 1)
-    bar:SetPoint('TOPRIGHT', -1, -(_G.Minimap:GetHeight() / 8) - 1)
+    local bar = CreateFrame('StatusBar', 'FreeUIMinimapProgressBar', _G.Minimap)
+    bar:SetPoint('TOPLEFT', 1, -_G.Minimap.halfDiff - 1)
+    bar:SetPoint('TOPRIGHT', -1, -_G.Minimap.halfDiff - 1)
     bar:SetHeight(4)
     bar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
+    bar:SetFrameStrata('MEDIUM')
     bar.bg = F.CreateBDFrame(bar)
 
     bar:SetFrameLevel(_G.Minimap:GetFrameLevel() + 2)
@@ -189,16 +172,8 @@ function M:Bar_OnEnter()
         end
         _G.GameTooltip:AddLine(' ')
         _G.GameTooltip:AddLine(name, 0, .6, 1)
-        _G.GameTooltip:AddDoubleLine(
-            standingtext,
-            value - barMin .. ' / ' .. barMax - barMin .. ' (' .. math.floor((value - barMin) / (barMax - barMin) * 100) .. '%)',
-            colors.r,
-            colors.g,
-            colors.b,
-            1,
-            1,
-            1
-        )
+        _G.GameTooltip:AddDoubleLine(standingtext, value - barMin .. ' / ' .. barMax - barMin .. ' (' .. math.floor((value - barMin) / (barMax - barMin) * 100) .. '%)', colors.r, colors.g, colors.b,
+                                     1, 1, 1)
 
         if C_Reputation.IsFactionParagon(factionID) then
             local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
@@ -251,17 +226,13 @@ function M:SetupScript()
     M.Bar:SetScript('OnEnter', M.Bar_OnEnter)
     M.Bar:SetScript('OnLeave', F.HideTooltip)
 
-    hooksecurefunc(
-        _G.StatusTrackingBarManager,
-        'UpdateBarsShown',
-        function()
-            M.Bar_Update(M.Bar)
-        end
-    )
+    hooksecurefunc(_G.StatusTrackingBarManager, 'UpdateBarsShown', function()
+        M.Bar_Update(M.Bar)
+    end)
 end
 
-function M:OnLogin()
-    if not C.DB.Map.ExpBar then
+function M:CreateProgressBar()
+    if not C.DB.Map.ProgressBar then
         return
     end
 

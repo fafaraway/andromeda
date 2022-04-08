@@ -401,10 +401,10 @@ C.CharacterSettings = {
             MapRevealGlow = true,
         Coords = true,
         Minimap = true,
-        MinimapScale = 1,
-        HideMinimapInCombat = false,
-        WhoPings = true,
-        ExpBar = true
+            MinimapScale = 1,
+            HiddenInCombat = false,
+            WhoPings = true,
+            ProgressBar = true
     },
     Infobar = {
         Enable = true,

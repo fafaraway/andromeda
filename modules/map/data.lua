@@ -1,5 +1,5 @@
 local F = unpack(select(2, ...))
-local MAP = F:GetModule('WorldMap')
+local MAP = F:GetModule('Map')
 
 -- https://github.com/fang2hou/WindToolsScripts/blob/master/MapOverlay
 

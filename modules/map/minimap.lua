@@ -1,315 +1,13 @@
-local F, C, L = unpack(select(2, ...))
-local MM = F:GetModule('Minimap')
+local F, C = unpack(select(2, ...))
+local MAP = F:GetModule('Map')
 
-local map = _G.Minimap
-local offset = 256 / 8
 
-local menuList = {
-    {
-        text = _G.MAINMENU_BUTTON,
-        isTitle = true,
-        notCheckable = true
-    },
-    {
-        text = _G.CHARACTER_BUTTON,
-        icon = 'Interface\\PaperDollInfoFrame\\UI-EquipmentManager-Toggle',
-        func = function()
-            if InCombatLockdown() then
-                _G.UIErrorsFrame:AddMessage('|cffff0000' .. _G.ERR_NOT_IN_COMBAT .. '|r')
-                return
-            end
-            securecall(_G.ToggleCharacter, 'PaperDollFrame')
-        end,
-        notCheckable = true
-    },
-    {
-        text = _G.SPELLBOOK_ABILITIES_BUTTON,
-        icon = 'Interface\\MINIMAP\\TRACKING\\Class',
-        func = function()
-            if InCombatLockdown() then
-                _G.UIErrorsFrame:AddMessage('|cffff0000' .. _G.ERR_NOT_IN_COMBAT .. '|r')
-                return
-            end
-            if not _G.SpellBookFrame:IsShown() then
-                _G.ShowUIPanel(_G.SpellBookFrame)
-            else
-                _G.HideUIPanel(_G.SpellBookFrame)
-            end
-        end,
-        notCheckable = true
-    },
-    {
-        text = _G.TALENTS_BUTTON,
-        icon = 'Interface\\MINIMAP\\TRACKING\\Ammunition',
-        func = function()
-            if InCombatLockdown() then
-                _G.UIErrorsFrame:AddMessage('|cffff0000' .. _G.ERR_NOT_IN_COMBAT .. '|r')
-                return
-            end
-            if not _G.PlayerTalentFrame then
-                LoadAddOn('Blizzard_TalentUI')
-            end
-            if not _G.GlyphFrame then
-                LoadAddOn('Blizzard_GlyphUI')
-            end
-            securecall(_G.ToggleFrame, _G.PlayerTalentFrame)
-        end,
-        notCheckable = true
-    },
-    {
-        text = _G.ACHIEVEMENT_BUTTON,
-        icon = 'Interface\\ACHIEVEMENTFRAME\\UI-Achievement-Shield',
-        func = function()
-            if InCombatLockdown() then
-                _G.UIErrorsFrame:AddMessage('|cffff0000' .. _G.ERR_NOT_IN_COMBAT .. '|r')
-                return
-            end
-            securecall(_G.ToggleAchievementFrame)
-        end,
-        notCheckable = true
-    },
-    {
-        text = _G.MAP_AND_QUEST_LOG, -- OLD: QUESTLOG_BUTTON
-        icon = 'Interface\\GossipFrame\\ActiveQuestIcon',
-        func = function()
-            securecall(_G.ToggleFrame, _G.WorldMapFrame)
-        end,
-        notCheckable = true
-    },
-    {
-        text = _G.COMMUNITIES_FRAME_TITLE, -- OLD: COMMUNITIES
-        icon = 'Interface\\FriendsFrame\\UI-Toast-ChatInviteIcon',
-        arg1 = IsInGuild('player'),
-        func = function()
-            if InCombatLockdown() then
-                _G.UIErrorsFrame:AddMessage('|cffff0000' .. _G.ERR_NOT_IN_COMBAT .. '|r')
-                return
-            end
-            _G.ToggleCommunitiesFrame()
-        end,
-        notCheckable = true
-    },
-    {
-        text = _G.SOCIAL_BUTTON,
-        icon = 'Interface\\FriendsFrame\\PlusManz-BattleNet',
-        func = function()
-            if InCombatLockdown() then
-                _G.UIErrorsFrame:AddMessage('|cffff0000' .. _G.ERR_NOT_IN_COMBAT .. '|r')
-                return
-            end
-            securecall(_G.ToggleFriendsFrame, 1)
-        end,
-        notCheckable = true
-    },
-    {
-        text = _G.GROUP_FINDER, -- DUNGEONS_BUTTON
-        icon = 'Interface\\LFGFRAME\\BattleNetWorking0',
-        func = function()
-            if InCombatLockdown() then
-                _G.UIErrorsFrame:AddMessage('|cffff0000' .. _G.ERR_NOT_IN_COMBAT .. '|r')
-                return
-            end
-            securecall(_G.ToggleLFDParentFrame) -- OR securecall(PVEFrame_ToggleFrame, "GroupFinderFrame")
-        end,
-        notCheckable = true
-    },
-    {
-        text = _G.COLLECTIONS, -- OLD: MOUNTS_AND_PETS
-        icon = 'Interface\\MINIMAP\\TRACKING\\Reagents',
-        func = function()
-            if InCombatLockdown() then
-                _G.UIErrorsFrame:AddMessage('|cffffff00' .. _G.ERR_NOT_IN_COMBAT .. '|r')
-                return
-            end
-            securecall(_G.ToggleCollectionsJournal, 1)
-        end,
-        notCheckable = true
-    },
-    {
-        text = _G.ADVENTURE_JOURNAL, -- OLD: ENCOUNTER_JOURNAL
-        icon = 'Interface\\MINIMAP\\TRACKING\\Profession',
-        func = function()
-            if InCombatLockdown() then
-                _G.UIErrorsFrame:AddMessage('|cffff0000' .. _G.ERR_NOT_IN_COMBAT .. '|r')
-                return
-            end
-            securecall(_G.ToggleEncounterJournal)
-        end,
-        notCheckable = true
-    },
-    {
-        text = _G.BLIZZARD_STORE,
-        icon = 'Interface\\MINIMAP\\TRACKING\\Auctioneer',
-        func = function()
-            if not _G.StoreFrame then
-                LoadAddOn('Blizzard_StoreUI')
-            end
-            securecall(_G.ToggleStoreUI)
-        end,
-        notCheckable = true
-    },
-    {
-        text = '',
-        isTitle = true,
-        notCheckable = true
-    },
-    {
-        text = _G.OTHER,
-        isTitle = true,
-        notCheckable = true
-    },
-    {
-        text = _G.BACKPACK_TOOLTIP,
-        icon = 'Interface\\MINIMAP\\TRACKING\\Banker',
-        func = function()
-            securecall(_G.ToggleAllBags)
-        end,
-        notCheckable = true
-    },
-    --[[ {
-        text = GARRISON_LANDING_PAGE_TITLE,
-        icon = 'Interface\\HELPFRAME\\OpenTicketIcon',
-        func = function()
-            if InCombatLockdown() then
-                UIErrorsFrame:AddMessage('|cffff0000' .. ERR_NOT_IN_COMBAT .. '|r')
-                return
-            end
-            securecall(ShowGarrisonLandingPage, 2)
-        end,
-        notCheckable = true
-    },
-    {
-        text = ORDER_HALL_LANDING_PAGE_TITLE,
-        icon = 'Interface\\GossipFrame\\WorkOrderGossipIcon',
-        func = function()
-            if InCombatLockdown() then
-                UIErrorsFrame:AddMessage('|cffff0000' .. ERR_NOT_IN_COMBAT .. '|r')
-                return
-            end
-            securecall(ShowGarrisonLandingPage, 3)
-        end,
-        notCheckable = true
-    }, ]]
-    {
-        text = _G.PLAYER_V_PLAYER,
-        icon = 'Interface\\MINIMAP\\TRACKING\\BattleMaster',
-        func = function()
-            if InCombatLockdown() then
-                _G.UIErrorsFrame:AddMessage('|cffff0000' .. _G.ERR_NOT_IN_COMBAT .. '|r')
-                return
-            end
-            securecall(_G.TogglePVPUI, 1)
-        end,
-        notCheckable = true
-    },
-    {
-        text = _G.RAID,
-        icon = 'Interface\\TARGETINGFRAME\\UI-TargetingFrame-Skull',
-        func = function()
-            if InCombatLockdown() then
-                _G.UIErrorsFrame:AddMessage('|cffff0000' .. _G.ERR_NOT_IN_COMBAT .. '|r')
-                return
-            end
-            securecall(_G.ToggleFriendsFrame, 3)
-        end,
-        notCheckable = true
-    },
-    {
-        text = _G.GM_EMAIL_NAME,
-        icon = 'Interface\\CHATFRAME\\UI-ChatIcon-Blizz',
-        func = function()
-            if InCombatLockdown() then
-                _G.UIErrorsFrame:AddMessage('|cffff0000' .. _G.ERR_NOT_IN_COMBAT .. '|r')
-                return
-            end
-            securecall(_G.ToggleHelpFrame)
-        end,
-        notCheckable = true
-    },
-    {
-        text = _G.CHANNEL,
-        icon = 'Interface\\CHATFRAME\\UI-ChatIcon-ArmoryChat-AwayMobile',
-        func = function()
-            _G.ToggleChannelFrame()
-        end,
-        notCheckable = true
-    },
-    {
-        text = L['Calendar'],
-        func = function()
-            if InCombatLockdown() then
-                _G.UIErrorsFrame:AddMessage('|cffff0000' .. _G.ERR_NOT_IN_COMBAT .. '|r')
-                return
-            end
-            if not _G.CalendarFrame then
-                LoadAddOn('Blizzard_Calendar')
-            end
-            _G.Calendar_Toggle()
-        end,
-        notCheckable = true
-    },
-    {
-        text = _G.BATTLEFIELD_MINIMAP,
-        colorCode = '|cff999999',
-        func = function()
-            if not _G.BattlefieldMapFrame then
-                LoadAddOn('Blizzard_BattlefieldMap')
-            end
-            _G.BattlefieldMapFrame:Toggle()
-        end,
-        notCheckable = true
-    },
-    {
-        text = '',
-        isTitle = true,
-        notCheckable = true
-    },
-    {
-        text = _G.ADDONS,
-        isTitle = true,
-        notCheckable = true
-    },
-    {
-        text = _G.RELOADUI,
-        colorCode = '|cff999999',
-        func = function()
-            _G.ReloadUI()
-        end,
-        notCheckable = true
-    }
-}
+-- Cleanup Cluster
 
-function MM:ReskinMinimap()
-    local backdrop = CreateFrame('Frame', nil, _G.UIParent)
-    backdrop:SetSize(256, 190)
-    backdrop:SetFrameStrata('BACKGROUND')
-    backdrop.bg = F.SetBD(backdrop)
-    backdrop.bg:SetBackdropColor(0, 0, 0, 1)
-    backdrop.bg:SetBackdropBorderColor(0, 0, 0, 1)
-    map.backdrop = backdrop
-
-    map:SetMaskTexture(C.Assets.Texture.MinimapMask)
-    map:SetSize(256, 256)
-    map:SetHitRectInsets(0, 0, map:GetHeight() / 8, map:GetHeight() / 8)
-    map:SetClampRectInsets(0, 0, 0, 0)
-    map:SetFrameLevel(map:GetFrameLevel() + 2)
-    map:ClearAllPoints()
-    map:SetPoint('CENTER', backdrop)
-    -- map:SetParent(map.backdrop)
-
-    local pos = {'BOTTOMRIGHT', _G.UIParent, 'BOTTOMRIGHT', -C.UI_GAP, C.UI_GAP}
-    local mover = F.Mover(backdrop, _G.MINIMAP_LABEL, 'Minimap', pos)
-    map.mover = mover
-
-    function _G.GetMinimapShape()
-        return 'SQUARE'
-    end
-
+function MAP:RemoveBlizzStuff()
     _G.MinimapCluster:EnableMouse(false)
-    map:SetArchBlobRingScalar(0)
-    map:SetQuestBlobRingScalar(0)
-
-    _G.DropDownList1:SetClampedToScreen(true)
+    _G.Minimap:SetArchBlobRingScalar(0)
+    _G.Minimap:SetQuestBlobRingScalar(0)
 
     -- ClockFrame
     LoadAddOn('Blizzard_TimeManager')
@@ -330,7 +28,7 @@ function MM:ReskinMinimap()
         'MiniMapTracking',
         'MiniMapInstanceDifficulty',
         'GuildInstanceDifficulty',
-        'MiniMapChallengeMode'
+        'MiniMapChallengeMode',
     }
 
     for _, v in pairs(frames) do
@@ -338,18 +36,83 @@ function MM:ReskinMinimap()
     end
 end
 
-function MM:CreateMailButton()
+-- Rectangular Minimap
+
+function MAP:RestyleMinimap()
+    local texturePath = C.Assets.Texture.MinimapMask
+    local diff = 256 - 190
+    local halfDiff = math.ceil(diff / 2)
+
+    local holder = CreateFrame('Frame', 'FreeUIMinimapHolder', _G.UIParent)
+    holder:SetSize(258, 192)
+    holder:SetPoint('CENTER', _G.UIParent)
+    holder:SetFrameStrata('BACKGROUND')
+    holder:SetScale(C.DB.Map.MinimapScale)
+    holder.bg = F.SetBD(holder, 1)
+    holder.bg:SetBackdropColor(0, 0, 0, 1)
+    -- holder.bg:SetBackdropBorderColor(1, 0, 0, 1)
+    _G.Minimap.holder = holder
+
+    local pos = {'BOTTOMRIGHT', _G.UIParent, 'BOTTOMRIGHT', -C.UI_GAP, C.UI_GAP}
+    local mover = F.Mover(holder, _G.MINIMAP_LABEL, 'Minimap', pos)
+    _G.Minimap.mover = mover
+
+    _G.Minimap:SetClampedToScreen(true)
+    _G.Minimap:SetMaskTexture(texturePath)
+    _G.Minimap:SetSize(256, 256)
+    _G.Minimap:SetHitRectInsets(0, 0, halfDiff * C.MULT, halfDiff * C.MULT)
+    _G.Minimap:SetClampRectInsets(0, 0, 0, 0)
+    _G.Minimap:ClearAllPoints()
+    _G.Minimap:SetPoint('CENTER', holder)
+
+    _G.Minimap.diff = diff
+    _G.Minimap.halfDiff = halfDiff
+end
+
+-- Hybrid Minimap (Torghast)
+
+function MAP:RestyleHybridMinimap()
+    local mapCanvas = _G.HybridMinimap.MapCanvas
+    local rectangleMask = _G.HybridMinimap:CreateMaskTexture()
+
+    rectangleMask:SetTexture(C.Assets.Texture.MinimapMask)
+    rectangleMask:SetAllPoints(_G.HybridMinimap)
+
+    _G.HybridMinimap.RectangleMask = rectangleMask
+    mapCanvas:SetMaskTexture(rectangleMask)
+    mapCanvas:SetUseMaskTexture(true)
+
+    _G.HybridMinimap.CircleMask:SetTexture('')
+end
+
+-- Scale
+
+function MAP:UpdateMinimapScale()
+    local scale = C.DB.Map.MinimapScale
+
+    _G.Minimap.holder:SetScale(scale)
+    _G.Minimap:SetScale(scale)
+    if _G.Minimap.mover then
+        _G.Minimap.mover:SetScale(scale)
+    end
+end
+
+-- Mail
+
+function MAP:CreateMailButton()
     local mail = _G.MiniMapMailFrame
     local icon = _G.MiniMapMailIcon
 
     mail:ClearAllPoints()
-    mail:SetPoint('BOTTOM', map, 0, offset - 4)
+    mail:SetPoint('BOTTOM', _G.Minimap, 0, _G.Minimap.halfDiff)
     icon:SetTexture(C.Assets.Texture.Mail)
     icon:SetSize(21, 21)
     icon:SetVertexColor(1, .8, 0)
 end
 
-function MM:CreateCalendar()
+-- Calendar
+
+function MAP:CreateCalendar()
     local timeFrame = _G.GameTimeFrame
 
     if not timeFrame.styled then
@@ -357,9 +120,9 @@ function MM:CreateCalendar()
         timeFrame:SetPushedTexture(nil)
         timeFrame:SetHighlightTexture(nil)
         timeFrame:SetSize(24, 12)
-        timeFrame:SetParent(map)
+        timeFrame:SetParent(_G.Minimap)
         timeFrame:ClearAllPoints()
-        timeFrame:SetPoint('TOPRIGHT', map, -4, -offset - 10)
+        timeFrame:SetPoint('TOPRIGHT', _G.Minimap, -4, -10 - _G.Minimap.halfDiff)
         timeFrame:SetHitRectInsets(0, 0, 0, 0)
 
         for i = 1, timeFrame:GetNumRegions() do
@@ -375,27 +138,28 @@ function MM:CreateCalendar()
         timeFrame.styled = true
     end
     timeFrame:Show()
+    timeFrame:SetFrameStrata('MEDIUM')
 
     -- Calendar invites
     _G.GameTimeCalendarInvitesTexture:ClearAllPoints()
     _G.GameTimeCalendarInvitesTexture:SetParent('Minimap')
     _G.GameTimeCalendarInvitesTexture:SetPoint('TOPRIGHT')
 
-    local Invt = CreateFrame('Button', nil, _G.UIParent)
-    Invt:SetPoint('TOPRIGHT', map, 'TOPLEFT', -6, -6)
-    Invt:SetSize(300, 80)
-    Invt:Hide()
-    F.SetBD(Invt)
-    F.CreateFS(Invt, C.Assets.Font.Regular, 14, 'OUTLINE', _G.GAMETIME_TOOLTIP_CALENDAR_INVITES, 'BLUE')
+    local invt = CreateFrame('Button', nil, _G.UIParent)
+    invt:SetPoint('TOPRIGHT', _G.Minimap, 'TOPLEFT', -6, -6)
+    invt:SetSize(300, 80)
+    invt:Hide()
+    F.SetBD(invt)
+    F.CreateFS(invt, C.Assets.Font.Regular, 14, 'OUTLINE', _G.GAMETIME_TOOLTIP_CALENDAR_INVITES, 'BLUE')
 
     local function updateInviteVisibility()
-        Invt:SetShown(C_Calendar.GetNumPendingInvites() > 0)
+        invt:SetShown(C_Calendar.GetNumPendingInvites() > 0)
     end
     F:RegisterEvent('CALENDAR_UPDATE_PENDING_INVITES', updateInviteVisibility)
     F:RegisterEvent('PLAYER_ENTERING_WORLD', updateInviteVisibility)
 
-    Invt:SetScript('OnClick', function(_, btn)
-        Invt:Hide()
+    invt:SetScript('OnClick', function(_, btn)
+        invt:Hide()
         if btn == 'LeftButton' then
             _G.ToggleCalendar()
         end
@@ -404,8 +168,10 @@ function MM:CreateCalendar()
     end)
 end
 
-function MM:UpdateDifficultyFlag()
-    local diffText = map.DiffText
+-- Difficulty Flag
+
+function MAP:UpdateDifficultyFlag()
+    local diffText = _G.Minimap.DiffText
     local inInstance, instanceType = IsInInstance()
     local difficulty = select(3, GetInstanceInfo())
     local numplayers = select(9, GetInstanceInfo())
@@ -473,87 +239,93 @@ function MM:UpdateDifficultyFlag()
     end
 
     if not inInstance then
-        map.DiffFlag:SetAlpha(0)
+        _G.Minimap.DiffFlag:SetAlpha(0)
     else
-        map.DiffFlag:SetAlpha(1)
+        _G.Minimap.DiffFlag:SetAlpha(1)
     end
 end
 
-function MM:CreateDifficultyFlag()
-    local diffFlag = CreateFrame('Frame', nil, map)
+function MAP:CreateDifficultyFlag()
+    local diffFlag = CreateFrame('Frame', nil, _G.Minimap)
     diffFlag:SetSize(80, 40)
-    diffFlag:SetPoint('TOPLEFT', map, 6, -offset - 11)
-    diffFlag:SetFrameLevel(map:GetFrameLevel() + 2)
+    diffFlag:SetPoint('TOPLEFT', _G.Minimap, 6, -_G.Minimap.halfDiff - 10)
+    diffFlag:SetFrameLevel(_G.Minimap:GetFrameLevel() + 2)
     diffFlag.text = F.CreateFS(diffFlag, C.Assets.Font.Bold, 12, true, '', nil, true, 'TOPLEFT', 0, 0)
 
-    map.DiffFlag = diffFlag
-    map.DiffText = diffFlag.text
+    _G.Minimap.DiffFlag = diffFlag
+    _G.Minimap.DiffText = diffFlag.text
 
-    map.DiffFlag:RegisterEvent('PLAYER_ENTERING_WORLD')
-    map.DiffFlag:RegisterEvent('PLAYER_DIFFICULTY_CHANGED')
-    map.DiffFlag:RegisterEvent('INSTANCE_GROUP_SIZE_CHANGED')
-    map.DiffFlag:RegisterEvent('ZONE_CHANGED_NEW_AREA')
-    map.DiffFlag:RegisterEvent('CHALLENGE_MODE_START')
-    map.DiffFlag:RegisterEvent('CHALLENGE_MODE_COMPLETED')
-    map.DiffFlag:RegisterEvent('CHALLENGE_MODE_RESET')
-    map.DiffFlag:SetScript('OnEvent', MM.UpdateDifficultyFlag)
+    _G.Minimap.DiffFlag:RegisterEvent('PLAYER_ENTERING_WORLD')
+    _G.Minimap.DiffFlag:RegisterEvent('PLAYER_DIFFICULTY_CHANGED')
+    _G.Minimap.DiffFlag:RegisterEvent('INSTANCE_GROUP_SIZE_CHANGED')
+    _G.Minimap.DiffFlag:RegisterEvent('ZONE_CHANGED_NEW_AREA')
+    _G.Minimap.DiffFlag:RegisterEvent('CHALLENGE_MODE_START')
+    _G.Minimap.DiffFlag:RegisterEvent('CHALLENGE_MODE_COMPLETED')
+    _G.Minimap.DiffFlag:RegisterEvent('CHALLENGE_MODE_RESET')
+    _G.Minimap.DiffFlag:SetScript('OnEvent', MAP.UpdateDifficultyFlag)
 end
 
-function MM:CreateGarrisonButton()
+-- Garrision
+
+function MAP:CreateGarrisonButton()
     _G.GarrisonLandingPageMinimapButton:SetScale(.5)
     hooksecurefunc('GarrisonLandingPageMinimapButton_UpdateIcon', function(self)
         self:ClearAllPoints()
-        self:SetPoint('BOTTOMLEFT', map, 0, offset + 30)
+        self:SetPoint('BOTTOMLEFT', _G.Minimap, 0, _G.Minimap.halfDiff + 30)
     end)
 end
 
+-- Zone Text
+
 local function UpdateZoneText()
     if GetSubZoneText() == '' then
-        map.ZoneText:SetText(GetZoneText())
+        _G.Minimap.ZoneText:SetText(GetZoneText())
     else
-        map.ZoneText:SetText(GetSubZoneText())
+        _G.Minimap.ZoneText:SetText(GetSubZoneText())
     end
-    map.ZoneText:SetTextColor(_G.ZoneTextString:GetTextColor())
+    _G.Minimap.ZoneText:SetTextColor(_G.ZoneTextString:GetTextColor())
 end
 
-function MM:CreateZoneText()
+function MAP:CreateZoneText()
     _G.ZoneTextString:ClearAllPoints()
-    _G.ZoneTextString:SetPoint('TOP', map, 0, -offset - 10)
+    _G.ZoneTextString:SetPoint('TOP', _G.Minimap, 0, -_G.Minimap.halfDiff - 10)
     _G.ZoneTextString:SetFont(C.Assets.Font.Header, 22)
     _G.SubZoneTextString:SetFont(C.Assets.Font.Header, 22)
     _G.PVPInfoTextString:SetFont(C.Assets.Font.Header, 22)
     _G.PVPArenaTextString:SetFont(C.Assets.Font.Header, 22)
 
-    local zoneText = F.CreateFS(map, C.Assets.Font.Header, 16, nil, '', nil, 'THICK')
-    zoneText:SetPoint('TOP', map, 0, -offset - 10)
-    zoneText:SetSize(map:GetWidth(), 30)
+    local zoneText = F.CreateFS(_G.Minimap, C.Assets.Font.Header, 16, nil, '', nil, 'THICK')
+    zoneText:SetPoint('TOP', _G.Minimap, 0, -_G.Minimap.halfDiff - 10)
+    zoneText:SetSize(_G.Minimap:GetWidth(), 30)
     zoneText:SetJustifyH('CENTER')
     zoneText:Hide()
 
-    map.ZoneText = zoneText
+    _G.Minimap.ZoneText = zoneText
 
-    map:HookScript('OnUpdate', function()
+    _G.Minimap:HookScript('OnUpdate', function()
         UpdateZoneText()
     end)
 
-    map:HookScript('OnEnter', function()
-        map.ZoneText:Show()
+    _G.Minimap:HookScript('OnEnter', function()
+        _G.Minimap.ZoneText:Show()
     end)
 
-    map:HookScript('OnLeave', function()
-        map.ZoneText:Hide()
+    _G.Minimap:HookScript('OnLeave', function()
+        _G.Minimap.ZoneText:Hide()
     end)
 end
 
-function MM:CreateQueueStatusButton()
+-- Queue Status
+
+function MAP:CreateQueueStatusButton()
     _G.QueueStatusMinimapButton:ClearAllPoints()
-    _G.QueueStatusMinimapButton:SetPoint('BOTTOMRIGHT', map, 0, offset)
+    _G.QueueStatusMinimapButton:SetPoint('BOTTOMRIGHT', _G.Minimap, 0, _G.Minimap.halfDiff)
     _G.QueueStatusMinimapButtonBorder:Hide()
     _G.QueueStatusMinimapButtonIconTexture:SetTexture(nil)
     _G.QueueStatusFrame:ClearAllPoints()
-    _G.QueueStatusFrame:SetPoint('BOTTOMRIGHT', map, 'BOTTOMLEFT', -4, offset)
+    _G.QueueStatusFrame:SetPoint('BOTTOMRIGHT', _G.Minimap, 'BOTTOMLEFT', -4, _G.Minimap.halfDiff)
 
-    local queueIcon = map:CreateTexture(nil, 'ARTWORK')
+    local queueIcon = _G.Minimap:CreateTexture(nil, 'ARTWORK')
     queueIcon:SetPoint('CENTER', _G.QueueStatusMinimapButton)
     queueIcon:SetSize(50, 50)
     queueIcon:SetTexture('Interface\\Minimap\\Raid_Icon')
@@ -573,14 +345,16 @@ function MM:CreateQueueStatusButton()
     end)
 end
 
-function MM:WhoPings()
+-- Ping
+
+function MAP:WhoPings()
     if not C.DB.Map.WhoPings then
         return
     end
 
-    local f = CreateFrame('Frame', nil, map)
+    local f = CreateFrame('Frame', nil, _G.Minimap)
     f:SetAllPoints()
-    f.text = F.CreateFS(f, C.Assets.Font.Regular, 14, 'OUTLINE', '', 'CLASS', false, 'TOP', 0, -4)
+    f.text = F.CreateFS(f, C.Assets.Font.Bold, 14, 'OUTLINE', '', nil, true, 'TOP', 0, -4)
 
     local anim = f:CreateAnimationGroup()
     anim:SetScript('OnPlay', function()
@@ -611,105 +385,35 @@ function MM:WhoPings()
     end)
 end
 
-function MM:Minimap_OnMouseWheel(zoom)
-    if zoom > 0 then
-        _G.Minimap_ZoomIn()
-    else
-        _G.Minimap_ZoomOut()
-    end
-end
-
-function MM:Minimap_OnMouseUp(btn)
-    if btn == 'RightButton' then
-        if InCombatLockdown() then
-            _G.UIErrorsFrame:AddMessage(C.INFO_COLOR .. _G.ERR_NOT_IN_COMBAT)
-            return
-        end
-        _G.EasyMenu(menuList, F.EasyMenu, 'cursor', 0, 0, 'MENU', 3)
-    elseif btn == 'MiddleButton' then
-        _G.ToggleDropDownMenu(1, nil, _G.MiniMapTrackingDropDown, self)
-    else
-        _G.Minimap_OnClick(self)
-    end
-end
-
-function MM:MouseFunc()
-    map:EnableMouseWheel(true)
-    map:SetScript('OnMouseWheel', MM.Minimap_OnMouseWheel)
-    map:SetScript('OnMouseUp', MM.Minimap_OnMouseUp)
-end
-
-function MM:HybridMinimapOnLoad(addon)
-    if addon == 'Blizzard_HybridMinimap' then
-        MM:SetupHybridMinimap()
-        F:UnregisterEvent(self, MM.HybridMinimapOnLoad)
-    end
-end
-
-function MM:SetupHybridMinimap()
-    local mapCanvas = _G.HybridMinimap.MapCanvas
-    local rectangleMask = _G.HybridMinimap:CreateMaskTexture()
-
-    rectangleMask:SetTexture(C.Assets.Texture.MinimapMask)
-    rectangleMask:SetAllPoints(_G.HybridMinimap)
-
-    _G.HybridMinimap.RectangleMask = rectangleMask
-    mapCanvas:SetMaskTexture(rectangleMask)
-    mapCanvas:SetUseMaskTexture(true)
-
-    _G.HybridMinimap.CircleMask:SetTexture('')
-end
-
-function MM:UpdateMinimapScale()
-    local scale = C.DB.Map.MinimapScale
-    map:SetScale(scale)
-    map.backdrop:SetSize(256 * scale, 190 * scale)
-    if map.mover then
-        map.mover:SetSize(256 * scale, 190 * scale)
-    end
-end
-
-function MM:HideInCombat()
-    if not C.DB.Map.HideMinimapInCombat then
-        return
-    end
-
-    _G.Minimap.backdrop:RegisterEvent('PLAYER_REGEN_ENABLED')
-    _G.Minimap.backdrop:RegisterEvent('PLAYER_REGEN_DISABLED')
-    _G.Minimap.backdrop:HookScript('OnEvent', function(self, event)
-        if event == 'PLAYER_REGEN_ENABLED' then
-            F:UIFrameFadeIn(self, .1, self:GetAlpha(), 1)
-            F:UIFrameFadeIn(_G.Minimap, .1, self:GetAlpha(), 1)
-        elseif event == 'PLAYER_REGEN_DISABLED' then
-            F:UIFrameFadeOut(self, .1, self:GetAlpha(), 0)
-            F:UIFrameFadeOut(_G.Minimap, .1, self:GetAlpha(), 0)
-        end
-    end)
-end
-
-function MM:OnLogin()
+function MAP:SetupMinimap()
     if not C.DB.Map.Minimap then
         return
     end
 
-    F:RegisterEvent('ADDON_LOADED', MM.HybridMinimapOnLoad)
+    MAP:RemoveBlizzStuff()
+    MAP:RestyleMinimap()
+    MAP:UpdateMinimapScale()
+    MAP:CreateGarrisonButton()
+    MAP:CreateCalendar()
+    MAP:CreateZoneText()
+    MAP:CreateMailButton()
+    MAP:CreateDifficultyFlag()
+    MAP:CreateQueueStatusButton()
+    MAP:WhoPings()
+    MAP:MouseFunc()
+    MAP:UpdateMinimapFader()
+    MAP:CreateProgressBar()
 
-    MM:ReskinMinimap()
-    MM:UpdateMinimapScale()
-    MM:CreateGarrisonButton()
-    MM:CreateCalendar()
-    MM:CreateZoneText()
-    MM:CreateMailButton()
-    MM:CreateDifficultyFlag()
-    MM:CreateQueueStatusButton()
-    MM:WhoPings()
-    MM:MouseFunc()
-    MM:HideInCombat()
+    F:HookAddOn('Blizzard_HybridMinimap', function(self)
+        MAP:RestyleHybridMinimap()
+    end)
+
+    _G.DropDownList1:SetClampedToScreen(true)
 
     function _G.GetMinimapShape() -- LibDBIcon
-        if not MM.initialized then
-            MM:UpdateMinimapScale()
-            MM.initialized = true
+        if not MAP.initialized then
+            MAP:UpdateMinimapScale()
+            MAP.initialized = true
         end
         return 'SQUARE'
     end

@@ -5,7 +5,7 @@ local NAMEPLATE = F:GetModule('Nameplate')
 local ACTIONBAR = F:GetModule('ActionBar')
 local CHAT = F:GetModule('Chat')
 local ANNOUNCEMENT = F:GetModule('Announcement')
-local MAP = F:GetModule('Minimap')
+local MAP = F:GetModule('Map')
 local INVENTORY = F:GetModule('Inventory')
 local VIGNETTING = F:GetModule('Vignetting')
 local BAR = F:GetModule('ActionBar')
@@ -2414,19 +2414,19 @@ function GUI:SetupMapScale(parent)
 
     local panel = CreateExtraGUI(parent, guiName)
     local scroll = GUI:CreateScroll(panel, 220, 540)
-
-    local values = C.DB.Map
+    local mKey = 'Map'
+    local db = C.CharacterSettings.Map
 
     local datas = {
-        [1] = {key = 'WorldMapScale', value = values.WorldMapScale, text = L['World Map Scale'], min = .5, max = 2},
-        [2] = {key = 'MaxWorldMapScale', value = values.MaxWorldMapScale, text = L['Max World Map Scale'], min = .5, max = 1},
-        [3] = {key = 'MinimapScale', value = values.MinimapScale, text = L['Minimap Scale'], min = .5, max = 2},
+        [1] = {key = 'WorldMapScale', value = db.WorldMapScale, text = L['World Map Scale'], min = .5, max = 2},
+        [2] = {key = 'MaxWorldMapScale', value = db.MaxWorldMapScale, text = L['Max World Map Scale'], min = .5, max = 1},
+        [3] = {key = 'MinimapScale', value = db.MinimapScale, text = L['Minimap Scale'], min = .5, max = 2},
     }
 
     local offset = -10
     for _, v in ipairs(datas) do
         CreateGroupTitle(scroll, L['Map Scale'], offset)
-        CreateSlider(scroll, 'Map', v.key, v.text, v.min, v.max, .1, v.value, 20, offset - 50, UpdateMapScale)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, .1, v.value, 20, offset - 50, UpdateMapScale)
         offset = offset - 65
     end
 end
