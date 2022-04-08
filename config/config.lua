@@ -9,7 +9,6 @@ C.CharacterSettings = {
     InstallationComplete = false,
     UIAnchor = {},
     UIAnchorTemp = {},
-    TalentManager = {},
     General = {
         HideTalkingHead = true,
         HideBossBanner = false,

@@ -15,7 +15,6 @@
     <Script file="proposal-timer.lua"/>
     <Script file="reputation.lua"/>
     <Script file="screenshot.lua"/>
-    <Script file="talent-manager.lua"/>
     <Script file="vendor.lua"/>
     <Script file="vignetting.lua"/>
 </Ui>
