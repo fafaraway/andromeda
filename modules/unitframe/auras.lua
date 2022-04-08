@@ -251,7 +251,7 @@ function UNITFRAME.AuraFilter(element, unit, button, name, _, _, _, _, _, caster
     elseif style == 'pet' then
         return button.isDebuff or isBossAura or SpellIsPriorityAura(spellID)
     elseif style == 'target' then
-        return isStealable or (element.onlyShowPlayer and button.isPlayer) or (not element.onlyShowPlayer and name)
+        return isStealable or not button.isDebuff or (element.onlyShowPlayer and button.isPlayer) or (not element.onlyShowPlayer and name)
     elseif style == 'targettarget' then
         return isBossAura or SpellIsPriorityAura(spellID)
     elseif style == 'focus' then
