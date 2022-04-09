@@ -4,6 +4,7 @@
     <Script file="extra.lua"/>
     <Script file="about.lua"/>
     <Script file="credits.lua"/>
+    <Script file="help.lua"/>
     <Script file="profiles.lua"/>
     <Script file="data.lua"/>
     <Script file="installation.lua"/>

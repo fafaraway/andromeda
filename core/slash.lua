@@ -1,109 +1,31 @@
-local F, C, L = unpack(select(2, ...))
-
-local cmdList = {
-    '/free install - Open installation panel',
-    '/free config - Open config panel',
-    '/free unlock - Unlock the interface to let you easily move elements',
-    '/free reset - Reset all saved options to their default values.',
-    '/disband - Disband group',
-    '/convert - Convert party/raid',
-    '/reset - Reset instance',
-    '/rdc or /ready - Ready check',
-    '/rpc or /role - Role check',
-    '/lg - Leave group',
-    '/rl or /reload - Reload interface',
-    '/ss - Take a screenshot',
-    '/clear - Clear chat',
-    '/bb - Set BattleNet broadcast',
-    '/spec - Switch specialization',
-    '/bind - Launch quick keybind mode',
-}
-
-local function CreateHelpFrame()
-    local f = CreateFrame('Frame', 'FreeUIHelpFrame', _G.UIParent, 'BackdropTemplate')
-    f:SetSize(400, 400)
-    f:SetPoint('CENTER')
-    f:SetFrameStrata('HIGH')
-    F.SetBD(f)
-end
-
-local function Commands()
-    -- for _, v in ipairs(cmdList) do
-    --     local command, desc = string.split('-', tostring(v))
-    --     print(string.format('%s|r - %s|r', C.YELLOW_COLOR .. command, C.BLUE_COLOR .. desc))
-    -- end
-
-end
-
-local function Version()
-    print(string.format(C.ADDON_NAME .. C.CLASS_COLOR .. '%s', C.ADDON_VERSION))
-end
-
-local function Reset()
-    _G.StaticPopup_Show('FREEUI_RESET_ALL')
-end
-
-local function Install()
-    F:GetModule('Installation'):HelloWorld()
-end
-
-local function Unlock()
-    F:MoverConsole()
-end
-
-local function GUI()
-    F.ToggleGUI()
-end
-
--- _G.SlashCmdList.FREEUI = function(str)
---     local cmd, _ = string.split(' ', str:lower(), 2)
---     if cmd == 'reset' then
---         Reset()
---     elseif cmd == 'install' then
---         Install()
---     elseif cmd == 'unlock' or cmd == 'layout' then
---         Unlock()
---     elseif cmd == 'gui' or cmd == 'config' then
---         GUI()
---     elseif cmd == 'help' then
---         Commands()
---     elseif cmd == 'ver' or cmd == 'version' then
---         Version()
---     else
---         Commands()
---     end
--- end
--- _G.SLASH_FREEUI1 = '/freeui'
--- _G.SLASH_FREEUI2 = '/free'
+local F, C = unpack(select(2, ...))
+local GUI = F:GetModule('GUI')
 
 F:RegisterSlash('/free', function(msg)
     local str, _ = string.split(' ', string.lower(msg), 2)
-    if str == 'reset' then
-        Reset()
-    elseif str == 'install' then
-        Install()
-    elseif str == 'unlock' or str == 'layout' then
-        Unlock()
-    elseif str == 'gui' or str == 'config' then
-        GUI()
-    elseif str == 'help' then
-        Commands()
-    elseif str == 'ver' or str == 'version' then
-        Version()
+    if string.match(str, 'reset') or string.match(str, 'init') then
+        StaticPopup_Show('FREEUI_RESET_ALL')
+    elseif string.match(str, 'install') or string.match(str, 'tutorial') then
+        F:GetModule('Installation'):HelloWorld()
+    elseif string.match(str, 'unlock') or string.match(str, 'layout') then
+        F:MoverConsole()
+    elseif string.match(str, 'gui') or string.match(str, 'config') then
+        F.ToggleGUI()
+    elseif string.match(str, 'help') then
+        GUI:ToggleCheatSheet()
+    elseif string.match(str, 'discord') or string.match(str, 'feedback') then
+        F:Print('discord: https://discord.gg/86wbfZXxn7')
+    elseif string.match(str, 'ver') then
+        F:Printf('version: %s', C.ADDON_VERSION)
     else
-        Commands()
+        GUI:ToggleCheatSheet()
+        -- PlaySoundFile(C.Assets.Sound.PhubIntro, 'Master')
     end
 end)
 
--- Disable all addons except FreeUI and debug tool
-F:RegisterSlash('/onlyfree', function()
-    for i = 1, GetNumAddOns() do
-        local name = GetAddOnInfo(i)
-        if name ~= 'FreeUI' and name ~= '!BaudErrorFrame' and GetAddOnEnableState(C.NAME, name) == 2 then
-            DisableAddOn(name, C.NAME)
-        end
-    end
-    _G.ReloadUI()
+-- Leave group
+F:RegisterSlash('/lg', function()
+    C_PartyInfo.LeaveParty()
 end)
 
 --	Disband party or raid
@@ -124,28 +46,28 @@ F:RegisterSlash('/convert', function()
     end
 end)
 
+-- Ready check
 F:RegisterSlash('/rdc', function()
     DoReadyCheck()
 end)
 
+-- Role poll
 F:RegisterSlash('/role', function()
     InitiateRolePoll()
 end)
 
+-- Reset instance
 F:RegisterSlash('/ri', function()
     ResetInstances()
 end)
 
+-- Teleport LFG instance
 F:RegisterSlash('/tp', function()
     if IsInInstance() then
         LFGTeleport(true)
     else
         LFGTeleport()
     end
-end)
-
-F:RegisterSlash('/lg', function()
-    C_PartyInfo.LeaveParty()
 end)
 
 -- Take screenshot
@@ -203,6 +125,27 @@ F:RegisterSlash('/clear', function()
     for i = 1, _G.NUM_CHAT_WINDOWS do
         _G[string.format('ChatFrame%d', i)]:Clear()
     end
+end)
+
+-- Dev tool
+F:RegisterSlash('/rl', function()
+    ReloadUI()
+end)
+
+F:RegisterSlash('/fs', function()
+    _G.UIParentLoadAddOn('Blizzard_DebugTools')
+    _G.FrameStackTooltip_Toggle(false, true, true)
+end)
+
+-- Disable all addons except FreeUI and debug tool
+F:RegisterSlash('/onlyfree', function()
+    for i = 1, GetNumAddOns() do
+        local name = GetAddOnInfo(i)
+        if name ~= 'FreeUI' and name ~= '!BaudErrorFrame' and GetAddOnEnableState(C.NAME, name) == 2 then
+            DisableAddOn(name, C.NAME)
+        end
+    end
+    _G.ReloadUI()
 end)
 
 -- Print NPC ID
@@ -285,8 +228,8 @@ end)
 -- Print item info
 F:RegisterSlash('/scaleinfo', function()
     F:Print(C.LINE_STRING)
-    F:Print('C.ScreenWidth ' .. C.ScreenWidth)
-    F:Print('C.ScreenHeight ' .. C.ScreenHeight)
+    F:Print('C.SCREEN_WIDTH ' .. C.SCREEN_WIDTH)
+    F:Print('C.SCREEN_HEIGHT ' .. C.SCREEN_HEIGHT)
     F:Print('C.MULT ' .. C.MULT)
     F:Print('UIScale ' .. _G.FREE_ADB.UIScale)
     F:Print('UIParentScale ' .. _G.UIParent:GetScale())
@@ -300,16 +243,6 @@ F:RegisterSlash('/dbmtest', function()
     else
         F:Print(C.RED_COLOR .. 'DBM is not loaded.')
     end
-end)
-
--- Dev tool
-F:RegisterSlash('/rl', function()
-    ReloadUI()
-end)
-
-F:RegisterSlash('/fs', function()
-    _G.UIParentLoadAddOn('Blizzard_DebugTools')
-    _G.FrameStackTooltip_Toggle(false, true, true)
 end)
 
 --[[ do
