@@ -9,37 +9,14 @@ local watchQuests = {
     -- glow
     [59585] = true, -- https://www.wowhead.com/quest=59585/well-make-an-aspirant-out-of-you
     [64271] = true, -- https://www.wowhead.com/quest=64271/a-more-civilized-way
-    -- mousewheel
-    [60657] = 333960, -- https://www.wowhead.com/quest=60657/aid-from-above
-    [64018] = 356464, -- https://www.wowhead.com/quest=64018/the-weight-of-stone
-    -- others
-    [62459] = true -- https://www.wowhead.com/quest=62459/go-beyond -- questItem = 183725
 }
 
 local activeQuests = {}
 
 local questNPCs = {
     [170080] = true, -- Boggart
-    [174498] = true -- Shimmersod
+    [174498] = true, -- Shimmersod
 }
-
-function QH:GetOverrideIndex(spellID)
-    if spellID == 356464 then
-        return 1, 2
-    elseif spellID == 356151 or spellID == 333960 then
-        return 1
-    end
-end
-
-local function GetActionSpell(index)
-    local button = _G['ActionButton' .. index]
-    local _, spellID = GetActionInfo(button.action)
-    return spellID
-end
-
-local function GetOverrideButton(index)
-    return 'OverrideActionBarButton' .. index
-end
 
 function QH:QuestTool_Init()
     for questID, value in pairs(watchQuests) do
@@ -61,56 +38,7 @@ function QH:QuestTool_Remove(questID)
     end
 end
 
-function QH:QuestTool_IsMatch(questID, spellID)
-    return activeQuests[questID] == spellID
-end
-
-local messages = {
-    [356464] = L['Mouse scroll up on blue circles, mousewheel down on red circles, try harder!'],
-    [333960] = L['Mouse scroll up on blue circles, try harder!'],
-    [356151] = L['Mouse scroll up when Wilderling speeds up!']
-}
-
-function QH:QuestTool_SetAction()
-    local spellID = GetActionSpell(1)
-    if QH:QuestTool_IsMatch(60657, spellID) or QH:QuestTool_IsMatch(64018, spellID) or spellID == 356151 then
-        if InCombatLockdown() then
-            F:RegisterEvent('PLAYER_REGEN_ENABLED', QH.QuestTool_SetAction)
-            QH.isDelay = true
-        else
-            local index1, index2 = QH:GetOverrideIndex(spellID)
-            if index1 then
-                ClearOverrideBindings(QH.QuestHandler)
-                SetOverrideBindingClick(QH.QuestHandler, true, 'MOUSEWHEELUP', GetOverrideButton(index1))
-                if index2 then
-                    SetOverrideBindingClick(QH.QuestHandler, true, 'MOUSEWHEELDOWN', GetOverrideButton(index2))
-                end
-
-                QH.QuestTip:SetText(C.COLORED_ADDON_NAME .. ': ' .. messages[spellID])
-                QH.QuestTip:Show()
-                QH.isHandling = true
-
-                if QH.isDelay then
-                    F:UnregisterEvent('PLAYER_REGEN_ENABLED', QH.QuestTool_SetAction)
-                    QH.isDelay = nil
-                end
-            end
-        end
-    end
-end
-
-function QH:QuestTool_ClearAction()
-    if QH.isHandling then
-        QH.isHandling = nil
-        ClearOverrideBindings(QH.QuestHandler)
-        QH.QuestTip:Hide()
-    end
-end
-
-local fixedStrings = {
-    ['横扫'] = '低扫',
-    ['突刺'] = '突袭'
-}
+local fixedStrings = {['横扫'] = '低扫', ['突刺'] = '突袭'}
 local function isActionMatch(msg, text)
     return text and string.find(msg, text)
 end
@@ -154,19 +82,6 @@ function QH:QuestTool_SetQuestUnit()
     end
 end
 
-function QH:QuestTool_UpdateBinding()
-    if activeQuests[62459] and not IsResting() and C_QuestLog.GetDistanceSqToQuest(62459) < 35000 then
-        SetBinding('MOUSEWHEELUP', 'EXTRAACTIONBUTTON1')
-        QH.isBinding = true
-        QH.QuestTip:SetText(C.COLORED_ADDON_NAME .. ': ' .. L['Get close to butterflies and mouse scroll up.'])
-        QH.QuestTip:Show()
-    elseif QH.isBinding then
-        SetBinding('MOUSEWHEELUP', QH.SavedKey)
-        QH.isBinding = nil
-        QH.QuestTip:Hide()
-    end
-end
-
 function QH:OnLogin()
     local handler = CreateFrame('Frame', nil, _G.UIParent)
     QH.QuestHandler = handler
@@ -184,11 +99,6 @@ function QH:OnLogin()
     F:RegisterEvent('QUEST_ACCEPTED', QH.QuestTool_Accept)
     F:RegisterEvent('QUEST_REMOVED', QH.QuestTool_Remove)
 
-    -- Vehicle button quests
-    C_Timer.After(10, QH.QuestTool_SetAction) -- may need this for ui reload
-    F:RegisterEvent('UNIT_ENTERED_VEHICLE', QH.QuestTool_SetAction)
-    F:RegisterEvent('UNIT_EXITED_VEHICLE', QH.QuestTool_ClearAction)
-
     -- Override button quests
     if C.DB.Actionbar.Enable then
         F:RegisterEvent('CHAT_MSG_MONSTER_SAY', QH.QuestTool_SetGlow)
@@ -198,35 +108,26 @@ function QH:OnLogin()
     -- Check npc in quests
     _G.GameTooltip:HookScript('OnTooltipSetUnit', QH.QuestTool_SetQuestUnit)
 
-    -- Quest items
-    QH.SavedKey = GetBindingFromClick('MOUSEWHEELUP')
-    QH:QuestTool_UpdateBinding()
-    F:RegisterEvent('ZONE_CHANGED', QH.QuestTool_UpdateBinding)
-    F:RegisterEvent('ZONE_CHANGED_INDOORS', QH.QuestTool_UpdateBinding)
-
     -- Auto gossip
     local firstStep
-    F:RegisterEvent(
-        'GOSSIP_SHOW',
-        function()
-            local guid = UnitGUID('npc')
-            local npcID = guid and F.GetNpcId(guid)
-            if npcID == 174498 then
-                C_GossipInfo.SelectOption(3)
-            elseif npcID == 174371 then
-                if GetItemCount(183961) == 0 then
-                    return
-                end
-                if C_GossipInfo.GetNumOptions() ~= 5 then
-                    return
-                end
-                if firstStep then
-                    C_GossipInfo.SelectOption(5)
-                else
-                    C_GossipInfo.SelectOption(2)
-                    firstStep = true
-                end
+    F:RegisterEvent('GOSSIP_SHOW', function()
+        local guid = UnitGUID('npc')
+        local npcID = guid and F.GetNpcId(guid)
+        if npcID == 174498 then
+            C_GossipInfo.SelectOption(3)
+        elseif npcID == 174371 then
+            if GetItemCount(183961) == 0 then
+                return
+            end
+            if C_GossipInfo.GetNumOptions() ~= 5 then
+                return
+            end
+            if firstStep then
+                C_GossipInfo.SelectOption(5)
+            else
+                C_GossipInfo.SelectOption(2)
+                firstStep = true
             end
         end
-    )
+    end)
 end
