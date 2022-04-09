@@ -10,7 +10,6 @@
     <Script file="group-tool.lua"/>
     <Script file="itemlevel.lua"/>
     <Script file="logo.lua"/>
-    <Script file="opie.lua"/>
     <Script file="premade.lua"/>
     <Script file="proposal-timer.lua"/>
     <Script file="reputation.lua"/>
