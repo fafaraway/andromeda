@@ -1,172 +1,194 @@
 local F, C, L = unpack(select(2, ...))
-local M = F:RegisterModule('ScreenSaver')
+local SS = F:RegisterModule('ScreenSaver')
 
-function M:Enable()
-    local self = M.Frame
+local function Enable()
+    local self = SS.ScreenSaver
     if not self then
         return
     end
+
     if self.isActive then
         return
     end
+
     self.isActive = true
     self:Show()
     self.fadeIn:Play()
 end
 
-function M:Disable()
-    local self = M.Frame
+local function Disable()
+    local self = SS.ScreenSaver
     if not self then
         return
     end
+
     if not self.isActive then
         return
     end
+
     self.isActive = false
     self.fadeOut:Play()
 end
 
-local afkCount
-function M:OnEvent()
-    if UnitIsAFK('player') then
-        afkCount = GetServerTime()
-        M:Enable()
+local afkStart = nil
+local function OnEvent()
+    if _G.UnitIsAFK('player') then
+        if not afkStart then
+            afkStart = _G.GetServerTime()
+            Enable()
+        end
+
+        if _G.UnitAffectingCombat('player') then
+            _G.PlaySound(15262, 'MASTER')
+            Disable()
+        end
     else
-        afkCount = nil
-        M:Disable()
+        afkStart = nil
+        Disable()
     end
 end
 
-function M:OnDoubleClick()
-    M:Disable()
+local function FormatTimer(seconds)
+    local units = ConvertSecondsToUnits(seconds)
+    if units.hours > 0 then
+        return string.format('%.2d : %.2d : %.2d', units.hours, units.minutes, units.seconds)
+    else
+        return string.format('%.2d : %.2d', units.minutes, units.seconds)
+    end
 end
 
-function M:CreateAnimation()
-    local self = M.Frame
-
-    self.fadeIn = self:CreateAnimationGroup()
-    self.fadeIn.anim = self.fadeIn:CreateAnimation('Alpha')
-    self.fadeIn.anim:SetDuration(1)
-    self.fadeIn.anim:SetSmoothing('OUT')
-    self.fadeIn.anim:SetFromAlpha(0)
-    self.fadeIn.anim:SetToAlpha(1)
-    self.fadeIn:HookScript(
-        'OnFinished',
-        function(self)
-            self:GetParent():SetAlpha(1)
-        end
-    )
-
-    self.fadeOut = self:CreateAnimationGroup()
-    self.fadeOut.anim = self.fadeOut:CreateAnimation('Alpha')
-    self.fadeOut.anim:SetDuration(1)
-    self.fadeOut.anim:SetSmoothing('OUT')
-    self.fadeOut.anim:SetFromAlpha(1)
-    self.fadeOut.anim:SetToAlpha(0)
-    self.fadeOut:HookScript(
-        'OnFinished',
-        function(self)
-            self:GetParent():SetAlpha(0)
-            self:GetParent():Hide()
-        end
-    )
-end
-
-function M:CreateBackdrop()
-    local self = M.Frame
-    self.bg = self:CreateTexture(nil, 'BACKGROUND', nil, -8)
-    self.bg:SetColorTexture(1, 1, 1)
-    self.bg:SetVertexColor(0, 0, 0, 1)
-    self.bg:SetAllPoints()
-end
-
-function M:CreateGalaxy()
-    local self = M.Frame
-    self.galaxy = CreateFrame('PlayerModel', nil, self)
-    self.galaxy:SetDisplayInfo(67918)
-    self.galaxy:SetCamDistanceScale(2.4)
-    --self.galaxy:SetRotation(math.rad(180))
-    self.galaxy:SetAllPoints()
-end
-
-function M:CreatePlayerModel()
-    local self = M.Frame
-    local height = self:GetHeight()
-    self.model = CreateFrame('PlayerModel', nil, self.galaxy)
-    self.model:SetUnit('player')
-    self.model:SetRotation(math.rad(-30))
-    self.model:SetAnimation(96)
-    self.model:SetSize(height, height * 1.5)
-    self.model:SetPoint('BOTTOMRIGHT', height * .25, -height * .2)
-end
-
-_G.MINUTES_SECONDS = '%.2d : %.2d'
-function M:UpdateTimer()
-    local self = M.Frame
-    if afkCount then
-        local timeStr = SecondsToClock(GetServerTime() - afkCount)
+local function OnUpdate(self)
+    if afkStart then
+        local timeStr = FormatTimer(GetServerTime() - afkStart)
         self.timer:SetText(timeStr)
     end
 end
 
-function M:CreateScreenSaverFrame()
-    local f = CreateFrame('Button', nil, _G.UIParent)
+local function OnKeyUp(_, key)
+    local self = SS.ScreenSaver
+    if not self then
+        return
+    end
+    if key == 'ESCAPE' then
+        if self:IsShown() then
+            Disable()
+        end
+    end
+end
+
+local function ConstructTextString(f)
+    f.text = F.CreateFS(f, C.Assets.Font.Bold, 12, nil, L['Double-click left mouse button or press ESC key to exit this screen.'], {.3, .3, .3}, 'THICK', 'BOTTOM', 0, C.UI_GAP)
+    f.timer = F.CreateFS(f, C.ASSET_PATH .. 'fonts\\header.ttf', 56, nil, 'timer', 'CLASS', 'THICK', 'TOP', 0, -C.UI_GAP)
+end
+
+local function ConstructAnimation(f)
+    local fadeIn = f:CreateAnimationGroup()
+    fadeIn.anim = fadeIn:CreateAnimation('Alpha')
+    fadeIn.anim:SetDuration(2)
+    fadeIn.anim:SetSmoothing('OUT')
+    fadeIn.anim:SetFromAlpha(0)
+    fadeIn.anim:SetToAlpha(1)
+    fadeIn:HookScript('OnFinished', function(self)
+        self:GetParent():SetAlpha(1)
+    end)
+    f.fadeIn = fadeIn
+
+    local fadeOut = f:CreateAnimationGroup()
+    fadeOut.anim = fadeOut:CreateAnimation('Alpha')
+    fadeOut.anim:SetDuration(1)
+    fadeOut.anim:SetSmoothing('OUT')
+    fadeOut.anim:SetFromAlpha(1)
+    fadeOut.anim:SetToAlpha(0)
+    fadeOut:HookScript('OnFinished', function(self)
+        self:GetParent():SetAlpha(0)
+        self:GetParent():Hide()
+    end)
+    f.fadeOut = fadeOut
+end
+
+local function ConstructModel(f)
+    f.galaxy = CreateFrame('PlayerModel', nil, f)
+    f.galaxy:SetDisplayInfo(67918)
+    f.galaxy:SetCamDistanceScale(2.4)
+    -- f.galaxy:SetRotation(math.rad(180))
+    f.galaxy:SetAllPoints()
+
+    local height = f:GetHeight()
+    f.model = CreateFrame('PlayerModel', nil, f.galaxy)
+    f.model:SetUnit('player')
+    f.model:SetRotation(math.rad(-30))
+    f.model:SetAnimation(96)
+    f.model:SetSize(height, height * 1.5)
+    f.model:SetPoint('BOTTOMRIGHT', height * .25, -height * .2)
+end
+
+function SS:UpdateScreenSaver()
+    local f = _G.FreeUIScreenSave
+
+    if C.DB.General.ScreenSaver then
+        if not f then
+            SS:CreateScreenSaver()
+        end
+
+        f:SetScript('OnKeyUp', OnKeyUp)
+        f:SetScript('OnDoubleClick', Disable)
+        f:SetScript('OnUpdate', OnUpdate)
+
+        F:RegisterEvent('PLAYER_FLAGS_CHANGED', OnEvent)
+        F:RegisterEvent('PLAYER_REGEN_DISABLED', OnEvent)
+        F:RegisterEvent('PLAYER_REGEN_ENABLED', OnEvent)
+    else
+        if f then
+            f:Hide()
+        end
+
+        f:SetScript('OnKeyUp', nil)
+        f:SetScript('OnDoubleClick', nil)
+        f:SetScript('OnUpdate', nil)
+
+        F:UnregisterEvent('PLAYER_FLAGS_CHANGED', OnEvent)
+        F:UnregisterEvent('PLAYER_REGEN_DISABLED', OnEvent)
+        F:UnregisterEvent('PLAYER_REGEN_ENABLED', OnEvent)
+    end
+end
+
+function SS:CreateScreenSaver()
+    if InCombatLockdown() then
+        return
+    end
+    if _G.FreeUIScreenSave then
+        return
+    end
+
+    local f = CreateFrame('Button', 'FreeUIScreenSave', _G.UIParent)
     f:SetFrameStrata('FULLSCREEN')
     f:SetAllPoints()
     f:EnableMouse(true)
     f:SetAlpha(0)
     f:Hide()
 
-    M.Frame = f
+    f.bg = F.SetBD(f)
+    f.bg:SetBackdropColor(0, 0, 0, 1)
+
+    ConstructAnimation(f)
+    ConstructModel(f)
+    ConstructTextString(f)
+
+    SS.ScreenSaver = f
+
+    f:SetScript('OnKeyUp', OnKeyUp)
+    f:SetScript('OnDoubleClick', Disable)
+    f:SetScript('OnUpdate', OnUpdate)
+
+    F:RegisterEvent('PLAYER_FLAGS_CHANGED', OnEvent)
+    F:RegisterEvent('PLAYER_REGEN_DISABLED', OnEvent)
+    F:RegisterEvent('PLAYER_REGEN_ENABLED', OnEvent)
 end
 
-function M:CreateText()
-    local self = M.Frame
-    local font = C.Assets.Font.Header
-    self.text = F.CreateFS(self.galaxy, font, 18, 'OUTLINE', L['Double click to unlock!'], 'GREY', nil, 'TOPLEFT', 20, -20)
-    self.timer = F.CreateFS(self.galaxy, font, 18, 'OUTLINE', '', 'CLASS', nil, 'TOPLEFT', 20, -40)
-end
-
-function M:SetupScreenSaver()
-    M.Frame:SetScript('OnUpdate', M.UpdateTimer)
-    M.Frame:SetScript('OnEvent', M.OnEvent)
-    M.Frame:SetScript('OnDoubleClick', M.OnDoubleClick)
-
-    M.Frame:RegisterEvent('PLAYER_FLAGS_CHANGED')
-    M.Frame:RegisterEvent('PLAYER_ENTERING_WORLD')
-    M.Frame:RegisterEvent('PLAYER_LEAVING_WORLD')
-end
-
-function M:UpdateScreenSaver()
-    if C.DB.General.ScreenSaver then
-        M.Frame:SetScript('OnUpdate', M.UpdateTimer)
-        M.Frame:SetScript('OnEvent', M.OnEvent)
-        M.Frame:SetScript('OnDoubleClick', M.OnDoubleClick)
-
-        M.Frame:RegisterEvent('PLAYER_FLAGS_CHANGED')
-        M.Frame:RegisterEvent('PLAYER_ENTERING_WORLD')
-        M.Frame:RegisterEvent('PLAYER_LEAVING_WORLD')
-    else
-        M.Frame:SetScript('OnUpdate', nil)
-        M.Frame:SetScript('OnEvent', nil)
-        M.Frame:SetScript('OnDoubleClick', nil)
-
-        M.Frame:UnregisterEvent('PLAYER_FLAGS_CHANGED')
-        M.Frame:UnregisterEvent('PLAYER_ENTERING_WORLD')
-        M.Frame:UnregisterEvent('PLAYER_LEAVING_WORLD')
-    end
-end
-
-function M:OnLogin()
+function SS:OnLogin()
     if not C.DB.General.ScreenSaver then
         return
     end
 
-    M:CreateScreenSaverFrame()
-    M:CreateAnimation()
-    M:CreateBackdrop()
-    M:CreateGalaxy()
-    M:CreatePlayerModel()
-    M:CreateText()
-    M:SetupScreenSaver()
+    SS:CreateScreenSaver()
 end
