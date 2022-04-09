@@ -13,9 +13,10 @@ do
 end
 
 local addOnName, engine = ...
-local aceAddon, aceAddonMinor = _G.LibStub('AceAddon-3.0')
+--local aceAddon, aceAddonMinor = _G.LibStub('AceAddon-3.0')
 
-engine[1] = aceAddon:NewAddon(addOnName, 'AceConsole-3.0', 'AceEvent-3.0', 'AceTimer-3.0', 'AceHook-3.0')
+-- engine[1] = aceAddon:NewAddon(addOnName, 'AceTimer-3.0', 'AceHook-3.0')
+engine[1] = {}
 engine[2] = {}
 engine[3] = {}
 
@@ -52,7 +53,7 @@ do
         end
     end
 
-    F:AddLib('AceAddon', aceAddon, aceAddonMinor)
+    --F:AddLib('AceAddon', aceAddon, aceAddonMinor)
     F:AddLib('ACL', 'AceLocale-3.0')
     F:AddLib('LBG', 'LibButtonGlow-1.0')
     F:AddLib('LRC', 'LibRangeCheck-2.0')
@@ -62,56 +63,10 @@ do
 
     F.Libs.oUF = engine.oUF
     F.Libs.cargBags = engine.cargBags
+
+    _G.LibStub('AceTimer-3.0'):Embed(F)
 end
 
---[[ function F:OnEnable()
-    F:Initialize()
-end
-
-function F:CallLoadedModule(obj, silent, object, index)
-    local name, func
-    if type(obj) == 'table' then name, func = unpack(obj) else name = obj end
-    local module = name and F:GetModule(name, silent)
-
-    if not module then return end
-    if func and type(func) == 'string' then
-        F:CallLoadFunc(module[func], module)
-    elseif func and type(func) == 'function' then
-        F:CallLoadFunc(func, module)
-    elseif module.Initialize then
-        F:CallLoadFunc(module.Initialize, module)
-    end
-
-    if object and index then object[index] = nil end
-end
-
-function F:RegisterInitialModule(name, func)
-    F.RegisteredInitialModules[#F.RegisteredInitialModules + 1] = (func and {name, func}) or name
-end
-
-function F:RegisterModule(name, func)
-    if F.initialized then
-        F:CallLoadedModule((func and {name, func}) or name)
-    else
-        F.RegisteredModules[#F.RegisteredModules + 1] = (func and {name, func}) or name
-    end
-end
-
-function F:InitializeInitialModules()
-    for index, object in ipairs(F.RegisteredInitialModules) do
-        F:CallLoadedModule(object, true, F.RegisteredInitialModules, index)
-    end
-end
-
-function F:InitializeModules()
-    for index, object in ipairs(F.RegisteredModules) do
-        F:CallLoadedModule(object, true, F.RegisteredModules, index)
-    end
-end
-
-function F:Initialize()
-    F:InitializeModules()
-end ]]
 
 -- Events
 local events = {}
