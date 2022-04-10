@@ -15,6 +15,5 @@
     <Script file="proposal-timer.lua"/>
     <Script file="reputation.lua"/>
     <Script file="screenshot.lua"/>
-    <Script file="vendor.lua"/>
     <Script file="vignetting.lua"/>
 </Ui>

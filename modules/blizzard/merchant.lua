@@ -1,9 +1,9 @@
 local F, C = unpack(select(2, ...))
-local EVU = F:RegisterModule('ExtendedVendorUI')
+local BLIZZARD = F:GetModule('Blizzard')
 
 local OLD_MERCHANT_ITEMS_PER_PAGE = 10
 
-function EVU:UpdateMerchantItemPos()
+function BLIZZARD:UpdateMerchantItemPos()
     for i = 1, _G.MERCHANT_ITEMS_PER_PAGE do
         local button = _G['MerchantItem' .. i]
         button:Show()
@@ -25,7 +25,7 @@ function EVU:UpdateMerchantItemPos()
     end
 end
 
-function EVU:UpdateBuybackItemPos()
+function BLIZZARD:UpdateBuybackItemPos()
     for i = 1, _G.MERCHANT_ITEMS_PER_PAGE do
         local button = _G['MerchantItem' .. i]
         button:ClearAllPoints()
@@ -46,7 +46,7 @@ function EVU:UpdateBuybackItemPos()
     end
 end
 
-function EVU:RestyleElemennts()
+function BLIZZARD:RestyleElemennts()
     if not _G.FREE_ADB.ReskinBlizz then
         return
     end
@@ -87,11 +87,11 @@ function EVU:RestyleElemennts()
     end
 end
 
-function EVU:OnLogin()
+function BLIZZARD:EnhancedMerchant()
     if IsAddOnLoaded('ExtVendor') then
         return
     end
-    if not C.DB.General.ExtVendorUI then
+    if not C.DB.General.EnhancedMerchant then
         return
     end
 
@@ -114,13 +114,13 @@ function EVU:OnLogin()
     _G.MerchantNextPageButton:SetPoint('CENTER', _G.MerchantFrame, 'BOTTOM', 290, 55)
 
     hooksecurefunc('MerchantFrame_UpdateMerchantInfo', function()
-        EVU:UpdateMerchantItemPos()
+        BLIZZARD:UpdateMerchantItemPos()
     end)
 
     hooksecurefunc('MerchantFrame_UpdateBuybackInfo', function()
-        EVU:UpdateBuybackItemPos()
+        BLIZZARD:UpdateBuybackItemPos()
     end)
 
-    EVU:RestyleElemennts()
+    BLIZZARD:RestyleElemennts()
 end
 

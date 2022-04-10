@@ -413,6 +413,7 @@ GUI.OptionsList = {
         {1, 'General', 'EnhancedLoot', L['Enhanced Loot'], true, nil, nil, L['Enhance the default loot frame.']},
         {1, 'General', 'EnhancedMailBox', L['Enhanced Mailbox'], nil, nil, nil, L['Enhance the default mailbox frame, and provide some additional convenience functions.']},
         {1, 'General', 'EnhancedLFGList', L['Enhanced Premade'], true, nil, nil, L['Enhance the premade, including quick apply by double click, hide group join notice, styled group roles, auto invite applicants, show leader overall score, abbr keystone name for Tazavesh.']},
+        {1, 'General', 'EnhancedMerchant', L['Enhanced Merchant'], nil, nil, nil, L['Enhance the default merchant frame by expanding it to twice the width.']},
         {},
         {1, 'General', 'SimplifyErrors', L['Filter Error Messages'], nil, nil, nil, L['Filter error messages during battle, such as ability not ready yet, out of rage/mana/energy, etc.']},
         {1, 'General', 'FasterMovieSkip', L['Faster Movie Skip'], true, nil, nil, L['Allow space bar, escape key and enter key to cancel cinematic without confirmation.']},

@@ -16,16 +16,17 @@ function BLIZZARD:OnLogin()
         end
     end
 
-    self:UpdateBossBanner()
-    self:UpdateBossEmote()
+    BLIZZARD:UpdateBossBanner()
+    BLIZZARD:UpdateBossEmote()
 
-    self:TradeTargetInfo()
-    self:TicketStatusMover()
-    self:VehicleIndicatorMover()
-    self:DurabilityFrameMover()
-    self:UIWidgetMover()
-    self:MawBuffsFrameMover()
-    self:EnhancedColorPicker()
+    BLIZZARD:TradeTargetInfo()
+    BLIZZARD:TicketStatusMover()
+    BLIZZARD:VehicleIndicatorMover()
+    BLIZZARD:DurabilityFrameMover()
+    BLIZZARD:UIWidgetMover()
+    BLIZZARD:MawBuffsFrameMover()
+    BLIZZARD:EnhancedColorPicker()
+    BLIZZARD:EnhancedMerchant()
 end
 
 do
