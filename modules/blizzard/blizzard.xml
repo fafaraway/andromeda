@@ -10,6 +10,7 @@
     <Script file="errors.lua"/>
     <Script file="fixes.lua"/>
     <Script file="fonts.lua"/>
+    <Script file="friendslist.lua"/>
     <Script file="loot.lua"/>
     <Script file="mail.lua"/>
     <Script file="merchant.lua"/>

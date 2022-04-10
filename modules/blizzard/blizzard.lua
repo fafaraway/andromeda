@@ -27,6 +27,7 @@ function BLIZZARD:OnLogin()
     BLIZZARD:MawBuffsFrameMover()
     BLIZZARD:EnhancedColorPicker()
     BLIZZARD:EnhancedMerchant()
+    BLIZZARD:EnhancedFriendsList()
 end
 
 do

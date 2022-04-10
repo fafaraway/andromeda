@@ -5,7 +5,6 @@
     <Script file="camera.lua"/>
     <Script file="cursor.lua"/>
     <Script file="domination-shards.lua"/>
-    <Script file="friends-list.lua"/>
     <Script file="dragemall.lua"/>
     <Script file="group-tool.lua"/>
     <Script file="itemlevel.lua"/>
