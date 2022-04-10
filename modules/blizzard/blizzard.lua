@@ -25,6 +25,7 @@ function BLIZZARD:OnLogin()
     self:DurabilityFrameMover()
     self:UIWidgetMover()
     self:MawBuffsFrameMover()
+    self:EnhancedColorPicker()
 end
 
 do
