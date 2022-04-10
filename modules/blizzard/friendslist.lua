@@ -1,30 +1,31 @@
-local F, C = unpack(select(2, ...))
-local EFL = F:RegisterModule('EnhancedFriendsList')
+local F, C, L = unpack(select(2, ...))
+local BLIZZARD = F:GetModule('Blizzard')
 
 local WOW_PROJECT_CLASSIC_TBC = 5
-local mediaPath = 'Interface\\AddOns\\FreeUI\\assets\\textures\\'
+local mediaPath = 'Interface\\AddOns\\FreeUI\\assets\\textures\\client\\'
 
 local gameIcons = {
-    [_G.BNET_CLIENT_WOW] = mediaPath .. 'game_icons\\WoWSL',
-    [_G.BNET_CLIENT_WOW .. 'C'] = mediaPath .. 'game_icons\\WoW',
-    [_G.BNET_CLIENT_WOW .. 'C_TBC'] = mediaPath .. 'game_icons\\WoWC',
-    [_G.BNET_CLIENT_D2] = mediaPath .. 'GameIcons\\D2',
-    [_G.BNET_CLIENT_D3] = mediaPath .. 'game_icons\\D3',
-    [_G.BNET_CLIENT_WTCG] = mediaPath .. 'game_icons\\HS',
-    [_G.BNET_CLIENT_SC] = mediaPath .. 'game_icons\\SC',
-    [_G.BNET_CLIENT_SC2] = mediaPath .. 'game_icons\\SC2',
-    [_G.BNET_CLIENT_APP] = mediaPath .. 'game_icons\\App',
-    ['BSAp'] = mediaPath .. 'game_icons\\Mobile',
-    [_G.BNET_CLIENT_HEROES] = mediaPath .. 'game_icons\\HotS',
-    [_G.BNET_CLIENT_OVERWATCH] = mediaPath .. 'game_icons\\OW',
-    [_G.BNET_CLIENT_COD] = mediaPath .. 'game_icons\\COD',
-    [_G.BNET_CLIENT_COD_BOCW] = mediaPath .. 'game_icons\\COD_CW',
-    [_G.BNET_CLIENT_COD_MW] = mediaPath .. 'game_icons\\COD_MW',
-    [_G.BNET_CLIENT_COD_MW2] = mediaPath .. 'game_icons\\COD_MW2',
-    [_G.BNET_CLIENT_WC3] = mediaPath .. 'game_icons\\WC3',
+    [_G.BNET_CLIENT_WOW] = mediaPath .. 'WoWSL',
+    [_G.BNET_CLIENT_WOW .. 'C'] = mediaPath .. 'WoW',
+    [_G.BNET_CLIENT_WOW .. 'C_TBC'] = mediaPath .. 'WoWC',
+    [_G.BNET_CLIENT_D2] = mediaPath .. 'D2',
+    [_G.BNET_CLIENT_D3] = mediaPath .. 'D3',
+    [_G.BNET_CLIENT_WTCG] = mediaPath .. 'HS',
+    [_G.BNET_CLIENT_SC] = mediaPath .. 'SC',
+    [_G.BNET_CLIENT_SC2] = mediaPath .. 'SC2',
+    [_G.BNET_CLIENT_APP] = mediaPath .. 'App',
+    ['BSAp'] = mediaPath .. 'Mobile',
+    [_G.BNET_CLIENT_HEROES] = mediaPath .. 'HotS',
+    [_G.BNET_CLIENT_OVERWATCH] = mediaPath .. 'OW',
+    [_G.BNET_CLIENT_COD] = mediaPath .. 'COD',
+    [_G.BNET_CLIENT_COD_BOCW] = mediaPath .. 'COD_CW',
+    [_G.BNET_CLIENT_COD_MW] = mediaPath .. 'COD_MW',
+    [_G.BNET_CLIENT_COD_MW2] = mediaPath .. 'COD_MW2',
+    [_G.BNET_CLIENT_WC3] = mediaPath .. 'WC3',
     [_G.BNET_CLIENT_CLNT] = _G.BNet_GetClientTexture(_G.BNET_CLIENT_CLNT),
-    [_G.BNET_CLIENT_CRASH4] = mediaPath .. 'game_icons\\CRASH4',
-    [_G.BNET_CLIENT_ARCADE] = _G.BNet_GetClientTexture(_G.BNET_CLIENT_ARCADE)
+    [_G.BNET_CLIENT_CRASH4] = mediaPath .. 'CRASH4',
+    [_G.BNET_CLIENT_ARCADE] = _G.BNet_GetClientTexture(_G.BNET_CLIENT_ARCADE),
+    [_G.BNET_CLIENT_COD_VANGUARD] = mediaPath .. 'COD_VG',
 }
 
 local statusIcons = {
@@ -34,6 +35,13 @@ local statusIcons = {
     ['AFK'] = _G.FRIENDS_TEXTURE_AFK
 }
 
+local regionLocales = {
+    [1] = L['America'],
+    [2] = L['Korea'],
+    [3] = L['Europe'],
+    [4] = L['Taiwan'],
+    [5] = L['China']}
+
 local maxLevel = {
     [_G.BNET_CLIENT_WOW .. 'C'] = 60,
     [_G.BNET_CLIENT_WOW .. 'C_TBC'] = 70,
@@ -41,6 +49,8 @@ local maxLevel = {
 }
 
 local clientColor = {
+    [_G.BNET_CLIENT_ARCADE] = {r = 0.509, g = 0.772, b = 1}, -- Arcade
+    [_G.BNET_CLIENT_CRASH4] = {r = 0.509, g = 0.772, b = 1}, -- Crash
     [_G.BNET_CLIENT_CLNT] = {r = 0.509, g = 0.772, b = 1}, -- 未知
     [_G.BNET_CLIENT_APP] = {r = 0.509, g = 0.772, b = 1}, -- 战网
     [_G.BNET_CLIENT_WC3] = {r = 0.796, g = 0.247, b = 0.145}, -- 魔兽争霸重置版 3
@@ -52,10 +62,11 @@ local clientColor = {
     [_G.BNET_CLIENT_HEROES] = {r = 0, g = 0.8, b = 1}, -- 风暴英雄
     [_G.BNET_CLIENT_OVERWATCH] = {r = 1, g = 1, b = 1}, -- 守望先锋
     [_G.BNET_CLIENT_COD] = {r = 0, g = 0.8, b = 0}, -- 使命召唤
-    [_G.BNET_CLIENT_COD_MW] = {r = 0, g = 0.8, b = 0}, -- 使命召唤：现代战争 2
+    [_G.BNET_CLIENT_COD_MW] = {r = 0, g = 0.8, b = 0}, -- 使命召唤：现代战争
+    [_G.BNET_CLIENT_COD_MW2] = {r = 0, g = 0.8, b = 0}, -- 使命召唤：现代战争 2
     [_G.BNET_CLIENT_COD_BOCW] = {r = 0, g = 0.8, b = 0}, -- 使命召唤：冷战
     [_G.BNET_CLIENT_WOW .. 'C'] = {r = 0.866, g = 0.690, b = 0.180}, -- 魔兽世界怀旧版
-    ['BSAp'] = {r = 0.509, g = 0.772, b = 1} -- 手机战网 App
+    ['BSAp'] = {r = 0.509, g = 0.772, b = 1}, -- 手机战网 App
 }
 
 local function GetClassColor(className)
@@ -80,7 +91,7 @@ local function UpdateFriendButton(button)
         return
     end
 
-    local game, realID, name, server, class, area, level, status
+    local game, realID, name, server, class, area, level, status, isInCurrentRegion, regionID
 
     -- 获取好友游戏情况
     if button.buttonType == _G.FRIENDS_BUTTON_TYPE_WOW then
@@ -91,6 +102,7 @@ local function UpdateFriendButton(button)
         level = friendInfo.level
         class = friendInfo.className
         area = friendInfo.area
+        -- faction = C.FACTION -- 同一阵营才能加好友的吧？
 
         if friendInfo.connected then
             if friendInfo.afk then
@@ -128,8 +140,11 @@ local function UpdateFriendButton(button)
             if game == _G.BNET_CLIENT_WOW then
                 name = gameAccountInfo.characterName or ''
                 level = gameAccountInfo.characterLevel or 0
+                -- faction = gameAccountInfo.factionName or nil
                 class = gameAccountInfo.className or ''
                 area = gameAccountInfo.areaName or ''
+                isInCurrentRegion = gameAccountInfo.isInCurrentRegion or false
+                regionID = gameAccountInfo.regionID or false
 
                 if gameAccountInfo.wowProjectID == _G.WOW_PROJECT_CLASSIC then
                     game = _G.BNET_CLIENT_WOW .. 'C' -- Classic
@@ -158,7 +173,6 @@ local function UpdateFriendButton(button)
 
         -- 名字
         local realIDString = realID and F:CreateColorString(realID, clientColor[game]) or realID
-
         local nameString = name
         local classColor = GetClassColor(class)
         if classColor then
@@ -181,10 +195,14 @@ local function UpdateFriendButton(button)
 
         -- 地区
         if area then
-            if server and server ~= C.REALM then
+            if server and server ~= '' and server ~= C.REALM then
                 buttonText = F:CreateColorString(area .. ' - ' .. server, {r = .8, g = .8, b = .8})
             else
                 buttonText = F:CreateColorString(area, {r = .8, g = .8, b = .8})
+            end
+
+            if not isInCurrentRegion and regionLocales[regionID] then
+                buttonText = buttonText .. ' ' .. F.CreateColorString(string.format('[%s]', regionLocales[regionID]), {r = 0.62, g = 0.62, b = 0.62})
             end
 
             button.info:SetText(buttonText)
@@ -213,7 +231,7 @@ local function UpdateFriendButton(button)
     end
 end
 
-function EFL:OnLogin()
+function BLIZZARD:EnhancedFriendsList()
     hooksecurefunc('FriendsFrame_UpdateFriendButton', UpdateFriendButton)
     _G.FriendsFrame_Update()
 end

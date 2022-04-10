@@ -27,6 +27,11 @@ C.Assets.Texture = {
     Backdrop = 'Interface\\ChatFrame\\ChatFrameBackground',
     Shadow = C.ASSET_PATH .. 'textures\\shadow_tex',
     Glow = C.ASSET_PATH .. 'textures\\glow_tex',
+    Rare = C.ASSET_PATH .. 'textures\\np_rare',
+    Elite = C.ASSET_PATH .. 'textures\\np_elite',
+    Boss = C.ASSET_PATH .. 'textures\\np_boss',
+    Skull = C.ASSET_PATH .. 'textures\\np_skull',
+    Target = C.ASSET_PATH .. 'textures\\np_target',
 }
 
 C.Assets.Statusbar = {

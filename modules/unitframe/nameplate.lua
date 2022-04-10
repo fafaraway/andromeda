@@ -253,13 +253,14 @@ function NAMEPLATE:UpdateColor(_, unit)
 
     if r or g or b then
         element:SetStatusBarColor(r, g, b)
+
+        if self.TargetIndicator then
+            self.TargetIndicator.aggroL:SetVertexColor(r, g, b)
+            self.TargetIndicator.aggroR:SetVertexColor(r, g, b)
+        end
     end
 
-    if isCustomUnit then
-        self.Overlay:Show()
-    else
-        self.Overlay:Hide()
-    end
+    NAMEPLATE:UpdateOverlayVisibility(self, unit)
 
     self.ThreatIndicator:Hide()
     if status and (isCustomUnit or (not tankMode and C.MyRole ~= 'Tank')) then
@@ -299,7 +300,7 @@ function NAMEPLATE:CreateThreatIndicator(self)
     local threat = frame:CreateTexture(nil, 'OVERLAY')
     threat:SetPoint('BOTTOMLEFT', frame, 'TOPLEFT', 0, 0)
     threat:SetPoint('BOTTOMRIGHT', frame, 'TOPRIGHT', 0, 0)
-    threat:SetHeight(8)
+    threat:SetHeight(12)
     threat:SetTexture(C.Assets.Texture.Glow)
     threat:Hide()
 
@@ -321,8 +322,20 @@ function NAMEPLATE:UpdateTargetChange()
 
     if UnitIsUnit(unit, 'target') and not UnitIsUnit(unit, 'player') then
         element:Show()
+        if element.aggroR:IsShown() and not element.animGroupR:IsPlaying() then
+            element.animGroupR:Play()
+        end
+        if element.aggroL:IsShown() and not element.animGroupL:IsPlaying() then
+            element.animGroupL:Play()
+        end
     else
         element:Hide()
+        if element.animGroupR:IsPlaying() then
+            element.animGroupR:Stop()
+        end
+        if element.animGroupL:IsPlaying() then
+            element.animGroupL:Stop()
+        end
     end
 
     if C.DB.Nameplate.ColoredTarget then
@@ -336,11 +349,18 @@ function NAMEPLATE:UpdateTargetIndicator()
 
     if C.DB.Nameplate.TargetIndicator then
         if isNameOnly then
-            element.Glow:Hide()
             element.nameGlow:Show()
+            element.Glow:Hide()
+            element.aggroL:Hide()
+            element.aggroR:Hide()
         else
-            element.Glow:Show()
             element.nameGlow:Hide()
+            element.Glow:Show()
+            element.aggroL:Show()
+            element.aggroR:Show()
+
+            element.animR.points[1]:SetOffset(2, 0)
+            element.animL.points[1]:SetOffset(-2, 0)
         end
         element:Show()
     else
@@ -357,17 +377,49 @@ function NAMEPLATE:CreateTargetIndicator(self)
     local r, g, b = color.r, color.g, color.b
 
     local frame = CreateFrame('Frame', nil, self)
+    frame:SetFrameStrata('BACKGROUND')
     frame:SetAllPoints()
-    frame:SetFrameLevel(self:GetFrameLevel() - 1)
     frame:Hide()
 
-    frame.Glow = frame:CreateTexture(nil, 'OVERLAY')
+    frame.Glow = frame:CreateTexture(nil, 'BACKGROUND')
     frame.Glow:SetPoint('TOPLEFT', frame, 'BOTTOMLEFT')
     frame.Glow:SetPoint('TOPRIGHT', frame, 'BOTTOMRIGHT')
     frame.Glow:SetHeight(12)
     frame.Glow:SetTexture(C.Assets.Texture.Glow)
     frame.Glow:SetRotation(math.rad(180))
     frame.Glow:SetVertexColor(r, g, b)
+
+    frame.aggroL = frame:CreateTexture(nil, 'BACKGROUND', nil, -5)
+    frame.aggroL:SetSize(C.DB.Nameplate.Height * 8, C.DB.Nameplate.Height * 4)
+    frame.aggroL:SetPoint('CENTER', frame, 'LEFT', -10, 0)
+    frame.aggroL:SetTexture(C.Assets.Texture.Target)
+
+    local animGroupL = frame.aggroL:CreateAnimationGroup()
+    animGroupL:SetLooping('REPEAT')
+    local anim = animGroupL:CreateAnimation('Path')
+    anim:SetSmoothing('IN_OUT')
+    anim:SetDuration(1)
+    anim.points = {}
+    anim.points[1] = anim:CreateControlPoint()
+    anim.points[1]:SetOrder(1)
+    frame.animL = anim
+    frame.animGroupL = animGroupL
+
+    frame.aggroR = frame:CreateTexture(nil, 'BACKGROUND', nil, -5)
+    frame.aggroR:SetSize(C.DB.Nameplate.Height * 8, C.DB.Nameplate.Height * 4)
+    frame.aggroR:SetPoint('CENTER', frame, 'RIGHT', 10, 0)
+    frame.aggroR:SetTexture(C.Assets.Texture.Target)
+    frame.aggroR:SetRotation(math.rad(180))
+
+    local animGroupR = frame.aggroR:CreateAnimationGroup()
+    animGroupR:SetLooping('REPEAT')
+    local anim = animGroupR:CreateAnimation('Path')
+    anim:SetDuration(1)
+    anim.points = {}
+    anim.points[1] = anim:CreateControlPoint()
+    anim.points[1]:SetOrder(1)
+    frame.animR = anim
+    frame.animGroupR = animGroupR
 
     frame.nameGlow = frame:CreateTexture(nil, 'BACKGROUND', nil, -5)
     frame.nameGlow:SetSize(150, 80)
@@ -662,7 +714,7 @@ local totemsList = {
     [105451] = {204331, 15}, -- Counterstrike
     [104818] = {207399, 30}, -- Ancestral
     [105427] = {204330, 15}, -- Skyfury
-    [119052] = {236320, 15} -- Warrior War Banner
+    [119052] = {236320, 15}, -- Warrior War Banner
 }
 
 local function CreateTotemIcon(self)
@@ -679,38 +731,60 @@ local function CreateTotemIcon(self)
     return icon
 end
 
+-- Overlay
+function NAMEPLATE:UpdateOverlayVisibility(self, unit)
+    local name = self.unitName
+    local npcID = self.npcID
+    local isCustomUnit = customUnits[name] or customUnits[npcID]
+    if isCustomUnit or UnitIsUnit(unit, 'focus') then
+        self.Overlay:Show()
+    else
+        self.Overlay:Hide()
+    end
+end
+
+function NAMEPLATE:CreateOverlayTexture(self)
+    local overlay = self.Health:CreateTexture(nil, 'OVERLAY')
+    overlay:SetAllPoints()
+    overlay:SetTexture(C.Assets.Statusbar.Overlay)
+    overlay:SetVertexColor(0, 0, 0, .4)
+    overlay:Hide()
+
+    self.Overlay = overlay
+end
+
+-- Health
+function NAMEPLATE:CreateHealthBar(self)
+    local health = CreateFrame('StatusBar', nil, self)
+    health:SetAllPoints()
+    health:SetStatusBarTexture(NAMEPLATE.StatusBarTex)
+    health.backdrop = F.SetBD(health)
+    health.backdrop:SetBackdropColor(0, 0, 0, .6)
+    health.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
+
+    health.Smooth = C.DB.Unitframe.Smooth
+
+    self.Health = health
+    self.Health.UpdateColor = NAMEPLATE.UpdateColor
+end
+
 --[[ Create plate ]]
 local platesList = {}
 function NAMEPLATE:CreateNameplateStyle()
     self.unitStyle = 'nameplate'
 
     self:SetSize(C.DB.Nameplate.Width, C.DB.Nameplate.Height)
-    self:SetPoint('CENTER', 0, -10)
+    self:SetPoint('CENTER')
     self:SetScale(_G.UIParent:GetScale())
 
-    local health = CreateFrame('StatusBar', nil, self)
-    health:SetAllPoints()
-    health:SetStatusBarTexture(NAMEPLATE.StatusBarTex)
-    health.backdrop = F.SetBD(health)
-    health.Smooth = C.DB.Unitframe.Smooth
-
-    self.Health = health
-    self.Health.UpdateColor = NAMEPLATE.UpdateColor
-
-    local overlay = health:CreateTexture(nil, 'OVERLAY')
-    overlay:SetAllPoints()
-    overlay:SetTexture(C.Assets.Statusbar.Overlay)
-    overlay:SetAlpha(.2)
-    overlay:SetBlendMode('ADD')
-    overlay:Hide()
-    self.Overlay = overlay
-
+    NAMEPLATE:CreateHealthBar(self)
     NAMEPLATE:CreateNameTag(self)
-    NAMEPLATE:CreateHealthTag(self)
+    UNITFRAME:CreateHealthTag(self)
     UNITFRAME:CreateHealPrediction(self)
+    NAMEPLATE:CreateOverlayTexture(self)
     NAMEPLATE:CreateTargetIndicator(self)
     NAMEPLATE:CreateMouseoverIndicator(self)
-    NAMEPLATE:CreateClassifyIndicator(self)
+    -- NAMEPLATE:CreateClassifyIndicator(self)
     NAMEPLATE:CreateThreatIndicator(self)
     NAMEPLATE:CreateQuestIndicator(self)
     UNITFRAME:CreateNamePlateCastBar(self)
@@ -758,7 +832,6 @@ function NAMEPLATE:UpdateNameplateAuras()
     local element = self.Auras
     element:SetPoint('BOTTOM', self, 'TOP', 0, 8)
     element.numTotal = C.DB.Nameplate.AuraNumTotal
-    element.size = C.DB.Nameplate.AuraSize
     element:SetWidth(self:GetWidth())
     element:SetHeight((element.size + element.spacing) * 2)
     element:ForceUpdate()
@@ -795,7 +868,7 @@ local disabledElements = {
 }
 
 function NAMEPLATE:UpdatePlateByType()
-    --local nameOnlyName = self.nameOnlyName
+    -- local nameOnlyName = self.nameOnlyName
     local name = self.NameTag
 
     local raidtarget = self.RaidTargetIndicator
@@ -821,7 +894,6 @@ function NAMEPLATE:UpdatePlateByType()
         name:SetPoint('CENTER', self, 'TOP', 0, 8)
         F:SetFS(name, C.Assets.Font.Header, 16, nil, nil, nil, 'THICK')
 
-
         -- raidtarget:SetPoint('BOTTOM', name, 'TOP', 0, -5)
         -- raidtarget:SetParent(self)
 
@@ -842,13 +914,12 @@ function NAMEPLATE:UpdatePlateByType()
             end
         end
 
-        name:SetJustifyH('CENTER')
-        self:Tag(name, '[free:npname]')
+        name:SetJustifyH('LEFT')
+        self:Tag(name, '[free:classification][free:npname]')
         name:UpdateTag()
         name:SetParent(self.Health)
-        name:SetPoint('CENTER', self, 'TOP')
+        name:SetPoint('LEFT', self, 'TOPLEFT')
         F:SetFS(name, C.Assets.Font.Bold, 11, outline, nil, nil, outline or 'THICK')
-
 
         -- raidtarget:SetPoint('CENTER')
         -- raidtarget:SetParent(self.Health)
@@ -917,7 +988,7 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
         self.widgetContainer = blizzPlate and blizzPlate.WidgetContainer
         if self.widgetContainer then
             self.widgetContainer:SetParent(self)
-        --self.widgetContainer:SetScale(_G.FREE_ADB.UIScale)
+            -- self.widgetContainer:SetScale(_G.FREE_ADB.UIScale)
         end
 
         NAMEPLATE.RefreshPlateType(self, unit)

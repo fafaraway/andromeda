@@ -8,7 +8,7 @@ engine[3] = F.Libs.ACL:GetLocale(addOnName, GetLocale())
 
 -- Prepare modules
 do
-    F:RegisterModule('General')
+    F:RegisterModule('Misc')
     F:RegisterModule('UnitFrame')
     F:RegisterModule('Map')
     F:RegisterModule('Tooltip')
@@ -28,6 +28,7 @@ do
     F:RegisterModule('Nameplate')
     F:RegisterModule('Vignetting')
     F:RegisterModule('Camera')
+    F:RegisterModule('Automation')
 end
 
 -- Initialize settings
