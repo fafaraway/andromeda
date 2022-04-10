@@ -28,6 +28,7 @@ function BLIZZARD:OnLogin()
     BLIZZARD:EnhancedColorPicker()
     BLIZZARD:EnhancedMerchant()
     BLIZZARD:EnhancedFriendsList()
+    BLIZZARD:EnhancedPremade()
 end
 
 do

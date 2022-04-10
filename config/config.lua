@@ -51,9 +51,7 @@ C.CharacterSettings = {
         EnhancedMailBox = true,
             SaveRecipient = false,
             RecipientList = '',
-
-        EnhancedLFGList = true,
-            ShortenScore = true,
+        EnhancedPremade = true,
     },
     Combat = {
         Enable = true,
