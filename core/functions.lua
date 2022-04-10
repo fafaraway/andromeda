@@ -1605,6 +1605,20 @@ do
         if vertical then
             thumb:SetRotation(math.rad(90))
         end
+
+        local bar = CreateFrame('StatusBar', nil, bg)
+        bar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
+        bar:SetStatusBarColor(C.r, C.g, C.b, .25)
+        if vertical then
+            bar:SetPoint('BOTTOMLEFT', bg, C.MULT, C.MULT)
+            bar:SetPoint('BOTTOMRIGHT', bg, -C.MULT, C.MULT)
+            bar:SetPoint('TOP', thumb, 'CENTER')
+            bar:SetOrientation('VERTICAL')
+        else
+            bar:SetPoint('TOPLEFT', bg, C.MULT, -C.MULT)
+            bar:SetPoint('BOTTOMLEFT', bg, C.MULT, C.MULT)
+            bar:SetPoint('RIGHT', thumb, 'CENTER')
+        end
     end
 
     -- Handle collapse
