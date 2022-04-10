@@ -374,6 +374,26 @@ do
     end
 end
 
+-- auto holiday boss
+do
+    local doneHoliday
+    _G.LFDParentFrame:HookScript('OnShow', function()
+        if not doneHoliday then
+            for index = 1, _G.GetNumRandomDungeons() do
+                local dungeonID = _G.GetLFGRandomDungeonInfo(index)
+                local isHoliday = _G.select(15, _G.GetLFGDungeonInfo(dungeonID))
+                if isHoliday then
+                    if _G.GetLFGDungeonRewards(dungeonID) then
+                        doneHoliday = true
+                    else
+                        _G.LFDQueueFrame_SetType(dungeonID)
+                    end
+                end
+            end
+        end
+    end)
+end
+
 
 function M:OnLogin()
     M:ForceWarning()
