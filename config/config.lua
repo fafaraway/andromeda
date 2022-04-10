@@ -42,6 +42,7 @@ C.CharacterSettings = {
         ScreenSaver = true,
         ProposalTimer = true,
         ExtVendorUI = true,
+        MicroMenu = true,
 
         GroupTool = true,
             RuneCheck = false,
