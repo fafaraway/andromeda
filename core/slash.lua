@@ -120,6 +120,47 @@ F:RegisterSlash('/tt', function(msg)
     end
 end)
 
+-- Support cmd /way if TomTom disabled
+do
+    local pointString = C.INFO_COLOR .. '|Hworldmap:%d+:%d+:%d+|h[|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a%s (%s, %s)%s]|h|r'
+
+    local function GetCorrectCoord(x)
+        x = tonumber(x)
+        if x then
+            if x > 100 then
+                return 100
+            elseif x < 0 then
+                return 0
+            end
+
+            return x
+        end
+    end
+
+    F:RegisterSlash('/way', function(msg)
+        if IsAddOnLoaded('TomTom') then
+            return
+        end
+        msg = string.gsub(msg, '(%d)[%.,] (%d)', '%1 %2')
+        local x, y, z = string.match(msg, '(%S+)%s(%S+)(.*)')
+        if x and y then
+            local mapID = C_Map.GetBestMapForUnit('player')
+            if mapID then
+                local mapInfo = C_Map.GetMapInfo(mapID)
+                local mapName = mapInfo and mapInfo.name
+                if mapName then
+                    x = GetCorrectCoord(x)
+                    y = GetCorrectCoord(y)
+
+                    if x and y then
+                        print(string.format(pointString, mapID, x * 100, y * 100, mapName, x, y, z or ''))
+                    end
+                end
+            end
+        end
+    end)
+end
+
 -- Clear chat
 F:RegisterSlash('/clear', function()
     for i = 1, _G.NUM_CHAT_WINDOWS do

@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local M = F:RegisterModule('EnhancedPremade')
+local BLIZZARD = F:GetModule('Blizzard')
 local TT = F:GetModule('Tooltip')
 
 local applicationViewerFrame = _G.LFGListFrame.ApplicationViewer
@@ -9,7 +9,7 @@ local categorySelection = _G.LFGListFrame.CategorySelection
 local LE_PARTY_CATEGORY_HOME = _G.LE_PARTY_CATEGORY_HOME or 1
 local scoreFormat = C.GREY_COLOR .. '(%s) |r%s'
 
-function M:HookApplicationClick()
+function BLIZZARD:HookApplicationClick()
     if _G.LFGListFrame.SearchPanel.SignUpButton:IsEnabled() then
         _G.LFGListFrame.SearchPanel.SignUpButton:Click()
     end
@@ -20,7 +20,7 @@ function M:HookApplicationClick()
 end
 
 local pendingFrame
-function M:DialogHideInSecond()
+function BLIZZARD:DialogHideInSecond()
     if not pendingFrame then
         return
     end
@@ -34,9 +34,9 @@ function M:DialogHideInSecond()
     pendingFrame = nil
 end
 
-function M:HookDialogOnShow()
+function BLIZZARD:HookDialogOnShow()
     pendingFrame = self
-    F:Delay(1, M.DialogHideInSecond)
+    F:Delay(1, BLIZZARD.DialogHideInSecond)
 end
 
 local function HidePvEFrame()
@@ -123,7 +123,7 @@ local function SetClassIcon(button, class)
     end
 end
 
-function M:ReplaceGroupRoles(numPlayers, _, disabled)
+function BLIZZARD:ReplaceGroupRoles(numPlayers, _, disabled)
     UpdateGroupRoles(self)
 
     for i = 1, 5 do
@@ -183,7 +183,7 @@ function M:ReplaceGroupRoles(numPlayers, _, disabled)
     end
 end
 
-function M:ShowLeaderOverallScore()
+function BLIZZARD:ShowLeaderOverallScore()
     local resultID = self.resultID
     local searchResultInfo = resultID and C_LFGList.GetSearchResultInfo(resultID)
     if searchResultInfo then
@@ -200,7 +200,7 @@ function M:ShowLeaderOverallScore()
     end
 end
 
-function M:AddAutoAcceptButton()
+function BLIZZARD:AddAutoAcceptButton()
     local bu = F.CreateCheckbox(searchPanel, true)
     bu:SetSize(20, 20)
     bu:SetHitRectInsets(0, -130, 0, 0)
@@ -238,7 +238,7 @@ function M:AddAutoAcceptButton()
     end)
 end
 
-function M:ReplaceFindGroupButton()
+function BLIZZARD:ReplaceFindGroupButton()
     if not IsAddOnLoaded('PremadeGroupsFilter') then
         return
     end
@@ -275,7 +275,7 @@ function M:ReplaceFindGroupButton()
     end
 end
 
-function M:AddDungeonsFilter()
+function BLIZZARD:AddDungeonsFilter()
     local mapData = {
         [0] = {mapID = 375, aID = 703}, -- 仙林
         [1] = {mapID = 376, aID = 713}, -- 通灵
@@ -379,7 +379,7 @@ local function CreateSortButton(parent, texture, sortStr)
     table.insert(parent.__sortBu, bu)
 end
 
-function M:AddPGFSortingExpression()
+function BLIZZARD:AddPGFSortingExpression()
     if not IsAddOnLoaded('PremadeGroupsFilter') then
         return
     end
@@ -414,8 +414,8 @@ local function Fix(self)
     end
 end
 
-function M:OnLogin()
-    if not C.DB.General.EnhancedLFGList then
+function BLIZZARD:EnhancedPremade()
+    if not C.DB.General.EnhancedPremade then
         return
     end
 
@@ -424,19 +424,19 @@ function M:OnLogin()
         if bu then
             bu.Name:SetFontObject(_G.Game14Font)
             bu.ActivityName:SetFontObject(_G.Game12Font)
-            bu:HookScript('OnDoubleClick', M.HookApplicationClick)
+            bu:HookScript('OnDoubleClick', BLIZZARD.HookApplicationClick)
         end
     end
 
     hooksecurefunc('LFGListInviteDialog_Accept', HidePvEFrame)
-    hooksecurefunc('StaticPopup_Show', M.HookDialogOnShow)
-    hooksecurefunc('LFGListInviteDialog_Show', M.HookDialogOnShow)
-    hooksecurefunc('LFGListGroupDataDisplayEnumerate_Update', M.ReplaceGroupRoles)
-    hooksecurefunc('LFGListSearchEntry_Update', M.ShowLeaderOverallScore)
+    hooksecurefunc('StaticPopup_Show', BLIZZARD.HookDialogOnShow)
+    hooksecurefunc('LFGListInviteDialog_Show', BLIZZARD.HookDialogOnShow)
+    hooksecurefunc('LFGListGroupDataDisplayEnumerate_Update', BLIZZARD.ReplaceGroupRoles)
+    hooksecurefunc('LFGListSearchEntry_Update', BLIZZARD.ShowLeaderOverallScore)
     hooksecurefunc('LFGListSearchPanel_UpdateResultList', Fix)
 
-    M:AddAutoAcceptButton()
-    M:ReplaceFindGroupButton()
-    M:AddDungeonsFilter()
-    M:AddPGFSortingExpression()
+    BLIZZARD:AddAutoAcceptButton()
+    BLIZZARD:ReplaceFindGroupButton()
+    BLIZZARD:AddDungeonsFilter()
+    BLIZZARD:AddPGFSortingExpression()
 end

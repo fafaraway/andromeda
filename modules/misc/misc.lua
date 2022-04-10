@@ -1,9 +1,9 @@
 local F, C, L = unpack(select(2, ...))
-local M = F:GetModule('General')
+local M = F:GetModule('Misc')
 
 -- Force warning
 do
-    local function ForceWarning_OnEvent(_, event)
+    local function onEvent(_, event)
         if event == 'UPDATE_BATTLEFIELD_STATUS' then
             for i = 1, GetMaxBattlefieldID() do
                 local status = GetBattlefieldStatus(i)
@@ -22,114 +22,20 @@ do
         end
     end
 
-    local function ReadyCheckHook(_, initiator)
+    local function hook(_, initiator)
         if initiator ~= 'player' then
             PlaySound(_G.SOUNDKIT.READY_CHECK, 'Master')
         end
     end
 
     function M:ForceWarning()
-        F:RegisterEvent('UPDATE_BATTLEFIELD_STATUS', ForceWarning_OnEvent)
-        F:RegisterEvent('PET_BATTLE_QUEUE_PROPOSE_MATCH', ForceWarning_OnEvent)
-        F:RegisterEvent('LFG_PROPOSAL_SHOW', ForceWarning_OnEvent)
-        F:RegisterEvent('RESURRECT_REQUEST', ForceWarning_OnEvent)
+        F:RegisterEvent('UPDATE_BATTLEFIELD_STATUS', onEvent)
+        F:RegisterEvent('PET_BATTLE_QUEUE_PROPOSE_MATCH', onEvent)
+        F:RegisterEvent('LFG_PROPOSAL_SHOW', onEvent)
+        F:RegisterEvent('RESURRECT_REQUEST', onEvent)
 
-        hooksecurefunc('ShowReadyCheck', ReadyCheckHook)
+        hooksecurefunc('ShowReadyCheck', hook)
     end
-end
-
--- Support cmd /way if TomTom disabled
-do
-    local pointString = C.INFO_COLOR .. '|Hworldmap:%d+:%d+:%d+|h[|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a%s (%s, %s)%s]|h|r'
-
-    local function GetCorrectCoord(x)
-        x = tonumber(x)
-        if x then
-            if x > 100 then
-                return 100
-            elseif x < 0 then
-                return 0
-            end
-            return x
-        end
-    end
-
-    function M:JerryWay()
-        if IsAddOnLoaded('TomTom') then
-            return
-        end
-
-        _G.SlashCmdList['FREEUI_JERRY_WAY'] = function(msg)
-            msg = string.gsub(msg, '(%d)[%.,] (%d)', '%1 %2')
-            local x, y, z = string.match(msg, '(%S+)%s(%S+)(.*)')
-            if x and y then
-                local mapID = C_Map.GetBestMapForUnit('player')
-                if mapID then
-                    local mapInfo = C_Map.GetMapInfo(mapID)
-                    local mapName = mapInfo and mapInfo.name
-                    if mapName then
-                        x = GetCorrectCoord(x)
-                        y = GetCorrectCoord(y)
-
-                        if x and y then
-                            print(string.format(pointString, mapID, x * 100, y * 100, mapName, x, y, z or ''))
-                        end
-                    end
-                end
-            end
-        end
-        _G.SLASH_FREEUI_JERRY_WAY1 = '/way'
-    end
-end
-
--- Auto select current event boss from LFD tool
-do
-    local firstLFD
-    local function LFD_OnShow()
-        if not firstLFD then
-            firstLFD = 1
-            for i = 1, GetNumRandomDungeons() do
-                local id = GetLFGRandomDungeonInfo(i)
-                local isHoliday = select(15, GetLFGDungeonInfo(id))
-                if isHoliday and not GetLFGDungeonRewards(id) then
-                    _G.LFDQueueFrame_SetType(id)
-                end
-            end
-        end
-    end
-
-    _G.LFDParentFrame:HookScript('OnShow', LFD_OnShow)
-end
-
--- Auto collapse TradeSkillFrame RecipeList
-do
-    local function CollapseTradeSkills(self)
-        self.tradeSkillChanged = nil
-        self.collapsedCategories = {}
-
-        for _, categoryID in ipairs({_G.C_TradeSkillUI.GetCategories()}) do
-            self.collapsedCategories[categoryID] = true
-        end
-
-        self:Refresh()
-    end
-
-    F:HookAddOn('Blizzard_TradeSkillUI', function(self)
-        hooksecurefunc(_G.TradeSkillFrame.RecipeList, 'OnDataSourceChanged', CollapseTradeSkills)
-    end)
-end
-
--- automatically select the talent tab
-do
-    local function SelectTalentTab()
-        if not InCombatLockdown() then
-            PlayerTalentTab_OnClick(_G['PlayerTalentFrameTab' .. _G.TALENTS_TAB])
-        end
-    end
-
-    F:HookAddOn('Blizzard_TalentUI', function()
-        hooksecurefunc('PlayerTalentFrame_Toggle', SelectTalentTab)
-    end)
 end
 
 -- alt+click to buy a stack
@@ -249,14 +155,20 @@ do
         '2066605',
     }
 
-    for _, soundID in pairs(soundsList) do
-        MuteSoundFile(soundID)
+    function M:MuteAnnoyingSounds()
+        for _, soundID in pairs(soundsList) do
+            MuteSoundFile(soundID)
+        end
     end
 end
 
 -- faster movie skip
 do
-    local function CinematicFrame_OnKeyDown(self, key)
+    local function skipOnKeyDown(self, key)
+        if not C.DB.General.FasterMovieSkip then
+            return
+        end
+
         if key == 'ESCAPE' then
             if self:IsShown() and self.closeDialog and self.closeDialog.confirmButton then
                 self.closeDialog:Hide()
@@ -264,7 +176,11 @@ do
         end
     end
 
-    local function CinematicFrame_OnKeyUp(self, key)
+    local function skipOnKeyUp(self, key)
+        if not C.DB.General.FasterMovieSkip then
+            return
+        end
+
         if key == 'SPACE' or key == 'ESCAPE' or key == 'ENTER' then
             if self:IsShown() and self.closeDialog and self.closeDialog.confirmButton then
                 self.closeDialog.confirmButton:Click()
@@ -272,80 +188,16 @@ do
         end
     end
 
-    local function MovieFrame_OnKeyUp(self, key)
-        if key == 'SPACE' or key == 'ESCAPE' or key == 'ENTER' then
-            if self:IsShown() and self.CloseDialog and self.CloseDialog.ConfirmButton then
-                self.CloseDialog.ConfirmButton:Click()
-            end
-        end
-    end
-
     function M:FasterMovieSkip()
-        if not C.DB.General.FasterMovieSkip then
-            return
-        end
+        _G.MovieFrame.closeDialog = _G.MovieFrame.CloseDialog
+        _G.MovieFrame.closeDialog.confirmButton = _G.MovieFrame.CloseDialog.ConfirmButton
+        _G.CinematicFrame.closeDialog.confirmButton = _G.CinematicFrameCloseDialogConfirmButton
 
-        if _G.CinematicFrame.closeDialog and not _G.CinematicFrame.closeDialog.confirmButton then
-            _G.CinematicFrame.closeDialog.confirmButton = _G.CinematicFrameCloseDialogConfirmButton
-        end
-
-        _G.CinematicFrame:HookScript('OnKeyDown', CinematicFrame_OnKeyDown)
-        _G.CinematicFrame:HookScript('OnKeyUp', CinematicFrame_OnKeyUp)
-        _G.MovieFrame:HookScript('OnKeyUp', MovieFrame_OnKeyUp)
+        _G.MovieFrame:HookScript('OnKeyDown', skipOnKeyDown)
+        _G.MovieFrame:HookScript('OnKeyUp', skipOnKeyUp)
+        _G.CinematicFrame:HookScript('OnKeyDown', skipOnKeyDown)
+        _G.CinematicFrame:HookScript('OnKeyUp', skipOnKeyUp)
     end
-end
-
--- automatically place keystones in the font of power
-do
-    local function autoKeystone()
-        for bagID = _G.BACKPACK_CONTAINER, _G.NUM_BAG_SLOTS do
-            for slotID = 1, GetContainerNumSlots(bagID) do
-                local itemLink = GetContainerItemLink(bagID, slotID)
-                if itemLink and itemLink:match('|Hkeystone:') then
-                    PickupContainerItem(bagID, slotID)
-                    if CursorHasItem() then
-                        C_ChallengeMode.SlotKeystone()
-                        return
-                    end
-                end
-            end
-        end
-    end
-
-    F:RegisterEvent('CHALLENGE_MODE_KEYSTONE_RECEPTABLE_OPEN', autoKeystone)
-end
-
--- track repair vendors if we're severely damaged
-do
-    local function trackRepair()
-        local alert = 0
-        for index in next, _G.INVENTORY_ALERT_STATUS_SLOTS do
-            local status = GetInventoryAlertStatus(index)
-            if status > alert then
-                alert = status
-            end
-        end
-
-        for index = 1, GetNumTrackingTypes() do
-            if GetTrackingInfo(index) == _G.MINIMAP_TRACKING_REPAIR then
-                return SetTracking(index, alert > 0)
-            end
-        end
-    end
-    F:RegisterEvent('UPDATE_INVENTORY_DURABILITY', trackRepair)
-end
-
--- track mailbox if we have pending mail
-do
-    local function trackMailbox()
-        for index = 1, GetNumTrackingTypes() do
-            local name, _, active = GetTrackingInfo(index)
-            if name == _G.MINIMAP_TRACKING_MAILBOX then
-                return SetTracking(index, HasNewMail() and not active)
-            end
-        end
-    end
-    F:RegisterEvent('UPDATE_INVENTORY_DURABILITY', trackMailbox)
 end
 
 -- ensure max camera distance
@@ -367,36 +219,74 @@ do
     F:RegisterEvent('PLAYER_ENTERING_WORLD', SetMaxZoomFactor)
 end
 
--- disable spells are automatically added to actionbar
+-- change the color of the current trader's name
+-- red stranger / blue guild / green friend
 do
-    if C.DEV_MODE then
-        _G.IconIntroTracker:UnregisterEvent('SPELL_PUSHED_TO_ACTIONBAR')
+    local infoText = F.CreateFS(_G.TradeFrame, C.Assets.Font.Bold, 14, true)
+    infoText:ClearAllPoints()
+    infoText:SetPoint('TOP', _G.TradeFrameRecipientNameText, 'BOTTOM', 0, -5)
+
+    local function updateColor()
+        local r, g, b = F:UnitColor('NPC')
+        _G.TradeFrameRecipientNameText:SetTextColor(r, g, b)
+
+        local guid = UnitGUID('NPC')
+        if not guid then
+            return
+        end
+        local text = C.RED_COLOR .. L['Stranger']
+        if C_BattleNet.GetGameAccountInfoByGUID(guid) or C_FriendList.IsFriend(guid) then
+            text = C.GREEN_COLOR .. _G.FRIEND
+        elseif IsGuildMember(guid) then
+            text = C.BLUE_COLOR .. _G.GUILD
+        end
+        infoText:SetText(text)
     end
+
+    hooksecurefunc('TradeFrame_Update', updateColor)
 end
 
--- auto holiday boss
+-- kill blizzard tutorials
 do
-    local doneHoliday
-    _G.LFDParentFrame:HookScript('OnShow', function()
-        if not doneHoliday then
-            for index = 1, _G.GetNumRandomDungeons() do
-                local dungeonID = _G.GetLFGRandomDungeonInfo(index)
-                local isHoliday = _G.select(15, _G.GetLFGDungeonInfo(dungeonID))
-                if isHoliday then
-                    if _G.GetLFGDungeonRewards(dungeonID) then
-                        doneHoliday = true
-                    else
-                        _G.LFDQueueFrame_SetType(dungeonID)
-                    end
-                end
+    local function onEvent()
+        local lastInfoFrame = C_CVar.GetCVarBitfield('closedInfoFrames', _G.NUM_LE_FRAME_TUTORIALS)
+        if not lastInfoFrame then
+            C_CVar.SetCVar('showTutorials', 0)
+            C_CVar.SetCVar('showNPETutorials', 0)
+            C_CVar.SetCVar('hideAdventureJournalAlerts', 1)
+            -- help plates
+            for i = 1, _G.NUM_LE_FRAME_TUTORIALS do
+                C_CVar.SetCVarBitfield('closedInfoFrames', i, true)
+            end
+            for i = 1, _G.NUM_LE_FRAME_TUTORIAL_ACCCOUNTS do
+                C_CVar.SetCVarBitfield('closedInfoFramesAccountWide', i, true)
             end
         end
-    end)
-end
 
+        -- hide talent alert
+        function _G.MainMenuMicroButton_AreAlertsEnabled()
+            return false
+        end
+
+        -- disable spells are automatically added to actionbar
+        _G.IconIntroTracker:UnregisterEvent('SPELL_PUSHED_TO_ACTIONBAR')
+    end
+
+    -- if you're in Exile's Reach and level 1 this cvar gets automatically enabled
+    hooksecurefunc('NPE_CheckTutorials', function()
+        if C_PlayerInfo.IsPlayerNPERestricted() and UnitLevel('player') == 1 then
+            SetCVar('showTutorials', 0)
+            _G.NewPlayerExperience:Shutdown()
+            -- for some reason this window still shows up
+            _G.NPE_TutorialKeyboardMouseFrame_Frame:Hide()
+        end
+    end)
+
+    F:RegisterEvent('ADDON_LOADED', onEvent)
+end
 
 function M:OnLogin()
     M:ForceWarning()
-    M:JerryWay()
+    M:MuteAnnoyingSounds()
     M:FasterMovieSkip()
 end

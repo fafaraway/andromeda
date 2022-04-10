@@ -1,4 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Include file="aura.xml"/>
     <Script file="blizzard.lua"/>
     <Script file="alerts.lua"/>
     <Script file="challenges.lua"/>
@@ -10,10 +11,12 @@
     <Script file="errors.lua"/>
     <Script file="fixes.lua"/>
     <Script file="fonts.lua"/>
+    <Script file="friendslist.lua"/>
     <Script file="loot.lua"/>
     <Script file="mail.lua"/>
     <Script file="merchant.lua"/>
     <Script file="orderhall.lua"/>
+    <Script file="premade.lua"/>
     <Script file="talent.lua"/>
     <Script file="tradeskill.lua"/>
 </Ui>
