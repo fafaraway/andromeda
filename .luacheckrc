@@ -2515,5 +2515,8 @@ read_globals = {
     'TexturePool_HideAndClearAnchors',
     'ChatEdit_ParseText',
     'tostringall',
-    'ConvertSecondsToUnits'
+    'ConvertSecondsToUnits',
+    'MicroButtonTooltipText',
+    'ToggleAllBags',
+    'MicroButtonTooltipText'
 }
