@@ -50,7 +50,7 @@ function MAP:RestyleMinimap()
     holder:SetScale(C.DB.Map.MinimapScale)
     holder.bg = F.SetBD(holder, 1)
     holder.bg:SetBackdropColor(0, 0, 0, 1)
-    -- holder.bg:SetBackdropBorderColor(1, 0, 0, 1)
+    holder.bg:SetBackdropBorderColor(0, 0, 0, 1)
     _G.Minimap.holder = holder
 
     local pos = {'BOTTOMRIGHT', _G.UIParent, 'BOTTOMRIGHT', -C.UI_GAP, C.UI_GAP}

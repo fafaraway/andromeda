@@ -63,6 +63,7 @@ function M:CreateBar()
     bar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
     bar:SetFrameStrata('MEDIUM')
     bar.bg = F.CreateBDFrame(bar)
+    bar.bg:SetBackdropBorderColor(0, 0, 0)
 
     bar:SetFrameLevel(_G.Minimap:GetFrameLevel() + 2)
     bar:SetHitRectInsets(0, 0, 0, -10)
