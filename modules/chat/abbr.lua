@@ -1,125 +1,144 @@
 local F, C, L = unpack(select(2, ...))
 local CHAT = F:GetModule('Chat')
 
---[[ local function GetColor(className, isLocal)
-    if isLocal then
-        local found
-        for k, v in pairs(_G.LOCALIZED_CLASS_NAMES_FEMALE) do
-            if v == className then
-                className = k
-                found = true
-                break
-            end
-        end
-        if not found then
-            for k, v in pairs(_G.LOCALIZED_CLASS_NAMES_MALE) do
-                if v == className then
-                    className = k
-                    break
-                end
-            end
-        end
-    end
-    local tbl = C.ClassColors[className]
-    local color = ('%02x%02x%02x'):format(tbl.r * 255, tbl.g * 255, tbl.b * 255)
-    return color
-end ]]
--- #FIXME
---[[ local function FormatBNPlayerName(misc, id, moreMisc, fakeName, tag, colon)
-    local gameAccount = select(6, BNGetFriendInfoByID(id))
-    if gameAccount then
-        local _, charName, _, _, _, _, _, englishClass = BNGetGameAccountInfo(gameAccount)
-        if englishClass and englishClass ~= '' then
-            fakeName = '|cFF' .. GetColor(englishClass, true) .. fakeName .. '|r'
-        end
-    end
-    return misc .. id .. moreMisc .. fakeName .. tag .. (colon == ':' and ':' or colon)
-end ]]
+local ABBREVIATIONS = {
+    OFFICER = 'O',
+    GUILD = 'G',
+    PARTY_LEADER = '|cffffff00!|rP',
+    PARTY = 'P',
+    RAID_LEADER = '|cffffff00!|rR',
+    RAID = 'R',
+    INSTANCE_CHAT = 'I'
+}
 
-local function FormatPlayerName(info, name)
-    return string.format('|Hplayer:%s|h%s|h', info, string.gsub(name, '%-[^|]+', ''))
+local CLIENT_DEFAULT_COLOR = '22aaff'
+local CLIENT_COLORS = {
+    [_G.BNET_CLIENT_WOW] = '5cc400',
+    [_G.BNET_CLIENT_D3] = 'b71709',
+    [_G.BNET_CLIENT_SC2] = '00b6ff',
+    [_G.BNET_CLIENT_WTCG] = 'd37000',
+    [_G.BNET_CLIENT_HEROES] = '6800c4',
+    [_G.BNET_CLIENT_OVERWATCH] = 'dcdcef',
+}
+
+local function getClientColorAndTag(accountID)
+    local account = C_BattleNet.GetAccountInfoByID(accountID)
+    local accountClient = account.gameAccountInfo.clientProgram
+    return CLIENT_COLORS[accountClient] or CLIENT_DEFAULT_COLOR, account.battleTag:match('(%w+)#%d+')
 end
 
-local function RemoveRealmName(self, _, msg, author, ...)
-    local realm = string.gsub(C.REALM, ' ', '')
-    if msg:find('-' .. realm) then
-        return false, string.gsub(msg, '%-' .. realm, ''), author, ...
+local FORMAT_PLAYER = '|Hplayer:%s|h%s|h'
+local function formatPlayer(info, name)
+    return FORMAT_PLAYER:format(info, name:gsub('%-[^|]+', ''))
+end
+
+local FORMAT_BN_PLAYER = '|HBNplayer:%s|h|cff%s%s|r|h'
+local function formatBNPlayer(info)
+    -- replace the colors with a client color
+    local color, tag = getClientColorAndTag(info:match('(%d+):'))
+    return FORMAT_BN_PLAYER:format(info, color, tag)
+end
+
+local FORMAT_CHANNEL = '|Hchannel:%s|h%s|h %s'
+local function formatChannel(info)
+    return FORMAT_CHANNEL:format(info, ABBREVIATIONS[info] or info:gsub('channel:', ''), '')
+end
+
+local FORMAT_WAYPOINT_FAR = '|Hworldmap:%d:%d:%d|h[%s: %.2f, %.2f]|h'
+local FORMAT_WAYPOINT_NEAR = '|Hworldmap:%d:%d:%d|h[%.2f, %.2f]|h'
+local function formatWaypoint(mapID, x, y)
+    local playerMapID = C_Map.GetBestMapForUnit('player')
+    if tonumber(mapID) ~= playerMapID then
+        local mapInfo = C_Map.GetMapInfo(mapID)
+        return FORMAT_WAYPOINT_FAR:format(mapID, x, y, mapInfo.name, x / 100, y / 100)
+    else
+        return FORMAT_WAYPOINT_NEAR:format(mapID, x, y, x / 100, y / 100)
     end
 end
 
-function CHAT:UpdateChannelNames(text, ...)
-    -- Make whisper color different
+local chatFrameHooks = {}
+local function addMessage(chatFrame, msg, ...)
+    -- different whisper color
     local r, g, b = ...
-    if string.find(text, L['Tell'] .. ' |H[BN]*player.+%]') then
-        r, g, b = r * .7, g * .7, b * .7
+    if string.find(msg, L['Tell'] .. ' |H[BN]*player.+%]') then
+        r, g, b = r * .5, g * .5, b * .5
     end
 
-    if C.DB.Chat.ShortenChannelName then
-        -- Shorten world channel name
-        -- text = string.gsub(text, '|h%[(%d+)%. 大脚世界频道%]|h', '|h%[%1%. 世界%]|h')
-        -- text = string.gsub(text, '|h%[(%d+)%. 大腳世界頻道%]|h', '|h%[%1%. 世界%]|h')
+    -- remove realm and bracket
+    msg = msg:gsub('|Hplayer:(.-)|h%[(.-)%]|h', formatPlayer)
+    msg = msg:gsub('|HBNplayer:(.-)|h%[(.-)%]|h', formatBNPlayer)
 
-        -- Shorten other channel name
-        text = string.gsub(text, '|h%[(%d+)%..-%]|h', '|h[%1]|h')
+    msg = msg:gsub('|Hchannel:(.-)|h%[(.-)%]|h', formatChannel)
+
+    -- msg = msg:gsub('^%w- (|H)', '|cffa1a1a1@|r%1')
+    -- msg = msg:gsub('^(.-|h) %w-:', '%1:')
+    msg = msg:gsub('^%[' .. _G.RAID_WARNING .. '%]', 'RW')
+
+    msg = msg:gsub('|Hworldmap:(.-):(.-):(.-)|h%[(.-)%]|h', formatWaypoint)
+
+    msg = msg:gsub(_G.CHAT_FLAG_AFK, '')
+    msg = msg:gsub(_G.CHAT_FLAG_DND, '')
+
+    msg = msg:gsub('|h：', '|h ')
+    msg = msg:gsub('|h:', '|h ')
+
+    return chatFrameHooks[chatFrame](chatFrame, msg, r, g, b)
+end
+
+-- we need to fix abbreviations in the editbox too
+local editBoxHooks = {}
+function editBoxHooks.WHISPER(editBox)
+    -- TODO: class colors (no API for this)
+    editBox.header:SetFormattedText('|cffa1a1a1@|r%s ', editBox:GetAttribute('tellTarget'))
+end
+
+function editBoxHooks.BN_WHISPER(editBox)
+    local color, tag = getClientColorAndTag(GetAutoCompletePresenceID(editBox:GetAttribute('tellTarget')))
+    editBox.header:SetFormattedText('|cffa1a1a1@|r|cff%s%s|r ', color, tag)
+end
+
+function editBoxHooks.CHANNEL(editBox)
+    local _, channelName, instanceID = GetChannelName(editBox:GetAttribute('channelTarget'))
+    if channelName then
+        channelName = channelName:match('%w+')
+        if instanceID > 0 then
+            channelName = channelName .. instanceID
+        end
+
+        editBox.header:SetFormattedText('%s: ', channelName)
+
     end
-
-    -- Remove brackets from player name
-    text = string.gsub(text, '|Hplayer:(.-)|h%[(.-)%]|h', FormatPlayerName)
-    -- text = gsub(text, '(|HBNplayer:%S-|k:)(%d-)(:%S-|h)%[(%S-)%](|?h?)(:?)', FormatBNPlayerName)
-
-    -- Remove brackets from item and spell links
-    -- text = gsub(text, '|r|h:(.+)|cff(.+)|H(.+)|h%[(.+)%]|h|r', '|r|h:%1%4')
-
-    return self.oldAddMsg(self, text, r, g, b)
 end
 
 function CHAT:Abbreviation()
-    for i = 1, _G.NUM_CHAT_WINDOWS do
-        if i ~= 2 then
-            local chatFrame = _G['ChatFrame' .. i]
-            chatFrame.oldAddMsg = chatFrame.AddMessage
-            chatFrame.AddMessage = CHAT.UpdateChannelNames
+    for index = 1, _G.NUM_CHAT_WINDOWS do
+        if index ~= 2 then -- ignore combat frame
+            -- override the message injection
+            local chatFrame = _G['ChatFrame' .. index]
+            chatFrameHooks[chatFrame] = chatFrame.AddMessage
+            chatFrame.AddMessage = addMessage
         end
     end
 
-    _G.ChatFrame_AddMessageEventFilter('CHAT_MSG_SYSTEM', RemoveRealmName)
+    hooksecurefunc('ChatEdit_UpdateHeader', function(editBox)
+        local chatType = editBox:GetAttribute('chatType')
+        if not chatType then
+            return
+        end
 
-    -- online/offline info
-    _G.ERR_FRIEND_ONLINE_SS = string.gsub(_G.ERR_FRIEND_ONLINE_SS, '%]%|h', ']|h|cff00c957')
-    _G.ERR_FRIEND_OFFLINE_S = string.gsub(_G.ERR_FRIEND_OFFLINE_S, '%%s', '%%s|cffff7f50')
+        if editBoxHooks[chatType] then
+            editBoxHooks[chatType](editBox)
+        end
+    end)
 
     -- whisper
     _G.CHAT_WHISPER_INFORM_GET = L['Tell'] .. ' %s '
     _G.CHAT_WHISPER_GET = L['From'] .. ' %s '
     _G.CHAT_BN_WHISPER_INFORM_GET = L['Tell'] .. ' %s '
     _G.CHAT_BN_WHISPER_GET = L['From'] .. ' %s '
+    _G.CHAT_WHISPER_SEND = L['Tell'] .. ' %s '
 
     -- say / yell
     _G.CHAT_SAY_GET = '%s '
     _G.CHAT_YELL_GET = '%s '
-
-    -- guild
-    _G.CHAT_GUILD_GET = '|Hchannel:GUILD|h[G]|h %s '
-    _G.CHAT_OFFICER_GET = '|Hchannel:OFFICER|h[O]|h %s '
-
-    -- raid
-    _G.CHAT_RAID_GET = '|Hchannel:RAID|h[R]|h %s '
-    _G.CHAT_RAID_WARNING_GET = '[RW] %s '
-    _G.CHAT_RAID_LEADER_GET = '|Hchannel:RAID|h[RL]|h %s '
-
-    -- party
-    _G.CHAT_PARTY_GET = '|Hchannel:PARTY|h[P]|h %s '
-    _G.CHAT_PARTY_LEADER_GET = '|Hchannel:PARTY|h[PL]|h %s '
-    _G.CHAT_PARTY_GUIDE_GET = '|Hchannel:PARTY|h[PG]|h %s '
-
-    -- instance
-    _G.CHAT_INSTANCE_CHAT_GET = '|Hchannel:INSTANCE|h[I]|h %s '
-    _G.CHAT_INSTANCE_CHAT_LEADER_GET = '|Hchannel:INSTANCE|h[IL]|h %s '
-
-    _G.CHAT_CHANNEL_GET = '%s: '
-
-    -- flags
-    _G.CHAT_FLAG_AFK = '|cff808080[AFK]|r '
-    _G.CHAT_FLAG_DND = '|cff808080[DND]|r '
-    _G.CHAT_FLAG_GM = '|cffff0000[GM]|r '
 end
