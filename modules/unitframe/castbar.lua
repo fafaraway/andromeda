@@ -59,22 +59,15 @@ function UNITFRAME:OnCastbarUpdate(elapsed)
             return
         end
 
-        if self.__owner.unit == 'player' then
-            -- if self.delay ~= 0 then
-            --     self.Time:SetFormattedText(decimal .. ' | |cffff0000' .. decimal, duration, self.casting and self.max + self.delay or self.max - self.delay)
-            -- else
-            --     self.Time:SetFormattedText(decimal .. ' | ' .. decimal, duration, self.max)
-            --     if self.Lag and self.SafeZone and self.SafeZone.timeDiff and self.SafeZone.timeDiff ~= 0 then
-            --         self.Lag:SetFormattedText('%d ms', self.SafeZone.timeDiff * 1000)
-            --     end
-            -- end
-            self.Time:SetFormattedText(decimal, self.max - duration)
-        else
-            if duration > 1e4 then
-                self.Time:SetText('∞')
-            else
-                --self.Time:SetFormattedText(decimal .. ' | ' .. decimal, duration, self.casting and self.max + self.delay or self.max - self.delay)
+        if self.Time then
+            if self.__owner.unit == 'player' then
                 self.Time:SetFormattedText(decimal, self.max - duration)
+            else
+                if duration > 1e4 then
+                    self.Time:SetText('∞')
+                else
+                    self.Time:SetFormattedText(decimal, self.max - duration)
+                end
             end
         end
 
@@ -199,6 +192,10 @@ function UNITFRAME:PostCastStart(unit)
         -- Spell target
         UpdateSpellTarget(self, unit)
     end
+
+
+
+
 end
 
 function UNITFRAME:PostCastUpdate(unit)
@@ -251,6 +248,9 @@ function UNITFRAME:PostCastFailed()
     self:Show()
 
     ResetSpellTarget(self)
+
+
+
 end
 
 local function UpdateSpellTarget_OnEvent(self, _, unit)
@@ -392,11 +392,11 @@ function UNITFRAME:CreateNamePlateCastBar(self)
     text:SetShown(not compact)
     castbar.Text = text
 
-    local time = F.CreateFS(castbar, font, 11, outline, '', nil, outline or 'THICK')
-    time:SetPoint('RIGHT')
-    time:SetShown(not compact)
-    castbar.Time = time
-    castbar.Decimal = '%.1f'
+    -- local time = F.CreateFS(castbar, font, 11, outline, '', nil, outline or 'THICK')
+    -- time:SetPoint('RIGHT')
+    -- time:SetShown(not compact)
+    -- castbar.Time = time
+    -- castbar.Decimal = '%.1f'
 
     local icon = castbar:CreateTexture(nil, 'ARTWORK')
     icon:SetTexCoord(unpack(C.TEX_COORD))
@@ -433,13 +433,21 @@ function UNITFRAME:CreateNamePlateCastBar(self)
     castbar.glowFrame:SetPoint('CENTER', castbar.Icon)
 
     -- Spell target
-    local spellTarget = F.CreateFS(castbar, C.Assets.Font.Bold, 11, outline, '', nil, outline or 'THICK')
-    spellTarget:ClearAllPoints()
-    spellTarget:SetJustifyH('CENTER')
-    spellTarget:SetPoint('TOP', castbar, 'BOTTOM', 0, -4)
-    castbar.spellTarget = spellTarget
+    -- local spellTarget = F.CreateFS(castbar, C.Assets.Font.Bold, 14, outline, '', nil, outline or 'THICK')
+    -- spellTarget:ClearAllPoints()
+    -- spellTarget:SetJustifyH('CENTER')
+    -- spellTarget:SetPoint('TOP', castbar, 'BOTTOM', 0, -4)
+    -- castbar.spellTarget = spellTarget
 
-    self:RegisterEvent('UNIT_TARGET', UpdateSpellTarget_OnEvent)
+    -- self:RegisterEvent('UNIT_TARGET', UpdateSpellTarget_OnEvent)
+
+
+
+
+
+
+
+
 
     castbar.OnUpdate = UNITFRAME.OnCastbarUpdate
     castbar.PostCastStart = UNITFRAME.PostCastStart
