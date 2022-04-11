@@ -2,16 +2,7 @@ local F, C, L = unpack(select(2, ...))
 local MM = F:RegisterModule('MicroMenu')
 
 local buttonList = {}
-local inAlpha = 1
-local outAlpha = .4
-local glowAlpha = .35
-local buNum = 14
-local buSize = 22
-local barHeight = 20
-local buGap = 2
-local barWidth = (buSize * buNum) + (buGap * (buNum - 1))
 local texPath = 'Interface\\AddOns\\FreeUI\\assets\\textures\\menu\\'
-
 local buttonsList = {
     {
         _G.CHARACTER_BUTTON,
@@ -126,11 +117,11 @@ local function CreateButtonTexture(icon, texture)
 end
 
 local function OnEnter(self)
-    F:UIFrameFadeIn(self, .5, self:GetAlpha(), inAlpha)
+    F:UIFrameFadeIn(self, C.DB.General.MicroMenuSmooth, self:GetAlpha(), C.DB.General.MicroMenuButtonInAlpha)
 end
 
 local function OnLeave(self)
-    F:UIFrameFadeOut(self, .5, self:GetAlpha(), outAlpha)
+    F:UIFrameFadeOut(self, C.DB.General.MicroMenuSmooth, self:GetAlpha(), C.DB.General.MicroMenuButtonOutAlpha)
 end
 
 local function OnClick(self)
@@ -142,8 +133,8 @@ function MM:Constructor(bar, data)
 
     local bu = CreateFrame('Button', nil, bar)
     table.insert(buttonList, bu)
-    bu:SetSize(buSize, buSize)
-    bu:SetAlpha(outAlpha)
+    bu:SetSize(C.DB.General.MicroMenuButtonSize, C.DB.General.MicroMenuButtonSize)
+    bu:SetAlpha(C.DB.General.MicroMenuButtonOutAlpha)
     bu.icon = bu:CreateTexture(nil, 'ARTWORK')
 
     bu.tip = tip
@@ -164,18 +155,23 @@ function MM:OnLogin()
         return
     end
 
+    local buSize = C.DB.General.MicroMenuButtonSize
+    local buGap = C.DB.General.MicroMenuButtonGap
+    local buNum = #buttonsList
+
+    local barWidth = (buSize * buNum) + (buGap * (buNum - 1))
     local bar = CreateFrame('Frame', 'FreeUIMicroMenu', _G.UIParent)
-    bar:SetSize(barWidth, barHeight)
+    bar:SetSize(barWidth, C.DB.General.MicroMenuBarHeight)
 
     local glow = bar:CreateTexture(nil, 'BACKGROUND')
     glow:SetPoint('BOTTOMLEFT', bar, 'BOTTOMLEFT', -30, 0)
     glow:SetPoint('BOTTOMRIGHT', bar, 'BOTTOMRIGHT', 30, 0)
-    glow:SetHeight(buSize * 2)
+    glow:SetHeight(C.DB.General.MicroMenuButtonSize * 2)
     glow:SetTexture(C.Assets.Texture.Glow)
     if C.DB.General.MicroMenuClassColor then
-        glow:SetVertexColor(C.r, C.g, C.b, glowAlpha)
+        glow:SetVertexColor(C.r, C.g, C.b, C.DB.General.MicroMenuBackdropAlpha)
     else
-        glow:SetVertexColor(1, 1, 1, glowAlpha)
+        glow:SetVertexColor(1, 1, 1, C.DB.General.MicroMenuBackdropAlpha)
     end
 
     for _, info in pairs(buttonsList) do
@@ -186,7 +182,7 @@ function MM:OnLogin()
         if i == 1 then
             buttonList[i]:SetPoint('LEFT')
         else
-            buttonList[i]:SetPoint('LEFT', buttonList[i - 1], 'RIGHT', buGap, 0)
+            buttonList[i]:SetPoint('LEFT', buttonList[i - 1], 'RIGHT', C.DB.General.MicroMenuButtonGap, 0)
         end
     end
 
