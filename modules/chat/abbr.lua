@@ -66,7 +66,8 @@ local function addMessage(chatFrame, msg, ...)
 
     -- remove realm and bracket
     msg = msg:gsub('|Hplayer:(.-)|h%[(.-)%]|h', formatPlayer)
-    msg = msg:gsub('|HBNplayer:(.-)|h%[(.-)%]|h', formatBNPlayer)
+    -- msg = msg:gsub('|HBNplayer:(.-)|h%[(.-)%]|h', formatBNPlayer)
+
 
     msg = msg:gsub('|Hchannel:(.-)|h%[(.-)%]|h', formatChannel)
 

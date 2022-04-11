@@ -250,17 +250,17 @@ local _tags = {
             return '|cffCC3300P|r'
         end
     end,
+
     classification = function(unit)
+        local texStr = '|T%s:16:16:0:0:64:64:4:60:4:60|t'
         local class, level = UnitClassification(unit), UnitLevel(unit)
 
         if (class == 'worldboss' or level == -1) then
-            return '|cff9D2933' .. _G.BOSS .. '|r'
-        elseif (class == 'rare') then
-            return '|cffFF99FF' .. _G.RARE .. '|r'
-        elseif (class == 'rareelite') then
-            return '|cffFF0099' .. _G.RAREELITE .. '|r'
+            return string.format(texStr, C.Assets.Texture.Skull)
+        elseif (class == 'rare') or (class == 'rareelite') then
+            return string.format(texStr, C.Assets.Texture.Rare)
         elseif (class == 'elite') then
-            return '|cffCC3300' .. _G.ELITE .. '|r'
+            return string.format(texStr, C.Assets.Texture.Elite)
         end
     end
 }
@@ -331,10 +331,10 @@ function NAMEPLATE:CreateNameTag(self)
     local font = C.Assets.Font.Bold
 
     local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
-    text:SetJustifyH('CENTER')
-    text:SetPoint('CENTER', self, 'TOP')
+    text:SetJustifyH('LEFT')
+    text:SetPoint('LEFT', self, 'TOPLEFT')
 
-    self:Tag(text, '[free:color][free:npname]')
+    self:Tag(text, '[free:classification][free:npname]')
 
     self.NameTag = text
 end
@@ -359,6 +359,11 @@ function UNITFRAME:CreateHealthTag(self)
         text:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
         text:SetJustifyH('RIGHT')
         self:Tag(text, '[free:dead][free:offline][free:healthvalue]')
+    elseif style == 'nameplate' then
+        text:ClearAllPoints()
+        text:SetPoint('RIGHT', self, 'TOPRIGHT')
+        text:SetJustifyH('RIGHT')
+        self:Tag(text, '[free:nphp]')
     end
 
     self.HealthTag = text
@@ -441,7 +446,8 @@ function NAMEPLATE:CreateHealthTag(self)
     local outline = _G.FREE_ADB.FontOutline
 
     local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
-    text:SetPoint('CENTER', self, 'BOTTOM')
+    text:SetJustifyH('RIGHT')
+    text:SetPoint('RIGHT', self, 'TOPRIGHT')
 
     self:Tag(text, '[free:nphp]')
 

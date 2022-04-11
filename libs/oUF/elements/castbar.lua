@@ -101,6 +101,12 @@ local function resetAttributes(self)
 	self.spellID = nil
 end
 
+local function resetSpellTarget(self)
+    if self.Text then
+        self.Text:SetText('')
+    end
+end
+
 local function CastStart(self, event, unit)
 	if(self.unit ~= unit) then return end
 
@@ -147,6 +153,21 @@ local function CastStart(self, event, unit)
 	if(element.Spark) then element.Spark:Show() end
 	if(element.Text) then element.Text:SetText(name) end
 	if(element.Time) then element.Time:SetText() end
+
+    local unitTarget = unit and unit .. 'target'
+    if unitTarget and UnitExists(unitTarget) then
+        local tarName = ns[1].ShortenString(UnitName(unitTarget), 4)
+        local hexStr = ns[1]:RgbToHex(ns[1]:UnitColor(unitTarget))
+        local nameStr
+        if UnitIsUnit(unitTarget, 'player') then
+            nameStr = string.format('|cffff0000%s|r', string.upper(_G.YOU))
+        else
+            nameStr = string.format('%s%s|r', hexStr, tarName)
+        end
+        if(element.Text) then element.Text:SetFormattedText('%s (%s)', name, nameStr) end
+    else
+        resetSpellTarget(self) -- when unit loses target
+    end
 
 	local safeZone = element.SafeZone
 	if(safeZone) then

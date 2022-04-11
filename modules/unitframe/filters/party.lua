@@ -1,9 +1,14 @@
 local _, C = unpack(select(2, ...))
 
 C.PartyDebuffsBlackList = {
-    [206151] = true,
-    [296847] = true,
-    [338906] = true
+    [23445] = true, -- 邪恶双子
+    [36893] = true, -- 传送器故障
+    [36895] = true, -- 传送器故障
+    [36897] = true, -- 传送器故障
+    [36899] = true, -- 传送器故障
+    [36900] = true, -- 灵魂分裂：坏蛋
+    [36901] = true, -- 灵魂分裂：好人
+    [36940] = true, -- 传送器故障
 }
 
 C.PartyAurasList = {
