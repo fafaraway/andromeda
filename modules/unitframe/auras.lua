@@ -72,9 +72,12 @@ function UNITFRAME.PostCreateIcon(element, button)
 
     local style = element.__owner.unitStyle
     local isGroup = style == 'party' or style == 'raid'
+    local isNP = style == 'nameplate'
 
     if isGroup then
         button.icon:SetTexCoord(unpack(C.TEX_COORD))
+    elseif isNP then
+        button.icon:SetTexCoord(.1,.9,.26,.74) -- precise texcoord for rectangular icons
     else
         button.icon:SetTexCoord(.1, .9, .22, .78) -- precise texcoord for rectangular icons
     end
@@ -127,12 +130,15 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
 
     local style = element.__owner.unitStyle
     local isGroup = style == 'party' or style == 'raid'
-    button:SetSize(element.size, isGroup and element.size or element.size * .7)
+    local isNP = style == 'nameplate'
+    button:SetSize(element.size, (isGroup and element.size) or (isNP and element.size * .6) or element.size * .7)
 
-    --[[ local squareness = .7
+    --[[ local squareness = .6
     element.icon_height = element.size * squareness
     element.icon_ratio = (1 - (element.icon_height / element.size)) / 2.5
-    element.tex_coord = {.1,.9,.1+element.icon_ratio,.9-element.icon_ratio} ]]
+    element.tex_coord = {.1,.9,.1+element.icon_ratio,.9-element.icon_ratio}
+    print('element.icon_height', element.icon_height)
+    print('element.icon_ratio', element.icon_ratio) ]]
 
     local _, _, _, _, _, _, _, canStealOrPurge = UnitAura(unit, index, button.filter)
     if element.desaturateDebuff and button.isDebuff and filteredUnits[style] and not button.isPlayer then
@@ -466,7 +472,7 @@ function NAMEPLATE:CreateAuras(self)
     bu.spacing = 4
     bu.numTotal = 32
     bu.initialAnchor = 'BOTTOMLEFT'
-    bu:SetPoint('BOTTOM', self, 'TOP', 0, 12)
+    bu:SetPoint('BOTTOM', self, 'TOP', 0, 16)
     bu['growth-x'] = 'RIGHT'
     bu['growth-y'] = 'UP'
     bu.iconsPerRow = C.DB.Nameplate.AuraPerRow
@@ -548,7 +554,7 @@ function UNITFRAME.GroupDebuffFilter(element, _, _, _, _, _, _, _, _, caster, _,
         return false
     elseif (C.DB.Unitframe.CornerIndicator and UNITFRAME.CornerSpellsList[spellID]) or parent.DebuffWatcher.spellID == spellID or parent.rawSpellID == spellID then
         return false
-    elseif isBossAura or SpellIsPriorityAura(spellID) then
+    elseif isBossAura then
         return true
     else
         local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellID, UnitAffectingCombat('player') and 'RAID_INCOMBAT' or 'RAID_OUTOFCOMBAT')
