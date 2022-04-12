@@ -13,7 +13,7 @@ local datas = {
     nearIncrement = 1
 }
 
-local function CameraZoom(func, increment)
+local function SetupZooming(func, increment)
     -- anything not 1 could be a custom zoom increment from another addon
     if increment ~= 1 then
         func(increment)
@@ -23,21 +23,20 @@ local function CameraZoom(func, increment)
     end
 end
 
-local oldZoomIn = _G.CameraZoomIn
-local oldZoomOut = _G.CameraZoomOut
+local function UpdateZooming()
+    local oldZoomIn = _G.CameraZoomIn
+    local oldZoomOut = _G.CameraZoomOut
 
-function _G.CameraZoomIn(v)
-    CameraZoom(oldZoomIn, v)
-end
-
-function _G.CameraZoomOut(v)
-    CameraZoom(oldZoomOut, v)
-end
-
-function CAMERA:OnEvent()
-    if not C.DB.General.FasterZooming then
-        return
+    function _G.CameraZoomIn(v)
+        SetupZooming(oldZoomIn, v)
     end
+
+    function _G.CameraZoomOut(v)
+        SetupZooming(oldZoomOut, v)
+    end
+end
+
+local function CameraZoom_OnEvent()
     F:Delay(1, function()
         -- not actually necessary to override from savedvars
         -- but better to do this if other addons also set it
@@ -45,7 +44,7 @@ function CAMERA:OnEvent()
         SetCVar('cameraZoomSpeed', datas.speed)
     end)
 
-    -- self:UnregisterEvent(event)
+    F:UnregisterEvent('ADDON_LOADED', CameraZoom_OnEvent)
 end
 
 -- Camera action mode
@@ -68,6 +67,12 @@ function CAMERA:ActionCamera()
 end
 
 function CAMERA:OnLogin()
-    F:RegisterEvent('ADDON_LOADED', CAMERA.OnEvent)
+    if C.DB.General.FasterZooming then
+        UpdateZooming()
+        F:RegisterEvent('ADDON_LOADED', CameraZoom_OnEvent)
+    else
+        F:UnregisterEvent('ADDON_LOADED', CameraZoom_OnEvent)
+    end
+
     F:RegisterEvent('PLAYER_ENTERING_WORLD', CAMERA.ActionCamera)
 end
