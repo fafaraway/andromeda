@@ -1,6 +1,5 @@
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('UnitFrame')
-local oUF = F.Libs.oUF
 
 UNITFRAME.UnitFrames = {
     ['player'] = true,
@@ -66,7 +65,6 @@ local function PreUpdateHealth(self, unit)
         return
     end
 
-    local parent = self.__owner
     local cur, max = UnitHealth(unit), UnitHealthMax(unit)
     local isOffline = not UnitIsConnected(unit)
     local isDead = UnitIsDead(unit)
@@ -76,39 +74,45 @@ local function PreUpdateHealth(self, unit)
 
     if isOffline then
         self:SetValue(0)
-        parent.backdrop:SetBackdropColor(.5, .5, .5, .8)
     elseif isGhost or isDead then
         self:SetValue(max)
-        parent.backdrop:SetBackdropColor(.1, .1, .1, .8)
     else
         if max == cur then
             self:SetValue(0)
         else
             self:SetValue(max - cur)
         end
-        parent.backdrop:SetBackdropColor(.1, .1, .1, .8)
     end
 end
 
 local function PostUpdateHealth(self, unit, cur, max)
-    local parent = self.__owner
     local isOffline = not UnitIsConnected(unit)
     local isDead = UnitIsDead(unit)
     local isGhost = UnitIsGhost(unit)
 
     if isOffline then
         self:SetValue(0)
-        parent.backdrop:SetBackdropColor(.5, .5, .5, .8)
     elseif isGhost or isDead then
         self:SetValue(max)
-        parent.backdrop:SetBackdropColor(.1, .1, .1, .8)
     else
         if max == cur then
             self:SetValue(0)
         else
             self:SetValue(max - cur)
         end
-        parent.backdrop:SetBackdropColor(.1, .1, .1, .8)
+    end
+end
+
+local function PostUpdateColor(self, unit)
+    local parent = self.__owner
+    local inverted = C.DB.Unitframe.InvertedColorMode
+    local isOffline = not UnitIsConnected(unit)
+    if inverted then
+        if isOffline then
+            parent.backdrop:SetBackdropColor(.5, .5, .5, .8)
+        else
+            parent.backdrop:SetBackdropColor(.1, .1, .1, .8)
+        end
     end
 end
 
@@ -170,6 +174,7 @@ function UNITFRAME:CreateHealthBar(self)
     self.Health = health
     self.Health.PreUpdate = inverted and PreUpdateHealth
     self.Health.PostUpdate = inverted and PostUpdateHealth
+    self.Health.PostUpdateColor = inverted and PostUpdateColor
 
     UNITFRAME:UpdateHealthBarColor(self)
 end
@@ -178,7 +183,6 @@ end
 
 -- Heal Prediction
 local function PostUpdateHealPrediction(element, unit)
-
     local r, g, b = F:UnitColor(unit)
 
     if element.myBar then
