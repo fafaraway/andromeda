@@ -51,6 +51,11 @@ function NAMEPLATE:UpdatePlateClickThrough()
     C_NamePlate.SetNamePlateFriendlyClickThrough(C.DB.Nameplate.FriendlyClickThrough)
 end
 
+function NAMEPLATE:UpdateNameOnlyMode()
+    SetCVar('nameplateShowOnlyNames', C.DB.Nameplate.NameOnlyMode)
+    SetCVar('nameplateShowDebuffsOnFriendly', not C.DB.Nameplate.NameOnlyMode)
+end
+
 function NAMEPLATE:UpdateNameplateCVars()
     if not C.DB.Nameplate.ForceCVars then
         return
@@ -70,6 +75,8 @@ function NAMEPLATE:UpdateNameplateCVars()
     NAMEPLATE:UpdateClickableSize()
     hooksecurefunc(_G.NamePlateDriverFrame, 'UpdateNamePlateOptions', NAMEPLATE.UpdateClickableSize)
     NAMEPLATE:UpdatePlateClickThrough()
+
+    NAMEPLATE:UpdateNameOnlyMode()
 
     SetCVar('nameplateShowSelf', 0)
     SetCVar('nameplateResourceOnTarget', 0)
@@ -201,9 +208,7 @@ function NAMEPLATE:UpdateColor(_, unit)
     local hostileClassColor = C.DB.Nameplate.HostileClassColor
     local friendlyClassColor = C.DB.Nameplate.FriendlyClassColor
     local tankMode = C.DB.Nameplate.TankMode
-    local executeIndicator = C.DB.Nameplate.ExecuteIndicator
-    local executeRatio = C.DB.Nameplate.ExecuteRatio
-    local healthPerc = UnitHealth(unit) / (UnitHealthMax(unit) + .0001) * 100
+
     local r, g, b
 
     if not UnitIsConnected(unit) then
@@ -253,14 +258,11 @@ function NAMEPLATE:UpdateColor(_, unit)
 
     if r or g or b then
         element:SetStatusBarColor(r, g, b)
-
-        if self.TargetIndicator then
-            self.TargetIndicator.aggroL:SetVertexColor(r, g, b)
-            self.TargetIndicator.aggroR:SetVertexColor(r, g, b)
-        end
+        NAMEPLATE:UpdateTargetIndicatorColor(self, r, g, b)
     end
 
     NAMEPLATE:UpdateOverlayVisibility(self, unit)
+    NAMEPLATE:UpdateExecuteIndicator(self, unit)
 
     self.ThreatIndicator:Hide()
     if status and (isCustomUnit or (not tankMode and C.MyRole ~= 'Tank')) then
@@ -272,6 +274,12 @@ function NAMEPLATE:UpdateColor(_, unit)
             self.ThreatIndicator:Show()
         end
     end
+end
+
+function NAMEPLATE:UpdateExecuteIndicator(self, unit)
+    local executeIndicator = C.DB.Nameplate.ExecuteIndicator
+    local executeRatio = C.DB.Nameplate.ExecuteRatio
+    local healthPerc = UnitHealth(unit) / (UnitHealthMax(unit) + .0001) * 100
 
     if executeIndicator and executeRatio > 0 and healthPerc <= executeRatio then
         self.NameTag:SetTextColor(1, 0, 0)
@@ -297,10 +305,10 @@ function NAMEPLATE:CreateThreatIndicator(self)
     frame:SetAllPoints()
     frame:SetFrameLevel(self:GetFrameLevel() - 1)
 
-    local threat = frame:CreateTexture(nil, 'OVERLAY')
-    threat:SetPoint('BOTTOMLEFT', frame, 'TOPLEFT', 0, 0)
-    threat:SetPoint('BOTTOMRIGHT', frame, 'TOPRIGHT', 0, 0)
-    threat:SetHeight(12)
+    local threat = frame:CreateTexture(nil, 'BACKGROUND')
+    threat:SetPoint('BOTTOMLEFT', frame, 'TOPLEFT')
+    threat:SetPoint('BOTTOMRIGHT', frame, 'TOPRIGHT')
+    threat:SetHeight(6)
     threat:SetTexture(C.Assets.Texture.Glow)
     threat:Hide()
 
@@ -343,7 +351,14 @@ function NAMEPLATE:UpdateTargetChange()
     end
 end
 
-function NAMEPLATE:UpdateTargetIndicator()
+function NAMEPLATE:UpdateTargetIndicatorColor(self, r, g, b)
+    if self.TargetIndicator then
+        self.TargetIndicator.aggroL:SetVertexColor(r, g, b)
+        self.TargetIndicator.aggroR:SetVertexColor(r, g, b)
+    end
+end
+
+function NAMEPLATE:UpdateTargetIndicatorVisibility()
     local element = self.TargetIndicator
     local isNameOnly = self.plateType == 'NameOnly'
 
@@ -359,8 +374,8 @@ function NAMEPLATE:UpdateTargetIndicator()
             element.aggroL:Show()
             element.aggroR:Show()
 
-            element.animR.points[1]:SetOffset(2, 0)
-            element.animL.points[1]:SetOffset(-2, 0)
+            element.animR.points[1]:SetOffset(4, 0)
+            element.animL.points[1]:SetOffset(-4, 0)
         end
         element:Show()
     else
@@ -395,10 +410,10 @@ function NAMEPLATE:CreateTargetIndicator(self)
     frame.aggroL:SetTexture(C.Assets.Texture.Target)
 
     local animGroupL = frame.aggroL:CreateAnimationGroup()
-    animGroupL:SetLooping('REPEAT')
+    animGroupL:SetLooping('NONE')
     local anim = animGroupL:CreateAnimation('Path')
     anim:SetSmoothing('IN_OUT')
-    anim:SetDuration(1)
+    anim:SetDuration(.5)
     anim.points = {}
     anim.points[1] = anim:CreateControlPoint()
     anim.points[1]:SetOrder(1)
@@ -412,9 +427,9 @@ function NAMEPLATE:CreateTargetIndicator(self)
     frame.aggroR:SetRotation(math.rad(180))
 
     local animGroupR = frame.aggroR:CreateAnimationGroup()
-    animGroupR:SetLooping('REPEAT')
+    animGroupR:SetLooping('NONE')
     local anim = animGroupR:CreateAnimation('Path')
-    anim:SetDuration(1)
+    anim:SetDuration(.5)
     anim.points = {}
     anim.points[1] = anim:CreateControlPoint()
     anim.points[1]:SetOrder(1)
@@ -431,7 +446,7 @@ function NAMEPLATE:CreateTargetIndicator(self)
     self.TargetIndicator = frame
     self:RegisterEvent('PLAYER_TARGET_CHANGED', NAMEPLATE.UpdateTargetChange, true)
 
-    NAMEPLATE.UpdateTargetIndicator(self)
+    NAMEPLATE.UpdateTargetIndicatorVisibility(self)
 end
 
 -- Mouseover indicator
@@ -853,7 +868,7 @@ function NAMEPLATE:RefreshNameplats()
     for nameplate in pairs(platesList) do
         NAMEPLATE.UpdateNameplateSize(nameplate)
         NAMEPLATE.UpdateNameplateAuras(nameplate)
-        NAMEPLATE.UpdateTargetIndicator(nameplate)
+        NAMEPLATE.UpdateTargetIndicatorVisibility(nameplate)
         NAMEPLATE.UpdateTargetChange(nameplate)
     end
     NAMEPLATE:UpdateClickableSize()
@@ -942,7 +957,7 @@ function NAMEPLATE:UpdatePlateByType()
         NAMEPLATE.UpdateNameplateSize(self)
     end
 
-    NAMEPLATE.UpdateTargetIndicator(self)
+    NAMEPLATE.UpdateTargetIndicatorVisibility(self)
     NAMEPLATE.ToggleNameplateAuras(self)
 end
 

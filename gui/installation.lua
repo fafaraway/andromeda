@@ -124,7 +124,6 @@ local function SetupCVars()
     SetCVar('alwaysShowActionBars', 1)
 
     if C.DEV_MODE then
-        SetCVar('nameplateShowOnlyNames', 1)
         SetCVar('cursorsizepreferred', 2)
         SetCVar('worldPreloadNonCritical', 0)
     end
