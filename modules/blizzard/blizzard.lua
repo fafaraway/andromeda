@@ -22,7 +22,7 @@ function BLIZZARD:OnLogin()
     BLIZZARD:TicketStatusMover()
     BLIZZARD:VehicleIndicatorMover()
     BLIZZARD:DurabilityFrameMover()
-    BLIZZARD:UIWidgetMover()
+    BLIZZARD:UIWidgetFrameMover()
     BLIZZARD:EnhancedColorPicker()
     BLIZZARD:EnhancedMerchant()
     BLIZZARD:EnhancedFriendsList()
@@ -85,16 +85,26 @@ function BLIZZARD:TicketStatusMover()
     end)
 end
 
-function BLIZZARD:UIWidgetMover()
-    local frame = CreateFrame('Frame', 'FreeUI_UIWidgetMover', _G.UIParent)
-    frame:SetSize(200, 50)
-    F.Mover(frame, L['Widget Frame'], 'UIWidgetFrame', {'TOP', 0, -80})
+function BLIZZARD:UIWidgetFrameMover()
+    local frame1 = CreateFrame('Frame', 'FreeUIUIWidgetMover', _G.UIParent)
+    frame1:SetSize(200, 50)
+    F.Mover(frame1, L['UIWidgetFrame'], 'UIWidgetFrame', {'TOP', 0, -80})
 
     hooksecurefunc(_G.UIWidgetBelowMinimapContainerFrame, 'SetPoint', function(self, _, parent)
         if parent == 'MinimapCluster' or parent == _G.MinimapCluster then
             self:ClearAllPoints()
-            self:SetPoint('TOP', frame)
+            self:SetPoint('CENTER', frame1)
+        end
+    end)
+
+    local frame2 = CreateFrame('Frame', 'FreeUIWidgetPowerBarMover', _G.UIParent)
+    frame2:SetSize(260, 40)
+    F.Mover(frame2, L['UIWidgetPowerBar'], 'UIWidgetPowerBar', {'BOTTOM', _G.UIParent, 'BOTTOM', 0, 150})
+
+    hooksecurefunc(_G.UIWidgetPowerBarContainerFrame, 'SetPoint', function(self, _, parent)
+        if parent == 'UIParent' or parent == _G.UIParent then
+            self:ClearAllPoints()
+            self:SetPoint('CENTER', frame2)
         end
     end)
 end
-
