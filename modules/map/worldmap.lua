@@ -126,10 +126,6 @@ end
 
 
 function MAP:SetupWorldMap()
-    if not C.DB.Map.Enable then
-        return
-    end
-
     -- Remove from frame manager
     mapFrame:ClearAllPoints()
     mapFrame:SetPoint('CENTER') -- init anchor
@@ -148,6 +144,10 @@ function MAP:SetupWorldMap()
 end
 
 function MAP:OnLogin()
+    if not C.DB.Map.Enable then
+        return
+    end
+
     MAP:SetupWorldMap()
     MAP:SetupMinimap()
 end
