@@ -283,6 +283,14 @@ do
     end)
 
     F:RegisterEvent('ADDON_LOADED', onEvent)
+
+    for i = 1, NUM_LE_FRAME_TUTORIALS do
+        C_CVar.SetCVarBitfield('closedInfoFrames', i, true)
+    end
+
+    for i = 1, NUM_LE_FRAME_TUTORIAL_ACCCOUNTS do
+        C_CVar.SetCVarBitfield('closedInfoFramesAccountWide', i, true)
+    end
 end
 
 function M:OnLogin()

@@ -9,6 +9,7 @@ C.PartyDebuffsBlackList = {
     [36900] = true, -- 灵魂分裂：坏蛋
     [36901] = true, -- 灵魂分裂：好人
     [36940] = true, -- 传送器故障
+    [206151] = true, --挑战者的负担
 }
 
 C.PartyAurasList = {

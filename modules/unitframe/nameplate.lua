@@ -830,8 +830,12 @@ function NAMEPLATE:UpdateNameplateAuras()
     end
 
     local element = self.Auras
-    element:SetPoint('BOTTOM', self, 'TOP', 0, 8)
+    element:SetPoint('BOTTOM', self, 'TOP', 0, 16)
     element.numTotal = C.DB.Nameplate.AuraNumTotal
+    element.showDebuffType = C.DB.Nameplate.DebuffTypeColor
+    element.showStealableBuffs = C.DB.Nameplate.StealableBuffs
+    element.desaturateDebuff = C.DB.Nameplate.DesaturateIcon
+    element.disableMouse = C.DB.Nameplate.DisableMouse
     element:SetWidth(self:GetWidth())
     element:SetHeight((element.size + element.spacing) * 2)
     element:ForceUpdate()
