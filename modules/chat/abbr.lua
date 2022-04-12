@@ -86,31 +86,6 @@ local function addMessage(chatFrame, msg, ...)
     return chatFrameHooks[chatFrame](chatFrame, msg, r, g, b)
 end
 
--- we need to fix abbreviations in the editbox too
-local editBoxHooks = {}
-function editBoxHooks.WHISPER(editBox)
-    -- TODO: class colors (no API for this)
-    editBox.header:SetFormattedText('|cffa1a1a1@|r%s ', editBox:GetAttribute('tellTarget'))
-end
-
-function editBoxHooks.BN_WHISPER(editBox)
-    local color, tag = getClientColorAndTag(GetAutoCompletePresenceID(editBox:GetAttribute('tellTarget')))
-    editBox.header:SetFormattedText('|cffa1a1a1@|r|cff%s%s|r ', color, tag)
-end
-
-function editBoxHooks.CHANNEL(editBox)
-    local _, channelName, instanceID = GetChannelName(editBox:GetAttribute('channelTarget'))
-    if channelName then
-        channelName = channelName:match('%w+')
-        if instanceID > 0 then
-            channelName = channelName .. instanceID
-        end
-
-        editBox.header:SetFormattedText('%s: ', channelName)
-
-    end
-end
-
 function CHAT:Abbreviation()
     for index = 1, _G.NUM_CHAT_WINDOWS do
         if index ~= 2 then -- ignore combat frame
@@ -120,17 +95,6 @@ function CHAT:Abbreviation()
             chatFrame.AddMessage = addMessage
         end
     end
-
-    hooksecurefunc('ChatEdit_UpdateHeader', function(editBox)
-        local chatType = editBox:GetAttribute('chatType')
-        if not chatType then
-            return
-        end
-
-        if editBoxHooks[chatType] then
-            editBoxHooks[chatType](editBox)
-        end
-    end)
 
     -- whisper
     _G.CHAT_WHISPER_INFORM_GET = L['Tell'] .. ' %s '
