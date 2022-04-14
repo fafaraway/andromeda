@@ -19,6 +19,10 @@ end
 
 function UNITFRAME:UpdateGCDTicker()
     local frame = _G.oUF_Player
+    if not frame then
+        return
+    end
+
     if C.DB.Unitframe.GCDIndicator then
         if not frame:IsElementEnabled('GCD') then
             frame:EnableElement('GCD')
