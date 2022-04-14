@@ -141,13 +141,13 @@ function BLIZZARD:ReplaceGroupRoles(numPlayers, _, disabled)
 
             icon.role = self:CreateTexture(nil, 'OVERLAY', nil, 2)
             icon.role:SetSize(14, 14)
-            icon.role:SetPoint('TOPLEFT', icon, -6, 2)
+            icon.role:SetPoint('TOPLEFT', icon, -4, 2)
 
             icon.leader = self:CreateTexture(nil, 'OVERLAY', nil, 1)
             icon.leader:SetSize(14, 14)
-            icon.leader:SetPoint('TOP', icon, 0, 8)
+            icon.leader:SetPoint('TOP', icon, 4, 8)
             icon.leader:SetTexture('Interface\\GroupFrame\\UI-Group-LeaderIcon')
-            -- icon.leader:SetRotation(_G.rad(-15))
+            icon.leader:SetRotation(_G.rad(-15))
         end
 
         if i > numPlayers then
