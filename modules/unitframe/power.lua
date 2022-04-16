@@ -8,18 +8,12 @@ local function PostUpdatePower(power, unit, _, _, max)
     end
 end
 
-local function CheckSpellAvailability(power)
-    local spec = GetSpecialization() or 0
-    local isBDK = C.CLASS == 'DEATHKNIGHT' and spec == 1
-    local r, g, b = power:GetStatusBarColor()
-
-    if isBDK then
-        local _, noRunic = IsUsableSpell(49998)
-        if noRunic then
-            power:SetStatusBarColor(r/2, g/2, b/2)
-        else
-            power:SetStatusBarColor(r, g, b)
-        end
+local function IsSpellAvailable(spellId)
+    local _, noPower = IsUsableSpell(spellId)
+    if noPower then
+        return false
+    else
+        return true
     end
 end
 
@@ -28,53 +22,44 @@ local function UpdatePowerColor(power, unit)
         return
     end
 
+    if not C.DEV_MODE then return end
+
     local spec = GetSpecialization() or 0
-    if C.CLASS == 'DEMONHUNTER' then
-        if spec == 1 then -- Havoc
-            -- ChaosStrike needs 40 power
-            -- BladeDance needs 35 power or 15 power with FirstBlood
-            -- EyeBeam needs 30 power
+    local isBlood = C.CLASS == 'DEATHKNIGHT' and spec == 1
+    local isFrost = C.CLASS == 'DEATHKNIGHT' and spec == 2
+    local isHavoc = C.CLASS == 'DEMONHUNTER' and spec == 1
+    local isVengeance = C.CLASS == 'DEMONHUNTER' and spec == 2
+    local r, g, b = power:GetStatusBarColor()
 
-            -- If Chaos Strike can be used, the energy bar is red
-            -- if Blade Dance can be used, the energy bar is yellow
-            -- if the eye can be used, the energy bar is green
-            -- and if nothing can be used, the energy bar is gray
-
-            local _, eyeBeam = IsUsableSpell(198013)
-            local _, bladeDance = IsUsableSpell(188499)
-            local _, chaosStrike = IsUsableSpell(162794)
-
-            if not chaosStrike then
-                power:SetStatusBarColor(234 / 255, 64 / 255, 58 / 255)
-            elseif not bladeDance then
-                power:SetStatusBarColor(234 / 255, 218 / 255, 92 / 255)
-            elseif not eyeBeam then
-                power:SetStatusBarColor(77 / 255, 218 / 255, 135 / 255)
-            else
-                power:SetStatusBarColor(.45, .45, .45)
-            end
-        else -- Vengeance
-            -- Fel Devastation needs 50 power
-            -- Soul Cleave needs 30 power
-
-            -- If Fel Devastation can be used, the energy bar is red
-            -- if Soul Cleave can be used, the energy bar is yellow
-            -- and if nothing can be used, the energy bar is gray
-
-            local _, soulCleave = IsUsableSpell(228477)
-            local _, felDevastation = IsUsableSpell(212084)
-
-            if not felDevastation then
-                power:SetStatusBarColor(234 / 255, 64 / 255, 58 / 255)
-            elseif not soulCleave then
-                power:SetStatusBarColor(234 / 255, 218 / 255, 92 / 255)
-            else
-                power:SetStatusBarColor(.45, .45, .45)
-            end
+    if isBlood then -- Blood Death Knight
+        if IsSpellAvailable(49998) then -- Death Strike
+            power:SetStatusBarColor(r, g, b)
+        else
+            power:SetStatusBarColor(r * .5, g * .5, b * .5)
+        end
+    elseif isFrost then -- Frost Death Knight
+        if IsSpellAvailable(49143) then -- Frost Strike
+            power:SetStatusBarColor(r, g, b)
+        else
+            power:SetStatusBarColor(r * .5, g * .5, b * .5)
+        end
+    elseif isVengeance then -- Vengeance Demon Hunter
+        if IsSpellAvailable(212084) then -- Fel Devastation
+            power:SetStatusBarColor(r, g, b)
+        elseif IsSpellAvailable(228477) then -- Soul Cleave
+            power:SetStatusBarColor(r * .5, g * .5, b * .5)
+        else
+            power:SetStatusBarColor(.3, .3, .3)
+        end
+    elseif isHavoc then -- Havoc Demon Hunter
+        if IsSpellAvailable(162794) then -- Chaos Strike
+            power:SetStatusBarColor(r, g, b)
+        elseif IsSpellAvailable(198013) then -- Eye Beam
+            power:SetStatusBarColor(r * .5, g * .5, b * .5)
+        else
+            power:SetStatusBarColor(.3, .3, .3)
         end
     end
-
-    CheckSpellAvailability(power)
 end
 
 function UNITFRAME:CreatePowerBar(self)
