@@ -8,6 +8,7 @@ local function SetupCVars()
     SetCVar('missingTransmogSourceInItemTooltips', 1)
     SetCVar('movieSubtitle', 1)
     SetCVar('scriptErrors', C.DEV_MODE and 0 or 1)
+    SetCVar('predictedHealth', 1)
 
     -- map
     SetCVar('rotateMinimap', 0)
@@ -124,6 +125,7 @@ local function SetupCVars()
     SetCVar('alwaysShowActionBars', 1)
 
     if C.DEV_MODE then
+        SetCVar('AutoPushSpellToActionBar', 0)
         SetCVar('cursorsizepreferred', 2)
         SetCVar('worldPreloadNonCritical', 0)
     end
