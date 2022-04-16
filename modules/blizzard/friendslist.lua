@@ -40,7 +40,8 @@ local regionLocales = {
     [2] = L['Korea'],
     [3] = L['Europe'],
     [4] = L['Taiwan'],
-    [5] = L['China']}
+    [5] = L['China']
+}
 
 local maxLevel = {
     [_G.BNET_CLIENT_WOW .. 'C'] = 60,
@@ -202,7 +203,9 @@ local function UpdateFriendButton(button)
             end
 
             if not isInCurrentRegion and regionLocales[regionID] then
-                buttonText = buttonText .. ' ' .. F.CreateColorString(string.format('[%s]', regionLocales[regionID]), {r = 0.62, g = 0.62, b = 0.62})
+                -- Unblocking profanity filter will change the region
+                local regionText = string.format('[%s]', regionLocales[regionID])
+                buttonText = buttonText .. ' ' .. F.CreateColorString(regionText, {r = 0.62, g = 0.62, b = 0.62})
             end
 
             button.info:SetText(buttonText)
