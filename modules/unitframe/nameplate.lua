@@ -78,12 +78,15 @@ function NAMEPLATE:UpdateNameplateCVars()
 
     NAMEPLATE:UpdateNameOnlyMode()
 
-    SetCVar('nameplateShowSelf', 0)
-    SetCVar('nameplateResourceOnTarget', 0)
-    SetCVar('predictedHealth', 1)
+    if C.DEV_MODE then
+        SetCVar('nameplateShowSelf', 0)
+        SetCVar('NameplatePersonalShowAlways', 0)
+        SetCVar('nameplateSelfAlpha', 0)
+        SetCVar('nameplateResourceOnTarget', 0)
+    end
 
-    F.HideOption(_G.InterfaceOptionsNamesPanelUnitNameplatesPersonalResource)
-    F.HideOption(_G.InterfaceOptionsNamesPanelUnitNameplatesPersonalResourceOnEnemy)
+    -- F.HideOption(_G.InterfaceOptionsNamesPanelUnitNameplatesPersonalResource)
+    -- F.HideOption(_G.InterfaceOptionsNamesPanelUnitNameplatesPersonalResourceOnEnemy)
 end
 
 --[[ AddOn ]]
