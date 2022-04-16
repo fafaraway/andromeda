@@ -25,7 +25,7 @@ ReplacePowerColor('RAGE', 1, {255 / 255, 26 / 255, 48 / 255})
 ReplacePowerColor('FOCUS', 2, {255 / 255, 128 / 255, 64 / 255})
 ReplacePowerColor('ENERGY', 3, {238 / 255, 212 / 255, 78 / 255})
 ReplacePowerColor('COMBO_POINTS', 4, {199 / 255, 171 / 255, 90 / 255})
-ReplacePowerColor('RUNES', 5, {0 / 255, 200 / 255, 255 / 255})
+ReplacePowerColor('RUNES', 5, {.22, .95, .97})
 ReplacePowerColor('RUNIC_POWER', 6, {135 / 255, 214 / 255, 194 / 255})
 ReplacePowerColor('SOUL_SHARDS', 7, {151 / 255, 101 / 255, 221 / 255})
 ReplacePowerColor('LUNAR_POWER', 8, {144 / 255, 112 / 255, 254 / 255})
@@ -47,9 +47,9 @@ colors.power.max = {
 }
 
 colors.runes = {
-    [1] = {177 / 255, 40 / 255, 45 / 255}, -- Blood
-    [2] = {42 / 255, 138 / 255, 186 / 255}, -- Frost
-    [3] = {101 / 255, 186 / 255, 112 / 255} -- Unholy
+    [1] = {.91, .23, .21}, -- Blood
+    [2] = {.23, .67, .97}, -- Frost
+    [3] = {.41, .97, .21} -- Unholy
 }
 
 colors.debuff = {
