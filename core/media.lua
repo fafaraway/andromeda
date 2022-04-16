@@ -108,6 +108,7 @@ C.Assets.Font = {
     Pixel = C.ASSET_PATH .. 'fonts\\pixel.ttf',
     Square = C.ASSET_PATH .. 'fonts\\square.ttf',
     Roadway = C.ASSET_PATH .. 'fonts\\roadway.ttf',
+    Micro = C.ASSET_PATH .. 'fonts\\micro.ttf',
 }
 
 -- Overwrite fonts
