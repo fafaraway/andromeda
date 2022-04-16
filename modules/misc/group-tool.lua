@@ -46,7 +46,7 @@ function GT:RaidTool_Header()
     frame:SetSize(120, 28)
     frame:SetFrameLevel(2)
     F.Reskin(frame)
-    F.Mover(frame, L['Group Tool'], 'GroupTool', {'TOP', 0, -30})
+    F.Mover(frame, L['Group Tool'], 'GroupTool', { 'TOP', 0, -30 })
 
     GT:RaidTool_Visibility(frame)
     F:RegisterEvent('GROUP_ROSTER_UPDATE', function()
@@ -114,14 +114,14 @@ end
 local roleIcons = {
     C.Assets.Texture.Tank,
     C.Assets.Texture.Healer,
-    C.Assets.Texture.Damager
+    C.Assets.Texture.Damager,
 }
 local eventList = {
     'GROUP_ROSTER_UPDATE',
     'UPDATE_ACTIVE_BATTLEFIELD',
     'UNIT_FLAGS',
     'PLAYER_FLAGS_CHANGED',
-    'PLAYER_ENTERING_WORLD'
+    'PLAYER_ENTERING_WORLD',
 }
 function GT:RaidTool_RoleCount(parent)
     local frame = CreateFrame('Frame', nil, parent)
@@ -137,7 +137,7 @@ function GT:RaidTool_RoleCount(parent)
         role[i].text:SetPoint('CENTER', role[i], 'RIGHT', 10, -1)
     end
 
-    local raidCounts = {totalTANK = 0, totalHEALER = 0, totalDAMAGER = 0}
+    local raidCounts = { totalTANK = 0, totalHEALER = 0, totalDAMAGER = 0 }
 
     local function updateRoleCount()
         for k in pairs(raidCounts) do
@@ -166,7 +166,7 @@ end
 
 function GT:RaidTool_UpdateRes(elapsed)
     self.elapsed = (self.elapsed or 0) + elapsed
-    if self.elapsed > .1 then
+    if self.elapsed > 0.1 then
         local charges, _, started, duration = GetSpellCharges(20484)
         if charges then
             local timer = duration - (GetTime() - started)
@@ -276,7 +276,7 @@ end
 function GT:RaidTool_Marker(parent)
     local markerButton = _G.CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton
     if not markerButton then
-        for _, addon in next, {'Blizzard_CUFProfiles', 'Blizzard_CompactRaidFrames'} do
+        for _, addon in next, { 'Blizzard_CUFProfiles', 'Blizzard_CompactRaidFrames' } do
             EnableAddOn(addon)
             LoadAddOn(addon)
         end
@@ -293,7 +293,7 @@ function GT:RaidTool_Marker(parent)
 
         F.Reskin(markerButton)
         markerButton:SetNormalTexture('Interface\\RaidFrame\\Raid-WorldPing')
-        markerButton:GetNormalTexture():SetVertexColor(.2, 1, .2)
+        markerButton:GetNormalTexture():SetVertexColor(0.2, 1, 0.2)
         markerButton:HookScript('OnMouseUp', function()
             if (IsInGroup() and not IsInRaid()) or UnitIsGroupLeader('player') or UnitIsGroupAssistant('player') then
                 return
@@ -312,10 +312,10 @@ function GT:RaidTool_BuffChecker(parent)
     frame.tex:SetSize(16, 16)
     frame.tex:SetPoint('CENTER')
     frame.tex:SetTexture(C.Assets.Texture.StateIcon)
-    frame.tex:SetTexCoord(.5, 1, 0, .5)
+    frame.tex:SetTexCoord(0.5, 1, 0, 0.5)
     F.Reskin(frame)
 
-    local BuffName = {L['Flask'], _G.POWER_TYPE_FOOD, _G.SPELL_STAT4_NAME, _G.RAID_BUFF_2, _G.RAID_BUFF_3, _G.RUNES}
+    local BuffName = { L['Flask'], _G.POWER_TYPE_FOOD, _G.SPELL_STAT4_NAME, _G.RAID_BUFF_2, _G.RAID_BUFF_3, _G.RUNES }
     local NoBuff, numGroups, numPlayer = {}, 6, 0
     for i = 1, numGroups do
         NoBuff[i] = {}
@@ -386,7 +386,14 @@ function GT:RaidTool_BuffChecker(parent)
             NoBuff[numGroups] = {}
         end
 
-        if #NoBuff[1] == 0 and #NoBuff[2] == 0 and #NoBuff[3] == 0 and #NoBuff[4] == 0 and #NoBuff[5] == 0 and #NoBuff[6] == 0 then
+        if
+            #NoBuff[1] == 0
+            and #NoBuff[2] == 0
+            and #NoBuff[3] == 0
+            and #NoBuff[4] == 0
+            and #NoBuff[5] == 0
+            and #NoBuff[6] == 0
+        then
             sendMsg(L['All Buffs Ready!'])
         else
             sendMsg(L['Raid Buff Checker:'])
@@ -406,11 +413,16 @@ function GT:RaidTool_BuffChecker(parent)
         _G.GameTooltip:ClearLines()
         _G.GameTooltip:AddLine(L['Group Tool'])
         _G.GameTooltip:AddLine(' ')
-        _G.GameTooltip:AddLine(C.MOUSE_LEFT_BUTTON .. _G.READY_CHECK, 0, .6, 1)
-        _G.GameTooltip:AddLine(C.MOUSE_MIDDLE_BUTTON .. L['Start/Cancel count down'], 0, .6, 1)
-        _G.GameTooltip:AddLine(C.MOUSE_RIGHT_BUTTON .. C.RED_COLOR .. '(Ctrl)|r ' .. L['Check Flask & Food'], 0, .6, 1)
+        _G.GameTooltip:AddLine(C.MOUSE_LEFT_BUTTON .. _G.READY_CHECK, 0, 0.6, 1)
+        _G.GameTooltip:AddLine(C.MOUSE_MIDDLE_BUTTON .. L['Start/Cancel count down'], 0, 0.6, 1)
+        _G.GameTooltip:AddLine(C.MOUSE_RIGHT_BUTTON .. C.RED_COLOR .. '(Ctrl)|r ' .. L['Check Flask & Food'], 0, 0.6, 1)
         if potionCheck then
-            _G.GameTooltip:AddLine(C.MOUSE_RIGHT_BUTTON .. C.RED_COLOR .. '(Alt)|r ' .. L['MRT Potion Check'], 0, .6, 1)
+            _G.GameTooltip:AddLine(
+                C.MOUSE_RIGHT_BUTTON .. C.RED_COLOR .. '(Alt)|r ' .. L['MRT Potion Check'],
+                0,
+                0.6,
+                1
+            )
         end
         _G.GameTooltip:Show()
     end)
@@ -476,7 +488,7 @@ function GT:RaidTool_CreateMenu(parent)
 
     local function updateDelay(self, elapsed)
         self.elapsed = (self.elapsed or 0) + elapsed
-        if self.elapsed > .1 then
+        if self.elapsed > 0.1 then
             if not frame:IsMouseOver() then
                 self:Hide()
                 self:SetScript('OnUpdate', nil)
@@ -520,7 +532,11 @@ function GT:RaidTool_CreateMenu(parent)
         {
             _G.ROLE_POLL,
             function()
-                if IsInGroup() and not HasLFGRestrictions() and (UnitIsGroupLeader('player') or (UnitIsGroupAssistant('player') and IsInRaid())) then
+                if
+                    IsInGroup()
+                    and not HasLFGRestrictions()
+                    and (UnitIsGroupLeader('player') or (UnitIsGroupAssistant('player') and IsInRaid()))
+                then
                     InitiateRolePoll()
                 else
                     _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. _G.ERR_NOT_LEADER)
@@ -538,7 +554,11 @@ function GT:RaidTool_CreateMenu(parent)
     local bu = {}
     for i, j in pairs(buttons) do
         bu[i] = F.CreateButton(frame, 84, 28, j[1], 12)
-        bu[i]:SetPoint(math.fmod(i, 2) == 0 and 'TOPRIGHT' or 'TOPLEFT', math.fmod(i, 2) == 0 and -5 or 5, i > 2 and -37 or -5)
+        bu[i]:SetPoint(
+            math.fmod(i, 2) == 0 and 'TOPRIGHT' or 'TOPLEFT',
+            math.fmod(i, 2) == 0 and -5 or 5,
+            i > 2 and -37 or -5
+        )
         bu[i]:SetScript('OnClick', j[2])
     end
 

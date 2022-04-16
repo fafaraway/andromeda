@@ -60,7 +60,7 @@ function UNITFRAME:PLAYER_ENTERING_WORLD()
 end
 
 function UNITFRAME.PostCreateIcon(element, button)
-    button.bg = F.CreateBDFrame(button, .25)
+    button.bg = F.CreateBDFrame(button, 0.25)
     button.glow = F.CreateSD(button.bg)
 
     button:SetFrameLevel(element:GetFrameLevel() + 4)
@@ -77,17 +77,17 @@ function UNITFRAME.PostCreateIcon(element, button)
     if isGroup then
         button.icon:SetTexCoord(unpack(C.TEX_COORD))
     elseif isNP then
-        button.icon:SetTexCoord(.1,.9,.26,.74) -- precise texcoord for rectangular icons
+        button.icon:SetTexCoord(0.1, 0.9, 0.26, 0.74) -- precise texcoord for rectangular icons
     else
-        button.icon:SetTexCoord(.1, .9, .22, .78) -- precise texcoord for rectangular icons
+        button.icon:SetTexCoord(0.1, 0.9, 0.22, 0.78) -- precise texcoord for rectangular icons
     end
 
     button.HL = button:CreateTexture(nil, 'HIGHLIGHT')
-    button.HL:SetColorTexture(1, 1, 1, .25)
+    button.HL:SetColorTexture(1, 1, 1, 0.25)
     button.HL:SetAllPoints()
 
     local font = C.Assets.Font.Roadway
-    local fontSize = math.max((element.width or element.size) * .4, 12)
+    local fontSize = math.max((element.width or element.size) * 0.4, 12)
     button.count = F.CreateFS(button, font, fontSize, true, nil, nil, true)
     button.count:SetPoint('RIGHT', button, 'TOPRIGHT')
     button.timer = F.CreateFS(button, font, fontSize, true, nil, nil, true)
@@ -103,21 +103,19 @@ function UNITFRAME.PostCreateIcon(element, button)
     end)
 end
 
--- LuaFormatter off
 local filteredUnits = {
     ['target'] = true,
     ['nameplate'] = true,
     ['boss'] = true,
-    ['arena'] = true
+    ['arena'] = true,
 }
 
 local replaceEncryptedIcons = {
     [368078] = 348567, -- 移速
     [368079] = 348567, -- 移速
     [368103] = 648208, -- 急速
-    [368243] = 237538 -- CD
+    [368243] = 237538, -- CD
 }
--- LuaFormatter on
 
 function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, expiration, debuffType)
     if duration then
@@ -131,7 +129,7 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
     local style = element.__owner.unitStyle
     local isGroup = style == 'party' or style == 'raid'
     local isNP = style == 'nameplate'
-    button:SetSize(element.size, (isGroup and element.size) or (isNP and element.size * .6) or element.size * .7)
+    button:SetSize(element.size, (isGroup and element.size) or (isNP and element.size * 0.6) or element.size * 0.7)
 
     --[[ local squareness = .6
     element.icon_height = element.size * squareness
@@ -151,7 +149,7 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
         button.bg:SetBackdropBorderColor(1, 1, 1)
 
         if button.glow then
-            button.glow:SetBackdropBorderColor(1, 1, 1, .25)
+            button.glow:SetBackdropBorderColor(1, 1, 1, 0.25)
         end
     elseif button.isDebuff and element.showDebuffType then
         local color = oUF.colors.debuff[debuffType] or oUF.colors.debuff.none
@@ -159,13 +157,13 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
         button.bg:SetBackdropBorderColor(color[1], color[2], color[3])
 
         if button.glow then
-            button.glow:SetBackdropBorderColor(color[1], color[2], color[3], .25)
+            button.glow:SetBackdropBorderColor(color[1], color[2], color[3], 0.25)
         end
     else
         button.bg:SetBackdropBorderColor(0, 0, 0)
 
         if button.glow then
-            button.glow:SetBackdropBorderColor(0, 0, 0, .25)
+            button.glow:SetBackdropBorderColor(0, 0, 0, 0.25)
         end
     end
 
@@ -180,7 +178,7 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
         end
     end
 
-    local fontSize = math.max((element.width or element.size) * .4, 12)
+    local fontSize = math.max((element.width or element.size) * 0.4, 12)
     local font = C.Assets.Font.Roadway
     if button.count then
         button.count:SetFont(font, fontSize, 'OUTLINE')
@@ -216,15 +214,31 @@ local function BolsterPostUpdate(element)
     end
 end
 
--- LuaFormatter off
 local isMine = {
     ['player'] = true,
     ['pet'] = true,
-    ['vehicle'] = true
+    ['vehicle'] = true,
 }
--- LuaFormatter on
 
-function UNITFRAME.AuraFilter(element, unit, button, name, _, _, _, _, _, caster, isStealable, _, spellID, _, isBossAura, _, nameplateShowAll)
+function UNITFRAME.AuraFilter(
+    element,
+    unit,
+    button,
+    name,
+    _,
+    _,
+    _,
+    _,
+    _,
+    caster,
+    isStealable,
+    _,
+    spellID,
+    _,
+    isBossAura,
+    _,
+    nameplateShowAll
+)
     local style = element.__owner.unitStyle
 
     if name and spellID == 209859 then
@@ -257,7 +271,10 @@ function UNITFRAME.AuraFilter(element, unit, button, name, _, _, _, _, _, caster
     elseif style == 'pet' then
         return button.isDebuff or isBossAura or SpellIsPriorityAura(spellID)
     elseif style == 'target' then
-        return isStealable or not button.isDebuff or (element.onlyShowPlayer and button.isPlayer) or (not element.onlyShowPlayer and name)
+        return isStealable
+            or not button.isDebuff
+            or (element.onlyShowPlayer and button.isPlayer)
+            or (not element.onlyShowPlayer and name)
     elseif style == 'targettarget' then
         return isBossAura or SpellIsPriorityAura(spellID)
     elseif style == 'focus' then
@@ -340,13 +357,14 @@ local function UpdatePlayerAuraPosition(self)
     local specIndex = GetSpecialization()
 
     if
-        (C.CLASS == 'ROGUE'
-        or C.CLASS == 'PALADIN'
-        or C.CLASS == 'WARLOCK'
-        or (C.CLASS == 'DRUID' and specIndex == 2)
-        or (C.CLASS == 'MONK' and specIndex == 3)
-        or (C.CLASS == 'MAGE' and specIndex == 1))
-        and C.DB.Unitframe.ClassPower
+        (
+            C.CLASS == 'ROGUE'
+            or C.CLASS == 'PALADIN'
+            or C.CLASS == 'WARLOCK'
+            or (C.CLASS == 'DRUID' and specIndex == 2)
+            or (C.CLASS == 'MONK' and specIndex == 3)
+            or (C.CLASS == 'MAGE' and specIndex == 1)
+        ) and C.DB.Unitframe.ClassPower
     then
         self.Auras:ClearAllPoints()
         self.Auras:SetPoint('TOP', self.ClassPowerBar, 'BOTTOM', 0, -5)
@@ -527,7 +545,10 @@ function UNITFRAME.GroupBuffFilter(_, _, _, _, _, _, _, _, _, caster, _, _, spel
     if isBossAura then
         return true
     else
-        local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellID, UnitAffectingCombat('player') and 'RAID_INCOMBAT' or 'RAID_OUTOFCOMBAT')
+        local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(
+            spellID,
+            UnitAffectingCombat('player') and 'RAID_INCOMBAT' or 'RAID_OUTOFCOMBAT'
+        )
         local isPlayerSpell = (caster == 'player' or caster == 'pet' or caster == 'vehicle')
         if hasCustom then
             return showForMySpec or (alwaysShowMine and isPlayerSpell)
@@ -579,12 +600,19 @@ function UNITFRAME.GroupDebuffFilter(element, _, _, _, _, _, _, _, _, caster, _,
     local parent = element.__owner
     if C.PartyDebuffsBlackList[spellID] then
         return false
-    elseif (C.DB.Unitframe.CornerIndicator and UNITFRAME.CornerSpellsList[spellID]) or parent.DebuffWatcher.spellID == spellID or parent.rawSpellID == spellID then
+    elseif
+        (C.DB.Unitframe.CornerIndicator and UNITFRAME.CornerSpellsList[spellID])
+        or parent.DebuffWatcher.spellID == spellID
+        or parent.rawSpellID == spellID
+    then
         return false
     elseif isBossAura then
         return true
     else
-        local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellID, UnitAffectingCombat('player') and 'RAID_INCOMBAT' or 'RAID_OUTOFCOMBAT')
+        local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(
+            spellID,
+            UnitAffectingCombat('player') and 'RAID_INCOMBAT' or 'RAID_OUTOFCOMBAT'
+        )
         if hasCustom then
             return showForMySpec or (alwaysShowMine and (caster == 'player' or caster == 'pet' or caster == 'vehicle'))
         else
@@ -637,7 +665,6 @@ end
 
 function UNITFRAME:UpdateGroupAuras()
     for _, frame in pairs(oUF.objects) do
-
         local buffs = frame.Buffs
         local debuffs = frame.Debuffs
 
@@ -689,6 +716,3 @@ function UNITFRAME:RefreshAurasByCombat(self)
     self:RegisterEvent('PLAYER_REGEN_ENABLED', RefreshAurasElements, true)
     self:RegisterEvent('PLAYER_REGEN_DISABLED', RefreshAurasElements, true)
 end
-
-
-

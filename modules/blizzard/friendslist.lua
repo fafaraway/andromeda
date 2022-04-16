@@ -32,7 +32,7 @@ local statusIcons = {
     ['Online'] = _G.FRIENDS_TEXTURE_ONLINE,
     ['Offline'] = _G.FRIENDS_TEXTURE_OFFLINE,
     ['DND'] = _G.FRIENDS_TEXTURE_DND,
-    ['AFK'] = _G.FRIENDS_TEXTURE_AFK
+    ['AFK'] = _G.FRIENDS_TEXTURE_AFK,
 }
 
 local regionLocales = {
@@ -40,34 +40,34 @@ local regionLocales = {
     [2] = L['Korea'],
     [3] = L['Europe'],
     [4] = L['Taiwan'],
-    [5] = L['China']
+    [5] = L['China'],
 }
 
 local maxLevel = {
     [_G.BNET_CLIENT_WOW .. 'C'] = 60,
     [_G.BNET_CLIENT_WOW .. 'C_TBC'] = 70,
-    [_G.BNET_CLIENT_WOW] = GetMaxLevelForPlayerExpansion()
+    [_G.BNET_CLIENT_WOW] = GetMaxLevelForPlayerExpansion(),
 }
 
 local clientColor = {
-    [_G.BNET_CLIENT_ARCADE] = {r = 0.509, g = 0.772, b = 1}, -- Arcade
-    [_G.BNET_CLIENT_CRASH4] = {r = 0.509, g = 0.772, b = 1}, -- Crash
-    [_G.BNET_CLIENT_CLNT] = {r = 0.509, g = 0.772, b = 1}, -- 未知
-    [_G.BNET_CLIENT_APP] = {r = 0.509, g = 0.772, b = 1}, -- 战网
-    [_G.BNET_CLIENT_WC3] = {r = 0.796, g = 0.247, b = 0.145}, -- 魔兽争霸重置版 3
-    [_G.BNET_CLIENT_SC] = {r = 0.749, g = 0.501, b = 0.878}, -- 星际争霸 1
-    [_G.BNET_CLIENT_SC2] = {r = 0.749, g = 0.501, b = 0.878}, -- 星际争霸 2
-    [_G.BNET_CLIENT_D3] = {r = 0.768, g = 0.121, b = 0.231}, -- 暗黑破坏神 3
-    [_G.BNET_CLIENT_WOW] = {r = 0.866, g = 0.690, b = 0.180}, -- 魔兽世界
-    [_G.BNET_CLIENT_WTCG] = {r = 1, g = 0.694, b = 0}, -- 炉石传说
-    [_G.BNET_CLIENT_HEROES] = {r = 0, g = 0.8, b = 1}, -- 风暴英雄
-    [_G.BNET_CLIENT_OVERWATCH] = {r = 1, g = 1, b = 1}, -- 守望先锋
-    [_G.BNET_CLIENT_COD] = {r = 0, g = 0.8, b = 0}, -- 使命召唤
-    [_G.BNET_CLIENT_COD_MW] = {r = 0, g = 0.8, b = 0}, -- 使命召唤：现代战争
-    [_G.BNET_CLIENT_COD_MW2] = {r = 0, g = 0.8, b = 0}, -- 使命召唤：现代战争 2
-    [_G.BNET_CLIENT_COD_BOCW] = {r = 0, g = 0.8, b = 0}, -- 使命召唤：冷战
-    [_G.BNET_CLIENT_WOW .. 'C'] = {r = 0.866, g = 0.690, b = 0.180}, -- 魔兽世界怀旧版
-    ['BSAp'] = {r = 0.509, g = 0.772, b = 1}, -- 手机战网 App
+    [_G.BNET_CLIENT_ARCADE] = { r = 0.509, g = 0.772, b = 1 }, -- Arcade
+    [_G.BNET_CLIENT_CRASH4] = { r = 0.509, g = 0.772, b = 1 }, -- Crash
+    [_G.BNET_CLIENT_CLNT] = { r = 0.509, g = 0.772, b = 1 }, -- 未知
+    [_G.BNET_CLIENT_APP] = { r = 0.509, g = 0.772, b = 1 }, -- 战网
+    [_G.BNET_CLIENT_WC3] = { r = 0.796, g = 0.247, b = 0.145 }, -- 魔兽争霸重置版 3
+    [_G.BNET_CLIENT_SC] = { r = 0.749, g = 0.501, b = 0.878 }, -- 星际争霸 1
+    [_G.BNET_CLIENT_SC2] = { r = 0.749, g = 0.501, b = 0.878 }, -- 星际争霸 2
+    [_G.BNET_CLIENT_D3] = { r = 0.768, g = 0.121, b = 0.231 }, -- 暗黑破坏神 3
+    [_G.BNET_CLIENT_WOW] = { r = 0.866, g = 0.690, b = 0.180 }, -- 魔兽世界
+    [_G.BNET_CLIENT_WTCG] = { r = 1, g = 0.694, b = 0 }, -- 炉石传说
+    [_G.BNET_CLIENT_HEROES] = { r = 0, g = 0.8, b = 1 }, -- 风暴英雄
+    [_G.BNET_CLIENT_OVERWATCH] = { r = 1, g = 1, b = 1 }, -- 守望先锋
+    [_G.BNET_CLIENT_COD] = { r = 0, g = 0.8, b = 0 }, -- 使命召唤
+    [_G.BNET_CLIENT_COD_MW] = { r = 0, g = 0.8, b = 0 }, -- 使命召唤：现代战争
+    [_G.BNET_CLIENT_COD_MW2] = { r = 0, g = 0.8, b = 0 }, -- 使命召唤：现代战争 2
+    [_G.BNET_CLIENT_COD_BOCW] = { r = 0, g = 0.8, b = 0 }, -- 使命召唤：冷战
+    [_G.BNET_CLIENT_WOW .. 'C'] = { r = 0.866, g = 0.690, b = 0.180 }, -- 魔兽世界怀旧版
+    ['BSAp'] = { r = 0.509, g = 0.772, b = 1 }, -- 手机战网 App
 }
 
 local function GetClassColor(className)
@@ -149,13 +149,14 @@ local function UpdateFriendButton(button)
 
                 if gameAccountInfo.wowProjectID == _G.WOW_PROJECT_CLASSIC then
                     game = _G.BNET_CLIENT_WOW .. 'C' -- Classic
-                    local serverStrings = {string.split(' - ', gameAccountInfo.richPresence)}
+                    local serverStrings = { string.split(' - ', gameAccountInfo.richPresence) }
                     server = serverStrings[#serverStrings] or _G.BNET_FRIEND_TOOLTIP_WOW_CLASSIC
                     server = server .. '*'
                 elseif gameAccountInfo.wowProjectID == WOW_PROJECT_CLASSIC_TBC then
                     game = _G.BNET_CLIENT_WOW .. 'C_TBC' -- TBC
-                    local serverStrings = {string.split(' - ', gameAccountInfo.richPresence)}
-                    server = serverStrings[#serverStrings] or _G.BNET_FRIEND_TOOLTIP_WOW_CLASSIC .. ' (' .. _G.CINEMATIC_NAME_2 .. ')'
+                    local serverStrings = { string.split(' - ', gameAccountInfo.richPresence) }
+                    server = serverStrings[#serverStrings]
+                        or _G.BNET_FRIEND_TOOLTIP_WOW_CLASSIC .. ' (' .. _G.CINEMATIC_NAME_2 .. ')'
                     server = server .. '*'
                 else
                     server = gameAccountInfo.realmDisplayName or ''
@@ -197,15 +198,15 @@ local function UpdateFriendButton(button)
         -- 地区
         if area then
             if server and server ~= '' and server ~= C.REALM then
-                buttonText = F:CreateColorString(area .. ' - ' .. server, {r = .8, g = .8, b = .8})
+                buttonText = F:CreateColorString(area .. ' - ' .. server, { r = 0.8, g = 0.8, b = 0.8 })
             else
-                buttonText = F:CreateColorString(area, {r = .8, g = .8, b = .8})
+                buttonText = F:CreateColorString(area, { r = 0.8, g = 0.8, b = 0.8 })
             end
 
             if not isInCurrentRegion and regionLocales[regionID] then
                 -- Unblocking profanity filter will change the region
                 local regionText = string.format('[%s]', regionLocales[regionID])
-                buttonText = buttonText .. ' ' .. F.CreateColorString(regionText, {r = 0.62, g = 0.62, b = 0.62})
+                buttonText = buttonText .. ' ' .. F.CreateColorString(regionText, { r = 0.62, g = 0.62, b = 0.62 })
             end
 
             button.info:SetText(buttonText)

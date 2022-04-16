@@ -31,18 +31,18 @@ end
 
 local function Enable(self, unit)
     local element = self.GCD
-    if (element and UnitIsUnit(unit, 'player')) then
+    if element and UnitIsUnit(unit, 'player') then
         element.__owner = self
         element.ForceUpdate = ForceUpdate
 
         element:SetScript('OnUpdate', Update)
 
-        if (element:IsObjectType('StatusBar') and not element:GetStatusBarTexture()) then
+        if element:IsObjectType('StatusBar') and not element:GetStatusBarTexture() then
             element:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
         end
 
         local spark = element.spark
-        if (spark and spark:IsObjectType('Texture') and not spark:GetTexture()) then
+        if spark and spark:IsObjectType('Texture') and not spark:GetTexture() then
             spark:SetTexture([[Interface\CastingBar\UI-CastingBar-Spark]])
         end
 
@@ -54,7 +54,7 @@ end
 
 local function Disable(self)
     local element = self.GCD
-    if (element) then
+    if element then
         element:Hide()
     end
 end

@@ -36,7 +36,7 @@ function INFOBAR:GuildPanel_CreateButton(parent, index)
     button:SetPoint('TOPLEFT', 0, -(index - 1) * 20)
     button.HL = button:CreateTexture(nil, 'HIGHLIGHT')
     button.HL:SetAllPoints()
-    button.HL:SetColorTexture(C.r, C.g, C.b, .2)
+    button.HL:SetColorTexture(C.r, C.g, C.b, 0.2)
 
     button.level = F.CreateFS(button, C.Assets.Font.Regular, 13, nil, 'Level', nil, true)
     button.level:SetPoint('TOP', button, 'TOPLEFT', 16, -4)
@@ -137,7 +137,7 @@ end
 
 local function isPanelCanHide(self, elapsed)
     self.timer = (self.timer or 0) + elapsed
-    if self.timer > .1 then
+    if self.timer > 0.1 then
         if not infoFrame:IsMouseOver() then
             self:Hide()
             self:SetScript('OnUpdate', nil)
@@ -157,7 +157,13 @@ function INFOBAR:GuildPanel_Init()
 
     infoFrame = CreateFrame('Frame', 'FreeUIGuildInfobar', INFOBAR.Bar)
     infoFrame:SetSize(335, 495)
-    infoFrame:SetPoint(anchorTop and 'TOP' or 'BOTTOM', INFOBAR.GuildBlock, anchorTop and 'BOTTOM' or 'TOP', 0, anchorTop and -6 or 6)
+    infoFrame:SetPoint(
+        anchorTop and 'TOP' or 'BOTTOM',
+        INFOBAR.GuildBlock,
+        anchorTop and 'BOTTOM' or 'TOP',
+        0,
+        anchorTop and -6 or 6
+    )
     infoFrame:SetClampedToScreen(true)
     infoFrame:SetFrameStrata('TOOLTIP')
     F.SetBD(infoFrame)
@@ -172,7 +178,7 @@ function INFOBAR:GuildPanel_Init()
     gRank = F.CreateFS(infoFrame, C.Assets.Font.Regular, 13, nil, 'Rank', nil, true, 'TOPLEFT', 15, -51)
 
     local bu = {}
-    local width = {30, 35, 126, 126}
+    local width = { 30, 35, 126, 126 }
     for i = 1, 4 do
         bu[i] = CreateFrame('Button', nil, infoFrame)
         bu[i]:SetSize(width[i], 22)
@@ -184,7 +190,7 @@ function INFOBAR:GuildPanel_Init()
         end
         bu[i].HL = bu[i]:CreateTexture(nil, 'HIGHLIGHT')
         bu[i].HL:SetAllPoints(bu[i])
-        bu[i].HL:SetColorTexture(C.r, C.g, C.b, .2)
+        bu[i].HL:SetColorTexture(C.r, C.g, C.b, 0.2)
         bu[i].index = i
         bu[i]:SetScript('OnClick', sortHeaderOnClick)
     end
@@ -201,7 +207,12 @@ function INFOBAR:GuildPanel_Init()
     local copyInfo = C.INFO_COLOR .. 'SHIFT +' .. C.MOUSE_LEFT_BUTTON .. L['Copy Name']
     F.CreateFS(infoFrame, C.Assets.Font.Regular, 13, nil, copyInfo, nil, true, 'BOTTOMRIGHT', -15, 10)
 
-    local scrollFrame = CreateFrame('ScrollFrame', 'FreeUIGuildInfobarScrollFrame', infoFrame, 'HybridScrollFrameTemplate')
+    local scrollFrame = CreateFrame(
+        'ScrollFrame',
+        'FreeUIGuildInfobarScrollFrame',
+        infoFrame,
+        'HybridScrollFrameTemplate'
+    )
     scrollFrame:SetSize(305, 320)
     scrollFrame:SetPoint('TOPLEFT', 10, -100)
     infoFrame.scrollFrame = scrollFrame
@@ -248,7 +259,7 @@ function INFOBAR:GuildPanel_Refresh()
     local total, _, online = GetNumGuildMembers()
     local guildName, guildRank = GetGuildInfo('player')
 
-    gName:SetText(F:RgbToHex({.9, .8, .6}) .. '<' .. (guildName or '') .. '>')
+    gName:SetText(F:RgbToHex({ 0.9, 0.8, 0.6 }) .. '<' .. (guildName or '') .. '>')
     gOnline:SetText(string.format(C.INFO_COLOR .. '%s:' .. ' %d/%d', _G.GUILD_ONLINE_LABEL, online, total))
     -- gApps:SetText(string.format(C.INFO_COLOR .. _G.GUILDINFOTAB_APPLICANTS, GetNumGuildApplicants()))
     gRank:SetText(C.INFO_COLOR .. _G.RANK .. ': ' .. (guildRank or ''))
@@ -313,7 +324,6 @@ local function Block_OnMouseUp(self, btn)
             end
             _G.GuildFrame_Toggle()
             _G.GuildFrame_TabClicked(_G.GuildFrameTab2)
-
         else
             if not _G.LookingForGuildFrame then
                 LoadAddOn('Blizzard_LookingForGuildUI')
@@ -363,7 +373,7 @@ local function Block_OnLeave(self)
     if not infoFrame then
         return
     end
-    F:Delay(.1, delayLeave)
+    F:Delay(0.1, delayLeave)
 end
 
 function INFOBAR:CreateGuildBlock()
@@ -376,8 +386,7 @@ function INFOBAR:CreateGuildBlock()
     guild.onEnter = Block_OnEnter
     guild.onLeave = Block_OnLeave
     guild.onMouseUp = Block_OnMouseUp
-    guild.eventList = {'PLAYER_ENTERING_WORLD', 'GUILD_ROSTER_UPDATE', 'PLAYER_GUILD_UPDATE'}
-
+    guild.eventList = { 'PLAYER_ENTERING_WORLD', 'GUILD_ROSTER_UPDATE', 'PLAYER_GUILD_UPDATE' }
 
     INFOBAR.GuildBlock = guild
 end

@@ -42,7 +42,7 @@ function BAR:UpdateActionBarSize(name)
     local size = C.DB['Actionbar'][name .. 'Size']
     local num = C.DB['Actionbar'][name .. 'Num']
     local perRow = C.DB['Actionbar'][name .. 'PerRow']
-    local fontSize = math.floor(size / 30 * 10 + .5)
+    local fontSize = math.floor(size / 30 * 10 + 0.5)
 
     if num == 0 then
         local column = 3
@@ -126,7 +126,7 @@ function BAR:CreateBar1()
     local buttonList = {}
 
     local frame = CreateFrame('Frame', 'FreeUI_ActionBar1', _G.UIParent, 'SecureHandlerStateTemplate')
-    frame.mover = F.Mover(frame, L['Actionbar'] .. '1', 'Bar1', {'BOTTOM', _G.UIParent, 'BOTTOM', 0, C.UI_GAP})
+    frame.mover = F.Mover(frame, L['Actionbar'] .. '1', 'Bar1', { 'BOTTOM', _G.UIParent, 'BOTTOM', 0, C.UI_GAP })
     BAR.movers[1] = frame.mover
 
     for i = 1, num do
@@ -141,7 +141,8 @@ function BAR:CreateBar1()
     frame.frameVisibility = '[petbattle] hide; show'
     _G.RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
 
-    local actionPage = '[bar:6]6;[bar:5]5;[bar:4]4;[bar:3]3;[bar:2]2;[possessbar]12;[overridebar]14;[shapeshift]13;[vehicleui]12;[bonusbar:5]11;[bonusbar:4]10;[bonusbar:3]9;[bonusbar:2]8;[bonusbar:1]7;1'
+    local actionPage =
+        '[bar:6]6;[bar:5]5;[bar:4]4;[bar:3]3;[bar:2]2;[possessbar]12;[overridebar]14;[shapeshift]13;[vehicleui]12;[bonusbar:5]11;[bonusbar:4]10;[bonusbar:3]9;[bonusbar:2]8;[bonusbar:1]7;1'
     local buttonName = 'ActionButton'
     for i, button in next, buttonList do
         frame:SetFrameRef(buttonName .. i, button)
@@ -154,11 +155,14 @@ function BAR:CreateBar1()
         end
     ]]):format(num, buttonName))
 
-    frame:SetAttribute('_onstate-page', [[
+    frame:SetAttribute(
+        '_onstate-page',
+        [[
         for _, button in next, buttons do
             button:SetAttribute("actionpage", newstate)
         end
-    ]])
+    ]]
+    )
     _G.RegisterStateDriver(frame, 'page', actionPage)
 
     -- Fix button texture, need reviewed
@@ -190,7 +194,12 @@ function BAR:CreateBar2()
     local buttonList = {}
 
     local frame = CreateFrame('Frame', 'FreeUI_ActionBar2', _G.UIParent, 'SecureHandlerStateTemplate')
-    frame.mover = F.Mover(frame, L['Actionbar'] .. '2', 'Bar2', {'BOTTOM', _G.FreeUI_ActionBar1, 'TOP', 0, -BAR.margin})
+    frame.mover = F.Mover(
+        frame,
+        L['Actionbar'] .. '2',
+        'Bar2',
+        { 'BOTTOM', _G.FreeUI_ActionBar1, 'TOP', 0, -BAR.margin }
+    )
     BAR.movers[2] = frame.mover
 
     _G.MultiBarBottomLeft:SetParent(frame)
@@ -213,10 +222,20 @@ function BAR:CreateBar3()
     local buttonList = {}
 
     local frame = CreateFrame('Frame', 'FreeUI_ActionBar3', _G.UIParent, 'SecureHandlerStateTemplate')
-    frame.mover = F.Mover(frame, L['Actionbar'] .. '3L', 'Bar3L', {'RIGHT', _G.FreeUI_ActionBar1, 'TOPLEFT', BAR.margin, -BAR.padding / 2})
+    frame.mover = F.Mover(
+        frame,
+        L['Actionbar'] .. '3L',
+        'Bar3L',
+        { 'RIGHT', _G.FreeUI_ActionBar1, 'TOPLEFT', BAR.margin, -BAR.padding / 2 }
+    )
     local child = CreateFrame('Frame', nil, frame)
     child:SetSize(1, 1)
-    child.mover = F.Mover(child, L['Actionbar'] .. '3R', 'Bar3R', {'LEFT', _G.FreeUI_ActionBar1, 'TOPRIGHT', -BAR.margin, -BAR.padding / 2})
+    child.mover = F.Mover(
+        child,
+        L['Actionbar'] .. '3R',
+        'Bar3R',
+        { 'LEFT', _G.FreeUI_ActionBar1, 'TOPRIGHT', -BAR.margin, -BAR.padding / 2 }
+    )
     frame.child = child
 
     BAR.movers[3] = frame.mover
@@ -262,8 +281,8 @@ function BAR:UpdateFrameClickThru()
     end
 
     hooksecurefunc('SetActionBarToggles', function(_, _, bar3, bar4)
-        showBar4 = not (not bar3)
-        showBar5 = not (not bar4)
+        showBar4 = not not bar3
+        showBar5 = not not bar4
         if InCombatLockdown() then
             F:RegisterEvent('PLAYER_REGEN_ENABLED', updateClickThru)
         else
@@ -277,7 +296,7 @@ function BAR:CreateBar4()
     local buttonList = {}
 
     local frame = CreateFrame('Frame', 'FreeUI_ActionBar4', _G.UIParent, 'SecureHandlerStateTemplate')
-    frame.mover = F.Mover(frame, L['Actionbar'] .. '4', 'Bar4', {'RIGHT', _G.UIParent, 'RIGHT', -2, 0})
+    frame.mover = F.Mover(frame, L['Actionbar'] .. '4', 'Bar4', { 'RIGHT', _G.UIParent, 'RIGHT', -2, 0 })
     BAR.movers[5] = frame.mover
 
     _G.MultiBarRight:SetParent(frame)
@@ -310,7 +329,12 @@ function BAR:CreateBar5()
     local buttonList = {}
 
     local frame = CreateFrame('Frame', 'FreeUI_ActionBar5', _G.UIParent, 'SecureHandlerStateTemplate')
-    frame.mover = F.Mover(frame, L['Actionbar'] .. '5', 'Bar5', {'RIGHT', _G.FreeUI_ActionBar4, 'LEFT', BAR.margin, 0})
+    frame.mover = F.Mover(
+        frame,
+        L['Actionbar'] .. '5',
+        'Bar5',
+        { 'RIGHT', _G.FreeUI_ActionBar4, 'LEFT', BAR.margin, 0 }
+    )
     BAR.movers[6] = frame.mover
 
     _G.MultiBarLeft:SetParent(frame)
@@ -339,7 +363,7 @@ function BAR:CreatePetBar()
     local buttonList = {}
 
     local frame = CreateFrame('Frame', 'FreeUI_ActionBarPet', _G.UIParent, 'SecureHandlerStateTemplate')
-    frame.mover = F.Mover(frame, L['Pet Actionbar'], 'PetBar', {'BOTTOM', _G.FreeUI_ActionBar2, 'TOP', 0, BAR.margin})
+    frame.mover = F.Mover(frame, L['Pet Actionbar'], 'PetBar', { 'BOTTOM', _G.FreeUI_ActionBar2, 'TOP', 0, BAR.margin })
     BAR.movers[7] = frame.mover
 
     _G.PetActionBarFrame:SetParent(frame)
@@ -354,7 +378,8 @@ function BAR:CreatePetBar()
     end
     frame.buttons = buttonList
 
-    frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; [pet] show; hide'
+    frame.frameVisibility =
+        '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; [pet] show; hide'
     _G.RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
 end
 
@@ -367,7 +392,7 @@ function BAR:UpdateStanceBar()
 
     local size = C.DB['Actionbar']['BarStanceSize']
     local perRow = C.DB['Actionbar']['BarStancePerRow']
-    local fontSize = math.floor(size / 30 * 10 + .5)
+    local fontSize = math.floor(size / 30 * 10 + 0.5)
 
     for i = 1, 12 do
         local button = frame.buttons[i]
@@ -400,7 +425,12 @@ function BAR:CreateStanceBar()
     local num = _G.NUM_STANCE_SLOTS
     local buttonList = {}
     local frame = CreateFrame('Frame', 'FreeUI_ActionBarStance', _G.UIParent, 'SecureHandlerStateTemplate')
-    frame.mover = F.Mover(frame, L['StanceBar'], 'StanceBar', {'BOTTOMLEFT', _G.FreeUI_ActionBar2, 'TOPLEFT', 0, BAR.margin})
+    frame.mover = F.Mover(
+        frame,
+        L['StanceBar'],
+        'StanceBar',
+        { 'BOTTOMLEFT', _G.FreeUI_ActionBar2, 'TOPLEFT', 0, BAR.margin }
+    )
     BAR.movers[8] = frame.mover
 
     -- StanceBar
@@ -442,7 +472,7 @@ function BAR:UpdateExtraBar()
     end
 
     local size = C.DB['Actionbar']['BarExtraSize']
-    local fontSize = math.floor(size / 30 * 10 + .5)
+    local fontSize = math.floor(size / 30 * 10 + 0.5)
 
     local button = _G.ExtraActionButton1
     button:SetSize(size, size)
@@ -458,7 +488,7 @@ function BAR:CreateExtraBar()
     local frame = CreateFrame('Frame', 'FreeUI_ActionBarExtra', _G.UIParent, 'SecureHandlerStateTemplate')
     frame:SetWidth(size + 2 * BAR.padding)
     frame:SetHeight(size + 2 * BAR.padding)
-    frame.mover = F.Mover(frame, L['Extrabar'], 'Extrabar', {'CENTER', _G.UIParent, 'CENTER', 0, 300})
+    frame.mover = F.Mover(frame, L['Extrabar'], 'Extrabar', { 'CENTER', _G.UIParent, 'CENTER', 0, 300 })
 
     _G.ExtraActionBarFrame:EnableMouse(false)
     _G.ExtraAbilityContainer:SetParent(frame)
@@ -478,7 +508,7 @@ function BAR:CreateExtraBar()
     local zoneFrame = CreateFrame('Frame', 'FreeUI_ActionBarZone', _G.UIParent)
     zoneFrame:SetWidth(size + 2 * BAR.padding)
     zoneFrame:SetHeight(size + 2 * BAR.padding)
-    zoneFrame.mover = F.Mover(zoneFrame, L['Zone Ability'], 'ZoneAbility', {'CENTER', _G.UIParent, 'CENTER', 0, 250})
+    zoneFrame.mover = F.Mover(zoneFrame, L['Zone Ability'], 'ZoneAbility', { 'CENTER', _G.UIParent, 'CENTER', 0, 250 })
 
     _G.ZoneAbilityFrame:SetParent(zoneFrame)
     _G.ZoneAbilityFrame:ClearAllPoints()
@@ -491,7 +521,7 @@ function BAR:CreateExtraBar()
             if spellButton and not spellButton.styled then
                 spellButton.NormalTexture:SetAlpha(0)
                 spellButton:SetPushedTexture(C.Assets.Button.Pushed) -- force it to gain a texture
-                spellButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+                spellButton:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
                 spellButton:GetHighlightTexture():SetInside()
                 spellButton.Icon:SetInside()
                 F.ReskinIcon(spellButton.Icon, true)
@@ -529,14 +559,19 @@ function BAR:CreateLeaveVehicleBar()
     local buttonList = {}
 
     local frame = CreateFrame('Frame', 'FreeUI_ActionBarExit', _G.UIParent, 'SecureHandlerStateTemplate')
-    frame.mover = F.Mover(frame, L['LeaveVehicle'], 'LeaveVehicle', {'CENTER', _G.UIParent, 'CENTER', 0, 200})
+    frame.mover = F.Mover(frame, L['LeaveVehicle'], 'LeaveVehicle', { 'CENTER', _G.UIParent, 'CENTER', 0, 200 })
 
-    local button = CreateFrame('CheckButton', 'FreeUI_LeaveVehicleButton', frame, 'ActionButtonTemplate, SecureHandlerClickTemplate')
+    local button = CreateFrame(
+        'CheckButton',
+        'FreeUI_LeaveVehicleButton',
+        frame,
+        'ActionButtonTemplate, SecureHandlerClickTemplate'
+    )
     table.insert(buttonList, button)
     button:SetPoint('BOTTOMLEFT', frame, BAR.padding, BAR.padding)
     button:RegisterForClicks('AnyUp')
     button.icon:SetTexture('INTERFACE\\VEHICLES\\UI-Vehicles-Button-Exit-Up')
-    button.icon:SetTexCoord(.216, .784, .216, .784)
+    button.icon:SetTexCoord(0.216, 0.784, 0.216, 0.784)
     button.icon:SetDrawLayer('ARTWORK')
     button.icon.__lockdown = true
 

@@ -6,7 +6,7 @@ local function OnEnable(self)
 end
 
 local function OnDisable(self)
-    self.__bg:SetBackdropColor(C.r, C.g, C.b, .25)
+    self.__bg:SetBackdropColor(C.r, C.g, C.b, 0.25)
 end
 
 local function OnClick(self)
@@ -23,7 +23,7 @@ local function ReskinBossButtons()
 
         F.Reskin(button, true)
         local hl = button:GetHighlightTexture()
-        hl:SetColorTexture(C.r, C.g, C.b, .25)
+        hl:SetColorTexture(C.r, C.g, C.b, 0.25)
         hl:SetInside(button.__bg)
 
         button.text:SetTextColor(1, 1, 1)
@@ -102,7 +102,7 @@ C.Themes['Blizzard_EncounterJournal'] = function()
     local r, g, b = C.r, C.g, C.b
 
     -- Tabs
-    for _, tabName in pairs({'suggestTab', 'dungeonsTab', 'raidsTab', 'LootJournalTab'}) do
+    for _, tabName in pairs({ 'suggestTab', 'dungeonsTab', 'raidsTab', 'LootJournalTab' }) do
         local tab = _G.EncounterJournal.instanceSelect[tabName]
         local text = tab:GetFontString()
 
@@ -113,7 +113,7 @@ C.Themes['Blizzard_EncounterJournal'] = function()
         text:SetTextColor(1, 1, 1)
         F.Reskin(tab)
         if tabName == 'suggestTab' then
-            tab.__bg:SetBackdropColor(r, g, b, .25)
+            tab.__bg:SetBackdropColor(r, g, b, 0.25)
         end
 
         tab:HookScript('OnEnable', OnEnable)
@@ -122,7 +122,7 @@ C.Themes['Blizzard_EncounterJournal'] = function()
     end
 
     -- Side tabs
-    local tabs = {'overviewTab', 'modelTab', 'bossTab', 'lootTab'}
+    local tabs = { 'overviewTab', 'modelTab', 'bossTab', 'lootTab' }
     for _, name in pairs(tabs) do
         local tab = _G.EncounterJournal.encounter.info[name]
         local bg = F.SetBD(tab)
@@ -132,7 +132,7 @@ C.Themes['Blizzard_EncounterJournal'] = function()
         tab:SetPushedTexture('')
         tab:SetDisabledTexture('')
         local hl = tab:GetHighlightTexture()
-        hl:SetColorTexture(r, g, b, .2)
+        hl:SetColorTexture(r, g, b, 0.2)
         hl:SetInside(bg)
 
         if name == 'overviewTab' then
@@ -161,8 +161,13 @@ C.Themes['Blizzard_EncounterJournal'] = function()
     _G.EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollChildTitle:SetTextColor(1, 1, 1)
     _G.EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollChild.overviewDescription.Text:SetTextColor(1, 1, 1)
 
-    F.CreateBDFrame(_G.EncounterJournalEncounterFrameInfoModelFrame, .25)
-    _G.EncounterJournalEncounterFrameInfoCreatureButton1:SetPoint('TOPLEFT', _G.EncounterJournalEncounterFrameInfoModelFrame, 0, -35)
+    F.CreateBDFrame(_G.EncounterJournalEncounterFrameInfoModelFrame, 0.25)
+    _G.EncounterJournalEncounterFrameInfoCreatureButton1:SetPoint(
+        'TOPLEFT',
+        _G.EncounterJournalEncounterFrameInfoModelFrame,
+        0,
+        -35
+    )
 
     hooksecurefunc('EncounterJournal_DisplayInstance', ReskinBossButtons)
     hooksecurefunc('EncounterJournal_ToggleHeaders', ReskinSectionHeader)
@@ -199,7 +204,7 @@ C.Themes['Blizzard_EncounterJournal'] = function()
         item.icon:SetPoint('TOPLEFT', 1, -1)
         F.ReskinIcon(item.icon)
 
-        local bg = F.CreateBDFrame(item, .25)
+        local bg = F.CreateBDFrame(item, 0.25)
         bg:SetPoint('TOPLEFT')
         bg:SetPoint('BOTTOMRIGHT', 0, 1)
     end
@@ -225,11 +230,11 @@ C.Themes['Blizzard_EncounterJournal'] = function()
             F.StripTextures(bu)
             F.ReskinIcon(bu.icon)
             bu.icon.SetTexCoord = nop
-            local bg = F.CreateBDFrame(bu, .25)
+            local bg = F.CreateBDFrame(bu, 0.25)
             bg:SetInside()
             bu:SetHighlightTexture(C.Assets.Texture.Backdrop)
             local hl = bu:GetHighlightTexture()
-            hl:SetVertexColor(r, g, b, .25)
+            hl:SetVertexColor(r, g, b, 0.25)
             hl:SetInside(bg)
         end
     end
@@ -250,7 +255,7 @@ C.Themes['Blizzard_EncounterJournal'] = function()
     local buttons = {
         _G.EncounterJournalEncounterFrameInfoDifficulty,
         _G.EncounterJournalEncounterFrameInfoLootScrollFrameFilterToggle,
-        _G.EncounterJournalEncounterFrameInfoLootScrollFrameSlotFilterToggle
+        _G.EncounterJournalEncounterFrameInfoLootScrollFrameSlotFilterToggle,
     }
     for _, button in pairs(buttons) do
         ReskinFilterToggle(button)
@@ -262,17 +267,17 @@ C.Themes['Blizzard_EncounterJournal'] = function()
     -- Suggestion 1
     local suggestion = suggestFrame.Suggestion1
     suggestion.bg:Hide()
-    F.CreateBDFrame(suggestion, .25)
+    F.CreateBDFrame(suggestion, 0.25)
     suggestion.icon:SetPoint('TOPLEFT', 135, -15)
     F.CreateBDFrame(suggestion.icon)
 
     local centerDisplay = suggestion.centerDisplay
     centerDisplay.title.text:SetTextColor(1, 1, 1)
-    centerDisplay.description.text:SetTextColor(.9, .9, .9)
+    centerDisplay.description.text:SetTextColor(0.9, 0.9, 0.9)
     F.Reskin(suggestion.button)
 
     local reward = suggestion.reward
-    reward.text:SetTextColor(.9, .9, .9)
+    reward.text:SetTextColor(0.9, 0.9, 0.9)
     reward.iconRing:Hide()
     reward.iconRingHighlight:SetTexture('')
     F.CreateBDFrame(reward.icon):SetFrameLevel(3)
@@ -284,7 +289,7 @@ C.Themes['Blizzard_EncounterJournal'] = function()
         local suggestion = suggestFrame['Suggestion' .. i]
 
         suggestion.bg:Hide()
-        F.CreateBDFrame(suggestion, .25)
+        F.CreateBDFrame(suggestion, 0.25)
         suggestion.icon:SetPoint('TOPLEFT', 10, -10)
         F.CreateBDFrame(suggestion.icon)
 
@@ -293,7 +298,7 @@ C.Themes['Blizzard_EncounterJournal'] = function()
         centerDisplay:ClearAllPoints()
         centerDisplay:SetPoint('TOPLEFT', 85, -10)
         centerDisplay.title.text:SetTextColor(1, 1, 1)
-        centerDisplay.description.text:SetTextColor(.9, .9, .9)
+        centerDisplay.description.text:SetTextColor(0.9, 0.9, 0.9)
         F.Reskin(centerDisplay.button)
 
         local reward = suggestion.reward
@@ -368,7 +373,7 @@ C.Themes['Blizzard_EncounterJournal'] = function()
                 button.bg = F.ReskinIcon(button.Icon)
                 button.bg:SetBackdropBorderColor(iconColor.r, iconColor.g, iconColor.b)
 
-                local bg = F.CreateBDFrame(button, .25)
+                local bg = F.CreateBDFrame(button, 0.25)
                 bg:SetPoint('TOPLEFT', 3, 0)
                 bg:SetPoint('BOTTOMRIGHT', -2, 1)
             end
@@ -392,7 +397,7 @@ C.Themes['Blizzard_EncounterJournal'] = function()
                 if not button.styled then
                     button.ItemLevel:SetTextColor(1, 1, 1)
                     button.Background:Hide()
-                    F.CreateBDFrame(button, .25)
+                    F.CreateBDFrame(button, 0.25)
 
                     button.styled = true
                 end

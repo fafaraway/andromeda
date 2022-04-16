@@ -73,15 +73,11 @@ function THEME:ReskinMRT()
     if isEnabled then
         LoadMRTSkin()
     else
-        hooksecurefunc(
-            _G.MRTOptionsFrameExCD2,
-            'Load',
-            function(self)
-                if self.chkEnable then
-                    self.chkEnable:HookScript('OnClick', LoadMRTSkin)
-                end
+        hooksecurefunc(_G.MRTOptionsFrameExCD2, 'Load', function(self)
+            if self.chkEnable then
+                self.chkEnable:HookScript('OnClick', LoadMRTSkin)
             end
-        )
+        end)
     end
 
     -- Consumables

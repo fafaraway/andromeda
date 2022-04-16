@@ -13,12 +13,12 @@ local scripts = {
     'OnValueChanged',
     'OnClick',
     'OnMouseDown',
-    'OnMouseUp'
+    'OnMouseUp',
 }
 
 local framesToHide = {
     _G.MainMenuBar,
-    _G.OverrideActionBar
+    _G.OverrideActionBar,
 }
 
 local framesToDisable = {
@@ -275,11 +275,11 @@ local function SetupCooldown(cooldown, cfg)
 end
 
 local function SetupBackdrop(icon)
-    local bg = F.SetBD(icon, .25)
+    local bg = F.SetBD(icon, 0.25)
     if C.DB.Actionbar.ClassColor then
-        bg:SetBackdropColor(C.r, C.g, C.b, .25)
+        bg:SetBackdropColor(C.r, C.g, C.b, 0.25)
     else
-        bg:SetBackdropColor(.1, .1, .1, .25)
+        bg:SetBackdropColor(0.1, 0.1, 0.1, 0.25)
     end
 
     icon:GetParent().__bg = bg
@@ -289,24 +289,24 @@ local keyButton = string.gsub(_G.KEY_BUTTON4, '%d', '')
 local keyNumpad = string.gsub(_G.KEY_NUMPAD1, '%d', '')
 
 local replaces = {
-    {'(' .. keyButton .. ')', 'M'},
-    {'(' .. keyNumpad .. ')', 'N'},
-    {'(a%-)', 'a'},
-    {'(c%-)', 'c'},
-    {'(s%-)', 's'},
-    {_G.KEY_BUTTON3, 'M3'},
-    {_G.KEY_MOUSEWHEELUP, 'MU'},
-    {_G.KEY_MOUSEWHEELDOWN, 'MD'},
-    {_G.KEY_SPACE, 'Sp'},
-    {_G.CAPSLOCK_KEY_TEXT, 'CL'},
-    {'BUTTON', 'M'},
-    {'NUMPAD', 'N'},
-    {'(ALT%-)', 'a'},
-    {'(CTRL%-)', 'c'},
-    {'(SHIFT%-)', 's'},
-    {'MOUSEWHEELUP', 'MU'},
-    {'MOUSEWHEELDOWN', 'MD'},
-    {'SPACE', 'Sp'},
+    { '(' .. keyButton .. ')', 'M' },
+    { '(' .. keyNumpad .. ')', 'N' },
+    { '(a%-)', 'a' },
+    { '(c%-)', 'c' },
+    { '(s%-)', 's' },
+    { _G.KEY_BUTTON3, 'M3' },
+    { _G.KEY_MOUSEWHEELUP, 'MU' },
+    { _G.KEY_MOUSEWHEELDOWN, 'MD' },
+    { _G.KEY_SPACE, 'Sp' },
+    { _G.CAPSLOCK_KEY_TEXT, 'CL' },
+    { 'BUTTON', 'M' },
+    { 'NUMPAD', 'N' },
+    { '(ALT%-)', 'a' },
+    { '(CTRL%-)', 'c' },
+    { '(SHIFT%-)', 's' },
+    { 'MOUSEWHEELUP', 'MU' },
+    { 'MOUSEWHEELDOWN', 'MD' },
+    { 'SPACE', 'Sp' },
 }
 
 function ACTIONBAR:UpdateHotKey()
@@ -345,7 +345,7 @@ function ACTIONBAR:UpdateEquipItemColor()
     end
 
     if C.DB.Actionbar.EquipColor and IsEquippedAction(self.action) then
-        self.__bg:SetBackdropBorderColor(0, .7, .1)
+        self.__bg:SetBackdropBorderColor(0, 0.7, 0.1)
     else
         self.__bg:SetBackdropBorderColor(0, 0, 0)
     end
@@ -425,7 +425,7 @@ function ACTIONBAR:StyleActionButton(button, cfg)
 
     if checkedTexture then
         SetupTexture(checkedTexture, cfg.checkedTexture, 'SetCheckedTexture', button)
-        checkedTexture:SetColorTexture(1, .8, 0, .35)
+        checkedTexture:SetColorTexture(1, 0.8, 0, 0.35)
     end
 
     -- cooldown
@@ -457,7 +457,7 @@ function ACTIONBAR:StyleActionButton(button, cfg)
     end
 
     if autoCastable then
-        autoCastable:SetTexCoord(.217, .765, .217, .765)
+        autoCastable:SetTexCoord(0.217, 0.765, 0.217, 0.765)
         autoCastable:SetInside()
     end
 
@@ -582,20 +582,50 @@ end
 
 function ACTIONBAR:RestyleButtons()
     local cfg = {
-        icon = {texCoord = C.TEX_COORD, points = {{'TOPLEFT', C.MULT, -C.MULT}, {'BOTTOMRIGHT', -C.MULT, C.MULT}}},
-        flyoutBorder = {file = ''},
-        flyoutBorderShadow = {file = ''},
-        border = {file = ''},
-        normalTexture = {file = C.Assets.Button.Normal, color = {.3, .3, .3}, points = {{'TOPLEFT', C.MULT, -C.MULT}, {'BOTTOMRIGHT', -C.MULT, C.MULT}}},
-        flash = {file = C.Assets.Button.Flash},
-        pushedTexture = {file = C.Assets.Button.Pushed, color = {C.r, C.g, C.b}, points = {{'TOPLEFT', C.MULT, -C.MULT}, {'BOTTOMRIGHT', -C.MULT, C.MULT}}},
-        checkedTexture = {file = C.Assets.Button.Checked, color = {.2, 1, .2}, points = {{'TOPLEFT', C.MULT, -C.MULT}, {'BOTTOMRIGHT', -C.MULT, C.MULT}}},
-        highlightTexture = {file = C.Assets.Button.Highlight, points = {{'TOPLEFT', C.MULT, -C.MULT}, {'BOTTOMRIGHT', -C.MULT, C.MULT}}},
-        cooldown = {points = {{'TOPLEFT', 0, 0}, {'BOTTOMRIGHT', 0, 0}}},
-        name = {font = {C.Assets.Font.Condensed, 10, 'OUTLINE'}, points = {{'BOTTOMLEFT', 0, 2}}, color = {.5, .5, .5}, shadow = {0, 0, 0, 1, 1, -1}},
-        hotkey = {font = {C.Assets.Font.Condensed, 10, 'OUTLINE'}, points = {{'TOPRIGHT', -2, -2}}, color = {1, 1, 1}, shadow = {0, 0, 0, 1, 1, -1}},
-        count = {font = {C.Assets.Font.Condensed, 10, 'OUTLINE'}, points = {{'BOTTOMLEFT', 2, 2}}, color = {.19, .75, 1}, shadow = {0, 0, 0, 1, 1, -1}},
-        buttonstyle = {file = ''},
+        icon = { texCoord = C.TEX_COORD, points = { { 'TOPLEFT', C.MULT, -C.MULT }, { 'BOTTOMRIGHT', -C.MULT, C.MULT } } },
+        flyoutBorder = { file = '' },
+        flyoutBorderShadow = { file = '' },
+        border = { file = '' },
+        normalTexture = {
+            file = C.Assets.Button.Normal,
+            color = { 0.3, 0.3, 0.3 },
+            points = { { 'TOPLEFT', C.MULT, -C.MULT }, { 'BOTTOMRIGHT', -C.MULT, C.MULT } },
+        },
+        flash = { file = C.Assets.Button.Flash },
+        pushedTexture = {
+            file = C.Assets.Button.Pushed,
+            color = { C.r, C.g, C.b },
+            points = { { 'TOPLEFT', C.MULT, -C.MULT }, { 'BOTTOMRIGHT', -C.MULT, C.MULT } },
+        },
+        checkedTexture = {
+            file = C.Assets.Button.Checked,
+            color = { 0.2, 1, 0.2 },
+            points = { { 'TOPLEFT', C.MULT, -C.MULT }, { 'BOTTOMRIGHT', -C.MULT, C.MULT } },
+        },
+        highlightTexture = {
+            file = C.Assets.Button.Highlight,
+            points = { { 'TOPLEFT', C.MULT, -C.MULT }, { 'BOTTOMRIGHT', -C.MULT, C.MULT } },
+        },
+        cooldown = { points = { { 'TOPLEFT', 0, 0 }, { 'BOTTOMRIGHT', 0, 0 } } },
+        name = {
+            font = { C.Assets.Font.Condensed, 10, 'OUTLINE' },
+            points = { { 'BOTTOMLEFT', 0, 2 } },
+            color = { 0.5, 0.5, 0.5 },
+            shadow = { 0, 0, 0, 1, 1, -1 },
+        },
+        hotkey = {
+            font = { C.Assets.Font.Condensed, 10, 'OUTLINE' },
+            points = { { 'TOPRIGHT', -2, -2 } },
+            color = { 1, 1, 1 },
+            shadow = { 0, 0, 0, 1, 1, -1 },
+        },
+        count = {
+            font = { C.Assets.Font.Condensed, 10, 'OUTLINE' },
+            points = { { 'BOTTOMLEFT', 2, 2 } },
+            color = { 0.19, 0.75, 1 },
+            shadow = { 0, 0, 0, 1, 1, -1 },
+        },
+        buttonstyle = { file = '' },
     }
 
     ACTIONBAR:StyleAllActionButtons(cfg)

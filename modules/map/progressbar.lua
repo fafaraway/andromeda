@@ -71,7 +71,7 @@ function M:CreateBar()
     local rest = CreateFrame('StatusBar', nil, bar)
     rest:SetAllPoints()
     rest:SetStatusBarTexture(C.Assets.Statusbar.Normal)
-    rest:SetStatusBarColor(.34, .45, .86, .8)
+    rest:SetStatusBarColor(0.34, 0.45, 0.86, 0.8)
     rest:SetFrameLevel(bar:GetFrameLevel() - 1)
     bar.restBar = rest
 
@@ -86,7 +86,7 @@ function M:Bar_Update()
 
     if not IsPlayerAtEffectiveMaxLevel() then
         local xp, mxp, rxp = UnitXP('player'), UnitXPMax('player'), GetXPExhaustion()
-        self:SetStatusBarColor(.29, .59, .82)
+        self:SetStatusBarColor(0.29, 0.59, 0.82)
         self:SetMinMaxValues(0, mxp)
         self:SetValue(xp)
         self:Show()
@@ -96,11 +96,13 @@ function M:Bar_Update()
             rest:Show()
         end
         if IsXPUserDisabled() then
-            self:SetStatusBarColor(.7, 0, 0)
+            self:SetStatusBarColor(0.7, 0, 0)
         end
     elseif GetWatchedFactionInfo() then
         local _, standing, barMin, barMax, value, factionID = GetWatchedFactionInfo()
-        local friendID, friendRep, _, _, _, _, _, friendThreshold, nextFriendThreshold = GetFriendshipReputation(factionID)
+        local friendID, friendRep, _, _, _, _, _, friendThreshold, nextFriendThreshold = GetFriendshipReputation(
+            factionID
+        )
         if C_Reputation.IsFactionParagon(factionID) then
             local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
             currentValue = math.fmod(currentValue, threshold)
@@ -117,13 +119,18 @@ function M:Bar_Update()
                 barMin, barMax, value = 0, 1, 1
             end
         end
-        self:SetStatusBarColor(_G.FACTION_BAR_COLORS[standing].r, _G.FACTION_BAR_COLORS[standing].g, _G.FACTION_BAR_COLORS[standing].b, .85)
+        self:SetStatusBarColor(
+            _G.FACTION_BAR_COLORS[standing].r,
+            _G.FACTION_BAR_COLORS[standing].g,
+            _G.FACTION_BAR_COLORS[standing].b,
+            0.85
+        )
         self:SetMinMaxValues(barMin, barMax)
         self:SetValue(value)
         self:Show()
     elseif IsWatchingHonorAsXP() then
         local current, barMax = UnitHonor('player'), UnitHonorMax('player')
-        self:SetStatusBarColor(1, .24, 0)
+        self:SetStatusBarColor(1, 0.24, 0)
         self:SetMinMaxValues(0, barMax)
         self:SetValue(current)
         self:Show()
@@ -140,9 +147,31 @@ function M:Bar_OnEnter()
     if not IsPlayerAtEffectiveMaxLevel() then
         _G.GameTooltip:AddLine(' ')
         local xp, mxp, rxp = UnitXP('player'), UnitXPMax('player'), GetXPExhaustion()
-        _G.GameTooltip:AddDoubleLine(_G.XP .. ':', BreakUpLargeNumbers(xp) .. ' / ' .. BreakUpLargeNumbers(mxp) .. ' (' .. string.format('%.1f%%)', xp / mxp * 100), .6, .8, 1, 1, 1, 1)
+        _G.GameTooltip:AddDoubleLine(
+            _G.XP .. ':',
+            BreakUpLargeNumbers(xp)
+                .. ' / '
+                .. BreakUpLargeNumbers(mxp)
+                .. ' ('
+                .. string.format('%.1f%%)', xp / mxp * 100),
+            0.6,
+            0.8,
+            1,
+            1,
+            1,
+            1
+        )
         if rxp then
-            _G.GameTooltip:AddDoubleLine(_G.TUTORIAL_TITLE26 .. ':', '+' .. BreakUpLargeNumbers(rxp) .. ' (' .. string.format('%.1f%%)', rxp / mxp * 100), .6, .8, 1, 1, 1, 1)
+            _G.GameTooltip:AddDoubleLine(
+                _G.TUTORIAL_TITLE26 .. ':',
+                '+' .. BreakUpLargeNumbers(rxp) .. ' (' .. string.format('%.1f%%)', rxp / mxp * 100),
+                0.6,
+                0.8,
+                1,
+                1,
+                1,
+                1
+            )
         end
         if IsXPUserDisabled() then
             _G.GameTooltip:AddLine('|cffff0000' .. _G.XP .. _G.LOCKED)
@@ -172,15 +201,37 @@ function M:Bar_OnEnter()
             standingtext = _G['FACTION_STANDING_LABEL' .. standing] or _G.UNKNOWN
         end
         _G.GameTooltip:AddLine(' ')
-        _G.GameTooltip:AddLine(name, 0, .6, 1)
-        _G.GameTooltip:AddDoubleLine(standingtext, value - barMin .. ' / ' .. barMax - barMin .. ' (' .. math.floor((value - barMin) / (barMax - barMin) * 100) .. '%)', colors.r, colors.g, colors.b,
-                                     1, 1, 1)
+        _G.GameTooltip:AddLine(name, 0, 0.6, 1)
+        _G.GameTooltip:AddDoubleLine(
+            standingtext,
+            value - barMin
+                .. ' / '
+                .. barMax - barMin
+                .. ' ('
+                .. math.floor((value - barMin) / (barMax - barMin) * 100)
+                .. '%)',
+            colors.r,
+            colors.g,
+            colors.b,
+            1,
+            1,
+            1
+        )
 
         if C_Reputation.IsFactionParagon(factionID) then
             local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
             local paraCount = math.floor(currentValue / threshold)
             currentValue = math.fmod(currentValue, threshold)
-            _G.GameTooltip:AddDoubleLine(L['Paragon'] .. '(' .. paraCount .. ')', currentValue .. ' / ' .. threshold .. ' (' .. math.floor(currentValue / threshold * 100) .. '%)', .6, .8, 1, 1, 1, 1)
+            _G.GameTooltip:AddDoubleLine(
+                L['Paragon'] .. '(' .. paraCount .. ')',
+                currentValue .. ' / ' .. threshold .. ' (' .. math.floor(currentValue / threshold * 100) .. '%)',
+                0.6,
+                0.8,
+                1,
+                1,
+                1,
+                1
+            )
         end
 
         if factionID == 2465 then -- 荒猎团
@@ -189,8 +240,17 @@ function M:Bar_OnEnter()
                 local current = rep - threshold
                 local currentMax = nextThreshold - threshold
                 _G.GameTooltip:AddLine(' ')
-                _G.GameTooltip:AddLine(name, 0, .6, 1)
-                _G.GameTooltip:AddDoubleLine(reaction, current .. ' / ' .. currentMax .. ' (' .. math.floor(current / currentMax * 100) .. '%)', .6, .8, 1, 1, 1, 1)
+                _G.GameTooltip:AddLine(name, 0, 0.6, 1)
+                _G.GameTooltip:AddDoubleLine(
+                    reaction,
+                    current .. ' / ' .. currentMax .. ' (' .. math.floor(current / currentMax * 100) .. '%)',
+                    0.6,
+                    0.8,
+                    1,
+                    1,
+                    1,
+                    1
+                )
             end
         end
     end
@@ -198,14 +258,14 @@ function M:Bar_OnEnter()
     if IsWatchingHonorAsXP() then
         local current, barMax, level = UnitHonor('player'), UnitHonorMax('player'), UnitHonorLevel('player')
         _G.GameTooltip:AddLine(' ')
-        _G.GameTooltip:AddLine(_G.HONOR, 0, .6, 1)
-        _G.GameTooltip:AddDoubleLine(_G.LEVEL .. ' ' .. level, current .. ' / ' .. barMax, .8, .2, 0, 1, 1, 1)
+        _G.GameTooltip:AddLine(_G.HONOR, 0, 0.6, 1)
+        _G.GameTooltip:AddDoubleLine(_G.LEVEL .. ' ' .. level, current .. ' / ' .. barMax, 0.8, 0.2, 0, 1, 1, 1)
     end
 
     local covenantID = C_Covenants.GetActiveCovenantID()
     if covenantID and covenantID > 0 then
         _G.GameTooltip:AddLine(' ')
-        _G.GameTooltip:AddLine(_G.LANDING_PAGE_RENOWN_LABEL, 0, .6, 1)
+        _G.GameTooltip:AddLine(_G.LANDING_PAGE_RENOWN_LABEL, 0, 0.6, 1)
 
         for i = 1, 4 do
             local level = _G.FREE_ADB['RenownLevels'][C.REALM][C.NAME][i]

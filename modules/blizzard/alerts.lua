@@ -104,13 +104,9 @@ local function NoTalkingHeads()
         return
     end
 
-    hooksecurefunc(
-        _G.TalkingHeadFrame,
-        'Show',
-        function(self)
-            self:Hide()
-        end
-    )
+    hooksecurefunc(_G.TalkingHeadFrame, 'Show', function(self)
+        self:Hide()
+    end)
 end
 
 local function TalkingHeadOnLoad(event, addon)
@@ -124,7 +120,7 @@ end
 function BLIZZARD:AlertFrame_Setup()
     parentFrame = CreateFrame('Frame', nil, _G.UIParent)
     parentFrame:SetSize(200, 30)
-    F.Mover(parentFrame, L['Alert Frame'], 'AlertFrames', {'TOP', _G.UIParent, 0, -100})
+    F.Mover(parentFrame, L['Alert Frame'], 'AlertFrames', { 'TOP', _G.UIParent, 0, -100 })
 
     _G.GroupLootContainer:EnableMouse(false)
     _G.GroupLootContainer.ignoreFramePositionManager = true
@@ -133,13 +129,9 @@ function BLIZZARD:AlertFrame_Setup()
         BLIZZARD.AlertFrame_AdjustPosition(alertFrameSubSystem)
     end
 
-    hooksecurefunc(
-        _G.AlertFrame,
-        'AddAlertFrameSubSystem',
-        function(_, alertFrameSubSystem)
-            BLIZZARD.AlertFrame_AdjustPosition(alertFrameSubSystem)
-        end
-    )
+    hooksecurefunc(_G.AlertFrame, 'AddAlertFrameSubSystem', function(_, alertFrameSubSystem)
+        BLIZZARD.AlertFrame_AdjustPosition(alertFrameSubSystem)
+    end)
 
     hooksecurefunc(_G.AlertFrame, 'UpdateAnchors', BLIZZARD.AlertFrame_UpdateAnchor)
     hooksecurefunc('GroupLootContainer_Update', BLIZZARD.UpdatGroupLootContainer)

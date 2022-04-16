@@ -25,7 +25,7 @@ function event:PET_BATTLE_OPENING_START()
 end
 
 function CHAT:CombatStart()
-    F:UIFrameFadeOut(_G.ChatFrame1, .1, _G.ChatFrame1:GetAlpha(), 0)
+    F:UIFrameFadeOut(_G.ChatFrame1, 0.1, _G.ChatFrame1:GetAlpha(), 0)
 
     _G.GeneralDockManager:Hide()
 
@@ -35,7 +35,7 @@ function CHAT:CombatStart()
 end
 
 function CHAT:CombatEnd()
-    F:UIFrameFadeIn(_G.ChatFrame1, .1, _G.ChatFrame1:GetAlpha(), 1)
+    F:UIFrameFadeIn(_G.ChatFrame1, 0.1, _G.ChatFrame1:GetAlpha(), 1)
 
     _G.GeneralDockManager:Show()
 
@@ -54,10 +54,7 @@ function CHAT:HideInCombat()
     event:RegisterEvent('PLAYER_LOGIN')
     event:RegisterEvent('PET_BATTLE_CLOSE')
     event:RegisterEvent('PET_BATTLE_OPENING_START')
-    event:SetScript(
-        'OnEvent',
-        function(self, event, ...)
-            self[event](self, ...)
-        end
-    )
+    event:SetScript('OnEvent', function(self, event, ...)
+        self[event](self, ...)
+    end)
 end

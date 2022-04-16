@@ -66,7 +66,7 @@ function GUI:Icon_OnEnter()
     for _, value in pairs(self.list) do
         for name, class in pairs(value) do
             if class == 'NONE' then
-                r, g, b = .5, .5, .5
+                r, g, b = 0.5, 0.5, 0.5
             else
                 r, g, b = F:ClassColor(class)
             end
@@ -91,7 +91,7 @@ function GUI:Note_OnEnter()
 end
 
 function GUI:CreateProfileBar(parent, index)
-    local bar = F.CreateBDFrame(parent, .25)
+    local bar = F.CreateBDFrame(parent, 0.25)
     bar:ClearAllPoints()
     bar:SetPoint('TOPLEFT', 10, -10 - 45 * (index - 1))
     bar:SetSize(440, 40)
@@ -105,7 +105,7 @@ function GUI:CreateProfileBar(parent, index)
         SetPortraitTexture(icon.Icon, 'player')
     else
         F.PixelIcon(icon, 235423, true) -- share
-        icon.Icon:SetTexCoord(.6, .9, .1, .4)
+        icon.Icon:SetTexCoord(0.6, 0.9, 0.1, 0.4)
         icon.index = index
         GUI:FindProfleUser(icon)
         icon:SetScript('OnEnter', GUI.Icon_OnEnter)
@@ -128,22 +128,51 @@ function GUI:CreateProfileBar(parent, index)
     note:HookScript('OnEnterPressed', GUI.Note_OnEnter)
     note:HookScript('OnEscapePressed', GUI.Note_OnEscape)
     note.title = L['Profile name']
-    F.AddTooltip(note, 'ANCHOR_TOP', L['|nCustomize your profile name. If emty the editbox, the name would reset to default string.|n|nPress KEY ENTER when you finish typing.'], 'BLUE')
+    F.AddTooltip(
+        note,
+        'ANCHOR_TOP',
+        L['|nCustomize your profile name. If emty the editbox, the name would reset to default string.|n|nPress KEY ENTER when you finish typing.'],
+        'BLUE'
+    )
 
-    local reset = GUI:CreateProfileIcon(bar, 1, 'Atlas:transmog-icon-revert', L['Reset profile'], L['|nReset your current profile, and load default settings. Requires UI reload.'])
+    local reset = GUI:CreateProfileIcon(
+        bar,
+        1,
+        'Atlas:transmog-icon-revert',
+        L['Reset profile'],
+        L['|nReset your current profile, and load default settings. Requires UI reload.']
+    )
     reset:SetScript('OnClick', GUI.Reset_OnClick)
     bar.reset = reset
 
-    local apply = GUI:CreateProfileIcon(bar, 2, 'Interface\\RAIDFRAME\\ReadyCheck-Ready', L['Select profile'], L['|nSwitch to the selected profile, requires UI reload.'])
+    local apply = GUI:CreateProfileIcon(
+        bar,
+        2,
+        'Interface\\RAIDFRAME\\ReadyCheck-Ready',
+        L['Select profile'],
+        L['|nSwitch to the selected profile, requires UI reload.']
+    )
     apply:SetScript('OnClick', GUI.Apply_OnClick)
     bar.apply = apply
 
-    local download = GUI:CreateProfileIcon(bar, 3, 'Atlas:streamcinematic-downloadicon', L['Replace current profile'], L['|nReplace the current profile with the selected one, requires UI reload.'])
-    download.Icon:SetTexCoord(.25, .75, .25, .75)
+    local download = GUI:CreateProfileIcon(
+        bar,
+        3,
+        'Atlas:streamcinematic-downloadicon',
+        L['Replace current profile'],
+        L['|nReplace the current profile with the selected one, requires UI reload.']
+    )
+    download.Icon:SetTexCoord(0.25, 0.75, 0.25, 0.75)
     download:SetScript('OnClick', GUI.Download_OnClick)
     bar.download = download
 
-    local upload = GUI:CreateProfileIcon(bar, 4, 'Atlas:bags-icon-addslots', L['Replace selected profile'], L['|nReplace the selected profile with the current using one.'])
+    local upload = GUI:CreateProfileIcon(
+        bar,
+        4,
+        'Atlas:bags-icon-addslots',
+        L['Replace selected profile'],
+        L['|nReplace the selected profile with the current using one.']
+    )
     upload.Icon:SetInside(nil, 6, 6)
     upload:SetScript('OnClick', GUI.Upload_OnClick)
     bar.upload = upload
@@ -163,14 +192,14 @@ function GUI:UpdateCurrentProfile()
             UpdateButtonStatus(bar.download, false)
             UpdateButtonStatus(bar.apply, false)
             UpdateButtonStatus(bar.reset, true)
-            bar:SetBackdropColor(C.r, C.g, C.b, .25)
+            bar:SetBackdropColor(C.r, C.g, C.b, 0.25)
             bar.apply.bg:SetBackdropBorderColor(1, 1, 0)
         else
             UpdateButtonStatus(bar.upload, true)
             UpdateButtonStatus(bar.download, true)
             UpdateButtonStatus(bar.apply, true)
             UpdateButtonStatus(bar.reset, false)
-            bar:SetBackdropColor(0, 0, 0, .25)
+            bar:SetBackdropColor(0, 0, 0, 0.25)
             F.SetBorderColor(bar.apply.bg)
         end
     end
@@ -188,7 +217,10 @@ function GUI:Delete_OnEnter()
         self:SetText(text)
     end
 
-    if _G.FREE_ADB['ProfileIndex'][text] or (_G.FREE_ADB['GoldStatistic'][realm] and _G.FREE_ADB['GoldStatistic'][realm][name]) then
+    if
+        _G.FREE_ADB['ProfileIndex'][text]
+        or (_G.FREE_ADB['GoldStatistic'][realm] and _G.FREE_ADB['GoldStatistic'][realm][name])
+    then
         _G.StaticPopup_Show('FREEUI_DELETE_UNIT_PROFILE', text, GUI:GetClassFromGoldInfo(name, realm))
     else
         _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Invalid character name.'])
@@ -202,40 +234,36 @@ end
 function GUI:CreateProfileGUI(parent)
     local reset = F.CreateButton(parent, 100, 24, L['Reset'])
     reset:SetPoint('BOTTOMRIGHT', -20, 20)
-    reset:SetScript(
-        'OnClick',
-        function()
-            _G.StaticPopup_Show('FREEUI_RESET_ALL')
-        end
+    reset:SetScript('OnClick', function()
+        _G.StaticPopup_Show('FREEUI_RESET_ALL')
+    end)
+    F.AddTooltip(
+        reset,
+        'ANCHOR_TOP',
+        F:StyleAddonName(L['Delete %AddonName% all settings, reset to the default.']),
+        'RED'
     )
-    F.AddTooltip(reset, 'ANCHOR_TOP', F:StyleAddonName(L['Delete %AddonName% all settings, reset to the default.']), 'RED')
 
     local import = F.CreateButton(parent, 100, 24, L['Import'])
     import:SetPoint('BOTTOMLEFT', 20, 20)
-    import:SetScript(
-        'OnClick',
-        function()
-            parent:GetParent():Hide()
-            GUI:CreateDataFrame()
-            GUI.ProfileDataFrame.Header:SetText(L['Import settings'])
-            GUI.ProfileDataFrame.text:SetText(L['Import'])
-            GUI.ProfileDataFrame.editBox:SetText('')
-        end
-    )
+    import:SetScript('OnClick', function()
+        parent:GetParent():Hide()
+        GUI:CreateDataFrame()
+        GUI.ProfileDataFrame.Header:SetText(L['Import settings'])
+        GUI.ProfileDataFrame.text:SetText(L['Import'])
+        GUI.ProfileDataFrame.editBox:SetText('')
+    end)
     F.AddTooltip(import, 'ANCHOR_TOP', L['Import settings.'], 'BLUE')
 
     local export = F.CreateButton(parent, 100, 24, L['Export'])
     export:SetPoint('LEFT', import, 'RIGHT', 5, 0)
-    export:SetScript(
-        'OnClick',
-        function()
-            parent:GetParent():Hide()
-            GUI:CreateDataFrame()
-            GUI.ProfileDataFrame.Header:SetText(L['Export settings'])
-            GUI.ProfileDataFrame.text:SetText(_G.OKAY)
-            GUI:ExportData()
-        end
-    )
+    export:SetScript('OnClick', function()
+        parent:GetParent():Hide()
+        GUI:CreateDataFrame()
+        GUI.ProfileDataFrame.Header:SetText(L['Export settings'])
+        GUI.ProfileDataFrame.text:SetText(_G.OKAY)
+        GUI:ExportData()
+    end)
     F.AddTooltip(export, 'ANCHOR_TOP', L['Export settings.'], 'BLUE')
 
     local delete = F.CreateEditBox(parent, 205, 24)
@@ -243,10 +271,26 @@ function GUI:CreateProfileGUI(parent)
     delete:HookScript('OnEnterPressed', GUI.Delete_OnEnter)
     delete:HookScript('OnEscapePressed', GUI.Delete_OnEscape)
     delete.title = L['Delete unit profile']
-    F.AddTooltip(delete, 'ANCHOR_TOP', L['|nEnter the character name that you intend to delete its profile, the input format is \'UnitName-RealmName\'. You only need to enter name if unit is in the same realm with you.|n|nThis will delete unit gold info as well.|n|nPress key ESC to clear editbox, press key Enter to confirm.'], 'BLUE')
+    F.AddTooltip(
+        delete,
+        'ANCHOR_TOP',
+        L["|nEnter the character name that you intend to delete its profile, the input format is 'UnitName-RealmName'. You only need to enter name if unit is in the same realm with you.|n|nThis will delete unit gold info as well.|n|nPress key ESC to clear editbox, press key Enter to confirm."],
+        'BLUE'
+    )
 
     F.CreateFS(parent, C.Assets.Font.Bold, 14, nil, L['Profile Management'], 'YELLOW', 'THICK', 'TOPLEFT', 20, -20)
-    local description = F.CreateFS(parent, C.Assets.Font.Regular, 13, nil, L['You can manage your addon profile, please backup your settings before start. The default settings is based on your character, won\'t share within the same account. You can switch to the shared profile to share between your characters, and get rid of data transfer.|nData export and import only support the current profile.'], nil, 'THICK', 'TOPLEFT', 20, -40)
+    local description = F.CreateFS(
+        parent,
+        C.Assets.Font.Regular,
+        13,
+        nil,
+        L["You can manage your addon profile, please backup your settings before start. The default settings is based on your character, won't share within the same account. You can switch to the shared profile to share between your characters, and get rid of data transfer.|nData export and import only support the current profile."],
+        nil,
+        'THICK',
+        'TOPLEFT',
+        20,
+        -40
+    )
     description:SetPoint('TOPRIGHT', -20, -40)
     description:SetWordWrap(true)
     description:SetJustifyH('LEFT')
@@ -254,7 +298,7 @@ function GUI:CreateProfileGUI(parent)
     GUI.currentProfile = _G.FREE_ADB['ProfileIndex'][C.FULL_NAME]
 
     local numBars = 6
-    local panel = F.CreateBDFrame(parent, .25)
+    local panel = F.CreateBDFrame(parent, 0.25)
     panel:ClearAllPoints()
     panel:SetPoint('TOPRIGHT', -20, -120)
     panel:SetWidth(parent:GetWidth() - 40)

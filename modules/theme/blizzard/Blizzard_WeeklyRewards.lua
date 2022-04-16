@@ -8,7 +8,7 @@ local function updateSelection(frame)
     end
 
     if frame.SelectedTexture:IsShown() then
-        frame.bg:SetBackdropBorderColor(1, .8, 0)
+        frame.bg:SetBackdropBorderColor(1, 0.8, 0)
     else
         frame.bg:SetBackdropBorderColor(0, 0, 0)
     end
@@ -26,7 +26,7 @@ end
 
 local function fixBg(anim) -- color reset for the first time game launched
     if anim.bg then
-        anim.bg:SetBackdropColor(0, 0, 0, .25)
+        anim.bg:SetBackdropColor(0, 0, 0, 0.25)
     end
 end
 
@@ -40,11 +40,11 @@ local function ReskinActivityFrame(frame, isObject)
             hooksecurefunc(frame.ItemFrame, 'SetDisplayedItem', reskinRewardIcon)
 
             if frame.SheenAnim then
-                frame.SheenAnim.bg = F.CreateBDFrame(frame.ItemFrame, .25)
+                frame.SheenAnim.bg = F.CreateBDFrame(frame.ItemFrame, 0.25)
                 frame.SheenAnim:HookScript('OnFinished', fixBg)
             end
         else
-            frame.Border:SetTexCoord(.926, 1, 0, 1)
+            frame.Border:SetTexCoord(0.926, 1, 0, 1)
             frame.Border:SetSize(25, 137)
             frame.Border:SetPoint('LEFT', frame, 'RIGHT', 3, 0)
         end
@@ -88,7 +88,7 @@ C.Themes['Blizzard_WeeklyRewards'] = function()
 
     local headerFrame = WeeklyRewardsFrame.HeaderFrame
     F.StripTextures(headerFrame)
-    F.CreateBDFrame(headerFrame, .25)
+    F.CreateBDFrame(headerFrame, 0.25)
     headerFrame:SetPoint('TOP', 1, -42)
     headerFrame.Text:SetFontObject(_G.SystemFont_Huge1)
 
@@ -100,27 +100,23 @@ C.Themes['Blizzard_WeeklyRewards'] = function()
         ReskinActivityFrame(frame, true)
     end
 
-    hooksecurefunc(
-        WeeklyRewardsFrame,
-        'SelectReward',
-        function(self)
-            local confirmFrame = self.confirmSelectionFrame
-            if confirmFrame then
-                if not confirmFrame.styled then
-                    reskinConfirmIcon(confirmFrame.ItemFrame)
-                    _G.WeeklyRewardsFrameNameFrame:Hide()
-                    confirmFrame.styled = true
-                end
+    hooksecurefunc(WeeklyRewardsFrame, 'SelectReward', function(self)
+        local confirmFrame = self.confirmSelectionFrame
+        if confirmFrame then
+            if not confirmFrame.styled then
+                reskinConfirmIcon(confirmFrame.ItemFrame)
+                _G.WeeklyRewardsFrameNameFrame:Hide()
+                confirmFrame.styled = true
+            end
 
-                local alsoItemsFrame = confirmFrame.AlsoItemsFrame
-                if alsoItemsFrame.pool then
-                    for frame in alsoItemsFrame.pool:EnumerateActive() do
-                        reskinConfirmIcon(frame)
-                    end
+            local alsoItemsFrame = confirmFrame.AlsoItemsFrame
+            if alsoItemsFrame.pool then
+                for frame in alsoItemsFrame.pool:EnumerateActive() do
+                    reskinConfirmIcon(frame)
                 end
             end
         end
-    )
+    end)
 
     local rewardText = WeeklyRewardsFrame.ConcessionFrame.RewardsFrame.Text
     replaceIconString(rewardText)

@@ -8,7 +8,13 @@ local RTB_Fail, RTB_DefaultKey = false, true
 local LastTargetKey, TargetKey, CurrentBind, Success
 
 local function OnEvent(self, event, ...)
-    if event == 'ZONE_CHANGED_NEW_AREA' or (event == 'PLAYER_REGEN_ENABLED' and RTB_Fail) or event == 'DUEL_REQUESTED' or event == 'DUEL_FINISHED' or event == 'CHAT_MSG_SYSTEM' then
+    if
+        event == 'ZONE_CHANGED_NEW_AREA'
+        or (event == 'PLAYER_REGEN_ENABLED' and RTB_Fail)
+        or event == 'DUEL_REQUESTED'
+        or event == 'DUEL_FINISHED'
+        or event == 'CHAT_MSG_SYSTEM'
+    then
         if event == 'CHAT_MSG_SYSTEM' and ... == _G.ERR_DUEL_REQUESTED then
             event = 'DUEL_REQUESTED'
         elseif event == 'CHAT_MSG_SYSTEM' then

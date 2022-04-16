@@ -1,4 +1,3 @@
-
 local F, C = unpack(select(2, ...))
 
 C.ADDON_NAME = 'FreeUI'
@@ -12,14 +11,13 @@ C.FACTION = select(2, UnitFactionGroup('player'))
 
 C.SCREEN_WIDTH, C.SCREEN_HEIGHT = GetPhysicalScreenSize()
 C.ASSET_PATH = 'Interface\\AddOns\\FreeUI\\assets\\'
-C.TEX_COORD = {.08, .92, .08, .92}
+C.TEX_COORD = { 0.08, 0.92, 0.08, 0.92 }
 C.UI_GAP = 33
 
 C.MOUSE_LEFT_BUTTON = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:230:307|t '
 C.MOUSE_RIGHT_BUTTON = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:333:410|t '
 C.MOUSE_MIDDLE_BUTTON = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:127:204|t '
 C.LINE_STRING = '|cff7f7f7f---------------|r'
-
 
 C.ClassList = {}
 for k, v in pairs(_G.LOCALIZED_CLASS_NAMES_MALE) do
@@ -34,7 +32,6 @@ function F.UpdateCustomClassColors()
         C.ClassColors[class].r = value.r
         C.ClassColors[class].g = value.g
         C.ClassColors[class].b = value.b
-        C.ClassColors[class].colorStr = value.colorStr
     end
 
     C.r = C.ClassColors[C.CLASS].r
@@ -54,9 +51,6 @@ C.RED_COLOR = '|cffff2020'
 C.GREEN_COLOR = '|cff20ff20'
 C.BLUE_COLOR = '|cff82c5ff' -- .5, .8, 1
 
-
-
-
 -- Deprecated
 _G.LE_ITEM_QUALITY_POOR = _G.Enum.ItemQuality.Poor
 _G.LE_ITEM_QUALITY_COMMON = _G.Enum.ItemQuality.Common
@@ -70,12 +64,12 @@ _G.LE_ITEM_QUALITY_HEIRLOOM = _G.Enum.ItemQuality.Heirloom
 C.QualityColors = {}
 local qualityColors = _G.BAG_ITEM_QUALITY_COLORS
 for index, value in pairs(qualityColors) do
-    C.QualityColors[index] = {r = value.r, g = value.g, b = value.b}
+    C.QualityColors[index] = { r = value.r, g = value.g, b = value.b }
 end
-C.QualityColors[-1] = {r = 0, g = 0, b = 0}
-C.QualityColors[_G.LE_ITEM_QUALITY_POOR] = {r = .61, g = .61, b = .61}
-C.QualityColors[_G.LE_ITEM_QUALITY_COMMON] = {r = 0, g = 0, b = 0}
-C.QualityColors[99] = {r = 1, g = 0, b = 0}
+C.QualityColors[-1] = { r = 0, g = 0, b = 0 }
+C.QualityColors[_G.LE_ITEM_QUALITY_POOR] = { r = 0.61, g = 0.61, b = 0.61 }
+C.QualityColors[_G.LE_ITEM_QUALITY_COMMON] = { r = 0, g = 0, b = 0 }
+C.QualityColors[99] = { r = 1, g = 0, b = 0 }
 
 _G.GOLD_AMOUNT_SYMBOL = string.format('|cffffd700%s|r', _G.GOLD_AMOUNT_SYMBOL)
 _G.SILVER_AMOUNT_SYMBOL = string.format('|cffd0d0d0%s|r', _G.SILVER_AMOUNT_SYMBOL)
@@ -110,8 +104,18 @@ F:RegisterEvent('PLAYER_TALENT_UPDATE', CheckMyRole)
 function C:IsMyPet(flags)
     return _G.bit.band(flags, _G.COMBATLOG_OBJECT_AFFILIATION_MINE) > 0
 end
-C.PartyPetFlags = _G.bit.bor(_G.COMBATLOG_OBJECT_AFFILIATION_PARTY, _G.COMBATLOG_OBJECT_REACTION_FRIENDLY, _G.COMBATLOG_OBJECT_CONTROL_PLAYER, _G.COMBATLOG_OBJECT_TYPE_PET)
-C.RaidPetFlags = _G.bit.bor(_G.COMBATLOG_OBJECT_AFFILIATION_RAID, _G.COMBATLOG_OBJECT_REACTION_FRIENDLY, _G.COMBATLOG_OBJECT_CONTROL_PLAYER, _G.COMBATLOG_OBJECT_TYPE_PET)
+C.PartyPetFlags = _G.bit.bor(
+    _G.COMBATLOG_OBJECT_AFFILIATION_PARTY,
+    _G.COMBATLOG_OBJECT_REACTION_FRIENDLY,
+    _G.COMBATLOG_OBJECT_CONTROL_PLAYER,
+    _G.COMBATLOG_OBJECT_TYPE_PET
+)
+C.RaidPetFlags = _G.bit.bor(
+    _G.COMBATLOG_OBJECT_AFFILIATION_RAID,
+    _G.COMBATLOG_OBJECT_REACTION_FRIENDLY,
+    _G.COMBATLOG_OBJECT_CONTROL_PLAYER,
+    _G.COMBATLOG_OBJECT_TYPE_PET
+)
 
 function C:IsInMyGroup(flags)
     local inParty = IsInGroup() and _G.bit.band(flags, _G.COMBATLOG_OBJECT_AFFILIATION_PARTY) ~= 0
@@ -119,4 +123,3 @@ function C:IsInMyGroup(flags)
 
     return inRaid or inParty
 end
-

@@ -27,18 +27,40 @@ function AURA:BuildBuffFrame()
 
     -- Config
     AURA.settings = {
-        Buffs = {offset = 12, size = C.DB.Aura.BuffSize, wrapAfter = C.DB.Aura.BuffPerRow, maxWraps = 3, reverseGrow = C.DB.Aura.BuffReverse},
-        Debuffs = {offset = 12, size = C.DB.Aura.DebuffSize, wrapAfter = C.DB.Aura.DebuffPerRow, maxWraps = 1, reverseGrow = C.DB.Aura.DebuffReverse}
+        Buffs = {
+            offset = 12,
+            size = C.DB.Aura.BuffSize,
+            wrapAfter = C.DB.Aura.BuffPerRow,
+            maxWraps = 3,
+            reverseGrow = C.DB.Aura.BuffReverse,
+        },
+        Debuffs = {
+            offset = 12,
+            size = C.DB.Aura.DebuffSize,
+            wrapAfter = C.DB.Aura.DebuffPerRow,
+            maxWraps = 1,
+            reverseGrow = C.DB.Aura.DebuffReverse,
+        },
     }
 
     -- Movers
     AURA.BuffFrame = AURA:CreateAuraHeader('HELPFUL')
-    AURA.BuffFrame.mover = F.Mover(AURA.BuffFrame, L['Buff Frame'], 'BuffAnchor', {'TOPLEFT', _G.UIParent, 'TOPLEFT', C.UI_GAP, -C.UI_GAP})
+    AURA.BuffFrame.mover = F.Mover(
+        AURA.BuffFrame,
+        L['Buff Frame'],
+        'BuffAnchor',
+        { 'TOPLEFT', _G.UIParent, 'TOPLEFT', C.UI_GAP, -C.UI_GAP }
+    )
     AURA.BuffFrame:ClearAllPoints()
     AURA.BuffFrame:SetPoint('TOPRIGHT', AURA.BuffFrame.mover)
 
     AURA.DebuffFrame = AURA:CreateAuraHeader('HARMFUL')
-    AURA.DebuffFrame.mover = F.Mover(AURA.DebuffFrame, L['Debuff Frame'], 'DebuffAnchor', {'TOPLEFT', AURA.BuffFrame.mover, 'BOTTOMLEFT', 0, 30})
+    AURA.DebuffFrame.mover = F.Mover(
+        AURA.DebuffFrame,
+        L['Debuff Frame'],
+        'DebuffAnchor',
+        { 'TOPLEFT', AURA.BuffFrame.mover, 'BOTTOMLEFT', 0, 30 }
+    )
     AURA.DebuffFrame:ClearAllPoints()
     AURA.DebuffFrame:SetPoint('TOPRIGHT', AURA.DebuffFrame.mover)
 end
@@ -46,17 +68,17 @@ end
 local day, hour, minute = 86400, 3600, 60
 function AURA:FormatAuraTime(s)
     if s >= day then
-        return string.format('|cffbebfb3%d|r' .. C.INFO_COLOR .. 'd', s / day + .5), s % day
+        return string.format('|cffbebfb3%d|r' .. C.INFO_COLOR .. 'd', s / day + 0.5), s % day
     elseif s >= hour then
-        return string.format('|cff4fcd35%d|r' .. C.INFO_COLOR .. 'h', s / hour + .5), s % hour
+        return string.format('|cff4fcd35%d|r' .. C.INFO_COLOR .. 'h', s / hour + 0.5), s % hour
     elseif s >= 2 * hour then
-        return string.format('|cff4fcd35%d|r' .. C.INFO_COLOR .. 'h', s / hour + .5), s % hour
+        return string.format('|cff4fcd35%d|r' .. C.INFO_COLOR .. 'h', s / hour + 0.5), s % hour
     elseif s >= 10 * minute then
-        return string.format('|cff21c8de%d|r' .. C.INFO_COLOR .. 'm', s / minute + .5), s % minute
+        return string.format('|cff21c8de%d|r' .. C.INFO_COLOR .. 'm', s / minute + 0.5), s % minute
     elseif s >= minute then
         return string.format('|cff21c8de%d:%.2d|r', s / minute, s % minute), s - math.floor(s)
     elseif s > 10 then
-        return string.format('|cffffe700%d|r' .. C.INFO_COLOR .. 's', s + .5), s - math.floor(s)
+        return string.format('|cffffe700%d|r' .. C.INFO_COLOR .. 's', s + 0.5), s - math.floor(s)
     elseif s > 5 then
         return string.format('|cffffff00%.1f|r', s), s - string.format('%.1f', s)
     else
@@ -127,12 +149,12 @@ function AURA:UpdateAuras(button, index)
         local color = oUF.colors.debuff[debuffType or 'none']
         button:SetBackdropBorderColor(color[1], color[2], color[3])
         if button.__shadow then
-            button.__shadow:SetBackdropBorderColor(color[1], color[2], color[3], .25)
+            button.__shadow:SetBackdropBorderColor(color[1], color[2], color[3], 0.25)
         end
     else
         button:SetBackdropBorderColor(0, 0, 0)
         if button.__shadow then
-            button.__shadow:SetBackdropBorderColor(0, 0, 0, .25)
+            button.__shadow:SetBackdropBorderColor(0, 0, 0, 0.25)
         end
     end
 
@@ -199,11 +221,11 @@ function AURA:UpdateHeader(header)
     header:SetAttribute('wrapYOffset', -(cfg.size + cfg.offset))
     header:SetAttribute('template', string.format('FreeUIAuraTemplate%d', cfg.size))
 
-    local fontSize = math.floor(cfg.size / 30 * 10 + .5)
+    local fontSize = math.floor(cfg.size / 30 * 10 + 0.5)
     local index = 1
     local child = select(index, header:GetChildren())
     while child do
-        if (math.floor(child:GetWidth() * 100 + .5) / 100) ~= cfg.size then
+        if (math.floor(child:GetWidth() * 100 + 0.5) / 100) ~= cfg.size then
             child:SetSize(cfg.size, cfg.size)
         end
 
@@ -262,7 +284,7 @@ function AURA:Button_OnEnter()
     self:SetScript('OnUpdate', AURA.UpdateTimer)
 end
 
-local indexToOffset = {2, 6, 10}
+local indexToOffset = { 2, 6, 10 }
 
 function AURA:CreateAuraIcon(button)
     button.header = button:GetParent()
@@ -275,7 +297,7 @@ function AURA:CreateAuraIcon(button)
     if button.filter == 'HELPFUL' then
         cfg = AURA.settings.Buffs
     end
-    local fontSize = math.floor(cfg.size / 30 * 10 + .5)
+    local fontSize = math.floor(cfg.size / 30 * 10 + 0.5)
 
     button.icon = button:CreateTexture(nil, 'BORDER')
     button.icon:SetInside()
@@ -290,10 +312,10 @@ function AURA:CreateAuraIcon(button)
     button.timer:SetFont(C.Assets.Font.Roadway, fontSize, 'OUTLINE')
 
     button.highlight = button:CreateTexture(nil, 'HIGHLIGHT')
-    button.highlight:SetColorTexture(1, 1, 1, .25)
+    button.highlight:SetColorTexture(1, 1, 1, 0.25)
     button.highlight:SetInside()
 
-    F.CreateBD(button, .25)
+    F.CreateBD(button, 0.25)
     F.CreateSD(button)
 
     button:RegisterForClicks('RightButtonUp')

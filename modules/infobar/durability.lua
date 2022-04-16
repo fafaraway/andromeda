@@ -3,19 +3,19 @@ local INFOBAR = F:GetModule('InfoBar')
 local oUF = F.Libs.oUF
 
 local repairCostString = string.gsub(_G.REPAIR_COST, _G.HEADER_COLON, ' ')
-local lowDurabilityCap = .25
+local lowDurabilityCap = 0.25
 
 local localSlots = {
-    [1] = {1, _G.INVTYPE_HEAD, 1000},
-    [2] = {3, _G.INVTYPE_SHOULDER, 1000},
-    [3] = {5, _G.INVTYPE_CHEST, 1000},
-    [4] = {6, _G.INVTYPE_WAIST, 1000},
-    [5] = {9, _G.INVTYPE_WRIST, 1000},
-    [6] = {10, L['Hands'], 1000},
-    [7] = {7, _G.INVTYPE_LEGS, 1000},
-    [8] = {8, L['Feet'], 1000},
-    [9] = {16, _G.INVTYPE_WEAPONMAINHAND, 1000},
-    [10] = {17, _G.INVTYPE_WEAPONOFFHAND, 1000}
+    [1] = { 1, _G.INVTYPE_HEAD, 1000 },
+    [2] = { 3, _G.INVTYPE_SHOULDER, 1000 },
+    [3] = { 5, _G.INVTYPE_CHEST, 1000 },
+    [4] = { 6, _G.INVTYPE_WAIST, 1000 },
+    [5] = { 9, _G.INVTYPE_WRIST, 1000 },
+    [6] = { 10, L['Hands'], 1000 },
+    [7] = { 7, _G.INVTYPE_LEGS, 1000 },
+    [8] = { 8, L['Feet'], 1000 },
+    [9] = { 16, _G.INVTYPE_WEAPONMAINHAND, 1000 },
+    [10] = { 17, _G.INVTYPE_WEAPONOFFHAND, 1000 },
 }
 
 local function sortSlots(a, b)
@@ -59,14 +59,27 @@ end
 local function Block_OnEvent(self, event)
     if UpdateAllSlots() > 0 then
         local r, g, b = getDurabilityColor(math.floor(localSlots[1][3] * 100), 100)
-        self.text:SetText(string.format('%s: %s%s', L['Durability'], F:RgbToHex(r, g, b) .. math.floor(localSlots[1][3] * 100), '%'))
+        self.text:SetText(
+            string.format('%s: %s%s', L['Durability'], F:RgbToHex(r, g, b) .. math.floor(localSlots[1][3] * 100), '%')
+        )
     else
         self.text:SetText(string.format('%s: %s', L['Durability'], C.INFO_COLOR .. _G.NONE))
     end
 
-    if event == 'PLAYER_ENTERING_WORLD' or event == 'PLAYER_REGEN_ENABLED' and C.DB.Notification.Enable and C.DB.Notification.LowDurability and not InCombatLockdown() then
+    if
+        event == 'PLAYER_ENTERING_WORLD'
+        or event == 'PLAYER_REGEN_ENABLED'
+            and C.DB.Notification.Enable
+            and C.DB.Notification.LowDurability
+            and not InCombatLockdown()
+    then
         if isLowDurability() then
-            F:CreateNotification(_G.MINIMAP_TRACKING_REPAIR, L['You have slots in low durability!'], nil, 'Interface\\ICONS\\Ability_Repair')
+            F:CreateNotification(
+                _G.MINIMAP_TRACKING_REPAIR,
+                L['You have slots in low durability!'],
+                nil,
+                'Interface\\ICONS\\Ability_Repair'
+            )
         end
     end
 end
@@ -79,7 +92,7 @@ local function Block_OnEnter(self)
     local anchorTop = C.DB.Infobar.AnchorTop
     _G.GameTooltip:SetOwner(self, (anchorTop and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (anchorTop and -6) or 6)
     _G.GameTooltip:ClearLines()
-    _G.GameTooltip:AddLine(_G.DURABILITY, .9, .8, .6)
+    _G.GameTooltip:AddLine(_G.DURABILITY, 0.9, 0.8, 0.6)
     _G.GameTooltip:AddLine(' ')
 
     local totalCost = 0
@@ -88,7 +101,14 @@ local function Block_OnEnter(self)
             local slot = localSlots[i][1]
             local cur = math.floor(localSlots[i][3] * 100)
             local slotIcon = localSlots[i][4]
-            _G.GameTooltip:AddDoubleLine(slotIcon .. localSlots[i][2], cur .. '%', 1, 1, 1, getDurabilityColor(cur, 100))
+            _G.GameTooltip:AddDoubleLine(
+                slotIcon .. localSlots[i][2],
+                cur .. '%',
+                1,
+                1,
+                1,
+                getDurabilityColor(cur, 100)
+            )
 
             F.ScanTip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
             totalCost = totalCost + select(3, F.ScanTip:SetInventoryItem('player', slot))
@@ -97,12 +117,12 @@ local function Block_OnEnter(self)
 
     if totalCost > 0 then
         _G.GameTooltip:AddLine(' ')
-        _G.GameTooltip:AddDoubleLine(repairCostString, GetMoneyString(totalCost), .6, .8, 1, 1, 1, 1)
+        _G.GameTooltip:AddDoubleLine(repairCostString, GetMoneyString(totalCost), 0.6, 0.8, 1, 1, 1, 1)
     end
 
     _G.GameTooltip:AddLine(' ')
     _G.GameTooltip:AddDoubleLine(' ', C.LINE_STRING)
-    _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_LEFT_BUTTON .. L['Toggle Character Panel'] .. ' ', 1, 1, 1, .9, .8, .6)
+    _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_LEFT_BUTTON .. L['Toggle Character Panel'] .. ' ', 1, 1, 1, 0.9, 0.8, 0.6)
     _G.GameTooltip:Show()
 end
 
@@ -120,7 +140,7 @@ function INFOBAR:CreateDurabilityBlock()
     du.onEnter = Block_OnEnter
     du.onLeave = Block_OnLeave
     du.onMouseUp = Block_OnMouseUp
-    du.eventList = {'PLAYER_ENTERING_WORLD', 'UPDATE_INVENTORY_DURABILITY', 'PLAYER_REGEN_ENABLED'}
+    du.eventList = { 'PLAYER_ENTERING_WORLD', 'UPDATE_INVENTORY_DURABILITY', 'PLAYER_REGEN_ENABLED' }
 
     INFOBAR.Durabiliy = du
 end

@@ -101,10 +101,13 @@ end
 function CHAT.SetItemRefHook(link, _, button)
     if string.sub(link, 1, 6) == 'player' and button == 'LeftButton' and IsModifiedClick('CHATLINK') then
         if
-            not _G.StaticPopup_Visible('ADD_IGNORE') and not _G.StaticPopup_Visible('ADD_FRIEND') and not _G.StaticPopup_Visible('ADD_GUILDMEMBER') and not _G.StaticPopup_Visible('ADD_RAIDMEMBER') and
-                not _G.StaticPopup_Visible('CHANNEL_INVITE') and
-                not _G.ChatEdit_GetActiveWindow()
-         then
+            not _G.StaticPopup_Visible('ADD_IGNORE')
+            and not _G.StaticPopup_Visible('ADD_FRIEND')
+            and not _G.StaticPopup_Visible('ADD_GUILDMEMBER')
+            and not _G.StaticPopup_Visible('ADD_RAIDMEMBER')
+            and not _G.StaticPopup_Visible('CHANNEL_INVITE')
+            and not _G.ChatEdit_GetActiveWindow()
+        then
             local namelink, fullname
             if string.sub(link, 7, 8) == 'GM' then
                 namelink = string.sub(link, 10)

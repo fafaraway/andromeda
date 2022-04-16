@@ -1,4 +1,4 @@
-﻿local F, C = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
 local INFOBAR = F:GetModule('InfoBar')
 
 INFOBAR.Modules = {}
@@ -27,11 +27,11 @@ end
 
 local function FadeOut(self, elapsed)
     local bar = INFOBAR.Bar
-    if barAlpha > .25 then
+    if barAlpha > 0.25 then
         barAlpha = barAlpha - elapsed
         blockAlpha = blockAlpha - (elapsed * 4)
     else
-        barAlpha = .25
+        barAlpha = 0.25
         blockAlpha = 0
         bar:SetScript('OnUpdate', nil)
     end
@@ -64,7 +64,7 @@ end
 
 local function Block_OnEnter(block)
     Bar_OnEnter()
-    block:SetBackdropColor(C.r, C.g, C.b, .25)
+    block:SetBackdropColor(C.r, C.g, C.b, 0.25)
 end
 
 local function Block_OnLeave(block)
@@ -90,21 +90,19 @@ local function ArrangeBlocks()
                 block:SetPoint('CENTER', bar)
             end
         end
-
-
     end
 end
 
 function INFOBAR:RegisterNewBlock(name, position, width, noFade)
-	local block = CreateFrame('Button', nil, INFOBAR.Bar, 'BackdropTemplate')
-	block:SetPoint('TOP', INFOBAR.Bar, 'TOP')
+    local block = CreateFrame('Button', nil, INFOBAR.Bar, 'BackdropTemplate')
+    block:SetPoint('TOP', INFOBAR.Bar, 'TOP')
     block:SetPoint('BOTTOM', INFOBAR.Bar, 'BOTTOM')
     block:SetWidth(width)
     F.CreateBD(block)
     block:SetBackdropColor(0, 0, 0, 0)
     block:SetBackdropBorderColor(0, 0, 0, 0)
 
-	block.text = F.CreateFS(block, C.Assets.Font.Condensed, 11, nil, '', nil, true, 'CENTER', 0, 0)
+    block.text = F.CreateFS(block, C.Assets.Font.Condensed, 11, nil, '', nil, true, 'CENTER', 0, 0)
     block.position = position
 
     if C.DB.Infobar.Mouseover and not noFade then
@@ -112,24 +110,21 @@ function INFOBAR:RegisterNewBlock(name, position, width, noFade)
     end
 
     block:SetScript('OnEnter', Block_OnEnter)
-        block:SetScript('OnLeave', Block_OnLeave)
+    block:SetScript('OnLeave', Block_OnLeave)
 
     if not noFade then
-
     else
         block.noFade = true
     end
 
-	INFOBAR.Modules[string.lower(name)] = block
+    INFOBAR.Modules[string.lower(name)] = block
 
     table.insert(INFOBAR.Blocks, block)
 
     ArrangeBlocks()
 
-	return block
+    return block
 end
-
-
 
 function INFOBAR:CreateInfoBar()
     local mouseover = C.DB.Infobar.Mouseover
@@ -141,7 +136,7 @@ function INFOBAR:CreateInfoBar()
     bar:SetPoint(anchorTop and 'TOPLEFT' or 'BOTTOMLEFT', 0, 0)
     bar:SetPoint(anchorTop and 'TOPRIGHT' or 'BOTTOMRIGHT', 0, 0)
 
-    barAlpha = mouseover and .25 or .65
+    barAlpha = mouseover and 0.25 or 0.65
     blockAlpha = mouseover and 0 or 1
 
     bar:SetScript('OnEnter', Bar_OnEnter)
@@ -155,47 +150,43 @@ function INFOBAR:CreateInfoBar()
     bar.bg:SetOutside(bar, 2, 2)
     bar.bg:SetFrameStrata('BACKGROUND')
     bar.bg:SetFrameLevel(1) -- Make sure the frame level is higher than the vignetting
-    bar.bg:SetBackdrop({bgFile = C.Assets.Texture.Backdrop, edgeFile = C.Assets.Texture.Backdrop, edgeSize = 1})
-    bar.bg:SetBackdropColor(0, 0, 0, mouseover and .25 or .65)
+    bar.bg:SetBackdrop({ bgFile = C.Assets.Texture.Backdrop, edgeFile = C.Assets.Texture.Backdrop, edgeSize = 1 })
+    bar.bg:SetBackdropColor(0, 0, 0, mouseover and 0.25 or 0.65)
     bar.bg:SetBackdropBorderColor(0, 0, 0)
 
     bar.anim = bar.bg:CreateAnimationGroup()
     bar.anim:SetLooping('BOUNCE')
     bar.anim.fader = bar.anim:CreateAnimation('Alpha')
     bar.anim.fader:SetFromAlpha(1)
-    bar.anim.fader:SetToAlpha(.2)
+    bar.anim.fader:SetToAlpha(0.2)
     bar.anim.fader:SetDuration(1)
     bar.anim.fader:SetSmoothing('OUT')
 end
 
 local function Block_OnEvent(self, ...)
-	self:onEvent(...)
+    self:onEvent(...)
 end
 
 function INFOBAR:LoadInfobar(block)
-	if block.eventList then
-		for _, event in pairs(block.eventList) do
-			block:RegisterEvent(event)
-		end
-		block:HookScript("OnEvent", Block_OnEvent)
-	end
-	if block.onEnter then
-		block:HookScript("OnEnter", block.onEnter)
-	end
-	if block.onLeave then
-		block:HookScript("OnLeave", block.onLeave)
-	end
-	if block.onMouseUp then
-		block:HookScript("OnMouseUp", block.onMouseUp)
-	end
-	if block.onUpdate then
-		block:HookScript("OnUpdate", block.onUpdate)
-	end
-
+    if block.eventList then
+        for _, event in pairs(block.eventList) do
+            block:RegisterEvent(event)
+        end
+        block:HookScript('OnEvent', Block_OnEvent)
+    end
+    if block.onEnter then
+        block:HookScript('OnEnter', block.onEnter)
+    end
+    if block.onLeave then
+        block:HookScript('OnLeave', block.onLeave)
+    end
+    if block.onMouseUp then
+        block:HookScript('OnMouseUp', block.onMouseUp)
+    end
+    if block.onUpdate then
+        block:HookScript('OnUpdate', block.onUpdate)
+    end
 end
-
-
-
 
 local function BorderAnim_OnEvent(event)
     local bar = INFOBAR.Bar
@@ -389,8 +380,6 @@ function INFOBAR:OnLogin()
     INFOBAR:CreateInfoBar()
     INFOBAR:UpdateCombatPulse()
 
-
-
     INFOBAR:CreateSystemBlock()
     INFOBAR:CreateDurabilityBlock()
     INFOBAR:CreateCurrencyBlock()
@@ -401,17 +390,9 @@ function INFOBAR:OnLogin()
     INFOBAR:CreateFriendsBlock()
     INFOBAR:CreateDailyBlock()
 
-
     for _, block in pairs(INFOBAR.Modules) do
-		INFOBAR:LoadInfobar(block)
-
-	end
+        INFOBAR:LoadInfobar(block)
+    end
 
     INFOBAR.loginTime = GetTime()
-
-
-
-
-
-
 end

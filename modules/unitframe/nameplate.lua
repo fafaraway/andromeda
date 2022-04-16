@@ -6,8 +6,8 @@ local oUF = F.Libs.oUF
 --[[ CVars ]]
 function NAMEPLATE:PlateInsideView()
     if C.DB.Nameplate.InsideView then
-        SetCVar('nameplateOtherTopInset', .05)
-        SetCVar('nameplateOtherBottomInset', .08)
+        SetCVar('nameplateOtherTopInset', 0.05)
+        SetCVar('nameplateOtherBottomInset', 0.08)
     elseif GetCVar('nameplateOtherTopInset') == '0.05' and GetCVar('nameplateOtherBottomInset') == '0.08' then
         SetCVar('nameplateOtherTopInset', -1)
         SetCVar('nameplateOtherBottomInset', -1)
@@ -175,7 +175,11 @@ function NAMEPLATE:CheckThreatStatus(unit)
     end
 
     local unitTarget = unit .. 'target'
-    local unitRole = isInGroup and UnitExists(unitTarget) and not UnitIsUnit(unitTarget, 'player') and groupRoles[UnitName(unitTarget)] or 'NONE'
+    local unitRole = isInGroup
+            and UnitExists(unitTarget)
+            and not UnitIsUnit(unitTarget, 'player')
+            and groupRoles[UnitName(unitTarget)]
+        or 'NONE'
 
     if C.MyRole == 'Tank' and unitRole == 'TANK' then
         return true, UnitThreatSituation(unitTarget, unit)
@@ -227,9 +231,9 @@ function NAMEPLATE:UpdateColor(_, unit)
             if friendlyClassColor then
                 r, g, b = F:UnitColor(unit)
             else
-                r, g, b = .3, .3, 1
+                r, g, b = 0.3, 0.3, 1
             end
-        elseif isPlayer and (not isFriendly) and hostileClassColor then
+        elseif isPlayer and not isFriendly and hostileClassColor then
             r, g, b = F:UnitColor(unit)
         elseif UnitIsTapDenied(unit) and not UnitPlayerControlled(unit) or C.TrashUnits[npcID] then
             r, g, b = unpack(oUF.colors.tapped)
@@ -282,7 +286,7 @@ end
 function NAMEPLATE:UpdateExecuteIndicator(self, unit)
     local executeIndicator = C.DB.Nameplate.ExecuteIndicator
     local executeRatio = C.DB.Nameplate.ExecuteRatio
-    local healthPerc = UnitHealth(unit) / (UnitHealthMax(unit) + .0001) * 100
+    local healthPerc = UnitHealth(unit) / (UnitHealthMax(unit) + 0.0001) * 100
 
     if executeIndicator and executeRatio > 0 and healthPerc <= executeRatio then
         self.NameTag:SetTextColor(1, 0, 0)
@@ -416,7 +420,7 @@ function NAMEPLATE:CreateTargetIndicator(self)
     animGroupL:SetLooping('NONE')
     local anim = animGroupL:CreateAnimation('Path')
     anim:SetSmoothing('IN_OUT')
-    anim:SetDuration(.5)
+    anim:SetDuration(0.5)
     anim.points = {}
     anim.points[1] = anim:CreateControlPoint()
     anim.points[1]:SetOrder(1)
@@ -432,7 +436,7 @@ function NAMEPLATE:CreateTargetIndicator(self)
     local animGroupR = frame.aggroR:CreateAnimationGroup()
     animGroupR:SetLooping('NONE')
     local anim = animGroupR:CreateAnimation('Path')
-    anim:SetDuration(.5)
+    anim:SetDuration(0.5)
     anim.points = {}
     anim.points[1] = anim:CreateControlPoint()
     anim.points[1]:SetOrder(1)
@@ -442,7 +446,7 @@ function NAMEPLATE:CreateTargetIndicator(self)
     frame.nameGlow = frame:CreateTexture(nil, 'BACKGROUND', nil, -5)
     frame.nameGlow:SetSize(150, 80)
     frame.nameGlow:SetTexture('Interface\\GLUES\\Models\\UI_Draenei\\GenericGlow64')
-    frame.nameGlow:SetVertexColor(0, .6, 1)
+    frame.nameGlow:SetVertexColor(0, 0.6, 1)
     frame.nameGlow:SetBlendMode('ADD')
     frame.nameGlow:SetPoint('CENTER', 0, 14)
 
@@ -466,7 +470,7 @@ end
 
 function NAMEPLATE:HighlightOnUpdate(elapsed)
     self.elapsed = (self.elapsed or 0) + elapsed
-    if self.elapsed > .1 then
+    if self.elapsed > 0.1 then
         if not NAMEPLATE.IsMouseoverUnit(self.__owner) then
             self:Hide()
         end
@@ -497,7 +501,7 @@ function NAMEPLATE:CreateMouseoverIndicator(self)
     highlight:Hide()
     local texture = highlight:CreateTexture(nil, 'ARTWORK')
     texture:SetAllPoints()
-    texture:SetColorTexture(1, 1, 1, .25)
+    texture:SetColorTexture(1, 1, 1, 0.25)
 
     self:RegisterEvent('UPDATE_MOUSEOVER_UNIT', NAMEPLATE.UpdateMouseoverShown, true)
 
@@ -527,7 +531,7 @@ end
 
 local function isQuestTitle(textLine)
     local r, g, b = textLine:GetTextColor()
-    if r > .99 and g > .82 and b == 0 then
+    if r > 0.99 and g > 0.82 and b == 0 then
         return true
     end
 end
@@ -606,7 +610,7 @@ function NAMEPLATE:CreateQuestIndicator(self)
 
     local count = F.CreateFS(self, C.Assets.Font.Condensed, 12, nil, '', nil, true)
     count:SetPoint('LEFT', qicon, 'RIGHT', -3, 0)
-    count:SetTextColor(.6, .8, 1)
+    count:SetTextColor(0.6, 0.8, 1)
 
     self.questIcon = qicon
     self.questCount = count
@@ -717,22 +721,22 @@ end
 -- Totem icon
 local totemsList = {
     -- npcID spellID duration
-    [2630] = {2484, 20}, -- Earthbind
-    [3527] = {5394, 15}, -- Healing Stream
-    [6112] = {8512, 120}, -- Windfury
-    [97369] = {192222, 15}, -- Liquid Magma
-    [5913] = {8143, 10}, -- Tremor
-    [5925] = {204336, 3}, -- Grounding
-    [78001] = {157153, 15}, -- Cloudburst
-    [53006] = {98008, 6}, -- Spirit Link
-    [59764] = {108280, 12}, -- Healing Tide
-    [61245] = {192058, 2}, -- Static Charge
-    [100943] = {198838, 15}, -- Earthen Wall
-    [97285] = {192077, 15}, -- Wind Rush
-    [105451] = {204331, 15}, -- Counterstrike
-    [104818] = {207399, 30}, -- Ancestral
-    [105427] = {204330, 15}, -- Skyfury
-    [119052] = {236320, 15}, -- Warrior War Banner
+    [2630] = { 2484, 20 }, -- Earthbind
+    [3527] = { 5394, 15 }, -- Healing Stream
+    [6112] = { 8512, 120 }, -- Windfury
+    [97369] = { 192222, 15 }, -- Liquid Magma
+    [5913] = { 8143, 10 }, -- Tremor
+    [5925] = { 204336, 3 }, -- Grounding
+    [78001] = { 157153, 15 }, -- Cloudburst
+    [53006] = { 98008, 6 }, -- Spirit Link
+    [59764] = { 108280, 12 }, -- Healing Tide
+    [61245] = { 192058, 2 }, -- Static Charge
+    [100943] = { 198838, 15 }, -- Earthen Wall
+    [97285] = { 192077, 15 }, -- Wind Rush
+    [105451] = { 204331, 15 }, -- Counterstrike
+    [104818] = { 207399, 30 }, -- Ancestral
+    [105427] = { 204330, 15 }, -- Skyfury
+    [119052] = { 236320, 15 }, -- Warrior War Banner
 }
 
 local function CreateTotemIcon(self)
@@ -765,7 +769,7 @@ function NAMEPLATE:CreateOverlayTexture(self)
     local overlay = self.Health:CreateTexture(nil, 'OVERLAY')
     overlay:SetAllPoints()
     overlay:SetTexture(C.Assets.Statusbar.Overlay)
-    overlay:SetVertexColor(0, 0, 0, .4)
+    overlay:SetVertexColor(0, 0, 0, 0.4)
     overlay:Hide()
 
     self.Overlay = overlay
@@ -777,7 +781,7 @@ function NAMEPLATE:CreateHealthBar(self)
     health:SetAllPoints()
     health:SetStatusBarTexture(NAMEPLATE.StatusBarTex)
     health.backdrop = F.SetBD(health)
-    health.backdrop:SetBackdropColor(0, 0, 0, .6)
+    health.backdrop:SetBackdropColor(0, 0, 0, 0.6)
     health.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
 
     health.Smooth = C.DB.Unitframe.Smooth
@@ -886,7 +890,7 @@ local disabledElements = {
     'Castbar',
     'HealPredictionAndAbsorb',
     'PvPClassificationIndicator',
-    'ThreatIndicator'
+    'ThreatIndicator',
 }
 
 function NAMEPLATE:UpdatePlateByType()

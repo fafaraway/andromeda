@@ -4,7 +4,7 @@ local N = F:GetModule('Notification')
 local feasts = {
     [308458] = true, -- Surprisingly Palatable Feast
     [308462] = true, -- Feast of Gluttonous Hedonism
-    [359336] = true -- Prepare Kettle of Stone Soup
+    [359336] = true, -- Prepare Kettle of Stone Soup
 }
 
 local bots = {
@@ -15,7 +15,7 @@ local bots = {
     [126459] = true, -- Blingtron 4000
     [161414] = true, -- Blingtron 5000
     [298926] = true, -- Blingtron 7000
-    [199109] = true -- Auto-Hammer
+    [199109] = true, -- Auto-Hammer
 }
 
 local portals = {
@@ -45,7 +45,7 @@ local portals = {
     [53142] = true, -- Dalaran
     [120146] = true, -- Ancient Dalaran
     [224871] = true, -- Dalaran, Broken Isles
-    [344597] = true -- Oribos
+    [344597] = true, -- Oribos
 }
 
 local icons = {
@@ -55,7 +55,7 @@ local icons = {
     codex = 'Interface\\ICONS\\INV_7XP_Inscription_TalentTome01',
     soulwell = 'Interface\\ICONS\\Spell_Shadow_Shadesofdarkness',
     mailbox = 'Interface\\ICONS\\INV_Letter_20',
-    bot = 'Interface\\ICONS\\Ability_Repair'
+    bot = 'Interface\\ICONS\\Ability_Repair',
 }
 
 function N:IsInMyGroup(flag)
@@ -94,23 +94,58 @@ function N:Instance_OnEvent()
         elseif spellID == 43987 then -- Mage Refreshment Table
             F:CreateNotification(L['Food'], string.format(L['%s: %s'], srcName, GetSpellLink(spellID)), nil, icons.food)
         elseif spellID == 307157 then -- Eternal Cauldron
-            F:CreateNotification(L['Cauldron'], string.format(L['%s: %s'], srcName, GetSpellLink(spellID)), nil, icons.cauldron)
+            F:CreateNotification(
+                L['Cauldron'],
+                string.format(L['%s: %s'], srcName, GetSpellLink(spellID)),
+                nil,
+                icons.cauldron
+            )
         end
     elseif eventType == 'SPELL_SUMMON' then
         if bots[spellID] then
-            F:CreateNotification(L['Repair'], string.format(L['%s: %s'], srcName, GetSpellLink(spellID)), nil, icons.bot)
+            F:CreateNotification(
+                L['Repair'],
+                string.format(L['%s: %s'], srcName, GetSpellLink(spellID)),
+                nil,
+                icons.bot
+            )
         elseif spellID == 324029 then -- Codex of the Still Mind
-            F:CreateNotification(L['Codex'], string.format(L['%s: %s'], srcName, GetSpellLink(spellID)), nil, icons.codex)
+            F:CreateNotification(
+                L['Codex'],
+                string.format(L['%s: %s'], srcName, GetSpellLink(spellID)),
+                nil,
+                icons.codex
+            )
         elseif spellID == 261602 then -- Katy's Stampwhistle
-            F:CreateNotification(L['Mailbox'], string.format(L['%s: %s'], srcName, GetSpellLink(spellID)), nil, icons.mailbox)
+            F:CreateNotification(
+                L['Mailbox'],
+                string.format(L['%s: %s'], srcName, GetSpellLink(spellID)),
+                nil,
+                icons.mailbox
+            )
         end
     elseif eventType == 'SPELL_CREATE' then
         if spellID == 29893 then -- Soulwell
-            F:CreateNotification(L['Soulwell'], string.format(L['%s: %s'], srcName, GetSpellLink(spellID)), nil, icons.soulwell)
+            F:CreateNotification(
+                L['Soulwell'],
+                string.format(L['%s: %s'], srcName, GetSpellLink(spellID)),
+                nil,
+                icons.soulwell
+            )
         elseif spellID == 54710 then -- MOLL-E
-            F:CreateNotification(L['Mailbox'], string.format(L['%s: %s'], srcName, GetSpellLink(spellID)), nil, icons.mailbox)
+            F:CreateNotification(
+                L['Mailbox'],
+                string.format(L['%s: %s'], srcName, GetSpellLink(spellID)),
+                nil,
+                icons.mailbox
+            )
         elseif portals[spellID] then -- Mage Portals
-            F:CreateNotification(L['Portal'], string.format(L['%s: %s'], srcName, GetSpellLink(spellID)), nil, icons.portal)
+            F:CreateNotification(
+                L['Portal'],
+                string.format(L['%s: %s'], srcName, GetSpellLink(spellID)),
+                nil,
+                icons.portal
+            )
         end
     end
 end

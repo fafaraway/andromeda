@@ -29,12 +29,12 @@ function ACTIONBAR:SetupButtonFlash()
 
     local scale2 = animation:CreateAnimation('Scale')
     scale2:SetScale(0, 0)
-    scale2:SetDuration(.3)
+    scale2:SetDuration(0.3)
     scale2:SetOrder(2)
 
     local rotation = animation:CreateAnimation('Rotation')
     rotation:SetDegrees(90)
-    rotation:SetDuration(.3)
+    rotation:SetDuration(0.3)
     rotation:SetOrder(2)
 
     self.overlay = frame
@@ -43,20 +43,20 @@ end
 
 function ACTIONBAR:ActionButtonDown(id)
     local button = _G.GetActionButtonForID(id)
-    if (button) then
+    if button then
         self:AnimateButton(button)
     end
 end
 
 function ACTIONBAR:MultiActionButtonDown(bar, id)
     local button = _G[bar .. 'Button' .. id]
-    if (button) then
+    if button then
         self:AnimateButton(button)
     end
 end
 
 function ACTIONBAR:AnimateButton(button)
-    if (not button:IsVisible()) then
+    if not button:IsVisible() then
         return
     end
 
@@ -83,7 +83,9 @@ function ACTIONBAR:HookActionEvents()
 end
 
 function ACTIONBAR:ButtonFlash()
-    if C.DB.Actionbar.Fader then return end
+    if C.DB.Actionbar.Fader then
+        return
+    end
 
     if not C.DB.Actionbar.ButtonFlash then
         return

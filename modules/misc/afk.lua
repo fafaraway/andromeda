@@ -77,8 +77,30 @@ local function OnKeyUp(_, key)
 end
 
 local function ConstructTextString(f)
-    f.text = F.CreateFS(f, C.Assets.Font.Bold, 12, nil, L['Double-click left mouse button or press ESC key to exit this screen.'], {.3, .3, .3}, 'THICK', 'BOTTOM', 0, C.UI_GAP)
-    f.timer = F.CreateFS(f, C.ASSET_PATH .. 'fonts\\header.ttf', 56, nil, 'timer', 'CLASS', 'THICK', 'TOP', 0, -C.UI_GAP)
+    f.text = F.CreateFS(
+        f,
+        C.Assets.Font.Bold,
+        12,
+        nil,
+        L['Double-click left mouse button or press ESC key to exit this screen.'],
+        { 0.3, 0.3, 0.3 },
+        'THICK',
+        'BOTTOM',
+        0,
+        C.UI_GAP
+    )
+    f.timer = F.CreateFS(
+        f,
+        C.ASSET_PATH .. 'fonts\\header.ttf',
+        56,
+        nil,
+        'timer',
+        'CLASS',
+        'THICK',
+        'TOP',
+        0,
+        -C.UI_GAP
+    )
 end
 
 local function ConstructAnimation(f)
@@ -119,7 +141,7 @@ local function ConstructModel(f)
     f.model:SetRotation(math.rad(-30))
     f.model:SetAnimation(96)
     f.model:SetSize(height, height * 1.5)
-    f.model:SetPoint('BOTTOMRIGHT', height * .25, -height * .2)
+    f.model:SetPoint('BOTTOMRIGHT', height * 0.25, -height * 0.2)
 end
 
 function SS:UpdateScreenSaver()

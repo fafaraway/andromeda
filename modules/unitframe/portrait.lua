@@ -10,7 +10,7 @@ function UNITFRAME:CreatePortrait(self)
     local portrait = CreateFrame('PlayerModel', nil, self)
     portrait:SetInside()
     portrait:SetFrameLevel(self.Health:GetFrameLevel() + 2)
-    portrait:SetAlpha(.1)
+    portrait:SetAlpha(0.1)
 
     portrait.PostUpdate = PostUpdate
     self.Portrait = portrait

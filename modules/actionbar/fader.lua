@@ -22,7 +22,15 @@ local function DelayFadeOut(frame, timeToFade, startAlpha, endAlpha)
     ClearTimers(frame)
 
     if C.DB.Actionbar.Delay > 0 then
-        frame.delayTimer = F:ScheduleTimer(F.UIFrameFadeOut, C.DB.Actionbar.Delay, F, frame, timeToFade, startAlpha, endAlpha)
+        frame.delayTimer = F:ScheduleTimer(
+            F.UIFrameFadeOut,
+            C.DB.Actionbar.Delay,
+            F,
+            frame,
+            timeToFade,
+            startAlpha,
+            endAlpha
+        )
     else
         F:UIFrameFadeOut(frame, timeToFade, startAlpha, endAlpha)
     end
@@ -62,13 +70,15 @@ end
 
 function ACTIONBAR:FadeParent_OnEvent(event)
     if
-        (event == 'ACTIONBAR_SHOWGRID') or
-        (C.DB.Actionbar.Instance and IsInInstance()) or
-        (C.DB.Actionbar.Vehicle and ((HasVehicleActionBar() and UnitVehicleSkin('player') and UnitVehicleSkin('player') ~= '') or (HasOverrideActionBar() and GetOverrideBarSkin() and GetOverrideBarSkin() ~= ''))) or
-        (C.DB.Actionbar.Combat and UnitAffectingCombat('player')) or
-        (C.DB.Actionbar.Target and (UnitExists('target') or UnitExists('focus'))) or
-        (C.DB.Actionbar.Casting and (UnitCastingInfo('player') or UnitChannelInfo('player'))) or
-        (C.DB.Actionbar.Health and (UnitHealth('player') ~= UnitHealthMax('player')))
+        (event == 'ACTIONBAR_SHOWGRID')
+        or (C.DB.Actionbar.Instance and IsInInstance())
+        or (C.DB.Actionbar.Vehicle and ((HasVehicleActionBar() and UnitVehicleSkin('player') and UnitVehicleSkin(
+            'player'
+        ) ~= '') or (HasOverrideActionBar() and GetOverrideBarSkin() and GetOverrideBarSkin() ~= '')))
+        or (C.DB.Actionbar.Combat and UnitAffectingCombat('player'))
+        or (C.DB.Actionbar.Target and (UnitExists('target') or UnitExists('focus')))
+        or (C.DB.Actionbar.Casting and (UnitCastingInfo('player') or UnitChannelInfo('player')))
+        or (C.DB.Actionbar.Health and (UnitHealth('player') ~= UnitHealthMax('player')))
     then
         self.mouseLock = true
 
@@ -89,7 +99,7 @@ local options = {
             self:RegisterEvent('PLAYER_ENTERING_WORLD')
             self:RegisterEvent('ZONE_CHANGED_NEW_AREA')
         end,
-        events = {'PLAYER_ENTERING_WORLD', 'ZONE_CHANGED_NEW_AREA'},
+        events = { 'PLAYER_ENTERING_WORLD', 'ZONE_CHANGED_NEW_AREA' },
     },
     Vehicle = {
         enable = function(self)
@@ -99,7 +109,13 @@ local options = {
             self:RegisterEvent('UPDATE_OVERRIDE_ACTIONBAR')
             self:RegisterEvent('ACTIONBAR_PAGE_CHANGED')
         end,
-        events = {'PLAYER_ENTERING_WORLD', 'UPDATE_BONUS_ACTIONBAR', 'UPDATE_VEHICLE_ACTIONBAR', 'UPDATE_OVERRIDE_ACTIONBAR', 'ACTIONBAR_PAGE_CHANGED'},
+        events = {
+            'PLAYER_ENTERING_WORLD',
+            'UPDATE_BONUS_ACTIONBAR',
+            'UPDATE_VEHICLE_ACTIONBAR',
+            'UPDATE_OVERRIDE_ACTIONBAR',
+            'ACTIONBAR_PAGE_CHANGED',
+        },
     },
     Combat = {
         enable = function(self)
@@ -107,13 +123,13 @@ local options = {
             self:RegisterEvent('PLAYER_REGEN_DISABLED')
             self:RegisterUnitEvent('UNIT_FLAGS', 'player')
         end,
-        events = {'PLAYER_REGEN_ENABLED', 'PLAYER_REGEN_DISABLED', 'UNIT_FLAGS'},
+        events = { 'PLAYER_REGEN_ENABLED', 'PLAYER_REGEN_DISABLED', 'UNIT_FLAGS' },
     },
     Target = {
         enable = function(self)
             self:RegisterEvent('PLAYER_TARGET_CHANGED')
         end,
-        events = {'PLAYER_TARGET_CHANGED'},
+        events = { 'PLAYER_TARGET_CHANGED' },
     },
     Casting = {
         enable = function(self)
@@ -122,15 +138,19 @@ local options = {
             self:RegisterUnitEvent('UNIT_SPELLCAST_CHANNEL_START', 'player')
             self:RegisterUnitEvent('UNIT_SPELLCAST_CHANNEL_STOP', 'player')
         end,
-        events = {'UNIT_SPELLCAST_START', 'UNIT_SPELLCAST_STOP', 'UNIT_SPELLCAST_CHANNEL_START', 'UNIT_SPELLCAST_CHANNEL_STOP'},
+        events = {
+            'UNIT_SPELLCAST_START',
+            'UNIT_SPELLCAST_STOP',
+            'UNIT_SPELLCAST_CHANNEL_START',
+            'UNIT_SPELLCAST_CHANNEL_STOP',
+        },
     },
     Health = {
         enable = function(self)
             self:RegisterUnitEvent('UNIT_HEALTH', 'player')
         end,
-        events = {'UNIT_HEALTH'},
+        events = { 'UNIT_HEALTH' },
     },
-
 }
 
 function ACTIONBAR:UpdateFaderSettings()

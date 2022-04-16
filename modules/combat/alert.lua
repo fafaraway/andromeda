@@ -4,7 +4,6 @@
     https://github.com/fang2hou/ElvUI_WindTools
 --]]
 
-
 local F, C, L = unpack(select(2, ...))
 local COMBAT = F:GetModule('Combat')
 
@@ -22,7 +21,16 @@ function COMBAT:CreateAnimationFrame()
     self.animationFrame = frame
 
     -- 盾
-    frame = F.CreateAnimationFrame(nil, self.animationFrame, 'HIGH', 3, true, C.Assets.Texture.Shield, false, {1, 1, 1})
+    frame = F.CreateAnimationFrame(
+        nil,
+        self.animationFrame,
+        'HIGH',
+        3,
+        true,
+        C.Assets.Texture.Shield,
+        false,
+        { 1, 1, 1 }
+    )
     anime = F.CreateAnimationGroup(frame, 'enter') -- 进入战斗
     F.AddTranslation(anime, 'moveToCenter')
     F.AddFadeIn(anime, 'fadeIn')
@@ -35,7 +43,7 @@ function COMBAT:CreateAnimationFrame()
     anime.fadeOut:SetDuration(0.3)
     anime.fadeOut:SetStartDelay(0.5)
     anime = F.CreateAnimationGroup(frame, 'leave') -- 离开战斗
-    F.AddScale(anime, 'scale', {1, 1}, {0.1, 0.1})
+    F.AddScale(anime, 'scale', { 1, 1 }, { 0.1, 0.1 })
     F.AddFadeIn(anime, 'fadeIn')
     F.AddFadeOut(anime, 'fadeOut')
     anime.fadeIn:SetDuration(0.3)
@@ -48,7 +56,16 @@ function COMBAT:CreateAnimationFrame()
     self.animationFrame.shield = frame
 
     -- 剑 ↗
-    frame = F.CreateAnimationFrame(nil, self.animationFrame, 'HIGH', 2, true, C.Assets.Texture.Sword, false, {1, 1, 1})
+    frame = F.CreateAnimationFrame(
+        nil,
+        self.animationFrame,
+        'HIGH',
+        2,
+        true,
+        C.Assets.Texture.Sword,
+        false,
+        { 1, 1, 1 }
+    )
     anime = F.CreateAnimationGroup(frame, 'enter') -- 进入战斗
     F.AddTranslation(anime, 'moveToCenter')
     F.AddFadeIn(anime, 'fadeIn')
@@ -78,7 +95,7 @@ function COMBAT:CreateAnimationFrame()
     self.animationFrame.swordLeftToRight = frame
 
     -- 剑 ↖
-    frame = F.CreateAnimationFrame(nil, self.animationFrame, 'HIGH', 2, true, C.Assets.Texture.Sword, true, {1, 1, 1})
+    frame = F.CreateAnimationFrame(nil, self.animationFrame, 'HIGH', 2, true, C.Assets.Texture.Sword, true, { 1, 1, 1 })
     anime = F.CreateAnimationGroup(frame, 'enter') -- 进入战斗
     F.AddTranslation(anime, 'moveToCenter')
     F.AddFadeIn(anime, 'fadeIn')
@@ -102,7 +119,6 @@ function COMBAT:CreateAnimationFrame()
     anime.fadeOut:SetStartDelay(0.6)
     F.CloseAnimationOnHide(frame, anime)
     self.animationFrame.swordRightToLeft = frame
-
 end
 
 function COMBAT:UpdateAnimationFrame()
@@ -110,7 +126,7 @@ function COMBAT:UpdateAnimationFrame()
         return
     end
 
-    local animationFrameSize = {240 * C.DB.Combat.AlertScale, 220 * C.DB.Combat.AlertScale}
+    local animationFrameSize = { 240 * C.DB.Combat.AlertScale, 220 * C.DB.Combat.AlertScale }
     local textureSize = 200 * C.DB.Combat.AlertScale
     local swordAnimationRange = 130 * C.DB.Combat.AlertScale
     local shieldAnimationRange = 65 * C.DB.Combat.AlertScale
@@ -294,7 +310,9 @@ function COMBAT:PLAYER_REGEN_ENABLED()
 end
 
 function COMBAT:CombatAlert()
-    if not C.DB.Combat.CombatAlert then return end
+    if not C.DB.Combat.CombatAlert then
+        return
+    end
 
     COMBAT:CreateAnimationFrame()
     COMBAT:CreateTextFrame()

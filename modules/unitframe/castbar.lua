@@ -32,7 +32,7 @@ local channelingTicks = {
     [257044] = 7, -- 急速射击
     [291944] = 6, -- 再生，赞达拉巨魔
     [314791] = 4, -- 变易幻能
-    [324631] = 8 -- 血肉铸造，盟约
+    [324631] = 8, -- 血肉铸造，盟约
 }
 
 if C.CLASS == 'PRIEST' then
@@ -79,7 +79,7 @@ function UNITFRAME:OnCastbarUpdate(elapsed)
     else
         self.Spark:Hide()
 
-        local alpha = self:GetAlpha() - .02
+        local alpha = self:GetAlpha() - 0.02
         if alpha > 0 then
             self:SetAlpha(alpha)
         else
@@ -133,7 +133,7 @@ function UNITFRAME:PostCastStart(unit)
     local normalColor = C.DB.Unitframe.CastingColor
     local uninterruptibleColor = C.DB.Unitframe.UninterruptibleColor
     local color = self.notInterruptible and uninterruptibleColor or normalColor
-    local textColor = self.notInterruptible and {1, 0, 0} or {1, 1, 1}
+    local textColor = self.notInterruptible and { 1, 0, 0 } or { 1, 1, 1 }
 
     -- F:Debug(self.name)
     -- F:Debug(self.spellID)
@@ -156,7 +156,7 @@ function UNITFRAME:PostCastStart(unit)
             if safeZone.castSent then
                 safeZone.timeDiff = GetTime() - safeZone.sendTime
                 safeZone.timeDiff = safeZone.timeDiff > self.max and self.max or safeZone.timeDiff
-                safeZone:SetWidth(self:GetWidth() * (safeZone.timeDiff + .001) / self.max)
+                safeZone:SetWidth(self:GetWidth() * (safeZone.timeDiff + 0.001) / self.max)
                 safeZone:Show()
                 safeZone.castSent = nil
             end
@@ -170,15 +170,15 @@ function UNITFRAME:PostCastStart(unit)
     end
 
     if (style == 'nameplate' and npCompact) or (style ~= 'nameplate' and compact) then
-        self:SetStatusBarColor(color.r, color.g, color.b, .6)
-        self.Backdrop:SetBackdropColor(0, 0, 0, .2)
+        self:SetStatusBarColor(color.r, color.g, color.b, 0.6)
+        self.Backdrop:SetBackdropColor(0, 0, 0, 0.2)
         self.Backdrop:SetBackdropBorderColor(0, 0, 0, 0)
-        self.Border:SetBackdropBorderColor(color.r, color.g, color.b, .6)
+        self.Border:SetBackdropBorderColor(color.r, color.g, color.b, 0.6)
     else
         self:SetStatusBarColor(color.r, color.g, color.b, 1)
-        self.Backdrop:SetBackdropColor(0, 0, 0, .45)
+        self.Backdrop:SetBackdropColor(0, 0, 0, 0.45)
         self.Backdrop:SetBackdropBorderColor(0, 0, 0, 1)
-        self.Border:SetBackdropBorderColor(0, 0, 0, .35)
+        self.Border:SetBackdropBorderColor(0, 0, 0, 0.35)
     end
 
     if style == 'nameplate' then
@@ -192,10 +192,6 @@ function UNITFRAME:PostCastStart(unit)
         -- Spell target
         UpdateSpellTarget(self, unit)
     end
-
-
-
-
 end
 
 function UNITFRAME:PostCastUpdate(unit)
@@ -209,18 +205,18 @@ function UNITFRAME:PostUpdateInterruptible()
     local normalColor = C.DB.Unitframe.CastingColor
     local uninterruptibleColor = C.DB.Unitframe.UninterruptibleColor
     local color = self.notInterruptible and uninterruptibleColor or normalColor
-    local textColor = self.notInterruptible and {1, 0, 0} or {1, 1, 1}
+    local textColor = self.notInterruptible and { 1, 0, 0 } or { 1, 1, 1 }
 
     if (style == 'nameplate' and npCompact) or (style ~= 'nameplate' and compact) then
-        self:SetStatusBarColor(color.r, color.g, color.b, .6)
-        self.Backdrop:SetBackdropColor(0, 0, 0, .2)
+        self:SetStatusBarColor(color.r, color.g, color.b, 0.6)
+        self.Backdrop:SetBackdropColor(0, 0, 0, 0.2)
         self.Backdrop:SetBackdropBorderColor(0, 0, 0, 0)
-        self.Border:SetBackdropBorderColor(color.r, color.g, color.b, .6)
+        self.Border:SetBackdropBorderColor(color.r, color.g, color.b, 0.6)
     else
         self:SetStatusBarColor(color.r, color.g, color.b, 1)
-        self.Backdrop:SetBackdropColor(0, 0, 0, .45)
+        self.Backdrop:SetBackdropColor(0, 0, 0, 0.45)
         self.Backdrop:SetBackdropBorderColor(0, 0, 0, 1)
-        self.Border:SetBackdropBorderColor(0, 0, 0, .35)
+        self.Border:SetBackdropBorderColor(0, 0, 0, 0.35)
     end
 
     --self.Text:SetTextColor(unpack(textColor))
@@ -248,9 +244,6 @@ function UNITFRAME:PostCastFailed()
     self:Show()
 
     ResetSpellTarget(self)
-
-
-
 end
 
 local function UpdateSpellTarget_OnEvent(self, _, unit)
@@ -277,20 +270,20 @@ function UNITFRAME:CreateCastBar(self)
 
     local castbar = CreateFrame('StatusBar', 'oUF_Castbar' .. style, self)
     castbar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
-    castbar.Backdrop = F.CreateBDFrame(castbar, .45)
-    castbar.Border = F.CreateSD(castbar.Backdrop, .35, 6, 6, true)
+    castbar.Backdrop = F.CreateBDFrame(castbar, 0.45)
+    castbar.Border = F.CreateSD(castbar.Backdrop, 0.35, 6, 6, true)
     self.Castbar = castbar
 
     local spark = castbar:CreateTexture(nil, 'OVERLAY')
     spark:SetTexture(C.Assets.Texture.Spark)
     spark:SetBlendMode('ADD')
-    spark:SetAlpha(.7)
+    spark:SetAlpha(0.7)
     spark:SetSize(12, castbar:GetHeight() * 2)
     castbar.Spark = spark
 
     local icon = castbar:CreateTexture(nil, 'ARTWORK')
     icon:SetTexCoord(unpack(C.TEX_COORD))
-    F.SetBD(icon, .25)
+    F.SetBD(icon, 0.25)
     icon.__bg:SetBackdropBorderColor(0, 0, 0)
     castbar.Icon = icon
 
@@ -306,7 +299,7 @@ function UNITFRAME:CreateCastBar(self)
     if isPlayer then
         local safeZone = castbar:CreateTexture(nil, 'OVERLAY')
         safeZone:SetTexture(C.Assets.Statusbar.Normal)
-        safeZone:SetVertexColor(.87, .25, .42, .25)
+        safeZone:SetVertexColor(0.87, 0.25, 0.42, 0.25)
         safeZone:SetPoint('TOPRIGHT')
         safeZone:SetPoint('BOTTOMRIGHT')
         castbar.SafeZone = safeZone
@@ -329,19 +322,19 @@ function UNITFRAME:CreateCastBar(self)
     else
         if style == 'player' then
             castbar:SetSize(playerWidth, playerHeight)
-            CreateCastBarMover(castbar, L['Player Castbar'], 'PlayerCastbar', {'TOP', self, 'BOTTOM', 0, -20})
+            CreateCastBarMover(castbar, L['Player Castbar'], 'PlayerCastbar', { 'TOP', self, 'BOTTOM', 0, -20 })
 
             icon:SetSize(playerHeight + iconAmp, playerHeight + iconAmp)
             icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
         elseif style == 'target' then
             castbar:SetSize(targetWidth, targetHeight)
-            CreateCastBarMover(castbar, L['Target Castbar'], 'TargetCastbar', {'TOP', self, 'BOTTOM', 0, -4})
+            CreateCastBarMover(castbar, L['Target Castbar'], 'TargetCastbar', { 'TOP', self, 'BOTTOM', 0, -4 })
 
             icon:SetSize(targetHeight + iconAmp, targetHeight + iconAmp)
             icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
         elseif style == 'focus' then
             castbar:SetSize(focusWidth, focusHeight)
-            CreateCastBarMover(castbar, L['Focus Castbar'], 'FocusCastbar', {'CENTER', _G.UIParent, 'CENTER', 0, 120})
+            CreateCastBarMover(castbar, L['Focus Castbar'], 'FocusCastbar', { 'CENTER', _G.UIParent, 'CENTER', 0, 120 })
 
             icon:SetSize(focusHeight + iconAmp, focusHeight + iconAmp)
             icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
@@ -376,14 +369,14 @@ function UNITFRAME:CreateNamePlateCastBar(self)
 
     local castbar = CreateFrame('StatusBar', 'oUF_Castbar' .. style, self)
     castbar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
-    castbar.Backdrop = F.CreateBDFrame(castbar, .45)
-    castbar.Border = F.CreateSD(castbar.Backdrop, .35, 6, 6, true)
+    castbar.Backdrop = F.CreateBDFrame(castbar, 0.45)
+    castbar.Border = F.CreateSD(castbar.Backdrop, 0.35, 6, 6, true)
     self.Castbar = castbar
 
     local spark = castbar:CreateTexture(nil, 'OVERLAY')
     spark:SetTexture(C.Assets.Texture.Spark)
     spark:SetBlendMode('ADD')
-    spark:SetAlpha(.7)
+    spark:SetAlpha(0.7)
     spark:SetSize(12, castbar:GetHeight() * 2)
     castbar.Spark = spark
 
@@ -400,7 +393,7 @@ function UNITFRAME:CreateNamePlateCastBar(self)
 
     local icon = castbar:CreateTexture(nil, 'ARTWORK')
     icon:SetTexCoord(unpack(C.TEX_COORD))
-    F.SetBD(icon, .25)
+    F.SetBD(icon, 0.25)
     icon.__bg:SetBackdropBorderColor(0, 0, 0)
     castbar.Icon = icon
 
@@ -440,13 +433,6 @@ function UNITFRAME:CreateNamePlateCastBar(self)
     -- castbar.spellTarget = spellTarget
 
     -- self:RegisterEvent('UNIT_TARGET', UpdateSpellTarget_OnEvent)
-
-
-
-
-
-
-
 
     castbar.SpellTarget = true
     castbar.OnUpdate = UNITFRAME.OnCastbarUpdate

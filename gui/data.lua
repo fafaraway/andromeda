@@ -75,7 +75,7 @@ function GUI:ImportData()
     if LibBase64:IsBase64(profile) then
         profile = LibBase64:Decode(profile)
     end
-    local options = {string.split(';', profile)}
+    local options = { string.split(';', profile) }
     local title, _, _, class = string.split(':', options[1])
     if title ~= 'FreeUISettings' then
         _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Import failed, due to data exception.'])
@@ -102,7 +102,7 @@ function GUI:ImportData()
             value = tonumber(value) or value
             x = tonumber(x)
             y = tonumber(y)
-            C.DB[key][value] = {relFrom, parent, relTo, x, y}
+            C.DB[key][value] = { relFrom, parent, relTo, x, y }
         elseif key == 'ACCOUNT' then
             if value == 'ProfileIndex' then
                 local name, index = select(3, string.split(':', option))
@@ -149,12 +149,23 @@ function GUI:CreateDataFrame()
     dataFrame:SetFrameStrata('DIALOG')
     F.CreateMF(dataFrame)
     F.SetBD(dataFrame)
-    dataFrame.Header = F.CreateFS(dataFrame, C.Assets.Font.Regular, 14, nil, L['Export settings'], 'YELLOW', true, 'TOP', 0, -5)
+    dataFrame.Header = F.CreateFS(
+        dataFrame,
+        C.Assets.Font.Regular,
+        14,
+        nil,
+        L['Export settings'],
+        'YELLOW',
+        true,
+        'TOP',
+        0,
+        -5
+    )
 
     local scrollArea = CreateFrame('ScrollFrame', nil, dataFrame, 'UIPanelScrollFrameTemplate')
     scrollArea:SetPoint('TOPLEFT', 10, -30)
     scrollArea:SetPoint('BOTTOMRIGHT', -28, 40)
-    F.CreateBDFrame(scrollArea, .25)
+    F.CreateBDFrame(scrollArea, 0.25)
     F.ReskinScroll(scrollArea.ScrollBar)
 
     local editBox = CreateFrame('EditBox', nil, dataFrame)
@@ -166,49 +177,40 @@ function GUI:CreateDataFrame()
     editBox:SetFont(C.Assets.Font.Regular, 12)
     editBox:SetWidth(scrollArea:GetWidth())
     editBox:SetHeight(scrollArea:GetHeight())
-    editBox:SetScript(
-        'OnEscapePressed',
-        function()
-            dataFrame:Hide()
-        end
-    )
+    editBox:SetScript('OnEscapePressed', function()
+        dataFrame:Hide()
+    end)
     scrollArea:SetScrollChild(editBox)
     dataFrame.editBox = editBox
 
     local accept = F.CreateButton(dataFrame, 100, 20, _G.OKAY)
     accept:SetPoint('BOTTOM', 0, 10)
-    accept:SetScript(
-        'OnClick',
-        function(self)
-            if self.text:GetText() ~= _G.OKAY and dataFrame.editBox:GetText() ~= '' then
-                _G.StaticPopup_Show('FREEUI_IMPORT_PROFILE')
-            end
-            dataFrame:Hide()
+    accept:SetScript('OnClick', function(self)
+        if self.text:GetText() ~= _G.OKAY and dataFrame.editBox:GetText() ~= '' then
+            _G.StaticPopup_Show('FREEUI_IMPORT_PROFILE')
         end
-    )
+        dataFrame:Hide()
+    end)
 
-    accept:HookScript(
-        'OnEnter',
-        function(self)
-            if dataFrame.editBox:GetText() == '' then
-                return
-            end
-            UpdateTooltip()
-
-            _G.GameTooltip:SetOwner(self, 'ANCHOR_TOP', 0, 10)
-            _G.GameTooltip:ClearLines()
-
-            if dataFrame.version then
-                _G.GameTooltip:AddLine(L['Data info'])
-                _G.GameTooltip:AddDoubleLine(L['Version'], dataFrame.version, .6, .8, 1, 1, 1, 1)
-                _G.GameTooltip:AddDoubleLine(L['Character'], dataFrame.name, .6, .8, 1, F:ClassColor(dataFrame.class))
-            else
-                _G.GameTooltip:AddLine(L['Data exception'], 1, 0, 0)
-            end
-
-            _G.GameTooltip:Show()
+    accept:HookScript('OnEnter', function(self)
+        if dataFrame.editBox:GetText() == '' then
+            return
         end
-    )
+        UpdateTooltip()
+
+        _G.GameTooltip:SetOwner(self, 'ANCHOR_TOP', 0, 10)
+        _G.GameTooltip:ClearLines()
+
+        if dataFrame.version then
+            _G.GameTooltip:AddLine(L['Data info'])
+            _G.GameTooltip:AddDoubleLine(L['Version'], dataFrame.version, 0.6, 0.8, 1, 1, 1, 1)
+            _G.GameTooltip:AddDoubleLine(L['Character'], dataFrame.name, 0.6, 0.8, 1, F:ClassColor(dataFrame.class))
+        else
+            _G.GameTooltip:AddLine(L['Data exception'], 1, 0, 0)
+        end
+
+        _G.GameTooltip:Show()
+    end)
 
     accept:HookScript('OnLeave', F.HideTooltip)
     dataFrame.text = accept.text

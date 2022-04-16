@@ -51,45 +51,42 @@ C.Themes['Blizzard_GuildControlUI'] = function()
     hooksecurefunc('GuildControlUI_RankOrder_Update', updateGuildRanks)
 
     -- Guild tabs
-    local checkboxes = {'viewCB', 'depositCB'}
-    hooksecurefunc(
-        'GuildControlUI_BankTabPermissions_Update',
-        function()
-            for i = 1, GetNumGuildBankTabs() + 1 do
-                local tab = 'GuildControlBankTab' .. i
-                local bu = _G[tab]
-                if bu and not bu.styled then
-                    local ownedTab = bu.owned
+    local checkboxes = { 'viewCB', 'depositCB' }
+    hooksecurefunc('GuildControlUI_BankTabPermissions_Update', function()
+        for i = 1, GetNumGuildBankTabs() + 1 do
+            local tab = 'GuildControlBankTab' .. i
+            local bu = _G[tab]
+            if bu and not bu.styled then
+                local ownedTab = bu.owned
 
-                    _G[tab .. 'Bg']:Hide()
-                    F.ReskinIcon(ownedTab.tabIcon)
-                    F.CreateBDFrame(bu, .25)
-                    F.Reskin(bu.buy.button)
-                    F.ReskinInput(ownedTab.editBox)
+                _G[tab .. 'Bg']:Hide()
+                F.ReskinIcon(ownedTab.tabIcon)
+                F.CreateBDFrame(bu, 0.25)
+                F.Reskin(bu.buy.button)
+                F.ReskinInput(ownedTab.editBox)
 
-                    for _, name in pairs(checkboxes) do
-                        local box = ownedTab[name]
-                        box:SetNormalTexture('')
-                        box:SetPushedTexture('')
-                        box:SetHighlightTexture(C.Assets.Texture.Backdrop)
+                for _, name in pairs(checkboxes) do
+                    local box = ownedTab[name]
+                    box:SetNormalTexture('')
+                    box:SetPushedTexture('')
+                    box:SetHighlightTexture(C.Assets.Texture.Backdrop)
 
-                        local check = box:GetCheckedTexture()
-                        check:SetDesaturated(true)
-                        check:SetVertexColor(r, g, b)
+                    local check = box:GetCheckedTexture()
+                    check:SetDesaturated(true)
+                    check:SetVertexColor(r, g, b)
 
-                        local bg = F.CreateBDFrame(box, 0, true)
-                        bg:SetInside(box, 4, 4)
+                    local bg = F.CreateBDFrame(box, 0, true)
+                    bg:SetInside(box, 4, 4)
 
-                        local hl = box:GetHighlightTexture()
-                        hl:SetInside(bg)
-                        hl:SetVertexColor(r, g, b, .25)
-                    end
-
-                    bu.styled = true
+                    local hl = box:GetHighlightTexture()
+                    hl:SetInside(bg)
+                    hl:SetVertexColor(r, g, b, 0.25)
                 end
+
+                bu.styled = true
             end
         end
-    )
+    end)
 
     F.ReskinCheck(_G.GuildControlUIRankSettingsFrameOfficerCheckbox)
     for i = 1, 20 do

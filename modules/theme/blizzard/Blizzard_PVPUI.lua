@@ -9,9 +9,9 @@ local function ReskinPvPFrame(frame)
 
     local bar = frame.ConquestBar
     F.StripTextures(bar)
-    F.CreateBDFrame(bar, .25)
+    F.CreateBDFrame(bar, 0.25)
     bar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
-    bar:GetStatusBarTexture():SetGradient('VERTICAL', 1, .8, 0, 6, .4, 0)
+    bar:GetStatusBarTexture():SetGradient('VERTICAL', 1, 0.8, 0, 6, 0.4, 0)
 
     local reward = bar.Reward
     reward.Ring:Hide()
@@ -42,7 +42,7 @@ C.Themes['Blizzard_PVPUI'] = function()
         bu.Ring:Hide()
         F.Reskin(bu, true)
         bu.Background:SetInside(bu.__bg)
-        bu.Background:SetColorTexture(r, g, b, .25)
+        bu.Background:SetColorTexture(r, g, b, 0.25)
         bu.Background:SetAlpha(1)
 
         icon:SetPoint('LEFT', bu, 'LEFT')
@@ -80,8 +80,8 @@ C.Themes['Blizzard_PVPUI'] = function()
     local popup = PVPQueueFrame.NewSeasonPopup
     F.Reskin(popup.Leave)
     popup.Leave.__bg:SetFrameLevel(popup:GetFrameLevel() + 1)
-    popup.NewSeason:SetTextColor(1, .8, 0)
-    popup.SeasonRewardText:SetTextColor(1, .8, 0)
+    popup.NewSeason:SetTextColor(1, 0.8, 0)
+    popup.SeasonRewardText:SetTextColor(1, 0.8, 0)
     popup.SeasonDescriptionHeader:SetTextColor(1, 1, 1)
     popup:HookScript('OnShow', function(self)
         for _, description in pairs(self.SeasonDescriptions) do
@@ -112,11 +112,17 @@ C.Themes['Blizzard_PVPUI'] = function()
     bonusFrame.WorldBattlesTexture:Hide()
     bonusFrame.ShadowOverlay:Hide()
 
-    for _, bonusButton in pairs({'RandomBGButton', 'RandomEpicBGButton', 'Arena1Button', 'BrawlButton', 'BrawlButton2'}) do
+    for _, bonusButton in pairs({
+        'RandomBGButton',
+        'RandomEpicBGButton',
+        'Arena1Button',
+        'BrawlButton',
+        'BrawlButton2',
+    }) do
         local bu = bonusFrame[bonusButton]
         F.Reskin(bu, true)
         bu.SelectedTexture:SetDrawLayer('BACKGROUND')
-        bu.SelectedTexture:SetColorTexture(r, g, b, .25)
+        bu.SelectedTexture:SetColorTexture(r, g, b, 0.25)
         bu.SelectedTexture:SetInside(bu.__bg)
 
         local reward = bu.Reward
@@ -141,7 +147,7 @@ C.Themes['Blizzard_PVPUI'] = function()
         bg:SetPoint('BOTTOMRIGHT', -1, 2)
 
         bu.SelectedTexture:SetDrawLayer('BACKGROUND')
-        bu.SelectedTexture:SetColorTexture(r, g, b, .25)
+        bu.SelectedTexture:SetColorTexture(r, g, b, 0.25)
         bu.SelectedTexture:SetInside(bg)
 
         F.ReskinIcon(bu.Icon)
@@ -160,7 +166,7 @@ C.Themes['Blizzard_PVPUI'] = function()
     ConquestFrame.RatedBG:HookScript('OnEnter', ConquestFrameButton_OnEnter)
     F.Reskin(ConquestFrame.JoinButton)
 
-    for _, bu in pairs({ConquestFrame.Arena2v2, ConquestFrame.Arena3v3, ConquestFrame.RatedBG}) do
+    for _, bu in pairs({ ConquestFrame.Arena2v2, ConquestFrame.Arena3v3, ConquestFrame.RatedBG }) do
         F.Reskin(bu, true)
         local reward = bu.Reward
         if reward then
@@ -170,7 +176,7 @@ C.Themes['Blizzard_PVPUI'] = function()
         end
 
         bu.SelectedTexture:SetDrawLayer('BACKGROUND')
-        bu.SelectedTexture:SetColorTexture(r, g, b, .25)
+        bu.SelectedTexture:SetColorTexture(r, g, b, 0.25)
         bu.SelectedTexture:SetInside(bu.__bg)
     end
 
@@ -184,7 +190,13 @@ C.Themes['Blizzard_PVPUI'] = function()
                 local info = C_CurrencyInfo.GetCurrencyInfo(reward.id)
                 local name, texture, quality = info.name, info.iconFileID, info.quality
                 if quality == _G.LE_ITEM_QUALITY_ARTIFACT then
-                    _, rewardTexture, _, rewardQuaility = _G.CurrencyContainerUtil_GetCurrencyContainerInfo(reward.id, reward.quantity, name, texture, quality)
+                    _, rewardTexture, _, rewardQuaility = _G.CurrencyContainerUtil_GetCurrencyContainerInfo(
+                        reward.id,
+                        reward.quantity,
+                        name,
+                        texture,
+                        quality
+                    )
                 end
             end
         end

@@ -46,7 +46,7 @@ local function CreateExtraGUI(parent, name, title, bgFrame)
         frame.bg = CreateFrame('Frame', nil, frame, 'BackdropTemplate')
         frame.bg:SetSize(240, 540)
         frame.bg:SetPoint('TOPLEFT', 10, -50)
-        frame.bg.bg = F.CreateBDFrame(frame.bg, .25)
+        frame.bg.bg = F.CreateBDFrame(frame.bg, 0.25)
     end
 
     if not parent.extraGUIHook then
@@ -68,7 +68,7 @@ function GUI:CreateScroll(parent, width, height, text, noBg)
     end
 
     if not noBg then
-        scroll.bg = F.CreateBDFrame(scroll, .25)
+        scroll.bg = F.CreateBDFrame(scroll, 0.25)
     end
 
     scroll.child = CreateFrame('Frame', nil, scroll)
@@ -103,7 +103,7 @@ local function CreateBars(parent, spellID, table1, table2, table3)
 
     local bar = CreateFrame('Frame', nil, parent.child, 'BackdropTemplate')
     bar:SetSize(200, 30)
-    F.CreateBD(bar, .25)
+    F.CreateBD(bar, 0.25)
     table1[spellID] = bar
 
     local icon, close = GUI:CreateBarWidgets(bar, texture)
@@ -131,7 +131,7 @@ local function Label_OnEnter(self)
     _G.GameTooltip:SetOwner(self:GetParent(), 'ANCHOR_RIGHT', 0, 3)
     _G.GameTooltip:AddLine(self.text)
     _G.GameTooltip:AddLine(' ')
-    _G.GameTooltip:AddLine(self.tip, .6, .8, 1, 1)
+    _G.GameTooltip:AddLine(self.tip, 0.6, 0.8, 1, 1)
     _G.GameTooltip:Show()
 end
 
@@ -205,7 +205,7 @@ local function CreateGroupTitle(parent, text, offset)
     end
 
     F.CreateFS(parent.child, C.Assets.Font.Regular, 13, nil, text, 'YELLOW', true, 'TOP', 0, offset)
-    local line = F.SetGradient(parent.child, 'H', .5, .5, .5, .25, .25, 200, C.MULT)
+    local line = F.SetGradient(parent.child, 'H', 0.5, 0.5, 0.5, 0.25, 0.25, 200, C.MULT)
     line:SetPoint('TOPLEFT', 10, offset - 20)
 
     parent.groupTitle = true
@@ -285,10 +285,10 @@ local function updateDropdownHighlight(self)
     for i = 1, #dd.__options do
         local option = dd.options[i]
         if i == C.DB[dd.__key][dd.__value] then
-            option:SetBackdropColor(C.r, C.g, C.b, .25)
+            option:SetBackdropColor(C.r, C.g, C.b, 0.25)
             option.selected = true
         else
-            option:SetBackdropColor(.1, .1, .1, .25)
+            option:SetBackdropColor(0.1, 0.1, 0.1, 0.25)
             option.selected = false
         end
     end
@@ -353,14 +353,17 @@ function GUI:SetupAuraSize(parent)
 
     local datas = {
         buff = {
-            [1] = {key = 'BuffSize', value = db.BuffSize, text = L['Size'], min = 24, max = 50, step = 1},
-            [2] = {key = 'BuffPerRow', value = db.BuffPerRow, text = L['Per Row'], min = 6, max = 20, step = 1},
+            [1] = { key = 'BuffSize', value = db.BuffSize, text = L['Size'], min = 24, max = 50, step = 1 },
+            [2] = { key = 'BuffPerRow', value = db.BuffPerRow, text = L['Per Row'], min = 6, max = 20, step = 1 },
         },
         debuff = {
-            [1] = {key = 'DebuffSize', value = db.DebuffSize, text = L['Size'], min = 24, max = 50, step = 1},
-            [2] = {key = 'DebuffPerRow', value = db.DebuffSize, text = L['Per Row'], min = 6, max = 20, step = 1},
+            [1] = { key = 'DebuffSize', value = db.DebuffSize, text = L['Size'], min = 24, max = 50, step = 1 },
+            [2] = { key = 'DebuffPerRow', value = db.DebuffSize, text = L['Per Row'], min = 6, max = 20, step = 1 },
         },
-        layout = {[1] = {value = 'BuffReverse', text = L['Buffs Reverse Growth']}, [2] = {value = 'DebuffReverse', text = L['Debuffs Reverse Growth']}},
+        layout = {
+            [1] = { value = 'BuffReverse', text = L['Buffs Reverse Growth'] },
+            [2] = { value = 'DebuffReverse', text = L['Debuffs Reverse Growth'] },
+        },
     }
 
     local offset = -10
@@ -411,17 +414,17 @@ function GUI:SetupInventoryFilter(parent)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
     local datas = {
-        [1] = {value = 'FilterJunk', text = _G.BAG_FILTER_JUNK},
-        [2] = {value = 'FilterQuestItem', text = _G.QUESTS_LABEL},
-        [3] = {value = 'FilterTradeGoods', text = _G.AUCTION_CATEGORY_TRADE_GOODS},
-        [4] = {value = 'FilterConsumable', text = _G.BAG_FILTER_CONSUMABLES},
-        [5] = {value = 'FilterAnima', text = _G.POWER_TYPE_ANIMA},
-        [6] = {value = 'FilterRelic', text = L['Korthia Relics']},
-        [7] = {value = 'FilterEquipment', text = _G.BAG_FILTER_EQUIPMENT},
-        [8] = {value = 'FilterEquipSet', text = L['Equipement Set']},
-        [9] = {value = 'FilterLegendary', text = _G.LOOT_JOURNAL_LEGENDARIES},
-        [10] = {value = 'FilterCollection', text = _G.COLLECTIONS},
-        [11] = {value = 'FilterFavourite', text = _G.PREFERENCES},
+        [1] = { value = 'FilterJunk', text = _G.BAG_FILTER_JUNK },
+        [2] = { value = 'FilterQuestItem', text = _G.QUESTS_LABEL },
+        [3] = { value = 'FilterTradeGoods', text = _G.AUCTION_CATEGORY_TRADE_GOODS },
+        [4] = { value = 'FilterConsumable', text = _G.BAG_FILTER_CONSUMABLES },
+        [5] = { value = 'FilterAnima', text = _G.POWER_TYPE_ANIMA },
+        [6] = { value = 'FilterRelic', text = L['Korthia Relics'] },
+        [7] = { value = 'FilterEquipment', text = _G.BAG_FILTER_EQUIPMENT },
+        [8] = { value = 'FilterEquipSet', text = L['Equipement Set'] },
+        [9] = { value = 'FilterLegendary', text = _G.LOOT_JOURNAL_LEGENDARIES },
+        [10] = { value = 'FilterCollection', text = _G.COLLECTIONS },
+        [11] = { value = 'FilterFavourite', text = _G.PREFERENCES },
     }
 
     local offset = -10
@@ -445,18 +448,18 @@ function GUI:SetupInventorySize(parent)
     local values = C.DB.Inventory
 
     local sizeDatas = {
-        [1] = {key = 'SlotSize', value = values.SlotSize, text = L['Slot Size'], min = 20, max = 60, step = 1},
-        [2] = {key = 'Spacing', value = values.Spacing, text = L['Slot Spacing'], min = 3, max = 6, step = 1},
+        [1] = { key = 'SlotSize', value = values.SlotSize, text = L['Slot Size'], min = 20, max = 60, step = 1 },
+        [2] = { key = 'Spacing', value = values.Spacing, text = L['Slot Spacing'], min = 3, max = 6, step = 1 },
     }
 
     local colDatas = {
-        [1] = {key = 'BagColumns', value = values.BagColumns, text = L['Bag Columns'], min = 6, max = 20, step = 1},
-        [2] = {key = 'BankColumns', value = values.BagColumns, text = L['Bank Columns'], min = 6, max = 20, step = 1},
+        [1] = { key = 'BagColumns', value = values.BagColumns, text = L['Bag Columns'], min = 6, max = 20, step = 1 },
+        [2] = { key = 'BankColumns', value = values.BagColumns, text = L['Bank Columns'], min = 6, max = 20, step = 1 },
     }
 
     local rowDatas = {
-        [1] = {key = 'BagsPerRow', value = values.BagsPerRow, text = L['Bags Per Row'], min = 2, max = 10, step = 1},
-        [2] = {key = 'BankPerRow', value = values.BankPerRow, text = L['Bank Per Row'], min = 2, max = 10, step = 1},
+        [1] = { key = 'BagsPerRow', value = values.BagsPerRow, text = L['Bags Per Row'], min = 2, max = 10, step = 1 },
+        [2] = { key = 'BankPerRow', value = values.BankPerRow, text = L['Bank Per Row'], min = 2, max = 10, step = 1 },
     }
 
     local offset = -10
@@ -478,7 +481,19 @@ function GUI:SetupInventorySize(parent)
 
     for _, v in ipairs(rowDatas) do
         CreateGroupTitle(scroll, L['Rows'], offset - 100)
-        CreateSlider(scroll, 'Inventory', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 150, UpdateInventoryAnchor)
+        CreateSlider(
+            scroll,
+            'Inventory',
+            v.key,
+            v.text,
+            v.min,
+            v.max,
+            1,
+            v.value,
+            20,
+            offset - 150,
+            UpdateInventoryAnchor
+        )
         offset = offset - 65
     end
 end
@@ -494,15 +509,34 @@ function GUI:SetupMinItemLevelToShow(parent)
     local scroll = GUI:CreateScroll(panel, 220, 540)
     local values = C.DB.Inventory
 
-    local datas = {key = 'MinItemLevelToShow', value = values.MinItemLevelToShow, text = L['Min'], min = 0, max = 1, step = .1}
+    local datas = {
+        key = 'MinItemLevelToShow',
+        value = values.MinItemLevelToShow,
+        text = L['Min'],
+        min = 0,
+        max = 1,
+        step = 0.1,
+    }
 
     local offset = -10
     CreateGroupTitle(scroll, L['Item Level'], offset)
-    CreateSlider(scroll, 'Inventory', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset - 50, UpdateInventoryStatus)
+    CreateSlider(
+        scroll,
+        'Inventory',
+        datas.key,
+        datas.text,
+        datas.min,
+        datas.max,
+        datas.step,
+        datas.value,
+        20,
+        offset - 50,
+        UpdateInventoryStatus
+    )
 end
 
 -- Actionbar
-local barsList = {'Bar1', 'Bar2', 'Bar3', 'Bar4', 'Bar5'}
+local barsList = { 'Bar1', 'Bar2', 'Bar3', 'Bar4', 'Bar5' }
 local function UpdateActionBarSize()
     for _, v in ipairs(barsList) do
         BAR:UpdateActionBarSize(v)
@@ -527,36 +561,38 @@ function GUI:SetupActionBarSize(parent)
 
     local datas = {
         bar1 = {
-            [1] = {key = 'Bar1Size', value = db.Bar1Size, text = L['Size'], min = 20, max = 60, step = 1},
-            [2] = {key = 'Bar1Num', value = db.Bar1Num, text = L['Number'], min = 1, max = 12, step = 1},
-            [3] = {key = 'Bar1PerRow', value = db.Bar1PerRow, text = L['Per Row'], min = 1, max = 12, step = 1},
-            [4] = {key = 'Bar1Font', value = db.Bar1Font, text = L['Font Size'], min = 8, max = 16, step = 1},
+            [1] = { key = 'Bar1Size', value = db.Bar1Size, text = L['Size'], min = 20, max = 60, step = 1 },
+            [2] = { key = 'Bar1Num', value = db.Bar1Num, text = L['Number'], min = 1, max = 12, step = 1 },
+            [3] = { key = 'Bar1PerRow', value = db.Bar1PerRow, text = L['Per Row'], min = 1, max = 12, step = 1 },
+            [4] = { key = 'Bar1Font', value = db.Bar1Font, text = L['Font Size'], min = 8, max = 16, step = 1 },
         },
         bar2 = {
-            [1] = {key = 'Bar2Size', value = db.Bar2Size, text = L['Size'], min = 20, max = 60, step = 1},
-            [2] = {key = 'Bar2Num', value = db.Bar2Num, text = L['Number'], min = 1, max = 12, step = 1},
-            [3] = {key = 'Bar2PerRow', value = db.Bar2PerRow, text = L['Per Row'], min = 1, max = 12, step = 1},
-            [4] = {key = 'Bar2Font', value = db.Bar2Font, text = L['Font Size'], min = 8, max = 16, step = 1},
+            [1] = { key = 'Bar2Size', value = db.Bar2Size, text = L['Size'], min = 20, max = 60, step = 1 },
+            [2] = { key = 'Bar2Num', value = db.Bar2Num, text = L['Number'], min = 1, max = 12, step = 1 },
+            [3] = { key = 'Bar2PerRow', value = db.Bar2PerRow, text = L['Per Row'], min = 1, max = 12, step = 1 },
+            [4] = { key = 'Bar2Font', value = db.Bar2Font, text = L['Font Size'], min = 8, max = 16, step = 1 },
         },
         bar3 = {
-            [1] = {key = 'Bar3Size', value = db.Bar3Size, text = L['Size'], min = 20, max = 60, step = 1},
-            [2] = {key = 'Bar3Num', value = db.Bar3Num, text = L['Number'], min = 0, max = 12, step = 1},
-            [3] = {key = 'Bar3PerRow', value = db.Bar3PerRow, text = L['Per Row'], min = 1, max = 12, step = 1},
-            [4] = {key = 'Bar3Font', value = db.Bar3Font, text = L['Font Size'], min = 8, max = 16, step = 1},
+            [1] = { key = 'Bar3Size', value = db.Bar3Size, text = L['Size'], min = 20, max = 60, step = 1 },
+            [2] = { key = 'Bar3Num', value = db.Bar3Num, text = L['Number'], min = 0, max = 12, step = 1 },
+            [3] = { key = 'Bar3PerRow', value = db.Bar3PerRow, text = L['Per Row'], min = 1, max = 12, step = 1 },
+            [4] = { key = 'Bar3Font', value = db.Bar3Font, text = L['Font Size'], min = 8, max = 16, step = 1 },
         },
         bar4 = {
-            [1] = {key = 'Bar4Size', value = db.Bar4Size, text = L['Size'], min = 20, max = 60, step = 1},
-            [2] = {key = 'Bar4Num', value = db.Bar4Num, text = L['Number'], min = 1, max = 12, step = 1},
-            [3] = {key = 'Bar4PerRow', value = db.Bar4PerRow, text = L['Per Row'], min = 1, max = 12, step = 1},
-            [4] = {key = 'Bar4Font', value = db.Bar4Font, text = L['Font Size'], min = 8, max = 16, step = 1},
+            [1] = { key = 'Bar4Size', value = db.Bar4Size, text = L['Size'], min = 20, max = 60, step = 1 },
+            [2] = { key = 'Bar4Num', value = db.Bar4Num, text = L['Number'], min = 1, max = 12, step = 1 },
+            [3] = { key = 'Bar4PerRow', value = db.Bar4PerRow, text = L['Per Row'], min = 1, max = 12, step = 1 },
+            [4] = { key = 'Bar4Font', value = db.Bar4Font, text = L['Font Size'], min = 8, max = 16, step = 1 },
         },
         bar5 = {
-            [1] = {key = 'Bar5Size', value = db.Bar5Size, text = L['Size'], min = 20, max = 60, step = 1},
-            [2] = {key = 'Bar5Num', value = db.Bar5Num, text = L['Number'], min = 1, max = 12, step = 1},
-            [3] = {key = 'Bar5PerRow', value = db.Bar5PerRow, text = L['Per Row'], min = 1, max = 12, step = 1},
-            [4] = {key = 'Bar5Font', value = db.Bar5Font, text = L['Font Size'], min = 8, max = 16, step = 1},
+            [1] = { key = 'Bar5Size', value = db.Bar5Size, text = L['Size'], min = 20, max = 60, step = 1 },
+            [2] = { key = 'Bar5Num', value = db.Bar5Num, text = L['Number'], min = 1, max = 12, step = 1 },
+            [3] = { key = 'Bar5PerRow', value = db.Bar5PerRow, text = L['Per Row'], min = 1, max = 12, step = 1 },
+            [4] = { key = 'Bar5Font', value = db.Bar5Font, text = L['Font Size'], min = 8, max = 16, step = 1 },
         },
-        extrabar = {[1] = {key = 'BarExtraSize', value = db.BarExtraSize, text = L['Size'], min = 20, max = 60, step = 1}},
+        extrabar = {
+            [1] = { key = 'BarExtraSize', value = db.BarExtraSize, text = L['Size'], min = 20, max = 60, step = 1 },
+        },
     }
 
     local offset = -10
@@ -627,11 +663,30 @@ function GUI:SetupVehicleButtonSize(parent)
     local db = C.DB.Actionbar
     local mKey = 'Actionbar'
 
-    local datas = {key = 'VehicleButtonSize', value = db.VehicleButtonSize, text = L['Button Size'], min = 20, max = 80, step = 1}
+    local datas = {
+        key = 'VehicleButtonSize',
+        value = db.VehicleButtonSize,
+        text = L['Button Size'],
+        min = 20,
+        max = 80,
+        step = 1,
+    }
 
     local offset = -10
     CreateGroupTitle(scroll, L['Leave Vehicle Button'], offset)
-    CreateSlider(scroll, mKey, datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset - 50, UpdateVehicleButton)
+    CreateSlider(
+        scroll,
+        mKey,
+        datas.key,
+        datas.text,
+        datas.min,
+        datas.max,
+        datas.step,
+        datas.value,
+        20,
+        offset - 50,
+        UpdateVehicleButton
+    )
 end
 
 function GUI:SetupStanceBarSize(parent)
@@ -646,7 +701,16 @@ function GUI:SetupStanceBarSize(parent)
     local db = C.DB.Actionbar
     local mKey = 'Actionbar'
 
-    local datas = {[1] = {key = 'BarStanceSize', value = db.BarStanceSize, text = L['Button Size'], min = 20, max = 80, step = 1}}
+    local datas = {
+        [1] = {
+            key = 'BarStanceSize',
+            value = db.BarStanceSize,
+            text = L['Button Size'],
+            min = 20,
+            max = 80,
+            step = 1,
+        },
+    }
 
     local offset = -10
     for _, v in ipairs(datas) do
@@ -674,27 +738,27 @@ function GUI:SetupActionbarFader(parent)
 
     local datas = {
         bars = {
-            [1] = {value = 'FadeBar1', text = L['Enable Fade on Bar1']},
-            [2] = {value = 'FadeBar2', text = L['Enable Fade on Bar2']},
-            [3] = {value = 'FadeBar3', text = L['Enable Fade on Bar3']},
-            [4] = {value = 'FadeBar4', text = L['Enable Fade on SideBar1']},
-            [5] = {value = 'FadeBar5', text = L['Enable Fade on SideBar2']},
-            [6] = {value = 'FadePetBar', text = L['Enable Fade on PetBar']},
-            [7] = {value = 'FadeStanceBar', text = L['Enable Fade on StanceBar']},
+            [1] = { value = 'FadeBar1', text = L['Enable Fade on Bar1'] },
+            [2] = { value = 'FadeBar2', text = L['Enable Fade on Bar2'] },
+            [3] = { value = 'FadeBar3', text = L['Enable Fade on Bar3'] },
+            [4] = { value = 'FadeBar4', text = L['Enable Fade on SideBar1'] },
+            [5] = { value = 'FadeBar5', text = L['Enable Fade on SideBar2'] },
+            [6] = { value = 'FadePetBar', text = L['Enable Fade on PetBar'] },
+            [7] = { value = 'FadeStanceBar', text = L['Enable Fade on StanceBar'] },
         },
         conditions = {
-            [1] = {value = 'Instance', text = L['Inside Instance']},
-            [2] = {value = 'Combat', text = L['Enter Combat']},
-            [3] = {value = 'Target', text = L['Have Target or Focus']},
-            [4] = {value = 'Casting', text = L['Casting']},
-            [5] = {value = 'Health', text = L['Injured']},
-            [6] = {value = 'Vehicle', text = L['Enter Vehicle']},
+            [1] = { value = 'Instance', text = L['Inside Instance'] },
+            [2] = { value = 'Combat', text = L['Enter Combat'] },
+            [3] = { value = 'Target', text = L['Have Target or Focus'] },
+            [4] = { value = 'Casting', text = L['Casting'] },
+            [5] = { value = 'Health', text = L['Injured'] },
+            [6] = { value = 'Vehicle', text = L['Enter Vehicle'] },
         },
         sliders = {
-            [1] = {text = L['Fade Out Alpha'], key = 'FadeOutAlpha', value = db.FadeOutAlpha},
-            [2] = {text = L['Fade Out Duration'], key = 'FadeOutDuration', value = db.FadeOutDuration},
-            [3] = {text = L['Fade In Alpha'], key = 'FadeInAlpha', value = db.FadeInAlpha},
-            [4] = {text = L['Fade In Duration'], key = 'FadeInDuration', value = db.FadeInDuration},
+            [1] = { text = L['Fade Out Alpha'], key = 'FadeOutAlpha', value = db.FadeOutAlpha },
+            [2] = { text = L['Fade Out Duration'], key = 'FadeOutDuration', value = db.FadeOutDuration },
+            [3] = { text = L['Fade In Alpha'], key = 'FadeInAlpha', value = db.FadeInAlpha },
+            [4] = { text = L['Fade In Duration'], key = 'FadeInDuration', value = db.FadeInDuration },
         },
     }
 
@@ -718,7 +782,7 @@ function GUI:SetupActionbarFader(parent)
 
     for _, v in ipairs(datas.sliders) do
         CreateGroupTitle(scroll, L['Fading Parameters'], offset - 30)
-        CreateSlider(scroll, mKey, v.key, v.text, 0, 1, .1, v.value, 20, offset - 80, UpdateActionBarFader)
+        CreateSlider(scroll, mKey, v.key, v.text, 0, 1, 0.1, v.value, 20, offset - 80, UpdateActionBarFader)
         offset = offset - 65
     end
 end
@@ -740,12 +804,12 @@ function GUI:SetupCooldownCount(parent)
             [1] = {
                 value = 'OnlyNumbers',
                 text = L['Only Numbers'],
-                tip = L["Display only numbers, hide the 'd/h/m' suffix.|nEg. 2 mins presents as 2 instead of 2m."]
+                tip = L["Display only numbers, hide the 'd/h/m' suffix.|nEg. 2 mins presents as 2 instead of 2m."],
             },
             [2] = {
                 value = 'IgnoreWA',
                 text = L['Ignore WeakAuras'],
-                tip = L['Hide cooldown count on WeakAuras.']
+                tip = L['Hide cooldown count on WeakAuras.'],
             },
         },
         slider = {
@@ -802,15 +866,25 @@ function GUI:SetupNameplateAuraFilter(parent)
     local panel = CreateExtraGUI(parent, guiName)
 
     local frameData = {
-        [1] = {text = L['White List'], tip = L['Fill in SpellID, must be a number.|nSpell name is not supported.'], offset = -25, barList = {}},
-        [2] = {text = L['Black List'], tip = L['Fill in SpellID, must be a number.|nSpell name is not supported.'], offset = -315, barList = {}},
+        [1] = {
+            text = L['White List'],
+            tip = L['Fill in SpellID, must be a number.|nSpell name is not supported.'],
+            offset = -25,
+            barList = {},
+        },
+        [2] = {
+            text = L['Black List'],
+            tip = L['Fill in SpellID, must be a number.|nSpell name is not supported.'],
+            offset = -315,
+            barList = {},
+        },
     }
 
     local function createBar(parent, index, spellID)
         local name, _, texture = GetSpellInfo(spellID)
         local bar = CreateFrame('Frame', nil, parent, 'BackdropTemplate')
         bar:SetSize(200, 30)
-        bar.bg = F.CreateBD(bar, .25)
+        bar.bg = F.CreateBD(bar, 0.25)
         frameData[index].barList[spellID] = bar
 
         local icon, close = GUI:CreateBarWidgets(bar, texture)
@@ -853,7 +927,7 @@ function GUI:SetupNameplateAuraFilter(parent)
         local frame = CreateFrame('Frame', nil, panel, 'BackdropTemplate')
         frame:SetSize(240, 250)
         frame:SetPoint('TOPLEFT', 10, value.offset - 25)
-        frame.bg = F.CreateBDFrame(frame, .25)
+        frame.bg = F.CreateBDFrame(frame, 0.25)
 
         local scroll = GUI:CreateScroll(frame, 200, 200, nil, true)
         scroll:ClearAllPoints()
@@ -897,9 +971,15 @@ function GUI:SetupNameplateMajorSpells(parent)
     parent.scroll = scroll
     scroll.box = GUI:CreateEditbox(frame, nil, 10, -10, nil, 110, 24)
     scroll.box.title = L['SpellID']
-    F.AddTooltip(scroll.box, 'ANCHOR_RIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE', true)
+    F.AddTooltip(
+        scroll.box,
+        'ANCHOR_RIGHT',
+        L['Fill in SpellID, must be a number.|nSpell name is not supported.'],
+        'BLUE',
+        true
+    )
 
-    scroll.add = CreateButton(scroll, 50, 22, _G.ADD, {'LEFT', scroll.box, 'RIGHT', 5, 0})
+    scroll.add = CreateButton(scroll, 50, 22, _G.ADD, { 'LEFT', scroll.box, 'RIGHT', 5, 0 })
     scroll.add.__owner = scroll
     scroll.add:HookScript('OnClick', function(button)
         local parent = button.__owner
@@ -918,7 +998,7 @@ function GUI:SetupNameplateMajorSpells(parent)
         parent.box:SetText('')
     end)
 
-    scroll.reset = CreateButton(frame, 50, 22, _G.RESET, {'LEFT', scroll.add, 'RIGHT', 5, 0})
+    scroll.reset = CreateButton(frame, 50, 22, _G.RESET, { 'LEFT', scroll.add, 'RIGHT', 5, 0 })
     scroll.reset:HookScript('OnClick', function()
         _G.StaticPopup_Show('FREEUI_RESET_MAJOR_SPELLS')
     end)
@@ -946,18 +1026,51 @@ function GUI:SetupNameplateCVars(parent)
     local db = C.CharacterSettings.Nameplate
 
     local datas = {
-        [1] = {key = 'MinScale', value = db.MinScale, text = L['MinScale'], min = .5, max = 1, step = .1},
-        [2] = {key = 'TargetScale', value = db.TargetScale, text = L['TargetScale'], min = 1, max = 2, step = .1},
-        [3] = {key = 'MinAlpha', value = db.MinAlpha, text = L['TargetScale'], min = .5, max = 1, step = .1},
-        [4] = {key = 'OccludedAlpha', value = db.OccludedAlpha, text = L['OccludedAlpha'], min = .2, max = 1, step = .1},
-        [5] = {key = 'VerticalSpacing', value = db.VerticalSpacing, text = L['VerticalSpacing'], min = .3, max = 3, step = .1},
-        [6] = {key = 'HorizontalSpacing', value = db.HorizontalSpacing, text = L['HorizontalSpacing'], min = .3, max = 3, step = .1},
+        [1] = { key = 'MinScale', value = db.MinScale, text = L['MinScale'], min = 0.5, max = 1, step = 0.1 },
+        [2] = { key = 'TargetScale', value = db.TargetScale, text = L['TargetScale'], min = 1, max = 2, step = 0.1 },
+        [3] = { key = 'MinAlpha', value = db.MinAlpha, text = L['TargetScale'], min = 0.5, max = 1, step = 0.1 },
+        [4] = {
+            key = 'OccludedAlpha',
+            value = db.OccludedAlpha,
+            text = L['OccludedAlpha'],
+            min = 0.2,
+            max = 1,
+            step = 0.1,
+        },
+        [5] = {
+            key = 'VerticalSpacing',
+            value = db.VerticalSpacing,
+            text = L['VerticalSpacing'],
+            min = 0.3,
+            max = 3,
+            step = 0.1,
+        },
+        [6] = {
+            key = 'HorizontalSpacing',
+            value = db.HorizontalSpacing,
+            text = L['HorizontalSpacing'],
+            min = 0.3,
+            max = 3,
+            step = 0.1,
+        },
     }
 
     local offset = -10
     for _, v in ipairs(datas) do
         CreateGroupTitle(scroll, L['Nameplate CVars'], offset)
-        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateNameplateCVars)
+        CreateSlider(
+            scroll,
+            'Nameplate',
+            v.key,
+            v.text,
+            v.min,
+            v.max,
+            v.step,
+            v.value,
+            20,
+            offset - 50,
+            UpdateNameplateCVars
+        )
         offset = offset - 65
     end
 end
@@ -979,10 +1092,27 @@ function GUI:SetupNameplateSize(parent)
     local mKey = 'Nameplate'
 
     local datas = {
-        size = {[1] = {key = 'Width', value = db.Width, text = L['Width'], min = 40, max = 400, step = 1}, [2] = {key = 'Height', value = db.Height, text = L['Height'], min = 4, max = 40, step = 1}},
+        size = {
+            [1] = { key = 'Width', value = db.Width, text = L['Width'], min = 40, max = 400, step = 1 },
+            [2] = { key = 'Height', value = db.Height, text = L['Height'], min = 4, max = 40, step = 1 },
+        },
         clickableSize = {
-            [1] = {key = 'ClickableWidth', value = db.ClickableWidth, text = L['Width'], min = 40, max = 400, step = 1},
-            [2] = {key = 'ClickableHeight', value = db.ClickableHeight, text = L['Height'], min = 4, max = 40, step = 1},
+            [1] = {
+                key = 'ClickableWidth',
+                value = db.ClickableWidth,
+                text = L['Width'],
+                min = 40,
+                max = 400,
+                step = 1,
+            },
+            [2] = {
+                key = 'ClickableHeight',
+                value = db.ClickableHeight,
+                text = L['Height'],
+                min = 4,
+                max = 40,
+                step = 1,
+            },
         },
     }
 
@@ -1016,19 +1146,52 @@ function GUI:SetupNameplateFriendlySize(parent)
 
     local datas = {
         size = {
-            [1] = {key = 'FriendlyWidth', value = db.FriendlyWidth, text = L['Width'], min = 1, max = 200, step = 1},
-            [2] = {key = 'FriendlyHeight', value = db.FriendlyHeight, text = L['Height'], min = 1, max = 40, step = 1},
+            [1] = { key = 'FriendlyWidth', value = db.FriendlyWidth, text = L['Width'], min = 1, max = 200, step = 1 },
+            [2] = {
+                key = 'FriendlyHeight',
+                value = db.FriendlyHeight,
+                text = L['Height'],
+                min = 1,
+                max = 40,
+                step = 1,
+            },
         },
         clickableSize = {
-            [1] = {key = 'FriendlyClickableWidth', value = db.FriendlyClickableWidth, text = L['Width'], min = 1, max = 200, step = 1},
-            [2] = {key = 'FriendlyClickableHeight', value = db.FriendlyClickableHeight, text = L['Height'], min = 1, max = 40, step = 1},
+            [1] = {
+                key = 'FriendlyClickableWidth',
+                value = db.FriendlyClickableWidth,
+                text = L['Width'],
+                min = 1,
+                max = 200,
+                step = 1,
+            },
+            [2] = {
+                key = 'FriendlyClickableHeight',
+                value = db.FriendlyClickableHeight,
+                text = L['Height'],
+                min = 1,
+                max = 40,
+                step = 1,
+            },
         },
     }
 
     local offset = -10
     for _, v in ipairs(datas.size) do
         CreateGroupTitle(scroll, L['Friendly Nameplate Size'], offset)
-        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, RefreshAllPlates)
+        CreateSlider(
+            scroll,
+            'Nameplate',
+            v.key,
+            v.text,
+            v.min,
+            v.max,
+            v.step,
+            v.value,
+            20,
+            offset - 50,
+            RefreshAllPlates
+        )
         offset = offset - 65
     end
 
@@ -1052,11 +1215,22 @@ function GUI:SetupNameplateCastbarSize(parent)
     local scroll = GUI:CreateScroll(panel, 220, 540)
     local db = C.CharacterSettings.Nameplate
 
-    local datas = {key = 'CastbarHeight', value = db.CastbarHeight, text = L['Height'], min = 6, max = 20, step = 1}
+    local datas = { key = 'CastbarHeight', value = db.CastbarHeight, text = L['Height'], min = 6, max = 20, step = 1 }
 
     local offset = -10
     CreateGroupTitle(scroll, L['Nameplate Castbar'], offset)
-    CreateSlider(scroll, 'Nameplate', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset - 50)
+    CreateSlider(
+        scroll,
+        'Nameplate',
+        datas.key,
+        datas.text,
+        datas.min,
+        datas.max,
+        datas.step,
+        datas.value,
+        20,
+        offset - 50
+    )
 end
 
 function GUI:SetupNameplateExecuteIndicator(parent)
@@ -1070,7 +1244,14 @@ function GUI:SetupNameplateExecuteIndicator(parent)
     local scroll = GUI:CreateScroll(panel, 220, 540)
     local values = C.DB.Nameplate
 
-    local datas = {key = 'ExecuteRatio', value = values.ExecuteRatio, text = L['Execute Ratio'], min = 1, max = 90, step = 1}
+    local datas = {
+        key = 'ExecuteRatio',
+        value = values.ExecuteRatio,
+        text = L['Execute Ratio'],
+        min = 1,
+        max = 90,
+        step = 1,
+    }
 
     local offset = -30
     CreateSlider(scroll, 'Nameplate', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset)
@@ -1125,9 +1306,15 @@ function GUI:SetupPartyFrame(parent)
     local db = C.CharacterSettings.Unitframe
 
     local datas = {
-        [1] = {key = 'PartyWidth', value = db.PartyWidth, text = L['Width'], min = 10, max = 200},
-        [2] = {key = 'PartyHealthHeight', value = db.PartyHealthHeight, text = L['Health Height'], min = 10, max = 200},
-        [3] = {key = 'PartyPowerHeight', value = db.PartyPowerHeight, text = L['Power Height'], min = 1, max = 20},
+        [1] = { key = 'PartyWidth', value = db.PartyWidth, text = L['Width'], min = 10, max = 200 },
+        [2] = {
+            key = 'PartyHealthHeight',
+            value = db.PartyHealthHeight,
+            text = L['Health Height'],
+            min = 10,
+            max = 200,
+        },
+        [3] = { key = 'PartyPowerHeight', value = db.PartyPowerHeight, text = L['Power Height'], min = 1, max = 20 },
     }
 
     local offset = -10
@@ -1142,7 +1329,17 @@ function GUI:SetupPartyFrame(parent)
         options[i] = UNITFRAME.PartyDirections[i].name
     end
 
-    CreateOptionDropdown(scroll, L['Growth Direction'], offset - 60, options, nil, mKey, 'PartyDirec', 1, UpdatePartyFrameSize)
+    CreateOptionDropdown(
+        scroll,
+        L['Growth Direction'],
+        offset - 60,
+        options,
+        nil,
+        mKey,
+        'PartyDirec',
+        1,
+        UpdatePartyFrameSize
+    )
 end
 
 local function UpdateRaidFrameDirection()
@@ -1178,11 +1375,11 @@ function GUI:SetupRaidFrame(parent)
     local db = C.CharacterSettings.Unitframe
 
     local datas = {
-        [1] = {key = 'RaidWidth', value = db.RaidWidth, text = L['Width'], min = 10, max = 200},
-        [2] = {key = 'RaidHealthHeight', value = db.RaidHealthHeight, text = L['Health Height'], min = 10, max = 200},
-        [3] = {key = 'RaidPowerHeight', value = db.RaidPowerHeight, text = L['Power Height'], min = 1, max = 20},
-        [4] = {key = 'NumGroups', value = db.NumGroups, text = L['Groups to Show'], min = 1, max = 8},
-        [5] = {key = 'RaidRows', value = db.RaidRows, text = L['Groups per row'], min = 1, max = 8},
+        [1] = { key = 'RaidWidth', value = db.RaidWidth, text = L['Width'], min = 10, max = 200 },
+        [2] = { key = 'RaidHealthHeight', value = db.RaidHealthHeight, text = L['Health Height'], min = 10, max = 200 },
+        [3] = { key = 'RaidPowerHeight', value = db.RaidPowerHeight, text = L['Power Height'], min = 1, max = 20 },
+        [4] = { key = 'NumGroups', value = db.NumGroups, text = L['Groups to Show'], min = 1, max = 8 },
+        [5] = { key = 'RaidRows', value = db.RaidRows, text = L['Groups per row'], min = 1, max = 8 },
     }
 
     local offset = -10
@@ -1197,9 +1394,17 @@ function GUI:SetupRaidFrame(parent)
         options[i] = UNITFRAME.RaidDirections[i].name
     end
 
-    CreateOptionDropdown(scroll, L['Growth Direction'], offset - 60, options,
-                         L['Change the growth direction for RaidFrames.|nDirection on the left is the growth method within your group. Direction on the right is the growth method between groups.'],
-                         mKey, 'RaidDirec', 1, UpdateRaidFrameDirection)
+    CreateOptionDropdown(
+        scroll,
+        L['Growth Direction'],
+        offset - 60,
+        options,
+        L['Change the growth direction for RaidFrames.|nDirection on the left is the growth method within your group. Direction on the right is the growth method between groups.'],
+        mKey,
+        'RaidDirec',
+        1,
+        UpdateRaidFrameDirection
+    )
 end
 
 local function UpdateSimpleRaidFrameSize()
@@ -1235,9 +1440,9 @@ function GUI:SetupSimpleRaidFrame(parent)
     local db = C.CharacterSettings.Unitframe
 
     local datas = {
-        [1] = {key = 'SMRScale', value = db.SMRScale, text = L['Scale'], min = 6, max = 20},
-        [2] = {key = 'SMRPerCol', value = db.SMRPerCol, text = L['Units Per Column'], min = 5, max = 40},
-        [3] = {key = 'SMRGroups', value = db.SMRGroups, text = L['Groups to Show'], min = 1, max = 8},
+        [1] = { key = 'SMRScale', value = db.SMRScale, text = L['Scale'], min = 6, max = 20 },
+        [2] = { key = 'SMRPerCol', value = db.SMRPerCol, text = L['Units Per Column'], min = 5, max = 40 },
+        [3] = { key = 'SMRGroups', value = db.SMRGroups, text = L['Groups to Show'], min = 1, max = 8 },
     }
 
     local offset = -10
@@ -1253,7 +1458,17 @@ function GUI:SetupSimpleRaidFrame(parent)
     end
 
     CreateOptionDropdown(scroll, L['Growth Direction'], offset - 60, options, nil, mKey, 'SMRDirec', 1)
-    CreateOptionDropdown(scroll, L['Group By'], offset - 110, {_G.GROUP, _G.CLASS, _G.ROLE}, nil, mKey, 'SMRGroupBy', 1, UpdateSimpleRaidFrameSize)
+    CreateOptionDropdown(
+        scroll,
+        L['Group By'],
+        offset - 110,
+        { _G.GROUP, _G.CLASS, _G.ROLE },
+        nil,
+        mKey,
+        'SMRGroupBy',
+        1,
+        UpdateSimpleRaidFrameSize
+    )
 end
 
 function GUI:SetupUnitFrame(parent)
@@ -1271,41 +1486,181 @@ function GUI:SetupUnitFrame(parent)
 
     local datas = {
         player = {
-            [1] = {key = 'PlayerWidth', value = db.PlayerWidth, text = L['Width'], min = 10, max = 400, step = 1},
-            [2] = {key = 'PlayerHealthHeight', value = db.PlayerHealthHeight, text = L['Health Height'], min = 1, max = 40, step = 1},
-            [3] = {key = 'PlayerPowerHeight', value = db.PlayerPowerHeight, text = L['Power Height'], min = 1, max = 40, step = 1},
-            [4] = {key = 'PlayerAuraPerRow' , value = db.PlayerAuraPerRow, text = L['Aura Per Row'], min = 0, max = 10, step = 1}
+            [1] = { key = 'PlayerWidth', value = db.PlayerWidth, text = L['Width'], min = 10, max = 400, step = 1 },
+            [2] = {
+                key = 'PlayerHealthHeight',
+                value = db.PlayerHealthHeight,
+                text = L['Health Height'],
+                min = 1,
+                max = 40,
+                step = 1,
+            },
+            [3] = {
+                key = 'PlayerPowerHeight',
+                value = db.PlayerPowerHeight,
+                text = L['Power Height'],
+                min = 1,
+                max = 40,
+                step = 1,
+            },
+            [4] = {
+                key = 'PlayerAuraPerRow',
+                value = db.PlayerAuraPerRow,
+                text = L['Aura Per Row'],
+                min = 0,
+                max = 10,
+                step = 1,
+            },
         },
         pet = {
-            [1] = {key = 'PetWidth', value = db.PetWidth, text = L['Width'], min = 10, max = 400, step = 1},
-            [2] = {key = 'PetHealthHeight', value = db.PetHealthHeight, text = L['Health Height'], min = 1, max = 40, step = 1},
-            [3] = {key = 'PetPowerHeight', value = db.PetPowerHeight, text = L['Power Height'], min = 1, max = 40, step = 1},
-            [4] = {key = 'PetAuraPerRow' , value = db.PetAuraPerRow, text = L['Aura Per Row'], min = 0, max = 10, step = 1}
+            [1] = { key = 'PetWidth', value = db.PetWidth, text = L['Width'], min = 10, max = 400, step = 1 },
+            [2] = {
+                key = 'PetHealthHeight',
+                value = db.PetHealthHeight,
+                text = L['Health Height'],
+                min = 1,
+                max = 40,
+                step = 1,
+            },
+            [3] = {
+                key = 'PetPowerHeight',
+                value = db.PetPowerHeight,
+                text = L['Power Height'],
+                min = 1,
+                max = 40,
+                step = 1,
+            },
+            [4] = {
+                key = 'PetAuraPerRow',
+                value = db.PetAuraPerRow,
+                text = L['Aura Per Row'],
+                min = 0,
+                max = 10,
+                step = 1,
+            },
         },
         target = {
-            [1] = {key = 'TargetWidth', value = db.TargetWidth, text = L['Width'], min = 10, max = 400, step = 1},
-            [2] = {key = 'TargetHealthHeight', value = db.TargetHealthHeight, text = L['Health Height'], min = 1, max = 40, step = 1},
-            [3] = {key = 'TargetPowerHeight', value = db.TargetPowerHeight, text = L['Power Height'], min = 1, max = 40, step = 1},
-            [4] = {key = 'TargetAuraPerRow' , value = db.TargetAuraPerRow, text = L['Aura Per Row'], min = 0, max = 10, step = 1}
+            [1] = { key = 'TargetWidth', value = db.TargetWidth, text = L['Width'], min = 10, max = 400, step = 1 },
+            [2] = {
+                key = 'TargetHealthHeight',
+                value = db.TargetHealthHeight,
+                text = L['Health Height'],
+                min = 1,
+                max = 40,
+                step = 1,
+            },
+            [3] = {
+                key = 'TargetPowerHeight',
+                value = db.TargetPowerHeight,
+                text = L['Power Height'],
+                min = 1,
+                max = 40,
+                step = 1,
+            },
+            [4] = {
+                key = 'TargetAuraPerRow',
+                value = db.TargetAuraPerRow,
+                text = L['Aura Per Row'],
+                min = 0,
+                max = 10,
+                step = 1,
+            },
         },
         tot = {
-            [1] = {key = 'TargetTargetWidth', value = db.TargetTargetWidth, text = L['Width'], min = 10, max = 400, step = 1},
-            [2] = {key = 'TargetTargetHealthHeight', value = db.TargetTargetHealthHeight, text = L['Health Height'], min = 1, max = 40, step = 1},
-            [3] = {key = 'TargetTargetPowerHeight', value = db.TargetTargetPowerHeight, text = L['Power Height'], min = 1, max = 40, step = 1},
-            [4] = {key = 'TargetTargetAuraPerRow' , value = db.TargetTargetAuraPerRow, text = L['Aura Per Row'], min = 0, max = 10, step = 1}
+            [1] = {
+                key = 'TargetTargetWidth',
+                value = db.TargetTargetWidth,
+                text = L['Width'],
+                min = 10,
+                max = 400,
+                step = 1,
+            },
+            [2] = {
+                key = 'TargetTargetHealthHeight',
+                value = db.TargetTargetHealthHeight,
+                text = L['Health Height'],
+                min = 1,
+                max = 40,
+                step = 1,
+            },
+            [3] = {
+                key = 'TargetTargetPowerHeight',
+                value = db.TargetTargetPowerHeight,
+                text = L['Power Height'],
+                min = 1,
+                max = 40,
+                step = 1,
+            },
+            [4] = {
+                key = 'TargetTargetAuraPerRow',
+                value = db.TargetTargetAuraPerRow,
+                text = L['Aura Per Row'],
+                min = 0,
+                max = 10,
+                step = 1,
+            },
         },
         focus = {
-            [1] = {key = 'FocusWidth', value = db.FocusWidth, text = L['Width'], min = 10, max = 400, step = 1},
-            [2] = {key = 'FocusHealthHeight', value = db.FocusHealthHeight, text = L['Health Height'], min = 1, max = 40, step = 1},
-            [3] = {key = 'FocusPowerHeight', value = db.FocusPowerHeight, text = L['Power Height'], min = 1, max = 40, step = 1},
-            [4] = {key = 'FocusAuraPerRow' , value = db.FocusAuraPerRow, text = L['Aura Per Row'], min = 0, max = 10, step = 1}
+            [1] = { key = 'FocusWidth', value = db.FocusWidth, text = L['Width'], min = 10, max = 400, step = 1 },
+            [2] = {
+                key = 'FocusHealthHeight',
+                value = db.FocusHealthHeight,
+                text = L['Health Height'],
+                min = 1,
+                max = 40,
+                step = 1,
+            },
+            [3] = {
+                key = 'FocusPowerHeight',
+                value = db.FocusPowerHeight,
+                text = L['Power Height'],
+                min = 1,
+                max = 40,
+                step = 1,
+            },
+            [4] = {
+                key = 'FocusAuraPerRow',
+                value = db.FocusAuraPerRow,
+                text = L['Aura Per Row'],
+                min = 0,
+                max = 10,
+                step = 1,
+            },
         },
         tof = {
-            [1] = {key = 'FocusTargetWidth', value = db.FocusTargetWidth, text = L['Width'], min = 10, max = 400, step = 1},
-            [2] = {key = 'FocusTargetHealthHeight', value = db.FocusTargetHealthHeight, text = L['Health Height'], min = 1, max = 40, step = 1},
-            [3] = {key = 'FocusTargetPowerHeight', value = db.FocusTargetPowerHeight, text = L['Power Height'], min = 1, max = 40, step = 1},
-            [4] = {key = 'FocusTargetAuraPerRow' , value = db.FocusTargetAuraPerRow, text = L['Aura Per Row'], min = 0, max = 10, step = 1}
-        }
+            [1] = {
+                key = 'FocusTargetWidth',
+                value = db.FocusTargetWidth,
+                text = L['Width'],
+                min = 10,
+                max = 400,
+                step = 1,
+            },
+            [2] = {
+                key = 'FocusTargetHealthHeight',
+                value = db.FocusTargetHealthHeight,
+                text = L['Health Height'],
+                min = 1,
+                max = 40,
+                step = 1,
+            },
+            [3] = {
+                key = 'FocusTargetPowerHeight',
+                value = db.FocusTargetPowerHeight,
+                text = L['Power Height'],
+                min = 1,
+                max = 40,
+                step = 1,
+            },
+            [4] = {
+                key = 'FocusTargetAuraPerRow',
+                value = db.FocusTargetAuraPerRow,
+                text = L['Aura Per Row'],
+                min = 0,
+                max = 10,
+                step = 1,
+            },
+        },
     }
 
     local offset = -10
@@ -1370,11 +1725,32 @@ function GUI:SetupBossFrame(parent)
     local db = C.CharacterSettings.Unitframe
 
     local bossDatas = {
-        [1] = {key = 'BossWidth', value = db.BossWidth, text = L['Width'], min = 10, max = 400, step = 1},
-        [2] = {key = 'BossHealthHeight', value = db.BossHealthHeight, text = L['Health Height'], min = 1, max = 40, step = 1},
-        [3] = {key = 'BossPowerHeight', value = db.BossPowerHeight, text = L['Power Height'], min = 1, max = 40, step = 1},
-        [4] = {key = 'BossAuraPerRow' , value = db.BossAuraPerRow, text = L['Aura Per Row'], min = 0, max = 10, step = 1},
-        [5] = {key = 'BossGap', value = db.BossGap, text = L['Gap'], min = 10, max = 100, step = 1},
+        [1] = { key = 'BossWidth', value = db.BossWidth, text = L['Width'], min = 10, max = 400, step = 1 },
+        [2] = {
+            key = 'BossHealthHeight',
+            value = db.BossHealthHeight,
+            text = L['Health Height'],
+            min = 1,
+            max = 40,
+            step = 1,
+        },
+        [3] = {
+            key = 'BossPowerHeight',
+            value = db.BossPowerHeight,
+            text = L['Power Height'],
+            min = 1,
+            max = 40,
+            step = 1,
+        },
+        [4] = {
+            key = 'BossAuraPerRow',
+            value = db.BossAuraPerRow,
+            text = L['Aura Per Row'],
+            min = 0,
+            max = 10,
+            step = 1,
+        },
+        [5] = { key = 'BossGap', value = db.BossGap, text = L['Gap'], min = 10, max = 100, step = 1 },
     }
 
     local offset = -10
@@ -1399,11 +1775,32 @@ function GUI:SetupArenaFrame(parent)
     local db = C.CharacterSettings.Unitframe
 
     local bossDatas = {
-        [1] = {key = 'ArenaWidth', value = db.ArenaWidth, text = L['Width'], min = 10, max = 400, step = 1},
-        [2] = {key = 'ArenaHealthHeight', value = db.ArenaHealthHeight, text = L['Health Height'], min = 1, max = 40, step = 1},
-        [3] = {key = 'ArenaPowerHeight', value = db.ArenaPowerHeight, text = L['Power Height'], min = 1, max = 40, step = 1},
-        [4] = {key = 'ArenaAuraPerRow' , value = db.ArenaAuraPerRow, text = L['Aura Per Row'], min = 0, max = 10, step = 1},
-        [5] = {key = 'ArenaGap', value = db.ArenaGap, text = L['Gap'], min = 10, max = 100, step = 1},
+        [1] = { key = 'ArenaWidth', value = db.ArenaWidth, text = L['Width'], min = 10, max = 400, step = 1 },
+        [2] = {
+            key = 'ArenaHealthHeight',
+            value = db.ArenaHealthHeight,
+            text = L['Health Height'],
+            min = 1,
+            max = 40,
+            step = 1,
+        },
+        [3] = {
+            key = 'ArenaPowerHeight',
+            value = db.ArenaPowerHeight,
+            text = L['Power Height'],
+            min = 1,
+            max = 40,
+            step = 1,
+        },
+        [4] = {
+            key = 'ArenaAuraPerRow',
+            value = db.ArenaAuraPerRow,
+            text = L['Aura Per Row'],
+            min = 0,
+            max = 10,
+            step = 1,
+        },
+        [5] = { key = 'ArenaGap', value = db.ArenaGap, text = L['Gap'], min = 10, max = 100, step = 1 },
     }
 
     local offset = -10
@@ -1427,8 +1824,17 @@ function GUI:SetupClassPower(parent)
     local mKey = 'Unitframe'
 
     local datas = {
-        slider = {[1] = {key = 'ClassPowerHeight', value = db.ClassPowerHeight, text = L['Height'], min = 1, max = 20, step = 1}},
-        checkbox = {[1] = {value = 'RunesTimer', text = L['Runes Timer'], tip = L['Display timer for DK Runes.']}},
+        slider = {
+            [1] = {
+                key = 'ClassPowerHeight',
+                value = db.ClassPowerHeight,
+                text = L['Height'],
+                min = 1,
+                max = 20,
+                step = 1,
+            },
+        },
+        checkbox = { [1] = { value = 'RunesTimer', text = L['Runes Timer'], tip = L['Display timer for DK Runes.'] } },
     }
 
     local offset = -10
@@ -1463,13 +1869,16 @@ function GUI:SetupUnitFrameFader(parent)
 
     local datas = {
         conditions = {
-            [1] = {value = 'Instance', text = L['Inside Instance']},
-            [2] = {value = 'Combat', text = L['Enter Combat']},
-            [3] = {value = 'Target', text = L['Have Target or Focus']},
-            [4] = {value = 'Casting', text = L['Casting']},
-            [5] = {value = 'Health', text = L['Injured']},
+            [1] = { value = 'Instance', text = L['Inside Instance'] },
+            [2] = { value = 'Combat', text = L['Enter Combat'] },
+            [3] = { value = 'Target', text = L['Have Target or Focus'] },
+            [4] = { value = 'Casting', text = L['Casting'] },
+            [5] = { value = 'Health', text = L['Injured'] },
         },
-        fader = {[1] = {key = 'MinAlpha', value = '0', text = L['Fade Out Alpha']}, [2] = {key = 'MaxAlpha', value = '1', text = L['Fade In Alpha']}},
+        fader = {
+            [1] = { key = 'MinAlpha', value = '0', text = L['Fade Out Alpha'] },
+            [2] = { key = 'MaxAlpha', value = '1', text = L['Fade In Alpha'] },
+        },
     }
 
     local offset = -10
@@ -1483,7 +1892,7 @@ function GUI:SetupUnitFrameFader(parent)
 
     for _, v in ipairs(datas.fader) do
         CreateGroupTitle(scroll, L['Fading Parameters'], offset - 30)
-        CreateSlider(scroll, mKey, v.key, v.text, 0, 1, .1, v.value, 20, offset - 80, UpdateFader)
+        CreateSlider(scroll, mKey, v.key, v.text, 0, 1, 0.1, v.value, 20, offset - 80, UpdateFader)
         offset = offset - 65
     end
 end
@@ -1499,11 +1908,29 @@ function GUI:SetupUnitFrameRangeCheck(parent)
     local scroll = GUI:CreateScroll(panel, 220, 540)
     local db = C.CharacterSettings.Unitframe
 
-    local datas = {key = 'OutRangeAlpha', value = db.RangeCheckAlpha, text = L['Out Range Alpha'], min = .1, max = 1, step = .1}
+    local datas = {
+        key = 'OutRangeAlpha',
+        value = db.RangeCheckAlpha,
+        text = L['Out Range Alpha'],
+        min = 0.1,
+        max = 1,
+        step = 0.1,
+    }
 
     local offset = -10
     CreateGroupTitle(scroll, L['Range Check'], offset)
-    CreateSlider(scroll, 'Unitframe', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset - 50)
+    CreateSlider(
+        scroll,
+        'Unitframe',
+        datas.key,
+        datas.text,
+        datas.min,
+        datas.max,
+        datas.step,
+        datas.value,
+        20,
+        offset - 50
+    )
 end
 
 function GUI:SetupCastbar(parent)
@@ -1521,17 +1948,59 @@ function GUI:SetupCastbar(parent)
 
     local datas = {
         player = {
-            [1] = {key = 'PlayerCastbarWidth', value = db.PlayerCastbarWidth, text = L['Width'], min = 60, max = 400, step = 1},
-            [2] = {key = 'PlayerCastbarHeight', value = db.PlayerCastbarHeight, text = L['Height'], min = 6, max = 40, step = 1},
+            [1] = {
+                key = 'PlayerCastbarWidth',
+                value = db.PlayerCastbarWidth,
+                text = L['Width'],
+                min = 60,
+                max = 400,
+                step = 1,
+            },
+            [2] = {
+                key = 'PlayerCastbarHeight',
+                value = db.PlayerCastbarHeight,
+                text = L['Height'],
+                min = 6,
+                max = 40,
+                step = 1,
+            },
         },
         target = {
-            [1] = {key = 'TargetCastbarWidth', value = db.TargetCastbarWidth, text = L['Width'], min = 60, max = 400, step = 1},
-            [2] = {key = 'TargetCastbarHeight', value = db.TargetCastbarHeight, text = L['Height'], min = 6, max = 40, step = 1},
+            [1] = {
+                key = 'TargetCastbarWidth',
+                value = db.TargetCastbarWidth,
+                text = L['Width'],
+                min = 60,
+                max = 400,
+                step = 1,
+            },
+            [2] = {
+                key = 'TargetCastbarHeight',
+                value = db.TargetCastbarHeight,
+                text = L['Height'],
+                min = 6,
+                max = 40,
+                step = 1,
+            },
         },
         focus = {
-            [1] = {key = 'FocusCastbarWidth', value = db.FocusCastbarWidth, text = L['Width'], min = 60, max = 400, step = 1},
-            [2] = {key = 'FocusCastbarHeight', value = db.FocusCastbarHeight, text = L['Height'], min = 6, max = 40, step = 1},
-        }
+            [1] = {
+                key = 'FocusCastbarWidth',
+                value = db.FocusCastbarWidth,
+                text = L['Width'],
+                min = 60,
+                max = 400,
+                step = 1,
+            },
+            [2] = {
+                key = 'FocusCastbarHeight',
+                value = db.FocusCastbarHeight,
+                text = L['Height'],
+                min = 6,
+                max = 40,
+                step = 1,
+            },
+        },
     }
 
     local offset = -10
@@ -1570,10 +2039,10 @@ function GUI:SetupCastbarColor(parent)
     local db = C.DB.Unitframe
 
     local datas = {
-        [1] = {key = 'CastingColor', value = db.CastingColor, text = L['Normal Casting']},
-        [2] = {key = 'UninterruptibleColor', value = db.UninterruptibleColor, text = L['Uninterruptible Casting']},
-        [3] = {key = 'CompleteColor', value = db.CompleteColor, text = L['Casting Complete']},
-        [4] = {key = 'FailColor', value = db.FailColor, text = L['Casting Fail']},
+        [1] = { key = 'CastingColor', value = db.CastingColor, text = L['Normal Casting'] },
+        [2] = { key = 'UninterruptibleColor', value = db.UninterruptibleColor, text = L['Uninterruptible Casting'] },
+        [3] = { key = 'CompleteColor', value = db.CompleteColor, text = L['Casting Complete'] },
+        [4] = { key = 'FailColor', value = db.FailColor, text = L['Casting Fail'] },
     }
 
     local offset = -10
@@ -1611,7 +2080,7 @@ function GUI:SetupPartyWatcher(parent)
 
         local bar = CreateFrame('Frame', nil, parent, 'BackdropTemplate')
         bar:SetSize(200, 30)
-        F.CreateBD(bar, .25)
+        F.CreateBD(bar, 0.25)
         barTable[spellID] = bar
 
         local icon, close = GUI:CreateBarWidgets(bar, texture)
@@ -1643,10 +2112,24 @@ function GUI:SetupPartyWatcher(parent)
     local frame = panel.bg
     local options = {}
 
-    options[1] = GUI:CreateEditbox(frame, L['SpellID'], 10, -30, L['Enter spell ID, must be a number.|nYou can get ID on spell\'s tooltip.|nSpell name is not supported.'], 107, 24)
-    options[2] = GUI:CreateEditbox(frame, L['Spell Cooldown'], 122, -30,
-                                   L['Enter the spell\'s cooldown duration.|nParty watcher only support regular spells and abilities.|nFor spells like \'Aspect of the Wild\' (BM Hunter), you need to sync cooldown with your party members.'],
-                                   108, 24)
+    options[1] = GUI:CreateEditbox(
+        frame,
+        L['SpellID'],
+        10,
+        -30,
+        L["Enter spell ID, must be a number.|nYou can get ID on spell's tooltip.|nSpell name is not supported."],
+        107,
+        24
+    )
+    options[2] = GUI:CreateEditbox(
+        frame,
+        L['Spell Cooldown'],
+        122,
+        -30,
+        L["Enter the spell's cooldown duration.|nParty watcher only support regular spells and abilities.|nFor spells like 'Aspect of the Wild' (BM Hunter), you need to sync cooldown with your party members."],
+        108,
+        24
+    )
 
     local scroll = GUI:CreateScroll(frame, 200, 440)
     scroll:ClearAllPoints()
@@ -1707,7 +2190,7 @@ function GUI:SetupPartyWatcher(parent)
     for class, value in pairs(C.PartySpellsDB) do
         local color = F:RgbToHex(F:ClassColor(class))
         local localClassName = _G.LOCALIZED_CLASS_NAMES_MALE[class]
-        menuList[index] = {text = color .. localClassName, notCheckable = true, hasArrow = true, menuList = {}}
+        menuList[index] = { text = color .. localClassName, notCheckable = true, hasArrow = true, menuList = {} }
 
         for spellID, duration in pairs(value) do
             local spellName, _, texture = GetSpellInfo(spellID)
@@ -1715,10 +2198,10 @@ function GUI:SetupPartyWatcher(parent)
                 table.insert(menuList[index].menuList, {
                     text = spellName,
                     icon = texture,
-                    tCoordLeft = .08,
-                    tCoordRight = .92,
-                    tCoordTop = .08,
-                    tCoordBottom = .92,
+                    tCoordLeft = 0.08,
+                    tCoordRight = 0.92,
+                    tCoordTop = 0.08,
+                    tCoordBottom = 0.92,
                     arg1 = spellID,
                     arg2 = duration,
                     func = AddSpellFromPreset,
@@ -1764,7 +2247,7 @@ function GUI:SetupDebuffWatcher(parent)
     local frame = panel.bg
     local bars, options = {}, {}
 
-    local iType = GUI:CreateDropdown(frame, L['Type'], 10, -30, {_G.DUNGEONS, _G.RAID, _G.OTHER}, nil, 107, 24)
+    local iType = GUI:CreateDropdown(frame, L['Type'], 10, -30, { _G.DUNGEONS, _G.RAID, _G.OTHER }, nil, 107, 24)
     for i = 1, 3 do
         iType.options[i]:HookScript('OnClick', function()
             for j = 1, 2 do
@@ -1791,17 +2274,31 @@ function GUI:SetupDebuffWatcher(parent)
         AddNewDungeon(dungeons, dungeonID)
     end
 
-    local raids = {[1] = EJ_GetInstanceInfo(1190), [2] = EJ_GetInstanceInfo(1193), [3] = EJ_GetInstanceInfo(1195)}
+    local raids = { [1] = EJ_GetInstanceInfo(1190), [2] = EJ_GetInstanceInfo(1193), [3] = EJ_GetInstanceInfo(1195) }
 
     options[1] = GUI:CreateDropdown(frame, _G.DUNGEONS, 123, -30, dungeons, nil, 107, 24)
     options[1]:Hide()
     options[2] = GUI:CreateDropdown(frame, _G.RAID, 123, -30, raids, nil, 107, 24)
     options[2]:Hide()
 
-    options[3] = GUI:CreateEditbox(frame, L['SpellID'], 10, -90, L['|nEnter spell ID, must be a number.|nYou can get ID on spell\'s tooltip.|nSpell name is not supported.'], 107, 24)
-    options[4] = GUI:CreateEditbox(frame, L['Priority'], 123, -90,
-                                   L['|nSpell\'s priority when visible.|nWhen multiple spells exist, it only remain the one that owns highest priority.|nDefault priority is 2, if you leave it blank.|nThe maximun priority is 6, and the icon would flash if you set so.'],
-                                   107, 24)
+    options[3] = GUI:CreateEditbox(
+        frame,
+        L['SpellID'],
+        10,
+        -90,
+        L["|nEnter spell ID, must be a number.|nYou can get ID on spell's tooltip.|nSpell name is not supported."],
+        107,
+        24
+    )
+    options[4] = GUI:CreateEditbox(
+        frame,
+        L['Priority'],
+        123,
+        -90,
+        L["|nSpell's priority when visible.|nWhen multiple spells exist, it only remain the one that owns highest priority.|nDefault priority is 2, if you leave it blank.|nThe maximun priority is 6, and the icon would flash if you set so."],
+        107,
+        24
+    )
 
     local function analyzePrio(priority)
         priority = priority or 2
@@ -1815,7 +2312,8 @@ function GUI:SetupDebuffWatcher(parent)
         print(spellID)
         print(C.DebuffWatcherList[instName][spellID])
         local localPrio = C.DebuffWatcherList[instName][spellID]
-        local savedPrio = _G.FREE_ADB['DebuffWatcherList'][instName] and _G.FREE_ADB['DebuffWatcherList'][instName][spellID]
+        local savedPrio = _G.FREE_ADB['DebuffWatcherList'][instName]
+            and _G.FREE_ADB['DebuffWatcherList'][instName][spellID]
         if (localPrio and savedPrio and savedPrio == 0) or (not localPrio and not savedPrio) then
             return false
         end
@@ -1886,7 +2384,7 @@ function GUI:SetupDebuffWatcher(parent)
     local function createBar(index, texture)
         local bar = CreateFrame('Frame', nil, scroll.child, 'BackdropTemplate')
         bar:SetSize(200, 30)
-        F.CreateBD(bar, .25)
+        F.CreateBD(bar, 0.25)
         bar.index = index
 
         local icon, close = GUI:CreateBarWidgets(bar, texture)
@@ -1917,7 +2415,7 @@ function GUI:SetupDebuffWatcher(parent)
         prioBox:SetTextInsets(10, 0, 0, 0)
         prioBox:SetMaxLetters(1)
         prioBox:SetTextColor(0, 1, 0)
-        prioBox.bg:SetBackdropColor(1, 1, 1, .3)
+        prioBox.bg:SetBackdropColor(1, 1, 1, 0.3)
         prioBox:HookScript('OnEscapePressed', function(self)
             self:SetText(bar.priority)
         end)
@@ -1930,7 +2428,12 @@ function GUI:SetupDebuffWatcher(parent)
             self:SetText(prio)
         end)
         prioBox.title = L['Priority']
-        F.AddTooltip(prioBox, 'ANCHOR_RIGHT', L['|nPriority limit in 1-6.|nPress ENTER KEY when you finish typing.'], 'BLUE')
+        F.AddTooltip(
+            prioBox,
+            'ANCHOR_RIGHT',
+            L['|nPriority limit in 1-6.|nPress ENTER KEY when you finish typing.'],
+            'BLUE'
+        )
         bar.prioBox = prioBox
 
         return bar
@@ -1956,7 +2459,12 @@ function GUI:SetupDebuffWatcher(parent)
 
         if C.DebuffWatcherList[instName] then
             for spellID, priority in pairs(C.DebuffWatcherList[instName]) do
-                if not (_G.FREE_ADB['DebuffWatcherList'][instName] and _G.FREE_ADB['DebuffWatcherList'][instName][spellID]) then
+                if
+                    not (
+                        _G.FREE_ADB['DebuffWatcherList'][instName]
+                        and _G.FREE_ADB['DebuffWatcherList'][instName][spellID]
+                    )
+                then
                     index = index + 1
                     applyData(index, instName, spellID, priority)
                 end
@@ -2027,8 +2535,8 @@ function GUI:SetupNameLength(parent)
     local db = C.CharacterSettings.Unitframe
 
     local datas = {
-        [1] = {key = 'PartyNameLength', value = db.PartyNameLength, text = L['Party Name Length'], min = 0, max = 10},
-        [2] = {key = 'RaidNameLength', value = db.RaidNameLength, text = L['Raid Name Length'], min = 0, max = 10},
+        [1] = { key = 'PartyNameLength', value = db.PartyNameLength, text = L['Party Name Length'], min = 0, max = 10 },
+        [2] = { key = 'RaidNameLength', value = db.RaidNameLength, text = L['Raid Name Length'], min = 0, max = 10 },
     }
 
     local offset = -10
@@ -2057,8 +2565,8 @@ function GUI:SetupPartyBuff(parent)
     local db = C.CharacterSettings.Unitframe
 
     local datas = {
-        [1] = {key = 'PartyBuffSize', value = db.PartyBuffSize, text = L['Icon Size'], min = 12, max = 36, step = 1},
-        [2] = {key = 'PartyBuffNum', value = db.PartyBuffNum, text = L['Icon Number'], min = 1, max = 6, step = 1},
+        [1] = { key = 'PartyBuffSize', value = db.PartyBuffSize, text = L['Icon Size'], min = 12, max = 36, step = 1 },
+        [2] = { key = 'PartyBuffNum', value = db.PartyBuffNum, text = L['Icon Number'], min = 1, max = 6, step = 1 },
     }
 
     local offset = -10
@@ -2083,8 +2591,22 @@ function GUI:SetupPartyDebuff(parent)
     local db = C.CharacterSettings.Unitframe
 
     local datas = {
-        [1] = {key = 'PartyDebuffSize', value = db.PartyDebuffSize, text = L['Icon Size'], min = 12, max = 36, step = 1},
-        [2] = {key = 'PartyDebuffNum', value = db.PartyDebuffNum, text = L['Icon Number'], min = 1, max = 6, step = 1},
+        [1] = {
+            key = 'PartyDebuffSize',
+            value = db.PartyDebuffSize,
+            text = L['Icon Size'],
+            min = 12,
+            max = 36,
+            step = 1,
+        },
+        [2] = {
+            key = 'PartyDebuffNum',
+            value = db.PartyDebuffNum,
+            text = L['Icon Number'],
+            min = 1,
+            max = 6,
+            step = 1,
+        },
     }
 
     local offset = -10
@@ -2109,8 +2631,8 @@ function GUI:SetupRaidBuff(parent)
     local db = C.CharacterSettings.Unitframe
 
     local datas = {
-        [1] = {key = 'RaidBuffSize', value = db.RaidBuffSize, text = L['Icon Size'], min = 12, max = 36, step = 1},
-        [2] = {key = 'RaidBuffNum', value = db.RaidBuffNum, text = L['Icon Number'], min = 1, max = 6, step = 1},
+        [1] = { key = 'RaidBuffSize', value = db.RaidBuffSize, text = L['Icon Size'], min = 12, max = 36, step = 1 },
+        [2] = { key = 'RaidBuffNum', value = db.RaidBuffNum, text = L['Icon Number'], min = 1, max = 6, step = 1 },
     }
 
     local offset = -10
@@ -2135,8 +2657,15 @@ function GUI:SetupRaidDebuff(parent)
     local db = C.CharacterSettings.Unitframe
 
     local datas = {
-        [1] = {key = 'RaidDebuffSize', value = db.RaidDebuffSize, text = L['Icon Size'], min = 12, max = 36, step = 1},
-        [2] = {key = 'RaidDebuffNum', value = db.RaidDebuffNum, text = L['Icon Number'], min = 1, max = 6, step = 1},
+        [1] = {
+            key = 'RaidDebuffSize',
+            value = db.RaidDebuffSize,
+            text = L['Icon Size'],
+            min = 12,
+            max = 36,
+            step = 1,
+        },
+        [2] = { key = 'RaidDebuffNum', value = db.RaidDebuffNum, text = L['Icon Number'], min = 1, max = 6, step = 1 },
     }
 
     local offset = -10
@@ -2160,10 +2689,10 @@ function GUI:SetupAutoScreenshot(parent)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
     local datas = {
-        [1] = {value = 'EarnedNewAchievement', text = L['Earned new achievement']},
-        [2] = {value = 'ChallengeModeCompleted', text = L['Mythic+ completed']},
-        [3] = {value = 'PlayerLevelUp', text = L['Level up']},
-        [4] = {value = 'PlayerDead', text = L['Dead']},
+        [1] = { value = 'EarnedNewAchievement', text = L['Earned new achievement'] },
+        [2] = { value = 'ChallengeModeCompleted', text = L['Mythic+ completed'] },
+        [3] = { value = 'PlayerLevelUp', text = L['Level up'] },
+        [4] = { value = 'PlayerDead', text = L['Dead'] },
     }
 
     local offset = -10
@@ -2187,18 +2716,18 @@ function GUI:SetupCustomClassColor(parent)
     local colors = _G.FREE_ADB.CustomClassColors
 
     local datas = {
-        [1] = {text = 'HUNTER', value = colors.HUNTER},
-        [2] = {text = 'WARRIOR', value = colors.WARRIOR},
-        [3] = {text = 'SHAMAN', value = colors.SHAMAN},
-        [4] = {text = 'MAGE', value = colors.MAGE},
-        [5] = {text = 'PRIEST', value = colors.PRIEST},
-        [6] = {text = 'DEATHKNIGHT', value = colors.DEATHKNIGHT},
-        [7] = {text = 'WARLOCK', value = colors.WARLOCK},
-        [8] = {text = 'DEMONHUNTER', value = colors.DEMONHUNTER},
-        [9] = {text = 'ROGUE', value = colors.ROGUE},
-        [10] = {text = 'DRUID', value = colors.DRUID},
-        [11] = {text = 'MONK', value = colors.MONK},
-        [12] = {text = 'PALADIN', value = colors.PALADIN},
+        [1] = { text = 'HUNTER', value = colors.HUNTER },
+        [2] = { text = 'WARRIOR', value = colors.WARRIOR },
+        [3] = { text = 'SHAMAN', value = colors.SHAMAN },
+        [4] = { text = 'MAGE', value = colors.MAGE },
+        [5] = { text = 'PRIEST', value = colors.PRIEST },
+        [6] = { text = 'DEATHKNIGHT', value = colors.DEATHKNIGHT },
+        [7] = { text = 'WARLOCK', value = colors.WARLOCK },
+        [8] = { text = 'DEMONHUNTER', value = colors.DEMONHUNTER },
+        [9] = { text = 'ROGUE', value = colors.ROGUE },
+        [10] = { text = 'DRUID', value = colors.DRUID },
+        [11] = { text = 'MONK', value = colors.MONK },
+        [12] = { text = 'PALADIN', value = colors.PALADIN },
     }
 
     local offset = -10
@@ -2225,10 +2754,29 @@ function GUI:SetupVignettingVisibility(parent)
     local scroll = GUI:CreateScroll(panel, 220, 540)
     local values = C.DB.General
 
-    local datas = {key = 'VignettingAlpha', value = values.VignettingAlpha, text = L['Vignetting Alpha'], min = 0, max = 1, step = .1}
+    local datas = {
+        key = 'VignettingAlpha',
+        value = values.VignettingAlpha,
+        text = L['Vignetting Alpha'],
+        min = 0,
+        max = 1,
+        step = 0.1,
+    }
 
     local offset = -30
-    CreateSlider(scroll, 'General', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset, UpdateVignettingVisibility)
+    CreateSlider(
+        scroll,
+        'General',
+        datas.key,
+        datas.text,
+        datas.min,
+        datas.max,
+        datas.step,
+        datas.value,
+        20,
+        offset,
+        UpdateVignettingVisibility
+    )
 end
 
 -- Chat
@@ -2246,7 +2794,10 @@ function GUI:SetupChatSize(parent)
     local panel = CreateExtraGUI(parent, guiName)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
-    local datas = {[1] = {key = 'Width', value = '300', text = L['Width'], min = 50, max = 500}, [2] = {key = 'Height', value = '100', text = L['Height'], min = 50, max = 500}}
+    local datas = {
+        [1] = { key = 'Width', value = '300', text = L['Width'], min = 50, max = 500 },
+        [2] = { key = 'Height', value = '100', text = L['Height'], min = 50, max = 500 },
+    }
 
     local offset = -10
     for _, v in ipairs(datas) do
@@ -2274,8 +2825,8 @@ function GUI:SetupChatTextFading(parent)
     local db = C.CharacterSettings.Chat
 
     local datas = {
-        [1] = {key = 'TimeVisible', value = db.TimeVisible, text = L['Time Visible'], min = 10, max = 300},
-        [2] = {key = 'FadeDuration', value = db.FadeDuration, text = L['Fade Duration'], min = 1, max = 6},
+        [1] = { key = 'TimeVisible', value = db.TimeVisible, text = L['Time Visible'], min = 10, max = 300 },
+        [2] = { key = 'FadeDuration', value = db.FadeDuration, text = L['Fade Duration'], min = 1, max = 6 },
     }
 
     local offset = -10
@@ -2298,11 +2849,11 @@ function GUI:SetupSimpleFloatingCombatText(parent)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
     local datas = {
-        [1] = {value = 'Incoming', text = L['Incoming']},
-        [2] = {value = 'Outgoing', text = L['Outgoing']},
-        [3] = {value = 'Pet', text = L['Pet']},
-        [4] = {value = 'Periodic', text = L['Periodic']},
-        [5] = {value = 'Merge', text = L['Merge']},
+        [1] = { value = 'Incoming', text = L['Incoming'] },
+        [2] = { value = 'Outgoing', text = L['Outgoing'] },
+        [3] = { value = 'Pet', text = L['Pet'] },
+        [4] = { value = 'Periodic', text = L['Periodic'] },
+        [5] = { value = 'Merge', text = L['Merge'] },
     }
 
     local offset = -10
@@ -2324,12 +2875,12 @@ function GUI:SetupSoundAlert(parent)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
     local datas = {
-        [1] = {value = 'Interrupt', text = L['Interrupt']},
-        [2] = {value = 'Dispel', text = L['Dispel']},
-        [3] = {value = 'SpellSteal', text = L['Spell Steal']},
-        [4] = {value = 'SpellMiss', text = L['Spell Miss']},
-        [5] = {value = 'LowHealth', text = L['Low Health']},
-        [6] = {value = 'LowMana', text = L['Low Mana']},
+        [1] = { value = 'Interrupt', text = L['Interrupt'] },
+        [2] = { value = 'Dispel', text = L['Dispel'] },
+        [3] = { value = 'SpellSteal', text = L['Spell Steal'] },
+        [4] = { value = 'SpellMiss', text = L['Spell Miss'] },
+        [5] = { value = 'LowHealth', text = L['Low Health'] },
+        [6] = { value = 'LowMana', text = L['Low Mana'] },
     }
 
     local offset = -10
@@ -2362,7 +2913,13 @@ function GUI:SetupAnnounceableSpells(parent)
     local scroll = GUI:CreateScroll(frame, 200, 480)
     scroll.box = GUI:CreateEditbox(frame, nil, 10, -10, nil, 110, 24)
     scroll.box.title = L['SpellID']
-    F.AddTooltip(scroll.box, 'ANCHOR_RIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE', true)
+    F.AddTooltip(
+        scroll.box,
+        'ANCHOR_RIGHT',
+        L['Fill in SpellID, must be a number.|nSpell name is not supported.'],
+        'BLUE',
+        true
+    )
 
     scroll.add = F.CreateButton(frame, 50, 24, _G.ADD)
     scroll.add:SetPoint('LEFT', scroll.box, 'RIGHT', 5, 0)
@@ -2418,15 +2975,21 @@ function GUI:SetupMapScale(parent)
     local db = C.CharacterSettings.Map
 
     local datas = {
-        [1] = {key = 'WorldMapScale', value = db.WorldMapScale, text = L['World Map Scale'], min = .5, max = 2},
-        [2] = {key = 'MaxWorldMapScale', value = db.MaxWorldMapScale, text = L['Max World Map Scale'], min = .5, max = 1},
-        [3] = {key = 'MinimapScale', value = db.MinimapScale, text = L['Minimap Scale'], min = .5, max = 2},
+        [1] = { key = 'WorldMapScale', value = db.WorldMapScale, text = L['World Map Scale'], min = 0.5, max = 2 },
+        [2] = {
+            key = 'MaxWorldMapScale',
+            value = db.MaxWorldMapScale,
+            text = L['Max World Map Scale'],
+            min = 0.5,
+            max = 1,
+        },
+        [3] = { key = 'MinimapScale', value = db.MinimapScale, text = L['Minimap Scale'], min = 0.5, max = 2 },
     }
 
     local offset = -10
     for _, v in ipairs(datas) do
         CreateGroupTitle(scroll, L['Map Scale'], offset)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, .1, v.value, 20, offset - 50, UpdateMapScale)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 0.1, v.value, 20, offset - 50, UpdateMapScale)
         offset = offset - 65
     end
 end

@@ -1,4 +1,4 @@
-﻿local _G = _G
+local _G = _G
 local unpack = unpack
 local select = select
 local C_ToyBox_GetToyInfo = C_ToyBox.GetToyInfo
@@ -17,7 +17,7 @@ local CustomFilterList = {
     [141446] = true, -- 宁神书卷
     [153646] = true, -- 静心圣典
     [153647] = true, -- 静心书卷
-    [161053] = true -- 水手咸饼干
+    [161053] = true, -- 水手咸饼干
 }
 
 local function isCustomFilter(item)
@@ -46,7 +46,9 @@ local function isItemJunk(item)
         return
     end
 
-    return (item.quality == _G.LE_ITEM_QUALITY_POOR or _G.FREE_ADB['CustomJunkList'][item.id]) and item.hasPrice and not INVENTORY:IsPetTrashCurrency(item.id)
+    return (item.quality == _G.LE_ITEM_QUALITY_POOR or _G.FREE_ADB['CustomJunkList'][item.id])
+        and item.hasPrice
+        and not INVENTORY:IsPetTrashCurrency(item.id)
 end
 
 local function isItemEquipSet(item)
@@ -80,7 +82,7 @@ end
 local iLvlClassIDs = {
     [_G.LE_ITEM_CLASS_GEM] = _G.LE_ITEM_GEM_ARTIFACTRELIC,
     [_G.LE_ITEM_CLASS_ARMOR] = 0,
-    [_G.LE_ITEM_CLASS_WEAPON] = 0
+    [_G.LE_ITEM_CLASS_WEAPON] = 0,
 }
 
 function INVENTORY:IsItemHasLevel(item)
@@ -102,7 +104,7 @@ end
 
 local consumableIDs = {
     [_G.LE_ITEM_CLASS_CONSUMABLE] = true,
-    [_G.LE_ITEM_CLASS_ITEM_ENHANCEMENT] = true
+    [_G.LE_ITEM_CLASS_ITEM_ENHANCEMENT] = true,
 }
 
 local function isItemConsumable(item)
@@ -134,12 +136,12 @@ local function isItemLegendary(item)
 end
 
 local isPetToy = {
-    [174925] = true
+    [174925] = true,
 }
 
 local collectionIDs = {
     [_G.LE_ITEM_MISCELLANEOUS_MOUNT] = _G.LE_ITEM_CLASS_MISCELLANEOUS,
-    [_G.LE_ITEM_MISCELLANEOUS_COMPANION_PET] = _G.LE_ITEM_CLASS_MISCELLANEOUS
+    [_G.LE_ITEM_MISCELLANEOUS_COMPANION_PET] = _G.LE_ITEM_CLASS_MISCELLANEOUS,
 }
 
 local function isMountOrPet(item)
@@ -155,7 +157,7 @@ local petTrashCurrenies = {
     [25402] = true,
     [36812] = true,
     [62072] = true,
-    [67410] = true
+    [67410] = true,
 }
 
 function INVENTORY:IsPetTrashCurrency(itemID)
@@ -244,7 +246,7 @@ local relicSpellIDs = {
     [356937] = true,
     [356938] = true,
     [356939] = true,
-    [356940] = true
+    [356940] = true,
 }
 
 local function isKorthiaRelicByID(itemID)

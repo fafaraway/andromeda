@@ -141,8 +141,7 @@ local function UpdateUIScale()
     end
 end
 
-local function SetupActionbars()
-end
+local function SetupActionbars() end
 
 local function SetupChatFrame()
     F:GetModule('Chat'):UpdateChatSize()
@@ -175,8 +174,7 @@ local function SetupDBM()
     -- end
 end
 
-local function SetupAddons()
-end
+local function SetupAddons() end
 
 function INSTALL:HelloWorld()
     local f = CreateFrame('Frame', 'FreeUI_InstallFrame', _G.UIParent, 'BackdropTemplate')
@@ -186,19 +184,19 @@ function INSTALL:HelloWorld()
     F.SetBD(f)
 
     f.logo = F.CreateFS(f, C.ASSET_PATH .. 'fonts\\header.ttf', 22, nil, C.ADDON_NAME, nil, true, 'TOP', 0, -4)
-    f.desc = F.CreateFS(f, C.Assets.Font.Regular, 10, nil, 'installation', {.7, .7, .7}, true, 'TOP', 0, -30)
+    f.desc = F.CreateFS(f, C.Assets.Font.Regular, 10, nil, 'installation', { 0.7, 0.7, 0.7 }, true, 'TOP', 0, -30)
 
-    local lineLeft = F.SetGradient(f, 'H', .7, .7, .7, 0, .7, 120, C.MULT)
+    local lineLeft = F.SetGradient(f, 'H', 0.7, 0.7, 0.7, 0, 0.7, 120, C.MULT)
     lineLeft:SetPoint('TOP', -60, -26)
 
-    local lineRight = F.SetGradient(f, 'H', .7, .7, .7, .7, 0, 120, C.MULT)
+    local lineRight = F.SetGradient(f, 'H', 0.7, 0.7, 0.7, 0.7, 0, 120, C.MULT)
     lineRight:SetPoint('TOP', 60, -26)
 
     f.body = CreateFrame('Frame', nil, f, 'BackdropTemplate')
     f.body:SetSize(380, 304)
     f.body:SetPoint('TOPLEFT', 10, -50)
     f.body.__bg = F.CreateBDFrame(f.body)
-    f.body.__bg:SetBackdropColor(.04, .04, .04, .25)
+    f.body.__bg:SetBackdropColor(0.04, 0.04, 0.04, 0.25)
 
     local headerText = F.CreateFS(f.body, C.Assets.Font.Regular, 18, nil, nil, 'YELLOW', true, 'TOPLEFT', 10, -20)
     headerText:SetWidth(360)
@@ -215,7 +213,7 @@ function INSTALL:HelloWorld()
     progressBar:Hide()
     F:SmoothBar(progressBar)
 
-    F.CreateBDFrame(progressBar, .3)
+    F.CreateBDFrame(progressBar, 0.3)
     progressBar.shadow = F.CreateSD(progressBar)
     if progressBar.shadow then
         progressBar.shadow:SetBackdropBorderColor(C.r, C.g, C.b)
@@ -235,12 +233,9 @@ function INSTALL:HelloWorld()
 
     local closeButton = CreateFrame('Button', 'FreeUI_Install_CloseButton', f, 'UIPanelCloseButton')
     closeButton:SetPoint('TOPRIGHT', f, 'TOPRIGHT')
-    closeButton:SetScript(
-        'OnClick',
-        function()
-            f:Hide()
-        end
-    )
+    closeButton:SetScript('OnClick', function()
+        f:Hide()
+    end)
     F.ReskinClose(closeButton)
 
     local step6 = function()
@@ -249,39 +244,35 @@ function INSTALL:HelloWorld()
         headerText:SetText(L['Success!'])
         bodyText:SetText(
             F:StyleAddonName(
-                L[
-                    'The installation has completed successfully.|n|nPlease click the Finish button below to reload the interface.|n|nKeep in mind, you can enter |cffe9c55d/free|r to get detailed help or directly enter |cffe9c55d/free config|r to open the config panel and change various settings.'
-                ]
+                L['The installation has completed successfully.|n|nPlease click the Finish button below to reload the interface.|n|nKeep in mind, you can enter |cffe9c55d/free|r to get detailed help or directly enter |cffe9c55d/free config|r to open the config panel and change various settings.']
             )
         )
         progressBarText:SetText('6/6')
         leftButton:Hide()
         rightButton:SetText(L['Finish'])
 
-        rightButton:SetScript(
-            'OnClick',
-            function()
-                C.DB.InstallationComplete = true
-                _G.ReloadUI()
-            end
-        )
+        rightButton:SetScript('OnClick', function()
+            C.DB.InstallationComplete = true
+            _G.ReloadUI()
+        end)
     end
 
     local step5 = function()
         progressBar:SetValue(500)
         headerText:SetText(L['Addons'])
-        bodyText:SetText(F:StyleAddonName(L['This step will adjust the settings of some addons to match the interface style and layout of %AddonName%.']))
+        bodyText:SetText(
+            F:StyleAddonName(
+                L['This step will adjust the settings of some addons to match the interface style and layout of %AddonName%.']
+            )
+        )
         progressBarText:SetText('5/6')
 
         leftButton:SetScript('OnClick', step6)
-        rightButton:SetScript(
-            'OnClick',
-            function()
-                SetupDBM()
-                SetupAddons()
-                step6()
-            end
-        )
+        rightButton:SetScript('OnClick', function()
+            SetupDBM()
+            SetupAddons()
+            step6()
+        end)
     end
 
     local step4 = function()
@@ -291,13 +282,10 @@ function INSTALL:HelloWorld()
         progressBarText:SetText('4/6')
 
         leftButton:SetScript('OnClick', step5)
-        rightButton:SetScript(
-            'OnClick',
-            function()
-                SetupActionbars()
-                step5()
-            end
-        )
+        rightButton:SetScript('OnClick', function()
+            SetupActionbars()
+            step5()
+        end)
     end
 
     local step3 = function()
@@ -307,13 +295,10 @@ function INSTALL:HelloWorld()
         progressBarText:SetText('3/6')
 
         leftButton:SetScript('OnClick', step4)
-        rightButton:SetScript(
-            'OnClick',
-            function()
-                SetupChatFrame()
-                step4()
-            end
-        )
+        rightButton:SetScript('OnClick', function()
+            SetupChatFrame()
+            step4()
+        end)
     end
 
     local step2 = function()
@@ -323,15 +308,12 @@ function INSTALL:HelloWorld()
         progressBarText:SetText('2/6')
 
         leftButton:SetScript('OnClick', step3)
-        rightButton:SetScript(
-            'OnClick',
-            function()
-                UpdateUIScale()
-                F.SetupUIScale(true)
-                F.SetupUIScale()
-                step3()
-            end
-        )
+        rightButton:SetScript('OnClick', function()
+            UpdateUIScale()
+            F.SetupUIScale(true)
+            F.SetupUIScale()
+            step3()
+        end)
     end
 
     local step1 = function()
@@ -343,9 +325,7 @@ function INSTALL:HelloWorld()
         headerText:SetText(L['Basic Settings'])
         bodyText:SetText(
             F:StyleAddonName(
-                L[
-                    'These installation steps will adjust various suitable settings for %AddonName%.|n|nThe first step will adjust some |cffe9c55dCVars|r settings.|n|nClick the continue button below to apply the settings, or click the skip button to skip these settings.'
-                ]
+                L['These installation steps will adjust various suitable settings for %AddonName%.|n|nThe first step will adjust some |cffe9c55dCVars|r settings.|n|nClick the continue button below to apply the settings, or click the skip button to skip these settings.']
             )
         )
         progressBarText:SetText('1/6')
@@ -355,27 +335,25 @@ function INSTALL:HelloWorld()
         rightButton:SetText(L['Continue'])
 
         leftButton:SetScript('OnClick', step2)
-        rightButton:SetScript(
-            'OnClick',
-            function()
-                SetupCVars()
-                step2()
-            end
-        )
+        rightButton:SetScript('OnClick', function()
+            SetupCVars()
+            step2()
+        end)
     end
 
     headerText:SetText(L['Hello'])
-    bodyText:SetText(F:StyleAddonName(L['Welcome to %ADDONNAME%!|n|nYou need to adjust some settings before you start using it.|n|nClick the install button to enter the installation step.']))
+    bodyText:SetText(
+        F:StyleAddonName(
+            L['Welcome to %ADDONNAME%!|n|nYou need to adjust some settings before you start using it.|n|nClick the install button to enter the installation step.']
+        )
+    )
 
     leftButton:SetText(L['Cancel'])
     rightButton:SetText(L['Install'])
 
-    leftButton:SetScript(
-        'OnClick',
-        function()
-            f:Hide()
-        end
-    )
+    leftButton:SetScript('OnClick', function()
+        f:Hide()
+    end)
     rightButton:SetScript('OnClick', step1)
 end
 

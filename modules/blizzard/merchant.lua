@@ -10,10 +10,16 @@ function BLIZZARD:UpdateMerchantItemPos()
         button:ClearAllPoints()
 
         if (i % OLD_MERCHANT_ITEMS_PER_PAGE) == 1 then
-            if (i == 1) then
+            if i == 1 then
                 button:SetPoint('TOPLEFT', _G.MerchantFrame, 'TOPLEFT', 24, -70)
             else
-                button:SetPoint('TOPLEFT', _G['MerchantItem' .. (i - (OLD_MERCHANT_ITEMS_PER_PAGE - 1))], 'TOPRIGHT', 12, 0)
+                button:SetPoint(
+                    'TOPLEFT',
+                    _G['MerchantItem' .. (i - (OLD_MERCHANT_ITEMS_PER_PAGE - 1))],
+                    'TOPRIGHT',
+                    12,
+                    0
+                )
             end
         else
             if (i % 2) == 1 then
@@ -36,7 +42,7 @@ function BLIZZARD:UpdateBuybackItemPos()
             if i == 1 then
                 button:SetPoint('TOPLEFT', _G.MerchantFrame, 'TOPLEFT', 64, -105)
             else
-                if ((i % 3) == 1) then
+                if (i % 3) == 1 then
                     button:SetPoint('TOPLEFT', _G['MerchantItem' .. (i - 3)], 'BOTTOMLEFT', 0, -30)
                 else
                     button:SetPoint('TOPLEFT', _G['MerchantItem' .. (i - 1)], 'TOPRIGHT', 50, 0)
@@ -59,13 +65,13 @@ function BLIZZARD:RestyleElemennts()
         local moneyFrame = _G['MerchantItem' .. i .. 'MoneyFrame']
 
         F.StripTextures(item)
-        F.CreateBDFrame(item, .25)
+        F.CreateBDFrame(item, 0.25)
 
         F.StripTextures(button)
         button:ClearAllPoints()
         button:SetPoint('LEFT', item, 4, 0)
         local hl = button:GetHighlightTexture()
-        hl:SetColorTexture(1, 1, 1, .25)
+        hl:SetColorTexture(1, 1, 1, 0.25)
         hl:SetInside()
 
         icon:SetInside()
@@ -99,7 +105,7 @@ function BLIZZARD:EnhancedMerchant()
     _G.MerchantFrame:SetWidth(690)
 
     for i = 1, _G.MERCHANT_ITEMS_PER_PAGE do
-        if (not _G['MerchantItem' .. i]) then
+        if not _G['MerchantItem' .. i] then
             CreateFrame('Frame', 'MerchantItem' .. i, _G.MerchantFrame, 'MerchantItemTemplate')
         end
     end
@@ -123,4 +129,3 @@ function BLIZZARD:EnhancedMerchant()
 
     BLIZZARD:RestyleElemennts()
 end
-

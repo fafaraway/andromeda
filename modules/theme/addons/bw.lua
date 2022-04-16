@@ -77,7 +77,7 @@ local styleData = {
     fontOutline = 'OUTLINE',
     GetStyleName = function()
         return 'FreeUI'
-    end
+    end,
 }
 
 function THEME:RegisterBigWigsStyle()
@@ -93,18 +93,14 @@ function THEME:RegisterBigWigsStyle()
 
     -- Force to use FreeUI style
     local pending = true
-    hooksecurefunc(
-        _G.BigWigsAPI,
-        'GetBarStyle',
-        function()
-            if pending then
-                _G.BigWigsAPI.GetBarStyle = function()
-                    return styleData
-                end
-                pending = nil
+    hooksecurefunc(_G.BigWigsAPI, 'GetBarStyle', function()
+        if pending then
+            _G.BigWigsAPI.GetBarStyle = function()
+                return styleData
             end
+            pending = nil
         end
-    )
+    end)
 end
 
 function THEME:ReskinBigWigs()
@@ -113,19 +109,15 @@ function THEME:ReskinBigWigs()
     end
 
     if _G.BigWigsLoader and _G.BigWigsLoader.RegisterMessage then
-        _G.BigWigsLoader.RegisterMessage(
-            _,
-            'BigWigs_FrameCreated',
-            function(_, frame, name)
-                if name == 'QueueTimer' and not frame.styled then
-                    F.StripTextures(frame)
-                    frame:SetStatusBarTexture(C.Assets.Statusbar.Normal)
-                    F.SetBD(frame)
+        _G.BigWigsLoader.RegisterMessage(_, 'BigWigs_FrameCreated', function(_, frame, name)
+            if name == 'QueueTimer' and not frame.styled then
+                F.StripTextures(frame)
+                frame:SetStatusBarTexture(C.Assets.Statusbar.Normal)
+                F.SetBD(frame)
 
-                    frame.styled = true
-                end
+                frame.styled = true
             end
-        )
+        end)
     end
 end
 

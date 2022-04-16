@@ -2,7 +2,7 @@ local F, C = unpack(select(2, ...))
 
 local function UpdateNewGlow(self)
     if self.NewOutline:IsShown() then
-        self.bg:SetBackdropBorderColor(0, .7, .08)
+        self.bg:SetBackdropBorderColor(0, 0.7, 0.08)
     else
         self.bg:SetBackdropBorderColor(0, 0, 0)
     end
@@ -10,7 +10,7 @@ end
 
 local function UpdateIconGlow(self, show)
     if show then
-        self.__owner.bg:SetBackdropBorderColor(0, .7, .08)
+        self.__owner.bg:SetBackdropBorderColor(0, 0.7, 0.08)
     else
         self.__owner.bg:SetBackdropBorderColor(0, 0, 0)
     end
@@ -23,12 +23,12 @@ local function ReskinScrollChild(self)
         if icon and not icon.bg then
             icon.bg = F.ReskinIcon(icon)
             child.Background:Hide()
-            child.bg = F.CreateBDFrame(child.Background, .25)
+            child.bg = F.CreateBDFrame(child.Background, 0.25)
 
             F.Reskin(child.DeleteButton)
             child.DeleteButton:SetSize(20, 20)
             child.FrameHighlight:SetInside(child.bg)
-            child.FrameHighlight:SetColorTexture(1, 1, 1, .15) -- 0.25 might be too much
+            child.FrameHighlight:SetColorTexture(1, 1, 1, 0.15) -- 0.25 might be too much
 
             child.NewOutline:SetTexture('')
             child.BindingText:SetFontObject(_G.Game12Font)
@@ -44,7 +44,7 @@ end
 
 local function UpdateButtonSelection(button, isSelected)
     if isSelected then
-        button.bg:SetBackdropBorderColor(1, .8, 0)
+        button.bg:SetBackdropBorderColor(1, 0.8, 0)
     else
         button.bg:SetBackdropBorderColor(0, 0, 0)
     end
@@ -55,7 +55,7 @@ local function ReskinPortraitIcon(button, texture)
     button.Portrait:SetTexture(texture)
     button.bg = F.ReskinIcon(button.Portrait)
     button.bg:SetBackdropColor(0, 0, 0)
-    button.Highlight:SetColorTexture(1, 1, 1, .25)
+    button.Highlight:SetColorTexture(1, 1, 1, 0.25)
     button.Highlight:SetInside(button.bg)
     hooksecurefunc(button, 'SetSelectedState', UpdateButtonSelection)
 end

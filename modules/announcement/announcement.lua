@@ -51,7 +51,8 @@ function ANNOUNCEMENT:OnEvent()
         return true
     end
 
-    local _, eventType, _, srcGUID, srcName, srcFlags, _, _, destName, _, _, spellID, _, _, extraSpellID = CombatLogGetCurrentEventInfo()
+    local _, eventType, _, srcGUID, srcName, srcFlags, _, _, destName, _, _, spellID, _, _, extraSpellID =
+        CombatLogGetCurrentEventInfo()
 
     if not srcGUID or srcName == destName then
         return
@@ -64,7 +65,10 @@ function ANNOUNCEMENT:OnEvent()
     if eventType == 'SPELL_MISSED' and C.DB.Announcement.Reflect then
         local spellID, _, _, missType = select(12, CombatLogGetCurrentEventInfo())
         if missType == 'REFLECT' and destName == C.NAME then
-            SendChatMessage(string.format(_G.COMBAT_TEXT_REFLECT .. ' %s %s', arrowStr, GetSpellLink(spellID)), GetChannel())
+            SendChatMessage(
+                string.format(_G.COMBAT_TEXT_REFLECT .. ' %s %s', arrowStr, GetSpellLink(spellID)),
+                GetChannel()
+            )
         end
     end
 
@@ -75,17 +79,37 @@ function ANNOUNCEMENT:OnEvent()
     if eventType == 'SPELL_CAST_SUCCESS' then
         if ANNOUNCEMENT.AnnounceableSpellsList[spellID] and C.DB.Announcement.Spells then
             if destName == nil then
-                SendChatMessage(string.format(_G.ACTION_SPELL_CAST_SUCCESS .. ' %s', GetSpellLink(spellID)), GetChannel())
+                SendChatMessage(
+                    string.format(_G.ACTION_SPELL_CAST_SUCCESS .. ' %s', GetSpellLink(spellID)),
+                    GetChannel()
+                )
             else
-                SendChatMessage(string.format(_G.ACTION_SPELL_CAST_SUCCESS .. ' %s %s %s', GetSpellLink(spellID), arrowStr, destName), GetChannel())
+                SendChatMessage(
+                    string.format(
+                        _G.ACTION_SPELL_CAST_SUCCESS .. ' %s %s %s',
+                        GetSpellLink(spellID),
+                        arrowStr,
+                        destName
+                    ),
+                    GetChannel()
+                )
             end
         end
     elseif eventType == 'SPELL_INTERRUPT' and C.DB.Announcement.Interrupt then
-        SendChatMessage(string.format(_G.ACTION_SPELL_INTERRUPT .. ' %s %s', arrowStr, GetSpellLink(extraSpellID)), GetChannel())
+        SendChatMessage(
+            string.format(_G.ACTION_SPELL_INTERRUPT .. ' %s %s', arrowStr, GetSpellLink(extraSpellID)),
+            GetChannel()
+        )
     elseif eventType == 'SPELL_DISPEL' and C.DB.Announcement.Dispel then
-        SendChatMessage(string.format(_G.ACTION_SPELL_DISPEL .. ' %s %s', arrowStr, GetSpellLink(extraSpellID)), GetChannel())
+        SendChatMessage(
+            string.format(_G.ACTION_SPELL_DISPEL .. ' %s %s', arrowStr, GetSpellLink(extraSpellID)),
+            GetChannel()
+        )
     elseif eventType == 'SPELL_STOLEN' and C.DB.Announcement.Stolen then
-        SendChatMessage(string.format(_G.ACTION_SPELL_STOLEN .. ' %s %s', arrowStr, GetSpellLink(extraSpellID)), GetChannel())
+        SendChatMessage(
+            string.format(_G.ACTION_SPELL_STOLEN .. ' %s %s', arrowStr, GetSpellLink(extraSpellID)),
+            GetChannel()
+        )
     end
 end
 

@@ -7,7 +7,7 @@ _G.StaticPopupDialogs.FREEUI_RELOADUI_REQUIRED = {
     OnAccept = function()
         ReloadUI()
     end,
-    whileDead = 1
+    whileDead = 1,
 }
 
 -- Layout
@@ -21,7 +21,7 @@ _G.StaticPopupDialogs.FREEUI_RESET_LAYOUT = {
     end,
     timeout = 0,
     whileDead = 1,
-    hideOnEscape = false
+    hideOnEscape = false,
 }
 
 -- GUI
@@ -34,7 +34,7 @@ _G.StaticPopupDialogs.FREEUI_RELOADUI = {
     end,
     timeout = 0,
     whileDead = 1,
-    hideOnEscape = true
+    hideOnEscape = true,
 }
 
 _G.StaticPopupDialogs.FREEUI_RESET_MAJOR_SPELLS = {
@@ -45,7 +45,7 @@ _G.StaticPopupDialogs.FREEUI_RESET_MAJOR_SPELLS = {
         _G.FREE_ADB['NPMajorSpells'] = {}
         _G.ReloadUI()
     end,
-    whileDead = 1
+    whileDead = 1,
 }
 
 _G.StaticPopupDialogs.FREEUI_RESET_ANNOUNCEABLE_SPELLS = {
@@ -56,7 +56,7 @@ _G.StaticPopupDialogs.FREEUI_RESET_ANNOUNCEABLE_SPELLS = {
         _G.FREE_ADB['AnnounceableSpellsList'] = {}
         _G.ReloadUI()
     end,
-    whileDead = 1
+    whileDead = 1,
 }
 
 _G.StaticPopupDialogs.FREEUI_RESET_PARTY_SPELLS = {
@@ -67,7 +67,7 @@ _G.StaticPopupDialogs.FREEUI_RESET_PARTY_SPELLS = {
         table.wipe(_G.FREE_ADB['PartySpellsList'])
         _G.ReloadUI()
     end,
-    whileDead = 1
+    whileDead = 1,
 }
 
 _G.StaticPopupDialogs.FREEUI_RESET_RAID_DEBUFFS = {
@@ -78,7 +78,7 @@ _G.StaticPopupDialogs.FREEUI_RESET_RAID_DEBUFFS = {
         _G.FREE_ADB['DebuffWatcherList'] = {}
         _G.ReloadUI()
     end,
-    whileDead = 1
+    whileDead = 1,
 }
 
 -- Profile Management
@@ -93,7 +93,7 @@ _G.StaticPopupDialogs.FREEUI_IMPORT_PROFILE = {
     end,
     timeout = 0,
     whileDead = 1,
-    hideOnEscape = false
+    hideOnEscape = false,
 }
 
 _G.StaticPopupDialogs.FREEUI_RESET_ALL = {
@@ -108,7 +108,7 @@ _G.StaticPopupDialogs.FREEUI_RESET_ALL = {
     end,
     timeout = 0,
     whileDead = 1,
-    hideOnEscape = false
+    hideOnEscape = false,
 }
 
 _G.StaticPopupDialogs.FREEUI_RESET_CURRENT_PROFILE = {
@@ -121,7 +121,7 @@ _G.StaticPopupDialogs.FREEUI_RESET_CURRENT_PROFILE = {
     end,
     timeout = 0,
     whileDead = 1,
-    hideOnEscape = false
+    hideOnEscape = false,
 }
 
 _G.StaticPopupDialogs.FREEUI_APPLY_PROFILE = {
@@ -135,7 +135,7 @@ _G.StaticPopupDialogs.FREEUI_APPLY_PROFILE = {
     end,
     timeout = 0,
     whileDead = 1,
-    hideOnEscape = false
+    hideOnEscape = false,
 }
 
 _G.StaticPopupDialogs.FREEUI_REPLACE_CURRENT_PROFILE = {
@@ -156,7 +156,7 @@ _G.StaticPopupDialogs.FREEUI_REPLACE_CURRENT_PROFILE = {
     end,
     timeout = 0,
     whileDead = 1,
-    hideOnEscape = false
+    hideOnEscape = false,
 }
 
 _G.StaticPopupDialogs.FREEUI_REPLACE_SELECTED_PROFILE = {
@@ -173,7 +173,7 @@ _G.StaticPopupDialogs.FREEUI_REPLACE_SELECTED_PROFILE = {
     end,
     timeout = 0,
     whileDead = 1,
-    hideOnEscape = false
+    hideOnEscape = false,
 }
 
 _G.StaticPopupDialogs.FREEUI_DELETE_UNIT_PROFILE = {
@@ -191,21 +191,27 @@ _G.StaticPopupDialogs.FREEUI_DELETE_UNIT_PROFILE = {
         local r, g, b
         local class = self.text.text_arg2
         if class == 'NONE' then
-            r, g, b = .5, .5, .5
+            r, g, b = 0.5, 0.5, 0.5
         else
             r, g, b = F:ClassColor(class)
         end
-        self.text:SetText(string.format(C.RED_COLOR .. L['Are you sure to delete %s%s|r profile?'], F:RgbToHex(r, g, b), self.text.text_arg1))
+        self.text:SetText(
+            string.format(
+                C.RED_COLOR .. L['Are you sure to delete %s%s|r profile?'],
+                F:RgbToHex(r, g, b),
+                self.text.text_arg1
+            )
+        )
     end,
     timeout = 0,
     whileDead = 1,
-    hideOnEscape = false
+    hideOnEscape = false,
 }
 
 -- Infobar Gold Statistics
 local crossRealms = GetAutoCompleteRealms()
 if not crossRealms or #crossRealms == 0 then
-    crossRealms = {[1] = C.REALM}
+    crossRealms = { [1] = C.REALM }
 end
 
 _G.StaticPopupDialogs.FREEUI_RESET_GOLD = {
@@ -219,11 +225,11 @@ _G.StaticPopupDialogs.FREEUI_RESET_GOLD = {
             end
         end
 
-        _G.FREE_ADB['GoldStatistic'][C.REALM][C.NAME] = {GetMoney(), C.CLASS}
+        _G.FREE_ADB['GoldStatistic'][C.REALM][C.NAME] = { GetMoney(), C.CLASS }
     end,
     timeout = 0,
     whileDead = 1,
-    hideOnEscape = true
+    hideOnEscape = true,
 }
 
 -- Inventory Custom Junk List
@@ -236,7 +242,7 @@ _G.StaticPopupDialogs.FREEUI_RESET_JUNK_LIST = {
     end,
     timeout = 0,
     whileDead = 1,
-    hideOnEscape = true
+    hideOnEscape = true,
 }
 
 -- Group Tool
@@ -267,5 +273,5 @@ _G.StaticPopupDialogs['FREEUI_DISBAND_GROUP'] = {
         C_PartyInfo.LeaveParty()
     end,
     timeout = 0,
-    whileDead = 1
+    whileDead = 1,
 }

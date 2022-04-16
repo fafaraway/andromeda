@@ -8,22 +8,22 @@ local onlyCurrentZone = true
 local maxDistanceYards = 1e4 -- needs review
 
 -- Warlords of Draenor intro quest items which inspired this addon
-local blacklist = {[113191] = true, [110799] = true, [109164] = true}
+local blacklist = { [113191] = true, [110799] = true, [109164] = true }
 
 -- quests that doesn't have a defined area on the map (questID = bool/mapID/{mapID,...})
 -- these have low priority during collision
 local inaccurateQuestAreas = {
-    [11731] = {84, 87, 103}, -- alliance capitals (missing Darnassus)
-    [11921] = {84, 87, 103}, -- alliance capitals (missing Darnassus)
-    [11922] = {18, 85, 88, 110}, -- horde capitals
-    [11926] = {18, 85, 88, 110}, -- horde capitals
+    [11731] = { 84, 87, 103 }, -- alliance capitals (missing Darnassus)
+    [11921] = { 84, 87, 103 }, -- alliance capitals (missing Darnassus)
+    [11922] = { 18, 85, 88, 110 }, -- horde capitals
+    [11926] = { 18, 85, 88, 110 }, -- horde capitals
     [12779] = 124, -- Scarlet Enclave (Death Knight starting zone)
     [13998] = 11, -- Northern Barrens
     [14246] = 66, -- Desolace
     [24440] = 7, -- Mulgore
     [24456] = 7, -- Mulgore
     [24524] = 7, -- Mulgore
-    [24629] = {84, 85, 87, 88, 103, 110}, -- major capitals (missing Darnassus & Undercity)
+    [24629] = { 84, 85, 87, 88, 103, 110 }, -- major capitals (missing Darnassus & Undercity)
     [25577] = 198, -- Mount Hyjal
     [29506] = 407, -- Darkmoon Island
     [29510] = 407, -- Darkmoon Island
@@ -39,7 +39,7 @@ local inaccurateQuestAreas = {
     [34461] = 590, -- Horde Garrison
     [59809] = true,
     [60004] = 118, -- 前夕任务：英勇之举
-    [63971] = 1543 -- 法夜突袭，蜗牛践踏
+    [63971] = 1543, -- 法夜突袭，蜗牛践踏
 }
 
 -- items that should be used for a quest but aren't (questID = itemID)
@@ -87,7 +87,7 @@ local questItems = {
     [59809] = 177904, -- Night Fae Covenant
     [60188] = 178464, -- Night Fae Covenant
     [60649] = 180170, -- Ardenweald
-    [60609] = 180008 -- Ardenweald
+    [60609] = 180008, -- Ardenweald
 }
 
 -- items that need to be shown, but not. (itemID = bool/mapID)
@@ -96,7 +96,7 @@ local completeShownItems = {
     [60273] = 50, -- Northern Stranglethorn Vale
     [52853] = true, -- Mount Hyjal
     [41058] = 120, -- Storm Peaks
-    [177904] = true
+    [177904] = true,
 }
 
 -- items that need to be hidden, but not. (itemID = bool/mapID)
@@ -105,10 +105,15 @@ local completeHiddenItems = {
     [184876] = true, -- Cohesion Crystal
     [186199] = true, -- Lady Moonberry's Wand
     [187012] = true, -- Unbalanced Riftstone
-    [187516] = true -- 菲历姆的锻炉阀门
+    [187516] = true, -- 菲历姆的锻炉阀门
 }
 
-local ExtraQuestButton = CreateFrame('Button', 'ExtraQuestButton', _G.UIParent, 'SecureActionButtonTemplate, SecureHandlerStateTemplate, SecureHandlerAttributeTemplate')
+local ExtraQuestButton = CreateFrame(
+    'Button',
+    'ExtraQuestButton',
+    _G.UIParent,
+    'SecureActionButtonTemplate, SecureHandlerStateTemplate, SecureHandlerAttributeTemplate'
+)
 ExtraQuestButton:SetMovable(true)
 ExtraQuestButton:RegisterEvent('PLAYER_LOGIN')
 ExtraQuestButton:Hide()
@@ -220,7 +225,7 @@ function ExtraQuestButton:PLAYER_LOGIN()
         if _G.FreeUI_ActionBarExtra then
             self:SetPoint('CENTER', _G.FreeUI_ActionBarExtra)
         else
-            F.Mover(self, L['Quest Item Button'], 'QuestButton', {'CENTER', _G.UIParent, 'CENTER', 0, 300})
+            F.Mover(self, L['Quest Item Button'], 'QuestButton', { 'CENTER', _G.UIParent, 'CENTER', 0, 300 })
         end
     end
 
@@ -236,7 +241,7 @@ function ExtraQuestButton:PLAYER_LOGIN()
     Icon:SetInside()
     F.ReskinIcon(Icon, true)
     self.HL = self:CreateTexture(nil, 'HIGHLIGHT')
-    self.HL:SetColorTexture(1, 1, 1, .25)
+    self.HL:SetColorTexture(1, 1, 1, 0.25)
     self.HL:SetAllPoints(Icon)
     self.Icon = Icon
 
@@ -290,11 +295,11 @@ ExtraQuestButton:SetScript('OnUpdate', function(self, elapsed)
             local inRange = IsItemInRange(self.itemLink, 'target')
             if HotKey:GetText() == _G.RANGE_INDICATOR then
                 if inRange == false then
-                    HotKey:SetTextColor(1, .1, .1)
+                    HotKey:SetTextColor(1, 0.1, 0.1)
                     HotKey:Show()
-                    Icon:SetVertexColor(1, .1, .1)
+                    Icon:SetVertexColor(1, 0.1, 0.1)
                 elseif inRange then
-                    HotKey:SetTextColor(.6, .6, .6)
+                    HotKey:SetTextColor(0.6, 0.6, 0.6)
                     HotKey:Show()
                     Icon:SetVertexColor(1, 1, 1)
                 else
@@ -302,10 +307,10 @@ ExtraQuestButton:SetScript('OnUpdate', function(self, elapsed)
                 end
             else
                 if inRange == false then
-                    HotKey:SetTextColor(1, .1, .1)
-                    Icon:SetVertexColor(1, .1, .1)
+                    HotKey:SetTextColor(1, 0.1, 0.1)
+                    Icon:SetVertexColor(1, 0.1, 0.1)
                 else
-                    HotKey:SetTextColor(.6, .6, .6)
+                    HotKey:SetTextColor(0.6, 0.6, 0.6)
                     Icon:SetVertexColor(1, 1, 1)
                 end
             end
@@ -481,7 +486,12 @@ local function GetClosestQuestItem()
         for index = 1, C_QuestLog.GetNumQuestLogEntries() do
             local info = C_QuestLog.GetInfo(index)
             local questID = info and info.questID
-            if questID and not info.isHeader and (not info.isHidden or C_QuestLog.IsWorldQuest(questID)) and QuestHasPOIInfo(questID) then
+            if
+                questID
+                and not info.isHeader
+                and (not info.isHidden or C_QuestLog.IsWorldQuest(questID))
+                and QuestHasPOIInfo(questID)
+            then
                 local distance, itemLink = GetQuestDistanceWithItem(questID)
                 if distance and distance <= closestDistance then
                     closestDistance = distance

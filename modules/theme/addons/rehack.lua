@@ -35,8 +35,8 @@ function THEME:ReskinREHack()
         F.SetBD(_G.HackEditFrame)
         F.ReskinClose(_G.HackEditFrameClose)
         F.ReskinScroll(_G.HackEditScrollFrameScrollBar)
-        F.CreateBDFrame(_G.HackEditScrollFrame, .25)
-        _G.HackEditBoxLineBG:SetColorTexture(0, 0, 0, .25)
+        F.CreateBDFrame(_G.HackEditScrollFrame, 0.25)
+        _G.HackEditBoxLineBG:SetColorTexture(0, 0, 0, 0.25)
 
         local SetPoint = _G.HackEditFrame.SetPoint
         _G.HackEditFrame.SetPoint = function(frame, point, relativeFrame, relativePoint, x, y)
@@ -45,9 +45,8 @@ function THEME:ReskinREHack()
             end
             SetPoint(frame, point, relativeFrame, relativePoint, x, y)
         end
-        local tempPos = {_G.HackEditFrame:GetPoint()}
+        local tempPos = { _G.HackEditFrame:GetPoint() }
         _G.HackEditFrame:ClearAllPoints()
         _G.HackEditFrame:SetPoint(unpack(tempPos))
     end
 end
-

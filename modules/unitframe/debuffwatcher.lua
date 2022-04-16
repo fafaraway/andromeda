@@ -6,7 +6,9 @@ function UNITFRAME:UpdateDebuffWatcher()
     table.wipe(debuffList)
     for instName, value in pairs(C.DebuffWatcherList) do
         for spell, priority in pairs(value) do
-            if not (_G.FREE_ADB['DebuffWatcherList'][instName] and _G.FREE_ADB['DebuffWatcherList'][instName][spell]) then
+            if
+                not (_G.FREE_ADB['DebuffWatcherList'][instName] and _G.FREE_ADB['DebuffWatcherList'][instName][spell])
+            then
                 if not debuffList[instName] then
                     debuffList[instName] = {}
                 end
@@ -42,7 +44,7 @@ function UNITFRAME:CreateDebuffWatcher(self)
     end
 
     local bu = CreateFrame('Frame', nil, self)
-    bu:SetSize(self:GetHeight() * .6, self:GetHeight() * .6)
+    bu:SetSize(self:GetHeight() * 0.6, self:GetHeight() * 0.6)
     bu:SetPoint('CENTER')
     bu:SetFrameLevel(self.Health:GetFrameLevel() + 2)
     bu.bg = F.CreateBDFrame(bu)
@@ -61,7 +63,7 @@ function UNITFRAME:CreateDebuffWatcher(self)
     parentFrame:SetFrameLevel(bu:GetFrameLevel() + 6)
 
     local font = C.Assets.Font.Roadway
-    local fontSize = math.max(bu:GetHeight() * .4, 12)
+    local fontSize = math.max(bu:GetHeight() * 0.4, 12)
     bu.count = F.CreateFS(parentFrame, font, fontSize, true, '', nil, true)
     bu.count:SetPoint('CENTER', bu, 'TOP')
     bu.timer = F.CreateFS(parentFrame, font, fontSize, true, '', nil, true)
@@ -111,11 +113,14 @@ function UNITFRAME:RegisterInstanceDebuff(_, instID, _, spellID, level)
     instanceDebuffs[instName][spellID] = level
 end
 
-
 function UNITFRAME:InitDebuffWatcher()
     for instName, value in pairs(instanceDebuffs) do
         for spell, priority in pairs(value) do
-            if _G.FREE_ADB['DebuffWatcherList'][instName] and _G.FREE_ADB['DebuffWatcherList'][instName][spell] and _G.FREE_ADB['DebuffWatcherList'][instName][spell] == priority then
+            if
+                _G.FREE_ADB['DebuffWatcherList'][instName]
+                and _G.FREE_ADB['DebuffWatcherList'][instName][spell]
+                and _G.FREE_ADB['DebuffWatcherList'][instName][spell] == priority
+            then
                 _G.FREE_ADB['DebuffWatcherList'][instName][spell] = nil
             end
         end

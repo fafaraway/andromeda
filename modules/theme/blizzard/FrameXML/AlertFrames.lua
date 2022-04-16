@@ -10,7 +10,7 @@ local function fixBg(frame)
     if frame.bg then
         frame.bg:SetBackdropColor(color.r, color.g, color.b, alpha)
         if frame.bg.__shadow then
-            frame.bg.__shadow:SetBackdropBorderColor(0, 0, 0, .25)
+            frame.bg.__shadow:SetBackdropBorderColor(0, 0, 0, 0.25)
         end
     end
 end
@@ -22,7 +22,7 @@ local function fixParentbg(anim)
     if frame.bg then
         frame.bg:SetBackdropColor(color.r, color.g, color.b, alpha)
         if frame.bg.__shadow then
-            frame.bg.__shadow:SetBackdropBorderColor(0, 0, 0, .25)
+            frame.bg.__shadow:SetBackdropBorderColor(0, 0, 0, 0.25)
         end
     end
 end
@@ -56,7 +56,7 @@ table.insert(C.BlizzThemes, function()
         [_G.GarrisonMissionAlertSystem] = true,
         [_G.GarrisonRandomMissionAlertSystem] = true,
         [_G.GarrisonShipMissionAlertSystem] = true,
-        [_G.GarrisonShipFollowerAlertSystem] = true
+        [_G.GarrisonShipFollowerAlertSystem] = true,
     }
 
     if not _G.NewCosmeticAlertFrameSystem then
@@ -68,14 +68,14 @@ table.insert(C.BlizzThemes, function()
         [_G.NewMountAlertSystem] = true,
         [_G.NewToyAlertSystem] = true,
         [_G.NewRuneforgePowerAlertSystem] = true,
-        [_G.NewCosmeticAlertFrameSystem] = true
+        [_G.NewCosmeticAlertFrameSystem] = true,
     }
 
     hooksecurefunc(_G.AlertFrame, 'AddAlertFrame', function(_, frame)
         if frame.queue == _G.AchievementAlertSystem then
             if not frame.bg then
                 frame.bg = F.SetBD(frame)
-                frame.Unlocked:SetTextColor(1, .8, 0)
+                frame.Unlocked:SetTextColor(1, 0.8, 0)
                 frame.Unlocked:SetFontObject(_G.NumberFont_GameNormal)
                 frame.GuildName:ClearAllPoints()
                 frame.GuildName:SetPoint('TOPLEFT', 50, -14)
@@ -103,7 +103,7 @@ table.insert(C.BlizzThemes, function()
                 frame.bg:SetPoint('TOPLEFT', frame, 5, -7)
                 frame.bg:SetPoint('BOTTOMRIGHT', frame, 18, 10)
 
-                frame.Unlocked:SetTextColor(1, .8, 0)
+                frame.Unlocked:SetTextColor(1, 0.8, 0)
                 frame.Unlocked:SetFontObject(_G.NumberFont_GameNormal)
                 F.ReskinIcon(frame.Icon.Texture)
                 frame.Background:SetTexture('')
@@ -331,7 +331,7 @@ table.insert(C.BlizzThemes, function()
                 frame.bg:SetInside(frame, 12, 12)
 
                 F.ReskinIcon(frame.Icon)
-                frame.Title:SetTextColor(0, .6, 1)
+                frame.Title:SetTextColor(0, 0.6, 1)
                 frame.Background:Hide()
             end
         elseif frame.queue == _G.RafRewardDeliveredAlertSystem then

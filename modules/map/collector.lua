@@ -17,15 +17,21 @@ local buttonBlackList = {
 
 local ignoredButtons = {
     ['GatherMatePin'] = true,
-    ['HandyNotes.-Pin'] = true
+    ['HandyNotes.-Pin'] = true,
 }
 
 local isGoodLookingIcon = {
-    ['Narci_MinimapButton'] = true
+    ['Narci_MinimapButton'] = true,
 }
 
 local function UpdateCollectorTip(bu)
-    bu.text = C.MOUSE_RIGHT_BUTTON .. L['Auto Hide'] .. ': ' .. (_G.FREE_ADB['MinimapAddOnCollector'] and '|cff55ff55' .. _G.VIDEO_OPTIONS_ENABLED or '|cffff5555' .. _G.VIDEO_OPTIONS_DISABLED)
+    bu.text = C.MOUSE_RIGHT_BUTTON
+        .. L['Auto Hide']
+        .. ': '
+        .. (
+            _G.FREE_ADB['MinimapAddOnCollector'] and '|cff55ff55' .. _G.VIDEO_OPTIONS_ENABLED
+            or '|cffff5555' .. _G.VIDEO_OPTIONS_DISABLED
+        )
 end
 
 local function HideCollectorTray()
@@ -34,8 +40,8 @@ end
 
 local function ClickFunc(force)
     if force == 1 or _G.FREE_ADB['MinimapAddOnCollector'] then
-        F:UIFrameFadeOut(_G.Minimap.AddOnCollectorTray, .5, 1, 0)
-        F:Delay(.5, HideCollectorTray)
+        F:UIFrameFadeOut(_G.Minimap.AddOnCollectorTray, 0.5, 1, 0)
+        F:Delay(0.5, HideCollectorTray)
     end
 end
 
@@ -53,7 +59,7 @@ local currentIndex, pendingTime, timeThreshold = 0, 5, 12
 local buttons, numMinimapChildren = {}, 0
 local removedTextures = {
     [136430] = true,
-    [136467] = true
+    [136467] = true,
 }
 
 local function RestyleAddOnIcon(child, name)
@@ -61,7 +67,11 @@ local function RestyleAddOnIcon(child, name)
         local region = select(j, child:GetRegions())
         if region:IsObjectType('Texture') then
             local texture = region:GetTexture() or ''
-            if removedTextures[texture] or string.find(texture, 'Interface\\CharacterFrame') or string.find(texture, 'Interface\\Minimap') then
+            if
+                removedTextures[texture]
+                or string.find(texture, 'Interface\\CharacterFrame')
+                or string.find(texture, 'Interface\\Minimap')
+            then
                 region:SetTexture(nil)
             end
             region:ClearAllPoints()
@@ -94,11 +104,11 @@ local function KillAddOnIcon()
 
             if child:IsObjectType('Button') then
                 child:SetHighlightTexture(C.Assets.Texture.Backdrop) -- prevent nil function
-                child:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+                child:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
             elseif child:IsObjectType('Frame') then
                 child.highlight = child:CreateTexture(nil, 'HIGHLIGHT')
                 child.highlight:SetAllPoints()
-                child.highlight:SetColorTexture(1, 1, 1, .25)
+                child.highlight:SetColorTexture(1, 1, 1, 0.25)
             end
 
             -- Naughty Addons
@@ -122,7 +132,10 @@ local function CollectRubbish()
             local child = select(i, _G.Minimap:GetChildren())
             local name = child and child.GetName and child:GetName()
             if name and not child.isExamed and not buttonBlackList[name] then
-                if (child:IsObjectType('Button') or string.match(string.upper(name), 'BUTTON')) and not IsButtonIgnored(name) then
+                if
+                    (child:IsObjectType('Button') or string.match(string.upper(name), 'BUTTON'))
+                    and not IsButtonIgnored(name)
+                then
                     RestyleAddOnIcon(child, name)
                 end
                 child.isExamed = true
@@ -180,7 +193,7 @@ local function Button_OnClick(self, btn)
             ClickFunc(1)
         else
             SortRubbish()
-            F:UIFrameFadeIn(_G.Minimap.AddOnCollectorTray, .5, 0, 1)
+            F:UIFrameFadeIn(_G.Minimap.AddOnCollectorTray, 0.5, 0, 1)
         end
     end
 end
@@ -215,4 +228,3 @@ function MAP:AddOnIconCollector()
 
     CollectRubbish()
 end
-

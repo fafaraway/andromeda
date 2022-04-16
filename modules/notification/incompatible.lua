@@ -21,7 +21,7 @@ local IncompatibleAddOns = {
 }
 
 local AddonDependency = {
-    ['BigFoot'] = '!!!Libs'
+    ['BigFoot'] = '!!!Libs',
 }
 
 local IncompatibleList = {}
@@ -48,7 +48,7 @@ local function ConstructFrame()
 
     local disable = F.CreateButton(frame, 150, 25, L['Disable Incompatible Addons'])
     disable:SetPoint('BOTTOM', 0, 10)
-    disable.text:SetTextColor(1, .8, 0)
+    disable.text:SetTextColor(1, 0.8, 0)
     disable:SetScript('OnClick', function()
         for _, addon in pairs(IncompatibleList) do
             DisableAddOn(addon, true)

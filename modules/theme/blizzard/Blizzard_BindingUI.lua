@@ -26,25 +26,22 @@ C.Themes['Blizzard_BindingUI'] = function()
         button2:SetPoint('LEFT', button1, 'RIGHT', 1, 0)
     end
 
-    hooksecurefunc(
-        'BindingButtonTemplate_SetupBindingButton',
-        function(_, button)
-            if not button.styled then
-                local selected = button.selectedHighlight
-                selected:SetTexture(C.Assets.Texture.Backdrop)
-                selected:SetInside()
-                selected:SetColorTexture(r, g, b, .25)
-                F.Reskin(button)
+    hooksecurefunc('BindingButtonTemplate_SetupBindingButton', function(_, button)
+        if not button.styled then
+            local selected = button.selectedHighlight
+            selected:SetTexture(C.Assets.Texture.Backdrop)
+            selected:SetInside()
+            selected:SetColorTexture(r, g, b, 0.25)
+            F.Reskin(button)
 
-                button.styled = true
-            end
+            button.styled = true
         end
-    )
+    end)
 
     local line = KeyBindingFrame:CreateTexture(nil, 'ARTWORK')
     line:SetSize(C.MULT, 546)
     line:SetPoint('LEFT', 205, 10)
-    line:SetColorTexture(1, 1, 1, .25)
+    line:SetColorTexture(1, 1, 1, 0.25)
 
     -- QuickKeybindFrame
 

@@ -15,7 +15,7 @@ local broadcastString = '|TInterface\\FriendsFrame\\BroadcastIcon:12|t %s (%s)'
 local onlineString = string.gsub(_G.ERR_FRIEND_ONLINE_SS, '.+h', '')
 local offlineString = string.gsub(_G.ERR_FRIEND_OFFLINE_S, '%%s', '')
 
-local menuList = {[1] = {text = L['Join or Invite'], isTitle = true, notCheckable = true}}
+local menuList = { [1] = { text = L['Join or Invite'], isTitle = true, notCheckable = true } }
 
 local function sortFriends(a, b)
     if a[1] and b[1] then
@@ -36,7 +36,7 @@ local function buildFriendTable(num)
                 status = _G.FRIENDS_TEXTURE_DND
             end
             local class = C.ClassList[INFOBAR.className]
-            table.insert(friendTable, {INFOBAR.name, INFOBAR.level, class, INFOBAR.area, status})
+            table.insert(friendTable, { INFOBAR.name, INFOBAR.level, class, INFOBAR.area, status })
         end
     end
 
@@ -128,7 +128,23 @@ local function buildBNetTable(num)
                     client = CLIENT_WOW_DIFF
                 end
 
-                table.insert(bnetTable, {i, accountName, charName, canCooperate, client, status, class, level, infoText, note, broadcastText, broadcastTime})
+                table.insert(
+                    bnetTable,
+                    {
+                        i,
+                        accountName,
+                        charName,
+                        canCooperate,
+                        client,
+                        status,
+                        class,
+                        level,
+                        infoText,
+                        note,
+                        broadcastText,
+                        broadcastTime,
+                    }
+                )
             end
         end
     end
@@ -138,7 +154,7 @@ end
 
 local function isPanelCanHide(self, elapsed)
     self.timer = (self.timer or 0) + elapsed
-    if self.timer > .1 then
+    if self.timer > 0.1 then
         if not infoFrame:IsMouseOver() then
             self:Hide()
             self:SetScript('OnUpdate', nil)
@@ -158,7 +174,13 @@ function INFOBAR:FriendsPanel_Init()
 
     infoFrame = CreateFrame('Frame', 'FreeUIFriendsFrame', INFOBAR.Bar)
     infoFrame:SetSize(400, 495)
-    infoFrame:SetPoint(anchorTop and 'TOP' or 'BOTTOM', INFOBAR.FriendsBlock, anchorTop and 'BOTTOM' or 'TOP', 0, anchorTop and -6 or 6)
+    infoFrame:SetPoint(
+        anchorTop and 'TOP' or 'BOTTOM',
+        INFOBAR.FriendsBlock,
+        anchorTop and 'BOTTOM' or 'TOP',
+        0,
+        anchorTop and -6 or 6
+    )
     infoFrame:SetClampedToScreen(true)
     infoFrame:SetFrameStrata('DIALOG')
     F.SetBD(infoFrame)
@@ -172,10 +194,37 @@ function INFOBAR:FriendsPanel_Init()
         end
     end)
 
-    F.CreateFS(infoFrame, C.Assets.Font.Bold, 16, nil, F:RgbToHex({.9, .8, .6}) .. _G.FRIENDS_LIST, nil, true, 'TOPLEFT', 15, -10)
-    infoFrame.friendCountText = F.CreateFS(infoFrame, C.Assets.Font.Regular, 14, nil, '-/-', nil, true, 'TOPRIGHT', -15, -12)
+    F.CreateFS(
+        infoFrame,
+        C.Assets.Font.Bold,
+        16,
+        nil,
+        F:RgbToHex({ 0.9, 0.8, 0.6 }) .. _G.FRIENDS_LIST,
+        nil,
+        true,
+        'TOPLEFT',
+        15,
+        -10
+    )
+    infoFrame.friendCountText = F.CreateFS(
+        infoFrame,
+        C.Assets.Font.Regular,
+        14,
+        nil,
+        '-/-',
+        nil,
+        true,
+        'TOPRIGHT',
+        -15,
+        -12
+    )
 
-    local scrollFrame = CreateFrame('ScrollFrame', 'FreeUIFriendsInfobarScrollFrame', infoFrame, 'HybridScrollFrameTemplate')
+    local scrollFrame = CreateFrame(
+        'ScrollFrame',
+        'FreeUIFriendsInfobarScrollFrame',
+        infoFrame,
+        'HybridScrollFrameTemplate'
+    )
     scrollFrame:SetSize(370, 400)
     scrollFrame:SetPoint('TOPLEFT', 10, -35)
     infoFrame.scrollFrame = scrollFrame
@@ -236,7 +285,11 @@ local function buttonOnClick(self, btn)
                         local bnetIDGameAccount = gameAccountInfo.gameAccountID
                         local guid = gameAccountInfo.playerGuid
                         local wowProjectID = gameAccountInfo.wowProjectID
-                        if client == _G.BNET_CLIENT_WOW and CanCooperateWithUnit(gameAccountInfo) and wowProjectID == WOW_PROJECT_ID then
+                        if
+                            client == _G.BNET_CLIENT_WOW
+                            and CanCooperateWithUnit(gameAccountInfo)
+                            and wowProjectID == WOW_PROJECT_ID
+                        then
                             if not menuList[index] then
                                 menuList[index] = {}
                             end
@@ -279,7 +332,7 @@ local function buttonOnEnter(self)
     _G.GameTooltip:SetPoint('TOPRIGHT', infoFrame, 'TOPLEFT', -5, 0)
     _G.GameTooltip:ClearLines()
     if self.isBNet then
-        _G.GameTooltip:AddLine(L['Battle.NET Friend'], .9, .8, .6)
+        _G.GameTooltip:AddLine(L['Battle.NET Friend'], 0.9, 0.8, 0.6)
         _G.GameTooltip:AddLine(' ')
 
         local index, accountName, _, _, _, _, _, _, _, note, broadcastText, broadcastTime = unpack(self.data)
@@ -315,7 +368,9 @@ local function buttonOnEnter(self)
                     elseif faction == 'Alliance' then
                         clientString = '|TInterface\\FriendsFrame\\PlusManz-Alliance:16:|t'
                     end
-                    _G.GameTooltip:AddLine(string.format('%s%s %s%s%s', clientString, level, classColor, charName, realmName))
+                    _G.GameTooltip:AddLine(
+                        string.format('%s%s %s%s%s', clientString, level, classColor, charName, realmName)
+                    )
 
                     if wowProjectID ~= WOW_PROJECT_ID then
                         zoneName = '*' .. zoneName
@@ -332,15 +387,21 @@ local function buttonOnEnter(self)
 
         if note and note ~= '' then
             _G.GameTooltip:AddLine(' ')
-            _G.GameTooltip:AddLine(string.format(noteString, note), 1, .8, 0)
+            _G.GameTooltip:AddLine(string.format(noteString, note), 1, 0.8, 0)
         end
 
         if broadcastText and broadcastText ~= '' then
             _G.GameTooltip:AddLine(' ')
-            _G.GameTooltip:AddLine(string.format(broadcastString, broadcastText, _G.FriendsFrame_GetLastOnline(broadcastTime)), .3, .6, .8, 1)
+            _G.GameTooltip:AddLine(
+                string.format(broadcastString, broadcastText, _G.FriendsFrame_GetLastOnline(broadcastTime)),
+                0.3,
+                0.6,
+                0.8,
+                1
+            )
         end
     else
-        _G.GameTooltip:AddLine(L['WoW'], 1, .8, 0)
+        _G.GameTooltip:AddLine(L['WoW'], 1, 0.8, 0)
         _G.GameTooltip:AddLine(' ')
         local name, level, class, area = unpack(self.data)
         local classColor = F:RgbToHex(F:ClassColor(class))
@@ -356,7 +417,7 @@ function INFOBAR:FriendsPanel_CreateButton(parent, index)
     button:SetPoint('TOPLEFT', 0, -(index - 1) * 20)
     button.HL = button:CreateTexture(nil, 'HIGHLIGHT')
     button.HL:SetAllPoints()
-    button.HL:SetColorTexture(C.r, C.g, C.b, .2)
+    button.HL:SetColorTexture(C.r, C.g, C.b, 0.2)
 
     button.status = button:CreateTexture(nil, 'ARTWORK')
     button.status:SetPoint('LEFT', button, 5, 0)
@@ -365,7 +426,7 @@ function INFOBAR:FriendsPanel_CreateButton(parent, index)
     button.name = F.CreateFS(button, C.Assets.Font.Regular, 13, nil, 'Tag (name)', nil, true, 'LEFT', 25, 0)
     button.name:SetPoint('RIGHT', button, 'LEFT', 230, 0)
     button.name:SetJustifyH('LEFT')
-    button.name:SetTextColor(.5, .7, 1)
+    button.name:SetTextColor(0.5, 0.7, 1)
     button.name:SetWordWrap(false)
 
     button.zone = F.CreateFS(button, C.Assets.Font.Regular, 13, nil, 'Zone', nil, true, 'RIGHT', -28, 0)
@@ -376,7 +437,7 @@ function INFOBAR:FriendsPanel_CreateButton(parent, index)
     button.gameIcon = button:CreateTexture(nil, 'ARTWORK')
     button.gameIcon:SetPoint('RIGHT', button, -8, 0)
     button.gameIcon:SetSize(16, 16)
-    button.gameIcon:SetTexCoord(.17, .83, .17, .83)
+    button.gameIcon:SetTexCoord(0.17, 0.83, 0.17, 0.83)
     F.CreateBDFrame(button.gameIcon)
 
     button:RegisterForClicks('AnyUp')
@@ -424,7 +485,7 @@ function INFOBAR:FriendsPanel_UpdateButton(button)
         button.zone:SetText(string.format('%s%s', zoneColor, infoText))
         if client == CLIENT_WOW_DIFF then
             button.gameIcon:SetTexture(_G.BNet_GetClientTexture(_G.BNET_CLIENT_WOW))
-            button.gameIcon:SetVertexColor(.3, .3, .3)
+            button.gameIcon:SetVertexColor(0.3, 0.3, 0.3)
         else
             button.gameIcon:SetTexture(_G.BNet_GetClientTexture(client))
             button.gameIcon:SetVertexColor(1, 1, 1)
@@ -519,7 +580,16 @@ local function Block_OnEnter(self)
         _G.GameTooltip:SetOwner(self, 'ANCHOR_NONE')
         _G.GameTooltip:SetPoint('TOPLEFT', _G.UIParent, 15, -30)
         _G.GameTooltip:ClearLines()
-        _G.GameTooltip:AddDoubleLine(_G.FRIENDS_LIST, string.format('%s: %s/%s', _G.GUILD_ONLINE_LABEL, totalOnline, totalFriends), 0, .6, 1, 0, .6, 1)
+        _G.GameTooltip:AddDoubleLine(
+            _G.FRIENDS_LIST,
+            string.format('%s: %s/%s', _G.GUILD_ONLINE_LABEL, totalOnline, totalFriends),
+            0,
+            0.6,
+            1,
+            0,
+            0.6,
+            1
+        )
         _G.GameTooltip:AddLine(' ')
         _G.GameTooltip:AddLine(L['No Online'], 1, 1, 1)
         _G.GameTooltip:Show()
@@ -546,7 +616,7 @@ local function Block_OnLeave(self)
     if not infoFrame then
         return
     end
-    F:Delay(.1, delayLeave)
+    F:Delay(0.1, delayLeave)
 end
 
 local function Block_OnEvent(self, event, arg1)
@@ -575,7 +645,13 @@ function INFOBAR:CreateFriendsBlock()
     friend.onEnter = Block_OnEnter
     friend.onLeave = Block_OnLeave
     friend.onMouseUp = Block_OnMouseUp
-    friend.eventList = {'PLAYER_ENTERING_WORLD', 'CHAT_MSG_SYSTEM', 'FRIENDLIST_UPDATE', 'BN_FRIEND_ACCOUNT_ONLINE', 'BN_FRIEND_ACCOUNT_OFFLINE'}
+    friend.eventList = {
+        'PLAYER_ENTERING_WORLD',
+        'CHAT_MSG_SYSTEM',
+        'FRIENDLIST_UPDATE',
+        'BN_FRIEND_ACCOUNT_ONLINE',
+        'BN_FRIEND_ACCOUNT_OFFLINE',
+    }
 
     INFOBAR.FriendsBlock = friend
 end

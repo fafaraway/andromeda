@@ -2,7 +2,7 @@ local F = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 
 local tips = {
-    [1] = _G['ItemRefTooltip']
+    [1] = _G['ItemRefTooltip'],
 }
 
 local types = {
@@ -15,7 +15,7 @@ local types = {
     achievement = true,
     glyph = true,
     instancelock = true,
-    currency = true
+    currency = true,
 }
 
 local function CreateTip(link)
@@ -45,18 +45,12 @@ local function CreateTip(link)
     tip:SetMovable(true)
     tip:SetClampedToScreen(true)
     tip:RegisterForDrag('LeftButton')
-    tip:SetScript(
-        'OnDragStart',
-        function(self)
-            self:StartMoving()
-        end
-    )
-    tip:SetScript(
-        'OnDragStop',
-        function(self)
-            self:StopMovingOrSizing()
-        end
-    )
+    tip:SetScript('OnDragStart', function(self)
+        self:StartMoving()
+    end)
+    tip:SetScript('OnDragStop', function(self)
+        self:StopMovingOrSizing()
+    end)
 
     tip:SetBackdrop(nil)
     tip.SetBackdrop = nop
@@ -70,12 +64,9 @@ local function CreateTip(link)
     F.SetBD(bg)
 
     local close = CreateFrame('Button', 'ItemRefTooltip' .. num .. 'CloseButton', tip)
-    close:SetScript(
-        'OnClick',
-        function()
-            _G.HideUIPanel(tip)
-        end
-    )
+    close:SetScript('OnClick', function()
+        _G.HideUIPanel(tip)
+    end)
     F.ReskinClose(close)
 
     table.insert(_G.UISpecialFrames, tip:GetName())

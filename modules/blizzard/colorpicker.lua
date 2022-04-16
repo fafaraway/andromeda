@@ -5,7 +5,7 @@ local Picker = _G.ColorPickerFrame
 
 local colorBuffer = {}
 local function AlphaValue(num)
-    return num and math.floor(((1 - num) * 100) + .05) or 0
+    return num and math.floor(((1 - num) * 100) + 0.05) or 0
 end
 
 local function UpdateAlphaText(alpha)
@@ -45,7 +45,10 @@ local function GetHexColor(box)
         rgb = string.gsub(rgb, '(.+)$', ExtendToSix)
     end
 
-    local r, g, b = tonumber(string.sub(rgb, 0, 2), 16) or 0, tonumber(string.sub(rgb, 3, 4), 16) or 0, tonumber(string.sub(rgb, 5, 6), 16) or 0
+    local r, g, b =
+        tonumber(string.sub(rgb, 0, 2), 16) or 0,
+        tonumber(string.sub(rgb, 3, 4), 16) or 0,
+        tonumber(string.sub(rgb, 5, 6), 16) or 0
 
     return r / 255, g / 255, b / 255
 end
@@ -231,7 +234,6 @@ function BLIZZARD:EnhancedColorPicker()
         -- We overwrite these two scripts and set a limit on how often we allow a call their update functions
         _G.OpacitySliderFrame:SetScript('OnValueChanged', OnValueChanged)
         frame:SetScript('OnColorSelect', OnColorSelect)
-
     end)
 
     -- move the Color Swatch
@@ -329,7 +331,7 @@ function BLIZZARD:EnhancedColorPicker()
     _G.OpacitySliderFrame:SetPoint('RIGHT', 'ColorPickerFrame', 'RIGHT', -35, 18)
 
     -- set up edit box frames and interior label and text areas
-    for i, rgb in next, {'R', 'G', 'B', 'H', 'A'} do
+    for i, rgb in next, { 'R', 'G', 'B', 'H', 'A' } do
         local box = CreateFrame('EditBox', 'ColorPPBox' .. rgb, Picker, 'InputBoxTemplate')
         box:SetPoint('TOP', 'ColorPickerWheel', 'BOTTOM', 0, -15)
         box:SetFrameStrata('DIALOG')

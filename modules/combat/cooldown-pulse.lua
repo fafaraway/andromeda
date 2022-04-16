@@ -29,7 +29,7 @@ local function memoize(f)
     local memoized = {}
 
     local function get()
-        if (cache == nil) then
+        if cache == nil then
             cache = f()
         end
 
@@ -40,7 +40,7 @@ local function memoize(f)
         cache = nil
     end
 
-    setmetatable(memoized, {__call = get})
+    setmetatable(memoized, { __call = get })
 
     return memoized
 end
@@ -61,49 +61,40 @@ local function OnUpdate(_, update)
             if GetTime() >= v[1] + 0.5 then
                 local getCooldownDetails
                 if v[2] == 'spell' then
-                    getCooldownDetails =
-                        memoize(
-                        function()
-                            local start, duration, enabled = GetSpellCooldown(v[3])
-                            return {
-                                name = GetSpellInfo(v[3]),
-                                texture = GetSpellTexture(v[3]),
-                                start = start,
-                                duration = duration,
-                                enabled = enabled
-                            }
-                        end
-                    )
+                    getCooldownDetails = memoize(function()
+                        local start, duration, enabled = GetSpellCooldown(v[3])
+                        return {
+                            name = GetSpellInfo(v[3]),
+                            texture = GetSpellTexture(v[3]),
+                            start = start,
+                            duration = duration,
+                            enabled = enabled,
+                        }
+                    end)
                 elseif v[2] == 'item' then
-                    getCooldownDetails =
-                        memoize(
-                        function()
-                            local start, duration, enabled = GetItemCooldown(i)
-                            return {
-                                name = GetItemInfo(i),
-                                texture = v[3],
-                                start = start,
-                                duration = duration,
-                                enabled = enabled
-                            }
-                        end
-                    )
+                    getCooldownDetails = memoize(function()
+                        local start, duration, enabled = GetItemCooldown(i)
+                        return {
+                            name = GetItemInfo(i),
+                            texture = v[3],
+                            start = start,
+                            duration = duration,
+                            enabled = enabled,
+                        }
+                    end)
                 elseif v[2] == 'pet' then
-                    getCooldownDetails =
-                        memoize(
-                        function()
-                            local name, texture = GetPetActionInfo(v[3])
-                            local start, duration, enabled = GetPetActionCooldown(v[3])
-                            return {
-                                name = name,
-                                texture = texture,
-                                isPet = true,
-                                start = start,
-                                duration = duration,
-                                enabled = enabled
-                            }
-                        end
-                    )
+                    getCooldownDetails = memoize(function()
+                        local name, texture = GetPetActionInfo(v[3])
+                        local start, duration, enabled = GetPetActionCooldown(v[3])
+                        return {
+                            name = name,
+                            texture = texture,
+                            isPet = true,
+                            start = start,
+                            duration = duration,
+                            enabled = enabled,
+                        }
+                    end)
                 end
                 local cooldown = getCooldownDetails()
                 if ignoredList[cooldown.name] then
@@ -124,7 +115,7 @@ local function OnUpdate(_, update)
             local cooldown = getCooldownDetails()
             local remaining = cooldown.duration - (GetTime() - cooldown.start)
             if remaining <= 0 then
-                table.insert(animating, {cooldown.texture, cooldown.isPet, cooldown.name})
+                table.insert(animating, { cooldown.texture, cooldown.isPet, cooldown.name })
                 cooldowns[i] = nil
             end
         end
@@ -179,7 +170,7 @@ end
 
 function frame:UNIT_SPELLCAST_SUCCEEDED(unit, _, spellID)
     if unit == 'player' then
-        watching[spellID] = {GetTime(), 'spell', spellID}
+        watching[spellID] = { GetTime(), 'spell', spellID }
         self:SetScript('OnUpdate', OnUpdate)
     end
 end
@@ -187,16 +178,17 @@ end
 function frame:COMBAT_LOG_EVENT_UNFILTERED()
     local _, eventType, _, _, _, sourceFlags, _, _, _, _, _, spellID = CombatLogGetCurrentEventInfo()
     local isPet = _G.bit.band(sourceFlags, _G.COMBATLOG_OBJECT_TYPE_PET) == _G.COMBATLOG_OBJECT_TYPE_PET
-    local isMine = _G.bit.band(sourceFlags, _G.COMBATLOG_OBJECT_AFFILIATION_MINE) == _G.COMBATLOG_OBJECT_AFFILIATION_MINE
+    local isMine = _G.bit.band(sourceFlags, _G.COMBATLOG_OBJECT_AFFILIATION_MINE)
+        == _G.COMBATLOG_OBJECT_AFFILIATION_MINE
 
     if eventType == 'SPELL_CAST_SUCCESS' then
         if isPet and isMine then
             local name = GetSpellInfo(spellID)
             local index = GetPetActionIndexByName(name)
             if index and not select(7, GetPetActionInfo(index)) then
-                watching[spellID] = {GetTime(), 'pet', index}
+                watching[spellID] = { GetTime(), 'pet', index }
             elseif not index and spellID then
-                watching[spellID] = {GetTime(), 'spell', spellID}
+                watching[spellID] = { GetTime(), 'spell', spellID }
             else
                 return
             end
@@ -222,57 +214,45 @@ function CDP:OnLogin()
     frame.bg = F.SetBD(frame)
     icon:SetTexCoord(unpack(C.TEX_COORD))
 
-    local mover = F.Mover(anchor, L['Cooldown Pulse'], 'CooldownPulse', {'CENTER', _G.UIParent}, iconSize, iconSize)
+    local mover = F.Mover(anchor, L['Cooldown Pulse'], 'CooldownPulse', { 'CENTER', _G.UIParent }, iconSize, iconSize)
     anchor:ClearAllPoints()
     anchor:SetPoint('CENTER', mover)
 
-    frame:SetScript(
-        'OnEvent',
-        function(self, event, ...)
-            self[event](self, ...)
-        end
-    )
+    frame:SetScript('OnEvent', function(self, event, ...)
+        self[event](self, ...)
+    end)
     frame:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED')
     frame:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
     frame:RegisterEvent('SPELL_UPDATE_COOLDOWN')
     frame:RegisterEvent('PLAYER_ENTERING_WORLD')
 
-    hooksecurefunc(
-        'UseAction',
-        function(slot)
-            local actionType, itemID = GetActionInfo(slot)
-            if actionType == 'item' then
-                local texture = GetActionTexture(slot)
-                watching[itemID] = {GetTime(), 'item', texture}
-            end
+    hooksecurefunc('UseAction', function(slot)
+        local actionType, itemID = GetActionInfo(slot)
+        if actionType == 'item' then
+            local texture = GetActionTexture(slot)
+            watching[itemID] = { GetTime(), 'item', texture }
         end
-    )
+    end)
 
-    hooksecurefunc(
-        'UseInventoryItem',
-        function(slot)
-            local itemID = GetInventoryItemID('player', slot)
-            if itemID then
-                local texture = GetInventoryItemTexture('player', slot)
-                watching[itemID] = {GetTime(), 'item', texture}
-            end
+    hooksecurefunc('UseInventoryItem', function(slot)
+        local itemID = GetInventoryItemID('player', slot)
+        if itemID then
+            local texture = GetInventoryItemTexture('player', slot)
+            watching[itemID] = { GetTime(), 'item', texture }
         end
-    )
+    end)
 
-    hooksecurefunc(
-        'UseContainerItem',
-        function(bag, slot)
-            local itemID = GetContainerItemID(bag, slot)
-            if itemID then
-                local texture = select(10, GetItemInfo(itemID))
-                watching[itemID] = {GetTime(), 'item', texture}
-            end
+    hooksecurefunc('UseContainerItem', function(bag, slot)
+        local itemID = GetContainerItemID(bag, slot)
+        if itemID then
+            local texture = select(10, GetItemInfo(itemID))
+            watching[itemID] = { GetTime(), 'item', texture }
         end
-    )
+    end)
 end
 
 _G.SlashCmdList.CDPULSE = function()
-    table.insert(animating, {GetSpellTexture(87214)})
+    table.insert(animating, { GetSpellTexture(87214) })
     frame:SetScript('OnUpdate', OnUpdate)
 end
 _G.SLASH_CDPULSE1 = '/cdpulse'

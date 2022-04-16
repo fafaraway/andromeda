@@ -1,11 +1,11 @@
 local F = unpack(select(2, ...))
 
-local COLOR = {r = .1, g = 1, b = .1}
+local COLOR = { r = 0.1, g = 1, b = 0.1 }
 local knowables = {
     [_G.LE_ITEM_CLASS_CONSUMABLE] = true,
     [_G.LE_ITEM_CLASS_RECIPE] = true,
     [_G.LE_ITEM_CLASS_MISCELLANEOUS] = true,
-    [_G.LE_ITEM_CLASS_ITEM_ENHANCEMENT] = true
+    [_G.LE_ITEM_CLASS_ITEM_ENHANCEMENT] = true,
 }
 local knowns = {}
 
@@ -76,7 +76,7 @@ local function Hook_UpdateMerchantInfo()
             if isUsable and IsAlreadyKnown(GetMerchantItemLink(index)) then
                 local r, g, b = COLOR.r, COLOR.g, COLOR.b
                 if numAvailable == 0 then
-                    r, g, b = r * .5, g * .5, b * .5
+                    r, g, b = r * 0.5, g * 0.5, b * 0.5
                 end
                 _G.SetItemButtonTextureVertexColor(button, r, g, b)
             end
@@ -117,7 +117,10 @@ local function Hook_UpdateAuctionHouse(self)
             if button.rowData.itemKey.itemID then
                 local itemLink
                 if button.rowData.itemKey.itemID == 82800 then -- BattlePet
-                    itemLink = string.format('|Hbattlepet:%d::::::|h[Dummy]|h', button.rowData.itemKey.battlePetSpeciesID)
+                    itemLink = string.format(
+                        '|Hbattlepet:%d::::::|h[Dummy]|h',
+                        button.rowData.itemKey.battlePetSpeciesID
+                    )
                 else -- Normal item
                     itemLink = string.format('item:%d', button.rowData.itemKey.itemID)
                 end
@@ -126,7 +129,7 @@ local function Hook_UpdateAuctionHouse(self)
                     -- Highlight
                     button.SelectedHighlight:Show()
                     button.SelectedHighlight:SetVertexColor(COLOR.r, COLOR.g, COLOR.b)
-                    button.SelectedHighlight:SetAlpha(.25)
+                    button.SelectedHighlight:SetAlpha(0.25)
                     -- Icon
                     button.cells[2].Icon:SetVertexColor(COLOR.r, COLOR.g, COLOR.b)
                     button.cells[2].IconBorder:SetVertexColor(COLOR.r, COLOR.g, COLOR.b)
@@ -159,7 +162,7 @@ local function GuildBankFrame_Update(self)
             index = NUM_SLOTS_PER_GUILDBANK_GROUP
         end
 
-        column = math.ceil((i - .5) / NUM_SLOTS_PER_GUILDBANK_GROUP)
+        column = math.ceil((i - 0.5) / NUM_SLOTS_PER_GUILDBANK_GROUP)
         button = self.Columns[column].Buttons[index]
         if button and button:IsShown() then
             local texture, _, locked = GetGuildBankItemInfo(tab, i)

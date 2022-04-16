@@ -2,13 +2,12 @@ local F, C, L = unpack(select(2, ...))
 local INFOBAR = F:GetModule('InfoBar')
 local oUF = F.Libs.oUF
 
-
 local showMoreString = '%d %s (%s)'
 local usageString = '%.3f ms'
 local enableString = '|cff55ff55' .. _G.VIDEO_OPTIONS_ENABLED
 local disableString = '|cffff5555' .. _G.VIDEO_OPTIONS_DISABLED
 local scriptProfileStatus = GetCVarBool('scriptProfile')
-local ipTypes = {'IPv4', 'IPv6'}
+local ipTypes = { 'IPv4', 'IPv6' }
 local entered
 
 local function formatMemory(value)
@@ -31,7 +30,7 @@ local function sortByCPU(a, b)
     end
 end
 
-local usageColor = {0, 1, 0, 1, 1, 0, 1, 0, 0}
+local usageColor = { 0, 1, 0, 1, 1, 0, 1, 0, 0 }
 local function smoothColor(cur, max)
     local r, g, b = oUF:RGBColorGradient(cur, max, unpack(usageColor))
     return r, g, b
@@ -48,7 +47,7 @@ local function BuildAddonList()
     for i = 1, numAddons do
         local _, title, _, loadable = GetAddOnInfo(i)
         if loadable then
-            table.insert(infoTable, {i, title, 0, 0})
+            table.insert(infoTable, { i, title, 0, 0 })
         end
     end
 end
@@ -88,7 +87,7 @@ end
 local function SetStatsText(self)
     local time = _G.GameTime_GetTime(false)
     local _, _, latencyHome, latencyWorld = GetNetStats()
-    local fps = math.floor(GetFramerate() + .5)
+    local fps = math.floor(GetFramerate() + 0.5)
     local string = '|cffffffff%s|r fps   |cffffffff%s|r/|cffffffff%s|r ms   |cffffffff%s|r'
 
     self.text:SetText(string.format(string, fps, latencyHome, latencyWorld, time))
@@ -111,23 +110,28 @@ local function Block_OnEnter(self)
 
     local today = C_DateAndTime.GetCurrentCalendarTime()
     local w, m, d, y = today.weekday, today.month, today.monthDay, today.year
-    _G.GameTooltip:AddLine(string.format(_G.FULLDATE, _G.CALENDAR_WEEKDAY_NAMES[w], _G.CALENDAR_FULLDATE_MONTH_NAMES[m], d, y), .9, .82, .62)
+    _G.GameTooltip:AddLine(
+        string.format(_G.FULLDATE, _G.CALENDAR_WEEKDAY_NAMES[w], _G.CALENDAR_FULLDATE_MONTH_NAMES[m], d, y),
+        0.9,
+        0.82,
+        0.62
+    )
     _G.GameTooltip:AddLine(' ')
-    _G.GameTooltip:AddDoubleLine(L['Local Time'], _G.GameTime_GetLocalTime(true), .6, .8, 1, 1, 1, 1)
-    _G.GameTooltip:AddDoubleLine(L['Realm Time'], _G.GameTime_GetGameTime(true), .6, .8, 1, 1, 1, 1)
+    _G.GameTooltip:AddDoubleLine(L['Local Time'], _G.GameTime_GetLocalTime(true), 0.6, 0.8, 1, 1, 1, 1)
+    _G.GameTooltip:AddDoubleLine(L['Realm Time'], _G.GameTime_GetGameTime(true), 0.6, 0.8, 1, 1, 1, 1)
 
     if GetCVarBool('useIPv6') then
         local ipTypeHome, ipTypeWorld = GetNetIpTypes()
         _G.GameTooltip:AddLine(' ')
-        _G.GameTooltip:AddDoubleLine(L['Home Protocol'], ipTypes[ipTypeHome or 0] or _G.UNKNOWN, .6, .8, 1, 1, 1, 1)
-        _G.GameTooltip:AddDoubleLine(L['World Protocol'], ipTypes[ipTypeWorld or 0] or _G.UNKNOWN, .6, .8, 1, 1, 1, 1)
+        _G.GameTooltip:AddDoubleLine(L['Home Protocol'], ipTypes[ipTypeHome or 0] or _G.UNKNOWN, 0.6, 0.8, 1, 1, 1, 1)
+        _G.GameTooltip:AddDoubleLine(L['World Protocol'], ipTypes[ipTypeWorld or 0] or _G.UNKNOWN, 0.6, 0.8, 1, 1, 1, 1)
     end
 
     _G.GameTooltip:AddLine(' ')
 
     if self.showMemory or not scriptProfileStatus then
         local totalMemory = UpdateMemory()
-        _G.GameTooltip:AddDoubleLine(L['AddOns'], formatMemory(totalMemory), .6, .8, 1, 1, 1, 1)
+        _G.GameTooltip:AddDoubleLine(L['AddOns'], formatMemory(totalMemory), 0.6, 0.8, 1, 1, 1, 1)
         _G.GameTooltip:AddLine(' ')
 
         local numEnabled = 0
@@ -146,13 +150,31 @@ local function Block_OnEnter(self)
             for i = (maxAddOns + 1), numEnabled do
                 hiddenMemory = hiddenMemory + infoTable[i][3]
             end
-            _G.GameTooltip:AddDoubleLine(string.format(showMoreString, numEnabled - maxAddOns, L['Hidden'], L['Hold Shift']), formatMemory(hiddenMemory), .6, .8, 1, .6, .8, 1)
+            _G.GameTooltip:AddDoubleLine(
+                string.format(showMoreString, numEnabled - maxAddOns, L['Hidden'], L['Hold Shift']),
+                formatMemory(hiddenMemory),
+                0.6,
+                0.8,
+                1,
+                0.6,
+                0.8,
+                1
+            )
         end
     else
         local totalCPU = UpdateCPU()
         local passedTime = math.max(1, GetTime() - INFOBAR.loginTime)
 
-        _G.GameTooltip:AddDoubleLine(L['AddOns'], string.format(usageString, totalCPU / passedTime), .6, .8, 1, 1, 1, 1)
+        _G.GameTooltip:AddDoubleLine(
+            L['AddOns'],
+            string.format(usageString, totalCPU / passedTime),
+            0.6,
+            0.8,
+            1,
+            1,
+            1,
+            1
+        )
         _G.GameTooltip:AddLine(' ')
 
         local numEnabled = 0
@@ -161,7 +183,16 @@ local function Block_OnEnter(self)
                 numEnabled = numEnabled + 1
                 if numEnabled <= maxShown then
                     local r, g, b = smoothColor(data[4], totalCPU)
-                    _G.GameTooltip:AddDoubleLine(data[2], string.format(usageString, data[4] / passedTime), 1, 1, 1, r, g, b)
+                    _G.GameTooltip:AddDoubleLine(
+                        data[2],
+                        string.format(usageString, data[4] / passedTime),
+                        1,
+                        1,
+                        1,
+                        r,
+                        g,
+                        b
+                    )
                 end
             end
         end
@@ -171,17 +202,39 @@ local function Block_OnEnter(self)
             for i = (maxAddOns + 1), numEnabled do
                 hiddenUsage = hiddenUsage + infoTable[i][4]
             end
-            _G.GameTooltip:AddDoubleLine(string.format(showMoreString, numEnabled - maxAddOns, L['Hidden'], L['Hold Shift']), string.format(usageString, hiddenUsage / passedTime), .6, .8, 1, .6, .8, 1)
+            _G.GameTooltip:AddDoubleLine(
+                string.format(showMoreString, numEnabled - maxAddOns, L['Hidden'], L['Hold Shift']),
+                string.format(usageString, hiddenUsage / passedTime),
+                0.6,
+                0.8,
+                1,
+                0.6,
+                0.8,
+                1
+            )
         end
     end
 
     _G.GameTooltip:AddLine(' ')
     _G.GameTooltip:AddDoubleLine(' ', C.LINE_STRING)
-    _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_LEFT_BUTTON .. L['Collect Memory'] .. ' ', 1, 1, 1, .9, .82, .62)
+    _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_LEFT_BUTTON .. L['Collect Memory'] .. ' ', 1, 1, 1, 0.9, 0.82, 0.62)
     if scriptProfileStatus then
-        _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_RIGHT_BUTTON .. L['Switch Mode'] .. ' ', 1, 1, 1, .6, .8, 1)
+        _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_RIGHT_BUTTON .. L['Switch Mode'] .. ' ', 1, 1, 1, 0.6, 0.8, 1)
     end
-    _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_MIDDLE_BUTTON .. L['CPU Usage'] .. ': ' .. (GetCVarBool('scriptProfile') and enableString or disableString) .. ' ', 1, 1, 1, .6, .8, 1)
+    _G.GameTooltip:AddDoubleLine(
+        ' ',
+        C.MOUSE_MIDDLE_BUTTON
+            .. L['CPU Usage']
+            .. ': '
+            .. (GetCVarBool('scriptProfile') and enableString or disableString)
+            .. ' ',
+        1,
+        1,
+        1,
+        0.6,
+        0.8,
+        1
+    )
     _G.GameTooltip:Show()
 end
 
@@ -236,14 +289,10 @@ function INFOBAR:CreateSystemBlock()
         return
     end
 
-    local sys = INFOBAR:RegisterNewBlock("system", 'CENTER', 200, true)
+    local sys = INFOBAR:RegisterNewBlock('system', 'CENTER', 200, true)
 
     sys.onUpdate = Block_OnUpdate
     sys.onEnter = Block_OnEnter
     sys.onLeave = Block_OnLeave
     sys.onMouseUp = Block_OnMouseUp
-
-
 end
-
-

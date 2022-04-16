@@ -51,12 +51,12 @@ local function constructor(name, parent, size)
     local highlight = button:CreateTexture(nil, 'OVERLAY')
     highlight:SetAllPoints()
     highlight:SetTexture(hlTex)
-    highlight:SetVertexColor(1, 1, 1, .3)
+    highlight:SetVertexColor(1, 1, 1, 0.3)
     button.highlight = highlight
 
     return Mixin(button, methods)
 end
 
 F:HookAddOn('OPie', function()
-    _G.OPie.UI:RegisterIndicatorConstructor('FreeUI', {name = 'FreeUI', apiLevel = 1, CreateIndicator = constructor})
+    _G.OPie.UI:RegisterIndicatorConstructor('FreeUI', { name = 'FreeUI', apiLevel = 1, CreateIndicator = constructor })
 end)

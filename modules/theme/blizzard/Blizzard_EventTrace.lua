@@ -28,7 +28,7 @@ end
 
 local function ReskinEventTraceScrollBox(frame)
     frame:DisableDrawLayer('BACKGROUND')
-    F.CreateBDFrame(frame, .25)
+    F.CreateBDFrame(frame, 0.25)
     hooksecurefunc(frame, 'Update', ReskinScrollChild)
 end
 
@@ -59,7 +59,7 @@ C.Themes['Blizzard_EventTrace'] = function()
         logBar.MarkButton,
         filterBar.DiscardAllButton,
         filterBar.UncheckAllButton,
-        filterBar.CheckAllButton
+        filterBar.CheckAllButton,
     }
     for _, button in pairs(buttons) do
         ReskinEventTraceButton(button)

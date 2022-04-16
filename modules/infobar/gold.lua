@@ -7,14 +7,22 @@ end
 
 local function GetClassIcon(class)
     local c1, c2, c3, c4 = unpack(_G.CLASS_ICON_TCOORDS[class])
-    c1, c2, c3, c4 = (c1 + .03) * 50, (c2 - .03) * 50, (c3 + .03) * 50, (c4 - .03) * 50
-    local classStr = '|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:13:15:0:-1:50:50:' .. c1 .. ':' .. c2 .. ':' .. c3 .. ':' .. c4 .. '|t '
+    c1, c2, c3, c4 = (c1 + 0.03) * 50, (c2 - 0.03) * 50, (c3 + 0.03) * 50, (c4 - 0.03) * 50
+    local classStr = '|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:13:15:0:-1:50:50:'
+        .. c1
+        .. ':'
+        .. c2
+        .. ':'
+        .. c3
+        .. ':'
+        .. c4
+        .. '|t '
     return classStr or ''
 end
 
 local crossRealms = GetAutoCompleteRealms()
 if not crossRealms or #crossRealms == 0 then
-    crossRealms = {[1] = C.REALM}
+    crossRealms = { [1] = C.REALM }
 end
 
 local profit, spent, oldMoney = 0, 0, 0
@@ -55,7 +63,7 @@ end
 
 local function Button_OnMouseUp(self, btn)
     if btn == 'LeftButton' then
-        if (not _G.StoreFrame) then
+        if not _G.StoreFrame then
             LoadAddOn('Blizzard_StoreUI')
         end
         securecall(_G.ToggleStoreUI)
@@ -68,10 +76,10 @@ local function Button_OnEnter(self)
     local anchorTop = C.DB.Infobar.AnchorTop
     _G.GameTooltip:SetOwner(self, (anchorTop and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (anchorTop and -6) or 6)
     _G.GameTooltip:ClearLines()
-    _G.GameTooltip:AddLine(_G.WORLD_QUEST_REWARD_FILTERS_GOLD, .9, .8, .6)
+    _G.GameTooltip:AddLine(_G.WORLD_QUEST_REWARD_FILTERS_GOLD, 0.9, 0.8, 0.6)
     _G.GameTooltip:AddLine(' ')
 
-    _G.GameTooltip:AddLine(L['Session'], .6, .8, 1)
+    _G.GameTooltip:AddLine(L['Session'], 0.6, 0.8, 1)
     _G.GameTooltip:AddDoubleLine(L['Earned'], GetMoneyString(profit, true), 1, 1, 1, 1, 1, 1)
     _G.GameTooltip:AddDoubleLine(L['Spent'], GetMoneyString(spent, true), 1, 1, 1, 1, 1, 1)
     if profit < spent then
@@ -82,7 +90,7 @@ local function Button_OnEnter(self)
     _G.GameTooltip:AddLine(' ')
 
     local totalGold = 0
-    _G.GameTooltip:AddLine(_G.CHARACTER, .6, .8, 1)
+    _G.GameTooltip:AddLine(_G.CHARACTER, 0.6, 0.8, 1)
 
     for _, realm in pairs(crossRealms) do
         local thisRealmList = _G.FREE_ADB['GoldStatistic'][realm]
@@ -98,17 +106,26 @@ local function Button_OnEnter(self)
     end
 
     _G.GameTooltip:AddLine(' ')
-    _G.GameTooltip:AddDoubleLine(_G.HONOR_LIFETIME, GetMoneyString(totalGold, true), .6, .8, 1, 1, 1, 1)
+    _G.GameTooltip:AddDoubleLine(_G.HONOR_LIFETIME, GetMoneyString(totalGold, true), 0.6, 0.8, 1, 1, 1, 1)
 
     _G.GameTooltip:AddLine(' ')
-    _G.GameTooltip:AddLine(_G.ITEM_QUALITY8_DESC, .6, .8, 1)
+    _G.GameTooltip:AddLine(_G.ITEM_QUALITY8_DESC, 0.6, 0.8, 1)
     local tokenPrice = C_WowTokenPublic.GetCurrentMarketPrice() or 0
-    _G.GameTooltip:AddDoubleLine(_G.AUCTION_HOUSE_BROWSE_HEADER_PRICE, GetMoneyString(tokenPrice, true), 1, 1, 1, 1, 1, 1)
+    _G.GameTooltip:AddDoubleLine(
+        _G.AUCTION_HOUSE_BROWSE_HEADER_PRICE,
+        GetMoneyString(tokenPrice, true),
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+    )
 
     _G.GameTooltip:AddLine(' ')
     _G.GameTooltip:AddDoubleLine(' ', C.LINE_STRING)
-    _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_LEFT_BUTTON .. L['Toggle Store Panel'] .. ' ', 1, 1, 1, .9, .8, .6)
-    _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_RIGHT_BUTTON .. L['Reset Gold Statistics'] .. ' ', 1, 1, 1, .9, .8, .6)
+    _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_LEFT_BUTTON .. L['Toggle Store Panel'] .. ' ', 1, 1, 1, 0.9, 0.8, 0.6)
+    _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_RIGHT_BUTTON .. L['Reset Gold Statistics'] .. ' ', 1, 1, 1, 0.9, 0.8, 0.6)
     _G.GameTooltip:Show()
 end
 
@@ -121,7 +138,7 @@ function INFOBAR:CreateGoldBlock()
         return
     end
 
-    local gold = INFOBAR:RegisterNewBlock("gold", 'LEFT', 200)
+    local gold = INFOBAR:RegisterNewBlock('gold', 'LEFT', 200)
     gold:HookScript('OnEvent', Button_OnEvent)
     gold:HookScript('OnMouseUp', Button_OnMouseUp)
     gold:HookScript('OnEnter', Button_OnEnter)

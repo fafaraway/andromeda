@@ -41,7 +41,7 @@ local msgSymbols = {
     ',',
     '_',
     '/',
-    '~'
+    '~',
 }
 
 local FilterList = {}
@@ -79,7 +79,15 @@ local chatLines, prevLineID, filterResult = {}, 0, false
 function CHAT:GetFilterResult(event, msg, name, flag, guid)
     if name == C.NAME or (event == 'CHAT_MSG_WHISPER' and flag == 'GM') or flag == 'DEV' then
         return
-    elseif guid and (IsGuildMember(guid) or C_BattleNet.GetGameAccountInfoByGUID(guid) or C_FriendList.IsFriend(guid) or IsGUIDInGroup(guid)) then
+    elseif
+        guid
+        and (
+            IsGuildMember(guid)
+            or C_BattleNet.GetGameAccountInfoByGUID(guid)
+            or C_FriendList.IsFriend(guid)
+            or IsGUIDInGroup(guid)
+        )
+    then
         return
     end
 
@@ -134,7 +142,7 @@ function CHAT:GetFilterResult(event, msg, name, flag, guid)
     end
 
     -- ECF Repeat Filter
-    local msgTable = {name, {}, GetTime()}
+    local msgTable = { name, {}, GetTime() }
     if filterMsg == '' then
         filterMsg = msg
     end
@@ -145,7 +153,13 @@ function CHAT:GetFilterResult(event, msg, name, flag, guid)
     chatLines[chatLinesSize + 1] = msgTable
     for i = 1, chatLinesSize do
         local line = chatLines[i]
-        if line[1] == msgTable[1] and ((event == 'CHAT_MSG_CHANNEL' and msgTable[3] - line[3] < .6) or CHAT:CompareStrDiff(line[2], msgTable[2]) <= .1) then
+        if
+            line[1] == msgTable[1]
+            and (
+                (event == 'CHAT_MSG_CHANNEL' and msgTable[3] - line[3] < 0.6)
+                or CHAT:CompareStrDiff(line[2], msgTable[2]) <= 0.1
+            )
+        then
             table.remove(chatLines, i)
             return true
         end
@@ -211,7 +225,7 @@ local addonBlockList = {
     '【有爱插件】',
     '：.+>',
     '|Hspell.+=>',
-    '<EH>'
+    '<EH>',
 }
 
 local cvar
@@ -226,7 +240,7 @@ function CHAT:ToggleChatBubble(party)
         return
     end
     toggleCVar(0)
-    F:Delay(.01, toggleCVar)
+    F:Delay(0.01, toggleCVar)
 end
 
 function CHAT:UpdateAddOnBlocker(event, msg, author)
@@ -267,7 +281,7 @@ function CHAT:BlockAddonSpam()
 end
 
 -- Block trash clubs
-local trashClubs = {'站桩', '致敬我们', '我们一起玩游戏', '部落大杂烩', '小号提升'}
+local trashClubs = { '站桩', '致敬我们', '我们一起玩游戏', '部落大杂烩', '小号提升' }
 function CHAT:CheckClubName()
     if self.toastType == BN_TOAST_TYPE_CLUB_INVITATION then
         local text = self.DoubleLine:GetText() or ''

@@ -519,7 +519,12 @@ function TOOLTIP:AddParagonRewards()
 
         local color = _G.ITEM_QUALITY_COLORS[quality]
         if name then
-            _G.GameTooltip:AddLine(string.format(lineStr, collected and readyTex or notReadyTex, icon, name, data.covenant or data.type), color.r, color.g, color.b)
+            _G.GameTooltip:AddLine(
+                string.format(lineStr, collected and readyTex or notReadyTex, icon, name, data.covenant or data.type),
+                color.r,
+                color.g,
+                color.b
+            )
         else
             _G.GameTooltip:AddLine(_G.ERR_TRAVEL_PASS_NO_INFO, 1, 0, 0)
         end
@@ -536,4 +541,3 @@ function TOOLTIP:ParagonRewards()
 
     hooksecurefunc('ReputationParagonFrame_SetupParagonTooltip', TOOLTIP.AddParagonRewards)
 end
-

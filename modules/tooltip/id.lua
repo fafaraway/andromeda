@@ -7,7 +7,7 @@ local types = {
     currency = 'CurrencyID',
     quest = 'QuestID',
     achievement = 'AchievementID',
-    unit = 'NPCID'
+    unit = 'NPCID',
 }
 
 function TOOLTIP:AddLineForID(id, linkType)
@@ -31,7 +31,7 @@ function TOOLTIP:AddLineForID(id, linkType)
     end
 
     self:AddLine(' ')
-    self:AddDoubleLine(linkType .. ':', id, .5, .8, 1, 1, 1, 1)
+    self:AddDoubleLine(linkType .. ':', id, 0.5, 0.8, 1, 1, 1, 1)
     self:Show()
 end
 

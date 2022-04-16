@@ -11,20 +11,20 @@ local function DesaturateUpdateCooldown(self, expectedUpdate)
     local icon = self.icon
     local action = self.action
 
-    if (icon and action) then
+    if icon and action then
         local start, duration = GetActionCooldown(action)
 
-        if (duration >= minDuration) then
+        if duration >= minDuration then
             if start > 3085367 and start <= 4294967.295 then
                 start = start - 4294967.296
             end
 
-            if ((not self.onCooldown) or (self.onCooldown == 0)) then
+            if not self.onCooldown or (self.onCooldown == 0) then
                 local nextTime = start + duration - GetTime() - 1.0
 
-                if (nextTime < -1.0) then
+                if nextTime < -1.0 then
                     nextTime = 0.05
-                elseif (nextTime < 0) then
+                elseif nextTime < 0 then
                     nextTime = -nextTime / 2
                 end
 
@@ -40,17 +40,17 @@ local function DesaturateUpdateCooldown(self, expectedUpdate)
 
                     F:Delay(nextTime, func)
                 end
-            elseif (expectedUpdate) then
-                if ((not self.onCooldown) or (self.onCooldown < start + duration)) then
+            elseif expectedUpdate then
+                if not self.onCooldown or (self.onCooldown < start + duration) then
                     self.onCooldown = start + duration
                 end
 
                 local nextTime = 0.05
                 local timeRemains = self.onCooldown - GetTime()
 
-                if (timeRemains > 0.31) then
+                if timeRemains > 0.31 then
                     nextTime = timeRemains / 5
-                elseif (timeRemains < 0) then
+                elseif timeRemains < 0 then
                     nextTime = 0.05
                 end
 
@@ -67,17 +67,17 @@ local function DesaturateUpdateCooldown(self, expectedUpdate)
                 end
             end
 
-            if ((not self.onCooldown) or (self.onCooldown < start + duration)) then
+            if not self.onCooldown or (self.onCooldown < start + duration) then
                 self.onCooldown = start + duration
             end
 
-            if (not icon:IsDesaturated()) then
+            if not icon:IsDesaturated() then
                 icon:SetDesaturated(true)
             end
         else
             self.onCooldown = 0
 
-            if (icon:IsDesaturated()) then
+            if icon:IsDesaturated() then
                 icon:SetDesaturated(false)
             end
         end
@@ -89,7 +89,7 @@ function ACTIONBAR:CooldownDesaturate()
         return
     end
 
-    if (not desaturateHooked) then
+    if not desaturateHooked then
         hooksecurefunc('ActionButton_UpdateCooldown', DesaturateUpdateCooldown)
         desaturateHooked = true
     end

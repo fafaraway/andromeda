@@ -72,28 +72,16 @@ function TOOLTIP:ReskinTipIcon()
     TOOLTIP.HookTooltipMethod(_G.GameTooltip)
     TOOLTIP.HookTooltipMethod(_G.ItemRefTooltip)
 
-    hooksecurefunc(
-        _G.GameTooltip,
-        'SetUnitAura',
-        function(self)
-            TOOLTIP.SetupTooltipIcon(self)
-        end
-    )
+    hooksecurefunc(_G.GameTooltip, 'SetUnitAura', function(self)
+        TOOLTIP.SetupTooltipIcon(self)
+    end)
 
-    hooksecurefunc(
-        _G.GameTooltip,
-        'SetAzeriteEssence',
-        function(self)
-            TOOLTIP.SetupTooltipIcon(self)
-        end
-    )
-    hooksecurefunc(
-        _G.GameTooltip,
-        'SetAzeriteEssenceSlot',
-        function(self)
-            TOOLTIP.SetupTooltipIcon(self)
-        end
-    )
+    hooksecurefunc(_G.GameTooltip, 'SetAzeriteEssence', function(self)
+        TOOLTIP.SetupTooltipIcon(self)
+    end)
+    hooksecurefunc(_G.GameTooltip, 'SetAzeriteEssenceSlot', function(self)
+        TOOLTIP.SetupTooltipIcon(self)
+    end)
 
     -- Tooltip rewards icon
     TOOLTIP.ReskinRewardIcon(_G.GameTooltip.ItemTooltip)

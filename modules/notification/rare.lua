@@ -28,7 +28,12 @@ function NOTIFICATION:RareAlert_Update(id)
             return
         end
 
-        F:CreateNotification(_G.GARRISON_MISSION_RARE, tex .. (info.name or ''), nil, 'Interface\\ICONS\\INV_Misc_Map_01')
+        F:CreateNotification(
+            _G.GARRISON_MISSION_RARE,
+            tex .. (info.name or ''),
+            nil,
+            'Interface\\ICONS\\INV_Misc_Map_01'
+        )
 
         local nameString
         local mapID = C_Map.GetBestMapForUnit('player')

@@ -38,7 +38,7 @@ function CHAT:ChatCopy_OnClick()
     if not frame:IsShown() then
         local chatframe = _G.SELECTED_DOCK_FRAME
         local _, fontSize = chatframe:GetFont()
-        _G.FCF_SetChatWindowFontSize(chatframe, chatframe, .01)
+        _G.FCF_SetChatWindowFontSize(chatframe, chatframe, 0.01)
         frame:Show()
 
         local lineCt = CHAT.GetChatLines(chatframe)
@@ -63,7 +63,13 @@ function CHAT:ChatCopy_Create()
     frame.close = CreateFrame('Button', nil, frame, 'UIPanelCloseButton')
     frame.close:SetPoint('TOPRIGHT', frame)
 
-    local scrollArea = CreateFrame('ScrollFrame', 'ChatCopyScrollFrame', frame, 'UIPanelScrollFrameTemplate', 'BackdropTemplate')
+    local scrollArea = CreateFrame(
+        'ScrollFrame',
+        'ChatCopyScrollFrame',
+        frame,
+        'UIPanelScrollFrameTemplate',
+        'BackdropTemplate'
+    )
     scrollArea:SetPoint('TOPLEFT', 10, -30)
     scrollArea:SetPoint('BOTTOMRIGHT', -28, 10)
 
@@ -110,7 +116,7 @@ function CHAT:ChatCopy_Create()
         _G.GameTooltip:SetOwner(copy, 'ANCHOR_TOPRIGHT')
         _G.GameTooltip:AddLine(' ')
         _G.GameTooltip:AddDoubleLine(' ', C.LINE_STRING)
-        _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_LEFT_BUTTON .. L['Copy chat content'] .. ' ', 1, 1, 1, .9, .8, .6)
+        _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_LEFT_BUTTON .. L['Copy chat content'] .. ' ', 1, 1, 1, 0.9, 0.8, 0.6)
         _G.GameTooltip:Show()
     end)
 

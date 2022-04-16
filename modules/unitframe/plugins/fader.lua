@@ -1,9 +1,9 @@
 local F = unpack(select(2, ...))
 local oUF = F.Libs.oUF
 
-local MIN_ALPHA, MAX_ALPHA = .35, 1
+local MIN_ALPHA, MAX_ALPHA = 0.35, 1
 local onRangeObjects, onRangeFrame = {}
-local PowerTypesFull = {MANA = true, FOCUS = true, ENERGY = true}
+local PowerTypesFull = { MANA = true, FOCUS = true, ENERGY = true }
 
 local function ClearTimers(element)
     if element.configTimer then
@@ -54,15 +54,15 @@ local function Update(self)
     end
 
     if
-        (element.Instance and IsInInstance()) or
-        (element.Combat and UnitAffectingCombat(unit)) or
-        (element.Casting and (UnitCastingInfo(unit) or UnitChannelInfo(unit))) or
-        (element.PlayerTarget and UnitExists('target')) or
-        (element.UnitTarget and UnitExists(unit..'target')) or
-        (element.Focus and UnitExists('focus')) or
-        (element.Health and UnitHealth(unit) < UnitHealthMax(unit)) or
-        (element.Power and (PowerTypesFull[powerType] and UnitPower(unit) < UnitPowerMax(unit))) or
-        (element.Hover and GetMouseFocus() == (self.__faderobject or self))
+        (element.Instance and IsInInstance())
+        or (element.Combat and UnitAffectingCombat(unit))
+        or (element.Casting and (UnitCastingInfo(unit) or UnitChannelInfo(unit)))
+        or (element.PlayerTarget and UnitExists('target'))
+        or (element.UnitTarget and UnitExists(unit .. 'target'))
+        or (element.Focus and UnitExists('focus'))
+        or (element.Health and UnitHealth(unit) < UnitHealthMax(unit))
+        or (element.Power and (PowerTypesFull[powerType] and UnitPower(unit) < UnitPowerMax(unit)))
+        or (element.Hover and GetMouseFocus() == (self.__faderobject or self))
     then
         ToggleAlpha(self, element, element.MaxAlpha)
     else
@@ -86,7 +86,7 @@ end
 local function onRangeUpdate(frame, elapsed)
     frame.timer = (frame.timer or 0) + elapsed
 
-    if (frame.timer >= .20) then
+    if frame.timer >= 0.20 then
         for _, object in next, onRangeObjects do
             if object:IsVisible() then
                 object.Fader:ForceUpdate()
@@ -162,7 +162,7 @@ local options = {
             self:RegisterEvent('PLAYER_ENTERING_WORLD', Update)
             self:RegisterEvent('ZONE_CHANGED_NEW_AREA', Update, true)
         end,
-        events = {'PLAYER_ENTERING_WORLD', 'ZONE_CHANGED_NEW_AREA'},
+        events = { 'PLAYER_ENTERING_WORLD', 'ZONE_CHANGED_NEW_AREA' },
     },
     Combat = {
         enable = function(self)
@@ -170,7 +170,7 @@ local options = {
             self:RegisterEvent('PLAYER_REGEN_DISABLED', Update, true)
             self:RegisterEvent('UNIT_FLAGS', Update)
         end,
-        events = {'PLAYER_REGEN_ENABLED', 'PLAYER_REGEN_DISABLED', 'UNIT_FLAGS'},
+        events = { 'PLAYER_REGEN_ENABLED', 'PLAYER_REGEN_DISABLED', 'UNIT_FLAGS' },
     },
     Target = { --[[ UnitTarget, PlayerTarget ]]
         enable = function(self)
@@ -189,7 +189,7 @@ local options = {
             self:RegisterEvent('PLAYER_TARGET_CHANGED', Update, true)
             self:RegisterEvent('PLAYER_FOCUS_CHANGED', Update, true)
         end,
-        events = {'UNIT_TARGET', 'PLAYER_TARGET_CHANGED', 'PLAYER_FOCUS_CHANGED'},
+        events = { 'UNIT_TARGET', 'PLAYER_TARGET_CHANGED', 'PLAYER_FOCUS_CHANGED' },
         disable = function(self)
             if self.Fader.TargetHooked == 1 then
                 self.Fader.TargetHooked = 0 -- off state
@@ -200,21 +200,21 @@ local options = {
         enable = function(self)
             self:RegisterEvent('PLAYER_FOCUS_CHANGED', Update, true)
         end,
-        events = {'PLAYER_FOCUS_CHANGED'}
+        events = { 'PLAYER_FOCUS_CHANGED' },
     },
     Health = {
         enable = function(self)
             self:RegisterEvent('UNIT_HEALTH', Update)
             self:RegisterEvent('UNIT_MAXHEALTH', Update)
         end,
-        events = {'UNIT_HEALTH', 'UNIT_MAXHEALTH'},
+        events = { 'UNIT_HEALTH', 'UNIT_MAXHEALTH' },
     },
     Power = {
         enable = function(self)
             self:RegisterEvent('UNIT_POWER_UPDATE', Update)
             self:RegisterEvent('UNIT_MAXPOWER', Update)
         end,
-        events = {'UNIT_POWER_UPDATE', 'UNIT_MAXPOWER'},
+        events = { 'UNIT_POWER_UPDATE', 'UNIT_MAXPOWER' },
     },
     Casting = {
         enable = function(self)
@@ -233,7 +233,7 @@ local options = {
             'UNIT_SPELLCAST_INTERRUPTED',
             'UNIT_SPELLCAST_CHANNEL_START',
             'UNIT_SPELLCAST_CHANNEL_UPDATE',
-            'UNIT_SPELLCAST_CHANNEL_STOP'
+            'UNIT_SPELLCAST_CHANNEL_STOP',
         },
     },
     MinAlpha = {
@@ -248,9 +248,9 @@ local options = {
             self.Fader.MaxAlpha = state or MAX_ALPHA
         end,
     },
-    Smooth = {countIgnored = true},
-    DelayAlpha = {countIgnored = true},
-    Delay = {countIgnored = true},
+    Smooth = { countIgnored = true },
+    DelayAlpha = { countIgnored = true },
+    Delay = { countIgnored = true },
 }
 
 local function CountOption(element, state, oldState)

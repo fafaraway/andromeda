@@ -63,13 +63,13 @@ C.AuraWhiteList = {
     [355934] = true, -- 集市，强光屏障
     [349933] = true, -- 集市，狂热鞭笞协议
     -- S3, Encrypted
-    [368078] = true,	-- 飘移力场
-    [368103] = true,	-- 加速力场
-    [368243] = true,	-- 能量弹幕
+    [368078] = true, -- 飘移力场
+    [368103] = true, -- 加速力场
+    [368243] = true, -- 能量弹幕
     -- Raids
     [334695] = true, -- 动荡能量，猎手
     [345902] = true, -- 破裂的联结，猎手
-    [346792] = true -- 罪触之刃，猩红议会
+    [346792] = true, -- 罪触之刃，猩红议会
 }
 
 C.AuraBlackList = {
@@ -80,7 +80,7 @@ C.AuraBlackList = {
     [214975] = true, -- 抑心光环
     [273977] = true, -- 亡者之握
     [276919] = true, -- 承受压力
-    [206930] = true -- 心脏打击
+    [206930] = true, -- 心脏打击
 }
 
 -- 显示姓名板单位的目标
@@ -127,12 +127,12 @@ C.NPSpecialUnitsList = {
     [169425] = true,
     [169429] = true,
     [169421] = true,
-    [169426] = true
+    [169426] = true,
 }
 
 C.NPShowPowerUnitsList = {
     [165556] = true, -- 赤红深渊，瞬息具象
-    [GetSectionInfo(22339)] = true -- 猎手阿尔迪莫，巴加斯特之影
+    [GetSectionInfo(22339)] = true, -- 猎手阿尔迪莫，巴加斯特之影
 }
 
 C.NPMajorSpellsList = {

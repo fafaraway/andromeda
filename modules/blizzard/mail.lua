@@ -1,7 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 local M = F:RegisterModule('EnhancedMailBox')
 
-local mailIndex, timeToWait, totalCash, inboxItems = 0, .15, 0, {}
+local mailIndex, timeToWait, totalCash, inboxItems = 0, 0.15, 0, {}
 local isGoldCollecting
 
 function M:GetMoneyString(money, full)
@@ -74,7 +74,13 @@ function M:InboxItem_OnEnter()
                 local itemName, _, itemQuality, _, _, _, _, _, _, itemTexture = GetItemInfo(itemID)
                 if itemName then
                     local r, g, b = GetItemQualityColor(itemQuality)
-                    _G.GameTooltip:AddDoubleLine(' |T' .. itemTexture .. ':12:12:0:0:50:50:4:46:4:46|t ' .. itemName, count, r, g, b)
+                    _G.GameTooltip:AddDoubleLine(
+                        ' |T' .. itemTexture .. ':12:12:0:0:50:50:4:46:4:46|t ' .. itemName,
+                        count,
+                        r,
+                        g,
+                        b
+                    )
                 end
             end
             _G.GameTooltip:Show()
@@ -102,7 +108,7 @@ function M:ContactButton_Create(parent, index)
     button:SetPoint('TOPLEFT', 2, -2 - (index - 1) * 20)
     button.HL = button:CreateTexture(nil, 'HIGHLIGHT')
     button.HL:SetAllPoints()
-    button.HL:SetColorTexture(1, 1, 1, .25)
+    button.HL:SetColorTexture(1, 1, 1, 0.25)
 
     button.name = F.CreateFS(button, C.Assets.Font.Bold, 12, nil, 'Name', nil, true, 'LEFT', 0, 0)
     button.name:SetPoint('RIGHT', button, 'LEFT', 155, 0)
@@ -128,7 +134,7 @@ local function GenerateDataByRealm(realm)
     if contactListByRealm[realm] then
         for name, color in pairs(contactListByRealm[realm]) do
             local r, g, b = string.split(':', color)
-            table.insert(contactList, {name = name .. '-' .. realm, r = r, g = g, b = b})
+            table.insert(contactList, { name = name .. '-' .. realm, r = r, g = g, b = b })
         end
     end
 end
@@ -205,7 +211,7 @@ function M:MailBox_ContactList()
     bu.Icon = bu:CreateTexture(nil, 'ARTWORK')
     bu.Icon:SetAllPoints()
     bu.Icon:SetTexture(C.Assets.Texture.Gear)
-    bu.Icon:SetVertexColor(.6, .6, .6)
+    bu.Icon:SetVertexColor(0.6, 0.6, 0.6)
     bu:SetHighlightTexture(C.Assets.Texture.Gear)
     bu:SetPoint('LEFT', _G.SendMailNameEditBox, 'RIGHT', 20, 0)
 
@@ -216,12 +222,9 @@ function M:MailBox_ContactList()
     F.SetBD(list)
     F.CreateFS(list, C.Assets.Font.Regular, 12, nil, L['Contact List'], 'YELLOW', true, 'TOP', 0, -5)
 
-    bu:SetScript(
-        'OnClick',
-        function()
-            F:TogglePanel(list)
-        end
-    )
+    bu:SetScript('OnClick', function()
+        F:TogglePanel(list)
+    end)
 
     local editbox = F.CreateEditBox(list, 120, 20)
     editbox:SetPoint('TOPLEFT', 4, -25)
@@ -238,31 +241,28 @@ function M:MailBox_ContactList()
     swatch:SetPoint('LEFT', editbox, 'RIGHT', 5, 0)
     local add = F.CreateButton(list, 42, 20, _G.ADD, 12)
     add:SetPoint('LEFT', swatch, 'RIGHT', 5, 0)
-    add:SetScript(
-        'OnClick',
-        function()
-            local text = editbox:GetText()
-            if text == '' or tonumber(text) then
-                return
-            end -- incorrect input
-            if not string.find(text, '-') then
-                text = text .. '-' .. C.REALM
-            end -- complete player realm name
-            if _G.FREE_ADB['ContactList'][text] then
-                return
-            end -- unit exists
+    add:SetScript('OnClick', function()
+        local text = editbox:GetText()
+        if text == '' or tonumber(text) then
+            return
+        end -- incorrect input
+        if not string.find(text, '-') then
+            text = text .. '-' .. C.REALM
+        end -- complete player realm name
+        if _G.FREE_ADB['ContactList'][text] then
+            return
+        end -- unit exists
 
-            local r, g, b = swatch.tex:GetColor()
-            _G.FREE_ADB['ContactList'][text] = r .. ':' .. g .. ':' .. b
-            M:ContactList_Refresh()
-            editbox:SetText('')
-        end
-    )
+        local r, g, b = swatch.tex:GetColor()
+        _G.FREE_ADB['ContactList'][text] = r .. ':' .. g .. ':' .. b
+        M:ContactList_Refresh()
+        editbox:SetText('')
+    end)
 
     local scrollFrame = CreateFrame('ScrollFrame', 'FreeUIMailBoxScrollFrame', list, 'HybridScrollFrameTemplate')
     scrollFrame:SetSize(175, 368)
     scrollFrame:SetPoint('BOTTOMLEFT', 4, 4)
-    F.CreateBDFrame(scrollFrame, .25)
+    F.CreateBDFrame(scrollFrame, 0.25)
     list.scrollFrame = scrollFrame
 
     local scrollBar = CreateFrame('Slider', '$parentScrollBar', scrollFrame, 'HybridScrollBarTemplate')
@@ -367,7 +367,7 @@ function M:CollectGoldButton()
     _G.OpenAllMail:SetPoint('BOTTOMRIGHT', _G.MailFrame, 'BOTTOM', -2, 16)
     _G.OpenAllMail:SetSize(80, 20)
 
-    local button = M:MailBox_CreatButton(_G.InboxFrame, 80, 20, '', {'BOTTOMLEFT', _G.MailFrame, 'BOTTOM', 2, 16})
+    local button = M:MailBox_CreatButton(_G.InboxFrame, 80, 20, '', { 'BOTTOMLEFT', _G.MailFrame, 'BOTTOM', 2, 16 })
     button:HookScript('OnClick', M.MailBox_CollectAllGold)
     button:HookScript('OnEnter', M.TotalCash_OnEnter)
     button:HookScript('OnLeave', M.TotalCash_OnLeave)
@@ -401,7 +401,13 @@ function M:MailBox_CollectCurrent()
 end
 
 function M:CollectCurrentButton()
-    local button = M:MailBox_CreatButton(_G.OpenMailFrame, 70, 20, L['Take All'], {'RIGHT', 'OpenMailReplyButton', 'LEFT', -6, 0})
+    local button = M:MailBox_CreatButton(
+        _G.OpenMailFrame,
+        70,
+        20,
+        L['Take All'],
+        { 'RIGHT', 'OpenMailReplyButton', 'LEFT', -6, 0 }
+    )
     button:SetScript('OnClick', M.MailBox_CollectCurrent)
 
     _G.OpenMailCancelButton:SetSize(70, 20)
@@ -423,46 +429,33 @@ function M:LastMailSaver()
     F.ReskinCheck(mailSaver)
 
     mailSaver:SetChecked(C.DB.General.SaveRecipient)
-    mailSaver:SetScript(
-        'OnClick',
-        function(self)
-            C.DB.General.SaveRecipient = self:GetChecked()
-        end
-    )
+    mailSaver:SetScript('OnClick', function(self)
+        C.DB.General.SaveRecipient = self:GetChecked()
+    end)
     F.AddTooltip(mailSaver, 'ANCHOR_TOP', L['Save mail recipient'])
 
     local resetPending
-    hooksecurefunc(
-        'SendMailFrame_SendMail',
-        function()
-            if C.DB.General.SaveRecipient then
-                C.DB.General.RecipientList = _G.SendMailNameEditBox:GetText()
-                resetPending = true
-            else
-                resetPending = nil
-            end
+    hooksecurefunc('SendMailFrame_SendMail', function()
+        if C.DB.General.SaveRecipient then
+            C.DB.General.RecipientList = _G.SendMailNameEditBox:GetText()
+            resetPending = true
+        else
+            resetPending = nil
         end
-    )
+    end)
 
-    hooksecurefunc(
-        _G.SendMailNameEditBox,
-        'SetText',
-        function(self, text)
-            if resetPending and text == '' then
-                resetPending = nil
-                self:SetText(C.DB.General.RecipientList)
-            end
+    hooksecurefunc(_G.SendMailNameEditBox, 'SetText', function(self, text)
+        if resetPending and text == '' then
+            resetPending = nil
+            self:SetText(C.DB.General.RecipientList)
         end
-    )
+    end)
 
-    _G.SendMailFrame:HookScript(
-        'OnShow',
-        function()
-            if C.DB.General.SaveRecipient then
-                _G.SendMailNameEditBox:SetText(C.DB.General.RecipientList)
-            end
+    _G.SendMailFrame:HookScript('OnShow', function()
+        if C.DB.General.SaveRecipient then
+            _G.SendMailNameEditBox:SetText(C.DB.General.RecipientList)
         end
-    )
+    end)
 end
 
 function M:ArrangeDefaultElements()
@@ -473,20 +466,17 @@ function M:ArrangeDefaultElements()
     _G.SendMailNameEditBoxMiddle:SetWidth(146)
     _G.SendMailCostMoneyFrame:SetAlpha(0)
 
-    _G.SendMailMailButton:HookScript(
-        'OnEnter',
-        function(self)
-            _G.GameTooltip:SetOwner(self, 'ANCHOR_TOP')
-            _G.GameTooltip:ClearLines()
-            local sendPrice = GetSendMailPrice()
-            local colorStr = '|cffffffff'
-            if sendPrice > GetMoney() then
-                colorStr = '|cffff0000'
-            end
-            _G.GameTooltip:AddLine(_G.SEND_MAIL_COST .. colorStr .. M:GetMoneyString(sendPrice, true))
-            _G.GameTooltip:Show()
+    _G.SendMailMailButton:HookScript('OnEnter', function(self)
+        _G.GameTooltip:SetOwner(self, 'ANCHOR_TOP')
+        _G.GameTooltip:ClearLines()
+        local sendPrice = GetSendMailPrice()
+        local colorStr = '|cffffffff'
+        if sendPrice > GetMoney() then
+            colorStr = '|cffff0000'
         end
-    )
+        _G.GameTooltip:AddLine(_G.SEND_MAIL_COST .. colorStr .. M:GetMoneyString(sendPrice, true))
+        _G.GameTooltip:Show()
+    end)
     _G.SendMailMailButton:HookScript('OnLeave', F.HideTooltip)
 end
 

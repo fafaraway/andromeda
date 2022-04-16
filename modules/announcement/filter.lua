@@ -52,5 +52,5 @@ C.AnnounceableSpellsList = {
     [116849] = true, -- Life Cocoon
     [322118] = true, -- Invoke Yu'lon, the Jade Serpent
     -- Covenants
-    [316958] = true -- Ashen Hallow
+    [316958] = true, -- Ashen Hallow
 }

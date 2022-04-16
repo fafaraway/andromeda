@@ -37,7 +37,7 @@ table.insert(C.BlizzThemes, function()
     local tabContainer = content.TabContainer
 
     F.StripTextures(content)
-    local bg = F.CreateBDFrame(content, .25)
+    local bg = F.CreateBDFrame(content, 0.25)
     bg:SetPoint('BOTTOMRIGHT', tabContainer.InsetBorderTop, 4, -1)
     F.ReskinScroll(content.ScrollFrame.ScrollBar)
 
@@ -58,7 +58,7 @@ table.insert(C.BlizzThemes, function()
     local tabContainer = content.tabContainer
 
     F.StripTextures(content)
-    local bg = F.CreateBDFrame(content, .25)
+    local bg = F.CreateBDFrame(content, 0.25)
     bg:SetPoint('BOTTOMRIGHT', tabContainer.InsetBorderTop, 4, -1)
     F.StripTextures(content.earningsArt)
     F.ReskinScroll(content.scrollFrame.scrollBar)

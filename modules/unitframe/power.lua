@@ -22,7 +22,9 @@ local function UpdatePowerColor(power, unit)
         return
     end
 
-    if not C.DEV_MODE then return end
+    if not C.DEV_MODE then
+        return
+    end
 
     local spec = GetSpecialization() or 0
     local isBlood = C.CLASS == 'DEATHKNIGHT' and spec == 1
@@ -35,29 +37,29 @@ local function UpdatePowerColor(power, unit)
         if IsSpellAvailable(49998) then -- Death Strike
             power:SetStatusBarColor(r, g, b)
         else
-            power:SetStatusBarColor(r * .5, g * .5, b * .5)
+            power:SetStatusBarColor(r * 0.5, g * 0.5, b * 0.5)
         end
     elseif isFrost then -- Frost Death Knight
         if IsSpellAvailable(49143) then -- Frost Strike
             power:SetStatusBarColor(r, g, b)
         else
-            power:SetStatusBarColor(r * .5, g * .5, b * .5)
+            power:SetStatusBarColor(r * 0.5, g * 0.5, b * 0.5)
         end
     elseif isVengeance then -- Vengeance Demon Hunter
         if IsSpellAvailable(212084) then -- Fel Devastation
             power:SetStatusBarColor(r, g, b)
         elseif IsSpellAvailable(228477) then -- Soul Cleave
-            power:SetStatusBarColor(r * .5, g * .5, b * .5)
+            power:SetStatusBarColor(r * 0.5, g * 0.5, b * 0.5)
         else
-            power:SetStatusBarColor(.3, .3, .3)
+            power:SetStatusBarColor(0.3, 0.3, 0.3)
         end
     elseif isHavoc then -- Havoc Demon Hunter
         if IsSpellAvailable(162794) then -- Chaos Strike
             power:SetStatusBarColor(r, g, b)
         elseif IsSpellAvailable(198013) then -- Eye Beam
-            power:SetStatusBarColor(r * .5, g * .5, b * .5)
+            power:SetStatusBarColor(r * 0.5, g * 0.5, b * 0.5)
         else
-            power:SetStatusBarColor(.3, .3, .3)
+            power:SetStatusBarColor(0.3, 0.3, 0.3)
         end
     end
 end
@@ -117,7 +119,7 @@ function UNITFRAME:CreatePowerBar(self)
         local bg = power:CreateTexture(nil, 'BACKGROUND')
         bg:SetAllPoints()
         bg:SetTexture(C.Assets.Texture.Backdrop)
-        bg.multiplier = .1
+        bg.multiplier = 0.1
         power.bg = bg
     end
 
@@ -139,7 +141,7 @@ end
 
 --[[ Alternative power ]]
 local function AltPowerOnEnter(self)
-    if (not self:IsVisible()) then
+    if not self:IsVisible() then
         return
     end
 

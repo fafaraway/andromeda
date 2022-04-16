@@ -65,7 +65,7 @@ local function ApplyStyle(self)
     end
 
     frame:SetScale(1)
-    frame:SetHeight(buttonSize * .6)
+    frame:SetHeight(buttonSize * 0.6)
 
     ReskinIcon(icon1, frame)
     ReskinIcon(icon2, frame)
@@ -77,7 +77,7 @@ local function ApplyStyle(self)
 
     name:ClearAllPoints()
     name:SetPoint('LEFT', frame, 'LEFT', 2, 6)
-    name:SetPoint('RIGHT', frame, 'LEFT', tbar:GetWidth() * .85, 6)
+    name:SetPoint('RIGHT', frame, 'LEFT', tbar:GetWidth() * 0.85, 6)
     name:SetFont(C.Assets.Font.Bold, 12, nil, nil, nil, nil, 'THICK')
     name:SetJustifyH('LEFT')
     name:SetWordWrap(false)
@@ -96,7 +96,11 @@ function THEME:ReskinDBM()
             if string.match(textString, ':(%d+):(%d+)') then
                 local size1, size2 = string.match(textString, ':(%d+):(%d+)')
                 size1, size2 = size1 + 3, size2 + 3
-                textString = string.gsub(textString, ':(%d+):(%d+)', ':' .. size1 .. ':' .. size2 .. ':0:0:64:64:5:59:5:59')
+                textString = string.gsub(
+                    textString,
+                    ':(%d+):(%d+)',
+                    ':' .. size1 .. ':' .. size2 .. ':0:0:64:64:5:59:5:59'
+                )
             elseif string.match(textString, ':(%d+)|t') then
                 local size = string.match(textString, ':(%d+)|t')
                 size = size + 3

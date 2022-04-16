@@ -8,7 +8,7 @@ local ABBREVIATIONS = {
     PARTY = 'P',
     RAID_LEADER = '|cffffff00!|rR',
     RAID = 'R',
-    INSTANCE_CHAT = 'I'
+    INSTANCE_CHAT = 'I',
 }
 
 local CLIENT_DEFAULT_COLOR = '22aaff'
@@ -61,13 +61,12 @@ local function addMessage(chatFrame, msg, ...)
     -- different whisper color
     local r, g, b = ...
     if string.find(msg, L['Tell'] .. ' |H[BN]*player.+%]') then
-        r, g, b = r * .5, g * .5, b * .5
+        r, g, b = r * 0.5, g * 0.5, b * 0.5
     end
 
     -- remove realm and bracket
     msg = msg:gsub('|Hplayer:(.-)|h%[(.-)%]|h', formatPlayer)
     -- msg = msg:gsub('|HBNplayer:(.-)|h%[(.-)%]|h', formatBNPlayer)
-
 
     msg = msg:gsub('|Hchannel:(.-)|h%[(.-)%]|h', formatChannel)
 

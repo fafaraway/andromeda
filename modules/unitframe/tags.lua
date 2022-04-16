@@ -29,7 +29,7 @@ local events = {
     groupleader = 'PARTY_LEADER_CHANGED GROUP_ROSTER_UPDATE',
     resting = 'PLAYER_UPDATE_RESTING',
     pvp = 'UNIT_FACTION',
-    classification = 'UNIT_CLASSIFICATION_CHANGED'
+    classification = 'UNIT_CLASSIFICATION_CHANGED',
 }
 
 -- abbreviate the name
@@ -88,7 +88,7 @@ local _tags = {
     -- power value
     powervalue = function(unit)
         local cur, max = UnitPower(unit), UnitPowerMax(unit)
-        if (cur == 0 or max == 0 or not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit)) then
+        if cur == 0 or max == 0 or not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then
             return
         end
 
@@ -100,18 +100,18 @@ local _tags = {
         local max = UnitPowerMax(unit, _G.ALTERNATE_POWER_INDEX)
 
         if max > 0 and not UnitIsDeadOrGhost(unit) then
-            return ('%s%%'):format(math.floor(cur / max * 100 + .5))
+            return ('%s%%'):format(math.floor(cur / max * 100 + 0.5))
         end
     end,
 
     -- offline ghost dead
     ddg = function(unit)
         if not UnitIsConnected(unit) and GetNumArenaOpponentSpecs() == 0 then
-            return "|cffcccccc".._G.PLAYER_OFFLINE.."|r"
+            return '|cffcccccc' .. _G.PLAYER_OFFLINE .. '|r'
         elseif UnitIsGhost(unit) then
-            return "|cffcccccc"..L["Ghost"].."|r"
+            return '|cffcccccc' .. L['Ghost'] .. '|r'
         elseif UnitIsDead(unit) then
-            return "|cffcccccc".._G.DEAD.."|r"
+            return '|cffcccccc' .. _G.DEAD .. '|r'
         end
     end,
 
@@ -197,7 +197,10 @@ local _tags = {
         local isTapped = UnitIsTapDenied(unit)
         local isDead = UnitIsDeadOrGhost(unit)
 
-        if (unit == 'targettarget' and UnitIsUnit('targettarget', 'player')) or (unit == 'focustarget' and UnitIsUnit('focustarget', 'player')) then
+        if
+            (unit == 'targettarget' and UnitIsUnit('targettarget', 'player'))
+            or (unit == 'focustarget' and UnitIsUnit('focustarget', 'player'))
+        then
             return F:RgbToHex(1, 0, 0)
         elseif isTapped or isOffline then
             return F:RgbToHex(colors.tapped)
@@ -240,7 +243,7 @@ local _tags = {
     end,
     -- player resting
     resting = function(unit)
-        if (unit == 'player' and IsResting()) then
+        if unit == 'player' and IsResting() then
             return '|cff2C8D51Zzz|r'
         end
     end,
@@ -255,21 +258,20 @@ local _tags = {
         local texStr = '|T%s:16:16:0:0:64:64:4:60:4:60|t'
         local class, level = UnitClassification(unit), UnitLevel(unit)
 
-        if (class == 'worldboss' or level == -1) then
+        if class == 'worldboss' or level == -1 then
             return string.format(texStr, C.Assets.Texture.Skull)
         elseif (class == 'rare') or (class == 'rareelite') then
             return string.format(texStr, C.Assets.Texture.Rare)
-        elseif (class == 'elite') then
+        elseif class == 'elite' then
             return string.format(texStr, C.Assets.Texture.Elite)
         end
-    end
+    end,
 }
 
 for tag, func in next, _tags do
     tagMethods['free:' .. tag] = func
     tagEvents['free:' .. tag] = events[tag]
 end
-
 
 function UNITFRAME:CreateGroupLeaderTag(self)
     local font = C.Assets.Font.Pixel

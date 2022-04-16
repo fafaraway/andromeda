@@ -4,7 +4,7 @@ local activeObjects = {}
 local handledObjects = {}
 
 local TARGET_FPS = 60
-local AMOUNT = .33
+local AMOUNT = 0.33
 
 local function clamp(v, min, max)
     min = min or 0
@@ -22,7 +22,7 @@ end
 
 local function isCloseEnough(new, target, range)
     if range > 0 then
-        return math.abs((new - target) / range) <= .001
+        return math.abs((new - target) / range) <= 0.001
     end
 
     return true
@@ -113,7 +113,7 @@ function F:DesmoothBar(bar)
 end
 
 function F:SetSmoothingAmount(amount)
-    AMOUNT = clamp(amount, .15, .6)
+    AMOUNT = clamp(amount, 0.15, 0.6)
 end
 
 F:RegisterEvent('PLAYER_LOGIN', function()

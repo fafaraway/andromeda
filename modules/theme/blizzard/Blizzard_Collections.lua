@@ -35,11 +35,11 @@ C.Themes['Blizzard_Collections'] = function()
     _G.PetJournalTutorialButton.Ring:Hide()
 
     F.StripTextures(MountJournal.MountCount)
-    F.CreateBDFrame(MountJournal.MountCount, .25)
+    F.CreateBDFrame(MountJournal.MountCount, 0.25)
     F.StripTextures(PetJournal.PetCount)
-    F.CreateBDFrame(PetJournal.PetCount, .25)
+    F.CreateBDFrame(PetJournal.PetCount, 0.25)
     PetJournal.PetCount:SetWidth(140)
-    F.CreateBDFrame(MountJournal.MountDisplay.ModelScene, .25)
+    F.CreateBDFrame(MountJournal.MountDisplay.ModelScene, 0.25)
     F.ReskinIcon(MountJournal.MountDisplay.InfoButton.Icon)
 
     F.Reskin(_G.MountJournalMountButton)
@@ -59,7 +59,7 @@ C.Themes['Blizzard_Collections'] = function()
     togglePlayer:SetSize(28, 28)
 
     F.StripTextures(MountJournal.BottomLeftInset)
-    local bg = F.CreateBDFrame(MountJournal.BottomLeftInset, .25)
+    local bg = F.CreateBDFrame(MountJournal.BottomLeftInset, 0.25)
     bg:SetPoint('TOPLEFT', 3, 0)
     bg:SetPoint('BOTTOMRIGHT', -24, 2)
 
@@ -67,7 +67,7 @@ C.Themes['Blizzard_Collections'] = function()
     _G.PetJournalFilterButton:SetPoint('TOPRIGHT', _G.PetJournalLeftInset, -5, -8)
     _G.PetJournalTutorialButton:SetPoint('TOPLEFT', PetJournal, 'TOPLEFT', -14, 14)
 
-    local scrollFrames = {MountJournal.ListScrollFrame.buttons, PetJournal.listScroll.buttons}
+    local scrollFrames = { MountJournal.ListScrollFrame.buttons, PetJournal.listScroll.buttons }
     for _, scrollFrame in pairs(scrollFrames) do
         for i = 1, #scrollFrame do
             local bu = scrollFrame[i]
@@ -78,7 +78,7 @@ C.Themes['Blizzard_Collections'] = function()
             bu.iconBorder:SetTexture('')
             bu.selectedTexture:SetTexture('')
 
-            local bg = F.CreateBDFrame(bu, .25)
+            local bg = F.CreateBDFrame(bu, 0.25)
             bg:SetPoint('TOPLEFT', 3, -1)
             bg:SetPoint('BOTTOMRIGHT', 0, 1)
             bu.bg = bg
@@ -89,14 +89,14 @@ C.Themes['Blizzard_Collections'] = function()
 
             if bu.DragButton then
                 bu.DragButton.ActiveTexture:SetTexture('')
-                bu.DragButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+                bu.DragButton:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
                 bu.DragButton:GetHighlightTexture():SetAllPoints(icon)
             else
                 bu.dragButton.ActiveTexture:SetTexture('')
                 bu.dragButton.levelBG:SetAlpha(0)
                 bu.dragButton.level:SetFontObject(_G.GameFontNormal)
                 bu.dragButton.level:SetTextColor(1, 1, 1)
-                bu.dragButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+                bu.dragButton:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
                 bu.dragButton:GetHighlightTexture():SetAllPoints(icon)
             end
         end
@@ -110,13 +110,13 @@ C.Themes['Blizzard_Collections'] = function()
                 bu.icon:SetShown(bu.index ~= nil)
 
                 if bu.selectedTexture:IsShown() then
-                    bu.bg:SetBackdropColor(r, g, b, .25)
+                    bu.bg:SetBackdropColor(r, g, b, 0.25)
                 else
-                    bu.bg:SetBackdropColor(0, 0, 0, .25)
+                    bu.bg:SetBackdropColor(0, 0, 0, 0.25)
                 end
 
                 if bu.DragButton.ActiveTexture:IsShown() then
-                    bu.icon.bg:SetBackdropBorderColor(1, .8, 0)
+                    bu.icon.bg:SetBackdropBorderColor(1, 0.8, 0)
                 else
                     bu.icon.bg:SetBackdropBorderColor(0, 0, 0)
                 end
@@ -145,17 +145,17 @@ C.Themes['Blizzard_Collections'] = function()
                             bu.name:SetTextColor(1, 1, 1)
                         end
                     else
-                        bu.name:SetTextColor(.5, .5, .5)
+                        bu.name:SetTextColor(0.5, 0.5, 0.5)
                     end
 
                     if bu.selectedTexture:IsShown() then
-                        bu.bg:SetBackdropColor(r, g, b, .25)
+                        bu.bg:SetBackdropColor(r, g, b, 0.25)
                     else
-                        bu.bg:SetBackdropColor(0, 0, 0, .25)
+                        bu.bg:SetBackdropColor(0, 0, 0, 0.25)
                     end
 
                     if bu.dragButton.ActiveTexture:IsShown() then
-                        bu.icon.bg:SetBackdropBorderColor(1, .8, 0)
+                        bu.icon.bg:SetBackdropBorderColor(1, 0.8, 0)
                     else
                         bu.icon.bg:SetBackdropBorderColor(0, 0, 0)
                     end
@@ -173,7 +173,7 @@ C.Themes['Blizzard_Collections'] = function()
             border:Hide()
         end
         button:SetPushedTexture('')
-        button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+        button:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
         F.ReskinIcon(button.texture)
     end
 
@@ -212,14 +212,14 @@ C.Themes['Blizzard_Collections'] = function()
 
     card.PetInfo.icon.bg = F.ReskinIcon(card.PetInfo.icon)
 
-    F.CreateBDFrame(card, .25)
+    F.CreateBDFrame(card, 0.25)
 
     for i = 2, 12 do
         select(i, card.xpBar:GetRegions()):Hide()
     end
 
     card.xpBar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
-    F.CreateBDFrame(card.xpBar, .25)
+    F.CreateBDFrame(card.xpBar, 0.25)
 
     _G.PetJournalPetCardHealthFramehealthStatusBarLeft:Hide()
     _G.PetJournalPetCardHealthFramehealthStatusBarRight:Hide()
@@ -227,7 +227,7 @@ C.Themes['Blizzard_Collections'] = function()
     _G.PetJournalPetCardHealthFramehealthStatusBarBGMiddle:Hide()
 
     card.HealthFrame.healthBar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
-    F.CreateBDFrame(card.HealthFrame.healthBar, .25)
+    F.CreateBDFrame(card.HealthFrame.healthBar, 0.25)
 
     for i = 1, 6 do
         local bu = card['spell' .. i]
@@ -258,7 +258,7 @@ C.Themes['Blizzard_Collections'] = function()
         bu.qualityBorder:SetTexture('')
         bu.levelBG:SetAlpha(0)
         bu.helpFrame:GetRegions():Hide()
-        bu.dragButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+        bu.dragButton:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
 
         bu.level:SetFontObject(_G.GameFontNormal)
         bu.level:SetTextColor(1, 1, 1)
@@ -268,24 +268,24 @@ C.Themes['Blizzard_Collections'] = function()
         bu.setButton:GetRegions():SetPoint('TOPLEFT', bu.icon, -5, 5)
         bu.setButton:GetRegions():SetPoint('BOTTOMRIGHT', bu.icon, 5, -5)
 
-        F.CreateBDFrame(bu, .25)
+        F.CreateBDFrame(bu, 0.25)
 
         for i = 2, 12 do
             select(i, bu.xpBar:GetRegions()):Hide()
         end
 
         bu.xpBar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
-        F.CreateBDFrame(bu.xpBar, .25)
+        F.CreateBDFrame(bu.xpBar, 0.25)
 
         F.StripTextures(bu.healthFrame.healthBar)
         bu.healthFrame.healthBar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
-        F.CreateBDFrame(bu.healthFrame.healthBar, .25)
+        F.CreateBDFrame(bu.healthFrame.healthBar, 0.25)
 
         for j = 1, 3 do
             local spell = bu['spell' .. j]
 
             spell:SetPushedTexture('')
-            spell:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+            spell:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
             spell.selected:SetTexture(C.Assets.Button.Checked)
             spell:GetRegions():Hide()
 
@@ -317,7 +317,7 @@ C.Themes['Blizzard_Collections'] = function()
 
         bu:SetCheckedTexture(C.Assets.Button.Checked)
         bu:SetPushedTexture('')
-        bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+        bu:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
 
         F.ReskinIcon(bu.icon)
     end
@@ -342,7 +342,7 @@ C.Themes['Blizzard_Collections'] = function()
     progressBar.text:SetPoint('CENTER', 0, 1)
     progressBar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
 
-    F.CreateBDFrame(progressBar, .25)
+    F.CreateBDFrame(progressBar, 0.25)
 
     -- Toys!
 
@@ -363,7 +363,7 @@ C.Themes['Blizzard_Collections'] = function()
                 text:SetTextColor(1, 1, 1)
             end
         else
-            text:SetTextColor(.5, .5, .5)
+            text:SetTextColor(0.5, 0.5, 0.5)
         end
 
         text.isSetting = nil
@@ -375,7 +375,7 @@ C.Themes['Blizzard_Collections'] = function()
         local ic = bu.iconTexture
 
         bu:SetPushedTexture('')
-        bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+        bu:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
         bu:GetHighlightTexture():SetAllPoints(ic)
         bu.cooldown:SetAllPoints(ic)
         bu.slotFrameCollected:SetTexture('')
@@ -403,7 +403,7 @@ C.Themes['Blizzard_Collections'] = function()
 
     hooksecurefunc(HeirloomsJournal, 'UpdateButton', function(_, button)
         button.level:SetFontObject('GameFontWhiteSmall')
-        button.special:SetTextColor(1, .8, 0)
+        button.special:SetTextColor(1, 0.8, 0)
     end)
 
     -- Progress bar
@@ -415,7 +415,7 @@ C.Themes['Blizzard_Collections'] = function()
     progressBar.text:SetPoint('CENTER', 0, 1)
     progressBar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
 
-    F.CreateBDFrame(progressBar, .25)
+    F.CreateBDFrame(progressBar, 0.25)
 
     -- Buttons
 
@@ -427,7 +427,7 @@ C.Themes['Blizzard_Collections'] = function()
             button.slotFrameUncollected:SetTexture('')
             button.levelBackground:SetAlpha(0)
             button:SetPushedTexture('')
-            button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+            button:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
             button:GetHighlightTexture():SetAllPoints(ic)
 
             button.iconTextureUncollected:SetTexCoord(unpack(C.TEX_COORD))
@@ -437,7 +437,7 @@ C.Themes['Blizzard_Collections'] = function()
             button.level:SetPoint('BOTTOM', 0, 1)
 
             local newLevelBg = button:CreateTexture(nil, 'OVERLAY')
-            newLevelBg:SetColorTexture(0, 0, 0, .5)
+            newLevelBg:SetColorTexture(0, 0, 0, 0.5)
             newLevelBg:SetPoint('BOTTOMLEFT', button, 'BOTTOMLEFT', 4, 5)
             newLevelBg:SetPoint('BOTTOMRIGHT', button, 'BOTTOMRIGHT', -4, 5)
             newLevelBg:SetHeight(11)
@@ -448,10 +448,10 @@ C.Themes['Blizzard_Collections'] = function()
 
         if button.iconTexture:IsShown() then
             button.name:SetTextColor(1, 1, 1)
-            button.bg:SetBackdropBorderColor(0, .8, 1)
+            button.bg:SetBackdropBorderColor(0, 0.8, 1)
             button.newLevelBg:Show()
         else
-            button.name:SetTextColor(.5, .5, .5)
+            button.name:SetTextColor(0.5, 0.5, 0.5)
             button.bg:SetBackdropBorderColor(0, 0, 0)
             button.newLevelBg:Hide()
         end
@@ -474,13 +474,13 @@ C.Themes['Blizzard_Collections'] = function()
             if button.iconTexture:IsShown() then
                 button.name:SetTextColor(1, 1, 1)
                 if button.bg then
-                    button.bg:SetBackdropBorderColor(0, .8, 1)
+                    button.bg:SetBackdropBorderColor(0, 0.8, 1)
                 end
                 if button.newLevelBg then
                     button.newLevelBg:Show()
                 end
             else
-                button.name:SetTextColor(.5, .5, .5)
+                button.name:SetTextColor(0.5, 0.5, 0.5)
                 if button.bg then
                     button.bg:SetBackdropBorderColor(0, 0, 0)
                 end
@@ -507,7 +507,7 @@ C.Themes['Blizzard_Collections'] = function()
             select(i, tab:GetRegions()):SetAlpha(0)
         end
         tab:SetHighlightTexture('')
-        tab.bg = F.CreateBDFrame(tab, .25)
+        tab.bg = F.CreateBDFrame(tab, 0.25)
         tab.bg:SetPoint('TOPLEFT', 3, -3)
         tab.bg:SetPoint('BOTTOMRIGHT', -3, -1)
     end
@@ -516,9 +516,9 @@ C.Themes['Blizzard_Collections'] = function()
         for index = 1, 2 do
             local tab = _G['WardrobeCollectionFrameTab' .. index]
             if tabID == index then
-                tab.bg:SetBackdropColor(r, g, b, .2)
+                tab.bg:SetBackdropColor(r, g, b, 0.2)
             else
-                tab.bg:SetBackdropColor(0, 0, 0, .2)
+                tab.bg:SetBackdropColor(0, 0, 0, 0.2)
             end
         end
     end)
@@ -533,14 +533,14 @@ C.Themes['Blizzard_Collections'] = function()
     select(2, progressBar:GetRegions()):Hide()
     progressBar.text:SetPoint('CENTER', 0, 1)
     progressBar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
-    F.CreateBDFrame(progressBar, .25)
+    F.CreateBDFrame(progressBar, 0.25)
 
     -- ItemSetsCollection
 
     local SetsCollectionFrame = WardrobeCollectionFrame.SetsCollectionFrame
     SetsCollectionFrame.LeftInset:Hide()
     SetsCollectionFrame.RightInset:Hide()
-    F.CreateBDFrame(SetsCollectionFrame.Model, .25)
+    F.CreateBDFrame(SetsCollectionFrame.Model, 0.25)
 
     local ScrollFrame = SetsCollectionFrame.ScrollFrame
     F.ReskinScroll(ScrollFrame.scrollBar)
@@ -553,11 +553,11 @@ C.Themes['Blizzard_Collections'] = function()
         bu.IconCover:SetOutside(bu.Icon)
 
         bu.SelectedTexture:SetDrawLayer('BACKGROUND')
-        bu.SelectedTexture:SetColorTexture(r, g, b, .25)
+        bu.SelectedTexture:SetColorTexture(r, g, b, 0.25)
         bu.SelectedTexture:ClearAllPoints()
         bu.SelectedTexture:SetPoint('TOPLEFT', 4, -2)
         bu.SelectedTexture:SetPoint('BOTTOMRIGHT', -1, 2)
-        F.CreateBDFrame(bu.SelectedTexture, .25)
+        F.CreateBDFrame(bu.SelectedTexture, 0.25)
     end
 
     local DetailsFrame = SetsCollectionFrame.DetailsFrame
@@ -602,7 +602,21 @@ C.Themes['Blizzard_Collections'] = function()
     local modelScene = WardrobeTransmogFrame.ModelScene
     modelScene.ClearAllPendingButton:DisableDrawLayer('BACKGROUND')
 
-    local slots = {'Head', 'Shoulder', 'Chest', 'Waist', 'Legs', 'Feet', 'Wrist', 'Hands', 'Back', 'Shirt', 'Tabard', 'MainHand', 'SecondaryHand'}
+    local slots = {
+        'Head',
+        'Shoulder',
+        'Chest',
+        'Waist',
+        'Legs',
+        'Feet',
+        'Wrist',
+        'Hands',
+        'Back',
+        'Shirt',
+        'Tabard',
+        'MainHand',
+        'SecondaryHand',
+    }
     for i = 1, #slots do
         local slot = modelScene[slots[i] .. 'Button']
         if slot then
@@ -610,7 +624,7 @@ C.Themes['Blizzard_Collections'] = function()
             F.ReskinIcon(slot.Icon)
             slot:SetHighlightTexture(C.Assets.Texture.Backdrop)
             local hl = slot:GetHighlightTexture()
-            hl:SetVertexColor(1, 1, 1, .25)
+            hl:SetVertexColor(1, 1, 1, 0.25)
             hl:SetAllPoints(slot.Icon)
         end
     end
@@ -638,7 +652,7 @@ C.Themes['Blizzard_Collections'] = function()
 
             if _G.PetJournalBandageButton then
                 _G.PetJournalBandageButton:SetPushedTexture('')
-                _G.PetJournalBandageButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+                _G.PetJournalBandageButton:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
                 _G.PetJournalBandageButtonBorder:Hide()
                 _G.PetJournalBandageButton:SetPoint('TOPRIGHT', _G.PetJournalHealPetButton, 'TOPLEFT', -3, 0)
                 _G.PetJournalBandageButton:SetPoint('BOTTOMLEFT', _G.PetJournalHealPetButton, 'BOTTOMLEFT', -35, 0)

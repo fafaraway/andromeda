@@ -6,56 +6,56 @@ local menuList = {
         text = _G.RAID_TARGET_NONE,
         func = function()
             SetRaidTarget('target', 0)
-        end
+        end,
     },
     {
-        text = F:RgbToHex(1, .92, 0) .. _G.RAID_TARGET_1 .. ' ' .. _G.ICON_LIST[1] .. '12|t',
+        text = F:RgbToHex(1, 0.92, 0) .. _G.RAID_TARGET_1 .. ' ' .. _G.ICON_LIST[1] .. '12|t',
         func = function()
             SetRaidTarget('target', 1)
-        end
+        end,
     },
     {
-        text = F:RgbToHex(.98, .57, 0) .. _G.RAID_TARGET_2 .. ' ' .. _G.ICON_LIST[2] .. '12|t',
+        text = F:RgbToHex(0.98, 0.57, 0) .. _G.RAID_TARGET_2 .. ' ' .. _G.ICON_LIST[2] .. '12|t',
         func = function()
             SetRaidTarget('target', 2)
-        end
+        end,
     },
     {
-        text = F:RgbToHex(.83, .22, .9) .. _G.RAID_TARGET_3 .. ' ' .. _G.ICON_LIST[3] .. '12|t',
+        text = F:RgbToHex(0.83, 0.22, 0.9) .. _G.RAID_TARGET_3 .. ' ' .. _G.ICON_LIST[3] .. '12|t',
         func = function()
             SetRaidTarget('target', 3)
-        end
+        end,
     },
     {
-        text = F:RgbToHex(.04, .95, 0) .. _G.RAID_TARGET_4 .. ' ' .. _G.ICON_LIST[4] .. '12|t',
+        text = F:RgbToHex(0.04, 0.95, 0) .. _G.RAID_TARGET_4 .. ' ' .. _G.ICON_LIST[4] .. '12|t',
         func = function()
             SetRaidTarget('target', 4)
-        end
+        end,
     },
     {
-        text = F:RgbToHex(.7, .82, .875) .. _G.RAID_TARGET_5 .. ' ' .. _G.ICON_LIST[5] .. '12|t',
+        text = F:RgbToHex(0.7, 0.82, 0.875) .. _G.RAID_TARGET_5 .. ' ' .. _G.ICON_LIST[5] .. '12|t',
         func = function()
             SetRaidTarget('target', 5)
-        end
+        end,
     },
     {
-        text = F:RgbToHex(0, .71, 1) .. _G.RAID_TARGET_6 .. ' ' .. _G.ICON_LIST[6] .. '12|t',
+        text = F:RgbToHex(0, 0.71, 1) .. _G.RAID_TARGET_6 .. ' ' .. _G.ICON_LIST[6] .. '12|t',
         func = function()
             SetRaidTarget('target', 6)
-        end
+        end,
     },
     {
-        text = F:RgbToHex(1, .24, .168) .. _G.RAID_TARGET_7 .. ' ' .. _G.ICON_LIST[7] .. '12|t',
+        text = F:RgbToHex(1, 0.24, 0.168) .. _G.RAID_TARGET_7 .. ' ' .. _G.ICON_LIST[7] .. '12|t',
         func = function()
             SetRaidTarget('target', 7)
-        end
+        end,
     },
     {
-        text = F:RgbToHex(.98, .98, .98) .. _G.RAID_TARGET_8 .. ' ' .. _G.ICON_LIST[8] .. '12|t',
+        text = F:RgbToHex(0.98, 0.98, 0.98) .. _G.RAID_TARGET_8 .. ' ' .. _G.ICON_LIST[8] .. '12|t',
         func = function()
             SetRaidTarget('target', 8)
-        end
-    }
+        end,
+    },
 }
 
 local function getModifiedKey()
@@ -76,22 +76,24 @@ function COMBAT:EasyMark()
         return
     end
 
-    _G.WorldFrame:HookScript(
-        'OnMouseDown',
-        function(_, btn)
-            if btn == 'LeftButton' and getModifiedKey() and UnitExists('mouseover') then
-                if not IsInGroup() or (IsInGroup() and not IsInRaid()) or UnitIsGroupLeader('player') or UnitIsGroupAssistant('player') then
-                    local ricon = GetRaidTargetIndex('mouseover')
-                    for i = 1, 8 do
-                        if ricon == i then
-                            menuList[i + 1].checked = true
-                        else
-                            menuList[i + 1].checked = false
-                        end
+    _G.WorldFrame:HookScript('OnMouseDown', function(_, btn)
+        if btn == 'LeftButton' and getModifiedKey() and UnitExists('mouseover') then
+            if
+                not IsInGroup()
+                or (IsInGroup() and not IsInRaid())
+                or UnitIsGroupLeader('player')
+                or UnitIsGroupAssistant('player')
+            then
+                local ricon = GetRaidTargetIndex('mouseover')
+                for i = 1, 8 do
+                    if ricon == i then
+                        menuList[i + 1].checked = true
+                    else
+                        menuList[i + 1].checked = false
                     end
-                    _G.EasyMenu(menuList, F.EasyMenu, 'cursor', 0, 0, 'MENU', 1)
                 end
+                _G.EasyMenu(menuList, F.EasyMenu, 'cursor', 0, 0, 'MENU', 1)
             end
         end
-    )
+    end)
 end

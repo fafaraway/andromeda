@@ -34,7 +34,7 @@ _G.StaticPopupDialogs.WOWHEAD_LINK = {
             self:HighlightText()
         end
     end,
-    preferredIndex = 5
+    preferredIndex = 5,
 }
 
 local function Button_Onclick(self)
@@ -57,50 +57,41 @@ function QUEST:WowheadLink()
         return
     end
 
-    hooksecurefunc(
-        'QuestObjectiveTracker_OnOpenDropDown',
-        function(self)
-            local id = self.activeFrame.id
-            local info = _G.UIDropDownMenu_CreateInfo()
-            info.text = L['Wowhead Link']
-            info.func = function()
-                local text = linkQuest:format(id)
-                _G.StaticPopup_Show('WOWHEAD_LINK', _, _, text)
-            end
-            info.notCheckable = true
-            _G.UIDropDownMenu_AddButton(info, _G.UIDROPDOWN_MENU_LEVEL)
+    hooksecurefunc('QuestObjectiveTracker_OnOpenDropDown', function(self)
+        local id = self.activeFrame.id
+        local info = _G.UIDropDownMenu_CreateInfo()
+        info.text = L['Wowhead Link']
+        info.func = function()
+            local text = linkQuest:format(id)
+            _G.StaticPopup_Show('WOWHEAD_LINK', _, _, text)
         end
-    )
+        info.notCheckable = true
+        _G.UIDropDownMenu_AddButton(info, _G.UIDROPDOWN_MENU_LEVEL)
+    end)
 
-    hooksecurefunc(
-        'BonusObjectiveTracker_OnOpenDropDown',
-        function(self)
-            local id = self.activeFrame.TrackedQuest.questID
-            local info = _G.UIDropDownMenu_CreateInfo()
-            info.text = L['Wowhead link']
-            info.func = function()
-                local text = linkQuest:format(id)
-                _G.StaticPopup_Show('WOWHEAD_LINK', _, _, text)
-            end
-            info.notCheckable = true
-            _G.UIDropDownMenu_AddButton(info, _G.UIDROPDOWN_MENU_LEVEL)
+    hooksecurefunc('BonusObjectiveTracker_OnOpenDropDown', function(self)
+        local id = self.activeFrame.TrackedQuest.questID
+        local info = _G.UIDropDownMenu_CreateInfo()
+        info.text = L['Wowhead link']
+        info.func = function()
+            local text = linkQuest:format(id)
+            _G.StaticPopup_Show('WOWHEAD_LINK', _, _, text)
         end
-    )
+        info.notCheckable = true
+        _G.UIDropDownMenu_AddButton(info, _G.UIDROPDOWN_MENU_LEVEL)
+    end)
 
-    hooksecurefunc(
-        'AchievementObjectiveTracker_OnOpenDropDown',
-        function(self)
-            local id = self.activeFrame.id
-            local info = _G.UIDropDownMenu_CreateInfo()
-            info.text = L['Wowhead link']
-            info.func = function()
-                local text = linkAchievement:format(id)
-                _G.StaticPopup_Show('WOWHEAD_LINK', _, _, text)
-            end
-            info.notCheckable = true
-            _G.UIDropDownMenu_AddButton(info, _G.UIDROPDOWN_MENU_LEVEL)
+    hooksecurefunc('AchievementObjectiveTracker_OnOpenDropDown', function(self)
+        local id = self.activeFrame.id
+        local info = _G.UIDropDownMenu_CreateInfo()
+        info.text = L['Wowhead link']
+        info.func = function()
+            local text = linkAchievement:format(id)
+            _G.StaticPopup_Show('WOWHEAD_LINK', _, _, text)
         end
-    )
+        info.notCheckable = true
+        _G.UIDropDownMenu_AddButton(info, _G.UIDROPDOWN_MENU_LEVEL)
+    end)
 
     if IsAddOnLoaded('Blizzard_AchievementUI') then
         hooksecurefunc('AchievementButton_OnClick', Button_Onclick)

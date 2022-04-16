@@ -12,7 +12,7 @@ local function ReskinQuestHeader(header, isCalling)
         return
     end
 
-    header.Background:SetAlpha(.7)
+    header.Background:SetAlpha(0.7)
     if header.Divider then
         header.Divider:Hide()
     end
@@ -58,171 +58,155 @@ local function ReskinAWQHeader()
     end
 end
 
-tinsert(
-    C.BlizzThemes,
-    function()
-        -- Quest frame
+tinsert(C.BlizzThemes, function()
+    -- Quest frame
 
-        local QuestMapFrame = _G.QuestMapFrame
-        QuestMapFrame.VerticalSeparator:SetAlpha(0)
-        QuestMapFrame.Background:SetAlpha(0)
+    local QuestMapFrame = _G.QuestMapFrame
+    QuestMapFrame.VerticalSeparator:SetAlpha(0)
+    QuestMapFrame.Background:SetAlpha(0)
 
-        local QuestScrollFrame = _G.QuestScrollFrame
-        QuestScrollFrame.DetailFrame.TopDetail:SetAlpha(0)
-        QuestScrollFrame.DetailFrame.BottomDetail:SetAlpha(0)
-        QuestScrollFrame.Contents.Separator:SetAlpha(0)
-        ReskinQuestHeader(QuestScrollFrame.Contents.StoryHeader)
-        F.ReskinScroll(QuestScrollFrame.ScrollBar)
+    local QuestScrollFrame = _G.QuestScrollFrame
+    QuestScrollFrame.DetailFrame.TopDetail:SetAlpha(0)
+    QuestScrollFrame.DetailFrame.BottomDetail:SetAlpha(0)
+    QuestScrollFrame.Contents.Separator:SetAlpha(0)
+    ReskinQuestHeader(QuestScrollFrame.Contents.StoryHeader)
+    F.ReskinScroll(QuestScrollFrame.ScrollBar)
 
-        local campaignOverview = QuestMapFrame.CampaignOverview
-        campaignOverview.BG:SetAlpha(0)
-        ReskinQuestHeader(campaignOverview.Header)
-        F.ReskinScroll(campaignOverview.ScrollFrame.ScrollBar)
+    local campaignOverview = QuestMapFrame.CampaignOverview
+    campaignOverview.BG:SetAlpha(0)
+    ReskinQuestHeader(campaignOverview.Header)
+    F.ReskinScroll(campaignOverview.ScrollFrame.ScrollBar)
 
-        -- Quest details
+    -- Quest details
 
-        local DetailsFrame = QuestMapFrame.DetailsFrame
-        local CompleteQuestFrame = DetailsFrame.CompleteQuestFrame
+    local DetailsFrame = QuestMapFrame.DetailsFrame
+    local CompleteQuestFrame = DetailsFrame.CompleteQuestFrame
 
-        F.StripTextures(DetailsFrame)
-        F.StripTextures(DetailsFrame.RewardsFrame)
-        F.StripTextures(DetailsFrame.ShareButton)
-        DetailsFrame.Bg:SetAlpha(0)
-        DetailsFrame.SealMaterialBG:SetAlpha(0)
+    F.StripTextures(DetailsFrame)
+    F.StripTextures(DetailsFrame.RewardsFrame)
+    F.StripTextures(DetailsFrame.ShareButton)
+    DetailsFrame.Bg:SetAlpha(0)
+    DetailsFrame.SealMaterialBG:SetAlpha(0)
 
-        F.Reskin(DetailsFrame.BackButton)
-        F.Reskin(DetailsFrame.AbandonButton)
-        F.Reskin(DetailsFrame.ShareButton)
-        F.Reskin(DetailsFrame.TrackButton)
-        F.ReskinScroll(_G.QuestMapDetailsScrollFrame.ScrollBar)
+    F.Reskin(DetailsFrame.BackButton)
+    F.Reskin(DetailsFrame.AbandonButton)
+    F.Reskin(DetailsFrame.ShareButton)
+    F.Reskin(DetailsFrame.TrackButton)
+    F.ReskinScroll(_G.QuestMapDetailsScrollFrame.ScrollBar)
 
-        DetailsFrame.AbandonButton:ClearAllPoints()
-        DetailsFrame.AbandonButton:SetPoint('BOTTOMLEFT', DetailsFrame, -1, 0)
-        DetailsFrame.AbandonButton:SetWidth(95)
+    DetailsFrame.AbandonButton:ClearAllPoints()
+    DetailsFrame.AbandonButton:SetPoint('BOTTOMLEFT', DetailsFrame, -1, 0)
+    DetailsFrame.AbandonButton:SetWidth(95)
 
-        DetailsFrame.ShareButton:ClearAllPoints()
-        DetailsFrame.ShareButton:SetPoint('LEFT', DetailsFrame.AbandonButton, 'RIGHT', 1, 0)
-        DetailsFrame.ShareButton:SetWidth(94)
+    DetailsFrame.ShareButton:ClearAllPoints()
+    DetailsFrame.ShareButton:SetPoint('LEFT', DetailsFrame.AbandonButton, 'RIGHT', 1, 0)
+    DetailsFrame.ShareButton:SetWidth(94)
 
-        DetailsFrame.TrackButton:ClearAllPoints()
-        DetailsFrame.TrackButton:SetPoint('LEFT', DetailsFrame.ShareButton, 'RIGHT', 1, 0)
-        DetailsFrame.TrackButton:SetWidth(96)
+    DetailsFrame.TrackButton:ClearAllPoints()
+    DetailsFrame.TrackButton:SetPoint('LEFT', DetailsFrame.ShareButton, 'RIGHT', 1, 0)
+    DetailsFrame.TrackButton:SetWidth(96)
 
-        -- Scroll frame
+    -- Scroll frame
 
-        hooksecurefunc(
-            'QuestLogQuests_Update',
-            function()
-                for button in QuestScrollFrame.headerFramePool:EnumerateActive() do
-                    if button.ButtonText then
-                        if not button.styled then
-                            F.ReskinCollapse(button, true)
-                            button:GetPushedTexture():SetAlpha(0)
-                            button:GetHighlightTexture():SetAlpha(0)
+    hooksecurefunc('QuestLogQuests_Update', function()
+        for button in QuestScrollFrame.headerFramePool:EnumerateActive() do
+            if button.ButtonText then
+                if not button.styled then
+                    F.ReskinCollapse(button, true)
+                    button:GetPushedTexture():SetAlpha(0)
+                    button:GetHighlightTexture():SetAlpha(0)
 
-                            button.styled = true
-                        end
-                    end
-                end
-
-                for header in QuestScrollFrame.campaignHeaderFramePool:EnumerateActive() do
-                    ReskinQuestHeader(header)
-                end
-
-                for header in QuestScrollFrame.covenantCallingsHeaderFramePool:EnumerateActive() do
-                    ReskinQuestHeader(header, true)
-                end
-
-                ReskinAWQHeader()
-            end
-        )
-
-        -- Complete quest frame
-        F.StripTextures(CompleteQuestFrame)
-        F.StripTextures(CompleteQuestFrame.CompleteButton)
-        F.Reskin(CompleteQuestFrame.CompleteButton)
-
-        -- [[ Quest log popup detail frame ]]
-
-        local QuestLogPopupDetailFrame = _G.QuestLogPopupDetailFrame
-
-        F.ReskinPortraitFrame(QuestLogPopupDetailFrame)
-        F.ReskinScroll(_G.QuestLogPopupDetailFrameScrollFrameScrollBar)
-        F.Reskin(QuestLogPopupDetailFrame.AbandonButton)
-        F.Reskin(QuestLogPopupDetailFrame.TrackButton)
-        F.Reskin(QuestLogPopupDetailFrame.ShareButton)
-        QuestLogPopupDetailFrame.SealMaterialBG:SetAlpha(0)
-
-        -- Show map button
-
-        local ShowMapButton = QuestLogPopupDetailFrame.ShowMapButton
-
-        ShowMapButton.Texture:SetAlpha(0)
-        ShowMapButton.Highlight:SetTexture('')
-        ShowMapButton.Highlight:SetTexture('')
-
-        ShowMapButton:SetSize(ShowMapButton.Text:GetStringWidth() + 14, 22)
-        ShowMapButton.Text:ClearAllPoints()
-        ShowMapButton.Text:SetPoint('CENTER', 1, 0)
-
-        ShowMapButton:ClearAllPoints()
-        ShowMapButton:SetPoint('TOPRIGHT', QuestLogPopupDetailFrame, -30, -25)
-
-        F.Reskin(ShowMapButton)
-
-        ShowMapButton:HookScript(
-            'OnEnter',
-            function(self)
-                self.Text:SetTextColor(1, 1, 1)
-            end
-        )
-
-        ShowMapButton:HookScript(
-            'OnLeave',
-            function(self)
-                self.Text:SetTextColor(1, .8, 0)
-            end
-        )
-
-        -- Bottom buttons
-
-        QuestLogPopupDetailFrame.ShareButton:ClearAllPoints()
-        QuestLogPopupDetailFrame.ShareButton:SetPoint('LEFT', QuestLogPopupDetailFrame.AbandonButton, 'RIGHT', 1, 0)
-        QuestLogPopupDetailFrame.ShareButton:SetPoint('RIGHT', QuestLogPopupDetailFrame.TrackButton, 'LEFT', -1, 0)
-
-        -- Party Sync button
-
-        local sessionManagement = QuestMapFrame.QuestSessionManagement
-        sessionManagement.BG:Hide()
-        F.CreateBDFrame(sessionManagement, .25)
-
-        hooksecurefunc(_G.QuestSessionManager, 'NotifyDialogShow', ReskinSessionDialog)
-
-        local executeSessionCommand = sessionManagement.ExecuteSessionCommand
-        F.Reskin(executeSessionCommand)
-
-        local icon = executeSessionCommand:CreateTexture(nil, 'ARTWORK')
-        icon:SetInside()
-        executeSessionCommand.normalIcon = icon
-
-        local sessionCommandToButtonAtlas = {
-            [_G.Enum.QuestSessionCommand.Start] = 'QuestSharing-DialogIcon',
-            [_G.Enum.QuestSessionCommand.Stop] = 'QuestSharing-Stop-DialogIcon'
-        }
-
-        hooksecurefunc(
-            QuestMapFrame.QuestSessionManagement,
-            'UpdateExecuteCommandAtlases',
-            function(self, command)
-                self.ExecuteSessionCommand:SetNormalTexture('')
-                self.ExecuteSessionCommand:SetPushedTexture('')
-                self.ExecuteSessionCommand:SetDisabledTexture('')
-
-                local atlas = sessionCommandToButtonAtlas[command]
-                if atlas then
-                    self.ExecuteSessionCommand.normalIcon:SetAtlas(atlas)
+                    button.styled = true
                 end
             end
-        )
-    end
-)
+        end
+
+        for header in QuestScrollFrame.campaignHeaderFramePool:EnumerateActive() do
+            ReskinQuestHeader(header)
+        end
+
+        for header in QuestScrollFrame.covenantCallingsHeaderFramePool:EnumerateActive() do
+            ReskinQuestHeader(header, true)
+        end
+
+        ReskinAWQHeader()
+    end)
+
+    -- Complete quest frame
+    F.StripTextures(CompleteQuestFrame)
+    F.StripTextures(CompleteQuestFrame.CompleteButton)
+    F.Reskin(CompleteQuestFrame.CompleteButton)
+
+    -- [[ Quest log popup detail frame ]]
+
+    local QuestLogPopupDetailFrame = _G.QuestLogPopupDetailFrame
+
+    F.ReskinPortraitFrame(QuestLogPopupDetailFrame)
+    F.ReskinScroll(_G.QuestLogPopupDetailFrameScrollFrameScrollBar)
+    F.Reskin(QuestLogPopupDetailFrame.AbandonButton)
+    F.Reskin(QuestLogPopupDetailFrame.TrackButton)
+    F.Reskin(QuestLogPopupDetailFrame.ShareButton)
+    QuestLogPopupDetailFrame.SealMaterialBG:SetAlpha(0)
+
+    -- Show map button
+
+    local ShowMapButton = QuestLogPopupDetailFrame.ShowMapButton
+
+    ShowMapButton.Texture:SetAlpha(0)
+    ShowMapButton.Highlight:SetTexture('')
+    ShowMapButton.Highlight:SetTexture('')
+
+    ShowMapButton:SetSize(ShowMapButton.Text:GetStringWidth() + 14, 22)
+    ShowMapButton.Text:ClearAllPoints()
+    ShowMapButton.Text:SetPoint('CENTER', 1, 0)
+
+    ShowMapButton:ClearAllPoints()
+    ShowMapButton:SetPoint('TOPRIGHT', QuestLogPopupDetailFrame, -30, -25)
+
+    F.Reskin(ShowMapButton)
+
+    ShowMapButton:HookScript('OnEnter', function(self)
+        self.Text:SetTextColor(1, 1, 1)
+    end)
+
+    ShowMapButton:HookScript('OnLeave', function(self)
+        self.Text:SetTextColor(1, 0.8, 0)
+    end)
+
+    -- Bottom buttons
+
+    QuestLogPopupDetailFrame.ShareButton:ClearAllPoints()
+    QuestLogPopupDetailFrame.ShareButton:SetPoint('LEFT', QuestLogPopupDetailFrame.AbandonButton, 'RIGHT', 1, 0)
+    QuestLogPopupDetailFrame.ShareButton:SetPoint('RIGHT', QuestLogPopupDetailFrame.TrackButton, 'LEFT', -1, 0)
+
+    -- Party Sync button
+
+    local sessionManagement = QuestMapFrame.QuestSessionManagement
+    sessionManagement.BG:Hide()
+    F.CreateBDFrame(sessionManagement, 0.25)
+
+    hooksecurefunc(_G.QuestSessionManager, 'NotifyDialogShow', ReskinSessionDialog)
+
+    local executeSessionCommand = sessionManagement.ExecuteSessionCommand
+    F.Reskin(executeSessionCommand)
+
+    local icon = executeSessionCommand:CreateTexture(nil, 'ARTWORK')
+    icon:SetInside()
+    executeSessionCommand.normalIcon = icon
+
+    local sessionCommandToButtonAtlas = {
+        [_G.Enum.QuestSessionCommand.Start] = 'QuestSharing-DialogIcon',
+        [_G.Enum.QuestSessionCommand.Stop] = 'QuestSharing-Stop-DialogIcon',
+    }
+
+    hooksecurefunc(QuestMapFrame.QuestSessionManagement, 'UpdateExecuteCommandAtlases', function(self, command)
+        self.ExecuteSessionCommand:SetNormalTexture('')
+        self.ExecuteSessionCommand:SetPushedTexture('')
+        self.ExecuteSessionCommand:SetDisabledTexture('')
+
+        local atlas = sessionCommandToButtonAtlas[command]
+        if atlas then
+            self.ExecuteSessionCommand.normalIcon:SetAtlas(atlas)
+        end
+    end)
+end)

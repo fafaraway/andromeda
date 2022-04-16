@@ -44,57 +44,45 @@ function ACTIONBAR:Bind_Create()
     frame:EnableKeyboard(true)
     frame:EnableMouseWheel(true)
     F.CreateBD(frame, 1)
-    frame:SetBackdropColor(1, .8, 0, .25)
-    frame:SetBackdropBorderColor(1, .8, 0)
+    frame:SetBackdropColor(1, 0.8, 0, 0.25)
+    frame:SetBackdropBorderColor(1, 0.8, 0)
     frame:Hide()
 
-    frame:SetScript(
-        'OnEnter',
-        function()
-            _G.GameTooltip:SetOwner(frame, 'ANCHOR_NONE')
-            _G.GameTooltip:SetPoint('BOTTOM', frame, 'TOP', 0, 2)
-            _G.GameTooltip:AddLine(frame.tipName or frame.name, .6, .8, 1)
+    frame:SetScript('OnEnter', function()
+        _G.GameTooltip:SetOwner(frame, 'ANCHOR_NONE')
+        _G.GameTooltip:SetPoint('BOTTOM', frame, 'TOP', 0, 2)
+        _G.GameTooltip:AddLine(frame.tipName or frame.name, 0.6, 0.8, 1)
 
-            if #frame.bindings == 0 then
-                _G.GameTooltip:AddLine(_G.NOT_BOUND, 1, 0, 0)
-                _G.GameTooltip:AddLine(_G.PRESS_KEY_TO_BIND)
-            else
-                _G.GameTooltip:AddDoubleLine(L['Index'], L['Key'], .6, .6, .6, .6, .6, .6)
-                for i = 1, #frame.bindings do
-                    _G.GameTooltip:AddDoubleLine(i, frame.bindings[i], 1, 1, 1, 0, 1, 0)
-                end
-                _G.GameTooltip:AddLine(L['Press the escape key or right click to unbind this action.'], 1, .8, 0, 1)
+        if #frame.bindings == 0 then
+            _G.GameTooltip:AddLine(_G.NOT_BOUND, 1, 0, 0)
+            _G.GameTooltip:AddLine(_G.PRESS_KEY_TO_BIND)
+        else
+            _G.GameTooltip:AddDoubleLine(L['Index'], L['Key'], 0.6, 0.6, 0.6, 0.6, 0.6, 0.6)
+            for i = 1, #frame.bindings do
+                _G.GameTooltip:AddDoubleLine(i, frame.bindings[i], 1, 1, 1, 0, 1, 0)
             end
-            _G.GameTooltip:Show()
+            _G.GameTooltip:AddLine(L['Press the escape key or right click to unbind this action.'], 1, 0.8, 0, 1)
         end
-    )
+        _G.GameTooltip:Show()
+    end)
 
     frame:SetScript('OnLeave', ACTIONBAR.Bind_HideFrame)
 
-    frame:SetScript(
-        'OnKeyUp',
-        function(_, key)
-            ACTIONBAR:Bind_Listener(key)
-        end
-    )
+    frame:SetScript('OnKeyUp', function(_, key)
+        ACTIONBAR:Bind_Listener(key)
+    end)
 
-    frame:SetScript(
-        'OnMouseUp',
-        function(_, key)
-            ACTIONBAR:Bind_Listener(key)
-        end
-    )
+    frame:SetScript('OnMouseUp', function(_, key)
+        ACTIONBAR:Bind_Listener(key)
+    end)
 
-    frame:SetScript(
-        'OnMouseWheel',
-        function(_, delta)
-            if delta > 0 then
-                ACTIONBAR:Bind_Listener('MOUSEWHEELUP')
-            else
-                ACTIONBAR:Bind_Listener('MOUSEWHEELDOWN')
-            end
+    frame:SetScript('OnMouseWheel', function(_, delta)
+        if delta > 0 then
+            ACTIONBAR:Bind_Listener('MOUSEWHEELUP')
+        else
+            ACTIONBAR:Bind_Listener('MOUSEWHEELDOWN')
         end
-    )
+    end)
 
     for _, button in pairs(ACTIONBAR.buttons) do
         ACTIONBAR:Bind_RegisterButton(button)
@@ -129,15 +117,15 @@ function ACTIONBAR:Bind_Update(button, spellmacro)
     if spellmacro == 'SPELL' then
         frame.id = _G.SpellBook_GetSpellBookSlot(frame.button)
         frame.name = GetSpellBookItemName(frame.id, _G.SpellBookFrame.bookType)
-        frame.bindings = {GetBindingKey(spellmacro .. ' ' .. frame.name)}
+        frame.bindings = { GetBindingKey(spellmacro .. ' ' .. frame.name) }
     elseif spellmacro == 'MACRO' then
         frame.id = frame.button:GetID()
         local colorIndex = F:Round(select(2, _G.MacroFrameTab1Text:GetTextColor()), 1)
-        if colorIndex == .8 then
+        if colorIndex == 0.8 then
             frame.id = frame.id + _G.MAX_ACCOUNT_MACROS
         end
         frame.name = GetMacroInfo(frame.id)
-        frame.bindings = {GetBindingKey(spellmacro .. ' ' .. frame.name)}
+        frame.bindings = { GetBindingKey(spellmacro .. ' ' .. frame.name) }
     elseif spellmacro == 'STANCE' or spellmacro == 'PET' then
         frame.name = button:GetName()
         if not frame.name then
@@ -151,7 +139,7 @@ function ACTIONBAR:Bind_Update(button, spellmacro)
         else
             frame.bindstring = (spellmacro == 'STANCE' and 'SHAPESHIFTBUTTON' or 'BONUSACTIONBUTTON') .. frame.id
         end
-        frame.bindings = {GetBindingKey(frame.bindstring)}
+        frame.bindings = { GetBindingKey(frame.bindstring) }
     else
         frame.name = button:GetName()
         if not frame.name then
@@ -178,7 +166,7 @@ function ACTIONBAR:Bind_Update(button, spellmacro)
                 frame.bindstring = 'MULTIACTIONBAR3BUTTON' .. modact
             end
         end
-        frame.bindings = {GetBindingKey(frame.bindstring)}
+        frame.bindings = { GetBindingKey(frame.bindstring) }
     end
 
     -- Refresh tooltip
@@ -193,7 +181,7 @@ local ignoreKeys = {
     ['LSHIFT'] = true,
     ['RSHIFT'] = true,
     ['UNKNOWN'] = true,
-    ['LeftButton'] = true
+    ['LeftButton'] = true,
 }
 
 function ACTIONBAR:Bind_Listener(key)
@@ -204,7 +192,9 @@ function ACTIONBAR:Bind_Listener(key)
                 SetBinding(frame.bindings[i])
             end
         end
-        F:Print(string.format(L['All keybinds cleared for %s.'], C.GREEN_COLOR .. (frame.tipName or frame.name) .. '|r'))
+        F:Print(
+            string.format(L['All keybinds cleared for %s.'], C.GREEN_COLOR .. (frame.tipName or frame.name) .. '|r')
+        )
 
         ACTIONBAR:Bind_Update(frame.button, frame.spellmacro)
 
@@ -232,7 +222,18 @@ function ACTIONBAR:Bind_Listener(key)
     else
         SetBinding(alt .. ctrl .. shift .. key, frame.spellmacro .. ' ' .. frame.name)
     end
-    F:Print(C.GREEN_COLOR .. (frame.tipName or frame.name) .. ' |r' .. L['bound to'] .. ' ' .. C.RED_COLOR .. alt .. ctrl .. shift .. key)
+    F:Print(
+        C.GREEN_COLOR
+            .. (frame.tipName or frame.name)
+            .. ' |r'
+            .. L['bound to']
+            .. ' '
+            .. C.RED_COLOR
+            .. alt
+            .. ctrl
+            .. shift
+            .. key
+    )
 
     ACTIONBAR:Bind_Update(frame.button, frame.spellmacro)
 end
@@ -281,37 +282,34 @@ function ACTIONBAR:Bind_CreateDialog()
     local font = C.Assets.Font.Bold
     F.CreateFS(frame, font, 14, nil, _G.QUICK_KEYBIND_MODE, false, true, 'TOP', 0, -10)
 
-    local helpInfo = F.CreateHelpInfo(frame, '|n' .. _G.QUICK_KEYBIND_DESCRIPTION .. '|n|n' .. L['You can even keybind your spellbook spells or macros without placing them to your actionbars.'])
+    local helpInfo = F.CreateHelpInfo(
+        frame,
+        '|n'
+            .. _G.QUICK_KEYBIND_DESCRIPTION
+            .. '|n|n'
+            .. L['You can even keybind your spellbook spells or macros without placing them to your actionbars.']
+    )
     helpInfo:SetPoint('TOPRIGHT', 2, -2)
 
     local text = F.CreateFS(frame, font, 12, nil, _G.CHARACTER_SPECIFIC_KEYBINDINGS, 'YELLOW', true, 'TOP', 0, -40)
     local box = F.CreateCheckbox(frame)
     box:SetChecked(C.DB.Actionbar.BindType == 2)
     box:SetPoint('RIGHT', text, 'LEFT', -5, -0)
-    box:SetScript(
-        'OnClick',
-        function(self)
-            C.DB.Actionbar.BindType = self:GetChecked() and 2 or 1
-        end
-    )
+    box:SetScript('OnClick', function(self)
+        C.DB.Actionbar.BindType = self:GetChecked() and 2 or 1
+    end)
 
     local button1 = F.CreateButton(frame, 120, 26, _G.APPLY, 12)
     button1:SetPoint('BOTTOMLEFT', 25, 10)
-    button1:SetScript(
-        'OnClick',
-        function()
-            ACTIONBAR:Bind_Deactivate(true)
-        end
-    )
+    button1:SetScript('OnClick', function()
+        ACTIONBAR:Bind_Deactivate(true)
+    end)
 
     local button2 = F.CreateButton(frame, 120, 26, _G.CANCEL, 12)
     button2:SetPoint('BOTTOMRIGHT', -25, 10)
-    button2:SetScript(
-        'OnClick',
-        function()
-            ACTIONBAR:Bind_Deactivate()
-        end
-    )
+    button2:SetScript('OnClick', function()
+        ACTIONBAR:Bind_Deactivate()
+    end)
 
     ACTIONBAR.keybindDialog = frame
 end

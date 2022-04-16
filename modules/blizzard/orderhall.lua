@@ -19,13 +19,9 @@ function BLIZZARD:OrderHall_CreateIcon()
 
     hall:SetScript('OnEnter', BLIZZARD.OrderHall_OnEnter)
     hall:SetScript('OnLeave', BLIZZARD.OrderHall_OnLeave)
-    hooksecurefunc(
-        _G.OrderHallCommandBar,
-        'SetShown',
-        function(_, state)
-            hall:SetShown(state)
-        end
-    )
+    hooksecurefunc(_G.OrderHallCommandBar, 'SetShown', function(_, state)
+        hall:SetShown(state)
+    end)
 
     -- Default objects
     F.HideOption(_G.OrderHallCommandBar)
@@ -82,15 +78,24 @@ function BLIZZARD:OrderHall_OnEnter()
         end
         local category = self.Category[i]
         if category then
-            _G.GameTooltip:AddDoubleLine(getIconString(category.icon) .. category.name, category.count .. '/' .. category.limit, 1, 1, 1, 1, 1, 1)
+            _G.GameTooltip:AddDoubleLine(
+                getIconString(category.icon) .. category.name,
+                category.count .. '/' .. category.limit,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1
+            )
             if IsShiftKeyDown() then
-                _G.GameTooltip:AddLine(category.description, .6, .8, 1, 1)
+                _G.GameTooltip:AddLine(category.description, 0.6, 0.8, 1, 1)
             end
         end
     end
 
     _G.GameTooltip:AddDoubleLine(' ', C.LINE_STRING)
-    _G.GameTooltip:AddDoubleLine(' ', L['Hold SHIFT for details'], 1, 1, 1, .6, .8, 1)
+    _G.GameTooltip:AddDoubleLine(' ', L['Hold SHIFT for details'], 1, 1, 1, 0.6, 0.8, 1)
     _G.GameTooltip:Show()
 
     F:RegisterEvent('MODIFIER_STATE_CHANGED', BLIZZARD.OrderHall_OnShiftDown)

@@ -14,7 +14,10 @@ local function UpdateItemBorder(self)
         local name, texture, numItems, quality = GetQuestCurrencyInfo(self.type, self:GetID())
         local currencyID = GetQuestCurrencyID(self.type, self:GetID())
         if name and texture and numItems and quality and currencyID then
-            local currencyQuality = select(4, _G.CurrencyContainerUtil.GetCurrencyContainerInfo(currencyID, numItems, name, texture, quality))
+            local currencyQuality = select(
+                4,
+                _G.CurrencyContainerUtil.GetCurrencyContainerInfo(currencyID, numItems, name, texture, quality)
+            )
             local color = C.QualityColors[currencyQuality or 1]
             self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
         end
@@ -31,7 +34,7 @@ local function ReskinItemButton(buttons)
             button.Mask:Hide()
             button.NameFrame:Hide()
             button.bg = F.ReskinIcon(button.Icon)
-            button.textBg = F.CreateBDFrame(button, .25)
+            button.textBg = F.CreateBDFrame(button, 0.25)
             button.textBg:SetPoint('TOPLEFT', button.bg, 'TOPRIGHT', 2, 0)
             button.textBg:SetPoint('BOTTOMRIGHT', -5, 1)
 
@@ -70,7 +73,7 @@ local function ReskinReward(self)
                 F.ReskinGarrisonPortrait(portrait)
                 reward.BG:Hide()
                 portrait:SetPoint('TOPLEFT', 2, -5)
-                reward.textBg = F.CreateBDFrame(reward, .25)
+                reward.textBg = F.CreateBDFrame(reward, 0.25)
                 reward.textBg:SetPoint('TOPLEFT', 0, -3)
                 reward.textBg:SetPoint('BOTTOMRIGHT', 2, 7)
                 reward.Class:SetPoint('TOPRIGHT', reward.textBg, 'TOPRIGHT', -C.MULT, -C.MULT)
@@ -93,7 +96,7 @@ local function ReskinReward(self)
                 local nameFrame = spellReward.NameFrame
                 nameFrame:Hide()
 
-                local bg = F.CreateBDFrame(nameFrame, .25)
+                local bg = F.CreateBDFrame(nameFrame, 0.25)
                 bg:SetPoint('TOPLEFT', icon, 'TOPRIGHT', 2, 1)
                 bg:SetPoint('BOTTOMRIGHT', nameFrame, 'BOTTOMRIGHT', -24, 15)
 
@@ -132,16 +135,16 @@ local function ReskinImmersion()
 
     local hilite = F.CreateBDFrame(talkBox.Hilite, 0)
     hilite:SetAllPoints(talkBox)
-    hilite:SetBackdropColor(cr, cg, cb, .25)
+    hilite:SetBackdropColor(cr, cg, cb, 0.25)
     hilite:SetBackdropBorderColor(cr, cg, cb, 1)
 
     local mainFrame = talkBox.MainFrame
     F.StripTextures(mainFrame)
-    F.SetBD(mainFrame, .45)
+    F.SetBD(mainFrame, 0.45)
 
     local elements = talkBox.Elements
     F.StripTextures(elements)
-    F.SetBD(elements, .45, 0, -12, 0, 0)
+    F.SetBD(elements, 0.45, 0, -12, 0, 0)
     elements.Content.RewardsFrame.ItemHighlight.Icon:SetAlpha(0)
 
     F.ReskinClose(mainFrame.CloseButton)
@@ -153,7 +156,7 @@ local function ReskinImmersion()
     reputationBar.icon:SetPoint('TOPLEFT', -30, 6)
     F.StripTextures(reputationBar)
     reputationBar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
-    F.CreateBDFrame(reputationBar, .25)
+    F.CreateBDFrame(reputationBar, 0.25)
 
     for i = 1, 4 do
         local notch = _G['ImmersionFrameNotch' .. i]

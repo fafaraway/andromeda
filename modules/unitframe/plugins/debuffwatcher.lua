@@ -12,18 +12,18 @@ local DispellPriority = {
     ['Magic'] = 4,
     ['Curse'] = 3,
     ['Disease'] = 2,
-    ['Poison'] = 1
+    ['Poison'] = 1,
 }
 
 local DispellFilter
 do
     local dispellClasses = {
-        ['DRUID'] = {['Magic'] = false, ['Curse'] = true, ['Poison'] = true},
-        ['MONK'] = {['Magic'] = true, ['Poison'] = true, ['Disease'] = true},
-        ['PALADIN'] = {['Magic'] = false, ['Poison'] = true, ['Disease'] = true},
-        ['PRIEST'] = {['Magic'] = true, ['Disease'] = true},
-        ['SHAMAN'] = {['Magic'] = false, ['Curse'] = true},
-        ['MAGE'] = {['Curse'] = true}
+        ['DRUID'] = { ['Magic'] = false, ['Curse'] = true, ['Poison'] = true },
+        ['MONK'] = { ['Magic'] = true, ['Poison'] = true, ['Disease'] = true },
+        ['PALADIN'] = { ['Magic'] = false, ['Poison'] = true, ['Disease'] = true },
+        ['PRIEST'] = { ['Magic'] = true, ['Disease'] = true },
+        ['SHAMAN'] = { ['Magic'] = false, ['Curse'] = true },
+        ['MAGE'] = { ['Curse'] = true },
     }
 
     DispellFilter = dispellClasses[C.CLASS] or {}
@@ -102,7 +102,7 @@ local function UpdateDebuffFrame(self, name, icon, count, debuffType, duration, 
             end
 
             if rd.shadow then
-                rd.shadow:SetBackdropBorderColor(color[1], color[2], color[3], .35)
+                rd.shadow:SetBackdropBorderColor(color[1], color[2], color[3], 0.35)
             end
 
             if rd.glowFrame then
@@ -151,7 +151,7 @@ local function Update(self, _, unit)
             break
         end
 
-        if rd.ShowDispellableDebuff and debuffType and (not isCharmed) and (not canAttack) then
+        if rd.ShowDispellableDebuff and debuffType and not isCharmed and not canAttack then
             if C.DB.Unitframe.DispellableOnly then
                 prio = DispellFilter[debuffType] and (DispellPriority[debuffType] + 6) or invalidPrio
                 if prio == invalidPrio then
@@ -163,7 +163,8 @@ local function Update(self, _, unit)
 
             if prio and prio > rd.priority then
                 rd.priority, rd.index, rd.spellID = prio, i, spellId
-                _name, _icon, _count, _debuffType, _duration, _expiration = name, icon, count, debuffType, duration, expiration
+                _name, _icon, _count, _debuffType, _duration, _expiration =
+                    name, icon, count, debuffType, duration, expiration
             end
         end
 
@@ -175,7 +176,8 @@ local function Update(self, _, unit)
 
         if not debuffsIgnore[spellId] and instPrio and (instPrio == 6 or instPrio > rd.priority) then
             rd.priority, rd.index, rd.spellID = instPrio, i, spellId
-            _name, _icon, _count, _debuffType, _duration, _expiration = name, icon, count, debuffType, duration, expiration
+            _name, _icon, _count, _debuffType, _duration, _expiration =
+                name, icon, count, debuffType, duration, expiration
         end
     end
 

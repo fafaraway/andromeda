@@ -30,10 +30,10 @@ local OnLeave = function(self)
 end
 
 local OnClick = function(self)
-    if (IsModifiedClick()) then
+    if IsModifiedClick() then
         _G.HandleModifiedItemClick(GetLootSlotLink(self:GetID()))
     else
-        _G.StaticPopup_Hide 'CONFIRM_LOOT_DISTRIBUTION'
+        _G.StaticPopup_Hide('CONFIRM_LOOT_DISTRIBUTION')
         ss = self:GetID()
         sq = self.quality
         sn = self.name:GetText()
@@ -110,7 +110,7 @@ local AnchorLootSlots = function(self)
     local shownSlots = 0
     for i = 1, #self.slots do
         local frame = self.slots[i]
-        if (frame:IsShown()) then
+        if frame:IsShown() then
             shownSlots = shownSlots + 1
 
             frame:SetPoint('TOP', lootFrame, 4, (-8 + iconsize) - (shownSlots * (iconsize + 4)))
@@ -121,7 +121,7 @@ local AnchorLootSlots = function(self)
 end
 
 lootFrame.LOOT_CLOSED = function(self)
-    _G.StaticPopup_Hide 'LOOT_BIND'
+    _G.StaticPopup_Hide('LOOT_BIND')
     self:Hide()
 
     for _, v in next, self.slots do
@@ -132,7 +132,7 @@ end
 lootFrame.LOOT_OPENED = function(self, _, autoloot)
     self:Show()
 
-    if (not self:IsShown()) then
+    if not self:IsShown() then
         CloseLoot(not autoloot)
     end
 
@@ -147,10 +147,12 @@ lootFrame.LOOT_OPENED = function(self, _, autoloot)
     local maxQuality = 0
     local items = GetNumLootItems()
 
-    if (items > 0) then
+    if items > 0 then
         for i = 1, items do
             local slot = lootFrame.slots[i] or CreateLootSlot(i)
-            local lootIcon, lootName, lootQuantity, _, lootQuality, _, isQuestItem, questID, isActive = GetLootSlotInfo(i)
+            local lootIcon, lootName, lootQuantity, _, lootQuality, _, isQuestItem, questID, isActive = GetLootSlotInfo(
+                i
+            )
             if lootIcon then
                 local color = _G.ITEM_QUALITY_COLORS[lootQuality]
                 local r, g, b = color.r, color.g, color.b
@@ -169,23 +171,23 @@ lootFrame.LOOT_OPENED = function(self, _, autoloot)
                 if lootQuality == 0 or lootQuality == 1 then
                     slot.iconFrame.bg:SetBackdropBorderColor(0, 0, 0)
                     if slot.iconFrame.bg.__shadow then
-                        slot.iconFrame.bg.__shadow:SetBackdropBorderColor(0, 0, 0, .25)
+                        slot.iconFrame.bg.__shadow:SetBackdropBorderColor(0, 0, 0, 0.25)
                     end
                 else
                     slot.iconFrame.bg:SetBackdropBorderColor(r, g, b)
                     if slot.iconFrame.bg.__shadow then
-                        slot.iconFrame.bg.__shadow:SetBackdropBorderColor(r, g, b, .25)
+                        slot.iconFrame.bg.__shadow:SetBackdropBorderColor(r, g, b, 0.25)
                     end
                 end
 
                 if questID and not isActive then
-                    slot.bg:SetBackdropColor(.5, .5, 0, .5)
+                    slot.bg:SetBackdropColor(0.5, 0.5, 0, 0.5)
                     slot.name:SetTextColor(1, 1, 0)
                 elseif questID or isQuestItem then
-                    slot.bg:SetBackdropColor(.5, .5, 0, .5)
+                    slot.bg:SetBackdropColor(0.5, 0.5, 0, 0.5)
                     slot.name:SetTextColor(r, g, b)
                 else
-                    slot.bg:SetBackdropColor(0, 0, 0, .5)
+                    slot.bg:SetBackdropColor(0, 0, 0, 0.5)
                     slot.name:SetTextColor(r, g, b)
                 end
 
@@ -215,7 +217,7 @@ lootFrame.LOOT_OPENED = function(self, _, autoloot)
 end
 
 lootFrame.LOOT_SLOT_CLEARED = function(self, _, slot)
-    if (not self:IsShown()) then
+    if not self:IsShown() then
         return
     end
     lootFrame.slots[slot]:Hide()
@@ -235,26 +237,20 @@ function EL:OnLogin()
         return
     end
 
-    lootFrame:SetScript(
-        'OnHide',
-        function(self)
-            _G.StaticPopup_Hide 'CONFIRM_LOOT_DISTRIBUTION'
-            CloseLoot()
-        end
-    )
+    lootFrame:SetScript('OnHide', function(self)
+        _G.StaticPopup_Hide('CONFIRM_LOOT_DISTRIBUTION')
+        CloseLoot()
+    end)
 
-    lootFrame:SetScript(
-        'OnEvent',
-        function(self, event, ...)
-            self[event](self, event, ...)
-        end
-    )
+    lootFrame:SetScript('OnEvent', function(self, event, ...)
+        self[event](self, event, ...)
+    end)
 
-    lootFrame:RegisterEvent 'LOOT_OPENED'
-    lootFrame:RegisterEvent 'LOOT_SLOT_CLEARED'
-    lootFrame:RegisterEvent 'LOOT_CLOSED'
-    lootFrame:RegisterEvent 'OPEN_MASTER_LOOT_LIST'
-    lootFrame:RegisterEvent 'UPDATE_MASTER_LOOT_LIST'
+    lootFrame:RegisterEvent('LOOT_OPENED')
+    lootFrame:RegisterEvent('LOOT_SLOT_CLEARED')
+    lootFrame:RegisterEvent('LOOT_CLOSED')
+    lootFrame:RegisterEvent('OPEN_MASTER_LOOT_LIST')
+    lootFrame:RegisterEvent('UPDATE_MASTER_LOOT_LIST')
 
     _G.LootFrame:UnregisterAllEvents()
 end

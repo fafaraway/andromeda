@@ -12,9 +12,9 @@ end
 
 local function updateMinorButtonState(button)
     if button:GetChecked() then
-        button.bg:SetBackdropColor(1, .8, 0, .25)
+        button.bg:SetBackdropColor(1, 0.8, 0, 0.25)
     else
-        button.bg:SetBackdropColor(0, 0, 0, .25)
+        button.bg:SetBackdropColor(0, 0, 0, 0.25)
     end
 end
 
@@ -37,7 +37,7 @@ table.insert(C.BlizzThemes, function()
         bu.bg = F.ReskinIcon(icon)
         F.ReskinIconBorder(bu.IconBorder)
 
-        local bg = F.CreateBDFrame(bu, .25)
+        local bg = F.CreateBDFrame(bu, 0.25)
         bg:SetPoint('TOPLEFT', bu.bg, 'TOPRIGHT', 2, 0)
         bg:SetPoint('BOTTOMRIGHT', bu.bg, 115, 0)
 
@@ -154,8 +154,8 @@ table.insert(C.BlizzThemes, function()
                 for button in self.MinorCategoryButtonPool:EnumerateActive() do
                     if not button.styled then
                         F.StripTextures(button)
-                        button.bg = F.CreateBDFrame(button, .25)
-                        button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+                        button.bg = F.CreateBDFrame(button, 0.25)
+                        button:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
                         button:HookScript('OnClick', updateMinorButtonState)
 
                         button.styled = true

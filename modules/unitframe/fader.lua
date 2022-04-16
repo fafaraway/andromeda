@@ -4,7 +4,7 @@ local oUF = F.Libs.oUF
 
 local unitFrames = {
     ['player'] = true,
-    ['pet'] = true
+    ['pet'] = true,
 }
 
 function UNITFRAME:ConfigureFader(frame)
@@ -27,11 +27,11 @@ function UNITFRAME:ConfigureFader(frame)
             frame.Fader:SetOption('UnitTarget', C.DB.Unitframe['Target'])
         end
 
-        frame.Fader:SetOption('Smooth', .3)
+        frame.Fader:SetOption('Smooth', 0.3)
         frame.Fader:SetOption('Delay', C.DB.Unitframe['Delay'])
 
         frame.Fader:ClearTimers()
-        frame.Fader.configTimer = F:ScheduleTimer(frame.Fader.ForceUpdate, .3, frame.Fader, true)
+        frame.Fader.configTimer = F:ScheduleTimer(frame.Fader.ForceUpdate, 0.3, frame.Fader, true)
     elseif frame:IsElementEnabled('Fader') then
         frame:DisableElement('Fader')
         F:UIFrameFadeIn(frame, 1, frame:GetAlpha(), 1)

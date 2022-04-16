@@ -17,97 +17,84 @@ local function UpdateProgressItemQuality(self)
     button.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 end
 
-_G.tinsert(
-    C.BlizzThemes,
-    function()
-        F.ReskinPortraitFrame(_G.QuestFrame)
+_G.tinsert(C.BlizzThemes, function()
+    F.ReskinPortraitFrame(_G.QuestFrame)
 
-        F.StripTextures(_G.QuestFrameDetailPanel, 0)
-        F.StripTextures(_G.QuestFrameRewardPanel, 0)
-        F.StripTextures(_G.QuestFrameProgressPanel, 0)
-        F.StripTextures(_G.QuestFrameGreetingPanel, 0)
+    F.StripTextures(_G.QuestFrameDetailPanel, 0)
+    F.StripTextures(_G.QuestFrameRewardPanel, 0)
+    F.StripTextures(_G.QuestFrameProgressPanel, 0)
+    F.StripTextures(_G.QuestFrameGreetingPanel, 0)
 
-        local line = _G.QuestFrameGreetingPanel:CreateTexture()
-        line:SetColorTexture(1, 1, 1, .25)
-        line:SetSize(256, C.MULT)
-        line:SetPoint('CENTER', _G.QuestGreetingFrameHorizontalBreak)
-        _G.QuestGreetingFrameHorizontalBreak:SetTexture('')
-        _G.QuestFrameGreetingPanel:HookScript(
-            'OnShow',
-            function()
-                line:SetShown(_G.QuestGreetingFrameHorizontalBreak:IsShown())
-            end
-        )
+    local line = _G.QuestFrameGreetingPanel:CreateTexture()
+    line:SetColorTexture(1, 1, 1, 0.25)
+    line:SetSize(256, C.MULT)
+    line:SetPoint('CENTER', _G.QuestGreetingFrameHorizontalBreak)
+    _G.QuestGreetingFrameHorizontalBreak:SetTexture('')
+    _G.QuestFrameGreetingPanel:HookScript('OnShow', function()
+        line:SetShown(_G.QuestGreetingFrameHorizontalBreak:IsShown())
+    end)
 
-        for i = 1, _G.MAX_REQUIRED_ITEMS do
-            local button = _G['QuestProgressItem' .. i]
-            button.NameFrame:Hide()
-            button.bg = F.ReskinIcon(button.Icon)
-            button.Icon.__owner = button
-            _G.hooksecurefunc(button.Icon, 'SetTexture', UpdateProgressItemQuality)
+    for i = 1, _G.MAX_REQUIRED_ITEMS do
+        local button = _G['QuestProgressItem' .. i]
+        button.NameFrame:Hide()
+        button.bg = F.ReskinIcon(button.Icon)
+        button.Icon.__owner = button
+        _G.hooksecurefunc(button.Icon, 'SetTexture', UpdateProgressItemQuality)
 
-            local bg = F.CreateBDFrame(button, .25)
-            bg:SetPoint('TOPLEFT', button.bg, 'TOPRIGHT', 2, 0)
-            bg:SetPoint('BOTTOMRIGHT', button.bg, 100, 0)
-        end
-
-        _G.QuestDetailScrollFrame:SetWidth(302) -- else these buttons get cut off
-
-        _G.hooksecurefunc(
-            _G.QuestProgressRequiredMoneyText,
-            'SetTextColor',
-            function(self, r)
-                if r == 0 then
-                    self:SetTextColor(.8, .8, .8)
-                elseif r == .2 then
-                    self:SetTextColor(1, 1, 1)
-                end
-            end
-        )
-
-        F.Reskin(_G.QuestFrameAcceptButton)
-        F.Reskin(_G.QuestFrameDeclineButton)
-        F.Reskin(_G.QuestFrameCompleteQuestButton)
-        F.Reskin(_G.QuestFrameCompleteButton)
-        F.Reskin(_G.QuestFrameGoodbyeButton)
-        F.Reskin(_G.QuestFrameGreetingGoodbyeButton)
-
-        F.ReskinScroll(_G.QuestProgressScrollFrameScrollBar)
-        F.ReskinScroll(_G.QuestRewardScrollFrameScrollBar)
-        F.ReskinScroll(_G.QuestDetailScrollFrameScrollBar)
-        F.ReskinScroll(_G.QuestGreetingScrollFrameScrollBar)
-
-        -- Text colour stuff
-
-        _G.QuestProgressRequiredItemsText:SetTextColor(1, .8, 0)
-        _G.QuestProgressRequiredItemsText:SetShadowColor(0, 0, 0)
-        _G.QuestProgressTitleText:SetTextColor(1, .8, 0)
-        _G.QuestProgressTitleText:SetShadowColor(0, 0, 0)
-        _G.QuestProgressTitleText.SetTextColor = nop
-        _G.QuestProgressText:SetTextColor(1, 1, 1)
-        _G.QuestProgressText.SetTextColor = nop
-        _G.GreetingText:SetTextColor(1, 1, 1)
-        _G.GreetingText.SetTextColor = nop
-        _G.AvailableQuestsText:SetTextColor(1, .8, 0)
-        _G.AvailableQuestsText.SetTextColor = nop
-        _G.AvailableQuestsText:SetShadowColor(0, 0, 0)
-        _G.CurrentQuestsText:SetTextColor(1, 1, 1)
-        _G.CurrentQuestsText.SetTextColor = nop
-        _G.CurrentQuestsText:SetShadowColor(0, 0, 0)
-
-        -- Quest NPC model
-
-        F.StripTextures(_G.QuestModelScene)
-        F.StripTextures(_G.QuestNPCModelTextFrame)
-        local bg = F.SetBD(_G.QuestModelScene)
-        bg:SetOutside(nil, nil, nil, _G.QuestNPCModelTextFrame)
-
-        _G.hooksecurefunc(
-            'QuestFrame_ShowQuestPortrait',
-            function(parentFrame, _, _, _, _, _, x, y)
-                x = x + 6
-                _G.QuestModelScene:SetPoint('TOPLEFT', parentFrame, 'TOPRIGHT', x, y)
-            end
-        )
+        local bg = F.CreateBDFrame(button, 0.25)
+        bg:SetPoint('TOPLEFT', button.bg, 'TOPRIGHT', 2, 0)
+        bg:SetPoint('BOTTOMRIGHT', button.bg, 100, 0)
     end
-)
+
+    _G.QuestDetailScrollFrame:SetWidth(302) -- else these buttons get cut off
+
+    _G.hooksecurefunc(_G.QuestProgressRequiredMoneyText, 'SetTextColor', function(self, r)
+        if r == 0 then
+            self:SetTextColor(0.8, 0.8, 0.8)
+        elseif r == 0.2 then
+            self:SetTextColor(1, 1, 1)
+        end
+    end)
+
+    F.Reskin(_G.QuestFrameAcceptButton)
+    F.Reskin(_G.QuestFrameDeclineButton)
+    F.Reskin(_G.QuestFrameCompleteQuestButton)
+    F.Reskin(_G.QuestFrameCompleteButton)
+    F.Reskin(_G.QuestFrameGoodbyeButton)
+    F.Reskin(_G.QuestFrameGreetingGoodbyeButton)
+
+    F.ReskinScroll(_G.QuestProgressScrollFrameScrollBar)
+    F.ReskinScroll(_G.QuestRewardScrollFrameScrollBar)
+    F.ReskinScroll(_G.QuestDetailScrollFrameScrollBar)
+    F.ReskinScroll(_G.QuestGreetingScrollFrameScrollBar)
+
+    -- Text colour stuff
+
+    _G.QuestProgressRequiredItemsText:SetTextColor(1, 0.8, 0)
+    _G.QuestProgressRequiredItemsText:SetShadowColor(0, 0, 0)
+    _G.QuestProgressTitleText:SetTextColor(1, 0.8, 0)
+    _G.QuestProgressTitleText:SetShadowColor(0, 0, 0)
+    _G.QuestProgressTitleText.SetTextColor = nop
+    _G.QuestProgressText:SetTextColor(1, 1, 1)
+    _G.QuestProgressText.SetTextColor = nop
+    _G.GreetingText:SetTextColor(1, 1, 1)
+    _G.GreetingText.SetTextColor = nop
+    _G.AvailableQuestsText:SetTextColor(1, 0.8, 0)
+    _G.AvailableQuestsText.SetTextColor = nop
+    _G.AvailableQuestsText:SetShadowColor(0, 0, 0)
+    _G.CurrentQuestsText:SetTextColor(1, 1, 1)
+    _G.CurrentQuestsText.SetTextColor = nop
+    _G.CurrentQuestsText:SetShadowColor(0, 0, 0)
+
+    -- Quest NPC model
+
+    F.StripTextures(_G.QuestModelScene)
+    F.StripTextures(_G.QuestNPCModelTextFrame)
+    local bg = F.SetBD(_G.QuestModelScene)
+    bg:SetOutside(nil, nil, nil, _G.QuestNPCModelTextFrame)
+
+    _G.hooksecurefunc('QuestFrame_ShowQuestPortrait', function(parentFrame, _, _, _, _, _, x, y)
+        x = x + 6
+        _G.QuestModelScene:SetPoint('TOPLEFT', parentFrame, 'TOPRIGHT', x, y)
+    end)
+end)

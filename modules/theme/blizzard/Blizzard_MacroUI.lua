@@ -22,13 +22,13 @@ C.Themes['Blizzard_MacroUI'] = function()
         button:DisableDrawLayer('BACKGROUND')
         button:SetCheckedTexture(C.Assets.Button.Checked)
         local hl = button:GetHighlightTexture()
-        hl:SetColorTexture(1, 1, 1, .25)
+        hl:SetColorTexture(1, 1, 1, 0.25)
         hl:SetInside()
 
         local icon = _G[button:GetName() .. 'Icon']
         icon:SetTexCoord(unpack(C.TEX_COORD))
         icon:SetInside()
-        F.CreateBDFrame(icon, .25)
+        F.CreateBDFrame(icon, 0.25)
 
         button.styled = true
     end
@@ -39,18 +39,15 @@ C.Themes['Blizzard_MacroUI'] = function()
         reskinMacroButton(_G['MacroButton' .. i])
     end
 
-    _G.MacroPopupFrame:HookScript(
-        'OnShow',
-        function(self)
-            for i = 1, _G.NUM_MACRO_ICONS_SHOWN do
-                reskinMacroButton(_G['MacroPopupButton' .. i])
-            end
-            self:SetPoint('TOPLEFT', _G.MacroFrame, 'TOPRIGHT', 3, 0)
+    _G.MacroPopupFrame:HookScript('OnShow', function(self)
+        for i = 1, _G.NUM_MACRO_ICONS_SHOWN do
+            reskinMacroButton(_G['MacroPopupButton' .. i])
         end
-    )
+        self:SetPoint('TOPLEFT', _G.MacroFrame, 'TOPRIGHT', 3, 0)
+    end)
 
     F.ReskinPortraitFrame(_G.MacroFrame)
-    F.CreateBDFrame(_G.MacroFrameScrollFrame, .25)
+    F.CreateBDFrame(_G.MacroFrameScrollFrame, 0.25)
     F.SetBD(_G.MacroPopupFrame)
     _G.MacroPopupEditBox:DisableDrawLayer('BACKGROUND')
     F.ReskinInput(_G.MacroPopupEditBox)

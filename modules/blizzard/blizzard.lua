@@ -51,13 +51,13 @@ end
 function BLIZZARD:VehicleIndicatorMover()
     local frame = CreateFrame('Frame', 'FreeUIVehicleIndicatorMover', _G.UIParent)
     frame:SetSize(100, 100)
-    F.Mover(frame, L['Vehicle Indicator'], 'VehicleIndicator', {'BOTTOMRIGHT', _G.Minimap, 'TOPRIGHT', 0, 0})
+    F.Mover(frame, L['Vehicle Indicator'], 'VehicleIndicator', { 'BOTTOMRIGHT', _G.Minimap, 'TOPRIGHT', 0, 0 })
 
     hooksecurefunc(_G.VehicleSeatIndicator, 'SetPoint', function(self, _, parent)
         if parent == 'MinimapCluster' or parent == _G.MinimapCluster then
             self:ClearAllPoints()
             self:SetPoint('TOPLEFT', frame)
-            self:SetScale(.7)
+            self:SetScale(0.7)
         end
     end)
 end
@@ -65,13 +65,18 @@ end
 function BLIZZARD:DurabilityFrameMover()
     local frame = CreateFrame('Frame', 'FreeUIDurabilityFrameMover', _G.UIParent)
     frame:SetSize(100, 100)
-    F.Mover(frame, L['Durability Indicator'], 'DurabilityFrame', {'TOPRIGHT', _G.ObjectiveTrackerFrame, 'TOPLEFT', -10, 0})
+    F.Mover(
+        frame,
+        L['Durability Indicator'],
+        'DurabilityFrame',
+        { 'TOPRIGHT', _G.ObjectiveTrackerFrame, 'TOPLEFT', -10, 0 }
+    )
 
     hooksecurefunc(_G.DurabilityFrame, 'SetPoint', function(self, _, parent)
         if parent == 'MinimapCluster' or parent == _G.MinimapCluster then
             self:ClearAllPoints()
             self:SetPoint('TOPLEFT', frame)
-            self:SetScale(.7)
+            self:SetScale(0.7)
         end
     end)
 end
@@ -88,7 +93,7 @@ end
 function BLIZZARD:UIWidgetFrameMover()
     local frame1 = CreateFrame('Frame', 'FreeUIUIWidgetMover', _G.UIParent)
     frame1:SetSize(200, 50)
-    F.Mover(frame1, L['UIWidgetFrame'], 'UIWidgetFrame', {'TOP', 0, -80})
+    F.Mover(frame1, L['UIWidgetFrame'], 'UIWidgetFrame', { 'TOP', 0, -80 })
 
     hooksecurefunc(_G.UIWidgetBelowMinimapContainerFrame, 'SetPoint', function(self, _, parent)
         if parent == 'MinimapCluster' or parent == _G.MinimapCluster then
@@ -99,7 +104,7 @@ function BLIZZARD:UIWidgetFrameMover()
 
     local frame2 = CreateFrame('Frame', 'FreeUIWidgetPowerBarMover', _G.UIParent)
     frame2:SetSize(260, 40)
-    F.Mover(frame2, L['UIWidgetPowerBar'], 'UIWidgetPowerBar', {'BOTTOM', _G.UIParent, 'BOTTOM', 0, 150})
+    F.Mover(frame2, L['UIWidgetPowerBar'], 'UIWidgetPowerBar', { 'BOTTOM', _G.UIParent, 'BOTTOM', 0, 150 })
 
     hooksecurefunc(_G.UIWidgetPowerBarContainerFrame, 'SetPoint', function(self, _, parent)
         if parent == 'UIParent' or parent == _G.UIParent then

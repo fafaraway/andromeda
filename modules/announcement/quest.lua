@@ -48,7 +48,7 @@ local questMatches = {
     ['PKill'] = getPattern(_G.ERR_QUEST_ADD_PLAYER_KILL_SII),
     ['ObjectiveComplete'] = getPattern(_G.ERR_QUEST_OBJECTIVE_COMPLETE_S),
     ['QuestComplete'] = getPattern(_G.ERR_QUEST_COMPLETE_S),
-    ['QuestFailed'] = getPattern(_G.ERR_QUEST_FAILED_S)
+    ['QuestFailed'] = getPattern(_G.ERR_QUEST_FAILED_S),
 }
 
 function ANNOUNCEMENT:FindQuestProgress(_, msg)

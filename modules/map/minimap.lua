@@ -28,7 +28,7 @@ function MAP:RemoveBlizzStuff()
         'MiniMapInstanceDifficulty',
         'GuildInstanceDifficulty',
         'MiniMapChallengeMode',
-        'GameTimeFrame'
+        'GameTimeFrame',
     }
 
     for _, v in pairs(frames) do
@@ -53,7 +53,7 @@ function MAP:RestyleMinimap()
     holder.bg:SetBackdropBorderColor(0, 0, 0, 1)
     _G.Minimap.holder = holder
 
-    local pos = {'BOTTOMRIGHT', _G.UIParent, 'BOTTOMRIGHT', -C.UI_GAP, C.UI_GAP}
+    local pos = { 'BOTTOMRIGHT', _G.UIParent, 'BOTTOMRIGHT', -C.UI_GAP, C.UI_GAP }
     local mover = F.Mover(holder, _G.MINIMAP_LABEL, 'Minimap', pos)
     _G.Minimap.mover = mover
 
@@ -119,7 +119,7 @@ function MAP:CreateMailButton()
     mail:SetPoint('BOTTOM', _G.Minimap, 0, _G.Minimap.halfDiff)
     icon:SetTexture(C.Assets.Texture.Mail)
     icon:SetSize(21, 21)
-    icon:SetVertexColor(1, .8, 0)
+    icon:SetVertexColor(1, 0.8, 0)
 end
 
 -- Calendar
@@ -170,7 +170,7 @@ function MAP:UpdateDifficultyFlag()
     local pvp = string.format('|cffff0007%s|r', 'PvP')
 
     if instanceType == 'party' or instanceType == 'raid' or instanceType == 'scenario' then
-        if (difficulty == 1) then -- Normal
+        if difficulty == 1 then -- Normal
             diffText:SetText('5' .. norm)
         elseif difficulty == 2 then -- Heroic
             diffText:SetText('5' .. hero)
@@ -253,7 +253,7 @@ end
 -- Garrision
 
 function MAP:CreateGarrisonButton()
-    _G.GarrisonLandingPageMinimapButton:SetScale(.5)
+    _G.GarrisonLandingPageMinimapButton:SetScale(0.5)
     hooksecurefunc('GarrisonLandingPageMinimapButton_UpdateIcon', function(self)
         self:ClearAllPoints()
         self:SetPoint('BOTTOMLEFT', _G.Minimap, 0, _G.Minimap.halfDiff + 30)
@@ -369,7 +369,6 @@ function MAP:WhoPings()
         anim:Play()
     end)
 end
-
 
 function MAP:SetupMinimap()
     if not C.DB.Map.Minimap then

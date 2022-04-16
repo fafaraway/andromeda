@@ -76,7 +76,9 @@ function UNITFRAME:SendCDMessage()
                     if remaining < 0 then
                         remaining = 0
                     end
-                    SendPartySyncMsg(string.format('3:U:%s:%d:%.2f:%.2f:%s', UNITFRAME.myGUID, spellID, duration, remaining, '-')) -- sync to others
+                    SendPartySyncMsg(
+                        string.format('3:U:%s:%d:%.2f:%.2f:%s', UNITFRAME.myGUID, spellID, duration, remaining, '-')
+                    ) -- sync to others
                 end
             end
         end
@@ -154,8 +156,8 @@ function UNITFRAME:CreatePartyWatcher(self)
     local maxIcons = 6
 
     for i = 1, maxIcons do
-        local bu = CreateFrame('Frame', 'FreeUIPartyWatcherButton'..i, self)
-        bu.CD = CreateFrame('Cooldown', 'FreeUIPartyWatcherButtonCooldown'..i, bu, 'CooldownFrameTemplate')
+        local bu = CreateFrame('Frame', 'FreeUIPartyWatcherButton' .. i, self)
+        bu.CD = CreateFrame('Cooldown', 'FreeUIPartyWatcherButtonCooldown' .. i, bu, 'CooldownFrameTemplate')
         bu.CD:SetInside()
         bu.CD:SetReverse(false)
         F.PixelIcon(bu)

@@ -6,7 +6,12 @@ local extraRep = {}
 
 local repMsg = '%s (%d/%d): %+d ' .. L['Reputation']
 local paraMsg = C.GREEN_COLOR .. '%s (%d/10000): %+d ' .. L['Paragon Reputation'] .. '|r'
-local cacheMsg = C.RED_COLOR .. '%s (%d/10000): %+d ' .. L['Paragon Reputation'] .. ' (' .. L['Max Reputation - Receive Reward.'] .. ')|r'
+local cacheMsg = C.RED_COLOR
+    .. '%s (%d/10000): %+d '
+    .. L['Paragon Reputation']
+    .. ' ('
+    .. L['Max Reputation - Receive Reward.']
+    .. ')|r'
 
 local function CreateMessage(msg)
     local info = _G.ChatTypeInfo['COMBAT_FACTION_CHANGE']
@@ -29,7 +34,7 @@ local function InitExtraRep(factionID, name)
             extraRep[name] = extraRep[name] + threshold
         end
     end
-    if extraRep[name] > threshold and (not hasRewardPending) then
+    if extraRep[name] > threshold and not hasRewardPending then
         extraRep[name] = extraRep[name] - threshold
     end
 end
@@ -61,13 +66,13 @@ local function UpdateRep(self)
                     CreateMessage(extra_msg2)
                 end
             end
-        elseif name and (not isHeader) or (hasRep) then
+        elseif name and not isHeader or hasRep then
             if not rep[name] then
                 rep[name] = barValue
             end
 
             local change = barValue - rep[name]
-            if (change > 0) then
+            if change > 0 then
                 rep[name] = barValue
                 local msg = string.format(repMsg, name, barValue - barMin, barMax - barMin, change)
                 CreateMessage(msg)
@@ -89,9 +94,11 @@ local function HookParagonRep()
         if factionIndex <= numFactions then
             local name, _, _, _, _, _, _, _, _, _, _, _, _, factionID = GetFactionInfo(factionIndex)
             if factionID and C_Reputation.IsFactionParagon(factionID) then
-                local currentValue, threshold, rewardQuestID, hasRewardPending = C_Reputation.GetFactionParagonInfo(factionID)
+                local currentValue, threshold, rewardQuestID, hasRewardPending = C_Reputation.GetFactionParagonInfo(
+                    factionID
+                )
                 factionRow.questID = rewardQuestID
-                local r, g, b = .9, .8, .6
+                local r, g, b = 0.9, 0.8, 0.6
 
                 if currentValue then
                     local barValue = math.fmod(currentValue, threshold)
@@ -108,7 +115,8 @@ local function HookParagonRep()
                     factionBar:SetMinMaxValues(0, threshold)
                     factionBar:SetValue(barValue)
                     factionBar:SetStatusBarColor(r, g, b)
-                    factionRow.rolloverText = C.INFO_COLOR .. string.format(_G.REPUTATION_PROGRESS_FORMAT, barValue, threshold)
+                    factionRow.rolloverText = C.INFO_COLOR
+                        .. string.format(_G.REPUTATION_PROGRESS_FORMAT, barValue, threshold)
 
                     if hasRewardPending then
                         barValue = barValue - threshold

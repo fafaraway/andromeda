@@ -6,12 +6,12 @@ local Type_SpellDisplay = _G.Enum.UIWidgetVisualizationType.SpellDisplay
 local Type_DoubleStatusBar = _G.Enum.UIWidgetVisualizationType.DoubleStatusBar
 
 local atlasColors = {
-    ['UI-Frame-Bar-Fill-Blue'] = {.2, .6, 1},
-    ['UI-Frame-Bar-Fill-Red'] = {.9, .2, .2},
-    ['UI-Frame-Bar-Fill-Yellow'] = {1, .6, 0},
-    ['objectivewidget-bar-fill-left'] = {.2, .6, 1},
-    ['objectivewidget-bar-fill-right'] = {.9, .2, .2},
-    ['EmberCourtScenario-Tracker-barfill'] = {.9, .2, .2}
+    ['UI-Frame-Bar-Fill-Blue'] = { 0.2, 0.6, 1 },
+    ['UI-Frame-Bar-Fill-Red'] = { 0.9, 0.2, 0.2 },
+    ['UI-Frame-Bar-Fill-Yellow'] = { 1, 0.6, 0 },
+    ['objectivewidget-bar-fill-left'] = { 0.2, 0.6, 1 },
+    ['objectivewidget-bar-fill-right'] = { 0.9, 0.2, 0.2 },
+    ['EmberCourtScenario-Tracker-barfill'] = { 0.9, 0.2, 0.2 },
 }
 
 function F:ReplaceWidgetBarTexture(atlas)
@@ -87,9 +87,9 @@ local function ReskinPVPCaptureBar(self)
     self.NeutralBar:SetTexture(C.Assets.Statusbar.Normal)
     self.RightBar:SetTexture(C.Assets.Statusbar.Normal)
 
-    self.LeftBar:SetVertexColor(.2, .6, 1)
-    self.NeutralBar:SetVertexColor(.8, .8, .8)
-    self.RightBar:SetVertexColor(.9, .2, .2)
+    self.LeftBar:SetVertexColor(0.2, 0.6, 1)
+    self.NeutralBar:SetVertexColor(0.8, 0.8, 0.8)
+    self.RightBar:SetVertexColor(0.9, 0.2, 0.2)
 
     self.LeftLine:SetAlpha(0)
     self.RightLine:SetAlpha(0)

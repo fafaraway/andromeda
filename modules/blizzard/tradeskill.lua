@@ -18,7 +18,7 @@ local onlyPrimary = {
 
 function BLIZZARD:UpdateProfessions()
     local prof1, prof2, _, fish, cook = GetProfessions()
-    local profs = {prof1, prof2, fish, cook}
+    local profs = { prof1, prof2, fish, cook }
 
     if C.CLASS == 'DEATHKNIGHT' then
         BLIZZARD:TradeTabs_Create(RUNEFORGING_ID)
@@ -109,7 +109,12 @@ function BLIZZARD:TradeTabs_Create(spellID, toyID, itemID)
         name, _, texture = GetSpellInfo(spellID)
     end
 
-    local tab = CreateFrame('CheckButton', nil, _G.TradeSkillFrame, 'SpellBookSkillLineTabTemplate, SecureActionButtonTemplate')
+    local tab = CreateFrame(
+        'CheckButton',
+        nil,
+        _G.TradeSkillFrame,
+        'SpellBookSkillLineTabTemplate, SecureActionButtonTemplate'
+    )
     tab.tooltip = name
     tab.spellID = spellID
     tab.itemID = toyID or itemID
@@ -122,7 +127,7 @@ function BLIZZARD:TradeTabs_Create(spellID, toyID, itemID)
         tab:SetAttribute(tab.type, spellID or name)
     end
     tab:SetNormalTexture(texture)
-    tab:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+    tab:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
     tab:Show()
 
     tab.CD = CreateFrame('Cooldown', nil, tab, 'CooldownFrameTemplate')
@@ -139,8 +144,18 @@ end
 
 function BLIZZARD:TradeTabs_FilterIcons()
     local buttonList = {
-        [1] = {'Atlas:bags-greenarrow', _G.TRADESKILL_FILTER_HAS_SKILL_UP, C_TradeSkillUI.GetOnlyShowSkillUpRecipes, C_TradeSkillUI.SetOnlyShowSkillUpRecipes},
-        [2] = {'Interface\\RAIDFRAME\\ReadyCheck-Ready', _G.CRAFT_IS_MAKEABLE, C_TradeSkillUI.GetOnlyShowMakeableRecipes, C_TradeSkillUI.SetOnlyShowMakeableRecipes},
+        [1] = {
+            'Atlas:bags-greenarrow',
+            _G.TRADESKILL_FILTER_HAS_SKILL_UP,
+            C_TradeSkillUI.GetOnlyShowSkillUpRecipes,
+            C_TradeSkillUI.SetOnlyShowSkillUpRecipes,
+        },
+        [2] = {
+            'Interface\\RAIDFRAME\\ReadyCheck-Ready',
+            _G.CRAFT_IS_MAKEABLE,
+            C_TradeSkillUI.GetOnlyShowMakeableRecipes,
+            C_TradeSkillUI.SetOnlyShowMakeableRecipes,
+        },
     }
 
     local function filterClick(self)
@@ -150,7 +165,7 @@ function BLIZZARD:TradeTabs_FilterIcons()
             F.SetBorderColor(self.bg)
         else
             value[4](true)
-            self.bg:SetBackdropBorderColor(1, .8, 0)
+            self.bg:SetBackdropBorderColor(1, 0.8, 0)
         end
     end
 
@@ -170,7 +185,7 @@ function BLIZZARD:TradeTabs_FilterIcons()
     local function updateFilterStatus()
         for index, value in pairs(buttonList) do
             if value[3]() then
-                buttons[index].bg:SetBackdropBorderColor(1, .8, 0)
+                buttons[index].bg:SetBackdropBorderColor(1, 0.8, 0)
             else
                 F.SetBorderColor(buttons[index].bg)
             end
@@ -218,7 +233,11 @@ local function IsRecipeEnchanting(self)
         local parentSkillLineID = select(6, C_TradeSkillUI.GetTradeSkillLine())
         if parentSkillLineID == 333 then
             isEnchanting = true
-            self.CreateButton.tooltip = string.format(tooltipString, L['Right click to use vellum'], GetItemCount(ENCHANTING_VELLUM))
+            self.CreateButton.tooltip = string.format(
+                tooltipString,
+                L['Right click to use vellum'],
+                GetItemCount(ENCHANTING_VELLUM)
+            )
         end
     end
 end

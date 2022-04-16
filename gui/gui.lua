@@ -24,7 +24,7 @@ local tabsList = {
     L['Theme'],
     L['Profile'],
     L['About'],
-    L['Credit']
+    L['Credit'],
 }
 
 local iconsList = {
@@ -44,20 +44,20 @@ local iconsList = {
     'Interface\\ICONS\\Ability_Hunter_BeastWithin',
     'Interface\\ICONS\\INV_Misc_Blingtron',
     'Interface\\ICONS\\Achievement_WorldEvent_Brewmaster',
-    'Interface\\ICONS\\Achievement_Reputation_06'
+    'Interface\\ICONS\\Achievement_Reputation_06',
 }
 
 GUI.TexturesList = {
-    [1] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\statusbar\\norm', name = L['Default']},
-    [2] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\statusbar\\grad', name = L['Gradient']},
-    [3] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\statusbar\\flat', name = L['Flat']}
+    [1] = { texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\statusbar\\norm', name = L['Default'] },
+    [2] = { texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\statusbar\\grad', name = L['Gradient'] },
+    [3] = { texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\statusbar\\flat', name = L['Flat'] },
 }
 
 local function AddTextureToOption(parent, index)
     local tex = parent[index]:CreateTexture()
     tex:SetInside(nil, 4, 4)
     tex:SetTexture(GUI.TexturesList[index].texture)
-    tex:SetVertexColor(.6, .6, .6)
+    tex:SetVertexColor(0.6, 0.6, 0.6)
 end
 
 local function UpdateValue(key, value, newValue)
@@ -82,7 +82,7 @@ local function CreateGearButton(self, name)
     bu.Icon = bu:CreateTexture(nil, 'ARTWORK')
     bu.Icon:SetAllPoints()
     bu.Icon:SetTexture(C.Assets.Texture.Gear)
-    bu.Icon:SetVertexColor(.6, .6, .6)
+    bu.Icon:SetVertexColor(0.6, 0.6, 0.6)
     bu:SetHighlightTexture(C.Assets.Texture.Gear)
 
     return bu
@@ -111,9 +111,9 @@ local function CheckUIReload(name)
 end
 
 function GUI:CreateGradientLine(frame, width, x, y, x2, y2)
-    local fll = F.SetGradient(frame, 'H', .7, .7, .7, 0, .5, width, C.MULT)
+    local fll = F.SetGradient(frame, 'H', 0.7, 0.7, 0.7, 0, 0.5, width, C.MULT)
     fll:SetPoint('TOP', x, y)
-    local flr = F.SetGradient(frame, 'H', .7, .7, .7, .5, 0, width, C.MULT)
+    local flr = F.SetGradient(frame, 'H', 0.7, 0.7, 0.7, 0.5, 0, width, C.MULT)
     flr:SetPoint('TOP', x2, y2)
 end
 
@@ -125,15 +125,25 @@ local function SelectTab(i)
     for num = 1, #tabsList do
         if num == i then
             if gradStyle then
-                guiTab[num].__gradient:SetGradientAlpha('Vertical', 0, 0, 0, .25, r, g, b, .25)
+                guiTab[num].__gradient:SetGradientAlpha('Vertical', 0, 0, 0, 0.25, r, g, b, 0.25)
             else
-                guiTab[num].__gradient:SetVertexColor(r, g, b, .25)
+                guiTab[num].__gradient:SetVertexColor(r, g, b, 0.25)
             end
             guiTab[num].checked = true
             guiPage[num]:Show()
         else
             if gradStyle then
-                guiTab[num].__gradient:SetGradientAlpha('Vertical', 0, 0, 0, .25, buttonColor.r, buttonColor.g, buttonColor.b, .25)
+                guiTab[num].__gradient:SetGradientAlpha(
+                    'Vertical',
+                    0,
+                    0,
+                    0,
+                    0.25,
+                    buttonColor.r,
+                    buttonColor.g,
+                    buttonColor.b,
+                    0.25
+                )
             else
                 guiTab[num].__gradient:SetVertexColor(0, 0, 0, 0)
             end
@@ -218,10 +228,10 @@ local function updateDropdownSelection(self)
     for i = 1, #dd.__options do
         local option = dd.options[i]
         if i == UpdateValue(dd.__key, dd.__value) then
-            option:SetBackdropColor(C.r, C.g, C.b, .25)
+            option:SetBackdropColor(C.r, C.g, C.b, 0.25)
             option.selected = true
         else
-            option:SetBackdropColor(.1, .1, .1, .25)
+            option:SetBackdropColor(0.1, 0.1, 0.1, 0.25)
             option.selected = false
         end
     end
@@ -409,11 +419,33 @@ local function CreateGUI()
     F.CreateMF(guiFrame)
     F.SetBD(guiFrame)
 
-    local verticalLine = F.SetGradient(guiFrame, 'V', .5, .5, .5, .25, .25, C.MULT, 540)
+    local verticalLine = F.SetGradient(guiFrame, 'V', 0.5, 0.5, 0.5, 0.25, 0.25, C.MULT, 540)
     verticalLine:SetPoint('TOPLEFT', 160, -50)
 
-    F.CreateFS(guiFrame, C.ASSET_PATH .. 'fonts\\header.ttf', 22, nil, F:StyleAddonName('%ADDONNAME%'), nil, 'THICK', 'TOP', 0, -4)
-    F.CreateFS(guiFrame, C.Assets.Font.Regular, 10, nil, 'Version: ' .. C.ADDON_VERSION, {.7, .7, .7}, 'THICK', 'TOP', 0, -30)
+    F.CreateFS(
+        guiFrame,
+        C.ASSET_PATH .. 'fonts\\header.ttf',
+        22,
+        nil,
+        F:StyleAddonName('%ADDONNAME%'),
+        nil,
+        'THICK',
+        'TOP',
+        0,
+        -4
+    )
+    F.CreateFS(
+        guiFrame,
+        C.Assets.Font.Regular,
+        10,
+        nil,
+        'Version: ' .. C.ADDON_VERSION,
+        { 0.7, 0.7, 0.7 },
+        'THICK',
+        'TOP',
+        0,
+        -30
+    )
 
     GUI:CreateGradientLine(guiFrame, 120, -60, -26, 60, -26)
 
@@ -421,13 +453,10 @@ local function CreateGUI()
     btnClose:SetPoint('BOTTOMRIGHT', -6, 6)
     btnClose:SetSize(80, 24)
     btnClose:SetText(_G.CLOSE)
-    btnClose:SetScript(
-        'OnClick',
-        function()
-            PlaySound(_G.SOUNDKIT.IG_MAINMENU_OPTION)
-            guiFrame:Hide()
-        end
-    )
+    btnClose:SetScript('OnClick', function()
+        PlaySound(_G.SOUNDKIT.IG_MAINMENU_OPTION)
+        guiFrame:Hide()
+    end)
     F.Reskin(btnClose)
 
     local btnApply = CreateFrame('Button', nil, guiFrame, 'UIPanelButtonTemplate')
@@ -435,16 +464,13 @@ local function CreateGUI()
     btnApply:SetSize(80, 24)
     btnApply:SetText(_G.APPLY)
     -- btnApply:Disable()
-    btnApply:SetScript(
-        'OnClick',
-        function()
-            guiFrame:Hide()
-            if GUI.NeedUIReload then
-                _G.StaticPopup_Show('FREEUI_RELOADUI')
-                GUI.NeedUIReload = nil
-            end
+    btnApply:SetScript('OnClick', function()
+        guiFrame:Hide()
+        if GUI.NeedUIReload then
+            _G.StaticPopup_Show('FREEUI_RELOADUI')
+            GUI.NeedUIReload = nil
         end
-    )
+    end)
     F.Reskin(btnApply)
 
     for i, name in pairs(tabsList) do
@@ -453,7 +479,7 @@ local function CreateGUI()
         guiPage[i] = CreateFrame('ScrollFrame', nil, guiFrame, 'UIPanelScrollFrameTemplate')
         guiPage[i]:SetPoint('TOPLEFT', 170, -50)
         guiPage[i]:SetSize(500, 540)
-        guiPage[i].__bg = F.CreateBDFrame(guiPage[i], .25)
+        guiPage[i].__bg = F.CreateBDFrame(guiPage[i], 0.25)
         guiPage[i]:Hide()
 
         guiPage[i].child = CreateFrame('Frame', nil, guiPage[i])

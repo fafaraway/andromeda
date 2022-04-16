@@ -147,7 +147,7 @@ hooksecurefunc('ChatEdit_InsertLink', function(text) -- shift-clicked
                 _G.TradeSkillFrame:SelectRecipe(tonumber(spellId))
             end
         elseif item then
-            F:Delay(.1, function() -- wait a bit or we cant select the recipe yet
+            F:Delay(0.1, function() -- wait a bit or we cant select the recipe yet
                 for _, v in pairs(_G.TradeSkillFrame.RecipeList.dataList) do
                     if v.name == item then
                         -- TradeSkillFrame.RecipeList:RefreshDisplay() -- didnt seem to help

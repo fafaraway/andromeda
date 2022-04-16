@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 local function GetBestScale()
-    local scale = math.max(.4, math.min(1.15, 768 / C.SCREEN_HEIGHT))
+    local scale = math.max(0.4, math.min(1.15, 768 / C.SCREEN_HEIGHT))
     return F:Round(scale, 2)
 end
 
@@ -34,5 +34,3 @@ function F:UpdatePixelScale(event)
 
     isScaling = false
 end
-
-

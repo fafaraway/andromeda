@@ -27,17 +27,17 @@ local function AddLines(self)
     local itemSellPrice = select(11, GetItemInfo(link))
 
     if bankCount > 0 then
-        self:AddDoubleLine(_G.BAGSLOT .. '/' .. _G.BANK .. ':', bagCount .. '/' .. bankCount, .5, .8, 1, 1, 1, 1)
+        self:AddDoubleLine(_G.BAGSLOT .. '/' .. _G.BANK .. ':', bagCount .. '/' .. bankCount, 0.5, 0.8, 1, 1, 1, 1)
     elseif bagCount > 1 then
-        self:AddDoubleLine(_G.BAGSLOT .. ':', bagCount, .5, .8, 1, 1, 1, 1)
+        self:AddDoubleLine(_G.BAGSLOT .. ':', bagCount, 0.5, 0.8, 1, 1, 1, 1)
     end
 
     if itemStackCount and itemStackCount > 1 then
-        self:AddDoubleLine(L['Stack'] .. ':', itemStackCount, .5, .8, 1, 1, 1, 1)
+        self:AddDoubleLine(L['Stack'] .. ':', itemStackCount, 0.5, 0.8, 1, 1, 1, 1)
     end
 
     if itemSellPrice and itemSellPrice > 0 then
-        self:AddDoubleLine(L['Price'] .. ':', GetMoneyString(itemSellPrice, true), .5, .8, 1, 1, 1, 1)
+        self:AddDoubleLine(L['Price'] .. ':', GetMoneyString(itemSellPrice, true), 0.5, 0.8, 1, 1, 1, 1)
     end
 end
 

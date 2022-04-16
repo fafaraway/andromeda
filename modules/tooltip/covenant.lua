@@ -16,21 +16,21 @@ local covenantList = {
     [1] = 'kyrian',
     [2] = 'venthyr',
     [3] = 'nightfae',
-    [4] = 'necrolord'
+    [4] = 'necrolord',
 }
 
 local covenantColor = {
     [1] = _G.COVENANT_COLORS.Kyrian,
     [2] = _G.COVENANT_COLORS.Venthyr,
     [3] = _G.COVENANT_COLORS.NightFae,
-    [4] = _G.COVENANT_COLORS.Necrolord
+    [4] = _G.COVENANT_COLORS.Necrolord,
 }
 
 local addonPrefixes = {
     [ZT_Prefix] = true,
     [DC_Prefix] = true,
     [OmniCD_Prefix] = true,
-    [MRT_Prefix] = true
+    [MRT_Prefix] = true,
 }
 
 function M:GetCovenantIcon(covenantID)
@@ -145,7 +145,11 @@ function M:HandleAddonMessage(...)
         end
     elseif prefix == MRT_Prefix then
         local modPrefix, subPrefix, soulbinds = string.split('\t', msg)
-        if (modPrefix and modPrefix == 'inspect') and (subPrefix and subPrefix == 'R') and (soulbinds and string.sub(soulbinds, 1, 1) == 'S') then
+        if
+            (modPrefix and modPrefix == 'inspect')
+            and (subPrefix and subPrefix == 'R')
+            and (soulbinds and string.sub(soulbinds, 1, 1) == 'S')
+        then
             local guid = UnitGUID(sender)
             local covenantID = select(2, string.split(':', soulbinds))
             covenantID = tonumber(covenantID)
@@ -185,7 +189,14 @@ function M:AddCovenantInfo()
     end
 
     if covenantID and covenantID ~= 0 then
-        _G.GameTooltip:AddLine(string.format('%s %s %s', C.WHITE_COLOR .. L['Covenant'] .. ':|r', M:GetCovenantName(covenantID), M:GetCovenantIcon(covenantID)))
+        _G.GameTooltip:AddLine(
+            string.format(
+                '%s %s %s',
+                C.WHITE_COLOR .. L['Covenant'] .. ':|r',
+                M:GetCovenantName(covenantID),
+                M:GetCovenantIcon(covenantID)
+            )
+        )
     end
 end
 

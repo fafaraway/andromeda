@@ -68,7 +68,7 @@ function THEME:ReskinPGF()
             'Members',
             'Tanks',
             'Heals',
-            'Dps'
+            'Dps',
         }
 
         for _, name in pairs(names) do

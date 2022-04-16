@@ -72,7 +72,7 @@ local function PostUpdateRunes(element, runemap)
                 rune:SetScript('OnUpdate', nil)
                 rune.timer:SetText(nil)
             elseif start then
-                rune:SetAlpha(.45)
+                rune:SetAlpha(0.45)
                 rune.runeDuration = duration
                 rune:SetScript('OnUpdate', UNITFRAME.OnUpdateRunes)
             end
@@ -93,7 +93,7 @@ function UNITFRAME:CreateClassPower(self)
     if not isDK then
         holder.bg = F.SetBD(holder)
         holder.bg:SetFrameLevel(5)
-        holder.bg:SetBackdropBorderColor(1, .8, 0)
+        holder.bg:SetBackdropBorderColor(1, 0.8, 0)
         holder.bg:Hide()
     end
 
@@ -116,7 +116,7 @@ function UNITFRAME:CreateClassPower(self)
         bars[i].bg = bars[i]:CreateTexture(nil, 'BACKGROUND')
         bars[i].bg:SetAllPoints(bars[i])
         bars[i].bg:SetTexture(C.Assets.Statusbar.Flat)
-        bars[i].bg.multiplier = .25
+        bars[i].bg.multiplier = 0.25
 
         if isDK then
             bars[i].timer = F.CreateFS(bars[i], C.Assets.Font.Regular, 11, nil, '')

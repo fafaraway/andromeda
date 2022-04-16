@@ -35,7 +35,7 @@ function BLIZZARD:PetTabs_Create()
     -- Create the pet type buttons, sorted according weakness
     -- Humanoid > Dragonkin > Magic > Flying > Aquatic > Elemental > Mechanical > Beast > Critter > Undead
     local activeCount = 0
-    for petIndex, petType in ipairs({1, 2, 6, 3, 9, 7, 10, 8, 5, 4}) do
+    for petIndex, petType in ipairs({ 1, 2, 6, 3, 9, 7, 10, 8, 5, 4 }) do
         local btn = CreateFrame('Button', 'PetJournalQuickFilterButton' .. petIndex, _G.PetJournal, 'BackdropTemplate')
         btn:SetSize(24, 24)
         btn:SetPoint('TOPLEFT', _G.PetJournalLeftInset, 6 + 25 * (petIndex - 1), -33)

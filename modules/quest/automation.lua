@@ -63,7 +63,7 @@ local ignoreQuestNPC = {
     [160248] = true, -- 档案员费安，罪魂碎片
     [127037] = true, -- 纳毕鲁
     [326027] = true, -- 运输站回收生成器DX-82
-    [162804] = true -- 威娜莉
+    [162804] = true, -- 威娜莉
 }
 
 QuickQuest:Register('QUEST_GREETING', function()
@@ -136,7 +136,7 @@ local ignoreGossipNPC = {
     [180458] = true, -- 灰烬王庭，大帝幻象
     [182681] = true, -- 扎雷殁提斯，强化控制台
     [183262] = true, -- 扎雷殁提斯，回声机若源生体
-    [184587] = true -- 集市，塔皮克斯
+    [184587] = true, -- 集市，塔皮克斯
 }
 
 local rogueClassHallInsignia = {
@@ -144,19 +144,19 @@ local rogueClassHallInsignia = {
     [96782] = true, -- Lucian Trias
     [93188] = true, -- Mongar
     [107486] = true, -- CoS rumors
-    [167839] = true -- 灵魂残渣，爬塔
+    [167839] = true, -- 灵魂残渣，爬塔
 }
 
 local followerAssignees = {
     [138708] = true, -- 半兽人迦罗娜
-    [135614] = true -- 马迪亚斯·肖尔大师
+    [135614] = true, -- 马迪亚斯·肖尔大师
 }
 
-local autoGossipTypes = {['taxi'] = true, ['gossip'] = true, ['banker'] = true, ['vendor'] = true, ['trainer'] = true}
+local autoGossipTypes = { ['taxi'] = true, ['gossip'] = true, ['banker'] = true, ['vendor'] = true, ['trainer'] = true }
 
 local ignoreInstances = {
     [1571] = true, -- 枯法者
-    [1626] = true -- 群星庭院
+    [1626] = true, -- 群星庭院
 }
 
 QuickQuest:Register('GOSSIP_SHOW', function()
@@ -215,7 +215,7 @@ end)
 local darkmoonNPC = {
     [57850] = true, -- Teleportologist Fozlebub
     [55382] = true, -- Darkmoon Faire Mystic Mage (Horde)
-    [54334] = true -- Darkmoon Faire Mystic Mage (Alliance)
+    [54334] = true, -- Darkmoon Faire Mystic Mage (Alliance)
 }
 
 QuickQuest:Register('GOSSIP_CONFIRM', function(index)
@@ -299,7 +299,7 @@ local itemBlacklist = {
     ['38176'] = 122405, -- Scouting Missive: Stonefury Cliffs
     ['38189'] = 122401, -- Scouting Missive: Stonefury Cliffs
     -- Misc
-    [31664] = 88604 -- Nat's Fishing Journal
+    [31664] = 88604, -- Nat's Fishing Journal
 }
 
 QuickQuest:Register('QUEST_PROGRESS', function()
@@ -347,7 +347,7 @@ local cashRewards = {
     [138131] = 24, -- Magical Sprouting Beans, 24 copper
     [138123] = 15, -- Shiny Gold Nugget, 15 copper
     [138125] = 16, -- Crystal Clear Gemstone, 16 copper
-    [138133] = 27 -- Elixir of Endless Wonder, 27 copper
+    [138133] = 27, -- Elixir of Endless Wonder, 27 copper
 }
 
 QuickQuest:Register('QUEST_COMPLETE', function()

@@ -11,7 +11,7 @@ for i = 1, numLines do
     local startA, endA = _G.Lerp(1, 0, (i - 1) / numLines), _G.Lerp(1, 0, i / numLines)
     line:SetGradientAlpha('HORIZONTAL', 1, 1, 1, startA, 1, 1, 1, endA)
 
-    lines[i] = {line = line, x = 0, y = 0}
+    lines[i] = { line = line, x = 0, y = 0 }
 end
 
 local function GetLength(startX, startY, endX, endY)
@@ -61,7 +61,7 @@ local function UpdateGlow(self, elapsed)
     local weight = 2048 ^ -elapsed
     speed = math.min(weight * speed + (1 - weight) * math.sqrt(dX * dX + dY * dY) / elapsed, 1024)
     local size = speed / 6 - 16
-    if (size > 0) then
+    if size > 0 then
         local scale = _G.UIParent:GetEffectiveScale()
         self.texture:SetHeight(size)
         self.texture:SetWidth(size)

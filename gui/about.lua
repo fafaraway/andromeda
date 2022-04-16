@@ -4,13 +4,13 @@ local GUI = F:GetModule('GUI')
 local urls = {
     curse = 'https://www.curseforge.com/wow/addons/freeui',
     github = 'https://github.com/Solor/FreeUI',
-    discord = 'https://discord.gg/86wbfZXxn7'
+    discord = 'https://discord.gg/86wbfZXxn7',
 }
 
 local icons = {
     curse = C.ASSET_PATH .. 'textures\\curse',
     github = C.ASSET_PATH .. 'textures\\github',
-    discord = C.ASSET_PATH .. 'textures\\discord'
+    discord = C.ASSET_PATH .. 'textures\\discord',
 }
 
 local function ResetUrlBox(self)

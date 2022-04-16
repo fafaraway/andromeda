@@ -1,8 +1,7 @@
-﻿local F, C = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
 local COMBAT = F:GetModule('Combat')
 
-local FILTER_MY_PETS =
-    _G.bit.bor(
+local FILTER_MY_PETS = _G.bit.bor(
     _G.COMBATLOG_OBJECT_AFFILIATION_MINE,
     _G.COMBATLOG_OBJECT_REACTION_FRIENDLY,
     _G.COMBATLOG_OBJECT_CONTROL_PLAYER,
@@ -10,15 +9,13 @@ local FILTER_MY_PETS =
     _G.COMBATLOG_OBJECT_TYPE_GUARDIAN,
     _G.COMBATLOG_OBJECT_TYPE_PET
 )
-local FILTER_ENEMY_PLAYERS =
-    _G.bit.bor(
-        _G.COMBATLOG_OBJECT_AFFILIATION_MASK,
-        _G.COMBATLOG_OBJECT_REACTION_MASK,
-        _G.COMBATLOG_OBJECT_CONTROL_PLAYER,
-        _G.COMBATLOG_OBJECT_TYPE_PLAYER
+local FILTER_ENEMY_PLAYERS = _G.bit.bor(
+    _G.COMBATLOG_OBJECT_AFFILIATION_MASK,
+    _G.COMBATLOG_OBJECT_REACTION_MASK,
+    _G.COMBATLOG_OBJECT_CONTROL_PLAYER,
+    _G.COMBATLOG_OBJECT_TYPE_PLAYER
 )
-local FILTER_ENEMY_NPC =
-    _G.bit.bor(
+local FILTER_ENEMY_NPC = _G.bit.bor(
     _G.COMBATLOG_OBJECT_AFFILIATION_MASK,
     _G.COMBATLOG_OBJECT_REACTION_MASK,
     _G.COMBATLOG_OBJECT_CONTROL_PLAYER,
@@ -48,7 +45,7 @@ local soundsList = {
     ['ludicrouskill'] = C.ASSET_PATH .. 'sounds\\killingblows\\multikill\\ludicrouskill.ogg',
     ['holyshit'] = C.ASSET_PATH .. 'sounds\\killingblows\\multikill\\holyshit.ogg',
     ['denied'] = C.ASSET_PATH .. 'sounds\\killingblows\\revenge\\denied.ogg',
-    ['retribution'] = C.ASSET_PATH .. 'sounds\\killingblows\\revenge\\retribution.ogg'
+    ['retribution'] = C.ASSET_PATH .. 'sounds\\killingblows\\revenge\\retribution.ogg',
 }
 
 local function PlaySound(file)
@@ -65,7 +62,8 @@ end
 
 local function OnEvent(self, event)
     if event == 'COMBAT_LOG_EVENT_UNFILTERED' then
-        local timestamp, type, _, sourceGUID, sourceName, sourceFlags, _, destGUID, destName, destFlags, _, _, swingOverkill, _, _, spellOverkill = CombatLogGetCurrentEventInfo()
+        local timestamp, type, _, sourceGUID, sourceName, sourceFlags, _, destGUID, destName, destFlags, _, _, swingOverkill, _, _, spellOverkill =
+            CombatLogGetCurrentEventInfo()
 
         local toEnemy, fromEnemy, fromMyPets
 
@@ -79,10 +77,17 @@ local function OnEvent(self, event)
         end
 
         if
-            (type == 'PARTY_KILL' and sourceGUID == playerGUID and toEnemy) or (type == 'SWING_DAMAGE' and destGUID ~= playerGUID and fromMyPets and toEnemy and swingOverkill >= 0) or
-                ((type == 'RANGE_DAMAGE' or type == 'SPELL_DAMAGE' or type == 'SPELL_PERIODIC_DAMAGE') and destGUID ~= playerGUID and fromMyPets and toEnemy and spellOverkill >= 0)
-         then
-            if (killsTable[destName] and (timestamp - killsTable[destName]) < 5) then
+            (type == 'PARTY_KILL' and sourceGUID == playerGUID and toEnemy)
+            or (type == 'SWING_DAMAGE' and destGUID ~= playerGUID and fromMyPets and toEnemy and swingOverkill >= 0)
+            or (
+                (type == 'RANGE_DAMAGE' or type == 'SPELL_DAMAGE' or type == 'SPELL_PERIODIC_DAMAGE')
+                and destGUID ~= playerGUID
+                and fromMyPets
+                and toEnemy
+                and spellOverkill >= 0
+            )
+        then
+            if killsTable[destName] and (timestamp - killsTable[destName]) < 5 then
                 return
             else
                 killsTable[destName] = timestamp
@@ -117,7 +122,7 @@ local function OnEvent(self, event)
                 PlaySound(soundsList.holyshit)
                 PrtMsg('Holy Shit')
             elseif streakCount <= 1 then
-                if (deathsTable[destName] and (timestamp - deathsTable[destName]) < 90) then
+                if deathsTable[destName] and (timestamp - deathsTable[destName]) < 90 then
                     deathsTable[destName] = nil
                     PlaySound(soundsList.retribution)
                     PrtMsg('Retribution')
@@ -147,11 +152,16 @@ local function OnEvent(self, event)
 
             lastKill = timestamp
         elseif
-            (type == 'SWING_DAMAGE' and fromEnemy and destGUID == playerGUID and swingOverkill >= 0) or
-                ((type == 'RANGE_DAMAGE' or type == 'SPELL_DAMAGE' or type == 'SPELL_PERIODIC_DAMAGE') and fromEnemy and destGUID == playerGUID and spellOverkill >= 0)
-         then
+            (type == 'SWING_DAMAGE' and fromEnemy and destGUID == playerGUID and swingOverkill >= 0)
+            or (
+                (type == 'RANGE_DAMAGE' or type == 'SPELL_DAMAGE' or type == 'SPELL_PERIODIC_DAMAGE')
+                and fromEnemy
+                and destGUID == playerGUID
+                and spellOverkill >= 0
+            )
+        then
             if sourceName ~= nil and sourceName ~= playerName then
-                if (deathsTable[sourceName] and (timestamp - deathsTable[sourceName]) < 5) then
+                if deathsTable[sourceName] and (timestamp - deathsTable[sourceName]) < 5 then
                     return
                 else
                     deathsTable[sourceName] = timestamp

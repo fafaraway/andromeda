@@ -5,9 +5,9 @@ local pvpTalents
 local pvpIconTexture = C_CurrencyInfo.GetCurrencyInfo(104).iconFileID
 
 local menuList = {
-    {text = _G.CHOOSE_SPECIALIZATION, isTitle = true, notCheckable = true},
-    {text = _G.SPECIALIZATION, hasArrow = true, notCheckable = true},
-    {text = _G.SELECT_LOOT_SPECIALIZATION, hasArrow = true, notCheckable = true}
+    { text = _G.CHOOSE_SPECIALIZATION, isTitle = true, notCheckable = true },
+    { text = _G.SPECIALIZATION, hasArrow = true, notCheckable = true },
+    { text = _G.SELECT_LOOT_SPECIALIZATION, hasArrow = true, notCheckable = true },
 }
 
 local function AddIcon(texture)
@@ -36,8 +36,8 @@ local function Block_OnMouseUp(self, btn)
     if btn == 'LeftButton' then
         _G.ToggleTalentFrame(2)
     else
-        menuList[2].menuList = {{}, {}, {}, {}}
-        menuList[3].menuList = {{}, {}, {}, {}, {}}
+        menuList[2].menuList = { {}, {}, {}, {} }
+        menuList[3].menuList = { {}, {}, {}, {}, {} }
         local specList, lootList = menuList[2].menuList, menuList[3].menuList
         local spec, specName = GetSpecializationInfo(specIndex)
         local lootSpec = GetLootSpecialization()
@@ -46,7 +46,7 @@ local function Block_OnMouseUp(self, btn)
             func = function()
                 ClickFunc(0, true)
             end,
-            checked = lootSpec == 0 and true or false
+            checked = lootSpec == 0 and true or false,
         }
 
         for i = 1, 4 do
@@ -69,7 +69,7 @@ local function Block_OnMouseUp(self, btn)
                     func = function()
                         ClickFunc(id, true)
                     end,
-                    checked = id == lootSpec and true or false
+                    checked = id == lootSpec and true or false,
                 }
             else
                 specList[i] = nil
@@ -96,9 +96,21 @@ local function Block_OnEvent(self)
         -- local lootrole = GetSpecializationRoleByID(lootSpecID)
 
         if not lootname or name == lootname then
-            self.text:SetText(string.format(L['Spec'] .. ': ' .. C.CLASS_COLOR .. '%s  |r' .. L['Loot'] .. ':' .. C.CLASS_COLOR .. ' %s', name, name))
+            self.text:SetText(
+                string.format(
+                    L['Spec'] .. ': ' .. C.CLASS_COLOR .. '%s  |r' .. L['Loot'] .. ':' .. C.CLASS_COLOR .. ' %s',
+                    name,
+                    name
+                )
+            )
         else
-            self.text:SetText(string.format(L['Spec'] .. ': ' .. C.CLASS_COLOR .. '%s  |r' .. L['Loot'] .. ':' .. C.CLASS_COLOR .. ' %s', name, lootname))
+            self.text:SetText(
+                string.format(
+                    L['Spec'] .. ': ' .. C.CLASS_COLOR .. '%s  |r' .. L['Loot'] .. ':' .. C.CLASS_COLOR .. ' %s',
+                    name,
+                    lootname
+                )
+            )
         end
     else
         self.text:SetText(string.format(L['Spec'] .. ': ' .. C.CLASS_COLOR .. '%s  |r', _G.NONE))
@@ -113,11 +125,11 @@ local function Block_OnEnter(self)
     local anchorTop = C.DB.Infobar.AnchorTop
     _G.GameTooltip:SetOwner(self, (anchorTop and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (anchorTop and -6) or 6)
     _G.GameTooltip:ClearLines()
-    _G.GameTooltip:AddLine(_G.TALENTS_BUTTON, .9, .8, .6)
+    _G.GameTooltip:AddLine(_G.TALENTS_BUTTON, 0.9, 0.8, 0.6)
     _G.GameTooltip:AddLine(' ')
 
     local _, specName, _, specIcon = GetSpecializationInfo(GetSpecialization())
-    _G.GameTooltip:AddLine(AddIcon(specIcon) .. ' ' .. specName, .6, .8, 1)
+    _G.GameTooltip:AddLine(AddIcon(specIcon) .. ' ' .. specName, 0.6, 0.8, 1)
 
     for t = 1, _G.MAX_TALENT_TIERS do
         for c = 1, 3 do
@@ -132,7 +144,7 @@ local function Block_OnEnter(self)
         pvpTalents = C_SpecializationInfo.GetAllSelectedPvpTalentIDs()
         if #pvpTalents > 0 then
             _G.GameTooltip:AddLine(' ')
-            _G.GameTooltip:AddLine(AddIcon(pvpIconTexture) .. ' ' .. _G.PVP_TALENTS, .6, .8, 1)
+            _G.GameTooltip:AddLine(AddIcon(pvpIconTexture) .. ' ' .. _G.PVP_TALENTS, 0.6, 0.8, 1)
             for _, talentID in next, pvpTalents do
                 local _, name, icon, _, _, _, unlocked = GetPvpTalentInfoByID(talentID)
                 if name and unlocked then
@@ -146,8 +158,17 @@ local function Block_OnEnter(self)
 
     _G.GameTooltip:AddLine(' ')
     _G.GameTooltip:AddDoubleLine(' ', C.LINE_STRING)
-    _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_LEFT_BUTTON .. L['Toggle Talent Panel'] .. ' ', 1, 1, 1, .9, .8, .6)
-    _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_RIGHT_BUTTON .. L['Change Specialization & Loot'] .. ' ', 1, 1, 1, .9, .8, .6)
+    _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_LEFT_BUTTON .. L['Toggle Talent Panel'] .. ' ', 1, 1, 1, 0.9, 0.8, 0.6)
+    _G.GameTooltip:AddDoubleLine(
+        ' ',
+        C.MOUSE_RIGHT_BUTTON .. L['Change Specialization & Loot'] .. ' ',
+        1,
+        1,
+        1,
+        0.9,
+        0.8,
+        0.6
+    )
     _G.GameTooltip:Show()
 end
 
@@ -165,5 +186,5 @@ function INFOBAR:CreateSpecBlock()
     spec.onEnter = Block_OnEnter
     spec.onLeave = Block_OnLeave
     spec.onMouseUp = Block_OnMouseUp
-    spec.eventList = {'PLAYER_ENTERING_WORLD', 'ACTIVE_TALENT_GROUP_CHANGED', 'PLAYER_LOOT_SPEC_UPDATED'}
+    spec.eventList = { 'PLAYER_ENTERING_WORLD', 'ACTIVE_TALENT_GROUP_CHANGED', 'PLAYER_LOOT_SPEC_UPDATED' }
 end

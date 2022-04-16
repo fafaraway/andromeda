@@ -9,12 +9,12 @@ UNITFRAME.UnitFrames = {
     ['targettarget'] = true,
     ['focustarget'] = true,
     ['boss'] = true,
-    ['arena'] = true
+    ['arena'] = true,
 }
 
 UNITFRAME.GroupFrames = {
     ['party'] = true,
-    ['raid'] = true
+    ['raid'] = true,
 }
 
 local function SetHealthColor(health, index)
@@ -39,7 +39,7 @@ local function SetHealthColor(health, index)
         local color = C.DB.Unitframe.HealthColor
         health:SetStatusBarColor(color.r, color.g, color.b)
         if health.bg then
-            health.bg:SetVertexColor(.35, .35, .35)
+            health.bg:SetVertexColor(0.35, 0.35, 0.35)
         end
     end
 end
@@ -61,7 +61,7 @@ function UNITFRAME:UpdateHealthBarColor(self, force)
 end
 
 local function PreUpdateHealth(self, unit)
-    if (not unit or self.unit ~= unit) then
+    if not unit or self.unit ~= unit then
         return
     end
 
@@ -109,9 +109,9 @@ local function PostUpdateColor(self, unit)
     local isOffline = not UnitIsConnected(unit)
     if inverted then
         if isOffline then
-            parent.backdrop:SetBackdropColor(.5, .5, .5, .8)
+            parent.backdrop:SetBackdropColor(0.5, 0.5, 0.5, 0.8)
         else
-            parent.backdrop:SetBackdropColor(.1, .1, .1, .8)
+            parent.backdrop:SetBackdropColor(0.1, 0.1, 0.1, 0.8)
         end
     end
 end
@@ -167,7 +167,7 @@ function UNITFRAME:CreateHealthBar(self)
         local bg = health:CreateTexture(nil, 'BACKGROUND')
         bg:SetAllPoints(health)
         bg:SetTexture(UNITFRAME.StatusBarTex)
-        bg.multiplier = .25
+        bg.multiplier = 0.25
         health.bg = bg
     end
 
@@ -179,22 +179,20 @@ function UNITFRAME:CreateHealthBar(self)
     UNITFRAME:UpdateHealthBarColor(self)
 end
 
-
-
 -- Heal Prediction
 local function PostUpdateHealPrediction(element, unit)
     local r, g, b = F:UnitColor(unit)
 
     if element.myBar then
-        element.myBar:SetStatusBarColor(r/2, g/2, b/2, .6)
+        element.myBar:SetStatusBarColor(r / 2, g / 2, b / 2, 0.6)
     end
 
     if element.otherBar then
-        element.otherBar:SetStatusBarColor(r/2, g/2, b/2, .6)
+        element.otherBar:SetStatusBarColor(r / 2, g / 2, b / 2, 0.6)
     end
 
     if element.absorbBar then
-        element.absorbBar:SetStatusBarColor(r/2, g/2, b/2, .6)
+        element.absorbBar:SetStatusBarColor(r / 2, g / 2, b / 2, 0.6)
     end
 end
 
@@ -224,7 +222,7 @@ function UNITFRAME:CreateHealPrediction(self)
     -- absorbBar:GetStatusBarTexture():SetHorizTile(true)
     -- absorbBar:GetStatusBarTexture():SetVertTile(true)
 
-    absorbBar:SetStatusBarColor(.3, .3, .3, .8)
+    absorbBar:SetStatusBarColor(0.3, 0.3, 0.3, 0.8)
     absorbBar:SetWidth(self:GetWidth())
 
     local overAbsorb = self.Health:CreateTexture(nil, 'OVERLAY')
@@ -240,7 +238,7 @@ function UNITFRAME:CreateHealPrediction(self)
         absorbBar = absorbBar,
         overAbsorb = overAbsorb,
         maxOverflow = 1,
-        frequentUpdates = true
+        frequentUpdates = true,
     }
     self.HealthPrediction.PostUpdate = PostUpdateHealPrediction
 end

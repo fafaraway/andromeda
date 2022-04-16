@@ -2,7 +2,7 @@ local F, C, L = unpack(select(2, ...))
 local MAP = F:GetModule('Map')
 
 local menuList = {
-    {text = _G.MAINMENU_BUTTON, isTitle = true, notCheckable = true},
+    { text = _G.MAINMENU_BUTTON, isTitle = true, notCheckable = true },
     {
         text = _G.CHARACTER_BUTTON,
         icon = 'Interface\\PaperDollInfoFrame\\UI-EquipmentManager-Toggle',
@@ -141,8 +141,8 @@ local menuList = {
         end,
         notCheckable = true,
     },
-    {text = '', isTitle = true, notCheckable = true},
-    {text = _G.OTHER, isTitle = true, notCheckable = true},
+    { text = '', isTitle = true, notCheckable = true },
+    { text = _G.OTHER, isTitle = true, notCheckable = true },
     {
         text = _G.BACKPACK_TOOLTIP,
         icon = 'Interface\\MINIMAP\\TRACKING\\Banker',
@@ -244,8 +244,8 @@ local menuList = {
         end,
         notCheckable = true,
     },
-    {text = '', isTitle = true, notCheckable = true},
-    {text = _G.ADDONS, isTitle = true, notCheckable = true},
+    { text = '', isTitle = true, notCheckable = true },
+    { text = _G.ADDONS, isTitle = true, notCheckable = true },
     {
         text = _G.RELOADUI,
         colorCode = '|cff999999',

@@ -2,7 +2,7 @@ local F, C = unpack(select(2, ...))
 
 local function ReskinEventList(frame)
     F.StripTextures(frame)
-    F.CreateBDFrame(frame, .25)
+    F.CreateBDFrame(frame, 0.25)
 end
 
 local function ReskinCalendarPage(frame)
@@ -19,14 +19,14 @@ C.Themes['Blizzard_Calendar'] = function()
         local bu = _G[dayButtonName]
         bu:DisableDrawLayer('BACKGROUND')
         bu:SetHighlightTexture(C.Assets.Texture.Backdrop)
-        local bg = F.CreateBDFrame(bu, .25)
+        local bg = F.CreateBDFrame(bu, 0.25)
         bg:SetInside()
         local hl = bu:GetHighlightTexture()
-        hl:SetVertexColor(r, g, b, .25)
+        hl:SetVertexColor(r, g, b, 0.25)
         hl:SetInside(bg)
         hl.SetAlpha = nop
 
-        _G[dayButtonName .. 'DarkFrame']:SetAlpha(.5)
+        _G[dayButtonName .. 'DarkFrame']:SetAlpha(0.5)
         _G[dayButtonName .. 'EventTexture']:SetInside(bg)
         _G[dayButtonName .. 'EventBackgroundTexture']:SetAlpha(0)
         _G[dayButtonName .. 'OverlayFrameTexture']:SetInside(bg)
@@ -34,7 +34,7 @@ C.Themes['Blizzard_Calendar'] = function()
         local eventButtonIndex = 1
         local eventButton = _G[dayButtonName .. 'EventButton' .. eventButtonIndex]
         while eventButton do
-            eventButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+            eventButton:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
             eventButton.black:SetTexture(nil)
             eventButtonIndex = eventButtonIndex + 1
             eventButton = _G[dayButtonName .. 'EventButton' .. eventButtonIndex]
@@ -56,7 +56,7 @@ C.Themes['Blizzard_Calendar'] = function()
     _G.CalendarCreateEventRaidInviteButtonBorder:Hide()
     _G.CalendarMonthBackground:SetAlpha(0)
     _G.CalendarYearBackground:SetAlpha(0)
-    _G.CalendarFrameModalOverlay:SetAlpha(.25)
+    _G.CalendarFrameModalOverlay:SetAlpha(0.25)
     _G.CalendarViewHolidayInfoTexture:SetAlpha(0)
     _G.CalendarTexturePickerAcceptButtonBorder:Hide()
     _G.CalendarTexturePickerCancelButtonBorder:Hide()
@@ -84,7 +84,7 @@ C.Themes['Blizzard_Calendar'] = function()
         _G.CalendarViewRaidTitleFrame,
         _G.CalendarCreateEventTitleFrame,
         _G.CalendarTexturePickerTitleFrame,
-        _G.CalendarMassInviteTitleFrame
+        _G.CalendarMassInviteTitleFrame,
     }
     for _, titleFrame in next, frames do
         F.StripTextures(titleFrame)
@@ -96,12 +96,9 @@ C.Themes['Blizzard_Calendar'] = function()
     _G.CalendarWeekdaySelectedTexture:SetDesaturated(true)
     _G.CalendarWeekdaySelectedTexture:SetVertexColor(r, g, b)
 
-    hooksecurefunc(
-        'CalendarFrame_SetToday',
-        function()
-            _G.CalendarTodayFrame:SetAllPoints()
-        end
-    )
+    hooksecurefunc('CalendarFrame_SetToday', function()
+        _G.CalendarTodayFrame:SetAllPoints()
+    end)
 
     _G.CalendarTodayFrame:SetScript('OnUpdate', nil)
     _G.CalendarTodayTextureGlow:Hide()
@@ -158,7 +155,7 @@ C.Themes['Blizzard_Calendar'] = function()
         'CalendarCreateEventRaidInviteButton',
         'CalendarTexturePickerAcceptButton',
         'CalendarTexturePickerCancelButton',
-        'CalendarMassInviteAcceptButton'
+        'CalendarMassInviteAcceptButton',
     }
     for i = 1, #cbuttons do
         local cbutton = _G[cbuttons[i]]

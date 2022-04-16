@@ -9,9 +9,9 @@ local function UpdateThreat(self, _, unit)
     local status = UnitThreatSituation(unit)
     if status and status > 0 then
         local r, g, b = GetThreatStatusColor(status)
-        self.shadow:SetBackdropBorderColor(r, g, b, .6)
+        self.shadow:SetBackdropBorderColor(r, g, b, 0.6)
     else
-        self.shadow:SetBackdropBorderColor(0, 0, 0, .35)
+        self.shadow:SetBackdropBorderColor(0, 0, 0, 0.35)
     end
 end
 
@@ -21,8 +21,7 @@ function UNITFRAME:CreateThreatIndicator(self)
     end
 
     self.ThreatIndicator = {
-        IsObjectType = function()
-        end,
-        Override = UpdateThreat
+        IsObjectType = function() end,
+        Override = UpdateThreat,
     }
 end

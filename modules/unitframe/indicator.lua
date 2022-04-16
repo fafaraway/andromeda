@@ -24,10 +24,10 @@ function UNITFRAME:CreateRaidTargetIndicator(self)
 end
 
 local classify = {
-    elite = {'VignetteKill'},
-    rare = {'VignetteKill', true},
-    rareelite = {'VignetteKill', true},
-    worldboss = {'VignetteKillElite'}
+    elite = { 'VignetteKill' },
+    rare = { 'VignetteKill', true },
+    rareelite = { 'VignetteKill', true },
+    worldboss = { 'VignetteKillElite' },
 }
 
 function NAMEPLATE:CreateClassifyIndicator(self)
@@ -99,7 +99,7 @@ end
 function UNITFRAME:CreateReadyCheckIndicator(self)
     local readyCheckIndicator = self:CreateTexture(nil, 'OVERLAY')
     readyCheckIndicator:SetPoint('CENTER')
-    readyCheckIndicator:SetSize(self:GetHeight() * .8, self:GetHeight() * .8)
+    readyCheckIndicator:SetSize(self:GetHeight() * 0.8, self:GetHeight() * 0.8)
 
     self.ReadyCheckIndicator = readyCheckIndicator
 end
@@ -127,7 +127,7 @@ end
 
 function UNITFRAME:CreateResurrectIndicator(self)
     local resurrectIndicator = self:CreateTexture(nil, 'OVERLAY')
-    resurrectIndicator:SetSize(self:GetHeight() * .8, self:GetHeight() * .8)
+    resurrectIndicator:SetSize(self:GetHeight() * 0.8, self:GetHeight() * 0.8)
     resurrectIndicator:SetPoint('CENTER')
 
     self.ResurrectIndicator = resurrectIndicator

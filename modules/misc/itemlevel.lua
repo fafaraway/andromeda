@@ -19,7 +19,7 @@ local inspectSlots = {
     'Trinket1',
     'Back',
     'MainHand',
-    'SecondaryHand'
+    'SecondaryHand',
 }
 
 function IL:GetSlotAnchor(index)
@@ -81,7 +81,7 @@ end
 local azeriteSlots = {
     [1] = true,
     [3] = true,
-    [5] = true
+    [5] = true,
 }
 
 local locationCache = {}
@@ -184,17 +184,14 @@ function IL:ItemLevel_UpdateInfo(slotFrame, info, quality)
 end
 
 function IL:ItemLevel_RefreshInfo(link, unit, index, slotFrame)
-    C_Timer.After(
-        .1,
-        function()
-            local quality = select(3, GetItemInfo(link))
-            local info = F.GetItemLevel(link, unit, index, C.DB.General.GemEnchant)
-            if info == 'tooSoon' then
-                return
-            end
-            IL:ItemLevel_UpdateInfo(slotFrame, info, quality)
+    C_Timer.After(0.1, function()
+        local quality = select(3, GetItemInfo(link))
+        local info = F.GetItemLevel(link, unit, index, C.DB.General.GemEnchant)
+        if info == 'tooSoon' then
+            return
         end
-    )
+        IL:ItemLevel_UpdateInfo(slotFrame, info, quality)
+    end)
 end
 
 function IL:ItemLevel_SetupLevel(frame, strType, unit)
@@ -360,16 +357,13 @@ function IL:OnLogin()
     F:RegisterEvent('INSPECT_READY', IL.ItemLevel_UpdateInspect)
 
     -- iLvl on FlyoutButtons
-    hooksecurefunc(
-        'EquipmentFlyout_UpdateItems',
-        function()
-            for _, button in pairs(_G.EquipmentFlyoutFrame.buttons) do
-                if button:IsShown() then
-                    IL.ItemLevel_FlyoutSetup(button)
-                end
+    hooksecurefunc('EquipmentFlyout_UpdateItems', function()
+        for _, button in pairs(_G.EquipmentFlyoutFrame.buttons) do
+            if button:IsShown() then
+                IL.ItemLevel_FlyoutSetup(button)
             end
         end
-    )
+    end)
 
     -- iLvl on ScrappingMachineFrame
     F:RegisterEvent('ADDON_LOADED', IL.ItemLevel_ScrappingShow)

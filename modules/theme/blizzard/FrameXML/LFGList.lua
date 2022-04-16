@@ -17,7 +17,7 @@ end
 local atlasToRole = {
     ['groupfinder-icon-role-large-tank'] = 'TANK',
     ['groupfinder-icon-role-large-heal'] = 'HEALER',
-    ['groupfinder-icon-role-large-dps'] = 'DAMAGER'
+    ['groupfinder-icon-role-large-dps'] = 'DAMAGER',
 }
 
 local function ReplaceApplicantRoles(texture, atlas)
@@ -47,7 +47,7 @@ table.insert(C.BlizzThemes, function()
         local bu = self.CategoryButtons[btnIndex]
         if bu and not bu.styled then
             bu.Cover:Hide()
-            bu.Icon:SetTexCoord(.01, .99, .01, .99)
+            bu.Icon:SetTexCoord(0.01, 0.99, 0.01, 0.99)
             F.CreateBDFrame(bu.Icon)
 
             bu.styled = true
@@ -106,11 +106,11 @@ table.insert(C.BlizzThemes, function()
             result:SetPushedTexture('')
             result:SetHighlightTexture('')
 
-            local bg = F.CreateBDFrame(result, .5)
+            local bg = F.CreateBDFrame(result, 0.5)
             local hl = result:CreateTexture(nil, 'BACKGROUND')
             hl:SetInside(bg)
             hl:SetTexture(C.Assets.Texture.Backdrop)
-            hl:SetVertexColor(r, g, b, .25)
+            hl:SetVertexColor(r, g, b, 0.25)
             hl:Hide()
             result.hl = hl
 
@@ -128,7 +128,12 @@ table.insert(C.BlizzThemes, function()
     applicationViewer.Inset:Hide()
 
     local prevHeader
-    for _, headerName in pairs({'NameColumnHeader', 'RoleColumnHeader', 'ItemLevelColumnHeader', 'RatingColumnHeader'}) do
+    for _, headerName in pairs({
+        'NameColumnHeader',
+        'RoleColumnHeader',
+        'ItemLevelColumnHeader',
+        'RatingColumnHeader',
+    }) do
         local header = applicationViewer[headerName]
 
         F.StripTextures(header)
@@ -136,11 +141,11 @@ table.insert(C.BlizzThemes, function()
         header.Label:SetShadowColor(0, 0, 0, 0)
         header:SetHighlightTexture('')
 
-        local bg = F.CreateBDFrame(header, .25)
+        local bg = F.CreateBDFrame(header, 0.25)
         local hl = header:CreateTexture(nil, 'BACKGROUND')
         hl:SetInside(bg)
         hl:SetTexture(C.Assets.Texture.Backdrop)
-        hl:SetVertexColor(r, g, b, .25)
+        hl:SetVertexColor(r, g, b, 0.25)
         hl:Hide()
         header.hl = hl
 
@@ -263,7 +268,7 @@ table.insert(C.BlizzThemes, function()
     F.StripTextures(LFGListApplicationDialog)
     F.SetBD(LFGListApplicationDialog)
     F.StripTextures(LFGListApplicationDialog.Description)
-    F.CreateBDFrame(LFGListApplicationDialog.Description, .25)
+    F.CreateBDFrame(LFGListApplicationDialog.Description, 0.25)
     F.Reskin(LFGListApplicationDialog.SignUpButton)
     F.Reskin(LFGListApplicationDialog.CancelButton)
 

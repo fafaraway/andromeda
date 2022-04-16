@@ -16,10 +16,17 @@ local function StartSelling()
 
             local _, _, _, quality, _, _, link, _, noValue, itemID = GetContainerItemInfo(bag, slot)
             local isInSet = GetContainerItemEquipmentSetInfo(bag, slot)
-            if link and not noValue and not isInSet and not INVENTORY:IsPetTrashCurrency(itemID) and (quality == 0 or _G.FREE_ADB['CustomJunkList'][itemID]) and not cache['b' .. bag .. 's' .. slot] then
+            if
+                link
+                and not noValue
+                and not isInSet
+                and not INVENTORY:IsPetTrashCurrency(itemID)
+                and (quality == 0 or _G.FREE_ADB['CustomJunkList'][itemID])
+                and not cache['b' .. bag .. 's' .. slot]
+            then
                 cache['b' .. bag .. 's' .. slot] = true
                 UseContainerItem(bag, slot)
-                F:Delay(.2, StartSelling)
+                F:Delay(0.2, StartSelling)
                 return
             end
         end

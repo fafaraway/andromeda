@@ -3,7 +3,7 @@ local F, C = unpack(select(2, ...))
 local function UpdateSelectedTexture(texture, shown)
     local button = texture.__owner
     if shown then
-        button.bg:SetBackdropBorderColor(1, .8, 0)
+        button.bg:SetBackdropBorderColor(1, 0.8, 0)
     else
         button.bg:SetBackdropBorderColor(0, 0, 0)
     end
@@ -49,27 +49,23 @@ C.Themes['Blizzard_RuneforgeUI'] = function()
     F.StripTextures(powerFrame)
     F.SetBD(powerFrame, 1)
 
-    hooksecurefunc(
-        powerFrame.PowerList,
-        'RefreshListDisplay',
-        function(self)
-            if not self.elements then
-                return
-            end
+    hooksecurefunc(powerFrame.PowerList, 'RefreshListDisplay', function(self)
+        if not self.elements then
+            return
+        end
 
-            for i = 1, self:GetNumElementFrames() do
-                local button = self.elements[i]
-                if button and not button.bg then
-                    button.Border:SetAlpha(0)
-                    button.CircleMask:Hide()
-                    button.bg = F.ReskinIcon(button.Icon)
-                    button.SelectedTexture:SetTexture('')
-                    button.SelectedTexture.__owner = button
-                    hooksecurefunc(button.SelectedTexture, 'SetShown', UpdateSelectedTexture)
-                end
+        for i = 1, self:GetNumElementFrames() do
+            local button = self.elements[i]
+            if button and not button.bg then
+                button.Border:SetAlpha(0)
+                button.CircleMask:Hide()
+                button.bg = F.ReskinIcon(button.Icon)
+                button.SelectedTexture:SetTexture('')
+                button.SelectedTexture.__owner = button
+                hooksecurefunc(button.SelectedTexture, 'SetShown', UpdateSelectedTexture)
             end
         end
-    )
+    end)
 
     local pageControl = powerFrame.PageControl
     F.ReskinArrow(pageControl.BackwardButton, 'left')

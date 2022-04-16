@@ -2,7 +2,7 @@ local F, C, L = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 
 local isPending = _G.LFG_LIST_LOADING
-local resetTime, frequency = 900, .5
+local resetTime, frequency = 900, 0.5
 local cache, weapon, currentUNIT, currentGUID = {}, {}
 
 local T29Sets = {
@@ -77,7 +77,7 @@ local T29Sets = {
     [188893] = true,
     [188894] = true,
     [188896] = true,
-    [188898] = true
+    [188898] = true,
 }
 
 local formatSets = {
@@ -85,7 +85,7 @@ local formatSets = {
     [2] = ' |cff0091f2(2/4)', -- blue
     [3] = ' |cff0091f2(3/4)', -- blue
     [4] = ' |cffc745f9(4/4)', -- purple
-    [5] = ' |cffc745f9(5/5)' -- purple
+    [5] = ' |cffc745f9(5/5)', -- purple
 }
 
 function TOOLTIP:InspectOnUpdate(elapsed)
@@ -110,7 +110,7 @@ local lastTime = 0
 function TOOLTIP:GetInspectInfo(...)
     if self == 'UNIT_INVENTORY_CHANGED' then
         local thisTime = GetTime()
-        if thisTime - lastTime > .1 then
+        if thisTime - lastTime > 0.1 then
             lastTime = thisTime
 
             local unit = ...
@@ -159,7 +159,13 @@ function TOOLTIP:SetupSpecLevel(spec, level)
 
     local infoString = isPending
     if spec ~= isPending then
-        infoString = string.format('|cffffffff%s:|r |cffe9c55d%s|r |cffffffff%s:|r |cffe9c55d%s|r', _G.SPECIALIZATION, spec, L['iLvl'], level)
+        infoString = string.format(
+            '|cffffffff%s:|r |cffe9c55d%s|r |cffffffff%s:|r |cffe9c55d%s|r',
+            _G.SPECIALIZATION,
+            spec,
+            L['iLvl'],
+            level
+        )
     end
 
     if infoLine then
@@ -192,7 +198,7 @@ function TOOLTIP:GetUnitItemLevel(unit)
                     delay = true
                 else
                     local _, _, quality, level, _, _, _, _, slot = GetItemInfo(itemLink)
-                    if (not quality) or (not level) then
+                    if not quality or not level then
                         delay = true
                     else
                         if quality == _G.LE_ITEM_QUALITY_HEIRLOOM then
@@ -209,7 +215,7 @@ function TOOLTIP:GetUnitItemLevel(unit)
                             if i < 16 then
                                 total = total + level
                             elseif i > 15 and quality == _G.LE_ITEM_QUALITY_ARTIFACT then
-                                local relics = {select(4, string.split(':', itemLink))}
+                                local relics = { select(4, string.split(':', itemLink)) }
                                 for i = 1, 3 do
                                     local relicID = relics[i] ~= '' and relics[i]
                                     local relicLink = select(2, GetItemGem(itemLink, i))
@@ -227,7 +233,11 @@ function TOOLTIP:GetUnitItemLevel(unit)
 
                                 weapon[1] = level
                                 haveWeapon = haveWeapon + 1
-                                if slot == 'INVTYPE_2HWEAPON' or slot == 'INVTYPE_RANGED' or (slot == 'INVTYPE_RANGEDRIGHT' and class == 'HUNTER') then
+                                if
+                                    slot == 'INVTYPE_2HWEAPON'
+                                    or slot == 'INVTYPE_RANGED'
+                                    or (slot == 'INVTYPE_RANGEDRIGHT' and class == 'HUNTER')
+                                then
                                     mainhand = true
                                     twohand = twohand + 1
                                 end

@@ -17,11 +17,11 @@ local buttonInfo = {
             else
                 _G.ChatFrame_OpenChat('/s ', chatFrame)
             end
-        end
+        end,
     },
     {
         1,
-        .5,
+        0.5,
         1,
         _G.WHISPER,
         function(_, btn)
@@ -31,27 +31,32 @@ local buttonInfo = {
                     _G.ChatFrame_OpenChat('/w ', chatFrame)
                 end
             else
-                if UnitExists('target') and UnitName('target') and UnitIsPlayer('target') and GetDefaultLanguage('player') == GetDefaultLanguage('target') then
+                if
+                    UnitExists('target')
+                    and UnitName('target')
+                    and UnitIsPlayer('target')
+                    and GetDefaultLanguage('player') == GetDefaultLanguage('target')
+                then
                     local name = GetUnitName('target', true)
                     _G.ChatFrame_OpenChat('/w ' .. name .. ' ', chatFrame)
                 else
                     _G.ChatFrame_OpenChat('/w ', chatFrame)
                 end
             end
-        end
+        end,
     },
     {
-        .65,
-        .65,
+        0.65,
+        0.65,
         1,
         _G.PARTY,
         function()
             _G.ChatFrame_OpenChat('/p ', chatFrame)
-        end
+        end,
     },
     {
         1,
-        .5,
+        0.5,
         0,
         _G.INSTANCE .. '/' .. _G.RAID,
         function()
@@ -60,12 +65,12 @@ local buttonInfo = {
             else
                 _G.ChatFrame_OpenChat('/raid ', chatFrame)
             end
-        end
+        end,
     },
     {
-        .25,
+        0.25,
         1,
-        .25,
+        0.25,
         _G.GUILD .. '/' .. _G.OFFICER,
         function(_, btn)
             if btn == 'RightButton' and C_GuildInfo.IsGuildOfficer() then
@@ -73,8 +78,8 @@ local buttonInfo = {
             else
                 _G.ChatFrame_OpenChat('/g ', chatFrame)
             end
-        end
-    }
+        end,
+    },
 }
 
 local chatSwitchInfo = {
@@ -83,7 +88,7 @@ local chatSwitchInfo = {
     targetPoint = _G.HelpTip.Point.TopEdgeCenter,
     offsetY = 50,
     onAcknowledgeCallback = F.HelpInfoAcknowledge,
-    callbackArg = 'ChatSwitch'
+    callbackArg = 'ChatSwitch',
 }
 
 local function SwitchTip()
@@ -142,16 +147,16 @@ local function UpdateChannelInfo()
     if not id or id == 0 then
         CHAT.InWorldChannel = false
         CHAT.WorldChannelID = nil
-        icon:SetVertexColor(1, .1, .1)
+        icon:SetVertexColor(1, 0.1, 0.1)
     else
         CHAT.InWorldChannel = true
         CHAT.WorldChannelID = id
-        icon:SetVertexColor(0, .8, 1)
+        icon:SetVertexColor(0, 0.8, 1)
     end
 end
 
 local function CheckChannelStatus()
-    F:Delay(.2, UpdateChannelInfo)
+    F:Delay(0.2, UpdateChannelInfo)
 end
 
 local function WorldChannelButton_OnClick(self, btn)
@@ -173,11 +178,11 @@ local function WorldChannelButton_OnClick(self, btn)
 end
 
 function CHAT:Bar_OnEnter()
-    F:UIFrameFadeIn(CHAT.ChannelBar, .3, CHAT.ChannelBar:GetAlpha(), 1)
+    F:UIFrameFadeIn(CHAT.ChannelBar, 0.3, CHAT.ChannelBar:GetAlpha(), 1)
 end
 
 function CHAT:Bar_OnLeave()
-    F:UIFrameFadeOut(CHAT.ChannelBar, .3, CHAT.ChannelBar:GetAlpha(), .2)
+    F:UIFrameFadeOut(CHAT.ChannelBar, 0.3, CHAT.ChannelBar:GetAlpha(), 0.2)
 end
 
 function CHAT:CreateChannelBar()
@@ -188,7 +193,7 @@ function CHAT:CreateChannelBar()
     local channelBar = CreateFrame('Frame', 'FreeUI_ChannelBar', _G.ChatFrame1)
     channelBar:SetSize(_G.ChatFrame1:GetWidth(), 5)
     channelBar:SetPoint('TOPLEFT', _G.ChatFrame1, 'BOTTOMLEFT', 0, -6)
-    channelBar:SetAlpha(.2)
+    channelBar:SetAlpha(0.2)
     CHAT.ChannelBar = channelBar
 
     for _, info in pairs(buttonInfo) do
@@ -196,7 +201,7 @@ function CHAT:CreateChannelBar()
     end
 
     -- ROLL
-    local rollButton = CreateButton(.8, 1, .6, _G.LOOT_ROLL)
+    local rollButton = CreateButton(0.8, 1, 0.6, _G.LOOT_ROLL)
     rollButton:SetAttribute('type', 'macro')
     rollButton:SetAttribute('macrotext', '/roll')
     channelBar.RollButton = rollButton
@@ -208,7 +213,7 @@ function CHAT:CreateChannelBar()
 
     -- WORLD CHANNEL
     if GetCVar('portal') == 'CN' then
-        local wcButton = CreateButton(0, .8, 1, L['World Channel'])
+        local wcButton = CreateButton(0, 0.8, 1, L['World Channel'])
         channelBar.WorldChannelButton = wcButton
 
         CheckChannelStatus()

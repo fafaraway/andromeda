@@ -109,7 +109,12 @@ function DS:DomiShards_ExtractButton()
         return
     end
 
-    local button = CreateFrame('Button', 'FreeUIExtractorButton', _G.ItemSocketingFrame, 'UIPanelButtonTemplate, SecureActionButtonTemplate')
+    local button = CreateFrame(
+        'Button',
+        'FreeUIExtractorButton',
+        _G.ItemSocketingFrame,
+        'UIPanelButtonTemplate, SecureActionButtonTemplate'
+    )
     button:SetSize(80, 22)
     button:SetText(L['Drop'])
     button:SetPoint('RIGHT', _G.ItemSocketingSocketButton, 'LEFT', -3, 0)

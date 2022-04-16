@@ -1,7 +1,7 @@
 local F = unpack(select(2, ...))
 
 -- Numberize
-local numCap = {CHINESE = {'兆', '亿', '万'}}
+local numCap = { CHINESE = { '兆', '亿', '万' } }
 function F:Numb(n)
     if _G.FREE_ADB.NumberFormat == 1 then
         if n >= 1e12 then
@@ -48,7 +48,10 @@ end
 function F:HexToRgb(rgb)
     if string.len(rgb) == 6 then
         local r, g, b
-        r, g, b = tonumber('0x' .. string.sub(rgb, 0, 2)), tonumber('0x' .. string.sub(rgb, 3, 4)), tonumber('0x' .. string.sub(rgb, 5, 6))
+        r, g, b =
+            tonumber('0x' .. string.sub(rgb, 0, 2)),
+            tonumber('0x' .. string.sub(rgb, 3, 4)),
+            tonumber('0x' .. string.sub(rgb, 5, 6))
         if not r then
             r = 0
         else
@@ -115,7 +118,7 @@ function F:TextGradient(text, r, g, b, lR, lG, lB, lightPosition)
     local lightPower
     local cR, cG, cB
     for i = 1, length do
-        if (length == 1) then
+        if length == 1 then
             lightPower = 0
         else
             local fullLight = (i - 1) / (length - 1)
@@ -162,8 +165,10 @@ function F:FramesOverlap(frameA, frameB)
         return
     end
 
-    local frameALeft, frameARight, frameABottom, frameATop = frameA:GetLeft(), frameA:GetRight(), frameA:GetBottom(), frameA:GetTop()
-    local frameBLeft, frameBRight, frameBBottom, frameBTop = frameB:GetLeft(), frameB:GetRight(), frameB:GetBottom(), frameB:GetTop()
+    local frameALeft, frameARight, frameABottom, frameATop =
+        frameA:GetLeft(), frameA:GetRight(), frameA:GetBottom(), frameA:GetTop()
+    local frameBLeft, frameBRight, frameBBottom, frameBTop =
+        frameB:GetLeft(), frameB:GetRight(), frameB:GetBottom(), frameB:GetTop()
     if not (frameALeft and frameARight and frameABottom and frameATop) then
         return
     end
@@ -171,7 +176,10 @@ function F:FramesOverlap(frameA, frameB)
         return
     end
 
-    return ((frameALeft * sA) < (frameBRight * sB)) and ((frameBLeft * sB) < (frameARight * sA)) and ((frameABottom * sA) < (frameBTop * sB)) and ((frameBBottom * sB) < (frameATop * sA))
+    return ((frameALeft * sA) < (frameBRight * sB))
+        and ((frameBLeft * sB) < (frameARight * sA))
+        and ((frameABottom * sA) < (frameBTop * sB))
+        and ((frameBBottom * sB) < (frameATop * sA))
 end
 
 function F:GetScreenQuadrant(frame)
@@ -211,13 +219,13 @@ end
 local day, hour, minute = 86400, 3600, 60
 function F:FormatTime(s)
     if s >= day then
-        return string.format('|cffbebfb3%d|r', s / day + .5), s % day -- grey
+        return string.format('|cffbebfb3%d|r', s / day + 0.5), s % day -- grey
     elseif s >= hour then
-        return string.format('|cff4fcd35%d|r', s / hour + .5), s % hour -- white
+        return string.format('|cff4fcd35%d|r', s / hour + 0.5), s % hour -- white
     elseif s >= minute then
-        return string.format('|cff21c8de%d|r', s / minute + .5), s % minute -- blue
+        return string.format('|cff21c8de%d|r', s / minute + 0.5), s % minute -- blue
     elseif s > 3 then
-        return string.format('|cffffe700%d|r', s + .5), s - math.floor(s) -- yellow
+        return string.format('|cffffe700%d|r', s + 0.5), s - math.floor(s) -- yellow
     else
         return string.format('|cfffd3612%.1f|r', s), s - string.format('%.1f', s) -- red
     end
@@ -225,13 +233,13 @@ end
 
 function F:FormatTimeRaw(s)
     if s >= day then
-        return string.format('%dd', s / day + .5)
+        return string.format('%dd', s / day + 0.5)
     elseif s >= hour then
-        return string.format('%dh', s / hour + .5)
+        return string.format('%dh', s / hour + 0.5)
     elseif s >= minute then
-        return string.format('%dm', s / minute + .5)
+        return string.format('%dm', s / minute + 0.5)
     else
-        return string.format('%d', s + .5)
+        return string.format('%d', s + 0.5)
     end
 end
 
@@ -289,7 +297,7 @@ function F:Delay(delay, func, ...)
     if select('#', ...) <= 0 then
         C_Timer.After(delay, func)
     else
-        table.insert(F.WaitTable, {delay, func, {...}})
+        table.insert(F.WaitTable, { delay, func, { ... } })
         F.WaitFrame:Show()
     end
 

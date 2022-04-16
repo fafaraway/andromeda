@@ -17,8 +17,8 @@ function UNITFRAME:CreateBackdrop(self, onKeyDown)
     local highlight = self:CreateTexture(nil, 'OVERLAY')
     highlight:SetAllPoints()
     highlight:SetTexture('Interface\\PETBATTLES\\PetBattle-SelectedPetGlow')
-    highlight:SetTexCoord(0, 1, .5, 1)
-    highlight:SetVertexColor(.6, .6, .6)
+    highlight:SetTexCoord(0, 1, 0.5, 1)
+    highlight:SetVertexColor(0.6, 0.6, 0.6)
     highlight:SetBlendMode('BLEND')
     highlight:Hide()
     self.Highlight = highlight
@@ -29,9 +29,9 @@ function UNITFRAME:CreateBackdrop(self, onKeyDown)
 
     self.backdrop = F.SetBD(self, 0)
     if C.DB.Unitframe.InvertedColorMode then
-        self.backdrop:SetBackdropColor(.1, .1, .1, .8)
+        self.backdrop:SetBackdropColor(0.1, 0.1, 0.1, 0.8)
     else
-        self.backdrop:SetBackdropColor(.1, .1, .1, 0)
+        self.backdrop:SetBackdropColor(0.1, 0.1, 0.1, 0)
     end
     self.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
     self.backdrop:SetFrameStrata('BACKGROUND')
@@ -63,10 +63,10 @@ end
 -- Sound effect for target/focus changed
 
 function UNITFRAME:PLAYER_TARGET_CHANGED()
-    if (UnitExists('target')) then
-        if (UnitIsEnemy('target', 'player')) then
+    if UnitExists('target') then
+        if UnitIsEnemy('target', 'player') then
             PlaySound(873)
-        elseif (UnitIsFriend('target', 'player')) then
+        elseif UnitIsFriend('target', 'player') then
             PlaySound(867)
         else
             PlaySound(871)
@@ -77,10 +77,10 @@ function UNITFRAME:PLAYER_TARGET_CHANGED()
 end
 
 function UNITFRAME:PLAYER_FOCUS_CHANGED()
-    if (UnitExists('focus')) then
-        if (UnitIsEnemy('focus', 'player')) then
+    if UnitExists('focus') then
+        if UnitIsEnemy('focus', 'player') then
             PlaySound(873)
-        elseif (UnitIsFriend('focus', 'player')) then
+        elseif UnitIsFriend('focus', 'player') then
             PlaySound(867)
         else
             PlaySound(871)

@@ -22,14 +22,14 @@ local firstLines = {
     '데미지량 -(.*)$', -- TinyDPS koKR
     '힐량 -(.*)$', -- TinyDPS koKR
     'Урон:(.*)$', -- TinyDPS ruRU
-    'Исцеление:(.*)$' -- TinyDPS ruRU
+    'Исцеление:(.*)$', -- TinyDPS ruRU
 }
 
 local nextLines = {
     '^(%d+). (.*)$', -- Recount, Details! and Skada
     '^(.*)   (.*)$', -- Additional Skada
     '^[+-]%d+.%d', -- Numeration deathlog details
-    '^(%d+). (.*):(.*)(%d+)(.*)(%d+)%%(.*)%((%d+)%)$' -- TinyDPS
+    '^(%d+). (.*):(.*)(%d+)(.*)(%d+)%%(.*)%((%d+)%)$', -- TinyDPS
 }
 
 local meters = {}
@@ -47,7 +47,7 @@ local events = {
     'CHAT_MSG_SAY',
     'CHAT_MSG_WHISPER',
     'CHAT_MSG_WHISPER_INFORM',
-    'CHAT_MSG_YELL'
+    'CHAT_MSG_YELL',
 }
 
 local function FilterLine(event, source, message)
@@ -91,7 +91,7 @@ local function FilterLine(event, source, message)
                 end
             end
 
-            table.insert(meters, {source = source, event = event, time = curTime, data = {}, title = message})
+            table.insert(meters, { source = source, event = event, time = curTime, data = {}, title = message })
 
             for i = 1, #meters do
                 local j = meters[i]

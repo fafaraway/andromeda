@@ -17,7 +17,7 @@ local function updateClassIcons()
 
         if not bu.bg then
             bu:SetHighlightTexture(C.Assets.Texture.Backdrop)
-            bu:GetHighlightTexture():SetVertexColor(r, g, b, .2)
+            bu:GetHighlightTexture():SetVertexColor(r, g, b, 0.2)
 
             bu.bg = F.CreateBDFrame(bu.icon)
         end
@@ -61,18 +61,18 @@ C.Themes['Blizzard_GuildUI'] = function()
     F.StripTextures(_G.GuildMemberDetailFrame)
     F.SetBD(_G.GuildMemberDetailFrame)
     _G.GuildMemberNoteBackground:HideBackdrop()
-    F.CreateBDFrame(_G.GuildMemberNoteBackground, .25)
+    F.CreateBDFrame(_G.GuildMemberNoteBackground, 0.25)
     _G.GuildMemberOfficerNoteBackground:HideBackdrop()
-    F.CreateBDFrame(_G.GuildMemberOfficerNoteBackground, .25)
+    F.CreateBDFrame(_G.GuildMemberOfficerNoteBackground, 0.25)
     F.SetBD(_G.GuildLogFrame)
-    F.CreateBDFrame(_G.GuildLogContainer, .25)
+    F.CreateBDFrame(_G.GuildLogContainer, 0.25)
     F.SetBD(_G.GuildNewsFiltersFrame)
     F.SetBD(_G.GuildTextEditFrame)
-    F.CreateBDFrame(_G.GuildTextEditContainer, .25)
-    F.CreateBDFrame(_G.GuildRecruitmentInterestFrame, .25)
-    F.CreateBDFrame(_G.GuildRecruitmentAvailabilityFrame, .25)
-    F.CreateBDFrame(_G.GuildRecruitmentRolesFrame, .25)
-    F.CreateBDFrame(_G.GuildRecruitmentLevelFrame, .25)
+    F.CreateBDFrame(_G.GuildTextEditContainer, 0.25)
+    F.CreateBDFrame(_G.GuildRecruitmentInterestFrame, 0.25)
+    F.CreateBDFrame(_G.GuildRecruitmentAvailabilityFrame, 0.25)
+    F.CreateBDFrame(_G.GuildRecruitmentRolesFrame, 0.25)
+    F.CreateBDFrame(_G.GuildRecruitmentLevelFrame, 0.25)
     for i = 1, 5 do
         F.ReskinTab(_G['GuildFrameTab' .. i])
     end
@@ -119,28 +119,19 @@ C.Themes['Blizzard_GuildUI'] = function()
     _G.GuildNewsBossNameText:SetDrawLayer('ARTWORK')
     F.StripTextures(_G.GuildNewsBossModelTextFrame)
 
-    _G.GuildMemberRankDropdown:HookScript(
-        'OnShow',
-        function()
-            _G.GuildMemberDetailRankText:Hide()
-        end
-    )
-    _G.GuildMemberRankDropdown:HookScript(
-        'OnHide',
-        function()
-            _G.GuildMemberDetailRankText:Show()
-        end
-    )
+    _G.GuildMemberRankDropdown:HookScript('OnShow', function()
+        _G.GuildMemberDetailRankText:Hide()
+    end)
+    _G.GuildMemberRankDropdown:HookScript('OnHide', function()
+        _G.GuildMemberDetailRankText:Show()
+    end)
 
-    hooksecurefunc(
-        'GuildNews_Update',
-        function()
-            local buttons = _G.GuildNewsContainer.buttons
-            for i = 1, #buttons do
-                buttons[i].header:SetAlpha(0)
-            end
+    hooksecurefunc('GuildNews_Update', function()
+        local buttons = _G.GuildNewsContainer.buttons
+        for i = 1, #buttons do
+            buttons[i].header:SetAlpha(0)
         end
-    )
+    end)
 
     F.ReskinClose(_G.GuildNewsFiltersFrameCloseButton)
     F.ReskinClose(_G.GuildLogFrameCloseButton)
@@ -182,7 +173,7 @@ C.Themes['Blizzard_GuildUI'] = function()
     _G.GuildFactionBarShadow:SetAlpha(0)
     _G.GuildFactionBarBG:Hide()
     _G.GuildFactionBarCap:SetAlpha(0)
-    local bg = F.CreateBDFrame(_G.GuildFactionFrame, .25)
+    local bg = F.CreateBDFrame(_G.GuildFactionFrame, 0.25)
     bg:SetPoint('TOPLEFT', _G.GuildFactionFrame, -1, -1)
     bg:SetPoint('BOTTOMRIGHT', _G.GuildFactionFrame, -3, 0)
     bg:SetFrameLevel(0)
@@ -190,7 +181,7 @@ C.Themes['Blizzard_GuildUI'] = function()
     for _, button in pairs(_G.GuildPerksContainer.buttons) do
         F.ReskinIcon(button.icon)
         F.StripTextures(button)
-        button.bg = F.CreateBDFrame(button, .25)
+        button.bg = F.CreateBDFrame(button, 0.25)
         button.bg:ClearAllPoints()
         button.bg:SetPoint('TOPLEFT', button.icon, 0, C.mult)
         button.bg:SetPoint('BOTTOMLEFT', button.icon, 0, -C.mult)
@@ -198,27 +189,24 @@ C.Themes['Blizzard_GuildUI'] = function()
     end
     _G.GuildPerksContainerButton1:SetPoint('LEFT', -1, 0)
 
-    hooksecurefunc(
-        'GuildRewards_Update',
-        function()
-            local buttons = _G.GuildRewardsContainer.buttons
-            for i = 1, #buttons do
-                local bu = buttons[i]
-                if not bu.bg then
-                    bu:SetNormalTexture('')
-                    bu:SetHighlightTexture('')
-                    F.ReskinIcon(bu.icon)
-                    bu.disabledBG:Hide()
-                    bu.disabledBG.Show = nop
+    hooksecurefunc('GuildRewards_Update', function()
+        local buttons = _G.GuildRewardsContainer.buttons
+        for i = 1, #buttons do
+            local bu = buttons[i]
+            if not bu.bg then
+                bu:SetNormalTexture('')
+                bu:SetHighlightTexture('')
+                F.ReskinIcon(bu.icon)
+                bu.disabledBG:Hide()
+                bu.disabledBG.Show = nop
 
-                    bu.bg = F.CreateBDFrame(bu, .25)
-                    bu.bg:ClearAllPoints()
-                    bu.bg:SetPoint('TOPLEFT', 1, -1)
-                    bu.bg:SetPoint('BOTTOMRIGHT', 0, 0)
-                end
+                bu.bg = F.CreateBDFrame(bu, 0.25)
+                bu.bg:ClearAllPoints()
+                bu.bg:SetPoint('TOPLEFT', 1, -1)
+                bu.bg:SetPoint('BOTTOMRIGHT', 0, 0)
             end
         end
-    )
+    end)
 
     hooksecurefunc('GuildRoster_Update', updateClassIcons)
     hooksecurefunc(GuildRosterContainer, 'update', updateClassIcons)
@@ -236,54 +224,48 @@ C.Themes['Blizzard_GuildUI'] = function()
         'GuildRecruitmentInviteButton',
         'GuildRecruitmentMessageButton',
         'GuildRecruitmentDeclineButton',
-        'GuildRecruitmentListGuildButton'
+        'GuildRecruitmentListGuildButton',
     }
     for i = 1, #gbuttons do
         F.Reskin(_G[gbuttons[i]])
     end
 
     -- Tradeskill View
-    hooksecurefunc(
-        'GuildRoster_UpdateTradeSkills',
-        function()
-            local buttons = GuildRosterContainer.buttons
-            for i = 1, #buttons do
-                local index = _G.HybridScrollFrame_GetOffset(GuildRosterContainer) + i
-                local str = _G['GuildRosterContainerButton' .. i .. 'String1']
-                local header = _G['GuildRosterContainerButton' .. i .. 'HeaderButton']
-                if header then
-                    local _, _, _, headerName = GetGuildTradeSkillInfo(index)
-                    if headerName then
-                        str:Hide()
-                    else
-                        str:Show()
-                    end
+    hooksecurefunc('GuildRoster_UpdateTradeSkills', function()
+        local buttons = GuildRosterContainer.buttons
+        for i = 1, #buttons do
+            local index = _G.HybridScrollFrame_GetOffset(GuildRosterContainer) + i
+            local str = _G['GuildRosterContainerButton' .. i .. 'String1']
+            local header = _G['GuildRosterContainerButton' .. i .. 'HeaderButton']
+            if header then
+                local _, _, _, headerName = GetGuildTradeSkillInfo(index)
+                if headerName then
+                    str:Hide()
+                else
+                    str:Show()
+                end
 
-                    if not header.bg then
-                        F.StripTextures(header, 5)
-                        header.bg = F.CreateBDFrame(header, .25)
-                        header.bg:SetAllPoints()
+                if not header.bg then
+                    F.StripTextures(header, 5)
+                    header.bg = F.CreateBDFrame(header, 0.25)
+                    header.bg:SetAllPoints()
 
-                        header:SetHighlightTexture(C.Assets.Texture.Backdrop)
-                        local hl = header:GetHighlightTexture()
-                        hl:SetVertexColor(r, g, b, .25)
-                        hl:SetInside()
-                    end
+                    header:SetHighlightTexture(C.Assets.Texture.Backdrop)
+                    local hl = header:GetHighlightTexture()
+                    hl:SetVertexColor(r, g, b, 0.25)
+                    hl:SetInside()
                 end
             end
         end
-    )
+    end)
 
     -- Font width fix
     local done
-    GuildRosterContainer:HookScript(
-        'OnShow',
-        function()
-            if not done then
-                updateLevelString(GetCVar('guildRosterView'))
-                done = true
-            end
+    GuildRosterContainer:HookScript('OnShow', function()
+        if not done then
+            updateLevelString(GetCVar('guildRosterView'))
+            done = true
         end
-    )
+    end)
     hooksecurefunc('GuildRoster_SetView', updateLevelString)
 end

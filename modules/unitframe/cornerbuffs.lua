@@ -9,25 +9,25 @@ function UNITFRAME:UpdateCornerSpells()
         local modData = _G.FREE_ADB['CornerSpellsList'][C.CLASS]
         if not (modData and modData[spellID]) then
             local r, g, b = unpack(value[2])
-            UNITFRAME.CornerSpellsList[spellID] = {value[1], {r, g, b}, value[3]}
+            UNITFRAME.CornerSpellsList[spellID] = { value[1], { r, g, b }, value[3] }
         end
     end
 
     for spellID, value in pairs(_G.FREE_ADB['CornerSpellsList'][C.CLASS]) do
         if next(value) then
             local r, g, b = unpack(value[2])
-            UNITFRAME.CornerSpellsList[spellID] = {value[1], {r, g, b}, value[3]}
+            UNITFRAME.CornerSpellsList[spellID] = { value[1], { r, g, b }, value[3] }
         end
     end
 end
 
 UNITFRAME.BloodlustList = {}
 for _, spellID in pairs(C.BloodlustList) do
-    UNITFRAME.BloodlustList[spellID] = {'BOTTOMLEFT', {1, .8, 0}, true}
+    UNITFRAME.BloodlustList[spellID] = { 'BOTTOMLEFT', { 1, 0.8, 0 }, true }
 end
 
 local found = {}
-local auraFilter = {'HELPFUL', 'HARMFUL'}
+local auraFilter = { 'HELPFUL', 'HARMFUL' }
 
 function UNITFRAME:UpdateCornerIndicator(event, unit)
     if event == 'UNIT_AURA' and self.unit ~= unit then
@@ -90,7 +90,7 @@ function UNITFRAME:CreateCornerIndicator(self)
     parent:SetPoint('TOPLEFT', 4, -4)
     parent:SetPoint('BOTTOMRIGHT', -4, 4)
 
-    local anchors = {'TOPLEFT', 'TOP', 'TOPRIGHT', 'LEFT', 'RIGHT', 'BOTTOMLEFT', 'BOTTOM', 'BOTTOMRIGHT'}
+    local anchors = { 'TOPLEFT', 'TOP', 'TOPRIGHT', 'LEFT', 'RIGHT', 'BOTTOMLEFT', 'BOTTOM', 'BOTTOMRIGHT' }
     local buttons = {}
     for _, anchor in pairs(anchors) do
         local bu = CreateFrame('Frame', nil, parent)

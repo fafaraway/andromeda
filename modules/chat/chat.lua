@@ -34,18 +34,18 @@ end
 
 function CHAT:UpdateTabColors(selected)
     if selected then
-        self.Text:SetTextColor(1, .8, 0)
+        self.Text:SetTextColor(1, 0.8, 0)
         self.whisperIndex = 0
     else
-        self.Text:SetTextColor(.5, .5, .5)
+        self.Text:SetTextColor(0.5, 0.5, 0.5)
     end
 
     if self.whisperIndex == 1 then
-        self.glow:SetVertexColor(1, .5, 1)
+        self.glow:SetVertexColor(1, 0.5, 1)
     elseif self.whisperIndex == 2 then
-        self.glow:SetVertexColor(0, 1, .96)
+        self.glow:SetVertexColor(0, 1, 0.96)
     else
-        self.glow:SetVertexColor(1, .8, 0)
+        self.glow:SetVertexColor(1, 0.8, 0)
     end
 end
 
@@ -217,12 +217,20 @@ function CHAT:UpdateEditBoxBorderColor()
             if id == 0 then
                 editBox.bd:SetBackdropBorderColor(0, 0, 0)
             else
-                editBox.bd:SetBackdropBorderColor(_G.ChatTypeInfo[mType .. id].r, _G.ChatTypeInfo[mType .. id].g, _G.ChatTypeInfo[mType .. id].b)
+                editBox.bd:SetBackdropBorderColor(
+                    _G.ChatTypeInfo[mType .. id].r,
+                    _G.ChatTypeInfo[mType .. id].g,
+                    _G.ChatTypeInfo[mType .. id].b
+                )
             end
         elseif mType == 'SAY' then
             editBox.bd:SetBackdropBorderColor(0, 0, 0)
         else
-            editBox.bd:SetBackdropBorderColor(_G.ChatTypeInfo[mType].r, _G.ChatTypeInfo[mType].g, _G.ChatTypeInfo[mType].b)
+            editBox.bd:SetBackdropBorderColor(
+                _G.ChatTypeInfo[mType].r,
+                _G.ChatTypeInfo[mType].g,
+                _G.ChatTypeInfo[mType].b
+            )
         end
     end)
 end
@@ -256,37 +264,37 @@ local cycles = {
         chatType = 'SAY',
         IsActive = function()
             return true
-        end
+        end,
     },
     {
         chatType = 'PARTY',
         IsActive = function()
             return IsInGroup()
-        end
+        end,
     },
     {
         chatType = 'RAID',
         IsActive = function()
             return IsInRaid()
-        end
+        end,
     },
     {
         chatType = 'INSTANCE_CHAT',
         IsActive = function()
             return IsPartyLFG()
-        end
+        end,
     },
     {
         chatType = 'GUILD',
         IsActive = function()
             return IsInGuild()
-        end
+        end,
     },
     {
         chatType = 'OFFICER',
         IsActive = function()
             return C_GuildInfo.IsGuildOfficer()
-        end
+        end,
     },
     {
         chatType = 'CHANNEL',
@@ -295,14 +303,14 @@ local cycles = {
                 editbox:SetAttribute('channelTarget', CHAT.WorldChannelID)
                 return true
             end
-        end
+        end,
     },
     {
         chatType = 'SAY',
         IsActive = function()
             return true
-        end
-    }
+        end,
+    },
 }
 
 function CHAT:SwitchToChannel(chatType)
@@ -347,7 +355,7 @@ local chatScrollTip = {
     buttonStyle = _G.HelpTip.ButtonStyle.GotIt,
     targetPoint = _G.HelpTip.Point.RightEdgeCenter,
     onAcknowledgeCallback = F.HelpInfoAcknowledge,
-    callbackArg = 'ChatScroll'
+    callbackArg = 'ChatScroll',
 }
 function CHAT:OnMouseScroll(dir)
     if not _G.FREE_ADB.HelpTips.ChatScroll then
@@ -375,7 +383,16 @@ hooksecurefunc('FloatingChatFrame_OnMouseScroll', CHAT.OnMouseScroll)
 -- Smart bubble
 local function UpdateChatBubble()
     local name, instType = GetInstanceInfo()
-    if name and (instType == 'raid' or instType == 'party' or instType == 'scenario' or instType == 'pvp' or instType == 'arena') then
+    if
+        name
+        and (
+            instType == 'raid'
+            or instType == 'party'
+            or instType == 'scenario'
+            or instType == 'pvp'
+            or instType == 'arena'
+        )
+    then
         SetCVar('chatBubbles', 1)
     else
         SetCVar('chatBubbles', 0)
@@ -413,7 +430,10 @@ end
 function CHAT.OnChatWhisper(event, ...)
     local msg, author, _, _, _, _, _, _, _, _, _, guid, presenceID = ...
     for word in pairs(whisperList) do
-        if (not IsInGroup() or UnitIsGroupLeader('player') or UnitIsGroupAssistant('player')) and string.lower(msg) == string.lower(word) then
+        if
+            (not IsInGroup() or UnitIsGroupLeader('player') or UnitIsGroupAssistant('player'))
+            and string.lower(msg) == string.lower(word)
+        then
             if event == 'CHAT_MSG_BN_WHISPER' then
                 local accountInfo = C_BattleNet.GetAccountInfoByID(presenceID)
                 if accountInfo then
@@ -422,7 +442,10 @@ function CHAT.OnChatWhisper(event, ...)
                     if gameID then
                         local charName = gameAccountInfo.characterName
                         local realmName = gameAccountInfo.realmName
-                        if _G.CanCooperateWithGameAccount(accountInfo) and (not C.DB.Chat.GuildOnly or CHAT:IsUnitInGuild(charName .. '-' .. realmName)) then
+                        if
+                            _G.CanCooperateWithGameAccount(accountInfo)
+                            and (not C.DB.Chat.GuildOnly or CHAT:IsUnitInGuild(charName .. '-' .. realmName))
+                        then
                             BNInviteFriend(gameID)
                         end
                     end
@@ -449,7 +472,7 @@ end
 CHAT.MuteCache = {}
 local whisperEvents = {
     ['CHAT_MSG_WHISPER'] = true,
-    ['CHAT_MSG_BN_WHISPER'] = true
+    ['CHAT_MSG_BN_WHISPER'] = true,
 }
 function CHAT:PlayWhisperSound(event, _, author)
     if not C.DB.Chat.WhisperSound then
@@ -502,7 +525,10 @@ function CHAT:AltClickToInvite(link)
                 return
             end
             local accountInfo = C_BattleNet.GetAccountInfoByID(bnID)
-            if accountInfo.gameAccountInfo.clientProgram == _G.BNET_CLIENT_WOW and _G.CanCooperateWithGameAccount(accountInfo) then
+            if
+                accountInfo.gameAccountInfo.clientProgram == _G.BNET_CLIENT_WOW
+                and _G.CanCooperateWithGameAccount(accountInfo)
+            then
                 BNInviteFriend(accountInfo.gameAccountInfo.gameAccountID)
             end
         end
@@ -549,14 +575,14 @@ local msgEvents = {
     CHAT_MSG_INSTANCE_CHAT_LEADER = 1,
     CHAT_MSG_RAID = 1,
     CHAT_MSG_RAID_LEADER = 1,
-    CHAT_MSG_RAID_WARNING = 1
+    CHAT_MSG_RAID_WARNING = 1,
 }
 
 local texStr = '|T%s:8:8:0:0:64:64:4:60:4:60|t'
 local texList = {
     TANK = C.Assets.Texture.Tank,
     HEALER = C.Assets.Texture.Healer,
-    DAMAGER = C.Assets.Texture.Damager
+    DAMAGER = C.Assets.Texture.Damager,
 }
 
 local GetColoredName_orig = _G.GetColoredName
@@ -599,7 +625,18 @@ local function FixLanguageFilterSideEffects()
     end
     sideEffectFixed = true
 
-    F.CreateFS(_G.HelpFrame, C.Assets.Font.Bold, 14, nil, L['You need to uncheck language filter in GUI and reload UI to get access into CN BattleNet support.'], 'YELLOW', 'THICK', 'TOP', 0, 30)
+    F.CreateFS(
+        _G.HelpFrame,
+        C.Assets.Font.Bold,
+        14,
+        nil,
+        L['You need to uncheck language filter in GUI and reload UI to get access into CN BattleNet support.'],
+        'YELLOW',
+        'THICK',
+        'TOP',
+        0,
+        30
+    )
 
     local OLD_GetFriendGameAccountInfo = C_BattleNet.GetFriendGameAccountInfo
     function _G.C_BattleNet.GetFriendGameAccountInfo(...)

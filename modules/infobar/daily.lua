@@ -35,26 +35,26 @@ local function CheckTexture(texture)
 end
 
 local questlist = {
-    {name = L['Winter Veil Daily'], id = 6983},
-    {name = L['Blingtron Daily Pack'], id = 34774},
-    {name = L['Tormentors of Torghast'], id = 63854},
-    {name = L['Timewarped Badge Reward'], id = 40168, texture = 1129674}, -- TBC
-    {name = L['Timewarped Badge Reward'], id = 40173, texture = 1129686}, -- WotLK
-    {name = L['Timewarped Badge Reward'], id = 40786, texture = 1304688}, -- Cata
-    {name = L['Timewarped Badge Reward'], id = 45799, texture = 1530590}, -- MoP
-    {name = L['Timewarped Badge Reward'], id = 55499, texture = 1129683}, -- WoD
-    {name = L['Timewarped Badge Reward'], id = 64710, texture = 1467047} -- Legion
+    { name = L['Winter Veil Daily'], id = 6983 },
+    { name = L['Blingtron Daily Pack'], id = 34774 },
+    { name = L['Tormentors of Torghast'], id = 63854 },
+    { name = L['Timewarped Badge Reward'], id = 40168, texture = 1129674 }, -- TBC
+    { name = L['Timewarped Badge Reward'], id = 40173, texture = 1129686 }, -- WotLK
+    { name = L['Timewarped Badge Reward'], id = 40786, texture = 1304688 }, -- Cata
+    { name = L['Timewarped Badge Reward'], id = 45799, texture = 1530590 }, -- MoP
+    { name = L['Timewarped Badge Reward'], id = 55499, texture = 1129683 }, -- WoD
+    { name = L['Timewarped Badge Reward'], id = 64710, texture = 1467047 }, -- Legion
 }
 
 -- Torghast
 local torgInfo
 local torgWidgets = {
-    {nameID = 2925, levelID = 2930}, -- Fracture Chambers
-    {nameID = 2926, levelID = 2932}, -- Skoldus Hall
-    {nameID = 2924, levelID = 2934}, -- Soulforges
-    {nameID = 2927, levelID = 2936}, -- Coldheart Interstitia
-    {nameID = 2928, levelID = 2938}, -- Mort'regar
-    {nameID = 2929, levelID = 2940} -- The Upper Reaches
+    { nameID = 2925, levelID = 2930 }, -- Fracture Chambers
+    { nameID = 2926, levelID = 2932 }, -- Skoldus Hall
+    { nameID = 2924, levelID = 2934 }, -- Soulforges
+    { nameID = 2927, levelID = 2936 }, -- Coldheart Interstitia
+    { nameID = 2928, levelID = 2938 }, -- Mort'regar
+    { nameID = 2929, levelID = 2940 }, -- The Upper Reaches
 }
 
 local function CleanupLevelName(text)
@@ -65,7 +65,7 @@ local title
 local function AddTitle(text)
     if not title then
         _G.GameTooltip:AddLine(' ')
-        _G.GameTooltip:AddLine(text, .6, .8, 1)
+        _G.GameTooltip:AddLine(text, 0.6, 0.8, 1)
         title = true
     end
 end
@@ -89,7 +89,7 @@ local function Block_OnEnter(self)
 
     _G.GameTooltip:SetOwner(self, (anchorTop and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (anchorTop and -6) or 6)
     _G.GameTooltip:ClearLines()
-    _G.GameTooltip:AddLine(L['Daily/Weekly'], .9, .8, .6)
+    _G.GameTooltip:AddLine(L['Daily/Weekly'], 0.9, 0.8, 0.6)
 
     -- World bosses
     title = false
@@ -108,7 +108,7 @@ local function Block_OnEnter(self)
         if diff == 23 and (locked or extended) then
             AddTitle(_G.DUNGEON_DIFFICULTY3 .. _G.DUNGEONS)
             if extended then
-                r, g, b = .3, 1, .3
+                r, g, b = 0.3, 1, 0.3
             else
                 r, g, b = 1, 1, 1
             end
@@ -123,11 +123,20 @@ local function Block_OnEnter(self)
         if isRaid and (locked or extended) then
             AddTitle(_G.RAID_INFO)
             if extended then
-                r, g, b = .3, 1, .3
+                r, g, b = 0.3, 1, 0.3
             else
                 r, g, b = 1, 1, 1
             end
-            _G.GameTooltip:AddDoubleLine(name .. ' - ' .. diffName, SecondsToTime(reset, true, nil, 3), 1, 1, 1, r, g, b)
+            _G.GameTooltip:AddDoubleLine(
+                name .. ' - ' .. diffName,
+                SecondsToTime(reset, true, nil, 3),
+                1,
+                1,
+                1,
+                r,
+                g,
+                b
+            )
         end
     end
 
@@ -166,8 +175,8 @@ local function Block_OnEnter(self)
 
     _G.GameTooltip:AddLine(' ')
     _G.GameTooltip:AddDoubleLine(' ', C.LINE_STRING)
-    _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_LEFT_BUTTON .. L['Toggle Calendar Panel'], 1, 1, 1, .9, .8, .6)
-    _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_RIGHT_BUTTON .. L['Toggle Great Vault Panel'], 1, 1, 1, .9, .8, .6)
+    _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_LEFT_BUTTON .. L['Toggle Calendar Panel'], 1, 1, 1, 0.9, 0.8, 0.6)
+    _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_RIGHT_BUTTON .. L['Toggle Great Vault Panel'], 1, 1, 1, 0.9, 0.8, 0.6)
     _G.GameTooltip:Show()
 end
 
@@ -194,5 +203,5 @@ function INFOBAR:CreateDailyBlock()
     daily.onLeave = Block_OnLeave
     daily.onMouseUp = Block_OnMouseUp
     daily.onEvent = Block_OnEvent
-    daily.eventList = {'PLAYER_ENTERING_WORLD'}
+    daily.eventList = { 'PLAYER_ENTERING_WORLD' }
 end

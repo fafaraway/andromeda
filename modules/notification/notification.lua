@@ -7,7 +7,7 @@ local duration = 5
 local bannerWidth = 240
 local bannerHeight = 50
 local padding = 4
-local interval = .1
+local interval = 0.1
 
 local function ConstructFrame()
     local f = CreateFrame('Frame', 'FreeUI_Notification', _G.UIParent, 'BackdropTemplate')
@@ -160,10 +160,10 @@ function F:CreateNotification(name, message, clickFunc, texture)
     end
 
     if UnitIsAFK('player') then
-        table.insert(incoming, {name, message, clickFunc, texture})
+        table.insert(incoming, { name, message, clickFunc, texture })
         handler:RegisterEvent('PLAYER_FLAGS_CHANGED')
     elseif bannerShown or #incoming ~= 0 then
-        table.insert(incoming, {name, message, clickFunc, texture})
+        table.insert(incoming, { name, message, clickFunc, texture })
         if not processing then
             HandleIncoming()
         end

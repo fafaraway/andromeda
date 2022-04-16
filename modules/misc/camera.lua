@@ -10,7 +10,7 @@ local datas = {
     speed = 20,
     distance = 2.6,
     nearDistance = 5,
-    nearIncrement = 1
+    nearIncrement = 1,
 }
 
 local function SetupZooming(func, increment)

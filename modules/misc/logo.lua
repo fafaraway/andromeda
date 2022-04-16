@@ -24,7 +24,7 @@ end
 function LOGO:Logo_Create()
     local frame = CreateFrame('Frame', nil, _G.UIParent)
     frame:SetSize(256, 256)
-    frame:SetPoint('CENTER', _G.UIParent, 'BOTTOM', -500, GetScreenHeight() * .618)
+    frame:SetPoint('CENTER', _G.UIParent, 'BOTTOM', -500, GetScreenHeight() * 0.618)
     frame:SetFrameStrata('HIGH')
     frame:SetAlpha(0)
     frame:Hide()
@@ -37,9 +37,9 @@ function LOGO:Logo_Create()
     -- tex:SetGradientAlpha('Vertical', 1, 1, 1, .75, 1, 1, 1, .75)
 
     local delayTime = 0
-    local timer1 = .5
+    local timer1 = 0.5
     local timer2 = 2.5
-    local timer3 = .2
+    local timer3 = 0.2
 
     local anim = frame:CreateAnimationGroup()
 

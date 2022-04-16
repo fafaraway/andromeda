@@ -1,9 +1,9 @@
 local F, C = unpack(select(2, ...))
 local BLIZZARD = F:GetModule('Blizzard')
 
-local holdtime = .52
-local fadeintime = .08
-local fadeouttime = .16
+local holdtime = 0.52
+local fadeintime = 0.08
+local fadeouttime = 0.16
 local state = 0
 
 local ignoredList = {
@@ -31,7 +31,7 @@ local ignoredList = {
     [_G.SPELL_FAILED_NO_COMBO_POINTS] = true,
     [_G.SPELL_FAILED_SPELL_IN_PROGRESS] = true,
     [_G.SPELL_FAILED_TARGET_AURASTATE] = true,
-    [_G.ERR_NO_ATTACK_TARGET] = true
+    [_G.ERR_NO_ATTACK_TARGET] = true,
 }
 
 local function CreateErrorFrames()

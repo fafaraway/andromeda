@@ -22,7 +22,7 @@ local events = {
     'CHAT_MSG_WHISPER_INFORM',
     'CHAT_MSG_YELL',
     'CHAT_MSG_LOOT',
-    'CHAT_MSG_CURRENCY'
+    'CHAT_MSG_CURRENCY',
 }
 
 -- item level and gem
@@ -45,7 +45,7 @@ local socketWatchList = {
     ['PUNCHCARDBLUE'] = true,
     ['PUNCHCARDRED'] = true,
     ['PUNCHCARDYELLOW'] = true,
-    ['DOMINATION'] = true
+    ['DOMINATION'] = true,
 }
 
 local function GetSocketTexture(socket, count)
@@ -82,7 +82,12 @@ function CHAT.ReplaceChatHyperlink(link, linkType, value)
         end
         return link
     elseif linkType == 'dungeonScore' then
-        return value and string.gsub(link, '|h%[(.-)%]|h', '|h[' .. string.format(L['MythicScore'], GetDungeonScoreInColor(value)) .. ']|h')
+        return value
+            and string.gsub(
+                link,
+                '|h%[(.-)%]|h',
+                '|h[' .. string.format(L['MythicScore'], GetDungeonScoreInColor(value)) .. ']|h'
+            )
     end
 end
 
@@ -99,7 +104,7 @@ end
 
 -- icon for item/spell/achievement
 local function GetHyperlink(hyperlink, texture)
-    if (not texture) then
+    if not texture then
         return hyperlink
     else
         return ' |T' .. texture .. ':14|t ' .. hyperlink

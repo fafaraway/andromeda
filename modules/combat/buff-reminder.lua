@@ -5,7 +5,7 @@ local buffsList = {
     ITEMS = {
         {
             itemID = 178742, -- 瓶装毒素饰品
-            spells = {[345545] = true},
+            spells = { [345545] = true },
             equip = true,
             instance = true,
             combat = true,
@@ -20,7 +20,7 @@ local buffsList = {
         },
         {
             itemID = 190958, -- 究极秘术
-            spells = {[368512] = true},
+            spells = { [368512] = true },
             equip = true,
             instance = true,
             combat = true,
@@ -154,7 +154,7 @@ function BR:Reminder_Update(cfg)
         if equip and not IsEquippedItem(itemID) then
             isEquipped = false
         end
-        if GetItemCount(itemID) == 0 or (not isEquipped) or (not isGrouped) or GetItemCooldown(itemID) > 0 then -- check item cooldown
+        if GetItemCount(itemID) == 0 or not isEquipped or not isGrouped or GetItemCooldown(itemID) > 0 then -- check item cooldown
             frame:Hide()
             return
         end
@@ -180,7 +180,13 @@ function BR:Reminder_Update(cfg)
     end
 
     frame:Hide()
-    if isPlayerSpell and isRightSpec and (isInCombat or isInInst or isInPVP) and not UnitInVehicle('player') and not UnitIsDeadOrGhost('player') then
+    if
+        isPlayerSpell
+        and isRightSpec
+        and (isInCombat or isInInst or isInPVP)
+        and not UnitInVehicle('player')
+        and not UnitIsDeadOrGhost('player')
+    then
         if weaponIndex then
             local hasMainHandEnchant, _, _, _, hasOffHandEnchant = GetWeaponEnchantInfo()
             if (hasMainHandEnchant and weaponIndex == 1) or (hasOffHandEnchant and weaponIndex == 2) then

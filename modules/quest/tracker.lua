@@ -4,7 +4,7 @@ local EOT = F:RegisterModule('EnhancedObjectiveTracker')
 function EOT:ObjectiveTrackerMover()
     local frame = CreateFrame('Frame', 'ObjectiveTrackerMover', _G.UIParent)
     frame:SetSize(240, 50)
-    F.Mover(frame, L['Objective Tracker'], 'QuestTracker', {'TOPRIGHT', _G.UIParent, 'TOPRIGHT', -C.UI_GAP, -60})
+    F.Mover(frame, L['Objective Tracker'], 'QuestTracker', { 'TOPRIGHT', _G.UIParent, 'TOPRIGHT', -C.UI_GAP, -60 })
 
     local tracker = _G.ObjectiveTrackerFrame
     tracker:ClearAllPoints()
@@ -19,26 +19,39 @@ function EOT:ObjectiveTrackerMover()
 end
 
 local progressColors = {
-    start = {r = 1.000, g = 0.647, b = 0.008},
-    complete = {r = 0.180, g = 0.835, b = 0.451}
+    start = { r = 1.000, g = 0.647, b = 0.008 },
+    complete = { r = 0.180, g = 0.835, b = 0.451 },
 }
 
 local function SetTextColorHook(text)
     if not text.Hooked then
         local SetTextColorOld = text.SetTextColor
         text.SetTextColor = function(self, r, g, b, a)
-            if r == _G.OBJECTIVE_TRACKER_COLOR['Header'].r and g == _G.OBJECTIVE_TRACKER_COLOR['Header'].g and b == _G.OBJECTIVE_TRACKER_COLOR['Header'].b then
+            if
+                r == _G.OBJECTIVE_TRACKER_COLOR['Header'].r
+                and g == _G.OBJECTIVE_TRACKER_COLOR['Header'].g
+                and b == _G.OBJECTIVE_TRACKER_COLOR['Header'].b
+            then
                 r = 216 / 255
                 g = 197 / 255
                 b = 136 / 255
-            elseif r == _G.OBJECTIVE_TRACKER_COLOR['HeaderHighlight'].r and g == _G.OBJECTIVE_TRACKER_COLOR['HeaderHighlight'].g and b == _G.OBJECTIVE_TRACKER_COLOR['HeaderHighlight'].b then
+            elseif
+                r == _G.OBJECTIVE_TRACKER_COLOR['HeaderHighlight'].r
+                and g == _G.OBJECTIVE_TRACKER_COLOR['HeaderHighlight'].g
+                and b == _G.OBJECTIVE_TRACKER_COLOR['HeaderHighlight'].b
+            then
                 r = 216 / 255
                 g = 181 / 255
                 b = 136 / 255
             end
             SetTextColorOld(self, r, g, b, a)
         end
-        text:SetTextColor(_G.OBJECTIVE_TRACKER_COLOR['Header'].r, _G.OBJECTIVE_TRACKER_COLOR['Header'].g, _G.OBJECTIVE_TRACKER_COLOR['Header'].b, 1)
+        text:SetTextColor(
+            _G.OBJECTIVE_TRACKER_COLOR['Header'].r,
+            _G.OBJECTIVE_TRACKER_COLOR['Header'].g,
+            _G.OBJECTIVE_TRACKER_COLOR['Header'].b,
+            1
+        )
         text.Hooked = true
     end
 end
@@ -53,7 +66,7 @@ local function GetProgressColor(progress)
     g = math.min(g + math.abs(0.5 - progress) * addition, g)
     b = math.min(b + math.abs(0.5 - progress) * addition, b)
 
-    return {r = r, g = g, b = b}
+    return { r = r, g = g, b = b }
 end
 
 function EOT:HandleHeaderText()
@@ -101,7 +114,7 @@ end
 
 function EOT:ScenarioObjectiveBlock_UpdateCriteria()
     if _G.ScenarioObjectiveBlock then
-        local childs = {_G.ScenarioObjectiveBlock:GetChildren()}
+        local childs = { _G.ScenarioObjectiveBlock:GetChildren() }
         for _, child in pairs(childs) do
             if child.Text then
                 EOT:HandleInfoText(child.Text)
@@ -154,46 +167,39 @@ function EOT:RestyleObjectiveTrackerText()
         _G.WORLD_QUEST_TRACKER_MODULE,
         _G.CAMPAIGN_QUEST_TRACKER_MODULE,
         _G.QUEST_TRACKER_MODULE,
-        _G.ACHIEVEMENT_TRACKER_MODULE
+        _G.ACHIEVEMENT_TRACKER_MODULE,
     }
 
     for _, module in pairs(trackerModules) do
-        hooksecurefunc(
-            module,
-            'AddObjective',
-            function(_, block)
-                if not block then
-                    return
-                end
+        hooksecurefunc(module, 'AddObjective', function(_, block)
+            if not block then
+                return
+            end
 
-                if block.HeaderText then
-                    EOT:HandleTitleText(block.HeaderText)
-                end
+            if block.HeaderText then
+                EOT:HandleTitleText(block.HeaderText)
+            end
 
-                if block.currentLine then
-                    if block.currentLine.objectiveKey == 0 then -- 世界任务标题
-                        EOT:HandleTitleText(block.currentLine.Text)
-                    else
-                        EOT:HandleInfoText(block.currentLine.Text)
-                    end
+            if block.currentLine then
+                if block.currentLine.objectiveKey == 0 then -- 世界任务标题
+                    EOT:HandleTitleText(block.currentLine.Text)
+                else
+                    EOT:HandleInfoText(block.currentLine.Text)
                 end
             end
-        )
+        end)
     end
 
     hooksecurefunc('ObjectiveTracker_Update', EOT.HandleHeaderText)
     hooksecurefunc(_G.SCENARIO_CONTENT_TRACKER_MODULE, 'UpdateCriteria', EOT.ScenarioObjectiveBlock_UpdateCriteria)
 
-    F.Delay(
-        1,
-        function()
-            for _, child in pairs {_G.ObjectiveTrackerBlocksFrame:GetChildren()} do
-                if child and child.HeaderText then
-                    SetTextColorHook(child.HeaderText)
-                end
+    F.Delay(1, function()
+        for _, child in pairs({ _G.ObjectiveTrackerBlocksFrame:GetChildren() }) do
+            if child and child.HeaderText then
+                SetTextColorHook(child.HeaderText)
             end
         end
-    )
+    end)
 
     _G.ObjectiveTracker_Update()
 end
@@ -205,40 +211,37 @@ local headers = {
     _G.CAMPAIGN_QUEST_TRACKER_MODULE,
     _G.QUEST_TRACKER_MODULE,
     _G.ACHIEVEMENT_TRACKER_MODULE,
-    _G.WORLD_QUEST_TRACKER_MODULE
+    _G.WORLD_QUEST_TRACKER_MODULE,
 }
 
 function EOT:AutoCollapse()
-    F:Delay(
-        1,
-        function()
-            local inInstance, instanceType = IsInInstance()
-            if inInstance then
-                if instanceType == 'party' or instanceType == 'scenario' then
-                    for i = 3, #headers do
-                        local button = headers[i].Header.MinimizeButton
-                        if button and not headers[i].collapsed then
-                            button:Click()
-                        end
+    F:Delay(1, function()
+        local inInstance, instanceType = IsInInstance()
+        if inInstance then
+            if instanceType == 'party' or instanceType == 'scenario' then
+                for i = 3, #headers do
+                    local button = headers[i].Header.MinimizeButton
+                    if button and not headers[i].collapsed then
+                        button:Click()
                     end
-                else
-                    _G.ObjectiveTracker_Collapse()
                 end
             else
-                if not InCombatLockdown() then
-                    for i = 3, #headers do
-                        local button = headers[i].Header.MinimizeButton
-                        if button and headers[i].collapsed then
-                            button:Click()
-                        end
+                _G.ObjectiveTracker_Collapse()
+            end
+        else
+            if not InCombatLockdown() then
+                for i = 3, #headers do
+                    local button = headers[i].Header.MinimizeButton
+                    if button and headers[i].collapsed then
+                        button:Click()
                     end
-                    if _G.ObjectiveTrackerFrame.collapsed then
-                        _G.ObjectiveTracker_Expand()
-                    end
+                end
+                if _G.ObjectiveTrackerFrame.collapsed then
+                    _G.ObjectiveTracker_Expand()
                 end
             end
         end
-    )
+    end)
 end
 
 function EOT:OnLogin()
@@ -248,13 +251,10 @@ function EOT:OnLogin()
     -- Kill reward animation when finished dungeon or bonus objectives
     _G.ObjectiveTrackerScenarioRewardsFrame.Show = nop
 
-    hooksecurefunc(
-        'BonusObjectiveTracker_AnimateReward',
-        function()
-            _G.ObjectiveTrackerBonusRewardsFrame:ClearAllPoints()
-            _G.ObjectiveTrackerBonusRewardsFrame:SetPoint('BOTTOM', _G.UIParent, 'TOP', 0, 90)
-        end
-    )
+    hooksecurefunc('BonusObjectiveTracker_AnimateReward', function()
+        _G.ObjectiveTrackerBonusRewardsFrame:ClearAllPoints()
+        _G.ObjectiveTrackerBonusRewardsFrame:SetPoint('BOTTOM', _G.UIParent, 'TOP', 0, 90)
+    end)
 
     -- Auto collapse Objective Tracker
     if C.DB.Quest.AutoCollapseTracker then

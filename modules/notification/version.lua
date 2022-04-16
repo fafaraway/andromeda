@@ -13,7 +13,9 @@ function NOTIFICATION:VersionCheck_Compare(new, old)
     local old1, old2 = string.split('.', old)
     old1, old2 = tonumber(old1), tonumber(old2)
 
-    if not old1 then return end
+    if not old1 then
+        return
+    end
 
     if new1 > old1 or (new1 == old1 and new2 > old2) then
         return 'IsNew'
@@ -36,7 +38,9 @@ function NOTIFICATION:VersionCheck_Init()
         local status = NOTIFICATION:VersionCheck_Compare(_G.FREE_ADB.DetectVersion, C.ADDON_VERSION)
         if status == 'IsNew' then
             local release = string.gsub(_G.FREE_ADB.DetectVersion, '(%d+)$', '0')
-            NOTIFICATION:VersionCheck_Create(string.format(L['Addon has been out of date, the latest release is |cffff0000%s|r.'], release))
+            NOTIFICATION:VersionCheck_Create(
+                string.format(L['Addon has been out of date, the latest release is |cffff0000%s|r.'], release)
+            )
         elseif status == 'IsOld' then
             _G.FREE_ADB.DetectVersion = C.ADDON_VERSION
         end

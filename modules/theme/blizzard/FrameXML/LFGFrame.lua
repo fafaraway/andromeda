@@ -13,7 +13,7 @@ local function styleRewardButton(button)
     local border = button.IconBorder
 
     button.bg = F.ReskinIcon(icon)
-    local bg = F.CreateBDFrame(button, .25)
+    local bg = F.CreateBDFrame(button, 0.25)
     bg:SetPoint('TOPLEFT', button.bg, 'TOPRIGHT', 1, 0)
     bg:SetPoint('BOTTOMRIGHT', button.bg, 'BOTTOMRIGHT', 105, 0)
 
@@ -58,9 +58,9 @@ local function updateRoleBonus(roleButton)
     end
     if roleButton.shortageBorder and roleButton.shortageBorder:IsShown() then
         if roleButton.cover:IsShown() then
-            roleButton.bg:SetBackdropBorderColor(.5, .45, .03)
+            roleButton.bg:SetBackdropBorderColor(0.5, 0.45, 0.03)
         else
-            roleButton.bg:SetBackdropBorderColor(1, .9, .06)
+            roleButton.bg:SetBackdropBorderColor(1, 0.9, 0.06)
         end
     else
         roleButton.bg:SetBackdropBorderColor(0, 0, 0)
@@ -103,8 +103,20 @@ table.insert(C.BlizzThemes, function()
     styleRewardButton(_G.LFDQueueFrameRandomScrollFrameChildFrameMoneyReward)
 
     _G.LFDQueueFrameRandomScrollFrame:SetWidth(_G.LFDQueueFrameRandomScrollFrame:GetWidth() + 1)
-    _G.LFDQueueFrameSpecificListScrollFrameScrollBarScrollDownButton:SetPoint('TOP', _G.LFDQueueFrameSpecificListScrollFrameScrollBar, 'BOTTOM', 0, 2)
-    _G.LFDQueueFrameRandomScrollFrameScrollBarScrollDownButton:SetPoint('TOP', _G.LFDQueueFrameRandomScrollFrameScrollBar, 'BOTTOM', 0, 2)
+    _G.LFDQueueFrameSpecificListScrollFrameScrollBarScrollDownButton:SetPoint(
+        'TOP',
+        _G.LFDQueueFrameSpecificListScrollFrameScrollBar,
+        'BOTTOM',
+        0,
+        2
+    )
+    _G.LFDQueueFrameRandomScrollFrameScrollBarScrollDownButton:SetPoint(
+        'TOP',
+        _G.LFDQueueFrameRandomScrollFrameScrollBar,
+        'BOTTOM',
+        0,
+        2
+    )
 
     -- LFGFrame
     hooksecurefunc('LFGRewardsFrame_SetItemButton', function(parentFrame, _, index)
@@ -152,19 +164,22 @@ table.insert(C.BlizzThemes, function()
         button.texture:SetTexture('Interface\\Icons\\inv_misc_coin_02')
     end)
 
-    hooksecurefunc('LFGDungeonReadyDialogReward_SetReward', function(button, dungeonID, rewardIndex, rewardType, rewardArg)
-        reskinDialogReward(button)
+    hooksecurefunc(
+        'LFGDungeonReadyDialogReward_SetReward',
+        function(button, dungeonID, rewardIndex, rewardType, rewardArg)
+            reskinDialogReward(button)
 
-        local texturePath
-        if rewardType == 'reward' then
-            texturePath = select(2, GetLFGDungeonRewardInfo(dungeonID, rewardIndex))
-        elseif rewardType == 'shortage' then
-            texturePath = select(2, GetLFGDungeonShortageRewardInfo(dungeonID, rewardArg, rewardIndex))
+            local texturePath
+            if rewardType == 'reward' then
+                texturePath = select(2, GetLFGDungeonRewardInfo(dungeonID, rewardIndex))
+            elseif rewardType == 'shortage' then
+                texturePath = select(2, GetLFGDungeonShortageRewardInfo(dungeonID, rewardArg, rewardIndex))
+            end
+            if texturePath then
+                button.texture:SetTexture(texturePath)
+            end
         end
-        if texturePath then
-            button.texture:SetTexture(texturePath)
-        end
-    end)
+    )
 
     F.StripTextures(_G.LFGDungeonReadyDialog, 0)
     F.SetBD(_G.LFGDungeonReadyDialog)
@@ -186,7 +201,7 @@ table.insert(C.BlizzThemes, function()
         _G.RaidFinderQueueFrameRoleButtonTank,
         _G.LFGInvitePopupRoleButtonTank,
         _G.LFGListApplicationDialog.TankButton,
-        _G.LFGDungeonReadyStatusGroupedTank
+        _G.LFGDungeonReadyStatusGroupedTank,
     }
     reskinRoleButton(tanks, 'TANK')
 
@@ -196,7 +211,7 @@ table.insert(C.BlizzThemes, function()
         _G.RaidFinderQueueFrameRoleButtonHealer,
         _G.LFGInvitePopupRoleButtonHealer,
         _G.LFGListApplicationDialog.HealerButton,
-        _G.LFGDungeonReadyStatusGroupedHealer
+        _G.LFGDungeonReadyStatusGroupedHealer,
     }
     reskinRoleButton(healers, 'HEALER')
 
@@ -206,7 +221,7 @@ table.insert(C.BlizzThemes, function()
         _G.RaidFinderQueueFrameRoleButtonDPS,
         _G.LFGInvitePopupRoleButtonDPS,
         _G.LFGListApplicationDialog.DamagerButton,
-        _G.LFGDungeonReadyStatusGroupedDamager
+        _G.LFGDungeonReadyStatusGroupedDamager,
     }
     reskinRoleButton(dps, 'DPS')
 
@@ -235,7 +250,7 @@ table.insert(C.BlizzThemes, function()
                 tex = 'coin-gold'
             end
             roleButton.incentiveIcon.texture:SetInside()
-			roleButton.incentiveIcon.texture:SetAtlas(tex)
+            roleButton.incentiveIcon.texture:SetAtlas(tex)
         end
 
         updateRoleBonus(roleButton)

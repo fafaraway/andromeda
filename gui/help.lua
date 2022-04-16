@@ -114,18 +114,51 @@ local function ConstructAnimation(f)
 end
 
 local function ConstructTextString(f)
-    f.title = F.CreateFS(f, C.ASSET_PATH .. 'fonts\\header.ttf', 56, nil, C.COLORED_ADDON_NAME, nil, 'THICK', 'TOP', 0, -C.UI_GAP)
-    f.version = F.CreateFS(f, C.Assets.Font.Bold, 12, nil, 'Version: ' .. C.ADDON_VERSION, 'GREY', 'THICK', 'TOP', 0, -90)
-    f.tip = F.CreateFS(f, C.Assets.Font.Bold, 12, nil, strList.tip, {.3, .3, .3}, 'THICK', 'BOTTOM', 0, C.UI_GAP)
+    f.title = F.CreateFS(
+        f,
+        C.ASSET_PATH .. 'fonts\\header.ttf',
+        56,
+        nil,
+        C.COLORED_ADDON_NAME,
+        nil,
+        'THICK',
+        'TOP',
+        0,
+        -C.UI_GAP
+    )
+    f.version = F.CreateFS(
+        f,
+        C.Assets.Font.Bold,
+        12,
+        nil,
+        'Version: ' .. C.ADDON_VERSION,
+        'GREY',
+        'THICK',
+        'TOP',
+        0,
+        -90
+    )
+    f.tip = F.CreateFS(f, C.Assets.Font.Bold, 12, nil, strList.tip, { 0.3, 0.3, 0.3 }, 'THICK', 'BOTTOM', 0, C.UI_GAP)
 
     local offset = 50
     for k, v in ipairs(strList.cmd.primary) do
         local a, b = string.split('~', v)
         -- local newStr = FormatTextString(a .. b)
 
-        F.CreateFS(f.box, C.Assets.Font.Bold, 18, nil, FormatTextString(a), {.7, .7, .7}, 'THICK', 'TOPLEFT', 0, -(k * 50))
+        F.CreateFS(
+            f.box,
+            C.Assets.Font.Bold,
+            18,
+            nil,
+            FormatTextString(a),
+            { 0.7, 0.7, 0.7 },
+            'THICK',
+            'TOPLEFT',
+            0,
+            -(k * 50)
+        )
 
-        F.CreateFS(f.box, C.Assets.Font.Bold, 16, nil, b, {.7, .7, .7}, 'THICK', 'TOPLEFT', 0, -(k * 24) - offset)
+        F.CreateFS(f.box, C.Assets.Font.Bold, 16, nil, b, { 0.7, 0.7, 0.7 }, 'THICK', 'TOPLEFT', 0, -(k * 24) - offset)
         offset = offset + 26
     end
 
@@ -133,7 +166,18 @@ local function ConstructTextString(f)
         local a, b = string.split('~', v)
         local newStr = FormatTextString(a .. b)
 
-        F.CreateFS(f.box, C.Assets.Font.Bold, 14, nil, newStr, {.7, .7, .7}, 'THICK', 'TOPLEFT', 0, -(k * 24) - 340)
+        F.CreateFS(
+            f.box,
+            C.Assets.Font.Bold,
+            14,
+            nil,
+            newStr,
+            { 0.7, 0.7, 0.7 },
+            'THICK',
+            'TOPLEFT',
+            0,
+            -(k * 24) - 340
+        )
     end
 end
 
@@ -153,7 +197,7 @@ function GUI:CreateCheatSheet()
     f:Hide()
 
     f.bg = F.SetBD(f)
-    f.bg:SetBackdropColor(0, 0, 0, .7)
+    f.bg:SetBackdropColor(0, 0, 0, 0.7)
 
     f.box = CreateFrame('Frame', nil, f)
     f.box:SetSize(800, 700)
@@ -174,15 +218,12 @@ end
 
 function GUI:ToggleCheatSheet()
     if _G.FreeUICheatSheet then
-
         if _G.FreeUICheatSheet:IsShown() then
             Disable()
         else
             Enable()
         end
     else
-
         GUI:CreateCheatSheet()
     end
 end
-

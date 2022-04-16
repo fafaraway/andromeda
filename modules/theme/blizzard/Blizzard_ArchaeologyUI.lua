@@ -7,7 +7,7 @@ C.Themes['Blizzard_ArchaeologyUI'] = function()
     F.Reskin(_G.ArchaeologyFrameArtifactPageBackButton)
 
     _G.ArchaeologyFrameSummaryPageTitle:SetTextColor(1, 1, 1)
-    _G.ArchaeologyFrameArtifactPageHistoryTitle:SetTextColor(1, .8, 0)
+    _G.ArchaeologyFrameArtifactPageHistoryTitle:SetTextColor(1, 0.8, 0)
     _G.ArchaeologyFrameArtifactPageHistoryScrollChildText:SetTextColor(1, 1, 1)
     _G.ArchaeologyFrameHelpPageTitle:SetTextColor(1, 1, 1)
     _G.ArchaeologyFrameHelpPageDigTitle:SetTextColor(1, 1, 1)
@@ -31,9 +31,9 @@ C.Themes['Blizzard_ArchaeologyUI'] = function()
         local subText = _G[buttonName .. 'ArtifactSubText']
         F.StripTextures(button)
         F.ReskinIcon(icon)
-        name:SetTextColor(1, .8, 0)
+        name:SetTextColor(1, 0.8, 0)
         subText:SetTextColor(1, 1, 1)
-        local bg = F.CreateBDFrame(button, .25)
+        local bg = F.CreateBDFrame(button, 0.25)
         bg:SetPoint('TOPLEFT', -4, 4)
         bg:SetPoint('BOTTOMRIGHT', 4, -4)
     end
@@ -57,32 +57,29 @@ C.Themes['Blizzard_ArchaeologyUI'] = function()
 
     F.StripTextures(_G.ArchaeologyFrameRankBar)
     _G.ArchaeologyFrameRankBarBar:SetTexture(C.Assets.Texture.Backdrop)
-    _G.ArchaeologyFrameRankBarBar:SetGradient('VERTICAL', 0, .65, 0, 0, .75, 0)
+    _G.ArchaeologyFrameRankBarBar:SetGradient('VERTICAL', 0, 0.65, 0, 0, 0.75, 0)
     _G.ArchaeologyFrameRankBar:SetHeight(14)
-    F.CreateBDFrame(_G.ArchaeologyFrameRankBar, .25)
+    F.CreateBDFrame(_G.ArchaeologyFrameRankBar, 0.25)
     F.ReskinIcon(_G.ArchaeologyFrameArtifactPageIcon)
 
     F.StripTextures(_G.ArchaeologyFrameArtifactPageSolveFrameStatusBar)
-    F.CreateBDFrame(_G.ArchaeologyFrameArtifactPageSolveFrameStatusBar, .25)
+    F.CreateBDFrame(_G.ArchaeologyFrameArtifactPageSolveFrameStatusBar, 0.25)
     local barTexture = _G.ArchaeologyFrameArtifactPageSolveFrameStatusBar:GetStatusBarTexture()
     barTexture:SetTexture(C.Assets.Texture.Backdrop)
-    barTexture:SetGradient('VERTICAL', .65, .25, 0, .75, .35, .1)
+    barTexture:SetGradient('VERTICAL', 0.65, 0.25, 0, 0.75, 0.35, 0.1)
 
     -- ArcheologyDigsiteProgressBar
     F.StripTextures(_G.ArcheologyDigsiteProgressBar)
     F.SetBD(_G.ArcheologyDigsiteProgressBar.FillBar)
     _G.ArcheologyDigsiteProgressBar.FillBar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
-    _G.ArcheologyDigsiteProgressBar.FillBar:SetStatusBarColor(.7, .3, .2)
+    _G.ArcheologyDigsiteProgressBar.FillBar:SetStatusBarColor(0.7, 0.3, 0.2)
 
     local ticks = {}
-    _G.ArcheologyDigsiteProgressBar:HookScript(
-        'OnShow',
-        function(self)
-            local bar = self.FillBar
-            if not bar then
-                return
-            end
-            F:CreateAndUpdateBarTicks(bar, ticks, bar.fillBarMax)
+    _G.ArcheologyDigsiteProgressBar:HookScript('OnShow', function(self)
+        local bar = self.FillBar
+        if not bar then
+            return
         end
-    )
+        F:CreateAndUpdateBarTicks(bar, ticks, bar.fillBarMax)
+    end)
 end

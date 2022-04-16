@@ -14,7 +14,11 @@ function BLIZZARD:HookApplicationClick()
         _G.LFGListFrame.SearchPanel.SignUpButton:Click()
     end
 
-    if (not IsAltKeyDown()) and _G.LFGListApplicationDialog:IsShown() and _G.LFGListApplicationDialog.SignUpButton:IsEnabled() then
+    if
+        (not IsAltKeyDown())
+        and _G.LFGListApplicationDialog:IsShown()
+        and _G.LFGListApplicationDialog.SignUpButton:IsEnabled()
+    then
         _G.LFGListApplicationDialog.SignUpButton:Click()
     end
 end
@@ -50,13 +54,13 @@ local roleCache = {}
 local roleOrder = {
     ['TANK'] = 1,
     ['HEALER'] = 2,
-    ['DAMAGER'] = 3
+    ['DAMAGER'] = 3,
 }
 
 local roleIcons = {
     [1] = C.Assets.Texture.Tank,
     [2] = C.Assets.Texture.Healer,
-    [3] = C.Assets.Texture.Damager
+    [3] = C.Assets.Texture.Damager,
 }
 
 local function SortRoleOrder(a, b)
@@ -155,10 +159,10 @@ function BLIZZARD:ReplaceGroupRoles(numPlayers, _, disabled)
         else
             icon.role:Show()
             icon.role:SetDesaturated(disabled)
-            icon.role:SetAlpha(disabled and .5 or 1)
+            icon.role:SetAlpha(disabled and 0.5 or 1)
 
             icon.leader:SetDesaturated(disabled)
-            icon.leader:SetAlpha(disabled and .5 or 1)
+            icon.leader:SetAlpha(disabled and 0.5 or 1)
         end
 
         icon.leader:Hide()
@@ -187,10 +191,16 @@ function BLIZZARD:ShowLeaderOverallScore()
     local resultID = self.resultID
     local searchResultInfo = resultID and C_LFGList.GetSearchResultInfo(resultID)
     if searchResultInfo then
-        local activityInfo = C_LFGList.GetActivityInfoTable(searchResultInfo.activityID, nil, searchResultInfo.isWarMode)
+        local activityInfo = C_LFGList.GetActivityInfoTable(
+            searchResultInfo.activityID,
+            nil,
+            searchResultInfo.isWarMode
+        )
         if activityInfo then
-            local showScore = activityInfo.isMythicPlusActivity and searchResultInfo.leaderOverallDungeonScore or activityInfo.isRatedPvpActivity and searchResultInfo.leaderPvpRatingInfo and
-                                  searchResultInfo.leaderPvpRatingInfo.rating
+            local showScore = activityInfo.isMythicPlusActivity and searchResultInfo.leaderOverallDungeonScore
+                or activityInfo.isRatedPvpActivity
+                    and searchResultInfo.leaderPvpRatingInfo
+                    and searchResultInfo.leaderPvpRatingInfo.rating
             if showScore then
                 local oldName = self.ActivityName:GetText()
                 oldName = string.gsub(oldName, '.-' .. _G.HEADER_COLON, '') -- Tazavesh
@@ -263,7 +273,12 @@ function BLIZZARD:ReplaceFindGroupButton()
             categorySelection.FindGroupButton:Click()
         else
             PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
-            _G.LFGListSearchPanel_SetCategory(searchPanel, selectedCategory, categorySelection.selectedFilters, _G.LFGListFrame.baseFilters)
+            _G.LFGListSearchPanel_SetCategory(
+                searchPanel,
+                selectedCategory,
+                categorySelection.selectedFilters,
+                _G.LFGListFrame.baseFilters
+            )
             _G.LFGListSearchPanel_DoSearch(searchPanel)
             _G.LFGListFrame_SetActivePanel(_G.LFGListFrame, searchPanel)
         end
@@ -277,16 +292,16 @@ end
 
 function BLIZZARD:AddDungeonsFilter()
     local mapData = {
-        [0] = {mapID = 375, aID = 703}, -- 仙林
-        [1] = {mapID = 376, aID = 713}, -- 通灵
-        [2] = {mapID = 377, aID = 695}, -- 彼界
-        [3] = {mapID = 378, aID = 699}, -- 赎罪
-        [4] = {mapID = 379, aID = 691}, -- 凋魂
-        [5] = {mapID = 380, aID = 705}, -- 赤红
-        [6] = {mapID = 381, aID = 709}, -- 晋升
-        [7] = {mapID = 382, aID = 717}, -- 剧场
-        [8] = {mapID = 391, aID = 1016}, -- 街道
-        [9] = {mapID = 392, aID = 1017} -- 宏图
+        [0] = { mapID = 375, aID = 703 }, -- 仙林
+        [1] = { mapID = 376, aID = 713 }, -- 通灵
+        [2] = { mapID = 377, aID = 695 }, -- 彼界
+        [3] = { mapID = 378, aID = 699 }, -- 赎罪
+        [4] = { mapID = 379, aID = 691 }, -- 凋魂
+        [5] = { mapID = 380, aID = 705 }, -- 赤红
+        [6] = { mapID = 381, aID = 709 }, -- 晋升
+        [7] = { mapID = 382, aID = 717 }, -- 剧场
+        [8] = { mapID = 391, aID = 1016 }, -- 街道
+        [9] = { mapID = 392, aID = 1017 }, -- 宏图
     }
 
     local function GetDungeonNameByID(mapID)
@@ -309,8 +324,8 @@ function BLIZZARD:AddDungeonsFilter()
     end
 
     local menuList = {
-        [1] = {text = _G.SPECIFIC_DUNGEONS, isTitle = true, notCheckable = true},
-        [2] = {text = _G.SWITCH, notCheckable = true, keepShownOnClick = true, func = toggleAll}
+        [1] = { text = _G.SPECIFIC_DUNGEONS, isTitle = true, notCheckable = true },
+        [2] = { text = _G.SWITCH, notCheckable = true, keepShownOnClick = true, func = toggleAll },
     }
 
     local function onClick(self, index, aID)
@@ -326,7 +341,14 @@ function BLIZZARD:AddDungeonsFilter()
 
     for i = 0, 9 do
         local value = mapData[i]
-        menuList[i + 3] = {text = GetDungeonNameByID(value.mapID), arg1 = i, arg2 = value.aID, func = onClick, checked = onCheck, keepShownOnClick = true}
+        menuList[i + 3] = {
+            text = GetDungeonNameByID(value.mapID),
+            arg1 = i,
+            arg2 = value.aID,
+            func = onClick,
+            checked = onCheck,
+            keepShownOnClick = true,
+        }
         filterIDs[value.aID] = false
     end
 

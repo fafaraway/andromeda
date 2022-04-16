@@ -1,14 +1,14 @@
 local F = unpack(select(2, ...))
 
 local animShake = {
-    {-9, 7, -7, 12},
-    {-5, 9, -9, 5},
-    {-5, 7, -7, 5},
-    {-9, 9, -9, 9},
-    {-5, 7, -7, 5},
-    {-9, 7, -9, 5}
+    { -9, 7, -7, 12 },
+    { -5, 9, -9, 5 },
+    { -5, 7, -7, 5 },
+    { -9, 9, -9, 9 },
+    { -5, 7, -7, 5 },
+    { -9, 7, -9, 5 },
 }
-local animShakeH = {-5, 5, -2, 5, -2, 5}
+local animShakeH = { -5, 5, -2, 5, -2, 5 }
 
 function F:FlashLoopFinished(requested)
     if not requested then
@@ -232,7 +232,7 @@ end
 
 local FADEMANAGER = CreateFrame('FRAME')
 local FADEFRAMES = {}
-FADEMANAGER.delay = .025
+FADEMANAGER.delay = 0.025
 
 function F:UIFrameFade_OnUpdate(elapsed)
     FADEMANAGER.timer = (FADEMANAGER.timer or 0) + elapsed
@@ -253,7 +253,9 @@ function F:UIFrameFade_OnUpdate(elapsed)
                 if info.mode == 'IN' then
                     frame:SetAlpha((info.fadeTimer / info.timeToFade) * info.diffAlpha + info.startAlpha)
                 else
-                    frame:SetAlpha(((info.timeToFade - info.fadeTimer) / info.timeToFade) * info.diffAlpha + info.endAlpha)
+                    frame:SetAlpha(
+                        ((info.timeToFade - info.fadeTimer) / info.timeToFade) * info.diffAlpha + info.endAlpha
+                    )
                 end
             else
                 frame:SetAlpha(info.endAlpha)
@@ -269,7 +271,13 @@ function F:UIFrameFade_OnUpdate(elapsed)
                         if info.finishedArgs then
                             info.finishedFunc(unpack(info.finishedArgs))
                         else -- optional method
-                            info.finishedFunc(info.finishedArg1, info.finishedArg2, info.finishedArg3, info.finishedArg4, info.finishedArg5)
+                            info.finishedFunc(
+                                info.finishedArg1,
+                                info.finishedArg2,
+                                info.finishedArg3,
+                                info.finishedArg4,
+                                info.finishedArg5
+                            )
                         end
 
                         if not info.finishedFuncKeep then
@@ -534,11 +542,11 @@ function F.AddScale(animationGroup, name, fromScale, toScale)
         return
     end
 
-    if not fromScale or type(fromScale) ~= 'table' or #(fromScale) < 2 then
+    if not fromScale or type(fromScale) ~= 'table' or #fromScale < 2 then
         return
     end
 
-    if not toScale or type(toScale) ~= 'table' or #(toScale) < 2 then
+    if not toScale or type(toScale) ~= 'table' or #toScale < 2 then
         return
     end
 
@@ -611,7 +619,7 @@ function F.SpeedAnimationGroup(animationGroup, speed)
 
     local durationTimer = 1 / speed
 
-    for _, animation in pairs({animationGroup:GetAnimations()}) do
+    for _, animation in pairs({ animationGroup:GetAnimations() }) do
         if not animation.originalDuration then
             animation.originalDuration = animation:GetDuration()
         end

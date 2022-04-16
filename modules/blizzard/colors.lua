@@ -19,9 +19,9 @@ local function diffColor(level)
     return F:RgbToHex(GetQuestDifficultyColor(level))
 end
 
-local rankColor = {1, 0, 0, 1, 1, 0, 0, 1, 0}
+local rankColor = { 1, 0, 0, 1, 1, 0, 0, 1, 0 }
 
-local repColor = {1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1}
+local repColor = { 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1 }
 
 local function smoothColor(cur, max, color)
     local r, g, b = oUF:RGBColorGradient(cur, max, unpack(color))
@@ -48,7 +48,9 @@ local function updateGuildView()
                     button.string2:SetText('|cff00ff00' .. zone)
                 end
             else
-                local _, rank, rankIndex, level, _, zone, _, _, _, _, _, _, _, _, _, repStanding = GetGuildRosterInfo(button.guildIndex)
+                local _, rank, rankIndex, level, _, zone, _, _, _, _, _, _, _, _, _, repStanding = GetGuildRosterInfo(
+                    button.guildIndex
+                )
                 if currentView == 'playerStatus' then
                     button.string1:SetText(diffColor(level) .. level)
                     if zone == playerArea then
@@ -63,7 +65,9 @@ local function updateGuildView()
                 elseif currentView == 'reputation' then
                     button.string1:SetText(diffColor(level) .. level)
                     if repStanding then
-                        button.string3:SetText(smoothColor(repStanding - 4, 5, repColor) .. _G['FACTION_STANDING_LABEL' .. repStanding])
+                        button.string3:SetText(
+                            smoothColor(repStanding - 4, 5, repColor) .. _G['FACTION_STANDING_LABEL' .. repStanding]
+                        )
                     end
                 end
             end
@@ -105,7 +109,8 @@ local function updateWhoList()
             local variableText = button.Variable
 
             local info = C_FriendList.GetWhoInfo(index)
-            local guild, level, race, zone, class = info.fullGuildName, info.level, info.raceStr, info.area, info.filename
+            local guild, level, race, zone, class =
+                info.fullGuildName, info.level, info.raceStr, info.area, info.filename
             if zone == playerZone then
                 zone = '|cff00ff00' .. zone
             end
@@ -157,40 +162,34 @@ do
 end
 
 -- FrameXML/LevelUpDisplay.lua
-hooksecurefunc(
-    'BossBanner_ConfigureLootFrame',
-    function(lootFrame, data)
-        local color = C.ClassColors[data.className]
-        lootFrame.PlayerName:SetTextColor(color.r, color.g, color.b)
-    end
-)
+hooksecurefunc('BossBanner_ConfigureLootFrame', function(lootFrame, data)
+    local color = C.ClassColors[data.className]
+    lootFrame.PlayerName:SetTextColor(color.r, color.g, color.b)
+end)
 
 -- FrameXML/PaperDollFrame.lua
 local primaryTalentTree, specName
-hooksecurefunc(
-    'PaperDollFrame_SetLevel',
-    function()
-        local className, class = UnitClass('player')
-        local color = C.ClassColors[class].colorStr
+hooksecurefunc('PaperDollFrame_SetLevel', function()
+    local className, class = UnitClass('player')
+    local color = C.ClassColors[class].colorStr
 
-        primaryTalentTree, specName = GetSpecialization()
-        if primaryTalentTree then
-            primaryTalentTree, specName = GetSpecializationInfo(primaryTalentTree)
-        end
-
-        local level = UnitLevel('player')
-        local effectiveLevel = UnitEffectiveLevel('player')
-        if effectiveLevel ~= level then
-            level = _G.EFFECTIVE_LEVEL_FORMAT:format(effectiveLevel, level)
-        end
-
-        if specName and specName ~= '' then
-            _G.CharacterLevelText:SetFormattedText(_G.PLAYER_LEVEL, level, color, specName, className)
-        else
-            _G.CharacterLevelText:SetFormattedText(_G.PLAYER_LEVEL_NO_SPEC, level, color, className)
-        end
+    primaryTalentTree, specName = GetSpecialization()
+    if primaryTalentTree then
+        primaryTalentTree, specName = GetSpecializationInfo(primaryTalentTree)
     end
-)
+
+    local level = UnitLevel('player')
+    local effectiveLevel = UnitEffectiveLevel('player')
+    if effectiveLevel ~= level then
+        level = _G.EFFECTIVE_LEVEL_FORMAT:format(effectiveLevel, level)
+    end
+
+    if specName and specName ~= '' then
+        _G.CharacterLevelText:SetFormattedText(_G.PLAYER_LEVEL, level, color, specName, className)
+    else
+        _G.CharacterLevelText:SetFormattedText(_G.PLAYER_LEVEL_NO_SPEC, level, color, className)
+    end
+end)
 
 -- FrameXML/RaidWarning.lua
 do

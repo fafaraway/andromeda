@@ -11,7 +11,7 @@ local function reskinPartyPose(frame)
     F.SetBD(frame)
     F.Reskin(frame.LeaveButton)
     F.StripTextures(frame.ModelScene)
-    F.CreateBDFrame(frame.ModelScene, .25)
+    F.CreateBDFrame(frame.ModelScene, 0.25)
 
     local rewardFrame = frame.RewardAnimations.RewardFrame
     local bg = F.SetBD(rewardFrame)

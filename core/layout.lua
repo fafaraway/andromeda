@@ -79,7 +79,7 @@ function F:CreateMF(parent, saved)
         end
         local orig, _, tar, x, y = frame:GetPoint()
         x, y = F:Round(x), F:Round(y)
-        C.DB['UIAnchorTemp'][frame:GetName()] = {orig, 'UIParent', tar, x, y}
+        C.DB['UIAnchorTemp'][frame:GetName()] = { orig, 'UIParent', tar, x, y }
     end)
 end
 
@@ -189,7 +189,7 @@ function M:DoTrim(trimX, trimY)
         f.__y.__current = y
         mover:ClearAllPoints()
         mover:SetPoint(point, _G.UIParent, point, x, y)
-        C.DB[mover.__key][mover.__value] = {point, 'UIParent', point, x, y}
+        C.DB[mover.__key][mover.__value] = { point, 'UIParent', point, x, y }
     end
 end
 
@@ -207,7 +207,7 @@ end
 
 function M:Mover_OnEnter()
     self.bg:SetBackdropBorderColor(C.r, C.g, C.b)
-    self.text:SetTextColor(1, .8, 0)
+    self.text:SetTextColor(1, 0.8, 0)
 end
 
 function M:Mover_OnLeave()
@@ -230,7 +230,7 @@ function M:Mover_OnDragStop()
 
     self:ClearAllPoints()
     self:SetPoint(orig, 'UIParent', tar, x, y)
-    C.DB[self.__key][self.__value] = {orig, 'UIParent', tar, x, y}
+    C.DB[self.__key][self.__value] = { orig, 'UIParent', tar, x, y }
     M.UpdateTrimFrame(self)
     updater:Hide()
 end
@@ -270,7 +270,7 @@ local function CreateConsole()
     F.CreateSD(f)
     F.CreateFS(f, C.Assets.Font.Regular, 12, true, L['Layout'], 'YELLOW', nil, 'TOP', 0, -10)
 
-    local bu, text = {}, {_G.LOCK, L['Grids'], _G.RESET}
+    local bu, text = {}, { _G.LOCK, L['Grids'], _G.RESET }
 
     for i = 1, 3 do
         bu[i] = F.CreateButton(f, 80, 24, text[i])
@@ -307,7 +307,12 @@ local function CreateConsole()
     header:SetSize(260, 30)
     header:SetPoint('TOP')
     F.CreateMF(header, f)
-    local tips = '|nCTRL +' .. C.MOUSE_RIGHT_BUTTON .. L['Reset default anchor'] .. '|nSHIFT +' .. C.MOUSE_RIGHT_BUTTON .. L['Hide the frame']
+    local tips = '|nCTRL +'
+        .. C.MOUSE_RIGHT_BUTTON
+        .. L['Reset default anchor']
+        .. '|nSHIFT +'
+        .. C.MOUSE_RIGHT_BUTTON
+        .. L['Hide the frame']
     header.title = L['Layout']
     F.AddTooltip(header, 'ANCHOR_TOP', tips, 'BLUE')
 
@@ -350,7 +355,12 @@ local function CreateConsole()
     f.__y = yBox
 
     local arrows = {}
-    local arrowIndex = {[1] = {degree = 180, offset = -1, x = 28, y = 9}, [2] = {degree = 0, offset = 1, x = 72, y = 9}, [3] = {degree = 90, offset = 1, x = 50, y = 20}, [4] = {degree = -90, offset = -1, x = 50, y = -2}}
+    local arrowIndex = {
+        [1] = { degree = 180, offset = -1, x = 28, y = 9 },
+        [2] = { degree = 0, offset = 1, x = 72, y = 9 },
+        [3] = { degree = 90, offset = 1, x = 50, y = 20 },
+        [4] = { degree = -90, offset = -1, x = 50, y = -2 },
+    }
     local function arrowOnClick(self)
         local modKey = IsModifierKeyDown()
         if self.__index < 3 then
@@ -405,4 +415,3 @@ function M:OnLogin()
         M.UpdateTrimFrame(updater.__owner)
     end)
 end
-

@@ -31,7 +31,7 @@ local function ReskinTableAttribute(frame)
     frame.DuplicateButton:SetPoint('LEFT', frame.NavigateForwardButton, 'RIGHT')
 
     F.StripTextures(frame.ScrollFrameArt)
-    F.CreateBDFrame(frame.ScrollFrameArt, .25)
+    F.CreateBDFrame(frame.ScrollFrameArt, 0.25)
     F.ReskinScroll(frame.LinesScrollFrame.ScrollBar)
 
     frame.styled = true

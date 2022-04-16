@@ -110,6 +110,3 @@ loader:SetScript('OnEvent', function(self, _, addon)
 
     self:UnregisterAllEvents()
 end)
-
-
-

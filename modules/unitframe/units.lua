@@ -3,17 +3,17 @@ local UNITFRAME = F:GetModule('UnitFrame')
 local oUF = F.Libs.oUF
 
 UNITFRAME.Positions = {
-    player = {'CENTER', _G.UIParent, 'CENTER', 0, -180},
-    pet = {'RIGHT', 'oUF_Player', 'LEFT', -6, 0},
-    target = {'LEFT', _G.UIParent, 'CENTER', 120, -140},
-    tot = {'LEFT', 'oUF_Target', 'RIGHT', 6, 0},
-    focus = {'BOTTOM', _G.UIParent, 'BOTTOM', -240, 220},
-    tof = {'TOPLEFT', 'oUF_Focus', 'TOPRIGHT', 6, 0},
-    boss = {'CENTER', _G.UIParent, 'CENTER', 500, 0},
-    arena = {'LEFT', 'oUF_Target', 'RIGHT', 120, 120},
-    party = {'CENTER', _G.UIParent, 'CENTER', -330, 0},
-    raid = {'TOPRIGHT', 'Minimap', 'TOPLEFT', -6, -42},
-    simple = {'TOPLEFT', C.UI_GAP, -100}
+    player = { 'CENTER', _G.UIParent, 'CENTER', 0, -180 },
+    pet = { 'RIGHT', 'oUF_Player', 'LEFT', -6, 0 },
+    target = { 'LEFT', _G.UIParent, 'CENTER', 120, -140 },
+    tot = { 'LEFT', 'oUF_Target', 'RIGHT', 6, 0 },
+    focus = { 'BOTTOM', _G.UIParent, 'BOTTOM', -240, 220 },
+    tof = { 'TOPLEFT', 'oUF_Focus', 'TOPRIGHT', 6, 0 },
+    boss = { 'CENTER', _G.UIParent, 'CENTER', 500, 0 },
+    arena = { 'LEFT', 'oUF_Target', 'RIGHT', 120, 120 },
+    party = { 'CENTER', _G.UIParent, 'CENTER', -330, 0 },
+    raid = { 'TOPRIGHT', 'Minimap', 'TOPLEFT', -6, -42 },
+    simple = { 'TOPLEFT', C.UI_GAP, -100 },
 }
 
 local function CreatePlayerStyle(self)
@@ -38,7 +38,7 @@ end
 
 function UNITFRAME:SpawnPlayer()
     oUF:RegisterStyle('Player', CreatePlayerStyle)
-    oUF:SetActiveStyle 'Player'
+    oUF:SetActiveStyle('Player')
 
     local player = oUF:Spawn('player', 'oUF_Player')
     F.Mover(player, L['Player Frame'], 'PlayerFrame', UNITFRAME.Positions.player, player:GetWidth(), player:GetHeight())
@@ -60,7 +60,7 @@ end
 
 function UNITFRAME:SpawnPet()
     oUF:RegisterStyle('Pet', CreatePetStyle)
-    oUF:SetActiveStyle 'Pet'
+    oUF:SetActiveStyle('Pet')
 
     local pet = oUF:Spawn('pet', 'oUF_Pet')
     F.Mover(pet, L['Pet Frame'], 'PetFrame', UNITFRAME.Positions.pet, pet:GetWidth(), pet:GetHeight())
@@ -85,7 +85,7 @@ end
 
 function UNITFRAME:SpawnTarget()
     oUF:RegisterStyle('Target', CreateTargetStyle)
-    oUF:SetActiveStyle 'Target'
+    oUF:SetActiveStyle('Target')
 
     local target = oUF:Spawn('target', 'oUF_Target')
     F.Mover(target, L['Target Frame'], 'TargetFrame', UNITFRAME.Positions.target, target:GetWidth(), target:GetHeight())
@@ -106,10 +106,17 @@ end
 
 function UNITFRAME:SpawnTargetTarget()
     oUF:RegisterStyle('TargetTarget', CreateTargetTargetStyle)
-    oUF:SetActiveStyle 'TargetTarget'
+    oUF:SetActiveStyle('TargetTarget')
 
     local targettarget = oUF:Spawn('targettarget', 'oUF_TargetTarget')
-    F.Mover(targettarget, L['Target of Target Frame'], 'TargetTargetFrame', UNITFRAME.Positions.tot, targettarget:GetWidth(), targettarget:GetHeight())
+    F.Mover(
+        targettarget,
+        L['Target of Target Frame'],
+        'TargetTargetFrame',
+        UNITFRAME.Positions.tot,
+        targettarget:GetWidth(),
+        targettarget:GetHeight()
+    )
 end
 
 local function CreateFocusStyle(self)
@@ -129,7 +136,7 @@ end
 
 function UNITFRAME:SpawnFocus()
     oUF:RegisterStyle('Focus', CreateFocusStyle)
-    oUF:SetActiveStyle 'Focus'
+    oUF:SetActiveStyle('Focus')
 
     local focus = oUF:Spawn('focus', 'oUF_Focus')
     F.Mover(focus, L['Focus Frame'], 'FocusFrame', UNITFRAME.Positions.focus, focus:GetWidth(), focus:GetHeight())
@@ -150,10 +157,17 @@ end
 
 function UNITFRAME:SpawnFocusTarget()
     oUF:RegisterStyle('FocusTarget', CreateFocusTargetStyle)
-    oUF:SetActiveStyle 'FocusTarget'
+    oUF:SetActiveStyle('FocusTarget')
 
     local focustarget = oUF:Spawn('focustarget', 'oUF_FocusTarget')
-    F.Mover(focustarget, L['Target of Focus Frame'], 'FocusTargetFrame', UNITFRAME.Positions.tof, focustarget:GetWidth(), focustarget:GetHeight())
+    F.Mover(
+        focustarget,
+        L['Target of Focus Frame'],
+        'FocusTargetFrame',
+        UNITFRAME.Positions.tof,
+        focustarget:GetWidth(),
+        focustarget:GetHeight()
+    )
 end
 
 local function CreateBossStyle(self)
@@ -181,7 +195,7 @@ end
 local boss = {}
 function UNITFRAME:SpawnBoss()
     oUF:RegisterStyle('Boss', CreateBossStyle)
-    oUF:SetActiveStyle 'Boss'
+    oUF:SetActiveStyle('Boss')
 
     for i = 1, 8 do -- MAX_BOSS_FRAMES, 8 in 9.2?
         boss[i] = oUF:Spawn('boss' .. i, 'oUF_Boss' .. i)
@@ -191,9 +205,23 @@ function UNITFRAME:SpawnBoss()
         if i == 1 then
             boss[i].mover = F.Mover(boss[i], title, 'Boss1', UNITFRAME.Positions.boss, moverWidth, moverHeight)
         elseif i == 6 then
-            boss[i].mover = F.Mover(boss[i], title, 'Boss' .. i, {'BOTTOMLEFT', boss[1].mover, 'BOTTOMRIGHT', 50, 0}, moverWidth, moverHeight)
+            boss[i].mover = F.Mover(
+                boss[i],
+                title,
+                'Boss' .. i,
+                { 'BOTTOMLEFT', boss[1].mover, 'BOTTOMRIGHT', 50, 0 },
+                moverWidth,
+                moverHeight
+            )
         else
-            boss[i].mover = F.Mover(boss[i], title, 'Boss' .. i, {'BOTTOMLEFT', boss[i - 1], 'TOPLEFT', 0, 60}, moverWidth, moverHeight)
+            boss[i].mover = F.Mover(
+                boss[i],
+                title,
+                'Boss' .. i,
+                { 'BOTTOMLEFT', boss[i - 1], 'TOPLEFT', 0, 60 },
+                moverWidth,
+                moverHeight
+            )
         end
     end
 end
@@ -218,7 +246,7 @@ end
 
 function UNITFRAME:SpawnArena()
     oUF:RegisterStyle('Arena', CreateArenaStyle)
-    oUF:SetActiveStyle 'Arena'
+    oUF:SetActiveStyle('Arena')
 
     local arena = {}
     for i = 1, 5 do
@@ -228,8 +256,6 @@ function UNITFRAME:SpawnArena()
 end
 
 -- Group Frames
-
-
 
 function UNITFRAME:UpdatePartyElements()
     for _, frame in pairs(oUF.objects) do
@@ -346,10 +372,10 @@ local function CreatePartyStyle(self)
 end
 
 UNITFRAME.PartyDirections = {
-    [1] = {name = L['DOWN'], point = 'TOP', xOffset = 0, yOffset = -5, initAnchor = 'TOPLEFT'},
-    [2] = {name = L['UP'], point = 'BOTTOM', xOffset = 0, yOffset = 5, initAnchor = 'BOTTOMLEFT'},
-    [3] = {name = L['RIGHT'], point = 'LEFT', xOffset = 5, yOffset = 0, initAnchor = 'TOPLEFT'},
-    [4] = {name = L['LEFT'], point = 'RIGHT', xOffset = -5, yOffset = 0, initAnchor = 'TOPRIGHT'}
+    [1] = { name = L['DOWN'], point = 'TOP', xOffset = 0, yOffset = -5, initAnchor = 'TOPLEFT' },
+    [2] = { name = L['UP'], point = 'BOTTOM', xOffset = 0, yOffset = 5, initAnchor = 'BOTTOMLEFT' },
+    [3] = { name = L['RIGHT'], point = 'LEFT', xOffset = 5, yOffset = 0, initAnchor = 'TOPLEFT' },
+    [4] = { name = L['LEFT'], point = 'RIGHT', xOffset = -5, yOffset = 0, initAnchor = 'TOPRIGHT' },
 }
 
 local party
@@ -358,7 +384,7 @@ local ascRole = 'TANK,HEALER,DAMAGER,NONE'
 local descRole = 'NONE,DAMAGER,HEALER,TANK'
 
 local function CreatePartyHeader(name, width, height)
-    -- LuaFormatter off
+    -- stylua: ignore start
     local group = oUF:SpawnHeader(name, nil, nil,
         'showPlayer', true,
         'showSolo', true,
@@ -366,13 +392,15 @@ local function CreatePartyHeader(name, width, height)
         'showRaid', true,
         'sortMethod', 'NAME',
         'columnAnchorPoint', 'LEFT',
-        'oUF-initialConfigFunction', ([[
+        'oUF-initialConfigFunction',
+        ([[
             self:SetWidth(%d)
             self:SetHeight(%d)
-        ]]):format(width, height))
+        ]]):format(width, height)
+    )
+    -- stylua: ignore end
 
     return group
-    -- LuaFormatter on
 end
 
 function UNITFRAME:CreateAndUpdatePartyHeader()
@@ -417,14 +445,110 @@ end
 -- Raid Frames
 
 UNITFRAME.RaidDirections = {
-    [1] = {name = L['DOWN_RIGHT'], point = 'TOP', xOffset = 0, yOffset = -5, initAnchor = 'TOPLEFT', relAnchor = 'TOPRIGHT', x = 5, y = 0, columnAnchorPoint = 'LEFT', multX = 1, multY = -1},
-    [2] = {name = L['DOWN_LEFT'], point = 'TOP', xOffset = 0, yOffset = -5, initAnchor = 'TOPRIGHT', relAnchor = 'TOPLEFT', x = -5, y = 0, columnAnchorPoint = 'RIGHT', multX = -1, multY = -1},
-    [3] = {name = L['UP_RIGHT'], point = 'BOTTOM', xOffset = 0, yOffset = 5, initAnchor = 'BOTTOMLEFT', relAnchor = 'BOTTOMRIGHT', x = 5, y = 0, columnAnchorPoint = 'LEFT', multX = 1, multY = 1},
-    [4] = {name = L['UP_LEFT'], point = 'BOTTOM', xOffset = 0, yOffset = 5, initAnchor = 'BOTTOMRIGHT', relAnchor = 'BOTTOMLEFT', x = -5, y = 0, columnAnchorPoint = 'RIGHT', multX = -1, multY = 1},
-    [5] = {name = L['RIGHT_DOWN'], point = 'LEFT', xOffset = 5, yOffset = 0, initAnchor = 'TOPLEFT', relAnchor = 'BOTTOMLEFT', x = 0, y = -5, columnAnchorPoint = 'TOP', multX = 1, multY = -1},
-    [6] = {name = L['RIGHT_UP'], point = 'LEFT', xOffset = 5, yOffset = 0, initAnchor = 'BOTTOMLEFT', relAnchor = 'TOPLEFT', x = 0, y = 5, columnAnchorPoint = 'BOTTOM', multX = 1, multY = 1},
-    [7] = {name = L['LEFT_DOWN'], point = 'RIGHT', xOffset = -5, yOffset = 0, initAnchor = 'TOPRIGHT', relAnchor = 'BOTTOMRIGHT', x = 0, y = -5, columnAnchorPoint = 'TOP', multX = -1, multY = -1},
-    [8] = {name = L['LEFT_UP'], point = 'RIGHT', xOffset = -5, yOffset = 0, initAnchor = 'BOTTOMRIGHT', relAnchor = 'TOPRIGHT', x = 0, y = 5, columnAnchorPoint = 'BOTTOM', multX = -1, multY = 1}
+    [1] = {
+        name = L['DOWN_RIGHT'],
+        point = 'TOP',
+        xOffset = 0,
+        yOffset = -5,
+        initAnchor = 'TOPLEFT',
+        relAnchor = 'TOPRIGHT',
+        x = 5,
+        y = 0,
+        columnAnchorPoint = 'LEFT',
+        multX = 1,
+        multY = -1,
+    },
+    [2] = {
+        name = L['DOWN_LEFT'],
+        point = 'TOP',
+        xOffset = 0,
+        yOffset = -5,
+        initAnchor = 'TOPRIGHT',
+        relAnchor = 'TOPLEFT',
+        x = -5,
+        y = 0,
+        columnAnchorPoint = 'RIGHT',
+        multX = -1,
+        multY = -1,
+    },
+    [3] = {
+        name = L['UP_RIGHT'],
+        point = 'BOTTOM',
+        xOffset = 0,
+        yOffset = 5,
+        initAnchor = 'BOTTOMLEFT',
+        relAnchor = 'BOTTOMRIGHT',
+        x = 5,
+        y = 0,
+        columnAnchorPoint = 'LEFT',
+        multX = 1,
+        multY = 1,
+    },
+    [4] = {
+        name = L['UP_LEFT'],
+        point = 'BOTTOM',
+        xOffset = 0,
+        yOffset = 5,
+        initAnchor = 'BOTTOMRIGHT',
+        relAnchor = 'BOTTOMLEFT',
+        x = -5,
+        y = 0,
+        columnAnchorPoint = 'RIGHT',
+        multX = -1,
+        multY = 1,
+    },
+    [5] = {
+        name = L['RIGHT_DOWN'],
+        point = 'LEFT',
+        xOffset = 5,
+        yOffset = 0,
+        initAnchor = 'TOPLEFT',
+        relAnchor = 'BOTTOMLEFT',
+        x = 0,
+        y = -5,
+        columnAnchorPoint = 'TOP',
+        multX = 1,
+        multY = -1,
+    },
+    [6] = {
+        name = L['RIGHT_UP'],
+        point = 'LEFT',
+        xOffset = 5,
+        yOffset = 0,
+        initAnchor = 'BOTTOMLEFT',
+        relAnchor = 'TOPLEFT',
+        x = 0,
+        y = 5,
+        columnAnchorPoint = 'BOTTOM',
+        multX = 1,
+        multY = 1,
+    },
+    [7] = {
+        name = L['LEFT_DOWN'],
+        point = 'RIGHT',
+        xOffset = -5,
+        yOffset = 0,
+        initAnchor = 'TOPRIGHT',
+        relAnchor = 'BOTTOMRIGHT',
+        x = 0,
+        y = -5,
+        columnAnchorPoint = 'TOP',
+        multX = -1,
+        multY = -1,
+    },
+    [8] = {
+        name = L['LEFT_UP'],
+        point = 'RIGHT',
+        xOffset = -5,
+        yOffset = 0,
+        initAnchor = 'BOTTOMRIGHT',
+        relAnchor = 'TOPRIGHT',
+        x = 0,
+        y = 5,
+        columnAnchorPoint = 'BOTTOM',
+        multX = -1,
+        multY = 1,
+    },
 }
 
 local function CreateSimpleRaidStyle(self)
@@ -438,9 +562,13 @@ local function CreateSimpleRaidStyle(self)
 end
 
 local groupByTypes = {
-    [1] = {'1,2,3,4,5,6,7,8', 'GROUP', 'INDEX'},
-    [2] = {'DEATHKNIGHT,WARRIOR,DEMONHUNTER,ROGUE,MONK,PALADIN,DRUID,SHAMAN,HUNTER,PRIEST,MAGE,WARLOCK', 'CLASS', 'NAME'},
-    [3] = {'TANK,HEALER,DAMAGER,NONE', 'ASSIGNEDROLE', 'NAME'}
+    [1] = { '1,2,3,4,5,6,7,8', 'GROUP', 'INDEX' },
+    [2] = {
+        'DEATHKNIGHT,WARRIOR,DEMONHUNTER,ROGUE,MONK,PALADIN,DRUID,SHAMAN,HUNTER,PRIEST,MAGE,WARLOCK',
+        'CLASS',
+        'NAME',
+    },
+    [3] = { 'TANK,HEALER,DAMAGER,NONE', 'ASSIGNEDROLE', 'NAME' },
 }
 
 local raidMover
@@ -474,7 +602,7 @@ function UNITFRAME:SpawnSimpleRaid()
     local sortData = UNITFRAME.RaidDirections[C.DB['Unitframe']['SMRDirec']]
 
     local function CreateGroup(name)
-        -- LuaFormatter off
+        -- stylua: ignore start
         simpleRaid = oUF:SpawnHeader(name, nil, nil,
             'showPlayer', true,
             'showSolo', true,
@@ -485,13 +613,15 @@ function UNITFRAME:SpawnSimpleRaid()
             'yOffset', sortData.yOffset,
             'columnSpacing', 5,
             'columnAnchorPoint', sortData.columnAnchorPoint,
-            'oUF-initialConfigFunction', ([[
+            'oUF-initialConfigFunction',
+            ([[
                 self:SetWidth(%d)
                 self:SetHeight(%d)
-            ]]):format(100 * scale, 20 * scale))
+            ]]):format(100 * scale, 20 * scale)
+        )
+        -- stylua: ignore end
 
         return simpleRaid
-        -- LuaFormatter on
     end
 
     local group = CreateGroup('oUF_Raid')
@@ -530,14 +660,14 @@ end
 
 local teamIndexes = {}
 local teamIndexAnchor = {
-    [1] = {'BOTTOM', 'TOP', 0, 5},
-    [2] = {'BOTTOM', 'TOP', 0, 5},
-    [3] = {'TOP', 'BOTTOM', 0, -5},
-    [4] = {'TOP', 'BOTTOM', 0, -5},
-    [5] = {'RIGHT', 'LEFT', -5, 0},
-    [6] = {'RIGHT', 'LEFT', -5, 0},
-    [7] = {'LEFT', 'RIGHT', 5, 0},
-    [8] = {'LEFT', 'RIGHT', 5, 0}
+    [1] = { 'BOTTOM', 'TOP', 0, 5 },
+    [2] = { 'BOTTOM', 'TOP', 0, 5 },
+    [3] = { 'TOP', 'BOTTOM', 0, -5 },
+    [4] = { 'TOP', 'BOTTOM', 0, -5 },
+    [5] = { 'RIGHT', 'LEFT', -5, 0 },
+    [6] = { 'RIGHT', 'LEFT', -5, 0 },
+    [7] = { 'LEFT', 'RIGHT', 5, 0 },
+    [8] = { 'LEFT', 'RIGHT', 5, 0 },
 }
 
 local function UpdateTeamIndex(teamIndex, showIndex, direc)
@@ -557,7 +687,7 @@ local function CreateTeamIndex(header)
     local parent = _G[header:GetName() .. 'UnitButton1']
     if parent and not parent.teamIndex then
         local teamIndex = F.CreateFS(parent, C.Assets.Font.Bold, 11, nil, header.index, nil, true)
-        teamIndex:SetTextColor(.6, .8, 1)
+        teamIndex:SetTextColor(0.6, 0.8, 1)
         teamIndex.__owner = parent
         UpdateTeamIndex(teamIndex, showIndex, direc)
         teamIndexes[header.index] = teamIndex
@@ -575,7 +705,7 @@ function UNITFRAME:UpdateRaidTeamIndex()
 end
 
 local function CreateRaid(name, i, width, height)
-    -- LuaFormatter off
+    -- stylua: ignore start
     local group = oUF:SpawnHeader(name, nil, nil,
         'showPlayer', true,
         'showSolo', true,
@@ -589,13 +719,15 @@ local function CreateRaid(name, i, width, height)
         'unitsPerColumn', 5,
         'columnSpacing', 5,
         'columnAnchorPoint', 'LEFT',
-        'oUF-initialConfigFunction', ([[
+        'oUF-initialConfigFunction',
+        ([[
             self:SetWidth(%d)
             self:SetHeight(%d)
-        ]]):format(width, height))
+        ]]):format(width, height)
+    )
+    -- stylua: ignore end
 
     return group
-    -- LuaFormatter on
 end
 
 local groups = {}
@@ -654,9 +786,21 @@ function UNITFRAME:CreateAndUpdateRaidHeader(direction)
             local x = math.floor((i - 1) / rows)
             local y = (i - 1) % rows
             if index < 5 then
-                group:SetPoint(sortData.initAnchor, raidMover, sortData.initAnchor, sortData.multX * groupWidth * x, sortData.multY * (groupHeight + indexSpacing) * y)
+                group:SetPoint(
+                    sortData.initAnchor,
+                    raidMover,
+                    sortData.initAnchor,
+                    sortData.multX * groupWidth * x,
+                    sortData.multY * (groupHeight + indexSpacing) * y
+                )
             else
-                group:SetPoint(sortData.initAnchor, raidMover, sortData.initAnchor, sortData.multX * (groupWidth + indexSpacing) * y, sortData.multY * groupHeight * x)
+                group:SetPoint(
+                    sortData.initAnchor,
+                    raidMover,
+                    sortData.initAnchor,
+                    sortData.multX * (groupWidth + indexSpacing) * y,
+                    sortData.multY * groupHeight * x
+                )
             end
         end
     end
@@ -671,7 +815,7 @@ end
 
 function UNITFRAME:SpawnRaid()
     oUF:RegisterStyle('Raid', CreateRaidStyle)
-    oUF:SetActiveStyle 'Raid'
+    oUF:SetActiveStyle('Raid')
 
     UNITFRAME:CreateAndUpdateRaidHeader(true)
     UNITFRAME:UpdateRaidTeamIndex()
@@ -688,7 +832,7 @@ local function UpdatePosBySpec(event, ...)
         end
 
         if not C.DB['UIAnchor']['raid_position' .. specIndex] then
-            C.DB['UIAnchor']['raid_position' .. specIndex] = {'TOPLEFT', 'oUF_Target', 'BOTTOMLEFT', 0, -10}
+            C.DB['UIAnchor']['raid_position' .. specIndex] = { 'TOPLEFT', 'oUF_Target', 'BOTTOMLEFT', 0, -10 }
         end
 
         UNITFRAME.RaidMover:ClearAllPoints()
@@ -700,7 +844,7 @@ local function UpdatePosBySpec(event, ...)
         end
 
         if not C.DB['UIAnchor']['party_position' .. specIndex] then
-            C.DB['UIAnchor']['party_position' .. specIndex] = {'BOTTOMRIGHT', 'oUF_Player', 'TOPLEFT', -100, 60}
+            C.DB['UIAnchor']['party_position' .. specIndex] = { 'BOTTOMRIGHT', 'oUF_Player', 'TOPLEFT', -100, 60 }
         end
         if UNITFRAME.PartyMover then
             UNITFRAME.PartyMover:ClearAllPoints()
@@ -749,7 +893,6 @@ function UNITFRAME:UpdateRaidHealthMethod()
         end
     end
 end
-
 
 function UNITFRAME:SpawnUnits()
     if not C.DB.Unitframe.Enable then

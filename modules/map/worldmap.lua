@@ -22,7 +22,7 @@ function MAP:GetPlayerMapPos(mapID)
         if not pos1 or not pos2 then
             return
         end
-        mapRect = {pos1, pos2}
+        mapRect = { pos1, pos2 }
         mapRect[2]:Subtract(mapRect[1])
 
         mapRects[mapID] = mapRect
@@ -88,7 +88,18 @@ function MAP:AddCoords()
     end
 
     playerCoords = F.CreateFS(mapFrame.BorderFrame, C.Assets.Font.Bold, 12, nil, '', nil, 'THICK', 'BOTTOMLEFT', 10, 10)
-    cursorCoords = F.CreateFS(mapFrame.BorderFrame, C.Assets.Font.Bold, 12, nil, '', nil, 'THICK', 'BOTTOMLEFT', 130, 10)
+    cursorCoords = F.CreateFS(
+        mapFrame.BorderFrame,
+        C.Assets.Font.Bold,
+        12,
+        nil,
+        '',
+        nil,
+        'THICK',
+        'BOTTOMLEFT',
+        130,
+        10
+    )
 
     F.HideObject(mapFrame.BorderFrame.Tutorial)
 
@@ -122,8 +133,6 @@ function MAP:WorldMapScale()
     F.CreateMF(mapFrame, nil, true)
     hooksecurefunc(mapFrame, 'SynchronizeDisplayState', self.UpdateMapAnchor)
 end
-
-
 
 function MAP:SetupWorldMap()
     -- Remove from frame manager

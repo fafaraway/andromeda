@@ -38,7 +38,7 @@ function QH:QuestTool_Remove(questID)
     end
 end
 
-local fixedStrings = {['横扫'] = '低扫', ['突刺'] = '突袭'}
+local fixedStrings = { ['横扫'] = '低扫', ['突刺'] = '突袭' }
 local function isActionMatch(msg, text)
     return text and string.find(msg, text)
 end

@@ -103,7 +103,6 @@ local buttonsList = {
             _G.ToggleHelpFrame()
         end,
     },
-
 }
 
 local function CreateButtonTexture(icon, texture)
@@ -186,5 +185,5 @@ function MM:OnLogin()
         end
     end
 
-    F.Mover(bar, L['Micro Menu'], 'MicroMenu', {'BOTTOM'})
+    F.Mover(bar, L['Micro Menu'], 'MicroMenu', { 'BOTTOM' })
 end

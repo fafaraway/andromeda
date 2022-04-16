@@ -7,7 +7,13 @@ local function delayFunc()
     if isBankEmpty then
         autoRepair(true)
     else
-        F:Print(string.format(C.GREEN_COLOR .. '%s|r %s', L['Repair cost covered by Guild Bank'], GetMoneyString(repairAllCost, true)))
+        F:Print(
+            string.format(
+                C.GREEN_COLOR .. '%s|r %s',
+                L['Repair cost covered by Guild Bank'],
+                GetMoneyString(repairAllCost, true)
+            )
+        )
     end
 end
 
@@ -23,12 +29,20 @@ function autoRepair(override)
     repairAllCost, canRepair = GetRepairAllCost()
 
     if canRepair and repairAllCost > 0 then
-        if (not override) and _G.FREE_ADB['RepairType'] == 1 and IsInGuild() and CanGuildBankRepair() and GetGuildBankWithdrawMoney() >= repairAllCost then
+        if
+            not override
+            and _G.FREE_ADB['RepairType'] == 1
+            and IsInGuild()
+            and CanGuildBankRepair()
+            and GetGuildBankWithdrawMoney() >= repairAllCost
+        then
             RepairAllItems(true)
         else
             if myMoney > repairAllCost then
                 RepairAllItems()
-                F:Print(string.format(C.GREEN_COLOR .. '%s|r %s', L['Repair cost'], GetMoneyString(repairAllCost, true)))
+                F:Print(
+                    string.format(C.GREEN_COLOR .. '%s|r %s', L['Repair cost'], GetMoneyString(repairAllCost, true))
+                )
                 return
             else
                 F:Print(C.RED_COLOR .. L['You have insufficient funds to repair your equipment!'])
@@ -36,7 +50,7 @@ function autoRepair(override)
             end
         end
 
-        F:Delay(.5, delayFunc)
+        F:Delay(0.5, delayFunc)
     end
 
     PlaySound(SOUNDKIT.ITEM_REPAIR)
