@@ -13,7 +13,7 @@ local function UF_OnLeave(self)
     self.Highlight:Hide()
 end
 
-function UNITFRAME:CreateBackdrop(self)
+function UNITFRAME:CreateBackdrop(self, onKeyDown)
     local highlight = self:CreateTexture(nil, 'OVERLAY')
     highlight:SetAllPoints()
     highlight:SetTexture('Interface\\PETBATTLES\\PetBattle-SelectedPetGlow')
@@ -23,7 +23,7 @@ function UNITFRAME:CreateBackdrop(self)
     highlight:Hide()
     self.Highlight = highlight
 
-    self:RegisterForClicks('AnyUp')
+    self:RegisterForClicks(onKeyDown and 'AnyDown' or 'AnyUp')
     self:HookScript('OnEnter', UF_OnEnter)
     self:HookScript('OnLeave', UF_OnLeave)
 
@@ -36,19 +36,6 @@ function UNITFRAME:CreateBackdrop(self)
     self.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
     self.backdrop:SetFrameStrata('BACKGROUND')
     self.shadow = self.backdrop.__shadow
-
-    if not self.unitStyle == 'player' then
-        return
-    end
-
-    local width = C.DB.Unitframe.PlayerWidth
-    local height = C.DB.Unitframe.ClassPowerHeight
-
-    local classPowerBarHolder = CreateFrame('Frame', nil, self)
-    classPowerBarHolder:SetSize(width, height)
-    classPowerBarHolder:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -3)
-
-    self.ClassPowerBarHolder = classPowerBarHolder
 end
 
 -- Selected border
@@ -168,6 +155,7 @@ function UNITFRAME:UpdateAllElements()
     UNITFRAME:UpdateGCDTicker()
     UNITFRAME:UpdateAuras()
     UNITFRAME:UpdateFader()
+    UNITFRAME:UpdateClassPower()
 end
 
 function UNITFRAME:OnLogin()

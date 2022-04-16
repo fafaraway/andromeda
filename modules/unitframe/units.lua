@@ -9,9 +9,9 @@ UNITFRAME.Positions = {
     tot = {'LEFT', 'oUF_Target', 'RIGHT', 6, 0},
     focus = {'BOTTOM', _G.UIParent, 'BOTTOM', -240, 220},
     tof = {'TOPLEFT', 'oUF_Focus', 'TOPRIGHT', 6, 0},
-    boss = {'LEFT', 'oUF_Target', 'RIGHT', 120, 120},
+    boss = {'CENTER', _G.UIParent, 'CENTER', 500, 0},
     arena = {'LEFT', 'oUF_Target', 'RIGHT', 120, 120},
-    party = {'BOTTOMRIGHT', 'oUF_Player', 'TOPLEFT', -100, 60},
+    party = {'CENTER', _G.UIParent, 'CENTER', -330, 0},
     raid = {'TOPRIGHT', 'Minimap', 'TOPLEFT', -6, -42},
     simple = {'TOPLEFT', C.UI_GAP, -100}
 }
@@ -30,9 +30,10 @@ local function CreatePlayerStyle(self)
     UNITFRAME:CreatePortrait(self)
     UNITFRAME:CreateCastBar(self)
     UNITFRAME:CreateGCDTicker(self)
-    UNITFRAME:CreateClassPowerBar(self)
+    UNITFRAME:CreateClassPower(self)
     UNITFRAME:CreatePlayerTags(self)
     UNITFRAME:CreateAuras(self)
+    UNITFRAME:UpdatePlayerAuraPosition(self)
 end
 
 function UNITFRAME:SpawnPlayer()

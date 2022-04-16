@@ -164,7 +164,7 @@ local function CastStart(self, event, unit)
         else
             nameStr = string.format('%s%s|r', hexStr, tarName)
         end
-        if(element.Text) then element.Text:SetFormattedText('%s (%s)', name, nameStr) end
+        if(element.Text and element.SpellTarget) then element.Text:SetFormattedText('%s (%s)', name, nameStr) end
     else
         resetSpellTarget(self) -- when unit loses target
     end

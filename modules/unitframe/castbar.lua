@@ -140,7 +140,7 @@ function UNITFRAME:PostCastStart(unit)
 
     self:SetAlpha(1)
     self.Spark:Show()
-    self.Text:SetTextColor(unpack(textColor))
+    --self.Text:SetTextColor(unpack(textColor))
 
     if unit == 'vehicle' or UnitInVehicle('player') then
         if self.SafeZone then
@@ -223,7 +223,7 @@ function UNITFRAME:PostUpdateInterruptible()
         self.Border:SetBackdropBorderColor(0, 0, 0, .35)
     end
 
-    self.Text:SetTextColor(unpack(textColor))
+    --self.Text:SetTextColor(unpack(textColor))
 end
 
 function UNITFRAME:PostCastStop()
@@ -448,7 +448,7 @@ function UNITFRAME:CreateNamePlateCastBar(self)
 
 
 
-
+    castbar.SpellTarget = true
     castbar.OnUpdate = UNITFRAME.OnCastbarUpdate
     castbar.PostCastStart = UNITFRAME.PostCastStart
     castbar.PostCastUpdate = UNITFRAME.PostCastUpdate

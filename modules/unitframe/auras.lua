@@ -336,6 +336,33 @@ function UNITFRAME:UpdateAuras()
     end
 end
 
+local function UpdatePlayerAuraPosition(self)
+    local specIndex = GetSpecialization()
+
+    if
+        (C.CLASS == 'ROGUE'
+        or C.CLASS == 'PALADIN'
+        or C.CLASS == 'WARLOCK'
+        or (C.CLASS == 'DRUID' and specIndex == 2)
+        or (C.CLASS == 'MONK' and specIndex == 3)
+        or (C.CLASS == 'MAGE' and specIndex == 1))
+        and C.DB.Unitframe.ClassPower
+    then
+        self.Auras:ClearAllPoints()
+        self.Auras:SetPoint('TOP', self.ClassPowerBar, 'BOTTOM', 0, -5)
+    else
+        self.Auras:ClearAllPoints()
+        self.Auras:SetPoint('TOP', self.Power, 'BOTTOM', 0, -5)
+    end
+
+    self:UnregisterEvent('PLAYER_ENTERING_WORLD', UpdatePlayerAuraPosition, true)
+end
+
+function UNITFRAME:UpdatePlayerAuraPosition(self)
+    self:RegisterEvent('PLAYER_ENTERING_WORLD', UpdatePlayerAuraPosition, true)
+    self:RegisterEvent('PLAYER_TALENT_UPDATE', UpdatePlayerAuraPosition, true)
+end
+
 function UNITFRAME:CreateAuras(self)
     local style = self.unitStyle
     local bu = CreateFrame('Frame', nil, self)
@@ -346,7 +373,7 @@ function UNITFRAME:CreateAuras(self)
 
     if style == 'player' then
         bu.initialAnchor = 'TOPLEFT'
-        bu:SetPoint('TOP', self.Power, 'BOTTOM', 0, -4)
+        bu:SetPoint('TOP', self.Power, 'BOTTOM', 0, -5)
         bu['growth-x'] = 'RIGHT'
         bu['growth-y'] = 'DOWN'
         bu.__value = 'Player'
@@ -662,3 +689,6 @@ function UNITFRAME:RefreshAurasByCombat(self)
     self:RegisterEvent('PLAYER_REGEN_ENABLED', RefreshAurasElements, true)
     self:RegisterEvent('PLAYER_REGEN_DISABLED', RefreshAurasElements, true)
 end
+
+
+

@@ -223,6 +223,10 @@ local function UpdateGCDTicker()
     UNITFRAME:UpdateGCDTicker()
 end
 
+local function UpdateClassPower()
+    UNITFRAME:UpdateClassPower()
+end
+
 local function UpdatePortrait()
     UNITFRAME:UpdatePortrait()
 end
@@ -587,7 +591,7 @@ GUI.OptionsList = {
         {1, 'Unitframe', 'Portrait', L['Portrait'], nil, nil, UpdatePortrait, L['Show dynamic portrait on unit frame.']},
         {1, 'Unitframe', 'GCDIndicator', L['GCD Indicator'], true, nil, UpdateGCDTicker, L['Show global cooldown ticker above the player frame.']},
         {1, 'Unitframe', 'AbbrName', L['Abbreviate Name'], nil, nil, UpdateUnitTags},
-        {1, 'Unitframe', 'ClassPower', L['Class Power'], true, SetupClassPower, nil, L['Show special resources of the class, such as Combo Points, Holy Power, Chi, Runes, etc.']},
+        {1, 'Unitframe', 'ClassPower', L['Class Power'], true, SetupClassPower, UpdateClassPower, L['Show special resources of the class, such as Combo Points, Holy Power, Chi, Runes, etc.']},
         {1, 'Unitframe', 'HidePlayerTags', L['Hide Player Tags'], nil, nil, UpdateUnitTags, L['Only show player tags on mouseover.']},
         {},
         {1, 'Unitframe', 'OnlyShowPlayer', L['Player Debuffs Only'], nil, nil, nil, L['Display debuffs cast by player only.']},

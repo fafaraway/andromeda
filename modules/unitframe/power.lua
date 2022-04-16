@@ -8,6 +8,21 @@ local function PostUpdatePower(power, unit, _, _, max)
     end
 end
 
+local function CheckSpellAvailability(power)
+    local spec = GetSpecialization() or 0
+    local isBDK = C.CLASS == 'DEATHKNIGHT' and spec == 1
+    local r, g, b = power:GetStatusBarColor()
+
+    if isBDK then
+        local _, noRunic = IsUsableSpell(49998)
+        if noRunic then
+            power:SetStatusBarColor(r/2, g/2, b/2)
+        else
+            power:SetStatusBarColor(r, g, b)
+        end
+    end
+end
+
 local function UpdatePowerColor(power, unit)
     if unit ~= 'player' or UnitHasVehicleUI('player') then
         return
@@ -58,6 +73,8 @@ local function UpdatePowerColor(power, unit)
             end
         end
     end
+
+    CheckSpellAvailability(power)
 end
 
 function UNITFRAME:CreatePowerBar(self)
@@ -167,11 +184,15 @@ local function PostUpdateAltPower(self, _, cur, _, max)
     end
 
     if self:IsShown() then
-        parent.ClassPowerBarHolder:ClearAllPoints()
-        parent.ClassPowerBarHolder:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -3)
+        if parent.ClassPowerBar then
+            parent.ClassPowerBar:ClearAllPoints()
+            parent.ClassPowerBar:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -3)
+        end
     else
-        parent.ClassPowerBarHolder:ClearAllPoints()
-        parent.ClassPowerBarHolder:SetPoint('TOPLEFT', parent, 'BOTTOMLEFT', 0, -3)
+        if parent.ClassPowerBar then
+            parent.ClassPowerBar:ClearAllPoints()
+            parent.ClassPowerBar:SetPoint('TOPLEFT', parent, 'BOTTOMLEFT', 0, -3)
+        end
     end
 end
 

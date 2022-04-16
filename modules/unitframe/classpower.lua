@@ -1,44 +1,63 @@
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('UnitFrame')
+local oUF = F.Libs.oUF
 
-local function SetLastBarColor(element, max, powerType)
-    if not element or not max then
-        return
-    end
-
-    local color = element.__owner.colors.power.max[powerType]
-
-    if element[max] and color then
-        local r, g, b = color[1], color[2], color[3]
-        local lastBar = element[max]
-        lastBar:SetStatusBarColor(r, g, b)
-    end
-end
-
-local function PostUpdateClassPower(element, _, max, diff, powerType)
+local function PostUpdateClassPower(element, cur, max, diff, powerType, chargedPowerPoints)
     local gap = 3
-    local maxWidth = C.DB.Unitframe.PlayerWidth
 
-    if diff then
+    if not cur or cur == 0 then
+        for i = 1, 6 do
+            element[i].bg:Hide()
+        end
+
+        element.prevColor = nil
+    else
         for i = 1, max do
-            element[i]:SetWidth((maxWidth - (max - 1) * gap) / max)
+            element[i].bg:Show()
+        end
+
+        element.thisColor = cur == max and 1 or 2
+        if not element.prevColor or element.prevColor ~= element.thisColor then
+            local r, g, b = 1, 0, 0
+            if element.thisColor == 2 then
+                local color = element.__owner.colors.power[powerType]
+                r, g, b = color[1], color[2], color[3]
+            end
+            for i = 1, #element do
+                element[i]:SetStatusBarColor(r, g, b)
+            end
+            element.prevColor = element.thisColor
         end
     end
 
-    SetLastBarColor(element, max, powerType)
+    if diff then
+        for i = 1, max do
+            element[i]:SetWidth((element.__owner.ClassPowerBar:GetWidth() - (max - 1) * gap) / max)
+        end
+        for i = max + 1, 6 do
+            element[i].bg:Hide()
+        end
+    end
+
+    for i = 1, 6 do
+        local bar = element[i]
+        if not bar.chargeStar then
+            break
+        end
+
+        bar.chargeStar:SetShown(chargedPowerPoints and tContains(chargedPowerPoints, i))
+    end
 end
 
 function UNITFRAME:OnUpdateRunes(elapsed)
     local duration = self.duration + elapsed
     self.duration = duration
     self:SetValue(duration)
-
-    if self.timer then
+    self.timer:SetText(nil)
+    if C.DB.Unitframe.RunesTimer then
         local remain = self.runeDuration - duration
         if remain > 0 then
             self.timer:SetText(F:FormatTime(remain))
-        else
-            self.timer:SetText(nil)
         end
     end
 end
@@ -51,11 +70,9 @@ local function PostUpdateRunes(element, runemap)
             if runeReady then
                 rune:SetAlpha(1)
                 rune:SetScript('OnUpdate', nil)
-                if rune.timer then
-                    rune.timer:SetText(nil)
-                end
+                rune.timer:SetText(nil)
             elseif start then
-                rune:SetAlpha(.3)
+                rune:SetAlpha(.45)
                 rune.runeDuration = duration
                 rune:SetScript('OnUpdate', UNITFRAME.OnUpdateRunes)
             end
@@ -63,24 +80,32 @@ local function PostUpdateRunes(element, runemap)
     end
 end
 
-function UNITFRAME:CreateClassPowerBar(self)
-    if not C.DB.Unitframe.ClassPower then
-        return
-    end
-
+function UNITFRAME:CreateClassPower(self)
     local gap = 3
     local barWidth = C.DB.Unitframe.PlayerWidth
     local barHeight = C.DB.Unitframe.ClassPowerHeight
 
+    local isDK = C.CLASS == 'DEATHKNIGHT'
+    local holder = CreateFrame('Frame', '$parentClassPowerBar', self)
+    holder:SetSize(barWidth, barHeight)
+    holder:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -3)
+
+    if not isDK then
+        holder.bg = F.SetBD(holder)
+        holder.bg:SetFrameLevel(5)
+        holder.bg:SetBackdropBorderColor(1, .8, 0)
+        holder.bg:Hide()
+    end
+
     local bars = {}
     for i = 1, 6 do
-        bars[i] = CreateFrame('StatusBar', nil, self.ClassPowerBarHolder)
+        bars[i] = CreateFrame('StatusBar', 'FreeUIClassPower' .. i, holder)
         bars[i]:SetHeight(barHeight)
         bars[i]:SetWidth((barWidth - 5 * gap) / 6)
         bars[i]:SetStatusBarTexture(C.Assets.Statusbar.Normal)
         bars[i]:SetFrameLevel(self:GetFrameLevel() + 5)
-
-        F.SetBD(bars[i])
+        bars[i].__bg = F.SetBD(bars[i], 0)
+        bars[i].__bg:SetBackdropBorderColor(0, 0, 0, 1)
 
         if i == 1 then
             bars[i]:SetPoint('BOTTOMLEFT')
@@ -88,18 +113,52 @@ function UNITFRAME:CreateClassPowerBar(self)
             bars[i]:SetPoint('LEFT', bars[i - 1], 'RIGHT', gap, 0)
         end
 
-        if C.CLASS == 'DEATHKNIGHT' and C.DB.Unitframe.RunesTimer then
+        bars[i].bg = bars[i]:CreateTexture(nil, 'BACKGROUND')
+        bars[i].bg:SetAllPoints(bars[i])
+        bars[i].bg:SetTexture(C.Assets.Statusbar.Flat)
+        bars[i].bg.multiplier = .25
+
+        if isDK then
             bars[i].timer = F.CreateFS(bars[i], C.Assets.Font.Regular, 11, nil, '')
         end
     end
 
-    if C.CLASS == 'DEATHKNIGHT' then
+    if isDK then
         bars.colorSpec = true
         bars.sortOrder = 'asc'
         bars.PostUpdate = PostUpdateRunes
+        bars.__max = 6
         self.Runes = bars
     else
         bars.PostUpdate = PostUpdateClassPower
         self.ClassPower = bars
+    end
+
+    self.ClassPowerBar = holder
+end
+
+function UNITFRAME:UpdateClassPower()
+    for _, frame in pairs(oUF.objects) do
+        if C.DB.Unitframe.ClassPower then
+            if not frame:IsElementEnabled('ClassPower') then
+                frame:EnableElement('ClassPower')
+                if frame.ClassPower then
+                    frame.ClassPower:ForceUpdate()
+                end
+            end
+            if not frame:IsElementEnabled('Runes') then
+                frame:EnableElement('Runes')
+                if frame.Runes then
+                    frame.Runes:ForceUpdate()
+                end
+            end
+        else
+            if frame:IsElementEnabled('ClassPower') then
+                frame:DisableElement('ClassPower')
+            end
+            if frame:IsElementEnabled('Runes') then
+                frame:DisableElement('Runes')
+            end
+        end
     end
 end
