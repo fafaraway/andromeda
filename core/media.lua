@@ -32,6 +32,7 @@ C.Assets.Texture = {
     Boss = C.ASSET_PATH .. 'textures\\np_boss',
     Skull = C.ASSET_PATH .. 'textures\\np_skull',
     Target = C.ASSET_PATH .. 'textures\\np_target',
+    Collector = C.ASSET_PATH .. 'textures\\collector',
 }
 
 C.Assets.Statusbar = {

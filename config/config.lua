@@ -410,7 +410,8 @@ C.CharacterSettings = {
             MinimapScale = 1,
             HiddenInCombat = false,
             WhoPings = true,
-            ProgressBar = true
+            ProgressBar = true,
+            AddOnIconCollector = true,
     },
     Infobar = {
         Enable = true,
@@ -611,5 +612,7 @@ C.AccountSettings = {
     ColorPickerPlus = {},
     ContactList = {},
     RenownLevels = {},
-    SmoothAmount = .25
+    SmoothAmount = .25,
+    MinimapAddOnCollector = true,
+        IgnoredAddOns = '',
 }

@@ -1,7 +1,6 @@
 local F, C = unpack(select(2, ...))
 local MAP = F:GetModule('Map')
 
-
 -- Cleanup Cluster
 
 function MAP:RemoveBlizzStuff()
@@ -29,6 +28,7 @@ function MAP:RemoveBlizzStuff()
         'MiniMapInstanceDifficulty',
         'GuildInstanceDifficulty',
         'MiniMapChallengeMode',
+        'GameTimeFrame'
     }
 
     for _, v in pairs(frames) do
@@ -44,7 +44,7 @@ function MAP:RestyleMinimap()
     local halfDiff = math.ceil(diff / 2)
 
     local holder = CreateFrame('Frame', 'FreeUIMinimapHolder', _G.UIParent)
-    holder:SetSize(258, 192)
+    holder:SetSize(256, 190)
     holder:SetPoint('CENTER', _G.UIParent)
     holder:SetFrameStrata('BACKGROUND')
     holder:SetScale(C.DB.Map.MinimapScale)
@@ -90,11 +90,23 @@ end
 function MAP:UpdateMinimapScale()
     local scale = C.DB.Map.MinimapScale
 
-    _G.Minimap.holder:SetScale(scale)
     _G.Minimap:SetScale(scale)
+    if _G.Minimap.holder then
+        _G.Minimap.holder:SetScale(scale)
+    end
     if _G.Minimap.mover then
         _G.Minimap.mover:SetScale(scale)
     end
+end
+
+-- LibDBIcon
+
+function _G.GetMinimapShape()
+    if not MAP.initialized then
+        MAP:UpdateMinimapScale()
+        MAP.initialized = true
+    end
+    return 'SQUARE'
 end
 
 -- Mail
@@ -112,34 +124,7 @@ end
 
 -- Calendar
 
-function MAP:CreateCalendar()
-    local timeFrame = _G.GameTimeFrame
-
-    if not timeFrame.styled then
-        timeFrame:SetNormalTexture(nil)
-        timeFrame:SetPushedTexture(nil)
-        timeFrame:SetHighlightTexture(nil)
-        timeFrame:SetSize(24, 12)
-        timeFrame:SetParent(_G.Minimap)
-        timeFrame:ClearAllPoints()
-        timeFrame:SetPoint('TOPRIGHT', _G.Minimap, -4, -10 - _G.Minimap.halfDiff)
-        timeFrame:SetHitRectInsets(0, 0, 0, 0)
-
-        for i = 1, timeFrame:GetNumRegions() do
-            local region = select(i, timeFrame:GetRegions())
-            if region.SetTextColor then
-                region:SetTextColor(147 / 255, 211 / 255, 231 / 255)
-                region:SetJustifyH('RIGHT')
-                F:SetFS(region, C.Assets.Font.Bold, 12, 'OUTLINE')
-                break
-            end
-        end
-
-        timeFrame.styled = true
-    end
-    timeFrame:Show()
-    timeFrame:SetFrameStrata('MEDIUM')
-
+function MAP:CreatePendingInvitation()
     -- Calendar invites
     _G.GameTimeCalendarInvitesTexture:ClearAllPoints()
     _G.GameTimeCalendarInvitesTexture:SetParent('Minimap')
@@ -385,6 +370,7 @@ function MAP:WhoPings()
     end)
 end
 
+
 function MAP:SetupMinimap()
     if not C.DB.Map.Minimap then
         return
@@ -394,11 +380,12 @@ function MAP:SetupMinimap()
     MAP:RestyleMinimap()
     MAP:UpdateMinimapScale()
     MAP:CreateGarrisonButton()
-    MAP:CreateCalendar()
+    MAP:CreatePendingInvitation()
     MAP:CreateZoneText()
     MAP:CreateMailButton()
     MAP:CreateDifficultyFlag()
     MAP:CreateQueueStatusButton()
+    MAP:AddOnIconCollector()
     MAP:WhoPings()
     MAP:MouseFunc()
     MAP:UpdateMinimapFader()
@@ -409,12 +396,4 @@ function MAP:SetupMinimap()
     end)
 
     _G.DropDownList1:SetClampedToScreen(true)
-
-    function _G.GetMinimapShape() -- LibDBIcon
-        if not MAP.initialized then
-            MAP:UpdateMinimapScale()
-            MAP.initialized = true
-        end
-        return 'SQUARE'
-    end
 end
