@@ -552,7 +552,7 @@ local msgEvents = {
     CHAT_MSG_RAID_WARNING = 1
 }
 
-local texStr = '|T%s:12:12:0:0:64:64:4:60:4:60|t'
+local texStr = '|T%s:8:8:0:0:64:64:4:60:4:60|t'
 local texList = {
     TANK = C.Assets.Texture.Tank,
     HEALER = C.Assets.Texture.Healer,
