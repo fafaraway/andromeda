@@ -11,8 +11,4 @@
     <Script file="slash.lua"/>
     <Script file="smooth.lua"/>
     <Script file="staticpopups.lua"/>
-
-    <!--@debug@-->
-    <Script file="private.lua"/>
-    <!--@end-debug@-->
 </Ui>

@@ -25,3 +25,7 @@ core\core.xml
 config\config.xml
 modules\modules.xml
 gui\gui.xml
+
+#@do-not-package@
+core\private.lua
+#@end-do-not-package@
