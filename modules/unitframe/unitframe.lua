@@ -4,12 +4,12 @@ local UNITFRAME = F:GetModule('UnitFrame')
 -- Backdrop
 
 local function UF_OnEnter(self)
-    _G.UnitFrame_OnEnter(self)
+    UnitFrame_OnEnter(self)
     self.Highlight:Show()
 end
 
 local function UF_OnLeave(self)
-    _G.UnitFrame_OnLeave(self)
+    UnitFrame_OnLeave(self)
     self.Highlight:Hide()
 end
 
@@ -137,10 +137,10 @@ end
 
 function UNITFRAME:RemoveBlizzRaidFrame()
     -- raid
-    _G.CompactRaidFrameManager_SetSetting('IsShown', '0')
-    _G.UIParent:UnregisterEvent('GROUP_ROSTER_UPDATE')
-    _G.CompactRaidFrameManager:UnregisterAllEvents()
-    _G.CompactRaidFrameManager:SetParent(F.HiddenFrame)
+    CompactRaidFrameManager_SetSetting('IsShown', '0')
+    UIParent:UnregisterEvent('GROUP_ROSTER_UPDATE')
+    CompactRaidFrameManager:UnregisterAllEvents()
+    CompactRaidFrameManager:SetParent(F.HiddenFrame)
 
     -- party
     for i = 1, 4 do

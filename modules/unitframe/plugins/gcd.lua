@@ -1,7 +1,7 @@
 local F = unpack(select(2, ...))
 local oUF = F.Libs.oUF
 
-local function Update(self, event, unit)
+local function Update(self)
     local spark = self.spark
     local start, duration = GetSpellCooldown(61304)
     if start > 0 and duration > 0 then

@@ -73,7 +73,7 @@ function NAMEPLATE:UpdateNameplateCVars()
     NAMEPLATE:UpdatePlateTargetScale()
 
     NAMEPLATE:UpdateClickableSize()
-    hooksecurefunc(_G.NamePlateDriverFrame, 'UpdateNamePlateOptions', NAMEPLATE.UpdateClickableSize)
+    hooksecurefunc(NamePlateDriverFrame, 'UpdateNamePlateOptions', NAMEPLATE.UpdateClickableSize)
     NAMEPLATE:UpdatePlateClickThrough()
 
     NAMEPLATE:UpdateNameOnlyMode()
@@ -84,18 +84,15 @@ function NAMEPLATE:UpdateNameplateCVars()
         SetCVar('nameplateSelfAlpha', 0)
         SetCVar('nameplateResourceOnTarget', 0)
     end
-
-    -- F.HideOption(_G.InterfaceOptionsNamesPanelUnitNameplatesPersonalResource)
-    -- F.HideOption(_G.InterfaceOptionsNamesPanelUnitNameplatesPersonalResourceOnEnemy)
 end
 
 --[[ AddOn ]]
 function NAMEPLATE:BlockAddons()
-    if not _G.DBM or not _G.DBM.Nameplate then
+    if not DBM or not DBM.Nameplate then
         return
     end
 
-    function _G.DBM.Nameplate:SupportedNPMod()
+    function DBM.Nameplate:SupportedNPMod()
         return true
     end
 
@@ -107,7 +104,7 @@ function NAMEPLATE:BlockAddons()
             C.AuraWhiteList[spellID] = true
         end
     end
-    hooksecurefunc(_G.DBM.Nameplate, 'Show', showAurasForDBM)
+    hooksecurefunc(DBM.Nameplate, 'Show', showAurasForDBM)
 end
 
 --[[ Elements ]]
@@ -552,7 +549,7 @@ function NAMEPLATE:UpdateQuestUnit(_, unit)
     unit = unit or self.unit
 
     local startLooking, questProgress
-    F.ScanTip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
+    F.ScanTip:SetOwner(UIParent, 'ANCHOR_NONE')
     F.ScanTip:SetUnit(unit)
 
     for i = 2, F.ScanTip:NumLines() do
@@ -575,7 +572,7 @@ function NAMEPLATE:UpdateQuestUnit(_, unit)
                         questProgress = diff
                         break
                     end
-                elseif progress and not string.match(text, _G.THREAT_TOOLTIP) then
+                elseif progress and not string.match(text, THREAT_TOOLTIP) then
                     if math.floor(100 - progress) > 0 then
                         questProgress = progress .. '%' -- lower priority on progress, keep looking
                     end
@@ -625,7 +622,7 @@ function NAMEPLATE:UpdateExplosives(event, unit)
         return
     end
 
-    local scale = _G.UIParent:GetScale()
+    local scale = UIParent:GetScale()
     local npcID = self.npcID
     if event == 'NAME_PLATE_UNIT_ADDED' and npcID == explosiveID then
         self:SetScale(scale * 2)
@@ -661,14 +658,14 @@ function NAMEPLATE:RefreshMajorSpells()
     for spellID in pairs(C.NPMajorSpellsList) do
         local name = GetSpellInfo(spellID)
         if name then
-            local modValue = _G.FREE_ADB['NPMajorSpells'][spellID]
+            local modValue = FREE_ADB['NPMajorSpells'][spellID]
             if modValue == nil then
                 NAMEPLATE.MajorSpellsList[spellID] = true
             end
         end
     end
 
-    for spellID, value in pairs(_G.FREE_ADB['NPMajorSpells']) do
+    for spellID, value in pairs(FREE_ADB['NPMajorSpells']) do
         if value then
             NAMEPLATE.MajorSpellsList[spellID] = true
         end
@@ -679,8 +676,8 @@ function NAMEPLATE:CheckMajorSpells()
     for spellID in pairs(C.NPMajorSpellsList) do
         local name = GetSpellInfo(spellID)
         if name then
-            if _G.FREE_ADB['NPMajorSpells'][spellID] then
-                _G.FREE_ADB['NPMajorSpells'][spellID] = nil
+            if FREE_ADB['NPMajorSpells'][spellID] then
+                FREE_ADB['NPMajorSpells'][spellID] = nil
             end
         else
             if C.DEV_MODE then
@@ -689,9 +686,9 @@ function NAMEPLATE:CheckMajorSpells()
         end
     end
 
-    for spellID, value in pairs(_G.FREE_ADB['NPMajorSpells']) do
+    for spellID, value in pairs(FREE_ADB['NPMajorSpells']) do
         if value == false and C.NPMajorSpellsList[spellID] == nil then
-            _G.FREE_ADB['NPMajorSpells'][spellID] = nil
+            FREE_ADB['NPMajorSpells'][spellID] = nil
         end
     end
 end
@@ -699,7 +696,7 @@ end
 -- Spiteful indicator
 function NAMEPLATE:CreateSpitefulIndicator(self)
     local font = C.Assets.Font.Condensed
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = FREE_ADB.FontOutline
 
     local tarName = F.CreateFS(self, font, 12, outline, nil, nil, outline or 'THICK')
     tarName:ClearAllPoints()
@@ -797,7 +794,7 @@ function NAMEPLATE:CreateNameplateStyle()
 
     self:SetSize(C.DB.Nameplate.Width, C.DB.Nameplate.Height)
     self:SetPoint('CENTER')
-    self:SetScale(_G.UIParent:GetScale())
+    self:SetScale(UIParent:GetScale())
 
     NAMEPLATE:CreateHealthBar(self)
     NAMEPLATE:CreateNameTag(self)
@@ -809,7 +806,7 @@ function NAMEPLATE:CreateNameplateStyle()
     -- NAMEPLATE:CreateClassifyIndicator(self)
     NAMEPLATE:CreateThreatIndicator(self)
     NAMEPLATE:CreateQuestIndicator(self)
-    UNITFRAME:CreateNamePlateCastBar(self)
+    NAMEPLATE:CreateCastBar(self)
     NAMEPLATE:CreateRaidTargetIndicator(self)
     NAMEPLATE:CreateAuras(self)
     NAMEPLATE:CreateSpitefulIndicator(self)
@@ -824,7 +821,7 @@ function NAMEPLATE:UpdateClickableSize()
         return
     end
 
-    local scale = _G.FREE_ADB.UIScale
+    local scale = FREE_ADB.UIScale
     local harmWidth, harmHeight = C.DB.Nameplate.ClickableWidth, C.DB.Nameplate.ClickableHeight
     local helpWidth, helpHeight = C.DB.Nameplate.FriendlyClickableWidth, C.DB.Nameplate.FriendlyClickableHeight
 
@@ -899,7 +896,7 @@ function NAMEPLATE:UpdatePlateByType()
 
     local raidtarget = self.RaidTargetIndicator
     local questIcon = self.questIcon
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = FREE_ADB.FontOutline
 
     name:SetShown(not self.widgetsOnly)
     name:ClearAllPoints()
@@ -1014,7 +1011,7 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
         self.widgetContainer = blizzPlate and blizzPlate.WidgetContainer
         if self.widgetContainer then
             self.widgetContainer:SetParent(self)
-            -- self.widgetContainer:SetScale(_G.FREE_ADB.UIScale)
+            -- self.widgetContainer:SetScale(FREE_ADB.UIScale)
         end
 
         NAMEPLATE.RefreshPlateType(self, unit)
@@ -1064,7 +1061,7 @@ function NAMEPLATE:OnLogin()
     end
 
     NAMEPLATE:UpdateClickableSize()
-    hooksecurefunc(_G.NamePlateDriverFrame, 'UpdateNamePlateOptions', NAMEPLATE.UpdateClickableSize)
+    hooksecurefunc(NamePlateDriverFrame, 'UpdateNamePlateOptions', NAMEPLATE.UpdateClickableSize)
 
     NAMEPLATE:UpdateNameplateCVars()
     NAMEPLATE:BlockAddons()

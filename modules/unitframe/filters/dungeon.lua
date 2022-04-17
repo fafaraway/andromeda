@@ -18,9 +18,9 @@ local SEASON_SPELLS = {
     [366297] = 2, -- 解构，S3
 }
 
-local function RegisterSeasonSpells(INSTANCE)
+local function RegisterSeasonSpells(instID)
     for spellID, priority in pairs(SEASON_SPELLS) do
-        UNITFRAME:RegisterInstanceDebuff(TIER, INSTANCE, 0, spellID, priority)
+        UNITFRAME:RegisterInstanceDebuff(TIER, instID, 0, spellID, priority)
     end
 end
 

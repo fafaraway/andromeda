@@ -7,7 +7,7 @@ function UNITFRAME:UpdateDebuffWatcher()
     for instName, value in pairs(C.DebuffWatcherList) do
         for spell, priority in pairs(value) do
             if
-                not (_G.FREE_ADB['DebuffWatcherList'][instName] and _G.FREE_ADB['DebuffWatcherList'][instName][spell])
+                not (FREE_ADB['DebuffWatcherList'][instName] and FREE_ADB['DebuffWatcherList'][instName][spell])
             then
                 if not debuffList[instName] then
                     debuffList[instName] = {}
@@ -16,7 +16,7 @@ function UNITFRAME:UpdateDebuffWatcher()
             end
         end
     end
-    for instName, value in pairs(_G.FREE_ADB['DebuffWatcherList']) do
+    for instName, value in pairs(FREE_ADB['DebuffWatcherList']) do
         for spell, priority in pairs(value) do
             if priority > 0 then
                 if not debuffList[instName] then
@@ -32,10 +32,10 @@ local function Button_OnEnter(self)
     if not self.index then
         return
     end
-    _G.GameTooltip:SetOwner(self, 'ANCHOR_BOTTOMRIGHT')
-    _G.GameTooltip:ClearLines()
-    _G.GameTooltip:SetUnitAura(self.__owner.unit, self.index, self.filter)
-    _G.GameTooltip:Show()
+    GameTooltip:SetOwner(self, 'ANCHOR_BOTTOMRIGHT')
+    GameTooltip:ClearLines()
+    GameTooltip:SetUnitAura(self.__owner.unit, self.index, self.filter)
+    GameTooltip:Show()
 end
 
 function UNITFRAME:CreateDebuffWatcher(self)
@@ -117,17 +117,17 @@ function UNITFRAME:InitDebuffWatcher()
     for instName, value in pairs(instanceDebuffs) do
         for spell, priority in pairs(value) do
             if
-                _G.FREE_ADB['DebuffWatcherList'][instName]
-                and _G.FREE_ADB['DebuffWatcherList'][instName][spell]
-                and _G.FREE_ADB['DebuffWatcherList'][instName][spell] == priority
+                FREE_ADB['DebuffWatcherList'][instName]
+                and FREE_ADB['DebuffWatcherList'][instName][spell]
+                and FREE_ADB['DebuffWatcherList'][instName][spell] == priority
             then
-                _G.FREE_ADB['DebuffWatcherList'][instName][spell] = nil
+                FREE_ADB['DebuffWatcherList'][instName][spell] = nil
             end
         end
     end
-    for instName, value in pairs(_G.FREE_ADB['DebuffWatcherList']) do
+    for instName, value in pairs(FREE_ADB['DebuffWatcherList']) do
         if not next(value) then
-            _G.FREE_ADB['DebuffWatcherList'][instName] = nil
+            FREE_ADB['DebuffWatcherList'][instName] = nil
         end
     end
 

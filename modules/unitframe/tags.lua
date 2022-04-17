@@ -96,8 +96,8 @@ local _tags = {
     end,
     -- altpower perc
     altpowerperc = function(unit)
-        local cur = UnitPower(unit, _G.ALTERNATE_POWER_INDEX)
-        local max = UnitPowerMax(unit, _G.ALTERNATE_POWER_INDEX)
+        local cur = UnitPower(unit, ALTERNATE_POWER_INDEX)
+        local max = UnitPowerMax(unit, ALTERNATE_POWER_INDEX)
 
         if max > 0 and not UnitIsDeadOrGhost(unit) then
             return ('%s%%'):format(math.floor(cur / max * 100 + 0.5))
@@ -107,24 +107,24 @@ local _tags = {
     -- offline ghost dead
     ddg = function(unit)
         if not UnitIsConnected(unit) and GetNumArenaOpponentSpecs() == 0 then
-            return '|cffcccccc' .. _G.PLAYER_OFFLINE .. '|r'
+            return '|cffcccccc' .. PLAYER_OFFLINE .. '|r'
         elseif UnitIsGhost(unit) then
             return '|cffcccccc' .. L['Ghost'] .. '|r'
         elseif UnitIsDead(unit) then
-            return '|cffcccccc' .. _G.DEAD .. '|r'
+            return '|cffcccccc' .. DEAD .. '|r'
         end
     end,
 
     -- dead
     dead = function(unit)
         if UnitIsDeadOrGhost(unit) and UnitIsConnected(unit) then
-            return '|cffd84343' .. _G.DEAD
+            return '|cffd84343' .. DEAD
         end
     end,
     -- offline
     offline = function(unit)
         if not UnitIsConnected(unit) then
-            return '|cffcccccc' .. _G.PLAYER_OFFLINE
+            return '|cffcccccc' .. PLAYER_OFFLINE
         end
     end,
 
@@ -141,7 +141,7 @@ local _tags = {
         local newStr = AbbrName(str, num) or str
 
         if isTargted or isFocusTargeted then
-            return '<' .. _G.YOU .. '>'
+            return '<' .. YOU .. '>'
         elseif unit == 'targettarget' or unit == 'focus' or unit == 'focustarget' then
             return shorten and F.ShortenString(newStr, numTar, true) or str
         elseif isBoss then
@@ -293,7 +293,7 @@ end
 
 function UNITFRAME:CreateGroupNameTag(self)
     local font = C.Assets.Font.Condensed
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = FREE_ADB.FontOutline
     local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
 
     self:Tag(text, '[free:color][free:groupname] [free:ddg]')
@@ -304,7 +304,7 @@ end
 function UNITFRAME:CreateNameTag(self)
     local font = C.Assets.Font.Condensed
     local style = self.unitStyle
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = FREE_ADB.FontOutline
 
     local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
 
@@ -329,7 +329,7 @@ function UNITFRAME:CreateNameTag(self)
 end
 
 function NAMEPLATE:CreateNameTag(self)
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = FREE_ADB.FontOutline
     local font = C.Assets.Font.Bold
 
     local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
@@ -344,7 +344,7 @@ end
 function UNITFRAME:CreateHealthTag(self)
     local font = C.Assets.Font.Condensed
     local style = self.unitStyle
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = FREE_ADB.FontOutline
 
     local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
     text:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
@@ -374,7 +374,7 @@ end
 function UNITFRAME:CreateAltPowerTag(self)
     local font = C.Assets.Font.Condensed
     local style = self.unitStyle
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = FREE_ADB.FontOutline
 
     local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
 
@@ -421,7 +421,7 @@ end
 
 function UNITFRAME:CreatePlayerTags(self)
     local font = C.Assets.Font.Condensed
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = FREE_ADB.FontOutline
 
     local leftTag = F.CreateFS(self, font, 11, outline, nil, nil, outline or 'THICK')
     leftTag:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
@@ -445,7 +445,7 @@ function NAMEPLATE:CreateHealthTag(self)
     end
 
     local font = C.Assets.Font.Condensed
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = FREE_ADB.FontOutline
 
     local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
     text:SetJustifyH('RIGHT')

@@ -8,16 +8,16 @@ local function Aura_OnEnter(self)
         return
     end
 
-    _G.GameTooltip:SetOwner(self, 'ANCHOR_TOPLEFT')
+    GameTooltip:SetOwner(self, 'ANCHOR_TOPLEFT')
     self:UpdateTooltip()
 end
 
 local function Aura_OnLeave()
-    _G.GameTooltip:Hide()
+    GameTooltip:Hide()
 end
 
 local function UpdateAuraTooltip(aura)
-    _G.GameTooltip:SetUnitAura(aura:GetParent().__owner.unit, aura:GetID(), aura.filter)
+    GameTooltip:SetUnitAura(aura:GetParent().__owner.unit, aura:GetID(), aura.filter)
 end
 
 function UNITFRAME:MODIFIER_STATE_CHANGED(key, state)
@@ -96,8 +96,8 @@ function UNITFRAME.PostCreateIcon(element, button)
     button.UpdateTooltip = UpdateAuraTooltip
     button:SetScript('OnEnter', Aura_OnEnter)
     button:SetScript('OnLeave', Aura_OnLeave)
-    button:SetScript('OnClick', function(self, button)
-        if not InCombatLockdown() and button == 'RightButton' then
+    button:SetScript('OnClick', function(self, btn)
+        if not InCombatLockdown() and btn == 'RightButton' then
             CancelUnitBuff('player', self:GetID(), self.filter)
         end
     end)
@@ -255,12 +255,12 @@ function UNITFRAME.AuraFilter(
         end
     elseif style == 'nameplate' or style == 'boss' or style == 'arena' then
         if element.__owner.plateType == 'NameOnly' then
-            return _G.FREE_ADB['NPAuraFilter'][1][spellID] or C.AuraWhiteList[spellID]
-        elseif _G.FREE_ADB['NPAuraFilter'][2][spellID] or C.AuraBlackList[spellID] then
+            return FREE_ADB['NPAuraFilter'][1][spellID] or C.AuraWhiteList[spellID]
+        elseif FREE_ADB['NPAuraFilter'][2][spellID] or C.AuraBlackList[spellID] then
             return false
         elseif element.showStealableBuffs and isStealable and not UnitIsPlayer(unit) then
             return true
-        elseif _G.FREE_ADB['NPAuraFilter'][1][spellID] or C.AuraWhiteList[spellID] then
+        elseif FREE_ADB['NPAuraFilter'][1][spellID] or C.AuraWhiteList[spellID] then
             return true
         else
             local auraFilter = C.DB.Nameplate.AuraFilterMode
@@ -340,12 +340,12 @@ function UNITFRAME:RefreshAuras(frame)
 end
 
 function UNITFRAME:UpdateAuras()
-    UNITFRAME:RefreshAuras(_G.oUF_Player)
-    UNITFRAME:RefreshAuras(_G.oUF_Pet)
-    UNITFRAME:RefreshAuras(_G.oUF_Target)
-    UNITFRAME:RefreshAuras(_G.oUF_TargetTarget)
-    UNITFRAME:RefreshAuras(_G.oUF_Focus)
-    UNITFRAME:RefreshAuras(_G.oUF_FocusTarget)
+    UNITFRAME:RefreshAuras(oUF_Player)
+    UNITFRAME:RefreshAuras(oUF_Pet)
+    UNITFRAME:RefreshAuras(oUF_Target)
+    UNITFRAME:RefreshAuras(oUF_TargetTarget)
+    UNITFRAME:RefreshAuras(oUF_Focus)
+    UNITFRAME:RefreshAuras(oUF_FocusTarget)
 
     for i = 1, 5 do
         UNITFRAME:RefreshAuras(_G['oUF_Boss' .. i])

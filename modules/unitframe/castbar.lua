@@ -104,28 +104,6 @@ local function ResetSpellTarget(self)
     end
 end
 
-local function UpdateSpellTarget(self, unit)
-    if not C.DB.Nameplate.CastTarget then
-        return
-    end
-    if not self.spellTarget then
-        return
-    end
-
-    local unitTarget = unit and unit .. 'target'
-    if unitTarget and UnitExists(unitTarget) then
-        local nameString
-        if UnitIsUnit(unitTarget, 'player') then
-            nameString = string.format('|cffff0000%s|r', '>' .. string.upper(_G.YOU) .. '<')
-        else
-            nameString = F:RgbToHex(F:UnitColor(unitTarget)) .. UnitName(unitTarget)
-        end
-        self.spellTarget:SetText(nameString)
-    else
-        ResetSpellTarget(self) -- when unit loses target
-    end
-end
-
 function UNITFRAME:PostCastStart(unit)
     local style = self.__owner.unitStyle
     local compact = not C.DB.Unitframe.SeparateCastbar
@@ -133,14 +111,9 @@ function UNITFRAME:PostCastStart(unit)
     local normalColor = C.DB.Unitframe.CastingColor
     local uninterruptibleColor = C.DB.Unitframe.UninterruptibleColor
     local color = self.notInterruptible and uninterruptibleColor or normalColor
-    local textColor = self.notInterruptible and { 1, 0, 0 } or { 1, 1, 1 }
-
-    -- F:Debug(self.name)
-    -- F:Debug(self.spellID)
 
     self:SetAlpha(1)
     self.Spark:Show()
-    --self.Text:SetTextColor(unpack(textColor))
 
     if unit == 'vehicle' or UnitInVehicle('player') then
         if self.SafeZone then
@@ -188,14 +161,7 @@ function UNITFRAME:PostCastStart(unit)
         else
             LBG.HideOverlayGlow(self.glowFrame)
         end
-
-        -- Spell target
-        UpdateSpellTarget(self, unit)
     end
-end
-
-function UNITFRAME:PostCastUpdate(unit)
-    UpdateSpellTarget(self, unit)
 end
 
 function UNITFRAME:PostUpdateInterruptible()
@@ -205,7 +171,6 @@ function UNITFRAME:PostUpdateInterruptible()
     local normalColor = C.DB.Unitframe.CastingColor
     local uninterruptibleColor = C.DB.Unitframe.UninterruptibleColor
     local color = self.notInterruptible and uninterruptibleColor or normalColor
-    local textColor = self.notInterruptible and { 1, 0, 0 } or { 1, 1, 1 }
 
     if (style == 'nameplate' and npCompact) or (style ~= 'nameplate' and compact) then
         self:SetStatusBarColor(color.r, color.g, color.b, 0.6)
@@ -218,8 +183,6 @@ function UNITFRAME:PostUpdateInterruptible()
         self.Backdrop:SetBackdropBorderColor(0, 0, 0, 1)
         self.Border:SetBackdropBorderColor(0, 0, 0, 0.35)
     end
-
-    --self.Text:SetTextColor(unpack(textColor))
 end
 
 function UNITFRAME:PostCastStop()
@@ -246,10 +209,6 @@ function UNITFRAME:PostCastFailed()
     ResetSpellTarget(self)
 end
 
-local function UpdateSpellTarget_OnEvent(self, _, unit)
-    UNITFRAME.PostCastUpdate(self.Castbar, unit)
-end
-
 function UNITFRAME:CreateCastBar(self)
     if not C.DB.Unitframe.Castbar then
         return
@@ -264,7 +223,7 @@ function UNITFRAME:CreateCastBar(self)
     local targetHeight = C.DB.Unitframe.TargetCastbarHeight
     local focusWidth = C.DB.Unitframe.FocusCastbarWidth
     local focusHeight = C.DB.Unitframe.FocusCastbarHeight
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = FREE_ADB.FontOutline
     local font = C.Assets.Font.Condensed
     local iconAmp = 4
 
@@ -334,7 +293,7 @@ function UNITFRAME:CreateCastBar(self)
             icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
         elseif style == 'focus' then
             castbar:SetSize(focusWidth, focusHeight)
-            CreateCastBarMover(castbar, L['Focus Castbar'], 'FocusCastbar', { 'CENTER', _G.UIParent, 'CENTER', 0, 120 })
+            CreateCastBarMover(castbar, L['Focus Castbar'], 'FocusCastbar', { 'CENTER', UIParent, 'CENTER', 0, 120 })
 
             icon:SetSize(focusHeight + iconAmp, focusHeight + iconAmp)
             icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
@@ -346,19 +305,18 @@ function UNITFRAME:CreateCastBar(self)
 
     castbar.OnUpdate = UNITFRAME.OnCastbarUpdate
     castbar.PostCastStart = UNITFRAME.PostCastStart
-    castbar.PostCastUpdate = UNITFRAME.PostCastUpdate
     castbar.PostCastStop = UNITFRAME.PostCastStop
     castbar.PostCastFail = UNITFRAME.PostCastFailed
     castbar.PostCastInterruptible = UNITFRAME.PostUpdateInterruptible
 end
 
-function UNITFRAME:CreateNamePlateCastBar(self)
+function NAMEPLATE:CreateCastBar(self)
     if not C.DB.Nameplate.Castbar then
         return
     end
 
     local style = self.unitStyle
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = FREE_ADB.FontOutline
     local font = C.Assets.Font.Condensed
     local color = C.DB.Unitframe.CastingColor
     local compact = not C.DB.Nameplate.SeparateCastbar
@@ -425,19 +383,9 @@ function UNITFRAME:CreateNamePlateCastBar(self)
     castbar.glowFrame = F.CreateGlowFrame(castbar, icon:GetHeight())
     castbar.glowFrame:SetPoint('CENTER', castbar.Icon)
 
-    -- Spell target
-    -- local spellTarget = F.CreateFS(castbar, C.Assets.Font.Bold, 14, outline, '', nil, outline or 'THICK')
-    -- spellTarget:ClearAllPoints()
-    -- spellTarget:SetJustifyH('CENTER')
-    -- spellTarget:SetPoint('TOP', castbar, 'BOTTOM', 0, -4)
-    -- castbar.spellTarget = spellTarget
-
-    -- self:RegisterEvent('UNIT_TARGET', UpdateSpellTarget_OnEvent)
-
-    castbar.SpellTarget = true
+    castbar.SpellTarget = C.DB.Nameplate.TargetName
     castbar.OnUpdate = UNITFRAME.OnCastbarUpdate
     castbar.PostCastStart = UNITFRAME.PostCastStart
-    castbar.PostCastUpdate = UNITFRAME.PostCastUpdate
     castbar.PostCastStop = UNITFRAME.PostCastStop
     castbar.PostCastFail = UNITFRAME.PostCastFailed
     castbar.PostCastInterruptible = UNITFRAME.PostUpdateInterruptible

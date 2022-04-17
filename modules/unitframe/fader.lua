@@ -23,7 +23,7 @@ function UNITFRAME:ConfigureFader(frame)
         frame.Fader:SetOption('MinAlpha', C.DB.Unitframe['MinAlpha'])
         frame.Fader:SetOption('MaxAlpha', C.DB.Unitframe['MaxAlpha'])
 
-        if frame ~= _G.oUF_Player then
+        if frame ~= oUF_Player then
             frame.Fader:SetOption('UnitTarget', C.DB.Unitframe['Target'])
         end
 

@@ -362,7 +362,7 @@ C.CharacterSettings = {
         CastbarHeight = 8,
         SeparateCastbar = true,
         MajorSpellsGlow = true,
-        CastTarget = true,
+        TargetName = true,
 
         InsideView = true,
         MinScale = 0.7,

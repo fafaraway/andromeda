@@ -3,15 +3,15 @@ local UNITFRAME = F:GetModule('UnitFrame')
 local oUF = F.Libs.oUF
 
 UNITFRAME.Positions = {
-    player = { 'CENTER', _G.UIParent, 'CENTER', 0, -180 },
+    player = { 'CENTER', UIParent, 'CENTER', 0, -180 },
     pet = { 'RIGHT', 'oUF_Player', 'LEFT', -6, 0 },
-    target = { 'LEFT', _G.UIParent, 'CENTER', 120, -140 },
+    target = { 'LEFT', UIParent, 'CENTER', 120, -140 },
     tot = { 'LEFT', 'oUF_Target', 'RIGHT', 6, 0 },
-    focus = { 'BOTTOM', _G.UIParent, 'BOTTOM', -240, 220 },
+    focus = { 'BOTTOM', UIParent, 'BOTTOM', -240, 220 },
     tof = { 'TOPLEFT', 'oUF_Focus', 'TOPRIGHT', 6, 0 },
-    boss = { 'CENTER', _G.UIParent, 'CENTER', 500, 0 },
+    boss = { 'CENTER', UIParent, 'CENTER', 500, 0 },
     arena = { 'LEFT', 'oUF_Target', 'RIGHT', 120, 120 },
-    party = { 'CENTER', _G.UIParent, 'CENTER', -330, 0 },
+    party = { 'CENTER', UIParent, 'CENTER', -330, 0 },
     raid = { 'TOPRIGHT', 'Minimap', 'TOPLEFT', -6, -42 },
     simple = { 'TOPLEFT', C.UI_GAP, -100 },
 }
@@ -313,7 +313,7 @@ function UNITFRAME:UpdateAllHeaders()
 
     for _, header in pairs(UNITFRAME.headers) do
         if header.groupType == 'party' then
-            _G.RegisterStateDriver(header, 'visibility', GetPartyVisibility())
+            RegisterStateDriver(header, 'visibility', GetPartyVisibility())
         elseif header.groupType == 'raid' then
             if header.__disabled then
                 RegisterStateDriver(header, 'visibility', 'hide')
