@@ -45,32 +45,30 @@ function F:RgbToHex(r, g, b, header, ending)
 end
 
 -- Hex to RGB
-function F:HexToRgb(rgb)
-    if string.len(rgb) == 6 then
-        local r, g, b
-        r, g, b =
-            tonumber('0x' .. string.sub(rgb, 0, 2)),
-            tonumber('0x' .. string.sub(rgb, 3, 4)),
-            tonumber('0x' .. string.sub(rgb, 5, 6))
-        if not r then
-            r = 0
-        else
-            r = r / 255
-        end
-        if not g then
-            g = 0
-        else
-            g = g / 255
-        end
-        if not b then
-            b = 0
-        else
-            b = b / 255
-        end
-        return r, g, b
-    else
-        return
+function F:HexToRgb(hex)
+    local a, r, g, b = strmatch(hex, '^|?c?(%x%x)(%x%x)(%x%x)(%x?%x?)|?r?$')
+    if not a then
+        return 0, 0, 0, 0
     end
+    if b == '' then
+        r, g, b, a = a, r, g, 'ff'
+    end
+
+    return tonumber(r, 16), tonumber(g, 16), tonumber(b, 16), tonumber(a, 16)
+end
+
+-- quick convert function: (nil or table to populate, 'ff0000', '00ff00', '0000ff', ...)
+-- to get (1,0,0, 0,1,0, 0,0,1, ...)
+function F:HexsToRgbs(rgb, ...)
+    if not rgb then
+        rgb = {}
+    end
+    for i = 1, select('#', ...) do
+        local x, r, g, b = #rgb, F:HexToRgb(select(i, ...))
+        rgb[x + 1], rgb[x + 2], rgb[x + 3] = r / 255, g / 255, b / 255
+    end
+
+    return unpack(rgb)
 end
 
 -- http://www.wowwiki.com/ColorGradient
@@ -89,50 +87,35 @@ function F:ColorGradient(perc, ...)
 end
 
 -- Text Gradient
-local function GetColorCode(r, g, b)
-    r = math.floor(r * 255 + 0.5)
-    local rH = string.format('%x', r)
-    if #rH < 2 then
-        rH = '0' .. rH
-    end
+function F:TextGradient(text, ...)
+    local msg, len, idx = '', string.utf8len(text), 0
 
-    g = math.floor(g * 255 + 0.5)
-    local gH = string.format('%x', g)
-    if #gH < 2 then
-        gH = '0' .. gH
-    end
-
-    b = math.floor(b * 255 + 0.5)
-    local bH = string.format('%x', b)
-    if #bH < 2 then
-        bH = '0' .. bH
-    end
-
-    return '|cff' .. rH .. gH .. bH
-end
-
-function F:TextGradient(text, r, g, b, lR, lG, lB, lightPosition)
-    local length = #text
-    local newChar
-    local newText = ''
-    local lightPower
-    local cR, cG, cB
-    for i = 1, length do
-        if length == 1 then
-            lightPower = 0
+    for i = 1, len do
+        local x = string.utf8sub(text, i, i)
+        if strmatch(x, '%s') then
+            msg = msg .. x
+            idx = idx + 1
         else
-            local fullLight = (i - 1) / (length - 1)
-            local delta = math.abs(lightPosition - fullLight)
-            lightPower = math.max(0, 1.00 - delta / 0.50)
+            local num = select('#', ...) / 3
+            local segment, relperc = math.modf((idx / len) * num)
+            local r1, g1, b1, r2, g2, b2 = select((segment * 3) + 1, ...)
+
+            if not r2 then
+                msg = msg .. F:RgbToHex(r1, g1, b1, nil, x .. '|r')
+            else
+                msg = msg .. F:RgbToHex(
+                    r1 + (r2 - r1) * relperc,
+                    g1 + (g2 - g1) * relperc,
+                    b1 + (b2 - b1) * relperc,
+                    nil,
+                    x .. '|r'
+                )
+                idx = idx + 1
+            end
         end
-        cR = r + (lR - r) * lightPower
-        cG = g + (lG - g) * lightPower
-        cB = b + (lB - b) * lightPower
-        newChar = GetColorCode(cR, cG, cB) .. string.sub(text, i, i)
-        newText = newText .. newChar
     end
 
-    return newText
+    return msg
 end
 
 -- Return rounded number
