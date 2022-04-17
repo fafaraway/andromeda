@@ -101,8 +101,9 @@ C.Assets.Sound = {
 
 C.Assets.Font = {
     Regular = C.ASSET_PATH .. 'fonts\\regular.ttf',
-    Condensed = C.ASSET_PATH .. 'fonts\\condensed.ttf',
     Bold = C.ASSET_PATH .. 'fonts\\bold.ttf',
+    Heavy = C.ASSET_PATH .. 'fonts\\heavy.ttf',
+    Condensed = C.ASSET_PATH .. 'fonts\\condensed.ttf',
     Combat = C.ASSET_PATH .. 'fonts\\combat.ttf',
     Header = C.ASSET_PATH .. 'fonts\\header.ttf',
     Pixel = C.ASSET_PATH .. 'fonts\\pixel.ttf',
@@ -118,30 +119,35 @@ do
         C.Assets.Font.Regular = 'Fonts\\FreeUI\\regular.ttf'
         C.Assets.Font.Condensed = 'Fonts\\FreeUI\\condensed.ttf'
         C.Assets.Font.Bold = 'Fonts\\FreeUI\\bold.ttf'
+        C.Assets.Font.Heavy = 'Fonts\\FreeUI\\heavy.ttf'
         C.Assets.Font.Combat = 'Fonts\\FreeUI\\combat.ttf'
         C.Assets.Font.Header = 'Fonts\\FreeUI\\header.ttf'
     elseif GetLocale() == 'zhCN' then
         C.Assets.Font.Regular = 'Fonts\\ARKai_T.ttf'
         C.Assets.Font.Condensed = 'Fonts\\ARKai_T.ttf'
         C.Assets.Font.Bold = 'Fonts\\ARHei.ttf'
+        C.Assets.Font.Heavy = 'Fonts\\ARHei.ttf'
         C.Assets.Font.Combat = 'Fonts\\ARHei.ttf'
         C.Assets.Font.Header = 'Fonts\\ARKai_T.ttf'
     elseif GetLocale() == 'zhTW' then
         C.Assets.Font.Regular = 'Fonts\\blei00d.ttf'
         C.Assets.Font.Condensed = 'Fonts\\blei00d.ttf'
         C.Assets.Font.Bold = 'Fonts\\blei00d.ttf'
+        C.Assets.Font.Heavy = 'Fonts\\blei00d.ttf'
         C.Assets.Font.Combat = 'Fonts\\blei00d.ttf'
         C.Assets.Font.Header = 'Fonts\\blei00d.ttf'
     elseif GetLocale() == 'koKR' then
         C.Assets.Font.Regular = 'Fonts\\2002.ttf'
         C.Assets.Font.Condensed = 'Fonts\\2002.ttf'
         C.Assets.Font.Bold = 'Fonts\\2002B.ttf'
+        C.Assets.Font.Heavy = 'Fonts\\2002B.ttf'
         C.Assets.Font.Combat = 'Fonts\\2002B.ttf'
         C.Assets.Font.Header = 'Fonts\\2002.ttf'
     elseif GetLocale() == 'ruRU' then
         C.Assets.Font.Regular = 'Fonts\\FRIZQT___CYR.ttf'
         C.Assets.Font.Condensed = 'Fonts\\FRIZQT___CYR.ttf'
         C.Assets.Font.Bold = 'Fonts\\FRIZQT___CYR.ttf'
+        C.Assets.Font.Heavy = 'Fonts\\FRIZQT___CYR.ttf'
         C.Assets.Font.Combat = 'Fonts\\FRIZQT___CYR.ttf'
         C.Assets.Font.Header = 'Fonts\\FRIZQT___CYR.ttf'
     end
