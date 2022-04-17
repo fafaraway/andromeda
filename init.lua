@@ -13,10 +13,9 @@ do
 end
 
 local addOnName, engine = ...
---local aceAddon, aceAddonMinor = _G.LibStub('AceAddon-3.0')
+local aceAddon, aceAddonMinor = _G.LibStub('AceAddon-3.0')
 
--- engine[1] = aceAddon:NewAddon(addOnName, 'AceTimer-3.0', 'AceHook-3.0')
-engine[1] = {}
+engine[1] = aceAddon:NewAddon(addOnName, 'AceTimer-3.0')
 engine[2] = {}
 engine[3] = {}
 
@@ -53,7 +52,7 @@ do
         end
     end
 
-    --F:AddLib('AceAddon', aceAddon, aceAddonMinor)
+    F:AddLib('AceAddon', aceAddon, aceAddonMinor)
     F:AddLib('ACL', 'AceLocale-3.0')
     F:AddLib('LBG', 'LibButtonGlow-1.0')
     F:AddLib('LRC', 'LibRangeCheck-2.0')
@@ -63,8 +62,6 @@ do
 
     F.Libs.oUF = engine.oUF
     F.Libs.cargBags = engine.cargBags
-
-    _G.LibStub('AceTimer-3.0'):Embed(F)
 end
 
 
