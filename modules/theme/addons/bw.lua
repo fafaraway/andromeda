@@ -31,6 +31,7 @@ local function ReskinBar(bar)
     if not bar.styled then
         F.StripTextures(bar.candyBarBar, true)
         F.SetBD(bar.candyBarBar)
+
         bar.styled = true
     end
     bar:SetTexture(C.Assets.Statusbar.Normal)
@@ -52,6 +53,7 @@ local function ReskinBar(bar)
 
         if not icon.styled then
             F.SetBD(icon)
+
             icon.styled = true
         end
     end
@@ -81,45 +83,59 @@ local styleData = {
 }
 
 function THEME:RegisterBigWigsStyle()
-    if not _G.FREE_ADB.ReskinAddons then
+    if not FREE_ADB.ReskinAddons then
         return
     end
 
-    if not _G.BigWigsAPI then
+    if not BigWigsAPI then
         return
     end
 
-    _G.BigWigsAPI:RegisterBarStyle('FreeUI', styleData)
+    BigWigsAPI:RegisterBarStyle('FreeUI', styleData)
 
     -- Force to use FreeUI style
     local pending = true
-    hooksecurefunc(_G.BigWigsAPI, 'GetBarStyle', function()
+    hooksecurefunc(BigWigsAPI, 'GetBarStyle', function()
         if pending then
-            _G.BigWigsAPI.GetBarStyle = function()
+            BigWigsAPI.GetBarStyle = function()
                 return styleData
             end
+
             pending = nil
         end
     end)
 end
 
-function THEME:ReskinBigWigs()
-    if not _G.FREE_ADB.ReskinAddons then
+function THEME:RestyleBigWigsQueueTimer()
+    if not FREE_ADB.ReskinAddons then
         return
     end
 
-    if _G.BigWigsLoader and _G.BigWigsLoader.RegisterMessage then
-        _G.BigWigsLoader.RegisterMessage(_, 'BigWigs_FrameCreated', function(_, frame, name)
+    if BigWigsLoader and BigWigsLoader.RegisterMessage then
+        BigWigsLoader.RegisterMessage('FreeUI', 'BigWigs_FrameCreated', function(_, frame, name)
             if name == 'QueueTimer' and not frame.styled then
                 F.StripTextures(frame)
-                frame:SetStatusBarTexture(C.Assets.Statusbar.Normal)
                 F.SetBD(frame)
+
+                frame:SetStatusBarTexture(C.Assets.Statusbar.Gradient)
+                frame:ClearAllPoints()
+                frame:SetPoint('BOTTOMLEFT', '$parent', 'BOTTOMLEFT')
+                frame:SetPoint('BOTTOMRIGHT', '$parent', 'BOTTOMRIGHT')
+                frame:SetHeight(6)
+                frame.text:Hide()
 
                 frame.styled = true
             end
         end)
+
+        -- BigWigsLoader.RegisterMessage('FreeUI', 'EmphasizedPrint', function(_, text)
+        --     if text and not text.styled then
+
+        --         text.styled = true
+        --     end
+        -- end)
     end
 end
 
---THEME:RegisterSkin('BigWigs', THEME.ReskinBigWigs)
+THEME:RegisterSkin('BigWigs', THEME.RestyleBigWigsQueueTimer)
 THEME:RegisterSkin('BigWigs_Plugins', THEME.RegisterBigWigsStyle)
