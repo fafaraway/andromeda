@@ -293,6 +293,35 @@ do
     end
 end
 
+-- weekly lottery
+do
+    local function OnMouseUp(self)
+        self:Hide()
+
+        PlaySound(SOUNDKIT.UI_LEGENDARY_LOOT_TOAST)
+    end
+
+    local function AddMask(frame)
+        local mask = CreateFrame('Frame', nil, frame)
+        mask:SetAllPoints()
+        mask:SetFrameLevel(99)
+
+        mask.tex = mask:CreateTexture()
+        mask.tex:SetAllPoints()
+        mask.tex:SetColorTexture(0, 0, 0)
+
+        mask:SetScript('OnMouseUp', OnMouseUp)
+    end
+
+    F:HookAddOn('Blizzard_WeeklyRewards', function()
+        if C_WeeklyRewards.HasAvailableRewards() then
+            for _, frame in pairs(WeeklyRewardsFrame.Activities) do
+                AddMask(frame)
+            end
+        end
+    end)
+end
+
 function M:OnLogin()
     M:ForceWarning()
     M:MuteAnnoyingSounds()
