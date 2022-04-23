@@ -41,6 +41,8 @@ end
 
 local FORMAT_CHANNEL = '|Hchannel:%s|h%s|h %s'
 local function formatChannel(info)
+    if not C.DB.Chat.ShortenChannelName then return end
+
     return FORMAT_CHANNEL:format(info, ABBREVIATIONS[info] or info:gsub('channel:', ''), '')
 end
 
