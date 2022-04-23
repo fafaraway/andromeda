@@ -42,6 +42,7 @@ globals = {
     'BigWigsLoader',
 
     -- Constants
+    'SOUNDKIT',
     'ALTERNATE_POWER_INDEX',
     'PLAYER_OFFLINE',
     'DEAD',
@@ -76,6 +77,7 @@ globals = {
     'UnitFrame_OnLeave',
     'CompactRaidFrameManager',
     'CompactRaidFrameManager_SetSetting',
+    'WeeklyRewardsFrame',
 
     -- namespaces
     'C_IncomingSummon',
@@ -84,6 +86,11 @@ globals = {
     'C_ChallengeMode',
     'C_ChatInfo',
     'C_EncounterJournal',
+    'C_WeeklyRewards',
+    'C_PlayerInfo',
+    'C_CVar',
+    'C_BattleNet',
+    'C_Map',
 
     -- API
     'CopyTable',
@@ -215,6 +222,21 @@ globals = {
     'UnitCanAssist',
     'IsSpellKnown',
     'IsSpellInRange',
+    'IsAddOnLoaded',
+    'GetItemCount',
+    'GetItemIcon',
+    'GetItemCooldown',
+    'IsEquippedItem',
+    'GetZonePVPInfo',
+    'GetWeaponEnchantInfo',
+    'UnitBuff',
+    'GetQuestItemInfo',
+    'GetQuestCurrencyInfo',
+    'GetQuestCurrencyID',
+    'GetNumRewardSpells',
+    'GetItemInfo',
+    'Mixin',
+    'nop',
 
     -- other
     'oUF_Player',
