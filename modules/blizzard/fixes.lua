@@ -5,6 +5,12 @@ do
     local done
     local function OnEvent(event, addon)
         if event == 'ADDON_LOADED' and addon == 'Blizzard_Collections' then
+            -- Fix undragable issue
+            local checkBox = _G.WardrobeTransmogFrame.ToggleSecondaryAppearanceCheckbox
+            checkBox.Label:ClearAllPoints()
+            checkBox.Label:SetPoint('LEFT', checkBox, 'RIGHT', 2, 1)
+            checkBox.Label:SetWidth(152)
+
             _G.CollectionsJournal:HookScript('OnShow', function()
                 if not done then
                     if InCombatLockdown() then
@@ -22,7 +28,7 @@ do
         end
     end
 
-    -- F:RegisterEvent('ADDON_LOADED', OnEvent) -- collections is not dragable atm
+    F:RegisterEvent('ADDON_LOADED', OnEvent)
 end
 
 -- Select target when click on raid units
@@ -127,47 +133,51 @@ do
 end
 
 -- Fix Trade Skill Search
-hooksecurefunc('ChatEdit_InsertLink', function(text) -- shift-clicked
-    -- change from SearchBox:HasFocus to :IsShown again
-    if text and _G.TradeSkillFrame and _G.TradeSkillFrame:IsShown() then
-        local spellId = string.match(text, 'enchant:(%d+)')
-        local spell = GetSpellInfo(spellId)
-        local item = GetItemInfo(string.match(text, 'item:(%d+)') or 0)
-        local search = spell or item
-        if not search then
-            return
-        end
-
-        -- search needs to be lowercase for .SetRecipeItemNameFilter
-        _G.TradeSkillFrame.SearchBox:SetText(search)
-
-        -- jump to the recipe
-        if spell then -- can only select recipes on the learned tab
-            if _G.PanelTemplates_GetSelectedTab(_G.TradeSkillFrame.RecipeList) == 1 then
-                _G.TradeSkillFrame:SelectRecipe(tonumber(spellId))
+do
+    hooksecurefunc('ChatEdit_InsertLink', function(text) -- shift-clicked
+        -- change from SearchBox:HasFocus to :IsShown again
+        if text and _G.TradeSkillFrame and _G.TradeSkillFrame:IsShown() then
+            local spellId = string.match(text, 'enchant:(%d+)')
+            local spell = GetSpellInfo(spellId)
+            local item = GetItemInfo(string.match(text, 'item:(%d+)') or 0)
+            local search = spell or item
+            if not search then
+                return
             end
-        elseif item then
-            F:Delay(0.1, function() -- wait a bit or we cant select the recipe yet
-                for _, v in pairs(_G.TradeSkillFrame.RecipeList.dataList) do
-                    if v.name == item then
-                        -- TradeSkillFrame.RecipeList:RefreshDisplay() -- didnt seem to help
-                        _G.TradeSkillFrame:SelectRecipe(v.recipeID)
-                        return
-                    end
+
+            -- search needs to be lowercase for .SetRecipeItemNameFilter
+            _G.TradeSkillFrame.SearchBox:SetText(search)
+
+            -- jump to the recipe
+            if spell then -- can only select recipes on the learned tab
+                if _G.PanelTemplates_GetSelectedTab(_G.TradeSkillFrame.RecipeList) == 1 then
+                    _G.TradeSkillFrame:SelectRecipe(tonumber(spellId))
                 end
-            end)
+            elseif item then
+                F:Delay(0.1, function() -- wait a bit or we cant select the recipe yet
+                    for _, v in pairs(_G.TradeSkillFrame.RecipeList.dataList) do
+                        if v.name == item then
+                            -- TradeSkillFrame.RecipeList:RefreshDisplay() -- didnt seem to help
+                            _G.TradeSkillFrame:SelectRecipe(v.recipeID)
+                            return
+                        end
+                    end
+                end)
+            end
         end
-    end
-end)
+    end)
+end
 
 -- make it only split stacks with shift-rightclick if the TradeSkillFrame is open
 -- shift-leftclick should be reserved for the search box
-local function hideSplitFrame(_, button)
-    if _G.TradeSkillFrame and _G.TradeSkillFrame:IsShown() then
-        if button == 'LeftButton' then
-            _G.StackSplitFrame:Hide()
+do
+    local function hideSplitFrame(_, button)
+        if _G.TradeSkillFrame and _G.TradeSkillFrame:IsShown() then
+            if button == 'LeftButton' then
+                _G.StackSplitFrame:Hide()
+            end
         end
     end
+    hooksecurefunc('ContainerFrameItemButton_OnModifiedClick', hideSplitFrame)
+    hooksecurefunc('MerchantItemButton_OnModifiedClick', hideSplitFrame)
 end
-hooksecurefunc('ContainerFrameItemButton_OnModifiedClick', hideSplitFrame)
-hooksecurefunc('MerchantItemButton_OnModifiedClick', hideSplitFrame)

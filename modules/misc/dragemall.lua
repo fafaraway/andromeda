@@ -84,7 +84,7 @@ local lodFrames = {
     },
     Blizzard_ChallengesUI = { ['ChallengesKeystoneFrame'] = false },
     Blizzard_ClickBindingUI = { ['ClickBindingFrame'] = false },
-    -- Blizzard_Collections = {['WardrobeFrame'] = false, ['WardrobeOutfitEditFrame'] = false},
+    Blizzard_Collections = {['WardrobeFrame'] = false, ['WardrobeOutfitEditFrame'] = false},
     Blizzard_CovenantRenown = { ['CovenantRenownFrame'] = false },
     Blizzard_CovenantSanctum = { ['CovenantSanctumFrame'] = false },
     Blizzard_Communities = {
