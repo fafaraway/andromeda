@@ -23,7 +23,6 @@ local buffsList = {
             spells = { [368512] = true },
             equip = true,
             instance = true,
-            combat = true,
             inGroup = true,
         },
     },
@@ -154,7 +153,7 @@ function BR:Reminder_Update(cfg)
         if equip and not IsEquippedItem(itemID) then
             isEquipped = false
         end
-        if GetItemCount(itemID) == 0 or not isEquipped or not isGrouped or GetItemCooldown(itemID) > 0 then -- check item cooldown
+        if GetItemCount(itemID) == 0 or not isEquipped or not isGrouped or GetItemCooldown(itemID) > 0 then
             frame:Hide()
             return
         end
