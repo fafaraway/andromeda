@@ -216,7 +216,7 @@ function TOOLTIP:OnTooltipSetUnit()
             (tarRicon and _G.ICON_LIST[tarRicon] .. '10|t') or '',
             TOOLTIP:GetTarget(unit .. 'target')
         )
-        self:AddLine(_G.TARGET .. ': ' .. tar)
+        self:AddLine(C.WHITE_COLOR .. _G.TARGET .. ':|r ' .. tar)
     end
 
     self.StatusBar:SetStatusBarColor(r, g, b)

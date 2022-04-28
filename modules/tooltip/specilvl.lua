@@ -2,6 +2,9 @@ local F, C, L = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 
 local isPending = _G.LFG_LIST_LOADING
+local specPrefix = C.WHITE_COLOR .. _G.SPECIALIZATION .. ':|r '
+local levelPrefix = C.WHITE_COLOR .. _G.STAT_AVERAGE_ITEM_LEVEL .. ':|r '
+
 local resetTime, frequency = 900, 0.5
 local cache, weapon, currentUNIT, currentGUID = {}, {}
 
@@ -139,40 +142,34 @@ end
 F:RegisterEvent('UNIT_INVENTORY_CHANGED', TOOLTIP.GetInspectInfo)
 
 function TOOLTIP:SetupSpecLevel(spec, level)
-    local _, unit = _G.GameTooltip:GetUnit()
+    local _, unit = GameTooltip:GetUnit()
     if not unit or UnitGUID(unit) ~= currentGUID then
         return
     end
 
-    local infoLine
-    for i = 2, _G.GameTooltip:NumLines() do
+    local specLine, levelLine
+    for i = 2, GameTooltip:NumLines() do
         local line = _G['GameTooltipTextLeft' .. i]
-        local text = line and line:GetText() or ''
-        if text == isPending or string.find(text, _G.SPECIALIZATION) then
-            infoLine = line
-            break
+        local text = line:GetText()
+        if text and string.find(text, specPrefix) then
+            specLine = line
+        elseif text and string.find(text, levelPrefix) then
+            levelLine = line
         end
     end
 
-    spec = spec or isPending
-    level = level or isPending
-
-    local infoString = isPending
-    if spec ~= isPending then
-        infoString = string.format(
-            '|cffffffff%s:|r |cffe9c55d%s|r |cffffffff%s:|r |cffe9c55d%s|r',
-            _G.SPECIALIZATION,
-            spec,
-            L['iLvl'],
-            level
-        )
+    spec = specPrefix .. (spec or isPending)
+    if specLine then
+        specLine:SetText(spec)
+    else
+        GameTooltip:AddLine(spec)
     end
 
-    if infoLine then
-        infoLine:SetText(infoString)
+    level = levelPrefix .. (level or isPending)
+    if levelLine then
+        levelLine:SetText(level)
     else
-        _G.GameTooltip:AddLine(' ')
-        _G.GameTooltip:AddLine(infoString)
+        GameTooltip:AddLine(level)
     end
 end
 
