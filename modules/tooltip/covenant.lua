@@ -1,7 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 local M = F:GetModule('Tooltip')
 
-local LibRS
+local LibOR
 local DCLoaded
 local debug = false
 
@@ -60,8 +60,13 @@ function M:GetCovenantID(unit)
     end
 
     local covenantID = memberCovenants[guid]
-    if not covenantID then
-        local playerInfo = LibRS and LibRS.playerInfoManager.GetPlayerInfo(GetUnitName(unit, true))
+    if not covenantID and LibOR then
+        local playerInfo
+        if LibOR.GetUnitInfo then
+            playerInfo = LibOR.GetUnitInfo(unit)
+        elseif LibOR.playerInfoManager and LibOR.playerInfoManager then
+            playerInfo = LibOR.playerInfoManager.GetPlayerInfo(GetUnitName(unit, true))
+        end
         return playerInfo and playerInfo.covenantId
     end
 
@@ -69,7 +74,13 @@ function M:GetCovenantID(unit)
 end
 
 local function msgChannel()
-    return IsPartyLFG() and 'INSTANCE_CHAT' or IsInRaid() and 'RAID' or 'PARTY'
+    if IsInGroup(LE_PARTY_CATEGORY_INSTANCE) or IsInRaid(LE_PARTY_CATEGORY_INSTANCE) then
+        return 'INSTANCE_CHAT'
+    elseif IsInRaid(LE_PARTY_CATEGORY_HOME) then
+        return 'RAID'
+    elseif IsInGroup(LE_PARTY_CATEGORY_HOME) then
+        return 'PARTY'
+    end
 end
 
 local cache = {}
@@ -90,8 +101,12 @@ function M:UpdateRosterInfo()
         end
     end
 
-    if LibRS then
-        LibRS.RequestAllPlayersInfo()
+    if LibOR then
+        if LibOR.RequestAllData then
+            LibOR.RequestAllData()
+        elseif LibOR.RequestAllPlayersInfo then
+            LibOR.RequestAllPlayersInfo()
+        end
     end
 end
 
@@ -172,12 +187,8 @@ function M:AddCovenantInfo()
         return
     end
 
-    if not IsInGroup() then
-        return
-    end
-
     local _, unit = _G.GameTooltip:GetUnit()
-    if not unit or not UnitExists(unit) then
+    if not unit or not UnitIsPlayer(unit) then
         return
     end
 
@@ -201,7 +212,7 @@ function M:AddCovenantInfo()
 end
 
 function M:CovenantInfo()
-    LibRS = _G.LibStub and _G.LibStub('LibOpenRaid-1.0', true)
+    LibOR = _G.LibStub and _G.LibStub('LibOpenRaid-1.0', true)
     DCLoaded = IsAddOnLoaded('Details_Covenants')
 
     for prefix in pairs(addonPrefixes) do
