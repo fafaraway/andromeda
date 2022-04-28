@@ -332,6 +332,14 @@ function NAMEPLATE:UpdateTargetChange()
     local element = self.TargetIndicator
     local unit = self.unit
 
+    if C.DB.Nameplate.ColoredTarget then
+        NAMEPLATE.UpdateThreatColor(self, _, unit)
+    end
+
+    if not element then
+        return
+    end
+
     if UnitIsUnit(unit, 'target') and not UnitIsUnit(unit, 'player') then
         element:Show()
         if element.aggroR:IsShown() and not element.animGroupR:IsPlaying() then
@@ -349,10 +357,6 @@ function NAMEPLATE:UpdateTargetChange()
             element.animGroupL:Stop()
         end
     end
-
-    if C.DB.Nameplate.ColoredTarget then
-        NAMEPLATE.UpdateThreatColor(self, _, unit)
-    end
 end
 
 function NAMEPLATE:UpdateTargetIndicatorColor(self, r, g, b)
@@ -365,6 +369,10 @@ end
 function NAMEPLATE:UpdateTargetIndicatorVisibility()
     local element = self.TargetIndicator
     local isNameOnly = self.plateType == 'NameOnly'
+
+    if not element then
+        return
+    end
 
     if C.DB.Nameplate.TargetIndicator then
         if isNameOnly then
