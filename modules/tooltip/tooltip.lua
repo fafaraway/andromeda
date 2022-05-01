@@ -216,7 +216,7 @@ function TOOLTIP:OnTooltipSetUnit()
             (tarRicon and _G.ICON_LIST[tarRicon] .. '10|t') or '',
             TOOLTIP:GetTarget(unit .. 'target')
         )
-        self:AddLine(C.WHITE_COLOR .. _G.TARGET .. ':|r ' .. tar)
+        self:AddLine(C.INFO_COLOR .. _G.TARGET .. ':|r ' .. tar)
     end
 
     self.StatusBar:SetStatusBarColor(r, g, b)
@@ -455,7 +455,7 @@ function TOOLTIP:AddMythicPlusScore(unit)
     local score = summary and summary.currentSeasonScore
     if score and score > 0 then
         _G.GameTooltip:AddLine(
-            string.format('%s: %s', '|cffffffff' .. _G.DUNGEON_SCORE, TOOLTIP.GetDungeonScore(score))
+            string.format('%s:|r %s', C.INFO_COLOR .. _G.DUNGEON_SCORE, TOOLTIP.GetDungeonScore(score))
         )
     end
 end

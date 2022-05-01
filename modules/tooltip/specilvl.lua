@@ -2,8 +2,8 @@ local F, C, L = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 
 local isPending = _G.LFG_LIST_LOADING
-local specPrefix = C.WHITE_COLOR .. _G.SPECIALIZATION .. ':|r '
-local levelPrefix = C.WHITE_COLOR .. _G.STAT_AVERAGE_ITEM_LEVEL .. ':|r '
+local specPrefix = C.INFO_COLOR .. _G.SPECIALIZATION .. ':|r '
+local levelPrefix = C.INFO_COLOR .. _G.STAT_AVERAGE_ITEM_LEVEL .. ':|r '
 
 local resetTime, frequency = 900, 0.5
 local cache, weapon, currentUNIT, currentGUID = {}, {}
@@ -158,11 +158,14 @@ function TOOLTIP:SetupSpecLevel(spec, level)
         end
     end
 
+    local r, g, b = F:UnitColor(unit)
+    local hexColor = F:RgbToHex(r, g, b)
+
     spec = specPrefix .. (spec or isPending)
     if specLine then
-        specLine:SetText(spec)
+        specLine:SetText(hexColor .. spec)
     else
-        GameTooltip:AddLine(spec)
+        GameTooltip:AddLine(hexColor .. spec)
     end
 
     level = levelPrefix .. (level or isPending)
