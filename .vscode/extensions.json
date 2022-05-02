@@ -1,7 +1,7 @@
 {
     "recommendations": [
-        "koihik.vscode-lua-format",
         "trixnz.vscode-lua",
-        "stanzilla.vscode-wow-toc"
+        "stanzilla.vscode-wow-toc",
+        "JohnnyMorganz.stylua"
     ]
 }
