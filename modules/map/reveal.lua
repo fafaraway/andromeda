@@ -24,7 +24,7 @@ function MAP:MapData_RefreshOverlays(fullUpdate)
     table.wipe(shownMapCache)
     table.wipe(exploredCache)
 
-    local mapID = _G.WorldMapFrame.mapID
+    local mapID = WorldMapFrame.mapID
     if not mapID then
         return
     end
@@ -43,7 +43,7 @@ function MAP:MapData_RefreshOverlays(fullUpdate)
     end
 
     if not self.layerIndex then
-        self.layerIndex = _G.WorldMapFrame.ScrollContainer:GetCurrentLayerIndex()
+        self.layerIndex = WorldMapFrame.ScrollContainer:GetCurrentLayerIndex()
     end
     local layers = C_Map.GetMapArtLayers(mapID)
     local layerInfo = layers and layers[self.layerIndex]
@@ -135,7 +135,7 @@ function MAP:MapData_ResetTexturePool(texture)
 end
 
 function MAP:WorldMapReveal()
-    for pin in _G.WorldMapFrame:EnumeratePinsByTemplate('MapExplorationPinTemplate') do
+    for pin in WorldMapFrame:EnumeratePinsByTemplate('MapExplorationPinTemplate') do
         hooksecurefunc(pin, 'RefreshOverlays', MAP.MapData_RefreshOverlays)
         pin.overlayTexturePool.resetterFunc = MAP.MapData_ResetTexturePool
     end

@@ -4,15 +4,15 @@ local MAP = F:GetModule('Map')
 -- Cleanup Cluster
 
 function MAP:RemoveBlizzStuff()
-    _G.MinimapCluster:EnableMouse(false)
-    _G.Minimap:SetArchBlobRingScalar(0)
-    _G.Minimap:SetQuestBlobRingScalar(0)
+    MinimapCluster:EnableMouse(false)
+    Minimap:SetArchBlobRingScalar(0)
+    Minimap:SetQuestBlobRingScalar(0)
 
     -- ClockFrame
     LoadAddOn('Blizzard_TimeManager')
-    local region = _G.TimeManagerClockButton:GetRegions()
+    local region = TimeManagerClockButton:GetRegions()
     region:Hide()
-    _G.TimeManagerClockButton:Hide()
+    TimeManagerClockButton:Hide()
 
     -- Hide BlizzArt
     local frames = {
@@ -43,46 +43,46 @@ function MAP:RestyleMinimap()
     local diff = 256 - 190
     local halfDiff = math.ceil(diff / 2)
 
-    local holder = CreateFrame('Frame', 'FreeUIMinimapHolder', _G.UIParent)
+    local holder = CreateFrame('Frame', 'FreeUIMinimapHolder', UIParent)
     holder:SetSize(256, 190)
-    holder:SetPoint('CENTER', _G.UIParent)
+    holder:SetPoint('CENTER', UIParent)
     holder:SetFrameStrata('BACKGROUND')
     holder:SetScale(C.DB.Map.MinimapScale)
     holder.bg = F.SetBD(holder, 1)
     holder.bg:SetBackdropColor(0, 0, 0, 1)
     holder.bg:SetBackdropBorderColor(0, 0, 0, 1)
-    _G.Minimap.holder = holder
+    Minimap.Holder = holder
 
-    local pos = { 'BOTTOMRIGHT', _G.UIParent, 'BOTTOMRIGHT', -C.UI_GAP, C.UI_GAP }
-    local mover = F.Mover(holder, _G.MINIMAP_LABEL, 'Minimap', pos)
-    _G.Minimap.mover = mover
+    local pos = { 'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -C.UI_GAP, C.UI_GAP }
+    local mover = F.Mover(holder, MINIMAP_LABEL, 'Minimap', pos)
+    Minimap.mover = mover
 
-    _G.Minimap:SetClampedToScreen(true)
-    _G.Minimap:SetMaskTexture(texturePath)
-    _G.Minimap:SetSize(256, 256)
-    _G.Minimap:SetHitRectInsets(0, 0, halfDiff * C.MULT, halfDiff * C.MULT)
-    _G.Minimap:SetClampRectInsets(0, 0, 0, 0)
-    _G.Minimap:ClearAllPoints()
-    _G.Minimap:SetPoint('CENTER', holder)
+    Minimap:SetClampedToScreen(true)
+    Minimap:SetMaskTexture(texturePath)
+    Minimap:SetSize(256, 256)
+    Minimap:SetHitRectInsets(0, 0, halfDiff * C.MULT, halfDiff * C.MULT)
+    Minimap:SetClampRectInsets(0, 0, 0, 0)
+    Minimap:ClearAllPoints()
+    Minimap:SetPoint('CENTER', holder)
 
-    _G.Minimap.diff = diff
-    _G.Minimap.halfDiff = halfDiff
+    Minimap.diff = diff
+    Minimap.halfDiff = halfDiff
 end
 
 -- Hybrid Minimap (Torghast)
 
 function MAP:RestyleHybridMinimap()
-    local mapCanvas = _G.HybridMinimap.MapCanvas
-    local rectangleMask = _G.HybridMinimap:CreateMaskTexture()
+    local mapCanvas = HybridMinimap.MapCanvas
+    local rectangleMask = HybridMinimap:CreateMaskTexture()
 
     rectangleMask:SetTexture(C.Assets.Texture.MinimapMask)
-    rectangleMask:SetAllPoints(_G.HybridMinimap)
+    rectangleMask:SetAllPoints(HybridMinimap)
 
-    _G.HybridMinimap.RectangleMask = rectangleMask
+    HybridMinimap.RectangleMask = rectangleMask
     mapCanvas:SetMaskTexture(rectangleMask)
     mapCanvas:SetUseMaskTexture(true)
 
-    _G.HybridMinimap.CircleMask:SetTexture('')
+    HybridMinimap.CircleMask:SetTexture('')
 end
 
 -- Scale
@@ -90,52 +90,54 @@ end
 function MAP:UpdateMinimapScale()
     local scale = C.DB.Map.MinimapScale
 
-    _G.Minimap:SetScale(scale)
-    if _G.Minimap.holder then
-        _G.Minimap.holder:SetScale(scale)
+    Minimap:SetScale(scale)
+    if Minimap.Holder then
+        Minimap.Holder:SetScale(scale)
     end
-    if _G.Minimap.mover then
-        _G.Minimap.mover:SetScale(scale)
+    if Minimap.mover then
+        Minimap.mover:SetScale(scale)
     end
 end
 
 -- LibDBIcon
 
-function _G.GetMinimapShape()
-    if not MAP.initialized then
-        MAP:UpdateMinimapScale()
-        MAP.initialized = true
-    end
+function MAP:GetMinimapShape()
     return 'SQUARE'
 end
 
--- Mail
+function MAP:SetGetMinimapShape()
+    GetMinimapShape = MAP.GetMinimapShape
+
+    Minimap:SetSize(256, 256)
+end
+
+-- Mail Icon
 
 function MAP:CreateMailButton()
-    local mail = _G.MiniMapMailFrame
-    local icon = _G.MiniMapMailIcon
+    local mail = MiniMapMailFrame
+    local icon = MiniMapMailIcon
 
     mail:ClearAllPoints()
-    mail:SetPoint('BOTTOM', _G.Minimap, 0, _G.Minimap.halfDiff)
+    mail:SetPoint('BOTTOM', Minimap, 0, Minimap.halfDiff)
     icon:SetTexture(C.Assets.Texture.Mail)
     icon:SetSize(21, 21)
     icon:SetVertexColor(1, 0.8, 0)
 end
 
--- Calendar
+-- Calendar Invite
 
 function MAP:CreatePendingInvitation()
     -- Calendar invites
-    _G.GameTimeCalendarInvitesTexture:ClearAllPoints()
-    _G.GameTimeCalendarInvitesTexture:SetParent('Minimap')
-    _G.GameTimeCalendarInvitesTexture:SetPoint('TOPRIGHT')
+    GameTimeCalendarInvitesTexture:ClearAllPoints()
+    GameTimeCalendarInvitesTexture:SetParent('Minimap')
+    GameTimeCalendarInvitesTexture:SetPoint('TOPRIGHT')
 
-    local invt = CreateFrame('Button', nil, _G.UIParent)
-    invt:SetPoint('TOPRIGHT', _G.Minimap, 'TOPLEFT', -6, -6)
+    local invt = CreateFrame('Button', nil, UIParent)
+    invt:SetPoint('TOPRIGHT', Minimap, 'TOPLEFT', -6, -6)
     invt:SetSize(300, 80)
     invt:Hide()
     F.SetBD(invt)
-    F.CreateFS(invt, C.Assets.Font.Regular, 14, 'OUTLINE', _G.GAMETIME_TOOLTIP_CALENDAR_INVITES, 'BLUE')
+    F.CreateFS(invt, C.Assets.Font.Regular, 14, 'OUTLINE', GAMETIME_TOOLTIP_CALENDAR_INVITES, 'BLUE')
 
     local function updateInviteVisibility()
         invt:SetShown(C_Calendar.GetNumPendingInvites() > 0)
@@ -146,7 +148,7 @@ function MAP:CreatePendingInvitation()
     invt:SetScript('OnClick', function(_, btn)
         invt:Hide()
         if btn == 'LeftButton' then
-            _G.ToggleCalendar()
+            ToggleCalendar()
         end
         F:UnregisterEvent('CALENDAR_UPDATE_PENDING_INVITES', updateInviteVisibility)
         F:UnregisterEvent('PLAYER_ENTERING_WORLD', updateInviteVisibility)
@@ -155,163 +157,138 @@ end
 
 -- Difficulty Flag
 
-function MAP:UpdateDifficultyFlag()
-    local diffText = _G.Minimap.DiffText
+local function UpdateDifficultyFlag()
+    local frame = Minimap.DiffFlag
+    local text = Minimap.DiffText
+
     local inInstance, instanceType = IsInInstance()
     local difficulty = select(3, GetInstanceInfo())
     local numplayers = select(9, GetInstanceInfo())
     local mplusdiff = select(1, C_ChallengeMode.GetActiveKeystoneInfo()) or ''
 
-    local norm = string.format('|cff1eff00%s|r', 'N')
-    local hero = string.format('|cff0070dd%s|r', 'H')
-    local myth = string.format('|cffa335ee%s|r', 'M')
-    local lfr = string.format('|cffff8000%s|r', 'LFR')
-    local mp = string.format('|cffff0000%s|r', 'M+')
-    local pvp = string.format('|cffff0007%s|r', 'PvP')
+    local norm = string.format('|cff74a1ff%s|r', 'N') -- 蓝色
+    local hero = string.format('|cffff66ff%s|r', 'H') -- 紫色
+    local myth = string.format('|cffff9900%s|r', 'M') -- 橙色
+    local lfr = string.format('|cffcccccc%s|r', 'LFR') -- 白色
+
+    local mp = string.format('|cffff9900%s|r', 'M+') -- 橙色
+    local pvp = string.format('|cffff0000%s|r', 'PvP') -- 红色
+    local wf = string.format('|cff00ff00%s|r', 'WF') -- 绿色
+    local tw = string.format('|cff00ff00%s|r', 'TW') -- 绿色
+    local scen = string.format('|cffffff00%s|r', 'SCEN') -- 黄色
 
     if instanceType == 'party' or instanceType == 'raid' or instanceType == 'scenario' then
         if difficulty == 1 then -- Normal
-            diffText:SetText('5' .. norm)
+            text:SetText('5' .. norm)
         elseif difficulty == 2 then -- Heroic
-            diffText:SetText('5' .. hero)
+            text:SetText('5' .. hero)
         elseif difficulty == 3 then -- 10 Player
-            diffText:SetText('10' .. norm)
+            text:SetText('10' .. norm)
         elseif difficulty == 4 then -- 25 Player
-            diffText:SetText('25' .. norm)
+            text:SetText('25' .. norm)
         elseif difficulty == 5 then -- 10 Player (Heroic)
-            diffText:SetText('10' .. hero)
+            text:SetText('10' .. hero)
         elseif difficulty == 6 then -- 25 Player (Heroic)
-            diffText:SetText('25' .. hero)
+            text:SetText('25' .. hero)
         elseif difficulty == 7 then -- LFR (Legacy)
-            diffText:SetText(lfr)
+            text:SetText(lfr)
         elseif difficulty == 8 then -- Mythic Keystone
-            diffText:SetText(mplusdiff .. mp)
+            text:SetText(mplusdiff .. mp)
         elseif difficulty == 9 then -- 40 Player
-            -- elseif difficulty == 11 or difficulty == 39 then -- Heroic Scenario / Heroic
-            --     diffText:SetText(string.format('%s %s', hero, 'Scen'))
-            -- elseif difficulty == 12 or difficulty == 38 then -- Normal Scenario / Normal
-            --     diffText:SetText(string.format('%s %s', norm, 'Scen'))
-            -- elseif difficulty == 40 then -- Mythic Scenario
-            --     diffText:SetText(string.format('%s %s', myth, 'Scen'))
-            diffText:SetText('40')
+            text:SetText('40')
+        elseif difficulty == 11 or difficulty == 39 then -- Heroic Scenario / Heroic
+            text:SetText(scen)
+        elseif difficulty == 12 or difficulty == 38 then -- Normal Scenario / Normal
+            text:SetText(scen)
+        elseif difficulty == 40 then -- Mythic Scenario
+            text:SetText(scen)
         elseif difficulty == 14 then -- Normal Raid
-            diffText:SetText(numplayers .. norm)
+            text:SetText(numplayers .. norm)
         elseif difficulty == 15 then -- Heroic Raid
-            diffText:SetText(numplayers .. hero)
+            text:SetText(numplayers .. hero)
         elseif difficulty == 16 then -- Mythic Raid
-            diffText:SetText(numplayers .. myth)
+            text:SetText(numplayers .. myth)
         elseif difficulty == 17 then -- LFR
-            -- elseif difficulty == 18 or difficulty == 19 or difficulty == 20 or difficulty == 30 then -- Event / Event Scenario
-            --     diffText:SetText('EScen')
-            diffText:SetText(numplayers .. lfr)
+            text:SetText(numplayers .. lfr)
+        elseif difficulty == 18 or difficulty == 19 or difficulty == 20 or difficulty == 30 then -- Event / Event Scenario
+            text:SetText(scen)
         elseif difficulty == 23 then -- Mythic Party
-            diffText:SetText('5' .. myth)
+            text:SetText('5' .. myth)
         elseif difficulty == 24 or difficulty == 33 then -- Timewalking /Timewalking Raid
-            diffText:SetText('TW')
+            text:SetText(tw)
         elseif difficulty == 25 or difficulty == 32 or difficulty == 34 or difficulty == 45 then -- World PvP Scenario / PvP / PvP Heroic
-            -- elseif difficulty == 29 then -- PvEvP Scenario
-            --     diffText:SetText('PvEvP')
-            diffText:SetText(pvp)
+            text:SetText(pvp)
+        elseif difficulty == 29 then -- PvEvP Scenario
+            text:SetText('PvEvP')
         elseif difficulty == 147 then -- Normal Scenario (Warfronts)
-            diffText:SetText('WF')
+            text:SetText(wf)
         elseif difficulty == 149 then -- Heroic Scenario (Warfronts)
-            diffText:SetText(string.format('WF'))
+            text:SetText(wf)
         end
     elseif instanceType == 'pvp' or instanceType == 'arena' then
-        diffText:SetText(pvp)
+        text:SetText(pvp)
     else
-        diffText:SetText('')
+        text:SetText('')
     end
 
     if not inInstance then
-        _G.Minimap.DiffFlag:SetAlpha(0)
+        frame:SetAlpha(0)
     else
-        _G.Minimap.DiffFlag:SetAlpha(1)
+        frame:SetAlpha(1)
     end
 end
 
 function MAP:CreateDifficultyFlag()
-    local diffFlag = CreateFrame('Frame', nil, _G.Minimap)
-    diffFlag:SetSize(80, 40)
-    diffFlag:SetPoint('TOPLEFT', _G.Minimap, 6, -_G.Minimap.halfDiff - 10)
-    diffFlag:SetFrameLevel(_G.Minimap:GetFrameLevel() + 2)
-    diffFlag.text = F.CreateFS(diffFlag, C.Assets.Font.Bold, 12, true, '', nil, true, 'TOPLEFT', 0, 0)
+    local frame = CreateFrame('Frame', nil, Minimap)
+    frame:SetSize(64, 32)
+    frame:SetPoint('TOPLEFT', Minimap, 4, -Minimap.halfDiff - 4)
+    frame:SetFrameLevel(Minimap:GetFrameLevel() + 2)
+    local texture = frame:CreateTexture(nil, 'BACKGROUND')
+    texture:SetAllPoints()
+    texture:SetTexture(C.Assets.Texture.Diff)
+    texture:SetVertexColor(0, 0, 0)
+    local text = F.CreateFS(frame, C.Assets.Font.Bold, 11, nil, '', nil, 'THICK')
+    text:SetPoint('CENTER', frame)
+    text:SetJustifyH('CENTER')
 
-    _G.Minimap.DiffFlag = diffFlag
-    _G.Minimap.DiffText = diffFlag.text
+    Minimap.DiffFlag = frame
+    Minimap.DiffText = text
 
-    _G.Minimap.DiffFlag:RegisterEvent('PLAYER_ENTERING_WORLD')
-    _G.Minimap.DiffFlag:RegisterEvent('PLAYER_DIFFICULTY_CHANGED')
-    _G.Minimap.DiffFlag:RegisterEvent('INSTANCE_GROUP_SIZE_CHANGED')
-    _G.Minimap.DiffFlag:RegisterEvent('ZONE_CHANGED_NEW_AREA')
-    _G.Minimap.DiffFlag:RegisterEvent('CHALLENGE_MODE_START')
-    _G.Minimap.DiffFlag:RegisterEvent('CHALLENGE_MODE_COMPLETED')
-    _G.Minimap.DiffFlag:RegisterEvent('CHALLENGE_MODE_RESET')
-    _G.Minimap.DiffFlag:SetScript('OnEvent', MAP.UpdateDifficultyFlag)
+    frame:RegisterEvent('PLAYER_ENTERING_WORLD')
+    frame:RegisterEvent('INSTANCE_GROUP_SIZE_CHANGED')
+    frame:RegisterEvent('PLAYER_DIFFICULTY_CHANGED')
+    frame:RegisterEvent('GUILD_PARTY_STATE_UPDATED')
+    frame:RegisterEvent('ZONE_CHANGED_NEW_AREA')
+    frame:RegisterEvent('GROUP_ROSTER_UPDATE')
+    frame:RegisterEvent('CHALLENGE_MODE_START')
+    frame:RegisterEvent('CHALLENGE_MODE_COMPLETED')
+    frame:RegisterEvent('CHALLENGE_MODE_RESET')
+
+    frame:SetScript('OnEvent', UpdateDifficultyFlag)
 end
 
--- Garrision
+-- Garrision Icon
 
 function MAP:CreateGarrisonButton()
-    _G.GarrisonLandingPageMinimapButton:SetScale(0.5)
+    GarrisonLandingPageMinimapButton:SetScale(0.5)
     hooksecurefunc('GarrisonLandingPageMinimapButton_UpdateIcon', function(self)
         self:ClearAllPoints()
-        self:SetPoint('BOTTOMLEFT', _G.Minimap, 0, _G.Minimap.halfDiff + 30)
-    end)
-end
-
--- Zone Text
-
-local function UpdateZoneText()
-    if GetSubZoneText() == '' then
-        _G.Minimap.ZoneText:SetText(GetZoneText())
-    else
-        _G.Minimap.ZoneText:SetText(GetSubZoneText())
-    end
-    _G.Minimap.ZoneText:SetTextColor(_G.ZoneTextString:GetTextColor())
-end
-
-function MAP:CreateZoneText()
-    _G.ZoneTextString:ClearAllPoints()
-    _G.ZoneTextString:SetPoint('TOP', _G.Minimap, 0, -_G.Minimap.halfDiff - 10)
-    _G.ZoneTextString:SetFont(C.Assets.Font.Header, 22)
-    _G.SubZoneTextString:SetFont(C.Assets.Font.Header, 22)
-    _G.PVPInfoTextString:SetFont(C.Assets.Font.Header, 22)
-    _G.PVPArenaTextString:SetFont(C.Assets.Font.Header, 22)
-
-    local zoneText = F.CreateFS(_G.Minimap, C.Assets.Font.Header, 16, nil, '', nil, 'THICK')
-    zoneText:SetPoint('TOP', _G.Minimap, 0, -_G.Minimap.halfDiff - 10)
-    zoneText:SetSize(_G.Minimap:GetWidth(), 30)
-    zoneText:SetJustifyH('CENTER')
-    zoneText:Hide()
-
-    _G.Minimap.ZoneText = zoneText
-
-    _G.Minimap:HookScript('OnUpdate', function()
-        UpdateZoneText()
-    end)
-
-    _G.Minimap:HookScript('OnEnter', function()
-        _G.Minimap.ZoneText:Show()
-    end)
-
-    _G.Minimap:HookScript('OnLeave', function()
-        _G.Minimap.ZoneText:Hide()
+        self:SetPoint('BOTTOMLEFT', Minimap, 0, Minimap.halfDiff + 30)
     end)
 end
 
 -- Queue Status
 
 function MAP:CreateQueueStatusButton()
-    _G.QueueStatusMinimapButton:ClearAllPoints()
-    _G.QueueStatusMinimapButton:SetPoint('BOTTOMRIGHT', _G.Minimap, 0, _G.Minimap.halfDiff)
-    _G.QueueStatusMinimapButtonBorder:Hide()
-    _G.QueueStatusMinimapButtonIconTexture:SetTexture(nil)
-    _G.QueueStatusFrame:ClearAllPoints()
-    _G.QueueStatusFrame:SetPoint('BOTTOMRIGHT', _G.Minimap, 'BOTTOMLEFT', -4, _G.Minimap.halfDiff)
+    QueueStatusMinimapButton:ClearAllPoints()
+    QueueStatusMinimapButton:SetPoint('BOTTOMRIGHT', Minimap, 0, Minimap.halfDiff)
+    QueueStatusMinimapButtonBorder:Hide()
+    QueueStatusMinimapButtonIconTexture:SetTexture(nil)
+    QueueStatusFrame:ClearAllPoints()
+    QueueStatusFrame:SetPoint('BOTTOMRIGHT', Minimap, 'BOTTOMLEFT', -4, Minimap.halfDiff)
 
-    local queueIcon = _G.Minimap:CreateTexture(nil, 'ARTWORK')
-    queueIcon:SetPoint('CENTER', _G.QueueStatusMinimapButton)
+    local queueIcon = Minimap:CreateTexture(nil, 'ARTWORK')
+    queueIcon:SetPoint('CENTER', QueueStatusMinimapButton)
     queueIcon:SetSize(50, 50)
     queueIcon:SetTexture('Interface\\Minimap\\Raid_Icon')
     local anim = queueIcon:CreateAnimationGroup()
@@ -320,7 +297,7 @@ function MAP:CreateQueueStatusButton()
     anim.rota:SetDuration(2)
     anim.rota:SetDegrees(360)
     hooksecurefunc('QueueStatusFrame_Update', function()
-        queueIcon:SetShown(_G.QueueStatusMinimapButton:IsShown())
+        queueIcon:SetShown(QueueStatusMinimapButton:IsShown())
     end)
     hooksecurefunc('EyeTemplate_StartAnimating', function()
         anim:Play()
@@ -337,7 +314,7 @@ function MAP:WhoPings()
         return
     end
 
-    local f = CreateFrame('Frame', nil, _G.Minimap)
+    local f = CreateFrame('Frame', nil, Minimap)
     f:SetAllPoints()
     f.text = F.CreateFS(f, C.Assets.Font.Bold, 14, 'OUTLINE', '', nil, true, 'TOP', 0, -4)
 
@@ -370,6 +347,132 @@ function MAP:WhoPings()
     end)
 end
 
+-- Zone Text
+
+local function UpdateZoneText()
+    if GetSubZoneText() == '' then
+        Minimap.ZoneText:SetText(GetZoneText())
+    else
+        Minimap.ZoneText:SetText(GetSubZoneText())
+    end
+    Minimap.ZoneText:SetTextColor(ZoneTextString:GetTextColor())
+end
+
+function MAP:CreateZoneText()
+    ZoneTextString:ClearAllPoints()
+    ZoneTextString:SetPoint('TOP', Minimap, 0, -Minimap.halfDiff - 10)
+    ZoneTextString:SetFont(C.Assets.Font.Header, 22, 'OUTLINE')
+    SubZoneTextString:SetFont(C.Assets.Font.Header, 22, 'OUTLINE')
+    PVPInfoTextString:SetFont(C.Assets.Font.Header, 22, 'OUTLINE')
+    PVPArenaTextString:SetFont(C.Assets.Font.Header, 22, 'OUTLINE')
+
+    local text = F.CreateFS(Minimap, C.Assets.Font.Header, 16, nil, '', nil, 'THICK')
+    text:SetPoint('TOP', Minimap, 0, -Minimap.halfDiff - 10)
+    text:SetSize(Minimap:GetWidth(), 30)
+    text:SetJustifyH('CENTER')
+    text:Hide()
+
+    Minimap.ZoneText = text
+
+    Minimap:HookScript('OnUpdate', function()
+        UpdateZoneText()
+    end)
+
+    Minimap:HookScript('OnEnter', function()
+        Minimap.ZoneText:Show()
+    end)
+
+    Minimap:HookScript('OnLeave', function()
+        Minimap.ZoneText:Hide()
+    end)
+end
+
+-- Sound Volume
+
+local function GetCurrentVolume()
+    return F:Round(GetCVar('Sound_MasterVolume') * 100)
+end
+
+function MAP:SoundVolume()
+    if not C.DB.Map.Volume then
+        return
+    end
+
+    local f = CreateFrame('Frame', nil, Minimap)
+    f:SetAllPoints()
+    local text = F.CreateFS(f, C.Assets.Font.Heavy, 48, 'OUTLINE')
+
+    local anim = f:CreateAnimationGroup()
+    anim:SetScript('OnPlay', function()
+        f:SetAlpha(1)
+    end)
+    anim:SetScript('OnFinished', function()
+        f:SetAlpha(0)
+    end)
+    anim.fader = anim:CreateAnimation('Alpha')
+    anim.fader:SetFromAlpha(1)
+    anim.fader:SetToAlpha(0)
+    anim.fader:SetDuration(3)
+    anim.fader:SetSmoothing('OUT')
+    anim.fader:SetStartDelay(1)
+
+    MAP.VolumeText = text
+    MAP.VolumeAnim = anim
+end
+
+-- Mouse Func
+
+local function OnMouseWheel(self, zoom)
+    if IsAltKeyDown() and MAP.VolumeText then
+        local value = GetCurrentVolume()
+        local mult = IsControlKeyDown() and 100 or 5
+        value = value + zoom * mult
+        if value > 100 then
+            value = 100
+        end
+        if value < 0 then
+            value = 0
+        end
+
+        SetCVar('Sound_MasterVolume', tostring(value / 100))
+        MAP.VolumeText:SetText(value)
+        MAP.VolumeAnim:Stop()
+        MAP.VolumeAnim:Play()
+    else
+        if zoom > 0 then
+            Minimap_ZoomIn()
+        else
+            Minimap_ZoomOut()
+        end
+    end
+end
+
+local function OnMouseUp(self, btn)
+    if not C.DB.Map.Menu then
+        return
+    end
+
+    if btn == 'RightButton' then
+        if InCombatLockdown() then
+            UIErrorsFrame:AddMessage(C.RED_COLOR .. ERR_NOT_IN_COMBAT)
+            return
+        end
+        EasyMenu(MAP.MenuList, F.EasyMenu, 'cursor', 0, 0, 'MENU', 3)
+    elseif btn == 'MiddleButton' then
+        ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, self)
+    else
+        Minimap_OnClick(self)
+    end
+end
+
+function MAP:MouseFunc()
+    Minimap:EnableMouseWheel(true)
+    Minimap:SetScript('OnMouseWheel', OnMouseWheel)
+    Minimap:SetScript('OnMouseUp', OnMouseUp)
+end
+
+--
+
 function MAP:SetupMinimap()
     if not C.DB.Map.Minimap then
         return
@@ -386,13 +489,15 @@ function MAP:SetupMinimap()
     MAP:CreateQueueStatusButton()
     MAP:AddOnIconCollector()
     MAP:WhoPings()
+    MAP:SoundVolume()
     MAP:MouseFunc()
     MAP:UpdateMinimapFader()
     MAP:CreateProgressBar()
+    MAP:SetGetMinimapShape()
 
     F:HookAddOn('Blizzard_HybridMinimap', function(self)
         MAP:RestyleHybridMinimap()
     end)
 
-    _G.DropDownList1:SetClampedToScreen(true)
+    DropDownList1:SetClampedToScreen(true)
 end

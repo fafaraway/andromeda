@@ -407,7 +407,9 @@ C.CharacterSettings = {
         HiddenInCombat = false,
         WhoPings = true,
         ProgressBar = true,
-        AddOnIconCollector = true,
+        Collector = true,
+        Volume = true,
+        Menu = true,
     },
     Infobar = {
         Enable = true,

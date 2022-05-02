@@ -334,10 +334,6 @@ local function UpdateBossEmote()
     BLIZZARD:UpdateBossEmote()
 end
 
-local function UpdateMawBuffsFrameVisibility()
-    BLIZZARD:UpdateMawBuffsFrameVisibility()
-end
-
 local function SetupAuraSize()
     GUI:SetupAuraSize(GUI.Page[1])
 end
@@ -1187,9 +1183,19 @@ GUI.OptionsList = {
         {
             1,
             'Map',
+            'Collector',
+            L['AddOns Icon Collector'],
+            nil,
+            nil,
+            nil,
+            L['Collect addons icon.'],
+        },
+        {
+            1,
+            'Map',
             'WhoPings',
             L['Who Pings'],
-            nil,
+            true,
             nil,
             nil,
             L['When you are in group, display the name of the group member who is clicking on the minimap.'],
@@ -1197,9 +1203,29 @@ GUI.OptionsList = {
         {
             1,
             'Map',
+            'Menu',
+            L['Game Menu'],
+            nil,
+            nil,
+            nil,
+            L['Right mouse click on minimap will show the game menu.'],
+        },
+        {
+            1,
+            'Map',
+            'Volume',
+            L['Game Volume'],
+            true,
+            nil,
+            nil,
+            L['Holding key ALT and mousewheel on minimap will change game sound volume.|nHold key CTRL+ALT, the volume will switch from 0 to 100 directly.'],
+        },
+        {
+            1,
+            'Map',
             'ProgressBar',
             L['Progress Bar'],
-            true,
+            nil,
             nil,
             nil,
             L["Track the progress of player's level, experience, reputation, honor, renown, etc."],
@@ -1209,7 +1235,7 @@ GUI.OptionsList = {
             'Map',
             'HiddenInCombat',
             L['Hidden in Combat'],
-            nil,
+            true,
             nil,
             UpdateMinimapFader,
             L['Hide minimap automatically after enter combat and restores it after leave combat.'],

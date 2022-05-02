@@ -29,18 +29,18 @@ local function UpdateCollectorTip(bu)
         .. L['Auto Hide']
         .. ': '
         .. (
-            _G.FREE_ADB['MinimapAddOnCollector'] and '|cff55ff55' .. _G.VIDEO_OPTIONS_ENABLED
-            or '|cffff5555' .. _G.VIDEO_OPTIONS_DISABLED
+            FREE_ADB['MinimapAddOnCollector'] and '|cff55ff55' .. VIDEO_OPTIONS_ENABLED
+            or '|cffff5555' .. VIDEO_OPTIONS_DISABLED
         )
 end
 
 local function HideCollectorTray()
-    _G.Minimap.AddOnCollectorTray:Hide()
+    Minimap.AddOnCollectorTray:Hide()
 end
 
 local function ClickFunc(force)
-    if force == 1 or _G.FREE_ADB['MinimapAddOnCollector'] then
-        F:UIFrameFadeOut(_G.Minimap.AddOnCollectorTray, 0.5, 1, 0)
+    if force == 1 or FREE_ADB['MinimapAddOnCollector'] then
+        F:UIFrameFadeOut(Minimap.AddOnCollectorTray, 0.5, 1, 0)
         F:Delay(0.5, HideCollectorTray)
     end
 end
@@ -91,7 +91,7 @@ end
 local function KillAddOnIcon()
     for _, child in pairs(buttons) do
         if not child.styled then
-            child:SetParent(_G.Minimap.AddOnCollectorTray)
+            child:SetParent(Minimap.AddOnCollectorTray)
             if child:HasScript('OnDragStop') then
                 child:SetScript('OnDragStop', nil)
             end
@@ -126,10 +126,10 @@ local function KillAddOnIcon()
 end
 
 local function CollectRubbish()
-    local numChildren = _G.Minimap:GetNumChildren()
+    local numChildren = Minimap:GetNumChildren()
     if numChildren ~= numMinimapChildren then
         for i = 1, numChildren do
-            local child = select(i, _G.Minimap:GetChildren())
+            local child = select(i, Minimap:GetChildren())
             local name = child and child.GetName and child:GetName()
             if name and not child.isExamed and not buttonBlackList[name] then
                 if
@@ -169,12 +169,12 @@ local function SortRubbish()
     local numShown = #shownButtons
     local row = numShown == 0 and 1 or F:Round((numShown + rowMult) / iconsPerRow)
     local newHeight = row * 24
-    _G.Minimap.AddOnCollectorTray:SetHeight(newHeight)
+    Minimap.AddOnCollectorTray:SetHeight(newHeight)
 
     for index, button in pairs(shownButtons) do
         button:ClearAllPoints()
         if index == 1 then
-            button:SetPoint('BOTTOMRIGHT', _G.Minimap.AddOnCollectorTray, -3, 3)
+            button:SetPoint('BOTTOMRIGHT', Minimap.AddOnCollectorTray, -3, 3)
         elseif row > 1 and math.fmod(index, row) == 1 or row == 1 then
             button:SetPoint('RIGHT', shownButtons[index - row], 'LEFT', -3, 0)
         else
@@ -185,27 +185,27 @@ end
 
 local function Button_OnClick(self, btn)
     if btn == 'RightButton' then
-        _G.FREE_ADB['MinimapAddOnCollector'] = not _G.FREE_ADB['MinimapAddOnCollector']
-        UpdateCollectorTip(_G.Minimap.AddOnCollector)
-        _G.Minimap.AddOnCollector:GetScript('OnEnter')(_G.Minimap.AddOnCollector)
+        FREE_ADB['MinimapAddOnCollector'] = not FREE_ADB['MinimapAddOnCollector']
+        UpdateCollectorTip(Minimap.AddOnCollector)
+        Minimap.AddOnCollector:GetScript('OnEnter')(Minimap.AddOnCollector)
     else
-        if _G.Minimap.AddOnCollectorTray:IsShown() then
+        if Minimap.AddOnCollectorTray:IsShown() then
             ClickFunc(1)
         else
             SortRubbish()
-            F:UIFrameFadeIn(_G.Minimap.AddOnCollectorTray, 0.5, 0, 1)
+            F:UIFrameFadeIn(Minimap.AddOnCollectorTray, 0.5, 0, 1)
         end
     end
 end
 
 function MAP:AddOnIconCollector()
-    if not C.DB.Map.AddOnIconCollector then
+    if not C.DB.Map.Collector then
         return
     end
 
-    local bu = CreateFrame('Button', 'FreeUIMinimapAddOnIconCollector', _G.Minimap)
+    local bu = CreateFrame('Button', 'FreeUIMinimapAddOnIconCollector', Minimap)
     bu:SetSize(20, 20)
-    bu:SetPoint('TOPRIGHT', -4, -_G.Minimap.halfDiff - 8)
+    bu:SetPoint('TOPRIGHT', -4, -Minimap.halfDiff - 8)
     bu:RegisterForClicks('LeftButtonUp', 'RightButtonUp')
     bu.Icon = bu:CreateTexture(nil, 'ARTWORK')
     bu.Icon:SetAllPoints()
@@ -214,15 +214,15 @@ function MAP:AddOnIconCollector()
     bu.title = C.INFO_COLOR .. L['AddOn Icon Collector']
     F.AddTooltip(bu, 'ANCHOR_LEFT')
     UpdateCollectorTip(bu)
-    _G.Minimap.AddOnCollector = bu
+    Minimap.AddOnCollector = bu
 
-    local tray = CreateFrame('Frame', 'FreeUIMinimapAddOnIconCollectorTray', _G.Minimap)
-    tray:SetPoint('BOTTOMRIGHT', _G.Minimap, 'TOPRIGHT', 0, -_G.Minimap.halfDiff)
-    tray:SetSize(_G.Minimap:GetWidth(), 24)
+    local tray = CreateFrame('Frame', 'FreeUIMinimapAddOnIconCollectorTray', Minimap)
+    tray:SetPoint('BOTTOMRIGHT', Minimap, 'TOPRIGHT', 0, -Minimap.halfDiff)
+    tray:SetSize(Minimap:GetWidth(), 24)
     tray:Hide()
-    _G.Minimap.AddOnCollectorTray = tray
+    Minimap.AddOnCollectorTray = tray
 
-    F:SplitList(ignoredButtons, _G.FREE_ADB['IgnoredAddOns'])
+    F:SplitList(ignoredButtons, FREE_ADB['IgnoredAddOns'])
 
     bu:SetScript('OnClick', Button_OnClick)
 

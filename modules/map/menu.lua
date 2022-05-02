@@ -1,285 +1,86 @@
 local F, C, L = unpack(select(2, ...))
 local MAP = F:GetModule('Map')
 
-local menuList = {
-    { text = _G.MAINMENU_BUTTON, isTitle = true, notCheckable = true },
+MAP.MenuList = {
     {
-        text = _G.CHARACTER_BUTTON,
-        icon = 'Interface\\PaperDollInfoFrame\\UI-EquipmentManager-Toggle',
+        text = CHARACTER_BUTTON,
         func = function()
-            if InCombatLockdown() then
-                _G.UIErrorsFrame:AddMessage('|cffff0000' .. _G.ERR_NOT_IN_COMBAT .. '|r')
-                return
-            end
-            securecall(_G.ToggleCharacter, 'PaperDollFrame')
+            ToggleCharacter('PaperDollFrame')
         end,
-        notCheckable = true,
     },
     {
-        text = _G.SPELLBOOK_ABILITIES_BUTTON,
-        icon = 'Interface\\MINIMAP\\TRACKING\\Class',
+        text = SPELLBOOK_ABILITIES_BUTTON,
         func = function()
-            if InCombatLockdown() then
-                _G.UIErrorsFrame:AddMessage('|cffff0000' .. _G.ERR_NOT_IN_COMBAT .. '|r')
-                return
-            end
-            if not _G.SpellBookFrame:IsShown() then
-                _G.ShowUIPanel(_G.SpellBookFrame)
-            else
-                _G.HideUIPanel(_G.SpellBookFrame)
-            end
+            ToggleFrame(SpellBookFrame)
         end,
-        notCheckable = true,
     },
     {
-        text = _G.TALENTS_BUTTON,
-        icon = 'Interface\\MINIMAP\\TRACKING\\Ammunition',
+        text = TIMEMANAGER_TITLE,
         func = function()
-            if InCombatLockdown() then
-                _G.UIErrorsFrame:AddMessage('|cffff0000' .. _G.ERR_NOT_IN_COMBAT .. '|r')
-                return
-            end
-            if not _G.PlayerTalentFrame then
-                LoadAddOn('Blizzard_TalentUI')
-            end
-            if not _G.GlyphFrame then
-                LoadAddOn('Blizzard_GlyphUI')
-            end
-            securecall(_G.ToggleFrame, _G.PlayerTalentFrame)
+            ToggleFrame(TimeManagerFrame)
         end,
-        notCheckable = true,
     },
-    {
-        text = _G.ACHIEVEMENT_BUTTON,
-        icon = 'Interface\\ACHIEVEMENTFRAME\\UI-Achievement-Shield',
-        func = function()
-            if InCombatLockdown() then
-                _G.UIErrorsFrame:AddMessage('|cffff0000' .. _G.ERR_NOT_IN_COMBAT .. '|r')
-                return
-            end
-            securecall(_G.ToggleAchievementFrame)
-        end,
-        notCheckable = true,
-    },
-    {
-        text = _G.MAP_AND_QUEST_LOG, -- OLD: QUESTLOG_BUTTON
-        icon = 'Interface\\GossipFrame\\ActiveQuestIcon',
-        func = function()
-            securecall(_G.ToggleFrame, _G.WorldMapFrame)
-        end,
-        notCheckable = true,
-    },
-    {
-        text = _G.COMMUNITIES_FRAME_TITLE, -- OLD: COMMUNITIES
-        icon = 'Interface\\FriendsFrame\\UI-Toast-ChatInviteIcon',
-        arg1 = IsInGuild('player'),
-        func = function()
-            if InCombatLockdown() then
-                _G.UIErrorsFrame:AddMessage('|cffff0000' .. _G.ERR_NOT_IN_COMBAT .. '|r')
-                return
-            end
-            _G.ToggleCommunitiesFrame()
-        end,
-        notCheckable = true,
-    },
-    {
-        text = _G.SOCIAL_BUTTON,
-        icon = 'Interface\\FriendsFrame\\PlusManz-BattleNet',
-        func = function()
-            if InCombatLockdown() then
-                _G.UIErrorsFrame:AddMessage('|cffff0000' .. _G.ERR_NOT_IN_COMBAT .. '|r')
-                return
-            end
-            securecall(_G.ToggleFriendsFrame, 1)
-        end,
-        notCheckable = true,
-    },
-    {
-        text = _G.GROUP_FINDER, -- DUNGEONS_BUTTON
-        icon = 'Interface\\LFGFRAME\\BattleNetWorking0',
-        func = function()
-            if InCombatLockdown() then
-                _G.UIErrorsFrame:AddMessage('|cffff0000' .. _G.ERR_NOT_IN_COMBAT .. '|r')
-                return
-            end
-            securecall(_G.ToggleLFDParentFrame) -- OR securecall(PVEFrame_ToggleFrame, "GroupFinderFrame")
-        end,
-        notCheckable = true,
-    },
-    {
-        text = _G.COLLECTIONS, -- OLD: MOUNTS_AND_PETS
-        icon = 'Interface\\MINIMAP\\TRACKING\\Reagents',
-        func = function()
-            if InCombatLockdown() then
-                _G.UIErrorsFrame:AddMessage('|cffffff00' .. _G.ERR_NOT_IN_COMBAT .. '|r')
-                return
-            end
-            securecall(_G.ToggleCollectionsJournal, 1)
-        end,
-        notCheckable = true,
-    },
-    {
-        text = _G.ADVENTURE_JOURNAL, -- OLD: ENCOUNTER_JOURNAL
-        icon = 'Interface\\MINIMAP\\TRACKING\\Profession',
-        func = function()
-            if InCombatLockdown() then
-                _G.UIErrorsFrame:AddMessage('|cffff0000' .. _G.ERR_NOT_IN_COMBAT .. '|r')
-                return
-            end
-            securecall(_G.ToggleEncounterJournal)
-        end,
-        notCheckable = true,
-    },
-    {
-        text = _G.BLIZZARD_STORE,
-        icon = 'Interface\\MINIMAP\\TRACKING\\Auctioneer',
-        func = function()
-            if not _G.StoreFrame then
-                LoadAddOn('Blizzard_StoreUI')
-            end
-            securecall(_G.ToggleStoreUI)
-        end,
-        notCheckable = true,
-    },
-    { text = '', isTitle = true, notCheckable = true },
-    { text = _G.OTHER, isTitle = true, notCheckable = true },
-    {
-        text = _G.BACKPACK_TOOLTIP,
-        icon = 'Interface\\MINIMAP\\TRACKING\\Banker',
-        func = function()
-            securecall(_G.ToggleAllBags)
-        end,
-        notCheckable = true,
-    },
-    --[[ {
-        text = GARRISON_LANDING_PAGE_TITLE,
-        icon = 'Interface\\HELPFRAME\\OpenTicketIcon',
-        func = function()
-            if InCombatLockdown() then
-                UIErrorsFrame:AddMessage('|cffff0000' .. ERR_NOT_IN_COMBAT .. '|r')
-                return
-            end
-            securecall(ShowGarrisonLandingPage, 2)
-        end,
-        notCheckable = true
-    },
-    {
-        text = ORDER_HALL_LANDING_PAGE_TITLE,
-        icon = 'Interface\\GossipFrame\\WorkOrderGossipIcon',
-        func = function()
-            if InCombatLockdown() then
-                UIErrorsFrame:AddMessage('|cffff0000' .. ERR_NOT_IN_COMBAT .. '|r')
-                return
-            end
-            securecall(ShowGarrisonLandingPage, 3)
-        end,
-        notCheckable = true
-    }, ]]
-    {
-        text = _G.PLAYER_V_PLAYER,
-        icon = 'Interface\\MINIMAP\\TRACKING\\BattleMaster',
-        func = function()
-            if InCombatLockdown() then
-                _G.UIErrorsFrame:AddMessage('|cffff0000' .. _G.ERR_NOT_IN_COMBAT .. '|r')
-                return
-            end
-            securecall(_G.TogglePVPUI, 1)
-        end,
-        notCheckable = true,
-    },
-    {
-        text = _G.RAID,
-        icon = 'Interface\\TARGETINGFRAME\\UI-TargetingFrame-Skull',
-        func = function()
-            if InCombatLockdown() then
-                _G.UIErrorsFrame:AddMessage('|cffff0000' .. _G.ERR_NOT_IN_COMBAT .. '|r')
-                return
-            end
-            securecall(_G.ToggleFriendsFrame, 3)
-        end,
-        notCheckable = true,
-    },
-    {
-        text = _G.GM_EMAIL_NAME,
-        icon = 'Interface\\CHATFRAME\\UI-ChatIcon-Blizz',
-        func = function()
-            if InCombatLockdown() then
-                _G.UIErrorsFrame:AddMessage('|cffff0000' .. _G.ERR_NOT_IN_COMBAT .. '|r')
-                return
-            end
-            securecall(_G.ToggleHelpFrame)
-        end,
-        notCheckable = true,
-    },
-    {
-        text = _G.CHANNEL,
-        icon = 'Interface\\CHATFRAME\\UI-ChatIcon-ArmoryChat-AwayMobile',
-        func = function()
-            _G.ToggleChannelFrame()
-        end,
-        notCheckable = true,
-    },
+    { text = CHAT_CHANNELS, func = ToggleChannelFrame },
+    { text = SOCIAL_BUTTON, func = ToggleFriendsFrame },
+    { text = TALENTS_BUTTON, func = ToggleTalentFrame },
+    { text = GUILD, func = ToggleGuildFrame },
+    { text = LFG_TITLE, func = ToggleLFDParentFrame },
+
+    { text = COLLECTIONS, func = ToggleCollectionsJournal },
+    { text = ACHIEVEMENT_BUTTON, func = ToggleAchievementFrame },
     {
         text = L['Calendar'],
         func = function()
-            if InCombatLockdown() then
-                _G.UIErrorsFrame:AddMessage('|cffff0000' .. _G.ERR_NOT_IN_COMBAT .. '|r')
-                return
-            end
-            if not _G.CalendarFrame then
-                LoadAddOn('Blizzard_Calendar')
-            end
-            _G.Calendar_Toggle()
+            GameTimeFrame:Click()
         end,
-        notCheckable = true,
     },
     {
-        text = _G.BATTLEFIELD_MINIMAP,
-        colorCode = '|cff999999',
+        text = BLIZZARD_STORE,
         func = function()
-            if not _G.BattlefieldMapFrame then
-                LoadAddOn('Blizzard_BattlefieldMap')
-            end
-            _G.BattlefieldMapFrame:Toggle()
+            StoreMicroButton:Click()
         end,
-        notCheckable = true,
     },
-    { text = '', isTitle = true, notCheckable = true },
-    { text = _G.ADDONS, isTitle = true, notCheckable = true },
     {
-        text = _G.RELOADUI,
-        colorCode = '|cff999999',
+        text = GARRISON_TYPE_8_0_LANDING_PAGE_TITLE,
         func = function()
-            _G.ReloadUI()
+            GarrisonLandingPageMinimapButton_OnClick(GarrisonLandingPageMinimapButton)
         end,
-        notCheckable = true,
+    },
+    {
+        text = ENCOUNTER_JOURNAL,
+        func = function()
+            if not IsAddOnLoaded('Blizzard_EncounterJournal') then
+                UIParentLoadAddOn('Blizzard_EncounterJournal')
+            end
+            ToggleFrame(EncounterJournal)
+        end,
+    },
+    {
+        text = MAINMENU_BUTTON,
+        func = function()
+            if not GameMenuFrame:IsShown() then
+                if VideoOptionsFrame:IsShown() then
+                    VideoOptionsFrameCancel:Click()
+                elseif AudioOptionsFrame:IsShown() then
+                    AudioOptionsFrameCancel:Click()
+                elseif InterfaceOptionsFrame:IsShown() then
+                    InterfaceOptionsFrameCancel:Click()
+                end
+
+                CloseMenus()
+                CloseAllWindows()
+                PlaySound(850) --IG_MAINMENU_OPEN
+                ShowUIPanel(GameMenuFrame)
+            else
+                PlaySound(854) --IG_MAINMENU_QUIT
+                HideUIPanel(GameMenuFrame)
+                MainMenuMicroButton_SetNormal()
+            end
+        end,
+    },
+    {
+        text = HELP_BUTTON,
+        bottom = true,
+        func = ToggleHelpFrame,
     },
 }
-
-function MAP:OnMouseWheel(zoom)
-    if zoom > 0 then
-        _G.Minimap_ZoomIn()
-    else
-        _G.Minimap_ZoomOut()
-    end
-end
-
-function MAP:OnMouseUp(btn)
-    if btn == 'RightButton' then
-        if InCombatLockdown() then
-            _G.UIErrorsFrame:AddMessage(C.INFO_COLOR .. _G.ERR_NOT_IN_COMBAT)
-            return
-        end
-        _G.EasyMenu(menuList, F.EasyMenu, 'cursor', 0, 0, 'MENU', 3)
-    elseif btn == 'MiddleButton' then
-        _G.ToggleDropDownMenu(1, nil, _G.MiniMapTrackingDropDown, self)
-    else
-        _G.Minimap_OnClick(self)
-    end
-end
-
-function MAP:MouseFunc()
-    _G.Minimap:EnableMouseWheel(true)
-    _G.Minimap:SetScript('OnMouseWheel', MAP.OnMouseWheel)
-    _G.Minimap:SetScript('OnMouseUp', MAP.OnMouseUp)
-end
