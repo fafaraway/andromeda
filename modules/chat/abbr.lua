@@ -41,8 +41,6 @@ end
 
 local FORMAT_CHANNEL = '|Hchannel:%s|h%s|h %s'
 local function formatChannel(info)
-    if not C.DB.Chat.ShortenChannelName then return end
-
     return FORMAT_CHANNEL:format(info, ABBREVIATIONS[info] or info:gsub('channel:', ''), '')
 end
 
@@ -70,7 +68,11 @@ local function addMessage(chatFrame, msg, ...)
     msg = msg:gsub('|Hplayer:(.-)|h%[(.-)%]|h', formatPlayer)
     -- msg = msg:gsub('|HBNplayer:(.-)|h%[(.-)%]|h', formatBNPlayer)
 
-    msg = msg:gsub('|Hchannel:(.-)|h%[(.-)%]|h', formatChannel)
+    if C.DB.Chat.ShortenChannelName then
+        msg = msg:gsub('|Hchannel:(.-)|h%[(.-)%]|h', formatChannel)
+        msg = msg:gsub('|h：', '|h ')
+        msg = msg:gsub('|h:', '|h ')
+    end
 
     -- msg = msg:gsub('^%w- (|H)', '|cffa1a1a1@|r%1')
     -- msg = msg:gsub('^(.-|h) %w-:', '%1:')
@@ -80,9 +82,6 @@ local function addMessage(chatFrame, msg, ...)
 
     msg = msg:gsub(_G.CHAT_FLAG_AFK, '')
     msg = msg:gsub(_G.CHAT_FLAG_DND, '')
-
-    msg = msg:gsub('|h：', '|h ')
-    msg = msg:gsub('|h:', '|h ')
 
     return chatFrameHooks[chatFrame](chatFrame, msg, r, g, b)
 end
