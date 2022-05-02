@@ -1,8 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local SetCVar = SetCVar
-
 local F, C, L = unpack(select(2, ...))
 local GUI = F:GetModule('GUI')
 local UNITFRAME = F:GetModule('UnitFrame')
