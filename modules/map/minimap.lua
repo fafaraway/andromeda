@@ -1,5 +1,6 @@
 local F, C = unpack(select(2, ...))
 local MAP = F:GetModule('Map')
+local oUF = F.Libs.oUF
 
 -- Cleanup Cluster
 
@@ -393,6 +394,11 @@ local function GetCurrentVolume()
     return F:Round(GetCVar('Sound_MasterVolume') * 100)
 end
 
+local function GetVolumeColor(cur)
+    local r, g, b = oUF:RGBColorGradient(cur, 100, 1, 1, 1, 1, 0.8, 0, 1, 0, 0)
+    return r, g, b
+end
+
 function MAP:SoundVolume()
     if not C.DB.Map.Volume then
         return
@@ -436,6 +442,7 @@ local function OnMouseWheel(self, zoom)
 
         SetCVar('Sound_MasterVolume', tostring(value / 100))
         MAP.VolumeText:SetText(value)
+        MAP.VolumeText:SetTextColor(GetVolumeColor(value))
         MAP.VolumeAnim:Stop()
         MAP.VolumeAnim:Play()
     else
