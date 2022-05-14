@@ -1,8 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local hooksecurefunc = hooksecurefunc
-
 local F, C = unpack(select(2, ...))
 
 local function ReskinConduitList(frame)

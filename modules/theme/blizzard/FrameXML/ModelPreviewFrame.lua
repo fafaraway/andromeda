@@ -1,8 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local tinsert = tinsert
-
 local F, C = unpack(select(2, ...))
 
 tinsert(C.BlizzThemes, function()

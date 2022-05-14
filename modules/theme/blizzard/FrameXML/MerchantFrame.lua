@@ -1,10 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local tinsert = tinsert
-local hooksecurefunc = hooksecurefunc
-local CanGuildBankRepair = CanGuildBankRepair
-
 local F, C = unpack(select(2, ...))
 
 local function reskinMerchantItem(item)

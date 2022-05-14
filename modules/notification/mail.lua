@@ -1,10 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local HasNewMail = HasNewMail
-local MAIL_LABEL = MAIL_LABEL
-local HAVE_MAIL = HAVE_MAIL
-
 local F, C = unpack(select(2, ...))
 local NOTIFICATION = F:GetModule('Notification')
 

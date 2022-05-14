@@ -1,11 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local C_ToyBox_GetToyInfo = C_ToyBox.GetToyInfo
-local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID
-local C_Item_IsAnimaItemByID = C_Item.IsAnimaItemByID
-local GetItemSpell = GetItemSpell
-
 local F, C = unpack(select(2, ...))
 local INVENTORY = F:GetModule('Inventory')
 
@@ -76,7 +68,7 @@ local function isAzeriteArmor(item)
         return
     end
 
-    return C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID(item.link)
+    return C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID(item.link)
 end
 
 local iLvlClassIDs = {
@@ -173,7 +165,7 @@ local function isItemCollection(item)
         return
     end
 
-    return item.id and C_ToyBox_GetToyInfo(item.id) or isMountOrPet(item) or INVENTORY:IsPetTrashCurrency(item.id)
+    return item.id and C_ToyBox.GetToyInfo(item.id) or isMountOrPet(item) or INVENTORY:IsPetTrashCurrency(item.id)
 end
 
 local function isItemFavourite(item)
@@ -234,7 +226,7 @@ local function isAnimaItem(item)
         return
     end
 
-    return item.id and C_Item_IsAnimaItemByID(item.id)
+    return item.id and C_Item.IsAnimaItemByID(item.id)
 end
 
 local relicSpellIDs = {
@@ -328,6 +320,7 @@ function INVENTORY:GetFilters()
     filters.bankCollection = function(item)
         return isItemInBank(item) and isItemCollection(item)
     end
+
     filters.bagFavourite = function(item)
         return isItemInBag(item) and isItemFavourite(item)
     end

@@ -1,10 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local C_CreatureInfo_GetClassInfo = C_CreatureInfo.GetClassInfo
-local GetClassInfo = GetClassInfo
-local hooksecurefunc = hooksecurefunc
-
 local F, C = unpack(select(2, ...))
 
 local function reskinCommunityTab(tab)
@@ -70,7 +63,7 @@ local function updateNameFrame(self)
     end
     local memberInfo = self:GetMemberInfo()
     if memberInfo and memberInfo.classID then
-        local classInfo = C_CreatureInfo_GetClassInfo(memberInfo.classID)
+        local classInfo = C_CreatureInfo.GetClassInfo(memberInfo.classID)
         if classInfo then
             F.ClassIconTexCoord(self.Class, classInfo.classFile)
         end

@@ -1,11 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local tinsert = tinsert
-local hooksecurefunc = hooksecurefunc
-local GetInventoryItemTexture = GetInventoryItemTexture
-local BankFrameItemButton_Update = BankFrameItemButton_Update
-
 local F, C = unpack(select(2, ...))
 
 local MAX_CONTAINER_ITEMS = 36

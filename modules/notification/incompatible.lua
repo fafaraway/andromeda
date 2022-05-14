@@ -1,12 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local tinsert = tinsert
-local CreateFrame = CreateFrame
-local IsAddOnLoaded = IsAddOnLoaded
-local DisableAddOn = DisableAddOn
-local ReloadUI = ReloadUI
-
 local F, C, L = unpack(select(2, ...))
 local NOTIFICATION = F:GetModule('Notification')
 

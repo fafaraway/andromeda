@@ -1,16 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local hooksecurefunc = hooksecurefunc
-local GetSpecializationInfo = GetSpecializationInfo
-local GetSpecialization = GetSpecialization
-local GetNumSpecializations = GetNumSpecializations
-local UnitSex = UnitSex
-local GetSpecializationSpells = GetSpecializationSpells
-local GetSpellTexture = GetSpellTexture
-local C_SpecializationInfo_GetSpellsDisplay = C_SpecializationInfo.GetSpellsDisplay
-local GetTalentInfo = GetTalentInfo
-
 local F, C = unpack(select(2, ...))
 
 local function ReanchorTutorial(button)
@@ -134,7 +121,7 @@ C.Themes['Blizzard_TalentUI'] = function()
             bonuses = { GetSpecializationSpells(shownSpec, nil, self.isPet, true) }
             bonusesIncrement = 2
         else
-            bonuses = C_SpecializationInfo_GetSpellsDisplay(id)
+            bonuses = C_SpecializationInfo.GetSpellsDisplay(id)
         end
 
         if bonuses then

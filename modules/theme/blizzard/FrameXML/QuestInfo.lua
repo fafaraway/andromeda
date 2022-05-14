@@ -1,17 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local tinsert = tinsert
-local strmatch = strmatch
-local GetQuestID = GetQuestID
-local C_QuestLog_GetSelectedQuest = C_QuestLog.GetSelectedQuest
-local C_QuestLog_GetNextWaypointText = C_QuestLog.GetNextWaypointText
-local GetNumQuestLeaderBoards = GetNumQuestLeaderBoards
-local GetQuestLogLeaderBoard = GetQuestLogLeaderBoard
-local hooksecurefunc = hooksecurefunc
-local GetNumQuestLogRewardSpells = GetNumQuestLogRewardSpells
-local GetNumRewardSpells = GetNumRewardSpells
-
 local F, C = unpack(select(2, ...))
 
 local function clearHighlight()
@@ -31,7 +17,7 @@ end
 
 local function QuestInfo_GetQuestID()
     if _G.QuestInfoFrame.questLog then
-        return C_QuestLog_GetSelectedQuest()
+        return C_QuestLog.GetSelectedQuest()
     else
         return GetQuestID()
     end
@@ -47,7 +33,7 @@ local function colorObjectivesText()
     local numVisibleObjectives = 0
     local objective
 
-    local waypointText = C_QuestLog_GetNextWaypointText(questID)
+    local waypointText = C_QuestLog.GetNextWaypointText(questID)
     if waypointText then
         numVisibleObjectives = numVisibleObjectives + 1
         objective = objectivesTable[numVisibleObjectives]

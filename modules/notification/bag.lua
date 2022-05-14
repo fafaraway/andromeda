@@ -1,11 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local CreateFrame = CreateFrame
-local GetContainerNumFreeSlots = GetContainerNumFreeSlots
-local INVTYPE_BAG = INVTYPE_BAG
-local TUTORIAL_TITLE58 = TUTORIAL_TITLE58
-
 local F, C, L = unpack(select(2, ...))
 local NOTIFICATION = F:GetModule('Notification')
 

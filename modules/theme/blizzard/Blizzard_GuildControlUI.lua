@@ -1,10 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local GuildControlGetNumRanks = GuildControlGetNumRanks
-local hooksecurefunc = hooksecurefunc
-local GetNumGuildBankTabs = GetNumGuildBankTabs
-
 local F, C = unpack(select(2, ...))
 
 local function updateGuildRanks()

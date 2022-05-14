@@ -1,10 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local tinsert = tinsert
-local hooksecurefunc = hooksecurefunc
-local IsAddOnLoaded = IsAddOnLoaded
-
 local F, C = unpack(select(2, ...))
 
 local function ReskinQuestHeader(header, isCalling)

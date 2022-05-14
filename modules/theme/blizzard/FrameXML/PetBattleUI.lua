@@ -1,18 +1,3 @@
-local _G = _G
-local unpack = unpack
-local select = select
-local tinsert = tinsert
-local LE_BATTLE_PET_ALLY = Enum.BattlePetOwner.Ally
-local CreateFrame = CreateFrame
-local hooksecurefunc = hooksecurefunc
-local RegisterStateDriver = RegisterStateDriver
-local C_PetBattles_GetPetType = C_PetBattles.GetPetType
-local C_PetBattles_GetNumPets = C_PetBattles.GetNumPets
-local C_PetBattles_GetBreedQuality = C_PetBattles.GetBreedQuality
-local C_PetBattles_GetNumAuras = C_PetBattles.GetNumAuras
-local C_PetBattles_GetAuraInfo = C_PetBattles.GetAuraInfo
-local C_PetBattles_IsPlayerNPC = C_PetBattles.IsPlayerNPC
-
 local F, C = unpack(select(2, ...))
 
 tinsert(C.BlizzThemes, function()
@@ -136,19 +121,19 @@ tinsert(C.BlizzThemes, function()
     -- Update Status
     hooksecurefunc('PetBattleUnitFrame_UpdatePetType', function(self)
         if self.PetType and self.petIcon then
-            local petType = C_PetBattles_GetPetType(self.petOwner, self.petIndex)
+            local petType = C_PetBattles.GetPetType(self.petOwner, self.petIndex)
             self.petIcon:SetTexture('Interface\\ICONS\\Icon_PetFamily_' .. _G.PET_TYPE_SUFFIX[petType])
         end
     end)
 
     hooksecurefunc('PetBattleUnitFrame_UpdateDisplay', function(self)
         local petOwner = self.petOwner
-        if not petOwner or self.petIndex > C_PetBattles_GetNumPets(petOwner) then
+        if not petOwner or self.petIndex > C_PetBattles.GetNumPets(petOwner) then
             return
         end
 
         if self.Icon then
-            if petOwner == LE_BATTLE_PET_ALLY then
+            if petOwner == Enum.BattlePetOwner.Ally then
                 self.Icon:SetTexCoord(0.92, 0.08, 0.08, 0.92)
             else
                 self.Icon:SetTexCoord(unpack(C.TEX_COORD))
@@ -158,7 +143,7 @@ tinsert(C.BlizzThemes, function()
             self.glow:Hide()
         end
         if self.Iconbg then
-            local quality = C_PetBattles_GetBreedQuality(self.petOwner, self.petIndex) - 1 or 1
+            local quality = C_PetBattles.GetBreedQuality(self.petOwner, self.petIndex) - 1 or 1
             local color = C.QualityColors[quality]
             self.Iconbg:SetBackdropBorderColor(color.r, color.g, color.b)
         end
@@ -179,8 +164,8 @@ tinsert(C.BlizzThemes, function()
         end
 
         local nextFrame = 1
-        for i = 1, C_PetBattles_GetNumAuras(self.petOwner, self.petIndex) do
-            local _, _, _, isBuff = C_PetBattles_GetAuraInfo(self.petOwner, self.petIndex, i)
+        for i = 1, C_PetBattles.GetNumAuras(self.petOwner, self.petIndex) do
+            local _, _, _, isBuff = C_PetBattles.GetAuraInfo(self.petOwner, self.petIndex, i)
             if (isBuff and self.displayBuffs) or (not isBuff and self.displayDebuffs) then
                 local frame = self.frames[nextFrame]
                 frame.DebuffBorder:Hide()
@@ -284,7 +269,7 @@ tinsert(C.BlizzThemes, function()
         skipButton:ClearAllPoints()
         skipButton:SetPoint('LEFT', bottomFrame.ForfeitButton, 'RIGHT', 3, 0)
 
-        local pveBattle = C_PetBattles_IsPlayerNPC(_G.LE_BATTLE_PET_ENEMY)
+        local pveBattle = C_PetBattles.IsPlayerNPC(_G.LE_BATTLE_PET_ENEMY)
         turnTimer.bg:SetShown(not pveBattle)
 
         xpbar:ClearAllPoints()
