@@ -66,8 +66,6 @@ local function ReskinHeader(header)
     header.button.title:SetTextColor(1, 1, 1)
     header.button.title.SetTextColor = nop
     header.button.expandedIcon:SetWidth(20) -- don't wrap the text
-    header.button.expandedIcon.SetTextColor = nop
-    header.button.expandedIcon.SetTextColor = nop
 end
 
 local function ReskinSectionHeader()
