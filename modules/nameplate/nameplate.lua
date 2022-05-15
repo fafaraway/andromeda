@@ -725,41 +725,6 @@ function NAMEPLATE:UpdateSpitefulIndicator()
     self.tarName:SetShown(C.ShowTargetNPCs[self.npcID])
 end
 
--- Totem icon
-local totemsList = {
-    -- npcID spellID duration
-    [2630] = { 2484, 20 }, -- Earthbind
-    [3527] = { 5394, 15 }, -- Healing Stream
-    [6112] = { 8512, 120 }, -- Windfury
-    [97369] = { 192222, 15 }, -- Liquid Magma
-    [5913] = { 8143, 10 }, -- Tremor
-    [5925] = { 204336, 3 }, -- Grounding
-    [78001] = { 157153, 15 }, -- Cloudburst
-    [53006] = { 98008, 6 }, -- Spirit Link
-    [59764] = { 108280, 12 }, -- Healing Tide
-    [61245] = { 192058, 2 }, -- Static Charge
-    [100943] = { 198838, 15 }, -- Earthen Wall
-    [97285] = { 192077, 15 }, -- Wind Rush
-    [105451] = { 204331, 15 }, -- Counterstrike
-    [104818] = { 207399, 30 }, -- Ancestral
-    [105427] = { 204330, 15 }, -- Skyfury
-    [119052] = { 236320, 15 }, -- Warrior War Banner
-}
-
-local function CreateTotemIcon(self)
-    local icon = CreateFrame('Frame', nil, self)
-    icon:SetSize(36, 36)
-    icon:SetPoint('BOTTOM', self, 'TOP', 0, self.isNameOnly and 12 or 6)
-
-    icon.texure = icon:CreateTexture(nil, 'ARTWORK')
-    icon.texure:SetTexCoord(unpack(C.TEX_COORD))
-    icon.texure:SetAllPoints()
-
-    F.SetBD(icon)
-
-    return icon
-end
-
 -- Overlay
 function NAMEPLATE:UpdateOverlayVisibility(self, unit)
     local name = self.unitName
@@ -1025,34 +990,8 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
         end
 
         NAMEPLATE.RefreshPlateType(self, unit)
-
-        if C.DB.Nameplate.TotemIcon and self.npcID and totemsList[self.npcID] then
-            if not self.TotemIcon then
-                self.TotemIcon = CreateTotemIcon(self)
-            end
-
-            self.TotemIcon:Show()
-
-            local totemData = totemsList[self.npcID]
-            local spellID, _ = unpack(totemData)
-            local texure = GetSpellTexture(spellID)
-
-            self.TotemIcon.texure:SetTexture(texure)
-
-            if self.NameTag then
-                self.NameTag:Hide()
-            end
-        else
-            if self.NameTag then
-                self.NameTag:Show()
-            end
-        end
     elseif event == 'NAME_PLATE_UNIT_REMOVED' then
         self.npcID = nil
-
-        if self.TotemIcon then
-            self.TotemIcon:Hide()
-        end
     end
 
     if event ~= 'NAME_PLATE_UNIT_REMOVED' then
@@ -1063,6 +1002,7 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
     end
 
     NAMEPLATE.UpdateExplosives(self, event, unit)
+    NAMEPLATE.UpdateTotemIcon(self, event, unit)
 end
 
 function NAMEPLATE:OnLogin()
