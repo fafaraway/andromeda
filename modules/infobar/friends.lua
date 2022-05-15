@@ -188,11 +188,6 @@ function INFOBAR:FriendsPanel_Init()
     infoFrame:SetScript('OnLeave', function(self)
         self:SetScript('OnUpdate', isPanelCanHide)
     end)
-    infoFrame:SetScript('OnHide', function()
-        if F.EasyMenu:IsShown() then
-            F.EasyMenu:Hide()
-        end
-    end)
 
     F.CreateFS(
         infoFrame,
