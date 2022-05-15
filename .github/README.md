@@ -13,7 +13,7 @@
 
 ## Introduction
 &emsp;&emsp;**FreeUI** is a user interface replacement for World of Warcraft.  
-&emsp;&emsp;**Minimalist**, **elegant**, yet also **efficient** and **practical**.
+&emsp;&emsp;**Minimalist**, **elegant**, yet also **efficient**.
 
 ## Screenshots
 *  https://imgur.com/a/0JfIGql
@@ -41,10 +41,10 @@
 ## Additional
 *  [WeakAuras Collection](https://wago.io/WloMMMBpx) *WA collection*
 *  [Clean Icons - Mechagnome Edition](https://github.com/AcidWeb/Clean-Icons-Mechagnome-Edition) *Icons replacement with high resolution*
-*  [Chinese Fonts Pack](https://1drv.ms/u/s!AocaDk73Gt7sgrk6bdKqfZGZQMQA2Q?e=SdbUe5) *Fonts replacement for Chinese game client*
-*  [Interface Textures](https://1drv.ms/u/s!AocaDk73Gt7sgrlAYVUKxYvs3pCGFg?e=ijoI9E) *Textures replacement for chat bubble in protected area*
+*  [Chinese Fonts Pack](https://1drv.ms/u/s!AocaDk73Gt7sgrk6bdKqfZGZQMQA2Q?e=QwjHh2) *Fonts replacement for Chinese game client*
+*  [Interface Textures](https://1drv.ms/u/s!AocaDk73Gt7sgrlAYVUKxYvs3pCGFg?e=KpJOfv) *Textures replacement for chat bubble in protected area*
 
 ## Credits
-*  **Haleth**, **Siweia**, Alza, Tukz, Gethe, Elv, Haste, Lightspark, Zork, Allez, AlleyKat, Caellian, p3lim, Shantalya, tekkub, Tuller, Wildbreath, aduth, silverwind, Nibelheim, humfras, aliluya555, Paojy, Rubgrsch, EKE, fang2hou, lilbitz95, Djamy, Hacktivist
+*  **Haleth**, **Siweia**, Alza, Tukz, Gethe, Elv, Haste, Lightspark, Zork, Allez, AlleyKat, Caellian, p3lim, Shantalya, tekkub, Tuller, Wildbreath, aduth, silverwind, Nibelheim, humfras, aliluya555, Paojy, Rubgrsch, EKE, fang2hou, lilbitz95, Djamy, Hacktivist, rgd87
 *  NDui, NDui_Plus, ShestakUI, RealUI, ElvUI, ElvUI_WindTools
 
