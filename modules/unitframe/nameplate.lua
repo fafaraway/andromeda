@@ -806,7 +806,7 @@ function NAMEPLATE:CreateNameplateStyle()
 
     NAMEPLATE:CreateHealthBar(self)
     NAMEPLATE:CreateNameTag(self)
-    UNITFRAME:CreateHealthTag(self)
+    NAMEPLATE:CreateHealthTag(self)
     UNITFRAME:CreateHealPrediction(self)
     NAMEPLATE:CreateOverlayTexture(self)
     NAMEPLATE:CreateTargetIndicator(self)

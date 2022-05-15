@@ -361,11 +361,6 @@ function UNITFRAME:CreateHealthTag(self)
         text:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
         text:SetJustifyH('RIGHT')
         self:Tag(text, '[free:dead][free:offline][free:healthvalue]')
-    elseif style == 'nameplate' then
-        text:ClearAllPoints()
-        text:SetPoint('RIGHT', self, 'TOPRIGHT')
-        text:SetJustifyH('RIGHT')
-        self:Tag(text, '[free:nphp]')
     end
 
     self.HealthTag = text
