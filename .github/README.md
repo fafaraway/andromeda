@@ -12,8 +12,9 @@
 <br />
 
 ## Introduction
-&emsp;&emsp;**FreeUI** is a user interface replacement for World of Warcraft.  
-&emsp;&emsp;**Minimalist**, **elegant**, yet also **efficient**.
+**FreeUI** is a user interface replacement for **World of Warcraft**.  
+It provides many useful features while maintaining **beauty**, **elegance**, and **efficiency**.  
+Accompany you through every challenging day in **Azeroth**. 💖💖💖
 
 ## Screenshots
 *  https://imgur.com/a/0JfIGql
@@ -24,10 +25,10 @@
 
 ## Feedback
 *  Report issues on [GitHub](https://github.com/Solor/FreeUI/issues)
-*  Join [FreeUI Discord channel](https://discord.gg/86wbfZXxn7)
+*  Join [Discord Channel](https://discord.gg/86wbfZXxn7)
 
 ## Download
-*  Stable release on [CurseForge](https://www.curseforge.com/wow/addons/freeui)
+*  Stable release on [Wago](https://addons.wago.io/addons/freeui) [WoWI](https://www.wowinterface.com/downloads/info23258-FreeUI.html#info) [Curse](https://www.curseforge.com/wow/addons/freeui)
 *  Beta release on [Github](https://github.com/Solor/FreeUI/releases)
 
 ## Usage
@@ -45,6 +46,7 @@
 *  [Interface Textures](https://1drv.ms/u/s!AocaDk73Gt7sgrlAYVUKxYvs3pCGFg?e=KpJOfv) *Textures replacement for chat bubble in protected area*
 
 ## Credits
-*  **Haleth**, **Siweia**, Alza, Tukz, Gethe, Elv, Haste, Lightspark, Zork, Allez, AlleyKat, Caellian, p3lim, Shantalya, tekkub, Tuller, Wildbreath, aduth, silverwind, Nibelheim, humfras, aliluya555, Paojy, Rubgrsch, EKE, fang2hou, lilbitz95, Djamy, Hacktivist, rgd87
+*  Haleth, Siweia, Alza, Tukz, Gethe, Elv, Haste, Lightspark, Zork, Allez, AlleyKat, Caellian, p3lim, Shantalya, tekkub, Tuller, Wildbreath, aduth, silverwind, Nibelheim, humfras, aliluya555, Paojy, Rubgrsch, EKE, fang2hou, lilbitz95, Djamy, Hacktivist, rgd87, Witnesscm, Gethe, Wetxius, Ketho
 *  NDui, NDui_Plus, ShestakUI, RealUI, ElvUI, ElvUI_WindTools
+*  oUF, Ace3, cargBags
 
