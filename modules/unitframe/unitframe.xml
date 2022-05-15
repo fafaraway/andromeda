@@ -7,7 +7,6 @@
     <Script file="fader.lua"/>
     <Script file="tags.lua"/>
     <Script file="units.lua"/>
-    <Script file="nameplate.lua"/>
     <Include file="groups\groups.xml"/>
     <Include file="units\units.xml"/>
 </Ui>
