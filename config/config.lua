@@ -347,6 +347,9 @@ C.CharacterSettings = {
         CustomColor = { r = 0.76, g = 0.42, b = 1 },
         CustomUnitList = '',
         ShowPowerList = '',
+        ColoredByDebuff = true,
+        CustomDebuffList = '',
+        CustomDebuffColor = { r = 0.8, g = 0.6, b = 0.4 },
 
         ShowAura = true,
         AuraFilterMode = 3,

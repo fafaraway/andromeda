@@ -165,6 +165,10 @@ local function UpdateCustomUnitList()
     NAMEPLATE:CreateUnitTable()
 end
 
+local function RefreshCustomDebuffs()
+    NAMEPLATE:RefreshCustomDebuffs()
+end
+
 local function RefreshAllPlates()
     NAMEPLATE:RefreshAllPlates()
 end
@@ -1957,7 +1961,31 @@ GUI.OptionsList = {
             true,
             nil,
             UpdateCustomUnitList,
-            L['Enter unit name or NPC ID. Use key SPACE between different units.'],
+            L['Enter unit name or NPC ID. |nUse key SPACE between multi units.'],
+        },
+
+
+
+        {
+            1,
+            'Nameplate',
+            'ColoredByDebuff',
+            L['Colored by Debuff'],
+            nil,
+            nil,
+            RefreshCustomDebuffs,
+            L["Color units' nameplate that affected by your specific debuff.|nYou can customize the color and the debuff list to match your requirement."],
+        },
+        { 5, 'Nameplate', 'CustomDebuffColor', L['Custom Color'] },
+        {
+            2,
+            'Nameplate',
+            'CustomDebuffList',
+            L['Custom Debuff List'],
+            true,
+            nil,
+            RefreshCustomDebuffs,
+            L['Enter the spell ID. |nUse key SPACE between multi spells.'],
         },
     },
     [14] = { -- theme

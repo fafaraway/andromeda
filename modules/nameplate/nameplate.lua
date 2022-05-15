@@ -212,7 +212,7 @@ function NAMEPLATE:UpdateColor(_, unit)
     local hostileClassColor = C.DB.Nameplate.HostileClassColor
     local friendlyClassColor = C.DB.Nameplate.FriendlyClassColor
     local tankMode = C.DB.Nameplate.TankMode
-
+    local auraColor = C.DB.Nameplate.CustomDebuffColor
     local r, g, b
 
     if not UnitIsConnected(unit) then
@@ -224,6 +224,8 @@ function NAMEPLATE:UpdateColor(_, unit)
             r, g, b = focusColor.r, focusColor.g, focusColor.b
         elseif isCustomUnit then
             r, g, b = customColor.r, customColor.g, customColor.b
+        elseif self.Auras.hasCustomDebuff then
+            r, g, b = auraColor.r, auraColor.g, auraColor.b
         elseif isPlayer and isFriendly then
             if friendlyClassColor then
                 r, g, b = F:UnitColor(unit)
@@ -1080,6 +1082,7 @@ function NAMEPLATE:OnLogin()
     NAMEPLATE:RefreshPlateOnFactionChanged()
     NAMEPLATE:CheckMajorSpells()
     NAMEPLATE:RefreshMajorSpells()
+    NAMEPLATE:RefreshCustomDebuffs()
 
     oUF:RegisterStyle('Nameplate', NAMEPLATE.CreateNameplateStyle)
     oUF:SetActiveStyle('Nameplate')

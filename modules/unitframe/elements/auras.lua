@@ -205,6 +205,7 @@ end
 local function BolsterPreUpdate(element)
     element.bolster = 0
     element.bolsterIndex = nil
+    element.hasCustomDebuff = nil
 end
 
 local function BolsterPostUpdate(element)
@@ -212,6 +213,12 @@ local function BolsterPostUpdate(element)
     if button then
         button.count:SetText(element.bolster)
     end
+end
+
+local debuffList = {}
+function NAMEPLATE:RefreshCustomDebuffs()
+    wipe(debuffList)
+    F:SplitList(debuffList, C.DB.Nameplate.CustomDebuffList)
 end
 
 local isMine = {
@@ -240,6 +247,10 @@ function UNITFRAME.AuraFilter(
     nameplateShowAll
 )
     local style = element.__owner.unitStyle
+
+    if C.DB.Nameplate.ColoredByDebuff and style == 'nameplate' and caster == 'player' and debuffList[spellID] then
+        element.hasCustomDebuff = true
+    end
 
     if name and spellID == 209859 then
         element.bolster = element.bolster + 1
