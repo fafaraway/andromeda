@@ -1058,7 +1058,7 @@ GUI.OptionsList = {
             nil,
             L['Track your spell cooldown using a pulse icon in the center of the screen.'],
         },
-        { 1, 'Combat', 'Announcement', L['Announce Important Informations'] },
+        { 1, 'Combat', 'KeyFeedback', L['Key Feedback'], nil, nil, nil, L['Display spell you are currently pressing.'] },
         { 4, 'Combat', 'EasyFocusKey', L['Easy Focus'], nil, { 'CTRL', 'ALT', 'SHIFT', _G.DISABLE } },
         { 4, 'Combat', 'EasyMarkKey', L['Easy Mark'], true, { 'CTRL', 'ALT', 'SHIFT', _G.DISABLE } },
     },

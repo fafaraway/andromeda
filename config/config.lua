@@ -86,6 +86,7 @@ C.CharacterSettings = {
         Outgoing = false,
         CooldownPulse = true,
         BuffReminder = true,
+        KeyFeedback = true,
     },
     Announcement = {
         Enable = true,
