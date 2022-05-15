@@ -553,7 +553,88 @@ function INVENTORY:SelectToggleButton(id)
 end
 
 local favouriteEnable
+
+local function GetCustomGroupTitle(index)
+    return C.DB['Inventory']['CustomNamesList'][index] or (PREFERENCES .. ' ' .. index)
+end
+
+StaticPopupDialogs['FREEUI_INVENTORY_RENAME_CUSTOM_GROUP'] = {
+    text = BATTLE_PET_RENAME,
+    button1 = OKAY,
+    button2 = CANCEL,
+    OnAccept = function(self)
+        local index = INVENTORY.selectGroupIndex
+        local text = self.editBox:GetText()
+        C.DB['Inventory']['CustomNamesList'][index] = text ~= '' and text or nil
+
+        INVENTORY.CustomMenu[index + 2].text = GetCustomGroupTitle(index)
+        INVENTORY.ContainerGroups['Bag'][index].label:SetText(GetCustomGroupTitle(index))
+        INVENTORY.ContainerGroups['Bank'][index].label:SetText(GetCustomGroupTitle(index))
+    end,
+    EditBoxOnEscapePressed = function(self)
+        self:GetParent():Hide()
+    end,
+    whileDead = 1,
+    showAlert = 1,
+    hasEditBox = 1,
+    editBoxWidth = 250,
+}
+
+function INVENTORY:RenameCustomGroup(index)
+    INVENTORY.selectGroupIndex = index
+    StaticPopup_Show('FREEUI_INVENTORY_RENAME_CUSTOM_GROUP')
+end
+
+function INVENTORY:MoveItemToCustomBag(index)
+    local itemID = INVENTORY.selectItemID
+    if index == 0 then
+        if C.DB['Inventory']['CustomItemsList'][itemID] then
+            C.DB['Inventory']['CustomItemsList'][itemID] = nil
+        end
+    else
+        C.DB['Inventory']['CustomItemsList'][itemID] = index
+    end
+    INVENTORY:UpdateAllBags()
+end
+
+function INVENTORY:IsItemInCustomBag()
+    local index = self.arg1
+    local itemID = INVENTORY.selectItemID
+    return (index == 0 and not C.DB['Inventory']['CustomItemsList'][itemID]) or (C.DB['Inventory']['CustomItemsList'][itemID] == index)
+end
+
+local menuList = {
+    {
+        text = '',
+        icon = 134400,
+        isTitle = true,
+        notCheckable = true,
+        tCoordLeft = 0.08,
+        tCoordRight = 0.92,
+        tCoordTop = 0.08,
+        tCoordBottom = 0.92,
+    },
+    {
+        text = NONE,
+        arg1 = 0,
+        func = INVENTORY.MoveItemToCustomBag,
+        checked = INVENTORY.IsItemInCustomBag
+    },
+}
+
 function INVENTORY:CreateFavouriteButton()
+    for i = 1, 5 do
+        tinsert(menuList, {
+            text = GetCustomGroupTitle(i),
+            arg1 = i,
+            func = INVENTORY.MoveItemToCustomBag,
+            checked = INVENTORY.IsItemInCustomBag,
+            hasArrow = true,
+            menuList = { { text = BATTLE_PET_RENAME, arg1 = i, func = INVENTORY.RenameCustomGroup } },
+        })
+    end
+    INVENTORY.CustomMenu = menuList
+
     local enabledText =
         L["You can now star items.|nIf 'Item Filter' enabled, the item you starred will add to Preferences filter slots.|nThis is not available to junk."]
 
@@ -592,15 +673,13 @@ local function favouriteOnClick(self)
         return
     end
 
-    local texture, _, _, quality, _, _, _, _, _, itemID = GetContainerItemInfo(self.bagID, self.slotID)
+    local texture, _, _, quality, _, _, link, _, _, itemID = GetContainerItemInfo(self.bagID, self.slotID)
     if texture and quality > _G.LE_ITEM_QUALITY_POOR then
-        if C.DB.Inventory.FavItemsList[itemID] then
-            C.DB.Inventory.FavItemsList[itemID] = nil
-        else
-            C.DB.Inventory.FavItemsList[itemID] = true
-        end
         ClearCursor()
-        INVENTORY:UpdateAllBags()
+        INVENTORY.selectItemID = itemID
+        INVENTORY.CustomMenu[1].text = link
+        INVENTORY.CustomMenu[1].icon = texture
+        EasyMenu(INVENTORY.CustomMenu, F.EasyMenu, self, 0, 0, 'MENU')
     end
 end
 
@@ -740,42 +819,46 @@ function INVENTORY:OnLogin()
     local f = {}
     local filters = INVENTORY:GetFilters()
     local MyContainer = Backpack:GetContainerClass()
-    local ContainerGroups = { ['Bag'] = {}, ['Bank'] = {} }
+    INVENTORY.ContainerGroups = { ['Bag'] = {}, ['Bank'] = {} }
 
     local function AddNewContainer(bagType, index, name, filter)
-        local newContainer = MyContainer:New(name, { BagType = bagType })
+        local newContainer = MyContainer:New(name, { BagType = bagType, Index = index })
         newContainer:SetFilter(filter, true)
-        ContainerGroups[bagType][index] = newContainer
+        INVENTORY.ContainerGroups[bagType][index] = newContainer
     end
 
     function Backpack:OnInit()
-        AddNewContainer('Bag', 11, 'Junk', filters.bagsJunk)
-        AddNewContainer('Bag', 1, 'BagFavourite', filters.bagFavourite)
-        AddNewContainer('Bag', 4, 'EquipSet', filters.bagEquipSet)
-        AddNewContainer('Bag', 2, 'AzeriteItem', filters.bagAzeriteItem)
-        AddNewContainer('Bag', 3, 'Equipment', filters.bagEquipment)
-        AddNewContainer('Bag', 5, 'BagCollection', filters.bagCollection)
-        AddNewContainer('Bag', 6, 'Consumable', filters.bagConsumable)
-        AddNewContainer('Bag', 7, 'BagGoods', filters.bagGoods)
-        AddNewContainer('Bag', 8, 'BagQuest', filters.bagQuest)
-        AddNewContainer('Bag', 9, 'BagAnima', filters.bagAnima)
-        AddNewContainer('Bag', 10, 'BagRelic', filters.bagRelic)
+        AddNewContainer('Bag', 15, 'Junk', filters.bagsJunk)
+        for i = 1, 5 do
+            AddNewContainer('Bag', i, 'BagCustom' .. i, filters['bagCustom' .. i])
+        end
+        AddNewContainer('Bag', 8, 'EquipSet', filters.bagEquipSet)
+        AddNewContainer('Bag', 6, 'AzeriteItem', filters.bagAzeriteItem)
+        AddNewContainer('Bag', 7, 'Equipment', filters.bagEquipment)
+        AddNewContainer('Bag', 9, 'BagCollection', filters.bagCollection)
+        AddNewContainer('Bag', 10, 'Consumable', filters.bagConsumable)
+        AddNewContainer('Bag', 11, 'BagGoods', filters.bagGoods)
+        AddNewContainer('Bag', 12, 'BagQuest', filters.bagQuest)
+        AddNewContainer('Bag', 13, 'BagAnima', filters.bagAnima)
+        AddNewContainer('Bag', 14, 'BagRelic', filters.bagRelic)
 
         f.main = MyContainer:New('Bag', { Bags = 'bags', BagType = 'Bag' })
         f.main.__anchor = { 'BOTTOMRIGHT', -C.UI_GAP, C.UI_GAP }
         f.main:SetPoint(unpack(f.main.__anchor))
         f.main:SetFilter(filters.onlyBags, true)
 
-        AddNewContainer('Bank', 10, 'BankFavourite', filters.bankFavourite)
-        AddNewContainer('Bank', 3, 'BankEquipSet', filters.bankEquipSet)
-        AddNewContainer('Bank', 1, 'BankAzeriteItem', filters.bankAzeriteItem)
-        AddNewContainer('Bank', 4, 'BankLegendary', filters.bankLegendary)
-        AddNewContainer('Bank', 2, 'BankEquipment', filters.bankEquipment)
-        AddNewContainer('Bank', 5, 'BankCollection', filters.bankCollection)
-        AddNewContainer('Bank', 8, 'BankConsumable', filters.bankConsumable)
-        AddNewContainer('Bank', 6, 'BankGoods', filters.bankGoods)
-        AddNewContainer('Bank', 9, 'BankQuest', filters.bankQuest)
-        AddNewContainer('Bank', 7, 'BankAnima', filters.bankAnima)
+        for i = 1, 5 do
+            AddNewContainer('Bank', i, 'BankCustom' .. i, filters['bankCustom' .. i])
+        end
+        AddNewContainer('Bank', 8, 'BankEquipSet', filters.bankEquipSet)
+        AddNewContainer('Bank', 6, 'BankAzeriteItem', filters.bankAzeriteItem)
+        AddNewContainer('Bank', 9, 'BankLegendary', filters.bankLegendary)
+        AddNewContainer('Bank', 7, 'BankEquipment', filters.bankEquipment)
+        AddNewContainer('Bank', 10, 'BankCollection', filters.bankCollection)
+        AddNewContainer('Bank', 13, 'BankConsumable', filters.bankConsumable)
+        AddNewContainer('Bank', 11, 'BankGoods', filters.bankGoods)
+        AddNewContainer('Bank', 14, 'BankQuest', filters.bankQuest)
+        AddNewContainer('Bank', 12, 'BankAnima', filters.bankAnima)
 
         f.bank = MyContainer:New('Bank', { Bags = 'bank', BagType = 'Bank' })
         f.bank.__anchor = { 'BOTTOMLEFT', C.UI_GAP, C.UI_GAP }
@@ -789,7 +872,7 @@ function INVENTORY:OnLogin()
         f.reagent:SetPoint(unpack(f.reagent.__anchor))
         f.reagent:Hide()
 
-        for bagType, groups in pairs(ContainerGroups) do
+        for bagType, groups in pairs(INVENTORY.ContainerGroups) do
             for _, container in ipairs(groups) do
                 local parent = Backpack.contByName[bagType]
                 container:SetParent(parent)
@@ -984,7 +1067,7 @@ function INVENTORY:OnLogin()
             end
         end
 
-        if C.DB.Inventory.FavItemsList[item.id] and not C.DB.Inventory.ItemFilter then
+        if C.DB['Inventory']['CustomItemsList'][item.id] and not C.DB.Inventory.ItemFilter then
             self.Favourite:Show()
         else
             self.Favourite:Hide()
@@ -1079,8 +1162,8 @@ function INVENTORY:OnLogin()
     end
 
     function INVENTORY:UpdateAllAnchors()
-        INVENTORY:UpdateBagsAnchor(f.main, ContainerGroups['Bag'])
-        INVENTORY:UpdateBankAnchor(f.bank, ContainerGroups['Bank'])
+        INVENTORY:UpdateBagsAnchor(f.main, INVENTORY.ContainerGroups['Bag'])
+        INVENTORY:UpdateBankAnchor(f.bank, INVENTORY.ContainerGroups['Bank'])
     end
 
     function INVENTORY:GetContainerColumns(bagType)
@@ -1156,8 +1239,6 @@ function INVENTORY:OnLogin()
             label = _G.BAG_FILTER_JUNK
         elseif string.match(name, 'Collection') then
             label = _G.COLLECTIONS
-        elseif string.match(name, 'Favourite') then
-            label = _G.PREFERENCES
         elseif string.match(name, 'Goods') then
             label = _G.AUCTION_CATEGORY_TRADE_GOODS
         elseif string.match(name, 'Quest') then
@@ -1166,6 +1247,8 @@ function INVENTORY:OnLogin()
             label = _G.POWER_TYPE_ANIMA
         elseif name == 'BagRelic' then
             label = L['Korthia Relics']
+        elseif strmatch(name, 'Custom%d') then
+            label = GetCustomGroupTitle(settings.Index)
         end
 
         if label then

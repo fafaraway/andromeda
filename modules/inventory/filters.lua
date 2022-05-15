@@ -168,7 +168,7 @@ local function isItemCollection(item)
     return item.id and C_ToyBox.GetToyInfo(item.id) or isMountOrPet(item) or INVENTORY:IsPetTrashCurrency(item.id)
 end
 
-local function isItemFavourite(item)
+local function isItemCustom(item, index)
     if not C.DB.Inventory.ItemFilter then
         return
     end
@@ -177,7 +177,8 @@ local function isItemFavourite(item)
         return
     end
 
-    return item.id and C.DB.Inventory.FavItemsList[item.id]
+    local customIndex = item.id and C.DB['Inventory']['CustomItemsList'][item.id]
+    return customIndex and customIndex == index
 end
 
 local function isEmptySlot(item)
@@ -321,14 +322,6 @@ function INVENTORY:GetFilters()
         return isItemInBank(item) and isItemCollection(item)
     end
 
-    filters.bagFavourite = function(item)
-        return isItemInBag(item) and isItemFavourite(item)
-    end
-
-    filters.bankFavourite = function(item)
-        return isItemInBank(item) and isItemFavourite(item)
-    end
-
     filters.bagGoods = function(item)
         return isItemInBag(item) and isTradeGoods(item)
     end
@@ -355,6 +348,15 @@ function INVENTORY:GetFilters()
 
     filters.bagRelic = function(item)
         return isItemInBag(item) and isKorthiaRelic(item)
+    end
+
+    for i = 1, 5 do
+        filters['bagCustom' .. i] = function(item)
+            return isItemInBag(item) and isItemCustom(item, i)
+        end
+        filters['bankCustom' .. i] = function(item)
+            return isItemInBank(item) and isItemCustom(item, i)
+        end
     end
 
     return filters
