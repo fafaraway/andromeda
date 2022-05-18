@@ -6,7 +6,7 @@
 ## Author: Solor
 ## Version: @project-version@
 ## Title: |cffffffffFreeUI|r
-## Notes: A user interface replacement for World of Warcraft. Minimalistic, elegant, yet also efficient and practical.
+## Notes: A user interface replacement for World of Warcraft.
 ## SavedVariables: FREE_ADB, FREE_PDB
 ## SavedVariablesPerCharacter: FREE_DB
 
