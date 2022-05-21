@@ -39,11 +39,11 @@ function TOOLTIP:ReskinTooltip()
         local _, item = self:GetItem()
         if item then
             local quality = select(3, GetItemInfo(item))
-            local color = C.QualityColors[quality or 1]
-            if color then
-                self.bg:SetBackdropBorderColor(color.r, color.g, color.b, 0.6)
+            local qualityColor = C.QualityColors[quality or 1]
+            if qualityColor then
+                self.bg:SetBackdropBorderColor(qualityColor.r, qualityColor.g, qualityColor.b, 0.6)
                 if self.bg.__shadow then
-                    self.bg.__shadow:SetBackdropBorderColor(color.r, color.g, color.b, 0.25)
+                    self.bg.__shadow:SetBackdropBorderColor(qualityColor.r, qualityColor.g, qualityColor.b, 0.25)
                 end
             end
         end
@@ -57,8 +57,9 @@ local function RestyleFont(obj, font, size)
 end
 
 function TOOLTIP:FixRecipeItemNameWidth()
+    local name = self:GetName()
     for i = 1, self:NumLines() do
-        local line = _G['GameTooltipTextLeft' .. i]
+        local line = _G[name .. 'TextLeft' .. i]
         if line:GetHeight() > 40 then
             line:SetWidth(line:GetWidth() + 1)
         end
