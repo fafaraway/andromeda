@@ -40,7 +40,7 @@ function F.UpdateCustomClassColors()
     C.b = C.ClassColors[C.CLASS].b
 
     C.CLASS_COLOR = string.format('|cff%02x%02x%02x', C.r * 255, C.g * 255, C.b * 255)
-    C.COLORED_ADDON_NAME = string.format('%s%s', C.CLASS_COLOR..'Free|r', 'UI')
+    C.COLORED_ADDON_NAME = F:TextGradient('FreeUI', C.r, C.g, C.b, 1, 1, 1)
 end
 F:RegisterEvent('ADDON_LOADED', F.UpdateCustomClassColors)
 
