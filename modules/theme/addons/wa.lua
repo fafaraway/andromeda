@@ -1,10 +1,10 @@
 local F, C = unpack(select(2, ...))
 local THEME = F:GetModule('Theme')
 
-local function IconBgOnUpdate(self)
-    self:SetAlpha(self.__icon:GetAlpha())
-    if self.__shadow then
-        self.__shadow:SetAlpha(self.__icon:GetAlpha())
+local function UpdateIconBgAlpha(icon, alpha)
+    icon.bg:SetAlpha(alpha)
+    if icon.bg.__shadow then
+        icon.bg.__shadow:SetAlpha(alpha)
     end
 end
 
@@ -33,37 +33,41 @@ local function UpdateIconTexCoord(icon)
     icon.isCutting = nil
 end
 
-local function ReskinObject(f, fType)
+local function RestyleIcon(icon)
+    UpdateIconTexCoord(icon)
+    hooksecurefunc(icon, 'SetTexCoord', UpdateIconTexCoord)
+    icon.bg = F.SetBD(icon, 0)
+    icon.bg:SetBackdropBorderColor(0, 0, 0)
+    icon.bg:SetFrameLevel(0)
+    hooksecurefunc(icon, 'SetAlpha', UpdateIconBgAlpha)
+end
+
+local function RestyleBar(f)
+    f.bg = F.SetBD(f.bar, 0)
+    f.bg:SetFrameLevel(0)
+    f.bg:SetBackdropBorderColor(0, 0, 0)
+end
+
+local function RestyleObject(f, fType)
     if fType == 'icon' then
         if not f.styled then
-            UpdateIconTexCoord(f.icon)
-            hooksecurefunc(f.icon, 'SetTexCoord', UpdateIconTexCoord)
-            f.bg = F.SetBD(f, 0)
-            f.bg:SetFrameLevel(0)
-            f.bg:SetBackdropBorderColor(0, 0, 0)
-            f.bg.__icon = f.icon
-            f.bg:HookScript('OnUpdate', IconBgOnUpdate)
+            RestyleIcon(f.icon)
 
             f.styled = true
         end
     elseif fType == 'aurabar' then
         if not f.styled then
-            f.bg = F.SetBD(f.bar, 0)
-            f.bg:SetFrameLevel(0)
-            f.bg:SetBackdropBorderColor(0, 0, 0)
-            UpdateIconTexCoord(f.icon)
-            hooksecurefunc(f.icon, 'SetTexCoord', UpdateIconTexCoord)
-
-            f.iconFrame:SetAllPoints(f.icon)
-            f.icon.bg = F.SetBD(f.iconFrame, 0)
-            f.icon.bg:SetBackdropBorderColor(0, 0, 0)
+            RestyleBar(f)
+            RestyleIcon(f.icon)
 
             f.styled = true
         end
+
+        f.icon.bg:SetShown(not not f.iconVisible)
     end
 end
 
-local function ReskinWA()
+local function RestyleWeakAuras()
     if not _G.FREE_ADB.ReskinAddons then
         return
     end
@@ -74,31 +78,31 @@ local function ReskinWA()
 
     regionTypes.icon.create = function(parent, data)
         local region = Create_Icon(parent, data)
-        ReskinObject(region, 'icon')
+        RestyleObject(region, 'icon')
         return region
     end
 
     regionTypes.aurabar.create = function(parent)
         local region = Create_AuraBar(parent)
-        ReskinObject(region, 'aurabar')
+        RestyleObject(region, 'aurabar')
         return region
     end
 
     regionTypes.icon.modify = function(parent, region, data)
         Modify_Icon(parent, region, data)
-        ReskinObject(region, 'icon')
+        RestyleObject(region, 'icon')
     end
 
     regionTypes.aurabar.modify = function(parent, region, data)
         Modify_AuraBar(parent, region, data)
-        ReskinObject(region, 'aurabar')
+        RestyleObject(region, 'aurabar')
     end
 
     for _, regions in pairs(_G.WeakAuras.regions) do
         if regions.regionType == 'icon' or regions.regionType == 'aurabar' then
-            ReskinObject(regions.region, regions.regionType)
+            RestyleObject(regions.region, regions.regionType)
         end
     end
 end
 
-THEME:RegisterSkin('WeakAuras', ReskinWA)
+THEME:RegisterSkin('WeakAuras', RestyleWeakAuras)
