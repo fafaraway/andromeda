@@ -358,7 +358,7 @@ C.CharacterSettings = {
         AuraPerRow = 5,
         DesaturateIcon = true,
         DebuffTypeColor = true,
-        StealableBuffs = true,
+        DispellMode = 2,
         DisableMouse = true,
 
         TotemIcon = true,

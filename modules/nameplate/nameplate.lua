@@ -827,7 +827,8 @@ function NAMEPLATE:UpdateNameplateAuras()
     element:SetPoint('BOTTOM', self, 'TOP', 0, 16)
     element.numTotal = C.DB.Nameplate.AuraNumTotal
     element.showDebuffType = C.DB.Nameplate.DebuffTypeColor
-    element.showStealableBuffs = C.DB.Nameplate.StealableBuffs
+    element.showStealableBuffs = C.DB.Nameplate.DispellMode == 1
+    element.alwaysShowStealable = C.DB.Nameplate.DispellMode == 2
     element.desaturateDebuff = C.DB.Nameplate.DesaturateIcon
     element.disableMouse = C.DB.Nameplate.DisableMouse
     element:SetWidth(self:GetWidth())

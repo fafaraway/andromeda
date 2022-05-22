@@ -117,6 +117,11 @@ local replaceEncryptedIcons = {
     [368243] = 237538, -- CD
 }
 
+local dispellType = {
+    ['Magic'] = true,
+    [''] = true,
+}
+
 function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, expiration, debuffType)
     if duration then
         button.bg:Show()
@@ -165,6 +170,10 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
         if button.glow then
             button.glow:SetBackdropBorderColor(0, 0, 0, 0.25)
         end
+    end
+
+    if element.alwaysShowStealable and dispellType[debuffType] and not UnitIsPlayer(unit) and not button.isDebuff then
+        button.stealable:Show()
     end
 
     if element.disableCooldown then
@@ -234,7 +243,7 @@ function UNITFRAME.AuraFilter(
     name,
     _,
     _,
-    _,
+    debuffType,
     _,
     _,
     caster,
@@ -269,7 +278,7 @@ function UNITFRAME.AuraFilter(
             return FREE_ADB['NPAuraFilter'][1][spellID] or C.AuraWhiteList[spellID]
         elseif FREE_ADB['NPAuraFilter'][2][spellID] or C.AuraBlackList[spellID] then
             return false
-        elseif element.showStealableBuffs and isStealable and not UnitIsPlayer(unit) then
+        elseif (element.showStealableBuffs and isStealable or element.alwaysShowStealable and dispellType[debuffType]) and not UnitIsPlayer(unit) and (not button.isDebuff) then
             return true
         elseif FREE_ADB['NPAuraFilter'][1][spellID] or C.AuraWhiteList[spellID] then
             return true
@@ -541,6 +550,9 @@ function NAMEPLATE:CreateAuras(self)
     bu.showDebuffType = C.DB.Nameplate.DebuffTypeColor
     bu.showStealableBuffs = C.DB.Nameplate.StealableBuffs
     bu.disableMouse = C.DB.Nameplate.DisableMouse
+
+    bu.showStealableBuffs = C.DB.Nameplate.DispellMode == 1
+    bu.alwaysShowStealable = C.DB.Nameplate.DispellMode == 2
 
     bu.CustomFilter = UNITFRAME.AuraFilter
     bu.PostCreateIcon = UNITFRAME.PostCreateIcon
