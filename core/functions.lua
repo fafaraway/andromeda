@@ -18,7 +18,7 @@ do
 
     local tmp = {}
     local function myPrint(...)
-        local prefix = F:TextGradient('[FreeUI]', C.r, C.g, C.b, 1, 1, 1)
+        local prefix = string.format('[%s]', C.COLORED_ADDON_NAME)
         local n = 0
 
         n = n + 1

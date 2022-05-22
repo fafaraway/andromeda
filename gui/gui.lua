@@ -551,7 +551,7 @@ end
 
 local function CreateFreeUIButton()
     local bu = CreateFrame('Button', 'GameMenuFrameFreeUI', _G.GameMenuFrame, 'GameMenuButtonTemplate')
-    bu:SetText(F:StyleAddonName('%ADDONNAME%'))
+    bu:SetText(C.COLORED_ADDON_NAME)
     -- bu.Text:SetFont(C.Assets.Font.Bold, 13, _G.FREE_ADB.FontOutline and 'OUTLINE' or nil)
     bu:SetPoint('TOP', _G.GameMenuButtonAddons, 'BOTTOM', 0, -14)
     if _G.FREE_ADB.ReskinBlizz then
