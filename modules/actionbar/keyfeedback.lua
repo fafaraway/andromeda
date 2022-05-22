@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local COMBAT = F:GetModule('Combat')
+local ACTIONBAR = F:GetModule('ActionBar')
 
 local keyFeedback = CreateFrame('Frame', 'FreeUIKeyFeedback', UIParent)
 keyFeedback:SetScript('OnEvent', function(self, event, ...)
@@ -24,7 +24,7 @@ local settings = {
 }
 
 function keyFeedback:PLAYER_LOGIN()
-    if not C.DB.Combat.KeyFeedback then
+    if not C.DB.Actionbar.KeyFeedback then
         return
     end
 
@@ -58,6 +58,7 @@ function keyFeedback:PLAYER_LOGIN()
             return
         end
         self.icon:SetTexture(tex)
+        self.icon:SetTexCoord(unpack(C.TEX_COORD))
 
         if fullUpdate then
             self:UpdateCooldownOrCast()
@@ -236,6 +237,7 @@ function keyFeedback:UNIT_SPELLCAST_SUCCEEDED(_, _, _, spellID)
             local frame = self.iconPool:Acquire()
             local texture = select(3, GetSpellInfo(spellID))
             frame.icon:SetTexture(texture)
+            frame.icon:SetTexCoord(unpack(C.TEX_COORD))
             frame:Show()
             frame.ag:Play()
         end
@@ -457,6 +459,7 @@ local PoolIconCreationFunc = function(pool)
     f:SetAlpha(0)
 
     t:SetTexture('Interface\\Icons\\Spell_Shadow_SacrificialShield')
+    t:SetTexCoord(unpack(C.TEX_COORD))
 
     local ag = f:CreateAnimationGroup()
     f.ag = ag

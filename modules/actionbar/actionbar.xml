@@ -4,6 +4,7 @@
     <Script file="desaturate.lua"/>
     <Script file="fader.lua"/>
     <Script file="flash.lua"/>
+    <Script file="keyfeedback.lua"/>
     <Script file="notify.lua"/>
     <Script file="range.lua"/>
     <Script file="style.lua"/>

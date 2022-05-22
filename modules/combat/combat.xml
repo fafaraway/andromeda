@@ -4,7 +4,6 @@
     <Script file="cooldown-pulse.lua"/>
     <Script file="fct.lua"/>
     <Script file="focuser.lua"/>
-    <Script file="keyfeedback.lua"/>
     <Script file="marker.lua"/>
     <Script file="pvp-sound.lua"/>
     <Script file="reminder.lua"/>
