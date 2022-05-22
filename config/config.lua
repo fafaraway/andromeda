@@ -86,7 +86,6 @@ C.CharacterSettings = {
         Outgoing = false,
         CooldownPulse = true,
         BuffReminder = true,
-        KeyFeedback = true,
     },
     Announcement = {
         Enable = true,
@@ -484,6 +483,7 @@ C.CharacterSettings = {
         CooldownNotify = true,
         CooldownDesaturate = true,
         BindType = 1,
+        KeyFeedback = true,
 
         Bar1Size = 34,
         Bar1Font = 12,
