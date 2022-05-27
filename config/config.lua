@@ -602,7 +602,7 @@ C.AccountSettings = {
         HUNTER = { r = 0, g = 0.58, b = 0.19, colorStr = 'ff009332' },
         WARRIOR = { r = 0.6, g = 0.53, b = 0.46, colorStr = 'ff9a8675' },
         SHAMAN = { r = 0, g = 0.38, b = 0.4, colorStr = 'ff006166' },
-        MAGE = { r = 0.2, g = 0.59, b = 0.86, colorStr = 'ff009332' },
+        MAGE = { r = 0.2, g = 0.59, b = 0.86, colorStr = 'ff3498db' },
         PRIEST = { r = 0.82, g = 0.85, b = 0.89, colorStr = 'ffd2dae2' },
         DEATHKNIGHT = { r = 0.72, g = 0.08, b = 0.25, colorStr = 'ffb71540' },
         WARLOCK = { r = 0.61, g = 0.53, b = 1, colorStr = 'ff9c88ff' },
