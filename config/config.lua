@@ -587,7 +587,7 @@ C.AccountSettings = {
     ChatFilterWhiteList = '',
     RepairType = 1,
     CustomJunkList = {},
-    NPAuraFilter = { [1] = {}, [2] = {} },
+    NameplateAuraFilterList = { [1] = {}, [2] = {} },
     DebuffWatcherList = {},
     RaidAuraWatch = {},
     NPMajorSpells = {},

@@ -6,7 +6,7 @@ local function GetSectionInfo(id)
     return C_EncounterJournal.GetSectionInfo(id).title
 end
 
-C.AuraWhiteList = {
+C.NameplateAuraWhiteList = {
     -- Buffs
     [642] = true, -- 圣盾术
     [1022] = true, -- 保护之手
@@ -72,7 +72,7 @@ C.AuraWhiteList = {
     [346792] = true, -- 罪触之刃，猩红议会
 }
 
-C.AuraBlackList = {
+C.NameplateAuraBlackList = {
     [15407] = true, -- 精神鞭笞
     [51714] = true, -- 锋锐之霜
     [199721] = true, -- 腐烂光环
@@ -84,18 +84,18 @@ C.AuraBlackList = {
 }
 
 -- 显示姓名板单位的目标
-C.ShowTargetNPCs = {
+C.NameplateShowTargetNPCsList = {
     [165251] = true, -- 仙林狐狸
     [174773] = true, -- 怨毒怪
 }
 
 -- 无效目标
-C.TrashUnits = {
+C.NameplateTrashUnitsList = {
     [166589] = true, -- 活化武器，赤红
     [175677] = true, -- 走私来的生物，集市
 }
 
-C.NPSpecialUnitsList = {
+C.NameplateSpecialUnitsList = {
     [179823] = true, -- 圣物收集者，刻希亚
     [179565] = true, -- 圣物饕餮者，刻希亚
     [180501] = true, -- 无辜的灵魂，低语威能碎片
@@ -130,12 +130,12 @@ C.NPSpecialUnitsList = {
     [169426] = true,
 }
 
-C.NPShowPowerUnitsList = {
+C.NameplateShowPowerUnitsList = {
     [165556] = true, -- 赤红深渊，瞬息具象
     [GetSectionInfo(22339)] = true, -- 猎手阿尔迪莫，巴加斯特之影
 }
 
-C.NPMajorSpellsList = {
+C.NameplateMajorSpellsList = {
     [358967] = true, -- S2，地狱烈火
     [334664] = true, -- 彼界，惊恐嚎哭
     [332612] = true, -- 彼界，治疗波

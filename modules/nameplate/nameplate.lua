@@ -100,8 +100,8 @@ function NAMEPLATE:BlockAddons()
         if not tonumber(spellID) then
             return
         end
-        if not C.AuraWhiteList[spellID] then
-            C.AuraWhiteList[spellID] = true
+        if not C.NameplateAuraWhiteList[spellID] then
+            C.NameplateAuraWhiteList[spellID] = true
         end
     end
     hooksecurefunc(DBM.Nameplate, 'Show', showAurasForDBM)
@@ -114,14 +114,14 @@ function NAMEPLATE:CreateUnitTable()
     if not C.DB.Nameplate.CustomUnitColor then
         return
     end
-    F:CopyTable(C.NPSpecialUnitsList, customUnits)
+    F:CopyTable(C.NameplateSpecialUnitsList, customUnits)
     F:SplitList(customUnits, C.DB.Nameplate.CustomUnitList)
 end
 
 local showPowerList = {}
 function NAMEPLATE:CreatePowerUnitTable()
     table.wipe(showPowerList)
-    F:CopyTable(C.NPShowPowerUnitsList, showPowerList)
+    F:CopyTable(C.NameplateShowPowerUnitsList, showPowerList)
     F:SplitList(showPowerList, C.DB.Nameplate.ShowPowerList)
 end
 
@@ -234,7 +234,7 @@ function NAMEPLATE:UpdateColor(_, unit)
             end
         elseif isPlayer and not isFriendly and hostileClassColor then
             r, g, b = F:UnitColor(unit)
-        elseif UnitIsTapDenied(unit) and not UnitPlayerControlled(unit) or C.TrashUnits[npcID] then
+        elseif UnitIsTapDenied(unit) and not UnitPlayerControlled(unit) or C.NameplateTrashUnitsList[npcID] then
             r, g, b = unpack(oUF.colors.tapped)
         else
             r, g, b = unpack(oUF.colors.reaction[UnitReaction(unit, 'player') or 5])
@@ -425,13 +425,13 @@ function NAMEPLATE:CreateTargetIndicator(self)
 
     local animGroupL = frame.aggroL:CreateAnimationGroup()
     animGroupL:SetLooping('NONE')
-    local anim = animGroupL:CreateAnimation('Path')
-    anim:SetSmoothing('IN_OUT')
-    anim:SetDuration(0.5)
-    anim.points = {}
-    anim.points[1] = anim:CreateControlPoint()
-    anim.points[1]:SetOrder(1)
-    frame.animL = anim
+    local animL = animGroupL:CreateAnimation('Path')
+    animL:SetSmoothing('IN_OUT')
+    animL:SetDuration(0.5)
+    animL.points = {}
+    animL.points[1] = animL:CreateControlPoint()
+    animL.points[1]:SetOrder(1)
+    frame.animL = animL
     frame.animGroupL = animGroupL
 
     frame.aggroR = frame:CreateTexture(nil, 'BACKGROUND', nil, -5)
@@ -442,12 +442,12 @@ function NAMEPLATE:CreateTargetIndicator(self)
 
     local animGroupR = frame.aggroR:CreateAnimationGroup()
     animGroupR:SetLooping('NONE')
-    local anim = animGroupR:CreateAnimation('Path')
-    anim:SetDuration(0.5)
-    anim.points = {}
-    anim.points[1] = anim:CreateControlPoint()
-    anim.points[1]:SetOrder(1)
-    frame.animR = anim
+    local animR = animGroupR:CreateAnimation('Path')
+    animR:SetDuration(0.5)
+    animR.points = {}
+    animR.points[1] = animR:CreateControlPoint()
+    animR.points[1]:SetOrder(1)
+    frame.animR = animR
     frame.animGroupR = animGroupR
 
     frame.nameGlow = frame:CreateTexture(nil, 'BACKGROUND', nil, -5)
@@ -665,7 +665,7 @@ NAMEPLATE.MajorSpellsList = {}
 function NAMEPLATE:RefreshMajorSpells()
     table.wipe(NAMEPLATE.MajorSpellsList)
 
-    for spellID in pairs(C.NPMajorSpellsList) do
+    for spellID in pairs(C.NameplateMajorSpellsList) do
         local name = GetSpellInfo(spellID)
         if name then
             local modValue = FREE_ADB['NPMajorSpells'][spellID]
@@ -683,7 +683,7 @@ function NAMEPLATE:RefreshMajorSpells()
 end
 
 function NAMEPLATE:CheckMajorSpells()
-    for spellID in pairs(C.NPMajorSpellsList) do
+    for spellID in pairs(C.NameplateMajorSpellsList) do
         local name = GetSpellInfo(spellID)
         if name then
             if FREE_ADB['NPMajorSpells'][spellID] then
@@ -697,7 +697,7 @@ function NAMEPLATE:CheckMajorSpells()
     end
 
     for spellID, value in pairs(FREE_ADB['NPMajorSpells']) do
-        if value == false and C.NPMajorSpellsList[spellID] == nil then
+        if value == false and C.NameplateMajorSpellsList[spellID] == nil then
             FREE_ADB['NPMajorSpells'][spellID] = nil
         end
     end
@@ -722,7 +722,7 @@ function NAMEPLATE:UpdateSpitefulIndicator()
         return
     end
 
-    self.tarName:SetShown(C.ShowTargetNPCs[self.npcID])
+    self.tarName:SetShown(C.NameplateShowTargetNPCsList[self.npcID])
 end
 
 -- Overlay
@@ -1006,6 +1006,64 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
     NAMEPLATE.UpdateTotemIcon(self, event, unit)
 end
 
+local function CheckNameplateFilter(index)
+    local VALUE = (index == 1 and C.NameplateAuraWhiteList) or (index == 2 and C.NameplateAuraBlackList)
+    if VALUE then
+        for spellID in pairs(VALUE) do
+            local name = GetSpellInfo(spellID)
+            if name then
+                if FREE_ADB['NameplateAuraFilterList'][index][spellID] then
+                    FREE_ADB['NameplateAuraFilterList'][index][spellID] = nil
+                end
+            else
+                if C.DEV_MODE then
+                    F:Print('Invalid nameplate filter ID: ' .. spellID)
+                end
+            end
+        end
+
+        for spellID, value in pairs(FREE_ADB['NameplateAuraFilterList'][index]) do
+            if value == false and VALUE[spellID] == nil then
+                FREE_ADB['NameplateAuraFilterList'][index][spellID] = nil
+            end
+        end
+    end
+end
+
+function NAMEPLATE:CheckNameplateFilters()
+    CheckNameplateFilter(1)
+    CheckNameplateFilter(2)
+end
+
+NAMEPLATE.NameplateFilter = { [1] = {}, [2] = {} }
+
+local function RefreshNameplateFilter(index)
+    wipe(NAMEPLATE.NameplateFilter[index])
+
+    local VALUE = (index == 1 and C.NameplateAuraWhiteList) or (index == 2 and C.NameplateAuraBlackList)
+    if VALUE then
+        for spellID in pairs(VALUE) do
+            local name = GetSpellInfo(spellID)
+            if name then
+                if FREE_ADB['NameplateAuraFilterList'][index][spellID] == nil then
+                    NAMEPLATE.NameplateFilter[index][spellID] = true
+                end
+            end
+        end
+    end
+
+    for spellID, value in pairs(FREE_ADB['NameplateAuraFilterList'][index]) do
+        if value then
+            NAMEPLATE.NameplateFilter[index][spellID] = true
+        end
+    end
+end
+
+function NAMEPLATE:RefreshNameplateFilters()
+    RefreshNameplateFilter(1)
+    RefreshNameplateFilter(2)
+end
+
 function NAMEPLATE:OnLogin()
     if not C.DB.Nameplate.Enable then
         return
@@ -1024,6 +1082,8 @@ function NAMEPLATE:OnLogin()
     NAMEPLATE:CheckMajorSpells()
     NAMEPLATE:RefreshMajorSpells()
     NAMEPLATE:RefreshCustomDebuffs()
+    NAMEPLATE:CheckNameplateFilters()
+    NAMEPLATE:RefreshNameplateFilters()
 
     oUF:RegisterStyle('Nameplate', NAMEPLATE.CreateNameplateStyle)
     oUF:SetActiveStyle('Nameplate')

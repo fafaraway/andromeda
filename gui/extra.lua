@@ -112,9 +112,9 @@ local function CreateBars(parent, spellID, table1, table2, table3)
         bar:Hide()
         table1[spellID] = nil
         if C[table2][spellID] then
-            _G.FREE_ADB[table3][spellID] = false
+            FREE_ADB[table3][spellID] = false
         else
-            _G.FREE_ADB[table3][spellID] = nil
+            FREE_ADB[table3][spellID] = nil
         end
         SortBars(table1)
     end)
@@ -127,12 +127,12 @@ local function CreateBars(parent, spellID, table1, table2, table3)
 end
 
 local function Label_OnEnter(self)
-    _G.GameTooltip:ClearLines()
-    _G.GameTooltip:SetOwner(self:GetParent(), 'ANCHOR_RIGHT', 0, 3)
-    _G.GameTooltip:AddLine(self.text)
-    _G.GameTooltip:AddLine(' ')
-    _G.GameTooltip:AddLine(self.tip, 0.6, 0.8, 1, 1)
-    _G.GameTooltip:Show()
+    GameTooltip:ClearLines()
+    GameTooltip:SetOwner(self:GetParent(), 'ANCHOR_RIGHT', 0, 3)
+    GameTooltip:AddLine(self.text)
+    GameTooltip:AddLine(' ')
+    GameTooltip:AddLine(self.tip, 0.6, 0.8, 1, 1)
+    GameTooltip:Show()
 end
 
 local function CreateLabel(parent, text, tip)
@@ -856,6 +856,10 @@ local function RefreshAllPlates()
     NAMEPLATE:RefreshAllPlates()
 end
 
+local function RefreshNameplateFilters()
+    NAMEPLATE:RefreshNameplateFilters()
+end
+
 function GUI:SetupNameplateAuraFilter(parent)
     local guiName = 'FreeUIGUINamePlateAuraFilter'
     TogglePanel(guiName)
@@ -864,16 +868,17 @@ function GUI:SetupNameplateAuraFilter(parent)
     end
 
     local panel = CreateExtraGUI(parent, guiName)
+    panel:SetScript('OnHide', RefreshNameplateFilters)
 
     local frameData = {
         [1] = {
-            text = L['White List'],
+            text = L['Nameplate Aura White List'],
             tip = L['Fill in SpellID, must be a number.|nSpell name is not supported.'],
             offset = -25,
             barList = {},
         },
         [2] = {
-            text = L['Black List'],
+            text = L['Nameplate Aura Black List'],
             tip = L['Fill in SpellID, must be a number.|nSpell name is not supported.'],
             offset = -315,
             barList = {},
@@ -891,7 +896,13 @@ function GUI:SetupNameplateAuraFilter(parent)
         F.AddTooltip(icon, 'ANCHOR_RIGHT', spellID)
         close:SetScript('OnClick', function()
             bar:Hide()
-            _G.FREE_ADB['NPAuraFilter'][index][spellID] = nil
+
+            if (index == 1 and C.NameplateAuraWhiteList[spellID]) or (index == 2 and C.NameplateAuraBlackList[spellID]) then
+                FREE_ADB['NameplateAuraFilterList'][index][spellID] = false
+            else
+                FREE_ADB['NameplateAuraFilterList'][index][spellID] = nil
+            end
+
             frameData[index].barList[spellID] = nil
             SortBars(frameData[index].barList)
         end)
@@ -906,21 +917,41 @@ function GUI:SetupNameplateAuraFilter(parent)
         SortBars(frameData[index].barList)
     end
 
+    local function isAuraExisted(index, spellID)
+        local modValue = FREE_ADB['NameplateAuraFilterList'][index][spellID]
+        local locValue = (index == 1 and C.NameplateAuraWhiteList[spellID]) or (index == 2 and C.NameplateAuraBlackList[spellID])
+
+        return modValue or (modValue == nil and locValue)
+    end
+
     local function addClick(parent, index)
         local spellID = tonumber(parent.box:GetText())
         if not spellID or not GetSpellInfo(spellID) then
-            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Incorrect SpellID.'])
-            return
-        end
-        if _G.FREE_ADB['NPAuraFilter'][index][spellID] then
-            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is existed.'])
+            UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Incorrect SpellID'])
             return
         end
 
-        _G.FREE_ADB['NPAuraFilter'][index][spellID] = true
+        if isAuraExisted(index, spellID) then
+            UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is existed'])
+            return
+        end
+
+        FREE_ADB['NameplateAuraFilterList'][index][spellID] = true
         createBar(parent.child, index, spellID)
         parent.box:SetText('')
     end
+
+    local filterIndex
+    StaticPopupDialogs['FREEUI_RESET_NAMEPLATE_AURA_FILTER'] = {
+        text = C.RED_COLOR .. L['Reset nameplate filter'],
+        button1 = YES,
+        button2 = NO,
+        OnAccept = function()
+            wipe(FREE_ADB['NameplateAuraFilterList'][filterIndex])
+            ReloadUI()
+        end,
+        whileDead = 1,
+    }
 
     for index, value in ipairs(frameData) do
         F.CreateFS(panel, C.Assets.Font.Regular, 14, nil, value.text, 'YELLOW', true, 'TOPLEFT', 20, value.offset)
@@ -933,18 +964,28 @@ function GUI:SetupNameplateAuraFilter(parent)
         scroll:ClearAllPoints()
         scroll:SetPoint('BOTTOMLEFT', 10, 10)
 
-        scroll.box = F.CreateEditBox(frame, 145, 25)
+        scroll.box = F.CreateEditBox(frame, 120, 25)
         scroll.box:SetPoint('TOPLEFT', 10, -10)
         scroll.box.title = value.text
         F.AddTooltip(scroll.box, 'ANCHOR_RIGHT', value.tip, 'BLUE', true)
-        scroll.add = F.CreateButton(frame, 70, 25, _G.ADD)
+
+        scroll.add = F.CreateButton(frame, 45, 25, ADD)
         scroll.add:SetPoint('TOPRIGHT', -8, -10)
         scroll.add:SetScript('OnClick', function()
             addClick(scroll, index)
         end)
 
-        for spellID in pairs(_G.FREE_ADB['NPAuraFilter'][index]) do
-            createBar(scroll.child, index, spellID)
+        scroll.reset = F.CreateButton(frame, 45, 25, RESET)
+        scroll.reset:SetPoint('RIGHT', scroll.add, 'LEFT', -5, 0)
+        scroll.reset:SetScript('OnClick', function()
+            filterIndex = index
+            StaticPopup_Show('FREEUI_RESET_NAMEPLATE_AURA_FILTER')
+        end)
+
+        for spellID, value in pairs(NAMEPLATE.NameplateFilter[index]) do
+            if value then
+                createBar(scroll.child, index, spellID)
+            end
         end
     end
 end
@@ -985,27 +1026,27 @@ function GUI:SetupNameplateMajorSpells(parent)
         local parent = button.__owner
         local spellID = tonumber(parent.box:GetText())
         if not spellID or not GetSpellInfo(spellID) then
-            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is incorrect.'])
+            UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Incorrect SpellID'])
             return
         end
-        local modValue = _G.FREE_ADB['NPMajorSpells'][spellID]
-        if modValue or modValue == nil and C.NPMajorSpellsList[spellID] then
-            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is existed.'])
+        local modValue = FREE_ADB['NPMajorSpells'][spellID]
+        if modValue or modValue == nil and C.NameplateMajorSpellsList[spellID] then
+            UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is existed'])
             return
         end
-        _G.FREE_ADB['NPMajorSpells'][spellID] = true
-        CreateBars(scroll, spellID, barTable, 'NPMajorSpellsList', 'NPMajorSpells')
+        FREE_ADB['NPMajorSpells'][spellID] = true
+        CreateBars(scroll, spellID, barTable, 'NameplateMajorSpellsList', 'NPMajorSpells')
         parent.box:SetText('')
     end)
 
     scroll.reset = CreateButton(frame, 50, 22, _G.RESET, { 'LEFT', scroll.add, 'RIGHT', 5, 0 })
     scroll.reset:HookScript('OnClick', function()
-        _G.StaticPopup_Show('FREEUI_RESET_MAJOR_SPELLS')
+        StaticPopup_Show('FREEUI_RESET_MAJOR_SPELLS')
     end)
 
     for spellID, value in pairs(NAMEPLATE.MajorSpellsList) do
         if value then
-            CreateBars(scroll, spellID, barTable, 'NPMajorSpellsList', 'NPMajorSpells')
+            CreateBars(scroll, spellID, barTable, 'NameplateMajorSpellsList', 'NPMajorSpells')
         end
     end
 end
@@ -2088,9 +2129,9 @@ function GUI:SetupPartyWatcher(parent)
         close:SetScript('OnClick', function()
             bar:Hide()
             if C.PartySpellsList[spellID] then
-                _G.FREE_ADB['PartySpellsList'][spellID] = 0
+                FREE_ADB['PartySpellsList'][spellID] = 0
             else
-                _G.FREE_ADB['PartySpellsList'][spellID] = nil
+                FREE_ADB['PartySpellsList'][spellID] = nil
             end
             barTable[spellID] = nil
             SortBars(barTable)
@@ -2140,29 +2181,29 @@ function GUI:SetupPartyWatcher(parent)
     scroll.reset.text:SetTextColor(1, 0, 0)
 
     scroll.reset:SetScript('OnClick', function()
-        _G.StaticPopup_Show('FREEUI_RESET_PARTY_SPELLS')
+        StaticPopup_Show('FREEUI_RESET_PARTY_SPELLS')
     end)
 
     local function addClick(scroll, options)
         local spellID, duration = tonumber(options[1]:GetText()), tonumber(options[2]:GetText())
         if not spellID or not duration then
-            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['You need to complete all * optinos.'])
+            UIErrorsFrame:AddMessage(C.RED_COLOR .. L['You need to complete all * optinos.'])
             return
         end
 
         if not GetSpellInfo(spellID) then
-            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Incorrect SpellID.'])
+            UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Incorrect SpellID'])
             return
         end
 
-        local modDuration = _G.FREE_ADB['PartySpellsList'][spellID]
+        local modDuration = FREE_ADB['PartySpellsList'][spellID]
 
         if modDuration and modDuration ~= 0 or C.PartySpellsList[spellID] and not modDuration then
-            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is existed.'])
+            UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is existed'])
             return
         end
 
-        _G.FREE_ADB['PartySpellsList'][spellID] = duration
+        FREE_ADB['PartySpellsList'][spellID] = duration
         createBar(scroll.child, spellID, duration)
         ClearEdit(options)
     end
@@ -2214,7 +2255,7 @@ function GUI:SetupPartyWatcher(parent)
     scroll.preset = F.CreateButton(frame, 51, 24, L['Preset'], 11)
     scroll.preset:SetPoint('RIGHT', scroll.clear, 'LEFT', -5, 0)
     scroll.preset:SetScript('OnClick', function(self)
-        _G.EasyMenu(menuList, F.EasyMenu, self, -100, 100, 'MENU', 1)
+        EasyMenu(menuList, F.EasyMenu, self, -100, 100, 'MENU', 1)
     end)
 
     for spellID, duration in pairs(UNITFRAME.PartySpellsList) do
@@ -2312,8 +2353,8 @@ function GUI:SetupDebuffWatcher(parent)
         print(spellID)
         print(C.DebuffWatcherList[instName][spellID])
         local localPrio = C.DebuffWatcherList[instName][spellID]
-        local savedPrio = _G.FREE_ADB['DebuffWatcherList'][instName]
-            and _G.FREE_ADB['DebuffWatcherList'][instName][spellID]
+        local savedPrio = FREE_ADB['DebuffWatcherList'][instName]
+            and FREE_ADB['DebuffWatcherList'][instName][spellID]
         if (localPrio and savedPrio and savedPrio == 0) or (not localPrio and not savedPrio) then
             return false
         end
@@ -2328,23 +2369,23 @@ function GUI:SetupDebuffWatcher(parent)
         local instName = dungeonName or raidName or (iType.Text:GetText() == _G.OTHER and 0)
 
         if not instName or not spellID then
-            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['You need to complete all optinos.'])
+            UIErrorsFrame:AddMessage(C.RED_COLOR .. L['You need to complete all optinos'])
             return
         end
         if spellID and not GetSpellInfo(spellID) then
-            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Incorrect SpellID.'])
+            UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Incorrect SpellID'])
             return
         end
         if isAuraExisted(instName, spellID) then
-            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is existed.'])
+            UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is existed'])
             return
         end
 
         priority = analyzePrio(priority)
-        if not _G.FREE_ADB['DebuffWatcherList'][instName] then
-            _G.FREE_ADB['DebuffWatcherList'][instName] = {}
+        if not FREE_ADB['DebuffWatcherList'][instName] then
+            FREE_ADB['DebuffWatcherList'][instName] = {}
         end
-        _G.FREE_ADB['DebuffWatcherList'][instName][spellID] = priority
+        FREE_ADB['DebuffWatcherList'][instName][spellID] = priority
         setupBars(instName)
         GUI:ClearEdit(options[3])
         GUI:ClearEdit(options[4])
@@ -2357,7 +2398,7 @@ function GUI:SetupDebuffWatcher(parent)
     scroll.reset:SetPoint('TOPLEFT', 10, -120)
     scroll.reset.text:SetTextColor(1, 0, 0)
     scroll.reset:SetScript('OnClick', function()
-        _G.StaticPopup_Show('FREEUI_RESET_RAID_DEBUFFS')
+        StaticPopup_Show('FREEUI_RESET_RAID_DEBUFFS')
     end)
     scroll.add = F.CreateButton(frame, 70, 24, _G.ADD)
     scroll.add:SetPoint('TOPRIGHT', -10, -120)
@@ -2375,10 +2416,10 @@ function GUI:SetupDebuffWatcher(parent)
         if not spellID then
             return
         end
-        _G.GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
-        _G.GameTooltip:ClearLines()
-        _G.GameTooltip:SetSpellByID(spellID)
-        _G.GameTooltip:Show()
+        GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
+        GameTooltip:ClearLines()
+        GameTooltip:SetSpellByID(spellID)
+        GameTooltip:Show()
     end
 
     local function createBar(index, texture)
@@ -2395,12 +2436,12 @@ function GUI:SetupDebuffWatcher(parent)
         close:SetScript('OnClick', function()
             bar:Hide()
             if C.DebuffWatcherList[bar.instName][bar.spellID] then
-                if not _G.FREE_ADB['DebuffWatcherList'][bar.instName] then
-                    _G.FREE_ADB['DebuffWatcherList'][bar.instName] = {}
+                if not FREE_ADB['DebuffWatcherList'][bar.instName] then
+                    FREE_ADB['DebuffWatcherList'][bar.instName] = {}
                 end
-                _G.FREE_ADB['DebuffWatcherList'][bar.instName][bar.spellID] = 0
+                FREE_ADB['DebuffWatcherList'][bar.instName][bar.spellID] = 0
             else
-                _G.FREE_ADB['DebuffWatcherList'][bar.instName][bar.spellID] = nil
+                FREE_ADB['DebuffWatcherList'][bar.instName][bar.spellID] = nil
             end
             setupBars(bar.instName)
         end)
@@ -2421,10 +2462,10 @@ function GUI:SetupDebuffWatcher(parent)
         end)
         prioBox:HookScript('OnEnterPressed', function(self)
             local prio = analyzePrio(tonumber(self:GetText()))
-            if not _G.FREE_ADB['DebuffWatcherList'][bar.instName] then
-                _G.FREE_ADB['DebuffWatcherList'][bar.instName] = {}
+            if not FREE_ADB['DebuffWatcherList'][bar.instName] then
+                FREE_ADB['DebuffWatcherList'][bar.instName] = {}
             end
-            _G.FREE_ADB['DebuffWatcherList'][bar.instName][bar.spellID] = prio
+            FREE_ADB['DebuffWatcherList'][bar.instName][bar.spellID] = prio
             self:SetText(prio)
         end)
         prioBox.title = L['Priority']
@@ -2461,8 +2502,8 @@ function GUI:SetupDebuffWatcher(parent)
             for spellID, priority in pairs(C.DebuffWatcherList[instName]) do
                 if
                     not (
-                        _G.FREE_ADB['DebuffWatcherList'][instName]
-                        and _G.FREE_ADB['DebuffWatcherList'][instName][spellID]
+                        FREE_ADB['DebuffWatcherList'][instName]
+                        and FREE_ADB['DebuffWatcherList'][instName][spellID]
                     )
                 then
                     index = index + 1
@@ -2471,8 +2512,8 @@ function GUI:SetupDebuffWatcher(parent)
             end
         end
 
-        if _G.FREE_ADB['DebuffWatcherList'][instName] then
-            for spellID, priority in pairs(_G.FREE_ADB['DebuffWatcherList'][instName]) do
+        if FREE_ADB['DebuffWatcherList'][instName] then
+            for spellID, priority in pairs(FREE_ADB['DebuffWatcherList'][instName]) do
                 if priority > 0 then
                     index = index + 1
                     applyData(index, instName, spellID, priority)
@@ -2713,7 +2754,7 @@ function GUI:SetupCustomClassColor(parent)
     local panel = CreateExtraGUI(parent, guiName)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
-    local colors = _G.FREE_ADB.CustomClassColors
+    local colors = FREE_ADB.CustomClassColors
 
     local datas = {
         [1] = { text = 'HUNTER', value = colors.HUNTER },
@@ -2929,17 +2970,17 @@ function GUI:SetupAnnounceableSpells(parent)
         local spellID = tonumber(parent.box:GetText())
 
         if not spellID or not GetSpellInfo(spellID) then
-            _G.UIErrorsFrame:AddMessage(C.INFO_COLOR .. L['Incorrect SpellID'])
+            UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Incorrect SpellID'])
             return
         end
 
-        local modValue = _G.FREE_ADB['AnnounceableSpellsList'][spellID]
+        local modValue = FREE_ADB['AnnounceableSpellsList'][spellID]
         if modValue or modValue == nil and C.AnnounceableSpellsList[spellID] then
-            _G.UIErrorsFrame:AddMessage(C.INFO_COLOR .. L['Existing ID'])
+            UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is existed'])
             return
         end
 
-        _G.FREE_ADB['AnnounceableSpellsList'][spellID] = true
+        FREE_ADB['AnnounceableSpellsList'][spellID] = true
         CreateBars(scroll, spellID, barTable, 'AnnounceableSpellsList', 'AnnounceableSpellsList')
         parent.box:SetText('')
     end)
@@ -2947,7 +2988,7 @@ function GUI:SetupAnnounceableSpells(parent)
     scroll.reset = F.CreateButton(frame, 50, 24, _G.RESET)
     scroll.reset:SetPoint('LEFT', scroll.add, 'RIGHT', 5, 0)
     scroll.reset:SetScript('OnClick', function()
-        _G.StaticPopup_Show('FREEUI_RESET_ANNOUNCEABLE_SPELLS')
+        StaticPopup_Show('FREEUI_RESET_ANNOUNCEABLE_SPELLS')
     end)
 
     for spellID, value in pairs(ANNOUNCEMENT.AnnounceableSpellsList) do

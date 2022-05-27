@@ -275,12 +275,12 @@ function UNITFRAME.AuraFilter(
         end
     elseif style == 'nameplate' or style == 'boss' or style == 'arena' then
         if element.__owner.plateType == 'NameOnly' then
-            return FREE_ADB['NPAuraFilter'][1][spellID] or C.AuraWhiteList[spellID]
-        elseif FREE_ADB['NPAuraFilter'][2][spellID] or C.AuraBlackList[spellID] then
+            return NAMEPLATE.NameplateFilter[1][spellID]
+        elseif NAMEPLATE.NameplateFilter[2][spellID] then
             return false
         elseif (element.showStealableBuffs and isStealable or element.alwaysShowStealable and dispellType[debuffType]) and not UnitIsPlayer(unit) and (not button.isDebuff) then
             return true
-        elseif FREE_ADB['NPAuraFilter'][1][spellID] or C.AuraWhiteList[spellID] then
+        elseif NAMEPLATE.NameplateFilter[1][spellID] then
             return true
         else
             local auraFilter = C.DB.Nameplate.AuraFilterMode
@@ -739,3 +739,4 @@ function UNITFRAME:RefreshAurasByCombat(self)
     self:RegisterEvent('PLAYER_REGEN_ENABLED', RefreshAurasElements, true)
     self:RegisterEvent('PLAYER_REGEN_DISABLED', RefreshAurasElements, true)
 end
+
