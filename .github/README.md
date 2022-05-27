@@ -1,5 +1,5 @@
 <div align="center">
-<img src="https://i.imgur.com/MMMYmxZ.png" title="FreeUI Logo" />
+<img src="https://i.imgur.com/dLTqiS8.png" title="FreeUI Logo" />
 <br />
 <br />
 <img src="https://img.shields.io/badge/WoW-retail-orange" title="retail only" />
@@ -14,7 +14,7 @@
 
 <div align="center">
 
-# ![Logo](https://i.imgur.com/MMMYmxZ.png)
+# ![Logo](https://i.imgur.com/dLTqiS8.png)
 [![WoW](https://img.shields.io/badge/WoW-Retail-orange)]()
 [![Discord Channel](https://img.shields.io/badge/discord-FreeUI-7983f5)](https://discord.gg/86wbfZXxn7)
 [![QQ群](https://img.shields.io/badge/QQ群-203621176-ff69b4)](https://qm.qq.com/cgi-bin/qm/qr?k=ogz72zoE_fczw2Umsma71XALjWitQ3zk)
