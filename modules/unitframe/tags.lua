@@ -444,6 +444,7 @@ function NAMEPLATE:CreateHealthTag(self)
 
     local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
     text:SetJustifyH('RIGHT')
+    text:ClearAllPoints()
     text:SetPoint('RIGHT', self, 'TOPRIGHT')
 
     self:Tag(text, '[free:nphp]')
