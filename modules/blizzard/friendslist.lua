@@ -26,6 +26,8 @@ local gameIcons = {
     [_G.BNET_CLIENT_CRASH4] = mediaPath .. 'CRASH4',
     [_G.BNET_CLIENT_ARCADE] = _G.BNet_GetClientTexture(_G.BNET_CLIENT_ARCADE),
     [_G.BNET_CLIENT_COD_VANGUARD] = mediaPath .. 'COD_VG',
+    [_G.BNET_CLIENT_DI] = mediaPath .. 'GameIcons\\DI',
+    [_G.BNET_CLIENT_ARCLIGHT] = mediaPath .. 'GameIcons\\ARCLIGHT',
 }
 
 local statusIcons = {
@@ -66,6 +68,8 @@ local clientColor = {
     [_G.BNET_CLIENT_COD_MW] = { r = 0, g = 0.8, b = 0 }, -- 使命召唤：现代战争
     [_G.BNET_CLIENT_COD_MW2] = { r = 0, g = 0.8, b = 0 }, -- 使命召唤：现代战争 2
     [_G.BNET_CLIENT_COD_BOCW] = { r = 0, g = 0.8, b = 0 }, -- 使命召唤：冷战
+    [_G.BNET_CLIENT_DI] = { r = 0.768, g = 0.121, b = 0.231 }, -- 暗黑破坏神: 不朽
+    [_G.BNET_CLIENT_ARCLIGHT] = { r = 0.945, g = 0.757, b = 0.149 }, -- 魔兽争霸: 弧光大作战
     [_G.BNET_CLIENT_WOW .. 'C'] = { r = 0.866, g = 0.690, b = 0.180 }, -- 魔兽世界怀旧版
     ['BSAp'] = { r = 0.509, g = 0.772, b = 1 }, -- 手机战网 App
 }
