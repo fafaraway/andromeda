@@ -1,25 +1,12 @@
 <div align="center">
-<img src="https://i.imgur.com/tmqVAhI.png" title="FreeUI Logo" />
-<br />
-<br />
-<img src="https://img.shields.io/badge/WoW-retail-orange" title="retail only" />
-<a href="https://discord.gg/86wbfZXxn7" title="join Discord channel"><img src="https://img.shields.io/discord/242811601260904450?color=7289DA&label=Discord" /></a>
-<a href="https://qm.qq.com/cgi-bin/qm/qr?k=ogz72zoE_fczw2Umsma71XALjWitQ3zk" title="加入QQ群"><img src="https://img.shields.io/badge/QQ群-203621176-ff69b4" /></a>
-<a href="https://github.com/Solor/FreeUI/actions" title="bulid passing"><img src="https://img.shields.io/github/workflow/status/Solor/FreeUI/Release" /></a>
-<a href="https://github.com/Solor/FreeUI/releases" title="download latest release"><img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/Solor/FreeUI"></a>
-<img alt="GitHub Release Date" src="https://img.shields.io/github/release-date/Solor/FreeUI" title="release date" />
-</div>
-<br />
-<br />
 
-<div align="center">
-
-# ![Logo](https://i.imgur.com/tmqVAhI.png)
+# ![Logo](https://i.imgur.com/PswQwEW.png)
 [![WoW](https://img.shields.io/badge/WoW-Retail-orange)]()
-[![Discord Channel](https://img.shields.io/badge/discord-FreeUI-7983f5)](https://discord.gg/86wbfZXxn7)
+[![Discord Channel](https://img.shields.io/discord/242811601260904450?color=7289DA&label=Discord)](https://discord.gg/86wbfZXxn7)
 [![QQ群](https://img.shields.io/badge/QQ群-203621176-ff69b4)](https://qm.qq.com/cgi-bin/qm/qr?k=ogz72zoE_fczw2Umsma71XALjWitQ3zk)
 [![Build Status](https://img.shields.io/github/workflow/status/Solor/FreeUI/Release)](https://github.com/Solor/FreeUI/actions)
 [![Latest Release](https://img.shields.io/github/v/release/Solor/FreeUI)](https://github.com/Solor/FreeUI/releases)
+[![Release Date](https://img.shields.io/github/release-date/Solor/FreeUI)](https://github.com/Solor/FreeUI/releases)
 
 </div>
 
