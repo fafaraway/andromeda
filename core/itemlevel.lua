@@ -160,3 +160,59 @@ function F.GetItemLevel(link, arg1, arg2, fullScan)
         return iLvlDB[link]
     end
 end
+
+local pendingNPCs, nameCache, callbacks = {}, {}, {}
+local loadingStr = '...'
+local pendingFrame = CreateFrame('Frame')
+pendingFrame:Hide()
+pendingFrame:SetScript('OnUpdate', function(self, elapsed)
+    self.elapsed = (self.elapsed or 0) + elapsed
+    if self.elapsed > 1 then
+        if next(pendingNPCs) then
+            for npcID, count in pairs(pendingNPCs) do
+                if count > 2 then
+                    nameCache[npcID] = UNKNOWN
+                    if callbacks[npcID] then
+                        callbacks[npcID](UNKNOWN)
+                    end
+                    pendingNPCs[npcID] = nil
+                else
+                    local name = F.GetNPCName(npcID, callbacks[npcID])
+                    if name and name ~= loadingStr then
+                        pendingNPCs[npcID] = nil
+                    else
+                        pendingNPCs[npcID] = pendingNPCs[npcID] + 1
+                    end
+                end
+            end
+        else
+            self:Hide()
+        end
+
+        self.elapsed = 0
+    end
+end)
+
+function F.GetNPCName(npcID, callback)
+    local name = nameCache[npcID]
+    if not name then
+        tip:SetOwner(UIParent, 'ANCHOR_NONE')
+        tip:SetHyperlink(format('unit:Creature-0-0-0-0-%d', npcID))
+        name = _G[C.ADDON_NAME .. 'ScanTooltipTextLeft1']:GetText() or loadingStr
+        if name == loadingStr then
+            if not pendingNPCs[npcID] then
+                pendingNPCs[npcID] = 1
+                pendingFrame:Show()
+            end
+        else
+            nameCache[npcID] = name
+        end
+    end
+
+    if callback then
+        callback(name)
+        callbacks[npcID] = callback
+    end
+
+    return name
+end
