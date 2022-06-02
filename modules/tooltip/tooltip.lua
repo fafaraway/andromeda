@@ -486,6 +486,18 @@ function TOOLTIP:GameTooltip_ComparisonFix(anchorFrame, shoppingTooltip1, shoppi
     end
 end
 
+-- Fix
+function TOOLTIP:FixStoneSoupError()
+    local blockTooltips = {
+        [556] = true, -- Stone Soup
+    }
+    hooksecurefunc(_G.UIWidgetTemplateStatusBarMixin, 'Setup', function(self)
+        if self:IsForbidden() and blockTooltips[self.widgetSetID] and self.Bar then
+            self.Bar.tooltip = nil
+        end
+    end)
+end
+
 -- Reanchor and movable
 local mover
 function TOOLTIP:GameTooltip_SetDefaultAnchor(parent)
@@ -554,6 +566,7 @@ function TOOLTIP:OnLogin()
     TOOLTIP:AzeriteArmor()
     TOOLTIP:AlreadyUsed()
     TOOLTIP:ParagonRewards()
+    TOOLTIP:FixStoneSoupError()
 
     F:RegisterEvent('MODIFIER_STATE_CHANGED', TOOLTIP.ResetUnit)
 end
