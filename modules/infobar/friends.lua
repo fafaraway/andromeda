@@ -44,13 +44,11 @@ local function buildFriendTable(num)
 end
 
 local function sortBNFriends(a, b)
-    if a[5] and b[5] then
-        return a[5] > b[5]
+    if C.FACTION == 'Alliance' then
+        return a[5] == b[5] and a[4] < b[4] or a[5] > b[5]
+    else
+        return a[5] == b[5] and a[4] > b[4] or a[5] > b[5]
     end
-end
-
-local function CanCooperateWithUnit(gameAccountInfo)
-    return gameAccountInfo.playerGuid and (gameAccountInfo.factionName == C.FACTION) and (gameAccountInfo.realmID ~= 0)
 end
 
 local function GetOnlineInfoText(client, isMobile, rafLinkType, locationText)
@@ -101,7 +99,7 @@ local function buildBNetTable(num)
                 local isGameBusy = gameAccountInfo.isGameBusy
                 local wowProjectID = gameAccountInfo.wowProjectID
                 local isMobile = gameAccountInfo.isWowMobile
-                local canCooperate = CanCooperateWithUnit(gameAccountInfo)
+                local factionName = gameAccountInfo.factionName or UNKNOWN
 
                 charName = _G.BNet_GetValidatedCharacterName(charName, battleTag, client)
                 class = C.ClassList[class]
@@ -128,23 +126,20 @@ local function buildBNetTable(num)
                     client = CLIENT_WOW_DIFF
                 end
 
-                table.insert(
-                    bnetTable,
-                    {
-                        i,
-                        accountName,
-                        charName,
-                        canCooperate,
-                        client,
-                        status,
-                        class,
-                        level,
-                        infoText,
-                        note,
-                        broadcastText,
-                        broadcastTime,
-                    }
-                )
+                table.insert(bnetTable, {
+                    i,
+                    accountName,
+                    charName,
+                    factionName,
+                    client,
+                    status,
+                    class,
+                    level,
+                    infoText,
+                    note,
+                    broadcastText,
+                    broadcastTime,
+                })
             end
         end
     end
@@ -258,6 +253,32 @@ local function inviteFunc(_, bnetIDGameAccount, guid)
     _G.FriendsFrame_InviteOrRequestToJoin(guid, bnetIDGameAccount)
 end
 
+local inviteTypeToButtonText = {
+    ['INVITE'] = _G.TRAVEL_PASS_INVITE,
+    ['SUGGEST_INVITE'] = _G.SUGGEST_INVITE,
+    ['REQUEST_INVITE'] = _G.REQUEST_INVITE,
+    ['INVITE_CROSS_FACTION'] = _G.TRAVEL_PASS_INVITE_CROSS_FACTION,
+    ['SUGGEST_INVITE_CROSS_FACTION'] = _G.SUGGEST_INVITE_CROSS_FACTION,
+    ['REQUEST_INVITE_CROSS_FACTION'] = _G.REQUEST_INVITE_CROSS_FACTION,
+}
+
+local function GetButtonTexFromInviteType(guid, factionName)
+    local inviteType = GetDisplayedInviteType(guid)
+    if factionName and factionName ~= C.FACTION then
+        inviteType = inviteType .. '_CROSS_FACTION'
+    end
+    return inviteTypeToButtonText[inviteType]
+end
+
+local function GetNameAndInviteType(class, charName, guid, factionName)
+    return format(
+        '%s%s|r %s',
+        F:RgbToHex(F:ClassColor(C.ClassList[class])),
+        charName,
+        GetButtonTexFromInviteType(guid, factionName)
+    )
+end
+
 local function buttonOnClick(self, btn)
     if btn == 'LeftButton' then
         if IsAltKeyDown() then
@@ -269,32 +290,30 @@ local function buttonOnClick(self, btn)
                     end
                 end
 
+                menuList[1].text = C.RED_COLOR .. self.data[2]
+
                 local numGameAccounts = C_BattleNet.GetFriendNumGameAccounts(self.data[1])
-                local lastGameAccountID, lastGameAccountGUID
                 if numGameAccounts > 0 then
                     for i = 1, numGameAccounts do
                         local gameAccountInfo = C_BattleNet.GetFriendGameAccountInfo(self.data[1], i)
                         local charName = gameAccountInfo.characterName
                         local client = gameAccountInfo.clientProgram
                         local class = gameAccountInfo.className or _G.UNKNOWN
+                        local factionName = gameAccountInfo.factionName or _G.UNKNOWN
                         local bnetIDGameAccount = gameAccountInfo.gameAccountID
                         local guid = gameAccountInfo.playerGuid
                         local wowProjectID = gameAccountInfo.wowProjectID
-                        if
-                            client == _G.BNET_CLIENT_WOW
-                            and CanCooperateWithUnit(gameAccountInfo)
-                            and wowProjectID == WOW_PROJECT_ID
-                        then
+
+                        if client == BNET_CLIENT_WOW and wowProjectID == WOW_PROJECT_ID and guid then
                             if not menuList[index] then
                                 menuList[index] = {}
                             end
-                            menuList[index].text = F:RgbToHex(F:ClassColor(C.ClassList[class])) .. charName
+
+                            menuList[index].text = GetNameAndInviteType(class, charName, guid, factionName)
                             menuList[index].notCheckable = true
                             menuList[index].arg1 = bnetIDGameAccount
                             menuList[index].arg2 = guid
                             menuList[index].func = inviteFunc
-                            lastGameAccountID = bnetIDGameAccount
-                            lastGameAccountGUID = guid
 
                             index = index + 1
                         end
@@ -304,11 +323,7 @@ local function buttonOnClick(self, btn)
                 if index == 2 then
                     return
                 end
-                if index == 3 then
-                    _G.FriendsFrame_InviteOrRequestToJoin(lastGameAccountGUID, lastGameAccountID)
-                else
-                    _G.EasyMenu(menuList, F.EasyMenu, self, 0, 0, 'MENU', 1)
-                end
+                EasyMenu(menuList, F.EasyMenu, self, 0, 0, 'MENU', 1)
             else
                 C_PartyInfo.InviteUnit(self.data[1])
             end
@@ -464,26 +479,28 @@ function INFOBAR:FriendsPanel_UpdateButton(button)
         button.data = friendTable[index]
     else
         local bnetIndex = index - onlineFriends
-        local _, accountName, charName, canCooperate, client, status, class, _, infoText = unpack(bnetTable[bnetIndex])
+        local _, accountName, charName, factionName, client, status, class, _, infoText = unpack(bnetTable[bnetIndex])
 
         button.status:SetTexture(status)
+
         local zoneColor = inactiveZone
         local name = inactiveZone .. charName
+
         if client == _G.BNET_CLIENT_WOW then
-            if canCooperate then
-                local color = C.ClassColors[class] or GetQuestDifficultyColor(1)
-                name = F:RgbToHex(color) .. charName
-            end
+            local color = C.ClassColors[class] or GetQuestDifficultyColor(1)
+            name = F:RgbToHex(color) .. charName
             zoneColor = GetRealZoneText() == infoText and activeZone or inactiveZone
         end
+
         button.name:SetText(string.format('%s%s|r (%s|r)', C.INFO_COLOR, accountName, name))
         button.zone:SetText(string.format('%s%s', zoneColor, infoText))
+
         if client == CLIENT_WOW_DIFF then
             button.gameIcon:SetTexture(_G.BNet_GetClientTexture(_G.BNET_CLIENT_WOW))
-            button.gameIcon:SetVertexColor(0.3, 0.3, 0.3)
+        elseif client == BNET_CLIENT_WOW then
+            button.gameIcon:SetTexture('Interface\\FriendsFrame\\PlusManz-' .. factionName)
         else
             button.gameIcon:SetTexture(_G.BNet_GetClientTexture(client))
-            button.gameIcon:SetVertexColor(1, 1, 1)
         end
 
         button.isBNet = true
