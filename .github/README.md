@@ -1,12 +1,11 @@
 <div align="center">
 
-# ![Logo](https://i.imgur.com/PswQwEW.png)
+# ![Logo](https://i.imgur.com/dLTqiS8.png)
 [![WoW](https://img.shields.io/badge/WoW-Retail-orange)]()
-[![Discord Channel](https://img.shields.io/discord/242811601260904450?color=7289DA&label=Discord)](https://discord.gg/86wbfZXxn7)
+[![Discord Channel](https://img.shields.io/badge/discord-FreeUI-7983f5)](https://discord.gg/86wbfZXxn7)
 [![QQ群](https://img.shields.io/badge/QQ群-203621176-ff69b4)](https://qm.qq.com/cgi-bin/qm/qr?k=ogz72zoE_fczw2Umsma71XALjWitQ3zk)
 [![Build Status](https://img.shields.io/github/workflow/status/Solor/FreeUI/Release)](https://github.com/Solor/FreeUI/actions)
 [![Latest Release](https://img.shields.io/github/v/release/Solor/FreeUI)](https://github.com/Solor/FreeUI/releases)
-[![Release Date](https://img.shields.io/github/release-date/Solor/FreeUI)](https://github.com/Solor/FreeUI/releases)
 
 </div>
 
