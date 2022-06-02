@@ -157,16 +157,20 @@ local function SetupAuraFilter()
     GUI:SetupNameplateAuraFilter(GUI.Page[13])
 end
 
+local function SetupNameplateUnitFilter()
+    GUI:SetupNameplateUnitFilter(GUI.Page[13])
+end
+
+local function SetupNameplateColorByDot()
+    GUI:SetupNameplateColorByDot(GUI.Page[13])
+end
+
 local function SetupNameplateMajorSpells()
     GUI:SetupNameplateMajorSpells(GUI.Page[13])
 end
 
-local function UpdateCustomUnitList()
-    NAMEPLATE:CreateUnitTable()
-end
-
-local function RefreshCustomDebuffs()
-    NAMEPLATE:RefreshCustomDebuffs()
+local function RefreshSpecialUnitsList()
+    NAMEPLATE:RefreshSpecialUnitsList()
 end
 
 local function RefreshAllPlates()
@@ -1897,42 +1901,42 @@ GUI.OptionsList = {
             1,
             'Nameplate',
             'FriendlyClassColor',
-            L['Friendly Unit ClassColored'],
+            L['Color Friendly Unit By Class'],
             nil,
             nil,
             nil,
-            L["Friendly units' nameplate are colored by class."],
+            L["Friendly units are colored by class."],
         },
         {
             1,
             'Nameplate',
             'HostileClassColor',
-            L['Hostile Unit ClassColored'],
+            L['Color Hostile Unit By Class'],
             true,
             nil,
             nil,
-            L["Hostile units' nameplate are colored by class."],
+            L["Hostile units are colored by class."],
         },
         {
             1,
             'Nameplate',
             'ColoredTarget',
-            L['Colored Target'],
+            L['Color Target Unit'],
             nil,
             nil,
             nil,
-            L["Color your target's nameplate, its priority is higher than custom color and threat color."],
+            L["Color your current target, its priority is higher than special unit color and threat color."],
         },
         { 5, 'Nameplate', 'TargetColor', L['Target Color'], 2 },
         {
             1,
             'Nameplate',
             'ColoredFocus',
-            L['Colored Focus'],
+            L['Color Focus Unit'],
             nil,
             nil,
             nil,
-            L["Color your focus's nameplate, its priority is higher than custom color and threat color."],
+            L["Color your current focus, its priority is higher than special unit color and threat color."],
         },
 
         { 5, 'Nameplate', 'FocusColor', L['Focus Color'], 2 },
@@ -1940,11 +1944,11 @@ GUI.OptionsList = {
             1,
             'Nameplate',
             'TankMode',
-            L['Force TankMode Colored'],
+            L['Force Tank Mode Color'],
             nil,
             nil,
             nil,
-            L['Nameplate health color present its threat status to you, instead of glow color.|nFor custom color units, the threat status remains on nameplate glow.'],
+            L['Nameplate health color present its threat status for non-tank classes, instead of glow color.|nFor special units, the threat status remains on nameplate glow.'],
         },
         {
             1,
@@ -1954,7 +1958,7 @@ GUI.OptionsList = {
             true,
             nil,
             nil,
-            L["If 'Force TankMode Colored' enabled, swap their threat status color for non-tank classes."],
+            L["If 'Force Tank Mode Color' enabled, swap their threat status color for non-tank classes."],
         },
         { 5, 'Nameplate', 'SecureColor', L['Secure'] },
         { 5, 'Nameplate', 'TransColor', L['Transition'], 1 },
@@ -1963,45 +1967,22 @@ GUI.OptionsList = {
         {
             1,
             'Nameplate',
-            'CustomUnitColor',
-            L['Colored Custom Unit'],
+            'ShowSpecialUnits',
+            L['Color Special Unit'],
             nil,
-            nil,
-            UpdateCustomUnitList,
-            L["Color units' nameplate by custom color.|nYou can customize the color and the units list to match your requirement."],
+            SetupNameplateUnitFilter,
+            RefreshSpecialUnitsList,
+            L["Color special units nameplate by custom color.|nYou can customize the color and the units list to match your requirement."],
         },
-        { 5, 'Nameplate', 'CustomColor', L['Custom Color'] },
-        {
-            2,
-            'Nameplate',
-            'CustomUnitList',
-            L['Custom Unit List'],
-            true,
-            nil,
-            UpdateCustomUnitList,
-            L['Enter unit name or NPC ID. |nUse key SPACE between multi units.'],
-        },
-
         {
             1,
             'Nameplate',
-            'ColoredByDebuff',
-            L['Colored by Debuff'],
-            nil,
-            nil,
-            RefreshCustomDebuffs,
-            L["Color units' nameplate that affected by your specific debuff.|nYou can customize the color and the debuff list to match your requirement."],
-        },
-        { 5, 'Nameplate', 'CustomDebuffColor', L['Custom Color'] },
-        {
-            2,
-            'Nameplate',
-            'CustomDebuffList',
-            L['Custom Debuff List'],
+            'ColorByDot',
+            L['Color Unit by Debuff'],
             true,
+            SetupNameplateColorByDot,
             nil,
-            RefreshCustomDebuffs,
-            L['Enter the spell ID. |nUse key SPACE between multi spells.'],
+            L["Color units nameplate that affected by your specific debuff.|nYou can customize the color and the debuff list to match your requirement."],
         },
     },
     [14] = { -- theme

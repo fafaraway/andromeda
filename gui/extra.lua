@@ -61,7 +61,7 @@ end
 function GUI:CreateScroll(parent, width, height, text, noBg)
     local scroll = CreateFrame('ScrollFrame', nil, parent, 'UIPanelScrollFrameTemplate')
     scroll:SetSize(width, height)
-    scroll:SetPoint('TOPLEFT', 10, -50)
+    scroll:SetPoint('TOPLEFT', 10, -45)
 
     if text then
         F.CreateFS(scroll, C.Assets.Font.Regular, 12, 'OUTLINE', text, nil, true, 'TOPLEFT', 5, 20)
@@ -77,16 +77,6 @@ function GUI:CreateScroll(parent, width, height, text, noBg)
     F.ReskinScroll(scroll.ScrollBar)
 
     return scroll
-end
-
-local function CreateButton(parent, width, height, text, anchor)
-    local button = CreateFrame('Button', nil, parent, 'UIPanelButtonTemplate')
-    button:SetSize(width, height)
-    button:SetPoint(unpack(anchor))
-    button:SetText('|cffffffff' .. text)
-    F.Reskin(button)
-
-    return button
 end
 
 local function SortBars(barTable)
@@ -856,8 +846,8 @@ local function RefreshAllPlates()
     NAMEPLATE:RefreshAllPlates()
 end
 
-local function RefreshNameplateFilters()
-    NAMEPLATE:RefreshNameplateFilters()
+local function RefreshNameplateAuraFilters()
+    NAMEPLATE:RefreshNameplateAuraFilters()
 end
 
 function GUI:SetupNameplateAuraFilter(parent)
@@ -868,7 +858,7 @@ function GUI:SetupNameplateAuraFilter(parent)
     end
 
     local panel = CreateExtraGUI(parent, guiName)
-    panel:SetScript('OnHide', RefreshNameplateFilters)
+    panel:SetScript('OnHide', RefreshNameplateAuraFilters)
 
     local frameData = {
         [1] = {
@@ -897,7 +887,9 @@ function GUI:SetupNameplateAuraFilter(parent)
         close:SetScript('OnClick', function()
             bar:Hide()
 
-            if (index == 1 and C.NameplateAuraWhiteList[spellID]) or (index == 2 and C.NameplateAuraBlackList[spellID]) then
+            if
+                (index == 1 and C.NameplateAuraWhiteList[spellID]) or (index == 2 and C.NameplateAuraBlackList[spellID])
+            then
                 FREE_ADB['NameplateAuraFilterList'][index][spellID] = false
             else
                 FREE_ADB['NameplateAuraFilterList'][index][spellID] = nil
@@ -919,7 +911,8 @@ function GUI:SetupNameplateAuraFilter(parent)
 
     local function isAuraExisted(index, spellID)
         local modValue = FREE_ADB['NameplateAuraFilterList'][index][spellID]
-        local locValue = (index == 1 and C.NameplateAuraWhiteList[spellID]) or (index == 2 and C.NameplateAuraBlackList[spellID])
+        local locValue = (index == 1 and C.NameplateAuraWhiteList[spellID])
+            or (index == 2 and C.NameplateAuraBlackList[spellID])
 
         return modValue or (modValue == nil and locValue)
     end
@@ -943,7 +936,7 @@ function GUI:SetupNameplateAuraFilter(parent)
 
     local filterIndex
     StaticPopupDialogs['FREEUI_RESET_NAMEPLATE_AURA_FILTER'] = {
-        text = C.RED_COLOR .. L['Reset nameplate filter'],
+        text = C.RED_COLOR .. L['Reset to default filter list?'],
         button1 = YES,
         button2 = NO,
         OnAccept = function()
@@ -964,18 +957,17 @@ function GUI:SetupNameplateAuraFilter(parent)
         scroll:ClearAllPoints()
         scroll:SetPoint('BOTTOMLEFT', 10, 10)
 
-        scroll.box = F.CreateEditBox(frame, 120, 25)
+        scroll.box = F.CreateEditBox(frame, 130, 25)
         scroll.box:SetPoint('TOPLEFT', 10, -10)
-        scroll.box.title = value.text
-        F.AddTooltip(scroll.box, 'ANCHOR_RIGHT', value.tip, 'BLUE', true)
+        F.AddTooltip(scroll.box, 'ANCHOR_RIGHT', value.tip, 'BLUE')
 
-        scroll.add = F.CreateButton(frame, 45, 25, ADD)
+        scroll.add = F.CreateButton(frame, 40, 25, ADD, 11)
         scroll.add:SetPoint('TOPRIGHT', -8, -10)
         scroll.add:SetScript('OnClick', function()
             addClick(scroll, index)
         end)
 
-        scroll.reset = F.CreateButton(frame, 45, 25, RESET)
+        scroll.reset = F.CreateButton(frame, 40, 25, RESET, 11)
         scroll.reset:SetPoint('RIGHT', scroll.add, 'LEFT', -5, 0)
         scroll.reset:SetScript('OnClick', function()
             filterIndex = index
@@ -990,6 +982,10 @@ function GUI:SetupNameplateAuraFilter(parent)
     end
 end
 
+local function RefreshMajorSpells()
+    NAMEPLATE:RefreshMajorSpells()
+end
+
 function GUI:SetupNameplateMajorSpells(parent)
     local guiName = C.ADDON_NAME .. 'GUINamePlateCastbarGlow'
     TogglePanel(guiName)
@@ -997,30 +993,25 @@ function GUI:SetupNameplateMajorSpells(parent)
         return
     end
 
-    local function refreshMajorSpells()
-        NAMEPLATE:RefreshMajorSpells()
-    end
-
     local panel = CreateExtraGUI(parent, guiName, nil, true)
-    panel:SetScript('OnHide', refreshMajorSpells)
+    panel:SetScript('OnHide', RefreshMajorSpells)
     parent.panel = panel
 
     local barTable = {}
 
     local frame = panel.bg
-    local scroll = GUI:CreateScroll(frame, 200, 480)
+    local scroll = GUI:CreateScroll(frame, 200, 485)
     parent.scroll = scroll
-    scroll.box = GUI:CreateEditbox(frame, nil, 10, -10, nil, 110, 24)
-    scroll.box.title = L['SpellID']
+    scroll.box = GUI:CreateEditbox(frame, nil, 10, -10, nil, 130, 25)
     F.AddTooltip(
         scroll.box,
         'ANCHOR_RIGHT',
         L['Fill in SpellID, must be a number.|nSpell name is not supported.'],
-        'BLUE',
-        true
+        'BLUE'
     )
 
-    scroll.add = CreateButton(scroll, 50, 22, _G.ADD, { 'LEFT', scroll.box, 'RIGHT', 5, 0 })
+    scroll.add = F.CreateButton(frame, 40, 25, ADD, 11)
+    scroll.add:SetPoint('TOPRIGHT', -8, -10)
     scroll.add.__owner = scroll
     scroll.add:HookScript('OnClick', function(button)
         local parent = button.__owner
@@ -1039,7 +1030,8 @@ function GUI:SetupNameplateMajorSpells(parent)
         parent.box:SetText('')
     end)
 
-    scroll.reset = CreateButton(frame, 50, 22, _G.RESET, { 'LEFT', scroll.add, 'RIGHT', 5, 0 })
+    scroll.reset = F.CreateButton(frame, 40, 25, RESET, 11)
+    scroll.reset:SetPoint('RIGHT', scroll.add, 'LEFT', -5, 0)
     scroll.reset:HookScript('OnClick', function()
         StaticPopup_Show('FREEUI_RESET_MAJOR_SPELLS')
     end)
@@ -1296,6 +1288,197 @@ function GUI:SetupNameplateExecuteIndicator(parent)
 
     local offset = -30
     CreateSlider(scroll, 'Nameplate', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset)
+end
+
+local function RefreshSpecialUnitsList()
+    NAMEPLATE:RefreshSpecialUnitsList()
+end
+
+function GUI:SetupNameplateUnitFilter(parent)
+    local guiName = C.ADDON_NAME .. 'GUINamePlateUnitFilter'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName, nil, true)
+    panel:SetScript('OnHide', RefreshSpecialUnitsList)
+
+    local barTable = {}
+
+    local function createBar(parent, text, isNew)
+        local npcID = tonumber(text)
+
+        local bar = CreateFrame('Frame', nil, parent, 'BackdropTemplate')
+        bar:SetSize(200, 30)
+        F.CreateBD(bar, 0.25)
+        barTable[text] = bar
+
+        local icon, close = GUI:CreateBarWidgets(bar, npcID and 136243 or 132288)
+        if npcID then
+            F.AddTooltip(icon, 'ANCHOR_RIGHT', 'ID: ' .. npcID)
+        end
+        close:SetScript('OnClick', function()
+            bar:Hide()
+            barTable[text] = nil
+            if C.SpecialUnitsList[text] then
+                C.DB['Nameplate']['SpecialUnitsList'][text] = false
+            else
+                C.DB['Nameplate']['SpecialUnitsList'][text] = nil
+            end
+            SortBars(barTable)
+        end)
+
+        local name = F.CreateFS(bar, C.Assets.Font.Regular, 12, nil, text, nil, true, 'LEFT', 30, 0)
+        name:SetWidth(180)
+        name:SetJustifyH('LEFT')
+        if isNew then
+            name:SetTextColor(0, 1, 0)
+        end
+        if npcID then
+            F.GetNPCName(npcID, function(npcName)
+                name:SetText(npcName)
+                if npcName == UNKNOWN then
+                    name:SetTextColor(1, 0, 0)
+                end
+            end)
+        end
+
+        SortBars(barTable)
+    end
+
+    local frame = panel.bg
+    local scroll = GUI:CreateScroll(frame, 200, 485)
+
+    local swatch = F.CreateColorSwatch(frame, nil, C.DB['Nameplate']['SpecialUnitColor'])
+    swatch:SetPoint('TOPLEFT', frame, 'TOPLEFT', 10, -10)
+    swatch.__default = C.CharacterSettings['Nameplate']['SpecialUnitColor']
+    swatch:SetSize(25, 25)
+
+    scroll.box = F.CreateEditBox(frame, 100, 25)
+    scroll.box:SetPoint('LEFT', swatch, 'RIGHT', 5, 0)
+    F.AddTooltip(scroll.box, 'ANCHOR_TOPRIGHT', L['Enter NPC ID or name directly.'], 'BLUE')
+
+    local function addClick(button)
+        local parent = button.__owner
+        local text = tonumber(parent.box:GetText()) or parent.box:GetText()
+        if text and text ~= '' then
+            local modValue = C.DB['Nameplate']['SpecialUnitsList'][text]
+            if modValue or modValue == nil and C.SpecialUnitsList[text] then
+                UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is existed'])
+                return
+            end
+            C.DB['Nameplate']['SpecialUnitsList'][text] = true
+            createBar(parent.child, text, true)
+            parent.box:SetText('')
+        end
+    end
+
+    scroll.add = F.CreateButton(frame, 40, 25, ADD, 11)
+    scroll.add:SetPoint('TOPRIGHT', -8, -10)
+    scroll.add.__owner = scroll
+    scroll.add:SetScript('OnClick', addClick)
+
+    scroll.reset = F.CreateButton(frame, 40, 25, RESET, 11)
+    scroll.reset:SetPoint('RIGHT', scroll.add, 'LEFT', -5, 0)
+    scroll.reset:SetScript('OnClick', function()
+        StaticPopup_Show('FREEUI_RESET_NAMEPLATE_SPECIAL_UNIT_FILTER')
+    end)
+
+    for npcID in pairs(NAMEPLATE.SpecialUnitsList) do
+        createBar(scroll.child, npcID)
+    end
+end
+
+function GUI:SetupNameplateColorByDot(parent)
+    local guiName = C.ADDON_NAME .. 'GUINamePlateColorByDot'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName, nil, true)
+
+    local barTable = {}
+
+    local function createBar(parent, spellID, isNew)
+        local spellName = GetSpellInfo(spellID)
+        local texture = GetSpellTexture(spellID)
+
+        local bar = CreateFrame('Frame', nil, parent, 'BackdropTemplate')
+        bar:SetSize(200, 30)
+        F.CreateBD(bar, 0.25)
+        barTable[spellID] = bar
+
+        local icon, close = GUI:CreateBarWidgets(bar, texture)
+        F.AddTooltip(icon, 'ANCHOR_RIGHT', spellID)
+        close:SetScript('OnClick', function()
+            bar:Hide()
+            barTable[spellID] = nil
+            C.DB['Nameplate']['DotSpellsList'][spellID] = nil
+            SortBars(barTable)
+        end)
+
+        local name = F.CreateFS(bar, C.Assets.Font.Regular, 12, nil, spellName, nil, true, 'LEFT', 30, 0)
+        name:SetWidth(180)
+        name:SetJustifyH('LEFT')
+        if isNew then
+            name:SetTextColor(0, 1, 0)
+        end
+
+        SortBars(barTable)
+    end
+
+    local frame = panel.bg
+    local scroll = GUI:CreateScroll(frame, 200, 485)
+
+    local swatch = F.CreateColorSwatch(frame, nil, C.DB['Nameplate']['DotColor'])
+    swatch:SetPoint('TOPLEFT', frame, 'TOPLEFT', 10, -10)
+    swatch.__default = C.CharacterSettings['Nameplate']['DotColor']
+    swatch:SetSize(25, 25)
+
+    scroll.box = F.CreateEditBox(frame, 100, 25)
+    scroll.box:SetPoint('LEFT', swatch, 'RIGHT', 5, 0)
+    F.AddTooltip(
+        scroll.box,
+        'ANCHOR_TOPRIGHT',
+        L['Fill in SpellID, must be a number.|nSpell name is not supported.'],
+        'BLUE'
+    )
+
+    local function addClick(button)
+        local parent = button.__owner
+        local spellID = tonumber(parent.box:GetText())
+
+        if not spellID or not GetSpellInfo(spellID) then
+            UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Incorrect SpellID'])
+            return
+        end
+
+        if C.DB['Nameplate']['DotSpellsList'][spellID] then
+            UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is existed'])
+            return
+        end
+
+        C.DB['Nameplate']['DotSpellsList'][spellID] = true
+        createBar(parent.child, spellID, true)
+        parent.box:SetText('')
+    end
+
+    scroll.add = F.CreateButton(frame, 40, 25, ADD, 11)
+    scroll.add:SetPoint('TOPRIGHT', -8, -10)
+    scroll.add.__owner = scroll
+    scroll.add:SetScript('OnClick', addClick)
+
+    scroll.reset = F.CreateButton(frame, 40, 25, RESET, 11)
+    scroll.reset:SetPoint('RIGHT', scroll.add, 'LEFT', -5, 0)
+    scroll.reset:SetScript('OnClick', function()
+        StaticPopup_Show('FREEUI_RESET_NAMEPLATE_DOT_SPELLS')
+    end)
+
+    for npcID in pairs(C.DB['Nameplate']['DotSpellsList']) do
+        createBar(scroll.child, npcID)
+    end
 end
 
 -- Unitframe
@@ -2353,8 +2536,7 @@ function GUI:SetupDebuffWatcher(parent)
         print(spellID)
         print(C.DebuffWatcherList[instName][spellID])
         local localPrio = C.DebuffWatcherList[instName][spellID]
-        local savedPrio = FREE_ADB['DebuffWatcherList'][instName]
-            and FREE_ADB['DebuffWatcherList'][instName][spellID]
+        local savedPrio = FREE_ADB['DebuffWatcherList'][instName] and FREE_ADB['DebuffWatcherList'][instName][spellID]
         if (localPrio and savedPrio and savedPrio == 0) or (not localPrio and not savedPrio) then
             return false
         end
@@ -2501,10 +2683,7 @@ function GUI:SetupDebuffWatcher(parent)
         if C.DebuffWatcherList[instName] then
             for spellID, priority in pairs(C.DebuffWatcherList[instName]) do
                 if
-                    not (
-                        FREE_ADB['DebuffWatcherList'][instName]
-                        and FREE_ADB['DebuffWatcherList'][instName][spellID]
-                    )
+                    not (FREE_ADB['DebuffWatcherList'][instName] and FREE_ADB['DebuffWatcherList'][instName][spellID])
                 then
                     index = index + 1
                     applyData(index, instName, spellID, priority)

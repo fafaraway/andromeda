@@ -224,12 +224,6 @@ local function BolsterPostUpdate(element)
     end
 end
 
-local debuffList = {}
-function NAMEPLATE:RefreshCustomDebuffs()
-    wipe(debuffList)
-    F:SplitList(debuffList, C.DB.Nameplate.CustomDebuffList)
-end
-
 local isMine = {
     ['player'] = true,
     ['pet'] = true,
@@ -257,7 +251,12 @@ function UNITFRAME.AuraFilter(
 )
     local style = element.__owner.unitStyle
 
-    if C.DB.Nameplate.ColoredByDebuff and style == 'nameplate' and caster == 'player' and debuffList[spellID] then
+    if
+        C.DB.Nameplate.ColorByDot
+        and style == 'nameplate'
+        and caster == 'player'
+        and C.DB['Nameplate']['DotSpellsList'][spellID]
+    then
         element.hasCustomDebuff = true
     end
 
@@ -278,7 +277,11 @@ function UNITFRAME.AuraFilter(
             return NAMEPLATE.NameplateFilter[1][spellID]
         elseif NAMEPLATE.NameplateFilter[2][spellID] then
             return false
-        elseif (element.showStealableBuffs and isStealable or element.alwaysShowStealable and dispellType[debuffType]) and not UnitIsPlayer(unit) and (not button.isDebuff) then
+        elseif
+            (element.showStealableBuffs and isStealable or element.alwaysShowStealable and dispellType[debuffType])
+            and not UnitIsPlayer(unit)
+            and not button.isDebuff
+        then
             return true
         elseif NAMEPLATE.NameplateFilter[1][spellID] then
             return true
@@ -739,4 +742,3 @@ function UNITFRAME:RefreshAurasByCombat(self)
     self:RegisterEvent('PLAYER_REGEN_ENABLED', RefreshAurasElements, true)
     self:RegisterEvent('PLAYER_REGEN_DISABLED', RefreshAurasElements, true)
 end
-

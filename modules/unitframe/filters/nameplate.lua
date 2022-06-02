@@ -1,11 +1,5 @@
 local _, C = unpack(select(2, ...))
 
--- 取自地城手册的段落ID
--- 纯数字则为GUID，选择目标后输入/getnpcid获取
-local function GetSectionInfo(id)
-    return C_EncounterJournal.GetSectionInfo(id).title
-end
-
 C.NameplateAuraWhiteList = {
     -- Buffs
     [642] = true, -- 圣盾术
@@ -90,12 +84,12 @@ C.NameplateShowTargetNPCsList = {
 }
 
 -- 无效目标
-C.NameplateTrashUnitsList = {
+C.TrashUnitsList = {
     [166589] = true, -- 活化武器，赤红
     [175677] = true, -- 走私来的生物，集市
 }
 
-C.NameplateSpecialUnitsList = {
+C.SpecialUnitsList = {
     [179823] = true, -- 圣物收集者，刻希亚
     [179565] = true, -- 圣物饕餮者，刻希亚
     [180501] = true, -- 无辜的灵魂，低语威能碎片
@@ -119,7 +113,7 @@ C.NameplateSpecialUnitsList = {
     [101008] = true, -- 黑鸦堡垒，针刺虫群
     -- Raids
     [175992] = true, -- 猩红议会，忠实的侍从
-    [GetSectionInfo(21953)] = true, -- 凯子，灵能灌注者
+    [165762] = true, -- 凯子，灵能灌注者
     -- Condemned Demon
     [169430] = true,
     [169428] = true,
@@ -128,11 +122,13 @@ C.NameplateSpecialUnitsList = {
     [169429] = true,
     [169421] = true,
     [169426] = true,
+
+    -- [153292] = true,
 }
 
-C.NameplateShowPowerUnitsList = {
+C.PowerUnitsList = {
     [165556] = true, -- 赤红深渊，瞬息具象
-    [GetSectionInfo(22339)] = true, -- 猎手阿尔迪莫，巴加斯特之影
+    [171557] = true, -- 猎手阿尔迪莫，巴加斯特之影
 }
 
 C.NameplateMajorSpellsList = {

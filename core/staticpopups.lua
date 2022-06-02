@@ -81,6 +81,28 @@ _G.StaticPopupDialogs.FREEUI_RESET_RAID_DEBUFFS = {
     whileDead = 1,
 }
 
+StaticPopupDialogs['FREEUI_RESET_NAMEPLATE_SPECIAL_UNIT_FILTER'] = {
+    text = L['Reset to default list?'],
+    button1 = YES,
+    button2 = NO,
+    OnAccept = function()
+        C.DB['Nameplate']['SpecialUnitsList'] = {}
+        ReloadUI()
+    end,
+    whileDead = 1,
+}
+
+StaticPopupDialogs['FREEUI_RESET_NAMEPLATE_DOT_SPELLS'] = {
+    text = L['Reset to default list'],
+    button1 = YES,
+    button2 = NO,
+    OnAccept = function()
+        C.DB['Nameplate']['DotSpellsList'] = {}
+        ReloadUI()
+    end,
+    whileDead = 1,
+}
+
 -- Profile Management
 _G.StaticPopupDialogs.FREEUI_IMPORT_PROFILE = {
     text = C.RED_COLOR .. L['Are you sure to import the settings?'],

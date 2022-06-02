@@ -108,32 +108,63 @@ function NAMEPLATE:BlockAddons()
 end
 
 --[[ Elements ]]
-local customUnits = {}
-function NAMEPLATE:CreateUnitTable()
-    table.wipe(customUnits)
-    if not C.DB.Nameplate.CustomUnitColor then
-        return
+
+NAMEPLATE.SpecialUnitsList = {}
+NAMEPLATE.PowerUnitsList = {}
+
+local function CheckUnitsList(value)
+    for npcID in pairs(C[value]) do
+        if C.DB['Nameplate'][value][npcID] then
+            C.DB['Nameplate'][value][npcID] = nil
+        end
     end
-    F:CopyTable(C.NameplateSpecialUnitsList, customUnits)
-    F:SplitList(customUnits, C.DB.Nameplate.CustomUnitList)
+
+    for npcID, val in pairs(C.DB['Nameplate'][value]) do
+        if val == false and C[value][npcID] == nil then
+            C.DB['Nameplate'][value][npcID] = nil
+        end
+    end
 end
 
-local showPowerList = {}
-function NAMEPLATE:CreatePowerUnitTable()
-    table.wipe(showPowerList)
-    F:CopyTable(C.NameplateShowPowerUnitsList, showPowerList)
-    F:SplitList(showPowerList, C.DB.Nameplate.ShowPowerList)
+function NAMEPLATE:CheckUnitsList()
+    CheckUnitsList('SpecialUnitsList')
+    CheckUnitsList('PowerUnitsList')
+end
+
+local function RefreshNameplateUnits(list, enable)
+    table.wipe(NAMEPLATE[list])
+
+    if not C.DB['Nameplate'][enable] then
+        return
+    end
+
+    for npcID in pairs(C[list]) do
+        if C.DB['Nameplate'][list][npcID] == nil then
+            NAMEPLATE[list][npcID] = true
+        end
+    end
+
+    for npcID, value in pairs(C.DB['Nameplate'][list]) do
+        if value then
+            NAMEPLATE[list][npcID] = true
+        end
+    end
+end
+
+function NAMEPLATE:RefreshSpecialUnitsList()
+    RefreshNameplateUnits('SpecialUnitsList', 'ShowSpecialUnits')
+end
+
+function NAMEPLATE:RefreshPowerUnitsList()
+    RefreshNameplateUnits('PowerUnitsList', 'ShowPowerUnits')
 end
 
 function NAMEPLATE:UpdateUnitPower()
     local unitName = self.unitName
     local npcID = self.npcID
-    local shouldShowPower = showPowerList[unitName] or showPowerList[npcID]
-    if shouldShowPower then
-        self.powerText:Show()
-    else
-        self.powerText:Hide()
-    end
+    local shouldShowPower = NAMEPLATE.PowerUnitsList[unitName] or NAMEPLATE.PowerUnitsList[npcID]
+
+    self.powerText:SetShown(shouldShowPower)
 end
 
 -- Off-tank threat color
@@ -194,12 +225,12 @@ function NAMEPLATE:UpdateColor(_, unit)
     local element = self.Health
     local name = self.unitName
     local npcID = self.npcID
-    local isCustomUnit = customUnits[name] or customUnits[npcID]
+    local isSpecialUnit = NAMEPLATE.SpecialUnitsList[name] or NAMEPLATE.SpecialUnitsList[npcID]
     local isPlayer = self.isPlayer
     local isFriendly = self.isFriendly
     local isOffTank, status = NAMEPLATE:CheckThreatStatus(unit)
-
-    local customColor = C.DB.Nameplate.CustomColor
+    local showSpecialUnit = C.DB.Nameplate.ShowSpecialUnits
+    local specialColor = C.DB.Nameplate.SpecialUnitColor
     local secureColor = C.DB.Nameplate.SecureColor
     local transColor = C.DB.Nameplate.TransColor
     local insecureColor = C.DB.Nameplate.InsecureColor
@@ -212,7 +243,7 @@ function NAMEPLATE:UpdateColor(_, unit)
     local hostileClassColor = C.DB.Nameplate.HostileClassColor
     local friendlyClassColor = C.DB.Nameplate.FriendlyClassColor
     local tankMode = C.DB.Nameplate.TankMode
-    local auraColor = C.DB.Nameplate.CustomDebuffColor
+    local debuffColor = C.DB.Nameplate.DotColor
     local r, g, b
 
     if not UnitIsConnected(unit) then
@@ -222,10 +253,10 @@ function NAMEPLATE:UpdateColor(_, unit)
             r, g, b = targetColor.r, targetColor.g, targetColor.b
         elseif coloredFocus and UnitIsUnit(unit, 'focus') then
             r, g, b = focusColor.r, focusColor.g, focusColor.b
-        elseif isCustomUnit then
-            r, g, b = customColor.r, customColor.g, customColor.b
+        elseif showSpecialUnit and isSpecialUnit then
+            r, g, b = specialColor.r, specialColor.g, specialColor.b
         elseif self.Auras.hasCustomDebuff then
-            r, g, b = auraColor.r, auraColor.g, auraColor.b
+            r, g, b = debuffColor.r, debuffColor.g, debuffColor.b
         elseif isPlayer and isFriendly then
             if friendlyClassColor then
                 r, g, b = F:UnitColor(unit)
@@ -234,7 +265,7 @@ function NAMEPLATE:UpdateColor(_, unit)
             end
         elseif isPlayer and not isFriendly and hostileClassColor then
             r, g, b = F:UnitColor(unit)
-        elseif UnitIsTapDenied(unit) and not UnitPlayerControlled(unit) or C.NameplateTrashUnitsList[npcID] then
+        elseif UnitIsTapDenied(unit) and not UnitPlayerControlled(unit) or C.TrashUnitsList[npcID] then
             r, g, b = unpack(oUF.colors.tapped)
         else
             r, g, b = unpack(oUF.colors.reaction[UnitReaction(unit, 'player') or 5])
@@ -271,7 +302,7 @@ function NAMEPLATE:UpdateColor(_, unit)
     NAMEPLATE:UpdateExecuteIndicator(self, unit)
 
     self.ThreatIndicator:Hide()
-    if status and (isCustomUnit or (not tankMode and C.MyRole ~= 'Tank')) then
+    if status and (isSpecialUnit or (not tankMode and C.MyRole ~= 'Tank')) then
         if status == 3 then
             self.ThreatIndicator:SetVertexColor(1, 0, 0)
             self.ThreatIndicator:Show()
@@ -729,7 +760,7 @@ end
 function NAMEPLATE:UpdateOverlayVisibility(self, unit)
     local name = self.unitName
     local npcID = self.npcID
-    local isCustomUnit = customUnits[name] or customUnits[npcID]
+    local isCustomUnit = NAMEPLATE.SpecialUnitsList[name] or NAMEPLATE.SpecialUnitsList[npcID]
     if isCustomUnit or UnitIsUnit(unit, 'focus') then
         self.Overlay:Show()
     else
@@ -1006,10 +1037,10 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
     NAMEPLATE.UpdateTotemIcon(self, event, unit)
 end
 
-local function CheckNameplateFilter(index)
-    local VALUE = (index == 1 and C.NameplateAuraWhiteList) or (index == 2 and C.NameplateAuraBlackList)
-    if VALUE then
-        for spellID in pairs(VALUE) do
+local function CheckNameplateAuraFilter(index)
+    local value = (index == 1 and C.NameplateAuraWhiteList) or (index == 2 and C.NameplateAuraBlackList)
+    if value then
+        for spellID in pairs(value) do
             local name = GetSpellInfo(spellID)
             if name then
                 if FREE_ADB['NameplateAuraFilterList'][index][spellID] then
@@ -1022,22 +1053,22 @@ local function CheckNameplateFilter(index)
             end
         end
 
-        for spellID, value in pairs(FREE_ADB['NameplateAuraFilterList'][index]) do
-            if value == false and VALUE[spellID] == nil then
+        for spellID, val in pairs(FREE_ADB['NameplateAuraFilterList'][index]) do
+            if val == false and value[spellID] == nil then
                 FREE_ADB['NameplateAuraFilterList'][index][spellID] = nil
             end
         end
     end
 end
 
-function NAMEPLATE:CheckNameplateFilters()
-    CheckNameplateFilter(1)
-    CheckNameplateFilter(2)
+function NAMEPLATE:CheckNameplateAuraFilters()
+    CheckNameplateAuraFilter(1)
+    CheckNameplateAuraFilter(2)
 end
 
 NAMEPLATE.NameplateFilter = { [1] = {}, [2] = {} }
 
-local function RefreshNameplateFilter(index)
+local function RefreshNameplateAuraFilter(index)
     wipe(NAMEPLATE.NameplateFilter[index])
 
     local VALUE = (index == 1 and C.NameplateAuraWhiteList) or (index == 2 and C.NameplateAuraBlackList)
@@ -1059,10 +1090,12 @@ local function RefreshNameplateFilter(index)
     end
 end
 
-function NAMEPLATE:RefreshNameplateFilters()
-    RefreshNameplateFilter(1)
-    RefreshNameplateFilter(2)
+function NAMEPLATE:RefreshNameplateAuraFilters()
+    RefreshNameplateAuraFilter(1)
+    RefreshNameplateAuraFilter(2)
 end
+
+
 
 function NAMEPLATE:OnLogin()
     if not C.DB.Nameplate.Enable then
@@ -1074,16 +1107,16 @@ function NAMEPLATE:OnLogin()
 
     NAMEPLATE:UpdateNameplateCVars()
     NAMEPLATE:BlockAddons()
-    NAMEPLATE:CreateUnitTable()
-    NAMEPLATE:CreatePowerUnitTable()
     NAMEPLATE:CheckExplosives()
     NAMEPLATE:UpdateGroupRoles()
     NAMEPLATE:RefreshPlateOnFactionChanged()
     NAMEPLATE:CheckMajorSpells()
     NAMEPLATE:RefreshMajorSpells()
-    NAMEPLATE:RefreshCustomDebuffs()
-    NAMEPLATE:CheckNameplateFilters()
-    NAMEPLATE:RefreshNameplateFilters()
+    NAMEPLATE:CheckNameplateAuraFilters()
+    NAMEPLATE:RefreshNameplateAuraFilters()
+    NAMEPLATE:CheckUnitsList()
+    NAMEPLATE:RefreshSpecialUnitsList()
+    NAMEPLATE:RefreshPowerUnitsList()
 
     oUF:RegisterStyle('Nameplate', NAMEPLATE.CreateNameplateStyle)
     oUF:SetActiveStyle('Nameplate')

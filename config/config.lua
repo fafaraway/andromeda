@@ -344,13 +344,17 @@ C.CharacterSettings = {
         TargetColor = { r = 0, g = 0.6, b = 1 },
         ColoredFocus = true,
         FocusColor = { r = 1, g = 1, b = 1 },
-        CustomUnitColor = true,
-        CustomColor = { r = 0.76, g = 0.42, b = 1 },
-        CustomUnitList = '',
-        ShowPowerList = '',
-        ColoredByDebuff = true,
-        CustomDebuffList = '',
-        CustomDebuffColor = { r = 0.8, g = 0.6, b = 0.4 },
+
+        ShowSpecialUnits = true,
+        SpecialUnitColor = { r = 0.76, g = 0.42, b = 1 },
+        SpecialUnitsList = {},
+
+        ShowPowerUnits = false,
+        PowerUnitsList = {},
+
+        ColorByDot = true,
+        DotSpellsList = {},
+        DotColor = { r = 0.8, g = 0.6, b = 0.4 },
 
         ShowAura = true,
         AuraFilterMode = 3,
