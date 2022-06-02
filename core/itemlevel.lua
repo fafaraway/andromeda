@@ -1,4 +1,4 @@
-local F = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
 
 local iLvlDB = {}
 local itemLevelString = '^' .. string.gsub(_G.ITEM_LEVEL, '%%d', '')
@@ -6,7 +6,7 @@ local enchantString = string.gsub(_G.ENCHANTED_TOOLTIP_LINE, '%%s', '(.+)')
 local essenceTextureID = 2975691
 local essenceDescription = GetSpellDescription(277253)
 
-local tip = CreateFrame('GameTooltip', 'FreeUIScanTooltip', nil, 'GameTooltipTemplate')
+local tip = CreateFrame('GameTooltip', C.ADDON_NAME .. 'ScanTooltip', nil, 'GameTooltipTemplate')
 F.ScanTip = tip
 
 function F:InspectItemTextures()
@@ -137,7 +137,7 @@ function F.GetItemLevel(link, arg1, arg2, fullScan)
             tip:SetHyperlink(link)
         end
 
-        local firstLine = _G.FreeUIScanTooltipTextLeft1:GetText()
+        local firstLine = _G[C.ADDON_NAME .. 'ScanTooltipTextLeft1']:GetText()
         if firstLine == _G.RETRIEVING_ITEM_INFO then
             return 'tooSoon'
         end

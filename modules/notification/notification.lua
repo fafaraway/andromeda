@@ -10,7 +10,7 @@ local padding = 4
 local interval = 0.1
 
 local function ConstructFrame()
-    local f = CreateFrame('Frame', 'FreeUI_Notification', _G.UIParent, 'BackdropTemplate')
+    local f = CreateFrame('Frame', C.ADDON_NAME .. 'Notification', _G.UIParent, 'BackdropTemplate')
     f:SetFrameStrata('FULLSCREEN_DIALOG')
     f:SetSize(bannerWidth, bannerHeight)
     f:SetPoint('TOP', _G.UIParent, 'TOP', 0, -70)

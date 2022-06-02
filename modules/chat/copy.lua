@@ -53,7 +53,7 @@ function CHAT:ChatCopy_OnClick()
 end
 
 function CHAT:ChatCopy_Create()
-    frame = CreateFrame('Frame', 'FreeUI_ChatCopy', _G.UIParent)
+    frame = CreateFrame('Frame', C.ADDON_NAME .. 'ChatCopy', _G.UIParent)
     frame:SetPoint('CENTER')
     frame:SetSize(700, 400)
     frame:Hide()

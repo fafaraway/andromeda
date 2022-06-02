@@ -116,13 +116,14 @@ C.Assets.Font = {
 -- Overwrite fonts
 
 do
+    local path = 'Fonts\\' .. C.ADDON_NAME .. '\\'
     if C.DEV_MODE then
-        C.Assets.Font.Regular = 'Fonts\\FreeUI\\regular.ttf'
-        C.Assets.Font.Condensed = 'Fonts\\FreeUI\\condensed.ttf'
-        C.Assets.Font.Bold = 'Fonts\\FreeUI\\bold.ttf'
-        C.Assets.Font.Heavy = 'Fonts\\FreeUI\\heavy.ttf'
-        C.Assets.Font.Combat = 'Fonts\\FreeUI\\combat.ttf'
-        C.Assets.Font.Header = 'Fonts\\FreeUI\\header.ttf'
+        C.Assets.Font.Regular = path .. 'regular.ttf'
+        C.Assets.Font.Condensed = path .. 'condensed.ttf'
+        C.Assets.Font.Bold = path .. 'bold.ttf'
+        C.Assets.Font.Heavy = path .. 'heavy.ttf'
+        C.Assets.Font.Combat = path .. 'combat.ttf'
+        C.Assets.Font.Header = path .. 'header.ttf'
     elseif GetLocale() == 'zhCN' then
         C.Assets.Font.Regular = 'Fonts\\ARKai_T.ttf'
         C.Assets.Font.Condensed = 'Fonts\\ARKai_T.ttf'
@@ -170,13 +171,14 @@ do
         LOCALE_MASK = 128
     end
 
+    local prefix = string.format('|cffa763ea%s: ', C.ADDON_NAME)
     function F:RegisterSharedMedia(type, name)
         if type == 'font' then
-            LSM:Register(LSM.MediaType.FONT, '|cffa763eaFreeUI: ' .. name .. '|r', C.Assets.Font[name], LOCALE_MASK)
+            LSM:Register(LSM.MediaType.FONT, prefix, C.Assets.Font[name], LOCALE_MASK)
         elseif type == 'statusbar' then
-            LSM:Register(LSM.MediaType.STATUSBAR, '|cffa763eaFreeUI: ' .. name .. '|r', C.Assets.Statusbar[name])
+            LSM:Register(LSM.MediaType.STATUSBAR, prefix, C.Assets.Statusbar[name])
         elseif type == 'sound' then
-            LSM:Register(LSM.MediaType.SOUND, '|cffa763eaFreeUI: ' .. name .. '|r', C.Assets.Sound[name])
+            LSM:Register(LSM.MediaType.SOUND, prefix, C.Assets.Sound[name])
         end
     end
 

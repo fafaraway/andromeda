@@ -563,7 +563,7 @@ function NAMEPLATE:UpdateQuestUnit(_, unit)
     F.ScanTip:SetUnit(unit)
 
     for i = 2, F.ScanTip:NumLines() do
-        local textLine = _G['FreeUIScanTooltipTextLeft' .. i]
+        local textLine = _G[C.ADDON_NAME .. 'ScanTooltipTextLeft' .. i]
         local text = textLine and textLine:GetText()
 
         if not text then

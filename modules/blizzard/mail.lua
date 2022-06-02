@@ -171,7 +171,7 @@ function M:ContactButton_Update(button)
 end
 
 function M:ContactList_Update()
-    local scrollFrame = _G.FreeUIMailBoxScrollFrame
+    local scrollFrame = _G[C.ADDON_NAME .. 'MailBoxScrollFrame']
     local usedHeight = 0
     local buttons = scrollFrame.buttons
     local height = scrollFrame.buttonHeight
@@ -259,7 +259,7 @@ function M:MailBox_ContactList()
         editbox:SetText('')
     end)
 
-    local scrollFrame = CreateFrame('ScrollFrame', 'FreeUIMailBoxScrollFrame', list, 'HybridScrollFrameTemplate')
+    local scrollFrame = CreateFrame('ScrollFrame', C.ADDON_NAME .. 'MailBoxScrollFrame', list, 'HybridScrollFrameTemplate')
     scrollFrame:SetSize(175, 368)
     scrollFrame:SetPoint('BOTTOMLEFT', 4, 4)
     F.CreateBDFrame(scrollFrame, 0.25)

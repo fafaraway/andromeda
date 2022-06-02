@@ -53,7 +53,7 @@ do
             if name == addonName then
                 callback()
                 return true
-            elseif name == 'FreeUI' and IsAddOnLoaded(addonName) then
+            elseif name == C.ADDON_NAME and IsAddOnLoaded(addonName) then
                 callback()
                 return true
             end
@@ -61,7 +61,7 @@ do
     end
 
     function F:RegisterSlash(...)
-        local name = 'FreeUI' .. 'Slash' .. math.random()
+        local name = C.ADDON_NAME .. 'Slash' .. math.random()
 
         local numArgs = select('#', ...)
         local callback = select(numArgs, ...)
@@ -174,7 +174,7 @@ end
 
 do
     -- Dropdown menu
-    F.EasyMenu = CreateFrame('Frame', 'FreeUIEasyMenu', _G.UIParent, 'UIDropDownMenuTemplate')
+    F.EasyMenu = CreateFrame('Frame', C.ADDON_NAME .. 'EasyMenu', _G.UIParent, 'UIDropDownMenuTemplate')
 
     -- Font string
     function F:CreateFS(font, size, flag, text, colour, shadow, anchor, x, y)

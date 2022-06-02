@@ -2,7 +2,7 @@ local F, C, L = unpack(select(2, ...))
 local BLIZZARD = F:GetModule('Blizzard')
 
 local WOW_PROJECT_CLASSIC_TBC = 5
-local mediaPath = 'Interface\\AddOns\\FreeUI\\assets\\textures\\client\\'
+local mediaPath = 'Interface\\AddOns\\' .. C.ADDON_NAME .. '\\assets\\textures\\client\\'
 
 local gameIcons = {
     [_G.BNET_CLIENT_WOW] = mediaPath .. 'WoWSL',

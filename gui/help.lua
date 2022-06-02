@@ -7,11 +7,11 @@ local strList = {
         primary = {
             [0] = L['*/free|r @--|r#install|r @or|r */free|r @--|r#tutorial|r ~ Open tutorial panel'],
             [1] = L['*/free|r @--|r#gui|r @or|r */free|r @--|r#config|r ~ Open GUI panel'],
-            [2] = L['*/free|r @--|r#unlock|r @or|r */free|r @--|r#layout|r ~ Unlock FreeUI interface to allow you to freely drag and drop the elements.'],
-            [3] = L['*/free|r @--|r#reset|r @or|r */free|r @--|r#init|r ~ Initialize FreeUI and all settings will be reset to their default state.'],
-            [4] = L['*/free|r @--|r#ver|r @or|r */free|r @--|r#version|r ~ Output the current version number of FreeUI.'],
+            [2] = L['*/free|r @--|r#unlock|r @or|r */free|r @--|r#layout|r ~ Unlock &ADDON_NAME& interface to allow you to freely drag and drop the elements.'],
+            [3] = L['*/free|r @--|r#reset|r @or|r */free|r @--|r#init|r ~ Initialize &ADDON_NAME& and all settings will be reset to their default state.'],
+            [4] = L['*/free|r @--|r#ver|r @or|r */free|r @--|r#version|r ~ Output the current version number of &ADDON_NAME&.'],
             [5] = L['*/free|r @--|r#help|r @or|r */free|r @--|r#command|r ~ View all available commands.'],
-            [6] = L['*/free|r @--|r#discord|r @or|r */free|r @--|r#feedback|r ~ Output the discord channel link of FreeUI.'],
+            [6] = L['*/free|r @--|r#discord|r @or|r */free|r @--|r#feedback|r ~ Output the discord channel link of &ADDON_NAME&.'],
         },
         secondary = {
             [1] = L['*/lg|r ~ Leave the current group, support both party and raid.'],
@@ -31,9 +31,10 @@ local strList = {
 }
 
 local function FormatTextString(str)
-    str = str:gsub('*', C.CLASS_COLOR)
-    str = str:gsub('#', '|cffffeccb')
-    str = str:gsub('@', C.GREY_COLOR)
+    str = gsub(str, '&ADDON_NAME&', C.COLORED_ADDON_NAME)
+    str = gsub(str, '*', C.CLASS_COLOR)
+    str = gsub(str, '#', '|cffffeccb')
+    str = gsub(str, '@', C.GREY_COLOR)
 
     return str
 end
@@ -143,14 +144,15 @@ local function ConstructTextString(f)
     local offset = 50
     for k, v in ipairs(strList.cmd.primary) do
         local a, b = string.split('~', v)
-        -- local newStr = FormatTextString(a .. b)
+        local str1 = FormatTextString(a)
+        local str2 = FormatTextString(b)
 
         F.CreateFS(
             f.box,
             C.Assets.Font.Bold,
             18,
             nil,
-            FormatTextString(a),
+            str1,
             { 0.7, 0.7, 0.7 },
             'THICK',
             'TOPLEFT',
@@ -158,7 +160,7 @@ local function ConstructTextString(f)
             -(k * 50)
         )
 
-        F.CreateFS(f.box, C.Assets.Font.Bold, 16, nil, b, { 0.7, 0.7, 0.7 }, 'THICK', 'TOPLEFT', 0, -(k * 24) - offset)
+        F.CreateFS(f.box, C.Assets.Font.Bold, 16, nil, str2, { 0.6, 0.6, 0.6 }, 'THICK', 'TOPLEFT', 0, -(k * 24) - offset)
         offset = offset + 26
     end
 
@@ -172,7 +174,7 @@ local function ConstructTextString(f)
             14,
             nil,
             newStr,
-            { 0.7, 0.7, 0.7 },
+            { 0.6, 0.6, 0.6 },
             'THICK',
             'TOPLEFT',
             0,
@@ -185,11 +187,11 @@ function GUI:CreateCheatSheet()
     if InCombatLockdown() then
         return
     end
-    if _G.FreeUICheatSheet then
+    if _G[C.ADDON_NAME .. 'CheatSheet'] then
         return
     end
 
-    local f = CreateFrame('Button', 'FreeUICheatSheet', _G.UIParent)
+    local f = CreateFrame('Button', C.ADDON_NAME .. 'CheatSheet', _G.UIParent)
     f:SetFrameStrata('FULLSCREEN')
     f:SetAllPoints()
     f:EnableMouse(true)
@@ -217,8 +219,8 @@ function GUI:CreateCheatSheet()
 end
 
 function GUI:ToggleCheatSheet()
-    if _G.FreeUICheatSheet then
-        if _G.FreeUICheatSheet:IsShown() then
+    if _G[C.ADDON_NAME .. 'CheatSheet'] then
+        if _G[C.ADDON_NAME .. 'CheatSheet']:IsShown() then
             Disable()
         else
             Enable()

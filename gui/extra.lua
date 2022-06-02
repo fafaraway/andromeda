@@ -340,7 +340,7 @@ local function UpdateAuraSize()
 end
 
 function GUI:SetupAuraSize(parent)
-    local guiName = 'FreeUIGUIAuraSize'
+    local guiName = C.ADDON_NAME .. 'GUIAuraSize'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -404,7 +404,7 @@ local function UpdateInventoryStatus()
 end
 
 function GUI:SetupInventoryFilter(parent)
-    local guiName = 'FreeUIGUIInventoryFilter'
+    local guiName = C.ADDON_NAME .. 'GUIInventoryFilter'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -436,7 +436,7 @@ function GUI:SetupInventoryFilter(parent)
 end
 
 function GUI:SetupInventorySize(parent)
-    local guiName = 'FreeUIGUIInventorySize'
+    local guiName = C.ADDON_NAME .. 'GUIInventorySize'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -499,7 +499,7 @@ function GUI:SetupInventorySize(parent)
 end
 
 function GUI:SetupMinItemLevelToShow(parent)
-    local guiName = 'FreeUIGUIMinItemLevelToShow'
+    local guiName = C.ADDON_NAME .. 'GUIMinItemLevelToShow'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -548,7 +548,7 @@ local function UpdateExtraBar()
 end
 
 function GUI:SetupActionBarSize(parent)
-    local guiName = 'FreeUIGUIActionBarSize'
+    local guiName = C.ADDON_NAME .. 'GUIActionBarSize'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -652,7 +652,7 @@ local function UpdateStanceBar()
 end
 
 function GUI:SetupVehicleButtonSize(parent)
-    local guiName = 'FreeUIGUIVehicleButtonSize'
+    local guiName = C.ADDON_NAME .. 'GUIVehicleButtonSize'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -690,7 +690,7 @@ function GUI:SetupVehicleButtonSize(parent)
 end
 
 function GUI:SetupStanceBarSize(parent)
-    local guiName = 'FreeUIGUIStanceBarSize'
+    local guiName = C.ADDON_NAME .. 'GUIStanceBarSize'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -725,7 +725,7 @@ local function UpdateActionBarFader()
 end
 
 function GUI:SetupActionbarFader(parent)
-    local guiName = 'FreeUIGUIActionbarFader'
+    local guiName = C.ADDON_NAME .. 'GUIActionbarFader'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -788,7 +788,7 @@ function GUI:SetupActionbarFader(parent)
 end
 
 function GUI:SetupCooldownCount(parent)
-    local guiName = 'FreeUIGUICooldownCount'
+    local guiName = C.ADDON_NAME .. 'GUICooldownCount'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -861,7 +861,7 @@ local function RefreshNameplateFilters()
 end
 
 function GUI:SetupNameplateAuraFilter(parent)
-    local guiName = 'FreeUIGUINamePlateAuraFilter'
+    local guiName = C.ADDON_NAME .. 'GUINamePlateAuraFilter'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -991,7 +991,7 @@ function GUI:SetupNameplateAuraFilter(parent)
 end
 
 function GUI:SetupNameplateMajorSpells(parent)
-    local guiName = 'FreeUIGUINamePlateCastbarGlow'
+    local guiName = C.ADDON_NAME .. 'GUINamePlateCastbarGlow'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1056,7 +1056,7 @@ local function UpdateNameplateCVars()
 end
 
 function GUI:SetupNameplateCVars(parent)
-    local guiName = 'FreeUIGUINamePlateCvars'
+    local guiName = C.ADDON_NAME .. 'GUINamePlateCvars'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1121,7 +1121,7 @@ local function UpdateClickableSize()
 end
 
 function GUI:SetupNameplateSize(parent)
-    local guiName = 'FreeUIGUINamePlateSize'
+    local guiName = C.ADDON_NAME .. 'GUINamePlateSize'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1174,7 +1174,7 @@ function GUI:SetupNameplateSize(parent)
 end
 
 function GUI:SetupNameplateFriendlySize(parent)
-    local guiName = 'FreeUIGUINamePlateFriendlySize'
+    local guiName = C.ADDON_NAME .. 'GUINamePlateFriendlySize'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1246,7 +1246,7 @@ function GUI:SetupNameplateFriendlySize(parent)
 end
 
 function GUI:SetupNameplateCastbarSize(parent)
-    local guiName = 'FreeUIGUINamePlateCastbarSize'
+    local guiName = C.ADDON_NAME .. 'GUINamePlateCastbarSize'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1275,7 +1275,7 @@ function GUI:SetupNameplateCastbarSize(parent)
 end
 
 function GUI:SetupNameplateExecuteIndicator(parent)
-    local guiName = 'FreeUIGUINameplateExecuteIndicator'
+    local guiName = C.ADDON_NAME .. 'GUINameplateExecuteIndicator'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1334,7 +1334,7 @@ local function UpdatePartyFrameSize()
 end
 
 function GUI:SetupPartyFrame(parent)
-    local guiName = 'FreeUIGUISetupPartyFrame'
+    local guiName = C.ADDON_NAME .. 'GUISetupPartyFrame'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1403,7 +1403,7 @@ local function UpdateRaidFrameSize()
 end
 
 function GUI:SetupRaidFrame(parent)
-    local guiName = 'FreeUIGUISetupRaidFrame'
+    local guiName = C.ADDON_NAME .. 'GUISetupRaidFrame'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1468,7 +1468,7 @@ local function UpdateSimpleRaidFrameSize()
 end
 
 function GUI:SetupSimpleRaidFrame(parent)
-    local guiName = 'FreeUIGUISetupSimpleRaidFrame'
+    local guiName = C.ADDON_NAME .. 'GUISetupSimpleRaidFrame'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1513,7 +1513,7 @@ function GUI:SetupSimpleRaidFrame(parent)
 end
 
 function GUI:SetupUnitFrame(parent)
-    local guiName = 'FreeUIGUISetupUnitFrame'
+    local guiName = C.ADDON_NAME .. 'GUISetupUnitFrame'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1753,7 +1753,7 @@ function GUI:SetupUnitFrame(parent)
 end
 
 function GUI:SetupBossFrame(parent)
-    local guiName = 'FreeUIGUISetupBossFrame'
+    local guiName = C.ADDON_NAME .. 'GUISetupBossFrame'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1803,7 +1803,7 @@ function GUI:SetupBossFrame(parent)
 end
 
 function GUI:SetupArenaFrame(parent)
-    local guiName = 'FreeUIGUISetupArenaFrame'
+    local guiName = C.ADDON_NAME .. 'GUISetupArenaFrame'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1853,7 +1853,7 @@ function GUI:SetupArenaFrame(parent)
 end
 
 function GUI:SetupClassPower(parent)
-    local guiName = 'FreeUIGUISetupClassPower'
+    local guiName = C.ADDON_NAME .. 'GUISetupClassPower'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1898,7 +1898,7 @@ local function UpdateFader()
 end
 
 function GUI:SetupUnitFrameFader(parent)
-    local guiName = 'FreeUIGUIUnitFrameFader'
+    local guiName = C.ADDON_NAME .. 'GUIUnitFrameFader'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1939,7 +1939,7 @@ function GUI:SetupUnitFrameFader(parent)
 end
 
 function GUI:SetupUnitFrameRangeCheck(parent)
-    local guiName = 'FreeUIGUIRangeCheck'
+    local guiName = C.ADDON_NAME .. 'GUIRangeCheck'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -1975,7 +1975,7 @@ function GUI:SetupUnitFrameRangeCheck(parent)
 end
 
 function GUI:SetupCastbar(parent)
-    local guiName = 'FreeUIGUISetupCastbar'
+    local guiName = C.ADDON_NAME .. 'GUISetupCastbar'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -2069,7 +2069,7 @@ function GUI:SetupCastbar(parent)
 end
 
 function GUI:SetupCastbarColor(parent)
-    local guiName = 'FreeUIGUICastbarColor'
+    local guiName = C.ADDON_NAME .. 'GUICastbarColor'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -2100,7 +2100,7 @@ local function UpdatePartyWatcherSpells()
 end
 
 function GUI:SetupPartyWatcher(parent)
-    local guiName = 'FreeUIGUIPartySpellSetup'
+    local guiName = C.ADDON_NAME .. 'GUIPartySpellSetup'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -2275,7 +2275,7 @@ local function AddNewDungeon(dungeons, dungeonID)
 end
 
 function GUI:SetupDebuffWatcher(parent)
-    local guiName = 'FreeUIGUISetupDebuffWatcher'
+    local guiName = C.ADDON_NAME .. 'GUISetupDebuffWatcher'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -2563,7 +2563,7 @@ local function UpdateGroupTags()
 end
 
 function GUI:SetupNameLength(parent)
-    local guiName = 'FreeUIGUISetupNameLength'
+    local guiName = C.ADDON_NAME .. 'GUISetupNameLength'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -2593,7 +2593,7 @@ local function UpdateGroupAuras()
 end
 
 function GUI:SetupPartyBuff(parent)
-    local guiName = 'FreeUIGUISetupPartyBuffSize'
+    local guiName = C.ADDON_NAME .. 'GUISetupPartyBuffSize'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -2619,7 +2619,7 @@ function GUI:SetupPartyBuff(parent)
 end
 
 function GUI:SetupPartyDebuff(parent)
-    local guiName = 'FreeUIGUISetupPartyDebuffSize'
+    local guiName = C.ADDON_NAME .. 'GUISetupPartyDebuffSize'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -2659,7 +2659,7 @@ function GUI:SetupPartyDebuff(parent)
 end
 
 function GUI:SetupRaidBuff(parent)
-    local guiName = 'FreeUIGUISetupRaidBuffSize'
+    local guiName = C.ADDON_NAME .. 'GUISetupRaidBuffSize'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -2685,7 +2685,7 @@ function GUI:SetupRaidBuff(parent)
 end
 
 function GUI:SetupRaidDebuff(parent)
-    local guiName = 'FreeUIGUISetupRaidDebuffSize'
+    local guiName = C.ADDON_NAME .. 'GUISetupRaidDebuffSize'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -2720,7 +2720,7 @@ end
 -- General
 
 function GUI:SetupAutoScreenshot(parent)
-    local guiName = 'FreeUIGUIAutoScreenshot'
+    local guiName = C.ADDON_NAME .. 'GUIAutoScreenshot'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -2745,7 +2745,7 @@ function GUI:SetupAutoScreenshot(parent)
 end
 
 function GUI:SetupCustomClassColor(parent)
-    local guiName = 'FreeUIGUICustomClassColor'
+    local guiName = C.ADDON_NAME .. 'GUICustomClassColor'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -2785,7 +2785,7 @@ local function UpdateVignettingVisibility()
 end
 
 function GUI:SetupVignettingVisibility(parent)
-    local guiName = 'FreeUIGUIVignetting'
+    local guiName = C.ADDON_NAME .. 'GUIVignetting'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -2826,7 +2826,7 @@ local function UpdateChatSize()
 end
 
 function GUI:SetupChatSize(parent)
-    local guiName = 'FreeUIGUIChatSize'
+    local guiName = C.ADDON_NAME .. 'GUIChatSize'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -2853,7 +2853,7 @@ local function UpdateTextFading()
 end
 
 function GUI:SetupChatTextFading(parent)
-    local guiName = 'FreeUIGUIChatTextFading'
+    local guiName = C.ADDON_NAME .. 'GUIChatTextFading'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -2880,7 +2880,7 @@ end
 
 -- Combat
 function GUI:SetupSimpleFloatingCombatText(parent)
-    local guiName = 'FreeUIGUIFCT'
+    local guiName = C.ADDON_NAME .. 'GUIFCT'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -2906,7 +2906,7 @@ function GUI:SetupSimpleFloatingCombatText(parent)
 end
 
 function GUI:SetupSoundAlert(parent)
-    local guiName = 'FreeUIGUISoundAlert'
+    local guiName = C.ADDON_NAME .. 'GUISoundAlert'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -2938,7 +2938,7 @@ local function RefreshAnnounceableSpells()
 end
 
 function GUI:SetupAnnounceableSpells(parent)
-    local guiName = 'FreeUIGUIAnnounceableSpells'
+    local guiName = C.ADDON_NAME .. 'GUIAnnounceableSpells'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
@@ -3004,7 +3004,7 @@ local function UpdateMapScale()
 end
 
 function GUI:SetupMapScale(parent)
-    local guiName = 'FreeUIGUIMapScale'
+    local guiName = C.ADDON_NAME .. 'GUIMapScale'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return

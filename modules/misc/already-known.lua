@@ -51,7 +51,7 @@ local function IsAlreadyKnown(link, index)
             F.ScanTip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
             F.ScanTip:SetHyperlink(link)
             for i = 1, F.ScanTip:NumLines() do
-                local text = _G['FreeUIScanTooltipTextLeft' .. i]:GetText() or ''
+                local text = _G[C.ADDON_NAME .. 'ScanTooltipTextLeft' .. i]:GetText() or ''
                 if string.find(text, _G.COLLECTED) or text == _G.ITEM_SPELL_KNOWN then
                     knowns[link] = true
                     return true

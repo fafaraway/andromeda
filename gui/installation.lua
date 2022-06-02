@@ -177,7 +177,7 @@ end
 local function SetupAddons() end
 
 function INSTALL:HelloWorld()
-    local f = CreateFrame('Frame', 'FreeUI_InstallFrame', _G.UIParent, 'BackdropTemplate')
+    local f = CreateFrame('Frame', C.ADDON_NAME .. 'InstallFrame', _G.UIParent, 'BackdropTemplate')
     f:SetSize(400, 400)
     f:SetPoint('CENTER')
     f:SetFrameStrata('HIGH')
@@ -221,17 +221,17 @@ function INSTALL:HelloWorld()
 
     local progressBarText = F.CreateFS(progressBar, C.Assets.Font.Regular, 11, nil, '', nil, 'THICK', 'CENTER', 0, 0)
 
-    local leftButton = CreateFrame('Button', 'FreeUI_Install_LeftButton', f, 'UIPanelButtonTemplate')
+    local leftButton = CreateFrame('Button', '', f, 'UIPanelButtonTemplate')
     leftButton:SetPoint('BOTTOM', -52, 10)
     leftButton:SetSize(100, 26)
     F.Reskin(leftButton)
 
-    local rightButton = CreateFrame('Button', 'FreeUI_Install_RightButton', f, 'UIPanelButtonTemplate')
+    local rightButton = CreateFrame('Button', '', f, 'UIPanelButtonTemplate')
     rightButton:SetPoint('BOTTOM', 52, 10)
     rightButton:SetSize(100, 26)
     F.Reskin(rightButton)
 
-    local closeButton = CreateFrame('Button', 'FreeUI_Install_CloseButton', f, 'UIPanelCloseButton')
+    local closeButton = CreateFrame('Button', '', f, 'UIPanelCloseButton')
     closeButton:SetPoint('TOPRIGHT', f, 'TOPRIGHT')
     closeButton:SetScript('OnClick', function()
         f:Hide()

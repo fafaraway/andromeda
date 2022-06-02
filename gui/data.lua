@@ -5,7 +5,7 @@ local LibBase64 = F.Libs.Base64
 local dataFrame
 
 function GUI:ExportData()
-    local text = 'FreeUISettings:' .. C.ADDON_VERSION .. ':' .. C.NAME .. ':' .. C.CLASS
+    local text = C.ADDON_NAME .. 'Settings:' .. C.ADDON_VERSION .. ':' .. C.NAME .. ':' .. C.CLASS
     for KEY, VALUE in pairs(C.DB) do
         if type(VALUE) == 'table' then
             for key, value in pairs(VALUE) do
@@ -77,7 +77,7 @@ function GUI:ImportData()
     end
     local options = { string.split(';', profile) }
     local title, _, _, class = string.split(':', options[1])
-    if title ~= 'FreeUISettings' then
+    if title ~= C.ADDON_NAME .. 'Settings' then
         _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Import failed, due to data exception.'])
         return
     end
@@ -128,7 +128,7 @@ local function UpdateTooltip()
     end
     local option = string.split(';', profile)
     local title, version, name, class = string.split(':', option)
-    if title == 'FreeUISettings' then
+    if title == C.ADDON_NAME .. 'Settings' then
         dataFrame.version = version
         dataFrame.name = name
         dataFrame.class = class
@@ -143,7 +143,7 @@ function GUI:CreateDataFrame()
         return
     end
 
-    dataFrame = CreateFrame('Frame', 'FreeUI_Data', _G.UIParent)
+    dataFrame = CreateFrame('Frame', C.ADDON_NAME .. 'ProfileData', _G.UIParent)
     dataFrame:SetPoint('CENTER')
     dataFrame:SetSize(500, 500)
     dataFrame:SetFrameStrata('DIALOG')

@@ -105,7 +105,7 @@ function TOOLTIP:RegisterTooltips(addon, func)
     tipTable[addon] = func
 end
 
-TOOLTIP:RegisterTooltips('FreeUI', function()
+TOOLTIP:RegisterTooltips(C.ADDON_NAME, function()
     local tooltips = {
         _G.ChatMenu,
         _G.EmoteMenu,

@@ -63,7 +63,6 @@ local function ToggleButtonGrid()
         local showgrid = tonumber(GetCVar('alwaysShowActionBars'))
         ButtonShowGrid('ActionButton', showgrid)
         ButtonShowGrid('MultiBarBottomRightButton', showgrid)
-        ButtonShowGrid('FreeUI_CustomBarButton', showgrid)
         if updateAfterCombat then
             F:UnregisterEvent('PLAYER_REGEN_ENABLED', ToggleButtonGrid)
             updateAfterCombat = false
@@ -536,7 +535,6 @@ function ACTIONBAR:StyleAllActionButtons(cfg)
         ACTIONBAR:StyleActionButton(_G['MultiBarBottomRightButton' .. i], cfg)
         ACTIONBAR:StyleActionButton(_G['MultiBarRightButton' .. i], cfg)
         ACTIONBAR:StyleActionButton(_G['MultiBarLeftButton' .. i], cfg)
-        ACTIONBAR:StyleActionButton(_G['FreeUI_CustomBarButton' .. i], cfg)
     end
 
     for i = 1, 6 do
@@ -559,7 +557,7 @@ function ACTIONBAR:StyleAllActionButtons(cfg)
     end
 
     -- leave vehicle
-    ACTIONBAR:StyleActionButton(_G['FreeUI_LeaveVehicleButton'], cfg)
+    ACTIONBAR:StyleActionButton(_G[C.ADDON_NAME .. 'LeaveVehicleButton'], cfg)
 
     -- extra action button
     ACTIONBAR:StyleExtraActionButton(cfg)

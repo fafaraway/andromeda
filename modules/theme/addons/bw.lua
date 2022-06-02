@@ -78,7 +78,7 @@ local styleData = {
     fontSizeEmphasized = 14,
     fontOutline = 'OUTLINE',
     GetStyleName = function()
-        return 'FreeUI'
+        return C.ADDON_NAME
     end,
 }
 
@@ -91,9 +91,9 @@ function THEME:RegisterBigWigsStyle()
         return
     end
 
-    BigWigsAPI:RegisterBarStyle('FreeUI', styleData)
+    BigWigsAPI:RegisterBarStyle(C.ADDON_NAME, styleData)
 
-    -- Force to use FreeUI style
+    -- Force to use new style
     local pending = true
     hooksecurefunc(BigWigsAPI, 'GetBarStyle', function()
         if pending then
@@ -112,7 +112,7 @@ function THEME:RestyleBigWigsQueueTimer()
     end
 
     if BigWigsLoader and BigWigsLoader.RegisterMessage then
-        BigWigsLoader.RegisterMessage('FreeUI', 'BigWigs_FrameCreated', function(_, frame, name)
+        BigWigsLoader.RegisterMessage(C.ADDON_NAME, 'BigWigs_FrameCreated', function(_, frame, name)
             if name == 'QueueTimer' and not frame.styled then
                 F.StripTextures(frame)
                 F.SetBD(frame)
@@ -128,7 +128,7 @@ function THEME:RestyleBigWigsQueueTimer()
             end
         end)
 
-        -- BigWigsLoader.RegisterMessage('FreeUI', 'EmphasizedPrint', function(_, text)
+        -- BigWigsLoader.RegisterMessage(C.ADDON_NAME, 'EmphasizedPrint', function(_, text)
         --     if text and not text.styled then
 
         --         text.styled = true

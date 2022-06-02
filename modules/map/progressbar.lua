@@ -56,7 +56,7 @@ local eventsList = {
 }
 
 function M:CreateBar()
-    local bar = CreateFrame('StatusBar', 'FreeUIMinimapProgressBar', Minimap)
+    local bar = CreateFrame('StatusBar', C.ADDON_NAME .. 'MinimapProgressBar', Minimap)
     bar:SetPoint('TOPLEFT', 1, -Minimap.halfDiff - 1)
     bar:SetPoint('TOPRIGHT', -1, -Minimap.halfDiff - 1)
     bar:SetHeight(4)

@@ -67,7 +67,7 @@ end
 local loader = CreateFrame('Frame')
 loader:RegisterEvent('ADDON_LOADED')
 loader:SetScript('OnEvent', function(self, _, addon)
-    if addon ~= 'FreeUI' then
+    if addon ~= C.ADDON_NAME then
         return
     end
 

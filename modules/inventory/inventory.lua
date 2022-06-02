@@ -801,7 +801,7 @@ function INVENTORY:OnLogin()
     local hasCanIMogIt = IsAddOnLoaded('CanIMogIt')
     local hasPawn = IsAddOnLoaded('Pawn')
 
-    local Backpack = cargBags:NewImplementation('FreeUI_Backpack')
+    local Backpack = cargBags:NewImplementation(C.ADDON_NAME .. 'Backpack')
     Backpack:RegisterBlizzard()
     Backpack:HookScript('OnShow', function()
         PlaySound(_G.SOUNDKIT.IG_BACKPACK_OPEN)

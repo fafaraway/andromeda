@@ -2,7 +2,7 @@ local F, C, L = unpack(select(2, ...))
 local BLIZZARD = F:GetModule('Blizzard')
 
 function BLIZZARD:OrderHall_CreateIcon()
-    local hall = CreateFrame('Frame', 'FreeUI_OrderHallIcon', _G.UIParent)
+    local hall = CreateFrame('Frame', C.ADDON_NAME .. 'OrderHallIcon', _G.UIParent)
     hall:SetSize(50, 50)
     hall:SetPoint('TOP', 0, -30)
     hall:SetFrameStrata('HIGH')

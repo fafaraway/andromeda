@@ -1,7 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 local ACTIONBAR = F:GetModule('ActionBar')
 
-local keyFeedback = CreateFrame('Frame', 'FreeUIKeyFeedback', UIParent)
+local keyFeedback = CreateFrame('Frame', C.ADDON_NAME .. 'KeyFeedback', UIParent)
 keyFeedback:SetScript('OnEvent', function(self, event, ...)
     return self[event](self, event, ...)
 end)
@@ -301,7 +301,7 @@ end
 function keyFeedback:CreateFeedbackButton(autoKeyup)
     local db = self.db
 
-    local mirror = CreateFrame('Button', 'FreeUIKeyFeedbackMirror', self, 'ActionButtonTemplate')
+    local mirror = CreateFrame('Button', C.ADDON_NAME .. 'KeyFeedbackMirror', self, 'ActionButtonTemplate')
     mirror:SetHeight(db.mirrorSize)
     mirror:SetWidth(db.mirrorSize)
     mirror.NormalTexture:ClearAllPoints()
@@ -443,7 +443,7 @@ local PoolIconCreationFunc = function(pool)
     local hdr = pool.parent
     local id = pool.idCounter
     pool.idCounter = pool.idCounter + 1
-    local f = CreateFrame('Button', 'FreeUIKeyFeedbackPoolIcon' .. id, hdr, 'ActionButtonTemplate')
+    local f = CreateFrame('Button', C.ADDON_NAME .. 'KeyFeedbackPoolIcon' .. id, hdr, 'ActionButtonTemplate')
 
     F.StripTextures(f)
     local bg = F.CreateBDFrame(f)

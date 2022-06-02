@@ -1,4 +1,4 @@
-local F = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
 
 -- Numberize
 local numCap = { CHINESE = { '兆', '亿', '万' } }
@@ -248,7 +248,7 @@ end
 
 -- Timer
 F.WaitTable = {}
-F.WaitFrame = CreateFrame('Frame', 'FreeUIWaitFrame', _G.UIParent)
+F.WaitFrame = CreateFrame('Frame', C.ADDON_NAME .. 'WaitFrame', _G.UIParent)
 F.WaitFrame:SetScript('OnUpdate', F.WaitFunc)
 
 function F:WaitFunc(elapse)

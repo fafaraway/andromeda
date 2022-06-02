@@ -23,7 +23,7 @@ _G.FREE_ADB = {} -- Account variables
 _G.FREE_PDB = {}
 _G.FREE_DB = {} -- Character variables
 
-_G.FreeUI = engine -- Allow other addon access
+_G[addOnName] = engine -- Allow other addon access
 
 local F, C = engine[1], engine[2]
 
@@ -33,6 +33,7 @@ if (addonVersion:find('project%-version')) then
 end
 C.ADDON_VERSION = addonVersion
 C.DEV_MODE = C.ADDON_VERSION == 'Development'
+C.ADDON_NAME = tostring(addOnName)
 
 -- Libraries
 do

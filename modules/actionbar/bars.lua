@@ -34,7 +34,7 @@ function BAR:UpdateFontSize(button, fontSize)
 end
 
 function BAR:UpdateActionBarSize(name)
-    local frame = _G['FreeUI_Action' .. name]
+    local frame = _G[C.ADDON_NAME .. 'Action' .. name]
     if not frame then
         return
     end
@@ -108,7 +108,7 @@ function BAR:UpdateActionBarSize(name)
 end
 
 function BAR:ToggleBarFader(name)
-    local frame = _G['FreeUI_Action' .. name]
+    local frame = _G[C.ADDON_NAME .. 'Action' .. name]
     if not frame then
         return
     end
@@ -125,7 +125,7 @@ function BAR:CreateBar1()
     local num = _G.NUM_ACTIONBAR_BUTTONS
     local buttonList = {}
 
-    local frame = CreateFrame('Frame', 'FreeUI_ActionBar1', _G.UIParent, 'SecureHandlerStateTemplate')
+    local frame = CreateFrame('Frame', C.ADDON_NAME .. 'ActionBar1', _G.UIParent, 'SecureHandlerStateTemplate')
     frame.mover = F.Mover(frame, L['Actionbar'] .. '1', 'Bar1', { 'BOTTOM', _G.UIParent, 'BOTTOM', 0, C.UI_GAP })
     BAR.movers[1] = frame.mover
 
@@ -193,12 +193,12 @@ function BAR:CreateBar2()
     local num = _G.NUM_ACTIONBAR_BUTTONS
     local buttonList = {}
 
-    local frame = CreateFrame('Frame', 'FreeUI_ActionBar2', _G.UIParent, 'SecureHandlerStateTemplate')
+    local frame = CreateFrame('Frame', C.ADDON_NAME .. 'ActionBar2', _G.UIParent, 'SecureHandlerStateTemplate')
     frame.mover = F.Mover(
         frame,
         L['Actionbar'] .. '2',
         'Bar2',
-        { 'BOTTOM', _G.FreeUI_ActionBar1, 'TOP', 0, -BAR.margin }
+        { 'BOTTOM', _G[C.ADDON_NAME .. 'ActionBar1'], 'TOP', 0, -BAR.margin }
     )
     BAR.movers[2] = frame.mover
 
@@ -221,12 +221,12 @@ function BAR:CreateBar3()
     local num = _G.NUM_ACTIONBAR_BUTTONS
     local buttonList = {}
 
-    local frame = CreateFrame('Frame', 'FreeUI_ActionBar3', _G.UIParent, 'SecureHandlerStateTemplate')
+    local frame = CreateFrame('Frame', C.ADDON_NAME .. 'ActionBar3', _G.UIParent, 'SecureHandlerStateTemplate')
     frame.mover = F.Mover(
         frame,
         L['Actionbar'] .. '3L',
         'Bar3L',
-        { 'RIGHT', _G.FreeUI_ActionBar1, 'TOPLEFT', BAR.margin, -BAR.padding / 2 }
+        { 'RIGHT', _G[C.ADDON_NAME .. 'ActionBar1'], 'TOPLEFT', BAR.margin, -BAR.padding / 2 }
     )
     local child = CreateFrame('Frame', nil, frame)
     child:SetSize(1, 1)
@@ -234,7 +234,7 @@ function BAR:CreateBar3()
         child,
         L['Actionbar'] .. '3R',
         'Bar3R',
-        { 'LEFT', _G.FreeUI_ActionBar1, 'TOPRIGHT', -BAR.margin, -BAR.padding / 2 }
+        { 'LEFT', _G[C.ADDON_NAME .. 'ActionBar1'], 'TOPRIGHT', -BAR.margin, -BAR.padding / 2 }
     )
     frame.child = child
 
@@ -276,8 +276,8 @@ function BAR:UpdateFrameClickThru()
     local showBar4, showBar5
 
     local function updateClickThru()
-        _G.FreeUI_ActionBar4:EnableMouse(showBar4)
-        _G.FreeUI_ActionBar5:EnableMouse((not showBar4 and showBar4) or (showBar4 and showBar5))
+        _G[C.ADDON_NAME .. 'ActionBar4']:EnableMouse(showBar4)
+        _G[C.ADDON_NAME .. 'ActionBar5']:EnableMouse((not showBar4 and showBar4) or (showBar4 and showBar5))
     end
 
     hooksecurefunc('SetActionBarToggles', function(_, _, bar3, bar4)
@@ -295,7 +295,7 @@ function BAR:CreateBar4()
     local num = _G.NUM_ACTIONBAR_BUTTONS
     local buttonList = {}
 
-    local frame = CreateFrame('Frame', 'FreeUI_ActionBar4', _G.UIParent, 'SecureHandlerStateTemplate')
+    local frame = CreateFrame('Frame', C.ADDON_NAME .. 'ActionBar4', _G.UIParent, 'SecureHandlerStateTemplate')
     frame.mover = F.Mover(frame, L['Actionbar'] .. '4', 'Bar4', { 'RIGHT', _G.UIParent, 'RIGHT', -2, 0 })
     BAR.movers[5] = frame.mover
 
@@ -328,12 +328,12 @@ function BAR:CreateBar5()
     local num = _G.NUM_ACTIONBAR_BUTTONS
     local buttonList = {}
 
-    local frame = CreateFrame('Frame', 'FreeUI_ActionBar5', _G.UIParent, 'SecureHandlerStateTemplate')
+    local frame = CreateFrame('Frame', C.ADDON_NAME .. 'ActionBar5', _G.UIParent, 'SecureHandlerStateTemplate')
     frame.mover = F.Mover(
         frame,
         L['Actionbar'] .. '5',
         'Bar5',
-        { 'RIGHT', _G.FreeUI_ActionBar4, 'LEFT', BAR.margin, 0 }
+        { 'RIGHT', _G[C.ADDON_NAME .. 'ActionBar4'], 'LEFT', BAR.margin, 0 }
     )
     BAR.movers[6] = frame.mover
 
@@ -362,8 +362,8 @@ function BAR:CreatePetBar()
     local num = _G.NUM_PET_ACTION_SLOTS
     local buttonList = {}
 
-    local frame = CreateFrame('Frame', 'FreeUI_ActionBarPet', _G.UIParent, 'SecureHandlerStateTemplate')
-    frame.mover = F.Mover(frame, L['Pet Actionbar'], 'PetBar', { 'BOTTOM', _G.FreeUI_ActionBar2, 'TOP', 0, BAR.margin })
+    local frame = CreateFrame('Frame', C.ADDON_NAME .. 'ActionBarPet', _G.UIParent, 'SecureHandlerStateTemplate')
+    frame.mover = F.Mover(frame, L['Pet Actionbar'], 'PetBar', { 'BOTTOM', _G[C.ADDON_NAME .. 'ActionBar2'], 'TOP', 0, BAR.margin })
     BAR.movers[7] = frame.mover
 
     _G.PetActionBarFrame:SetParent(frame)
@@ -385,7 +385,7 @@ end
 
 function BAR:UpdateStanceBar()
     local num = _G.NUM_STANCE_SLOTS
-    local frame = _G['FreeUI_ActionBarStance']
+    local frame = _G[C.ADDON_NAME .. 'ActionBarStance']
     if not frame then
         return
     end
@@ -424,12 +424,12 @@ function BAR:CreateStanceBar()
 
     local num = _G.NUM_STANCE_SLOTS
     local buttonList = {}
-    local frame = CreateFrame('Frame', 'FreeUI_ActionBarStance', _G.UIParent, 'SecureHandlerStateTemplate')
+    local frame = CreateFrame('Frame', C.ADDON_NAME .. 'ActionBarStance', _G.UIParent, 'SecureHandlerStateTemplate')
     frame.mover = F.Mover(
         frame,
         L['StanceBar'],
         'StanceBar',
-        { 'BOTTOMLEFT', _G.FreeUI_ActionBar2, 'TOPLEFT', 0, BAR.margin }
+        { 'BOTTOMLEFT', _G[C.ADDON_NAME .. 'ActionBar2'], 'TOPLEFT', 0, BAR.margin }
     )
     BAR.movers[8] = frame.mover
 
@@ -466,7 +466,7 @@ function BAR:CreateStanceBar()
 end
 
 function BAR:UpdateExtraBar()
-    local frame = _G['FreeUI_ActionBarExtra']
+    local frame = _G[C.ADDON_NAME .. 'ActionBarExtra']
     if not frame then
         return
     end
@@ -485,7 +485,7 @@ function BAR:CreateExtraBar()
     local size = C.DB.Actionbar.BarExtraSize
 
     -- ExtraActionButton
-    local frame = CreateFrame('Frame', 'FreeUI_ActionBarExtra', _G.UIParent, 'SecureHandlerStateTemplate')
+    local frame = CreateFrame('Frame', C.ADDON_NAME .. 'ActionBarExtra', _G.UIParent, 'SecureHandlerStateTemplate')
     frame:SetWidth(size + 2 * BAR.padding)
     frame:SetHeight(size + 2 * BAR.padding)
     frame.mover = F.Mover(frame, L['Extrabar'], 'Extrabar', { 'CENTER', _G.UIParent, 'CENTER', 0, 300 })
@@ -505,7 +505,7 @@ function BAR:CreateExtraBar()
     _G.RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
 
     -- ZoneAbility
-    local zoneFrame = CreateFrame('Frame', 'FreeUI_ActionBarZone', _G.UIParent)
+    local zoneFrame = CreateFrame('Frame', C.ADDON_NAME .. 'ActionBarZone', _G.UIParent)
     zoneFrame:SetWidth(size + 2 * BAR.padding)
     zoneFrame:SetHeight(size + 2 * BAR.padding)
     zoneFrame.mover = F.Mover(zoneFrame, L['Zone Ability'], 'ZoneAbility', { 'CENTER', _G.UIParent, 'CENTER', 0, 250 })
@@ -539,7 +539,7 @@ function BAR:CreateExtraBar()
 end
 
 function BAR:UpdateVehicleButton()
-    local frame = _G['FreeUI_ActionBarExit']
+    local frame = _G[C.ADDON_NAME .. 'ActionBarExit']
     if not frame then
         return
     end
@@ -558,12 +558,12 @@ function BAR:CreateLeaveVehicleBar()
 
     local buttonList = {}
 
-    local frame = CreateFrame('Frame', 'FreeUI_ActionBarExit', _G.UIParent, 'SecureHandlerStateTemplate')
+    local frame = CreateFrame('Frame', C.ADDON_NAME .. 'ActionBarExit', _G.UIParent, 'SecureHandlerStateTemplate')
     frame.mover = F.Mover(frame, L['LeaveVehicle'], 'LeaveVehicle', { 'CENTER', _G.UIParent, 'CENTER', 0, 200 })
 
     local button = CreateFrame(
         'CheckButton',
-        'FreeUI_LeaveVehicleButton',
+        C.ADDON_NAME .. 'LeaveVehicleButton',
         frame,
         'ActionButtonTemplate, SecureHandlerClickTemplate'
     )

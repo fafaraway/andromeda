@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 
-C.ADDON_NAME = 'FreeUI'
+--C.ADDON_NAME = 'FreeUI'
 C.NEW_PATCH = select(4, GetBuildInfo()) >= 90205 -- 9.2.5
 
 C.REALM = GetRealmName()
@@ -10,7 +10,7 @@ C.FULL_NAME = C.NAME .. '-' .. C.REALM
 C.FACTION = select(2, UnitFactionGroup('player'))
 
 C.SCREEN_WIDTH, C.SCREEN_HEIGHT = GetPhysicalScreenSize()
-C.ASSET_PATH = 'Interface\\AddOns\\FreeUI\\assets\\'
+C.ASSET_PATH = 'Interface\\AddOns\\' .. C.ADDON_NAME .. '\\assets\\'
 C.TEX_COORD = { 0.08, 0.92, 0.08, 0.92 }
 C.UI_GAP = 33
 
@@ -40,7 +40,7 @@ function F.UpdateCustomClassColors()
     C.b = C.ClassColors[C.CLASS].b
 
     C.CLASS_COLOR = string.format('|cff%02x%02x%02x', C.r * 255, C.g * 255, C.b * 255)
-    C.COLORED_ADDON_NAME = F:TextGradient('FreeUI', C.r, C.g, C.b, 1, 1, 1)
+    C.COLORED_ADDON_NAME = F:TextGradient(C.ADDON_NAME, C.r, C.g, C.b, 1, 1, 1)
 end
 F:RegisterEvent('ADDON_LOADED', F.UpdateCustomClassColors)
 

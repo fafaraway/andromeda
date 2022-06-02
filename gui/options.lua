@@ -616,12 +616,12 @@ GUI.OptionsList = {
     },
     [2] = { -- notification
         { 1, 'Notification', 'Enable', L['Enable Notification'] },
-        { 1, 'Notification', 'BagFull', L['Backpack full'] },
-        { 1, 'Notification', 'NewMail', L['New mail'], true },
-        { 1, 'Notification', 'RareFound', L['Rare found'] },
-        { 1, 'Notification', 'LowDurability', L['Durability low'], true },
-        { 1, 'Notification', 'ParagonChest', L['Paragon chest'] },
-        { 1, 'ACCOUNT', 'VersionCheck', L['FreeUI outdated'], true },
+        { 1, 'Notification', 'BagFull', L['Backpack Full'] },
+        { 1, 'Notification', 'NewMail', L['New Mail'], true },
+        { 1, 'Notification', 'RareFound', L['Rare Found'] },
+        { 1, 'Notification', 'LowDurability', L['Durability Low'], true },
+        { 1, 'Notification', 'ParagonChest', L['Paragon Award'] },
+        { 1, 'ACCOUNT', 'VersionCheck', L['AddOn Outdated'], true },
     },
     [3] = { -- infobar
         { 1, 'Infobar', 'Enable', L['Enable Infobar'] },
@@ -1303,7 +1303,7 @@ GUI.OptionsList = {
             nil,
             nil,
             nil,
-            L["The health bar color and the background color are inverted.|nFreeUI's unitframe module is designed based on the Inverted Color Mode, which may cause some visual problems if disabled."],
+            L["The health bar color and the background color are inverted.|nThe unitframe module is designed based on the Inverted Color Mode, which may cause some visual problems if disabled."],
         },
         { 1, 'Unitframe', 'Smooth', L['Smooth'], true, nil, nil, L['Smoothly animate unit frame bars.'] },
 

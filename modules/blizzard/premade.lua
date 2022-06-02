@@ -253,8 +253,6 @@ function BLIZZARD:ReplaceFindGroupButton()
         return
     end
 
-    local searchPanel = _G.LFGListFrame.SearchPanel
-    local categorySelection = _G.LFGListFrame.CategorySelection
     categorySelection.FindGroupButton:Hide()
 
     local bu = CreateFrame('Button', nil, categorySelection, 'LFGListMagicButtonTemplate')

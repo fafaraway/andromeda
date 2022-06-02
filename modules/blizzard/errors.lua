@@ -38,7 +38,7 @@ local function CreateErrorFrames()
     local font = C.Assets.Font.Bold
     local outline = _G.FREE_ADB.FontOutline
 
-    local frame1 = CreateFrame('Frame', 'FreeUI_ErrorFrame1', _G.UIParent)
+    local frame1 = CreateFrame('Frame', C.ADDON_NAME .. 'ErrorFrame1', _G.UIParent)
     frame1:SetScript('OnUpdate', _G.FadingFrame_OnUpdate)
     frame1.fadeInTime = fadeintime
     frame1.fadeOutTime = fadeouttime
@@ -49,7 +49,7 @@ local function CreateErrorFrames()
     frame1.text = F.CreateFS(frame1, font, 14, outline, '', 'RED', outline or 'THICK')
     frame1.text:SetPoint('TOP', _G.UIParent, 0, -80)
 
-    local frame2 = CreateFrame('Frame', 'FreeUI_ErrorFrame2', _G.UIParent)
+    local frame2 = CreateFrame('Frame', C.ADDON_NAME .. 'ErrorFrame2', _G.UIParent)
     frame2:SetScript('OnUpdate', _G.FadingFrame_OnUpdate)
     frame2.fadeInTime = fadeintime
     frame2.fadeOutTime = fadeouttime

@@ -2,7 +2,7 @@ local F, C, L = unpack(select(2, ...))
 local MM = F:RegisterModule('MicroMenu')
 
 local buttonList = {}
-local texPath = 'Interface\\AddOns\\FreeUI\\assets\\textures\\menu\\'
+local texPath = 'Interface\\AddOns\\' .. C.ADDON_NAME .. '\\assets\\textures\\menu\\'
 local buttonsList = {
     {
         _G.CHARACTER_BUTTON,
@@ -159,7 +159,7 @@ function MM:OnLogin()
     local buNum = #buttonsList
 
     local barWidth = (buSize * buNum) + (buGap * (buNum - 1))
-    local bar = CreateFrame('Frame', 'FreeUIMicroMenu', _G.UIParent)
+    local bar = CreateFrame('Frame', C.ADDON_NAME .. 'MicroMenu', _G.UIParent)
     bar:SetSize(barWidth, C.DB.General.MicroMenuBarHeight)
 
     local glow = bar:CreateTexture(nil, 'BACKGROUND')
