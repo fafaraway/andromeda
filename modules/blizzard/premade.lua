@@ -187,6 +187,11 @@ function BLIZZARD:ReplaceGroupRoles(numPlayers, _, disabled)
     end
 end
 
+local factionStr = {
+    [0] = 'Horde',
+    [1] = 'Alliance',
+}
+
 function BLIZZARD:ShowLeaderOverallScore()
     local resultID = self.resultID
     local searchResultInfo = resultID and C_LFGList.GetSearchResultInfo(resultID)
@@ -205,6 +210,24 @@ function BLIZZARD:ShowLeaderOverallScore()
                 local oldName = self.ActivityName:GetText()
                 oldName = string.gsub(oldName, '.-' .. _G.HEADER_COLON, '') -- Tazavesh
                 self.ActivityName:SetFormattedText(scoreFormat, TT.GetDungeonScore(showScore), oldName)
+
+                if not self.crossFactionLogo then
+                    local logo = self:CreateTexture(nil, 'OVERLAY')
+                    logo:SetPoint('TOPLEFT', -6, 5)
+                    logo:SetSize(24, 24)
+                    self.crossFactionLogo = logo
+                end
+            end
+        end
+
+        if self.crossFactionLogo then
+            if searchResultInfo.crossFactionListing then
+                self.crossFactionLogo:Hide()
+            else
+                self.crossFactionLogo:SetTexture(
+                    'Interface\\Timer\\' .. factionStr[searchResultInfo.leaderFactionGroup] .. '-Logo'
+                )
+                self.crossFactionLogo:Show()
             end
         end
     end
