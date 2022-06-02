@@ -1481,7 +1481,7 @@ do
             self.Icon:SetPoint('RIGHT')
             self.Icon:SetSize(14, 14)
         end
-        if C.NEW_PATCH and self.ResetButton then
+        if self.ResetButton then
             F.ReskinFilterReset(self.ResetButton)
         end
     end

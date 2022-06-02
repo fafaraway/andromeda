@@ -128,42 +128,27 @@ table.insert(C.BlizzThemes, function()
     F.Reskin(_G.PetBattleQueueReadyFrame.DeclineButton)
 
     -- PlayerReportFrame
-    if not C.NEW_PATCH then
-        _G.PlayerReportFrame:HookScript('OnShow', function(self)
-            if not self.styled then
-                F.StripTextures(self)
-                F.SetBD(self)
-                F.StripTextures(self.Comment)
-                F.ReskinInput(self.Comment)
-                F.Reskin(self.ReportButton)
-                F.Reskin(self.CancelButton)
+    F.StripTextures(_G.ReportFrame)
+    F.SetBD(_G.ReportFrame)
+    F.ReskinClose(_G.ReportFrame.CloseButton)
+    F.Reskin(_G.ReportFrame.ReportButton)
+    F.ReskinDropDown(_G.ReportFrame.ReportingMajorCategoryDropdown)
+    F.ReskinEditBox(_G.ReportFrame.Comment)
 
-                self.styled = true
-            end
-        end)
-    else
-        F.StripTextures(_G.ReportFrame)
-        F.SetBD(_G.ReportFrame)
-        F.ReskinClose(_G.ReportFrame.CloseButton)
-        F.Reskin(_G.ReportFrame.ReportButton)
-        F.ReskinDropDown(_G.ReportFrame.ReportingMajorCategoryDropdown)
-        F.ReskinEditBox(_G.ReportFrame.Comment)
+    hooksecurefunc(_G.ReportFrame, 'AnchorMinorCategory', function(self)
+        if self.MinorCategoryButtonPool then
+            for button in self.MinorCategoryButtonPool:EnumerateActive() do
+                if not button.styled then
+                    F.StripTextures(button)
+                    button.bg = F.CreateBDFrame(button, 0.25)
+                    button:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
+                    button:HookScript('OnClick', updateMinorButtonState)
 
-        hooksecurefunc(_G.ReportFrame, 'AnchorMinorCategory', function(self)
-            if self.MinorCategoryButtonPool then
-                for button in self.MinorCategoryButtonPool:EnumerateActive() do
-                    if not button.styled then
-                        F.StripTextures(button)
-                        button.bg = F.CreateBDFrame(button, 0.25)
-                        button:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
-                        button:HookScript('OnClick', updateMinorButtonState)
-
-                        button.styled = true
-                    end
-
-                    updateMinorButtonState(button)
+                    button.styled = true
                 end
+
+                updateMinorButtonState(button)
             end
-        end)
-    end
+        end
+    end)
 end)
