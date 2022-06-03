@@ -1,7 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 local ANNOUNCEMENT = F:GetModule('Announcement')
 
-local debugMode = false
 local completedQuest = {}
 local initComplete
 
@@ -23,9 +22,7 @@ local function completeText(questID)
 end
 
 local function sendQuestMsg(msg)
-    if debugMode and C.DEV_MODE then
-        F:Debug(msg)
-    elseif IsPartyLFG() then
+    if IsPartyLFG() then
         SendChatMessage(msg, 'INSTANCE_CHAT')
     elseif IsInRaid() then
         SendChatMessage(msg, 'RAID')

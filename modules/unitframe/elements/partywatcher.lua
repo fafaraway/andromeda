@@ -190,9 +190,7 @@ function UNITFRAME:CheckPartySpells()
                 FREE_ADB['PartySpellsList'][spellID] = nil
             end
         else
-            if C.DEV_MODE then
-                F:Debug('Invalid Party Spell ID', spellID)
-            end
+            F:Debug('Party Watcher', 'Invalid Spell ID ' .. spellID)
         end
     end
 end

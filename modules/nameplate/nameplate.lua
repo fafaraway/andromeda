@@ -721,9 +721,7 @@ function NAMEPLATE:CheckMajorSpells()
                 FREE_ADB['NPMajorSpells'][spellID] = nil
             end
         else
-            if C.DEV_MODE then
-                F:Debug('Invalid Nameplate Major Spells ID', spellID)
-            end
+            F:Debug('Major Spell', 'Invalid Spell ID ' .. spellID)
         end
     end
 

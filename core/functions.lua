@@ -41,11 +41,50 @@ do
         return myPrint(string.format(...))
     end
 
-    function F:Debug(...)
-        local prefix = F:TextGradient('[DEBUG]', C.r, C.g, C.b, 1, 1, 1, 1)
-        local frame = (_G.SELECTED_CHAT_FRAME or _G.DEFAULT_CHAT_FRAME)
+    function F:Debug(module, text)
+        if not C.DEV_MODE then
+            return
+        end
 
-        frame:AddMessage(prefix .. ' ' .. string.join(', ', tostringall(...)))
+        if not text then
+            return
+        end
+
+        if not module then
+            module = 'Function'
+        end
+
+        if type(module) ~= 'string' and module.name then
+            module = module.name
+        end
+
+        local prefix = string.format('%s-%s', C.ADDON_NAME, 'Debug')
+        prefix = F:TextGradient(prefix, .98, .77, .18, .9, .49, .13, .71, .08, .25)
+
+        print(string.format('[%s] (|cff82c5ff%s|r) %s', prefix, module, text))
+    end
+
+    function F:Dump(object, inspect)
+        if GetAddOnEnableState(C.NAME, 'Blizzard_DebugTools') == 0 then
+            F:Print('Blizzard_DebugTools is disabled.')
+            return
+        end
+
+        local debugTools = IsAddOnLoaded('Blizzard_DebugTools')
+        if not debugTools then
+            UIParentLoadAddOn('Blizzard_DebugTools')
+        end
+
+        if inspect then
+            local tableType = type(object)
+            if tableType == 'table' then
+                _G.DisplayTableInspectorWindow(object)
+            else
+                F:Print('Failed: ', tostring(object), ' is type: ', tableType, '. Requires table object.')
+            end
+        else
+            _G.DevTools_Dump(object)
+        end
     end
 
     function F:HookAddOn(addonName, callback)
@@ -809,7 +848,11 @@ do
         swatch.bg = F.CreateBDFrame(swatch, 1)
         F.SetBorderColor(swatch.bg)
         F.CreateSD(swatch.bg, 0.25)
-        swatch.text = F.CreateFS(swatch, C.Assets.Font.Regular, 12, nil, name, nil, true, 'LEFT', 24, 0)
+
+        if name then
+            swatch.text = F.CreateFS(swatch, C.Assets.Font.Regular, 12, nil, name, nil, true, 'LEFT', 24, 0)
+        end
+
         local tex = swatch:CreateTexture()
         tex:SetInside(swatch, 2, 2)
         tex:SetTexture(C.Assets.Texture.Backdrop)

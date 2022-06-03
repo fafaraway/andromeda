@@ -57,7 +57,7 @@ local function PrtMsg(str)
         return
     end
 
-    F:Debug(str)
+    F:Debug('PvP Sound', str)
 end
 
 local function OnEvent(self, event)

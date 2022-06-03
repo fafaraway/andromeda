@@ -1,12 +1,8 @@
 local F, C, L = unpack(select(2, ...))
 local ACTIONBAR = F:GetModule('ActionBar')
 
-local debugMode = false
-
 local function SendNotifyMessage(msg)
-    if debugMode and C.DEV_MODE then
-        F:Debug(msg)
-    elseif IsPartyLFG() then
+    if IsPartyLFG() then
         SendChatMessage(msg, 'INSTANCE_CHAT')
     elseif IsInRaid() then
         SendChatMessage(msg, 'RAID')

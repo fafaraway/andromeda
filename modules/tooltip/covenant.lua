@@ -124,10 +124,6 @@ function M:HandleAddonMessage(...)
             covenantID = tonumber(covenantID)
             if covenantID and (not memberCovenants[guid] or memberCovenants[guid] ~= covenantID) then
                 memberCovenants[guid] = covenantID
-
-                if debug then
-                    F:Debug('%s Covenant: %s (by ZenTracker)', sender, covenantList[covenantID] or 'None')
-                end
             end
         end
     elseif prefix == OmniCD_Prefix then
@@ -137,10 +133,6 @@ function M:HandleAddonMessage(...)
             covenantID = tonumber(covenantID)
             if covenantID and (not memberCovenants[guid] or memberCovenants[guid] ~= covenantID) then
                 memberCovenants[guid] = covenantID
-
-                if debug then
-                    F:Debug('%s Covenant: %s (by OmniCD)', sender, covenantList[covenantID] or 'None')
-                end
             end
         end
     elseif prefix == DC_Prefix then
@@ -153,10 +145,6 @@ function M:HandleAddonMessage(...)
         covenantID = tonumber(covenantID)
         if covenantID and guid and (not memberCovenants[guid] or memberCovenants[guid] ~= covenantID) then
             memberCovenants[guid] = covenantID
-
-            if debug then
-                F:Debug('%s Covenant: %s (by Details_Covenants)', sender, covenantList[covenantID] or 'None')
-            end
         end
     elseif prefix == MRT_Prefix then
         local modPrefix, subPrefix, soulbinds = string.split('\t', msg)
@@ -170,10 +158,6 @@ function M:HandleAddonMessage(...)
             covenantID = tonumber(covenantID)
             if covenantID and guid and (not memberCovenants[guid] or memberCovenants[guid] ~= covenantID) then
                 memberCovenants[guid] = covenantID
-
-                if debug then
-                    F:Debug('%s Covenant: %s (by MRT)', sender, covenantList[covenantID] or 'None')
-                end
             end
         end
     end

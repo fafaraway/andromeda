@@ -116,7 +116,8 @@ end
 local modules, initQueue = {}, {}
 function F:RegisterModule(name)
     if modules[name] then
-        F:Print('Module <' .. name .. '> has been registered.')
+        F:Debug(name, 'has been registered.')
+
         return
     end
 
@@ -125,12 +126,14 @@ function F:RegisterModule(name)
     modules[name] = module
 
     table.insert(initQueue, module)
+
     return module
 end
 
 function F:GetModule(name)
     if not modules[name] then
-        F:Print('Module <' .. name .. '> does not exist.')
+        F:Debug(name, 'dose not exist.')
+
         return
     end
 
@@ -152,10 +155,11 @@ F:RegisterEvent('PLAYER_LOGIN', function()
         if module.OnLogin then
             module:OnLogin()
         else
-            F:Print('Module <' .. module.name .. '> does not loaded.')
+            F:Debug(module.name, 'does not loaded.')
         end
     end
 
     F.Modules = modules
+
     F:Print('Version: ' .. C.ADDON_VERSION)
 end)

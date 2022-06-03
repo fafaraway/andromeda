@@ -1,8 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 local ANNOUNCEMENT = F:GetModule('Announcement')
 
-local debugMode = false
-
 local msgList = {
     INSTANCE_RESET_SUCCESS = L['%s has been reset.'],
     INSTANCE_RESET_FAILED = L['Can not reset %s, there are players still inside the instance.'],
@@ -11,9 +9,7 @@ local msgList = {
 }
 
 local function SendMessage(msg)
-    if debugMode and C.DEV_MODE then
-        F:Debug(msg)
-    elseif IsPartyLFG() then
+    if IsPartyLFG() then
         SendChatMessage(msg, 'INSTANCE_CHAT')
     elseif IsInRaid() then
         SendChatMessage(msg, 'RAID')
