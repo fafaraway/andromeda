@@ -3,83 +3,83 @@ local MAP = F:GetModule('Map')
 
 MAP.MenuList = {
     {
-        text = CHARACTER_BUTTON,
+        text = _G.CHARACTER_BUTTON,
         func = function()
             ToggleCharacter('PaperDollFrame')
         end,
     },
     {
-        text = SPELLBOOK_ABILITIES_BUTTON,
+        text = _G.SPELLBOOK_ABILITIES_BUTTON,
         func = function()
-            ToggleFrame(SpellBookFrame)
+            ToggleFrame(_G.SpellBookFrame)
         end,
     },
     {
-        text = TIMEMANAGER_TITLE,
+        text = _G.TIMEMANAGER_TITLE,
         func = function()
-            ToggleFrame(TimeManagerFrame)
+            ToggleFrame(_G.TimeManagerFrame)
         end,
     },
-    { text = CHAT_CHANNELS, func = ToggleChannelFrame },
-    { text = SOCIAL_BUTTON, func = ToggleFriendsFrame },
-    { text = TALENTS_BUTTON, func = ToggleTalentFrame },
-    { text = GUILD, func = ToggleGuildFrame },
-    { text = LFG_TITLE, func = ToggleLFDParentFrame },
+    { text = _G.CHAT_CHANNELS, func = ToggleChannelFrame },
+    { text = _G.SOCIAL_BUTTON, func = ToggleFriendsFrame },
+    { text = _G.TALENTS_BUTTON, func = ToggleTalentFrame },
+    { text = _G.GUILD, func = ToggleGuildFrame },
+    { text = _G.LFG_TITLE, func = ToggleLFDParentFrame },
 
-    { text = COLLECTIONS, func = ToggleCollectionsJournal },
-    { text = ACHIEVEMENT_BUTTON, func = ToggleAchievementFrame },
+    { text = _G.COLLECTIONS, func = ToggleCollectionsJournal },
+    { text = _G.ACHIEVEMENT_BUTTON, func = ToggleAchievementFrame },
     {
         text = L['Calendar'],
         func = function()
-            GameTimeFrame:Click()
+            _G.GameTimeFrame:Click()
         end,
     },
     {
-        text = BLIZZARD_STORE,
+        text = _G.BLIZZARD_STORE,
         func = function()
-            StoreMicroButton:Click()
+            _G.StoreMicroButton:Click()
         end,
     },
     {
-        text = GARRISON_TYPE_8_0_LANDING_PAGE_TITLE,
+        text = _G.GARRISON_TYPE_8_0_LANDING_PAGE_TITLE,
         func = function()
-            GarrisonLandingPageMinimapButton_OnClick(GarrisonLandingPageMinimapButton)
+            GarrisonLandingPageMinimapButton_OnClick(_G.GarrisonLandingPageMinimapButton)
         end,
     },
     {
-        text = ENCOUNTER_JOURNAL,
+        text = _G.ENCOUNTER_JOURNAL,
         func = function()
             if not IsAddOnLoaded('Blizzard_EncounterJournal') then
                 UIParentLoadAddOn('Blizzard_EncounterJournal')
             end
-            ToggleFrame(EncounterJournal)
+            ToggleFrame(_G.EncounterJournal)
         end,
     },
     {
-        text = MAINMENU_BUTTON,
+        text = _G.MAINMENU_BUTTON,
         func = function()
-            if not GameMenuFrame:IsShown() then
-                if VideoOptionsFrame:IsShown() then
-                    VideoOptionsFrameCancel:Click()
-                elseif AudioOptionsFrame:IsShown() then
-                    AudioOptionsFrameCancel:Click()
-                elseif InterfaceOptionsFrame:IsShown() then
-                    InterfaceOptionsFrameCancel:Click()
+            if not _G.GameMenuFrame:IsShown() then
+                if _G.VideoOptionsFrame:IsShown() then
+                    _G.VideoOptionsFrameCancel:Click()
+                elseif _G.AudioOptionsFrame:IsShown() then
+                    _G.AudioOptionsFrameCancel:Click()
+                elseif _G.InterfaceOptionsFrame:IsShown() then
+                    _G.InterfaceOptionsFrameCancel:Click()
                 end
 
                 CloseMenus()
                 CloseAllWindows()
                 PlaySound(850) --IG_MAINMENU_OPEN
-                ShowUIPanel(GameMenuFrame)
+                ShowUIPanel(_G.GameMenuFrame)
             else
                 PlaySound(854) --IG_MAINMENU_QUIT
-                HideUIPanel(GameMenuFrame)
+                HideUIPanel(_G.GameMenuFrame)
                 MainMenuMicroButton_SetNormal()
             end
         end,
     },
     {
-        text = HELP_BUTTON,
+        text = _G.HELP_BUTTON,
         bottom = true,
         func = ToggleHelpFrame,
     },

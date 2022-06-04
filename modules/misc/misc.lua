@@ -284,11 +284,11 @@ do
 
     F:RegisterEvent('ADDON_LOADED', onEvent)
 
-    for i = 1, NUM_LE_FRAME_TUTORIALS do
+    for i = 1, _G.NUM_LE_FRAME_TUTORIALS do
         C_CVar.SetCVarBitfield('closedInfoFrames', i, true)
     end
 
-    for i = 1, NUM_LE_FRAME_TUTORIAL_ACCCOUNTS do
+    for i = 1, _G.NUM_LE_FRAME_TUTORIAL_ACCCOUNTS do
         C_CVar.SetCVarBitfield('closedInfoFramesAccountWide', i, true)
     end
 end
@@ -315,7 +315,7 @@ do
 
     F:HookAddOn('Blizzard_WeeklyRewards', function()
         if C_WeeklyRewards.HasAvailableRewards() then
-            for _, frame in pairs(WeeklyRewardsFrame.Activities) do
+            for _, frame in pairs(_G.WeeklyRewardsFrame.Activities) do
                 AddMask(frame)
             end
         end

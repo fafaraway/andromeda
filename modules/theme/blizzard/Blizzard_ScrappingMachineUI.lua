@@ -1,10 +1,10 @@
 local F, C = unpack(select(2, ...))
 
 C.Themes['Blizzard_ScrappingMachineUI'] = function()
-    F.ReskinPortraitFrame(ScrappingMachineFrame)
-    F.Reskin(ScrappingMachineFrame.ScrapButton)
+    F.ReskinPortraitFrame(_G.ScrappingMachineFrame)
+    F.Reskin(_G.ScrappingMachineFrame.ScrapButton)
 
-    local ItemSlots = ScrappingMachineFrame.ItemSlots
+    local ItemSlots = _G.ScrappingMachineFrame.ItemSlots
     F.StripTextures(ItemSlots)
 
     for button in pairs(ItemSlots.scrapButtons.activeObjects) do

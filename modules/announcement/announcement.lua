@@ -63,10 +63,10 @@ function ANNOUNCEMENT:OnEvent()
     end
 
     if eventType == 'SPELL_MISSED' and C.DB.Announcement.Reflect then
-        local spellID, _, _, missType = select(12, CombatLogGetCurrentEventInfo())
+        local id, _, _, missType = select(12, CombatLogGetCurrentEventInfo())
         if missType == 'REFLECT' and destName == C.NAME then
             SendChatMessage(
-                string.format(_G.COMBAT_TEXT_REFLECT .. ' %s %s', arrowStr, GetSpellLink(spellID)),
+                string.format(_G.COMBAT_TEXT_REFLECT .. ' %s %s', arrowStr, GetSpellLink(id)),
                 GetChannel()
             )
         end

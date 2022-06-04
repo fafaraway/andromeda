@@ -122,7 +122,7 @@ local function ReskinMinimizeButton(button)
     button:GetNormalTexture():SetAlpha(0)
     button:GetPushedTexture():SetAlpha(0)
     button.__texture:DoCollapse(false)
-    _G.hooksecurefunc(button, 'SetCollapsed', UpdateMinimizeButton)
+    hooksecurefunc(button, 'SetCollapsed', UpdateMinimizeButton)
 end
 
 local function GetMawBuffsAnchor(frame)
@@ -170,44 +170,44 @@ local function ReskinMawBuffsContainer(container)
     local blockList = container.List
     F.StripTextures(blockList)
     blockList.__bg = bg
-    local bg = F.SetBD(blockList)
-    bg:SetPoint('TOPLEFT', 7, -12)
-    bg:SetPoint('BOTTOMRIGHT', -7, 12)
+    local blbg = F.SetBD(blockList)
+    blbg:SetPoint('TOPLEFT', 7, -12)
+    blbg:SetPoint('BOTTOMRIGHT', -7, 12)
 
     blockList:HookScript('OnShow', BlockList_Show)
     blockList:HookScript('OnHide', BlockList_Hide)
 end
 
-_G.tinsert(C.BlizzThemes, function()
+table.insert(C.BlizzThemes, function()
     local r, g, b = C.r, C.g, C.b
 
     -- QuestIcons
-    _G.hooksecurefunc(_G.QUEST_TRACKER_MODULE, 'SetBlockHeader', ReskinQuestIcons)
-    _G.hooksecurefunc(_G.WORLD_QUEST_TRACKER_MODULE, 'AddObjective', ReskinQuestIcons)
-    _G.hooksecurefunc(_G.CAMPAIGN_QUEST_TRACKER_MODULE, 'AddObjective', ReskinQuestIcons)
-    _G.hooksecurefunc(_G.BONUS_OBJECTIVE_TRACKER_MODULE, 'AddObjective', ReskinQuestIcons)
+    hooksecurefunc(_G.QUEST_TRACKER_MODULE, 'SetBlockHeader', ReskinQuestIcons)
+    hooksecurefunc(_G.WORLD_QUEST_TRACKER_MODULE, 'AddObjective', ReskinQuestIcons)
+    hooksecurefunc(_G.CAMPAIGN_QUEST_TRACKER_MODULE, 'AddObjective', ReskinQuestIcons)
+    hooksecurefunc(_G.BONUS_OBJECTIVE_TRACKER_MODULE, 'AddObjective', ReskinQuestIcons)
 
     -- Reskin Progressbars
-    _G.hooksecurefunc(_G.QUEST_TRACKER_MODULE, 'AddProgressBar', ReskinProgressbar)
-    _G.hooksecurefunc(_G.CAMPAIGN_QUEST_TRACKER_MODULE, 'AddProgressBar', ReskinProgressbar)
+    hooksecurefunc(_G.QUEST_TRACKER_MODULE, 'AddProgressBar', ReskinProgressbar)
+    hooksecurefunc(_G.CAMPAIGN_QUEST_TRACKER_MODULE, 'AddProgressBar', ReskinProgressbar)
 
-    _G.hooksecurefunc(_G.BONUS_OBJECTIVE_TRACKER_MODULE, 'AddProgressBar', ReskinProgressbarWithIcon)
-    _G.hooksecurefunc(_G.WORLD_QUEST_TRACKER_MODULE, 'AddProgressBar', ReskinProgressbarWithIcon)
-    _G.hooksecurefunc(_G.SCENARIO_TRACKER_MODULE, 'AddProgressBar', ReskinProgressbarWithIcon)
+    hooksecurefunc(_G.BONUS_OBJECTIVE_TRACKER_MODULE, 'AddProgressBar', ReskinProgressbarWithIcon)
+    hooksecurefunc(_G.WORLD_QUEST_TRACKER_MODULE, 'AddProgressBar', ReskinProgressbarWithIcon)
+    hooksecurefunc(_G.SCENARIO_TRACKER_MODULE, 'AddProgressBar', ReskinProgressbarWithIcon)
 
-    _G.hooksecurefunc(_G.QUEST_TRACKER_MODULE, 'AddTimerBar', ReskinTimerBar)
-    _G.hooksecurefunc(_G.SCENARIO_TRACKER_MODULE, 'AddTimerBar', ReskinTimerBar)
-    _G.hooksecurefunc(_G.ACHIEVEMENT_TRACKER_MODULE, 'AddTimerBar', ReskinTimerBar)
+    hooksecurefunc(_G.QUEST_TRACKER_MODULE, 'AddTimerBar', ReskinTimerBar)
+    hooksecurefunc(_G.SCENARIO_TRACKER_MODULE, 'AddTimerBar', ReskinTimerBar)
+    hooksecurefunc(_G.ACHIEVEMENT_TRACKER_MODULE, 'AddTimerBar', ReskinTimerBar)
 
     -- Reskin Blocks
-    _G.hooksecurefunc('ScenarioStage_CustomizeBlock', function(block)
+    hooksecurefunc('ScenarioStage_CustomizeBlock', function(block)
         block.NormalBG:SetTexture('')
         if not block.bg then
             block.bg = F.SetBD(block.GlowTexture, nil, 4, -2, -4, 2)
         end
     end)
 
-    _G.hooksecurefunc(_G.SCENARIO_CONTENT_TRACKER_MODULE, 'Update', function()
+    hooksecurefunc(_G.SCENARIO_CONTENT_TRACKER_MODULE, 'Update', function()
         local widgetContainer = _G.ScenarioStageBlock.WidgetContainer
         if widgetContainer.widgetFrames then
             for _, widgetFrame in pairs(widgetContainer.widgetFrames) do
@@ -217,7 +217,7 @@ _G.tinsert(C.BlizzThemes, function()
 
                 local bar = widgetFrame.TimerBar
                 if bar and not bar.bg then
-                    _G.hooksecurefunc(bar, 'SetStatusBarAtlas', F.ReplaceWidgetBarTexture)
+                    hooksecurefunc(bar, 'SetStatusBarAtlas', F.ReplaceWidgetBarTexture)
                     bar.bg = F.CreateBDFrame(bar, 0.25)
                 end
 
@@ -232,7 +232,7 @@ _G.tinsert(C.BlizzThemes, function()
         end
     end)
 
-    _G.hooksecurefunc('Scenario_ChallengeMode_ShowBlock', function()
+    hooksecurefunc('Scenario_ChallengeMode_ShowBlock', function()
         local block = _G.ScenarioChallengeModeBlock
         if not block.bg then
             block.TimerBG:Hide()
@@ -250,7 +250,7 @@ _G.tinsert(C.BlizzThemes, function()
         end
     end)
 
-    _G.hooksecurefunc('Scenario_ChallengeMode_SetUpAffixes', F.AffixesSetup)
+    hooksecurefunc('Scenario_ChallengeMode_SetUpAffixes', F.AffixesSetup)
 
     -- Maw buffs container
     ReskinMawBuffsContainer(_G.ScenarioBlocksFrame.MawBuffsBlock.Container)

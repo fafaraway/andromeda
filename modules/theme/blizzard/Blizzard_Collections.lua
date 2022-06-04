@@ -404,14 +404,14 @@ C.Themes['Blizzard_Collections'] = function()
 
     -- Progress bar
 
-    local progressBar = HeirloomsJournal.progressBar
-    progressBar.border:Hide()
-    progressBar:DisableDrawLayer('BACKGROUND')
+    local hjBar = HeirloomsJournal.progressBar
+    hjBar.border:Hide()
+    hjBar:DisableDrawLayer('BACKGROUND')
 
-    progressBar.text:SetPoint('CENTER', 0, 1)
-    progressBar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
+    hjBar.text:SetPoint('CENTER', 0, 1)
+    hjBar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
 
-    F.CreateBDFrame(progressBar, 0.25)
+    F.CreateBDFrame(hjBar, 0.25)
 
     -- Buttons
 

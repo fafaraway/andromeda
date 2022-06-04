@@ -225,8 +225,8 @@ end)
 -- Print map info
 F:RegisterSlash('/mapid', function()
     local mapID
-    if WorldMapFrame:IsShown() then
-        mapID = WorldMapFrame:GetMapID()
+    if _G.WorldMapFrame:IsShown() then
+        mapID = _G.WorldMapFrame:GetMapID()
     else
         mapID = C_Map.GetBestMapForUnit('player')
     end

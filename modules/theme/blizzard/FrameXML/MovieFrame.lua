@@ -1,33 +1,33 @@
 local F, C = unpack(select(2, ...))
 
-tinsert(C.BlizzThemes, function()
+table.insert(C.BlizzThemes, function()
     if not _G.FREE_ADB.ReskinBlizz then
         return
     end
 
     -- Cinematic
 
-    CinematicFrameCloseDialog:HookScript('OnShow', function(self)
+    _G.CinematicFrameCloseDialog:HookScript('OnShow', function(self)
         self:SetScale(UIParent:GetScale())
     end)
 
-    F.StripTextures(CinematicFrameCloseDialog)
-    local bg = F.SetBD(CinematicFrameCloseDialog)
+    F.StripTextures(_G.CinematicFrameCloseDialog)
+    local bg = F.SetBD(_G.CinematicFrameCloseDialog)
     bg:SetFrameLevel(1)
-    F.Reskin(CinematicFrameCloseDialogConfirmButton)
-    F.Reskin(CinematicFrameCloseDialogResumeButton)
+    F.Reskin(_G.CinematicFrameCloseDialogConfirmButton)
+    F.Reskin(_G.CinematicFrameCloseDialogResumeButton)
 
     -- Movie
 
-    local closeDialog = MovieFrame.CloseDialog
+    local closeDialog = _G.MovieFrame.CloseDialog
 
     closeDialog:HookScript('OnShow', function(self)
         self:SetScale(UIParent:GetScale())
     end)
 
     F.StripTextures(closeDialog)
-    local bg = F.SetBD(closeDialog)
-    bg:SetFrameLevel(1)
+    local dbg = F.SetBD(closeDialog)
+    dbg:SetFrameLevel(1)
     F.Reskin(closeDialog.ConfirmButton)
     F.Reskin(closeDialog.ResumeButton)
 end)

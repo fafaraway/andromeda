@@ -389,7 +389,7 @@ end
 
 function M:MailBox_CollectCurrent()
     if _G.OpenMailFrame.cod then
-        _G.UIErrorsFrame:AddMessage(C.INFO_COLOR .. L["You can't auto collect Cash on Delivery"])
+        _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L["You can't auto collect CoD mail"])
         return
     end
 

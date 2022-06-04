@@ -1,14 +1,14 @@
 local F, C = unpack(select(2, ...))
 
-tinsert(C.BlizzThemes, function()
+table.insert(C.BlizzThemes, function()
     if not _G.FREE_ADB.ReskinBlizz then
         return
     end
 
-    F.SetBD(GuildInviteFrame)
+    F.SetBD(_G.GuildInviteFrame)
     for i = 1, 10 do
-        select(i, GuildInviteFrame:GetRegions()):Hide()
+        select(i, _G.GuildInviteFrame:GetRegions()):Hide()
     end
-    F.Reskin(GuildInviteFrameJoinButton)
-    F.Reskin(GuildInviteFrameDeclineButton)
+    F.Reskin(_G.GuildInviteFrameJoinButton)
+    F.Reskin(_G.GuildInviteFrameDeclineButton)
 end)

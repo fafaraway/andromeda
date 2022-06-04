@@ -1,9 +1,11 @@
 local F, C = unpack(select(2, ...))
 
-tinsert(C.BlizzThemes, function()
+table.insert(C.BlizzThemes, function()
     if not _G.FREE_ADB.ReskinBlizz then
         return
     end
+
+    local ScriptErrorsFrame = _G.ScriptErrorsFrame
 
     ScriptErrorsFrame:SetScale(UIParent:GetScale())
     F.StripTextures(ScriptErrorsFrame)
@@ -13,6 +15,6 @@ tinsert(C.BlizzThemes, function()
     F.ReskinArrow(ScriptErrorsFrame.NextError, 'right')
     F.Reskin(ScriptErrorsFrame.Reload)
     F.Reskin(ScriptErrorsFrame.Close)
-    F.ReskinScroll(ScriptErrorsFrameScrollBar)
-    F.ReskinClose(ScriptErrorsFrameClose)
+    F.ReskinScroll(_G.ScriptErrorsFrameScrollBar)
+    F.ReskinClose(_G.ScriptErrorsFrameClose)
 end)

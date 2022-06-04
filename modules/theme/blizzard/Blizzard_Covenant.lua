@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 C.Themes['Blizzard_CovenantPreviewUI'] = function()
-    local CovenantPreviewFrame = CovenantPreviewFrame
+    local CovenantPreviewFrame = _G.CovenantPreviewFrame
     F.Reskin(CovenantPreviewFrame.SelectButton)
 
     local infoPanel = CovenantPreviewFrame.InfoPanel
@@ -18,7 +18,7 @@ C.Themes['Blizzard_CovenantPreviewUI'] = function()
             self.BorderFrame:SetAlpha(0)
             self.Title:DisableDrawLayer('BACKGROUND')
             self.Title.Text:SetTextColor(1, 0.8, 0)
-            self.Title.Text:SetFontObject(SystemFont_Huge1)
+            self.Title.Text:SetFontObject(_G.SystemFont_Huge1)
             self.ModelSceneContainer.ModelSceneBorder:SetAlpha(0)
             F.CreateBDFrame(self.Title, 0.25)
             F.ReskinClose(self.CloseButton)
@@ -62,7 +62,7 @@ local function replaceCurrencies(displayGroup)
 end
 
 C.Themes['Blizzard_CovenantSanctum'] = function()
-    local CovenantSanctumFrame = CovenantSanctumFrame
+    local CovenantSanctumFrame = _G.CovenantSanctumFrame
 
     CovenantSanctumFrame:HookScript('OnShow', function(self)
         if not self.bg then
@@ -96,7 +96,7 @@ end
 
 -- Covenant renown
 C.Themes['Blizzard_CovenantRenown'] = function()
-    hooksecurefunc(CovenantRenownFrame, 'SetUpCovenantData', function(self)
+    hooksecurefunc(_G.CovenantRenownFrame, 'SetUpCovenantData', function(self)
         F.StripTextures(self)
 
         if not self.styled then

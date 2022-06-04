@@ -1,10 +1,10 @@
 local F, C = unpack(select(2, ...))
 
-tinsert(C.BlizzThemes, function()
+table.insert(C.BlizzThemes, function()
     -- Tooltip close buttons
-    F.ReskinClose(ItemRefTooltip.CloseButton)
-    F.ReskinClose(FloatingBattlePetTooltip.CloseButton)
-    F.ReskinClose(FloatingPetBattleAbilityTooltip.CloseButton)
+    F.ReskinClose(_G.ItemRefTooltip.CloseButton)
+    F.ReskinClose(_G.FloatingBattlePetTooltip.CloseButton)
+    F.ReskinClose(_G.FloatingPetBattleAbilityTooltip.CloseButton)
 
     if not _G.FREE_ADB.ReskinBlizz then
         return
@@ -20,13 +20,13 @@ tinsert(C.BlizzThemes, function()
         end
     end
 
-    F.ReskinGarrisonTooltip(FloatingGarrisonMissionTooltip)
-    F.ReskinGarrisonTooltip(GarrisonFollowerTooltip)
-    F.ReskinGarrisonTooltip(FloatingGarrisonFollowerTooltip)
-    F.ReskinGarrisonTooltip(GarrisonFollowerAbilityTooltip)
-    F.ReskinGarrisonTooltip(FloatingGarrisonFollowerAbilityTooltip)
-    F.ReskinGarrisonTooltip(GarrisonShipyardFollowerTooltip)
-    F.ReskinGarrisonTooltip(FloatingGarrisonShipyardFollowerTooltip)
+    F.ReskinGarrisonTooltip(_G.FloatingGarrisonMissionTooltip)
+    F.ReskinGarrisonTooltip(_G.GarrisonFollowerTooltip)
+    F.ReskinGarrisonTooltip(_G.FloatingGarrisonFollowerTooltip)
+    F.ReskinGarrisonTooltip(_G.GarrisonFollowerAbilityTooltip)
+    F.ReskinGarrisonTooltip(_G.FloatingGarrisonFollowerAbilityTooltip)
+    F.ReskinGarrisonTooltip(_G.GarrisonShipyardFollowerTooltip)
+    F.ReskinGarrisonTooltip(_G.FloatingGarrisonShipyardFollowerTooltip)
 
     hooksecurefunc('GarrisonFollowerTooltipTemplate_SetGarrisonFollower', function(tooltipFrame)
         -- Abilities

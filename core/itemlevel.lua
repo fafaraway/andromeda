@@ -171,9 +171,9 @@ pendingFrame:SetScript('OnUpdate', function(self, elapsed)
         if next(pendingNPCs) then
             for npcID, count in pairs(pendingNPCs) do
                 if count > 2 then
-                    nameCache[npcID] = UNKNOWN
+                    nameCache[npcID] = _G.UNKNOWN
                     if callbacks[npcID] then
-                        callbacks[npcID](UNKNOWN)
+                        callbacks[npcID](_G.UNKNOWN)
                     end
                     pendingNPCs[npcID] = nil
                 else

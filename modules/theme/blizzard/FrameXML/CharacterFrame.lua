@@ -1,25 +1,25 @@
 local F, C = unpack(select(2, ...))
 
-tinsert(C.BlizzThemes, function()
+table.insert(C.BlizzThemes, function()
     if not _G.FREE_ADB.ReskinBlizz then
         return
     end
 
     local r, g, b = C.r, C.g, C.b
 
-    F.ReskinPortraitFrame(CharacterFrame)
-    F.StripTextures(CharacterFrameInsetRight)
+    F.ReskinPortraitFrame(_G.CharacterFrame)
+    F.StripTextures(_G.CharacterFrameInsetRight)
 
     for i = 1, 3 do
         F.ReskinTab(_G['CharacterFrameTab' .. i])
     end
 
-    CharacterFrameTab1:ClearAllPoints()
-    CharacterFrameTab1:SetPoint('TOPLEFT', CharacterFrame, 'BOTTOMLEFT', 10, 1)
+    _G.CharacterFrameTab1:ClearAllPoints()
+    _G.CharacterFrameTab1:SetPoint('TOPLEFT', _G.CharacterFrame, 'BOTTOMLEFT', 10, 1)
 
-    CharacterModelFrame:DisableDrawLayer('BACKGROUND')
-    CharacterModelFrame:DisableDrawLayer('BORDER')
-    CharacterModelFrame:DisableDrawLayer('OVERLAY')
+    _G.CharacterModelFrame:DisableDrawLayer('BACKGROUND')
+    _G.CharacterModelFrame:DisableDrawLayer('BORDER')
+    _G.CharacterModelFrame:DisableDrawLayer('OVERLAY')
 
     -- [[ Item buttons ]]
 
@@ -139,7 +139,7 @@ tinsert(C.BlizzThemes, function()
 
     -- [[ Stats pane ]]
 
-    local pane = CharacterStatsPane
+    local pane = _G.CharacterStatsPane
     pane.ClassBackground:Hide()
     pane.ItemLevelFrame.Corruption:SetPoint('RIGHT', 22, -8)
 
@@ -155,7 +155,7 @@ tinsert(C.BlizzThemes, function()
 
     -- [[ Sidebar tabs ]]
 
-    for i = 1, #PAPERDOLL_SIDEBARS do
+    for i = 1, #_G.PAPERDOLL_SIDEBARS do
         local tab = _G['PaperDollSidebarTab' .. i]
 
         if i == 1 then
@@ -180,22 +180,22 @@ tinsert(C.BlizzThemes, function()
 
     -- [[ Equipment manager ]]
 
-    F.StripTextures(GearManagerDialogPopup.BorderBox)
-    GearManagerDialogPopup.BG:Hide()
-    F.SetBD(GearManagerDialogPopup)
-    GearManagerDialogPopup:SetHeight(525)
-    F.StripTextures(GearManagerDialogPopupScrollFrame)
-    F.ReskinScroll(GearManagerDialogPopupScrollFrameScrollBar)
-    F.Reskin(GearManagerDialogPopupOkay)
-    F.Reskin(GearManagerDialogPopupCancel)
-    F.ReskinInput(GearManagerDialogPopupEditBox)
-    F.ReskinScroll(PaperDollTitlesPaneScrollBar)
-    F.ReskinScroll(PaperDollEquipmentManagerPaneScrollBar)
-    F.StripTextures(PaperDollSidebarTabs)
-    F.Reskin(PaperDollEquipmentManagerPaneEquipSet)
-    F.Reskin(PaperDollEquipmentManagerPaneSaveSet)
+    F.StripTextures(_G.GearManagerDialogPopup.BorderBox)
+    _G.GearManagerDialogPopup.BG:Hide()
+    F.SetBD(_G.GearManagerDialogPopup)
+    _G.GearManagerDialogPopup:SetHeight(525)
+    F.StripTextures(_G.GearManagerDialogPopupScrollFrame)
+    F.ReskinScroll(_G.GearManagerDialogPopupScrollFrameScrollBar)
+    F.Reskin(_G.GearManagerDialogPopupOkay)
+    F.Reskin(_G.GearManagerDialogPopupCancel)
+    F.ReskinInput(_G.GearManagerDialogPopupEditBox)
+    F.ReskinScroll(_G.PaperDollTitlesPaneScrollBar)
+    F.ReskinScroll(_G.PaperDollEquipmentManagerPaneScrollBar)
+    F.StripTextures(_G.PaperDollSidebarTabs)
+    F.Reskin(_G.PaperDollEquipmentManagerPaneEquipSet)
+    F.Reskin(_G.PaperDollEquipmentManagerPaneSaveSet)
 
-    for i = 1, NUM_GEARSET_ICONS_SHOWN do
+    for i = 1, _G.NUM_GEARSET_ICONS_SHOWN do
         local bu = _G['GearManagerDialogPopupButton' .. i]
         local ic = _G['GearManagerDialogPopupButton' .. i .. 'Icon']
 
@@ -209,7 +209,7 @@ tinsert(C.BlizzThemes, function()
         F.ReskinIcon(ic)
     end
 
-    for _, bu in pairs(PaperDollEquipmentManagerPane.buttons) do
+    for _, bu in pairs(_G.PaperDollEquipmentManagerPane.buttons) do
         F.HideObject(bu.Stripe)
         bu.BgTop:SetTexture('')
         bu.BgMiddle:SetTexture('')
@@ -232,16 +232,16 @@ tinsert(C.BlizzThemes, function()
         end
     end)
 
-    PaperDollEquipmentManagerPaneEquipSet:SetWidth(PaperDollEquipmentManagerPaneEquipSet:GetWidth() - 1)
-    PaperDollEquipmentManagerPaneSaveSet:SetPoint('LEFT', PaperDollEquipmentManagerPaneEquipSet, 'RIGHT', 1, 0)
-    GearManagerDialogPopup:HookScript('OnShow', function(self)
-        self:SetPoint('TOPLEFT', CharacterFrame, 'TOPRIGHT', 3, 0)
+    _G.PaperDollEquipmentManagerPaneEquipSet:SetWidth(_G.PaperDollEquipmentManagerPaneEquipSet:GetWidth() - 1)
+    _G.PaperDollEquipmentManagerPaneSaveSet:SetPoint('LEFT', _G.PaperDollEquipmentManagerPaneEquipSet, 'RIGHT', 1, 0)
+    _G.GearManagerDialogPopup:HookScript('OnShow', function(self)
+        self:SetPoint('TOPLEFT', _G.CharacterFrame, 'TOPRIGHT', 3, 0)
     end)
 
     -- Reputation Frame
-    ReputationDetailCorner:Hide()
-    ReputationDetailDivider:Hide()
-    ReputationDetailFrame:SetPoint('TOPLEFT', ReputationFrame, 'TOPRIGHT', 3, -28)
+    _G.ReputationDetailCorner:Hide()
+    _G.ReputationDetailDivider:Hide()
+    _G.ReputationDetailFrame:SetPoint('TOPLEFT', _G.ReputationFrame, 'TOPRIGHT', 3, -28)
 
     local function UpdateFactionSkins()
         for i = 1, GetNumFactions() do
@@ -264,34 +264,34 @@ tinsert(C.BlizzThemes, function()
             end
         end
     end
-    ReputationFrame:HookScript('OnShow', UpdateFactionSkins)
-    ReputationFrame:HookScript('OnEvent', UpdateFactionSkins)
+    _G.ReputationFrame:HookScript('OnShow', UpdateFactionSkins)
+    _G.ReputationFrame:HookScript('OnEvent', UpdateFactionSkins)
 
-    for i = 1, NUM_FACTIONS_DISPLAYED do
+    for i = 1, _G.NUM_FACTIONS_DISPLAYED do
         local bu = _G['ReputationBar' .. i .. 'ExpandOrCollapseButton']
         F.ReskinCollapse(bu)
     end
 
-    F.StripTextures(ReputationDetailFrame)
-    F.SetBD(ReputationDetailFrame)
-    F.ReskinClose(ReputationDetailCloseButton)
-    F.ReskinCheck(ReputationDetailAtWarCheckBox)
-    F.ReskinCheck(ReputationDetailInactiveCheckBox)
-    F.ReskinCheck(ReputationDetailMainScreenCheckBox)
-    F.ReskinScroll(ReputationListScrollFrameScrollBar)
+    F.StripTextures(_G.ReputationDetailFrame)
+    F.SetBD(_G.ReputationDetailFrame)
+    F.ReskinClose(_G.ReputationDetailCloseButton)
+    F.ReskinCheck(_G.ReputationDetailAtWarCheckBox)
+    F.ReskinCheck(_G.ReputationDetailInactiveCheckBox)
+    F.ReskinCheck(_G.ReputationDetailMainScreenCheckBox)
+    F.ReskinScroll(_G.ReputationListScrollFrameScrollBar)
 
     -- Token frame
-    TokenFramePopupCorner:Hide()
-    TokenFramePopup:SetPoint('TOPLEFT', TokenFrame, 'TOPRIGHT', 3, -28)
-    F.StripTextures(TokenFramePopup)
-    F.SetBD(TokenFramePopup)
-    F.ReskinClose(TokenFramePopupCloseButton)
-    F.ReskinCheck(TokenFramePopupInactiveCheckBox)
-    F.ReskinCheck(TokenFramePopupBackpackCheckBox)
-    F.ReskinScroll(TokenFrameContainerScrollBar)
+    _G.TokenFramePopupCorner:Hide()
+    _G.TokenFramePopup:SetPoint('TOPLEFT', _G.TokenFrame, 'TOPRIGHT', 3, -28)
+    F.StripTextures(_G.TokenFramePopup)
+    F.SetBD(_G.TokenFramePopup)
+    F.ReskinClose(_G.TokenFramePopupCloseButton)
+    F.ReskinCheck(_G.TokenFramePopupInactiveCheckBox)
+    F.ReskinCheck(_G.TokenFramePopupBackpackCheckBox)
+    F.ReskinScroll(_G.TokenFrameContainerScrollBar)
 
     local function updateButtons()
-        local buttons = TokenFrameContainer.buttons
+        local buttons = _G.TokenFrameContainer.buttons
         if not buttons then
             return
         end
@@ -331,21 +331,21 @@ tinsert(C.BlizzThemes, function()
         end
     end
 
-    TokenFrame:HookScript('OnShow', updateButtons)
+    _G.TokenFrame:HookScript('OnShow', updateButtons)
     hooksecurefunc('TokenFrame_Update', updateButtons)
-    hooksecurefunc(TokenFrameContainer, 'update', updateButtons)
+    hooksecurefunc(_G.TokenFrameContainer, 'update', updateButtons)
 
     -- Quick Join
-    F.ReskinScroll(QuickJoinScrollFrame.scrollBar)
-    F.Reskin(QuickJoinFrame.JoinQueueButton)
+    F.ReskinScroll(_G.QuickJoinScrollFrame.scrollBar)
+    F.Reskin(_G.QuickJoinFrame.JoinQueueButton)
 
-    F.SetBD(QuickJoinRoleSelectionFrame)
-    F.Reskin(QuickJoinRoleSelectionFrame.AcceptButton)
-    F.Reskin(QuickJoinRoleSelectionFrame.CancelButton)
-    F.ReskinClose(QuickJoinRoleSelectionFrame.CloseButton)
-    F.StripTextures(QuickJoinRoleSelectionFrame)
+    F.SetBD(_G.QuickJoinRoleSelectionFrame)
+    F.Reskin(_G.QuickJoinRoleSelectionFrame.AcceptButton)
+    F.Reskin(_G.QuickJoinRoleSelectionFrame.CancelButton)
+    F.ReskinClose(_G.QuickJoinRoleSelectionFrame.CloseButton)
+    F.StripTextures(_G.QuickJoinRoleSelectionFrame)
 
-    F.ReskinRole(QuickJoinRoleSelectionFrame.RoleButtonTank, 'TANK')
-    F.ReskinRole(QuickJoinRoleSelectionFrame.RoleButtonHealer, 'HEALER')
-    F.ReskinRole(QuickJoinRoleSelectionFrame.RoleButtonDPS, 'DPS')
+    F.ReskinRole(_G.QuickJoinRoleSelectionFrame.RoleButtonTank, 'TANK')
+    F.ReskinRole(_G.QuickJoinRoleSelectionFrame.RoleButtonHealer, 'HEALER')
+    F.ReskinRole(_G.QuickJoinRoleSelectionFrame.RoleButtonDPS, 'DPS')
 end)

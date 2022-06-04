@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 C.Themes['Blizzard_AdventureMap'] = function()
-    local dialog = AdventureMapQuestChoiceDialog
+    local dialog = _G.AdventureMapQuestChoiceDialog
 
     F.StripTextures(dialog)
     F.SetBD(dialog)

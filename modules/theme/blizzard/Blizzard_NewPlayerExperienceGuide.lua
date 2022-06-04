@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 C.Themes['Blizzard_NewPlayerExperienceGuide'] = function()
-    local GuideFrame = GuideFrame
+    local GuideFrame = _G.GuideFrame
 
     F.ReskinPortraitFrame(GuideFrame)
     GuideFrame.Title:SetTextColor(1, 0.8, 0)

@@ -92,7 +92,7 @@ function COMBAT:EasyMark()
                         menuList[i + 1].checked = false
                     end
                 end
-                _G.EasyMenu(menuList, F.EasyMenu, 'cursor', 0, 0, 'MENU', 1)
+                EasyMenu(menuList, F.EasyMenu, 'cursor', 0, 0, 'MENU', 1)
             end
         end
     end)

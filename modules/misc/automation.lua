@@ -91,7 +91,7 @@ end
 
 -- auto fill delete confirm string
 do
-    local deleteDialog = _G.StaticPopupDialogs['DELETE_GOOD_ITEM']
+    local deleteDialog = StaticPopupDialogs['DELETE_GOOD_ITEM']
     if deleteDialog.OnShow then
         hooksecurefunc(deleteDialog, 'OnShow', function(self)
             self.editBox:SetText(_G.DELETE_ITEM_CONFIRM_STRING)

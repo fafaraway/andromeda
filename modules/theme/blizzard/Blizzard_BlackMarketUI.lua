@@ -2,6 +2,7 @@ local F, C = unpack(select(2, ...))
 
 C.Themes['Blizzard_BlackMarketUI'] = function()
     local r, g, b = C.r, C.g, C.b
+    local BlackMarketFrame = _G.BlackMarketFrame
 
     F.StripTextures(BlackMarketFrame)
     BlackMarketFrame.MoneyFrameBorder:SetAlpha(0)
@@ -17,8 +18,8 @@ C.Themes['Blizzard_BlackMarketUI'] = function()
         'ColumnHighBidder',
         'ColumnCurrentBid',
     }
-    for _, header in pairs(headers) do
-        local header = BlackMarketFrame[header]
+    for _, v in pairs(headers) do
+        local header = BlackMarketFrame[v]
         F.StripTextures(header)
         local bg = F.CreateBDFrame(header, 0.25)
         bg:SetPoint('TOPLEFT', 2, 0)
@@ -29,11 +30,11 @@ C.Themes['Blizzard_BlackMarketUI'] = function()
     F.CreateBDFrame(BlackMarketFrame.HotDeal, 0.25)
     F.Reskin(BlackMarketFrame.BidButton)
     F.ReskinClose(BlackMarketFrame.CloseButton)
-    F.ReskinInput(BlackMarketBidPriceGold)
-    F.ReskinScroll(BlackMarketScrollFrameScrollBar)
+    F.ReskinInput(_G.BlackMarketBidPriceGold)
+    F.ReskinScroll(_G.BlackMarketScrollFrameScrollBar)
 
     hooksecurefunc('BlackMarketScrollFrame_Update', function()
-        local buttons = BlackMarketScrollFrame.buttons
+        local buttons = _G.BlackMarketScrollFrame.buttons
         for i = 1, #buttons do
             local bu = buttons[i]
 

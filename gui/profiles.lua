@@ -131,8 +131,9 @@ function GUI:CreateProfileBar(parent, index)
     F.AddTooltip(
         note,
         'ANCHOR_TOP',
-        L['|nCustomize your profile name. If emty the editbox, the name would reset to default string.|n|nPress KEY ENTER when you finish typing.'],
-        'BLUE'
+        L['Customize your profile name. If empty the editbox, the name would reset to default string.|n|nPress KEY ENTER when you finish typing.'],
+        'BLUE',
+        true
     )
 
     local reset = GUI:CreateProfileIcon(
@@ -140,7 +141,7 @@ function GUI:CreateProfileBar(parent, index)
         1,
         'Atlas:transmog-icon-revert',
         L['Reset profile'],
-        L['|nReset your current profile, and load default settings. Requires UI reload.']
+        L['Reset your current profile, and load default settings. Requires UI reload.']
     )
     reset:SetScript('OnClick', GUI.Reset_OnClick)
     bar.reset = reset
@@ -150,7 +151,7 @@ function GUI:CreateProfileBar(parent, index)
         2,
         'Interface\\RAIDFRAME\\ReadyCheck-Ready',
         L['Select profile'],
-        L['|nSwitch to the selected profile, requires UI reload.']
+        L['Switch to the selected profile, requires UI reload.']
     )
     apply:SetScript('OnClick', GUI.Apply_OnClick)
     bar.apply = apply
@@ -160,7 +161,7 @@ function GUI:CreateProfileBar(parent, index)
         3,
         'Atlas:streamcinematic-downloadicon',
         L['Replace current profile'],
-        L['|nReplace the current profile with the selected one, requires UI reload.']
+        L['Replace the current profile with the selected one, requires UI reload.']
     )
     download.Icon:SetTexCoord(0.25, 0.75, 0.25, 0.75)
     download:SetScript('OnClick', GUI.Download_OnClick)
@@ -171,7 +172,7 @@ function GUI:CreateProfileBar(parent, index)
         4,
         'Atlas:bags-icon-addslots',
         L['Replace selected profile'],
-        L['|nReplace the selected profile with the current using one.']
+        L['Replace the selected profile with the current using one.']
     )
     upload.Icon:SetInside(nil, 6, 6)
     upload:SetScript('OnClick', GUI.Upload_OnClick)
@@ -274,8 +275,9 @@ function GUI:CreateProfileGUI(parent)
     F.AddTooltip(
         delete,
         'ANCHOR_TOP',
-        L["|nEnter the character name that you intend to delete its profile, the input format is 'UnitName-RealmName'. You only need to enter name if unit is in the same realm with you.|n|nThis will delete unit gold info as well.|n|nPress key ESC to clear editbox, press key Enter to confirm."],
-        'BLUE'
+        L["Enter the character name that you intend to delete its profile, the input format is 'UnitName-RealmName'. You only need to enter name if unit is in the same realm with you.|n|nThis will delete unit gold info as well.|n|nPress key ESC to clear editbox, press key Enter to confirm."],
+        'BLUE',
+        true
     )
 
     F.CreateFS(parent, C.Assets.Font.Bold, 14, nil, L['Profile Management'], 'YELLOW', 'THICK', 'TOPLEFT', 20, -20)

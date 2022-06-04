@@ -363,12 +363,12 @@ function UNITFRAME:RefreshAuras(frame)
 end
 
 function UNITFRAME:UpdateAuras()
-    UNITFRAME:RefreshAuras(oUF_Player)
-    UNITFRAME:RefreshAuras(oUF_Pet)
-    UNITFRAME:RefreshAuras(oUF_Target)
-    UNITFRAME:RefreshAuras(oUF_TargetTarget)
-    UNITFRAME:RefreshAuras(oUF_Focus)
-    UNITFRAME:RefreshAuras(oUF_FocusTarget)
+    UNITFRAME:RefreshAuras(_G.oUF_Player)
+    UNITFRAME:RefreshAuras(_G.oUF_Pet)
+    UNITFRAME:RefreshAuras(_G.oUF_Target)
+    UNITFRAME:RefreshAuras(_G.oUF_TargetTarget)
+    UNITFRAME:RefreshAuras(_G.oUF_Focus)
+    UNITFRAME:RefreshAuras(_G.oUF_FocusTarget)
 
     for i = 1, 5 do
         UNITFRAME:RefreshAuras(_G['oUF_Boss' .. i])

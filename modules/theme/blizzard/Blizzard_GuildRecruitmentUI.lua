@@ -3,42 +3,42 @@ local F, C = unpack(select(2, ...))
 C.Themes['Blizzard_GuildRecruitmentUI'] = function()
     local r, g, b = C.r, C.g, C.b
 
-    F.StripTextures(CommunitiesGuildRecruitmentFrame)
-    F.SetBD(CommunitiesGuildRecruitmentFrame)
-    F.StripTextures(CommunitiesGuildRecruitmentFrameTab1)
-    F.StripTextures(CommunitiesGuildRecruitmentFrameTab2)
-    F.ReskinClose(CommunitiesGuildRecruitmentFrameCloseButton)
-    F.Reskin(CommunitiesGuildRecruitmentFrameRecruitment.ListGuildButton)
-    F.StripTextures(CommunitiesGuildRecruitmentFrame)
-    CommunitiesGuildRecruitmentFrameInset:Hide()
+    F.StripTextures(_G.CommunitiesGuildRecruitmentFrame)
+    F.SetBD(_G.CommunitiesGuildRecruitmentFrame)
+    F.StripTextures(_G.CommunitiesGuildRecruitmentFrameTab1)
+    F.StripTextures(_G.CommunitiesGuildRecruitmentFrameTab2)
+    F.ReskinClose(_G.CommunitiesGuildRecruitmentFrameCloseButton)
+    F.Reskin(_G.CommunitiesGuildRecruitmentFrameRecruitment.ListGuildButton)
+    F.StripTextures(_G.CommunitiesGuildRecruitmentFrame)
+    _G.CommunitiesGuildRecruitmentFrameInset:Hide()
 
     for _, name in next, { 'InterestFrame', 'AvailabilityFrame', 'RolesFrame', 'LevelFrame', 'CommentFrame' } do
-        local frame = CommunitiesGuildRecruitmentFrameRecruitment[name]
+        local frame = _G.CommunitiesGuildRecruitmentFrameRecruitment[name]
         frame:GetRegions():Hide()
     end
 
     for _, name in next, { 'QuestButton', 'DungeonButton', 'RaidButton', 'PvPButton', 'RPButton' } do
-        local button = CommunitiesGuildRecruitmentFrameRecruitment.InterestFrame[name]
+        local button = _G.CommunitiesGuildRecruitmentFrameRecruitment.InterestFrame[name]
         F.ReskinCheck(button)
     end
 
-    local rolesFrame = CommunitiesGuildRecruitmentFrameRecruitment.RolesFrame
+    local rolesFrame = _G.CommunitiesGuildRecruitmentFrameRecruitment.RolesFrame
     F.ReskinRole(rolesFrame.TankButton, 'TANK')
     F.ReskinRole(rolesFrame.HealerButton, 'HEALER')
     F.ReskinRole(rolesFrame.DamagerButton, 'DPS')
 
-    F.ReskinCheck(CommunitiesGuildRecruitmentFrameRecruitment.AvailabilityFrame.WeekdaysButton)
-    F.ReskinCheck(CommunitiesGuildRecruitmentFrameRecruitment.AvailabilityFrame.WeekendsButton)
-    F.ReskinRadio(CommunitiesGuildRecruitmentFrameRecruitment.LevelFrame.LevelAnyButton)
-    F.ReskinRadio(CommunitiesGuildRecruitmentFrameRecruitment.LevelFrame.LevelMaxButton)
-    F.StripTextures(CommunitiesGuildRecruitmentFrameRecruitment.CommentFrame.CommentInputFrame)
-    F.CreateBDFrame(CommunitiesGuildRecruitmentFrameRecruitment.CommentFrame.CommentInputFrame, 0.25)
-    F.ReskinScroll(CommunitiesGuildRecruitmentFrameRecruitmentScrollFrameScrollBar)
+    F.ReskinCheck(_G.CommunitiesGuildRecruitmentFrameRecruitment.AvailabilityFrame.WeekdaysButton)
+    F.ReskinCheck(_G.CommunitiesGuildRecruitmentFrameRecruitment.AvailabilityFrame.WeekendsButton)
+    F.ReskinRadio(_G.CommunitiesGuildRecruitmentFrameRecruitment.LevelFrame.LevelAnyButton)
+    F.ReskinRadio(_G.CommunitiesGuildRecruitmentFrameRecruitment.LevelFrame.LevelMaxButton)
+    F.StripTextures(_G.CommunitiesGuildRecruitmentFrameRecruitment.CommentFrame.CommentInputFrame)
+    F.CreateBDFrame(_G.CommunitiesGuildRecruitmentFrameRecruitment.CommentFrame.CommentInputFrame, 0.25)
+    F.ReskinScroll(_G.CommunitiesGuildRecruitmentFrameRecruitmentScrollFrameScrollBar)
 
-    F.ReskinScroll(CommunitiesGuildRecruitmentFrameApplicantsContainer.scrollBar)
-    F.Reskin(CommunitiesGuildRecruitmentFrameApplicants.InviteButton)
-    F.Reskin(CommunitiesGuildRecruitmentFrameApplicants.MessageButton)
-    F.Reskin(CommunitiesGuildRecruitmentFrameApplicants.DeclineButton)
+    F.ReskinScroll(_G.CommunitiesGuildRecruitmentFrameApplicantsContainer.scrollBar)
+    F.Reskin(_G.CommunitiesGuildRecruitmentFrameApplicants.InviteButton)
+    F.Reskin(_G.CommunitiesGuildRecruitmentFrameApplicants.MessageButton)
+    F.Reskin(_G.CommunitiesGuildRecruitmentFrameApplicants.DeclineButton)
 
     hooksecurefunc('CommunitiesGuildRecruitmentFrameApplicants_Update', function(self)
         local buttons = self.Container.buttons

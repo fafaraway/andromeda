@@ -13,13 +13,13 @@ local function replaceInviteTex(self, atlas)
     end
 end
 
-tinsert(C.BlizzThemes, function()
+table.insert(C.BlizzThemes, function()
     if not _G.FREE_ADB.ReskinBlizz then
         return
     end
 
     local loadInit
-    FriendsFrame:HookScript('OnShow', function()
+    _G.FriendsFrame:HookScript('OnShow', function()
         if loadInit then
             return
         end
@@ -36,7 +36,7 @@ tinsert(C.BlizzThemes, function()
     _G.FriendsFrameIcon:Hide()
     F.StripTextures(_G.IgnoreListFrame)
 
-    for i = 1, FRIENDS_TO_DISPLAY do
+    for i = 1, _G.FRIENDS_TO_DISPLAY do
         local bu = _G['FriendsListFrameScrollFrameButton' .. i]
         local ic = bu.gameIcon
 
@@ -65,7 +65,7 @@ tinsert(C.BlizzThemes, function()
     end
 
     local function UpdateScroll()
-        for i = 1, FRIENDS_TO_DISPLAY do
+        for i = 1, _G.FRIENDS_TO_DISPLAY do
             local bu = _G['FriendsListFrameScrollFrameButton' .. i]
             if bu.gameIcon:IsShown() then
                 bu.bg:Show()
@@ -101,9 +101,9 @@ tinsert(C.BlizzThemes, function()
 
     local INVITE_RESTRICTION_NONE = 9
     hooksecurefunc('FriendsFrame_UpdateFriendButton', function(button)
-        if button.buttonType == FRIENDS_BUTTON_TYPE_INVITE then
+        if button.buttonType == _G.FRIENDS_BUTTON_TYPE_INVITE then
             reskinInvites(_G.FriendsListFrameScrollFrame.invitePool)
-        elseif button.buttonType == FRIENDS_BUTTON_TYPE_BNET then
+        elseif button.buttonType == _G.FRIENDS_BUTTON_TYPE_BNET then
             local nt = button.travelPassButton:GetNormalTexture()
             if FriendsFrame_GetInviteRestriction(button.id) == INVITE_RESTRICTION_NONE then
                 nt:SetVertexColor(1, 1, 1)
@@ -114,7 +114,7 @@ tinsert(C.BlizzThemes, function()
     end)
 
     _G.FriendsFrameStatusDropDown:ClearAllPoints()
-    _G.FriendsFrameStatusDropDown:SetPoint('TOPLEFT', FriendsFrame, 'TOPLEFT', 10, -28)
+    _G.FriendsFrameStatusDropDown:SetPoint('TOPLEFT', _G.FriendsFrame, 'TOPLEFT', 10, -28)
 
     for _, button in pairs({ _G.FriendsTabHeaderSoRButton, _G.FriendsTabHeaderRecruitAFriendButton }) do
         button:SetPushedTexture('')
@@ -149,7 +149,7 @@ tinsert(C.BlizzThemes, function()
     F.Reskin(broadcastFrame.UpdateButton)
     F.Reskin(broadcastFrame.CancelButton)
     broadcastFrame:ClearAllPoints()
-    broadcastFrame:SetPoint('TOPLEFT', FriendsFrame, 'TOPRIGHT', 3, 0)
+    broadcastFrame:SetPoint('TOPLEFT', _G.FriendsFrame, 'TOPRIGHT', 3, 0)
 
     local function BroadcastButton_SetTexture(self)
         self.BroadcastButton:SetNormalTexture('')
@@ -161,9 +161,9 @@ tinsert(C.BlizzThemes, function()
     local unavailableFrame = _G.FriendsFrameBattlenetFrame.UnavailableInfoFrame
     F.StripTextures(unavailableFrame)
     F.SetBD(unavailableFrame)
-    unavailableFrame:SetPoint('TOPLEFT', FriendsFrame, 'TOPRIGHT', 3, -18)
+    unavailableFrame:SetPoint('TOPLEFT', _G.FriendsFrame, 'TOPRIGHT', 3, -18)
 
-    F.ReskinPortraitFrame(FriendsFrame)
+    F.ReskinPortraitFrame(_G.FriendsFrame)
     F.Reskin(_G.FriendsFrameAddFriendButton)
     F.Reskin(_G.FriendsFrameSendMessageButton)
     F.Reskin(_G.FriendsFrameIgnorePlayerButton)
@@ -176,12 +176,12 @@ tinsert(C.BlizzThemes, function()
     F.ReskinDropDown(_G.FriendsFriendsFrameDropDown)
     F.Reskin(_G.FriendsListFrameContinueButton)
     F.ReskinInput(_G.AddFriendNameEditBox)
-    F.StripTextures(AddFriendFrame)
-    F.SetBD(AddFriendFrame)
-    F.StripTextures(FriendsFriendsFrame)
-    F.SetBD(FriendsFriendsFrame)
-    F.Reskin(FriendsFriendsFrame.SendRequestButton)
-    F.Reskin(FriendsFriendsFrame.CloseButton)
+    F.StripTextures(_G.AddFriendFrame)
+    F.SetBD(_G.AddFriendFrame)
+    F.StripTextures(_G.FriendsFriendsFrame)
+    F.SetBD(_G.FriendsFriendsFrame)
+    F.Reskin(_G.FriendsFriendsFrame.SendRequestButton)
+    F.Reskin(_G.FriendsFriendsFrame.CloseButton)
     F.ReskinScroll(_G.FriendsFriendsScrollFrame.scrollBar)
     F.Reskin(_G.WhoFrameWhoButton)
     F.Reskin(_G.WhoFrameAddFriendButton)
@@ -206,5 +206,5 @@ tinsert(C.BlizzThemes, function()
 
     _G.WhoFrameWhoButton:SetPoint('RIGHT', _G.WhoFrameAddFriendButton, 'LEFT', -1, 0)
     _G.WhoFrameAddFriendButton:SetPoint('RIGHT', _G.WhoFrameGroupInviteButton, 'LEFT', -1, 0)
-    _G.FriendsFrameTitleText:SetPoint('TOP', FriendsFrame, 'TOP', 0, -8)
+    _G.FriendsFrameTitleText:SetPoint('TOP', _G.FriendsFrame, 'TOP', 0, -8)
 end)

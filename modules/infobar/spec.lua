@@ -77,7 +77,7 @@ local function Block_OnMouseUp(self, btn)
             end
         end
 
-        _G.EasyMenu(menuList, F.EasyMenu, self, -80, 100, 'MENU', 1)
+        EasyMenu(menuList, F.EasyMenu, self, -80, 100, 'MENU', 1)
         _G.GameTooltip:Hide()
     end
 end

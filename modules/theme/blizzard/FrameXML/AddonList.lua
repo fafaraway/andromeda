@@ -1,30 +1,30 @@
 local F, C = unpack(select(2, ...))
 
-tinsert(C.BlizzThemes, function()
+table.insert(C.BlizzThemes, function()
     if not _G.FREE_ADB.ReskinBlizz then
         return
     end
 
-    F.ReskinPortraitFrame(AddonList)
-    F.Reskin(AddonListEnableAllButton)
-    F.Reskin(AddonListDisableAllButton)
-    F.Reskin(AddonListCancelButton)
-    F.Reskin(AddonListOkayButton)
-    F.ReskinCheck(AddonListForceLoad)
-    F.ReskinDropDown(AddonCharacterDropDown)
-    F.ReskinScroll(AddonListScrollFrameScrollBar)
+    F.ReskinPortraitFrame(_G.AddonList)
+    F.Reskin(_G.AddonListEnableAllButton)
+    F.Reskin(_G.AddonListDisableAllButton)
+    F.Reskin(_G.AddonListCancelButton)
+    F.Reskin(_G.AddonListOkayButton)
+    F.ReskinCheck(_G.AddonListForceLoad)
+    F.ReskinDropDown(_G.AddonCharacterDropDown)
+    F.ReskinScroll(_G.AddonListScrollFrameScrollBar)
 
-    AddonListForceLoad:SetSize(26, 26)
-    AddonCharacterDropDown:SetWidth(170)
+    _G.AddonListForceLoad:SetSize(26, 26)
+    _G.AddonCharacterDropDown:SetWidth(170)
 
-    for i = 1, MAX_ADDONS_DISPLAYED do
+    for i = 1, _G.MAX_ADDONS_DISPLAYED do
         local checkbox = _G['AddonListEntry' .. i .. 'Enabled']
         F.ReskinCheck(checkbox, false, true)
         F.Reskin(_G['AddonListEntry' .. i .. 'Load'])
     end
 
     hooksecurefunc('AddonList_Update', function()
-        for i = 1, MAX_ADDONS_DISPLAYED do
+        for i = 1, _G.MAX_ADDONS_DISPLAYED do
             local entry = _G['AddonListEntry' .. i]
             if entry and entry:IsShown() then
                 local checkbox = _G['AddonListEntry' .. i .. 'Enabled']

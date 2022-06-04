@@ -3,7 +3,6 @@ local M = F:GetModule('Tooltip')
 
 local LibOR
 local DCLoaded
-local debug = false
 
 local ZT_Prefix = 'ZenTracker'
 local DC_Prefix = 'DCOribos'
@@ -74,11 +73,11 @@ function M:GetCovenantID(unit)
 end
 
 local function msgChannel()
-    if IsInGroup(LE_PARTY_CATEGORY_INSTANCE) or IsInRaid(LE_PARTY_CATEGORY_INSTANCE) then
+    if IsInGroup(_G.LE_PARTY_CATEGORY_INSTANCE) or IsInRaid(_G.LE_PARTY_CATEGORY_INSTANCE) then
         return 'INSTANCE_CHAT'
-    elseif IsInRaid(LE_PARTY_CATEGORY_HOME) then
+    elseif IsInRaid(_G.LE_PARTY_CATEGORY_HOME) then
         return 'RAID'
-    elseif IsInGroup(LE_PARTY_CATEGORY_HOME) then
+    elseif IsInGroup(_G.LE_PARTY_CATEGORY_HOME) then
         return 'PARTY'
     end
 end

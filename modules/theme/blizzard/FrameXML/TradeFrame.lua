@@ -1,33 +1,33 @@
 local F, C = unpack(select(2, ...))
 
-tinsert(C.BlizzThemes, function()
+table.insert(C.BlizzThemes, function()
     if not _G.FREE_ADB.ReskinBlizz then
         return
     end
 
-    TradePlayerEnchantInset:Hide()
-    TradePlayerItemsInset:Hide()
-    TradeRecipientEnchantInset:Hide()
-    TradeRecipientItemsInset:Hide()
-    TradePlayerInputMoneyInset:Hide()
-    TradeRecipientMoneyInset:Hide()
-    TradeRecipientBG:Hide()
-    TradeRecipientMoneyBg:Hide()
-    TradeRecipientBotLeftCorner:Hide()
-    TradeRecipientLeftBorder:Hide()
-    select(4, TradePlayerItem7:GetRegions()):Hide()
-    select(4, TradeRecipientItem7:GetRegions()):Hide()
+    _G.TradePlayerEnchantInset:Hide()
+    _G.TradePlayerItemsInset:Hide()
+    _G.TradeRecipientEnchantInset:Hide()
+    _G.TradeRecipientItemsInset:Hide()
+    _G.TradePlayerInputMoneyInset:Hide()
+    _G.TradeRecipientMoneyInset:Hide()
+    _G.TradeRecipientBG:Hide()
+    _G.TradeRecipientMoneyBg:Hide()
+    _G.TradeRecipientBotLeftCorner:Hide()
+    _G.TradeRecipientLeftBorder:Hide()
+    select(4, _G.TradePlayerItem7:GetRegions()):Hide()
+    select(4, _G.TradeRecipientItem7:GetRegions()):Hide()
 
-    F.ReskinPortraitFrame(TradeFrame)
-    TradeFrame.RecipientOverlay:Hide()
-    F.Reskin(TradeFrameTradeButton)
-    F.Reskin(TradeFrameCancelButton)
-    F.ReskinInput(TradePlayerInputMoneyFrameGold)
-    F.ReskinInput(TradePlayerInputMoneyFrameSilver)
-    F.ReskinInput(TradePlayerInputMoneyFrameCopper)
+    F.ReskinPortraitFrame(_G.TradeFrame)
+    _G.TradeFrame.RecipientOverlay:Hide()
+    F.Reskin(_G.TradeFrameTradeButton)
+    F.Reskin(_G.TradeFrameCancelButton)
+    F.ReskinInput(_G.TradePlayerInputMoneyFrameGold)
+    F.ReskinInput(_G.TradePlayerInputMoneyFrameSilver)
+    F.ReskinInput(_G.TradePlayerInputMoneyFrameCopper)
 
-    TradePlayerInputMoneyFrameSilver:SetPoint('LEFT', TradePlayerInputMoneyFrameGold, 'RIGHT', 1, 0)
-    TradePlayerInputMoneyFrameCopper:SetPoint('LEFT', TradePlayerInputMoneyFrameSilver, 'RIGHT', 1, 0)
+    _G.TradePlayerInputMoneyFrameSilver:SetPoint('LEFT', _G.TradePlayerInputMoneyFrameGold, 'RIGHT', 1, 0)
+    _G.TradePlayerInputMoneyFrameCopper:SetPoint('LEFT', _G.TradePlayerInputMoneyFrameSilver, 'RIGHT', 1, 0)
 
     local function reskinButton(bu)
         bu:SetNormalTexture('')
@@ -43,7 +43,7 @@ tinsert(C.BlizzThemes, function()
         F.ReskinIconBorder(bu.IconBorder)
     end
 
-    for i = 1, MAX_TRADE_ITEMS do
+    for i = 1, _G.MAX_TRADE_ITEMS do
         _G['TradePlayerItem' .. i .. 'SlotTexture']:Hide()
         _G['TradePlayerItem' .. i .. 'NameFrame']:Hide()
         _G['TradeRecipientItem' .. i .. 'SlotTexture']:Hide()
@@ -54,10 +54,10 @@ tinsert(C.BlizzThemes, function()
     end
 
     local tradeHighlights = {
-        TradeHighlightPlayer,
-        TradeHighlightPlayerEnchant,
-        TradeHighlightRecipient,
-        TradeHighlightRecipientEnchant,
+        _G.TradeHighlightPlayer,
+        _G.TradeHighlightPlayerEnchant,
+        _G.TradeHighlightRecipient,
+        _G.TradeHighlightRecipientEnchant,
     }
     for _, highlight in pairs(tradeHighlights) do
         F.StripTextures(highlight)

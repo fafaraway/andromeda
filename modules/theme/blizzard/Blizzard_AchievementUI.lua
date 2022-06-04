@@ -111,12 +111,12 @@ C.Themes['Blizzard_AchievementUI'] = function()
         check:SetDesaturated(true)
         check:SetVertexColor(r, g, b)
 
-        local bg = F.CreateBDFrame(ch, 0, true)
-        bg:SetPoint('TOPLEFT', 2, -2)
-        bg:SetPoint('BOTTOMRIGHT', -2, 2)
+        local cbg = F.CreateBDFrame(ch, 0, true)
+        cbg:SetPoint('TOPLEFT', 2, -2)
+        cbg:SetPoint('BOTTOMRIGHT', -2, 2)
 
         local hl = ch:GetHighlightTexture()
-        hl:SetInside(bg)
+        hl:SetInside(cbg)
         hl:SetVertexColor(r, g, b, 0.25)
     end
 
@@ -307,9 +307,9 @@ C.Themes['Blizzard_AchievementUI'] = function()
         local result = _G.AchievementFrame.searchResults
         result:SetPoint('BOTTOMLEFT', _G.AchievementFrame, 'BOTTOMRIGHT', 15, -1)
         F.StripTextures(result)
-        local bg = F.SetBD(result)
-        bg:SetPoint('TOPLEFT', -10, 0)
-        bg:SetPoint('BOTTOMRIGHT')
+        local rbg = F.SetBD(result)
+        rbg:SetPoint('TOPLEFT', -10, 0)
+        rbg:SetPoint('BOTTOMRIGHT')
 
         F.ReskinClose(result.closeButton)
         F.ReskinScroll(_G.AchievementFrameScrollFrameScrollBar)
@@ -317,19 +317,19 @@ C.Themes['Blizzard_AchievementUI'] = function()
             local bu = _G['AchievementFrameScrollFrameButton' .. i]
             F.StripTextures(bu)
             F.ReskinIcon(bu.icon)
-            local bg = F.CreateBDFrame(bu, 0.25)
-            bg:SetInside()
-            SetupButtonHighlight(bu, bg)
+            local bbg = F.CreateBDFrame(bu, 0.25)
+            bbg:SetInside()
+            SetupButtonHighlight(bu, bbg)
         end
     end
 
     for i = 1, 20 do
         local bu = _G['AchievementFrameComparisonStatsContainerButton' .. i]
         F.StripTextures(bu)
-        local bg = F.CreateBDFrame(bu, 0.25)
-        bg:SetPoint('TOPLEFT', 2, -C.MULT)
-        bg:SetPoint('BOTTOMRIGHT', 4, C.MULT)
-        SetupButtonHighlight(bu, bg)
+        local bubg = F.CreateBDFrame(bu, 0.25)
+        bubg:SetPoint('TOPLEFT', 2, -C.MULT)
+        bubg:SetPoint('BOTTOMRIGHT', 4, C.MULT)
+        SetupButtonHighlight(bu, bubg)
     end
     F.ReskinScroll(_G.AchievementFrameComparisonStatsContainerScrollBar)
     _G.AchievementFrameComparisonWatermark:SetAlpha(0)

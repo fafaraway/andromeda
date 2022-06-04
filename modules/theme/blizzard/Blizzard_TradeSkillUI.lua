@@ -19,10 +19,11 @@ end
 
 C.Themes['Blizzard_TradeSkillUI'] = function()
     local r, g, b = C.r, C.g, C.b
+    local TradeSkillFrame = _G.TradeSkillFrame
 
     F.ReskinPortraitFrame(TradeSkillFrame)
-    TradeSkillFrameTitleText:Show()
-    TradeSkillFramePortrait:SetAlpha(0)
+    _G.TradeSkillFrameTitleText:Show()
+    _G.TradeSkillFramePortrait:SetAlpha(0)
     TradeSkillFrame.DetailsInset:Hide()
 
     local rankFrame = TradeSkillFrame.RankFrame

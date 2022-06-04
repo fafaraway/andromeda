@@ -1,6 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 
-_G.StaticPopupDialogs.FREEUI_RELOADUI_REQUIRED = {
+StaticPopupDialogs.FREEUI_RELOADUI_REQUIRED = {
     text = C.RED_COLOR .. L['ReloadUI Required'],
     button1 = _G.APPLY,
     button2 = _G.CLASS_TRIAL_THANKS_DIALOG_CLOSE_BUTTON,
@@ -11,7 +11,7 @@ _G.StaticPopupDialogs.FREEUI_RELOADUI_REQUIRED = {
 }
 
 -- Layout
-_G.StaticPopupDialogs.FREEUI_RESET_LAYOUT = {
+StaticPopupDialogs.FREEUI_RESET_LAYOUT = {
     text = C.RED_COLOR .. L['Are you sure to reset the Interface Layout?'],
     button1 = _G.OKAY,
     button2 = _G.CANCEL,
@@ -25,7 +25,7 @@ _G.StaticPopupDialogs.FREEUI_RESET_LAYOUT = {
 }
 
 -- GUI
-_G.StaticPopupDialogs.FREEUI_RELOADUI = {
+StaticPopupDialogs.FREEUI_RELOADUI = {
     text = C.RED_COLOR .. L['Are you sure to reload the Interface to apply settings?'],
     button1 = _G.APPLY,
     button2 = _G.CLASS_TRIAL_THANKS_DIALOG_CLOSE_BUTTON,
@@ -37,7 +37,7 @@ _G.StaticPopupDialogs.FREEUI_RELOADUI = {
     hideOnEscape = true,
 }
 
-_G.StaticPopupDialogs.FREEUI_RESET_MAJOR_SPELLS = {
+StaticPopupDialogs.FREEUI_RESET_MAJOR_SPELLS = {
     text = C.RED_COLOR .. L['Are you sure to restore default Major Spells List?'],
     button1 = _G.YES,
     button2 = _G.NO,
@@ -48,7 +48,7 @@ _G.StaticPopupDialogs.FREEUI_RESET_MAJOR_SPELLS = {
     whileDead = 1,
 }
 
-_G.StaticPopupDialogs.FREEUI_RESET_ANNOUNCEABLE_SPELLS = {
+StaticPopupDialogs.FREEUI_RESET_ANNOUNCEABLE_SPELLS = {
     text = C.RED_COLOR .. L['Are you sure to restore default Announceable Spells List?'],
     button1 = _G.YES,
     button2 = _G.NO,
@@ -59,7 +59,7 @@ _G.StaticPopupDialogs.FREEUI_RESET_ANNOUNCEABLE_SPELLS = {
     whileDead = 1,
 }
 
-_G.StaticPopupDialogs.FREEUI_RESET_PARTY_SPELLS = {
+StaticPopupDialogs.FREEUI_RESET_PARTY_SPELLS = {
     text = C.RED_COLOR .. L['Are you sure to restore default Party Spells List?'],
     button1 = _G.YES,
     button2 = _G.NO,
@@ -70,7 +70,7 @@ _G.StaticPopupDialogs.FREEUI_RESET_PARTY_SPELLS = {
     whileDead = 1,
 }
 
-_G.StaticPopupDialogs.FREEUI_RESET_RAID_DEBUFFS = {
+StaticPopupDialogs.FREEUI_RESET_RAID_DEBUFFS = {
     text = C.RED_COLOR .. L['Are you sure to restore default Raid Debuffs List?'],
     button1 = _G.YES,
     button2 = _G.NO,
@@ -83,8 +83,8 @@ _G.StaticPopupDialogs.FREEUI_RESET_RAID_DEBUFFS = {
 
 StaticPopupDialogs['FREEUI_RESET_NAMEPLATE_SPECIAL_UNIT_FILTER'] = {
     text = L['Reset to default list?'],
-    button1 = YES,
-    button2 = NO,
+    button1 = _G.YES,
+    button2 = _G.NO,
     OnAccept = function()
         C.DB['Nameplate']['SpecialUnitsList'] = {}
         ReloadUI()
@@ -94,8 +94,8 @@ StaticPopupDialogs['FREEUI_RESET_NAMEPLATE_SPECIAL_UNIT_FILTER'] = {
 
 StaticPopupDialogs['FREEUI_RESET_NAMEPLATE_DOT_SPELLS'] = {
     text = L['Reset to default list'],
-    button1 = YES,
-    button2 = NO,
+    button1 = _G.YES,
+    button2 = _G.NO,
     OnAccept = function()
         C.DB['Nameplate']['DotSpellsList'] = {}
         ReloadUI()
@@ -104,7 +104,7 @@ StaticPopupDialogs['FREEUI_RESET_NAMEPLATE_DOT_SPELLS'] = {
 }
 
 -- Profile Management
-_G.StaticPopupDialogs.FREEUI_IMPORT_PROFILE = {
+StaticPopupDialogs.FREEUI_IMPORT_PROFILE = {
     text = C.RED_COLOR .. L['Are you sure to import the settings?'],
     button1 = _G.YES,
     button2 = _G.NO,
@@ -118,7 +118,7 @@ _G.StaticPopupDialogs.FREEUI_IMPORT_PROFILE = {
     hideOnEscape = false,
 }
 
-_G.StaticPopupDialogs.FREEUI_RESET_ALL = {
+StaticPopupDialogs.FREEUI_RESET_ALL = {
     text = C.RED_COLOR .. L['Are you sure to reset ALL the settings?'],
     button1 = _G.YES,
     button2 = _G.NO,
@@ -133,7 +133,7 @@ _G.StaticPopupDialogs.FREEUI_RESET_ALL = {
     hideOnEscape = false,
 }
 
-_G.StaticPopupDialogs.FREEUI_RESET_CURRENT_PROFILE = {
+StaticPopupDialogs.FREEUI_RESET_CURRENT_PROFILE = {
     text = C.RED_COLOR .. L['Are you sure to reset your current profile?'],
     button1 = _G.YES,
     button2 = _G.NO,
@@ -146,7 +146,7 @@ _G.StaticPopupDialogs.FREEUI_RESET_CURRENT_PROFILE = {
     hideOnEscape = false,
 }
 
-_G.StaticPopupDialogs.FREEUI_APPLY_PROFILE = {
+StaticPopupDialogs.FREEUI_APPLY_PROFILE = {
     text = C.RED_COLOR .. L['Are you sure to switch to the selected profile?'],
     button1 = _G.YES,
     button2 = _G.NO,
@@ -160,7 +160,7 @@ _G.StaticPopupDialogs.FREEUI_APPLY_PROFILE = {
     hideOnEscape = false,
 }
 
-_G.StaticPopupDialogs.FREEUI_REPLACE_CURRENT_PROFILE = {
+StaticPopupDialogs.FREEUI_REPLACE_CURRENT_PROFILE = {
     text = C.RED_COLOR .. L['Are you sure to replace your current profile with the selected one?'],
     button1 = _G.YES,
     button2 = _G.NO,
@@ -181,7 +181,7 @@ _G.StaticPopupDialogs.FREEUI_REPLACE_CURRENT_PROFILE = {
     hideOnEscape = false,
 }
 
-_G.StaticPopupDialogs.FREEUI_REPLACE_SELECTED_PROFILE = {
+StaticPopupDialogs.FREEUI_REPLACE_SELECTED_PROFILE = {
     text = C.RED_COLOR .. L['Are you sure to replace the selected profile with your current one?'],
     button1 = _G.YES,
     button2 = _G.NO,
@@ -198,7 +198,7 @@ _G.StaticPopupDialogs.FREEUI_REPLACE_SELECTED_PROFILE = {
     hideOnEscape = false,
 }
 
-_G.StaticPopupDialogs.FREEUI_DELETE_UNIT_PROFILE = {
+StaticPopupDialogs.FREEUI_DELETE_UNIT_PROFILE = {
     text = '',
     button1 = _G.YES,
     button2 = _G.NO,
@@ -236,7 +236,7 @@ if not crossRealms or #crossRealms == 0 then
     crossRealms = { [1] = C.REALM }
 end
 
-_G.StaticPopupDialogs.FREEUI_RESET_GOLD = {
+StaticPopupDialogs.FREEUI_RESET_GOLD = {
     text = C.RED_COLOR .. L['Are you sure to reset All Gold Statistics?'],
     button1 = _G.YES,
     button2 = _G.NO,
@@ -255,7 +255,7 @@ _G.StaticPopupDialogs.FREEUI_RESET_GOLD = {
 }
 
 -- Inventory Custom Junk List
-_G.StaticPopupDialogs.FREEUI_RESET_JUNK_LIST = {
+StaticPopupDialogs.FREEUI_RESET_JUNK_LIST = {
     text = C.RED_COLOR .. L['Are you sure to reset Junk Items List?'],
     button1 = _G.YES,
     button2 = _G.NO,
@@ -268,7 +268,7 @@ _G.StaticPopupDialogs.FREEUI_RESET_JUNK_LIST = {
 }
 
 -- Group Tool
-_G.StaticPopupDialogs['FREEUI_DISBAND_GROUP'] = {
+StaticPopupDialogs['FREEUI_DISBAND_GROUP'] = {
     text = C.RED_COLOR .. L['Are you sure to disband your group?'],
     button1 = _G.YES,
     button2 = _G.NO,

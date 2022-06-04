@@ -26,7 +26,7 @@ alertBagsFull = function(self)
 
     if totalFree == 0 then
         if shouldAlertBags then
-            F:CreateNotification(INVTYPE_BAG, TUTORIAL_TITLE58, nil, 'Interface\\ICONS\\INV_Misc_Bag_08')
+            F:CreateNotification(_G.INVTYPE_BAG, _G.TUTORIAL_TITLE58, nil, 'Interface\\ICONS\\INV_Misc_Bag_08')
             shouldAlertBags = false
         else
             self:SetScript('OnUpdate', OnUpdate)

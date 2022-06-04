@@ -11,7 +11,7 @@ local ABBREVIATIONS = {
     INSTANCE_CHAT = 'I',
 }
 
-local CLIENT_DEFAULT_COLOR = '22aaff'
+--[[ local CLIENT_DEFAULT_COLOR = '22aaff'
 local CLIENT_COLORS = {
     [_G.BNET_CLIENT_WOW] = '5cc400',
     [_G.BNET_CLIENT_D3] = 'b71709',
@@ -19,25 +19,25 @@ local CLIENT_COLORS = {
     [_G.BNET_CLIENT_WTCG] = 'd37000',
     [_G.BNET_CLIENT_HEROES] = '6800c4',
     [_G.BNET_CLIENT_OVERWATCH] = 'dcdcef',
-}
+} ]]
 
-local function getClientColorAndTag(accountID)
+--[[ local function getClientColorAndTag(accountID)
     local account = C_BattleNet.GetAccountInfoByID(accountID)
     local accountClient = account.gameAccountInfo.clientProgram
     return CLIENT_COLORS[accountClient] or CLIENT_DEFAULT_COLOR, account.battleTag:match('(%w+)#%d+')
-end
+end ]]
 
 local FORMAT_PLAYER = '|Hplayer:%s|h%s|h'
 local function formatPlayer(info, name)
     return FORMAT_PLAYER:format(info, name:gsub('%-[^|]+', ''))
 end
 
-local FORMAT_BN_PLAYER = '|HBNplayer:%s|h|cff%s%s|r|h'
+--[[ local FORMAT_BN_PLAYER = '|HBNplayer:%s|h|cff%s%s|r|h'
 local function formatBNPlayer(info)
     -- replace the colors with a client color
     local color, tag = getClientColorAndTag(info:match('(%d+):'))
     return FORMAT_BN_PLAYER:format(info, color, tag)
-end
+end ]]
 
 local FORMAT_CHANNEL = '|Hchannel:%s|h%s|h %s'
 local function formatChannel(info)

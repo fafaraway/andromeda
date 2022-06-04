@@ -46,11 +46,11 @@ local function reskinDialogReward(button)
     button.styled = true
 end
 
-local function reskinRoleButton(buttons, role)
-    for _, roleButton in pairs(buttons) do
-        F.ReskinRole(roleButton, role)
-    end
-end
+-- local function reskinRoleButton(buttons, role)
+--     for _, roleButton in pairs(buttons) do
+--         F.ReskinRole(roleButton, role)
+--     end
+-- end
 
 local function updateRoleBonus(roleButton)
     if not roleButton.bg then
@@ -220,34 +220,34 @@ table.insert(C.BlizzThemes, function()
     F.ReskinClose(_G.LFGDungeonReadyDialogCloseButton)
     F.ReskinClose(_G.LFGDungeonReadyStatusCloseButton)
 
-    local tanks = {
-        _G.LFDQueueFrameRoleButtonTank,
-        _G.LFDRoleCheckPopupRoleButtonTank,
-        _G.RaidFinderQueueFrameRoleButtonTank,
-        _G.LFGInvitePopupRoleButtonTank,
-        _G.LFGListApplicationDialog.TankButton,
-        _G.LFGDungeonReadyStatusGroupedTank,
-    }
+    -- local tanks = {
+    --     _G.LFDQueueFrameRoleButtonTank,
+    --     _G.LFDRoleCheckPopupRoleButtonTank,
+    --     _G.RaidFinderQueueFrameRoleButtonTank,
+    --     _G.LFGInvitePopupRoleButtonTank,
+    --     _G.LFGListApplicationDialog.TankButton,
+    --     _G.LFGDungeonReadyStatusGroupedTank,
+    -- }
     --reskinRoleButton(tanks, 'TANK')
 
-    local healers = {
-        _G.LFDQueueFrameRoleButtonHealer,
-        _G.LFDRoleCheckPopupRoleButtonHealer,
-        _G.RaidFinderQueueFrameRoleButtonHealer,
-        _G.LFGInvitePopupRoleButtonHealer,
-        _G.LFGListApplicationDialog.HealerButton,
-        _G.LFGDungeonReadyStatusGroupedHealer,
-    }
+    -- local healers = {
+    --     _G.LFDQueueFrameRoleButtonHealer,
+    --     _G.LFDRoleCheckPopupRoleButtonHealer,
+    --     _G.RaidFinderQueueFrameRoleButtonHealer,
+    --     _G.LFGInvitePopupRoleButtonHealer,
+    --     _G.LFGListApplicationDialog.HealerButton,
+    --     _G.LFGDungeonReadyStatusGroupedHealer,
+    -- }
     --reskinRoleButton(healers, 'HEALER')
 
-    local dps = {
-        _G.LFDQueueFrameRoleButtonDPS,
-        _G.LFDRoleCheckPopupRoleButtonDPS,
-        _G.RaidFinderQueueFrameRoleButtonDPS,
-        _G.LFGInvitePopupRoleButtonDPS,
-        _G.LFGListApplicationDialog.DamagerButton,
-        _G.LFGDungeonReadyStatusGroupedDamager,
-    }
+    -- local dps = {
+    --     _G.LFDQueueFrameRoleButtonDPS,
+    --     _G.LFDRoleCheckPopupRoleButtonDPS,
+    --     _G.RaidFinderQueueFrameRoleButtonDPS,
+    --     _G.LFGInvitePopupRoleButtonDPS,
+    --     _G.LFGListApplicationDialog.DamagerButton,
+    --     _G.LFGDungeonReadyStatusGroupedDamager,
+    -- }
     --reskinRoleButton(dps, 'DPS')
 
     -- F.ReskinRole(_G.LFDQueueFrameRoleButtonLeader, 'LEADER')
@@ -392,9 +392,9 @@ table.insert(C.BlizzThemes, function()
         end
     end)
 
-    hooksecurefunc('LFGDungeonReadyStatusGrouped_UpdateIcon', function(button, role)
-        --button.texture:SetTexCoord(F.GetRoleTexCoord(role))
-    end)
+    -- hooksecurefunc('LFGDungeonReadyStatusGrouped_UpdateIcon', function(button, role)
+    --     button.texture:SetTexCoord(F.GetRoleTexCoord(role))
+    -- end)
 
     -- RaidFinder
     _G.RaidFinderFrameBottomInset:Hide()

@@ -1,43 +1,43 @@
 local F, C = unpack(select(2, ...))
 
-tinsert(C.BlizzThemes, function()
+table.insert(C.BlizzThemes, function()
     if not _G.FREE_ADB.ReskinBlizz then
         return
     end
 
-    if not CompactRaidFrameManagerToggleButton then
+    if not _G.CompactRaidFrameManagerToggleButton then
         return
     end
 
-    CompactRaidFrameManagerToggleButton:SetNormalTexture('Interface\\Buttons\\UI-ColorPicker-Buttons')
-    CompactRaidFrameManagerToggleButton:GetNormalTexture():SetTexCoord(0.15, 0.39, 0, 1)
-    CompactRaidFrameManagerToggleButton:SetSize(15, 15)
+    _G.CompactRaidFrameManagerToggleButton:SetNormalTexture('Interface\\Buttons\\UI-ColorPicker-Buttons')
+    _G.CompactRaidFrameManagerToggleButton:GetNormalTexture():SetTexCoord(0.15, 0.39, 0, 1)
+    _G.CompactRaidFrameManagerToggleButton:SetSize(15, 15)
     hooksecurefunc('CompactRaidFrameManager_Collapse', function()
-        CompactRaidFrameManagerToggleButton:GetNormalTexture():SetTexCoord(0.15, 0.39, 0, 1)
+        _G.CompactRaidFrameManagerToggleButton:GetNormalTexture():SetTexCoord(0.15, 0.39, 0, 1)
     end)
     hooksecurefunc('CompactRaidFrameManager_Expand', function()
-        CompactRaidFrameManagerToggleButton:GetNormalTexture():SetTexCoord(0.86, 1, 0, 1)
+        _G.CompactRaidFrameManagerToggleButton:GetNormalTexture():SetTexCoord(0.86, 1, 0, 1)
     end)
 
     local buttons = {
-        CompactRaidFrameManagerDisplayFrameFilterOptionsFilterRoleTank,
-        CompactRaidFrameManagerDisplayFrameFilterOptionsFilterRoleHealer,
-        CompactRaidFrameManagerDisplayFrameFilterOptionsFilterRoleDamager,
-        CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup1,
-        CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup2,
-        CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup3,
-        CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup4,
-        CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup5,
-        CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup6,
-        CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup7,
-        CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup8,
-        CompactRaidFrameManagerDisplayFrameLeaderOptionsInitiateRolePoll,
-        CompactRaidFrameManagerDisplayFrameLeaderOptionsCountdown,
-        CompactRaidFrameManagerDisplayFrameLeaderOptionsInitiateReadyCheck,
+        _G.CompactRaidFrameManagerDisplayFrameFilterOptionsFilterRoleTank,
+        _G.CompactRaidFrameManagerDisplayFrameFilterOptionsFilterRoleHealer,
+        _G.CompactRaidFrameManagerDisplayFrameFilterOptionsFilterRoleDamager,
+        _G.CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup1,
+        _G.CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup2,
+        _G.CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup3,
+        _G.CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup4,
+        _G.CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup5,
+        _G.CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup6,
+        _G.CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup7,
+        _G.CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup8,
+        _G.CompactRaidFrameManagerDisplayFrameLeaderOptionsInitiateRolePoll,
+        _G.CompactRaidFrameManagerDisplayFrameLeaderOptionsCountdown,
+        _G.CompactRaidFrameManagerDisplayFrameLeaderOptionsInitiateReadyCheck,
         --CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton,
-        CompactRaidFrameManagerDisplayFrameLockedModeToggle,
-        CompactRaidFrameManagerDisplayFrameHiddenModeToggle,
-        CompactRaidFrameManagerDisplayFrameConvertToRaid,
+        _G.CompactRaidFrameManagerDisplayFrameLockedModeToggle,
+        _G.CompactRaidFrameManagerDisplayFrameHiddenModeToggle,
+        _G.CompactRaidFrameManagerDisplayFrameConvertToRaid,
     }
     for _, button in pairs(buttons) do
         for i = 1, 9 do
@@ -45,20 +45,20 @@ tinsert(C.BlizzThemes, function()
         end
         F.Reskin(button)
     end
-    CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton:SetNormalTexture(
+    _G.CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton:SetNormalTexture(
         'Interface\\RaidFrame\\Raid-WorldPing'
     )
 
     for i = 1, 8 do
-        select(i, CompactRaidFrameManager:GetRegions()):SetAlpha(0)
+        select(i, _G.CompactRaidFrameManager:GetRegions()):SetAlpha(0)
     end
-    select(1, CompactRaidFrameManagerDisplayFrameFilterOptions:GetRegions()):SetAlpha(0)
-    select(1, CompactRaidFrameManagerDisplayFrame:GetRegions()):SetAlpha(0)
-    select(4, CompactRaidFrameManagerDisplayFrame:GetRegions()):SetAlpha(0)
+    select(1, _G.CompactRaidFrameManagerDisplayFrameFilterOptions:GetRegions()):SetAlpha(0)
+    select(1, _G.CompactRaidFrameManagerDisplayFrame:GetRegions()):SetAlpha(0)
+    select(4, _G.CompactRaidFrameManagerDisplayFrame:GetRegions()):SetAlpha(0)
 
-    local bd = F.SetBD(CompactRaidFrameManager)
+    local bd = F.SetBD(_G.CompactRaidFrameManager)
     bd:SetPoint('TOPLEFT')
     bd:SetPoint('BOTTOMRIGHT', -9, 9)
-    F.ReskinDropDown(CompactRaidFrameManagerDisplayFrameProfileSelector)
-    F.ReskinCheck(CompactRaidFrameManagerDisplayFrameEveryoneIsAssistButton)
+    F.ReskinDropDown(_G.CompactRaidFrameManagerDisplayFrameProfileSelector)
+    F.ReskinCheck(_G.CompactRaidFrameManagerDisplayFrameEveryoneIsAssistButton)
 end)

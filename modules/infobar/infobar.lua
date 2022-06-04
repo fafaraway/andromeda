@@ -112,8 +112,7 @@ function INFOBAR:RegisterNewBlock(name, position, width, noFade)
     block:SetScript('OnEnter', Block_OnEnter)
     block:SetScript('OnLeave', Block_OnLeave)
 
-    if not noFade then
-    else
+    if noFade then
         block.noFade = true
     end
 

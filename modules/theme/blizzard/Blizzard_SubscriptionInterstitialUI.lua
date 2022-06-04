@@ -6,7 +6,7 @@ local function reskinSubscribeButton(button)
 end
 
 C.Themes['Blizzard_SubscriptionInterstitialUI'] = function()
-    local frame = SubscriptionInterstitialFrame
+    local frame = _G.SubscriptionInterstitialFrame
 
     F.StripTextures(frame)
     frame.ShadowOverlay:Hide()

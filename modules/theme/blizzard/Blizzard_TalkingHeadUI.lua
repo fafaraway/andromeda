@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 C.Themes['Blizzard_TalkingHeadUI'] = function()
-    local TalkingHeadFrame = TalkingHeadFrame
+    local TalkingHeadFrame = _G.TalkingHeadFrame
     TalkingHeadFrame:SetScale(0.9)
 
     local portraitFrame = TalkingHeadFrame.PortraitFrame

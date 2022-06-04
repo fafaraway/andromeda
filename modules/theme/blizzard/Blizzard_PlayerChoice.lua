@@ -32,7 +32,7 @@ local ignoredTextureKit = {
 }
 
 C.Themes['Blizzard_PlayerChoice'] = function()
-    _G.hooksecurefunc(_G.PlayerChoiceFrame, 'TryShow', function(self)
+    hooksecurefunc(_G.PlayerChoiceFrame, 'TryShow', function(self)
         self.Header:Hide()
 
         if not self.bg then

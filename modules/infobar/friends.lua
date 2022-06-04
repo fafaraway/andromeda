@@ -99,7 +99,7 @@ local function buildBNetTable(num)
                 local isGameBusy = gameAccountInfo.isGameBusy
                 local wowProjectID = gameAccountInfo.wowProjectID
                 local isMobile = gameAccountInfo.isWowMobile
-                local factionName = gameAccountInfo.factionName or UNKNOWN
+                local factionName = gameAccountInfo.factionName or _G.UNKNOWN
 
                 charName = _G.BNet_GetValidatedCharacterName(charName, battleTag, client)
                 class = C.ClassList[class]
@@ -304,7 +304,7 @@ local function buttonOnClick(self, btn)
                         local guid = gameAccountInfo.playerGuid
                         local wowProjectID = gameAccountInfo.wowProjectID
 
-                        if client == BNET_CLIENT_WOW and wowProjectID == WOW_PROJECT_ID and guid then
+                        if client == _G.BNET_CLIENT_WOW and wowProjectID == WOW_PROJECT_ID and guid then
                             if not menuList[index] then
                                 menuList[index] = {}
                             end
@@ -497,7 +497,7 @@ function INFOBAR:FriendsPanel_UpdateButton(button)
 
         if client == CLIENT_WOW_DIFF then
             button.gameIcon:SetTexture(_G.BNet_GetClientTexture(_G.BNET_CLIENT_WOW))
-        elseif client == BNET_CLIENT_WOW then
+        elseif client == _G.BNET_CLIENT_WOW then
             button.gameIcon:SetTexture('Interface\\FriendsFrame\\PlusManz-' .. factionName)
         else
             button.gameIcon:SetTexture(_G.BNet_GetClientTexture(client))

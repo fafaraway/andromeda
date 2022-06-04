@@ -153,8 +153,8 @@ function UNITFRAME:RemoveBlizzRaidFrame()
     -- raid
     CompactRaidFrameManager_SetSetting('IsShown', '0')
     UIParent:UnregisterEvent('GROUP_ROSTER_UPDATE')
-    CompactRaidFrameManager:UnregisterAllEvents()
-    CompactRaidFrameManager:SetParent(F.HiddenFrame)
+    _G.CompactRaidFrameManager:UnregisterAllEvents()
+    _G.CompactRaidFrameManager:SetParent(F.HiddenFrame)
 
     -- party
     for i = 1, 4 do

@@ -1,29 +1,29 @@
 local F, C = unpack(select(2, ...))
 
-tinsert(C.BlizzThemes, function()
+table.insert(C.BlizzThemes, function()
     if not _G.FREE_ADB.ReskinBlizz then
         return
     end
 
-    F.StripTextures(RaidInfoFrame)
-    F.SetBD(RaidInfoFrame)
-    F.ReskinCheck(RaidFrameAllAssistCheckButton)
-    F.StripTextures(RaidInfoFrame.Header)
+    F.StripTextures(_G.RaidInfoFrame)
+    F.SetBD(_G.RaidInfoFrame)
+    F.ReskinCheck(_G.RaidFrameAllAssistCheckButton)
+    F.StripTextures(_G.RaidInfoFrame.Header)
 
-    RaidInfoFrame:SetPoint('TOPLEFT', RaidFrame, 'TOPRIGHT', 1, -28)
-    RaidInfoDetailFooter:Hide()
-    RaidInfoDetailHeader:Hide()
-    RaidInfoDetailCorner:Hide()
+    _G.RaidInfoFrame:SetPoint('TOPLEFT', _G.RaidFrame, 'TOPRIGHT', 1, -28)
+    _G.RaidInfoDetailFooter:Hide()
+    _G.RaidInfoDetailHeader:Hide()
+    _G.RaidInfoDetailCorner:Hide()
 
-    F.Reskin(RaidFrameRaidInfoButton)
-    F.Reskin(RaidFrameConvertToRaidButton)
-    F.Reskin(RaidInfoExtendButton)
-    F.Reskin(RaidInfoCancelButton)
-    F.ReskinClose(RaidInfoCloseButton)
-    F.ReskinScroll(RaidInfoScrollFrameScrollBar)
-    F.ReskinClose(RaidParentFrameCloseButton)
+    F.Reskin(_G.RaidFrameRaidInfoButton)
+    F.Reskin(_G.RaidFrameConvertToRaidButton)
+    F.Reskin(_G.RaidInfoExtendButton)
+    F.Reskin(_G.RaidInfoCancelButton)
+    F.ReskinClose(_G.RaidInfoCloseButton)
+    F.ReskinScroll(_G.RaidInfoScrollFrameScrollBar)
+    F.ReskinClose(_G.RaidParentFrameCloseButton)
 
-    F.ReskinPortraitFrame(RaidParentFrame)
-    RaidInfoInstanceLabel:DisableDrawLayer('BACKGROUND')
-    RaidInfoIDLabel:DisableDrawLayer('BACKGROUND')
+    F.ReskinPortraitFrame(_G.RaidParentFrame)
+    _G.RaidInfoInstanceLabel:DisableDrawLayer('BACKGROUND')
+    _G.RaidInfoIDLabel:DisableDrawLayer('BACKGROUND')
 end)

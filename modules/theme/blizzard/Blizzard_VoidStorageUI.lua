@@ -1,16 +1,16 @@
 local F, C = unpack(select(2, ...))
 
 C.Themes['Blizzard_VoidStorageUI'] = function()
-    F.SetBD(VoidStorageFrame, nil, 20, 0, 0, 20)
-    F.CreateBDFrame(VoidStoragePurchaseFrame)
-    F.StripTextures(VoidStorageBorderFrame)
-    F.StripTextures(VoidStorageDepositFrame)
-    F.StripTextures(VoidStorageWithdrawFrame)
-    F.StripTextures(VoidStorageCostFrame)
-    F.StripTextures(VoidStorageStorageFrame)
-    VoidStorageFrameMarbleBg:Hide()
-    VoidStorageFrameLines:Hide()
-    select(2, VoidStorageFrame:GetRegions()):Hide()
+    F.SetBD(_G.VoidStorageFrame, nil, 20, 0, 0, 20)
+    F.CreateBDFrame(_G.VoidStoragePurchaseFrame)
+    F.StripTextures(_G.VoidStorageBorderFrame)
+    F.StripTextures(_G.VoidStorageDepositFrame)
+    F.StripTextures(_G.VoidStorageWithdrawFrame)
+    F.StripTextures(_G.VoidStorageCostFrame)
+    F.StripTextures(_G.VoidStorageStorageFrame)
+    _G.VoidStorageFrameMarbleBg:Hide()
+    _G.VoidStorageFrameLines:Hide()
+    select(2, _G.VoidStorageFrame:GetRegions()):Hide()
 
     local function reskinIcons(bu, quality)
         if not bu.bg then
@@ -30,7 +30,7 @@ C.Themes['Blizzard_VoidStorageUI'] = function()
     end
 
     local function hookItemsUpdate(doDeposit, doContents)
-        local self = VoidStorageFrame
+        local self = _G.VoidStorageFrame
         if doDeposit then
             for i = 1, 9 do
                 local quality = select(3, GetVoidTransferDepositInfo(i))
@@ -56,7 +56,7 @@ C.Themes['Blizzard_VoidStorageUI'] = function()
     hooksecurefunc('VoidStorage_ItemsUpdate', hookItemsUpdate)
 
     for i = 1, 2 do
-        local tab = VoidStorageFrame['Page' .. i]
+        local tab = _G.VoidStorageFrame['Page' .. i]
         tab:GetRegions():Hide()
         tab:SetCheckedTexture(C.Assets.Button.Checked)
         tab:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
@@ -64,11 +64,11 @@ C.Themes['Blizzard_VoidStorageUI'] = function()
         F.CreateBDFrame(tab)
     end
 
-    VoidStorageFrame.Page1:ClearAllPoints()
-    VoidStorageFrame.Page1:SetPoint('LEFT', VoidStorageFrame, 'TOPRIGHT', 2, -60)
+    _G.VoidStorageFrame.Page1:ClearAllPoints()
+    _G.VoidStorageFrame.Page1:SetPoint('LEFT', _G.VoidStorageFrame, 'TOPRIGHT', 2, -60)
 
-    F.Reskin(VoidStoragePurchaseButton)
-    F.Reskin(VoidStorageTransferButton)
-    F.ReskinClose(VoidStorageBorderFrame.CloseButton)
-    F.ReskinInput(VoidItemSearchBox)
+    F.Reskin(_G.VoidStoragePurchaseButton)
+    F.Reskin(_G.VoidStorageTransferButton)
+    F.ReskinClose(_G.VoidStorageBorderFrame.CloseButton)
+    F.ReskinInput(_G.VoidItemSearchBox)
 end

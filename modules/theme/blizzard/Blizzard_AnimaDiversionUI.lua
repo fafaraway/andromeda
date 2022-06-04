@@ -15,7 +15,7 @@ function F:ReplaceIconString(text)
 end
 
 C.Themes['Blizzard_AnimaDiversionUI'] = function()
-    local frame = AnimaDiversionFrame
+    local frame = _G.AnimaDiversionFrame
 
     F.StripTextures(frame)
     F.SetBD(frame)

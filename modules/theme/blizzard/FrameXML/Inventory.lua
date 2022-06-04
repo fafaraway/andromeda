@@ -61,7 +61,7 @@ local function ReskinBagSlot(bu)
     end
 end
 
-tinsert(C.BlizzThemes, function()
+table.insert(C.BlizzThemes, function()
     if C.DB.Inventory.Enable then
         return
     end

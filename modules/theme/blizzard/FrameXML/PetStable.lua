@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 
-tinsert(C.BlizzThemes, function()
+table.insert(C.BlizzThemes, function()
     if not _G.FREE_ADB.ReskinBlizz then
         return
     end
@@ -10,21 +10,21 @@ tinsert(C.BlizzThemes, function()
         return
     end
 
-    PetStableBottomInset:Hide()
-    PetStableLeftInset:Hide()
-    PetStableModelShadow:Hide()
-    PetStableModelRotateLeftButton:Hide()
-    PetStableModelRotateRightButton:Hide()
-    PetStableFrameModelBg:Hide()
-    PetStablePrevPageButtonIcon:SetTexture('')
-    PetStableNextPageButtonIcon:SetTexture('')
+    _G.PetStableBottomInset:Hide()
+    _G.PetStableLeftInset:Hide()
+    _G.PetStableModelShadow:Hide()
+    _G.PetStableModelRotateLeftButton:Hide()
+    _G.PetStableModelRotateRightButton:Hide()
+    _G.PetStableFrameModelBg:Hide()
+    _G.PetStablePrevPageButtonIcon:SetTexture('')
+    _G.PetStableNextPageButtonIcon:SetTexture('')
 
-    F.ReskinPortraitFrame(PetStableFrame)
-    F.ReskinArrow(PetStablePrevPageButton, 'left')
-    F.ReskinArrow(PetStableNextPageButton, 'right')
-    F.ReskinIcon(PetStableSelectedPetIcon)
+    F.ReskinPortraitFrame(_G.PetStableFrame)
+    F.ReskinArrow(_G.PetStablePrevPageButton, 'left')
+    F.ReskinArrow(_G.PetStableNextPageButton, 'right')
+    F.ReskinIcon(_G.PetStableSelectedPetIcon)
 
-    for i = 1, NUM_PET_ACTIVE_SLOTS do
+    for i = 1, _G.NUM_PET_ACTIVE_SLOTS do
         local bu = _G['PetStableActivePet' .. i]
         bu.Background:Hide()
         bu.Border:Hide()
@@ -37,7 +37,7 @@ tinsert(C.BlizzThemes, function()
         F.CreateBDFrame(bu, 0.25)
     end
 
-    for i = 1, NUM_PET_STABLE_SLOTS do
+    for i = 1, _G.NUM_PET_STABLE_SLOTS do
         local bu = _G['PetStableStabledPet' .. i]
         bu:SetNormalTexture('')
         bu:SetPushedTexture('')

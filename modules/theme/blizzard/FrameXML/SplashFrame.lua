@@ -1,9 +1,11 @@
 local F, C = unpack(select(2, ...))
 
-tinsert(C.BlizzThemes, function()
+table.insert(C.BlizzThemes, function()
     if not _G.FREE_ADB.ReskinBlizz then
         return
     end
+
+    local SplashFrame = _G.SplashFrame
 
     F.Reskin(SplashFrame.BottomCloseButton)
     F.ReskinClose(SplashFrame.TopCloseButton)

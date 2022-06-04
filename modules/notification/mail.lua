@@ -7,7 +7,7 @@ local function NewMailNotify()
     if hasMail ~= newMail then
         hasMail = newMail
         if hasMail then
-            F:CreateNotification(MAIL_LABEL, HAVE_MAIL, nil, 'Interface\\ICONS\\INV_Letter_20')
+            F:CreateNotification(_G.MAIL_LABEL, _G.HAVE_MAIL, nil, 'Interface\\ICONS\\INV_Letter_20')
         end
     end
 end

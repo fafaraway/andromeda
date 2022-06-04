@@ -32,6 +32,7 @@ function MAP:GetPlayerMapPos(mapID)
 end
 
 function MAP:GetCursorCoords()
+    local WorldMapFrame = _G.WorldMapFrame
     if not WorldMapFrame.ScrollContainer:IsMouseOver() then
         return
     end
@@ -59,13 +60,13 @@ function MAP:UpdateCoords(elapsed)
         end
 
         if not currentMapID then
-            playerCoords:SetText(CoordsFormat(PLAYER, true))
+            playerCoords:SetText(CoordsFormat(_G.PLAYER, true))
         else
             local x, y = MAP:GetPlayerMapPos(currentMapID)
             if not x or (x == 0 and y == 0) then
-                playerCoords:SetText(CoordsFormat(PLAYER, true))
+                playerCoords:SetText(CoordsFormat(_G.PLAYER, true))
             else
-                playerCoords:SetFormattedText(CoordsFormat(PLAYER), 100 * x, 100 * y)
+                playerCoords:SetFormattedText(CoordsFormat(_G.PLAYER), 100 * x, 100 * y)
             end
         end
 
@@ -85,6 +86,8 @@ function MAP:AddCoords()
     if not C.DB.Map.Coords then
         return
     end
+
+    local WorldMapFrame = _G.WorldMapFrame
 
     playerCoords = F.CreateFS(
         WorldMapFrame.BorderFrame,
@@ -134,8 +137,9 @@ function MAP:UpdateMapAnchor()
 end
 
 function MAP:WorldMapScale()
+    local WorldMapFrame = _G.WorldMapFrame
     WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
-        local x, y = MapCanvasScrollControllerMixin.GetCursorPosition(f)
+        local x, y = _G.MapCanvasScrollControllerMixin.GetCursorPosition(f)
         local scale = WorldMapFrame:GetScale()
         return x / scale, y / scale
     end
@@ -145,13 +149,14 @@ function MAP:WorldMapScale()
 end
 
 function MAP:SetupWorldMap()
+    local WorldMapFrame = _G.WorldMapFrame
     -- Remove from frame manager
     WorldMapFrame:ClearAllPoints()
     WorldMapFrame:SetPoint('CENTER') -- init anchor
     WorldMapFrame:SetAttribute('UIPanelLayout-area', nil)
     WorldMapFrame:SetAttribute('UIPanelLayout-enabled', false)
     WorldMapFrame:SetAttribute('UIPanelLayout-allowOtherPanels', true)
-    table.insert(UISpecialFrames, 'WorldMapFrame')
+    table.insert(_G.UISpecialFrames, 'WorldMapFrame')
 
     -- Hide stuff
     WorldMapFrame.BlackoutFrame:SetAlpha(0)

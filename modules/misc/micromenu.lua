@@ -23,63 +23,63 @@ local buttonsList = {
         _G.TALENTS_BUTTON,
         texPath .. 'talent',
         function()
-            _G.ToggleTalentFrame()
+            ToggleTalentFrame()
         end,
     },
     {
         _G.SOCIAL_BUTTON,
         texPath .. 'friend',
         function()
-            _G.ToggleFriendsFrame()
+            ToggleFriendsFrame()
         end,
     },
     {
         _G.GUILD,
         texPath .. 'guild',
         function()
-            _G.ToggleGuildFrame()
+            ToggleGuildFrame()
         end,
     },
     {
         _G.ACHIEVEMENT_BUTTON,
         texPath .. 'achievement',
         function()
-            _G.ToggleAchievementFrame()
+            ToggleAchievementFrame()
         end,
     },
     {
         _G.COLLECTIONS,
         texPath .. 'collection',
         function()
-            _G.ToggleCollectionsJournal()
+            ToggleCollectionsJournal()
         end,
     },
     {
         _G.LFG_TITLE,
         texPath .. 'lfg',
         function()
-            _G.ToggleLFDParentFrame()
+            ToggleLFDParentFrame()
         end,
     },
     {
         _G.ENCOUNTER_JOURNAL,
         texPath .. 'encounter',
         function()
-            _G.ToggleEncounterJournal()
+            ToggleEncounterJournal()
         end,
     },
     {
         L['Calendar'],
         texPath .. 'calendar',
         function()
-            _G.ToggleCalendar()
+            ToggleCalendar()
         end,
     },
     {
         _G.MAP_AND_QUEST_LOG,
         texPath .. 'map',
         function()
-            _G.ToggleWorldMap()
+            ToggleWorldMap()
         end,
     },
     {
@@ -93,14 +93,14 @@ local buttonsList = {
         _G.BLIZZARD_STORE,
         texPath .. 'store',
         function()
-            _G.ToggleStoreUI()
+            ToggleStoreUI()
         end,
     },
     {
         _G.GAMEMENU_SUPPORT,
         texPath .. 'help',
         function()
-            _G.ToggleHelpFrame()
+            ToggleHelpFrame()
         end,
     },
 }

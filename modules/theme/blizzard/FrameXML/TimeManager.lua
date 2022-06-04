@@ -1,40 +1,40 @@
 local F, C = unpack(select(2, ...))
 
-tinsert(C.BlizzThemes, function()
+table.insert(C.BlizzThemes, function()
     if not _G.FREE_ADB.ReskinBlizz then
         return
     end
 
-    TimeManagerGlobe:Hide()
-    TimeManagerStopwatchCheck:GetNormalTexture():SetTexCoord(unpack(C.TEX_COORD))
-    TimeManagerStopwatchCheck:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
-    TimeManagerStopwatchCheck:SetCheckedTexture(C.Assets.Button.Checked)
-    F.CreateBDFrame(TimeManagerStopwatchCheck)
+    _G.TimeManagerGlobe:Hide()
+    _G.TimeManagerStopwatchCheck:GetNormalTexture():SetTexCoord(unpack(C.TEX_COORD))
+    _G.TimeManagerStopwatchCheck:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
+    _G.TimeManagerStopwatchCheck:SetCheckedTexture(C.Assets.Button.Checked)
+    F.CreateBDFrame(_G.TimeManagerStopwatchCheck)
 
-    TimeManagerAlarmHourDropDown:SetWidth(80)
-    TimeManagerAlarmMinuteDropDown:SetWidth(80)
-    TimeManagerAlarmAMPMDropDown:SetWidth(90)
+    _G.TimeManagerAlarmHourDropDown:SetWidth(80)
+    _G.TimeManagerAlarmMinuteDropDown:SetWidth(80)
+    _G.TimeManagerAlarmAMPMDropDown:SetWidth(90)
 
-    F.ReskinPortraitFrame(TimeManagerFrame)
-    F.ReskinDropDown(TimeManagerAlarmHourDropDown)
-    F.ReskinDropDown(TimeManagerAlarmMinuteDropDown)
-    F.ReskinDropDown(TimeManagerAlarmAMPMDropDown)
-    F.ReskinInput(TimeManagerAlarmMessageEditBox)
-    F.ReskinCheck(TimeManagerAlarmEnabledButton)
-    F.ReskinCheck(TimeManagerMilitaryTimeCheck)
-    F.ReskinCheck(TimeManagerLocalTimeCheck)
+    F.ReskinPortraitFrame(_G.TimeManagerFrame)
+    F.ReskinDropDown(_G.TimeManagerAlarmHourDropDown)
+    F.ReskinDropDown(_G.TimeManagerAlarmMinuteDropDown)
+    F.ReskinDropDown(_G.TimeManagerAlarmAMPMDropDown)
+    F.ReskinInput(_G.TimeManagerAlarmMessageEditBox)
+    F.ReskinCheck(_G.TimeManagerAlarmEnabledButton)
+    F.ReskinCheck(_G.TimeManagerMilitaryTimeCheck)
+    F.ReskinCheck(_G.TimeManagerLocalTimeCheck)
 
-    F.StripTextures(StopwatchFrame)
-    F.StripTextures(StopwatchTabFrame)
-    F.SetBD(StopwatchFrame)
-    F.ReskinClose(StopwatchCloseButton, StopwatchFrame, -2, -2)
+    F.StripTextures(_G.StopwatchFrame)
+    F.StripTextures(_G.StopwatchTabFrame)
+    F.SetBD(_G.StopwatchFrame)
+    F.ReskinClose(_G.StopwatchCloseButton, _G.StopwatchFrame, -2, -2)
 
-    local reset = StopwatchResetButton
+    local reset = _G.StopwatchResetButton
     reset:GetNormalTexture():SetTexCoord(0.25, 0.75, 0.27, 0.75)
     reset:SetSize(18, 18)
     reset:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
     reset:SetPoint('BOTTOMRIGHT', -5, 7)
-    local play = StopwatchPlayPauseButton
+    local play = _G.StopwatchPlayPauseButton
     play:GetNormalTexture():SetTexCoord(0.25, 0.75, 0.27, 0.75)
     play:SetSize(18, 18)
     play:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)

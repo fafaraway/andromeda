@@ -3,7 +3,7 @@ local INFOBAR = F:GetModule('InfoBar')
 
 INFOBAR.GuildTable = {}
 
-local infoFrame, gName, gOnline, gApps, gRank, prevTime
+local infoFrame, gName, gOnline, gRank, prevTime
 
 local function rosterButtonOnClick(self, btn)
     local name = INFOBAR.GuildTable[self.index][3]

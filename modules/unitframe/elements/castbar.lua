@@ -223,7 +223,7 @@ function UNITFRAME:CreateCastBar(self)
     local targetHeight = C.DB.Unitframe.TargetCastbarHeight
     local focusWidth = C.DB.Unitframe.FocusCastbarWidth
     local focusHeight = C.DB.Unitframe.FocusCastbarHeight
-    local outline = FREE_ADB.FontOutline
+    local outline = _G.FREE_ADB.FontOutline
     local font = C.Assets.Font.Condensed
     local iconAmp = 4
 
@@ -316,7 +316,7 @@ function NAMEPLATE:CreateCastBar(self)
     end
 
     local style = self.unitStyle
-    local outline = FREE_ADB.FontOutline
+    local outline = _G.FREE_ADB.FontOutline
     local font = C.Assets.Font.Condensed
     local color = C.DB.Unitframe.CastingColor
     local compact = not C.DB.Nameplate.SeparateCastbar

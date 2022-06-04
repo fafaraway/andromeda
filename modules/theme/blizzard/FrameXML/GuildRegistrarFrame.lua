@@ -1,18 +1,18 @@
 local F, C = unpack(select(2, ...))
 
-tinsert(C.BlizzThemes, function()
+table.insert(C.BlizzThemes, function()
     if not _G.FREE_ADB.ReskinBlizz then
         return
     end
 
-    GuildRegistrarFrameEditBox:SetHeight(20)
-    AvailableServicesText:SetTextColor(1, 1, 1)
-    AvailableServicesText:SetShadowColor(0, 0, 0)
+    _G.GuildRegistrarFrameEditBox:SetHeight(20)
+    _G.AvailableServicesText:SetTextColor(1, 1, 1)
+    _G.AvailableServicesText:SetShadowColor(0, 0, 0)
 
-    F.ReskinPortraitFrame(GuildRegistrarFrame)
-    GuildRegistrarFrameEditBox:DisableDrawLayer('BACKGROUND')
-    F.CreateBDFrame(GuildRegistrarFrameEditBox, 0.25)
-    F.Reskin(GuildRegistrarFrameGoodbyeButton)
-    F.Reskin(GuildRegistrarFramePurchaseButton)
-    F.Reskin(GuildRegistrarFrameCancelButton)
+    F.ReskinPortraitFrame(_G.GuildRegistrarFrame)
+    _G.GuildRegistrarFrameEditBox:DisableDrawLayer('BACKGROUND')
+    F.CreateBDFrame(_G.GuildRegistrarFrameEditBox, 0.25)
+    F.Reskin(_G.GuildRegistrarFrameGoodbyeButton)
+    F.Reskin(_G.GuildRegistrarFramePurchaseButton)
+    F.Reskin(_G.GuildRegistrarFrameCancelButton)
 end)

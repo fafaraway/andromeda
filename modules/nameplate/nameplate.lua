@@ -73,7 +73,7 @@ function NAMEPLATE:UpdateNameplateCVars()
     NAMEPLATE:UpdatePlateTargetScale()
 
     NAMEPLATE:UpdateClickableSize()
-    hooksecurefunc(NamePlateDriverFrame, 'UpdateNamePlateOptions', NAMEPLATE.UpdateClickableSize)
+    hooksecurefunc(_G.NamePlateDriverFrame, 'UpdateNamePlateOptions', NAMEPLATE.UpdateClickableSize)
     NAMEPLATE:UpdatePlateClickThrough()
 
     NAMEPLATE:UpdateNameOnlyMode()
@@ -88,11 +88,11 @@ end
 
 --[[ AddOn ]]
 function NAMEPLATE:BlockAddons()
-    if not DBM or not DBM.Nameplate then
+    if not _G.DBM or not _G.DBM.Nameplate then
         return
     end
 
-    function DBM.Nameplate:SupportedNPMod()
+    function _G.DBM.Nameplate:SupportedNPMod()
         return true
     end
 
@@ -104,7 +104,7 @@ function NAMEPLATE:BlockAddons()
             C.NameplateAuraWhiteList[spellID] = true
         end
     end
-    hooksecurefunc(DBM.Nameplate, 'Show', showAurasForDBM)
+    hooksecurefunc(_G.DBM.Nameplate, 'Show', showAurasForDBM)
 end
 
 --[[ Elements ]]
@@ -613,7 +613,7 @@ function NAMEPLATE:UpdateQuestUnit(_, unit)
                         questProgress = diff
                         break
                     end
-                elseif progress and not string.match(text, THREAT_TOOLTIP) then
+                elseif progress and not string.match(text, _G.THREAT_TOOLTIP) then
                     if math.floor(100 - progress) > 0 then
                         questProgress = progress .. '%' -- lower priority on progress, keep looking
                     end
@@ -699,14 +699,14 @@ function NAMEPLATE:RefreshMajorSpells()
     for spellID in pairs(C.NameplateMajorSpellsList) do
         local name = GetSpellInfo(spellID)
         if name then
-            local modValue = FREE_ADB['NPMajorSpells'][spellID]
+            local modValue = _G.FREE_ADB['NPMajorSpells'][spellID]
             if modValue == nil then
                 NAMEPLATE.MajorSpellsList[spellID] = true
             end
         end
     end
 
-    for spellID, value in pairs(FREE_ADB['NPMajorSpells']) do
+    for spellID, value in pairs(_G.FREE_ADB['NPMajorSpells']) do
         if value then
             NAMEPLATE.MajorSpellsList[spellID] = true
         end
@@ -717,17 +717,17 @@ function NAMEPLATE:CheckMajorSpells()
     for spellID in pairs(C.NameplateMajorSpellsList) do
         local name = GetSpellInfo(spellID)
         if name then
-            if FREE_ADB['NPMajorSpells'][spellID] then
-                FREE_ADB['NPMajorSpells'][spellID] = nil
+            if _G.FREE_ADB['NPMajorSpells'][spellID] then
+                _G.FREE_ADB['NPMajorSpells'][spellID] = nil
             end
         else
             F:Debug('Major Spell', 'Invalid Spell ID ' .. spellID)
         end
     end
 
-    for spellID, value in pairs(FREE_ADB['NPMajorSpells']) do
+    for spellID, value in pairs(_G.FREE_ADB['NPMajorSpells']) do
         if value == false and C.NameplateMajorSpellsList[spellID] == nil then
-            FREE_ADB['NPMajorSpells'][spellID] = nil
+            _G.FREE_ADB['NPMajorSpells'][spellID] = nil
         end
     end
 end
@@ -735,7 +735,7 @@ end
 -- Spiteful indicator
 function NAMEPLATE:CreateSpitefulIndicator(self)
     local font = C.Assets.Font.Condensed
-    local outline = FREE_ADB.FontOutline
+    local outline = _G.FREE_ADB.FontOutline
 
     local tarName = F.CreateFS(self, font, 12, outline, nil, nil, outline or 'THICK')
     tarName:ClearAllPoints()
@@ -825,7 +825,7 @@ function NAMEPLATE:UpdateClickableSize()
         return
     end
 
-    local scale = FREE_ADB.UIScale
+    local scale = _G.FREE_ADB.UIScale
     local harmWidth, harmHeight = C.DB.Nameplate.ClickableWidth, C.DB.Nameplate.ClickableHeight
     local helpWidth, helpHeight = C.DB.Nameplate.FriendlyClickableWidth, C.DB.Nameplate.FriendlyClickableHeight
 
@@ -901,7 +901,7 @@ function NAMEPLATE:UpdatePlateByType()
 
     local raidtarget = self.RaidTargetIndicator
     local questIcon = self.questIcon
-    local outline = FREE_ADB.FontOutline
+    local outline = _G.FREE_ADB.FontOutline
 
     name:SetShown(not self.widgetsOnly)
     name:ClearAllPoints()
@@ -1016,7 +1016,7 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
         self.widgetContainer = blizzPlate and blizzPlate.WidgetContainer
         if self.widgetContainer then
             self.widgetContainer:SetParent(self)
-            -- self.widgetContainer:SetScale(FREE_ADB.UIScale)
+            -- self.widgetContainer:SetScale(_G.FREE_ADB.UIScale)
         end
 
         NAMEPLATE.RefreshPlateType(self, unit)
@@ -1041,8 +1041,8 @@ local function CheckNameplateAuraFilter(index)
         for spellID in pairs(value) do
             local name = GetSpellInfo(spellID)
             if name then
-                if FREE_ADB['NameplateAuraFilterList'][index][spellID] then
-                    FREE_ADB['NameplateAuraFilterList'][index][spellID] = nil
+                if _G.FREE_ADB['NameplateAuraFilterList'][index][spellID] then
+                    _G.FREE_ADB['NameplateAuraFilterList'][index][spellID] = nil
                 end
             else
                 if C.DEV_MODE then
@@ -1051,9 +1051,9 @@ local function CheckNameplateAuraFilter(index)
             end
         end
 
-        for spellID, val in pairs(FREE_ADB['NameplateAuraFilterList'][index]) do
+        for spellID, val in pairs(_G.FREE_ADB['NameplateAuraFilterList'][index]) do
             if val == false and value[spellID] == nil then
-                FREE_ADB['NameplateAuraFilterList'][index][spellID] = nil
+                _G.FREE_ADB['NameplateAuraFilterList'][index][spellID] = nil
             end
         end
     end
@@ -1074,14 +1074,14 @@ local function RefreshNameplateAuraFilter(index)
         for spellID in pairs(VALUE) do
             local name = GetSpellInfo(spellID)
             if name then
-                if FREE_ADB['NameplateAuraFilterList'][index][spellID] == nil then
+                if _G.FREE_ADB['NameplateAuraFilterList'][index][spellID] == nil then
                     NAMEPLATE.NameplateFilter[index][spellID] = true
                 end
             end
         end
     end
 
-    for spellID, value in pairs(FREE_ADB['NameplateAuraFilterList'][index]) do
+    for spellID, value in pairs(_G.FREE_ADB['NameplateAuraFilterList'][index]) do
         if value then
             NAMEPLATE.NameplateFilter[index][spellID] = true
         end
@@ -1101,7 +1101,7 @@ function NAMEPLATE:OnLogin()
     end
 
     NAMEPLATE:UpdateClickableSize()
-    hooksecurefunc(NamePlateDriverFrame, 'UpdateNamePlateOptions', NAMEPLATE.UpdateClickableSize)
+    hooksecurefunc(_G.NamePlateDriverFrame, 'UpdateNamePlateOptions', NAMEPLATE.UpdateClickableSize)
 
     NAMEPLATE:UpdateNameplateCVars()
     NAMEPLATE:BlockAddons()

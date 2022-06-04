@@ -555,13 +555,13 @@ end
 local favouriteEnable
 
 local function GetCustomGroupTitle(index)
-    return C.DB['Inventory']['CustomNamesList'][index] or (PREFERENCES .. ' ' .. index)
+    return C.DB['Inventory']['CustomNamesList'][index] or (_G.PREFERENCES .. ' ' .. index)
 end
 
 StaticPopupDialogs['FREEUI_INVENTORY_RENAME_CUSTOM_GROUP'] = {
-    text = BATTLE_PET_RENAME,
-    button1 = OKAY,
-    button2 = CANCEL,
+    text = _G.BATTLE_PET_RENAME,
+    button1 = _G.OKAY,
+    button2 = _G.CANCEL,
     OnAccept = function(self)
         local index = INVENTORY.selectGroupIndex
         local text = self.editBox:GetText()
@@ -615,7 +615,7 @@ local menuList = {
         tCoordBottom = 0.92,
     },
     {
-        text = NONE,
+        text = _G.NONE,
         arg1 = 0,
         func = INVENTORY.MoveItemToCustomBag,
         checked = INVENTORY.IsItemInCustomBag
@@ -630,7 +630,7 @@ function INVENTORY:CreateFavouriteButton()
             func = INVENTORY.MoveItemToCustomBag,
             checked = INVENTORY.IsItemInCustomBag,
             hasArrow = true,
-            menuList = { { text = BATTLE_PET_RENAME, arg1 = i, func = INVENTORY.RenameCustomGroup } },
+            menuList = { { text = _G.BATTLE_PET_RENAME, arg1 = i, func = INVENTORY.RenameCustomGroup } },
         })
     end
     INVENTORY.CustomMenu = menuList

@@ -83,9 +83,11 @@ local styleData = {
 }
 
 function THEME:RegisterBigWigsStyle()
-    if not FREE_ADB.ReskinAddons then
+    if not _G.FREE_ADB.ReskinAddons then
         return
     end
+
+    local BigWigsAPI = _G.BigWigsAPI
 
     if not BigWigsAPI then
         return
@@ -107,9 +109,11 @@ function THEME:RegisterBigWigsStyle()
 end
 
 function THEME:RestyleBigWigsQueueTimer()
-    if not FREE_ADB.ReskinAddons then
+    if not _G.FREE_ADB.ReskinAddons then
         return
     end
+
+    local BigWigsLoader = _G.BigWigsLoader
 
     if BigWigsLoader and BigWigsLoader.RegisterMessage then
         BigWigsLoader.RegisterMessage(C.ADDON_NAME, 'BigWigs_FrameCreated', function(_, frame, name)

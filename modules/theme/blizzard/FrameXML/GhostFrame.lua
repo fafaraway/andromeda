@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 
-tinsert(C.BlizzThemes, function()
+table.insert(C.BlizzThemes, function()
     if not _G.FREE_ADB.ReskinBlizz then
         return
     end
@@ -8,12 +8,12 @@ tinsert(C.BlizzThemes, function()
     local r, g, b = C.r, C.g, C.b
 
     for i = 1, 6 do
-        select(i, GhostFrame:GetRegions()):Hide()
+        select(i, _G.GhostFrame:GetRegions()):Hide()
     end
-    F.ReskinIcon(GhostFrameContentsFrameIcon)
+    F.ReskinIcon(_G.GhostFrameContentsFrameIcon)
 
-    local bg = F.SetBD(GhostFrame, 0)
+    local bg = F.SetBD(_G.GhostFrame, 0)
     F.CreateGradient(bg)
-    GhostFrame:SetHighlightTexture(C.Assets.Texture.Backdrop)
-    GhostFrame:GetHighlightTexture():SetVertexColor(r, g, b, 0.25)
+    _G.GhostFrame:SetHighlightTexture(C.Assets.Texture.Backdrop)
+    _G.GhostFrame:GetHighlightTexture():SetVertexColor(r, g, b, 0.25)
 end)

@@ -1,5 +1,3 @@
--- Generate wowhead link for quest and achievement
-
 local F, C, L = unpack(select(2, ...))
 local QUEST = F:GetModule('Quest')
 
@@ -7,8 +5,8 @@ local linkQuest = 'http://www.wowhead.com/quest=%d'
 local linkAchievement = 'http://www.wowhead.com/achievement=%d'
 local selfText
 
-_G.StaticPopupDialogs.WOWHEAD_LINK = {
-    text = L['Wowhead link'],
+StaticPopupDialogs.WOWHEAD_LINK = {
+    text = L['Wowhead Link'],
     button1 = _G.OKAY,
     timeout = 0,
     whileDead = true,
@@ -72,7 +70,7 @@ function QUEST:WowheadLink()
     hooksecurefunc('BonusObjectiveTracker_OnOpenDropDown', function(self)
         local id = self.activeFrame.TrackedQuest.questID
         local info = _G.UIDropDownMenu_CreateInfo()
-        info.text = L['Wowhead link']
+        info.text = L['Wowhead Link']
         info.func = function()
             local text = linkQuest:format(id)
             _G.StaticPopup_Show('WOWHEAD_LINK', _, _, text)
@@ -84,7 +82,7 @@ function QUEST:WowheadLink()
     hooksecurefunc('AchievementObjectiveTracker_OnOpenDropDown', function(self)
         local id = self.activeFrame.id
         local info = _G.UIDropDownMenu_CreateInfo()
-        info.text = L['Wowhead link']
+        info.text = L['Wowhead Link']
         info.func = function()
             local text = linkAchievement:format(id)
             _G.StaticPopup_Show('WOWHEAD_LINK', _, _, text)

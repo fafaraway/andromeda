@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local ACTIONBAR = F:GetModule('ActionBar')
+-- local ACTIONBAR = F:GetModule('ActionBar')
 
 local keyFeedback = CreateFrame('Frame', C.ADDON_NAME .. 'KeyFeedback', UIParent)
 keyFeedback:SetScript('OnEvent', function(self, event, ...)

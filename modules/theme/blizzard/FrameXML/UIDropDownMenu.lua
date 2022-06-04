@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 
-tinsert(C.BlizzThemes, function()
+table.insert(C.BlizzThemes, function()
     if not _G.FREE_ADB.ReskinBlizz then
         return
     end
@@ -8,7 +8,7 @@ tinsert(C.BlizzThemes, function()
     local dropdowns = { 'DropDownList', 'L_DropDownList', 'Lib_DropDownList' }
     hooksecurefunc('UIDropDownMenu_CreateFrames', function()
         for _, name in next, dropdowns do
-            for i = 1, UIDROPDOWNMENU_MAXLEVELS do
+            for i = 1, _G.UIDROPDOWNMENU_MAXLEVELS do
                 local backdrop = _G[name .. i .. 'Backdrop']
                 if backdrop and not backdrop.styled then
                     F.StripTextures(backdrop)
@@ -26,7 +26,7 @@ tinsert(C.BlizzThemes, function()
         end
 
         local listFrame = _G['DropDownList' .. level]
-        for i = 1, UIDROPDOWNMENU_MAXBUTTONS do
+        for i = 1, _G.UIDROPDOWNMENU_MAXBUTTONS do
             local bu = _G['DropDownList' .. level .. 'Button' .. i]
             local _, _, _, x = bu:GetPoint()
             if bu:IsShown() and x then

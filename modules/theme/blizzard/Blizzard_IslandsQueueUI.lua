@@ -1,6 +1,8 @@
 local F, C = unpack(select(2, ...))
 
 C.Themes['Blizzard_IslandsQueueUI'] = function()
+    local IslandsQueueFrame = _G.IslandsQueueFrame
+
     F.ReskinPortraitFrame(IslandsQueueFrame)
     IslandsQueueFrame.ArtOverlayFrame.PortraitFrame:SetAlpha(0)
     IslandsQueueFrame.ArtOverlayFrame.portrait:SetAlpha(0)

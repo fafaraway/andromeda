@@ -17,16 +17,16 @@ C.Themes['Blizzard_GMChatUI'] = function()
     eb:SetPoint('TOPLEFT', frame, 'BOTTOMLEFT', 0, -7)
     eb:SetPoint('BOTTOMRIGHT', frame, 'BOTTOMRIGHT', -28, -32)
 
-    local bg = F.SetBD(eb)
-    bg:Hide()
+    local ebbg = F.SetBD(eb)
+    ebbg:Hide()
     hooksecurefunc('ChatEdit_DeactivateChat', function(editBox)
         if editBox.isGM then
-            bg:Hide()
+            ebbg:Hide()
         end
     end)
     hooksecurefunc('ChatEdit_ActivateChat', function(editBox)
         if editBox.isGM then
-            bg:Show()
+            ebbg:Show()
         end
     end)
 
@@ -38,13 +38,13 @@ C.Themes['Blizzard_GMChatUI'] = function()
 
     local tab = _G['GMChatTab']
     F.StripTextures(tab)
-    local bg = F.SetBD(tab)
-    bg:SetBackdropColor(0, 0.6, 1, 0.3)
+    local tabbg = F.SetBD(tab)
+    tabbg:SetBackdropColor(0, 0.6, 1, 0.3)
     tab:SetPoint('BOTTOMLEFT', frame, 'TOPLEFT', 0, 3)
     tab:SetPoint('TOPRIGHT', frame, 'TOPRIGHT', 0, 28)
-    GMChatTabIcon:SetTexture('Interface\\ChatFrame\\UI-ChatIcon-Blizz')
+    _G.GMChatTabIcon:SetTexture('Interface\\ChatFrame\\UI-ChatIcon-Blizz')
 
-    local close = GMChatFrameCloseButton
+    local close = _G.GMChatFrameCloseButton
     F.ReskinClose(close)
     close:ClearAllPoints()
     close:SetPoint('RIGHT', tab, -5, 0)

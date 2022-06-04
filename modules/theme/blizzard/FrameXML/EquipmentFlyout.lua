@@ -1,9 +1,12 @@
 local F, C = unpack(select(2, ...))
 
-tinsert(C.BlizzThemes, function()
+table.insert(C.BlizzThemes, function()
     if not _G.FREE_ADB.ReskinBlizz then
         return
     end
+
+    local EquipmentFlyoutFrame = _G.EquipmentFlyoutFrame
+    local EquipmentFlyoutFrameButtons = _G.EquipmentFlyoutFrameButtons
 
     hooksecurefunc('EquipmentFlyout_CreateButton', function()
         local button = EquipmentFlyoutFrame.buttons[#EquipmentFlyoutFrame.buttons]
@@ -22,7 +25,7 @@ tinsert(C.BlizzThemes, function()
             return
         end
 
-        border:SetShown(location < EQUIPMENTFLYOUT_FIRST_SPECIAL_LOCATION)
+        border:SetShown(location < _G.EQUIPMENTFLYOUT_FIRST_SPECIAL_LOCATION)
     end)
 
     hooksecurefunc('EquipmentFlyout_UpdateItems', function()

@@ -1,13 +1,13 @@
 local F, C = unpack(select(2, ...))
 
 C.Themes['Blizzard_InspectUI'] = function()
-    F.StripTextures(InspectTalentFrame)
-    F.StripTextures(InspectModelFrame, true)
-    InspectGuildFrameBG:Hide()
-    F.Reskin(InspectPaperDollFrame.ViewButton)
-    InspectPaperDollFrame.ViewButton:ClearAllPoints()
-    InspectPaperDollFrame.ViewButton:SetPoint('TOP', InspectFrame, 0, -45)
-    InspectPVPFrame.BG:Hide()
+    F.StripTextures(_G.InspectTalentFrame)
+    F.StripTextures(_G.InspectModelFrame, true)
+    _G.InspectGuildFrameBG:Hide()
+    F.Reskin(_G.InspectPaperDollFrame.ViewButton)
+    _G.InspectPaperDollFrame.ViewButton:ClearAllPoints()
+    _G.InspectPaperDollFrame.ViewButton:SetPoint('TOP', _G.InspectFrame, 0, -45)
+    _G.InspectPVPFrame.BG:Hide()
 
     -- Character
     local slots = {
@@ -44,7 +44,7 @@ C.Themes['Blizzard_InspectUI'] = function()
     end
 
     local function UpdateCosmetic(self)
-        local unit = InspectFrame.unit
+        local unit = _G.InspectFrame.unit
         local itemLink = unit and GetInventoryItemLink(unit, self:GetID())
         self.IconOverlay:SetShown(itemLink and IsCosmeticItem(itemLink))
     end
@@ -55,7 +55,7 @@ C.Themes['Blizzard_InspectUI'] = function()
     end)
 
     -- Talents
-    local inspectSpec = InspectTalentFrame.InspectSpec
+    local inspectSpec = _G.InspectTalentFrame.InspectSpec
 
     inspectSpec.ring:Hide()
     F.ReskinIcon(inspectSpec.specIcon)
@@ -63,7 +63,7 @@ C.Themes['Blizzard_InspectUI'] = function()
     F.CreateBDFrame(inspectSpec.roleIcon)
 
     for i = 1, 7 do
-        local row = InspectTalentFrame.InspectTalents['tier' .. i]
+        local row = _G.InspectTalentFrame.InspectTalents['tier' .. i]
         for j = 1, 3 do
             local bu = row['talent' .. j]
             bu.Slot:Hide()
@@ -74,8 +74,8 @@ C.Themes['Blizzard_InspectUI'] = function()
 
     local function updateIcon(self)
         local spec = nil
-        if INSPECTED_UNIT ~= nil then
-            spec = GetInspectSpecialization(INSPECTED_UNIT)
+        if _G.INSPECTED_UNIT ~= nil then
+            spec = GetInspectSpecialization(_G.INSPECTED_UNIT)
         end
         if spec ~= nil and spec > 0 then
             local role1 = GetSpecializationRoleByID(spec)
@@ -88,17 +88,17 @@ C.Themes['Blizzard_InspectUI'] = function()
     end
 
     inspectSpec:HookScript('OnShow', updateIcon)
-    InspectTalentFrame:HookScript('OnEvent', function(self, event, unit)
-        if not InspectFrame:IsShown() then
+    _G.InspectTalentFrame:HookScript('OnEvent', function(self, event, unit)
+        if not _G.InspectFrame:IsShown() then
             return
         end
-        if event == 'INSPECT_READY' and InspectFrame.unit and UnitGUID(InspectFrame.unit) == unit then
+        if event == 'INSPECT_READY' and _G.InspectFrame.unit and UnitGUID(_G.InspectFrame.unit) == unit then
             updateIcon(self.InspectSpec)
         end
     end)
 
-    InspectFrameTab1:ClearAllPoints()
-    InspectFrameTab1:SetPoint('TOPLEFT', InspectFrame, 'BOTTOMLEFT', 10, 1)
+    _G.InspectFrameTab1:ClearAllPoints()
+    _G.InspectFrameTab1:SetPoint('TOPLEFT', _G.InspectFrame, 'BOTTOMLEFT', 10, 1)
     for i = 1, 4 do
         local tab = _G['InspectFrameTab' .. i]
         F.ReskinTab(tab)
@@ -107,5 +107,5 @@ C.Themes['Blizzard_InspectUI'] = function()
         end
     end
 
-    F.ReskinPortraitFrame(InspectFrame)
+    F.ReskinPortraitFrame(_G.InspectFrame)
 end

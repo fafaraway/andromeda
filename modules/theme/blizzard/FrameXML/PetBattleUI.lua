@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 
-tinsert(C.BlizzThemes, function()
+table.insert(C.BlizzThemes, function()
     local r, g, b, pairs = C.r, C.g, C.b, pairs
 
     -- Head Frame
@@ -305,15 +305,15 @@ tinsert(C.BlizzThemes, function()
         ['BOTTOMLEFT'] = { 0.5, 0 },
     }
     for anchor, v in pairs(anchors) do
-        local frame = CreateFrame('Frame', nil, _G.UIParent)
-        frame:SetSize(width, height)
-        frame:SetPoint(anchor, _G.UIParent, 'BOTTOM', 0, 3)
-        frame:SetFrameLevel(0)
-        local tex = F.SetGradient(frame, 'H', 0, 0, 0, v[1], v[2], width, height)
+        local f = CreateFrame('Frame', nil, _G.UIParent)
+        f:SetSize(width, height)
+        f:SetPoint(anchor, _G.UIParent, 'BOTTOM', 0, 3)
+        f:SetFrameLevel(0)
+        local tex = F.SetGradient(f, 'H', 0, 0, 0, v[1], v[2], width, height)
         tex:SetPoint('CENTER')
-        local line = F.SetGradient(frame, 'H', r, g, b, v[1], v[2], width, C.MULT)
-        line:SetPoint('BOTTOM', frame, 'TOP')
+        local line = F.SetGradient(f, 'H', r, g, b, v[1], v[2], width, C.MULT)
+        line:SetPoint('BOTTOM', f, 'TOP')
 
-        RegisterStateDriver(frame, 'visibility', visibleState)
+        RegisterStateDriver(f, 'visibility', visibleState)
     end
 end)

@@ -15,11 +15,11 @@ local function reskinHelpTips(self)
     end
 end
 
-tinsert(C.BlizzThemes, function()
+table.insert(C.BlizzThemes, function()
     if not _G.FREE_ADB.ReskinBlizz then
         return
     end
 
-    reskinHelpTips(HelpTip)
-    hooksecurefunc(HelpTip, 'Show', reskinHelpTips)
+    reskinHelpTips(_G.HelpTip)
+    hooksecurefunc(_G.HelpTip, 'Show', reskinHelpTips)
 end)

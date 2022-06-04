@@ -1,9 +1,9 @@
 local F, C = unpack(select(2, ...))
 
 C.Themes['Blizzard_ChallengesUI'] = function()
-    ChallengesFrameInset:Hide()
+    _G.ChallengesFrameInset:Hide()
     for i = 1, 2 do
-        select(i, ChallengesFrame:GetRegions()):Hide()
+        select(i, _G.ChallengesFrame:GetRegions()):Hide()
     end
 
     local angryStyle
@@ -25,7 +25,7 @@ C.Themes['Blizzard_ChallengesUI'] = function()
         end
 
         if IsAddOnLoaded('AngryKeystones') and not angryStyle then
-            local mod = AngryKeystones.Modules.Schedule
+            local mod = _G.AngryKeystones.Modules.Schedule
             local scheduel = mod.AffixFrame
             local party = mod.PartyFrame
 
@@ -44,14 +44,14 @@ C.Themes['Blizzard_ChallengesUI'] = function()
     end
     hooksecurefunc('ChallengesFrame_Update', UpdateIcons)
 
-    hooksecurefunc(ChallengesFrame.WeeklyInfo, 'SetUp', function(self)
+    hooksecurefunc(_G.ChallengesFrame.WeeklyInfo, 'SetUp', function(self)
         local affixes = C_MythicPlus.GetCurrentAffixes()
         if affixes then
             F.AffixesSetup(self.Child)
         end
     end)
 
-    local keystone = ChallengesKeystoneFrame
+    local keystone = _G.ChallengesKeystoneFrame
     F.SetBD(keystone)
     F.ReskinClose(keystone.CloseButton)
     F.Reskin(keystone.StartButton)
@@ -64,7 +64,7 @@ C.Themes['Blizzard_ChallengesUI'] = function()
     hooksecurefunc(keystone, 'OnKeystoneSlotted', F.AffixesSetup)
 
     -- New season
-    local noticeFrame = ChallengesFrame.SeasonChangeNoticeFrame
+    local noticeFrame = _G.ChallengesFrame.SeasonChangeNoticeFrame
     F.Reskin(noticeFrame.Leave)
     noticeFrame.Leave.__bg:SetFrameLevel(noticeFrame:GetFrameLevel() + 1)
     noticeFrame.NewSeason:SetTextColor(1, 0.8, 0)

@@ -2,7 +2,7 @@ local F, C = unpack(select(2, ...))
 
 --/run LoadAddOn"Blizzard_ChromieTimeUI" ChromieTimeFrame:Show()
 C.Themes['Blizzard_ChromieTimeUI'] = function()
-    local frame = ChromieTimeFrame
+    local frame = _G.ChromieTimeFrame
 
     F.StripTextures(frame)
     F.SetBD(frame)
@@ -11,7 +11,7 @@ C.Themes['Blizzard_ChromieTimeUI'] = function()
 
     local header = frame.Title
     header:DisableDrawLayer('BACKGROUND')
-    header.Text:SetFontObject(SystemFont_Huge1)
+    header.Text:SetFontObject(_G.SystemFont_Huge1)
     F.CreateBDFrame(header, 0.25)
 
     frame.CurrentlySelectedExpansionInfoFrame.Name:SetTextColor(0, 0, 0)

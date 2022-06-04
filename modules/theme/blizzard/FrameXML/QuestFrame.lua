@@ -17,7 +17,7 @@ local function UpdateProgressItemQuality(self)
     button.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 end
 
-_G.tinsert(C.BlizzThemes, function()
+table.insert(C.BlizzThemes, function()
     F.ReskinPortraitFrame(_G.QuestFrame)
 
     F.StripTextures(_G.QuestFrameDetailPanel, 0)
@@ -39,7 +39,7 @@ _G.tinsert(C.BlizzThemes, function()
         button.NameFrame:Hide()
         button.bg = F.ReskinIcon(button.Icon)
         button.Icon.__owner = button
-        _G.hooksecurefunc(button.Icon, 'SetTexture', UpdateProgressItemQuality)
+        hooksecurefunc(button.Icon, 'SetTexture', UpdateProgressItemQuality)
 
         local bg = F.CreateBDFrame(button, 0.25)
         bg:SetPoint('TOPLEFT', button.bg, 'TOPRIGHT', 2, 0)
@@ -48,7 +48,7 @@ _G.tinsert(C.BlizzThemes, function()
 
     _G.QuestDetailScrollFrame:SetWidth(302) -- else these buttons get cut off
 
-    _G.hooksecurefunc(_G.QuestProgressRequiredMoneyText, 'SetTextColor', function(self, r)
+    hooksecurefunc(_G.QuestProgressRequiredMoneyText, 'SetTextColor', function(self, r)
         if r == 0 then
             self:SetTextColor(0.8, 0.8, 0.8)
         elseif r == 0.2 then
@@ -93,7 +93,7 @@ _G.tinsert(C.BlizzThemes, function()
     local bg = F.SetBD(_G.QuestModelScene)
     bg:SetOutside(nil, nil, nil, _G.QuestNPCModelTextFrame)
 
-    _G.hooksecurefunc('QuestFrame_ShowQuestPortrait', function(parentFrame, _, _, _, _, _, x, y)
+    hooksecurefunc('QuestFrame_ShowQuestPortrait', function(parentFrame, _, _, _, _, _, x, y)
         x = x + 6
         _G.QuestModelScene:SetPoint('TOPLEFT', parentFrame, 'TOPRIGHT', x, y)
     end)

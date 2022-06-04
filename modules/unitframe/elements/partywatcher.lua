@@ -8,14 +8,14 @@ function UNITFRAME:UpdatePartyWatcherSpells()
     for spellID, duration in pairs(C.PartySpellsList) do
         local name = GetSpellInfo(spellID)
         if name then
-            local modDuration = FREE_ADB['PartySpellsList'][spellID]
+            local modDuration = _G.FREE_ADB['PartySpellsList'][spellID]
             if not modDuration or modDuration > 0 then
                 UNITFRAME.PartySpellsList[spellID] = duration
             end
         end
     end
 
-    for spellID, duration in pairs(FREE_ADB['PartySpellsList']) do
+    for spellID, duration in pairs(_G.FREE_ADB['PartySpellsList']) do
         if duration > 0 then
             UNITFRAME.PartySpellsList[spellID] = duration
         end
@@ -56,7 +56,7 @@ local function SendPartySyncMsg(text)
     if IsInRaid() or not IsInGroup() then
         return
     end
-    if not IsInGroup(LE_PARTY_CATEGORY_HOME) and IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
+    if not IsInGroup(_G.LE_PARTY_CATEGORY_HOME) and IsInGroup(_G.LE_PARTY_CATEGORY_INSTANCE) then
         C_ChatInfo.SendAddonMessage('ZenTracker', text, 'INSTANCE_CHAT')
     else
         C_ChatInfo.SendAddonMessage('ZenTracker', text, 'PARTY')
@@ -185,9 +185,9 @@ function UNITFRAME:CheckPartySpells()
     for spellID, duration in pairs(C.PartySpellsList) do
         local name = GetSpellInfo(spellID)
         if name then
-            local modDuration = FREE_ADB['PartySpellsList'][spellID]
+            local modDuration = _G.FREE_ADB['PartySpellsList'][spellID]
             if modDuration and modDuration == duration then
-                FREE_ADB['PartySpellsList'][spellID] = nil
+                _G.FREE_ADB['PartySpellsList'][spellID] = nil
             end
         else
             F:Debug('Party Watcher', 'Invalid Spell ID ' .. spellID)

@@ -1,11 +1,11 @@
 local F, C = unpack(select(2, ...))
 
-tinsert(C.BlizzThemes, function()
+table.insert(C.BlizzThemes, function()
     if not _G.FREE_ADB.ReskinBlizz then
         return
     end
 
-    local WorldMapFrame = WorldMapFrame
+    local WorldMapFrame = _G.WorldMapFrame
     local BorderFrame = WorldMapFrame.BorderFrame
 
     F.ReskinPortraitFrame(WorldMapFrame)

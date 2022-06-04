@@ -1,11 +1,11 @@
 local F, C = unpack(select(2, ...))
 
-tinsert(C.BlizzThemes, function()
+table.insert(C.BlizzThemes, function()
     if not _G.FREE_ADB.ReskinBlizz then
         return
     end
 
-    local RecruitAFriendFrame = RecruitAFriendFrame
+    local RecruitAFriendFrame = _G.RecruitAFriendFrame
 
     RecruitAFriendFrame.SplashFrame.Description:SetTextColor(1, 1, 1)
     F.Reskin(RecruitAFriendFrame.SplashFrame.OKButton)
@@ -19,7 +19,7 @@ tinsert(C.BlizzThemes, function()
     recruitList.ScrollFrameInset:Hide()
     F.ReskinScroll(recruitList.ScrollFrame.scrollBar)
 
-    local recruitmentFrame = RecruitAFriendRecruitmentFrame
+    local recruitmentFrame = _G.RecruitAFriendRecruitmentFrame
     F.StripTextures(recruitmentFrame)
     F.ReskinClose(recruitmentFrame.CloseButton)
     F.SetBD(recruitmentFrame)
@@ -29,7 +29,7 @@ tinsert(C.BlizzThemes, function()
     bg:SetPoint('BOTTOMRIGHT', 0, 3)
     F.Reskin(recruitmentFrame.GenerateOrCopyLinkButton)
 
-    local rewardsFrame = RecruitAFriendRewardsFrame
+    local rewardsFrame = _G.RecruitAFriendRewardsFrame
     F.StripTextures(rewardsFrame)
     F.ReskinClose(rewardsFrame.CloseButton)
     F.SetBD(rewardsFrame)

@@ -3,23 +3,23 @@ local F, C = unpack(select(2, ...))
 C.Themes['Blizzard_TrainerUI'] = function()
     local r, g, b = C.r, C.g, C.b
 
-    F.ReskinPortraitFrame(ClassTrainerFrame)
-    ClassTrainerStatusBarSkillRank:ClearAllPoints()
-    ClassTrainerStatusBarSkillRank:SetPoint('CENTER', ClassTrainerStatusBar, 'CENTER', 0, 0)
+    F.ReskinPortraitFrame(_G.ClassTrainerFrame)
+    _G.ClassTrainerStatusBarSkillRank:ClearAllPoints()
+    _G.ClassTrainerStatusBarSkillRank:SetPoint('CENTER', _G.ClassTrainerStatusBar, 'CENTER', 0, 0)
 
-    local icbg = F.ReskinIcon(ClassTrainerFrameSkillStepButtonIcon)
-    local bg = F.CreateBDFrame(ClassTrainerFrameSkillStepButton, 0.25)
+    local icbg = F.ReskinIcon(_G.ClassTrainerFrameSkillStepButtonIcon)
+    local bg = F.CreateBDFrame(_G.ClassTrainerFrameSkillStepButton, 0.25)
     bg:SetPoint('TOPLEFT', icbg, 'TOPRIGHT', 1, 0)
     bg:SetPoint('BOTTOMRIGHT', icbg, 'BOTTOMRIGHT', 270, 0)
 
-    ClassTrainerFrameSkillStepButton:SetNormalTexture('')
-    ClassTrainerFrameSkillStepButton:SetHighlightTexture('')
-    ClassTrainerFrameSkillStepButton.disabledBG:SetTexture('')
-    ClassTrainerFrameSkillStepButton.selectedTex:SetAllPoints(bg)
-    ClassTrainerFrameSkillStepButton.selectedTex:SetColorTexture(r, g, b, 0.25)
+    _G.ClassTrainerFrameSkillStepButton:SetNormalTexture('')
+    _G.ClassTrainerFrameSkillStepButton:SetHighlightTexture('')
+    _G.ClassTrainerFrameSkillStepButton.disabledBG:SetTexture('')
+    _G.ClassTrainerFrameSkillStepButton.selectedTex:SetAllPoints(bg)
+    _G.ClassTrainerFrameSkillStepButton.selectedTex:SetColorTexture(r, g, b, 0.25)
 
     hooksecurefunc('ClassTrainerFrame_Update', function()
-        for _, bu in next, ClassTrainerFrame.scrollFrame.buttons do
+        for _, bu in next, _G.ClassTrainerFrame.scrollFrame.buttons do
             if not bu.styled then
                 local icbg = F.ReskinIcon(bu.icon)
                 local bg = F.CreateBDFrame(bu, 0.25)
@@ -43,13 +43,13 @@ C.Themes['Blizzard_TrainerUI'] = function()
         end
     end)
 
-    F.StripTextures(ClassTrainerStatusBar)
-    ClassTrainerStatusBar:SetPoint('TOPLEFT', ClassTrainerFrame, 'TOPLEFT', 64, -35)
-    ClassTrainerStatusBar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
-    ClassTrainerStatusBar:GetStatusBarTexture():SetGradient('VERTICAL', 0.1, 0.3, 0.9, 0.2, 0.4, 1)
-    F.CreateBDFrame(ClassTrainerStatusBar, 0.25)
+    F.StripTextures(_G.ClassTrainerStatusBar)
+    _G.ClassTrainerStatusBar:SetPoint('TOPLEFT', _G.ClassTrainerFrame, 'TOPLEFT', 64, -35)
+    _G.ClassTrainerStatusBar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
+    _G.ClassTrainerStatusBar:GetStatusBarTexture():SetGradient('VERTICAL', 0.1, 0.3, 0.9, 0.2, 0.4, 1)
+    F.CreateBDFrame(_G.ClassTrainerStatusBar, 0.25)
 
-    F.Reskin(ClassTrainerTrainButton)
-    F.ReskinScroll(ClassTrainerScrollFrameScrollBar)
-    F.ReskinDropDown(ClassTrainerFrameFilterDropDown)
+    F.Reskin(_G.ClassTrainerTrainButton)
+    F.ReskinScroll(_G.ClassTrainerScrollFrameScrollBar)
+    F.ReskinDropDown(_G.ClassTrainerFrameFilterDropDown)
 end

@@ -1,31 +1,31 @@
 local F, C = unpack(select(2, ...))
 
-tinsert(C.BlizzThemes, function()
+table.insert(C.BlizzThemes, function()
     if not _G.FREE_ADB.ReskinBlizz then
         return
     end
 
     -- Ready check
-    F.SetBD(ReadyCheckFrame)
-    ReadyCheckPortrait:SetAlpha(0)
-    select(2, ReadyCheckListenerFrame:GetRegions()):Hide()
+    F.SetBD(_G.ReadyCheckFrame)
+    _G.ReadyCheckPortrait:SetAlpha(0)
+    select(2, _G.ReadyCheckListenerFrame:GetRegions()):Hide()
 
-    ReadyCheckFrame:HookScript('OnShow', function(self)
+    _G.ReadyCheckFrame:HookScript('OnShow', function(self)
         if self.initiator and UnitIsUnit('player', self.initiator) then
             self:Hide()
         end
     end)
 
-    F.Reskin(ReadyCheckFrameYesButton)
-    F.Reskin(ReadyCheckFrameNoButton)
+    F.Reskin(_G.ReadyCheckFrameYesButton)
+    F.Reskin(_G.ReadyCheckFrameNoButton)
 
     -- Role poll
-    F.StripTextures(RolePollPopup)
-    F.SetBD(RolePollPopup)
-    F.Reskin(RolePollPopupAcceptButton)
-    F.ReskinClose(RolePollPopupCloseButton)
+    F.StripTextures(_G.RolePollPopup)
+    F.SetBD(_G.RolePollPopup)
+    F.Reskin(_G.RolePollPopupAcceptButton)
+    F.ReskinClose(_G.RolePollPopupCloseButton)
 
-    F.ReskinRole(RolePollPopupRoleButtonTank, 'TANK')
-    F.ReskinRole(RolePollPopupRoleButtonHealer, 'HEALER')
-    F.ReskinRole(RolePollPopupRoleButtonDPS, 'DPS')
+    F.ReskinRole(_G.RolePollPopupRoleButtonTank, 'TANK')
+    F.ReskinRole(_G.RolePollPopupRoleButtonHealer, 'HEALER')
+    F.ReskinRole(_G.RolePollPopupRoleButtonDPS, 'DPS')
 end)

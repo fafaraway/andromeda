@@ -697,7 +697,7 @@ GUI.OptionsList = {
             nil,
             SetupChatSize,
             nil,
-            L['|nLock postion and size of chat frame.|nDisable this if you want to adjust chat frame.'],
+            L['Lock postion and size of chat frame.|nDisable this if you want to adjust chat frame.'],
         },
         {
             1,
@@ -719,7 +719,7 @@ GUI.OptionsList = {
             nil,
             nil,
             nil,
-            L['|nSimplify channels name.|ne.g. [1: General] to [1] [Guild] to [G]'],
+            L['Simplify channels name.|ne.g. [1: General] to [1] [Guild] to [G]'],
         },
         {
             1,
@@ -729,7 +729,7 @@ GUI.OptionsList = {
             true,
             nil,
             nil,
-            L['|nYou can use TAB key to cycle channels after the input box is activated.'],
+            L['You can use TAB key to cycle channels after the input box is activated.'],
         },
         { 1, 'Chat', 'ChannelBar', L['Channel bar'] },
         { 1, 'Chat', 'GroupRoleIcon', L['Group role icon'], true },
@@ -744,7 +744,7 @@ GUI.OptionsList = {
             nil,
             L['Play sound when the new whisper message is more than 60 seconds from previous one.'],
         },
-        { 1, 'Chat', 'SmartChatBubble', L['Smart bubble'], nil, nil, nil, L['|nOnly show chat bubbles in raid.'] },
+        { 1, 'Chat', 'SmartChatBubble', L['Smart bubble'], nil, nil, nil, L['Only show chat bubbles in raid.'] },
         { 1, 'Chat', 'ExtendLink', L['Extend link'], true },
         {
             1,
@@ -756,7 +756,7 @@ GUI.OptionsList = {
             UpdateEditBoxAnchor,
             L['Anchor the editbox to the bottom.'],
         },
-        { 1, 'Chat', 'HideInCombat', L['Hide chat frame in combat'] },
+        { 1, 'Chat', 'HideInCombat', L['Hidden in Combat'] },
         { 1, 'Chat', 'DisableProfanityFilter', L['Disable Profanity Filter'], true, nil, UpdateLanguageFilter },
         {},
         { 1, 'Chat', 'SpamFilter', L['Spam filter'] },
@@ -769,7 +769,7 @@ GUI.OptionsList = {
             true,
             nil,
             UpdateFilterWhiteList,
-            L['|nOnly show messages that match the words below. Disabled if empty. Use key SPACE between multi words.'],
+            L['Only show messages that match the words below. Disabled if empty. Use key SPACE between multi words.'],
         },
         {
             1,
@@ -789,7 +789,7 @@ GUI.OptionsList = {
             nil,
             nil,
             nil,
-            L['|nOnly accept whispers from party or raid members, friends and guild members.'],
+            L['Only accept whispers from party or raid members, friends and guild members.'],
         },
         {
             2,
@@ -799,7 +799,7 @@ GUI.OptionsList = {
             true,
             nil,
             UpdateFilterList,
-            L['|nFilter messages that match the words blow. Use key SPACE between multi words.'],
+            L['Filter messages that match the words blow. Use key SPACE between multi words.'],
         },
         {
             1,
@@ -809,7 +809,7 @@ GUI.OptionsList = {
             nil,
             nil,
             nil,
-            L['|nSimplify chat messages from damage meters like Details and instead provides a chat-link to provide the blocked damage statistics in a popup.'],
+            L['Simplify chat messages from damage meters like Details and instead provides a chat-link to provide the blocked damage statistics in a popup.'],
         },
         {
             1,
@@ -819,7 +819,7 @@ GUI.OptionsList = {
             nil,
             nil,
             nil,
-            L['|nFilter the loot messages of teammates based on the quality of the items.'],
+            L['Filter the loot messages of teammates based on the quality of the items.'],
         },
         {
             4,
@@ -847,7 +847,7 @@ GUI.OptionsList = {
             nil,
             nil,
             nil,
-            L['|nAutomatically invite whisperers based on specific keywords.'],
+            L['Automatically invite whisperers based on specific keywords.'],
         },
         { 1, 'Chat', 'GuildOnly', L['Only invite guild members'] },
         {
@@ -858,7 +858,7 @@ GUI.OptionsList = {
             true,
             nil,
             UpdateWhisperList,
-            L['|nSetup whisper invite keywords. If you have more than one word, press key SPACE in between.'],
+            L['Setup whisper invite keywords. If you have more than one word, press key SPACE in between.'],
         },
     },
     [5] = { -- actionbar
@@ -1048,7 +1048,7 @@ GUI.OptionsList = {
             true,
             nil,
             nil,
-            L['|nPlay DotA-like sounds on PvP killing blows.'],
+            L['Play DotA-like sounds on PvP killing blows.'],
         },
         {
             1,
@@ -1140,7 +1140,7 @@ GUI.OptionsList = {
             1,
             'Inventory',
             'SpecialBagsColor',
-            L['Colorized Special Bags'],
+            L['Color Special Bags'],
             true,
             nil,
             UpdateInventoryStatus,
@@ -1741,7 +1741,7 @@ GUI.OptionsList = {
             nil,
             nil,
             RefreshAllPlates,
-            L['Coloring debuffs border by type.|nMagic is blue, Curse is purple, Poison is green, Disease is yellow, and others are red.'],
+            L['Color debuffs border by type.|nMagic is blue, Curse is purple, Poison is green, Disease is yellow, and others are red.'],
         },
         {
             1,
@@ -1759,7 +1759,7 @@ GUI.OptionsList = {
             'DispellMode',
             L['Dispellable Mode'],
             nil,
-            { L['Filter'], L['Always'], DISABLE },
+            { L['Filter'], L['Always'], _G.DISABLE },
             RefreshAllPlates,
             L['Filter: only shows the magic and enrage auras that you can dispell.|nAlways: always shows the magic and enrage auras, no matter which you can dispell.'],
         },

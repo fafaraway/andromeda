@@ -3,15 +3,15 @@ local M = F:GetModule('Map')
 local TOOLTIP = F:GetModule('Tooltip')
 
 function M:InitRenownLevel()
-    if not FREE_ADB['RenownLevels'][C.REALM] then
-        FREE_ADB['RenownLevels'][C.REALM] = {}
+    if not _G.FREE_ADB['RenownLevels'][C.REALM] then
+        _G.FREE_ADB['RenownLevels'][C.REALM] = {}
     end
 
-    if not FREE_ADB['RenownLevels'][C.REALM][C.NAME] then
-        FREE_ADB['RenownLevels'][C.REALM][C.NAME] = {}
+    if not _G.FREE_ADB['RenownLevels'][C.REALM][C.NAME] then
+        _G.FREE_ADB['RenownLevels'][C.REALM][C.NAME] = {}
 
         for i = 1, 4 do
-            FREE_ADB['RenownLevels'][C.REALM][C.NAME][i] = 0
+            _G.FREE_ADB['RenownLevels'][C.REALM][C.NAME][i] = 0
         end
     end
 end
@@ -20,7 +20,7 @@ function M:CheckRenownLevel()
     local level = C_CovenantSanctumUI.GetRenownLevel()
     local CovenantID = C_Covenants.GetActiveCovenantID()
 
-    FREE_ADB['RenownLevels'][C.REALM][C.NAME][CovenantID] = level
+    _G.FREE_ADB['RenownLevels'][C.REALM][C.NAME][CovenantID] = level
 end
 
 function M:UpdateRenownLevel()
@@ -56,6 +56,7 @@ local eventsList = {
 }
 
 function M:CreateBar()
+    local Minimap = _G.Minimap
     local bar = CreateFrame('StatusBar', C.ADDON_NAME .. 'MinimapProgressBar', Minimap)
     bar:SetPoint('TOPLEFT', 1, -Minimap.halfDiff - 1)
     bar:SetPoint('TOPRIGHT', -1, -Minimap.halfDiff - 1)
@@ -115,14 +116,14 @@ function M:Bar_Update()
             end
             standing = 5
         else
-            if standing == MAX_REPUTATION_REACTION then
+            if standing == _G.MAX_REPUTATION_REACTION then
                 barMin, barMax, value = 0, 1, 1
             end
         end
         self:SetStatusBarColor(
-            FACTION_BAR_COLORS[standing].r,
-            FACTION_BAR_COLORS[standing].g,
-            FACTION_BAR_COLORS[standing].b,
+            _G.FACTION_BAR_COLORS[standing].r,
+            _G.FACTION_BAR_COLORS[standing].g,
+            _G.FACTION_BAR_COLORS[standing].b,
             0.85
         )
         self:SetMinMaxValues(barMin, barMax)
@@ -142,13 +143,13 @@ end
 function M:Bar_OnEnter()
     GameTooltip:SetOwner(self, 'ANCHOR_LEFT')
     GameTooltip:ClearLines()
-    GameTooltip:AddDoubleLine(C.NAME, LEVEL .. ': ' .. UnitLevel('player'), C.r, C.g, C.b, 1, 1, 1)
+    GameTooltip:AddDoubleLine(C.NAME, _G.LEVEL .. ': ' .. UnitLevel('player'), C.r, C.g, C.b, 1, 1, 1)
 
     if not IsPlayerAtEffectiveMaxLevel() then
         GameTooltip:AddLine(' ')
         local xp, mxp, rxp = UnitXP('player'), UnitXPMax('player'), GetXPExhaustion()
         GameTooltip:AddDoubleLine(
-            XP .. ':',
+            _G.XP .. ':',
             BreakUpLargeNumbers(xp)
                 .. ' / '
                 .. BreakUpLargeNumbers(mxp)
@@ -163,7 +164,7 @@ function M:Bar_OnEnter()
         )
         if rxp then
             GameTooltip:AddDoubleLine(
-                TUTORIAL_TITLE26 .. ':',
+                _G.TUTORIAL_TITLE26 .. ':',
                 '+' .. BreakUpLargeNumbers(rxp) .. ' (' .. string.format('%.1f%%)', rxp / mxp * 100),
                 0.6,
                 0.8,
@@ -174,7 +175,7 @@ function M:Bar_OnEnter()
             )
         end
         if IsXPUserDisabled() then
-            GameTooltip:AddLine('|cffff0000' .. XP .. LOCKED)
+            GameTooltip:AddLine('|cffff0000' .. _G.XP .. _G.LOCKED)
         end
     end
 
@@ -182,7 +183,7 @@ function M:Bar_OnEnter()
         local name, standing, barMin, barMax, value, factionID = GetWatchedFactionInfo()
         local friendID, _, _, _, _, _, friendTextLevel, _, nextFriendThreshold = GetFriendshipReputation(factionID)
         local currentRank, maxRank = GetFriendshipReputationRanks(friendID)
-        local colors = FACTION_BAR_COLORS[standing]
+        local colors = _G.FACTION_BAR_COLORS[standing]
         local standingtext
         if friendID then
             if maxRank > 0 then
@@ -194,11 +195,11 @@ function M:Bar_OnEnter()
             end
             standingtext = friendTextLevel
         else
-            if standing == MAX_REPUTATION_REACTION then
+            if standing == _G.MAX_REPUTATION_REACTION then
                 barMax = barMin + 1e3
                 value = barMax - 1
             end
-            standingtext = _G['FACTION_STANDING_LABEL' .. standing] or UNKNOWN
+            standingtext = _G['FACTION_STANDING_LABEL' .. standing] or _G.UNKNOWN
         end
         GameTooltip:AddLine(' ')
         GameTooltip:AddLine(name, 0, 0.6, 1)
@@ -258,17 +259,17 @@ function M:Bar_OnEnter()
     if IsWatchingHonorAsXP() then
         local current, barMax, level = UnitHonor('player'), UnitHonorMax('player'), UnitHonorLevel('player')
         GameTooltip:AddLine(' ')
-        GameTooltip:AddLine(HONOR, 0, 0.6, 1)
-        GameTooltip:AddDoubleLine(LEVEL .. ' ' .. level, current .. ' / ' .. barMax, 0.8, 0.2, 0, 1, 1, 1)
+        GameTooltip:AddLine(_G.HONOR, 0, 0.6, 1)
+        GameTooltip:AddDoubleLine(_G.LEVEL .. ' ' .. level, current .. ' / ' .. barMax, 0.8, 0.2, 0, 1, 1, 1)
     end
 
     local covenantID = C_Covenants.GetActiveCovenantID()
     if covenantID and covenantID > 0 then
         GameTooltip:AddLine(' ')
-        GameTooltip:AddLine(LANDING_PAGE_RENOWN_LABEL, 0, 0.6, 1)
+        GameTooltip:AddLine(_G.LANDING_PAGE_RENOWN_LABEL, 0, 0.6, 1)
 
         for i = 1, 4 do
-            local level = FREE_ADB['RenownLevels'][C.REALM][C.NAME][i]
+            local level = _G.FREE_ADB['RenownLevels'][C.REALM][C.NAME][i]
             if level > 0 then
                 GameTooltip:AddDoubleLine(TOOLTIP:GetCovenantIcon(i) .. TOOLTIP:GetCovenantName(i), level)
             end
@@ -287,7 +288,7 @@ function M:SetupScript()
     M.Bar:SetScript('OnEnter', M.Bar_OnEnter)
     M.Bar:SetScript('OnLeave', F.HideTooltip)
 
-    hooksecurefunc(StatusTrackingBarManager, 'UpdateBarsShown', function()
+    hooksecurefunc(_G.StatusTrackingBarManager, 'UpdateBarsShown', function()
         M.Bar_Update(M.Bar)
     end)
 end
