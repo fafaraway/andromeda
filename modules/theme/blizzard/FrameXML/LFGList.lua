@@ -282,11 +282,11 @@ table.insert(C.BlizzThemes, function()
     F.Reskin(LFGListInviteDialog.AcknowledgeButton)
 
     local roleIcon = LFGListInviteDialog.RoleIcon
-    roleIcon:SetTexture(C.Assets.Texture.LfgRole)
-    F.CreateBDFrame(roleIcon)
+    roleIcon:SetTexture(C.Assets.Texture.Roles)
+    --F.CreateBDFrame(roleIcon)
 
-    hooksecurefunc('LFGListInviteDialog_Show', function(self, resultID)
-        local role = select(5, C_LFGList.GetApplicationInfo(resultID))
-        self.RoleIcon:SetTexCoord(F.GetRoleTexCoord(role))
-    end)
+    -- hooksecurefunc('LFGListInviteDialog_Show', function(self, resultID)
+    --     local role = select(5, C_LFGList.GetApplicationInfo(resultID))
+    --     self.RoleIcon:SetTexCoord(F.GetRoleTexCoord(role))
+    -- end)
 end)
