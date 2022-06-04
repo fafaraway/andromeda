@@ -56,15 +56,15 @@ local function updateRoleBonus(roleButton)
     if not roleButton.bg then
         return
     end
-    if roleButton.shortageBorder and roleButton.shortageBorder:IsShown() then
-        if roleButton.cover:IsShown() then
-            roleButton.bg:SetBackdropBorderColor(0.5, 0.45, 0.03)
-        else
-            roleButton.bg:SetBackdropBorderColor(1, 0.9, 0.06)
-        end
-    else
-        roleButton.bg:SetBackdropBorderColor(0, 0, 0)
-    end
+    -- if roleButton.shortageBorder and roleButton.shortageBorder:IsShown() then
+    --     if roleButton.cover:IsShown() then
+    --         roleButton.bg:SetBackdropBorderColor(0.5, 0.45, 0.03)
+    --     else
+    --         roleButton.bg:SetBackdropBorderColor(1, 0.9, 0.06)
+    --     end
+    -- else
+    --     roleButton.bg:SetBackdropBorderColor(0, 0, 0)
+    -- end
 end
 
 local function styleRewardRole(roleIcon)
@@ -118,6 +118,14 @@ table.insert(C.BlizzThemes, function()
         2
     )
 
+    _G.LFDQueueFrameRoleButtonTankBackground:SetTexture(C.Assets.Texture.Roles)
+    _G.LFDQueueFrameRoleButtonHealerBackground:SetTexture(C.Assets.Texture.Roles)
+    _G.LFDQueueFrameRoleButtonDPSBackground:SetTexture(C.Assets.Texture.Roles)
+
+    _G.RaidFinderQueueFrameRoleButtonTankBackground:SetTexture(C.Assets.Texture.Roles)
+    _G.RaidFinderQueueFrameRoleButtonHealerBackground:SetTexture(C.Assets.Texture.Roles)
+    _G.RaidFinderQueueFrameRoleButtonDPSBackground:SetTexture(C.Assets.Texture.Roles)
+
     -- LFGFrame
     hooksecurefunc('LFGRewardsFrame_SetItemButton', function(parentFrame, _, index)
         local parentName = parentFrame:GetName()
@@ -140,22 +148,39 @@ table.insert(C.BlizzThemes, function()
     F.ReskinRole(leaderIcon, 'LEADER')
 
     local iconTexture = _G.LFGDungeonReadyDialogRoleIconTexture
-    iconTexture:SetTexture(C.Assets.Texture.LfgRole)
-    local bg = F.CreateBDFrame(iconTexture)
+    iconTexture:SetTexture(C.Assets.Texture.Roles)
+    --local bg = F.CreateBDFrame(iconTexture)
 
     hooksecurefunc('LFGDungeonReadyPopup_Update', function()
         _G.LFGDungeonReadyDialog:SetBackdrop(nil)
         leaderFrame:SetShown(_G.LFGDungeonReadyDialogRoleIconLeaderIcon:IsShown())
 
+        -- if _G.LFGDungeonReadyDialogRoleIcon:IsShown() then
+        --     local role = select(7, GetLFGProposal())
+        --     if not role or role == 'NONE' then
+        --         role = 'DAMAGER'
+        --     end
+        --     iconTexture:SetTexCoord(F.GetRoleTexCoord(role))
+        --     bg:Show()
+        -- else
+        --     bg:Hide()
+        -- end
+
         if _G.LFGDungeonReadyDialogRoleIcon:IsShown() then
-            local role = select(7, GetLFGProposal())
-            if not role or role == 'NONE' then
-                role = 'DAMAGER'
+            local _, _, _, _, _, _, role = GetLFGProposal()
+            if role == 'DAMAGER' then
+                _G.LFGDungeonReadyDialogRoleIconTexture:SetTexCoord(
+                    _G.LFDQueueFrameRoleButtonDPS.background:GetTexCoord()
+                )
+            elseif role == 'TANK' then
+                _G.LFGDungeonReadyDialogRoleIconTexture:SetTexCoord(
+                    _G.LFDQueueFrameRoleButtonTank.background:GetTexCoord()
+                )
+            elseif role == 'HEALER' then
+                _G.LFGDungeonReadyDialogRoleIconTexture:SetTexCoord(
+                    _G.LFDQueueFrameRoleButtonHealer.background:GetTexCoord()
+                )
             end
-            iconTexture:SetTexCoord(F.GetRoleTexCoord(role))
-            bg:Show()
-        else
-            bg:Hide()
         end
     end)
 
@@ -203,7 +228,7 @@ table.insert(C.BlizzThemes, function()
         _G.LFGListApplicationDialog.TankButton,
         _G.LFGDungeonReadyStatusGroupedTank,
     }
-    reskinRoleButton(tanks, 'TANK')
+    --reskinRoleButton(tanks, 'TANK')
 
     local healers = {
         _G.LFDQueueFrameRoleButtonHealer,
@@ -213,7 +238,7 @@ table.insert(C.BlizzThemes, function()
         _G.LFGListApplicationDialog.HealerButton,
         _G.LFGDungeonReadyStatusGroupedHealer,
     }
-    reskinRoleButton(healers, 'HEALER')
+    --reskinRoleButton(healers, 'HEALER')
 
     local dps = {
         _G.LFDQueueFrameRoleButtonDPS,
@@ -223,11 +248,91 @@ table.insert(C.BlizzThemes, function()
         _G.LFGListApplicationDialog.DamagerButton,
         _G.LFGDungeonReadyStatusGroupedDamager,
     }
-    reskinRoleButton(dps, 'DPS')
+    --reskinRoleButton(dps, 'DPS')
 
-    F.ReskinRole(_G.LFDQueueFrameRoleButtonLeader, 'LEADER')
-    F.ReskinRole(_G.RaidFinderQueueFrameRoleButtonLeader, 'LEADER')
+    -- F.ReskinRole(_G.LFDQueueFrameRoleButtonLeader, 'LEADER')
+    -- F.ReskinRole(_G.RaidFinderQueueFrameRoleButtonLeader, 'LEADER')
     F.ReskinRole(_G.LFGDungeonReadyStatusRolelessReady, 'READY')
+
+    _G.LFDQueueFrameRoleButtonLeader.leadIcon = _G.LFDQueueFrameRoleButtonLeader:CreateTexture(nil, 'BACKGROUND')
+    _G.LFDQueueFrameRoleButtonLeader.leadIcon:SetTexture(C.Assets.Texture.Leader)
+    _G.LFDQueueFrameRoleButtonLeader.leadIcon:SetPoint(
+        _G.LFDQueueFrameRoleButtonLeader:GetNormalTexture():GetPoint(),
+        -14,
+        16
+    )
+    _G.LFDQueueFrameRoleButtonLeader.leadIcon:SetSize(80, 80)
+    _G.LFDQueueFrameRoleButtonLeader.leadIcon:SetAlpha(0.6)
+
+    _G.RaidFinderQueueFrameRoleButtonLeader.leadIcon = _G.RaidFinderQueueFrameRoleButtonLeader:CreateTexture(
+        nil,
+        'BACKGROUND'
+    )
+    _G.RaidFinderQueueFrameRoleButtonLeader.leadIcon:SetTexture(C.Assets.Texture.Leader)
+    _G.RaidFinderQueueFrameRoleButtonLeader.leadIcon:SetPoint(
+        _G.RaidFinderQueueFrameRoleButtonLeader:GetNormalTexture():GetPoint(),
+        -14,
+        16
+    )
+    _G.RaidFinderQueueFrameRoleButtonLeader.leadIcon:SetSize(80, 80)
+    _G.RaidFinderQueueFrameRoleButtonLeader.leadIcon:SetAlpha(0.6)
+
+    ----------------------
+    ----------------------
+    local RoleButtons1 = {
+        _G.LFDQueueFrameRoleButtonHealer,
+        _G.LFDQueueFrameRoleButtonDPS,
+        _G.LFDQueueFrameRoleButtonLeader,
+        _G.LFDQueueFrameRoleButtonTank,
+        _G.RaidFinderQueueFrameRoleButtonHealer,
+        _G.RaidFinderQueueFrameRoleButtonDPS,
+        _G.RaidFinderQueueFrameRoleButtonLeader,
+        _G.RaidFinderQueueFrameRoleButtonTank,
+        _G.LFGInvitePopupRoleButtonTank,
+        _G.LFGInvitePopupRoleButtonHealer,
+        _G.LFGInvitePopupRoleButtonDPS,
+        _G.LFGListApplicationDialog.TankButton,
+        _G.LFGListApplicationDialog.HealerButton,
+        _G.LFGListApplicationDialog.DamagerButton,
+        _G.RolePollPopupRoleButtonTank,
+        _G.RolePollPopupRoleButtonHealer,
+        _G.RolePollPopupRoleButtonDPS,
+    }
+
+    for _, roleButton in pairs(RoleButtons1) do
+        roleButton:DisableDrawLayer('ARTWORK')
+        roleButton:DisableDrawLayer('OVERLAY')
+
+        if not roleButton.background then
+            local isLeader = roleButton:GetName() ~= nil and roleButton:GetName():find('Leader') or false
+            if not isLeader then
+                roleButton.background = roleButton:CreateTexture(nil, 'BACKGROUND')
+                roleButton.background:SetSize(80, 80)
+                roleButton.background:SetPoint('CENTER')
+                roleButton.background:SetTexture(C.Assets.Texture.Roles)
+                roleButton.background:SetAlpha(0.65)
+
+                local buttonName = roleButton:GetName() ~= nil and roleButton:GetName() or roleButton.role
+                roleButton.background:SetTexCoord(
+                    GetBackgroundTexCoordsForRole(
+                        (strlower(buttonName):find('tank') and 'TANK')
+                            or (strlower(buttonName):find('healer') and 'HEALER')
+                            or 'DAMAGER'
+                    )
+                )
+            end
+        end
+
+        local checkButton = roleButton.checkButton or roleButton.CheckButton or roleButton.CheckBox
+        if checkButton then
+            checkButton:SetFrameLevel(roleButton:GetFrameLevel() + 2)
+            checkButton:SetPoint('BOTTOMLEFT', -2, -2)
+            checkButton:SetSize(20, 20)
+            F.ReskinCheck(checkButton, true)
+        end
+    end
+    ----------------------
+    ----------------------
 
     hooksecurefunc('SetCheckButtonIsRadio', function(button)
         button:SetNormalTexture('')
@@ -270,12 +375,25 @@ table.insert(C.BlizzThemes, function()
     end
 
     hooksecurefunc('LFGDungeonReadyStatusIndividual_UpdateIcon', function(button)
-        local role = select(2, GetLFGProposalMember(button:GetID()))
-        button.texture:SetTexCoord(F.GetRoleTexCoord(role))
+        -- local role = select(2, GetLFGProposalMember(button:GetID()))
+        -- button.texture:SetTexCoord(F.GetRoleTexCoord(role))
+
+        local _, role = GetLFGProposalMember(button:GetID())
+
+        button.texture:SetTexture(C.Assets.Texture.Roles)
+        button.texture:SetAlpha(0.6)
+
+        if role == 'DAMAGER' then
+            button.texture:SetTexCoord(_G.LFDQueueFrameRoleButtonDPS.background:GetTexCoord())
+        elseif role == 'TANK' then
+            button.texture:SetTexCoord(_G.LFDQueueFrameRoleButtonTank.background:GetTexCoord())
+        elseif role == 'HEALER' then
+            button.texture:SetTexCoord(_G.LFDQueueFrameRoleButtonHealer.background:GetTexCoord())
+        end
     end)
 
     hooksecurefunc('LFGDungeonReadyStatusGrouped_UpdateIcon', function(button, role)
-        button.texture:SetTexCoord(F.GetRoleTexCoord(role))
+        --button.texture:SetTexCoord(F.GetRoleTexCoord(role))
     end)
 
     -- RaidFinder
