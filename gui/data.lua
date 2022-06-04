@@ -76,7 +76,8 @@ function GUI:ImportData()
         profile = LibBase64:Decode(profile)
     end
     local options = { string.split(';', profile) }
-    local title, _, _, class = string.split(':', options[1])
+    -- local title, _, _, class = string.split(':', options[1])
+    local title = string.split(':', options[1])
     if title ~= C.ADDON_NAME .. 'Settings' then
         _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Import failed, due to data exception.'])
         return

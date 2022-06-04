@@ -12,11 +12,12 @@ ignore = {
     '211/C',        -- Unused local variable 'C'
     '211/L',        -- unused local variable 'L'
     '212/self',     -- unused argument 'self'
-    '212/event',     -- unused argument 'event'
+    '212/event',    -- unused argument 'event'
     '213',          -- unused loop variable
     '241',          -- local variable is mutated but never accessed
     '311/i',        -- value assigned to a local variable is unused 'i'
     '412/self',     -- redefining argument 'self'
+    '421',          -- shadowing a local variable
     '423',          -- shadowing definition of loop variable
     '431',          -- shadowing upvalue
     '432',          -- shadowing upvalue argument

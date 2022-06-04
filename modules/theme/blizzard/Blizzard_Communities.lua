@@ -532,8 +532,10 @@ C.Themes['Blizzard_Communities'] = function()
     F.ReskinScroll(_G.CommunitiesGuildLogFrameScrollBar)
     F.StripTextures(_G.CommunitiesGuildLogFrame.Container)
     F.CreateBDFrame(_G.CommunitiesGuildLogFrame.Container, 0.25)
-    local closeButton = select(3, _G.CommunitiesGuildLogFrame:GetChildren())
-    F.Reskin(closeButton)
+    do
+        local closeButton = select(3, _G.CommunitiesGuildLogFrame:GetChildren())
+        F.Reskin(closeButton)
+    end
 
     local bossModel = _G.CommunitiesFrameGuildDetailsFrameNews.BossModel
     F.StripTextures(bossModel)
@@ -541,8 +543,10 @@ C.Themes['Blizzard_Communities'] = function()
     bossModel:SetPoint('LEFT', CommunitiesFrame, 'RIGHT', 40, 0)
     local textFrame = bossModel.TextFrame
     F.StripTextures(textFrame)
-    local bg = F.SetBD(bossModel)
-    bg:SetOutside(bossModel, nil, nil, textFrame)
+    do
+        local bg = F.SetBD(bossModel)
+        bg:SetOutside(bossModel, nil, nil, textFrame)
+    end
 
     -- Recruitment dialog
     do

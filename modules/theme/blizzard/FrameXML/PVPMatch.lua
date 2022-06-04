@@ -49,28 +49,30 @@ table.insert(C.BlizzThemes, function()
     end
 
     -- match results
-    local PVPMatchResults = _G.PVPMatchResults
-    F.SetBD(PVPMatchResults)
-    PVPMatchResults.overlay:Hide()
-    PVPMatchResults:HookScript('OnShow', stripBorders)
-    F.ReskinClose(PVPMatchResults.CloseButton)
-    F.StripTextures(PVPMatchResults.overlay)
+    do
+        local PVPMatchResults = _G.PVPMatchResults
+        F.SetBD(PVPMatchResults)
+        PVPMatchResults.overlay:Hide()
+        PVPMatchResults:HookScript('OnShow', stripBorders)
+        F.ReskinClose(PVPMatchResults.CloseButton)
+        F.StripTextures(PVPMatchResults.overlay)
 
-    local content = PVPMatchResults.content
-    local tabContainer = content.tabContainer
+        local content = PVPMatchResults.content
+        local tabContainer = content.tabContainer
 
-    F.StripTextures(content)
-    local bg = F.CreateBDFrame(content, 0.25)
-    bg:SetPoint('BOTTOMRIGHT', tabContainer.InsetBorderTop, 4, -1)
-    F.StripTextures(content.earningsArt)
-    F.ReskinScroll(content.scrollFrame.scrollBar)
+        F.StripTextures(content)
+        local bg = F.CreateBDFrame(content, 0.25)
+        bg:SetPoint('BOTTOMRIGHT', tabContainer.InsetBorderTop, 4, -1)
+        F.StripTextures(content.earningsArt)
+        F.ReskinScroll(content.scrollFrame.scrollBar)
 
-    F.StripTextures(tabContainer)
-    for i = 1, 3 do
-        F.ReskinTab(tabContainer.tabGroup['tab' .. i])
+        F.StripTextures(tabContainer)
+        for i = 1, 3 do
+            F.ReskinTab(tabContainer.tabGroup['tab' .. i])
+        end
+
+        local buttonContainer = PVPMatchResults.buttonContainer
+        F.Reskin(buttonContainer.leaveButton)
+        F.Reskin(buttonContainer.requeueButton)
     end
-
-    local buttonContainer = PVPMatchResults.buttonContainer
-    F.Reskin(buttonContainer.leaveButton)
-    F.Reskin(buttonContainer.requeueButton)
 end)

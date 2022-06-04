@@ -169,13 +169,13 @@ C.Themes['Blizzard_PVPUI'] = function()
         bu:SetNormalTexture('')
         bu:SetHighlightTexture('')
 
-        local bg = F.CreateBDFrame(bu, 0, true)
-        bg:SetPoint('TOPLEFT', 2, 0)
-        bg:SetPoint('BOTTOMRIGHT', -1, 2)
+        local bubg = F.CreateBDFrame(bu, 0, true)
+        bubg:SetPoint('TOPLEFT', 2, 0)
+        bubg:SetPoint('BOTTOMRIGHT', -1, 2)
 
         bu.SelectedTexture:SetDrawLayer('BACKGROUND')
         bu.SelectedTexture:SetColorTexture(r, g, b, 0.25)
-        bu.SelectedTexture:SetInside(bg)
+        bu.SelectedTexture:SetInside(bubg)
 
         F.ReskinIcon(bu.Icon)
         bu.Icon:SetPoint('TOPLEFT', 5, -3)

@@ -524,12 +524,12 @@ C.Themes['Blizzard_Collections'] = function()
     ItemsCollectionFrame.BGCornerTopLeft:SetAlpha(0)
     ItemsCollectionFrame.BGCornerTopRight:SetAlpha(0)
 
-    local progressBar = WardrobeCollectionFrame.progressBar
-    progressBar:DisableDrawLayer('BACKGROUND')
-    select(2, progressBar:GetRegions()):Hide()
-    progressBar.text:SetPoint('CENTER', 0, 1)
-    progressBar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
-    F.CreateBDFrame(progressBar, 0.25)
+    local warBar = WardrobeCollectionFrame.progressBar
+    warBar:DisableDrawLayer('BACKGROUND')
+    select(2, warBar:GetRegions()):Hide()
+    warBar.text:SetPoint('CENTER', 0, 1)
+    warBar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
+    F.CreateBDFrame(warBar, 0.25)
 
     -- ItemSetsCollection
 

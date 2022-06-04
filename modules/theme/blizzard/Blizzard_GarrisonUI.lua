@@ -638,12 +638,14 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     end)
 
     -- Follower list
-    local followerList = GarrisonLandingPage.FollowerList
-    F.StripTextures(followerList)
-    F.ReskinInput(followerList.SearchBox)
-    F.ReskinScroll(followerList.listScroll.scrollBar)
-    hooksecurefunc(_G.GarrisonLandingPageFollowerList, 'UpdateData', UpdateFollowerList)
-    hooksecurefunc(_G.GarrisonLandingPageFollowerList, 'ShowFollower', UpdateFollowerAbilities)
+    do
+        local followerList = GarrisonLandingPage.FollowerList
+        F.StripTextures(followerList)
+        F.ReskinInput(followerList.SearchBox)
+        F.ReskinScroll(followerList.listScroll.scrollBar)
+        hooksecurefunc(_G.GarrisonLandingPageFollowerList, 'UpdateData', UpdateFollowerList)
+        hooksecurefunc(_G.GarrisonLandingPageFollowerList, 'ShowFollower', UpdateFollowerAbilities)
+    end
 
     -- Ship follower list
     local shipFollowerList = GarrisonLandingPage.ShipFollowerList
@@ -657,9 +659,11 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     hooksecurefunc(followerTab, 'UpdateAutoSpellAbilities', UpdateSpellAbilities)
 
     -- Ship follower tab
-    local followerTab = GarrisonLandingPage.ShipFollowerTab
-    ReskinXPBar(followerTab)
-    ReskinFollowerTab(followerTab)
+    do
+        local followerTab = GarrisonLandingPage.ShipFollowerTab
+        ReskinXPBar(followerTab)
+        ReskinFollowerTab(followerTab)
+    end
 
     -- Mission UI
     local GarrisonMissionFrame = _G.GarrisonMissionFrame
@@ -830,12 +834,14 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     F.ReskinClose(GarrisonRecruitSelectFrame.CloseButton)
 
     -- Follower list
-    local followerList = GarrisonRecruitSelectFrame.FollowerList
-    followerList:DisableDrawLayer('BORDER')
-    F.ReskinScroll(followerList.listScroll.scrollBar)
-    F.ReskinInput(followerList.SearchBox)
-    hooksecurefunc(followerList, 'UpdateData', UpdateFollowerList)
-    hooksecurefunc(followerList, 'ShowFollower', UpdateFollowerAbilities)
+    do
+        local followerList = GarrisonRecruitSelectFrame.FollowerList
+        followerList:DisableDrawLayer('BORDER')
+        F.ReskinScroll(followerList.listScroll.scrollBar)
+        F.ReskinInput(followerList.SearchBox)
+        hooksecurefunc(followerList, 'UpdateData', UpdateFollowerList)
+        hooksecurefunc(followerList, 'ShowFollower', UpdateFollowerAbilities)
+    end
 
     -- Follower selection
     local FollowerSelection = GarrisonRecruitSelectFrame.FollowerSelection

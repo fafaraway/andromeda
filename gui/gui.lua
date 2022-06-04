@@ -362,10 +362,10 @@ local function CreateOption(i)
             dd.button.__owner = dd
             dd.button:HookScript('OnClick', updateDropdownSelection)
 
-            for i = 1, #data do
-                dd.options[i]:HookScript('OnClick', updateDropdownClick)
+            for j = 1, #data do
+                dd.options[j]:HookScript('OnClick', updateDropdownClick)
                 if value == 'TextureStyle' then
-                    AddTextureToOption(dd.options, i) -- texture preview
+                    AddTextureToOption(dd.options, j) -- texture preview
                 end
             end
 

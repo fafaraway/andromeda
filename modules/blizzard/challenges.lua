@@ -188,13 +188,13 @@ function ECF:KeystoneInfo_Create()
         _G.GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
         _G.GameTooltip:AddLine(L['Account Keystones'])
         for name, info in pairs(_G.FREE_ADB.KeystoneInfo) do
-            local name = Ambiguate(name, 'none')
+            local newName = Ambiguate(name, 'none')
             local mapID, level, class, faction = string.split(':', info)
             local color = F:RgbToHex(F:ClassColor(class))
             local factionColor = faction == 'Horde' and '|cffff5040' or '|cff00adf0'
             local dungeon = C_ChallengeMode.GetMapUIInfo(tonumber(mapID))
             _G.GameTooltip:AddDoubleLine(
-                string.format(color .. '%s:|r', name),
+                string.format(color .. '%s:|r', newName),
                 string.format('%s%s(%s)|r', factionColor, dungeon, level)
             )
         end

@@ -44,9 +44,9 @@ function THEME:LoadAddOnSkins()
             C.Themes[addonName] = nil
         end
 
-        local func = C.AddonThemes[addonName]
-        if func then
-            func()
+        local nfunc = C.AddonThemes[addonName]
+        if nfunc then
+            nfunc()
             C.AddonThemes[addonName] = nil
         end
     end)
