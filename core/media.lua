@@ -173,30 +173,20 @@ do
         LOCALE_MASK = 128
     end
 
-    local prefix = string.format('|cffa763ea%s: ', C.ADDON_NAME)
-    function F:RegisterSharedMedia(type, name)
-        if type == 'font' then
-            LSM:Register(LSM.MediaType.FONT, prefix, C.Assets.Font[name], LOCALE_MASK)
-        elseif type == 'statusbar' then
-            LSM:Register(LSM.MediaType.STATUSBAR, prefix, C.Assets.Statusbar[name])
-        elseif type == 'sound' then
-            LSM:Register(LSM.MediaType.SOUND, prefix, C.Assets.Sound[name])
-        end
-    end
-
     local function registerSharedMedia()
-        for k, _ in pairs(C.Assets.Font) do
-            F:RegisterSharedMedia('font', k)
+        local prefix = string.format('|cff5da5e6%s:|r ', C.ADDON_NAME)
+
+        for k, v in pairs(C.Assets.Font) do
+            LSM:Register(LSM.MediaType.FONT, prefix .. k, v, LOCALE_MASK)
         end
 
-        for k, _ in pairs(C.Assets.Statusbar) do
-            F:RegisterSharedMedia('statusbar', k)
+        for k, v in pairs(C.Assets.Statusbar) do
+            LSM:Register(LSM.MediaType.STATUSBAR, prefix .. k, v)
         end
 
-        for k, _ in pairs(C.Assets.Sound) do
-            F:RegisterSharedMedia('sound', k)
+        for k, v in pairs(C.Assets.Sound) do
+            LSM:Register(LSM.MediaType.SOUND, prefix .. k, v)
         end
-
         F:UnregisterEvent('ADDON_LOADED', registerSharedMedia)
     end
 
