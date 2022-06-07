@@ -313,6 +313,10 @@ function TOOLTIP:GetUnitSpec(unit)
         end
     end
 
+    if specName == '' then
+        specName = _G.NONE
+    end
+
     return specName
 end
 
