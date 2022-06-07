@@ -45,9 +45,9 @@ function MAP:RestyleMinimap()
     local diff = 256 - 190
     local halfDiff = math.ceil(diff / 2)
 
-    local holder = CreateFrame('Frame', C.ADDON_NAME .. 'MinimapHolder', UIParent)
+    local holder = CreateFrame('Frame', C.ADDON_NAME .. 'MinimapHolder', _G.UIParent)
     holder:SetSize(256, 190)
-    holder:SetPoint('CENTER', UIParent)
+    holder:SetPoint('CENTER', _G.UIParent)
     holder:SetFrameStrata('BACKGROUND')
     holder:SetScale(C.DB.Map.MinimapScale)
     holder.bg = F.SetBD(holder, 1)
@@ -55,7 +55,7 @@ function MAP:RestyleMinimap()
     holder.bg:SetBackdropBorderColor(0, 0, 0, 1)
     Minimap.Holder = holder
 
-    local pos = { 'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -C.UI_GAP, C.UI_GAP }
+    local pos = { 'BOTTOMRIGHT', _G.UIParent, 'BOTTOMRIGHT', -C.UI_GAP, C.UI_GAP }
     local mover = F.Mover(holder, _G.MINIMAP_LABEL, 'Minimap', pos)
     Minimap.mover = mover
 
@@ -136,7 +136,7 @@ function MAP:CreatePendingInvitation()
     _G.GameTimeCalendarInvitesTexture:SetParent('Minimap')
     _G.GameTimeCalendarInvitesTexture:SetPoint('TOPRIGHT')
 
-    local invt = CreateFrame('Button', nil, UIParent)
+    local invt = CreateFrame('Button', nil, _G.UIParent)
     invt:SetPoint('TOPRIGHT', _G.Minimap, 'TOPLEFT', -6, -6)
     invt:SetSize(300, 80)
     invt:Hide()

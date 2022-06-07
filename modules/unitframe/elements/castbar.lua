@@ -293,7 +293,7 @@ function UNITFRAME:CreateCastBar(self)
             icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
         elseif style == 'focus' then
             castbar:SetSize(focusWidth, focusHeight)
-            CreateCastBarMover(castbar, L['Focus Castbar'], 'FocusCastbar', { 'CENTER', UIParent, 'CENTER', 0, 120 })
+            CreateCastBarMover(castbar, L['Focus Castbar'], 'FocusCastbar', { 'CENTER', _G.UIParent, 'CENTER', 0, 120 })
 
             icon:SetSize(focusHeight + iconAmp, focusHeight + iconAmp)
             icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)

@@ -196,7 +196,7 @@ end)
 function F.GetNPCName(npcID, callback)
     local name = nameCache[npcID]
     if not name then
-        tip:SetOwner(UIParent, 'ANCHOR_NONE')
+        tip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
         tip:SetHyperlink(format('unit:Creature-0-0-0-0-%d', npcID))
         name = _G[C.ADDON_NAME .. 'ScanTooltipTextLeft1']:GetText() or loadingStr
         if name == loadingStr then

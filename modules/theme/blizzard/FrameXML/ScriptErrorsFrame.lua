@@ -7,7 +7,7 @@ table.insert(C.BlizzThemes, function()
 
     local ScriptErrorsFrame = _G.ScriptErrorsFrame
 
-    ScriptErrorsFrame:SetScale(UIParent:GetScale())
+    ScriptErrorsFrame:SetScale(_G.UIParent:GetScale())
     F.StripTextures(ScriptErrorsFrame)
     F.SetBD(ScriptErrorsFrame)
 

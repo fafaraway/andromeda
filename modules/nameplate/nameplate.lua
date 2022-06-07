@@ -590,7 +590,7 @@ function NAMEPLATE:UpdateQuestUnit(_, unit)
     unit = unit or self.unit
 
     local startLooking, questProgress
-    F.ScanTip:SetOwner(UIParent, 'ANCHOR_NONE')
+    F.ScanTip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
     F.ScanTip:SetUnit(unit)
 
     for i = 2, F.ScanTip:NumLines() do
@@ -663,7 +663,7 @@ function NAMEPLATE:UpdateExplosives(event, unit)
         return
     end
 
-    local scale = UIParent:GetScale()
+    local scale = _G.UIParent:GetScale()
     local npcID = self.npcID
     if event == 'NAME_PLATE_UNIT_ADDED' and npcID == explosiveID then
         self:SetScale(scale * 2)
@@ -798,7 +798,7 @@ function NAMEPLATE:CreateNameplateStyle()
 
     self:SetSize(C.DB.Nameplate.Width, C.DB.Nameplate.Height)
     self:SetPoint('CENTER')
-    self:SetScale(UIParent:GetScale())
+    self:SetScale(_G.UIParent:GetScale())
 
     NAMEPLATE:CreateHealthBar(self)
     NAMEPLATE:CreateNameTag(self)

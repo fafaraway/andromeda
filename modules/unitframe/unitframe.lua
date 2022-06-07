@@ -2,15 +2,15 @@ local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('UnitFrame')
 
 UNITFRAME.Positions = {
-    player = { 'CENTER', UIParent, 'CENTER', 0, -180 },
+    player = { 'CENTER', _G.UIParent, 'CENTER', 0, -180 },
     pet = { 'RIGHT', 'oUF_Player', 'LEFT', -6, 0 },
-    target = { 'LEFT', UIParent, 'CENTER', 120, -140 },
+    target = { 'LEFT', _G.UIParent, 'CENTER', 120, -140 },
     tot = { 'LEFT', 'oUF_Target', 'RIGHT', 6, 0 },
-    focus = { 'BOTTOM', UIParent, 'BOTTOM', -240, 220 },
+    focus = { 'BOTTOM', _G.UIParent, 'BOTTOM', -240, 220 },
     tof = { 'TOPLEFT', 'oUF_Focus', 'TOPRIGHT', 6, 0 },
-    boss = { 'CENTER', UIParent, 'CENTER', 500, 0 },
-    arena = { 'CENTER', UIParent, 'CENTER', 500, 0 },
-    party = { 'CENTER', UIParent, 'CENTER', -330, 0 },
+    boss = { 'CENTER', _G.UIParent, 'CENTER', 500, 0 },
+    arena = { 'CENTER', _G.UIParent, 'CENTER', 500, 0 },
+    party = { 'CENTER', _G.UIParent, 'CENTER', -330, 0 },
     raid = { 'TOPRIGHT', 'Minimap', 'TOPLEFT', -6, -42 },
     simple = { 'TOPLEFT', C.UI_GAP, -100 },
 }
@@ -152,7 +152,7 @@ end
 function UNITFRAME:RemoveBlizzRaidFrame()
     -- raid
     CompactRaidFrameManager_SetSetting('IsShown', '0')
-    UIParent:UnregisterEvent('GROUP_ROSTER_UPDATE')
+    _G.UIParent:UnregisterEvent('GROUP_ROSTER_UPDATE')
     _G.CompactRaidFrameManager:UnregisterAllEvents()
     _G.CompactRaidFrameManager:SetParent(F.HiddenFrame)
 
