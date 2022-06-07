@@ -230,30 +230,6 @@ StaticPopupDialogs.FREEUI_DELETE_UNIT_PROFILE = {
     hideOnEscape = false,
 }
 
--- Infobar Gold Statistics
-local crossRealms = GetAutoCompleteRealms()
-if not crossRealms or #crossRealms == 0 then
-    crossRealms = { [1] = C.REALM }
-end
-
-StaticPopupDialogs.FREEUI_RESET_GOLD = {
-    text = C.RED_COLOR .. L['Are you sure to reset All Gold Statistics?'],
-    button1 = _G.YES,
-    button2 = _G.NO,
-    OnAccept = function()
-        for _, realm in pairs(crossRealms) do
-            if _G.FREE_ADB['GoldStatistic'][realm] then
-                table.wipe(_G.FREE_ADB['GoldStatistic'][realm])
-            end
-        end
-
-        _G.FREE_ADB['GoldStatistic'][C.REALM][C.NAME] = { GetMoney(), C.CLASS }
-    end,
-    timeout = 0,
-    whileDead = 1,
-    hideOnEscape = true,
-}
-
 -- Inventory Custom Junk List
 StaticPopupDialogs.FREEUI_RESET_JUNK_LIST = {
     text = C.RED_COLOR .. L['Are you sure to reset Junk Items List?'],
