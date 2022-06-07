@@ -6,8 +6,8 @@ local pvpIconTexture = C_CurrencyInfo.GetCurrencyInfo(104).iconFileID
 
 local menuList = {
     { text = _G.CHOOSE_SPECIALIZATION, isTitle = true, notCheckable = true },
-    { text = _G.SPECIALIZATION, hasArrow = true, notCheckable = true },
-    { text = _G.SELECT_LOOT_SPECIALIZATION, hasArrow = true, notCheckable = true },
+    {text = _G.SPECIALIZATION, hasArrow = true, notCheckable = true, menuList = {}},
+    {text = _G.SELECT_LOOT_SPECIALIZATION, hasArrow = true, notCheckable = true, menuList = {}},
 }
 
 local function AddIcon(texture)
@@ -15,16 +15,39 @@ local function AddIcon(texture)
     return texture
 end
 
-local function ClickFunc(i, isLoot)
-    if not i then
+local function SelectSpec(_, specIndex)
+    if GetSpecialization() == specIndex then
         return
     end
-    if isLoot then
-        SetLootSpecialization(i)
-    else
-        SetSpecialization(i)
-    end
+    SetSpecialization(specIndex)
     _G.DropDownList1:Hide()
+end
+
+local function CheckSpec(self)
+    return GetSpecialization() == self.arg1
+end
+
+local function SelectLootSpec(_, index)
+    SetLootSpecialization(index)
+    _G.DropDownList1:Hide()
+end
+
+local function CheckLootSpec(self)
+    return GetLootSpecialization() == self.arg1
+end
+
+local function BuildSpecMenu()
+    local specList = menuList[2].menuList
+    local lootList = menuList[3].menuList
+    lootList[1] = { text = '', arg1 = 0, func = SelectLootSpec, checked = CheckLootSpec }
+
+    for i = 1, 4 do
+        local id, name = GetSpecializationInfo(i)
+        if id then
+            specList[i] = { text = name, arg1 = i, func = SelectSpec, checked = CheckSpec }
+            lootList[i + 1] = { text = name, arg1 = id, func = SelectLootSpec, checked = CheckLootSpec }
+        end
+    end
 end
 
 local function Block_OnMouseUp(self, btn)
@@ -36,46 +59,11 @@ local function Block_OnMouseUp(self, btn)
     if btn == 'LeftButton' then
         _G.ToggleTalentFrame(2)
     else
-        menuList[2].menuList = { {}, {}, {}, {} }
-        menuList[3].menuList = { {}, {}, {}, {}, {} }
-        local specList, lootList = menuList[2].menuList, menuList[3].menuList
-        local spec, specName = GetSpecializationInfo(specIndex)
-        local lootSpec = GetLootSpecialization()
-        lootList[1] = {
-            text = string.format(_G.LOOT_SPECIALIZATION_DEFAULT, specName),
-            func = function()
-                ClickFunc(0, true)
-            end,
-            checked = lootSpec == 0 and true or false,
-        }
-
-        for i = 1, 4 do
-            local id, name = GetSpecializationInfo(i)
-            if id then
-                specList[i].text = name
-                if id == spec then
-                    specList[i].func = function()
-                        ClickFunc()
-                    end
-                    specList[i].checked = true
-                else
-                    specList[i].func = function()
-                        ClickFunc(i)
-                    end
-                    specList[i].checked = false
-                end
-                lootList[i + 1] = {
-                    text = name,
-                    func = function()
-                        ClickFunc(id, true)
-                    end,
-                    checked = id == lootSpec and true or false,
-                }
-            else
-                specList[i] = nil
-                lootList[i + 1] = nil
-            end
+        if not menuList[1].created then
+            BuildSpecMenu()
+            menuList[1].created = true
         end
+        menuList[3].menuList[1].text = format(_G.LOOT_SPECIALIZATION_DEFAULT, select(2, GetSpecializationInfo(specIndex)))
 
         EasyMenu(menuList, F.EasyMenu, self, -80, 100, 'MENU', 1)
         _G.GameTooltip:Hide()
