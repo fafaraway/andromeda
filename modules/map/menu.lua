@@ -4,50 +4,85 @@ local MAP = F:GetModule('Map')
 MAP.MenuList = {
     {
         text = _G.CHARACTER_BUTTON,
+        notCheckable = true,
         func = function()
             ToggleCharacter('PaperDollFrame')
         end,
     },
     {
         text = _G.SPELLBOOK_ABILITIES_BUTTON,
+        notCheckable = true,
         func = function()
             ToggleFrame(_G.SpellBookFrame)
         end,
     },
     {
         text = _G.TIMEMANAGER_TITLE,
+        notCheckable = true,
         func = function()
             ToggleFrame(_G.TimeManagerFrame)
         end,
     },
-    { text = _G.CHAT_CHANNELS, func = ToggleChannelFrame },
-    { text = _G.SOCIAL_BUTTON, func = ToggleFriendsFrame },
-    { text = _G.TALENTS_BUTTON, func = ToggleTalentFrame },
-    { text = _G.GUILD, func = ToggleGuildFrame },
-    { text = _G.LFG_TITLE, func = ToggleLFDParentFrame },
+    {
+        text = _G.CHAT_CHANNELS,
+        notCheckable = true,
+        func = ToggleChannelFrame
+    },
+    {
+        text = _G.SOCIAL_BUTTON,
+        notCheckable = true,
+        func = ToggleFriendsFrame
+    },
+    {
+        text = _G.TALENTS_BUTTON,
+        notCheckable = true,
+        func = ToggleTalentFrame
+    },
+    {
+        text = _G.GUILD,
+        notCheckable = true,
+        func = ToggleGuildFrame
+    },
+    {
+        text = _G.LFG_TITLE,
+        notCheckable = true,
+        func = ToggleLFDParentFrame
+    },
 
-    { text = _G.COLLECTIONS, func = ToggleCollectionsJournal },
-    { text = _G.ACHIEVEMENT_BUTTON, func = ToggleAchievementFrame },
+    {
+        text = _G.COLLECTIONS,
+        notCheckable = true,
+        func = ToggleCollectionsJournal
+    },
+    {
+        text = _G.ACHIEVEMENT_BUTTON,
+        notCheckable = true,
+        func = ToggleAchievementFrame
+    },
     {
         text = L['Calendar'],
+        notCheckable = true,
         func = function()
             _G.GameTimeFrame:Click()
         end,
     },
     {
         text = _G.BLIZZARD_STORE,
+        notCheckable = true,
         func = function()
             _G.StoreMicroButton:Click()
         end,
     },
     {
         text = _G.GARRISON_TYPE_8_0_LANDING_PAGE_TITLE,
+        notCheckable = true,
         func = function()
             GarrisonLandingPageMinimapButton_OnClick(_G.GarrisonLandingPageMinimapButton)
         end,
     },
     {
         text = _G.ENCOUNTER_JOURNAL,
+        notCheckable = true,
         func = function()
             if not IsAddOnLoaded('Blizzard_EncounterJournal') then
                 UIParentLoadAddOn('Blizzard_EncounterJournal')
@@ -57,6 +92,7 @@ MAP.MenuList = {
     },
     {
         text = _G.MAINMENU_BUTTON,
+        notCheckable = true,
         func = function()
             if not _G.GameMenuFrame:IsShown() then
                 if _G.VideoOptionsFrame:IsShown() then
@@ -80,6 +116,7 @@ MAP.MenuList = {
     },
     {
         text = _G.HELP_BUTTON,
+        notCheckable = true,
         bottom = true,
         func = ToggleHelpFrame,
     },
