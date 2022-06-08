@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 local THEME = F:GetModule('Theme')
 
-local function UpdateIconBgAlpha(icon, alpha)
+local function UpdateIconBgAlpha(icon, _, _, _, alpha)
     icon.bg:SetAlpha(alpha)
     if icon.bg.__shadow then
         icon.bg.__shadow:SetAlpha(alpha)
@@ -39,7 +39,7 @@ local function RestyleIcon(icon)
     icon.bg = F.SetBD(icon, 0)
     icon.bg:SetBackdropBorderColor(0, 0, 0)
     icon.bg:SetFrameLevel(0)
-    hooksecurefunc(icon, 'SetAlpha', UpdateIconBgAlpha)
+    hooksecurefunc(icon, 'SetVertexColor', UpdateIconBgAlpha)
 end
 
 local function RestyleBar(f)
