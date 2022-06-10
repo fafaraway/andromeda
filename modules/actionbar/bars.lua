@@ -363,7 +363,7 @@ function BAR:CreatePetBar()
     local buttonList = {}
 
     local frame = CreateFrame('Frame', C.ADDON_NAME .. 'ActionBarPet', _G.UIParent, 'SecureHandlerStateTemplate')
-    frame.mover = F.Mover(frame, L['Pet Actionbar'], 'PetBar', { 'BOTTOM', _G[C.ADDON_NAME .. 'ActionBar2'], 'TOP', 0, BAR.margin })
+    frame.mover = F.Mover(frame, L['PetBar'], 'PetBar', { 'BOTTOM', _G[C.ADDON_NAME .. 'ActionBar2'], 'TOP', 0, BAR.margin })
     BAR.movers[7] = frame.mover
 
     _G.PetActionBarFrame:SetParent(frame)
@@ -488,7 +488,7 @@ function BAR:CreateExtraBar()
     local frame = CreateFrame('Frame', C.ADDON_NAME .. 'ActionBarExtra', _G.UIParent, 'SecureHandlerStateTemplate')
     frame:SetWidth(size + 2 * BAR.padding)
     frame:SetHeight(size + 2 * BAR.padding)
-    frame.mover = F.Mover(frame, L['Extrabar'], 'Extrabar', { 'CENTER', _G.UIParent, 'CENTER', 0, 300 })
+    frame.mover = F.Mover(frame, L['ExtraButton'], 'ExtraButton', { 'CENTER', _G.UIParent, 'CENTER', 0, 300 })
 
     _G.ExtraActionBarFrame:EnableMouse(false)
     _G.ExtraAbilityContainer:SetParent(frame)
@@ -508,7 +508,7 @@ function BAR:CreateExtraBar()
     local zoneFrame = CreateFrame('Frame', C.ADDON_NAME .. 'ActionBarZone', _G.UIParent)
     zoneFrame:SetWidth(size + 2 * BAR.padding)
     zoneFrame:SetHeight(size + 2 * BAR.padding)
-    zoneFrame.mover = F.Mover(zoneFrame, L['Zone Ability'], 'ZoneAbility', { 'CENTER', _G.UIParent, 'CENTER', 0, 250 })
+    zoneFrame.mover = F.Mover(zoneFrame, L['ZoneAbilityButton'], 'ZoneAbilityButton', { 'CENTER', _G.UIParent, 'CENTER', 0, 250 })
 
     _G.ZoneAbilityFrame:SetParent(zoneFrame)
     _G.ZoneAbilityFrame:ClearAllPoints()
@@ -559,7 +559,7 @@ function BAR:CreateLeaveVehicleBar()
     local buttonList = {}
 
     local frame = CreateFrame('Frame', C.ADDON_NAME .. 'ActionBarExit', _G.UIParent, 'SecureHandlerStateTemplate')
-    frame.mover = F.Mover(frame, L['LeaveVehicle'], 'LeaveVehicle', { 'CENTER', _G.UIParent, 'CENTER', 0, 200 })
+    frame.mover = F.Mover(frame, L['LeaveVehicleButton'], 'LeaveVehicleButton', { 'CENTER', _G.UIParent, 'CENTER', 0, 200 })
 
     local button = CreateFrame(
         'CheckButton',

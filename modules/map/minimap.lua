@@ -122,9 +122,9 @@ function MAP:CreateMailButton()
     local icon = _G.MiniMapMailIcon
 
     mail:ClearAllPoints()
-    mail:SetPoint('BOTTOM', _G.Minimap, 0, _G.Minimap.halfDiff)
+    mail:SetPoint('BOTTOM', _G.Minimap, 'BOTTOM', 0, _G.Minimap.halfDiff - 10)
     icon:SetTexture(C.Assets.Texture.Mail)
-    icon:SetSize(21, 21)
+    icon:SetSize(16, 16)
     icon:SetVertexColor(1, 0.8, 0)
 end
 
@@ -345,7 +345,7 @@ function MAP:WhoPings()
             return
         end -- ignore player ping
 
-        local r, g, b = F:ClassColor(C.CLASS)
+        local r, g, b = F:ClassColor(C.MY_CLASS)
         local name = GetUnitName(unit)
 
         anim:Stop()

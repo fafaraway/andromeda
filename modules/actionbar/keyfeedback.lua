@@ -98,7 +98,7 @@ function keyFeedback:PLAYER_LOGIN()
 
     local mover = F.Mover(
         self,
-        L['Spell Feedback'],
+        L['SpellFeedback'],
         'SpellFeedback',
         { 'CENTER', _G.UIParent, 0, -300 },
         settings.mirrorSize,

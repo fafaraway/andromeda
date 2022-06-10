@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local MM = F:RegisterModule('MicroMenu')
+local MM = F:RegisterModule('GameMenu')
 
 local buttonList = {}
 local texPath = 'Interface\\AddOns\\' .. C.ADDON_NAME .. '\\assets\\textures\\menu\\'
@@ -108,7 +108,7 @@ local buttonsList = {
 local function CreateButtonTexture(icon, texture)
     icon:SetAllPoints()
     icon:SetTexture(texture)
-    if C.DB.General.MicroMenuClassColor then
+    if C.DB.General.GameMenuClassColor then
         icon:SetVertexColor(C.r, C.g, C.b)
     else
         icon:SetVertexColor(1, 1, 1)
@@ -116,11 +116,11 @@ local function CreateButtonTexture(icon, texture)
 end
 
 local function OnEnter(self)
-    F:UIFrameFadeIn(self, C.DB.General.MicroMenuSmooth, self:GetAlpha(), C.DB.General.MicroMenuButtonInAlpha)
+    F:UIFrameFadeIn(self, C.DB.General.GameMenuSmooth, self:GetAlpha(), C.DB.General.GameMenuButtonInAlpha)
 end
 
 local function OnLeave(self)
-    F:UIFrameFadeOut(self, C.DB.General.MicroMenuSmooth, self:GetAlpha(), C.DB.General.MicroMenuButtonOutAlpha)
+    F:UIFrameFadeOut(self, C.DB.General.GameMenuSmooth, self:GetAlpha(), C.DB.General.GameMenuButtonOutAlpha)
 end
 
 local function OnClick(self)
@@ -132,8 +132,8 @@ function MM:Constructor(bar, data)
 
     local bu = CreateFrame('Button', nil, bar)
     table.insert(buttonList, bu)
-    bu:SetSize(C.DB.General.MicroMenuButtonSize, C.DB.General.MicroMenuButtonSize)
-    bu:SetAlpha(C.DB.General.MicroMenuButtonOutAlpha)
+    bu:SetSize(C.DB.General.GameMenuButtonSize, C.DB.General.GameMenuButtonSize)
+    bu:SetAlpha(C.DB.General.GameMenuButtonOutAlpha)
     bu.icon = bu:CreateTexture(nil, 'ARTWORK')
 
     bu.tip = tip
@@ -150,27 +150,27 @@ function MM:Constructor(bar, data)
 end
 
 function MM:OnLogin()
-    if not C.DB.General.MicroMenu then
+    if not C.DB.General.GameMenu then
         return
     end
 
-    local buSize = C.DB.General.MicroMenuButtonSize
-    local buGap = C.DB.General.MicroMenuButtonGap
+    local buSize = C.DB.General.GameMenuButtonSize
+    local buGap = C.DB.General.GameMenuButtonGap
     local buNum = #buttonsList
 
     local barWidth = (buSize * buNum) + (buGap * (buNum - 1))
-    local bar = CreateFrame('Frame', C.ADDON_NAME .. 'MicroMenu', _G.UIParent)
-    bar:SetSize(barWidth, C.DB.General.MicroMenuBarHeight)
+    local bar = CreateFrame('Frame', C.ADDON_NAME .. 'GameMenu', _G.UIParent)
+    bar:SetSize(barWidth, C.DB.General.GameMenuBarHeight)
 
     local glow = bar:CreateTexture(nil, 'BACKGROUND')
     glow:SetPoint('BOTTOMLEFT', bar, 'BOTTOMLEFT', -30, 0)
     glow:SetPoint('BOTTOMRIGHT', bar, 'BOTTOMRIGHT', 30, 0)
-    glow:SetHeight(C.DB.General.MicroMenuButtonSize * 2)
+    glow:SetHeight(C.DB.General.GameMenuButtonSize * 2)
     glow:SetTexture(C.Assets.Texture.Glow)
-    if C.DB.General.MicroMenuClassColor then
-        glow:SetVertexColor(C.r, C.g, C.b, C.DB.General.MicroMenuBackdropAlpha)
+    if C.DB.General.GameMenuClassColor then
+        glow:SetVertexColor(C.r, C.g, C.b, C.DB.General.GameMenuBackdropAlpha)
     else
-        glow:SetVertexColor(1, 1, 1, C.DB.General.MicroMenuBackdropAlpha)
+        glow:SetVertexColor(1, 1, 1, C.DB.General.GameMenuBackdropAlpha)
     end
 
     for _, info in pairs(buttonsList) do
@@ -181,9 +181,9 @@ function MM:OnLogin()
         if i == 1 then
             buttonList[i]:SetPoint('LEFT')
         else
-            buttonList[i]:SetPoint('LEFT', buttonList[i - 1], 'RIGHT', C.DB.General.MicroMenuButtonGap, 0)
+            buttonList[i]:SetPoint('LEFT', buttonList[i - 1], 'RIGHT', C.DB.General.GameMenuButtonGap, 0)
         end
     end
 
-    F.Mover(bar, L['Micro Menu'], 'MicroMenu', { 'BOTTOM' })
+    F.Mover(bar, L['GameMenu'], 'GameMenu', { 'BOTTOM' })
 end

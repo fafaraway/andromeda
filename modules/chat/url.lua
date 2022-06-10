@@ -122,7 +122,7 @@ function CHAT.SetItemRefHook(link, _, button)
 
             if fullname and string.len(fullname) > 0 then
                 local name, server = string.split('-', fullname)
-                if server and server ~= C.REALM then
+                if server and server ~= C.MY_REALM then
                     name = fullname
                 end
 

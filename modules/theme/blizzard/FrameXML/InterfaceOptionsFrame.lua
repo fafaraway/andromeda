@@ -67,7 +67,7 @@ tinsert(C.BlizzThemes, function()
                     end
                 end
             else
-                if C.DEV_MODE then
+                if C.IS_DEVELOPER then
                     print(name, 'not found.')
                 end
             end

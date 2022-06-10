@@ -78,7 +78,7 @@ function NAMEPLATE:UpdateNameplateCVars()
 
     NAMEPLATE:UpdateNameOnlyMode()
 
-    if C.DEV_MODE then
+    if C.IS_DEVELOPER then
         SetCVar('nameplateShowSelf', 0)
         SetCVar('NameplatePersonalShowAlways', 0)
         SetCVar('nameplateSelfAlpha', 0)
@@ -602,7 +602,7 @@ function NAMEPLATE:UpdateQuestUnit(_, unit)
         end
 
         if text ~= ' ' then
-            if isInGroup and text == C.NAME or (not isInGroup and isQuestTitle(textLine)) then
+            if isInGroup and text == C.MY_NAME or (not isInGroup and isQuestTitle(textLine)) then
                 startLooking = true
             elseif startLooking then
                 local current, goal = string.match(text, '(%d+)/(%d+)')
@@ -721,7 +721,7 @@ function NAMEPLATE:CheckMajorSpells()
                 _G.FREE_ADB['NPMajorSpells'][spellID] = nil
             end
         else
-            F:Debug('Major Spell', 'Invalid Spell ID ' .. spellID)
+            F:Debug('CheckMajorSpells: Invalid Spell ID ' .. spellID)
         end
     end
 
@@ -1045,7 +1045,7 @@ local function CheckNameplateAuraFilter(index)
                     _G.FREE_ADB['NameplateAuraFilterList'][index][spellID] = nil
                 end
             else
-                if C.DEV_MODE then
+                if C.IS_DEVELOPER then
                     F:Print('Invalid nameplate filter ID: ' .. spellID)
                 end
             end

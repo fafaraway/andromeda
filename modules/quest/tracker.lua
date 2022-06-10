@@ -4,7 +4,7 @@ local EOT = F:RegisterModule('EnhancedObjectiveTracker')
 function EOT:ObjectiveTrackerMover()
     local frame = CreateFrame('Frame', 'ObjectiveTrackerMover', _G.UIParent)
     frame:SetSize(240, 50)
-    F.Mover(frame, L['Objective Tracker'], 'QuestTracker', { 'TOPRIGHT', _G.UIParent, 'TOPRIGHT', -C.UI_GAP, -60 })
+    F.Mover(frame, L['ObjectiveTracker'], 'ObjectiveTracker', { 'TOPRIGHT', _G.UIParent, 'TOPRIGHT', -C.UI_GAP, -60 })
 
     local tracker = _G.ObjectiveTrackerFrame
     tracker:ClearAllPoints()

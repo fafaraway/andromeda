@@ -77,7 +77,7 @@ local function UpdateColorTexts(r, g, b, box)
         end
     end
 
-    if C.DEV_MODE then
+    if C.IS_DEVELOPER then
         _G.ColorPPBoxR:SetText(string.format('%.3f', r))
         _G.ColorPPBoxG:SetText(string.format('%.3f', g))
         _G.ColorPPBoxB:SetText(string.format('%.3f', b))
@@ -86,7 +86,7 @@ local function UpdateColorTexts(r, g, b, box)
     -- we want those /255 values
     r, g, b = r * 255, g * 255, b * 255
     _G.ColorPPBoxH:SetText(('%.2x%.2x%.2x'):format(r, g, b))
-    if not C.DEV_MODE then
+    if not C.IS_DEVELOPER then
         _G.ColorPPBoxR:SetText(r)
         _G.ColorPPBoxG:SetText(g)
         _G.ColorPPBoxB:SetText(b)
@@ -348,9 +348,9 @@ function BLIZZARD:EnhancedColorPicker()
             box:SetWidth(64)
             box:SetNumeric(false)
         else
-            box:SetMaxLetters(C.DEV_MODE and 4 or 3)
+            box:SetMaxLetters(C.IS_DEVELOPER and 4 or 3)
             box:SetWidth(44)
-            box:SetNumeric(not C.DEV_MODE)
+            box:SetNumeric(not C.IS_DEVELOPER)
         end
 
         -- label

@@ -253,7 +253,7 @@ local function CreateOption(i)
         local optType, key, value, name, horizon, data, callback, tip = unpack(option)
         if optType == 1 then -- checkbox
             local cb = F.CreateCheckbox(parent, true, nil, true)
-            cb:SetSize(20, 20)
+            cb:SetSize(22, 22)
             cb:SetHitRectInsets(-5, -5, -5, -5)
 
             if horizon then
@@ -377,6 +377,7 @@ local function CreateOption(i)
             end
         elseif optType == 5 then -- colorswatch
             local swatch = F.CreateColorSwatch(parent, name, UpdateValue(key, value))
+            swatch:SetSize(22, 14)
             local width = 25 + (horizon or 0) * 115
             if horizon then
                 swatch:SetPoint('TOPLEFT', width, -offset + 30)

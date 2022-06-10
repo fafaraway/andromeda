@@ -51,7 +51,7 @@ end
 function BLIZZARD:VehicleIndicatorMover()
     local frame = CreateFrame('Frame', C.ADDON_NAME .. 'VehicleIndicatorMover', _G.UIParent)
     frame:SetSize(100, 100)
-    F.Mover(frame, L['Vehicle Indicator'], 'VehicleIndicator', { 'BOTTOMRIGHT', _G.Minimap, 'TOPRIGHT', 0, 0 })
+    F.Mover(frame, L['VehicleIndicator'], 'VehicleIndicator', { 'BOTTOMRIGHT', _G.Minimap, 'TOPRIGHT', 0, 0 })
 
     hooksecurefunc(_G.VehicleSeatIndicator, 'SetPoint', function(self, _, parent)
         if parent == 'MinimapCluster' or parent == _G.MinimapCluster then
@@ -67,8 +67,8 @@ function BLIZZARD:DurabilityFrameMover()
     frame:SetSize(100, 100)
     F.Mover(
         frame,
-        L['Durability Indicator'],
-        'DurabilityFrame',
+        L['DurabilityIndicator'],
+        'DurabilityIndicator',
         { 'TOPRIGHT', _G.ObjectiveTrackerFrame, 'TOPLEFT', -10, 0 }
     )
 

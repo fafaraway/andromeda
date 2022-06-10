@@ -64,7 +64,7 @@ function ANNOUNCEMENT:OnEvent()
 
     if eventType == 'SPELL_MISSED' and C.DB.Announcement.Reflect then
         local id, _, _, missType = select(12, CombatLogGetCurrentEventInfo())
-        if missType == 'REFLECT' and destName == C.NAME then
+        if missType == 'REFLECT' and destName == C.MY_NAME then
             SendChatMessage(
                 string.format(_G.COMBAT_TEXT_REFLECT .. ' %s %s', arrowStr, GetSpellLink(id)),
                 GetChannel()
@@ -72,7 +72,7 @@ function ANNOUNCEMENT:OnEvent()
         end
     end
 
-    if srcName ~= C.NAME and not C:IsMyPet(srcFlags) then
+    if srcName ~= C.MY_NAME and not C:IsMyPet(srcFlags) then
         return
     end
 
@@ -125,7 +125,7 @@ function ANNOUNCEMENT:CheckAnnounceableSpells()
                 _G.FREE_ADB['AnnounceableSpellsList'][spellID] = nil
             end
         else
-            F:Debug('Announcement', 'Invalid Spell ID ' .. spellID)
+            F:Debug('CheckAnnounceableSpells: Invalid Spell ID ' .. spellID)
         end
     end
 

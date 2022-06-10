@@ -32,10 +32,10 @@ local function Button_OnEnter(self)
     if not self.index then
         return
     end
-    GameTooltip:SetOwner(self, 'ANCHOR_BOTTOMRIGHT')
-    GameTooltip:ClearLines()
-    GameTooltip:SetUnitAura(self.__owner.unit, self.index, self.filter)
-    GameTooltip:Show()
+    _G.GameTooltip:SetOwner(self, 'ANCHOR_BOTTOMRIGHT')
+    _G.GameTooltip:ClearLines()
+    _G.GameTooltip:SetUnitAura(self.__owner.unit, self.index, self.filter)
+    _G.GameTooltip:Show()
 end
 
 function UNITFRAME:CreateDebuffWatcher(self)
@@ -94,7 +94,7 @@ local instanceDebuffs = {}
 function UNITFRAME:RegisterInstanceDebuff(_, instID, _, spellID, level)
     local instName = EJ_GetInstanceInfo(instID)
     if not instName then
-        if C.DEV_MODE then
+        if C.IS_DEVELOPER then
             print('Invalid instance ID: ' .. instID)
         end
         return

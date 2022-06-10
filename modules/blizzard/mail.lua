@@ -151,10 +151,10 @@ function M:ContactList_Refresh()
         contactListByRealm[realm][name] = color
     end
 
-    GenerateDataByRealm(C.REALM)
+    GenerateDataByRealm(C.MY_REALM)
 
     for realm in pairs(contactListByRealm) do
-        if realm ~= C.REALM then
+        if realm ~= C.MY_REALM then
             GenerateDataByRealm(realm)
         end
     end
@@ -247,7 +247,7 @@ function M:MailBox_ContactList()
             return
         end -- incorrect input
         if not string.find(text, '-') then
-            text = text .. '-' .. C.REALM
+            text = text .. '-' .. C.MY_REALM
         end -- complete player realm name
         if _G.FREE_ADB['ContactList'][text] then
             return

@@ -83,7 +83,7 @@ local buttonInfo = {
 }
 
 local chatSwitchInfo = {
-    text = L["Press Tab key to switch available channels, it's a bit silly to click on bars all the time."],
+    text = L["Press TAB key to switch available channels, it's a bit silly to click on bars all the time."],
     buttonStyle = _G.HelpTip.ButtonStyle.GotIt,
     targetPoint = _G.HelpTip.Point.TopEdgeCenter,
     offsetY = 50,

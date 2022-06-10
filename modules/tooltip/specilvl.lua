@@ -142,13 +142,13 @@ end
 F:RegisterEvent('UNIT_INVENTORY_CHANGED', TOOLTIP.GetInspectInfo)
 
 function TOOLTIP:SetupSpecLevel(spec, level)
-    local _, unit = GameTooltip:GetUnit()
+    local _, unit = _G.GameTooltip:GetUnit()
     if not unit or UnitGUID(unit) ~= currentGUID then
         return
     end
 
     local specLine, levelLine
-    for i = 2, GameTooltip:NumLines() do
+    for i = 2, _G.GameTooltip:NumLines() do
         local line = _G['GameTooltipTextLeft' .. i]
         local text = line:GetText()
         if text and string.find(text, specPrefix) then
@@ -165,14 +165,14 @@ function TOOLTIP:SetupSpecLevel(spec, level)
     if specLine then
         specLine:SetText(hexColor .. spec)
     else
-        GameTooltip:AddLine(hexColor .. spec)
+        _G.GameTooltip:AddLine(hexColor .. spec)
     end
 
     level = levelPrefix .. (level or isPending)
     if levelLine then
         levelLine:SetText(level)
     else
-        GameTooltip:AddLine(level)
+        _G.GameTooltip:AddLine(level)
     end
 end
 

@@ -1,5 +1,15 @@
 local F, C = unpack(select(2, ...))
 
+C.Themes['Blizzard_NewPlayerExperience'] = function()
+    F.Reskin(_G.KeyboardMouseConfirmButton)
+
+    _G.NPE_TutorialWalk_Frame.ContainerFrame.TURNLEFT.KeyBind:SetTextColor(1, 0.8, 0)
+    _G.NPE_TutorialWalk_Frame.ContainerFrame.TURNRIGHT.KeyBind:SetTextColor(1, 0.8, 0)
+    _G.NPE_TutorialWalk_Frame.ContainerFrame.MOVEFORWARD.KeyBind:SetTextColor(1, 0.8, 0)
+    _G.NPE_TutorialWalk_Frame.ContainerFrame.MOVEBACKWARD.KeyBind:SetTextColor(1, 0.8, 0)
+    _G.NPE_TutorialSingleKey_Frame.ContainerFrame.KeyBind.KeyBind:SetTextColor(1, 0.8, 0)
+end
+
 C.Themes['Blizzard_NewPlayerExperienceGuide'] = function()
     local GuideFrame = _G.GuideFrame
 

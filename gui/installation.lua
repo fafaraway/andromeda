@@ -7,7 +7,7 @@ local function SetupCVars()
     SetCVar('uiscale', '1')
     SetCVar('missingTransmogSourceInItemTooltips', 1)
     SetCVar('movieSubtitle', 1)
-    SetCVar('scriptErrors', C.DEV_MODE and 0 or 1)
+    SetCVar('scriptErrors', C.IS_DEVELOPER and 0 or 1)
     SetCVar('predictedHealth', 1)
 
     -- map
@@ -124,7 +124,7 @@ local function SetupCVars()
     SetCVar('lockActionBars', 1)
     SetCVar('alwaysShowActionBars', 1)
 
-    if C.DEV_MODE then
+    if C.IS_DEVELOPER then
         SetCVar('AutoPushSpellToActionBar', 0)
         SetCVar('cursorsizepreferred', 2)
         SetCVar('worldPreloadNonCritical', 0)
@@ -303,7 +303,7 @@ function INSTALL:HelloWorld()
 
     local step2 = function()
         progressBar:SetValue(200)
-        headerText:SetText(L['UIScale'])
+        headerText:SetText(L['UI Scale'])
         bodyText:SetText(F:StyleAddonName(L['This step will set the appropriate scale for the interface.']))
         progressBarText:SetText('2/6')
 
@@ -344,7 +344,7 @@ function INSTALL:HelloWorld()
     headerText:SetText(L['Hello'])
     bodyText:SetText(
         F:StyleAddonName(
-            L['Welcome to %ADDONNAME%!|n|nYou need to adjust some settings before you start using it.|n|nClick the install button to enter the installation step.']
+            L['Welcome to %ADDONNAME%!|n|nSome settings need to be adjust before you start using it.|n|nClick the install button to enter the installation step.']
         )
     )
 

@@ -5,7 +5,7 @@ local LibBase64 = F.Libs.Base64
 local dataFrame
 
 function GUI:ExportData()
-    local text = C.ADDON_NAME .. 'Settings:' .. C.ADDON_VERSION .. ':' .. C.NAME .. ':' .. C.CLASS
+    local text = C.ADDON_NAME .. 'Settings:' .. C.ADDON_VERSION .. ':' .. C.MY_NAME .. ':' .. C.MY_CLASS
     for KEY, VALUE in pairs(C.DB) do
         if type(VALUE) == 'table' then
             for key, value in pairs(VALUE) do

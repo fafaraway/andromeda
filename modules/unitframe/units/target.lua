@@ -24,5 +24,5 @@ function UNITFRAME:SpawnTarget()
     oUF:SetActiveStyle('Target')
 
     local target = oUF:Spawn('target', 'oUF_Target')
-    F.Mover(target, L['Target Frame'], 'TargetFrame', UNITFRAME.Positions.target, target:GetWidth(), target:GetHeight())
+    F.Mover(target, L['TargetFrame'], 'TargetFrame', UNITFRAME.Positions.target, target:GetWidth(), target:GetHeight())
 end

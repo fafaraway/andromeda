@@ -12,10 +12,12 @@ do
     _G.BINDING_NAME_FREEUI_TOGGLE_GUI = 'GUI'
 end
 
-local addOnName, engine = ...
+local addonName, engine = ...
 local aceAddon, aceAddonMinor = _G.LibStub('AceAddon-3.0')
 
-engine[1] = aceAddon:NewAddon(addOnName, 'AceTimer-3.0')
+engine.version = '@project-version@'
+
+engine[1] = aceAddon:NewAddon(addonName, 'AceTimer-3.0')
 engine[2] = {}
 engine[3] = {}
 
@@ -23,17 +25,21 @@ _G.FREE_ADB = {} -- Account variables
 _G.FREE_PDB = {}
 _G.FREE_DB = {} -- Character variables
 
-_G[addOnName] = engine -- Allow other addon access
+_G[addonName] = engine -- Allow other addon access
+
 
 local F, C = engine[1], engine[2]
 
-local addonVersion = '@project-version@'
-if (addonVersion:find('project%-version')) then
-    addonVersion = 'Development'
+do
+    if strfind(engine.version, 'project%-version') then
+        engine.version = 'development'
+    end
 end
-C.ADDON_VERSION = addonVersion
-C.DEV_MODE = C.ADDON_VERSION == 'Development'
-C.ADDON_NAME = tostring(addOnName)
+
+C.ADDON_NAME = tostring(addonName)
+C.ADDON_VERSION = engine.version
+C.IS_DEVELOPER = C.ADDON_VERSION == 'development'
+
 
 -- Libraries
 do
@@ -116,7 +122,8 @@ end
 local modules, initQueue = {}, {}
 function F:RegisterModule(name)
     if modules[name] then
-        F:Debug(name, 'has been registered.')
+        local L = engine[3]
+        F:Debug(string.format(L["module '%s' has been registered."], name))
 
         return
     end
@@ -132,7 +139,8 @@ end
 
 function F:GetModule(name)
     if not modules[name] then
-        F:Debug(name, 'dose not exist.')
+        local L = engine[3]
+        F:Debug(string.format(L["module '%s' does not exist."], name))
 
         return
     end
@@ -144,22 +152,20 @@ F:RegisterEvent('PLAYER_LOGIN', function()
     if C.DB.InstallationComplete then
         F:SetupUIScale()
         F:RegisterEvent('UI_SCALE_CHANGED', F.UpdatePixelScale)
-
-        _G.Display_UseUIScale:Kill()
-        _G.Display_UIScaleSlider:Kill()
     else
         F:SetupUIScale(true)
     end
 
+    local L = engine[3]
     for _, module in next, initQueue do
         if module.OnLogin then
             module:OnLogin()
         else
-            F:Debug(module.name, 'does not loaded.')
+            F:Debug(string.format(L["module '%s' does not loaded."], module.name))
         end
     end
 
     F.Modules = modules
 
-    F:Print('Version: ' .. C.ADDON_VERSION)
+    F:Printf(L['version: %s loaded.'], C.ADDON_VERSION)
 end)

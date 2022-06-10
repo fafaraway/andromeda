@@ -186,8 +186,8 @@ end)
 F:RegisterSlash('/onlyfree', function()
     for i = 1, GetNumAddOns() do
         local name = GetAddOnInfo(i)
-        if name ~= 'FreeUI' and name ~= '!BaudErrorFrame' and GetAddOnEnableState(C.NAME, name) == 2 then
-            DisableAddOn(name, C.NAME)
+        if name ~= 'FreeUI' and name ~= '!BaudErrorFrame' and GetAddOnEnableState(C.MY_NAME, name) == 2 then
+            DisableAddOn(name, C.MY_NAME)
         end
     end
     _G.ReloadUI()

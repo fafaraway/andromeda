@@ -107,7 +107,7 @@ local function UpdateFriendButton(button)
         level = friendInfo.level
         class = friendInfo.className
         area = friendInfo.area
-        -- faction = C.FACTION -- 同一阵营才能加好友的吧？
+        -- faction = C.MY_FACTION -- 同一阵营才能加好友的吧？
 
         if friendInfo.connected then
             if friendInfo.afk then
@@ -201,7 +201,7 @@ local function UpdateFriendButton(button)
 
         -- 地区
         if area then
-            if server and server ~= '' and server ~= C.REALM then
+            if server and server ~= '' and server ~= C.MY_REALM then
                 buttonText = F:CreateColorString(area .. ' - ' .. server, { r = 0.8, g = 0.8, b = 0.8 })
             else
                 buttonText = F:CreateColorString(area, { r = 0.8, g = 0.8, b = 0.8 })

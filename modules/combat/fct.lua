@@ -219,7 +219,7 @@ function COMBAT:FloatingCombatText()
     if C.DB.Combat.Incoming then
         F.Mover(
             inFrame,
-            L['Combat Text Incoming'],
+            L['FCTInFrame'],
             'FCTInFrame',
             { 'RIGHT', _G.UIParent, 'CENTER', -500, 0 },
             inFrame:GetWidth(),
@@ -230,7 +230,7 @@ function COMBAT:FloatingCombatText()
     if C.DB.Combat.Outgoing then
         F.Mover(
             outFrame,
-            L['Combat Text Outgoing'],
+            L['FCTOutFrame'],
             'FCTOutFrame',
             { 'LEFT', _G.UIParent, 'CENTER', 300, 140 },
             outFrame:GetWidth(),

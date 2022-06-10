@@ -236,9 +236,9 @@ end
 function ECF:KeystoneInfo_Update()
     local mapID, keystoneLevel = ECF:KeystoneInfo_UpdateBag()
     if mapID then
-        _G.FREE_ADB['KeystoneInfo'][C.FULL_NAME] = mapID .. ':' .. keystoneLevel .. ':' .. C.CLASS .. ':' .. C.FACTION
+        _G.FREE_ADB['KeystoneInfo'][C.MY_FULL_NAME] = mapID .. ':' .. keystoneLevel .. ':' .. C.MY_CLASS .. ':' .. C.MY_FACTION
     else
-        _G.FREE_ADB['KeystoneInfo'][C.FULL_NAME] = nil
+        _G.FREE_ADB['KeystoneInfo'][C.MY_FULL_NAME] = nil
     end
 end
 

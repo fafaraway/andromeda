@@ -41,52 +41,6 @@ do
         return myPrint(string.format(...))
     end
 
-    function F:Debug(module, text)
-        if not C.DEV_MODE then
-            return
-        end
-
-        if not text then
-            return
-        end
-
-        if not module then
-            module = 'Function'
-        end
-
-        if type(module) ~= 'string' and module.name then
-            module = module.name
-        end
-
-        local prefix = string.format('%s-%s', C.ADDON_NAME, 'Debug')
-        prefix = F:TextGradient(prefix, .98, .77, .18, .9, .49, .13, .71, .08, .25)
-
-        print(string.format('[%s] (|cff82c5ff%s|r) %s', prefix, module, text))
-    end
-
-    function F:Dump(object, inspect)
-        if GetAddOnEnableState(C.NAME, 'Blizzard_DebugTools') == 0 then
-            F:Print('Blizzard_DebugTools is disabled.')
-            return
-        end
-
-        local debugTools = IsAddOnLoaded('Blizzard_DebugTools')
-        if not debugTools then
-            UIParentLoadAddOn('Blizzard_DebugTools')
-        end
-
-        if inspect then
-            local tableType = type(object)
-            if tableType == 'table' then
-                _G.DisplayTableInspectorWindow(object)
-            else
-                F:Print('Failed: ', tostring(object), ' is type: ', tableType, '. Requires table object.')
-            end
-        else
-            _G.DevTools_Dump(object)
-        end
-    end
-
     function F:HookAddOn(addonName, callback)
         self:RegisterEvent('ADDON_LOADED', function(_, name)
             if name == addonName then
@@ -855,7 +809,7 @@ do
 
         local tex = swatch:CreateTexture()
         tex:SetInside(swatch, 2, 2)
-        tex:SetTexture(C.Assets.Texture.Backdrop)
+        tex:SetTexture(C.Assets.Statusbar.Gradient)
         tex:SetVertexColor(color.r, color.g, color.b)
         tex.GetColor = GetSwatchTexColor
 
@@ -1288,7 +1242,7 @@ do
             return
         end
 
-        thumb.bg:SetBackdropColor(C.r, C.g, C.b, 0.25)
+        thumb.bg:SetBackdropColor(C.r, C.g, C.b, 0.65)
         thumb.bg:SetBackdropBorderColor(C.r, C.g, C.b)
     end
 
@@ -1320,9 +1274,10 @@ do
             thumb:SetWidth(16)
             self.thumb = thumb
 
-            local bg = F.CreateBDFrame(self, 0.25)
+            local bg = F.CreateBDFrame(self, 0, true)
             bg:SetPoint('TOPLEFT', thumb, 0, -2)
             bg:SetPoint('BOTTOMRIGHT', thumb, 0, 4)
+            bg:SetBackdropBorderColor(0, 0, 0, 0.25)
             thumb.bg = bg
         end
 
@@ -1576,10 +1531,13 @@ do
 
         if flat then
             if self.SetCheckedTexture then
-                local checked = self:CreateTexture()
-                checked:SetColorTexture(C.r, C.g, C.b)
+                local checked = self:CreateTexture(nil, 'OVERLAY')
+                --checked:SetColorTexture(C.r, C.g, C.b)
+                checked:SetTexture(C.Assets.Statusbar.Gradient)
                 checked:SetPoint('TOPLEFT', self, 6, -6)
                 checked:SetPoint('BOTTOMRIGHT', self, -6, 6)
+                checked:SetDesaturated(true)
+                checked:SetVertexColor(C.r, C.g, C.b)
                 self:SetCheckedTexture(checked)
             end
 
@@ -1666,7 +1624,7 @@ do
         end
 
         local bar = CreateFrame('StatusBar', nil, bg)
-        bar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
+        bar:SetStatusBarTexture(C.Assets.Statusbar.Gradient)
         bar:SetStatusBarColor(C.r, C.g, C.b, 0.25)
         if vertical then
             bar:SetPoint('BOTTOMLEFT', bg, C.MULT, C.MULT)

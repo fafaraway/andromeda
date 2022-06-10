@@ -20,9 +20,9 @@ function BLIZZARD:UpdateProfessions()
     local prof1, prof2, _, fish, cook = GetProfessions()
     local profs = { prof1, prof2, fish, cook }
 
-    if C.CLASS == 'DEATHKNIGHT' then
+    if C.MY_CLASS == 'DEATHKNIGHT' then
         BLIZZARD:TradeTabs_Create(RUNEFORGING_ID)
-    elseif C.CLASS == 'ROGUE' and IsPlayerSpell(PICK_LOCK) then
+    elseif C.MY_CLASS == 'ROGUE' and IsPlayerSpell(PICK_LOCK) then
         BLIZZARD:TradeTabs_Create(PICK_LOCK)
     end
 

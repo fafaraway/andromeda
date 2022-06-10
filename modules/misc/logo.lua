@@ -23,7 +23,7 @@ end
 
 function LOGO:Logo_Create()
     local frame = CreateFrame('Frame', nil, _G.UIParent)
-    frame:SetSize(256, 256)
+    frame:SetSize(512, 512)
     frame:SetPoint('CENTER', _G.UIParent, 'BOTTOM', -500, GetScreenHeight() * 0.618)
     frame:SetFrameStrata('HIGH')
     frame:SetAlpha(0)

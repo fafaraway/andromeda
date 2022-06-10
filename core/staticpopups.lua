@@ -93,7 +93,7 @@ StaticPopupDialogs['FREEUI_RESET_NAMEPLATE_SPECIAL_UNIT_FILTER'] = {
 }
 
 StaticPopupDialogs['FREEUI_RESET_NAMEPLATE_DOT_SPELLS'] = {
-    text = L['Reset to default list'],
+    text = L['Reset to default list?'],
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
@@ -152,7 +152,7 @@ StaticPopupDialogs.FREEUI_APPLY_PROFILE = {
     button2 = _G.NO,
     OnAccept = function()
         local GUI = F:GetModule('GUI')
-        _G.FREE_ADB['ProfileIndex'][C.FULL_NAME] = GUI.currentProfile
+        _G.FREE_ADB['ProfileIndex'][C.MY_FULL_NAME] = GUI.currentProfile
         _G.ReloadUI()
     end,
     timeout = 0,
@@ -166,7 +166,7 @@ StaticPopupDialogs.FREEUI_REPLACE_CURRENT_PROFILE = {
     button2 = _G.NO,
     OnAccept = function()
         local GUI = F:GetModule('GUI')
-        local profileIndex = _G.FREE_ADB['ProfileIndex'][C.FULL_NAME]
+        local profileIndex = _G.FREE_ADB['ProfileIndex'][C.MY_FULL_NAME]
         if GUI.currentProfile == 1 then
             _G.FREE_PDB[profileIndex - 1] = _G.FREE_DB
         elseif profileIndex == 1 then
@@ -257,7 +257,7 @@ StaticPopupDialogs['FREEUI_DISBAND_GROUP'] = {
             SendChatMessage(_G.TEAM_DISBAND .. '...', 'RAID')
             for i = 1, GetNumGroupMembers() do
                 local name, _, _, _, _, _, _, online = GetRaidRosterInfo(i)
-                if online and name ~= C.NAME then
+                if online and name ~= C.MY_NAME then
                     UninviteUnit(name)
                 end
             end

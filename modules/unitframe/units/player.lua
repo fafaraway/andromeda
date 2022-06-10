@@ -27,5 +27,5 @@ function UNITFRAME:SpawnPlayer()
     oUF:SetActiveStyle('Player')
 
     local player = oUF:Spawn('player', 'oUF_Player')
-    F.Mover(player, L['Player Frame'], 'PlayerFrame', UNITFRAME.Positions.player, player:GetWidth(), player:GetHeight())
+    F.Mover(player, L['PlayerFrame'], 'PlayerFrame', UNITFRAME.Positions.player, player:GetWidth(), player:GetHeight())
 end

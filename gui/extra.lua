@@ -117,12 +117,12 @@ local function CreateBars(parent, spellID, table1, table2, table3)
 end
 
 local function Label_OnEnter(self)
-    GameTooltip:ClearLines()
-    GameTooltip:SetOwner(self:GetParent(), 'ANCHOR_RIGHT', 0, 3)
-    GameTooltip:AddLine(self.text)
-    GameTooltip:AddLine(' ')
-    GameTooltip:AddLine(self.tip, 0.6, 0.8, 1, 1)
-    GameTooltip:Show()
+    _G.GameTooltip:ClearLines()
+    _G.GameTooltip:SetOwner(self:GetParent(), 'ANCHOR_RIGHT', 0, 3)
+    _G.GameTooltip:AddLine(self.text)
+    _G.GameTooltip:AddLine(' ')
+    _G.GameTooltip:AddLine(self.tip, 0.6, 0.8, 1, 1)
+    _G.GameTooltip:Show()
 end
 
 local function CreateLabel(parent, text, tip)
@@ -799,7 +799,7 @@ function GUI:SetupCooldownCount(parent)
             [2] = {
                 value = 'IgnoreWA',
                 text = L['Ignore WeakAuras'],
-                tip = L['Hide cooldown count on WeakAuras.'],
+                tip = L['Cooldown timer ignore WeakAuras icon.|nYou can still use WeakAuras own timer.'],
             },
         },
         slider = {
@@ -809,7 +809,7 @@ function GUI:SetupCooldownCount(parent)
                 min = 60,
                 max = 600,
                 step = 1,
-                text = L['MMSS Threshold'],
+                text = L['MM:SS Threshold'],
                 tip = L['If cooldown less than current threhold, display cooldown in format MM:SS.|nEg. 2 mins and half presents as 2:30.'],
             },
             [2] = {
@@ -936,7 +936,7 @@ function GUI:SetupNameplateAuraFilter(parent)
 
     local filterIndex
     StaticPopupDialogs['FREEUI_RESET_NAMEPLATE_AURA_FILTER'] = {
-        text = C.RED_COLOR .. L['Reset to default filter list?'],
+        text = C.RED_COLOR .. L['Reset to default list?'],
         button1 = _G.YES,
         button2 = _G.NO,
         OnAccept = function()
@@ -1543,7 +1543,7 @@ function GUI:SetupPartyFrame(parent)
 
     local offset = -10
     for _, v in ipairs(datas) do
-        CreateGroupTitle(scroll, L['Party Frames'], offset)
+        CreateGroupTitle(scroll, L['Party Frame'], offset)
         CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdatePartyFrameSize)
         offset = offset - 65
     end
@@ -1608,7 +1608,7 @@ function GUI:SetupRaidFrame(parent)
 
     local offset = -10
     for _, v in ipairs(datas) do
-        CreateGroupTitle(scroll, L['Raid Frames'], offset)
+        CreateGroupTitle(scroll, L['Raid Frame'], offset)
         CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdateRaidFrameSize)
         offset = offset - 65
     end
@@ -2263,7 +2263,7 @@ function GUI:SetupCastbarColor(parent)
     local db = C.DB.Unitframe
 
     local datas = {
-        [1] = { key = 'CastingColor', value = db.CastingColor, text = L['Normal Casting'] },
+        [1] = { key = 'CastingColor', value = db.CastingColor, text = L['Regular Casting'] },
         [2] = { key = 'UninterruptibleColor', value = db.UninterruptibleColor, text = L['Uninterruptible Casting'] },
         [3] = { key = 'CompleteColor', value = db.CompleteColor, text = L['Casting Complete'] },
         [4] = { key = 'FailColor', value = db.FailColor, text = L['Casting Fail'] },
@@ -2341,7 +2341,7 @@ function GUI:SetupPartyWatcher(parent)
         L['SpellID'],
         10,
         -30,
-        L["Enter spell ID, must be a number.|nYou can get ID on spell's tooltip.|nSpell name is not supported."],
+        L["Fill in SpellID, must be a number.|nSpell name is not supported."],
         107,
         24
     )
@@ -2598,10 +2598,10 @@ function GUI:SetupDebuffWatcher(parent)
         if not spellID then
             return
         end
-        GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
-        GameTooltip:ClearLines()
-        GameTooltip:SetSpellByID(spellID)
-        GameTooltip:Show()
+        _G.GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
+        _G.GameTooltip:ClearLines()
+        _G.GameTooltip:SetSpellByID(spellID)
+        _G.GameTooltip:Show()
     end
 
     local function createBar(index, texture)
@@ -2654,7 +2654,7 @@ function GUI:SetupDebuffWatcher(parent)
         F.AddTooltip(
             prioBox,
             'ANCHOR_RIGHT',
-            L['Priority limit in 1-6.|nPress ENTER KEY when you finish typing.'],
+            L['Priority limit in 1-6.|nPress ENTER key when you finish typing.'],
             'BLUE',
             true
         )
@@ -3079,7 +3079,7 @@ function GUI:SetupSimpleFloatingCombatText(parent)
 
     local offset = -10
     for _, data in ipairs(datas) do
-        CreateGroupTitle(scroll, L['Simple floating combat text'], offset)
+        CreateGroupTitle(scroll, L['Floating Combat Text'], offset)
         CreateCheckbox(scroll, offset - 30, 'Combat', data.value, data.text)
         offset = offset - 35
     end

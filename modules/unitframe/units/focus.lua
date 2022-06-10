@@ -22,5 +22,5 @@ function UNITFRAME:SpawnFocus()
     oUF:SetActiveStyle('Focus')
 
     local focus = oUF:Spawn('focus', 'oUF_Focus')
-    F.Mover(focus, L['Focus Frame'], 'FocusFrame', UNITFRAME.Positions.focus, focus:GetWidth(), focus:GetHeight())
+    F.Mover(focus, L['FocusFrame'], 'FocusFrame', UNITFRAME.Positions.focus, focus:GetWidth(), focus:GetHeight())
 end

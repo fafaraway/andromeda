@@ -26,29 +26,29 @@ do
         ['MAGE'] = { ['Curse'] = true },
     }
 
-    DispellFilter = dispellClasses[C.CLASS] or {}
+    DispellFilter = dispellClasses[C.MY_CLASS] or {}
 end
 
 local function checkSpecs()
-    if C.CLASS == 'DRUID' then
+    if C.MY_CLASS == 'DRUID' then
         if GetSpecialization() == 4 then
             DispellFilter.Magic = true
         else
             DispellFilter.Magic = false
         end
-    elseif C.CLASS == 'MONK' then
+    elseif C.MY_CLASS == 'MONK' then
         if GetSpecialization() == 2 then
             DispellFilter.Magic = true
         else
             DispellFilter.Magic = false
         end
-    elseif C.CLASS == 'PALADIN' then
+    elseif C.MY_CLASS == 'PALADIN' then
         if GetSpecialization() == 1 then
             DispellFilter.Magic = true
         else
             DispellFilter.Magic = false
         end
-    elseif C.CLASS == 'SHAMAN' then
+    elseif C.MY_CLASS == 'SHAMAN' then
         if GetSpecialization() == 3 then
             DispellFilter.Magic = true
         else

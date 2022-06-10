@@ -44,7 +44,7 @@ local function buildFriendTable(num)
 end
 
 local function sortBNFriends(a, b)
-    if C.FACTION == 'Alliance' then
+    if C.MY_FACTION == 'Alliance' then
         return a[5] == b[5] and a[4] < b[4] or a[5] > b[5]
     else
         return a[5] == b[5] and a[4] > b[4] or a[5] > b[5]
@@ -264,7 +264,7 @@ local inviteTypeToButtonText = {
 
 local function GetButtonTexFromInviteType(guid, factionName)
     local inviteType = GetDisplayedInviteType(guid)
-    if factionName and factionName ~= C.FACTION then
+    if factionName and factionName ~= C.MY_FACTION then
         inviteType = inviteType .. '_CROSS_FACTION'
     end
     return inviteTypeToButtonText[inviteType]
@@ -361,7 +361,7 @@ local function buttonOnEnter(self)
             local clientString = _G.BNet_GetClientEmbeddedTexture(client, 16)
             if client == _G.BNET_CLIENT_WOW then
                 if charName ~= '' then -- fix for weird account
-                    realmName = (C.REALM == realmName or realmName == '') and '' or '-' .. realmName
+                    realmName = (C.MY_REALM == realmName or realmName == '') and '' or '-' .. realmName
 
                     -- Get TBC realm name from richPresence
                     if wowProjectID == WOW_PROJECT_TBC then
@@ -639,7 +639,7 @@ local function Block_OnEvent(self, event, arg1)
     end
 
     INFOBAR:FriendsPanel_Refresh()
-    self.text:SetText(string.format('%s: ' .. C.CLASS_COLOR .. '%d', _G.FRIENDS, INFOBAR.totalOnline))
+    self.text:SetText(string.format('%s: ' .. C.MY_CLASS_COLOR .. '%d', _G.FRIENDS, INFOBAR.totalOnline))
 
     updateRequest = false
     if infoFrame and infoFrame:IsShown() then

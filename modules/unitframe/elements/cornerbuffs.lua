@@ -5,15 +5,15 @@ UNITFRAME.CornerSpellsList = {}
 function UNITFRAME:UpdateCornerSpells()
     table.wipe(UNITFRAME.CornerSpellsList)
 
-    for spellID, value in pairs(C.CornerSpellsList[C.CLASS]) do
-        local modData = _G.FREE_ADB['CornerSpellsList'][C.CLASS]
+    for spellID, value in pairs(C.CornerSpellsList[C.MY_CLASS]) do
+        local modData = _G.FREE_ADB['CornerSpellsList'][C.MY_CLASS]
         if not (modData and modData[spellID]) then
             local r, g, b = unpack(value[2])
             UNITFRAME.CornerSpellsList[spellID] = { value[1], { r, g, b }, value[3] }
         end
     end
 
-    for spellID, value in pairs(_G.FREE_ADB['CornerSpellsList'][C.CLASS]) do
+    for spellID, value in pairs(_G.FREE_ADB['CornerSpellsList'][C.MY_CLASS]) do
         if next(value) then
             local r, g, b = unpack(value[2])
             UNITFRAME.CornerSpellsList[spellID] = { value[1], { r, g, b }, value[3] }
@@ -121,10 +121,10 @@ function UNITFRAME:CreateCornerIndicator(self)
 end
 
 function UNITFRAME:CheckCornerSpells()
-    if not _G.FREE_ADB['CornerSpellsList'][C.CLASS] then
-        _G.FREE_ADB['CornerSpellsList'][C.CLASS] = {}
+    if not _G.FREE_ADB['CornerSpellsList'][C.MY_CLASS] then
+        _G.FREE_ADB['CornerSpellsList'][C.MY_CLASS] = {}
     end
-    local data = C.CornerSpellsList[C.CLASS]
+    local data = C.CornerSpellsList[C.MY_CLASS]
     if not data then
         return
     end
@@ -132,13 +132,13 @@ function UNITFRAME:CheckCornerSpells()
     for spellID, _ in pairs(data) do
         local name = GetSpellInfo(spellID)
         if not name then
-            F:Debug('Corner Indicator', 'Invalid Spell ID ' .. spellID)
+            F:Debug('CheckCornerSpells: Invalid Spell ID ' .. spellID)
         end
     end
 
-    for spellID, value in pairs(_G.FREE_ADB['CornerSpellsList'][C.CLASS]) do
-        if not next(value) and C.CornerBuffs[C.CLASS][spellID] == nil then
-            _G.FREE_ADB['CornerSpellsList'][C.CLASS][spellID] = nil
+    for spellID, value in pairs(_G.FREE_ADB['CornerSpellsList'][C.MY_CLASS]) do
+        if not next(value) and C.CornerBuffs[C.MY_CLASS][spellID] == nil then
+            _G.FREE_ADB['CornerSpellsList'][C.MY_CLASS][spellID] = nil
         end
     end
 end

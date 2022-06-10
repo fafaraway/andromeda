@@ -7,7 +7,7 @@ end
 
 local crossRealms = GetAutoCompleteRealms()
 if not crossRealms or #crossRealms == 0 then
-    crossRealms = { [1] = C.REALM }
+    crossRealms = { [1] = C.MY_REALM }
 end
 
 StaticPopupDialogs.FREEUI_RESET_ALL_GOLD_STATISTICS = {
@@ -21,7 +21,7 @@ StaticPopupDialogs.FREEUI_RESET_ALL_GOLD_STATISTICS = {
             end
         end
 
-        _G.FREE_ADB['GoldStatistic'][C.REALM][C.NAME] = { GetMoney(), C.CLASS }
+        _G.FREE_ADB['GoldStatistic'][C.MY_REALM][C.MY_NAME] = { GetMoney(), C.MY_CLASS }
     end,
     timeout = 0,
     whileDead = 1,
@@ -62,9 +62,9 @@ function RebuildCharList()
 
     local index = 1
     for _, realm in pairs(crossRealms) do
-        if _G.FREE_ADB['GoldStatistic'][C.REALM] then
-            for name, value in pairs(_G.FREE_ADB['GoldStatistic'][C.REALM]) do
-                if not (realm == C.REALM and name == C.REALM) then
+        if _G.FREE_ADB['GoldStatistic'][C.MY_REALM] then
+            for name, value in pairs(_G.FREE_ADB['GoldStatistic'][C.MY_REALM]) do
+                if not (realm == C.MY_REALM and name == C.MY_REALM) then
                     index = index + 1
                     if not menuList[index] then
                         menuList[index] = {}
@@ -104,14 +104,14 @@ local function Button_OnEvent(self, event)
 
     self.text:SetText(FormatMoney(newMoney))
 
-    if not _G.FREE_ADB['GoldStatistic'][C.REALM] then
-        _G.FREE_ADB['GoldStatistic'][C.REALM] = {}
+    if not _G.FREE_ADB['GoldStatistic'][C.MY_REALM] then
+        _G.FREE_ADB['GoldStatistic'][C.MY_REALM] = {}
     end
-    if not _G.FREE_ADB['GoldStatistic'][C.REALM][C.NAME] then
-        _G.FREE_ADB['GoldStatistic'][C.REALM][C.NAME] = {}
+    if not _G.FREE_ADB['GoldStatistic'][C.MY_REALM][C.MY_NAME] then
+        _G.FREE_ADB['GoldStatistic'][C.MY_REALM][C.MY_NAME] = {}
     end
-    _G.FREE_ADB['GoldStatistic'][C.REALM][C.NAME][1] = GetMoney()
-    _G.FREE_ADB['GoldStatistic'][C.REALM][C.NAME][2] = C.CLASS
+    _G.FREE_ADB['GoldStatistic'][C.MY_REALM][C.MY_NAME][1] = GetMoney()
+    _G.FREE_ADB['GoldStatistic'][C.MY_REALM][C.MY_NAME][2] = C.MY_CLASS
 
     oldMoney = newMoney
 end

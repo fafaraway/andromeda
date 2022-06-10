@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 
-if not C.DEV_MODE then
+if not C.IS_DEVELOPER then
     return
 end
 

@@ -142,7 +142,7 @@ function M:MissingStats()
             displayItemLevel
         )
 
-        _G.CharacterStatsPane.ItemLevelFrame.Value:SetFont(C.Assets.Font.Header, 18)
+        _G.CharacterStatsPane.ItemLevelFrame.Value:SetFont(C.Assets.Font.Heavy, 18)
         _G.CharacterStatsPane.ItemLevelFrame.Value:SetShadowColor(0, 0, 0, 1)
         _G.CharacterStatsPane.ItemLevelFrame.Value:SetShadowOffset(1, -1)
     end)

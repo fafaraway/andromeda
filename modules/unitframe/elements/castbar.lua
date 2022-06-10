@@ -35,7 +35,7 @@ local channelingTicks = {
     [324631] = 8, -- 血肉铸造，盟约
 }
 
-if C.CLASS == 'PRIEST' then
+if C.MY_CLASS == 'PRIEST' then
     local function updateTicks()
         local numTicks = 3
         if IsPlayerSpell(193134) then

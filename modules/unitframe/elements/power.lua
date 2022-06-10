@@ -22,15 +22,15 @@ local function UpdatePowerColor(power, unit)
         return
     end
 
-    if not C.DEV_MODE then
+    if not C.IS_DEVELOPER then
         return
     end
 
     local spec = GetSpecialization() or 0
-    local isBlood = C.CLASS == 'DEATHKNIGHT' and spec == 1
-    local isFrost = C.CLASS == 'DEATHKNIGHT' and spec == 2
-    local isHavoc = C.CLASS == 'DEMONHUNTER' and spec == 1
-    local isVengeance = C.CLASS == 'DEMONHUNTER' and spec == 2
+    local isBlood = C.MY_CLASS == 'DEATHKNIGHT' and spec == 1
+    local isFrost = C.MY_CLASS == 'DEATHKNIGHT' and spec == 2
+    local isHavoc = C.MY_CLASS == 'DEMONHUNTER' and spec == 1
+    local isVengeance = C.MY_CLASS == 'DEMONHUNTER' and spec == 2
     local r, g, b = power:GetStatusBarColor()
 
     if isBlood then -- Blood Death Knight
@@ -145,7 +145,7 @@ local function AltPowerOnEnter(self)
         return
     end
 
-    GameTooltip:SetOwner(self, 'ANCHOR_BOTTOMRIGHT')
+    _G.GameTooltip:SetOwner(self, 'ANCHOR_BOTTOMRIGHT')
     self:UpdateTooltip()
 end
 
@@ -153,10 +153,10 @@ local function AltPowerUpdateTooltip(self)
     local value = self:GetValue()
     local min, max = self:GetMinMaxValues()
     local name, tooltip = GetUnitPowerBarStringsByID(self.__barID)
-    GameTooltip:SetText(name or '', 1, 1, 1)
-    GameTooltip:AddLine(tooltip or '', nil, nil, nil, true)
-    GameTooltip:AddLine(string.format('%d (%d%%)', value, (value - min) / (max - min) * 100), 1, 1, 1)
-    GameTooltip:Show()
+    _G.GameTooltip:SetText(name or '', 1, 1, 1)
+    _G.GameTooltip:AddLine(tooltip or '', nil, nil, nil, true)
+    _G.GameTooltip:AddLine(string.format('%d (%d%%)', value, (value - min) / (max - min) * 100), 1, 1, 1)
+    _G.GameTooltip:Show()
 end
 
 local function PostUpdateAltPower(self, _, cur, _, max)

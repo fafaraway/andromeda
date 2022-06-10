@@ -105,7 +105,7 @@ do
         self.tradeSkillChanged = nil
         self.collapsedCategories = {}
 
-        for _, categoryID in ipairs({ _G.C_TradeSkillUI.GetCategories() }) do
+        for _, categoryID in ipairs({ C_TradeSkillUI.GetCategories() }) do
             self.collapsedCategories[categoryID] = true
         end
 

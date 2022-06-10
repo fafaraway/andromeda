@@ -22,8 +22,8 @@ function UNITFRAME:SpawnTargetTarget()
     local targettarget = oUF:Spawn('targettarget', 'oUF_TargetTarget')
     F.Mover(
         targettarget,
-        L['Target of Target Frame'],
-        'TargetTargetFrame',
+        L['ToTFrame'],
+        'ToTFrame',
         UNITFRAME.Positions.tot,
         targettarget:GetWidth(),
         targettarget:GetHeight()

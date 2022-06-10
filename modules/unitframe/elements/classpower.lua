@@ -85,7 +85,7 @@ function UNITFRAME:CreateClassPower(self)
     local barWidth = C.DB.Unitframe.PlayerWidth
     local barHeight = C.DB.Unitframe.ClassPowerHeight
 
-    local isDK = C.CLASS == 'DEATHKNIGHT'
+    local isDK = C.MY_CLASS == 'DEATHKNIGHT'
     local holder = CreateFrame('Frame', '$parentClassPowerBar', self)
     holder:SetSize(barWidth, barHeight)
     holder:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -3)

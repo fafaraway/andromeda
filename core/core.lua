@@ -1,34 +1,34 @@
-local addOnName, engine = ...
+local addonName, engine = ...
 
 local F = engine[1]
 local C = engine[2]
 
 -- Get locale strings from AceLocale
-engine[3] = F.Libs.ACL:GetLocale(addOnName, GetLocale())
+engine[3] = F.Libs.ACL:GetLocale(addonName, GetLocale())
 
 -- Prepare modules
 do
-    F:RegisterModule('Misc')
-    F:RegisterModule('UnitFrame')
-    F:RegisterModule('Map')
-    F:RegisterModule('Tooltip')
-    F:RegisterModule('GUI')
-    F:RegisterModule('Quest')
-    F:RegisterModule('Inventory')
-    F:RegisterModule('InfoBar')
     F:RegisterModule('ActionBar')
     F:RegisterModule('Announcement')
     F:RegisterModule('Aura')
+    F:RegisterModule('Automation')
+    F:RegisterModule('Blizzard')
+    F:RegisterModule('Camera')
     F:RegisterModule('Chat')
     F:RegisterModule('Combat')
     F:RegisterModule('Cooldown')
-    F:RegisterModule('Notification')
-    F:RegisterModule('Theme')
-    F:RegisterModule('Blizzard')
+    F:RegisterModule('GUI')
+    F:RegisterModule('InfoBar')
+    F:RegisterModule('Inventory')
+    F:RegisterModule('Map')
+    F:RegisterModule('Misc')
     F:RegisterModule('Nameplate')
+    F:RegisterModule('Notification')
+    F:RegisterModule('Quest')
+    F:RegisterModule('Theme')
+    F:RegisterModule('Tooltip')
+    F:RegisterModule('UnitFrame')
     F:RegisterModule('Vignetting')
-    F:RegisterModule('Camera')
-    F:RegisterModule('Automation')
 end
 
 -- Initialize settings
@@ -78,18 +78,18 @@ loader:SetScript('OnEvent', function(self, _, addon)
         end
     end
 
-    if not _G.FREE_ADB['ProfileIndex'][C.FULL_NAME] then
-        _G.FREE_ADB['ProfileIndex'][C.FULL_NAME] = 1
+    if not _G.FREE_ADB['ProfileIndex'][C.MY_FULL_NAME] then
+        _G.FREE_ADB['ProfileIndex'][C.MY_FULL_NAME] = 1
     end
 
-    if _G.FREE_ADB['ProfileIndex'][C.FULL_NAME] == 1 then
+    if _G.FREE_ADB['ProfileIndex'][C.MY_FULL_NAME] == 1 then
         C.DB = _G.FREE_DB
         if not C.DB['ShadowLands'] then
             table.wipe(C.DB)
             C.DB['ShadowLands'] = true
         end
     else
-        C.DB = _G.FREE_PDB[_G.FREE_ADB['ProfileIndex'][C.FULL_NAME] - 1]
+        C.DB = _G.FREE_PDB[_G.FREE_ADB['ProfileIndex'][C.MY_FULL_NAME] - 1]
     end
     InitialSettings(C.CharacterSettings, C.DB, true)
 

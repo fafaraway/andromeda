@@ -3,15 +3,15 @@ local M = F:GetModule('Map')
 local TOOLTIP = F:GetModule('Tooltip')
 
 function M:InitRenownLevel()
-    if not _G.FREE_ADB['RenownLevels'][C.REALM] then
-        _G.FREE_ADB['RenownLevels'][C.REALM] = {}
+    if not _G.FREE_ADB['RenownLevels'][C.MY_REALM] then
+        _G.FREE_ADB['RenownLevels'][C.MY_REALM] = {}
     end
 
-    if not _G.FREE_ADB['RenownLevels'][C.REALM][C.NAME] then
-        _G.FREE_ADB['RenownLevels'][C.REALM][C.NAME] = {}
+    if not _G.FREE_ADB['RenownLevels'][C.MY_REALM][C.MY_NAME] then
+        _G.FREE_ADB['RenownLevels'][C.MY_REALM][C.MY_NAME] = {}
 
         for i = 1, 4 do
-            _G.FREE_ADB['RenownLevels'][C.REALM][C.NAME][i] = 0
+            _G.FREE_ADB['RenownLevels'][C.MY_REALM][C.MY_NAME][i] = 0
         end
     end
 end
@@ -20,7 +20,7 @@ function M:CheckRenownLevel()
     local level = C_CovenantSanctumUI.GetRenownLevel()
     local CovenantID = C_Covenants.GetActiveCovenantID()
 
-    _G.FREE_ADB['RenownLevels'][C.REALM][C.NAME][CovenantID] = level
+    _G.FREE_ADB['RenownLevels'][C.MY_REALM][C.MY_NAME][CovenantID] = level
 end
 
 function M:UpdateRenownLevel()
@@ -141,14 +141,14 @@ function M:Bar_Update()
 end
 
 function M:Bar_OnEnter()
-    GameTooltip:SetOwner(self, 'ANCHOR_LEFT')
-    GameTooltip:ClearLines()
-    GameTooltip:AddDoubleLine(C.NAME, _G.LEVEL .. ': ' .. UnitLevel('player'), C.r, C.g, C.b, 1, 1, 1)
+    _G.GameTooltip:SetOwner(self, 'ANCHOR_LEFT')
+    _G.GameTooltip:ClearLines()
+    _G.GameTooltip:AddDoubleLine(C.MY_NAME, _G.LEVEL .. ': ' .. UnitLevel('player'), C.r, C.g, C.b, 1, 1, 1)
 
     if not IsPlayerAtEffectiveMaxLevel() then
-        GameTooltip:AddLine(' ')
+        _G.GameTooltip:AddLine(' ')
         local xp, mxp, rxp = UnitXP('player'), UnitXPMax('player'), GetXPExhaustion()
-        GameTooltip:AddDoubleLine(
+        _G.GameTooltip:AddDoubleLine(
             _G.XP .. ':',
             BreakUpLargeNumbers(xp)
                 .. ' / '
@@ -163,7 +163,7 @@ function M:Bar_OnEnter()
             1
         )
         if rxp then
-            GameTooltip:AddDoubleLine(
+            _G.GameTooltip:AddDoubleLine(
                 _G.TUTORIAL_TITLE26 .. ':',
                 '+' .. BreakUpLargeNumbers(rxp) .. ' (' .. string.format('%.1f%%)', rxp / mxp * 100),
                 0.6,
@@ -175,7 +175,7 @@ function M:Bar_OnEnter()
             )
         end
         if IsXPUserDisabled() then
-            GameTooltip:AddLine('|cffff0000' .. _G.XP .. _G.LOCKED)
+            _G.GameTooltip:AddLine('|cffff0000' .. _G.XP .. _G.LOCKED)
         end
     end
 
@@ -201,9 +201,9 @@ function M:Bar_OnEnter()
             end
             standingtext = _G['FACTION_STANDING_LABEL' .. standing] or _G.UNKNOWN
         end
-        GameTooltip:AddLine(' ')
-        GameTooltip:AddLine(name, 0, 0.6, 1)
-        GameTooltip:AddDoubleLine(
+        _G.GameTooltip:AddLine(' ')
+        _G.GameTooltip:AddLine(name, 0, 0.6, 1)
+        _G.GameTooltip:AddDoubleLine(
             standingtext,
             value - barMin
                 .. ' / '
@@ -223,7 +223,7 @@ function M:Bar_OnEnter()
             local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
             local paraCount = math.floor(currentValue / threshold)
             currentValue = math.fmod(currentValue, threshold)
-            GameTooltip:AddDoubleLine(
+            _G.GameTooltip:AddDoubleLine(
                 L['Paragon'] .. '(' .. paraCount .. ')',
                 currentValue .. ' / ' .. threshold .. ' (' .. math.floor(currentValue / threshold * 100) .. '%)',
                 0.6,
@@ -240,9 +240,9 @@ function M:Bar_OnEnter()
             if nextThreshold and rep > 0 then
                 local current = rep - threshold
                 local currentMax = nextThreshold - threshold
-                GameTooltip:AddLine(' ')
-                GameTooltip:AddLine(repName, 0, 0.6, 1)
-                GameTooltip:AddDoubleLine(
+                _G.GameTooltip:AddLine(' ')
+                _G.GameTooltip:AddLine(repName, 0, 0.6, 1)
+                _G.GameTooltip:AddDoubleLine(
                     reaction,
                     current .. ' / ' .. currentMax .. ' (' .. math.floor(current / currentMax * 100) .. '%)',
                     0.6,
@@ -258,25 +258,25 @@ function M:Bar_OnEnter()
 
     if IsWatchingHonorAsXP() then
         local current, barMax, level = UnitHonor('player'), UnitHonorMax('player'), UnitHonorLevel('player')
-        GameTooltip:AddLine(' ')
-        GameTooltip:AddLine(_G.HONOR, 0, 0.6, 1)
-        GameTooltip:AddDoubleLine(_G.LEVEL .. ' ' .. level, current .. ' / ' .. barMax, 0.8, 0.2, 0, 1, 1, 1)
+        _G.GameTooltip:AddLine(' ')
+        _G.GameTooltip:AddLine(_G.HONOR, 0, 0.6, 1)
+        _G.GameTooltip:AddDoubleLine(_G.LEVEL .. ' ' .. level, current .. ' / ' .. barMax, 0.8, 0.2, 0, 1, 1, 1)
     end
 
     local covenantID = C_Covenants.GetActiveCovenantID()
     if covenantID and covenantID > 0 then
-        GameTooltip:AddLine(' ')
-        GameTooltip:AddLine(_G.LANDING_PAGE_RENOWN_LABEL, 0, 0.6, 1)
+        _G.GameTooltip:AddLine(' ')
+        _G.GameTooltip:AddLine(_G.LANDING_PAGE_RENOWN_LABEL, 0, 0.6, 1)
 
         for i = 1, 4 do
-            local level = _G.FREE_ADB['RenownLevels'][C.REALM][C.NAME][i]
+            local level = _G.FREE_ADB['RenownLevels'][C.MY_REALM][C.MY_NAME][i]
             if level > 0 then
-                GameTooltip:AddDoubleLine(TOOLTIP:GetCovenantIcon(i) .. TOOLTIP:GetCovenantName(i), level)
+                _G.GameTooltip:AddDoubleLine(TOOLTIP:GetCovenantIcon(i) .. TOOLTIP:GetCovenantName(i), level)
             end
         end
     end
 
-    GameTooltip:Show()
+    _G.GameTooltip:Show()
 end
 
 function M:SetupScript()

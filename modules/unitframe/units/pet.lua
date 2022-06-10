@@ -21,5 +21,5 @@ function UNITFRAME:SpawnPet()
     oUF:SetActiveStyle('Pet')
 
     local pet = oUF:Spawn('pet', 'oUF_Pet')
-    F.Mover(pet, L['Pet Frame'], 'PetFrame', UNITFRAME.Positions.pet, pet:GetWidth(), pet:GetHeight())
+    F.Mover(pet, L['PetFrame'], 'PetFrame', UNITFRAME.Positions.pet, pet:GetWidth(), pet:GetHeight())
 end

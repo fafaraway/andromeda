@@ -12,8 +12,13 @@ function F:SetupUIScale(init)
         local pixel = 1
         local ratio = 768 / C.SCREEN_HEIGHT
         C.MULT = (pixel / scale) - ((pixel - ratio) / scale)
-    elseif not InCombatLockdown() then
-        _G.UIParent:SetScale(scale)
+    else
+        _G.Display_UseUIScale:Kill()
+        _G.Display_UIScaleSlider:Kill()
+
+        if not InCombatLockdown() then
+            _G.UIParent:SetScale(scale)
+        end
     end
 end
 

@@ -4,14 +4,15 @@ local LSM = F.Libs.LSM
 C.Assets = {}
 
 C.Assets.Texture = {
-    Tank = C.ASSET_PATH .. 'textures\\roles\\tank',
-    Healer = C.ASSET_PATH .. 'textures\\roles\\healer',
-    Damager = C.ASSET_PATH .. 'textures\\roles\\damager',
+    Tank = C.ASSET_PATH .. 'textures\\roles\\tank_small',
+    Healer = C.ASSET_PATH .. 'textures\\roles\\healer_small',
+    Damager = C.ASSET_PATH .. 'textures\\roles\\damager_small',
     ClassCircle = C.ASSET_PATH .. 'textures\\UI-CLASSES-CIRCLES',
     LfgRole = C.ASSET_PATH .. 'textures\\UI-LFG-ICON-ROLES',
     StateIcon = C.ASSET_PATH .. 'textures\\state_icons',
-    Logo = C.ASSET_PATH .. 'textures\\logo_tex',
-    Mail = C.ASSET_PATH .. 'textures\\mail_tex',
+    Logo = C.ASSET_PATH .. 'textures\\logo_big',
+    LogoChat = C.ASSET_PATH .. 'textures\\logo_chat',
+    Mail = C.ASSET_PATH .. 'textures\\mail',
     MinimapMask = C.ASSET_PATH .. 'textures\\minimap_mask',
     RaidTargetingIcon = C.ASSET_PATH .. 'textures\\UI-RaidTargetingIcons',
     Vignetting = C.ASSET_PATH .. 'textures\\vignetting',
@@ -119,7 +120,7 @@ C.Assets.Font = {
 
 do
     local path = 'Fonts\\' .. C.ADDON_NAME .. '\\'
-    if C.DEV_MODE then
+    if C.IS_DEVELOPER then
         C.Assets.Font.Regular = path .. 'regular.ttf'
         C.Assets.Font.Condensed = path .. 'condensed.ttf'
         C.Assets.Font.Bold = path .. 'bold.ttf'

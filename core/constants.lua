@@ -1,13 +1,11 @@
-local F, C = unpack(select(2, ...))
+local F, C, L = unpack(select(2, ...))
 
---C.ADDON_NAME = 'FreeUI'
-C.NEW_PATCH = select(4, GetBuildInfo()) >= 90205 -- 9.2.5
-
-C.REALM = GetRealmName()
-C.CLASS = select(2, UnitClass('player'))
-C.NAME = UnitName('player')
-C.FULL_NAME = C.NAME .. '-' .. C.REALM
-C.FACTION = select(2, UnitFactionGroup('player'))
+C.IS_NEW_PATCH = select(4, GetBuildInfo()) >= 90205 -- 9.2.5
+C.MY_REALM = GetRealmName()
+C.MY_CLASS = select(2, UnitClass('player'))
+C.MY_NAME = UnitName('player')
+C.MY_FULL_NAME = C.MY_NAME .. '-' .. C.MY_REALM
+C.MY_FACTION = select(2, UnitFactionGroup('player'))
 
 C.SCREEN_WIDTH, C.SCREEN_HEIGHT = GetPhysicalScreenSize()
 C.ASSET_PATH = 'Interface\\AddOns\\' .. C.ADDON_NAME .. '\\assets\\'
@@ -23,6 +21,9 @@ C.ClassList = {}
 for k, v in pairs(_G.LOCALIZED_CLASS_NAMES_MALE) do
     C.ClassList[v] = k
 end
+for k, v in pairs(_G.LOCALIZED_CLASS_NAMES_FEMALE) do
+    C.ClassList[v] = k
+end
 
 C.ClassColors = {}
 function F.UpdateCustomClassColors()
@@ -35,11 +36,11 @@ function F.UpdateCustomClassColors()
         C.ClassColors[class].colorStr = value.colorStr
     end
 
-    C.r = C.ClassColors[C.CLASS].r
-    C.g = C.ClassColors[C.CLASS].g
-    C.b = C.ClassColors[C.CLASS].b
+    C.r = C.ClassColors[C.MY_CLASS].r
+    C.g = C.ClassColors[C.MY_CLASS].g
+    C.b = C.ClassColors[C.MY_CLASS].b
 
-    C.CLASS_COLOR = string.format('|cff%02x%02x%02x', C.r * 255, C.g * 255, C.b * 255)
+    C.MY_CLASS_COLOR = string.format('|cff%02x%02x%02x', C.r * 255, C.g * 255, C.b * 255)
     C.COLORED_ADDON_NAME = F:TextGradient(C.ADDON_NAME, C.r, C.g, C.b, 1, 1, 1)
 end
 F:RegisterEvent('ADDON_LOADED', F.UpdateCustomClassColors)

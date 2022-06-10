@@ -8,16 +8,16 @@ local function Aura_OnEnter(self)
         return
     end
 
-    GameTooltip:SetOwner(self, 'ANCHOR_TOPLEFT')
+    _G.GameTooltip:SetOwner(self, 'ANCHOR_TOPLEFT')
     self:UpdateTooltip()
 end
 
 local function Aura_OnLeave()
-    GameTooltip:Hide()
+    _G.GameTooltip:Hide()
 end
 
 local function UpdateAuraTooltip(aura)
-    GameTooltip:SetUnitAura(aura:GetParent().__owner.unit, aura:GetID(), aura.filter)
+    _G.GameTooltip:SetUnitAura(aura:GetParent().__owner.unit, aura:GetID(), aura.filter)
 end
 
 function UNITFRAME:MODIFIER_STATE_CHANGED(key, state)
@@ -381,12 +381,12 @@ local function UpdatePlayerAuraPosition(self)
 
     if
         (
-            C.CLASS == 'ROGUE'
-            or C.CLASS == 'PALADIN'
-            or C.CLASS == 'WARLOCK'
-            or (C.CLASS == 'DRUID' and specIndex == 2)
-            or (C.CLASS == 'MONK' and specIndex == 3)
-            or (C.CLASS == 'MAGE' and specIndex == 1)
+            C.MY_CLASS == 'ROGUE'
+            or C.MY_CLASS == 'PALADIN'
+            or C.MY_CLASS == 'WARLOCK'
+            or (C.MY_CLASS == 'DRUID' and specIndex == 2)
+            or (C.MY_CLASS == 'MONK' and specIndex == 3)
+            or (C.MY_CLASS == 'MAGE' and specIndex == 1)
         ) and C.DB.Unitframe.ClassPower
     then
         self.Auras:ClearAllPoints()

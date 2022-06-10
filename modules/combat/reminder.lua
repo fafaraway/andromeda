@@ -128,7 +128,7 @@ local buffsList = {
     },
 }
 
-local groups = buffsList[C.CLASS]
+local groups = buffsList[C.MY_CLASS]
 local iconSize = 36
 local frames, parentFrame = {}
 

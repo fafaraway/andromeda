@@ -337,7 +337,7 @@ end
 
 local function Block_OnEvent(self, event, arg1)
     if not IsInGuild() then
-        self.text:SetText(_G.GUILD .. ': ' .. C.CLASS_COLOR .. _G.NONE)
+        self.text:SetText(_G.GUILD .. ': ' .. C.MY_CLASS_COLOR .. _G.NONE)
         return
     end
 
@@ -348,7 +348,7 @@ local function Block_OnEvent(self, event, arg1)
     end
 
     local online = select(3, GetNumGuildMembers())
-    self.text:SetText(_G.GUILD .. ': ' .. C.CLASS_COLOR .. online)
+    self.text:SetText(_G.GUILD .. ': ' .. C.MY_CLASS_COLOR .. online)
 
     if infoFrame and infoFrame:IsShown() then
         INFOBAR:GuildPanel_Refresh()

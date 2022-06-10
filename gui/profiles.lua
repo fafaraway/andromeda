@@ -213,7 +213,7 @@ function GUI:Delete_OnEnter()
     end
     local name, realm = string.split('-', text)
     if not realm then
-        realm = C.REALM
+        realm = C.MY_REALM
         text = name .. '-' .. realm
         self:SetText(text)
     end
@@ -233,7 +233,7 @@ function GUI:Delete_OnEscape()
 end
 
 function GUI:CreateProfileGUI(parent)
-    local reset = F.CreateButton(parent, 100, 24, L['Reset'])
+    local reset = F.CreateButton(parent, 100, 24, _G.RESET)
     reset:SetPoint('BOTTOMRIGHT', -20, 20)
     reset:SetScript('OnClick', function()
         _G.StaticPopup_Show('FREEUI_RESET_ALL')
@@ -297,7 +297,7 @@ function GUI:CreateProfileGUI(parent)
     description:SetWordWrap(true)
     description:SetJustifyH('LEFT')
 
-    GUI.currentProfile = _G.FREE_ADB['ProfileIndex'][C.FULL_NAME]
+    GUI.currentProfile = _G.FREE_ADB['ProfileIndex'][C.MY_FULL_NAME]
 
     local numBars = 6
     local panel = F.CreateBDFrame(parent, 0.25)

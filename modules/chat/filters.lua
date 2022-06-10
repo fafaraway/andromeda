@@ -77,7 +77,7 @@ C.BadBoys = {} -- debug
 local chatLines, prevLineID, filterResult = {}, 0, false
 
 function CHAT:GetFilterResult(event, msg, name, flag, guid)
-    if name == C.NAME or (event == 'CHAT_MSG_WHISPER' and flag == 'GM') or flag == 'DEV' then
+    if name == C.MY_NAME or (event == 'CHAT_MSG_WHISPER' and flag == 'GM') or flag == 'DEV' then
         return
     elseif
         guid

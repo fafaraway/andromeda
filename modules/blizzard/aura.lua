@@ -47,7 +47,7 @@ function AURA:BuildBuffFrame()
     AURA.BuffFrame = AURA:CreateAuraHeader('HELPFUL')
     AURA.BuffFrame.mover = F.Mover(
         AURA.BuffFrame,
-        L['Buff Frame'],
+        L['BuffFrame'],
         'BuffAnchor',
         { 'TOPLEFT', _G.UIParent, 'TOPLEFT', C.UI_GAP, -C.UI_GAP }
     )
@@ -57,7 +57,7 @@ function AURA:BuildBuffFrame()
     AURA.DebuffFrame = AURA:CreateAuraHeader('HARMFUL')
     AURA.DebuffFrame.mover = F.Mover(
         AURA.DebuffFrame,
-        L['Debuff Frame'],
+        L['DebuffFrame'],
         'DebuffAnchor',
         { 'TOPLEFT', AURA.BuffFrame.mover, 'BOTTOMLEFT', 0, 30 }
     )

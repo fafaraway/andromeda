@@ -51,7 +51,7 @@ function COOLDOWN:OnSizeChanged(width, height)
     self.fontScale = fontScale
 
     local outline = _G.FREE_ADB.FontOutline
-    local font = C.Assets.Font.Bold
+    local font = C.Assets.Font.Heavy
 
     if fontScale < minScale then
         self:Hide()
@@ -103,7 +103,7 @@ function COOLDOWN:OnCreate()
     text:SetJustifyH('CENTER')
     timer.text = text
 
-    if C.DEV_MODE then
+    if C.IS_DEVELOPER then
         if
             (not C.DB.Cooldown.IgnoreWA and string.find(frameName, 'WeakAurasCooldown'))
             or string.find(frameName, C.ADDON_NAME .. 'PartyWatcher')

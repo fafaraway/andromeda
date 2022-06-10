@@ -90,7 +90,7 @@ function M:UpdateRosterInfo()
 
     for i = 1, GetNumGroupMembers() do
         local name = GetRaidRosterInfo(i)
-        if name and name ~= C.NAME and not cache[name] then
+        if name and name ~= C.MY_NAME and not cache[name] then
             if not DCLoaded then
                 C_ChatInfo.SendAddonMessage(DC_Prefix, string.format('ASK:%s', name), msgChannel())
             end
@@ -112,7 +112,7 @@ end
 function M:HandleAddonMessage(...)
     local prefix, msg, _, sender = ...
     sender = Ambiguate(sender, 'none')
-    if sender == C.NAME then
+    if sender == C.MY_NAME then
         return
     end
 

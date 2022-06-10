@@ -32,7 +32,7 @@ local strList = {
 
 local function FormatTextString(str)
     str = gsub(str, '&ADDON_NAME&', C.COLORED_ADDON_NAME)
-    str = gsub(str, '*', C.CLASS_COLOR)
+    str = gsub(str, '*', C.MY_CLASS_COLOR)
     str = gsub(str, '#', '|cffffeccb')
     str = gsub(str, '@', C.GREY_COLOR)
 

@@ -351,7 +351,7 @@ end
 
 -- Quick scroll
 local chatScrollTip = {
-    text = L['Scroll multi-lines by holding Ctrl key, and scroll to top or bottom by holding Shift key.'],
+    text = L['Scroll multi-lines by holding CTRL key, and scroll to top or bottom by holding SHIFT key.'],
     buttonStyle = _G.HelpTip.ButtonStyle.GotIt,
     targetPoint = _G.HelpTip.Point.RightEdgeCenter,
     onAcknowledgeCallback = F.HelpInfoAcknowledge,
@@ -578,7 +578,7 @@ local msgEvents = {
     CHAT_MSG_RAID_WARNING = 1,
 }
 
-local texStr = '|T%s:8:8:0:0:64:64:4:60:4:60|t'
+local texStr = '|T%s:12:12:0:0:64:64:4:60:4:60|t'
 local texList = {
     TANK = C.Assets.Texture.Tank,
     HEALER = C.Assets.Texture.Healer,
@@ -639,7 +639,7 @@ local function FixLanguageFilterSideEffects()
     )
 
     local OLD_GetFriendGameAccountInfo = C_BattleNet.GetFriendGameAccountInfo
-    function _G.C_BattleNet.GetFriendGameAccountInfo(...)
+    function C_BattleNet.GetFriendGameAccountInfo(...)
         local gameAccountInfo = OLD_GetFriendGameAccountInfo(...)
         if gameAccountInfo then
             gameAccountInfo.isInCurrentRegion = true
@@ -648,7 +648,7 @@ local function FixLanguageFilterSideEffects()
     end
 
     local OLD_GetFriendAccountInfo = C_BattleNet.GetFriendAccountInfo
-    function _G.C_BattleNet.GetFriendAccountInfo(...)
+    function C_BattleNet.GetFriendAccountInfo(...)
         local accountInfo = OLD_GetFriendAccountInfo(...)
         if accountInfo and accountInfo.gameAccountInfo then
             accountInfo.gameAccountInfo.isInCurrentRegion = true
@@ -690,7 +690,7 @@ function CHAT:OnLogin()
     CHAT:UpdateChatFrame()
     CHAT:UpdateEditBoxBorderColor()
     CHAT:ChatFilter()
-    CHAT:Abbreviation()
+    CHAT:ShortenChannelNames()
     CHAT:ChatCopy()
     CHAT:UrlCopy()
     CHAT:WhisperSticky()

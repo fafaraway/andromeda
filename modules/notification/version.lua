@@ -61,7 +61,7 @@ function NOTIFICATION:VersionCheck_Update(...)
     if prefix ~= 'FreeUIVersionCheck' then
         return
     end
-    if Ambiguate(author, 'none') == C.NAME then
+    if Ambiguate(author, 'none') == C.MY_NAME then
         return
     end
 

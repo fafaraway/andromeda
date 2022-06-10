@@ -161,7 +161,7 @@ function UNITFRAME:CreateAndUpdatePartyHeader()
         party.groupType = 'party'
         table.insert(UNITFRAME.headers, party)
         RegisterStateDriver(party, 'visibility', GetPartyVisibility())
-        partyMover = F.Mover(party, L['Party Frame'], 'PartyFrame', UNITFRAME.Positions.party)
+        partyMover = F.Mover(party, L['PartyFrame'], 'PartyFrame', UNITFRAME.Positions.party)
         UNITFRAME.PartyMover = partyMover
     end
 
@@ -375,7 +375,7 @@ function UNITFRAME:SpawnSimpleRaid()
     group.groupType = 'raid'
     table.insert(UNITFRAME.headers, group)
     RegisterStateDriver(group, 'visibility', GetRaidVisibility())
-    raidMover = F.Mover(group, L['Raid Frame'], 'RaidFrame', UNITFRAME.Positions.simple)
+    raidMover = F.Mover(group, L['RaidFrame'], 'RaidFrame', UNITFRAME.Positions.simple)
     group:ClearAllPoints()
     group:SetPoint(sortData.initAnchor, raidMover)
 
@@ -502,7 +502,7 @@ function UNITFRAME:CreateAndUpdateRaidHeader(direction)
         end
 
         if not raidMover and i == 1 then
-            raidMover = F.Mover(groups[i], L['Raid Frame'], 'RaidFrame', UNITFRAME.Positions.raid)
+            raidMover = F.Mover(groups[i], L['RaidFrame'], 'RaidFrame', UNITFRAME.Positions.raid)
             UNITFRAME.RaidMover = raidMover
         end
 

@@ -22,8 +22,8 @@ function UNITFRAME:SpawnFocusTarget()
     local focustarget = oUF:Spawn('focustarget', 'oUF_FocusTarget')
     F.Mover(
         focustarget,
-        L['Target of Focus Frame'],
-        'FocusTargetFrame',
+        L['ToFFrame'],
+        'ToFFrame',
         UNITFRAME.Positions.tof,
         focustarget:GetWidth(),
         focustarget:GetHeight()
