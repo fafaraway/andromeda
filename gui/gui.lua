@@ -48,9 +48,18 @@ local iconsList = {
 }
 
 GUI.TexturesList = {
-    [1] = { texture = 'Interface\\AddOns\\' .. C.ADDON_NAME .. '\\assets\\textures\\statusbar\\norm', name = L['Default'] },
-    [2] = { texture = 'Interface\\AddOns\\' .. C.ADDON_NAME .. '\\assets\\textures\\statusbar\\grad', name = L['Gradient'] },
-    [3] = { texture = 'Interface\\AddOns\\' .. C.ADDON_NAME .. '\\assets\\textures\\statusbar\\flat', name = L['Flat'] },
+    [1] = {
+        texture = 'Interface\\AddOns\\' .. C.ADDON_NAME .. '\\assets\\textures\\statusbar\\norm',
+        name = L['Default'],
+    },
+    [2] = {
+        texture = 'Interface\\AddOns\\' .. C.ADDON_NAME .. '\\assets\\textures\\statusbar\\grad',
+        name = L['Gradient'],
+    },
+    [3] = {
+        texture = 'Interface\\AddOns\\' .. C.ADDON_NAME .. '\\assets\\textures\\statusbar\\flat',
+        name = L['Flat'],
+    },
 }
 
 local function AddTextureToOption(parent, index)
@@ -120,32 +129,34 @@ end
 local function SelectTab(i)
     local r, g, b = C.r, C.g, C.b
     local gradStyle = _G.FREE_ADB.GradientStyle
-    local buttonColor = _G.FREE_ADB.ButtonBackdropColor
+    local color = _G.FREE_ADB.ButtonBackdropColor
+    local alpha = _G.FREE_ADB.ButtonBackdropAlpha
+
+    local classColor = _G.FREE_ADB.WidgetHighlightClassColor
+    local newColor = _G.FREE_ADB.WidgetHighlightColor
 
     for num = 1, #tabsList do
         if num == i then
             if gradStyle then
-                guiTab[num].__gradient:SetGradientAlpha('Vertical', 0, 0, 0, 0.25, r, g, b, 0.25)
+                if classColor then
+                    guiTab[num].__gradient:SetGradientAlpha('Vertical', r, g, b, 0.25, 0, 0, 0, 0.25)
+                else
+                    guiTab[num].__gradient:SetGradientAlpha('Vertical', newColor.r, newColor.g, newColor.b, 0.25, 0, 0, 0, 0.25)
+                end
             else
-                guiTab[num].__gradient:SetVertexColor(r, g, b, 0.25)
+                if classColor then
+                    guiTab[num].__gradient:SetVertexColor(r, g, b, 0.25)
+                else
+                    guiTab[num].__gradient:SetVertexColor(newColor.r, newColor.g, newColor.b, 0.25)
+                end
             end
             guiTab[num].checked = true
             guiPage[num]:Show()
         else
             if gradStyle then
-                guiTab[num].__gradient:SetGradientAlpha(
-                    'Vertical',
-                    0,
-                    0,
-                    0,
-                    0.25,
-                    buttonColor.r,
-                    buttonColor.g,
-                    buttonColor.b,
-                    0.25
-                )
+                guiTab[num].__gradient:SetGradientAlpha('Vertical', color.r, color.g, color.b, alpha, 0, 0, 0, 0.25)
             else
-                guiTab[num].__gradient:SetVertexColor(0, 0, 0, 0)
+                guiTab[num].__gradient:SetVertexColor(color.r, color.g, color.b, alpha)
             end
             guiTab[num].checked = false
             guiPage[num]:Hide()
@@ -253,7 +264,7 @@ local function CreateOption(i)
         local optType, key, value, name, horizon, data, callback, tip = unpack(option)
         if optType == 1 then -- checkbox
             local cb = F.CreateCheckbox(parent, true, nil, true)
-            cb:SetSize(22, 22)
+            cb:SetSize(18, 18)
             cb:SetHitRectInsets(-5, -5, -5, -5)
 
             if horizon then
@@ -268,7 +279,8 @@ local function CreateOption(i)
             cb.__name = name
             cb.__callback = callback
 
-            cb.label = F.CreateFS(cb, C.Assets.Font.Regular, 12, nil, name, nil, true, 'LEFT', 22, -1)
+            cb.label = F.CreateFS(cb, C.Assets.Font.Regular, 12, nil, name, nil, true)
+            cb.label:SetPoint('LEFT', cb, 'RIGHT', 4, 0)
 
             cb:SetChecked(UpdateValue(key, value))
             cb:SetScript('OnClick', Checkbox_OnClick)

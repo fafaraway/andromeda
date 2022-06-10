@@ -461,16 +461,16 @@ do
     function F:CreateGradient()
         local gradStyle = _G.FREE_ADB.GradientStyle
         local normTex = C.Assets.Texture.Backdrop
-        local buttonColor = _G.FREE_ADB.ButtonBackdropColor
 
         local tex = self:CreateTexture(nil, 'BORDER')
         tex:SetAllPoints(self)
         tex:SetTexture(normTex)
 
+        local color = _G.FREE_ADB.ButtonBackdropColor
         if gradStyle then
-            tex:SetGradientAlpha('Vertical', 0, 0, 0, 0.25, buttonColor.r, buttonColor.g, buttonColor.b, 0.25)
+            tex:SetGradientAlpha('Vertical', color.r, color.g, color.b, 0.65, 0, 0, 0, 0.25)
         else
-            tex:SetVertexColor(0, 0, 0, 0)
+            tex:SetVertexColor(color.r, color.g, color.b, 0)
         end
 
         return tex
@@ -615,7 +615,7 @@ do
     function F:CreateCheckbox(flat)
         local cb = CreateFrame('CheckButton', nil, self, 'InterfaceOptionsCheckButtonTemplate')
         cb:SetScript('OnClick', nil) -- reset onclick handler
-        F.ReskinCheck(cb, flat, true, true)
+        F.ReskinCheck(cb, flat, true)
 
         cb.Type = 'CheckBox'
         return cb
@@ -631,7 +631,7 @@ do
         eb:SetAutoFocus(false)
         eb:SetTextInsets(5, 5, 5, 5)
         eb:SetFont(C.Assets.Font.Regular, 11)
-        eb.bg = F.CreateBDFrame(eb)
+        eb.bg = F.CreateBDFrame(eb, 0.25, true)
         eb.bg:SetAllPoints()
         F.SetBorderColor(eb.bg)
         F.CreateSD(eb.bg, 0.25)
@@ -683,7 +683,14 @@ do
     end
 
     local function DD_OnEnter(self)
-        self.arrow:SetVertexColor(C.r, C.g, C.b)
+        local classColor = _G.FREE_ADB.WidgetHighlightClassColor
+        local newColor = _G.FREE_ADB.WidgetHighlightColor
+
+        if classColor then
+            self.arrow:SetVertexColor(C.r, C.g, C.b)
+        else
+            self.arrow:SetVertexColor(newColor.r, newColor.g, newColor.b)
+        end
     end
 
     local function DD_OnLeave(self)
@@ -693,7 +700,7 @@ do
     function F:CreateDropDown(width, height, data)
         local dd = CreateFrame('Frame', nil, self, 'BackdropTemplate')
         dd:SetSize(width, height)
-        dd.bg = F.CreateBDFrame(dd, 0.45)
+        dd.bg = F.CreateBDFrame(dd, 0.25, true)
         F.SetBorderColor(dd.bg)
         F.CreateSD(dd.bg, 0.25)
 
@@ -715,7 +722,7 @@ do
         local list = CreateFrame('Frame', nil, dd, 'BackdropTemplate')
         list:SetPoint('TOP', dd, 'BOTTOM', 0, -2)
         RaiseFrameLevel(list)
-        F.CreateBD(list, 0.85)
+        F.CreateBD(list, 0.45)
         list:Hide()
         bu.__list = list
 
@@ -804,12 +811,17 @@ do
         F.CreateSD(swatch.bg, 0.25)
 
         if name then
-            swatch.text = F.CreateFS(swatch, C.Assets.Font.Regular, 12, nil, name, nil, true, 'LEFT', 24, 0)
+            swatch.text = F.CreateFS(swatch, C.Assets.Font.Regular, 12, nil, name, nil, true)
+            swatch.text:SetPoint('LEFT', swatch, 'RIGHT', 6, 0)
         end
+
+        local gradStyle = _G.FREE_ADB.GradientStyle
+        local normTex = C.Assets.Statusbar.Flat
+        local gradTex = C.Assets.Statusbar.Gradient
 
         local tex = swatch:CreateTexture()
         tex:SetInside(swatch, 2, 2)
-        tex:SetTexture(C.Assets.Statusbar.Gradient)
+        tex:SetTexture(gradStyle and gradTex or normTex)
         tex:SetVertexColor(color.r, color.g, color.b)
         tex.GetColor = GetSwatchTexColor
 
@@ -1070,9 +1082,17 @@ do
         local alpha = 1
         local last = 0
 
+        local classColor = _G.FREE_ADB.WidgetHighlightClassColor
+        local newColor = _G.FREE_ADB.WidgetHighlightColor
+
         frame:SetScript('OnUpdate', function(self, elapsed)
             if not stop then
-                self:SetBackdropBorderColor(C.r, C.g, C.b)
+                if classColor then
+                    self:SetBackdropBorderColor(C.r, C.g, C.b)
+                else
+                    self:SetBackdropBorderColor(newColor.r, newColor.g, newColor.b)
+                end
+
                 last = last + elapsed
                 if last > speed then
                     last = 0
@@ -1118,16 +1138,42 @@ do
             return
         end
 
-        self.__bg:SetBackdropColor(C.r, C.g, C.b, 0.45)
-        self.__bg:SetBackdropBorderColor(C.r, C.g, C.b)
-    end
-
-    local function Button_OnLeave(self)
+        local gradStyle = _G.FREE_ADB.GradientStyle
         local color = _G.FREE_ADB.ButtonBackdropColor
         local alpha = _G.FREE_ADB.ButtonBackdropAlpha
 
-        self.__bg:SetBackdropColor(color.r, color.g, color.b, alpha)
+        local classColor = _G.FREE_ADB.WidgetHighlightClassColor
+        local newColor = _G.FREE_ADB.WidgetHighlightColor
+
+        if classColor then
+            self.__bg:SetBackdropColor(C.r, C.g, C.b, 0.25)
+            self.__bg:SetBackdropBorderColor(C.r, C.g, C.b)
+        else
+            self.__bg:SetBackdropColor(newColor.r, newColor.g, newColor.b, 0.25)
+            self.__bg:SetBackdropBorderColor(newColor.r, newColor.g, newColor.b)
+        end
+
+        -- if gradStyle then
+        --     self.__gradient:SetGradientAlpha('Vertical', C.r, C.g, C.b, alpha, 0, 0, 0, 0.25)
+        -- else
+        --     self.__gradient:SetVertexColor(C.r, C.g, C.b, alpha)
+        -- end
+    end
+
+    local function Button_OnLeave(self)
+        local gradStyle = _G.FREE_ADB.GradientStyle
+        local color = _G.FREE_ADB.ButtonBackdropColor
+        local alpha = _G.FREE_ADB.ButtonBackdropAlpha
+
+
+        self.__bg:SetBackdropColor(0, 0, 0, 0.25)
         F.SetBorderColor(self.__bg)
+
+        -- if gradStyle then
+        --     self.__gradient:SetGradientAlpha('Vertical', color.r, color.g, color.b, alpha, 0, 0, 0, 0.25)
+        -- else
+        --     self.__gradient:SetVertexColor(color.r, color.g, color.b, alpha)
+        -- end
     end
 
     local blizzRegions = {
@@ -1191,17 +1237,26 @@ do
         end
 
         F.CreateTex(self)
-        self.__bg = F.CreateBDFrame(self, 0.25, true)
+        self.__bg = F.CreateBDFrame(self, 0, true)
 
+        local gradStyle = _G.FREE_ADB.GradientStyle
         local color = _G.FREE_ADB.ButtonBackdropColor
         local alpha = _G.FREE_ADB.ButtonBackdropAlpha
-        self.__bg:SetBackdropColor(color.r, color.g, color.b, alpha)
+
+        self.__bg:SetBackdropColor(0, 0, 0, 0.25)
         F.SetBorderColor(self.__bg)
+
+        if gradStyle then
+            self.__gradient:SetGradientAlpha('Vertical', color.r, color.g, color.b, alpha, 0, 0, 0, 0.25)
+        else
+            self.__gradient:SetVertexColor(color.r, color.g, color.b, alpha)
+        end
 
         self:HookScript('OnEnter', Button_OnEnter)
         self:HookScript('OnLeave', Button_OnLeave)
 
-        if not noGlow then
+        local buttonAnima = _G.FREE_ADB.ButtonHoverAnimation
+        if not noGlow and buttonAnima then
             self.__shadow = F.CreateSD(self.__bg, 0.25)
 
             self:HookScript('OnEnter', StartGlow)
@@ -1242,8 +1297,16 @@ do
             return
         end
 
-        thumb.bg:SetBackdropColor(C.r, C.g, C.b, 0.65)
-        thumb.bg:SetBackdropBorderColor(C.r, C.g, C.b)
+        local classColor = _G.FREE_ADB.WidgetHighlightClassColor
+        local newColor = _G.FREE_ADB.WidgetHighlightColor
+
+        if classColor then
+            thumb.bg:SetBackdropColor(C.r, C.g, C.b, 0.65)
+            thumb.bg:SetBackdropBorderColor(C.r, C.g, C.b)
+        else
+            thumb.bg:SetBackdropColor(newColor.r, newColor.g, newColor.b, 0.65)
+            thumb.bg:SetBackdropBorderColor(newColor.r, newColor.g, newColor.b)
+        end
     end
 
     local function Scroll_OnLeave(self)
@@ -1274,10 +1337,12 @@ do
             thumb:SetWidth(16)
             self.thumb = thumb
 
-            local bg = F.CreateBDFrame(self, 0, true)
+            local color = _G.FREE_ADB.ButtonBackdropColor
+            local bg = F.CreateBDFrame(self, 0.25, true)
             bg:SetPoint('TOPLEFT', thumb, 0, -2)
             bg:SetPoint('BOTTOMRIGHT', thumb, 0, 4)
-            bg:SetBackdropBorderColor(0, 0, 0, 0.25)
+            bg:SetBackdropColor(color.r, color.g, color.b, 0.25)
+            bg:SetBackdropBorderColor(0, 0, 0)
             thumb.bg = bg
         end
 
@@ -1516,36 +1581,50 @@ do
         self:SetNormalTexture('')
         self:SetPushedTexture('')
 
-        self.bg = F.CreateBDFrame(self)
+        self.bg = F.CreateBDFrame(self, 0.25, true)
         F.SetBorderColor(self.bg)
-        self.bg:SetInside(self, 4, 4)
+        self.bg:SetInside(self)
         self.shadow = F.CreateSD(self.bg, 0.25)
 
         if self.SetHighlightTexture then
             local highligh = self:CreateTexture(nil, 'HIGHLIGHT')
             highligh:SetColorTexture(1, 1, 1, 0.25)
-            highligh:SetPoint('TOPLEFT', self, 6, -6)
-            highligh:SetPoint('BOTTOMRIGHT', self, -6, 6)
+            -- highligh:SetPoint('TOPLEFT', self, 6, -6)
+            -- highligh:SetPoint('BOTTOMRIGHT', self, -6, 6)
+            highligh:SetInside(self, 3, 3)
             self:SetHighlightTexture(highligh)
         end
 
         if flat then
+            local gradStyle = _G.FREE_ADB.GradientStyle
+            local normTex = C.Assets.Statusbar.Flat
+            local gradTex = C.Assets.Statusbar.Gradient
+            local classColor = _G.FREE_ADB.WidgetHighlightClassColor
+            local newColor = _G.FREE_ADB.WidgetHighlightColor
+
             if self.SetCheckedTexture then
-                local checked = self:CreateTexture(nil, 'OVERLAY')
-                --checked:SetColorTexture(C.r, C.g, C.b)
-                checked:SetTexture(C.Assets.Statusbar.Gradient)
-                checked:SetPoint('TOPLEFT', self, 6, -6)
-                checked:SetPoint('BOTTOMRIGHT', self, -6, 6)
+                local checked = self:CreateTexture()
+                checked:SetTexture(gradStyle and gradTex or normTex)
+                -- checked:SetPoint('TOPLEFT', self, 6, -6)
+                -- checked:SetPoint('BOTTOMRIGHT', self, -6, 6)
+                checked:SetInside(self, 3, 3)
                 checked:SetDesaturated(true)
-                checked:SetVertexColor(C.r, C.g, C.b)
+
+                if classColor then
+                    checked:SetVertexColor(C.r, C.g, C.b)
+                else
+                    checked:SetVertexColor(newColor.r, newColor.g, newColor.b)
+                end
+
                 self:SetCheckedTexture(checked)
             end
 
             if self.SetDisabledCheckedTexture then
                 local disabled = self:CreateTexture()
-                disabled:SetColorTexture(0.3, 0.3, 0.3)
-                disabled:SetPoint('TOPLEFT', self, 6, -6)
-                disabled:SetPoint('BOTTOMRIGHT', self, -6, 6)
+                disabled:SetTexture(gradStyle and gradTex or normTex)
+                -- disabled:SetPoint('TOPLEFT', self, 6, -6)
+                -- disabled:SetPoint('BOTTOMRIGHT', self, -6, 6)
+                disabled:SetInside(self, 3, 3)
                 self:SetDisabledCheckedTexture(disabled)
             end
         else
@@ -1609,7 +1688,7 @@ do
         self:SetBackdrop(nil)
         F.StripTextures(self)
 
-        local bg = F.CreateBDFrame(self)
+        local bg = F.CreateBDFrame(self, 0.25)
         bg:SetPoint('TOPLEFT', 14, -2)
         bg:SetPoint('BOTTOMRIGHT', -15, 3)
         F.SetBorderColor(bg)
@@ -1623,9 +1702,21 @@ do
             thumb:SetRotation(math.rad(90))
         end
 
+        local gradStyle = _G.FREE_ADB.GradientStyle
+        local normTex = C.Assets.Statusbar.Flat
+        local gradTex = C.Assets.Statusbar.Gradient
+        local classColor = _G.FREE_ADB.WidgetHighlightClassColor
+        local newColor = _G.FREE_ADB.WidgetHighlightColor
+
         local bar = CreateFrame('StatusBar', nil, bg)
-        bar:SetStatusBarTexture(C.Assets.Statusbar.Gradient)
-        bar:SetStatusBarColor(C.r, C.g, C.b, 0.25)
+        bar:SetStatusBarTexture(gradStyle and gradTex or normTex)
+
+        if classColor then
+            bar:SetStatusBarColor(C.r, C.g, C.b, 0.45)
+        else
+            bar:SetStatusBarColor(newColor.r, newColor.g, newColor.b, 0.45)
+        end
+
         if vertical then
             bar:SetPoint('BOTTOMLEFT', bg, C.MULT, C.MULT)
             bar:SetPoint('BOTTOMRIGHT', bg, -C.MULT, C.MULT)
