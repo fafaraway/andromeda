@@ -2658,6 +2658,7 @@ globals = {
     'RaiseFrameLevel',
     'CooldownFrame_Set',
     'MouseIsOver',
+    'HybridScrollFrame_GetOffset'
 
 
 }
