@@ -10,16 +10,17 @@ table.insert(C.BlizzThemes, function()
     F.Reskin(_G.AddonListDisableAllButton)
     F.Reskin(_G.AddonListCancelButton)
     F.Reskin(_G.AddonListOkayButton)
-    F.ReskinCheck(_G.AddonListForceLoad)
+    F.ReskinCheck(_G.AddonListForceLoad, true)
     F.ReskinDropDown(_G.AddonCharacterDropDown)
     F.ReskinScroll(_G.AddonListScrollFrameScrollBar)
 
-    _G.AddonListForceLoad:SetSize(26, 26)
+    _G.AddonListForceLoad:SetSize(20, 20)
     _G.AddonCharacterDropDown:SetWidth(170)
 
     for i = 1, _G.MAX_ADDONS_DISPLAYED do
         local checkbox = _G['AddonListEntry' .. i .. 'Enabled']
-        F.ReskinCheck(checkbox, false, true)
+        checkbox:SetSize(18, 18)
+        F.ReskinCheck(checkbox, true, true)
         F.Reskin(_G['AddonListEntry' .. i .. 'Load'])
     end
 
