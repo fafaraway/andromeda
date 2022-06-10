@@ -168,7 +168,7 @@ function ECF:KeystoneInfo_WeeklyRuns()
         end
 
         if not isShiftKeyDown then
-            _G.GameTooltip:AddLine(L['Hold Shift'], 0.6, 0.8, 1)
+            _G.GameTooltip:AddLine(L['Hold SHIFT for more details'], 0.6, 0.8, 1)
         end
 
         _G.GameTooltip:Show()

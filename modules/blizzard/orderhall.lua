@@ -95,7 +95,7 @@ function BLIZZARD:OrderHall_OnEnter()
     end
 
     _G.GameTooltip:AddDoubleLine(' ', C.LINE_STRING)
-    _G.GameTooltip:AddDoubleLine(' ', L['Hold SHIFT for details'], 1, 1, 1, 0.6, 0.8, 1)
+    _G.GameTooltip:AddDoubleLine(' ', L['Hold SHIFT for more details'], 1, 1, 1, 0.6, 0.8, 1)
     _G.GameTooltip:Show()
 
     F:RegisterEvent('MODIFIER_STATE_CHANGED', BLIZZARD.OrderHall_OnShiftDown)

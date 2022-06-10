@@ -151,7 +151,7 @@ local function Block_OnEnter(self)
                 hiddenMemory = hiddenMemory + infoTable[i][3]
             end
             _G.GameTooltip:AddDoubleLine(
-                string.format(showMoreString, numEnabled - maxAddOns, L['Hidden'], L['Hold Shift']),
+                string.format(showMoreString, numEnabled - maxAddOns, L['Hidden'], L['Hold SHIFT for more details']),
                 formatMemory(hiddenMemory),
                 0.6,
                 0.8,
@@ -203,7 +203,7 @@ local function Block_OnEnter(self)
                 hiddenUsage = hiddenUsage + infoTable[i][4]
             end
             _G.GameTooltip:AddDoubleLine(
-                string.format(showMoreString, numEnabled - maxAddOns, L['Hidden'], L['Hold Shift']),
+                string.format(showMoreString, numEnabled - maxAddOns, L['Hidden'], L['Hold SHIFT for more details']),
                 string.format(usageString, hiddenUsage / passedTime),
                 0.6,
                 0.8,

@@ -281,19 +281,19 @@ function UNITFRAME:CreateCastBar(self)
     else
         if style == 'player' then
             castbar:SetSize(playerWidth, playerHeight)
-            CreateCastBarMover(castbar, L['Player Castbar'], 'PlayerCastbar', { 'TOP', self, 'BOTTOM', 0, -20 })
+            CreateCastBarMover(castbar, L['PlayerCastbar'], 'PlayerCastbar', { 'TOP', self, 'BOTTOM', 0, -20 })
 
             icon:SetSize(playerHeight + iconAmp, playerHeight + iconAmp)
             icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
         elseif style == 'target' then
             castbar:SetSize(targetWidth, targetHeight)
-            CreateCastBarMover(castbar, L['Target Castbar'], 'TargetCastbar', { 'TOP', self, 'BOTTOM', 0, -4 })
+            CreateCastBarMover(castbar, L['TargetCastbar'], 'TargetCastbar', { 'TOP', self, 'BOTTOM', 0, -4 })
 
             icon:SetSize(targetHeight + iconAmp, targetHeight + iconAmp)
             icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
         elseif style == 'focus' then
             castbar:SetSize(focusWidth, focusHeight)
-            CreateCastBarMover(castbar, L['Focus Castbar'], 'FocusCastbar', { 'CENTER', _G.UIParent, 'CENTER', 0, 120 })
+            CreateCastBarMover(castbar, L['FocusCastbar'], 'FocusCastbar', { 'CENTER', _G.UIParent, 'CENTER', 0, 120 })
 
             icon:SetSize(focusHeight + iconAmp, focusHeight + iconAmp)
             icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
