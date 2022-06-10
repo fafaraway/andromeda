@@ -235,11 +235,17 @@ local function Slider_OnValueChanged(self, v)
 end
 
 local function updateDropdownSelection(self)
+    local classColor = _G.FREE_ADB.WidgetHighlightClassColor
+    local newColor = _G.FREE_ADB.WidgetHighlightColor
     local dd = self.__owner
     for i = 1, #dd.__options do
         local option = dd.options[i]
         if i == UpdateValue(dd.__key, dd.__value) then
-            option:SetBackdropColor(C.r, C.g, C.b, 0.25)
+            if classColor then
+                option:SetBackdropColor(C.r, C.g, C.b, 0.25)
+            else
+                option:SetBackdropColor(newColor.r, newColor.g, newColor.b, 0.25)
+            end
             option.selected = true
         else
             option:SetBackdropColor(0.1, 0.1, 0.1, 0.25)

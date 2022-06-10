@@ -644,11 +644,18 @@ do
     end
 
     local function Option_OnClick(self)
+        local classColor = _G.FREE_ADB.WidgetHighlightClassColor
+        local newColor = _G.FREE_ADB.WidgetHighlightColor
+
         PlaySound(_G.SOUNDKIT.GS_TITLE_OPTION_OK)
         local opt = self.__owner.options
         for i = 1, #opt do
             if self == opt[i] then
-                opt[i]:SetBackdropColor(C.r, C.g, C.b, 0.25)
+                if classColor then
+                    opt[i]:SetBackdropColor(C.r, C.g, C.b, 0.25)
+                else
+                    opt[i]:SetBackdropColor(newColor.r, newColor.g, newColor.b, 0.25)
+                end
                 opt[i].selected = true
             else
                 opt[i]:SetBackdropColor(0.1, 0.1, 0.1, 0.25)
@@ -1138,10 +1145,6 @@ do
             return
         end
 
-        local gradStyle = _G.FREE_ADB.GradientStyle
-        local color = _G.FREE_ADB.ButtonBackdropColor
-        local alpha = _G.FREE_ADB.ButtonBackdropAlpha
-
         local classColor = _G.FREE_ADB.WidgetHighlightClassColor
         local newColor = _G.FREE_ADB.WidgetHighlightColor
 
@@ -1161,11 +1164,6 @@ do
     end
 
     local function Button_OnLeave(self)
-        local gradStyle = _G.FREE_ADB.GradientStyle
-        local color = _G.FREE_ADB.ButtonBackdropColor
-        local alpha = _G.FREE_ADB.ButtonBackdropAlpha
-
-
         self.__bg:SetBackdropColor(0, 0, 0, 0.25)
         F.SetBorderColor(self.__bg)
 
@@ -1274,11 +1272,19 @@ do
         F.CreateSD(bg)
         self.bg = bg
 
+        local classColor = _G.FREE_ADB.WidgetHighlightClassColor
+        local newColor = _G.FREE_ADB.WidgetHighlightColor
+
         self:SetHighlightTexture(C.Assets.Texture.Backdrop)
         local hl = self:GetHighlightTexture()
         hl:ClearAllPoints()
         hl:SetInside(bg)
-        hl:SetVertexColor(C.r, C.g, C.b, 0.25)
+
+        if classColor then
+            hl:SetVertexColor(C.r, C.g, C.b, 0.25)
+        else
+            hl:SetVertexColor(newColor.r, newColor.g, newColor.b, 0.25)
+        end
     end
 
     function F:ResetTabAnchor()
@@ -1421,7 +1427,14 @@ do
     function F:Texture_OnEnter()
         if self:IsEnabled() then
             if self.__texture then
-                self.__texture:SetVertexColor(C.r, C.g, C.b)
+                local classColor = _G.FREE_ADB.WidgetHighlightClassColor
+                local newColor = _G.FREE_ADB.WidgetHighlightColor
+
+                if classColor then
+                    self.__texture:SetVertexColor(C.r, C.g, C.b)
+                else
+                    self.__texture:SetVertexColor(newColor.r, newColor.g, newColor.b)
+                end
             end
         end
     end
@@ -1688,7 +1701,7 @@ do
         self:SetBackdrop(nil)
         F.StripTextures(self)
 
-        local bg = F.CreateBDFrame(self, 0.25)
+        local bg = F.CreateBDFrame(self, 0.25, true)
         bg:SetPoint('TOPLEFT', 14, -2)
         bg:SetPoint('BOTTOMRIGHT', -15, 3)
         F.SetBorderColor(bg)
@@ -1712,9 +1725,9 @@ do
         bar:SetStatusBarTexture(gradStyle and gradTex or normTex)
 
         if classColor then
-            bar:SetStatusBarColor(C.r, C.g, C.b, 0.45)
+            bar:SetStatusBarColor(C.r, C.g, C.b, 0.85)
         else
-            bar:SetStatusBarColor(newColor.r, newColor.g, newColor.b, 0.45)
+            bar:SetStatusBarColor(newColor.r, newColor.g, newColor.b, 0.85)
         end
 
         if vertical then

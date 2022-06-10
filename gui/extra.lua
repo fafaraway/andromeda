@@ -213,10 +213,11 @@ end
 
 local function CreateCheckbox(parent, offset, key, value, text, func, tip)
     local box = F.CreateCheckbox(parent.child, true)
-    box:SetSize(20, 20)
+    box:SetSize(18, 18)
     box:SetHitRectInsets(-5, -5, -5, -5)
     box:SetPoint('TOPLEFT', 10, offset)
-    F.CreateFS(box, C.Assets.Font.Regular, 12, nil, text, nil, true, 'LEFT', 22, 0)
+    box.label = F.CreateFS(box, C.Assets.Font.Regular, 12, nil, text, nil, true)
+    box.label:SetPoint('LEFT', box, 'RIGHT', 4, 0)
 
     box:SetChecked(C.DB[key][value])
     box.__value = value
@@ -234,6 +235,7 @@ end
 
 local function CreateColorSwatch(parent, value, text, defaultV, offset, x, y)
     local swatch = F.CreateColorSwatch(parent, text, value)
+    swatch:SetSize(22, 14)
     swatch.__default = defaultV
 
     if x and y then
