@@ -976,7 +976,7 @@ function GUI:SetupNameplateAuraFilter(parent)
             StaticPopup_Show('FREEUI_RESET_NAMEPLATE_AURA_FILTER')
         end)
 
-        for spellID, value in pairs(NAMEPLATE.NameplateFilter[index]) do
+        for spellID, value in pairs(NAMEPLATE.AuraFilterList[index]) do
             if value then
                 createBar(scroll.child, index, spellID)
             end

@@ -230,6 +230,11 @@ local isMine = {
     ['vehicle'] = true,
 }
 
+NAMEPLATE.AuraFilterList = {
+    [1] = {},
+    [2] = {},
+}
+
 function UNITFRAME.AuraFilter(
     element,
     unit,
@@ -274,8 +279,8 @@ function UNITFRAME.AuraFilter(
         end
     elseif style == 'nameplate' or style == 'boss' or style == 'arena' then
         if element.__owner.plateType == 'NameOnly' then
-            return NAMEPLATE.NameplateFilter[1][spellID]
-        elseif NAMEPLATE.NameplateFilter[2][spellID] then
+            return NAMEPLATE.AuraFilterList[1][spellID]
+        elseif NAMEPLATE.AuraFilterList[2][spellID] then
             return false
         elseif
             (element.showStealableBuffs and isStealable or element.alwaysShowStealable and dispellType[debuffType])
@@ -283,7 +288,7 @@ function UNITFRAME.AuraFilter(
             and not button.isDebuff
         then
             return true
-        elseif NAMEPLATE.NameplateFilter[1][spellID] then
+        elseif NAMEPLATE.AuraFilterList[1][spellID] then
             return true
         else
             local auraFilter = C.DB.Nameplate.AuraFilterMode
@@ -489,6 +494,39 @@ function UNITFRAME:CreateAuras(self)
     F:RegisterEvent('PLAYER_ENTERING_WORLD', UNITFRAME.PLAYER_ENTERING_WORLD)
 end
 
+function NAMEPLATE:CreateAuras(self)
+    local bu = CreateFrame('Frame', nil, self)
+    bu.gap = true
+    bu.spacing = 4
+    bu.numTotal = 32
+    bu.initialAnchor = 'BOTTOMLEFT'
+    bu:SetPoint('BOTTOM', self, 'TOP', 0, 16)
+    bu['growth-x'] = 'RIGHT'
+    bu['growth-y'] = 'UP'
+    bu.iconsPerRow = C.DB.Nameplate.AuraPerRow
+    bu.disableCooldown = true
+
+    UNITFRAME:UpdateAuraContainer(self, bu, bu.numTotal)
+
+    bu.onlyShowPlayer = C.DB.Nameplate.OnlyShowPlayer
+    bu.desaturateDebuff = C.DB.Nameplate.DesaturateIcon
+    bu.showDebuffType = C.DB.Nameplate.DebuffTypeColor
+    bu.showStealableBuffs = C.DB.Nameplate.StealableBuffs
+    bu.disableMouse = C.DB.Nameplate.DisableMouse
+
+    bu.showStealableBuffs = C.DB.Nameplate.DispellMode == 1
+    bu.alwaysShowStealable = C.DB.Nameplate.DispellMode == 2
+
+    bu.CustomFilter = UNITFRAME.AuraFilter
+    bu.PostCreateIcon = UNITFRAME.PostCreateIcon
+    bu.PostUpdateIcon = UNITFRAME.PostUpdateIcon
+    bu.PostUpdateGapIcon = UNITFRAME.PostUpdateGapIcon
+    bu.PreUpdate = BolsterPreUpdate
+    bu.PostUpdate = BolsterPostUpdate
+
+    self.Auras = bu
+end
+
 function UNITFRAME.PartyAuraFilter(_, _, _, _, _, _, _, _, _, _, _, _, spellID)
     if C.PartyAurasList[spellID] then
         return true
@@ -534,38 +572,7 @@ function UNITFRAME:CreatePartyAuras(self)
     self.Auras = bu
 end
 
-function NAMEPLATE:CreateAuras(self)
-    local bu = CreateFrame('Frame', nil, self)
-    bu.gap = true
-    bu.spacing = 4
-    bu.numTotal = 32
-    bu.initialAnchor = 'BOTTOMLEFT'
-    bu:SetPoint('BOTTOM', self, 'TOP', 0, 16)
-    bu['growth-x'] = 'RIGHT'
-    bu['growth-y'] = 'UP'
-    bu.iconsPerRow = C.DB.Nameplate.AuraPerRow
-    bu.disableCooldown = true
 
-    UNITFRAME:UpdateAuraContainer(self, bu, bu.numTotal)
-
-    bu.onlyShowPlayer = C.DB.Nameplate.OnlyShowPlayer
-    bu.desaturateDebuff = C.DB.Nameplate.DesaturateIcon
-    bu.showDebuffType = C.DB.Nameplate.DebuffTypeColor
-    bu.showStealableBuffs = C.DB.Nameplate.StealableBuffs
-    bu.disableMouse = C.DB.Nameplate.DisableMouse
-
-    bu.showStealableBuffs = C.DB.Nameplate.DispellMode == 1
-    bu.alwaysShowStealable = C.DB.Nameplate.DispellMode == 2
-
-    bu.CustomFilter = UNITFRAME.AuraFilter
-    bu.PostCreateIcon = UNITFRAME.PostCreateIcon
-    bu.PostUpdateIcon = UNITFRAME.PostUpdateIcon
-    bu.PostUpdateGapIcon = UNITFRAME.PostUpdateGapIcon
-    bu.PreUpdate = BolsterPreUpdate
-    bu.PostUpdate = BolsterPostUpdate
-
-    self.Auras = bu
-end
 
 function UNITFRAME.GroupBuffFilter(_, _, _, _, _, _, _, _, _, caster, _, _, spellID, canApplyAura, isBossAura)
     if isBossAura then

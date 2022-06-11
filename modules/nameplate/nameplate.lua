@@ -1064,10 +1064,8 @@ function NAMEPLATE:CheckNameplateAuraFilters()
     CheckNameplateAuraFilter(2)
 end
 
-NAMEPLATE.NameplateFilter = { [1] = {}, [2] = {} }
-
 local function RefreshNameplateAuraFilter(index)
-    wipe(NAMEPLATE.NameplateFilter[index])
+    wipe(NAMEPLATE.AuraFilterList[index])
 
     local VALUE = (index == 1 and C.NameplateAuraWhiteList) or (index == 2 and C.NameplateAuraBlackList)
     if VALUE then
@@ -1075,7 +1073,7 @@ local function RefreshNameplateAuraFilter(index)
             local name = GetSpellInfo(spellID)
             if name then
                 if _G.FREE_ADB['NameplateAuraFilterList'][index][spellID] == nil then
-                    NAMEPLATE.NameplateFilter[index][spellID] = true
+                    NAMEPLATE.AuraFilterList[index][spellID] = true
                 end
             end
         end
@@ -1083,7 +1081,7 @@ local function RefreshNameplateAuraFilter(index)
 
     for spellID, value in pairs(_G.FREE_ADB['NameplateAuraFilterList'][index]) do
         if value then
-            NAMEPLATE.NameplateFilter[index][spellID] = true
+            NAMEPLATE.AuraFilterList[index][spellID] = true
         end
     end
 end
