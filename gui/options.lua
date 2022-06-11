@@ -1879,7 +1879,7 @@ GUI.OptionsList = {
         {
             1,
             'Nameplate',
-            'CastTarget',
+            'TargetName',
             L['Spell Target'],
             nil,
             nil,
