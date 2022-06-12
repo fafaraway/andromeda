@@ -580,7 +580,7 @@ function UNITFRAME.PartyAuraFilter(_, _, _, _, _, _, _, _, _, _, _, _, spellID)
     end
 end
 
-function UNITFRAME.UpdatePartyAuraAnchor(element)
+function UNITFRAME.PartyAuraUpdateAnchor(element)
     local self = element:GetParent()
     local horizon = C.DB.Unitframe.PartyDirec > 2
 
@@ -602,7 +602,7 @@ function UNITFRAME:CreatePartyAuras(self)
     bu.numTotal = C.DB.Unitframe.PartyAura and C.DB.Unitframe.PartyAuraNum or 0
     bu.partyAura = true
 
-    UNITFRAME.UpdatePartyAuraAnchor(bu)
+    UNITFRAME.PartyAuraUpdateAnchor(bu)
     UNITFRAME:UpdateAuraContainer(self, bu, bu.numTotal)
 
     bu.gap = false
@@ -612,7 +612,7 @@ function UNITFRAME:CreatePartyAuras(self)
     bu.PostCreateIcon = UNITFRAME.PostCreateIcon
     bu.PostUpdateIcon = UNITFRAME.PostUpdateIcon
     bu.PostUpdateGapIcon = UNITFRAME.PostUpdateGapIcon
-    bu.UpdateAnchor = UNITFRAME.UpdatePartyAuraAnchor
+    bu.UpdateAnchor = UNITFRAME.PartyAuraUpdateAnchor
 
     self.Auras = bu
 end

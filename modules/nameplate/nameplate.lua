@@ -693,41 +693,41 @@ end
 
 -- Major spells glow
 NAMEPLATE.MajorSpellsList = {}
-function NAMEPLATE:RefreshMajorSpells()
+function NAMEPLATE:RefreshMajorSpellsFilter()
     table.wipe(NAMEPLATE.MajorSpellsList)
 
-    for spellID in pairs(C.NameplateMajorSpellsList) do
+    for spellID in pairs(C.MajorSpellsList) do
         local name = GetSpellInfo(spellID)
         if name then
-            local modValue = _G.FREE_ADB['NPMajorSpells'][spellID]
+            local modValue = _G.FREE_ADB['MajorSpellsList'][spellID]
             if modValue == nil then
                 NAMEPLATE.MajorSpellsList[spellID] = true
             end
         end
     end
 
-    for spellID, value in pairs(_G.FREE_ADB['NPMajorSpells']) do
+    for spellID, value in pairs(_G.FREE_ADB['MajorSpellsList']) do
         if value then
             NAMEPLATE.MajorSpellsList[spellID] = true
         end
     end
 end
 
-function NAMEPLATE:CheckMajorSpells()
-    for spellID in pairs(C.NameplateMajorSpellsList) do
+function NAMEPLATE:CheckMajorSpellsFilter()
+    for spellID in pairs(C.MajorSpellsList) do
         local name = GetSpellInfo(spellID)
         if name then
-            if _G.FREE_ADB['NPMajorSpells'][spellID] then
-                _G.FREE_ADB['NPMajorSpells'][spellID] = nil
+            if _G.FREE_ADB['MajorSpellsList'][spellID] then
+                _G.FREE_ADB['MajorSpellsList'][spellID] = nil
             end
         else
             F:Debug('CheckMajorSpells: Invalid Spell ID ' .. spellID)
         end
     end
 
-    for spellID, value in pairs(_G.FREE_ADB['NPMajorSpells']) do
-        if value == false and C.NameplateMajorSpellsList[spellID] == nil then
-            _G.FREE_ADB['NPMajorSpells'][spellID] = nil
+    for spellID, value in pairs(_G.FREE_ADB['MajorSpellsList']) do
+        if value == false and C.MajorSpellsList[spellID] == nil then
+            _G.FREE_ADB['MajorSpellsList'][spellID] = nil
         end
     end
 end
@@ -1106,8 +1106,8 @@ function NAMEPLATE:OnLogin()
     NAMEPLATE:CheckExplosives()
     NAMEPLATE:UpdateGroupRoles()
     NAMEPLATE:RefreshPlateOnFactionChanged()
-    NAMEPLATE:CheckMajorSpells()
-    NAMEPLATE:RefreshMajorSpells()
+    NAMEPLATE:CheckMajorSpellsFilter()
+    NAMEPLATE:RefreshMajorSpellsFilter()
     NAMEPLATE:CheckNameplateAuraFilters()
     NAMEPLATE:RefreshNameplateAuraFilters()
     NAMEPLATE:CheckUnitsList()

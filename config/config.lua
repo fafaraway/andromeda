@@ -597,7 +597,7 @@ C.AccountSettings = {
     NameplateAuraFilterList = { [1] = {}, [2] = {} },
     DebuffWatcherList = {},
     RaidAuraWatch = {},
-    NPMajorSpells = {},
+    MajorSpellsList = {},
     CornerSpellsList = {},
     PartySpellsList = {},
     PartyAurasList = {},

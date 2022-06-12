@@ -37,12 +37,23 @@ StaticPopupDialogs.FREEUI_RELOADUI = {
     hideOnEscape = true,
 }
 
-StaticPopupDialogs.FREEUI_RESET_MAJOR_SPELLS = {
-    text = C.RED_COLOR .. L['Are you sure to restore default Major Spells List?'],
+StaticPopupDialogs.FREEUI_RESET_MAJOR_SPELLS_LIST = {
+    text = C.RED_COLOR .. L['Reset to default list?'],
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
-        _G.FREE_ADB['NPMajorSpells'] = {}
+        _G.FREE_ADB['MajorSpellsList'] = {}
+        _G.ReloadUI()
+    end,
+    whileDead = 1,
+}
+
+StaticPopupDialogs['FREEUI_RESET_PARTY_AURA_LIST'] = {
+    text = C.RED_COLOR .. L['Reset to default list?'],
+    button1 = _G.YES,
+    button2 = _G.NO,
+    OnAccept = function()
+        _G.FREE_ADB['PartyAurasList'] = {}
         _G.ReloadUI()
     end,
     whileDead = 1,

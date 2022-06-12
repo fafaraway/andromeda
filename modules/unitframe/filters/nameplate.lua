@@ -131,7 +131,7 @@ C.PowerUnitsList = {
     [171557] = true, -- 猎手阿尔迪莫，巴加斯特之影
 }
 
-C.NameplateMajorSpellsList = {
+C.MajorSpellsList = {
     [358967] = true, -- S2，地狱烈火
     [334664] = true, -- 彼界，惊恐嚎哭
     [332612] = true, -- 彼界，治疗波

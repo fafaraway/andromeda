@@ -61,7 +61,11 @@ end
 function GUI:CreateScroll(parent, width, height, text, noBg)
     local scroll = CreateFrame('ScrollFrame', nil, parent, 'UIPanelScrollFrameTemplate')
     scroll:SetSize(width, height)
-    scroll:SetPoint('TOPLEFT', 10, -45)
+    if parent.bg then
+        scroll:SetPoint('TOPLEFT', 10, -45)
+    else
+        scroll:SetPoint('TOPLEFT', 10, -50)
+    end
 
     if text then
         F.CreateFS(scroll, C.Assets.Font.Regular, 12, 'OUTLINE', text, nil, true, 'TOPLEFT', 5, 20)
@@ -121,6 +125,72 @@ local function CreateBars(parent, spellID, table1, table2, table3)
     SortBars(table1)
 end
 
+--[[
+
+ ]]
+
+local function createBars(parent, spellID, newTable, tableName)
+    -- table1 barTable
+    -- table2 C.table
+    -- table3 FREE_ADB.table
+    local spellName = GetSpellInfo(spellID)
+    local texture = GetSpellTexture(spellID)
+
+    local bar = CreateFrame('Frame', nil, parent.child, 'BackdropTemplate')
+    bar:SetSize(200, 30)
+    F.CreateBD(bar, 0.25)
+    newTable[spellID] = bar
+
+    local icon, delBtn = GUI:CreateBarWidgets(bar, texture)
+    F.AddTooltip(icon, 'ANCHOR_RIGHT', spellID)
+    delBtn:SetScript('OnClick', function()
+        bar:Hide()
+
+        if C[tableName][spellID] then
+            _G.FREE_ADB[tableName][spellID] = false
+        else
+            _G.FREE_ADB[tableName][spellID] = nil
+        end
+
+        newTable[spellID] = nil
+        SortBars(newTable)
+    end)
+
+    local name = F.CreateFS(bar, C.Assets.Font.Regular, 12, nil, spellName, nil, true, 'LEFT', 30, 0)
+    name:SetWidth(160)
+    name:SetJustifyH('LEFT')
+
+    SortBars(newTable)
+end
+
+local function addOnClick(btn)
+    local parent = btn.__owner
+    local newTable = parent.barTable
+    local tableName = parent.tableName
+
+    local spellID = tonumber(parent.editBox:GetText())
+    if not spellID or not GetSpellInfo(spellID) then
+        _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Incorrect SpellID'])
+        return
+    end
+
+    local modValue = _G.FREE_ADB[tableName][spellID]
+    if modValue or modValue == nil and C[tableName][spellID] then
+        _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is existed'])
+        return
+    end
+
+    _G.FREE_ADB[tableName][spellID] = true
+
+    createBars(parent.scrollArea, spellID, newTable, tableName)
+
+    parent.editBox:SetText('')
+end
+
+--[[
+
+ ]]
+
 local function Label_OnEnter(self)
     _G.GameTooltip:ClearLines()
     _G.GameTooltip:SetOwner(self:GetParent(), 'ANCHOR_RIGHT', 0, 3)
@@ -167,11 +237,16 @@ end
 
 -- Widgets
 
-function GUI:CreateEditbox(parent, text, x, y, tip, width, height)
+local function createEditBox(parent, text, x, y, tip, width, height)
     local eb = F.CreateEditBox(parent, width or 90, height or 24)
     eb:SetPoint('TOPLEFT', x, y)
     eb:SetMaxLetters(255)
-    CreateLabel(eb, text, tip)
+    CreateLabel(eb, text)
+
+    if tip then
+        eb.title = L['Hint']
+        F.AddTooltip(eb, 'ANCHOR_RIGHT', tip, 'BLUE', true)
+    end
 
     return eb
 end
@@ -299,16 +374,21 @@ local function updateDropdownState(self)
     end
 end
 
-function GUI:CreateDropdown(parent, text, x, y, data, tip, width, height)
+local function createDropdown(parent, text, x, y, data, tip, width, height)
     local dd = F.CreateDropDown(parent, width or 90, height or 30, data)
     dd:SetPoint('TOPLEFT', x, y)
-    CreateLabel(dd, text, tip)
+    CreateLabel(dd, text)
+
+    if tip then
+        dd.title = L['Hint']
+        F.AddTooltip(dd, 'ANCHOR_RIGHT', tip, 'BLUE', true)
+    end
 
     return dd
 end
 
 local function CreateOptionDropdown(parent, title, yOffset, options, tooltip, key, value, default, func)
-    local dd = GUI:CreateDropdown(parent.child, title, 20, yOffset, options, tooltip, 180, 20)
+    local dd = createDropdown(parent.child, title, 20, yOffset, options, tooltip, 180, 20)
     dd.__key = key
     dd.__value = value
     dd.__default = default
@@ -895,7 +975,8 @@ function GUI:SetupNameplateAuraFilter(parent)
             bar:Hide()
 
             if
-                (index == 1 and C.NameplateAuraWhiteList[spellID]) or (index == 2 and C.NameplateAuraBlackList[spellID])
+                (index == 1 and C.NameplateAuraWhiteList[spellID])
+                or (index == 2 and C.NameplateAuraBlackList[spellID])
             then
                 _G.FREE_ADB['NameplateAuraFilterList'][index][spellID] = false
             else
@@ -989,8 +1070,8 @@ function GUI:SetupNameplateAuraFilter(parent)
     end
 end
 
-local function RefreshMajorSpells()
-    NAMEPLATE:RefreshMajorSpells()
+local function RefreshMajorSpellsFilter()
+    NAMEPLATE:RefreshMajorSpellsFilter()
 end
 
 function GUI:SetupNameplateMajorSpells(parent)
@@ -1000,52 +1081,41 @@ function GUI:SetupNameplateMajorSpells(parent)
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName, nil, true)
-    panel:SetScript('OnHide', RefreshMajorSpells)
+    local panel = CreateExtraGUI(parent, guiName, L['Major Spells Filter'], true)
+    panel:SetScript('OnHide', RefreshMajorSpellsFilter)
     parent.panel = panel
 
-    local barTable = {}
+    panel.barTable = {}
+    panel.tableName = 'MajorSpellsList'
 
-    local frame = panel.bg
-    local scroll = GUI:CreateScroll(frame, 200, 485)
-    parent.scroll = scroll
-    scroll.box = GUI:CreateEditbox(frame, nil, 10, -10, nil, 130, 25)
+    local scrollArea = GUI:CreateScroll(panel.bg, 200, 485)
+    panel.scrollArea = scrollArea
+
+    local editBox = createEditBox(panel.bg, nil, 10, -10, nil, 110, 24)
+    panel.editBox = editBox
+    editBox.title = L['Hint']
     F.AddTooltip(
-        scroll.box,
+        editBox,
         'ANCHOR_RIGHT',
         L['Fill in SpellID, must be a number.|nSpell name is not supported.'],
-        'BLUE'
+        'BLUE',
+        true
     )
 
-    scroll.add = F.CreateButton(frame, 40, 25, _G.ADD, 11)
-    scroll.add:SetPoint('TOPRIGHT', -8, -10)
-    scroll.add.__owner = scroll
-    scroll.add:HookScript('OnClick', function(button)
-        local parent = button.__owner
-        local spellID = tonumber(parent.box:GetText())
-        if not spellID or not GetSpellInfo(spellID) then
-            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Incorrect SpellID'])
-            return
-        end
-        local modValue = _G.FREE_ADB['NPMajorSpells'][spellID]
-        if modValue or modValue == nil and C.NameplateMajorSpellsList[spellID] then
-            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is existed'])
-            return
-        end
-        _G.FREE_ADB['NPMajorSpells'][spellID] = true
-        CreateBars(scroll, spellID, barTable, 'NameplateMajorSpellsList', 'NPMajorSpells')
-        parent.box:SetText('')
+    local addBtn = F.CreateButton(panel.bg, 50, 24, _G.ADD)
+    addBtn:SetPoint('TOPRIGHT', -8, -10)
+    addBtn:HookScript('OnClick', addOnClick)
+    addBtn.__owner = panel
+
+    local resetBtn = F.CreateButton(panel.bg, 50, 24, _G.RESET)
+    resetBtn:SetPoint('RIGHT', addBtn, 'LEFT', -5, 0)
+    resetBtn:HookScript('OnClick', function()
+        StaticPopup_Show('FREEUI_RESET_MAJOR_SPELLS_LIST')
     end)
 
-    scroll.reset = F.CreateButton(frame, 40, 25, _G.RESET, 11)
-    scroll.reset:SetPoint('RIGHT', scroll.add, 'LEFT', -5, 0)
-    scroll.reset:HookScript('OnClick', function()
-        StaticPopup_Show('FREEUI_RESET_MAJOR_SPELLS')
-    end)
-
-    for spellID, value in pairs(NAMEPLATE.MajorSpellsList) do
+    for spellID, value in pairs(NAMEPLATE[panel.tableName]) do
         if value then
-            CreateBars(scroll, spellID, barTable, 'NameplateMajorSpellsList', 'NPMajorSpells')
+            createBars(scrollArea, spellID, panel.barTable, panel.tableName)
         end
     end
 end
@@ -2343,16 +2413,16 @@ function GUI:SetupPartyWatcher(parent)
     local frame = panel.bg
     local options = {}
 
-    options[1] = GUI:CreateEditbox(
+    options[1] = createEditBox(
         frame,
         L['SpellID'],
         10,
         -30,
-        L["Fill in SpellID, must be a number.|nSpell name is not supported."],
+        L['Fill in SpellID, must be a number.|nSpell name is not supported.'],
         107,
         24
     )
-    options[2] = GUI:CreateEditbox(
+    options[2] = createEditBox(
         frame,
         L['Spell Cooldown'],
         122,
@@ -2453,296 +2523,323 @@ function GUI:SetupPartyWatcher(parent)
     end
 end
 
-local function UpdateDebuffWatcher()
-    UNITFRAME:UpdateDebuffWatcher()
-end
 
-local function AddNewDungeon(dungeons, dungeonID)
-    local name = EJ_GetInstanceInfo(dungeonID)
-    if name then
-        table.insert(dungeons, name)
-    end
-end
 
-function GUI:SetupDebuffWatcher(parent)
-    local guiName = C.ADDON_NAME .. 'GUISetupDebuffWatcher'
-    TogglePanel(guiName)
-    if extraGUIs[guiName] then
-        return
+do
+
+    local function UpdateDebuffWatcher()
+        UNITFRAME:UpdateDebuffWatcher()
     end
 
-    local panel = CreateExtraGUI(parent, guiName, nil, true)
-    panel:SetScript('OnHide', UpdateDebuffWatcher)
+    function GUI:SetupDebuffWatcher(parent)
+        local guiName = C.ADDON_NAME .. 'GUISetupDebuffWatcher'
+        TogglePanel(guiName)
+        if extraGUIs[guiName] then
+            return
+        end
 
-    local setupBars
-    local frame = panel.bg
-    local bars, options = {}, {}
+        local panel = CreateExtraGUI(parent, guiName, L['Instance Debuffs Filter'], true)
+        panel:SetScript('OnHide', UpdateDebuffWatcher)
 
-    local iType = GUI:CreateDropdown(frame, L['Type'], 10, -30, { _G.DUNGEONS, _G.RAID, _G.OTHER }, nil, 107, 24)
-    for i = 1, 3 do
-        iType.options[i]:HookScript('OnClick', function()
-            for j = 1, 2 do
-                GUI:ClearEdit(options[j])
-                if i == j then
-                    options[j]:Show()
-                else
-                    options[j]:Hide()
+        local setupBars
+        local frame = panel.bg
+        local bars, options = {}, {}
+
+        local iType = createDropdown(
+            frame,
+            L['Instance Type'],
+            10,
+            -30,
+            { _G.DUNGEONS, _G.RAID, _G.OTHER },
+            L['Select the type of instance.|nThe list of debuffs is saved separately for each instance.'],
+            107,
+            24
+        )
+        iType.title = L['Hint']
+        for i = 1, 3 do
+            iType.options[i]:HookScript('OnClick', function()
+                for j = 1, 2 do
+                    GUI:ClearEdit(options[j])
+                    if i == j then
+                        options[j]:Show()
+                    else
+                        options[j]:Hide()
+                    end
                 end
+
+                for k = 1, #bars do
+                    bars[k]:Hide()
+                end
+
+                if i == 3 then
+                    setupBars(0) -- add OTHER spells
+                end
+            end)
+        end
+
+        local function addNewDungeon(dungeons, dungeonID)
+            local name = EJ_GetInstanceInfo(dungeonID)
+            if name then
+                table.insert(dungeons, name)
+            end
+        end
+
+        local dungeons = {}
+        for dungeonID = 1182, 1189 do
+            addNewDungeon(dungeons, dungeonID)
+        end
+
+        local raids = {
+            [1] = EJ_GetInstanceInfo(1190),
+            [2] = EJ_GetInstanceInfo(1193),
+            [3] = EJ_GetInstanceInfo(1195)
+        }
+
+        options[1] = createDropdown(frame, _G.DUNGEONS, 123, -30, dungeons, L['Select a specific dungeon.'], 107, 24)
+        options[1].title = L['Hint']
+        options[1]:Hide()
+        options[2] = createDropdown(frame, _G.RAID, 123, -30, raids, L['Select a specific raid.'], 107, 24)
+        options[2].title = L['Hint']
+        options[2]:Hide()
+        options[3] = createEditBox(
+            frame,
+            L['SpellID'],
+            10,
+            -90,
+            L['Fill in SpellID, must be a number.|nSpell name is not supported.'],
+            107,
+            24
+        )
+        options[4] = createEditBox(
+            frame,
+            L['Priority'],
+            123,
+            -90,
+            L["Spell's priority when visible.|nWhen multiple spells exist, it only remain the one that owns highest priority.|nDefault priority is 2, if you leave it blank.|nThe maximun priority is 6, and the icon would flash if you set so."],
+            107,
+            24
+        )
+
+        local function analyzePrio(priority)
+            priority = priority or 2
+            priority = math.min(priority, 6)
+            priority = math.max(priority, 1)
+            return priority
+        end
+
+        local function isDebuffExisted(instName, spellID)
+            print(instName)
+            print(spellID)
+            print(C.DebuffWatcherList[instName][spellID])
+            local localPrio = C.DebuffWatcherList[instName][spellID]
+            local savedPrio = _G.FREE_ADB['DebuffWatcherList'][instName]
+                and _G.FREE_ADB['DebuffWatcherList'][instName][spellID]
+            if (localPrio and savedPrio and savedPrio == 0) or (not localPrio and not savedPrio) then
+                return false
+            end
+            return true
+        end
+
+        local function addOnClick(options)
+            local dungeonName = options[1].Text:GetText()
+            local raidName = options[2].Text:GetText()
+            local spellID = tonumber(options[3]:GetText())
+            local priority = tonumber(options[4]:GetText())
+            local instName = dungeonName or raidName or (iType.Text:GetText() == _G.OTHER and 0)
+
+            if not instName or not spellID then
+                _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['You need to complete all optinos'])
+                return
+            end
+            if spellID and not GetSpellInfo(spellID) then
+                _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Incorrect SpellID'])
+                return
+            end
+            if isDebuffExisted(instName, spellID) then
+                _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is existed'])
+                return
             end
 
-            for k = 1, #bars do
-                bars[k]:Hide()
+            priority = analyzePrio(priority)
+            if not _G.FREE_ADB['DebuffWatcherList'][instName] then
+                _G.FREE_ADB['DebuffWatcherList'][instName] = {}
             end
+            _G.FREE_ADB['DebuffWatcherList'][instName][spellID] = priority
+            setupBars(instName)
+            GUI:ClearEdit(options[3])
+            GUI:ClearEdit(options[4])
+        end
 
-            if i == 3 then
-                setupBars(0) -- add OTHER spells
-            end
+
+
+
+        local scroll = GUI:CreateScroll(frame, 200, 380)
+        scroll:ClearAllPoints()
+        scroll:SetPoint('TOPLEFT', 10, -150)
+        scroll.reset = F.CreateButton(frame, 70, 24, _G.RESET)
+        scroll.reset:SetPoint('TOPLEFT', 10, -120)
+        scroll.reset.text:SetTextColor(1, 0, 0)
+        scroll.reset:SetScript('OnClick', function()
+            StaticPopup_Show('FREEUI_RESET_RAID_DEBUFFS')
         end)
-    end
+        scroll.add = F.CreateButton(frame, 70, 24, _G.ADD)
+        scroll.add:SetPoint('TOPRIGHT', -10, -120)
+        scroll.add:SetScript('OnClick', function()
+            addOnClick(options)
+        end)
+        scroll.clear = F.CreateButton(frame, 70, 24, _G.KEY_NUMLOCK_MAC)
+        scroll.clear:SetPoint('RIGHT', scroll.add, 'LEFT', -5, 0)
+        scroll.clear:SetScript('OnClick', function()
+            ClearEdit(options)
+        end)
 
-    local dungeons = {}
-    for dungeonID = 1182, 1189 do
-        AddNewDungeon(dungeons, dungeonID)
-    end
-
-    local raids = { [1] = EJ_GetInstanceInfo(1190), [2] = EJ_GetInstanceInfo(1193), [3] = EJ_GetInstanceInfo(1195) }
-
-    options[1] = GUI:CreateDropdown(frame, _G.DUNGEONS, 123, -30, dungeons, nil, 107, 24)
-    options[1]:Hide()
-    options[2] = GUI:CreateDropdown(frame, _G.RAID, 123, -30, raids, nil, 107, 24)
-    options[2]:Hide()
-
-    options[3] = GUI:CreateEditbox(
-        frame,
-        L['SpellID'],
-        10,
-        -90,
-        L["Fill in SpellID, must be a number.|nSpell name is not supported."],
-        107,
-        24
-    )
-    options[4] = GUI:CreateEditbox(
-        frame,
-        L['Priority'],
-        123,
-        -90,
-        L["Spell's priority when visible.|nWhen multiple spells exist, it only remain the one that owns highest priority.|nDefault priority is 2, if you leave it blank.|nThe maximun priority is 6, and the icon would flash if you set so."],
-        107,
-        24
-    )
-
-    local function analyzePrio(priority)
-        priority = priority or 2
-        priority = math.min(priority, 6)
-        priority = math.max(priority, 1)
-        return priority
-    end
-
-    local function isAuraExisted(instName, spellID)
-        print(instName)
-        print(spellID)
-        print(C.DebuffWatcherList[instName][spellID])
-        local localPrio = C.DebuffWatcherList[instName][spellID]
-        local savedPrio = _G.FREE_ADB['DebuffWatcherList'][instName] and _G.FREE_ADB['DebuffWatcherList'][instName][spellID]
-        if (localPrio and savedPrio and savedPrio == 0) or (not localPrio and not savedPrio) then
-            return false
-        end
-        return true
-    end
-
-    local function addClick(options)
-        local dungeonName = options[1].Text:GetText()
-        local raidName = options[2].Text:GetText()
-        local spellID = tonumber(options[3]:GetText())
-        local priority = tonumber(options[4]:GetText())
-        local instName = dungeonName or raidName or (iType.Text:GetText() == _G.OTHER and 0)
-
-        if not instName or not spellID then
-            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['You need to complete all optinos'])
-            return
-        end
-        if spellID and not GetSpellInfo(spellID) then
-            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Incorrect SpellID'])
-            return
-        end
-        if isAuraExisted(instName, spellID) then
-            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is existed'])
-            return
+        local function iconOnEnter(self)
+            local spellID = self:GetParent().spellID
+            if not spellID then
+                return
+            end
+            _G.GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
+            _G.GameTooltip:ClearLines()
+            _G.GameTooltip:SetSpellByID(spellID)
+            _G.GameTooltip:Show()
         end
 
-        priority = analyzePrio(priority)
-        if not _G.FREE_ADB['DebuffWatcherList'][instName] then
-            _G.FREE_ADB['DebuffWatcherList'][instName] = {}
-        end
-        _G.FREE_ADB['DebuffWatcherList'][instName][spellID] = priority
-        setupBars(instName)
-        GUI:ClearEdit(options[3])
-        GUI:ClearEdit(options[4])
-    end
+        local function createBar(index, texture)
+            local bar = CreateFrame('Frame', nil, scroll.child, 'BackdropTemplate')
+            bar:SetSize(200, 30)
+            F.CreateBD(bar, 0.25)
+            bar.index = index
 
-    local scroll = GUI:CreateScroll(frame, 200, 380)
-    scroll:ClearAllPoints()
-    scroll:SetPoint('TOPLEFT', 10, -150)
-    scroll.reset = F.CreateButton(frame, 70, 24, _G.RESET)
-    scroll.reset:SetPoint('TOPLEFT', 10, -120)
-    scroll.reset.text:SetTextColor(1, 0, 0)
-    scroll.reset:SetScript('OnClick', function()
-        StaticPopup_Show('FREEUI_RESET_RAID_DEBUFFS')
-    end)
-    scroll.add = F.CreateButton(frame, 70, 24, _G.ADD)
-    scroll.add:SetPoint('TOPRIGHT', -10, -120)
-    scroll.add:SetScript('OnClick', function()
-        addClick(options)
-    end)
-    scroll.clear = F.CreateButton(frame, 70, 24, _G.KEY_NUMLOCK_MAC)
-    scroll.clear:SetPoint('RIGHT', scroll.add, 'LEFT', -5, 0)
-    scroll.clear:SetScript('OnClick', function()
-        ClearEdit(options)
-    end)
+            local icon, close = GUI:CreateBarWidgets(bar, texture)
+            icon:SetScript('OnEnter', iconOnEnter)
+            icon:SetScript('OnLeave', F.HideTooltip)
+            bar.icon = icon
 
-    local function iconOnEnter(self)
-        local spellID = self:GetParent().spellID
-        if not spellID then
-            return
-        end
-        _G.GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
-        _G.GameTooltip:ClearLines()
-        _G.GameTooltip:SetSpellByID(spellID)
-        _G.GameTooltip:Show()
-    end
+            close:SetScript('OnClick', function()
+                bar:Hide()
+                if C.DebuffWatcherList[bar.instName][bar.spellID] then
+                    if not _G.FREE_ADB['DebuffWatcherList'][bar.instName] then
+                        _G.FREE_ADB['DebuffWatcherList'][bar.instName] = {}
+                    end
+                    _G.FREE_ADB['DebuffWatcherList'][bar.instName][bar.spellID] = 0
+                else
+                    _G.FREE_ADB['DebuffWatcherList'][bar.instName][bar.spellID] = nil
+                end
+                setupBars(bar.instName)
+            end)
 
-    local function createBar(index, texture)
-        local bar = CreateFrame('Frame', nil, scroll.child, 'BackdropTemplate')
-        bar:SetSize(200, 30)
-        F.CreateBD(bar, 0.25)
-        bar.index = index
+            local spellName = F.CreateFS(bar, C.Assets.Font.Regular, 11, nil, '', nil, true, 'LEFT', 26, 0)
+            spellName:SetWidth(120)
+            spellName:SetJustifyH('LEFT')
+            bar.spellName = spellName
 
-        local icon, close = GUI:CreateBarWidgets(bar, texture)
-        icon:SetScript('OnEnter', iconOnEnter)
-        icon:SetScript('OnLeave', F.HideTooltip)
-        bar.icon = icon
-
-        close:SetScript('OnClick', function()
-            bar:Hide()
-            if C.DebuffWatcherList[bar.instName][bar.spellID] then
+            local prioBox = F.CreateEditBox(bar, 24, 24)
+            prioBox:SetPoint('RIGHT', close, 'LEFT', -1, 0)
+            prioBox:SetTextInsets(10, 0, 0, 0)
+            prioBox:SetMaxLetters(1)
+            prioBox:SetTextColor(0, 1, 0)
+            prioBox.bg:SetBackdropColor(1, 1, 1, 0.3)
+            prioBox:HookScript('OnEscapePressed', function(self)
+                self:SetText(bar.priority)
+            end)
+            prioBox:HookScript('OnEnterPressed', function(self)
+                local prio = analyzePrio(tonumber(self:GetText()))
                 if not _G.FREE_ADB['DebuffWatcherList'][bar.instName] then
                     _G.FREE_ADB['DebuffWatcherList'][bar.instName] = {}
                 end
-                _G.FREE_ADB['DebuffWatcherList'][bar.instName][bar.spellID] = 0
-            else
-                _G.FREE_ADB['DebuffWatcherList'][bar.instName][bar.spellID] = nil
-            end
-            setupBars(bar.instName)
-        end)
+                _G.FREE_ADB['DebuffWatcherList'][bar.instName][bar.spellID] = prio
+                self:SetText(prio)
+            end)
+            prioBox.title = L['Priority']
+            F.AddTooltip(
+                prioBox,
+                'ANCHOR_RIGHT',
+                L['Priority limit in 1-6.|nPress ENTER key when you finish typing.'],
+                'BLUE',
+                true
+            )
+            bar.prioBox = prioBox
 
-        local spellName = F.CreateFS(bar, C.Assets.Font.Regular, 11, nil, '', nil, true, 'LEFT', 26, 0)
-        spellName:SetWidth(120)
-        spellName:SetJustifyH('LEFT')
-        bar.spellName = spellName
-
-        local prioBox = F.CreateEditBox(bar, 24, 24)
-        prioBox:SetPoint('RIGHT', close, 'LEFT', -1, 0)
-        prioBox:SetTextInsets(10, 0, 0, 0)
-        prioBox:SetMaxLetters(1)
-        prioBox:SetTextColor(0, 1, 0)
-        prioBox.bg:SetBackdropColor(1, 1, 1, 0.3)
-        prioBox:HookScript('OnEscapePressed', function(self)
-            self:SetText(bar.priority)
-        end)
-        prioBox:HookScript('OnEnterPressed', function(self)
-            local prio = analyzePrio(tonumber(self:GetText()))
-            if not _G.FREE_ADB['DebuffWatcherList'][bar.instName] then
-                _G.FREE_ADB['DebuffWatcherList'][bar.instName] = {}
-            end
-            _G.FREE_ADB['DebuffWatcherList'][bar.instName][bar.spellID] = prio
-            self:SetText(prio)
-        end)
-        prioBox.title = L['Priority']
-        F.AddTooltip(
-            prioBox,
-            'ANCHOR_RIGHT',
-            L['Priority limit in 1-6.|nPress ENTER key when you finish typing.'],
-            'BLUE',
-            true
-        )
-        bar.prioBox = prioBox
-
-        return bar
-    end
-
-    local function applyData(index, instName, spellID, priority)
-        local name, _, texture = GetSpellInfo(spellID)
-        if not bars[index] then
-            bars[index] = createBar(index, texture)
+            return bar
         end
-        bars[index].instName = instName
-        bars[index].spellID = spellID
-        bars[index].priority = priority
-        bars[index].spellName:SetText(name)
-        bars[index].prioBox:SetText(priority)
-        bars[index].icon.Icon:SetTexture(texture)
-        bars[index]:Show()
-    end
 
-    function setupBars(self)
-        local instName = tonumber(self) or self.text or self
-        local index = 0
+        local function applyData(index, instName, spellID, priority)
+            local name, _, texture = GetSpellInfo(spellID)
+            if not bars[index] then
+                bars[index] = createBar(index, texture)
+            end
+            bars[index].instName = instName
+            bars[index].spellID = spellID
+            bars[index].priority = priority
+            bars[index].spellName:SetText(name)
+            bars[index].prioBox:SetText(priority)
+            bars[index].icon.Icon:SetTexture(texture)
+            bars[index]:Show()
+        end
 
-        if C.DebuffWatcherList[instName] then
-            for spellID, priority in pairs(C.DebuffWatcherList[instName]) do
-                if
-                    not (_G.FREE_ADB['DebuffWatcherList'][instName] and _G.FREE_ADB['DebuffWatcherList'][instName][spellID])
-                then
-                    index = index + 1
-                    applyData(index, instName, spellID, priority)
+        function setupBars(self)
+            local instName = tonumber(self) or self.text or self
+            local index = 0
+
+            if C.DebuffWatcherList[instName] then
+                for spellID, priority in pairs(C.DebuffWatcherList[instName]) do
+                    if
+                        not (
+                            _G.FREE_ADB['DebuffWatcherList'][instName]
+                            and _G.FREE_ADB['DebuffWatcherList'][instName][spellID]
+                        )
+                    then
+                        index = index + 1
+                        applyData(index, instName, spellID, priority)
+                    end
                 end
             end
-        end
 
-        if _G.FREE_ADB['DebuffWatcherList'][instName] then
-            for spellID, priority in pairs(_G.FREE_ADB['DebuffWatcherList'][instName]) do
-                if priority > 0 then
-                    index = index + 1
-                    applyData(index, instName, spellID, priority)
+            if _G.FREE_ADB['DebuffWatcherList'][instName] then
+                for spellID, priority in pairs(_G.FREE_ADB['DebuffWatcherList'][instName]) do
+                    if priority > 0 then
+                        index = index + 1
+                        applyData(index, instName, spellID, priority)
+                    end
                 end
             end
-        end
 
-        for i = 1, #bars do
-            if i > index then
-                bars[i]:Hide()
+            for i = 1, #bars do
+                if i > index then
+                    bars[i]:Hide()
+                end
+            end
+
+            for i = 1, index do
+                bars[i]:SetPoint('TOPLEFT', 0, -35 * (i - 1))
             end
         end
 
-        for i = 1, index do
-            bars[i]:SetPoint('TOPLEFT', 0, -35 * (i - 1))
-        end
-    end
-
-    for i = 1, 2 do
-        for j = 1, #options[i].options do
-            options[i].options[j]:HookScript('OnClick', setupBars)
-        end
-    end
-
-    local function autoSelectInstance()
-        local instName, instType = GetInstanceInfo()
-        if instType == 'none' then
-            return
-        end
         for i = 1, 2 do
-            local option = options[i]
-            for j = 1, #option.options do
-                local name = option.options[j].text
-                if instName == name then
-                    iType.options[i]:Click()
-                    options[i].options[j]:Click()
+            for j = 1, #options[i].options do
+                options[i].options[j]:HookScript('OnClick', setupBars)
+            end
+        end
+
+        local function autoSelectInstance()
+            local instName, instType = GetInstanceInfo()
+            if instType == 'none' then
+                return
+            end
+            for i = 1, 2 do
+                local option = options[i]
+                for j = 1, #option.options do
+                    local name = option.options[j].text
+                    if instName == name then
+                        iType.options[i]:Click()
+                        options[i].options[j]:Click()
+                    end
                 end
             end
         end
+        autoSelectInstance()
+        panel:HookScript('OnShow', autoSelectInstance)
     end
-    autoSelectInstance()
-    panel:HookScript('OnShow', autoSelectInstance)
 end
 
 local function UpdateGroupTags()
@@ -2757,7 +2854,7 @@ function GUI:SetupNameLength(parent)
     end
 
     local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local scrollArea = GUI:CreateScroll(panel, 220, 540)
 
     local mKey = 'Unitframe'
     local db = C.CharacterSettings.Unitframe
@@ -2769,8 +2866,8 @@ function GUI:SetupNameLength(parent)
 
     local offset = -10
     for _, v in ipairs(datas) do
-        CreateGroupTitle(scroll, L['Name Length'], offset)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdateGroupTags)
+        CreateGroupTitle(scrollArea, L['Name Length'], offset)
+        CreateSlider(scrollArea, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdateGroupTags)
         offset = offset - 65
     end
 end
@@ -2787,33 +2884,33 @@ function GUI:SetupPartyBuff(parent)
     end
 
     local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local scrollArea = GUI:CreateScroll(panel, 220, 540)
 
     local mKey = 'Unitframe'
     local db = C.CharacterSettings.Unitframe
 
     local datas = {
-        [1] = { key = 'PartyBuffSize', value = db.PartyBuffSize, text = L['Icon Size'], min = 12, max = 36, step = 1 },
+        [1] = { key = 'PartyBuffSize', value = db.PartyBuffSize, text = L['Icon Size'], min = 8, max = 36, step = 1 },
         [2] = { key = 'PartyBuffNum', value = db.PartyBuffNum, text = L['Icon Number'], min = 1, max = 6, step = 1 },
     }
 
     local offset = -10
     for _, v in ipairs(datas) do
-        CreateGroupTitle(scroll, L['Party Buff'], offset)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateGroupAuras)
+        CreateGroupTitle(scrollArea, L['Party Buff'], offset)
+        CreateSlider(scrollArea, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateGroupAuras)
         offset = offset - 65
     end
 end
 
 function GUI:SetupPartyDebuff(parent)
-    local guiName = C.ADDON_NAME .. 'GUISetupPartyDebuffSize'
+    local guiName = C.ADDON_NAME .. 'GUISetupPartyDebuff'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
     local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local scrollArea = GUI:CreateScroll(panel, 220, 540)
 
     local mKey = 'Unitframe'
     local db = C.CharacterSettings.Unitframe
@@ -2823,7 +2920,7 @@ function GUI:SetupPartyDebuff(parent)
             key = 'PartyDebuffSize',
             value = db.PartyDebuffSize,
             text = L['Icon Size'],
-            min = 12,
+            min = 8,
             max = 36,
             step = 1,
         },
@@ -2839,47 +2936,47 @@ function GUI:SetupPartyDebuff(parent)
 
     local offset = -10
     for _, v in ipairs(datas) do
-        CreateGroupTitle(scroll, L['Party Debuff'], offset)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateGroupAuras)
+        CreateGroupTitle(scrollArea, L['Party Debuff'], offset)
+        CreateSlider(scrollArea, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateGroupAuras)
         offset = offset - 65
     end
 end
 
 function GUI:SetupRaidBuff(parent)
-    local guiName = C.ADDON_NAME .. 'GUISetupRaidBuffSize'
+    local guiName = C.ADDON_NAME .. 'GUISetupRaidBuff'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
     local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local scrollArea = GUI:CreateScroll(panel, 220, 540)
 
     local mKey = 'Unitframe'
     local db = C.CharacterSettings.Unitframe
 
     local datas = {
-        [1] = { key = 'RaidBuffSize', value = db.RaidBuffSize, text = L['Icon Size'], min = 12, max = 36, step = 1 },
+        [1] = { key = 'RaidBuffSize', value = db.RaidBuffSize, text = L['Icon Size'], min = 8, max = 36, step = 1 },
         [2] = { key = 'RaidBuffNum', value = db.RaidBuffNum, text = L['Icon Number'], min = 1, max = 6, step = 1 },
     }
 
     local offset = -10
     for _, v in ipairs(datas) do
-        CreateGroupTitle(scroll, L['Raid Buff'], offset)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateGroupAuras)
+        CreateGroupTitle(scrollArea, L['Raid Buff'], offset)
+        CreateSlider(scrollArea, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateGroupAuras)
         offset = offset - 65
     end
 end
 
 function GUI:SetupRaidDebuff(parent)
-    local guiName = C.ADDON_NAME .. 'GUISetupRaidDebuffSize'
+    local guiName = C.ADDON_NAME .. 'GUISetupRaidDebuff'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
     local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local scrollArea = GUI:CreateScroll(panel, 200, 535)
 
     local mKey = 'Unitframe'
     local db = C.CharacterSettings.Unitframe
@@ -2889,7 +2986,7 @@ function GUI:SetupRaidDebuff(parent)
             key = 'RaidDebuffSize',
             value = db.RaidDebuffSize,
             text = L['Icon Size'],
-            min = 12,
+            min = 8,
             max = 36,
             step = 1,
         },
@@ -2898,83 +2995,14 @@ function GUI:SetupRaidDebuff(parent)
 
     local offset = -10
     for _, v in ipairs(datas) do
-        CreateGroupTitle(scroll, L['Raid Debuff'], offset)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateGroupAuras)
+        CreateGroupTitle(scrollArea, L['Raid Debuff'], offset)
+        CreateSlider(scrollArea, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateGroupAuras)
         offset = offset - 65
     end
 end
 
 local function RefreshPartyAurasFilter()
     UNITFRAME:RefreshPartyAurasFilter()
-end
-
-StaticPopupDialogs['FREEUI_RESET_PARTY_AURA_LIST'] = {
-    text = C.RED_COLOR .. L['Reset to default list?'],
-    button1 = _G.YES,
-    button2 = _G.NO,
-    OnAccept = function()
-        _G.FREE_ADB['PartyAurasList'] = {}
-        _G.ReloadUI()
-    end,
-    whileDead = 1,
-}
-
-local function createBars(parent, spellID, newTable, tableName)
-    -- table1 barTable
-    -- table2 C.table
-    -- table3 FREE_ADB.table
-    local spellName = GetSpellInfo(spellID)
-    local texture = GetSpellTexture(spellID)
-
-    local bar = CreateFrame('Frame', nil, parent, 'BackdropTemplate')
-    bar:SetSize(200, 30)
-    F.CreateBD(bar, 0.25)
-    newTable[spellID] = bar
-
-    local icon, delBtn = GUI:CreateBarWidgets(bar, texture)
-    F.AddTooltip(icon, 'ANCHOR_RIGHT', spellID)
-    delBtn:SetScript('OnClick', function()
-        bar:Hide()
-
-        if C[tableName][spellID] then
-            _G.FREE_ADB[tableName][spellID] = false
-        else
-            _G.FREE_ADB[tableName][spellID] = nil
-        end
-
-        newTable[spellID] = nil
-        SortBars(newTable)
-    end)
-
-    local name = F.CreateFS(bar, C.Assets.Font.Regular, 12, nil, spellName, nil, true, 'LEFT', 30, 0)
-    name:SetWidth(160)
-    name:SetJustifyH('LEFT')
-
-    SortBars(newTable)
-end
-
-local function addOnClick(btn)
-    local parent = btn.__owner
-    local newTable = parent.barTable
-    local tableName = parent.tableName
-
-    local spellID = tonumber(parent.editBox:GetText())
-    if not spellID or not GetSpellInfo(spellID) then
-        _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Incorrect SpellID'])
-        return
-    end
-
-    local modValue = _G.FREE_ADB[tableName][spellID]
-    if modValue or modValue == nil and C[tableName][spellID] then
-        _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is existed'])
-        return
-    end
-
-    _G.FREE_ADB[tableName][spellID] = true
-
-    createBars(parent.scrollArea, spellID, newTable, tableName)
-
-    parent.editBox:SetText('')
 end
 
 function GUI:SetupPartyAura(parent)
@@ -2984,7 +3012,7 @@ function GUI:SetupPartyAura(parent)
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName, nil, true)
+    local panel = CreateExtraGUI(parent, guiName, L['Party Actived Auras Filter'], true)
     panel:SetScript('OnHide', RefreshPartyAurasFilter)
     parent.panel = panel
 
@@ -2994,7 +3022,7 @@ function GUI:SetupPartyAura(parent)
     local scrollArea = GUI:CreateScroll(panel.bg, 200, 485)
     panel.scrollArea = scrollArea
 
-    local editBox = GUI:CreateEditbox(panel.bg, nil, 10, -10, nil, 110, 24)
+    local editBox = createEditBox(panel.bg, nil, 10, -10, nil, 110, 24)
     panel.editBox = editBox
     editBox.title = L['Hint']
     F.AddTooltip(
@@ -3022,6 +3050,9 @@ function GUI:SetupPartyAura(parent)
         end
     end
 end
+
+
+
 
 -- General
 
@@ -3258,7 +3289,7 @@ function GUI:SetupAnnounceableSpells(parent)
 
     local frame = panel.bg
     local scroll = GUI:CreateScroll(frame, 200, 480)
-    scroll.box = GUI:CreateEditbox(frame, nil, 10, -10, nil, 110, 24)
+    scroll.box = createEditBox(frame, nil, 10, -10, nil, 110, 24)
     scroll.box.title = L['SpellID']
     F.AddTooltip(
         scroll.box,
