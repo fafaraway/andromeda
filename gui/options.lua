@@ -292,6 +292,10 @@ local function SetupPartyBuff()
     GUI:SetupPartyBuff(GUI.Page[12])
 end
 
+local function SetupPartyAura()
+    GUI:SetupPartyAura(GUI.Page[12])
+end
+
 local function SetupPartyDebuff()
     GUI:SetupPartyDebuff(GUI.Page[12])
 end
@@ -1508,7 +1512,7 @@ GUI.OptionsList = {
             'PartyAura',
             L['Display Important Auras'],
             true,
-            nil,
+            SetupPartyAura,
             nil,
             L['Displays the important offensive and defensive spells, displayed by default on the right side of the PartyFrame.'],
         },

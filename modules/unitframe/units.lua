@@ -183,6 +183,7 @@ function UNITFRAME:SpawnParty()
     UNITFRAME:SyncWithZenTracker()
     UNITFRAME:UpdatePartyWatcherSpells()
 
+
     oUF:RegisterStyle('Party', CreatePartyStyle)
     oUF:SetActiveStyle('Party')
 
@@ -653,6 +654,11 @@ function UNITFRAME:SpawnUnits()
     UNITFRAME:CheckCornerSpells()
     UNITFRAME:UpdateCornerSpells()
     UNITFRAME:InitDebuffWatcher()
+
+    UNITFRAME:CheckPartyAurasFilter()
+    UNITFRAME:RefreshPartyAurasFilter()
+
+
 
     UNITFRAME:SpawnPlayer()
     UNITFRAME:SpawnPet()

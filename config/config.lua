@@ -600,6 +600,7 @@ C.AccountSettings = {
     NPMajorSpells = {},
     CornerSpellsList = {},
     PartySpellsList = {},
+    PartyAurasList = {},
     AnnounceableSpellsList = {},
     KeystoneInfo = {},
     ProfileIndex = {},

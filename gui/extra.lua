@@ -34,7 +34,7 @@ end
 
 local function CreateExtraGUI(parent, name, title, bgFrame)
     local frame = CreateFrame('Frame', name, parent)
-    frame:SetSize(260, 640)
+    frame:SetSize(GUI.exWidth, GUI.height)
     frame:SetPoint('TOPLEFT', parent:GetParent(), 'TOPRIGHT', 3, 0)
     F.SetBD(frame)
 
@@ -44,8 +44,8 @@ local function CreateExtraGUI(parent, name, title, bgFrame)
 
     if bgFrame then
         frame.bg = CreateFrame('Frame', nil, frame, 'BackdropTemplate')
-        frame.bg:SetSize(240, 540)
         frame.bg:SetPoint('TOPLEFT', 10, -50)
+        frame.bg:SetPoint('bottomright', -10, 50)
         frame.bg.bg = F.CreateBDFrame(frame.bg, 0.25)
     end
 
@@ -88,24 +88,29 @@ local function SortBars(barTable)
 end
 
 local function CreateBars(parent, spellID, table1, table2, table3)
+    -- table1 barTable
+    -- table2 C.table
+    -- table3 FREE_ADB.table
     local spellName = GetSpellInfo(spellID)
     local texture = GetSpellTexture(spellID)
 
-    local bar = CreateFrame('Frame', nil, parent.child, 'BackdropTemplate')
+    local bar = CreateFrame('Frame', nil, parent, 'BackdropTemplate')
     bar:SetSize(200, 30)
     F.CreateBD(bar, 0.25)
     table1[spellID] = bar
 
-    local icon, close = GUI:CreateBarWidgets(bar, texture)
-    F.AddTooltip(icon, 'ANCHOR_RIGHT', spellID, 'BLUE')
-    close:SetScript('OnClick', function()
+    local icon, delBtn = GUI:CreateBarWidgets(bar, texture)
+    F.AddTooltip(icon, 'ANCHOR_RIGHT', spellID)
+    delBtn:SetScript('OnClick', function()
         bar:Hide()
-        table1[spellID] = nil
+
         if C[table2][spellID] then
             _G.FREE_ADB[table3][spellID] = false
         else
             _G.FREE_ADB[table3][spellID] = nil
         end
+
+        table1[spellID] = nil
         SortBars(table1)
     end)
 
@@ -2896,6 +2901,125 @@ function GUI:SetupRaidDebuff(parent)
         CreateGroupTitle(scroll, L['Raid Debuff'], offset)
         CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateGroupAuras)
         offset = offset - 65
+    end
+end
+
+local function RefreshPartyAurasFilter()
+    UNITFRAME:RefreshPartyAurasFilter()
+end
+
+StaticPopupDialogs['FREEUI_RESET_PARTY_AURA_LIST'] = {
+    text = C.RED_COLOR .. L['Reset to default list?'],
+    button1 = _G.YES,
+    button2 = _G.NO,
+    OnAccept = function()
+        _G.FREE_ADB['PartyAurasList'] = {}
+        _G.ReloadUI()
+    end,
+    whileDead = 1,
+}
+
+local function createBars(parent, spellID, newTable, tableName)
+    -- table1 barTable
+    -- table2 C.table
+    -- table3 FREE_ADB.table
+    local spellName = GetSpellInfo(spellID)
+    local texture = GetSpellTexture(spellID)
+
+    local bar = CreateFrame('Frame', nil, parent, 'BackdropTemplate')
+    bar:SetSize(200, 30)
+    F.CreateBD(bar, 0.25)
+    newTable[spellID] = bar
+
+    local icon, delBtn = GUI:CreateBarWidgets(bar, texture)
+    F.AddTooltip(icon, 'ANCHOR_RIGHT', spellID)
+    delBtn:SetScript('OnClick', function()
+        bar:Hide()
+
+        if C[tableName][spellID] then
+            _G.FREE_ADB[tableName][spellID] = false
+        else
+            _G.FREE_ADB[tableName][spellID] = nil
+        end
+
+        newTable[spellID] = nil
+        SortBars(newTable)
+    end)
+
+    local name = F.CreateFS(bar, C.Assets.Font.Regular, 12, nil, spellName, nil, true, 'LEFT', 30, 0)
+    name:SetWidth(160)
+    name:SetJustifyH('LEFT')
+
+    SortBars(newTable)
+end
+
+local function addOnClick(btn)
+    local parent = btn.__owner
+    local newTable = parent.barTable
+    local tableName = parent.tableName
+
+    local spellID = tonumber(parent.editBox:GetText())
+    if not spellID or not GetSpellInfo(spellID) then
+        _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Incorrect SpellID'])
+        return
+    end
+
+    local modValue = _G.FREE_ADB[tableName][spellID]
+    if modValue or modValue == nil and C[tableName][spellID] then
+        _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is existed'])
+        return
+    end
+
+    _G.FREE_ADB[tableName][spellID] = true
+
+    createBars(parent.scrollArea, spellID, newTable, tableName)
+
+    parent.editBox:SetText('')
+end
+
+function GUI:SetupPartyAura(parent)
+    local guiName = C.ADDON_NAME .. 'GUISetupPartyAura'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName, nil, true)
+    panel:SetScript('OnHide', RefreshPartyAurasFilter)
+    parent.panel = panel
+
+    panel.barTable = {}
+    panel.tableName = 'PartyAurasList'
+
+    local scrollArea = GUI:CreateScroll(panel.bg, 200, 485)
+    panel.scrollArea = scrollArea
+
+    local editBox = GUI:CreateEditbox(panel.bg, nil, 10, -10, nil, 110, 24)
+    panel.editBox = editBox
+    editBox.title = L['Hint']
+    F.AddTooltip(
+        editBox,
+        'ANCHOR_RIGHT',
+        L['Fill in SpellID, must be a number.|nSpell name is not supported.'],
+        'BLUE',
+        true
+    )
+
+    local addBtn = F.CreateButton(panel.bg, 50, 24, _G.ADD)
+    addBtn:SetPoint('TOPRIGHT', -8, -10)
+    addBtn:HookScript('OnClick', addOnClick)
+    addBtn.__owner = panel
+
+    local resetBtn = F.CreateButton(panel.bg, 50, 24, _G.RESET)
+    resetBtn:SetPoint('RIGHT', addBtn, 'LEFT', -5, 0)
+    resetBtn:HookScript('OnClick', function()
+        StaticPopup_Show('FREEUI_RESET_PARTY_AURA_LIST')
+    end)
+
+    for spellID, value in pairs(UNITFRAME[panel.tableName]) do
+        if value then
+            createBars(scrollArea, spellID, panel.barTable, panel.tableName)
+        end
     end
 end
 

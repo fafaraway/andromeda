@@ -1,6 +1,10 @@
 local F, C, L = unpack(select(2, ...))
 local GUI = F:GetModule('GUI')
 
+GUI.width = 700
+GUI.height = 640
+GUI.exWidth = 260
+
 local guiTab = {}
 local guiPage = {}
 GUI.Tab = guiTab
@@ -431,7 +435,7 @@ local function CreateGUI()
 
     local guiFrame = CreateFrame('Frame', C.ADDON_NAME .. 'GUI', _G.UIParent)
     table.insert(_G.UISpecialFrames, C.ADDON_NAME .. 'GUI')
-    guiFrame:SetSize(700, 640)
+    guiFrame:SetSize(GUI.width, GUI.height)
     guiFrame:SetPoint('CENTER')
     guiFrame:SetFrameStrata('HIGH')
     guiFrame:EnableMouse(true)

@@ -527,8 +527,53 @@ function NAMEPLATE:CreateAuras(self)
     self.Auras = bu
 end
 
+--[[
+
+--]]
+
+UNITFRAME.PartyAurasList = {}
+
+function UNITFRAME:RefreshPartyAurasFilter()
+    table.wipe(UNITFRAME.PartyAurasList)
+
+    for spellID in pairs(C.PartyAurasList) do
+        local name = GetSpellInfo(spellID)
+        if name then
+            local modValue = _G.FREE_ADB['PartyAurasList'][spellID]
+            if modValue == nil then
+                UNITFRAME.PartyAurasList[spellID] = true
+            end
+        end
+    end
+
+    for spellID, value in pairs(_G.FREE_ADB['PartyAurasList']) do
+        if value then
+            UNITFRAME.PartyAurasList[spellID] = true
+        end
+    end
+end
+
+function UNITFRAME:CheckPartyAurasFilter()
+    for spellID in pairs(C.PartyAurasList) do
+        local name = GetSpellInfo(spellID)
+        if name then
+            if _G.FREE_ADB['PartyAurasList'][spellID] then
+                _G.FREE_ADB['PartyAurasList'][spellID] = nil
+            end
+        else
+            F:Debug('CheckMajorSpells: Invalid Spell ID ' .. spellID)
+        end
+    end
+
+    for spellID, value in pairs(_G.FREE_ADB['PartyAurasList']) do
+        if value == false and C.PartyAurasList[spellID] == nil then
+            _G.FREE_ADB['PartyAurasList'][spellID] = nil
+        end
+    end
+end
+
 function UNITFRAME.PartyAuraFilter(_, _, _, _, _, _, _, _, _, _, _, _, spellID)
-    if C.PartyAurasList[spellID] then
+    if UNITFRAME.PartyAurasList[spellID] then
         return true
     else
         return false
@@ -572,7 +617,9 @@ function UNITFRAME:CreatePartyAuras(self)
     self.Auras = bu
 end
 
+--[[
 
+ ]]
 
 function UNITFRAME.GroupBuffFilter(_, _, _, _, _, _, _, _, _, caster, _, _, spellID, canApplyAura, isBossAura)
     if isBossAura then
