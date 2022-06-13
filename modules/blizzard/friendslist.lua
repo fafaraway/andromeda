@@ -26,8 +26,8 @@ local gameIcons = {
     [_G.BNET_CLIENT_CRASH4] = mediaPath .. 'CRASH4',
     [_G.BNET_CLIENT_ARCADE] = _G.BNet_GetClientTexture(_G.BNET_CLIENT_ARCADE),
     [_G.BNET_CLIENT_COD_VANGUARD] = mediaPath .. 'COD_VG',
-    [_G.BNET_CLIENT_DI] = mediaPath .. 'GameIcons\\DI',
-    [_G.BNET_CLIENT_ARCLIGHT] = mediaPath .. 'GameIcons\\ARCLIGHT',
+    [_G.BNET_CLIENT_DI] = mediaPath .. 'DI',
+    [_G.BNET_CLIENT_ARCLIGHT] = mediaPath .. 'ARCLIGHT',
 }
 
 local statusIcons = {
