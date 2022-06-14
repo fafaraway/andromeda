@@ -312,6 +312,10 @@ local function UpdateGroupAuras()
     UNITFRAME:UpdateGroupAuras()
 end
 
+local function UpdateRaidTargetIndicator()
+    UNITFRAME:UpdateRaidTargetIndicator()
+end
+
 -- General
 
 local function UpdateVignettingVisibility()
@@ -1582,12 +1586,12 @@ GUI.OptionsList = {
         {
             1,
             'Unitframe',
-            'SmartRaid',
-            L['Smart GroupFrame'],
+            'RaidTargetIndicator',
+            L['Raid Target Indicator'],
             true,
             nil,
-            UpdateAllHeaders,
-            L['If enabled, only show RaidFrame if there are more than 5 members in your group.|nIf disabled, show RaidFrame when in raid, show PartyFrame when in party.'],
+            UpdateRaidTargetIndicator,
+            L['Display raid target indicator on GroupFrame.'],
         },
         {
             1,
@@ -1618,6 +1622,16 @@ GUI.OptionsList = {
             nil,
             nil,
             L['Save the position of the GroupFrame separately according to the specialization.'],
+        },
+        {
+            1,
+            'Unitframe',
+            'SmartRaid',
+            L['Smart GroupFrame'],
+            true,
+            nil,
+            UpdateAllHeaders,
+            L['If enabled, only show RaidFrame if there are more than 5 members in your group.|nIf disabled, show RaidFrame when in raid, show PartyFrame when in party.'],
         },
         {},
         { 1, 'Unitframe', 'DebuffWatcher', L['Enable Debuff Watcher'] },

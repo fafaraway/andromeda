@@ -3,13 +3,13 @@ local UNITFRAME = F:GetModule('UnitFrame')
 local NAMEPLATE = F:GetModule('Nameplate')
 local oUF = F.Libs.oUF
 
-function UNITFRAME.UpdateRaidTargetIndicator(frame)
+function UNITFRAME.ConfigureTargetIndicator(frame)
     local icon = frame.RaidTargetIndicator
     local enable = C.DB.Unitframe.RaidTargetIndicator
 
-    icon:SetPoint('LEFT', frame, 'RIGHT', 4, 0)
+    icon:SetPoint('CENTER', frame, 'TOP')
     icon:SetAlpha(1)
-    icon:SetSize(frame:GetHeight(), frame:GetHeight())
+    icon:SetSize(16, 16)
     icon:SetScale(1)
     icon:SetShown(enable)
 end
@@ -20,7 +20,26 @@ function UNITFRAME:CreateRaidTargetIndicator(self)
 
     self.RaidTargetIndicator = icon
 
-    UNITFRAME.UpdateRaidTargetIndicator(self)
+    UNITFRAME.ConfigureTargetIndicator(self)
+end
+
+function UNITFRAME:UpdateRaidTargetIndicator()
+    for _, frame in pairs(oUF.objects) do
+        if frame.unitStyle == 'party' or frame.unitStyle == 'raid' then
+            if C.DB.Unitframe.RaidTargetIndicator then
+                if not frame:IsElementEnabled('RaidTargetIndicator') then
+                    frame:EnableElement('RaidTargetIndicator')
+                    if frame.RaidTargetIndicator then
+                        frame.RaidTargetIndicator:ForceUpdate()
+                    end
+                end
+            else
+                if frame:IsElementEnabled('RaidTargetIndicator') then
+                    frame:DisableElement('RaidTargetIndicator')
+                end
+            end
+        end
+    end
 end
 
 local classify = {
@@ -67,33 +86,6 @@ function NAMEPLATE:UpdateUnitClassify(unit)
             self.ClassifyIndicator:Hide()
         end
     end
-end
-
-function NAMEPLATE.UpdateRaidTargetIndicator(frame)
-    local icon = frame.RaidTargetIndicator
-    local enable = C.DB.Nameplate.RaidTargetIndicator
-    local nameOnly = frame.plateType == 'NameOnly'
-    local name = frame.NameTag
-
-    if nameOnly then
-        icon:SetPoint('BOTTOM', name, 'TOP')
-    else
-        icon:ClearAllPoints()
-        icon:SetPoint('LEFT', frame, 'RIGHT', 4, 0)
-    end
-
-    icon:SetAlpha(1)
-    icon:SetSize(frame:GetHeight(), frame:GetHeight())
-    icon:SetScale(2)
-    icon:SetShown(enable)
-end
-
-function NAMEPLATE:CreateRaidTargetIndicator(self)
-    local icon = self:CreateTexture(nil, 'OVERLAY')
-
-    self.RaidTargetIndicator = icon
-
-    NAMEPLATE.UpdateRaidTargetIndicator(self)
 end
 
 function UNITFRAME:CreateReadyCheckIndicator(self)

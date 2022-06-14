@@ -170,6 +170,7 @@ function UNITFRAME:UpdateAllElements()
     UNITFRAME:UpdateAuras()
     UNITFRAME:UpdateFader()
     UNITFRAME:UpdateClassPower()
+    UNITFRAME:UpdateRaidTargetIndicator()
 end
 
 function UNITFRAME:OnLogin()
