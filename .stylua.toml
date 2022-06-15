@@ -1,3 +1,4 @@
+column_width = 120
 indent_type = "Spaces"
 quote_style = "AutoPreferSingle"
 line_endings = "Windows"
