@@ -1,21 +1,25 @@
 local F, C = unpack(select(2, ...))
 local NAMEPLATE = F:GetModule('Nameplate')
+local oUF = F.Libs.oUF
 
-function NAMEPLATE.UpdateRaidTargetIndicator(frame)
+function NAMEPLATE.ConfigureTargetIndicator(frame)
     local icon = frame.RaidTargetIndicator
     local enable = C.DB.Nameplate.RaidTargetIndicator
     local nameOnly = frame.plateType == 'NameOnly'
     local name = frame.NameTag
 
     if nameOnly then
-        icon:SetPoint('BOTTOM', name, 'TOP')
+        icon:ClearAllPoints()
+        icon:SetPoint('TOP', name, 'BOTTOM')
+        icon:SetParent(frame)
     else
         icon:ClearAllPoints()
-        icon:SetPoint('LEFT', frame, 'RIGHT', 4, 0)
+        icon:SetPoint('CENTER', frame, 'BOTTOM')
+        icon:SetParent(frame.Health)
     end
 
     icon:SetAlpha(1)
-    icon:SetSize(frame:GetHeight(), frame:GetHeight())
+    icon:SetSize(8, 8)
     icon:SetScale(2)
     icon:SetShown(enable)
 end
@@ -25,5 +29,24 @@ function NAMEPLATE:CreateRaidTargetIndicator(self)
 
     self.RaidTargetIndicator = icon
 
-    NAMEPLATE.UpdateRaidTargetIndicator(self)
+    NAMEPLATE.ConfigureTargetIndicator(self)
+end
+
+function NAMEPLATE:UpdateRaidTargetIndicator()
+    for _, frame in pairs(oUF.objects) do
+        if frame.unitStyle == 'nameplate' then
+            if C.DB.Nameplate.RaidTargetIndicator then
+                if not frame:IsElementEnabled('RaidTargetIndicator') then
+                    frame:EnableElement('RaidTargetIndicator')
+                    if frame.RaidTargetIndicator then
+                        frame.RaidTargetIndicator:ForceUpdate()
+                    end
+                end
+            else
+                if frame:IsElementEnabled('RaidTargetIndicator') then
+                    frame:DisableElement('RaidTargetIndicator')
+                end
+            end
+        end
+    end
 end

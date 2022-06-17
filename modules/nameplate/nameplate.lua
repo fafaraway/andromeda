@@ -903,14 +903,11 @@ local disabledElements = {
 function NAMEPLATE:UpdatePlateByType()
     -- local nameOnlyName = self.nameOnlyName
     local name = self.NameTag
-
-    local raidtarget = self.RaidTargetIndicator
     local questIcon = self.questIcon
     local outline = _G.FREE_ADB.FontOutline
 
     name:SetShown(not self.widgetsOnly)
     name:ClearAllPoints()
-    raidtarget:ClearAllPoints()
 
     if self.plateType == 'NameOnly' then
         for _, element in pairs(disabledElements) do
@@ -927,10 +924,7 @@ function NAMEPLATE:UpdatePlateByType()
         name:SetPoint('CENTER', self, 'TOP', 0, 8)
         F:SetFS(name, C.Assets.Font.Header, 16, nil, nil, nil, 'THICK')
 
-        -- raidtarget:SetPoint('BOTTOM', name, 'TOP', 0, -5)
-        -- raidtarget:SetParent(self)
-
-        NAMEPLATE.UpdateRaidTargetIndicator(self)
+        NAMEPLATE.ConfigureTargetIndicator(self)
 
         if questIcon then
             questIcon:SetPoint('LEFT', name, 'RIGHT', -1, 0)
@@ -954,10 +948,7 @@ function NAMEPLATE:UpdatePlateByType()
         name:SetPoint('LEFT', self, 'TOPLEFT')
         F:SetFS(name, C.Assets.Font.Bold, 11, outline, nil, nil, outline or 'THICK')
 
-        -- raidtarget:SetPoint('CENTER')
-        -- raidtarget:SetParent(self.Health)
-
-        NAMEPLATE.UpdateRaidTargetIndicator(self)
+        NAMEPLATE.ConfigureTargetIndicator(self)
 
         if questIcon then
             questIcon:SetPoint('LEFT', self, 'RIGHT', 3, 0)
