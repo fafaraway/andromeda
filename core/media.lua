@@ -133,20 +133,20 @@ do
         C.Assets.Font.Bold = 'Fonts\\ARHei.ttf'
         C.Assets.Font.Heavy = 'Fonts\\ARHei.ttf'
         C.Assets.Font.Combat = 'Fonts\\ARHei.ttf'
-        C.Assets.Font.Header = 'Fonts\\ARKai_T.ttf'
+        C.Assets.Font.Header = 'Fonts\\ARKai_C.ttf'
     elseif GetLocale() == 'zhTW' then
         C.Assets.Font.Regular = 'Fonts\\blei00d.ttf'
         C.Assets.Font.Condensed = 'Fonts\\blei00d.ttf'
         C.Assets.Font.Bold = 'Fonts\\blei00d.ttf'
         C.Assets.Font.Heavy = 'Fonts\\blei00d.ttf'
-        C.Assets.Font.Combat = 'Fonts\\blei00d.ttf'
+        C.Assets.Font.Combat = 'Fonts\\bKAI00M.ttf'
         C.Assets.Font.Header = 'Fonts\\blei00d.ttf'
     elseif GetLocale() == 'koKR' then
         C.Assets.Font.Regular = 'Fonts\\2002.ttf'
         C.Assets.Font.Condensed = 'Fonts\\2002.ttf'
         C.Assets.Font.Bold = 'Fonts\\2002B.ttf'
         C.Assets.Font.Heavy = 'Fonts\\2002B.ttf'
-        C.Assets.Font.Combat = 'Fonts\\2002B.ttf'
+        C.Assets.Font.Combat = 'Fonts\\K_Damage.ttf'
         C.Assets.Font.Header = 'Fonts\\2002.ttf'
     elseif GetLocale() == 'ruRU' then
         C.Assets.Font.Regular = 'Fonts\\FRIZQT___CYR.ttf'
