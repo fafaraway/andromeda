@@ -206,7 +206,7 @@ function COMBAT:UpdateTextFrame()
     local f = self.textFrame
 
     f:Hide()
-    f.text:SetFont(C.Assets.Font.Header, 28)
+    f.text:SetFont(C.Assets.Font.Combat, 26)
     f.text:SetText(L['Enter Combat'])
     f:SetSize(f.text:GetStringWidth(), f.text:GetStringHeight())
 
@@ -264,7 +264,7 @@ function COMBAT:ShowAlert(alertType)
         a.swordLeftToRight.enter:Restart()
         a.swordRightToLeft.enter:Restart()
 
-        F:SetFS(t.text, C.Assets.Font.Header, 26, nil, L['Enter Combat'], 'RED', 'THICK')
+        F:SetFS(t.text, C.Assets.Font.Combat, 26, nil, L['Enter Combat'], 'RED', 'THICK')
         t:SetSize(t.text:GetStringWidth(), t.text:GetStringHeight())
         t:SetPoint('TOP', self.animationFrame or _G.UIParent, 'BOTTOM', 0, textOffsetEnter)
         t:Show()
@@ -280,7 +280,7 @@ function COMBAT:ShowAlert(alertType)
         a.swordLeftToRight.leave:Restart()
         a.swordRightToLeft.leave:Restart()
 
-        F:SetFS(t.text, C.Assets.Font.Header, 26, nil, L['Leave Combat'], 'GREEN', 'THICK')
+        F:SetFS(t.text, C.Assets.Font.Combat, 26, nil, L['Leave Combat'], 'GREEN', 'THICK')
         t:SetSize(t.text:GetStringWidth(), t.text:GetStringHeight())
         t:SetPoint('TOP', self.animationFrame or _G.UIParent, 'BOTTOM', 0, textOffsetLeave)
         t:Show()
