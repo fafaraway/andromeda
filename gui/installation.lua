@@ -259,7 +259,7 @@ function INSTALL:HelloWorld()
 
     local step5 = function()
         progressBar:SetValue(500)
-        headerText:SetText(L['Addons'])
+        headerText:SetText(_G.ADDONS)
         bodyText:SetText(
             F:StyleAddonName(
                 L['This step will adjust the settings of some addons to match the interface style and layout of %AddonName%.']

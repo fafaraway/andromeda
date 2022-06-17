@@ -2,11 +2,11 @@ local F, C, L = unpack(select(2, ...))
 local GUI = F:GetModule('GUI')
 
 local strList = {
-    tip = L['Double-click left mouse button or press ESC key to exit this screen.'],
+    tip = L['Double click left mouse button or press ESC key to exit this screen.'],
     cmd = {
         primary = {
-            [0] = L['*/free|r @--|r#install|r @or|r */free|r @--|r#tutorial|r ~ Open tutorial panel'],
-            [1] = L['*/free|r @--|r#gui|r @or|r */free|r @--|r#config|r ~ Open GUI panel'],
+            [0] = L['*/free|r @--|r#install|r @or|r */free|r @--|r#tutorial|r ~ Open tutorial panel.'],
+            [1] = L['*/free|r @--|r#gui|r @or|r */free|r @--|r#config|r ~ Open GUI panel.'],
             [2] = L['*/free|r @--|r#unlock|r @or|r */free|r @--|r#layout|r ~ Unlock &ADDON_NAME& interface to allow you to freely drag and drop the elements.'],
             [3] = L['*/free|r @--|r#reset|r @or|r */free|r @--|r#init|r ~ Initialize &ADDON_NAME& and all settings will be reset to their default state.'],
             [4] = L['*/free|r @--|r#ver|r @or|r */free|r @--|r#version|r ~ Output the current version number of &ADDON_NAME&.'],

@@ -215,7 +215,7 @@ function MAP:AddOnIconCollector()
     bu.Icon:SetAllPoints()
     bu.Icon:SetTexture(C.Assets.Texture.Collector)
     bu:SetHighlightTexture(C.Assets.Texture.Collector)
-    bu.title = C.INFO_COLOR .. L['AddOn Icon Collector']
+    bu.title = C.INFO_COLOR .. L['AddOns Icon Collector']
     F.AddTooltip(bu, 'ANCHOR_LEFT')
     UpdateCollectorTip(bu)
     _G.Minimap.AddOnCollector = bu

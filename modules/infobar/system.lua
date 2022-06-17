@@ -166,7 +166,7 @@ local function Block_OnEnter(self)
         local passedTime = math.max(1, GetTime() - INFOBAR.loginTime)
 
         _G.GameTooltip:AddDoubleLine(
-            L['AddOns'],
+            _G.ADDONS,
             string.format(usageString, totalCPU / passedTime),
             0.6,
             0.8,

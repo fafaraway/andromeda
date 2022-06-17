@@ -37,9 +37,9 @@ function NOTIFICATION:VersionCheck_Init()
     if not isVCInit then
         local status = NOTIFICATION:VersionCheck_Compare(_G.FREE_ADB.DetectVersion, C.ADDON_VERSION)
         if status == 'IsNew' then
-            local release = string.gsub(_G.FREE_ADB.DetectVersion, '(%d+)$', '0')
+            local ver = string.gsub(_G.FREE_ADB.DetectVersion, '(%d+)$', '0')
             NOTIFICATION:VersionCheck_Create(
-                string.format(L['Addon has been out of date, the latest release is |cffff0000%s|r.'], release)
+                string.format('%s has been out of date, the latest release is |cffff0000%s|r.', C.ADDON_NAME, ver)
             )
         elseif status == 'IsOld' then
             _G.FREE_ADB.DetectVersion = C.ADDON_VERSION

@@ -2523,7 +2523,9 @@ function GUI:SetupPartyWatcher(parent)
     end
 end
 
-
+--[[
+    debuff watcher filter
+ ]]
 
 do
 
@@ -3070,7 +3072,7 @@ function GUI:SetupAutoScreenshot(parent)
         [1] = { value = 'EarnedNewAchievement', text = L['Earned new achievement'] },
         [2] = { value = 'ChallengeModeCompleted', text = L['Mythic+ completed'] },
         [3] = { value = 'PlayerLevelUp', text = L['Level up'] },
-        [4] = { value = 'PlayerDead', text = L['Dead'] },
+        [4] = { value = 'PlayerDead', text = _G.DEAD },
     }
 
     local offset = -10

@@ -38,7 +38,7 @@ function BLIZZARD:EnhancedDressup()
     F.AddTooltip(
         button,
         'ANCHOR_TOP',
-        string.format(L['%sUndress all|n%sUndress tabard'], C.MOUSE_LEFT_BUTTON, C.MOUSE_RIGHT_BUTTON)
+        string.format(L['%s Undress all|n%s Undress tabard'], C.MOUSE_LEFT_BUTTON, C.MOUSE_RIGHT_BUTTON)
     )
 
     _G.DressUpFrame.LinkButton:SetWidth(80)

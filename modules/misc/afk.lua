@@ -82,7 +82,7 @@ local function ConstructTextString(f)
         C.Assets.Font.Bold,
         12,
         nil,
-        L['Double-click left mouse button or press ESC key to exit this screen.'],
+        L['Double click left mouse button or press ESC key to exit this screen.'],
         { 0.3, 0.3, 0.3 },
         'THICK',
         'BOTTOM',
