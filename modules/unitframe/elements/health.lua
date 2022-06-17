@@ -1,5 +1,6 @@
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('UnitFrame')
+local oUF = F.Libs.oUF
 
 UNITFRAME.UnitFrames = {
     ['player'] = true,
@@ -107,11 +108,16 @@ local function PostUpdateColor(self, unit)
     local parent = self.__owner
     local inverted = C.DB.Unitframe.InvertedColorMode
     local isOffline = not UnitIsConnected(unit)
+
     if inverted then
+        local color = C.DB.Unitframe.InvertedHealthColor
+        local alpha = C.DB.Unitframe.InvertedHealthAlpha
+
         if isOffline then
-            parent.backdrop:SetBackdropColor(0.5, 0.5, 0.5, 0.8)
+            local r, g, b = unpack(oUF.colors.disconnected)
+            parent.backdrop:SetBackdropColor(r, g, b, alpha)
         else
-            parent.backdrop:SetBackdropColor(0.1, 0.1, 0.1, 0.8)
+            parent.backdrop:SetBackdropColor(color.r, color.g, color.b, alpha)
         end
     end
 end

@@ -154,6 +154,8 @@ C.CharacterSettings = {
         Smooth = true,
         Portrait = true,
         HealthColor = { r = 0.82, g = 0.8, b = 0.77 },
+        InvertedHealthColor = { r = 0.1, g = 0.1, b = 0.1 },
+        InvertedHealthAlpha = 0.8,
         FrequentHealth = false,
         HealthFrequency = 0.2,
 

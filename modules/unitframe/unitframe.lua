@@ -43,9 +43,11 @@ function UNITFRAME:CreateBackdrop(self, onKeyDown)
 
     self.backdrop = F.SetBD(self, 0)
     if C.DB.Unitframe.InvertedColorMode then
-        self.backdrop:SetBackdropColor(0.1, 0.1, 0.1, 0.8)
+        local color = C.DB.Unitframe.InvertedHealthColor
+        local alpha = C.DB.Unitframe.InvertedHealthAlpha
+        self.backdrop:SetBackdropColor(color.r, color.g, color.b, alpha)
     else
-        self.backdrop:SetBackdropColor(0.1, 0.1, 0.1, 0)
+        self.backdrop:SetBackdropColor(0, 0, 0, 0)
     end
     self.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
     self.backdrop:SetFrameStrata('BACKGROUND')

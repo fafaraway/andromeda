@@ -73,3 +73,4 @@ colors.reaction = {
 }
 
 colors.smooth = { 1, 0, 0, 1, 1, 0, 0, 1, 0 }
+colors.disconnected = { 0.5, 0.5, 0.5 }
