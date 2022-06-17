@@ -52,6 +52,11 @@ function NAMEPLATE:UpdatePlateClickThrough()
 end
 
 function NAMEPLATE:UpdateNameOnlyMode()
+    SetCVar('nameplateShowFriends', 1)
+    SetCVar('nameplateShowFriendlyNPCs', 1)
+    SetCVar('nameplateShowFriendlyPets', 1)
+    SetCVar('nameplateShowFriendlyMinions', 1)
+    SetCVar('nameplateShowFriendlyGuardians', 1)
     SetCVar('nameplateShowOnlyNames', C.DB.Nameplate.NameOnlyMode)
     SetCVar('nameplateShowDebuffsOnFriendly', not C.DB.Nameplate.NameOnlyMode)
 end
