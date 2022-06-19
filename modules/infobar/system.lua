@@ -131,7 +131,7 @@ local function Block_OnEnter(self)
 
     if self.showMemory or not scriptProfileStatus then
         local totalMemory = UpdateMemory()
-        _G.GameTooltip:AddDoubleLine(L['AddOns'], formatMemory(totalMemory), 0.6, 0.8, 1, 1, 1, 1)
+        _G.GameTooltip:AddDoubleLine(_G.ADDONS, formatMemory(totalMemory), 0.6, 0.8, 1, 1, 1, 1)
         _G.GameTooltip:AddLine(' ')
 
         local numEnabled = 0
