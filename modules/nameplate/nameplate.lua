@@ -300,7 +300,7 @@ function NAMEPLATE:UpdateColor(_, unit)
 
     if r or g or b then
         element:SetStatusBarColor(r, g, b)
-        NAMEPLATE:UpdateTargetIndicatorColor(self, r, g, b)
+        NAMEPLATE:UpdateSelectedIndicatorColor(self, r, g, b)
     end
 
     NAMEPLATE:UpdateOverlayVisibility(self, unit)
@@ -358,7 +358,6 @@ function NAMEPLATE:CreateThreatIndicator(self)
     self.ThreatIndicator.Override = NAMEPLATE.UpdateThreatColor
 end
 
--- Target indicator
 function NAMEPLATE:UpdateFocusColor()
     local unit = self.unit
     if C.DB.Nameplate.ColoredFocus then
@@ -366,299 +365,7 @@ function NAMEPLATE:UpdateFocusColor()
     end
 end
 
-function NAMEPLATE:UpdateTargetChange()
-    local element = self.TargetIndicator
-    local unit = self.unit
 
-    if C.DB.Nameplate.ColoredTarget then
-        NAMEPLATE.UpdateThreatColor(self, _, unit)
-    end
-
-    if not element then
-        return
-    end
-
-    if UnitIsUnit(unit, 'target') and not UnitIsUnit(unit, 'player') then
-        element:Show()
-        if element.aggroR:IsShown() and not element.animGroupR:IsPlaying() then
-            element.animGroupR:Play()
-        end
-        if element.aggroL:IsShown() and not element.animGroupL:IsPlaying() then
-            element.animGroupL:Play()
-        end
-    else
-        element:Hide()
-        if element.animGroupR:IsPlaying() then
-            element.animGroupR:Stop()
-        end
-        if element.animGroupL:IsPlaying() then
-            element.animGroupL:Stop()
-        end
-    end
-end
-
-function NAMEPLATE:UpdateTargetIndicatorColor(self, r, g, b)
-    if self.TargetIndicator then
-        self.TargetIndicator.aggroL:SetVertexColor(r, g, b)
-        self.TargetIndicator.aggroR:SetVertexColor(r, g, b)
-    end
-end
-
-function NAMEPLATE:UpdateTargetIndicatorVisibility()
-    local element = self.TargetIndicator
-    local isNameOnly = self.plateType == 'NameOnly'
-
-    if not element then
-        return
-    end
-
-    if C.DB.Nameplate.TargetIndicator then
-        if isNameOnly then
-            element.nameGlow:Show()
-            element.Glow:Hide()
-            element.aggroL:Hide()
-            element.aggroR:Hide()
-        else
-            element.nameGlow:Hide()
-            element.Glow:Show()
-            element.aggroL:Show()
-            element.aggroR:Show()
-
-            element.animR.points[1]:SetOffset(4, 0)
-            element.animL.points[1]:SetOffset(-4, 0)
-        end
-        element:Show()
-    else
-        element:Hide()
-    end
-end
-
-function NAMEPLATE:CreateTargetIndicator(self)
-    if not C.DB.Nameplate.TargetIndicator then
-        return
-    end
-
-    local color = C.DB.Nameplate.TargetIndicatorColor
-    local r, g, b = color.r, color.g, color.b
-
-    local frame = CreateFrame('Frame', nil, self)
-    frame:SetFrameStrata('BACKGROUND')
-    frame:SetAllPoints()
-    frame:Hide()
-
-    frame.Glow = frame:CreateTexture(nil, 'BACKGROUND')
-    frame.Glow:SetPoint('TOPLEFT', frame, 'BOTTOMLEFT')
-    frame.Glow:SetPoint('TOPRIGHT', frame, 'BOTTOMRIGHT')
-    frame.Glow:SetHeight(12)
-    frame.Glow:SetTexture(C.Assets.Texture.Glow)
-    frame.Glow:SetRotation(math.rad(180))
-    frame.Glow:SetVertexColor(r, g, b)
-
-    frame.aggroL = frame:CreateTexture(nil, 'BACKGROUND', nil, -5)
-    frame.aggroL:SetSize(C.DB.Nameplate.Height * 8, C.DB.Nameplate.Height * 4)
-    frame.aggroL:SetPoint('CENTER', frame, 'LEFT', -10, 0)
-    frame.aggroL:SetTexture(C.Assets.Texture.Target)
-
-    local animGroupL = frame.aggroL:CreateAnimationGroup()
-    animGroupL:SetLooping('NONE')
-    local animL = animGroupL:CreateAnimation('Path')
-    animL:SetSmoothing('IN_OUT')
-    animL:SetDuration(0.5)
-    animL.points = {}
-    animL.points[1] = animL:CreateControlPoint()
-    animL.points[1]:SetOrder(1)
-    frame.animL = animL
-    frame.animGroupL = animGroupL
-
-    frame.aggroR = frame:CreateTexture(nil, 'BACKGROUND', nil, -5)
-    frame.aggroR:SetSize(C.DB.Nameplate.Height * 8, C.DB.Nameplate.Height * 4)
-    frame.aggroR:SetPoint('CENTER', frame, 'RIGHT', 10, 0)
-    frame.aggroR:SetTexture(C.Assets.Texture.Target)
-    frame.aggroR:SetRotation(math.rad(180))
-
-    local animGroupR = frame.aggroR:CreateAnimationGroup()
-    animGroupR:SetLooping('NONE')
-    local animR = animGroupR:CreateAnimation('Path')
-    animR:SetDuration(0.5)
-    animR.points = {}
-    animR.points[1] = animR:CreateControlPoint()
-    animR.points[1]:SetOrder(1)
-    frame.animR = animR
-    frame.animGroupR = animGroupR
-
-    frame.nameGlow = frame:CreateTexture(nil, 'BACKGROUND', nil, -5)
-    frame.nameGlow:SetSize(150, 80)
-    frame.nameGlow:SetTexture('Interface\\GLUES\\Models\\UI_Draenei\\GenericGlow64')
-    frame.nameGlow:SetVertexColor(0, 0.6, 1)
-    frame.nameGlow:SetBlendMode('ADD')
-    frame.nameGlow:SetPoint('CENTER', 0, 14)
-
-    self.TargetIndicator = frame
-    self:RegisterEvent('PLAYER_TARGET_CHANGED', NAMEPLATE.UpdateTargetChange, true)
-
-    NAMEPLATE.UpdateTargetIndicatorVisibility(self)
-end
-
--- Mouseover indicator
-function NAMEPLATE:IsMouseoverUnit()
-    if not self or not self.unit then
-        return
-    end
-
-    if self:IsVisible() and UnitExists('mouseover') then
-        return UnitIsUnit('mouseover', self.unit)
-    end
-    return false
-end
-
-function NAMEPLATE:HighlightOnUpdate(elapsed)
-    self.elapsed = (self.elapsed or 0) + elapsed
-    if self.elapsed > 0.1 then
-        if not NAMEPLATE.IsMouseoverUnit(self.__owner) then
-            self:Hide()
-        end
-        self.elapsed = 0
-    end
-end
-
-function NAMEPLATE:HighlightOnHide()
-    self.__owner.HighlightIndicator:Hide()
-end
-
-function NAMEPLATE:UpdateMouseoverShown()
-    if not self or not self.unit then
-        return
-    end
-
-    if self:IsShown() and UnitIsUnit('mouseover', self.unit) then
-        self.HighlightIndicator:Show()
-        self.HighlightUpdater:Show()
-    else
-        self.HighlightUpdater:Hide()
-    end
-end
-
-function NAMEPLATE:CreateMouseoverIndicator(self)
-    local highlight = CreateFrame('Frame', nil, self.Health)
-    highlight:SetAllPoints(self)
-    highlight:Hide()
-    local texture = highlight:CreateTexture(nil, 'ARTWORK')
-    texture:SetAllPoints()
-    texture:SetColorTexture(1, 1, 1, 0.25)
-
-    self:RegisterEvent('UPDATE_MOUSEOVER_UNIT', NAMEPLATE.UpdateMouseoverShown, true)
-
-    local updater = CreateFrame('Frame', nil, self)
-    updater.__owner = self
-    updater:SetScript('OnUpdate', NAMEPLATE.HighlightOnUpdate)
-    updater:HookScript('OnHide', NAMEPLATE.HighlightOnHide)
-
-    self.HighlightIndicator = highlight
-    self.HighlightUpdater = updater
-end
-
--- Quest progress
-local isInInstance
-local function CheckInstanceStatus()
-    isInInstance = IsInInstance()
-end
-
-function NAMEPLATE:QuestIconCheck()
-    if not C.DB.Nameplate.QuestIndicator then
-        return
-    end
-
-    CheckInstanceStatus()
-    F:RegisterEvent('PLAYER_ENTERING_WORLD', CheckInstanceStatus)
-end
-
-local function isQuestTitle(textLine)
-    local r, g, b = textLine:GetTextColor()
-    if r > 0.99 and g > 0.82 and b == 0 then
-        return true
-    end
-end
-
-function NAMEPLATE:UpdateQuestUnit(_, unit)
-    if not C.DB.Nameplate.QuestIndicator then
-        return
-    end
-
-    local isNameOnly = self.plateType == 'NameOnly'
-
-    if isInInstance then
-        self.questIcon:Hide()
-        self.questCount:SetText('')
-        return
-    end
-
-    unit = unit or self.unit
-
-    local startLooking, questProgress
-    F.ScanTip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
-    F.ScanTip:SetUnit(unit)
-
-    for i = 2, F.ScanTip:NumLines() do
-        local textLine = _G[C.ADDON_NAME .. 'ScanTooltipTextLeft' .. i]
-        local text = textLine and textLine:GetText()
-
-        if not text then
-            break
-        end
-
-        if text ~= ' ' then
-            if isInGroup and text == C.MY_NAME or (not isInGroup and isQuestTitle(textLine)) then
-                startLooking = true
-            elseif startLooking then
-                local current, goal = string.match(text, '(%d+)/(%d+)')
-                local progress = string.match(text, '(%d+)%%')
-                if current and goal then
-                    local diff = math.floor(goal - current)
-                    if diff > 0 then
-                        questProgress = diff
-                        break
-                    end
-                elseif progress and not string.match(text, _G.THREAT_TOOLTIP) then
-                    if math.floor(100 - progress) > 0 then
-                        questProgress = progress .. '%' -- lower priority on progress, keep looking
-                    end
-                else
-                    break
-                end
-            end
-        end
-    end
-
-    if questProgress and not isNameOnly then
-        self.questCount:SetText(questProgress)
-        self.questIcon:SetAtlas('Warfronts-BaseMapIcons-Horde-Barracks-Minimap')
-        self.questIcon:Show()
-    else
-        self.questCount:SetText('')
-        self.questIcon:Hide()
-    end
-end
-
-function NAMEPLATE:CreateQuestIndicator(self)
-    if not C.DB.Nameplate.QuestIndicator then
-        return
-    end
-
-    local height = C.DB.Nameplate.Height
-    local qicon = self:CreateTexture(nil, 'OVERLAY', nil, 2)
-    qicon:SetPoint('LEFT', self, 'RIGHT', 3, 0)
-    qicon:SetSize(height + 10, height + 10)
-    qicon:SetAtlas('adventureguide-microbutton-alert')
-    qicon:Hide()
-
-    local count = F.CreateFS(self, C.Assets.Font.Condensed, 12, nil, '', nil, true)
-    count:SetPoint('LEFT', qicon, 'RIGHT', -3, 0)
-    count:SetTextColor(0.6, 0.8, 1)
-
-    self.questIcon = qicon
-    self.questCount = count
-    self:RegisterEvent('QUEST_LOG_UPDATE', NAMEPLATE.UpdateQuestUnit, true)
-end
 
 -- Scale plates for explosives
 local hasExplosives
@@ -810,9 +517,8 @@ function NAMEPLATE:CreateNameplateStyle()
     NAMEPLATE:CreateHealthTag(self)
     UNITFRAME:CreateHealPrediction(self)
     NAMEPLATE:CreateOverlayTexture(self)
-    NAMEPLATE:CreateTargetIndicator(self)
+    NAMEPLATE:CreateSelectedIndicator(self)
     NAMEPLATE:CreateMouseoverIndicator(self)
-    -- NAMEPLATE:CreateClassifyIndicator(self)
     NAMEPLATE:CreateThreatIndicator(self)
     NAMEPLATE:CreateQuestIndicator(self)
     NAMEPLATE:CreateCastBar(self)
@@ -882,8 +588,8 @@ function NAMEPLATE:RefreshNameplats()
     for nameplate in pairs(platesList) do
         NAMEPLATE.UpdateNameplateSize(nameplate)
         NAMEPLATE.UpdateNameplateAuras(nameplate)
-        NAMEPLATE.UpdateTargetIndicatorVisibility(nameplate)
-        NAMEPLATE.UpdateTargetChange(nameplate)
+        NAMEPLATE.UpdateSelectedIndicatorVisibility(nameplate)
+        NAMEPLATE.UpdateSelectedChange(nameplate)
     end
     NAMEPLATE:UpdateClickableSize()
 end
@@ -924,7 +630,7 @@ function NAMEPLATE:UpdatePlateByType()
         name:SetPoint('CENTER', self, 'TOP', 0, 8)
         F:SetFS(name, C.Assets.Font.Header, 16, nil, nil, nil, 'THICK')
 
-        NAMEPLATE.ConfigureTargetIndicator(self)
+        NAMEPLATE.ConfigureRaidTargetIndicator(self)
 
         if questIcon then
             questIcon:SetPoint('LEFT', name, 'RIGHT', -1, 0)
@@ -948,7 +654,7 @@ function NAMEPLATE:UpdatePlateByType()
         name:SetPoint('LEFT', self, 'TOPLEFT')
         F:SetFS(name, C.Assets.Font.Bold, 11, outline, nil, nil, outline or 'THICK')
 
-        NAMEPLATE.ConfigureTargetIndicator(self)
+        NAMEPLATE.ConfigureRaidTargetIndicator(self)
 
         if questIcon then
             questIcon:SetPoint('LEFT', self, 'RIGHT', 3, 0)
@@ -962,7 +668,7 @@ function NAMEPLATE:UpdatePlateByType()
         NAMEPLATE.UpdateNameplateSize(self)
     end
 
-    NAMEPLATE.UpdateTargetIndicatorVisibility(self)
+    NAMEPLATE.UpdateSelectedIndicatorVisibility(self)
     NAMEPLATE.ToggleNameplateAuras(self)
 end
 
@@ -1021,8 +727,7 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
     end
 
     if event ~= 'NAME_PLATE_UNIT_REMOVED' then
-        NAMEPLATE.UpdateTargetChange(self)
-        NAMEPLATE.UpdateUnitClassify(self, unit)
+        NAMEPLATE.UpdateSelectedChange(self)
         NAMEPLATE.UpdateQuestUnit(self, event, unit)
         NAMEPLATE.UpdateSpitefulIndicator(self)
     end

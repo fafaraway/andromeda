@@ -2,7 +2,7 @@ local F, C = unpack(select(2, ...))
 local NAMEPLATE = F:GetModule('Nameplate')
 local oUF = F.Libs.oUF
 
-function NAMEPLATE.ConfigureTargetIndicator(frame)
+function NAMEPLATE.ConfigureRaidTargetIndicator(frame)
     local icon = frame.RaidTargetIndicator
     local enable = C.DB.Nameplate.RaidTargetIndicator
     local nameOnly = frame.plateType == 'NameOnly'
@@ -29,7 +29,7 @@ function NAMEPLATE:CreateRaidTargetIndicator(self)
 
     self.RaidTargetIndicator = icon
 
-    NAMEPLATE.ConfigureTargetIndicator(self)
+    NAMEPLATE.ConfigureRaidTargetIndicator(self)
 end
 
 function NAMEPLATE:UpdateRaidTargetIndicator()

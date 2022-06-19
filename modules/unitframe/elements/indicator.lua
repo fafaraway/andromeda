@@ -1,9 +1,8 @@
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('UnitFrame')
-local NAMEPLATE = F:GetModule('Nameplate')
 local oUF = F.Libs.oUF
 
-function UNITFRAME.ConfigureTargetIndicator(frame)
+function UNITFRAME.ConfigureRaidTargetIndicator(frame)
     local icon = frame.RaidTargetIndicator
     local enable = C.DB.Unitframe.RaidTargetIndicator
 
@@ -20,7 +19,7 @@ function UNITFRAME:CreateRaidTargetIndicator(self)
 
     self.RaidTargetIndicator = icon
 
-    UNITFRAME.ConfigureTargetIndicator(self)
+    UNITFRAME.ConfigureRaidTargetIndicator(self)
 end
 
 function UNITFRAME:UpdateRaidTargetIndicator()
@@ -38,52 +37,6 @@ function UNITFRAME:UpdateRaidTargetIndicator()
                     frame:DisableElement('RaidTargetIndicator')
                 end
             end
-        end
-    end
-end
-
-local classify = {
-    elite = { 'VignetteKill' },
-    rare = { 'VignetteKill', true },
-    rareelite = { 'VignetteKill', true },
-    worldboss = { 'VignetteKillElite' },
-}
-
-function NAMEPLATE:CreateClassifyIndicator(self)
-    if not C.DB.Nameplate.ClassifyIndicator then
-        return
-    end
-
-    local height = C.DB.Nameplate.Height
-    local icon = self:CreateTexture(nil, 'BACKGROUND')
-    icon:SetPoint('RIGHT', self, 'LEFT')
-    icon:SetSize(height + 10, height + 10)
-    icon:SetAtlas('')
-    icon:Hide()
-
-    self.ClassifyIndicator = icon
-end
-
-function NAMEPLATE:UpdateUnitClassify(unit)
-    local isBoss = UnitLevel(unit) == -1
-    local class = UnitClassification(unit)
-    local isNameOnly = self.plateType == 'NameOnly'
-
-    if self.ClassifyIndicator then
-        if isNameOnly then
-            self.ClassifyIndicator:SetAtlas('')
-            self.ClassifyIndicator:Hide()
-        elseif isBoss then
-            self.ClassifyIndicator:SetAtlas('VignetteKillElite')
-            self.ClassifyIndicator:Show()
-        elseif class and classify[class] then
-            local atlas, desature = unpack(classify[class])
-            self.ClassifyIndicator:SetAtlas(atlas)
-            self.ClassifyIndicator:SetDesaturated(desature)
-            self.ClassifyIndicator:Show()
-        else
-            self.ClassifyIndicator:SetAtlas('')
-            self.ClassifyIndicator:Hide()
         end
     end
 end
@@ -129,14 +82,6 @@ function UNITFRAME:UpdateGroupIndicators()
     for _, frame in pairs(oUF.objects) do
         if frame.unitStyle == 'party' or frame.unitStyle == 'raid' then
             UNITFRAME.UpdateRaidTargetIndicator(frame)
-        end
-    end
-end
-
-function NAMEPLATE:UpdateIndicators()
-    for _, frame in pairs(oUF.objects) do
-        if frame.unitStyle == 'nameplate' then
-            NAMEPLATE.UpdateRaidTargetIndicator(frame)
         end
     end
 end

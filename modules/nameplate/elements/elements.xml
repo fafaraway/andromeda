@@ -1,4 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-    <Script file="indicator.lua"/>
+    <Script file="mouseover.lua"/>
+    <Script file="quest.lua"/>
+    <Script file="raidtarget.lua"/>
+    <Script file="selected.lua"/>
     <Script file="totem.lua"/>
 </Ui>

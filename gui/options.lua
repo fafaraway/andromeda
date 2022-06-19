@@ -177,6 +177,10 @@ local function RefreshAllPlates()
     NAMEPLATE:RefreshAllPlates()
 end
 
+local function UpdateNameplateRaidTargetIndicator()
+    NAMEPLATE:UpdateRaidTargetIndicator()
+end
+
 -- Unitframe
 
 local function UpdateHealthColor()
@@ -2168,6 +2172,16 @@ GUI.OptionsList = {
             UpdatePlateClickThrough,
             L["Hostile units' nameplate ignore mouse clicks."],
         },
+        {
+            1,
+            'Nameplate',
+            'HealthPerc',
+            L['Health Percentage'],
+            true,
+            nil,
+            nil,
+            L['Display the health percentage on the nameplate and hides it when it is full.'],
+        },
         {},
         {
             1,
@@ -2253,12 +2267,12 @@ GUI.OptionsList = {
         {
             1,
             'Nameplate',
-            'HealthPerc',
-            L['Health Percentage'],
+            'SelectedIndicator',
+            L['Selected Indicator'],
             true,
             nil,
             nil,
-            L['Display the health percentage on the nameplate and hides it when it is full.'],
+            L['The currently selected unit has a white glow at the bottom of its nameplate.'],
         },
         {
             1,
@@ -2283,12 +2297,12 @@ GUI.OptionsList = {
         {
             1,
             'Nameplate',
-            'TargetIndicator',
-            L['Target Indicator'],
+            'RaidTargetIndicator',
+            L['Raid Target Indicator'],
             nil,
             nil,
-            nil,
-            L['A white glow is displayed below the nameplate of the current target.'],
+            UpdateNameplateRaidTargetIndicator,
+            L["Display raid target indicator on nameplate."],
         },
         {
             1,
