@@ -122,10 +122,10 @@ function MAP:CreateMailButton()
     local icon = _G.MiniMapMailIcon
 
     mail:ClearAllPoints()
-    mail:SetPoint('BOTTOM', _G.Minimap, 'BOTTOM', 0, _G.Minimap.halfDiff - 10)
+    mail:SetPoint('BOTTOM', _G.Minimap, 'BOTTOM', 0, _G.Minimap.halfDiff - 4)
     icon:SetTexture(C.Assets.Texture.Mail)
-    icon:SetSize(16, 16)
-    icon:SetVertexColor(1, 0.8, 0)
+    icon:SetSize(24, 24)
+    icon:SetVertexColor(1, 1, 0)
 end
 
 -- Calendar Invite
