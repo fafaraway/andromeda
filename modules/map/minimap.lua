@@ -141,7 +141,7 @@ function MAP:CreatePendingInvitation()
     invt:SetSize(300, 80)
     invt:Hide()
     F.SetBD(invt)
-    F.CreateFS(invt, C.Assets.Font.Regular, 14, 'OUTLINE', _G.GAMETIME_TOOLTIP_CALENDAR_INVITES, 'BLUE')
+    F.CreateFS(invt, C.Assets.Font.Regular, 14, true, _G.GAMETIME_TOOLTIP_CALENDAR_INVITES, 'BLUE')
 
     local function updateInviteVisibility()
         invt:SetShown(C_Calendar.GetNumPendingInvites() > 0)
@@ -324,7 +324,7 @@ function MAP:WhoPings()
 
     local f = CreateFrame('Frame', nil, _G.Minimap)
     f:SetAllPoints()
-    f.text = F.CreateFS(f, C.Assets.Font.Bold, 14, 'OUTLINE', '', nil, true, 'TOP', 0, -4)
+    f.text = F.CreateFS(f, C.Assets.Font.Bold, 14, true, '', nil, true, 'TOP', 0, -4)
 
     local anim = f:CreateAnimationGroup()
     anim:SetScript('OnPlay', function()
@@ -415,7 +415,7 @@ function MAP:SoundVolume()
 
     local f = CreateFrame('Frame', nil, _G.Minimap)
     f:SetAllPoints()
-    local text = F.CreateFS(f, C.Assets.Font.Heavy, 48, 'OUTLINE')
+    local text = F.CreateFS(f, C.Assets.Font.Heavy, 48, true)
 
     local anim = f:CreateAnimationGroup()
     anim:SetScript('OnPlay', function()
