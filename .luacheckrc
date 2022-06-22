@@ -729,6 +729,7 @@ globals = {
     'GetCorpseRecoveryDelay',
     'GetCorruption',
     'GetCorruptionResistance',
+    'GetCreatureDifficultyColor',
     'GetCritChance',
     'GetCritChanceProvidesParryEffect',
     'GetCriteriaSpell',
@@ -2658,7 +2659,8 @@ globals = {
     'RaiseFrameLevel',
     'CooldownFrame_Set',
     'MouseIsOver',
-    'HybridScrollFrame_GetOffset'
+    'HybridScrollFrame_GetOffset',
+    'FCF_SetChatWindowFontSize'
 
 
 }
