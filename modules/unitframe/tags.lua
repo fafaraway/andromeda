@@ -1,6 +1,5 @@
 local F, C, L = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('UnitFrame')
-local NAMEPLATE = F:GetModule('Nameplate')
 local oUF = F.Libs.oUF
 
 local colors = oUF.colors
@@ -12,7 +11,6 @@ local tagEvents = tags.Events
 local events = {
     healthvalue = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_CONNECTION UNIT_NAME_UPDATE',
     healthperc = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_CONNECTION UNIT_NAME_UPDATE',
-    nphp = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_CONNECTION',
     powervalue = 'UNIT_MAXPOWER UNIT_POWER_UPDATE UNIT_CONNECTION UNIT_DISPLAYPOWER',
     altpowerperc = 'UNIT_MAXPOWER UNIT_POWER_UPDATE',
     dead = 'UNIT_HEALTH',
@@ -20,36 +18,14 @@ local events = {
     ddg = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED',
     name = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED',
     groupname = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_CONNECTION PLAYER_FLAGS_CHANGED',
-
     npname = 'UNIT_NAME_UPDATE',
     tarname = 'UNIT_NAME_UPDATE UNIT_THREAT_SITUATION_UPDATE UNIT_HEALTH',
     color = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_FACTION UNIT_CONNECTION PLAYER_FLAGS_CHANGED',
-
     grouprole = 'PLAYER_ROLES_ASSIGNED GROUP_ROSTER_UPDATE',
     groupleader = 'PARTY_LEADER_CHANGED GROUP_ROSTER_UPDATE',
     resting = 'PLAYER_UPDATE_RESTING',
     pvp = 'UNIT_FACTION',
-    classification = 'UNIT_CLASSIFICATION_CHANGED',
 }
-
--- abbreviate the name
--- aaa.bbbbb -> a.bbbbb
-local function AbbrName(string, i)
-    if string and string.len(string) > i then
-        return string.gsub(string, '%s?(.[\128-\191]*)%S+%s', '%1. ')
-    else
-        return string
-    end
-end
-
-local function GetUnitHealthPerc(unit)
-    local unitHealth, unitMaxHealth = UnitHealth(unit), UnitHealthMax(unit)
-    if unitMaxHealth == 0 then
-        return 0, unitHealth
-    else
-        return F:Round(unitHealth / unitMaxHealth * 100, 1), unitHealth
-    end
-end
 
 local _tags = {
     -- health value
@@ -75,14 +51,6 @@ local _tags = {
 
         if cur ~= max then
             return string.format('|cff%02x%02x%02x%d%%|r', r, g, b, math.floor(cur / max * 100 + 0.5))
-        end
-    end,
-    -- nameplate health
-    nphp = function(unit)
-        local per = GetUnitHealthPerc(unit)
-
-        if per < 100 then
-            return string.format('%s%%', per)
         end
     end,
     -- power value
@@ -138,7 +106,7 @@ local _tags = {
         local numBoss = GetLocale() == 'zhCN' and 6 or 8
         local numTar = GetLocale() == 'zhCN' and 5 or 8
         local str = UnitName(unit)
-        local newStr = AbbrName(str, num) or str
+        local newStr = F.AbbrNameString(str) or str
 
         if isTargted or isFocusTargeted then
             return '<' .. _G.YOU .. '>'
@@ -161,25 +129,6 @@ local _tags = {
         if showName then
             return F.ShortenString(str, isRaid and raidLength or partyLength)
         end
-    end,
-
-    -- nameplate name
-    npname = function(unit)
-        local abbr = C.DB.Nameplate.AbbrName
-        local num = GetLocale() == 'zhCN' and 6 or 6
-        local str = UnitName(unit)
-        local newStr = AbbrName(str, num) or str
-
-        if abbr then
-            return F.ShortenString(newStr, num, true)
-        else
-            return str
-        end
-    end,
-    -- nameplate name (name only mode)
-    npnamelong = function(unit)
-        local str = UnitName(unit)
-        return str
     end,
     -- target name
     tarname = function(unit)
@@ -253,19 +202,6 @@ local _tags = {
             return '|cffCC3300P|r'
         end
     end,
-
-    classification = function(unit)
-        local texStr = '|T%s:16:16:0:0:64:64:4:60:4:60|t'
-        local class, level = UnitClassification(unit), UnitLevel(unit)
-
-        if class == 'worldboss' or level == -1 then
-            return string.format(texStr, C.Assets.Texture.Skull)
-        elseif (class == 'rare') or (class == 'rareelite') then
-            return string.format(texStr, C.Assets.Texture.Rare)
-        elseif class == 'elite' then
-            return string.format(texStr, C.Assets.Texture.Elite)
-        end
-    end,
 }
 
 for tag, func in next, _tags do
@@ -328,18 +264,7 @@ function UNITFRAME:CreateNameTag(self)
     self.NameTag = text
 end
 
-function NAMEPLATE:CreateNameTag(self)
-    local outline = _G.FREE_ADB.FontOutline
-    local font = C.Assets.Font.Bold
 
-    local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
-    text:SetJustifyH('LEFT')
-    text:SetPoint('LEFT', self, 'TOPLEFT')
-
-    self:Tag(text, '[free:classification][free:npname]')
-
-    self.NameTag = text
-end
 
 function UNITFRAME:CreateHealthTag(self)
     local font = C.Assets.Font.Condensed
@@ -434,23 +359,7 @@ function UNITFRAME:CreatePlayerTags(self)
     UpdatePlayerTags(self)
 end
 
-function NAMEPLATE:CreateHealthTag(self)
-    if not C.DB.Nameplate.HealthPerc then
-        return
-    end
 
-    local font = C.Assets.Font.Condensed
-    local outline = _G.FREE_ADB.FontOutline
-
-    local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
-    text:SetJustifyH('RIGHT')
-    text:ClearAllPoints()
-    text:SetPoint('RIGHT', self, 'TOPRIGHT')
-
-    self:Tag(text, '[free:nphp]')
-
-    self.HealthTag = text
-end
 
 function UNITFRAME:UpdateUnitTags()
     for _, frame in pairs(oUF.objects) do

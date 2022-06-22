@@ -328,6 +328,15 @@ do
         end
     end
 
+    -- 'Lady Sylvanas Windrunner' to 'L. S. Windrunner'
+    function F.AbbrNameString(string)
+        if string then
+            return string.gsub(string, '%s?(.[\128-\191]*)%S+%s', '%1. ')
+        else
+            return string
+        end
+    end
+
     function F:StyleAddonName(msg)
         msg = string.gsub(msg, '%%ADDONNAME%%', C.COLORED_ADDON_NAME)
 
@@ -635,6 +644,7 @@ do
         eb.bg:SetAllPoints()
         F.SetBorderColor(eb.bg)
         F.CreateSD(eb.bg, 0.25)
+        F.CreateTex(eb)
 
         eb:SetScript('OnEscapePressed', EditBoxClearFocus)
         eb:SetScript('OnEnterPressed', EditBoxClearFocus)
@@ -705,13 +715,16 @@ do
     end
 
     function F:CreateDropDown(width, height, data)
+        local outline = _G.FREE_ADB.FontOutline
+
         local dd = CreateFrame('Frame', nil, self, 'BackdropTemplate')
         dd:SetSize(width, height)
         dd.bg = F.CreateBDFrame(dd, 0.25, true)
         F.SetBorderColor(dd.bg)
         F.CreateSD(dd.bg, 0.25)
+        F.CreateTex(dd)
 
-        dd.Text = F.CreateFS(dd, C.Assets.Font.Regular, 11, nil, '', nil, true, 'LEFT', 5, 0)
+        dd.Text = F.CreateFS(dd, C.Assets.Font.Regular, 11, outline, '', nil, outline or 'THICK', 'LEFT', 5, 0)
         dd.Text:SetPoint('RIGHT', -5, 0)
         dd.options = {}
 
@@ -729,7 +742,8 @@ do
         local list = CreateFrame('Frame', nil, dd, 'BackdropTemplate')
         list:SetPoint('TOP', dd, 'BOTTOM', 0, -2)
         RaiseFrameLevel(list)
-        F.CreateBD(list, 0.45)
+        F.CreateBD(list, 0.75)
+        F.CreateTex(list)
         list:Hide()
         bu.__list = list
 
@@ -1706,6 +1720,7 @@ do
         bg:SetPoint('BOTTOMRIGHT', -15, 3)
         F.SetBorderColor(bg)
         F.CreateSD(bg, 0.25)
+        F.CreateTex(bg)
 
         local thumb = self:GetThumbTexture()
         thumb:SetTexture(C.Assets.Texture.Spark)

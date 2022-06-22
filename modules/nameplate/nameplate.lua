@@ -365,8 +365,6 @@ function NAMEPLATE:UpdateFocusColor()
     end
 end
 
-
-
 -- Scale plates for explosives
 local hasExplosives
 local explosiveID = 120651
@@ -556,6 +554,53 @@ function NAMEPLATE:ToggleNameplateAuras()
     end
 end
 
+local function GetIconSize(width, num, size)
+    return (width - (num - 1) * size) / num
+end
+
+function NAMEPLATE:UpdateAuraContainer(parent, element, maxAuras)
+    local width = parent:GetWidth()
+    local iconsPerRow = element.iconsPerRow
+    local maxLines = iconsPerRow and F:Round(maxAuras / iconsPerRow) or 2
+
+    element.size = iconsPerRow and GetIconSize(width, iconsPerRow, element.spacing) or element.size
+    element:SetWidth(width)
+    element:SetHeight((element.size + element.spacing) * maxLines)
+end
+
+function NAMEPLATE:ConfigureAuras(element)
+    element.iconsPerRow = C.DB['Nameplate']['AuraPerRow']
+
+    element.numTotal = C.DB.Nameplate.AuraNumTotal
+    element.showDebuffType = C.DB.Nameplate.DebuffTypeColor
+    element.showStealableBuffs = C.DB.Nameplate.DispellMode == 1
+    element.alwaysShowStealable = C.DB.Nameplate.DispellMode == 2
+    element.desaturateDebuff = C.DB.Nameplate.DesaturateIcon
+    element.disableMouse = C.DB.Nameplate.DisableMouse
+end
+
+function NAMEPLATE:RefreshAuras(frame)
+    if not (frame and frame.Auras) then
+        return
+    end
+    local element = frame.Auras
+
+    NAMEPLATE:ConfigureAuras(element)
+    NAMEPLATE:UpdateAuraContainer(frame, element, element.numTotal)
+
+    if element.iconsPerRow > 0 then
+        if not frame:IsElementEnabled('Auras') then
+            frame:EnableElement('Auras')
+        end
+    else
+        if frame:IsElementEnabled('Auras') then
+            frame:DisableElement('Auras')
+        end
+    end
+
+    element:ForceUpdate()
+end
+
 function NAMEPLATE:UpdateNameplateAuras()
     NAMEPLATE.ToggleNameplateAuras(self)
 
@@ -565,15 +610,12 @@ function NAMEPLATE:UpdateNameplateAuras()
 
     local element = self.Auras
     element:SetPoint('BOTTOM', self, 'TOP', 0, 16)
-    element.numTotal = C.DB.Nameplate.AuraNumTotal
-    element.showDebuffType = C.DB.Nameplate.DebuffTypeColor
-    element.showStealableBuffs = C.DB.Nameplate.DispellMode == 1
-    element.alwaysShowStealable = C.DB.Nameplate.DispellMode == 2
-    element.desaturateDebuff = C.DB.Nameplate.DesaturateIcon
-    element.disableMouse = C.DB.Nameplate.DisableMouse
+
     element:SetWidth(self:GetWidth())
     element:SetHeight((element.size + element.spacing) * 2)
     element:ForceUpdate()
+
+    NAMEPLATE:RefreshAuras(self)
 end
 
 function NAMEPLATE:UpdateNameplateSize()
@@ -607,13 +649,10 @@ local disabledElements = {
 }
 
 function NAMEPLATE:UpdatePlateByType()
-    -- local nameOnlyName = self.nameOnlyName
-    local name = self.NameTag
     local questIcon = self.questIcon
-    local outline = _G.FREE_ADB.FontOutline
-
-    name:SetShown(not self.widgetsOnly)
-    name:ClearAllPoints()
+    if questIcon then
+        questIcon:SetShown(not self.plateType == 'NameOnly')
+    end
 
     if self.plateType == 'NameOnly' then
         for _, element in pairs(disabledElements) do
@@ -622,42 +661,15 @@ function NAMEPLATE:UpdatePlateByType()
             end
         end
 
-        name:SetJustifyH('CENTER')
-        self:Tag(name, '[free:color][free:npnamelong]')
-        self.__tagIndex = 6
-        name:UpdateTag()
-        name:SetParent(self)
-        name:SetPoint('CENTER', self, 'TOP', 0, 8)
-        F:SetFS(name, C.Assets.Font.Header, 16, nil, nil, nil, 'THICK')
-
-        NAMEPLATE.ConfigureRaidTargetIndicator(self)
-
-        if questIcon then
-            questIcon:SetPoint('LEFT', name, 'RIGHT', -1, 0)
-        end
-
         if self.widgetContainer then
             self.widgetContainer:ClearAllPoints()
-            self.widgetContainer:SetPoint('TOP', name, 'BOTTOM', 0, -5)
+            self.widgetContainer:SetPoint('TOP', self.NameTag, 'BOTTOM', 0, -5)
         end
     else
         for _, element in pairs(disabledElements) do
             if not self:IsElementEnabled(element) then
                 self:EnableElement(element)
             end
-        end
-
-        name:SetJustifyH('LEFT')
-        self:Tag(name, '[free:classification][free:npname]')
-        name:UpdateTag()
-        name:SetParent(self.Health)
-        name:SetPoint('LEFT', self, 'TOPLEFT')
-        F:SetFS(name, C.Assets.Font.Bold, 11, outline, nil, nil, outline or 'THICK')
-
-        NAMEPLATE.ConfigureRaidTargetIndicator(self)
-
-        if questIcon then
-            questIcon:SetPoint('LEFT', self, 'RIGHT', 3, 0)
         end
 
         if self.widgetContainer then
@@ -668,6 +680,8 @@ function NAMEPLATE:UpdatePlateByType()
         NAMEPLATE.UpdateNameplateSize(self)
     end
 
+    NAMEPLATE.ConfigureNameTag(self)
+    NAMEPLATE.ConfigureRaidTargetIndicator(self)
     NAMEPLATE.UpdateSelectedIndicatorVisibility(self)
     NAMEPLATE.ToggleNameplateAuras(self)
 end
@@ -791,8 +805,6 @@ function NAMEPLATE:RefreshNameplateAuraFilters()
     RefreshNameplateAuraFilter(1)
     RefreshNameplateAuraFilter(2)
 end
-
-
 
 function NAMEPLATE:OnLogin()
     if not C.DB.Nameplate.Enable then

@@ -181,6 +181,14 @@ local function UpdateNameplateRaidTargetIndicator()
     NAMEPLATE:UpdateRaidTargetIndicator()
 end
 
+local function UpdateNamePlateTags()
+    NAMEPLATE:UpdateTags()
+end
+
+local function SetupNameplateNameLength()
+    GUI:SetupNameplateNameLength(GUI.Page[13])
+end
+
 -- Unitframe
 
 local function UpdateHealthColor()
@@ -474,22 +482,22 @@ GUI.OptionsList = {
         {
             1,
             'General',
-            'HideBossBanner',
-            L['Hide Boss Banner'],
-            nil,
-            nil,
-            UpdateBossBanner,
-            L['Hide the banner and loot list after the boss is killed.'],
-        },
-        {
-            1,
-            'General',
             'HideBossEmote',
             L['Hide Boss Emote'],
             true,
             nil,
             UpdateBossEmote,
             L['Hide the emote and whisper from boss during battle.'],
+        },
+        {
+            1,
+            'General',
+            'HideBossBanner',
+            L['Hide Boss Banner'],
+            nil,
+            nil,
+            UpdateBossBanner,
+            L['Hide the banner and loot list after the boss is killed.'],
         },
         {},
         {
@@ -2137,11 +2145,21 @@ GUI.OptionsList = {
             'Nameplate',
             'AbbrName',
             L['Abbreviate Name'],
-            true,
             nil,
-            RefreshAllPlates,
+            nil,
+            UpdateNamePlateTags,
+            L["Abbreviat nameplate name, e.g. 'Lady Sylvanas Windrunner' convert to 'L. S. Windrunner'. |nNot valid for Chinese game client."]
         },
-
+        {
+            1,
+            'Nameplate',
+            'ShortenName',
+            L['Shorten Name'],
+            true,
+            SetupNameplateNameLength,
+            UpdateNamePlateTags,
+            L['Limit the maximum length of the nameplate name.']
+        },
         {
             1,
             'Nameplate',
@@ -2173,16 +2191,42 @@ GUI.OptionsList = {
             L["Hostile units' nameplate ignore mouse clicks."],
         },
         {
-            1,
+            4,
             'Nameplate',
-            'HealthPerc',
-            L['Health Percentage'],
-            true,
+            'NameTagType',
+            L['Name Tag'],
             nil,
-            nil,
-            L['Display the health percentage on the nameplate and hides it when it is full.'],
+            {
+                _G.NAME,
+                _G.LEVEL .. ' ' .. _G.NAME,
+                L['Classification'] .. ' ' .. _G.LEVEL .. ' ' .. _G.NAME,
+                L['Classification'] .. ' ' .. _G.NAME,
+                _G.DISABLE
+            },
+            UpdateNamePlateTags,
+            L['The classification tag supports three types: Rare, Elite and Boss. |nRare is white, Elite is yellow, and Boss is red.|nWhen the unit has the same level as you, the level tag will be hidden.']
         },
+        {
+            4,
+            'Nameplate',
+            'HealthTagType',
+            L['Health Tag'],
+            true,
+            {
+                L['Current | Percent'],
+                L['Current | Max'],
+                L['Current Value'],
+                L['Current Percent'],
+                L['Loss Value'],
+                L['Loss Percent'],
+                _G.DISABLE,
+            },
+            UpdateNamePlateTags,
+            L['The percentage will be hidden when the health value is full.']
+        },
+
         {},
+
         {
             1,
             'Nameplate',
@@ -2227,11 +2271,11 @@ GUI.OptionsList = {
             4,
             'Nameplate',
             'DispellMode',
-            L['Dispellable Mode'],
+            L['Dispellable Buffs'],
             nil,
-            { L['Filter'], _G.ALWAYS, _G.DISABLE },
+            { L['Filter Display'], L['Always Display'], _G.DISABLE },
             RefreshAllPlates,
-            L['Filter: only shows the magic and enrage auras that you can dispell.|nAlways: always shows the magic and enrage auras, no matter which you can dispell.'],
+            L['Filter Display: Only show dispellable Magic and Enrage buffs that you can dispell.|nAlways Display: Always show dispellable Magic and Enrage buffs, whether you can dispel them or not.'],
         },
         {
             4,
@@ -2240,10 +2284,12 @@ GUI.OptionsList = {
             L['Aura Filter Mode'],
             true,
             {
-                L['BlackNWhite'],
-                L['PlayerOnly'],
-                L['IncludeCrowdControl'],
+                L['Black & White List'],
+                L['List & Player'],
+                L['List & Player & CC'],
             },
+            RefreshAllPlates,
+            L['Black & White List: Strictly follow Black and White list filter.|nPlayer: Spells cast by YOU. |nCC: Spells of Crowd Control.']
         },
         {
             3,
@@ -2252,6 +2298,8 @@ GUI.OptionsList = {
             L['Auras Per Row'],
             nil,
             { 4, 10, 1 },
+            RefreshAllPlates,
+            L['The number of auras displayed in per row.']
         },
         {},
         {

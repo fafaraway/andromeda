@@ -1558,6 +1558,35 @@ function GUI:SetupNameplateColorByDot(parent)
     end
 end
 
+local function UpdateNamePlateTags()
+    NAMEPLATE:UpdateTags()
+end
+
+function GUI:SetupNameplateNameLength(parent)
+    local guiName = C.ADDON_NAME .. 'GUISetupNameplateNameLength'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scrollArea = GUI:CreateScroll(panel, 220, 540)
+
+    local mKey = 'Nameplate'
+    local db = C.CharacterSettings.Nameplate
+
+    local datas = {
+        [1] = { key = 'NameLength', value = db.NameLength, text = L['Nameplate Name Length'], min = 0, max = 20 },
+    }
+
+    local offset = -10
+    for _, v in ipairs(datas) do
+        CreateGroupTitle(scrollArea, L['Name Length'], offset)
+        CreateSlider(scrollArea, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdateNamePlateTags)
+        offset = offset - 65
+    end
+end
+
 -- Unitframe
 
 local function SetUnitFrameSize(self, unit)
@@ -2522,10 +2551,6 @@ function GUI:SetupPartyWatcher(parent)
         createBar(scroll.child, spellID, duration)
     end
 end
-
---[[
-    debuff watcher filter
- ]]
 
 do
 

@@ -1,4 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
     <Include file="elements\elements.xml"/>
     <Script file="nameplate.lua"/>
+    <Script file="tags.lua"/>
 </Ui>
