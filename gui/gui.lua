@@ -89,14 +89,35 @@ local function UpdateValue(key, value, newValue)
     end
 end
 
+local function GearButtonOnEnter(self)
+    local classColor = _G.FREE_ADB.WidgetHighlightClassColor
+    local newColor = _G.FREE_ADB.WidgetHighlightColor
+
+    if classColor then
+        self.tex:SetVertexColor(C.r, C.g, C.b)
+    else
+        self.tex:SetVertexColor(newColor.r, newColor.g, newColor.b)
+    end
+end
+
+local function GearButtonOnLeave(self)
+    self.tex:SetVertexColor(0.4, 0.4, 0.4)
+end
+
 local function CreateGearButton(self, name)
     local bu = CreateFrame('Button', name, self)
-    bu:SetSize(20, 20)
-    bu.Icon = bu:CreateTexture(nil, 'ARTWORK')
-    bu.Icon:SetAllPoints()
-    bu.Icon:SetTexture(C.Assets.Texture.Gear)
-    bu.Icon:SetVertexColor(0.6, 0.6, 0.6)
-    bu:SetHighlightTexture(C.Assets.Texture.Gear)
+    bu:SetSize(16, 16)
+
+    local tex = bu:CreateTexture(nil, 'ARTWORK')
+    tex:SetAllPoints()
+    tex:SetTexture(C.Assets.Texture.Gear)
+    tex:SetVertexColor(0.4, 0.4, 0.4)
+    -- bu:SetHighlightTexture(C.Assets.Texture.Gear)
+
+    bu.tex = tex
+
+    bu:HookScript('OnEnter', GearButtonOnEnter)
+    bu:HookScript('OnLeave', GearButtonOnLeave)
 
     return bu
 end
@@ -299,7 +320,7 @@ local function CreateOption(i)
 
             if data and type(data) == 'function' then
                 local bu = CreateGearButton(parent)
-                bu:SetPoint('LEFT', cb.label, 'RIGHT', -2, 1)
+                bu:SetPoint('LEFT', cb.label, 'RIGHT', 2, 0)
                 bu:SetScript('OnClick', data)
             end
 
