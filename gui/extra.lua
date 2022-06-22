@@ -68,7 +68,7 @@ function GUI:CreateScroll(parent, width, height, text, noBg)
     end
 
     if text then
-        F.CreateFS(scroll, C.Assets.Font.Regular, 12, 'OUTLINE', text, nil, true, 'TOPLEFT', 5, 20)
+        F.CreateFS(scroll, C.Assets.Font.Regular, 12, true, text, nil, true, 'TOPLEFT', 5, 20)
     end
 
     if not noBg then

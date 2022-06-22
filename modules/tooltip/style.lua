@@ -48,7 +48,9 @@ function TOOLTIP:ReskinTooltip()
 end
 
 local function RestyleFont(obj, font, size)
-    obj:SetFont(font, size)
+    local outline = _G.FREE_ADB.FontOutline
+
+    obj:SetFont(font, size, outline and 'OUTLINE')
     obj:SetShadowColor(0, 0, 0, 1)
     obj:SetShadowOffset(1, -1)
 end

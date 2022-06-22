@@ -38,12 +38,12 @@ function CHAT:ChatCopy_OnClick()
     if not frame:IsShown() then
         local chatframe = _G.SELECTED_DOCK_FRAME
         local _, fontSize = chatframe:GetFont()
-        _G.FCF_SetChatWindowFontSize(chatframe, chatframe, 0.01)
+        FCF_SetChatWindowFontSize(chatframe, chatframe, 0.01)
         frame:Show()
 
         local lineCt = CHAT.GetChatLines(chatframe)
         local text = table.concat(lines, '\n', 1, lineCt)
-        _G.FCF_SetChatWindowFontSize(chatframe, chatframe, fontSize)
+        FCF_SetChatWindowFontSize(chatframe, chatframe, fontSize)
         editBox:SetText(text)
     else
         frame:Hide()
@@ -78,7 +78,8 @@ function CHAT:ChatCopy_Create()
     editBox:SetMaxLetters(99999)
     editBox:EnableMouse(true)
     editBox:SetAutoFocus(false)
-    editBox:SetFont(C.Assets.Font.Regular, 12)
+    local outline = _G.FREE_ADB.FontOutline
+    editBox:SetFont(C.Assets.Font.Regular, 12, outline, '', nil, outline or 'THICK')
     editBox:SetWidth(scrollArea:GetWidth())
     editBox:SetHeight(scrollArea:GetHeight())
     editBox:SetScript('OnEscapePressed', function()

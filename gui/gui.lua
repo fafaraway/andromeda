@@ -198,7 +198,8 @@ local function CreateTab(parent, i, name)
     tab.icon:SetTexture(iconsList[i])
     F.ReskinIcon(tab.icon)
 
-    tab.text = F.CreateFS(tab, C.Assets.Font.Bold, 13, nil, name, nil, true)
+    local outline = _G.FREE_ADB.FontOutline
+    tab.text = F.CreateFS(tab, C.Assets.Font.Bold, 13, outline, name, nil, outline or 'THICK')
     tab.text:SetPoint('LEFT', tab.icon, 'RIGHT', 6, 0)
 
     tab:HookScript('OnEnter', Tab_OnEnter)
@@ -269,6 +270,7 @@ end
 
 local function CreateOption(i)
     local parent, offset = guiPage[i].child, 20
+    local outline = _G.FREE_ADB.FontOutline
 
     for _, option in pairs(GUI.OptionsList[i]) do
         local optType, key, value, name, horizon, data, callback, tip = unpack(option)
@@ -289,7 +291,7 @@ local function CreateOption(i)
             cb.__name = name
             cb.__callback = callback
 
-            cb.label = F.CreateFS(cb, C.Assets.Font.Regular, 12, nil, name, nil, true)
+            cb.label = F.CreateFS(cb, C.Assets.Font.Regular, 12, outline, name, nil, outline or 'THICK')
             cb.label:SetPoint('LEFT', cb, 'RIGHT', 4, 0)
 
             cb:SetChecked(UpdateValue(key, value))
@@ -322,7 +324,7 @@ local function CreateOption(i)
             eb.__callback = callback
             eb.__default = (key == 'ACCOUNT' and C.AccountSettings[value]) or C.CharacterSettings[key][value]
 
-            eb.label = F.CreateFS(eb, C.Assets.Font.Regular, 11, nil, name, nil, true, 'CENTER', 0, 20)
+            eb.label = F.CreateFS(eb, C.Assets.Font.Regular, 11, outline, name, nil, outline or 'THICK', 'CENTER', 0, 20)
             eb:SetText(UpdateValue(key, value))
 
             eb:HookScript('OnEscapePressed', Editbox_OnEscapePressed)
@@ -391,7 +393,7 @@ local function CreateOption(i)
                 end
             end
 
-            dd.label = F.CreateFS(dd, C.Assets.Font.Regular, 11, nil, name, nil, true)
+            dd.label = F.CreateFS(dd, C.Assets.Font.Regular, 11, outline, name, nil, outline or 'THICK')
             dd.label:SetPoint('BOTTOM', dd, 'TOP', 0, 4)
             if tip then
                 dd.title = name

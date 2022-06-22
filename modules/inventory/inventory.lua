@@ -111,7 +111,8 @@ function INVENTORY:CreateMoneyFrame()
     moneyFrame:SetSize(140, 26)
 
     local tag = self:SpawnPlugin('TagDisplay', '[money] [currencies]', moneyFrame)
-    F:SetFS(tag, C.Assets.Font.Condensed, 12, nil, '', nil, true)
+    local outline = _G.FREE_ADB.FontOutline
+    F:SetFS(tag, C.Assets.Font.Bold, 12, outline, '', nil, outline or 'THICK')
     tag:SetPoint('TOPLEFT', 0, -4)
 end
 
@@ -535,7 +536,8 @@ function INVENTORY:CreateFreeSlots()
     slot.__name = name
 
     local tag = self:SpawnPlugin('TagDisplay', '[space]', slot)
-    F:SetFS(tag, C.Assets.Font.Condensed, 11, nil, '', 'CLASS', true)
+    local outline = _G.FREE_ADB.FontOutline
+    F:SetFS(tag, C.Assets.Font.Bold, 11, outline, '', 'CLASS', outline or 'THICK')
     tag:SetPoint('BOTTOMRIGHT', -2, 2)
     tag.__name = name
     slot.tag = tag
@@ -914,7 +916,8 @@ function INVENTORY:OnLogin()
 
         self.Icon:SetInside()
         self.Icon:SetTexCoord(unpack(C.TEX_COORD))
-        F:SetFS(self.Count, C.Assets.Font.Condensed, 11, true, '', nil, true, 'BOTTOMRIGHT', -2, 2)
+        local outline = _G.FREE_ADB.FontOutline
+        F:SetFS(self.Count, C.Assets.Font.Bold, 11, outline, '', nil, outline or 'THICK', 'BOTTOMRIGHT', -2, 2)
         self.Cooldown:SetInside()
         self.IconOverlay:SetInside()
         self.IconOverlay2:SetInside()
@@ -938,8 +941,8 @@ function INVENTORY:OnLogin()
         self.Quest:SetSize(24, 24)
         self.Quest:SetPoint('TOPLEFT', -2, -2)
 
-        self.iLvl = F.CreateFS(self, C.Assets.Font.Condensed, 11, true, '', nil, true, 'BOTTOMRIGHT', -2, 2)
-        self.BindType = F.CreateFS(self, C.Assets.Font.Condensed, 11, true, '', nil, true, 'TOPLEFT', 2, -2)
+        self.iLvl = F.CreateFS(self, C.Assets.Font.Bold, 11, outline, '', nil, outline or 'THICK', 'BOTTOMRIGHT', -2, 2)
+        self.BindType = F.CreateFS(self, C.Assets.Font.Bold, 11, outline, '', nil, outline or 'THICK', 'TOPLEFT', 2, -2)
 
         local flash = self:CreateTexture(nil, 'ARTWORK')
         flash:SetTexture('Interface\\Cooldown\\star4')
@@ -1251,8 +1254,9 @@ function INVENTORY:OnLogin()
             label = GetCustomGroupTitle(settings.Index)
         end
 
+        local outline = _G.FREE_ADB.FontOutline
         if label then
-            self.label = F.CreateFS(self, C.Assets.Font.Condensed, 11, nil, label, nil, true, 'TOPLEFT', 5, -4)
+            self.label = F.CreateFS(self, C.Assets.Font.Bold, 11, outline, label, nil, outline or 'THICK', 'TOPLEFT', 5, -4)
             return
         end
 
