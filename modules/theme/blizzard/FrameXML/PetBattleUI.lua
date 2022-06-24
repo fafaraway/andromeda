@@ -194,7 +194,7 @@ table.insert(C.BlizzThemes, function()
     end
 
     -- Reskin Petbar
-    local bar = CreateFrame('Frame', C.ADDON_NAME .. 'PetBattleBar', _G.UIParent, 'SecureHandlerStateTemplate')
+    local bar = CreateFrame('Frame', C.ADDON_TITLE .. 'PetBattleBar', _G.UIParent, 'SecureHandlerStateTemplate')
     bar:SetPoint('BOTTOM', _G.UIParent, 0, 28)
     bar:SetSize(310, 40)
     local visibleState = '[petbattle] show; hide'

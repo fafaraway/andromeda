@@ -1,12 +1,11 @@
 local F, C, L = unpack(select(2, ...))
 local MM = F:RegisterModule('GameMenu')
 
-local buttonList = {}
-local texPath = 'Interface\\AddOns\\' .. C.ADDON_NAME .. '\\assets\\textures\\menu\\'
-local buttonsList = {
+local buttonsList = {}
+local menuList = {
     {
         _G.CHARACTER_BUTTON,
-        texPath .. 'player',
+        C.ASSET_PATH .. 'textures\\menu\\player',
         function()
             securecall(_G.ToggleFrame, _G.CharacterFrame)
         end,
@@ -14,91 +13,91 @@ local buttonsList = {
 
     {
         _G.SPELLBOOK_ABILITIES_BUTTON,
-        texPath .. 'spellbook',
+        C.ASSET_PATH .. 'textures\\menu\\spellbook',
         function()
             securecall(_G.ToggleFrame, _G.SpellBookFrame)
         end,
     },
     {
         _G.TALENTS_BUTTON,
-        texPath .. 'talent',
+        C.ASSET_PATH .. 'textures\\menu\\talent',
         function()
             ToggleTalentFrame()
         end,
     },
     {
         _G.SOCIAL_BUTTON,
-        texPath .. 'friend',
+        C.ASSET_PATH .. 'textures\\menu\\friend',
         function()
             ToggleFriendsFrame()
         end,
     },
     {
         _G.GUILD,
-        texPath .. 'guild',
+        C.ASSET_PATH .. 'textures\\menu\\guild',
         function()
             ToggleGuildFrame()
         end,
     },
     {
         _G.ACHIEVEMENT_BUTTON,
-        texPath .. 'achievement',
+        C.ASSET_PATH .. 'textures\\menu\\achievement',
         function()
             ToggleAchievementFrame()
         end,
     },
     {
         _G.COLLECTIONS,
-        texPath .. 'collection',
+        C.ASSET_PATH .. 'textures\\menu\\collection',
         function()
             ToggleCollectionsJournal()
         end,
     },
     {
         _G.LFG_TITLE,
-        texPath .. 'lfg',
+        C.ASSET_PATH .. 'textures\\menu\\lfg',
         function()
             ToggleLFDParentFrame()
         end,
     },
     {
         _G.ENCOUNTER_JOURNAL,
-        texPath .. 'encounter',
+        C.ASSET_PATH .. 'textures\\menu\\encounter',
         function()
             ToggleEncounterJournal()
         end,
     },
     {
         L['Calendar'],
-        texPath .. 'calendar',
+        C.ASSET_PATH .. 'textures\\menu\\calendar',
         function()
             ToggleCalendar()
         end,
     },
     {
         _G.MAP_AND_QUEST_LOG,
-        texPath .. 'map',
+        C.ASSET_PATH .. 'textures\\menu\\map',
         function()
             ToggleWorldMap()
         end,
     },
     {
         _G.BAGSLOT,
-        texPath .. 'bag',
+        C.ASSET_PATH .. 'textures\\menu\\bag',
         function()
             ToggleAllBags()
         end,
     },
     {
         _G.BLIZZARD_STORE,
-        texPath .. 'store',
+        C.ASSET_PATH .. 'textures\\menu\\store',
         function()
             ToggleStoreUI()
         end,
     },
     {
         _G.GAMEMENU_SUPPORT,
-        texPath .. 'help',
+        C.ASSET_PATH .. 'textures\\menu\\help',
         function()
             ToggleHelpFrame()
         end,
@@ -131,7 +130,7 @@ function MM:Constructor(bar, data)
     local tip, texture, func = unpack(data)
 
     local bu = CreateFrame('Button', nil, bar)
-    table.insert(buttonList, bu)
+    table.insert(buttonsList, bu)
     bu:SetSize(C.DB.General.GameMenuButtonSize, C.DB.General.GameMenuButtonSize)
     bu:SetAlpha(C.DB.General.GameMenuButtonOutAlpha)
     bu.icon = bu:CreateTexture(nil, 'ARTWORK')
@@ -156,10 +155,10 @@ function MM:OnLogin()
 
     local buSize = C.DB.General.GameMenuButtonSize
     local buGap = C.DB.General.GameMenuButtonGap
-    local buNum = #buttonsList
+    local buNum = #menuList
 
     local barWidth = (buSize * buNum) + (buGap * (buNum - 1))
-    local bar = CreateFrame('Frame', C.ADDON_NAME .. 'GameMenu', _G.UIParent)
+    local bar = CreateFrame('Frame', C.ADDON_TITLE .. 'GameMenu', _G.UIParent)
     bar:SetSize(barWidth, C.DB.General.GameMenuBarHeight)
 
     local glow = bar:CreateTexture(nil, 'BACKGROUND')
@@ -173,15 +172,15 @@ function MM:OnLogin()
         glow:SetVertexColor(1, 1, 1, C.DB.General.GameMenuBackdropAlpha)
     end
 
-    for _, info in pairs(buttonsList) do
+    for _, info in pairs(menuList) do
         MM:Constructor(bar, info)
     end
 
-    for i = 1, #buttonList do
+    for i = 1, #buttonsList do
         if i == 1 then
-            buttonList[i]:SetPoint('LEFT')
+            buttonsList[i]:SetPoint('LEFT')
         else
-            buttonList[i]:SetPoint('LEFT', buttonList[i - 1], 'RIGHT', C.DB.General.GameMenuButtonGap, 0)
+            buttonsList[i]:SetPoint('LEFT', buttonsList[i - 1], 'RIGHT', C.DB.General.GameMenuButtonGap, 0)
         end
     end
 

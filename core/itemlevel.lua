@@ -6,7 +6,7 @@ local enchantString = string.gsub(_G.ENCHANTED_TOOLTIP_LINE, '%%s', '(.+)')
 local essenceTextureID = 2975691
 local essenceDescription = GetSpellDescription(277253)
 
-local tip = CreateFrame('GameTooltip', C.ADDON_NAME .. 'ScanTooltip', nil, 'GameTooltipTemplate')
+local tip = CreateFrame('GameTooltip', C.ADDON_TITLE .. 'ScanTooltip', nil, 'GameTooltipTemplate')
 F.ScanTip = tip
 
 function F:InspectItemTextures()
@@ -137,7 +137,7 @@ function F.GetItemLevel(link, arg1, arg2, fullScan)
             tip:SetHyperlink(link)
         end
 
-        local firstLine = _G[C.ADDON_NAME .. 'ScanTooltipTextLeft1']:GetText()
+        local firstLine = _G[C.ADDON_TITLE .. 'ScanTooltipTextLeft1']:GetText()
         if firstLine == _G.RETRIEVING_ITEM_INFO then
             return 'tooSoon'
         end
@@ -198,7 +198,7 @@ function F.GetNPCName(npcID, callback)
     if not name then
         tip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
         tip:SetHyperlink(format('unit:Creature-0-0-0-0-%d', npcID))
-        name = _G[C.ADDON_NAME .. 'ScanTooltipTextLeft1']:GetText() or loadingStr
+        name = _G[C.ADDON_TITLE .. 'ScanTooltipTextLeft1']:GetText() or loadingStr
         if name == loadingStr then
             if not pendingNPCs[npcID] then
                 pendingNPCs[npcID] = 1

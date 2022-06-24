@@ -11,8 +11,8 @@ local buttonBlackList = {
     ['QueueStatusMinimapButton'] = true,
     ['GarrisonLandingPageMinimapButton'] = true,
     ['MinimapZoneTextButton'] = true,
-    [C.ADDON_NAME .. 'MinimapAddOnIconCollectorTray'] = true,
-    [C.ADDON_NAME .. 'MinimapAddOnIconCollector'] = true,
+    [C.ADDON_TITLE .. 'MinimapAddOnIconCollectorTray'] = true,
+    [C.ADDON_TITLE .. 'MinimapAddOnIconCollector'] = true,
 }
 
 local ignoredButtons = {
@@ -207,7 +207,7 @@ function MAP:AddOnIconCollector()
         return
     end
 
-    local bu = CreateFrame('Button', C.ADDON_NAME .. 'MinimapAddOnIconCollector', _G.Minimap)
+    local bu = CreateFrame('Button', C.ADDON_TITLE .. 'MinimapAddOnIconCollector', _G.Minimap)
     bu:SetSize(20, 20)
     bu:SetPoint('TOPRIGHT', -4, -_G.Minimap.halfDiff - 8)
     bu:RegisterForClicks('LeftButtonUp', 'RightButtonUp')
@@ -220,7 +220,7 @@ function MAP:AddOnIconCollector()
     UpdateCollectorTip(bu)
     _G.Minimap.AddOnCollector = bu
 
-    local tray = CreateFrame('Frame', C.ADDON_NAME .. 'MinimapAddOnIconCollectorTray', _G.Minimap)
+    local tray = CreateFrame('Frame', C.ADDON_TITLE .. 'MinimapAddOnIconCollectorTray', _G.Minimap)
     tray:SetPoint('BOTTOMRIGHT', _G.Minimap, 'TOPRIGHT', 0, -_G.Minimap.halfDiff)
     tray:SetSize(_G.Minimap:GetWidth(), 24)
     tray:Hide()

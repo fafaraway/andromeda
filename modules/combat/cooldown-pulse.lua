@@ -6,10 +6,10 @@ local animScale, iconSize, holdTime, threshold = 2, 24, 0.3, 3
 local cooldowns, animating, watching = {}, {}, {}
 local ignoredList = {}
 
-local anchor = CreateFrame('Frame', C.ADDON_NAME .. 'CooldownPulseAnchor', _G.UIParent, 'BackdropTemplate')
+local anchor = CreateFrame('Frame', C.ADDON_TITLE .. 'CooldownPulseAnchor', _G.UIParent, 'BackdropTemplate')
 anchor:SetSize(iconSize, iconSize)
 
-local frame = CreateFrame('Frame', C.ADDON_NAME .. 'CooldownPulseFrame', anchor, 'BackdropTemplate')
+local frame = CreateFrame('Frame', C.ADDON_TITLE .. 'CooldownPulseFrame', anchor, 'BackdropTemplate')
 frame:SetPoint('CENTER', anchor, 'CENTER')
 
 local icon = frame:CreateTexture(nil, 'ARTWORK')

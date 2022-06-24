@@ -18,7 +18,7 @@ do
 
     local tmp = {}
     local function myPrint(...)
-        local prefix = string.format('[%s]', C.COLORED_ADDON_NAME)
+        local prefix = string.format('[%s]', C.COLORFUL_ADDON_TITLE)
         local n = 0
 
         n = n + 1
@@ -54,7 +54,7 @@ do
     end
 
     function F:RegisterSlash(...)
-        local name = C.ADDON_NAME .. 'Slash' .. math.random()
+        local name = C.ADDON_TITLE .. 'Slash' .. math.random()
 
         local numArgs = select('#', ...)
         local callback = select(numArgs, ...)
@@ -167,7 +167,7 @@ end
 
 do
     -- Dropdown menu
-    F.EasyMenu = CreateFrame('Frame', C.ADDON_NAME .. 'EasyMenu', _G.UIParent, 'UIDropDownMenuTemplate')
+    F.EasyMenu = CreateFrame('Frame', C.ADDON_TITLE .. 'EasyMenu', _G.UIParent, 'UIDropDownMenuTemplate')
 
     -- Font string
     function F:CreateFS(font, size, flag, text, colour, shadow, anchor, x, y)
@@ -338,7 +338,7 @@ do
     end
 
     function F:StyleAddonName(msg)
-        msg = string.gsub(msg, '%%ADDONNAME%%', C.COLORED_ADDON_NAME)
+        msg = string.gsub(msg, '%%ADDONNAME%%', C.COLORFUL_ADDON_TITLE)
 
         return msg
     end

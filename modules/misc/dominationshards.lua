@@ -68,7 +68,7 @@ function DS:DomiShards_ListFrame()
     local iconSize = 28
     local frameSize = iconSize * 3
 
-    local frame = CreateFrame('Frame', C.ADDON_NAME .. 'DomiShards', _G.ItemSocketingFrame)
+    local frame = CreateFrame('Frame', C.ADDON_TITLE .. 'DomiShards', _G.ItemSocketingFrame)
     frame:SetSize(frameSize, frameSize)
     frame:SetPoint('BOTTOMLEFT', 22, 3)
     frame.icons = {}
@@ -111,7 +111,7 @@ function DS:DomiShards_ExtractButton()
 
     local button = CreateFrame(
         'Button',
-        C.ADDON_NAME .. 'ExtractorButton',
+        C.ADDON_TITLE .. 'ExtractorButton',
         _G.ItemSocketingFrame,
         'UIPanelButtonTemplate, SecureActionButtonTemplate'
     )

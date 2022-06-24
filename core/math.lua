@@ -248,7 +248,7 @@ end
 
 -- Timer
 F.WaitTable = {}
-F.WaitFrame = CreateFrame('Frame', C.ADDON_NAME .. 'WaitFrame', _G.UIParent)
+F.WaitFrame = CreateFrame('Frame', C.ADDON_TITLE .. 'WaitFrame', _G.UIParent)
 F.WaitFrame:SetScript('OnUpdate', F.WaitFunc)
 
 function F:WaitFunc(elapse)

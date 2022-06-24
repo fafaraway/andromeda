@@ -1981,7 +1981,7 @@ GUI.OptionsList = {
             true,
             nil,
             nil,
-            L["Sync the cooldown status with players who using 'FreeUI' or 'WeakAuras ZenTracker'."],
+            L["Sync the cooldown status with players who using 'AndromedaUI' or 'WeakAuras ZenTracker'."],
         },
         {},
         {

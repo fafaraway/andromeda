@@ -5,7 +5,7 @@ local LibBase64 = F.Libs.Base64
 local dataFrame
 
 function GUI:ExportData()
-    local text = C.ADDON_NAME .. 'Settings:' .. C.ADDON_VERSION .. ':' .. C.MY_NAME .. ':' .. C.MY_CLASS
+    local text = C.ADDON_TITLE .. 'Settings:' .. C.ADDON_VERSION .. ':' .. C.MY_NAME .. ':' .. C.MY_CLASS
     for KEY, VALUE in pairs(C.DB) do
         if type(VALUE) == 'table' then
             for key, value in pairs(VALUE) do
@@ -78,7 +78,7 @@ function GUI:ImportData()
     local options = { string.split(';', profile) }
     -- local title, _, _, class = string.split(':', options[1])
     local title = string.split(':', options[1])
-    if title ~= C.ADDON_NAME .. 'Settings' then
+    if title ~= C.ADDON_TITLE .. 'Settings' then
         _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Import failed, due to data exception.'])
         return
     end
@@ -129,7 +129,7 @@ local function UpdateTooltip()
     end
     local option = string.split(';', profile)
     local title, version, name, class = string.split(':', option)
-    if title == C.ADDON_NAME .. 'Settings' then
+    if title == C.ADDON_TITLE .. 'Settings' then
         dataFrame.version = version
         dataFrame.name = name
         dataFrame.class = class
@@ -144,7 +144,7 @@ function GUI:CreateDataFrame()
         return
     end
 
-    dataFrame = CreateFrame('Frame', C.ADDON_NAME .. 'ProfileData', _G.UIParent)
+    dataFrame = CreateFrame('Frame', C.ADDON_TITLE .. 'ProfileData', _G.UIParent)
     dataFrame:SetPoint('CENTER')
     dataFrame:SetSize(500, 500)
     dataFrame:SetFrameStrata('DIALOG')

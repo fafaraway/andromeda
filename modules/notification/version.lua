@@ -51,14 +51,14 @@ end
 
 function NOTIFICATION:VersionCheck_Send(channel)
     if GetTime() - lastVCTime >= 10 then
-        C_ChatInfo.SendAddonMessage('FreeUIVersionCheck', _G.FREE_ADB.DetectVersion, channel)
+        C_ChatInfo.SendAddonMessage('AndromedaUIVersionCheck', _G.FREE_ADB.DetectVersion, channel)
         lastVCTime = GetTime()
     end
 end
 
 function NOTIFICATION:VersionCheck_Update(...)
     local prefix, msg, distType, author = ...
-    if prefix ~= 'FreeUIVersionCheck' then
+    if prefix ~= 'AndromedaUIVersionCheck' then
         return
     end
     if Ambiguate(author, 'none') == C.MY_NAME then
@@ -84,11 +84,11 @@ end
 
 function NOTIFICATION:VersionCheck()
     NOTIFICATION:VersionCheck_Init()
-    C_ChatInfo.RegisterAddonMessagePrefix('FreeUIVersionCheck')
+    C_ChatInfo.RegisterAddonMessagePrefix('AndromedaUIVersionCheck')
     F:RegisterEvent('CHAT_MSG_ADDON', NOTIFICATION.VersionCheck_Update)
 
     if IsInGuild() then
-        C_ChatInfo.SendAddonMessage('FreeUIVersionCheck', C.ADDON_VERSION, 'GUILD')
+        C_ChatInfo.SendAddonMessage('AndromedaUIVersionCheck', C.ADDON_VERSION, 'GUILD')
         lastVCTime = GetTime()
     end
 

@@ -31,7 +31,7 @@ local strList = {
 }
 
 local function FormatTextString(str)
-    str = gsub(str, '&ADDON_NAME&', C.COLORED_ADDON_NAME)
+    str = gsub(str, '&ADDON_NAME&', C.COLORFUL_ADDON_TITLE)
     str = gsub(str, '*', C.MY_CLASS_COLOR)
     str = gsub(str, '#', '|cffffeccb')
     str = gsub(str, '@', C.GREY_COLOR)
@@ -120,7 +120,7 @@ local function ConstructTextString(f)
         C.ASSET_PATH .. 'fonts\\header.ttf',
         56,
         nil,
-        C.COLORED_ADDON_NAME,
+        C.COLORFUL_ADDON_TITLE,
         nil,
         'THICK',
         'TOP',
@@ -187,11 +187,11 @@ function GUI:CreateCheatSheet()
     if InCombatLockdown() then
         return
     end
-    if _G[C.ADDON_NAME .. 'CheatSheet'] then
+    if _G[C.ADDON_TITLE .. 'CheatSheet'] then
         return
     end
 
-    local f = CreateFrame('Button', C.ADDON_NAME .. 'CheatSheet', _G.UIParent)
+    local f = CreateFrame('Button', C.ADDON_TITLE .. 'CheatSheet', _G.UIParent)
     f:SetFrameStrata('FULLSCREEN')
     f:SetAllPoints()
     f:EnableMouse(true)
@@ -219,8 +219,8 @@ function GUI:CreateCheatSheet()
 end
 
 function GUI:ToggleCheatSheet()
-    if _G[C.ADDON_NAME .. 'CheatSheet'] then
-        if _G[C.ADDON_NAME .. 'CheatSheet']:IsShown() then
+    if _G[C.ADDON_TITLE .. 'CheatSheet'] then
+        if _G[C.ADDON_TITLE .. 'CheatSheet']:IsShown() then
             Disable()
         else
             Enable()

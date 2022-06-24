@@ -41,7 +41,6 @@ function F.UpdateCustomClassColors()
     C.b = C.ClassColors[C.MY_CLASS].b
 
     C.MY_CLASS_COLOR = string.format('|cff%02x%02x%02x', C.r * 255, C.g * 255, C.b * 255)
-    C.COLORED_ADDON_NAME = F:TextGradient(C.ADDON_NAME, C.r, C.g, C.b, 1, 1, 1)
 end
 F:RegisterEvent('ADDON_LOADED', F.UpdateCustomClassColors)
 

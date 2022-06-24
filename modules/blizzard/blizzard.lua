@@ -49,7 +49,7 @@ function BLIZZARD:UpdateBossEmote()
 end
 
 function BLIZZARD:VehicleIndicatorMover()
-    local frame = CreateFrame('Frame', C.ADDON_NAME .. 'VehicleIndicatorMover', _G.UIParent)
+    local frame = CreateFrame('Frame', C.ADDON_TITLE .. 'VehicleIndicatorMover', _G.UIParent)
     frame:SetSize(100, 100)
     F.Mover(frame, L['VehicleIndicator'], 'VehicleIndicator', { 'BOTTOMRIGHT', _G.Minimap, 'TOPRIGHT', 0, 0 })
 
@@ -63,7 +63,7 @@ function BLIZZARD:VehicleIndicatorMover()
 end
 
 function BLIZZARD:DurabilityFrameMover()
-    local frame = CreateFrame('Frame', C.ADDON_NAME .. 'DurabilityFrameMover', _G.UIParent)
+    local frame = CreateFrame('Frame', C.ADDON_TITLE .. 'DurabilityFrameMover', _G.UIParent)
     frame:SetSize(100, 100)
     F.Mover(
         frame,
@@ -91,7 +91,7 @@ function BLIZZARD:TicketStatusMover()
 end
 
 function BLIZZARD:UIWidgetFrameMover()
-    local frame1 = CreateFrame('Frame', C.ADDON_NAME .. 'UIWidgetMover', _G.UIParent)
+    local frame1 = CreateFrame('Frame', C.ADDON_TITLE .. 'UIWidgetMover', _G.UIParent)
     frame1:SetSize(200, 50)
     F.Mover(frame1, L['UIWidgetFrame'], 'UIWidgetFrame', { 'TOP', 0, -80 })
 
@@ -102,7 +102,7 @@ function BLIZZARD:UIWidgetFrameMover()
         end
     end)
 
-    local frame2 = CreateFrame('Frame', C.ADDON_NAME .. 'WidgetPowerBarMover', _G.UIParent)
+    local frame2 = CreateFrame('Frame', C.ADDON_TITLE .. 'WidgetPowerBarMover', _G.UIParent)
     frame2:SetSize(260, 40)
     F.Mover(frame2, L['UIWidgetPowerBar'], 'UIWidgetPowerBar', { 'BOTTOM', _G.UIParent, 'BOTTOM', 0, 150 })
 

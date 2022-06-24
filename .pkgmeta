@@ -1,5 +1,4 @@
-package-as: FreeUI
+package-as: andromeda
 
 ignore:
   - *.py
-  - *.toml

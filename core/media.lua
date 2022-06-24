@@ -119,7 +119,7 @@ C.Assets.Font = {
 -- Overwrite fonts
 
 do
-    local path = 'Fonts\\' .. C.ADDON_NAME .. '\\'
+    local path = 'Fonts\\' .. C.ADDON_TITLE .. '\\'
     if C.IS_DEVELOPER then
         C.Assets.Font.Regular = path .. 'regular.ttf'
         C.Assets.Font.Condensed = path .. 'condensed.ttf'
@@ -175,7 +175,7 @@ do
     end
 
     local function registerSharedMedia()
-        local prefix = string.format('|cff5da5e6%s:|r ', C.ADDON_NAME)
+        local prefix = string.format('%s: ', C.COLORFUL_ADDON_TITLE)
 
         for k, v in pairs(C.Assets.Font) do
             LSM:Register(LSM.MediaType.FONT, prefix .. k, v, LOCALE_MASK)

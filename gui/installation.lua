@@ -177,13 +177,13 @@ end
 local function SetupAddons() end
 
 function INSTALL:HelloWorld()
-    local f = CreateFrame('Frame', C.ADDON_NAME .. 'InstallFrame', _G.UIParent, 'BackdropTemplate')
+    local f = CreateFrame('Frame', C.ADDON_TITLE .. 'InstallFrame', _G.UIParent, 'BackdropTemplate')
     f:SetSize(400, 400)
     f:SetPoint('CENTER')
     f:SetFrameStrata('HIGH')
     F.SetBD(f)
 
-    f.logo = F.CreateFS(f, C.ASSET_PATH .. 'fonts\\header.ttf', 22, nil, C.ADDON_NAME, nil, true, 'TOP', 0, -4)
+    f.logo = F.CreateFS(f, C.ASSET_PATH .. 'fonts\\header.ttf', 22, nil, C.COLORFUL_ADDON_TITLE, nil, true, 'TOP', 0, -4)
     f.desc = F.CreateFS(f, C.Assets.Font.Regular, 10, nil, 'installation', { 0.7, 0.7, 0.7 }, true, 'TOP', 0, -30)
 
     local lineLeft = F.SetGradient(f, 'H', 0.7, 0.7, 0.7, 0, 0.7, 120, C.MULT)

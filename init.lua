@@ -1,13 +1,5 @@
---[[
-    ____________ _____ _____ _   _ _____
-    |  ___| ___ \  ___|  ___| | | |_   _|
-    | |_  | |_/ / |__ | |__ | | | | | |
-    |  _| |    /|  __||  __|| | | | | |
-    | |   | |\ \| |___| |___| |_| |_| |_
-    \_|   \_| \_\____/\____/ \___/ \___/
-]]
-
 do
+    -- binding
     _G.BINDING_HEADER_FREEUI = GetAddOnMetadata(..., 'Title')
     _G.BINDING_NAME_FREEUI_TOGGLE_GUI = 'GUI'
 end
@@ -15,30 +7,39 @@ end
 local addonName, engine = ...
 local aceAddon, aceAddonMinor = _G.LibStub('AceAddon-3.0')
 
-engine.version = '@project-version@'
-
 engine[1] = aceAddon:NewAddon(addonName, 'AceTimer-3.0')
 engine[2] = {}
 engine[3] = {}
 
-_G.FREE_ADB = {} -- Account variables
-_G.FREE_PDB = {}
-_G.FREE_DB = {} -- Character variables
+_G.FREE_ADB = {} -- account variables
+_G.FREE_PDB = {} -- profile variables
+_G.FREE_DB = {} -- character variables
 
-_G[addonName] = engine -- Allow other addon access
-
+-- allow other addons to access andromeda engine
+-- for example: local F, C, L = unpack(_G.ANDROMEDA)
+_G[strupper(addonName)] = engine
 
 local F, C = engine[1], engine[2]
 
 do
+    -- when packager packages a new version for release
+    -- '@project-version@' is replaced with the version number
+    -- which is the latest tag
+    engine.version = '@project-version@'
+
     if strfind(engine.version, 'project%-version') then
         engine.version = 'development'
     end
-end
 
-C.ADDON_NAME = tostring(addonName)
-C.ADDON_VERSION = engine.version
-C.IS_DEVELOPER = C.ADDON_VERSION == 'development'
+    C.ADDON_VERSION = engine.version
+    C.IS_DEVELOPER = C.ADDON_VERSION == 'development'
+
+    -- ADDON_NAME is the name of the addon folder, which is 'andromeda'
+    -- ADDON_TITLE is the title of the addon, which is 'AndromedaUI'
+    C.ADDON_NAME = tostring(addonName)
+    C.COLORFUL_ADDON_TITLE = GetAddOnMetadata(C.ADDON_NAME, 'Title')
+    C.ADDON_TITLE = gsub(C.COLORFUL_ADDON_TITLE, '|c........([^|]+)|r', '%1')
+end
 
 
 -- Libraries
@@ -70,7 +71,6 @@ do
     F.Libs.oUF = engine.oUF
     F.Libs.cargBags = engine.cargBags
 end
-
 
 -- Events
 local events = {}

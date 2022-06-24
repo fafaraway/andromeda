@@ -2,13 +2,13 @@ local F, C = unpack(select(2, ...))
 local ACTIONBAR = F:GetModule('ActionBar')
 
 local barsList = {
-    ['FadeBar1'] = C.ADDON_NAME .. 'ActionBar1',
-    ['FadeBar2'] = C.ADDON_NAME .. 'ActionBar2',
-    ['FadeBar3'] = C.ADDON_NAME .. 'ActionBar3',
-    ['FadeBar4'] = C.ADDON_NAME .. 'ActionBar4',
-    ['FadeBar5'] = C.ADDON_NAME .. 'ActionBar5',
-    ['FadePetBar'] = C.ADDON_NAME .. 'ActionBarPet',
-    ['FadeStanceBar'] = C.ADDON_NAME .. 'ActionBarStance',
+    ['FadeBar1'] = C.ADDON_TITLE .. 'ActionBar1',
+    ['FadeBar2'] = C.ADDON_TITLE .. 'ActionBar2',
+    ['FadeBar3'] = C.ADDON_TITLE .. 'ActionBar3',
+    ['FadeBar4'] = C.ADDON_TITLE .. 'ActionBar4',
+    ['FadeBar5'] = C.ADDON_TITLE .. 'ActionBar5',
+    ['FadePetBar'] = C.ADDON_TITLE .. 'ActionBarPet',
+    ['FadeStanceBar'] = C.ADDON_TITLE .. 'ActionBarStance',
 }
 
 local function ClearTimers(object)
@@ -209,7 +209,7 @@ function ACTIONBAR:BarFade()
         return
     end
 
-    ACTIONBAR.fadeParent = CreateFrame('Frame', C.ADDON_NAME .. 'ActionbarFadeParent', _G.UIParent, 'SecureHandlerStateTemplate')
+    ACTIONBAR.fadeParent = CreateFrame('Frame', C.ADDON_TITLE .. 'ActionbarFadeParent', _G.UIParent, 'SecureHandlerStateTemplate')
     RegisterStateDriver(ACTIONBAR.fadeParent, 'visibility', '[petbattle] hide; show')
     ACTIONBAR.fadeParent:SetAlpha(C.DB.Actionbar.FadeOutAlpha)
     ACTIONBAR.fadeParent:RegisterEvent('ACTIONBAR_SHOWGRID')

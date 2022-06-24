@@ -99,7 +99,7 @@ function UNITFRAME:CreateClassPower(self)
 
     local bars = {}
     for i = 1, 6 do
-        bars[i] = CreateFrame('StatusBar', C.ADDON_NAME .. 'ClassPower' .. i, holder)
+        bars[i] = CreateFrame('StatusBar', C.ADDON_TITLE .. 'ClassPower' .. i, holder)
         bars[i]:SetHeight(barHeight)
         bars[i]:SetWidth((barWidth - 5 * gap) / 6)
         bars[i]:SetStatusBarTexture(C.Assets.Statusbar.Normal)

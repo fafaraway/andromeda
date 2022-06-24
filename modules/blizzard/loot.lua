@@ -5,13 +5,13 @@ local iconsize = 32
 local width = 140
 local sq, ss, sn, st
 
-local lootFrame = CreateFrame('Button', C.ADDON_NAME .. 'LootFrame', _G.UIParent, 'BackdropTemplate')
+local lootFrame = CreateFrame('Button', C.ADDON_TITLE .. 'LootFrame', _G.UIParent, 'BackdropTemplate')
 lootFrame:SetFrameStrata('HIGH')
 lootFrame:SetClampedToScreen(true)
 lootFrame:SetWidth(width)
 lootFrame:SetHeight(64)
 lootFrame:Hide()
-table.insert(_G.UISpecialFrames, C.ADDON_NAME .. 'LootFrame')
+table.insert(_G.UISpecialFrames, C.ADDON_TITLE .. 'LootFrame')
 
 lootFrame.slots = {}
 
@@ -58,7 +58,7 @@ local OnUpdate = function(self)
 end
 
 local CreateLootSlot = function(id)
-    local frame = CreateFrame('Button', C.ADDON_NAME .. 'LootSlot' .. id, lootFrame, 'BackdropTemplate')
+    local frame = CreateFrame('Button', C.ADDON_TITLE .. 'LootSlot' .. id, lootFrame, 'BackdropTemplate')
     frame:SetPoint('TOP', lootFrame, 0, -((id - 1) * (iconsize + 1)))
     frame:SetPoint('RIGHT')
     frame:SetPoint('LEFT')

@@ -106,7 +106,7 @@ function COOLDOWN:OnCreate()
     if C.IS_DEVELOPER then
         if
             (not C.DB.Cooldown.IgnoreWA and string.find(frameName, 'WeakAurasCooldown'))
-            or string.find(frameName, C.ADDON_NAME .. 'PartyWatcher')
+            or string.find(frameName, C.ADDON_TITLE .. 'PartyWatcher')
         then
             text:SetPoint('CENTER', timer, 'BOTTOM')
         end

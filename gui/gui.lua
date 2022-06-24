@@ -53,15 +53,15 @@ local iconsList = {
 
 GUI.TexturesList = {
     [1] = {
-        texture = 'Interface\\AddOns\\' .. C.ADDON_NAME .. '\\assets\\textures\\statusbar\\norm',
+        texture = C.ASSET_PATH .. 'textures\\statusbar\\norm',
         name = L['Default'],
     },
     [2] = {
-        texture = 'Interface\\AddOns\\' .. C.ADDON_NAME .. '\\assets\\textures\\statusbar\\grad',
+        texture = C.ASSET_PATH .. 'textures\\statusbar\\grad',
         name = L['Gradient'],
     },
     [3] = {
-        texture = 'Interface\\AddOns\\' .. C.ADDON_NAME .. '\\assets\\textures\\statusbar\\flat',
+        texture = C.ASSET_PATH .. 'textures\\statusbar\\flat',
         name = L['Flat'],
     },
 }
@@ -123,17 +123,17 @@ local function CreateGearButton(self, name)
 end
 
 local function CombatLockdown(event)
-    if not _G[C.ADDON_NAME .. 'GUI'] then
+    if not _G[C.ADDON_TITLE .. 'GUI'] then
         return
     end
 
     if event == 'PLAYER_REGEN_DISABLED' then
-        if _G[C.ADDON_NAME .. 'GUI']:IsShown() then
-            _G[C.ADDON_NAME .. 'GUI']:Hide()
+        if _G[C.ADDON_TITLE .. 'GUI']:IsShown() then
+            _G[C.ADDON_TITLE .. 'GUI']:Hide()
             F:RegisterEvent('PLAYER_REGEN_ENABLED', CombatLockdown)
         end
     else
-        _G[C.ADDON_NAME .. 'GUI']:Show()
+        _G[C.ADDON_TITLE .. 'GUI']:Show()
         F:UnregisterEvent(event, CombatLockdown)
     end
 end
@@ -451,13 +451,13 @@ local function ScrollBar_OnMouseWheel(self, delta)
 end
 
 local function CreateGUI()
-    if _G[C.ADDON_NAME .. 'GUI'] then
-        _G[C.ADDON_NAME .. 'GUI']:Show()
+    if _G[C.ADDON_TITLE .. 'GUI'] then
+        _G[C.ADDON_TITLE .. 'GUI']:Show()
         return
     end
 
-    local guiFrame = CreateFrame('Frame', C.ADDON_NAME .. 'GUI', _G.UIParent)
-    table.insert(_G.UISpecialFrames, C.ADDON_NAME .. 'GUI')
+    local guiFrame = CreateFrame('Frame', C.ADDON_TITLE .. 'GUI', _G.UIParent)
+    table.insert(_G.UISpecialFrames, C.ADDON_TITLE .. 'GUI')
     guiFrame:SetSize(GUI.width, GUI.height)
     guiFrame:SetPoint('CENTER')
     guiFrame:SetFrameStrata('HIGH')
@@ -545,11 +545,11 @@ local function CreateGUI()
 end
 
 function F.ToggleGUI()
-    if _G[C.ADDON_NAME .. 'GUI'] then
-        if _G[C.ADDON_NAME .. 'GUI']:IsShown() then
-            _G[C.ADDON_NAME .. 'GUI']:Hide()
+    if _G[C.ADDON_TITLE .. 'GUI'] then
+        if _G[C.ADDON_TITLE .. 'GUI']:IsShown() then
+            _G[C.ADDON_TITLE .. 'GUI']:Hide()
         else
-            _G[C.ADDON_NAME .. 'GUI']:Show()
+            _G[C.ADDON_TITLE .. 'GUI']:Show()
         end
     else
         CreateGUI()
@@ -596,8 +596,8 @@ local function Button_OnClick()
 end
 
 local function CreateGameMenuButton()
-    local bu = CreateFrame('Button', 'GameMenuButton' .. C.ADDON_NAME, _G.GameMenuFrame, 'GameMenuButtonTemplate')
-    bu:SetText(C.COLORED_ADDON_NAME)
+    local bu = CreateFrame('Button', 'GameMenuButton' .. C.ADDON_TITLE, _G.GameMenuFrame, 'GameMenuButtonTemplate')
+    bu:SetText(C.COLORFUL_ADDON_TITLE)
     -- bu.Text:SetFont(C.Assets.Font.Bold, 13, _G.FREE_ADB.FontOutline and 'OUTLINE' or nil)
     bu:SetPoint('TOP', _G.GameMenuButtonAddons, 'BOTTOM', 0, -14)
     if _G.FREE_ADB.ReskinBlizz then

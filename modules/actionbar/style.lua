@@ -557,7 +557,7 @@ function ACTIONBAR:StyleAllActionButtons(cfg)
     end
 
     -- leave vehicle
-    ACTIONBAR:StyleActionButton(_G[C.ADDON_NAME .. 'LeaveVehicleButton'], cfg)
+    ACTIONBAR:StyleActionButton(_G[C.ADDON_TITLE .. 'LeaveVehicleButton'], cfg)
 
     -- extra action button
     ACTIONBAR:StyleExtraActionButton(cfg)

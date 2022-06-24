@@ -156,8 +156,8 @@ function UNITFRAME:CreatePartyWatcher(self)
     local maxIcons = 6
 
     for i = 1, maxIcons do
-        local bu = CreateFrame('Frame', C.ADDON_NAME .. 'PartyWatcherButton' .. i, self)
-        bu.CD = CreateFrame('Cooldown', C.ADDON_NAME .. 'PartyWatcherButtonCooldown' .. i, bu, 'CooldownFrameTemplate')
+        local bu = CreateFrame('Frame', C.ADDON_TITLE .. 'PartyWatcherButton' .. i, self)
+        bu.CD = CreateFrame('Cooldown', C.ADDON_TITLE .. 'PartyWatcherButtonCooldown' .. i, bu, 'CooldownFrameTemplate')
         bu.CD:SetInside()
         bu.CD:SetReverse(false)
         F.PixelIcon(bu)

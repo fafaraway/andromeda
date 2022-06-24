@@ -204,7 +204,7 @@ function AURA:UpdateHeader(header)
     if header.filter == 'HELPFUL' then
         cfg = AURA.settings.Buffs
         header:SetAttribute('consolidateTo', 0)
-        header:SetAttribute('weaponTemplate', string.format('FreeUIAuraTemplate%d', cfg.size))
+        header:SetAttribute('weaponTemplate', string.format(C.ADDON_TITLE .. 'AuraTemplate%d', cfg.size))
     end
 
     header:SetAttribute('separateOwn', 1)
@@ -219,7 +219,7 @@ function AURA:UpdateHeader(header)
     header:SetAttribute('yOffset', 0)
     header:SetAttribute('wrapXOffset', 0)
     header:SetAttribute('wrapYOffset', -(cfg.size + cfg.offset))
-    header:SetAttribute('template', string.format('FreeUIAuraTemplate%d', cfg.size))
+    header:SetAttribute('template', string.format(C.ADDON_TITLE .. 'AuraTemplate%d', cfg.size))
 
     local fontSize = math.floor(cfg.size / 30 * 10 + 0.5)
     local index = 1
@@ -243,9 +243,9 @@ function AURA:UpdateHeader(header)
 end
 
 function AURA:CreateAuraHeader(filter)
-    local name = 'FreeUIPlayerDebuffs'
+    local name = C.ADDON_TITLE .. 'PlayerDebuffs'
     if filter == 'HELPFUL' then
-        name = 'FreeUIPlayerBuffs'
+        name = C.ADDON_TITLE .. 'PlayerBuffs'
     end
 
     local header = CreateFrame('Frame', name, _G.UIParent, 'SecureAuraHeaderTemplate')

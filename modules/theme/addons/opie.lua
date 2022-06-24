@@ -1,8 +1,8 @@
-local F = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
 
-local maskTex = 'Interface\\AddOns\\FreeUI\\assets\\textures\\opie\\mask'
-local borderTex = 'Interface\\AddOns\\FreeUI\\assets\\textures\\opie\\border'
-local hlTex = 'Interface\\AddOns\\FreeUI\\assets\\textures\\opie\\highlight'
+local maskTex = C.ASSET_PATH .. 'textures\\opie\\mask'
+local borderTex = C.ASSET_PATH .. 'textures\\opie\\border'
+local hlTex = C.ASSET_PATH .. 'textures\\opie\\highlight'
 
 local methods = {
     SetOverlayIcon = nop,
@@ -58,5 +58,8 @@ local function constructor(name, parent, size)
 end
 
 F:HookAddOn('OPie', function()
-    _G.OPie.UI:RegisterIndicatorConstructor('FreeUI', { name = 'FreeUI', apiLevel = 1, CreateIndicator = constructor })
+    _G.OPie.UI:RegisterIndicatorConstructor(
+        C.ADDON_TITLE,
+        { name = C.ADDON_TITLE, apiLevel = 1, CreateIndicator = constructor }
+    )
 end)

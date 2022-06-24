@@ -182,11 +182,11 @@ F:RegisterSlash('/fs', function()
     _G.FrameStackTooltip_Toggle(false, true, true)
 end)
 
--- Disable all addons except FreeUI and debug tool
-F:RegisterSlash('/onlyfree', function()
+-- Disable all addons except andromeda and debug tool
+F:RegisterSlash('/debugmode', function()
     for i = 1, GetNumAddOns() do
         local name = GetAddOnInfo(i)
-        if name ~= 'FreeUI' and name ~= '!BaudErrorFrame' and GetAddOnEnableState(C.MY_NAME, name) == 2 then
+        if name ~= C.ADDON_NAME and name ~= '!BaudErrorFrame' and name ~= 'REHack' and GetAddOnEnableState(C.MY_NAME, name) == 2 then
             DisableAddOn(name, C.MY_NAME)
         end
     end

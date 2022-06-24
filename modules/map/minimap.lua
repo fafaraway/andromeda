@@ -45,7 +45,7 @@ function MAP:RestyleMinimap()
     local diff = 256 - 190
     local halfDiff = math.ceil(diff / 2)
 
-    local holder = CreateFrame('Frame', C.ADDON_NAME .. 'MinimapHolder', _G.UIParent)
+    local holder = CreateFrame('Frame', C.ADDON_TITLE .. 'MinimapHolder', _G.UIParent)
     holder:SetSize(256, 190)
     holder:SetPoint('CENTER', _G.UIParent)
     holder:SetFrameStrata('BACKGROUND')

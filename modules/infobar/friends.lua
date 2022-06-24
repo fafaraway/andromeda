@@ -167,7 +167,7 @@ function INFOBAR:FriendsPanel_Init()
 
     local anchorTop = C.DB.Infobar.AnchorTop
 
-    infoFrame = CreateFrame('Frame', 'FreeUIFriendsFrame', INFOBAR.Bar)
+    infoFrame = CreateFrame('Frame', C.ADDON_TITLE .. 'FriendsFrame', INFOBAR.Bar)
     infoFrame:SetSize(400, 495)
     infoFrame:SetPoint(
         anchorTop and 'TOP' or 'BOTTOM',
@@ -211,7 +211,7 @@ function INFOBAR:FriendsPanel_Init()
 
     local scrollFrame = CreateFrame(
         'ScrollFrame',
-        'FreeUIFriendsInfobarScrollFrame',
+        C.ADDON_TITLE .. 'FriendsInfobarScrollFrame',
         infoFrame,
         'HybridScrollFrameTemplate'
     )
@@ -509,7 +509,7 @@ function INFOBAR:FriendsPanel_UpdateButton(button)
 end
 
 function INFOBAR:FriendsPanel_Update()
-    local scrollFrame = _G.FreeUIFriendsInfobarScrollFrame
+    local scrollFrame = _G[C.ADDON_TITLE .. 'FriendsInfobarScrollFrame']
     local usedHeight = 0
     local buttons = scrollFrame.buttons
     local height = scrollFrame.buttonHeight

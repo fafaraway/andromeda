@@ -78,7 +78,7 @@ local styleData = {
     fontSizeEmphasized = 14,
     fontOutline = 'OUTLINE',
     GetStyleName = function()
-        return C.ADDON_NAME
+        return C.ADDON_TITLE
     end,
 }
 
@@ -93,7 +93,7 @@ function THEME:RegisterBigWigsStyle()
         return
     end
 
-    BigWigsAPI:RegisterBarStyle(C.ADDON_NAME, styleData)
+    BigWigsAPI:RegisterBarStyle(C.ADDON_TITLE, styleData)
 
     -- Force to use new style
     local pending = true
@@ -116,7 +116,7 @@ function THEME:RestyleBigWigsQueueTimer()
     local BigWigsLoader = _G.BigWigsLoader
 
     if BigWigsLoader and BigWigsLoader.RegisterMessage then
-        BigWigsLoader.RegisterMessage(C.ADDON_NAME, 'BigWigs_FrameCreated', function(_, frame, name)
+        BigWigsLoader.RegisterMessage(C.ADDON_TITLE, 'BigWigs_FrameCreated', function(_, frame, name)
             if name == 'QueueTimer' and not frame.styled then
                 F.StripTextures(frame)
                 F.SetBD(frame)
@@ -132,7 +132,7 @@ function THEME:RestyleBigWigsQueueTimer()
             end
         end)
 
-        -- BigWigsLoader.RegisterMessage(C.ADDON_NAME, 'EmphasizedPrint', function(_, text)
+        -- BigWigsLoader.RegisterMessage(C.ADDON_TITLE, 'EmphasizedPrint', function(_, text)
         --     if text and not text.styled then
 
         --         text.styled = true

@@ -190,7 +190,7 @@ function CHAT:CreateChannelBar()
         return
     end
 
-    local channelBar = CreateFrame('Frame', C.ADDON_NAME .. 'ChannelBar', _G.ChatFrame1)
+    local channelBar = CreateFrame('Frame', C.ADDON_TITLE .. 'ChannelBar', _G.ChatFrame1)
     channelBar:SetSize(_G.ChatFrame1:GetWidth(), 5)
     channelBar:SetPoint('TOPLEFT', _G.ChatFrame1, 'BOTTOMLEFT', 0, -6)
     channelBar:SetAlpha(0.2)

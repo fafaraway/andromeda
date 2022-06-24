@@ -154,7 +154,7 @@ local function createAtlasCoin(coin)
 	if not str then
 		local info = C_Texture.GetAtlasInfo("coin-"..coin)
 		if info then
-			str = _G.FreeUI[1]:GetTextureStrByAtlas(info, 14, 14)
+			str = ns[1]:GetTextureStrByAtlas(info, 14, 14)
 			atlasCache[coin] = str
 		end
 	end

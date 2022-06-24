@@ -145,7 +145,7 @@ local function ConstructModel(f)
 end
 
 function SS:UpdateScreenSaver()
-    local f = _G[C.ADDON_NAME .. 'ScreenSave']
+    local f = _G[C.ADDON_TITLE .. 'ScreenSave']
 
     if not f then return end
 
@@ -180,11 +180,11 @@ function SS:CreateScreenSaver()
     if InCombatLockdown() then
         return
     end
-    if _G[C.ADDON_NAME .. 'ScreenSave'] then
+    if _G[C.ADDON_TITLE .. 'ScreenSave'] then
         return
     end
 
-    local f = CreateFrame('Button', C.ADDON_NAME .. 'ScreenSave', _G.UIParent)
+    local f = CreateFrame('Button', C.ADDON_TITLE .. 'ScreenSave', _G.UIParent)
     f:SetFrameStrata('FULLSCREEN')
     f:SetAllPoints()
     f:EnableMouse(true)

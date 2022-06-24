@@ -80,7 +80,7 @@ function INFOBAR:GuildPanel_UpdateButton(button)
 end
 
 function INFOBAR:GuildPanel_Update()
-    local scrollFrame = _G.FreeUIGuildInfobarScrollFrame
+    local scrollFrame = _G[C.ADDON_TITLE .. 'GuildInfobarScrollFrame']
     local usedHeight = 0
     local buttons = scrollFrame.buttons
     local height = scrollFrame.buttonHeight
@@ -155,7 +155,7 @@ function INFOBAR:GuildPanel_Init()
 
     local anchorTop = C.DB.Infobar.AnchorTop
 
-    infoFrame = CreateFrame('Frame', 'FreeUIGuildInfobar', INFOBAR.Bar)
+    infoFrame = CreateFrame('Frame', C.ADDON_TITLE .. 'GuildInfobar', INFOBAR.Bar)
     infoFrame:SetSize(335, 495)
     infoFrame:SetPoint(
         anchorTop and 'TOP' or 'BOTTOM',
@@ -209,7 +209,7 @@ function INFOBAR:GuildPanel_Init()
 
     local scrollFrame = CreateFrame(
         'ScrollFrame',
-        'FreeUIGuildInfobarScrollFrame',
+        C.ADDON_TITLE .. 'GuildInfobarScrollFrame',
         infoFrame,
         'HybridScrollFrameTemplate'
     )
@@ -360,8 +360,8 @@ local function Block_OnEnter(self)
     if not IsInGuild() then
         return
     end
-    if _G.FreeUIFriendsFrame and _G.FreeUIFriendsFrame:IsShown() then
-        _G.FreeUIFriendsFrame:Hide()
+    if _G[C.ADDON_TITLE .. 'FriendsFrame'] and _G[C.ADDON_TITLE .. 'FriendsFrame']:IsShown() then
+        _G[C.ADDON_TITLE .. 'FriendsFrame']:Hide()
     end
 
     INFOBAR:GuildPanel_Init()

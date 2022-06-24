@@ -1,6 +1,9 @@
 local F, C = unpack(select(2, ...))
 
-C.DevsList = {}
+C.DevsList = {
+    ['Farfaraway-白银之手'] = true,
+    ['貳拾年老術士-白银之手'] = true,
+}
 
 do
     if C.IS_DEVELOPER then
@@ -50,7 +53,7 @@ end
 
 function F:ThrowError(...)
     local message = strjoin(' ', ...)
-    geterrorhandler()(format('%s |cffff3860%s|r\n', C.ADDON_NAME, '[ERROR]') .. message)
+    geterrorhandler()(format('%s |cffff3860%s|r\n', C.ADDON_TITLE, '[ERROR]') .. message)
 end
 
 function F:Dump(object, inspect)

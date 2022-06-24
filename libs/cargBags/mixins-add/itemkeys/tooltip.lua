@@ -17,7 +17,6 @@ DESCRIPTION:
 	Item keys which require tooltip parsing to work
 ]]
 local _, ns = ...
-local F = unpack(ns)
 local cargBags = ns.cargBags
 
 local bindTypeToString = {
@@ -34,14 +33,14 @@ local bindTypeToString = {
 cargBags.itemKeys["bindOn"] = function(i)
 	if not i.link then return end
 
-	local tip = F.ScanTip
+	local tip = ns[1].ScanTip
 	if not tip then return end
 
 	tip:SetOwner(UIParent, "ANCHOR_NONE")
 	tip:SetBagItem(i.bagID, i.slotID)
 
 	for j = 2, 5 do
-		local line = _G["FreeUIScanTooltipTextLeft"..j]
+		local line = _G[C.ADDON_TITLE .. "ScanTooltipTextLeft"..j]
 		local lineText = line and line:GetText()
 		if not lineText then break end
 
