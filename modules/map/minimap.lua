@@ -368,15 +368,16 @@ local function UpdateZoneText()
 end
 
 function MAP:CreateZoneText()
+    local outline = _G.ANDROMEDA_ADB.FontOutline
     local Minimap = _G.Minimap
     _G.ZoneTextString:ClearAllPoints()
     _G.ZoneTextString:SetPoint('TOP', Minimap, 0, -Minimap.halfDiff - 10)
-    _G.ZoneTextString:SetFont(C.Assets.Font.Header, 22, 'OUTLINE')
-    _G.SubZoneTextString:SetFont(C.Assets.Font.Header, 22, 'OUTLINE')
-    _G.PVPInfoTextString:SetFont(C.Assets.Font.Header, 22, 'OUTLINE')
-    _G.PVPArenaTextString:SetFont(C.Assets.Font.Header, 22, 'OUTLINE')
+    _G.ZoneTextString:SetFont(C.Assets.Font.Header, 22, outline, '', nil, outline or 'THICK')
+    _G.SubZoneTextString:SetFont(C.Assets.Font.Header, 22, outline, '', nil, outline or 'THICK')
+    _G.PVPInfoTextString:SetFont(C.Assets.Font.Header, 22, outline, '', nil, outline or 'THICK')
+    _G.PVPArenaTextString:SetFont(C.Assets.Font.Header, 22, outline, '', nil, outline or 'THICK')
 
-    local text = F.CreateFS(Minimap, C.Assets.Font.Header, 16, nil, '', nil, 'THICK')
+    local text = F.CreateFS(Minimap, C.Assets.Font.Header, 16, outline, '', nil, outline or 'THICK')
     text:SetPoint('TOP', Minimap, 0, -Minimap.halfDiff - 10)
     text:SetSize(Minimap:GetWidth(), 30)
     text:SetJustifyH('CENTER')

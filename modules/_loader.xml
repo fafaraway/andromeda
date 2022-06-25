@@ -1,0 +1,18 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Include file="actionbar\_loader.xml"/>
+    <Include file="announcement\_loader.xml"/>
+    <Include file="blizzard\_loader.xml"/>
+    <Include file="chat\_loader.xml"/>
+    <Include file="combat\_loader.xml"/>
+    <Include file="cooldown\_loader.xml"/>
+    <Include file="infobar\_loader.xml"/>
+    <Include file="inventory\_loader.xml"/>
+    <Include file="map\_loader.xml"/>
+    <Include file="misc\_loader.xml"/>
+    <Include file="nameplate\_loader.xml"/>
+    <Include file="notification\_loader.xml"/>
+    <Include file="quest\_loader.xml"/>
+    <Include file="theme\_loader.xml"/>
+    <Include file="tooltip\_loader.xml"/>
+    <Include file="unitframe\_loader.xml"/>
+</Ui>

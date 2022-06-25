@@ -1,12 +1,12 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-    <Include file="filters\filters.xml"/>
-    <Include file="plugins\plugins.xml"/>
-    <Include file="elements\elements.xml"/>
+    <Include file="filters\_loader.xml"/>
+    <Include file="plugins\_loader.xml"/>
+    <Include file="elements\_loader.xml"/>
     <Script file="unitframe.lua"/>
     <Script file="colors.lua"/>
     <Script file="fader.lua"/>
     <Script file="tags.lua"/>
     <Script file="units.lua"/>
-    <Include file="groups\groups.xml"/>
-    <Include file="units\units.xml"/>
+    <Include file="groups\_loader.xml"/>
+    <Include file="units\_loader.xml"/>
 </Ui>
