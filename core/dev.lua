@@ -2,7 +2,22 @@ local F, C = unpack(select(2, ...))
 
 C.DevsList = {
     ['Farfaraway-白银之手'] = true,
-    ['貳拾年老術士-白银之手'] = true,
+    ['Fionorolah-白银之手'] = true,
+    ['Orchestra-白银之手'] = true,
+    ['Rhonesaia-白银之手'] = true,
+    ['歸雁入胡天-白银之手'] = true,
+    ['單方只一味-白银之手'] = true,
+    ['池魚故淵-白银之手'] = true,
+    ['盡在不言中-白银之手'] = true,
+    ['終是意難平-白银之手'] = true,
+    ['神而明之-白银之手'] = true,
+    ['雨色入青山-白银之手'] = true,
+    ['Dontbeshy-死亡之翼'] = true,
+    ['熒惑-死亡之翼'] = true,
+    ['Kangrinboqe-霜之哀伤'] = true,
+    ['哞夫人-霜之哀伤'] = true,
+    ['烽火夜長歌-霜之哀伤'] = true,
+    ['瑪格漢之光-霜之哀伤'] = true,
 }
 
 do

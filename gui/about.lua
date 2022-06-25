@@ -2,27 +2,46 @@ local F, C, L = unpack(select(2, ...))
 local GUI = F:GetModule('GUI')
 
 local urls = {
-    curse = 'https://www.curseforge.com/wow/addons/freeui',
-    github = 'https://github.com/Solor/FreeUI',
+    curse = 'https://www.curseforge.com/wow/addons/andromeda',
+    wago = 'https://addons.wago.io/addons/freeui',
+    wowi = 'https://www.wowinterface.com/downloads/info23258',
+    github = 'https://github.com/neotpravlennoye/andromeda',
     discord = 'https://discord.gg/86wbfZXxn7',
+    qq = '203621176',
 }
 
 local icons = {
-    curse = C.ASSET_PATH .. 'textures\\curse',
-    github = C.ASSET_PATH .. 'textures\\github',
-    discord = C.ASSET_PATH .. 'textures\\discord',
+    curse = C.ASSET_PATH .. 'textures\\site\\curse',
+    wago = C.ASSET_PATH .. 'textures\\site\\wago',
+    wowi = C.ASSET_PATH .. 'textures\\site\\wowi',
+    github = C.ASSET_PATH .. 'textures\\site\\github',
+    discord = C.ASSET_PATH .. 'textures\\site\\discord',
+    qq = C.ASSET_PATH .. 'textures\\site\\qq',
 }
 
 local function ResetUrlBox(self)
     self:SetText(self.url)
-    -- self:HighlightText()
 end
 
-local function CreateUrlBox(parent, text, url, texture)
-    local box = F.CreateEditBox(parent, 300, 24)
-    box:SetPoint('TOP', 0, -70)
+local function UrlBox_OnEditFocusGained(self)
+    self:HighlightText()
+end
 
-    box.lable = F.CreateFS(parent, C.Assets.Font.Condensed, 14, nil, text, 'YELLOW', true, 'TOP', 0, -50)
+local function UrlBox_OnEditFocusLost(self)
+    self:HighlightText(0, 0)
+end
+
+local function CreateUrlBox(parent, text, url, texture, position)
+    local box = F.CreateEditBox(parent, 340, 24)
+
+    if position then
+        box:SetPoint(unpack(position))
+    else
+        box:SetPoint('TOP', 0, -70)
+    end
+
+    box.lable = F.CreateFS(parent, C.Assets.Font.Condensed, 13, nil, text, 'YELLOW', true)
+    box.lable:SetPoint('BOTTOM', box, 'TOP', 0, 4)
 
     box.icon = box:CreateTexture()
     box.icon:SetSize(20, 20)
@@ -35,36 +54,43 @@ local function CreateUrlBox(parent, text, url, texture)
 
     box:SetScript('OnTextChanged', ResetUrlBox)
     box:SetScript('OnCursorChanged', ResetUrlBox)
+    box:SetScript('OnEditFocusGained', UrlBox_OnEditFocusGained)
+    box:SetScript('OnEditFocusLost', UrlBox_OnEditFocusLost)
 end
 
 function GUI:CreateAboutFrame(parent)
-    local release = CreateFrame('Frame', nil, parent)
-    release:SetSize(360, 200)
-    release:SetPoint('TOP', 0, -20)
+    local outline = _G.ANDROMEDA_ADB.FontOutline
 
-    F.CreateFS(release, C.Assets.Font.Header, 18, nil, L['Stable Release'], nil, true, 'TOP', 0, -10)
+    local repo = CreateFrame('Frame', nil, parent)
+    repo:SetSize(400, 120)
+    repo:SetPoint('TOP', 0, -20)
 
-    GUI:CreateGradientLine(release, 160, -80, -32, 80, -32)
+    F.CreateFS(repo, C.Assets.Font.Heavy, 20, outline, L['Development Repository'], { 242 / 255, 211 / 255, 104 / 255 }, outline or 'THICK', 'TOP', 0, -10)
 
-    CreateUrlBox(release, 'CurseForge', urls.curse, icons.curse)
+    GUI:CreateGradientLine(repo, 120, -60, -34, 60, -34)
 
-    local dev = CreateFrame('Frame', nil, parent)
-    dev:SetSize(360, 200)
-    dev:SetPoint('TOP', 0, -160)
+    CreateUrlBox(repo, 'Github', urls.github, icons.github)
 
-    F.CreateFS(dev, C.Assets.Font.Header, 18, nil, L['Development Repository'], nil, true, 'TOP', 0, -10)
+    local download = CreateFrame('Frame', nil, parent)
+    download:SetSize(400, 220)
+    download:SetPoint('TOP', repo, 'BOTTOM')
 
-    GUI:CreateGradientLine(dev, 160, -80, -32, 80, -32)
+    F.CreateFS(download, C.Assets.Font.Heavy, 20, outline, L['Stable Version Download'], { 242 / 255, 211 / 255, 104 / 255 }, outline or 'THICK', 'TOP', 0, -10)
 
-    CreateUrlBox(dev, 'GitHub', urls.github, icons.github)
+    GUI:CreateGradientLine(download, 120, -60, -34, 60, -34)
+
+    CreateUrlBox(download, 'CurseForge.com', urls.curse, icons.curse)
+    CreateUrlBox(download, 'Wago.io', urls.wago, icons.wago, { 'TOP', 0, -120 })
+    CreateUrlBox(download, 'WoWInterface.com', urls.wowi, icons.wowi, { 'TOP', 0, -170 })
 
     local feedback = CreateFrame('Frame', nil, parent)
-    feedback:SetSize(360, 200)
-    feedback:SetPoint('TOP', 0, -300)
+    feedback:SetSize(400, 220)
+    feedback:SetPoint('TOP', download, 'BOTTOM')
 
-    F.CreateFS(feedback, C.Assets.Font.Header, 18, nil, L['Feedback'], nil, true, 'TOP', 0, -10)
+    F.CreateFS(feedback, C.Assets.Font.Heavy, 20, outline, L['Feedback'], { 242 / 255, 211 / 255, 104 / 255 }, outline or 'THICK', 'TOP', 0, -10)
 
-    GUI:CreateGradientLine(feedback, 160, -80, -32, 80, -32)
+    GUI:CreateGradientLine(feedback, 120, -60, -34, 60, -34)
 
-    CreateUrlBox(feedback, 'Discord', urls.discord, icons.discord)
+    CreateUrlBox(feedback, 'Discord Channel', urls.discord, icons.discord)
+    CreateUrlBox(feedback, 'QQ Group', urls.qq, icons.qq, { 'TOP', 0, -120 })
 end

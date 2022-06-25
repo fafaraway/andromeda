@@ -53,19 +53,19 @@ do
         end)
     end
 
-    function F:RegisterSlash(...)
+    function F:RegisterSlashCommand(...)
         local name = C.ADDON_TITLE .. 'Slash' .. math.random()
 
         local numArgs = select('#', ...)
         local callback = select(numArgs, ...)
         if type(callback) ~= 'function' or numArgs < 2 then
-            error('Syntax: RegisterSlash("/slash1"[, "/slash2"], slashFunction)')
+            error('Syntax: RegisterSlashCommand("/slash1"[, "/slash2"], slashFunction)')
         end
 
         for index = 1, numArgs - 1 do
             local str = select(index, ...)
             if type(str) ~= 'string' then
-                error('Syntax: RegisterSlash("/slash1"[, "/slash2"], slashFunction)')
+                error('Syntax: RegisterSlashCommand("/slash1"[, "/slash2"], slashFunction)')
             end
 
             _G['SLASH_' .. name .. index] = str

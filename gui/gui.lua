@@ -493,7 +493,7 @@ local function CreateGUI()
         -30
     )
 
-    GUI:CreateGradientLine(guiFrame, 120, -60, -26, 60, -26)
+    GUI:CreateGradientLine(guiFrame, 140, -70, -26, 70, -26)
 
     local btnClose = CreateFrame('Button', nil, guiFrame, 'UIPanelButtonTemplate')
     btnClose:SetPoint('BOTTOMRIGHT', -6, 6)

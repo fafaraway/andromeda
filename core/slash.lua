@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 local GUI = F:GetModule('GUI')
 
-F:RegisterSlash('/free', function(msg)
+F:RegisterSlashCommand('/free', function(msg)
     local str, _ = string.split(' ', string.lower(msg), 2)
     if string.match(str, 'reset') or string.match(str, 'init') then
         StaticPopup_Show('ANDROMEDA_RESET_ALL')
@@ -24,17 +24,17 @@ F:RegisterSlash('/free', function(msg)
 end)
 
 -- Leave group
-F:RegisterSlash('/lg', function()
+F:RegisterSlashCommand('/lg', function()
     C_PartyInfo.LeaveParty()
 end)
 
 --	Disband party or raid
-F:RegisterSlash('/disband', function()
+F:RegisterSlashCommand('/disband', function()
     StaticPopup_Show('ANDROMEDA_DISBAND_GROUP')
 end)
 
 --	Convert party raid
-F:RegisterSlash('/convert', function()
+F:RegisterSlashCommand('/convert', function()
     if GetNumGroupMembers() > 0 then
         if UnitInRaid('player') and (UnitIsGroupLeader('player')) then
             C_PartyInfo.ConvertToParty()
@@ -47,22 +47,22 @@ F:RegisterSlash('/convert', function()
 end)
 
 -- Ready check
-F:RegisterSlash('/rdc', function()
+F:RegisterSlashCommand('/rdc', function()
     DoReadyCheck()
 end)
 
 -- Role poll
-F:RegisterSlash('/role', function()
+F:RegisterSlashCommand('/role', function()
     InitiateRolePoll()
 end)
 
 -- Reset instance
-F:RegisterSlash('/ri', function()
+F:RegisterSlashCommand('/ri', function()
     ResetInstances()
 end)
 
 -- Teleport LFG instance
-F:RegisterSlash('/tp', function()
+F:RegisterSlashCommand('/tp', function()
     if IsInInstance() then
         LFGTeleport(true)
     else
@@ -71,12 +71,12 @@ F:RegisterSlash('/tp', function()
 end)
 
 -- Take screenshot
-F:RegisterSlash('/ss', function()
+F:RegisterSlashCommand('/ss', function()
     Screenshot()
 end)
 
 -- Mount special pose
-F:RegisterSlash('/ms', function()
+F:RegisterSlashCommand('/ms', function()
     if IsMounted() then
         DoEmote('MOUNTSPECIAL')
     else
@@ -85,12 +85,12 @@ F:RegisterSlash('/ms', function()
 end)
 
 -- Set BattleNet broadcast
-F:RegisterSlash('/bb', function(msg)
+F:RegisterSlashCommand('/bb', function(msg)
     BNSetCustomMessage(msg)
 end)
 
 -- Switch specialization
-F:RegisterSlash('/spec', function(msg)
+F:RegisterSlashCommand('/spec', function(msg)
     local specID = tonumber(msg)
     if specID then
         local canUse, failureReason = C_SpecializationInfo.CanPlayerUseTalentSpecUI()
@@ -117,7 +117,7 @@ hooksecurefunc('ChatEdit_OnSpacePressed', function(editBox)
     end
 end)
 
-F:RegisterSlash('/tt', function(msg)
+F:RegisterSlashCommand('/tt', function(msg)
     if UnitCanCooperate('player', 'target') or UnitIsUnit('player', 'target') then
         SendChatMessage(msg, 'WHISPER', nil, GetUnitName('target', true))
     end
@@ -141,7 +141,7 @@ do
         end
     end
 
-    F:RegisterSlash('/way', function(msg)
+    F:RegisterSlashCommand('/way', function(msg)
         if IsAddOnLoaded('TomTom') then
             return
         end
@@ -166,24 +166,24 @@ do
 end
 
 -- Clear chat
-F:RegisterSlash('/clear', function()
+F:RegisterSlashCommand('/clear', function()
     for i = 1, _G.NUM_CHAT_WINDOWS do
         _G[string.format('ChatFrame%d', i)]:Clear()
     end
 end)
 
 -- Dev tool
-F:RegisterSlash('/rl', function()
+F:RegisterSlashCommand('/rl', function()
     ReloadUI()
 end)
 
-F:RegisterSlash('/fs', function()
+F:RegisterSlashCommand('/fs', function()
     _G.UIParentLoadAddOn('Blizzard_DebugTools')
     _G.FrameStackTooltip_Toggle(false, true, true)
 end)
 
 -- Disable all addons except andromeda and debug tool
-F:RegisterSlash('/debugmode', function()
+F:RegisterSlashCommand('/debugmode', function()
     for i = 1, GetNumAddOns() do
         local name = GetAddOnInfo(i)
         if name ~= C.ADDON_NAME and name ~= '!BaudErrorFrame' and name ~= 'REHack' and GetAddOnEnableState(C.MY_NAME, name) == 2 then
@@ -202,7 +202,7 @@ local function GetNPCID(unit)
     end
 end
 
-F:RegisterSlash('/npcid', function()
+F:RegisterSlashCommand('/npcid', function()
     local npcID = GetNPCID('target')
     if npcID then
         local str = 'NPC ID: ' .. npcID
@@ -211,7 +211,7 @@ F:RegisterSlash('/npcid', function()
 end)
 
 -- Print quest info
-F:RegisterSlash('/questid', function(msg)
+F:RegisterSlashCommand('/questid', function(msg)
     local questID = tonumber(msg)
     if questID then
         local isCompleted = C_QuestLog.IsQuestFlaggedCompleted(questID)
@@ -223,7 +223,7 @@ F:RegisterSlash('/questid', function(msg)
 end)
 
 -- Print map info
-F:RegisterSlash('/mapid', function()
+F:RegisterSlashCommand('/mapid', function()
     local mapID
     if _G.WorldMapFrame:IsShown() then
         mapID = _G.WorldMapFrame:GetMapID()
@@ -235,7 +235,7 @@ F:RegisterSlash('/mapid', function()
 end)
 
 -- Print instance info
-F:RegisterSlash('/instinfo', function()
+F:RegisterSlashCommand('/instinfo', function()
     local name, instanceType, difficultyID, difficultyName, _, _, _, instanceMapID = GetInstanceInfo()
     F:Print(C.LINE_STRING)
     F:Print('Name ' .. C.INFO_COLOR .. name)
@@ -247,7 +247,7 @@ F:RegisterSlash('/instinfo', function()
 end)
 
 -- Print item info
-F:RegisterSlash('/iteminfo', function(msg)
+F:RegisterSlashCommand('/iteminfo', function(msg)
     local itemID = tonumber(msg)
     if itemID then
         local name, link, rarity, level, minLevel, type, subType, _, _, _, _, classID, subClassID, bindType =
@@ -274,7 +274,7 @@ F:RegisterSlash('/iteminfo', function(msg)
 end)
 
 -- Print item info
-F:RegisterSlash('/scaleinfo', function()
+F:RegisterSlashCommand('/scaleinfo', function()
     F:Print(C.LINE_STRING)
     F:Print('C.SCREEN_WIDTH ' .. C.SCREEN_WIDTH)
     F:Print('C.SCREEN_HEIGHT ' .. C.SCREEN_HEIGHT)
@@ -285,7 +285,7 @@ F:RegisterSlash('/scaleinfo', function()
 end)
 
 -- DBM test
-F:RegisterSlash('/dbmtest', function()
+F:RegisterSlashCommand('/dbmtest', function()
     if IsAddOnLoaded('DBM-Core') then
         _G.DBM:DemoMode()
     else
