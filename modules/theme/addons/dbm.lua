@@ -114,7 +114,7 @@ function THEME:ReskinDBM()
         return
     end
 
-    if not _G.FREE_ADB.ReskinAddons then
+    if not _G.ANDROMEDA_ADB.ReskinAddons then
         return
     end
 

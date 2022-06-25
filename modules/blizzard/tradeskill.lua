@@ -83,7 +83,7 @@ function BLIZZARD:TradeTabs_Update()
 end
 
 function BLIZZARD:TradeTabs_Reskin()
-    if not _G.FREE_ADB.ReskinBlizz then
+    if not _G.ANDROMEDA_ADB.ReskinBlizz then
         return
     end
 

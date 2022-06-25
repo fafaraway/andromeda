@@ -539,14 +539,14 @@ function UNITFRAME:RefreshPartyAurasFilter()
     for spellID in pairs(C.PartyAurasList) do
         local name = GetSpellInfo(spellID)
         if name then
-            local modValue = _G.FREE_ADB['PartyAurasList'][spellID]
+            local modValue = _G.ANDROMEDA_ADB['PartyAurasList'][spellID]
             if modValue == nil then
                 UNITFRAME.PartyAurasList[spellID] = true
             end
         end
     end
 
-    for spellID, value in pairs(_G.FREE_ADB['PartyAurasList']) do
+    for spellID, value in pairs(_G.ANDROMEDA_ADB['PartyAurasList']) do
         if value then
             UNITFRAME.PartyAurasList[spellID] = true
         end
@@ -557,17 +557,17 @@ function UNITFRAME:CheckPartyAurasFilter()
     for spellID in pairs(C.PartyAurasList) do
         local name = GetSpellInfo(spellID)
         if name then
-            if _G.FREE_ADB['PartyAurasList'][spellID] then
-                _G.FREE_ADB['PartyAurasList'][spellID] = nil
+            if _G.ANDROMEDA_ADB['PartyAurasList'][spellID] then
+                _G.ANDROMEDA_ADB['PartyAurasList'][spellID] = nil
             end
         else
             F:Debug('CheckMajorSpells: Invalid Spell ID ' .. spellID)
         end
     end
 
-    for spellID, value in pairs(_G.FREE_ADB['PartyAurasList']) do
+    for spellID, value in pairs(_G.ANDROMEDA_ADB['PartyAurasList']) do
         if value == false and C.PartyAurasList[spellID] == nil then
-            _G.FREE_ADB['PartyAurasList'][spellID] = nil
+            _G.ANDROMEDA_ADB['PartyAurasList'][spellID] = nil
         end
     end
 end

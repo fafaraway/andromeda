@@ -136,7 +136,7 @@ end
 function NAMEPLATE.ConfigureNameTag(frame)
     local nameOnly = frame.plateType == 'NameOnly'
     local name = frame.NameTag
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = _G.ANDROMEDA_ADB.FontOutline
 
     name:SetShown(not frame.widgetsOnly)
     name:ClearAllPoints()
@@ -175,7 +175,7 @@ function NAMEPLATE.ConfigureNameTag(frame)
 end
 
 function NAMEPLATE:CreateNameTag(self)
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = _G.ANDROMEDA_ADB.FontOutline
     local font = C.Assets.Font.Bold
 
     local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
@@ -199,7 +199,7 @@ end
 
 function NAMEPLATE:CreateHealthTag(self)
     local font = C.Assets.Font.Condensed
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = _G.ANDROMEDA_ADB.FontOutline
 
     local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
 

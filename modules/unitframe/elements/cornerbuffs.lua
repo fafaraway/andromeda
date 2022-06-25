@@ -6,14 +6,14 @@ function UNITFRAME:UpdateCornerSpells()
     table.wipe(UNITFRAME.CornerSpellsList)
 
     for spellID, value in pairs(C.CornerSpellsList[C.MY_CLASS]) do
-        local modData = _G.FREE_ADB['CornerSpellsList'][C.MY_CLASS]
+        local modData = _G.ANDROMEDA_ADB['CornerSpellsList'][C.MY_CLASS]
         if not (modData and modData[spellID]) then
             local r, g, b = unpack(value[2])
             UNITFRAME.CornerSpellsList[spellID] = { value[1], { r, g, b }, value[3] }
         end
     end
 
-    for spellID, value in pairs(_G.FREE_ADB['CornerSpellsList'][C.MY_CLASS]) do
+    for spellID, value in pairs(_G.ANDROMEDA_ADB['CornerSpellsList'][C.MY_CLASS]) do
         if next(value) then
             local r, g, b = unpack(value[2])
             UNITFRAME.CornerSpellsList[spellID] = { value[1], { r, g, b }, value[3] }
@@ -121,8 +121,8 @@ function UNITFRAME:CreateCornerIndicator(self)
 end
 
 function UNITFRAME:CheckCornerSpells()
-    if not _G.FREE_ADB['CornerSpellsList'][C.MY_CLASS] then
-        _G.FREE_ADB['CornerSpellsList'][C.MY_CLASS] = {}
+    if not _G.ANDROMEDA_ADB['CornerSpellsList'][C.MY_CLASS] then
+        _G.ANDROMEDA_ADB['CornerSpellsList'][C.MY_CLASS] = {}
     end
     local data = C.CornerSpellsList[C.MY_CLASS]
     if not data then
@@ -136,9 +136,9 @@ function UNITFRAME:CheckCornerSpells()
         end
     end
 
-    for spellID, value in pairs(_G.FREE_ADB['CornerSpellsList'][C.MY_CLASS]) do
+    for spellID, value in pairs(_G.ANDROMEDA_ADB['CornerSpellsList'][C.MY_CLASS]) do
         if not next(value) and C.CornerBuffs[C.MY_CLASS][spellID] == nil then
-            _G.FREE_ADB['CornerSpellsList'][C.MY_CLASS][spellID] = nil
+            _G.ANDROMEDA_ADB['CornerSpellsList'][C.MY_CLASS][spellID] = nil
         end
     end
 end

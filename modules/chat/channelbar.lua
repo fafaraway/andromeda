@@ -92,7 +92,7 @@ local chatSwitchInfo = {
 }
 
 local function SwitchTip()
-    if not _G.FREE_ADB['HelpTips']['ChatSwitch'] then
+    if not _G.ANDROMEDA_ADB['HelpTips']['ChatSwitch'] then
         _G.HelpTip:Show(_G.ChatFrame1, chatSwitchInfo)
     end
 end

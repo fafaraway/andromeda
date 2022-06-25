@@ -16,7 +16,7 @@ local function reskinHelpTips(self)
 end
 
 table.insert(C.BlizzThemes, function()
-    if not _G.FREE_ADB.ReskinBlizz then
+    if not _G.ANDROMEDA_ADB.ReskinBlizz then
         return
     end
 

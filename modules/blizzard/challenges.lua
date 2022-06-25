@@ -187,7 +187,7 @@ function ECF:KeystoneInfo_Create()
         _G.GameTooltip:ClearLines()
         _G.GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
         _G.GameTooltip:AddLine(L['Account Keystones'])
-        for name, info in pairs(_G.FREE_ADB.KeystoneInfo) do
+        for name, info in pairs(_G.ANDROMEDA_ADB.KeystoneInfo) do
             local newName = Ambiguate(name, 'none')
             local mapID, level, class, faction = string.split(':', info)
             local color = F:RgbToHex(F:ClassColor(class))
@@ -220,7 +220,7 @@ function ECF:KeystoneInfo_Create()
             end
             F:TogglePanel(_G.WeeklyRewardsFrame)
         elseif btn == 'MiddleButton' then
-            table.wipe(_G.FREE_ADB.KeystoneInfo)
+            table.wipe(_G.ANDROMEDA_ADB.KeystoneInfo)
             ECF:KeystoneInfo_Update() -- update own keystone info after reset
         end
     end)
@@ -236,9 +236,9 @@ end
 function ECF:KeystoneInfo_Update()
     local mapID, keystoneLevel = ECF:KeystoneInfo_UpdateBag()
     if mapID then
-        _G.FREE_ADB['KeystoneInfo'][C.MY_FULL_NAME] = mapID .. ':' .. keystoneLevel .. ':' .. C.MY_CLASS .. ':' .. C.MY_FACTION
+        _G.ANDROMEDA_ADB['KeystoneInfo'][C.MY_FULL_NAME] = mapID .. ':' .. keystoneLevel .. ':' .. C.MY_CLASS .. ':' .. C.MY_FACTION
     else
-        _G.FREE_ADB['KeystoneInfo'][C.MY_FULL_NAME] = nil
+        _G.ANDROMEDA_ADB['KeystoneInfo'][C.MY_FULL_NAME] = nil
     end
 end
 

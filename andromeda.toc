@@ -7,8 +7,8 @@
 ## Version: @project-version@
 ## Title: |cff6ea3faA|r|cff749ffcn|r|cff7b9afdd|r|cff8395fer|r|cff8c90fdo|r|cff968afcm|r|cffa083fae|r|cffaa7cf7d|r|cffb575f3a|r|cffc06ceeU|r|cffca63e8I|r
 ## Notes: A user interface replacement for World of Warcraft.
-## SavedVariables: FREE_ADB, FREE_PDB
-## SavedVariablesPerCharacter: FREE_DB
+## SavedVariables: ANDROMEDA_ADB, ANDROMEDA_PDB
+## SavedVariablesPerCharacter: ANDROMEDA_CDB
 
 ## X-oUF: oUFembed
 ## X-Website: https://github.com/neotpravlennoye/andromeda

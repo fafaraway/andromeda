@@ -507,7 +507,7 @@ function GT:RaidTool_CreateMenu(parent)
             _G.TEAM_DISBAND,
             function()
                 if UnitIsGroupLeader('player') then
-                    _G.StaticPopup_Show('FREEUI_DISBAND_GROUP')
+                    _G.StaticPopup_Show('ANDROMEDA_DISBAND_GROUP')
                 else
                     _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. _G.ERR_NOT_LEADER)
                 end

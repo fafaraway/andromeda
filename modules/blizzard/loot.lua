@@ -91,7 +91,7 @@ local CreateLootSlot = function(id)
     icon:SetInside(iconFrame)
     frame.icon = icon
 
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = _G.ANDROMEDA_ADB.FontOutline
 
     local count = F.CreateFS(iconFrame, C.Assets.Font.Regular, 12, true, nil, nil, true, 'TOP', 1, -2)
     frame.count = count

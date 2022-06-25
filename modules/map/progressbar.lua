@@ -3,15 +3,15 @@ local M = F:GetModule('Map')
 local TOOLTIP = F:GetModule('Tooltip')
 
 function M:InitRenownLevel()
-    if not _G.FREE_ADB['RenownLevels'][C.MY_REALM] then
-        _G.FREE_ADB['RenownLevels'][C.MY_REALM] = {}
+    if not _G.ANDROMEDA_ADB['RenownLevels'][C.MY_REALM] then
+        _G.ANDROMEDA_ADB['RenownLevels'][C.MY_REALM] = {}
     end
 
-    if not _G.FREE_ADB['RenownLevels'][C.MY_REALM][C.MY_NAME] then
-        _G.FREE_ADB['RenownLevels'][C.MY_REALM][C.MY_NAME] = {}
+    if not _G.ANDROMEDA_ADB['RenownLevels'][C.MY_REALM][C.MY_NAME] then
+        _G.ANDROMEDA_ADB['RenownLevels'][C.MY_REALM][C.MY_NAME] = {}
 
         for i = 1, 4 do
-            _G.FREE_ADB['RenownLevels'][C.MY_REALM][C.MY_NAME][i] = 0
+            _G.ANDROMEDA_ADB['RenownLevels'][C.MY_REALM][C.MY_NAME][i] = 0
         end
     end
 end
@@ -20,7 +20,7 @@ function M:CheckRenownLevel()
     local level = C_CovenantSanctumUI.GetRenownLevel()
     local CovenantID = C_Covenants.GetActiveCovenantID()
 
-    _G.FREE_ADB['RenownLevels'][C.MY_REALM][C.MY_NAME][CovenantID] = level
+    _G.ANDROMEDA_ADB['RenownLevels'][C.MY_REALM][C.MY_NAME][CovenantID] = level
 end
 
 function M:UpdateRenownLevel()
@@ -269,7 +269,7 @@ function M:Bar_OnEnter()
         _G.GameTooltip:AddLine(_G.LANDING_PAGE_RENOWN_LABEL, 0, 0.6, 1)
 
         for i = 1, 4 do
-            local level = _G.FREE_ADB['RenownLevels'][C.MY_REALM][C.MY_NAME][i]
+            local level = _G.ANDROMEDA_ADB['RenownLevels'][C.MY_REALM][C.MY_NAME][i]
             if level > 0 then
                 _G.GameTooltip:AddDoubleLine(TOOLTIP:GetCovenantIcon(i) .. TOOLTIP:GetCovenantName(i), level)
             end

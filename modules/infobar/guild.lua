@@ -116,10 +116,10 @@ end
 
 local function sortRosters(a, b)
     if a and b then
-        if _G.FREE_ADB['GuildSortOrder'] then
-            return a[_G.FREE_ADB['GuildSortBy']] < b[_G.FREE_ADB['GuildSortBy']]
+        if _G.ANDROMEDA_ADB['GuildSortOrder'] then
+            return a[_G.ANDROMEDA_ADB['GuildSortBy']] < b[_G.ANDROMEDA_ADB['GuildSortBy']]
         else
-            return a[_G.FREE_ADB['GuildSortBy']] > b[_G.FREE_ADB['GuildSortBy']]
+            return a[_G.ANDROMEDA_ADB['GuildSortBy']] > b[_G.ANDROMEDA_ADB['GuildSortBy']]
         end
     end
 end
@@ -130,8 +130,8 @@ function INFOBAR:GuildPanel_SortUpdate()
 end
 
 local function sortHeaderOnClick(self)
-    _G.FREE_ADB['GuildSortBy'] = self.index
-    _G.FREE_ADB['GuildSortOrder'] = not _G.FREE_ADB['GuildSortOrder']
+    _G.ANDROMEDA_ADB['GuildSortBy'] = self.index
+    _G.ANDROMEDA_ADB['GuildSortOrder'] = not _G.ANDROMEDA_ADB['GuildSortOrder']
     INFOBAR:GuildPanel_SortUpdate()
 end
 

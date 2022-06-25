@@ -31,7 +31,7 @@ function autoRepair(override)
     if canRepair and repairAllCost > 0 then
         if
             not override
-            and _G.FREE_ADB['RepairType'] == 1
+            and _G.ANDROMEDA_ADB['RepairType'] == 1
             and IsInGuild()
             and CanGuildBankRepair()
             and GetGuildBankWithdrawMoney() >= repairAllCost
@@ -70,7 +70,7 @@ local function merchantClose()
 end
 
 local function merchantShow()
-    if IsAltKeyDown() or _G.FREE_ADB['RepairType'] == 0 or not CanMerchantRepair() then
+    if IsAltKeyDown() or _G.ANDROMEDA_ADB['RepairType'] == 0 or not CanMerchantRepair() then
         return
     end
 

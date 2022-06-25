@@ -4,7 +4,7 @@ local F, C, L = unpack(select(2, ...))
 
 do
     function F.HelpInfoAcknowledge(callbackArg)
-        _G.FREE_ADB['HelpTips'][callbackArg] = true
+        _G.ANDROMEDA_ADB['HelpTips'][callbackArg] = true
     end
 
     function F:MultiCheck(check, ...)
@@ -160,6 +160,227 @@ do
     function F:GetNpcId(guid)
         local id = tonumber(string.match((guid or ''), '%-(%d-)%-%x-$'))
         return id
+    end
+end
+
+-- Scan Tooltip
+
+do
+    local iLvlDB = {}
+    local itemLevelString = '^' .. string.gsub(_G.ITEM_LEVEL, '%%d', '')
+    local enchantString = string.gsub(_G.ENCHANTED_TOOLTIP_LINE, '%%s', '(.+)')
+    local essenceTextureID = 2975691
+    local essenceDescription = GetSpellDescription(277253)
+
+    local tip = CreateFrame('GameTooltip', C.ADDON_TITLE .. 'ScanTooltip', nil, 'GameTooltipTemplate')
+    F.ScanTip = tip
+
+    function F:InspectItemTextures()
+        if not tip.gems then
+            tip.gems = {}
+        else
+            table.wipe(tip.gems)
+        end
+
+        if not tip.essences then
+            tip.essences = {}
+        else
+            for _, essences in pairs(tip.essences) do
+                table.wipe(essences)
+            end
+        end
+
+        local step = 1
+        for i = 1, 10 do
+            local tex = _G[tip:GetName() .. 'Texture' .. i]
+            local texture = tex and tex:IsShown() and tex:GetTexture()
+            if texture then
+                if texture == essenceTextureID then
+                    local selected = (tip.gems[i - 1] ~= essenceTextureID and tip.gems[i - 1]) or nil
+                    if not tip.essences[step] then
+                        tip.essences[step] = {}
+                    end
+                    tip.essences[step][1] = selected -- essence texture if selected or nil
+                    tip.essences[step][2] = tex:GetAtlas() -- atlas place 'tooltip-heartofazerothessence-major' or 'tooltip-heartofazerothessence-minor'
+                    tip.essences[step][3] = texture -- border texture placed by the atlas
+
+                    step = step + 1
+                    if selected then
+                        tip.gems[i - 1] = nil
+                    end
+                else
+                    tip.gems[i] = texture
+                end
+            end
+        end
+
+        return tip.gems, tip.essences
+    end
+
+    function F:InspectItemInfo(text, slotInfo)
+        local itemLevel = string.find(text, itemLevelString) and string.match(text, '(%d+)%)?$')
+        if itemLevel then
+            slotInfo.iLvl = tonumber(itemLevel)
+        end
+
+        local enchant = string.match(text, enchantString)
+        if enchant then
+            slotInfo.enchantText = enchant
+        end
+    end
+
+    function F:CollectEssenceInfo(index, lineText, slotInfo)
+        local step = 1
+        local essence = slotInfo.essences[step]
+        if
+            essence
+            and next(essence)
+            and (
+                string.find(lineText, _G.ITEM_SPELL_TRIGGER_ONEQUIP, nil, true)
+                and string.find(lineText, essenceDescription, nil, true)
+            )
+        then
+            for i = 5, 2, -1 do
+                local line = _G[tip:GetName() .. 'TextLeft' .. index - i]
+                local text = line and line:GetText()
+
+                if text and (not string.match(text, '^[ +]')) and essence and next(essence) then
+                    local r, g, b = line:GetTextColor()
+                    essence[4] = r
+                    essence[5] = g
+                    essence[6] = b
+
+                    step = step + 1
+                    essence = slotInfo.essences[step]
+                end
+            end
+        end
+    end
+
+    function F.GetItemLevel(link, arg1, arg2, fullScan)
+        if fullScan then
+            tip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
+            tip:SetInventoryItem(arg1, arg2)
+
+            if not tip.slotInfo then
+                tip.slotInfo = {}
+            else
+                table.wipe(tip.slotInfo)
+            end
+
+            local slotInfo = tip.slotInfo
+            slotInfo.gems, slotInfo.essences = F:InspectItemTextures()
+
+            for i = 1, tip:NumLines() do
+                local line = _G[tip:GetName() .. 'TextLeft' .. i]
+                if not line then
+                    break
+                end
+
+                local text = line:GetText()
+                if text then
+                    if i == 1 and text == _G.RETRIEVING_ITEM_INFO then
+                        return 'tooSoon'
+                    else
+                        F:InspectItemInfo(text, slotInfo)
+                        F:CollectEssenceInfo(i, text, slotInfo)
+                    end
+                end
+            end
+
+            return slotInfo
+        else
+            if iLvlDB[link] then
+                return iLvlDB[link]
+            end
+
+            tip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
+            if arg1 and type(arg1) == 'string' then
+                tip:SetInventoryItem(arg1, arg2)
+            elseif arg1 and type(arg1) == 'number' then
+                tip:SetBagItem(arg1, arg2)
+            else
+                tip:SetHyperlink(link)
+            end
+
+            local firstLine = _G[C.ADDON_TITLE .. 'ScanTooltipTextLeft1']:GetText()
+            if firstLine == _G.RETRIEVING_ITEM_INFO then
+                return 'tooSoon'
+            end
+
+            for i = 2, 5 do
+                local line = _G[tip:GetName() .. 'TextLeft' .. i]
+                if not line then
+                    break
+                end
+
+                local text = line:GetText()
+                local found = text and string.find(text, itemLevelString)
+                if found then
+                    local level = string.match(text, '(%d+)%)?$')
+                    iLvlDB[link] = tonumber(level)
+                    break
+                end
+            end
+
+            return iLvlDB[link]
+        end
+    end
+
+    local pendingNPCs, nameCache, callbacks = {}, {}, {}
+    local loadingStr = '...'
+    local pendingFrame = CreateFrame('Frame')
+    pendingFrame:Hide()
+    pendingFrame:SetScript('OnUpdate', function(self, elapsed)
+        self.elapsed = (self.elapsed or 0) + elapsed
+        if self.elapsed > 1 then
+            if next(pendingNPCs) then
+                for npcID, count in pairs(pendingNPCs) do
+                    if count > 2 then
+                        nameCache[npcID] = _G.UNKNOWN
+                        if callbacks[npcID] then
+                            callbacks[npcID](_G.UNKNOWN)
+                        end
+                        pendingNPCs[npcID] = nil
+                    else
+                        local name = F.GetNPCName(npcID, callbacks[npcID])
+                        if name and name ~= loadingStr then
+                            pendingNPCs[npcID] = nil
+                        else
+                            pendingNPCs[npcID] = pendingNPCs[npcID] + 1
+                        end
+                    end
+                end
+            else
+                self:Hide()
+            end
+
+            self.elapsed = 0
+        end
+    end)
+
+    function F.GetNPCName(npcID, callback)
+        local name = nameCache[npcID]
+        if not name then
+            tip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
+            tip:SetHyperlink(format('unit:Creature-0-0-0-0-%d', npcID))
+            name = _G[C.ADDON_TITLE .. 'ScanTooltipTextLeft1']:GetText() or loadingStr
+            if name == loadingStr then
+                if not pendingNPCs[npcID] then
+                    pendingNPCs[npcID] = 1
+                    pendingFrame:Show()
+                end
+            else
+                nameCache[npcID] = name
+            end
+        end
+
+        if callback then
+            callback(name)
+            callbacks[npcID] = callback
+        end
+
+        return name
     end
 end
 
@@ -443,7 +664,7 @@ do
     end
 
     function F:CreateSD(a, m, s, override)
-        if not override and not _G.FREE_ADB.ShadowOutline then
+        if not override and not _G.ANDROMEDA_ADB.ShadowOutline then
             return
         end
 
@@ -468,14 +689,14 @@ do
     end
 
     function F:CreateGradient()
-        local gradStyle = _G.FREE_ADB.GradientStyle
+        local gradStyle = _G.ANDROMEDA_ADB.GradientStyle
         local normTex = C.Assets.Texture.Backdrop
 
         local tex = self:CreateTexture(nil, 'BORDER')
         tex:SetAllPoints(self)
         tex:SetTexture(normTex)
 
-        local color = _G.FREE_ADB.ButtonBackdropColor
+        local color = _G.ANDROMEDA_ADB.ButtonBackdropColor
         if gradStyle then
             tex:SetGradientAlpha('Vertical', color.r, color.g, color.b, 0.65, 0, 0, 0, 0.25)
         else
@@ -487,14 +708,14 @@ do
 
     -- Setup backdrop
     function F:SetBorderColor()
-        local borderColor = _G.FREE_ADB.BorderColor
+        local borderColor = _G.ANDROMEDA_ADB.BorderColor
         self:SetBackdropBorderColor(borderColor.r, borderColor.g, borderColor.b, 1)
     end
 
     C.Frames = {}
     function F:CreateBD(alpha)
-        local backdropColor = _G.FREE_ADB.BackdropColor
-        local backdropAlpha = _G.FREE_ADB.BackdropAlpha
+        local backdropColor = _G.ANDROMEDA_ADB.BackdropColor
+        local backdropAlpha = _G.ANDROMEDA_ADB.BackdropAlpha
 
         self:SetBackdrop({
             bgFile = C.Assets.Texture.Backdrop,
@@ -654,8 +875,8 @@ do
     end
 
     local function Option_OnClick(self)
-        local classColor = _G.FREE_ADB.WidgetHighlightClassColor
-        local newColor = _G.FREE_ADB.WidgetHighlightColor
+        local classColor = _G.ANDROMEDA_ADB.WidgetHighlightClassColor
+        local newColor = _G.ANDROMEDA_ADB.WidgetHighlightColor
 
         PlaySound(_G.SOUNDKIT.GS_TITLE_OPTION_OK)
         local opt = self.__owner.options
@@ -700,8 +921,8 @@ do
     end
 
     local function DD_OnEnter(self)
-        local classColor = _G.FREE_ADB.WidgetHighlightClassColor
-        local newColor = _G.FREE_ADB.WidgetHighlightColor
+        local classColor = _G.ANDROMEDA_ADB.WidgetHighlightClassColor
+        local newColor = _G.ANDROMEDA_ADB.WidgetHighlightColor
 
         if classColor then
             self.arrow:SetVertexColor(C.r, C.g, C.b)
@@ -715,7 +936,7 @@ do
     end
 
     function F:CreateDropDown(width, height, data)
-        local outline = _G.FREE_ADB.FontOutline
+        local outline = _G.ANDROMEDA_ADB.FontOutline
 
         local dd = CreateFrame('Frame', nil, self, 'BackdropTemplate')
         dd:SetSize(width, height)
@@ -836,7 +1057,7 @@ do
             swatch.text:SetPoint('LEFT', swatch, 'RIGHT', 6, 0)
         end
 
-        local gradStyle = _G.FREE_ADB.GradientStyle
+        local gradStyle = _G.ANDROMEDA_ADB.GradientStyle
         local normTex = C.Assets.Statusbar.Flat
         local gradTex = C.Assets.Statusbar.Gradient
 
@@ -1103,8 +1324,8 @@ do
         local alpha = 1
         local last = 0
 
-        local classColor = _G.FREE_ADB.WidgetHighlightClassColor
-        local newColor = _G.FREE_ADB.WidgetHighlightColor
+        local classColor = _G.ANDROMEDA_ADB.WidgetHighlightClassColor
+        local newColor = _G.ANDROMEDA_ADB.WidgetHighlightColor
 
         frame:SetScript('OnUpdate', function(self, elapsed)
             if not stop then
@@ -1159,8 +1380,8 @@ do
             return
         end
 
-        local classColor = _G.FREE_ADB.WidgetHighlightClassColor
-        local newColor = _G.FREE_ADB.WidgetHighlightColor
+        local classColor = _G.ANDROMEDA_ADB.WidgetHighlightClassColor
+        local newColor = _G.ANDROMEDA_ADB.WidgetHighlightColor
 
         if classColor then
             self.__bg:SetBackdropColor(C.r, C.g, C.b, 0.25)
@@ -1251,9 +1472,9 @@ do
         F.CreateTex(self)
         self.__bg = F.CreateBDFrame(self, 0, true)
 
-        local gradStyle = _G.FREE_ADB.GradientStyle
-        local color = _G.FREE_ADB.ButtonBackdropColor
-        local alpha = _G.FREE_ADB.ButtonBackdropAlpha
+        local gradStyle = _G.ANDROMEDA_ADB.GradientStyle
+        local color = _G.ANDROMEDA_ADB.ButtonBackdropColor
+        local alpha = _G.ANDROMEDA_ADB.ButtonBackdropAlpha
 
         self.__bg:SetBackdropColor(0, 0, 0, 0.25)
         F.SetBorderColor(self.__bg)
@@ -1267,7 +1488,7 @@ do
         self:HookScript('OnEnter', Button_OnEnter)
         self:HookScript('OnLeave', Button_OnLeave)
 
-        local buttonAnima = _G.FREE_ADB.ButtonHoverAnimation
+        local buttonAnima = _G.ANDROMEDA_ADB.ButtonHoverAnimation
         if not noGlow and buttonAnima then
             self.__shadow = F.CreateSD(self.__bg, 0.25)
 
@@ -1286,8 +1507,8 @@ do
         F.CreateSD(bg)
         self.bg = bg
 
-        local classColor = _G.FREE_ADB.WidgetHighlightClassColor
-        local newColor = _G.FREE_ADB.WidgetHighlightColor
+        local classColor = _G.ANDROMEDA_ADB.WidgetHighlightClassColor
+        local newColor = _G.ANDROMEDA_ADB.WidgetHighlightColor
 
         self:SetHighlightTexture(C.Assets.Texture.Backdrop)
         local hl = self:GetHighlightTexture()
@@ -1317,8 +1538,8 @@ do
             return
         end
 
-        local classColor = _G.FREE_ADB.WidgetHighlightClassColor
-        local newColor = _G.FREE_ADB.WidgetHighlightColor
+        local classColor = _G.ANDROMEDA_ADB.WidgetHighlightClassColor
+        local newColor = _G.ANDROMEDA_ADB.WidgetHighlightColor
 
         if classColor then
             thumb.bg:SetBackdropColor(C.r, C.g, C.b, 0.65)
@@ -1335,7 +1556,7 @@ do
             return
         end
 
-        local color = _G.FREE_ADB.ButtonBackdropColor
+        local color = _G.ANDROMEDA_ADB.ButtonBackdropColor
         thumb.bg:SetBackdropColor(color.r, color.g, color.b, 0.25)
         F.SetBorderColor(thumb.bg)
     end
@@ -1357,7 +1578,7 @@ do
             thumb:SetWidth(16)
             self.thumb = thumb
 
-            local color = _G.FREE_ADB.ButtonBackdropColor
+            local color = _G.ANDROMEDA_ADB.ButtonBackdropColor
             local bg = F.CreateBDFrame(self, 0.25, true)
             bg:SetPoint('TOPLEFT', thumb, 0, -2)
             bg:SetPoint('BOTTOMRIGHT', thumb, 0, 4)
@@ -1441,8 +1662,8 @@ do
     function F:Texture_OnEnter()
         if self:IsEnabled() then
             if self.__texture then
-                local classColor = _G.FREE_ADB.WidgetHighlightClassColor
-                local newColor = _G.FREE_ADB.WidgetHighlightColor
+                local classColor = _G.ANDROMEDA_ADB.WidgetHighlightClassColor
+                local newColor = _G.ANDROMEDA_ADB.WidgetHighlightColor
 
                 if classColor then
                     self.__texture:SetVertexColor(C.r, C.g, C.b)
@@ -1623,11 +1844,11 @@ do
         end
 
         if flat then
-            local gradStyle = _G.FREE_ADB.GradientStyle
+            local gradStyle = _G.ANDROMEDA_ADB.GradientStyle
             local normTex = C.Assets.Statusbar.Flat
             local gradTex = C.Assets.Statusbar.Gradient
-            local classColor = _G.FREE_ADB.WidgetHighlightClassColor
-            local newColor = _G.FREE_ADB.WidgetHighlightColor
+            local classColor = _G.ANDROMEDA_ADB.WidgetHighlightClassColor
+            local newColor = _G.ANDROMEDA_ADB.WidgetHighlightColor
 
             if self.SetCheckedTexture then
                 local checked = self:CreateTexture()
@@ -1730,11 +1951,11 @@ do
             thumb:SetRotation(math.rad(90))
         end
 
-        local gradStyle = _G.FREE_ADB.GradientStyle
+        local gradStyle = _G.ANDROMEDA_ADB.GradientStyle
         local normTex = C.Assets.Statusbar.Flat
         local gradTex = C.Assets.Statusbar.Gradient
-        local classColor = _G.FREE_ADB.WidgetHighlightClassColor
-        local newColor = _G.FREE_ADB.WidgetHighlightColor
+        local classColor = _G.ANDROMEDA_ADB.WidgetHighlightClassColor
+        local newColor = _G.ANDROMEDA_ADB.WidgetHighlightColor
 
         local bar = CreateFrame('StatusBar', nil, bg)
         bar:SetStatusBarTexture(gradStyle and gradTex or normTex)

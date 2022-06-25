@@ -25,7 +25,7 @@ function NOTIFICATION:VersionCheck_Compare(new, old)
 end
 
 function NOTIFICATION:VersionCheck_Create(text)
-    if not _G.FREE_ADB.VersionCheck then
+    if not _G.ANDROMEDA_ADB.VersionCheck then
         return
     end
 
@@ -35,14 +35,14 @@ end
 
 function NOTIFICATION:VersionCheck_Init()
     if not isVCInit then
-        local status = NOTIFICATION:VersionCheck_Compare(_G.FREE_ADB.DetectVersion, C.ADDON_VERSION)
+        local status = NOTIFICATION:VersionCheck_Compare(_G.ANDROMEDA_ADB.DetectVersion, C.ADDON_VERSION)
         if status == 'IsNew' then
-            local ver = string.gsub(_G.FREE_ADB.DetectVersion, '(%d+)$', '0')
+            local ver = string.gsub(_G.ANDROMEDA_ADB.DetectVersion, '(%d+)$', '0')
             NOTIFICATION:VersionCheck_Create(
                 string.format('%s has been out of date, the latest release is |cffff0000%s|r.', C.ADDON_NAME, ver)
             )
         elseif status == 'IsOld' then
-            _G.FREE_ADB.DetectVersion = C.ADDON_VERSION
+            _G.ANDROMEDA_ADB.DetectVersion = C.ADDON_VERSION
         end
 
         isVCInit = true
@@ -51,7 +51,7 @@ end
 
 function NOTIFICATION:VersionCheck_Send(channel)
     if GetTime() - lastVCTime >= 10 then
-        C_ChatInfo.SendAddonMessage('AndromedaUIVersionCheck', _G.FREE_ADB.DetectVersion, channel)
+        C_ChatInfo.SendAddonMessage('AndromedaUIVersionCheck', _G.ANDROMEDA_ADB.DetectVersion, channel)
         lastVCTime = GetTime()
     end
 end
@@ -65,9 +65,9 @@ function NOTIFICATION:VersionCheck_Update(...)
         return
     end
 
-    local status = NOTIFICATION:VersionCheck_Compare(msg, _G.FREE_ADB.DetectVersion)
+    local status = NOTIFICATION:VersionCheck_Compare(msg, _G.ANDROMEDA_ADB.DetectVersion)
     if status == 'IsNew' then
-        _G.FREE_ADB.DetectVersion = msg
+        _G.ANDROMEDA_ADB.DetectVersion = msg
     elseif status == 'IsOld' then
         NOTIFICATION:VersionCheck_Send(distType)
     end

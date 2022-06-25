@@ -32,14 +32,14 @@ function ANNOUNCEMENT:RefreshSpells()
     for spellID in pairs(C.AnnounceableSpellsList) do
         local name = GetSpellInfo(spellID)
         if name then
-            local modValue = _G.FREE_ADB['AnnounceableSpellsList'][spellID]
+            local modValue = _G.ANDROMEDA_ADB['AnnounceableSpellsList'][spellID]
             if modValue == nil then
                 ANNOUNCEMENT.AnnounceableSpellsList[spellID] = true
             end
         end
     end
 
-    for spellID, value in pairs(_G.FREE_ADB['AnnounceableSpellsList']) do
+    for spellID, value in pairs(_G.ANDROMEDA_ADB['AnnounceableSpellsList']) do
         if value then
             ANNOUNCEMENT.AnnounceableSpellsList[spellID] = true
         end
@@ -121,17 +121,17 @@ function ANNOUNCEMENT:CheckAnnounceableSpells()
     for spellID in pairs(C.AnnounceableSpellsList) do
         local name = GetSpellInfo(spellID)
         if name then
-            if _G.FREE_ADB['AnnounceableSpellsList'][spellID] then
-                _G.FREE_ADB['AnnounceableSpellsList'][spellID] = nil
+            if _G.ANDROMEDA_ADB['AnnounceableSpellsList'][spellID] then
+                _G.ANDROMEDA_ADB['AnnounceableSpellsList'][spellID] = nil
             end
         else
             F:Debug('CheckAnnounceableSpells: Invalid Spell ID ' .. spellID)
         end
     end
 
-    for spellID, value in pairs(_G.FREE_ADB['AnnounceableSpellsList']) do
+    for spellID, value in pairs(_G.ANDROMEDA_ADB['AnnounceableSpellsList']) do
         if value == false and C.AnnounceableSpellsList[spellID] == nil then
-            _G.FREE_ADB['AnnounceableSpellsList'][spellID] = nil
+            _G.ANDROMEDA_ADB['AnnounceableSpellsList'][spellID] = nil
         end
     end
 end

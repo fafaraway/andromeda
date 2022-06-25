@@ -11,7 +11,7 @@ local function ReplaceFont(obj, font, size, flag, shadow)
         return
     end
 
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = _G.ANDROMEDA_ADB.FontOutline
     local origFont, origSize = obj:GetFont()
     font = font or origFont
     size = size or origSize
@@ -32,7 +32,7 @@ local function ReplaceFont(obj, font, size, flag, shadow)
 end
 
 local function SetupBlizFonts()
-    if not _G.FREE_ADB.ReskinBlizz then
+    if not _G.ANDROMEDA_ADB.ReskinBlizz then
         return
     end
 

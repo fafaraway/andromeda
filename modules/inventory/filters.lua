@@ -38,7 +38,7 @@ local function isItemJunk(item)
         return
     end
 
-    return (item.quality == _G.LE_ITEM_QUALITY_POOR or _G.FREE_ADB['CustomJunkList'][item.id])
+    return (item.quality == _G.LE_ITEM_QUALITY_POOR or _G.ANDROMEDA_ADB['CustomJunkList'][item.id])
         and item.hasPrice
         and not INVENTORY:IsPetTrashCurrency(item.id)
 end

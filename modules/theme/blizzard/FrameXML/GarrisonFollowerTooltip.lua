@@ -6,7 +6,7 @@ table.insert(C.BlizzThemes, function()
     F.ReskinClose(_G.FloatingBattlePetTooltip.CloseButton)
     F.ReskinClose(_G.FloatingPetBattleAbilityTooltip.CloseButton)
 
-    if not _G.FREE_ADB.ReskinBlizz then
+    if not _G.ANDROMEDA_ADB.ReskinBlizz then
         return
     end
 

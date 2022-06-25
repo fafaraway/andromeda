@@ -83,7 +83,7 @@ local styleData = {
 }
 
 function THEME:RegisterBigWigsStyle()
-    if not _G.FREE_ADB.ReskinAddons then
+    if not _G.ANDROMEDA_ADB.ReskinAddons then
         return
     end
 
@@ -109,7 +109,7 @@ function THEME:RegisterBigWigsStyle()
 end
 
 function THEME:RestyleBigWigsQueueTimer()
-    if not _G.FREE_ADB.ReskinAddons then
+    if not _G.ANDROMEDA_ADB.ReskinAddons then
         return
     end
 

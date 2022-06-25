@@ -121,7 +121,7 @@ function DS:DomiShards_ExtractButton()
     button:SetAttribute('type', 'macro')
     button:SetAttribute('macrotext', '/use item:' .. EXTRACTOR_ID .. '\n/click ItemSocketingSocket1')
 
-    if _G.FREE_ADB.ReskinBlizz then
+    if _G.ANDROMEDA_ADB.ReskinBlizz then
         F.Reskin(button)
     end
 

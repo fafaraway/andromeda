@@ -34,7 +34,7 @@ function GUI:ExportData()
         end
     end
 
-    for KEY, VALUE in pairs(_G.FREE_ADB) do
+    for KEY, VALUE in pairs(_G.ANDROMEDA_ADB) do
         if KEY == 'ProfileIndex' or KEY == 'ProfileNames' then
             for k, v in pairs(VALUE) do
                 text = text .. ';ACCOUNT:' .. KEY .. ':' .. k .. ':' .. v
@@ -107,10 +107,10 @@ function GUI:ImportData()
         elseif key == 'ACCOUNT' then
             if value == 'ProfileIndex' then
                 local name, index = select(3, string.split(':', option))
-                _G.FREE_ADB[value][name] = tonumber(index)
+                _G.ANDROMEDA_ADB[value][name] = tonumber(index)
             elseif value == 'ProfileNames' then
                 local index, name = select(3, string.split(':', option))
-                _G.FREE_ADB[value][tonumber(index)] = name
+                _G.ANDROMEDA_ADB[value][tonumber(index)] = name
             end
         elseif tonumber(arg1) then
             if value == 'countdown' then
@@ -188,7 +188,7 @@ function GUI:CreateDataFrame()
     accept:SetPoint('BOTTOM', 0, 10)
     accept:SetScript('OnClick', function(self)
         if self.text:GetText() ~= _G.OKAY and dataFrame.editBox:GetText() ~= '' then
-            _G.StaticPopup_Show('FREEUI_IMPORT_PROFILE')
+            _G.StaticPopup_Show('ANDROMEDA_IMPORT_PROFILE')
         end
         dataFrame:Hide()
     end)

@@ -21,7 +21,7 @@ local function StartSelling()
                 and not noValue
                 and not isInSet
                 and not INVENTORY:IsPetTrashCurrency(itemID)
-                and (quality == 0 or _G.FREE_ADB['CustomJunkList'][itemID])
+                and (quality == 0 or _G.ANDROMEDA_ADB['CustomJunkList'][itemID])
                 and not cache['b' .. bag .. 's' .. slot]
             then
                 cache['b' .. bag .. 's' .. slot] = true

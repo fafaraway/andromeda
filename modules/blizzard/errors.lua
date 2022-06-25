@@ -36,7 +36,7 @@ local ignoredList = {
 
 local function CreateErrorFrames()
     local font = C.Assets.Font.Bold
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = _G.ANDROMEDA_ADB.FontOutline
 
     local frame1 = CreateFrame('Frame', C.ADDON_TITLE .. 'ErrorFrame1', _G.UIParent)
     frame1:SetScript('OnUpdate', _G.FadingFrame_OnUpdate)

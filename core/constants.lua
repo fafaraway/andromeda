@@ -27,7 +27,7 @@ end
 
 C.ClassColors = {}
 function F.UpdateCustomClassColors()
-    local colors = _G.FREE_ADB.UseCustomClassColor and _G.FREE_ADB.CustomClassColors or _G.RAID_CLASS_COLORS
+    local colors = _G.ANDROMEDA_ADB.UseCustomClassColor and _G.ANDROMEDA_ADB.CustomClassColors or _G.RAID_CLASS_COLORS
     for class, value in pairs(colors) do
         C.ClassColors[class] = {}
         C.ClassColors[class].r = value.r

@@ -1,6 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 
-StaticPopupDialogs.FREEUI_RELOADUI_REQUIRED = {
+StaticPopupDialogs.ANDROMEDA_RELOADUI_REQUIRED = {
     text = C.RED_COLOR .. L['ReloadUI Required'],
     button1 = _G.APPLY,
     button2 = _G.CLASS_TRIAL_THANKS_DIALOG_CLOSE_BUTTON,
@@ -11,7 +11,7 @@ StaticPopupDialogs.FREEUI_RELOADUI_REQUIRED = {
 }
 
 -- Layout
-StaticPopupDialogs.FREEUI_RESET_LAYOUT = {
+StaticPopupDialogs.ANDROMEDA_RESET_LAYOUT = {
     text = C.RED_COLOR .. L['Are you sure to reset the Interface Layout?'],
     button1 = _G.OKAY,
     button2 = _G.CANCEL,
@@ -25,7 +25,7 @@ StaticPopupDialogs.FREEUI_RESET_LAYOUT = {
 }
 
 -- GUI
-StaticPopupDialogs.FREEUI_RELOADUI = {
+StaticPopupDialogs.ANDROMEDA_RELOADUI = {
     text = C.RED_COLOR .. L['Are you sure to reload the Interface to apply settings?'],
     button1 = _G.APPLY,
     button2 = _G.CLASS_TRIAL_THANKS_DIALOG_CLOSE_BUTTON,
@@ -37,62 +37,62 @@ StaticPopupDialogs.FREEUI_RELOADUI = {
     hideOnEscape = true,
 }
 
-StaticPopupDialogs.FREEUI_RESET_MAJOR_SPELLS_LIST = {
+StaticPopupDialogs.ANDROMEDA_RESET_MAJOR_SPELLS_LIST = {
     text = C.RED_COLOR .. L['Reset to default list?'],
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
-        _G.FREE_ADB['MajorSpellsList'] = {}
+        _G.ANDROMEDA_ADB['MajorSpellsList'] = {}
         _G.ReloadUI()
     end,
     whileDead = 1,
 }
 
-StaticPopupDialogs['FREEUI_RESET_PARTY_AURA_LIST'] = {
+StaticPopupDialogs['ANDROMEDA_RESET_PARTY_AURA_LIST'] = {
     text = C.RED_COLOR .. L['Reset to default list?'],
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
-        _G.FREE_ADB['PartyAurasList'] = {}
+        _G.ANDROMEDA_ADB['PartyAurasList'] = {}
         _G.ReloadUI()
     end,
     whileDead = 1,
 }
 
-StaticPopupDialogs.FREEUI_RESET_ANNOUNCEABLE_SPELLS = {
+StaticPopupDialogs.ANDROMEDA_RESET_ANNOUNCEABLE_SPELLS = {
     text = C.RED_COLOR .. L['Are you sure to restore default Announceable Spells List?'],
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
-        _G.FREE_ADB['AnnounceableSpellsList'] = {}
+        _G.ANDROMEDA_ADB['AnnounceableSpellsList'] = {}
         _G.ReloadUI()
     end,
     whileDead = 1,
 }
 
-StaticPopupDialogs.FREEUI_RESET_PARTY_SPELLS = {
+StaticPopupDialogs.ANDROMEDA_RESET_PARTY_SPELLS = {
     text = C.RED_COLOR .. L['Are you sure to restore default Party Spells List?'],
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
-        table.wipe(_G.FREE_ADB['PartySpellsList'])
+        table.wipe(_G.ANDROMEDA_ADB['PartySpellsList'])
         _G.ReloadUI()
     end,
     whileDead = 1,
 }
 
-StaticPopupDialogs.FREEUI_RESET_RAID_DEBUFFS = {
+StaticPopupDialogs.ANDROMEDA_RESET_RAID_DEBUFFS = {
     text = C.RED_COLOR .. L['Are you sure to restore default Raid Debuffs List?'],
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
-        _G.FREE_ADB['DebuffWatcherList'] = {}
+        _G.ANDROMEDA_ADB['DebuffWatcherList'] = {}
         _G.ReloadUI()
     end,
     whileDead = 1,
 }
 
-StaticPopupDialogs['FREEUI_RESET_NAMEPLATE_SPECIAL_UNIT_FILTER'] = {
+StaticPopupDialogs['ANDROMEDA_RESET_NAMEPLATE_SPECIAL_UNIT_FILTER'] = {
     text = L['Reset to default list?'],
     button1 = _G.YES,
     button2 = _G.NO,
@@ -103,7 +103,7 @@ StaticPopupDialogs['FREEUI_RESET_NAMEPLATE_SPECIAL_UNIT_FILTER'] = {
     whileDead = 1,
 }
 
-StaticPopupDialogs['FREEUI_RESET_NAMEPLATE_DOT_SPELLS'] = {
+StaticPopupDialogs['ANDROMEDA_RESET_NAMEPLATE_DOT_SPELLS'] = {
     text = L['Reset to default list?'],
     button1 = _G.YES,
     button2 = _G.NO,
@@ -115,7 +115,7 @@ StaticPopupDialogs['FREEUI_RESET_NAMEPLATE_DOT_SPELLS'] = {
 }
 
 -- Profile Management
-StaticPopupDialogs.FREEUI_IMPORT_PROFILE = {
+StaticPopupDialogs.ANDROMEDA_IMPORT_PROFILE = {
     text = C.RED_COLOR .. L['Are you sure to import the settings?'],
     button1 = _G.YES,
     button2 = _G.NO,
@@ -129,14 +129,14 @@ StaticPopupDialogs.FREEUI_IMPORT_PROFILE = {
     hideOnEscape = false,
 }
 
-StaticPopupDialogs.FREEUI_RESET_ALL = {
+StaticPopupDialogs.ANDROMEDA_RESET_ALL = {
     text = C.RED_COLOR .. L['Are you sure to reset ALL the settings?'],
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
-        _G.FREE_DB = {}
-        _G.FREE_ADB = {}
-        _G.FREE_PDB = {}
+        _G.ANDROMEDA_CDB = {}
+        _G.ANDROMEDA_ADB = {}
+        _G.ANDROMEDA_PDB = {}
         _G.ReloadUI()
     end,
     timeout = 0,
@@ -144,7 +144,7 @@ StaticPopupDialogs.FREEUI_RESET_ALL = {
     hideOnEscape = false,
 }
 
-StaticPopupDialogs.FREEUI_RESET_CURRENT_PROFILE = {
+StaticPopupDialogs.ANDROMEDA_RESET_CURRENT_PROFILE = {
     text = C.RED_COLOR .. L['Are you sure to reset your current profile?'],
     button1 = _G.YES,
     button2 = _G.NO,
@@ -157,13 +157,13 @@ StaticPopupDialogs.FREEUI_RESET_CURRENT_PROFILE = {
     hideOnEscape = false,
 }
 
-StaticPopupDialogs.FREEUI_APPLY_PROFILE = {
+StaticPopupDialogs.ANDROMEDA_APPLY_PROFILE = {
     text = C.RED_COLOR .. L['Are you sure to switch to the selected profile?'],
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
         local GUI = F:GetModule('GUI')
-        _G.FREE_ADB['ProfileIndex'][C.MY_FULL_NAME] = GUI.currentProfile
+        _G.ANDROMEDA_ADB['ProfileIndex'][C.MY_FULL_NAME] = GUI.currentProfile
         _G.ReloadUI()
     end,
     timeout = 0,
@@ -171,19 +171,19 @@ StaticPopupDialogs.FREEUI_APPLY_PROFILE = {
     hideOnEscape = false,
 }
 
-StaticPopupDialogs.FREEUI_REPLACE_CURRENT_PROFILE = {
+StaticPopupDialogs.ANDROMEDA_REPLACE_CURRENT_PROFILE = {
     text = C.RED_COLOR .. L['Are you sure to replace your current profile with the selected one?'],
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
         local GUI = F:GetModule('GUI')
-        local profileIndex = _G.FREE_ADB['ProfileIndex'][C.MY_FULL_NAME]
+        local profileIndex = _G.ANDROMEDA_ADB['ProfileIndex'][C.MY_FULL_NAME]
         if GUI.currentProfile == 1 then
-            _G.FREE_PDB[profileIndex - 1] = _G.FREE_DB
+            _G.ANDROMEDA_PDB[profileIndex - 1] = _G.ANDROMEDA_CDB
         elseif profileIndex == 1 then
-            _G.FREE_DB = _G.FREE_PDB[GUI.currentProfile - 1]
+            _G.ANDROMEDA_CDB = _G.ANDROMEDA_PDB[GUI.currentProfile - 1]
         else
-            _G.FREE_PDB[profileIndex - 1] = _G.FREE_PDB[GUI.currentProfile - 1]
+            _G.ANDROMEDA_PDB[profileIndex - 1] = _G.ANDROMEDA_PDB[GUI.currentProfile - 1]
         end
         _G.ReloadUI()
     end,
@@ -192,16 +192,16 @@ StaticPopupDialogs.FREEUI_REPLACE_CURRENT_PROFILE = {
     hideOnEscape = false,
 }
 
-StaticPopupDialogs.FREEUI_REPLACE_SELECTED_PROFILE = {
+StaticPopupDialogs.ANDROMEDA_REPLACE_SELECTED_PROFILE = {
     text = C.RED_COLOR .. L['Are you sure to replace the selected profile with your current one?'],
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
         local GUI = F:GetModule('GUI')
         if GUI.currentProfile == 1 then
-            _G.FREE_DB = C.DB
+            _G.ANDROMEDA_CDB = C.DB
         else
-            _G.FREE_PDB[GUI.currentProfile - 1] = C.DB
+            _G.ANDROMEDA_PDB[GUI.currentProfile - 1] = C.DB
         end
     end,
     timeout = 0,
@@ -209,16 +209,16 @@ StaticPopupDialogs.FREEUI_REPLACE_SELECTED_PROFILE = {
     hideOnEscape = false,
 }
 
-StaticPopupDialogs.FREEUI_DELETE_UNIT_PROFILE = {
+StaticPopupDialogs.ANDROMEDA_DELETE_UNIT_PROFILE = {
     text = '',
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function(self)
         local name, realm = string.split('-', self.text.text_arg1)
-        if _G.FREE_ADB['GoldStatistic'][realm] and _G.FREE_ADB['GoldStatistic'][realm][name] then
-            _G.FREE_ADB['GoldStatistic'][realm][name] = nil
+        if _G.ANDROMEDA_ADB['GoldStatistic'][realm] and _G.ANDROMEDA_ADB['GoldStatistic'][realm][name] then
+            _G.ANDROMEDA_ADB['GoldStatistic'][realm][name] = nil
         end
-        _G.FREE_ADB['ProfileIndex'][self.text.text_arg1] = nil
+        _G.ANDROMEDA_ADB['ProfileIndex'][self.text.text_arg1] = nil
     end,
     OnShow = function(self)
         local r, g, b
@@ -242,12 +242,12 @@ StaticPopupDialogs.FREEUI_DELETE_UNIT_PROFILE = {
 }
 
 -- Inventory Custom Junk List
-StaticPopupDialogs.FREEUI_RESET_JUNK_LIST = {
+StaticPopupDialogs.ANDROMEDA_RESET_JUNK_LIST = {
     text = C.RED_COLOR .. L['Are you sure to reset Junk Items List?'],
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
-        table.wipe(_G.FREE_ADB.CustomJunkList)
+        table.wipe(_G.ANDROMEDA_ADB.CustomJunkList)
     end,
     timeout = 0,
     whileDead = 1,
@@ -255,7 +255,7 @@ StaticPopupDialogs.FREEUI_RESET_JUNK_LIST = {
 }
 
 -- Group Tool
-StaticPopupDialogs['FREEUI_DISBAND_GROUP'] = {
+StaticPopupDialogs['ANDROMEDA_DISBAND_GROUP'] = {
     text = C.RED_COLOR .. L['Are you sure to disband your group?'],
     button1 = _G.YES,
     button2 = _G.NO,

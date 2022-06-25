@@ -102,7 +102,7 @@ function INFOBAR:RegisterNewBlock(name, position, width, noFade)
     block:SetBackdropColor(0, 0, 0, 0)
     block:SetBackdropBorderColor(0, 0, 0, 0)
 
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = _G.ANDROMEDA_ADB.FontOutline
     block.text = F.CreateFS(block, C.Assets.Font.Condensed, 11, outline, '', nil, outline or 'THICK', 'CENTER', 0, 0)
     block.position = position
 

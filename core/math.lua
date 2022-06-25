@@ -3,7 +3,7 @@ local F, C = unpack(select(2, ...))
 -- Numberize
 local numCap = { CHINESE = { '兆', '亿', '万' } }
 function F:Numb(n)
-    if _G.FREE_ADB.NumberFormat == 1 then
+    if _G.ANDROMEDA_ADB.NumberFormat == 1 then
         if n >= 1e12 then
             return ('%.2ft'):format(n / 1e12)
         elseif n >= 1e9 then
@@ -15,7 +15,7 @@ function F:Numb(n)
         else
             return ('%.0f'):format(n)
         end
-    elseif _G.FREE_ADB.NumberFormat == 2 then
+    elseif _G.ANDROMEDA_ADB.NumberFormat == 2 then
         if n >= 1e12 then
             return string.format('%.2f' .. numCap['CHINESE'][1], n / 1e12)
         elseif n >= 1e8 then

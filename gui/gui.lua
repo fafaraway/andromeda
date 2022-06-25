@@ -76,9 +76,9 @@ end
 local function UpdateValue(key, value, newValue)
     if key == 'ACCOUNT' then
         if newValue ~= nil then
-            _G.FREE_ADB[value] = newValue
+            _G.ANDROMEDA_ADB[value] = newValue
         else
-            return _G.FREE_ADB[value]
+            return _G.ANDROMEDA_ADB[value]
         end
     else
         if newValue ~= nil then
@@ -90,8 +90,8 @@ local function UpdateValue(key, value, newValue)
 end
 
 local function GearButtonOnEnter(self)
-    local classColor = _G.FREE_ADB.WidgetHighlightClassColor
-    local newColor = _G.FREE_ADB.WidgetHighlightColor
+    local classColor = _G.ANDROMEDA_ADB.WidgetHighlightClassColor
+    local newColor = _G.ANDROMEDA_ADB.WidgetHighlightColor
 
     if classColor then
         self.tex:SetVertexColor(C.r, C.g, C.b)
@@ -153,12 +153,12 @@ end
 
 local function SelectTab(i)
     local r, g, b = C.r, C.g, C.b
-    local gradStyle = _G.FREE_ADB.GradientStyle
-    local color = _G.FREE_ADB.ButtonBackdropColor
-    local alpha = _G.FREE_ADB.ButtonBackdropAlpha
+    local gradStyle = _G.ANDROMEDA_ADB.GradientStyle
+    local color = _G.ANDROMEDA_ADB.ButtonBackdropColor
+    local alpha = _G.ANDROMEDA_ADB.ButtonBackdropAlpha
 
-    local classColor = _G.FREE_ADB.WidgetHighlightClassColor
-    local newColor = _G.FREE_ADB.WidgetHighlightColor
+    local classColor = _G.ANDROMEDA_ADB.WidgetHighlightClassColor
+    local newColor = _G.ANDROMEDA_ADB.WidgetHighlightColor
 
     for num = 1, #tabsList do
         if num == i then
@@ -219,7 +219,7 @@ local function CreateTab(parent, i, name)
     tab.icon:SetTexture(iconsList[i])
     F.ReskinIcon(tab.icon)
 
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = _G.ANDROMEDA_ADB.FontOutline
     tab.text = F.CreateFS(tab, C.Assets.Font.Bold, 13, outline, name, nil, outline or 'THICK')
     tab.text:SetPoint('LEFT', tab.icon, 'RIGHT', 6, 0)
 
@@ -261,8 +261,8 @@ local function Slider_OnValueChanged(self, v)
 end
 
 local function updateDropdownSelection(self)
-    local classColor = _G.FREE_ADB.WidgetHighlightClassColor
-    local newColor = _G.FREE_ADB.WidgetHighlightColor
+    local classColor = _G.ANDROMEDA_ADB.WidgetHighlightClassColor
+    local newColor = _G.ANDROMEDA_ADB.WidgetHighlightColor
     local dd = self.__owner
     for i = 1, #dd.__options do
         local option = dd.options[i]
@@ -291,7 +291,7 @@ end
 
 local function CreateOption(i)
     local parent, offset = guiPage[i].child, 20
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = _G.ANDROMEDA_ADB.FontOutline
 
     for _, option in pairs(GUI.OptionsList[i]) do
         local optType, key, value, name, horizon, data, callback, tip = unpack(option)
@@ -513,7 +513,7 @@ local function CreateGUI()
     btnApply:SetScript('OnClick', function()
         guiFrame:Hide()
         if GUI.NeedUIReload then
-            _G.StaticPopup_Show('FREEUI_RELOADUI')
+            _G.StaticPopup_Show('ANDROMEDA_RELOADUI')
             GUI.NeedUIReload = nil
         end
     end)
@@ -598,9 +598,9 @@ end
 local function CreateGameMenuButton()
     local bu = CreateFrame('Button', 'GameMenuButton' .. C.ADDON_TITLE, _G.GameMenuFrame, 'GameMenuButtonTemplate')
     bu:SetText(C.COLORFUL_ADDON_TITLE)
-    -- bu.Text:SetFont(C.Assets.Font.Bold, 13, _G.FREE_ADB.FontOutline and 'OUTLINE' or nil)
+    -- bu.Text:SetFont(C.Assets.Font.Bold, 13, _G.ANDROMEDA_ADB.FontOutline and 'OUTLINE' or nil)
     bu:SetPoint('TOP', _G.GameMenuButtonAddons, 'BOTTOM', 0, -14)
-    if _G.FREE_ADB.ReskinBlizz then
+    if _G.ANDROMEDA_ADB.ReskinBlizz then
         F.Reskin(bu)
     end
 

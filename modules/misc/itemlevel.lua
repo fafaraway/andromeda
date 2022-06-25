@@ -58,11 +58,11 @@ function IL:CreateItemString(frame, strType)
     for index, slot in pairs(inspectSlots) do
         if index ~= 4 then
             local slotFrame = _G[strType .. slot .. 'Slot']
-            slotFrame.iLvlText = F.CreateFS(slotFrame, C.Assets.Font.Condensed, 11, true, '', nil, true)
+            slotFrame.iLvlText = F.CreateFS(slotFrame, C.Assets.Font.Bold, 11, true, '', nil, true)
             slotFrame.iLvlText:ClearAllPoints()
             slotFrame.iLvlText:SetPoint('BOTTOMRIGHT', slotFrame, -1, 1)
             local relF, x, y = IL:GetSlotAnchor(index)
-            slotFrame.enchantText = F.CreateFS(slotFrame, C.Assets.Font.Condensed, 11, nil, '', nil, true)
+            slotFrame.enchantText = F.CreateFS(slotFrame, C.Assets.Font.Bold, 11, true, '', nil, true)
             slotFrame.enchantText:ClearAllPoints()
             slotFrame.enchantText:SetPoint(relF, slotFrame, x, y)
             slotFrame.enchantText:SetTextColor(0, 1, 0)
@@ -243,7 +243,7 @@ end
 
 function IL:ItemLevel_FlyoutUpdate(bag, slot, quality)
     if not self.iLvl then
-        self.iLvl = F.CreateFS(self, C.Assets.Font.Condensed, 11, true, '', nil, true, 'BOTTOMRIGHT', -1, 1)
+        self.iLvl = F.CreateFS(self, C.Assets.Font.Bold, 11, true, '', nil, true, 'BOTTOMRIGHT', -1, 1)
     end
 
     if quality and quality <= 1 then
@@ -304,7 +304,7 @@ end
 
 function IL:ItemLevel_ScrappingUpdate()
     if not self.iLvl then
-        self.iLvl = F.CreateFS(self, C.Assets.Font.Condensed, 11, true, '', nil, true, 'BOTTOMRIGHT', -1, 1)
+        self.iLvl = F.CreateFS(self, C.Assets.Font.Bold, 11, true, '', nil, true, 'BOTTOMRIGHT', -1, 1)
     end
     if not self.itemLink then
         self.iLvl:SetText('')
@@ -333,7 +333,7 @@ end
 
 function IL:ItemLevel_UpdateMerchant(link)
     if not self.iLvl then
-        self.iLvl = F.CreateFS(self.ItemButton, C.Assets.Font.Condensed, 11, true, '', nil, true, 'BOTTOMRIGHT', -1, 1)
+        self.iLvl = F.CreateFS(self.ItemButton, C.Assets.Font.Bold, 11, true, '', nil, true, 'BOTTOMRIGHT', -1, 1)
     end
     local quality = link and select(3, GetItemInfo(link)) or nil
     if quality and quality > 1 then

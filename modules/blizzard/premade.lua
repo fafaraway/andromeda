@@ -306,7 +306,7 @@ function BLIZZARD:ReplaceFindGroupButton()
         lastCategory = selectedCategory
     end)
 
-    if _G.FREE_ADB.ReskinBlizz then
+    if _G.ANDROMEDA_ADB.ReskinBlizz then
         F.Reskin(bu)
     end
 end

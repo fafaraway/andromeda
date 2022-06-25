@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 table.insert(C.BlizzThemes, function()
-    if not _G.FREE_ADB.ReskinBlizz then
+    if not _G.ANDROMEDA_ADB.ReskinBlizz then
         return
     end
 

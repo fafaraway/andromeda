@@ -2,7 +2,7 @@ local F = unpack(select(2, ...))
 local THEME = F:GetModule('Theme')
 
 function THEME:ReskinPGF()
-    if not _G.FREE_ADB.ReskinAddons then
+    if not _G.ANDROMEDA_ADB.ReskinAddons then
         return
     end
 

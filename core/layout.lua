@@ -300,7 +300,7 @@ local function CreateConsole()
 
     -- Reset
     bu[3]:SetScript('OnClick', function()
-        _G.StaticPopup_Show('FREEUI_RESET_LAYOUT')
+        _G.StaticPopup_Show('ANDROMEDA_RESET_LAYOUT')
     end)
 
     local header = CreateFrame('Frame', nil, f)

@@ -30,7 +30,7 @@ function THEME:LoadAddOnSkins()
 
     table.wipe(C.BlizzThemes)
 
-    if not _G.FREE_ADB.ReskinBlizz then
+    if not _G.ANDROMEDA_ADB.ReskinBlizz then
         table.wipe(C.Themes)
     end
 
@@ -96,7 +96,7 @@ local function ReskinMirrorBars()
 end
 
 function THEME:ReskinBlizzBars()
-    if not _G.FREE_ADB.ReskinBlizz then
+    if not _G.ANDROMEDA_ADB.ReskinBlizz then
         return
     end
 

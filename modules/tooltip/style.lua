@@ -24,7 +24,7 @@ function TOOLTIP:ReskinTooltip()
         self.tipStyled = true
     end
 
-    local color = _G.FREE_ADB.BackdropColor
+    local color = _G.ANDROMEDA_ADB.BackdropColor
     local alpha = C.DB.Tooltip.BackdropAlpha
     self.bg:SetBackdropColor(color.r, color.g, color.b, alpha)
     F.SetBorderColor(self.bg)
@@ -48,7 +48,7 @@ function TOOLTIP:ReskinTooltip()
 end
 
 local function RestyleFont(obj, font, size)
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = _G.ANDROMEDA_ADB.FontOutline
 
     obj:SetFont(font, size, outline and 'OUTLINE')
     obj:SetShadowColor(0, 0, 0, 1)

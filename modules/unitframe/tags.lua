@@ -229,7 +229,7 @@ end
 
 function UNITFRAME:CreateGroupNameTag(self)
     local font = C.Assets.Font.Condensed
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = _G.ANDROMEDA_ADB.FontOutline
     local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
 
     self:Tag(text, '[free:color][free:groupname] [free:ddg]')
@@ -240,7 +240,7 @@ end
 function UNITFRAME:CreateNameTag(self)
     local font = C.Assets.Font.Condensed
     local style = self.unitStyle
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = _G.ANDROMEDA_ADB.FontOutline
 
     local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
 
@@ -269,7 +269,7 @@ end
 function UNITFRAME:CreateHealthTag(self)
     local font = C.Assets.Font.Condensed
     local style = self.unitStyle
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = _G.ANDROMEDA_ADB.FontOutline
 
     local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
     text:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
@@ -294,7 +294,7 @@ end
 function UNITFRAME:CreateAltPowerTag(self)
     local font = C.Assets.Font.Condensed
     local style = self.unitStyle
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = _G.ANDROMEDA_ADB.FontOutline
 
     local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
 
@@ -341,7 +341,7 @@ end
 
 function UNITFRAME:CreatePlayerTags(self)
     local font = C.Assets.Font.Condensed
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = _G.ANDROMEDA_ADB.FontOutline
 
     local leftTag = F.CreateFS(self, font, 11, outline, nil, nil, outline or 'THICK')
     leftTag:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)

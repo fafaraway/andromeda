@@ -10,18 +10,18 @@ if not crossRealms or #crossRealms == 0 then
     crossRealms = { [1] = C.MY_REALM }
 end
 
-StaticPopupDialogs.FREEUI_RESET_ALL_GOLD_STATISTICS = {
+StaticPopupDialogs.ANDROMEDA_RESET_ALL_GOLD_STATISTICS = {
     text = C.RED_COLOR .. L['Reset All Gold Statistics?'],
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
         for _, realm in pairs(crossRealms) do
-            if _G.FREE_ADB['GoldStatistic'][realm] then
-                table.wipe(_G.FREE_ADB['GoldStatistic'][realm])
+            if _G.ANDROMEDA_ADB['GoldStatistic'][realm] then
+                table.wipe(_G.ANDROMEDA_ADB['GoldStatistic'][realm])
             end
         end
 
-        _G.FREE_ADB['GoldStatistic'][C.MY_REALM][C.MY_NAME] = { GetMoney(), C.MY_CLASS }
+        _G.ANDROMEDA_ADB['GoldStatistic'][C.MY_REALM][C.MY_NAME] = { GetMoney(), C.MY_CLASS }
     end,
     timeout = 0,
     whileDead = 1,
@@ -32,7 +32,7 @@ local menuList = {
         text = F:RgbToHex(1, 0.8, 0) .. _G.REMOVE_WORLD_MARKERS .. '!!!',
         notCheckable = true,
         func = function()
-            StaticPopup_Show('FREEUI_RESET_ALL_GOLD_STATISTICS')
+            StaticPopup_Show('ANDROMEDA_RESET_ALL_GOLD_STATISTICS')
         end,
     },
 }
@@ -48,7 +48,7 @@ end
 local RebuildCharList
 
 local function clearCharGold(_, realm, name)
-    _G.FREE_ADB['GoldStatistic'][realm][name] = nil
+    _G.ANDROMEDA_ADB['GoldStatistic'][realm][name] = nil
     _G.DropDownList1:Hide()
     RebuildCharList()
 end
@@ -62,8 +62,8 @@ function RebuildCharList()
 
     local index = 1
     for _, realm in pairs(crossRealms) do
-        if _G.FREE_ADB['GoldStatistic'][C.MY_REALM] then
-            for name, value in pairs(_G.FREE_ADB['GoldStatistic'][C.MY_REALM]) do
+        if _G.ANDROMEDA_ADB['GoldStatistic'][C.MY_REALM] then
+            for name, value in pairs(_G.ANDROMEDA_ADB['GoldStatistic'][C.MY_REALM]) do
                 if not (realm == C.MY_REALM and name == C.MY_REALM) then
                     index = index + 1
                     if not menuList[index] then
@@ -104,14 +104,14 @@ local function Button_OnEvent(self, event)
 
     self.text:SetText(FormatMoney(newMoney))
 
-    if not _G.FREE_ADB['GoldStatistic'][C.MY_REALM] then
-        _G.FREE_ADB['GoldStatistic'][C.MY_REALM] = {}
+    if not _G.ANDROMEDA_ADB['GoldStatistic'][C.MY_REALM] then
+        _G.ANDROMEDA_ADB['GoldStatistic'][C.MY_REALM] = {}
     end
-    if not _G.FREE_ADB['GoldStatistic'][C.MY_REALM][C.MY_NAME] then
-        _G.FREE_ADB['GoldStatistic'][C.MY_REALM][C.MY_NAME] = {}
+    if not _G.ANDROMEDA_ADB['GoldStatistic'][C.MY_REALM][C.MY_NAME] then
+        _G.ANDROMEDA_ADB['GoldStatistic'][C.MY_REALM][C.MY_NAME] = {}
     end
-    _G.FREE_ADB['GoldStatistic'][C.MY_REALM][C.MY_NAME][1] = GetMoney()
-    _G.FREE_ADB['GoldStatistic'][C.MY_REALM][C.MY_NAME][2] = C.MY_CLASS
+    _G.ANDROMEDA_ADB['GoldStatistic'][C.MY_REALM][C.MY_NAME][1] = GetMoney()
+    _G.ANDROMEDA_ADB['GoldStatistic'][C.MY_REALM][C.MY_NAME][2] = C.MY_CLASS
 
     oldMoney = newMoney
 end
@@ -152,7 +152,7 @@ local function Button_OnEnter(self)
     _G.GameTooltip:AddLine(_G.CHARACTER, 0.6, 0.8, 1)
 
     for _, realm in pairs(crossRealms) do
-        local thisRealmList = _G.FREE_ADB['GoldStatistic'][realm]
+        local thisRealmList = _G.ANDROMEDA_ADB['GoldStatistic'][realm]
         if thisRealmList then
             for k, v in pairs(thisRealmList) do
                 local name = Ambiguate(k .. '-' .. realm, 'none')

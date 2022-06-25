@@ -6,7 +6,7 @@ local function GetBestScale()
 end
 
 function F:SetupUIScale(init)
-    local scale = GetBestScale() * _G.FREE_ADB.UIScale
+    local scale = GetBestScale() * _G.ANDROMEDA_ADB.UIScale
 
     if init then
         local pixel = 1

@@ -4,7 +4,7 @@ local GUI = F:GetModule('GUI')
 F:RegisterSlash('/free', function(msg)
     local str, _ = string.split(' ', string.lower(msg), 2)
     if string.match(str, 'reset') or string.match(str, 'init') then
-        StaticPopup_Show('FREEUI_RESET_ALL')
+        StaticPopup_Show('ANDROMEDA_RESET_ALL')
     elseif string.match(str, 'install') or string.match(str, 'tutorial') then
         F:GetModule('Installation'):HelloWorld()
     elseif string.match(str, 'unlock') or string.match(str, 'layout') then
@@ -30,7 +30,7 @@ end)
 
 --	Disband party or raid
 F:RegisterSlash('/disband', function()
-    StaticPopup_Show('FREEUI_DISBAND_GROUP')
+    StaticPopup_Show('ANDROMEDA_DISBAND_GROUP')
 end)
 
 --	Convert party raid
@@ -279,7 +279,7 @@ F:RegisterSlash('/scaleinfo', function()
     F:Print('C.SCREEN_WIDTH ' .. C.SCREEN_WIDTH)
     F:Print('C.SCREEN_HEIGHT ' .. C.SCREEN_HEIGHT)
     F:Print('C.MULT ' .. C.MULT)
-    F:Print('UIScale ' .. _G.FREE_ADB.UIScale)
+    F:Print('UIScale ' .. _G.ANDROMEDA_ADB.UIScale)
     F:Print('UIParentScale ' .. _G.UIParent:GetScale())
     F:Print(C.LINE_STRING)
 end)

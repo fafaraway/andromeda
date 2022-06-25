@@ -94,7 +94,7 @@ end
 local function CreateBars(parent, spellID, table1, table2, table3)
     -- table1 barTable
     -- table2 C.table
-    -- table3 FREE_ADB.table
+    -- table3 ANDROMEDA_ADB.table
     local spellName = GetSpellInfo(spellID)
     local texture = GetSpellTexture(spellID)
 
@@ -109,9 +109,9 @@ local function CreateBars(parent, spellID, table1, table2, table3)
         bar:Hide()
 
         if C[table2][spellID] then
-            _G.FREE_ADB[table3][spellID] = false
+            _G.ANDROMEDA_ADB[table3][spellID] = false
         else
-            _G.FREE_ADB[table3][spellID] = nil
+            _G.ANDROMEDA_ADB[table3][spellID] = nil
         end
 
         table1[spellID] = nil
@@ -132,7 +132,7 @@ end
 local function createBars(parent, spellID, newTable, tableName)
     -- table1 barTable
     -- table2 C.table
-    -- table3 FREE_ADB.table
+    -- table3 ANDROMEDA_ADB.table
     local spellName = GetSpellInfo(spellID)
     local texture = GetSpellTexture(spellID)
 
@@ -147,9 +147,9 @@ local function createBars(parent, spellID, newTable, tableName)
         bar:Hide()
 
         if C[tableName][spellID] then
-            _G.FREE_ADB[tableName][spellID] = false
+            _G.ANDROMEDA_ADB[tableName][spellID] = false
         else
-            _G.FREE_ADB[tableName][spellID] = nil
+            _G.ANDROMEDA_ADB[tableName][spellID] = nil
         end
 
         newTable[spellID] = nil
@@ -174,13 +174,13 @@ local function addOnClick(btn)
         return
     end
 
-    local modValue = _G.FREE_ADB[tableName][spellID]
+    local modValue = _G.ANDROMEDA_ADB[tableName][spellID]
     if modValue or modValue == nil and C[tableName][spellID] then
         _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is existed'])
         return
     end
 
-    _G.FREE_ADB[tableName][spellID] = true
+    _G.ANDROMEDA_ADB[tableName][spellID] = true
 
     createBars(parent.scrollArea, spellID, newTable, tableName)
 
@@ -978,9 +978,9 @@ function GUI:SetupNameplateAuraFilter(parent)
                 (index == 1 and C.NameplateAuraWhiteList[spellID])
                 or (index == 2 and C.NameplateAuraBlackList[spellID])
             then
-                _G.FREE_ADB['NameplateAuraFilterList'][index][spellID] = false
+                _G.ANDROMEDA_ADB['NameplateAuraFilterList'][index][spellID] = false
             else
-                _G.FREE_ADB['NameplateAuraFilterList'][index][spellID] = nil
+                _G.ANDROMEDA_ADB['NameplateAuraFilterList'][index][spellID] = nil
             end
 
             frameData[index].barList[spellID] = nil
@@ -998,7 +998,7 @@ function GUI:SetupNameplateAuraFilter(parent)
     end
 
     local function isAuraExisted(index, spellID)
-        local modValue = _G.FREE_ADB['NameplateAuraFilterList'][index][spellID]
+        local modValue = _G.ANDROMEDA_ADB['NameplateAuraFilterList'][index][spellID]
         local locValue = (index == 1 and C.NameplateAuraWhiteList[spellID])
             or (index == 2 and C.NameplateAuraBlackList[spellID])
 
@@ -1017,18 +1017,18 @@ function GUI:SetupNameplateAuraFilter(parent)
             return
         end
 
-        _G.FREE_ADB['NameplateAuraFilterList'][index][spellID] = true
+        _G.ANDROMEDA_ADB['NameplateAuraFilterList'][index][spellID] = true
         createBar(parent.child, index, spellID)
         parent.box:SetText('')
     end
 
     local filterIndex
-    StaticPopupDialogs['FREEUI_RESET_NAMEPLATE_AURA_FILTER'] = {
+    StaticPopupDialogs['ANDROMEDA_RESET_NAMEPLATE_AURA_FILTER'] = {
         text = C.RED_COLOR .. L['Reset to default list?'],
         button1 = _G.YES,
         button2 = _G.NO,
         OnAccept = function()
-            wipe(_G.FREE_ADB['NameplateAuraFilterList'][filterIndex])
+            wipe(_G.ANDROMEDA_ADB['NameplateAuraFilterList'][filterIndex])
             ReloadUI()
         end,
         whileDead = 1,
@@ -1059,7 +1059,7 @@ function GUI:SetupNameplateAuraFilter(parent)
         scroll.reset:SetPoint('RIGHT', scroll.add, 'LEFT', -5, 0)
         scroll.reset:SetScript('OnClick', function()
             filterIndex = index
-            StaticPopup_Show('FREEUI_RESET_NAMEPLATE_AURA_FILTER')
+            StaticPopup_Show('ANDROMEDA_RESET_NAMEPLATE_AURA_FILTER')
         end)
 
         for spellID, value in pairs(NAMEPLATE.AuraFilterList[index]) do
@@ -1110,7 +1110,7 @@ function GUI:SetupNameplateMajorSpells(parent)
     local resetBtn = F.CreateButton(panel.bg, 50, 24, _G.RESET)
     resetBtn:SetPoint('RIGHT', addBtn, 'LEFT', -5, 0)
     resetBtn:HookScript('OnClick', function()
-        StaticPopup_Show('FREEUI_RESET_MAJOR_SPELLS_LIST')
+        StaticPopup_Show('ANDROMEDA_RESET_MAJOR_SPELLS_LIST')
     end)
 
     for spellID, value in pairs(NAMEPLATE[panel.tableName]) do
@@ -1459,7 +1459,7 @@ function GUI:SetupNameplateUnitFilter(parent)
     scroll.reset = F.CreateButton(frame, 40, 25, _G.RESET, 11)
     scroll.reset:SetPoint('RIGHT', scroll.add, 'LEFT', -5, 0)
     scroll.reset:SetScript('OnClick', function()
-        StaticPopup_Show('FREEUI_RESET_NAMEPLATE_SPECIAL_UNIT_FILTER')
+        StaticPopup_Show('ANDROMEDA_RESET_NAMEPLATE_SPECIAL_UNIT_FILTER')
     end)
 
     for npcID in pairs(NAMEPLATE.SpecialUnitsList) do
@@ -1550,7 +1550,7 @@ function GUI:SetupNameplateColorByDot(parent)
     scroll.reset = F.CreateButton(frame, 40, 25, _G.RESET, 11)
     scroll.reset:SetPoint('RIGHT', scroll.add, 'LEFT', -5, 0)
     scroll.reset:SetScript('OnClick', function()
-        StaticPopup_Show('FREEUI_RESET_NAMEPLATE_DOT_SPELLS')
+        StaticPopup_Show('ANDROMEDA_RESET_NAMEPLATE_DOT_SPELLS')
     end)
 
     for npcID in pairs(C.DB['Nameplate']['DotSpellsList']) do
@@ -2418,9 +2418,9 @@ function GUI:SetupPartyWatcher(parent)
         close:SetScript('OnClick', function()
             bar:Hide()
             if C.PartySpellsList[spellID] then
-                _G.FREE_ADB['PartySpellsList'][spellID] = 0
+                _G.ANDROMEDA_ADB['PartySpellsList'][spellID] = 0
             else
-                _G.FREE_ADB['PartySpellsList'][spellID] = nil
+                _G.ANDROMEDA_ADB['PartySpellsList'][spellID] = nil
             end
             barTable[spellID] = nil
             SortBars(barTable)
@@ -2470,7 +2470,7 @@ function GUI:SetupPartyWatcher(parent)
     scroll.reset.text:SetTextColor(1, 0, 0)
 
     scroll.reset:SetScript('OnClick', function()
-        StaticPopup_Show('FREEUI_RESET_PARTY_SPELLS')
+        StaticPopup_Show('ANDROMEDA_RESET_PARTY_SPELLS')
     end)
 
     local function addClick(scroll, options)
@@ -2485,14 +2485,14 @@ function GUI:SetupPartyWatcher(parent)
             return
         end
 
-        local modDuration = _G.FREE_ADB['PartySpellsList'][spellID]
+        local modDuration = _G.ANDROMEDA_ADB['PartySpellsList'][spellID]
 
         if modDuration and modDuration ~= 0 or C.PartySpellsList[spellID] and not modDuration then
             _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is existed'])
             return
         end
 
-        _G.FREE_ADB['PartySpellsList'][spellID] = duration
+        _G.ANDROMEDA_ADB['PartySpellsList'][spellID] = duration
         createBar(scroll.child, spellID, duration)
         ClearEdit(options)
     end
@@ -2659,8 +2659,8 @@ do
             print(spellID)
             print(C.DebuffWatcherList[instName][spellID])
             local localPrio = C.DebuffWatcherList[instName][spellID]
-            local savedPrio = _G.FREE_ADB['DebuffWatcherList'][instName]
-                and _G.FREE_ADB['DebuffWatcherList'][instName][spellID]
+            local savedPrio = _G.ANDROMEDA_ADB['DebuffWatcherList'][instName]
+                and _G.ANDROMEDA_ADB['DebuffWatcherList'][instName][spellID]
             if (localPrio and savedPrio and savedPrio == 0) or (not localPrio and not savedPrio) then
                 return false
             end
@@ -2688,10 +2688,10 @@ do
             end
 
             priority = analyzePrio(priority)
-            if not _G.FREE_ADB['DebuffWatcherList'][instName] then
-                _G.FREE_ADB['DebuffWatcherList'][instName] = {}
+            if not _G.ANDROMEDA_ADB['DebuffWatcherList'][instName] then
+                _G.ANDROMEDA_ADB['DebuffWatcherList'][instName] = {}
             end
-            _G.FREE_ADB['DebuffWatcherList'][instName][spellID] = priority
+            _G.ANDROMEDA_ADB['DebuffWatcherList'][instName][spellID] = priority
             setupBars(instName)
             GUI:ClearEdit(options[3])
             GUI:ClearEdit(options[4])
@@ -2707,7 +2707,7 @@ do
         scroll.reset:SetPoint('TOPLEFT', 10, -120)
         scroll.reset.text:SetTextColor(1, 0, 0)
         scroll.reset:SetScript('OnClick', function()
-            StaticPopup_Show('FREEUI_RESET_RAID_DEBUFFS')
+            StaticPopup_Show('ANDROMEDA_RESET_RAID_DEBUFFS')
         end)
         scroll.add = F.CreateButton(frame, 70, 24, _G.ADD)
         scroll.add:SetPoint('TOPRIGHT', -10, -120)
@@ -2745,12 +2745,12 @@ do
             close:SetScript('OnClick', function()
                 bar:Hide()
                 if C.DebuffWatcherList[bar.instName][bar.spellID] then
-                    if not _G.FREE_ADB['DebuffWatcherList'][bar.instName] then
-                        _G.FREE_ADB['DebuffWatcherList'][bar.instName] = {}
+                    if not _G.ANDROMEDA_ADB['DebuffWatcherList'][bar.instName] then
+                        _G.ANDROMEDA_ADB['DebuffWatcherList'][bar.instName] = {}
                     end
-                    _G.FREE_ADB['DebuffWatcherList'][bar.instName][bar.spellID] = 0
+                    _G.ANDROMEDA_ADB['DebuffWatcherList'][bar.instName][bar.spellID] = 0
                 else
-                    _G.FREE_ADB['DebuffWatcherList'][bar.instName][bar.spellID] = nil
+                    _G.ANDROMEDA_ADB['DebuffWatcherList'][bar.instName][bar.spellID] = nil
                 end
                 setupBars(bar.instName)
             end)
@@ -2771,10 +2771,10 @@ do
             end)
             prioBox:HookScript('OnEnterPressed', function(self)
                 local prio = analyzePrio(tonumber(self:GetText()))
-                if not _G.FREE_ADB['DebuffWatcherList'][bar.instName] then
-                    _G.FREE_ADB['DebuffWatcherList'][bar.instName] = {}
+                if not _G.ANDROMEDA_ADB['DebuffWatcherList'][bar.instName] then
+                    _G.ANDROMEDA_ADB['DebuffWatcherList'][bar.instName] = {}
                 end
-                _G.FREE_ADB['DebuffWatcherList'][bar.instName][bar.spellID] = prio
+                _G.ANDROMEDA_ADB['DebuffWatcherList'][bar.instName][bar.spellID] = prio
                 self:SetText(prio)
             end)
             prioBox.title = L['Priority']
@@ -2812,8 +2812,8 @@ do
                 for spellID, priority in pairs(C.DebuffWatcherList[instName]) do
                     if
                         not (
-                            _G.FREE_ADB['DebuffWatcherList'][instName]
-                            and _G.FREE_ADB['DebuffWatcherList'][instName][spellID]
+                            _G.ANDROMEDA_ADB['DebuffWatcherList'][instName]
+                            and _G.ANDROMEDA_ADB['DebuffWatcherList'][instName][spellID]
                         )
                     then
                         index = index + 1
@@ -2822,8 +2822,8 @@ do
                 end
             end
 
-            if _G.FREE_ADB['DebuffWatcherList'][instName] then
-                for spellID, priority in pairs(_G.FREE_ADB['DebuffWatcherList'][instName]) do
+            if _G.ANDROMEDA_ADB['DebuffWatcherList'][instName] then
+                for spellID, priority in pairs(_G.ANDROMEDA_ADB['DebuffWatcherList'][instName]) do
                     if priority > 0 then
                         index = index + 1
                         applyData(index, instName, spellID, priority)
@@ -3068,7 +3068,7 @@ function GUI:SetupPartyAura(parent)
     local resetBtn = F.CreateButton(panel.bg, 50, 24, _G.RESET)
     resetBtn:SetPoint('RIGHT', addBtn, 'LEFT', -5, 0)
     resetBtn:HookScript('OnClick', function()
-        StaticPopup_Show('FREEUI_RESET_PARTY_AURA_LIST')
+        StaticPopup_Show('ANDROMEDA_RESET_PARTY_AURA_LIST')
     end)
 
     for spellID, value in pairs(UNITFRAME[panel.tableName]) do
@@ -3118,7 +3118,7 @@ function GUI:SetupCustomClassColor(parent)
     local panel = CreateExtraGUI(parent, guiName)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
-    local colors = _G.FREE_ADB.CustomClassColors
+    local colors = _G.ANDROMEDA_ADB.CustomClassColors
 
     local datas = {
         [1] = { text = 'HUNTER', value = colors.HUNTER },
@@ -3338,13 +3338,13 @@ function GUI:SetupAnnounceableSpells(parent)
             return
         end
 
-        local modValue = _G.FREE_ADB['AnnounceableSpellsList'][spellID]
+        local modValue = _G.ANDROMEDA_ADB['AnnounceableSpellsList'][spellID]
         if modValue or modValue == nil and C.AnnounceableSpellsList[spellID] then
             _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is existed'])
             return
         end
 
-        _G.FREE_ADB['AnnounceableSpellsList'][spellID] = true
+        _G.ANDROMEDA_ADB['AnnounceableSpellsList'][spellID] = true
         CreateBars(scroll, spellID, barTable, 'AnnounceableSpellsList', 'AnnounceableSpellsList')
         parent.box:SetText('')
     end)
@@ -3352,7 +3352,7 @@ function GUI:SetupAnnounceableSpells(parent)
     scroll.reset = F.CreateButton(frame, 50, 24, _G.RESET)
     scroll.reset:SetPoint('LEFT', scroll.add, 'RIGHT', 5, 0)
     scroll.reset:SetScript('OnClick', function()
-        StaticPopup_Show('FREEUI_RESET_ANNOUNCEABLE_SPELLS')
+        StaticPopup_Show('ANDROMEDA_RESET_ANNOUNCEABLE_SPELLS')
     end)
 
     for spellID, value in pairs(ANNOUNCEMENT.AnnounceableSpellsList) do

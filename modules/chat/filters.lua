@@ -46,12 +46,12 @@ local msgSymbols = {
 
 local FilterList = {}
 function CHAT:UpdateFilterList()
-    F:SplitList(FilterList, _G.FREE_ADB.ChatFilterBlackList, true)
+    F:SplitList(FilterList, _G.ANDROMEDA_ADB.ChatFilterBlackList, true)
 end
 
 local WhiteFilterList = {}
 function CHAT:UpdateFilterWhiteList()
-    F:SplitList(WhiteFilterList, _G.FREE_ADB.ChatFilterWhiteList, true)
+    F:SplitList(WhiteFilterList, _G.ANDROMEDA_ADB.ChatFilterWhiteList, true)
 end
 
 -- ECF strings compare

@@ -111,7 +111,7 @@ function INVENTORY:CreateMoneyFrame()
     moneyFrame:SetSize(140, 26)
 
     local tag = self:SpawnPlugin('TagDisplay', '[money] [currencies]', moneyFrame)
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = _G.ANDROMEDA_ADB.FontOutline
     F:SetFS(tag, C.Assets.Font.Bold, 12, outline, '', nil, outline or 'THICK')
     tag:SetPoint('TOPLEFT', 0, -4)
 end
@@ -355,11 +355,11 @@ function INVENTORY:CreateSortButton(name)
 end
 
 local function updateRepairButtonStatus(bu)
-    if _G.FREE_ADB['RepairType'] == 1 then
+    if _G.ANDROMEDA_ADB['RepairType'] == 1 then
         bu.Icon:SetVertexColor(C.r, C.g, C.b)
         bu.text = L['Repair your equipment automatically when you visit an able vendor.|nPriority use of guild funds.']
         bu.title = L['Auto Repair'] .. ': ' .. C.GREEN_COLOR .. _G.VIDEO_OPTIONS_ENABLED
-    elseif _G.FREE_ADB['RepairType'] == 2 then
+    elseif _G.ANDROMEDA_ADB['RepairType'] == 2 then
         bu.Icon:SetVertexColor(C.r, C.g, C.b)
         bu.text = L['Repair your equipment automatically when you visit an able vendor.|nDo not use guild funds.']
         bu.title = L['Auto Repair'] .. ': ' .. C.GREEN_COLOR .. _G.VIDEO_OPTIONS_ENABLED
@@ -374,7 +374,7 @@ function INVENTORY:CreateRepairButton()
     local bu = F.CreateButton(self, 16, 16, true, iconsList.Repair)
     bu.Icon:SetVertexColor(unpack(iconColor))
     bu:SetScript('OnClick', function(self)
-        _G.FREE_ADB['RepairType'] = math.fmod(_G.FREE_ADB['RepairType'] + 1, 3)
+        _G.ANDROMEDA_ADB['RepairType'] = math.fmod(_G.ANDROMEDA_ADB['RepairType'] + 1, 3)
         updateRepairButtonStatus(bu)
         self:GetScript('OnEnter')(self)
     end)
@@ -536,7 +536,7 @@ function INVENTORY:CreateFreeSlots()
     slot.__name = name
 
     local tag = self:SpawnPlugin('TagDisplay', '[space]', slot)
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = _G.ANDROMEDA_ADB.FontOutline
     F:SetFS(tag, C.Assets.Font.Bold, 11, outline, '', 'CLASS', outline or 'THICK')
     tag:SetPoint('BOTTOMRIGHT', -2, 2)
     tag.__name = name
@@ -560,7 +560,7 @@ local function GetCustomGroupTitle(index)
     return C.DB['Inventory']['CustomNamesList'][index] or (_G.PREFERENCES .. ' ' .. index)
 end
 
-StaticPopupDialogs['FREEUI_INVENTORY_RENAME_CUSTOM_GROUP'] = {
+StaticPopupDialogs['ANDROMEDA_INVENTORY_RENAME_CUSTOM_GROUP'] = {
     text = _G.BATTLE_PET_RENAME,
     button1 = _G.OKAY,
     button2 = _G.CANCEL,
@@ -584,7 +584,7 @@ StaticPopupDialogs['FREEUI_INVENTORY_RENAME_CUSTOM_GROUP'] = {
 
 function INVENTORY:RenameCustomGroup(index)
     INVENTORY.selectGroupIndex = index
-    StaticPopup_Show('FREEUI_INVENTORY_RENAME_CUSTOM_GROUP')
+    StaticPopup_Show('ANDROMEDA_INVENTORY_RENAME_CUSTOM_GROUP')
 end
 
 function INVENTORY:MoveItemToCustomBag(index)
@@ -699,7 +699,7 @@ function INVENTORY:CreateCustomJunkButton()
     end
     bu:SetScript('OnClick', function(self)
         if IsAltKeyDown() and IsControlKeyDown() then
-            _G.StaticPopup_Show('FREEUI_RESET_JUNK_LIST')
+            _G.StaticPopup_Show('ANDROMEDA_RESET_JUNK_LIST')
             return
         end
 
@@ -732,10 +732,10 @@ local function customJunkOnClick(self)
     local texture, _, _, _, _, _, _, _, _, itemID = GetContainerItemInfo(self.bagID, self.slotID)
     local price = select(11, GetItemInfo(itemID))
     if texture and price > 0 then
-        if _G.FREE_ADB['CustomJunkList'][itemID] then
-            _G.FREE_ADB['CustomJunkList'][itemID] = nil
+        if _G.ANDROMEDA_ADB['CustomJunkList'][itemID] then
+            _G.ANDROMEDA_ADB['CustomJunkList'][itemID] = nil
         else
-            _G.FREE_ADB['CustomJunkList'][itemID] = true
+            _G.ANDROMEDA_ADB['CustomJunkList'][itemID] = true
         end
         ClearCursor()
         INVENTORY:UpdateAllBags()
@@ -916,7 +916,7 @@ function INVENTORY:OnLogin()
 
         self.Icon:SetInside()
         self.Icon:SetTexCoord(unpack(C.TEX_COORD))
-        local outline = _G.FREE_ADB.FontOutline
+        local outline = _G.ANDROMEDA_ADB.FontOutline
         F:SetFS(self.Count, C.Assets.Font.Bold, 11, outline, '', nil, outline or 'THICK', 'BOTTOMRIGHT', -2, 2)
         self.Cooldown:SetInside()
         self.IconOverlay:SetInside()
@@ -1044,7 +1044,7 @@ function INVENTORY:OnLogin()
         if self.JunkIcon then
             if
                 (_G.MerchantFrame:IsShown() or customJunkEnable)
-                and (item.quality == _G.LE_ITEM_QUALITY_POOR or _G.FREE_ADB['CustomJunkList'][item.id])
+                and (item.quality == _G.LE_ITEM_QUALITY_POOR or _G.ANDROMEDA_ADB['CustomJunkList'][item.id])
                 and item.hasPrice
             then
                 self.JunkIcon:Show()
@@ -1254,7 +1254,7 @@ function INVENTORY:OnLogin()
             label = GetCustomGroupTitle(settings.Index)
         end
 
-        local outline = _G.FREE_ADB.FontOutline
+        local outline = _G.ANDROMEDA_ADB.FontOutline
         if label then
             self.label = F.CreateFS(self, C.Assets.Font.Bold, 11, outline, label, nil, outline or 'THICK', 'TOPLEFT', 5, -4)
             return

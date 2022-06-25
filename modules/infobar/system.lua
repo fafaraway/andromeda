@@ -276,9 +276,9 @@ local function Block_OnMouseUp(self, btn)
         end
 
         if GetCVarBool('scriptProfile') == scriptProfileStatus then
-            StaticPopup_Hide('FREEUI_RELOADUI_REQUIRED')
+            StaticPopup_Hide('ANDROMEDA_RELOADUI_REQUIRED')
         else
-            StaticPopup_Show('FREEUI_RELOADUI_REQUIRED')
+            StaticPopup_Show('ANDROMEDA_RELOADUI_REQUIRED')
         end
         Block_OnEnter(self)
     end

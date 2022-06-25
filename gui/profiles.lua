@@ -13,28 +13,28 @@ function GUI:CreateProfileIcon(bar, index, texture, title, description)
 end
 
 function GUI:Reset_OnClick()
-    _G.StaticPopup_Show('FREEUI_RESET_CURRENT_PROFILE')
+    _G.StaticPopup_Show('ANDROMEDA_RESET_CURRENT_PROFILE')
 end
 
 function GUI:Apply_OnClick()
     GUI.currentProfile = self:GetParent().index
-    _G.StaticPopup_Show('FREEUI_APPLY_PROFILE')
+    _G.StaticPopup_Show('ANDROMEDA_APPLY_PROFILE')
 end
 
 function GUI:Download_OnClick()
     GUI.currentProfile = self:GetParent().index
-    _G.StaticPopup_Show('FREEUI_REPLACE_CURRENT_PROFILE')
+    _G.StaticPopup_Show('ANDROMEDA_REPLACE_CURRENT_PROFILE')
 end
 
 function GUI:Upload_OnClick()
     GUI.currentProfile = self:GetParent().index
-    _G.StaticPopup_Show('FREEUI_REPLACE_SELECTED_PROFILE')
+    _G.StaticPopup_Show('ANDROMEDA_REPLACE_SELECTED_PROFILE')
 end
 
 function GUI:GetClassFromGoldInfo(name, realm)
     local class = 'NONE'
-    if _G.FREE_ADB['GoldStatistic'][realm] and _G.FREE_ADB['GoldStatistic'][realm][name] then
-        class = _G.FREE_ADB['GoldStatistic'][realm][name][2]
+    if _G.ANDROMEDA_ADB['GoldStatistic'][realm] and _G.ANDROMEDA_ADB['GoldStatistic'][realm][name] then
+        class = _G.ANDROMEDA_ADB['GoldStatistic'][realm][name][2]
     end
 
     return class
@@ -42,7 +42,7 @@ end
 
 function GUI:FindProfleUser(icon)
     icon.list = {}
-    for fullName, index in pairs(_G.FREE_ADB['ProfileIndex']) do
+    for fullName, index in pairs(_G.ANDROMEDA_ADB['ProfileIndex']) do
         if index == icon.index then
             local name, realm = string.split('-', fullName)
             if not icon.list[realm] then
@@ -77,16 +77,16 @@ function GUI:Icon_OnEnter()
 end
 
 function GUI:Note_OnEscape()
-    self:SetText(_G.FREE_ADB['ProfileNames'][self.index])
+    self:SetText(_G.ANDROMEDA_ADB['ProfileNames'][self.index])
 end
 
 function GUI:Note_OnEnter()
     local text = self:GetText()
     if text == '' then
-        _G.FREE_ADB['ProfileNames'][self.index] = self.__defaultText
+        _G.ANDROMEDA_ADB['ProfileNames'][self.index] = self.__defaultText
         self:SetText(self.__defaultText)
     else
-        _G.FREE_ADB['ProfileNames'][self.index] = text
+        _G.ANDROMEDA_ADB['ProfileNames'][self.index] = text
     end
 end
 
@@ -120,10 +120,10 @@ function GUI:CreateProfileBar(parent, index)
     else
         note.__defaultText = L['Shared profile'] .. (index - 1)
     end
-    if not _G.FREE_ADB['ProfileNames'][index] then
-        _G.FREE_ADB['ProfileNames'][index] = note.__defaultText
+    if not _G.ANDROMEDA_ADB['ProfileNames'][index] then
+        _G.ANDROMEDA_ADB['ProfileNames'][index] = note.__defaultText
     end
-    note:SetText(_G.FREE_ADB['ProfileNames'][index])
+    note:SetText(_G.ANDROMEDA_ADB['ProfileNames'][index])
     note.index = index
     note:HookScript('OnEnterPressed', GUI.Note_OnEnter)
     note:HookScript('OnEscapePressed', GUI.Note_OnEscape)
@@ -219,10 +219,10 @@ function GUI:Delete_OnEnter()
     end
 
     if
-        _G.FREE_ADB['ProfileIndex'][text]
-        or (_G.FREE_ADB['GoldStatistic'][realm] and _G.FREE_ADB['GoldStatistic'][realm][name])
+        _G.ANDROMEDA_ADB['ProfileIndex'][text]
+        or (_G.ANDROMEDA_ADB['GoldStatistic'][realm] and _G.ANDROMEDA_ADB['GoldStatistic'][realm][name])
     then
-        _G.StaticPopup_Show('FREEUI_DELETE_UNIT_PROFILE', text, GUI:GetClassFromGoldInfo(name, realm))
+        _G.StaticPopup_Show('ANDROMEDA_DELETE_UNIT_PROFILE', text, GUI:GetClassFromGoldInfo(name, realm))
     else
         _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Invalid character name.'])
     end
@@ -236,7 +236,7 @@ function GUI:CreateProfileGUI(parent)
     local reset = F.CreateButton(parent, 100, 24, _G.RESET)
     reset:SetPoint('BOTTOMRIGHT', -20, 20)
     reset:SetScript('OnClick', function()
-        _G.StaticPopup_Show('FREEUI_RESET_ALL')
+        _G.StaticPopup_Show('ANDROMEDA_RESET_ALL')
     end)
     F.AddTooltip(
         reset,
@@ -297,7 +297,7 @@ function GUI:CreateProfileGUI(parent)
     description:SetWordWrap(true)
     description:SetJustifyH('LEFT')
 
-    GUI.currentProfile = _G.FREE_ADB['ProfileIndex'][C.MY_FULL_NAME]
+    GUI.currentProfile = _G.ANDROMEDA_ADB['ProfileIndex'][C.MY_FULL_NAME]
 
     local numBars = 6
     local panel = F.CreateBDFrame(parent, 0.25)

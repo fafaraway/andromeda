@@ -29,7 +29,7 @@ local function UpdateCollectorTip(bu)
         .. L['Auto Hide']
         .. ': '
         .. (
-            _G.FREE_ADB['MinimapAddOnCollector'] and '|cff55ff55' .. _G.VIDEO_OPTIONS_ENABLED
+            _G.ANDROMEDA_ADB['MinimapAddOnCollector'] and '|cff55ff55' .. _G.VIDEO_OPTIONS_ENABLED
             or '|cffff5555' .. _G.VIDEO_OPTIONS_DISABLED
         )
 end
@@ -39,7 +39,7 @@ local function HideCollectorTray()
 end
 
 local function ClickFunc(force)
-    if force == 1 or _G.FREE_ADB['MinimapAddOnCollector'] then
+    if force == 1 or _G.ANDROMEDA_ADB['MinimapAddOnCollector'] then
         F:UIFrameFadeOut(_G.Minimap.AddOnCollectorTray, 0.5, 1, 0)
         F:Delay(0.5, HideCollectorTray)
     end
@@ -189,7 +189,7 @@ end
 
 local function Button_OnClick(self, btn)
     if btn == 'RightButton' then
-        _G.FREE_ADB['MinimapAddOnCollector'] = not _G.FREE_ADB['MinimapAddOnCollector']
+        _G.ANDROMEDA_ADB['MinimapAddOnCollector'] = not _G.ANDROMEDA_ADB['MinimapAddOnCollector']
         UpdateCollectorTip(_G.Minimap.AddOnCollector)
         _G.Minimap.AddOnCollector:GetScript('OnEnter')(_G.Minimap.AddOnCollector)
     else
@@ -226,7 +226,7 @@ function MAP:AddOnIconCollector()
     tray:Hide()
     _G.Minimap.AddOnCollectorTray = tray
 
-    F:SplitList(ignoredButtons, _G.FREE_ADB['IgnoredAddOns'])
+    F:SplitList(ignoredButtons, _G.ANDROMEDA_ADB['IgnoredAddOns'])
 
     bu:SetScript('OnClick', Button_OnClick)
 

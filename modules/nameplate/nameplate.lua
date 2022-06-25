@@ -409,14 +409,14 @@ function NAMEPLATE:RefreshMajorSpellsFilter()
     for spellID in pairs(C.MajorSpellsList) do
         local name = GetSpellInfo(spellID)
         if name then
-            local modValue = _G.FREE_ADB['MajorSpellsList'][spellID]
+            local modValue = _G.ANDROMEDA_ADB['MajorSpellsList'][spellID]
             if modValue == nil then
                 NAMEPLATE.MajorSpellsList[spellID] = true
             end
         end
     end
 
-    for spellID, value in pairs(_G.FREE_ADB['MajorSpellsList']) do
+    for spellID, value in pairs(_G.ANDROMEDA_ADB['MajorSpellsList']) do
         if value then
             NAMEPLATE.MajorSpellsList[spellID] = true
         end
@@ -427,17 +427,17 @@ function NAMEPLATE:CheckMajorSpellsFilter()
     for spellID in pairs(C.MajorSpellsList) do
         local name = GetSpellInfo(spellID)
         if name then
-            if _G.FREE_ADB['MajorSpellsList'][spellID] then
-                _G.FREE_ADB['MajorSpellsList'][spellID] = nil
+            if _G.ANDROMEDA_ADB['MajorSpellsList'][spellID] then
+                _G.ANDROMEDA_ADB['MajorSpellsList'][spellID] = nil
             end
         else
             F:Debug('CheckMajorSpells: Invalid Spell ID ' .. spellID)
         end
     end
 
-    for spellID, value in pairs(_G.FREE_ADB['MajorSpellsList']) do
+    for spellID, value in pairs(_G.ANDROMEDA_ADB['MajorSpellsList']) do
         if value == false and C.MajorSpellsList[spellID] == nil then
-            _G.FREE_ADB['MajorSpellsList'][spellID] = nil
+            _G.ANDROMEDA_ADB['MajorSpellsList'][spellID] = nil
         end
     end
 end
@@ -445,7 +445,7 @@ end
 -- Spiteful indicator
 function NAMEPLATE:CreateSpitefulIndicator(self)
     local font = C.Assets.Font.Condensed
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = _G.ANDROMEDA_ADB.FontOutline
 
     local tarName = F.CreateFS(self, font, 12, outline, nil, nil, outline or 'THICK')
     tarName:ClearAllPoints()
@@ -534,7 +534,7 @@ function NAMEPLATE:UpdateClickableSize()
         return
     end
 
-    local scale = _G.FREE_ADB.UIScale
+    local scale = _G.ANDROMEDA_ADB.UIScale
     local harmWidth, harmHeight = C.DB.Nameplate.ClickableWidth, C.DB.Nameplate.ClickableHeight
     local helpWidth, helpHeight = C.DB.Nameplate.FriendlyClickableWidth, C.DB.Nameplate.FriendlyClickableHeight
 
@@ -732,7 +732,7 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
         self.widgetContainer = blizzPlate and blizzPlate.WidgetContainer
         if self.widgetContainer then
             self.widgetContainer:SetParent(self)
-            -- self.widgetContainer:SetScale(_G.FREE_ADB.UIScale)
+            -- self.widgetContainer:SetScale(_G.ANDROMEDA_ADB.UIScale)
         end
 
         NAMEPLATE.RefreshPlateType(self, unit)
@@ -756,8 +756,8 @@ local function CheckNameplateAuraFilter(index)
         for spellID in pairs(value) do
             local name = GetSpellInfo(spellID)
             if name then
-                if _G.FREE_ADB['NameplateAuraFilterList'][index][spellID] then
-                    _G.FREE_ADB['NameplateAuraFilterList'][index][spellID] = nil
+                if _G.ANDROMEDA_ADB['NameplateAuraFilterList'][index][spellID] then
+                    _G.ANDROMEDA_ADB['NameplateAuraFilterList'][index][spellID] = nil
                 end
             else
                 if C.IS_DEVELOPER then
@@ -766,9 +766,9 @@ local function CheckNameplateAuraFilter(index)
             end
         end
 
-        for spellID, val in pairs(_G.FREE_ADB['NameplateAuraFilterList'][index]) do
+        for spellID, val in pairs(_G.ANDROMEDA_ADB['NameplateAuraFilterList'][index]) do
             if val == false and value[spellID] == nil then
-                _G.FREE_ADB['NameplateAuraFilterList'][index][spellID] = nil
+                _G.ANDROMEDA_ADB['NameplateAuraFilterList'][index][spellID] = nil
             end
         end
     end
@@ -787,14 +787,14 @@ local function RefreshNameplateAuraFilter(index)
         for spellID in pairs(VALUE) do
             local name = GetSpellInfo(spellID)
             if name then
-                if _G.FREE_ADB['NameplateAuraFilterList'][index][spellID] == nil then
+                if _G.ANDROMEDA_ADB['NameplateAuraFilterList'][index][spellID] == nil then
                     NAMEPLATE.AuraFilterList[index][spellID] = true
                 end
             end
         end
     end
 
-    for spellID, value in pairs(_G.FREE_ADB['NameplateAuraFilterList'][index]) do
+    for spellID, value in pairs(_G.ANDROMEDA_ADB['NameplateAuraFilterList'][index]) do
         if value then
             NAMEPLATE.AuraFilterList[index][spellID] = true
         end

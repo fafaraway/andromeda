@@ -133,11 +133,11 @@ end
 
 local function UpdateUIScale()
     if C.SCREEN_HEIGHT > 1440 then
-        _G.FREE_ADB.UIScale = 2
+        _G.ANDROMEDA_ADB.UIScale = 2
     elseif C.SCREEN_HEIGHT > 1080 and C.SCREEN_HEIGHT < 1440 then
-        _G.FREE_ADB.UIScale = 1.4
+        _G.ANDROMEDA_ADB.UIScale = 1.4
     else
-        _G.FREE_ADB.UIScale = 1
+        _G.ANDROMEDA_ADB.UIScale = 1
     end
 end
 

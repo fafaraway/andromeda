@@ -2,8 +2,8 @@ local F, C = unpack(select(2, ...))
 
 -- Fix Alertframe bg
 local function fixBg(frame)
-    local color = _G.FREE_ADB.BackdropColor
-    local alpha = _G.FREE_ADB.BackdropAlpha
+    local color = _G.ANDROMEDA_ADB.BackdropColor
+    local alpha = _G.ANDROMEDA_ADB.BackdropAlpha
     if frame:IsObjectType('AnimationGroup') then
         frame = frame:GetParent()
     end
@@ -16,8 +16,8 @@ local function fixBg(frame)
 end
 
 local function fixParentbg(anim)
-    local color = _G.FREE_ADB.BackdropColor
-    local alpha = _G.FREE_ADB.BackdropAlpha
+    local color = _G.ANDROMEDA_ADB.BackdropColor
+    local alpha = _G.ANDROMEDA_ADB.BackdropAlpha
     local frame = anim.__owner
     if frame.bg then
         frame.bg:SetBackdropColor(color.r, color.g, color.b, alpha)

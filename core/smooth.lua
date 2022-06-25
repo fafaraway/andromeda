@@ -117,5 +117,5 @@ function F:SetSmoothingAmount(amount)
 end
 
 F:RegisterEvent('PLAYER_LOGIN', function()
-    F:SetSmoothingAmount(_G.FREE_ADB['SmoothAmount'])
+    F:SetSmoothingAmount(_G.ANDROMEDA_ADB['SmoothAmount'])
 end)

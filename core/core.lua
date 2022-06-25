@@ -71,25 +71,25 @@ loader:SetScript('OnEvent', function(self, _, addon)
         return
     end
 
-    InitialSettings(C.AccountSettings, _G.FREE_ADB)
-    if not next(_G.FREE_PDB) then
+    InitialSettings(C.AccountSettings, _G.ANDROMEDA_ADB)
+    if not next(_G.ANDROMEDA_PDB) then
         for i = 1, 5 do
-            _G.FREE_PDB[i] = {}
+            _G.ANDROMEDA_PDB[i] = {}
         end
     end
 
-    if not _G.FREE_ADB['ProfileIndex'][C.MY_FULL_NAME] then
-        _G.FREE_ADB['ProfileIndex'][C.MY_FULL_NAME] = 1
+    if not _G.ANDROMEDA_ADB['ProfileIndex'][C.MY_FULL_NAME] then
+        _G.ANDROMEDA_ADB['ProfileIndex'][C.MY_FULL_NAME] = 1
     end
 
-    if _G.FREE_ADB['ProfileIndex'][C.MY_FULL_NAME] == 1 then
-        C.DB = _G.FREE_DB
+    if _G.ANDROMEDA_ADB['ProfileIndex'][C.MY_FULL_NAME] == 1 then
+        C.DB = _G.ANDROMEDA_CDB
         if not C.DB['ShadowLands'] then
             table.wipe(C.DB)
             C.DB['ShadowLands'] = true
         end
     else
-        C.DB = _G.FREE_PDB[_G.FREE_ADB['ProfileIndex'][C.MY_FULL_NAME] - 1]
+        C.DB = _G.ANDROMEDA_PDB[_G.ANDROMEDA_ADB['ProfileIndex'][C.MY_FULL_NAME] - 1]
     end
     InitialSettings(C.CharacterSettings, C.DB, true)
 

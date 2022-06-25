@@ -53,7 +53,7 @@ function BLIZZARD:UpdateBuybackItemPos()
 end
 
 function BLIZZARD:RestyleElemennts()
-    if not _G.FREE_ADB.ReskinBlizz then
+    if not _G.ANDROMEDA_ADB.ReskinBlizz then
         return
     end
 

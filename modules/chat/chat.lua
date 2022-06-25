@@ -101,7 +101,7 @@ local function SetupChatFrame(self)
     local maxLines = 1024
 
     local font = C.Assets.Font.Bold
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = _G.ANDROMEDA_ADB.FontOutline
     local fontSize = select(2, self:GetFont())
     F:SetFS(self, font, fontSize, outline, nil, nil, outline or 'THICK')
 
@@ -358,7 +358,7 @@ local chatScrollTip = {
     callbackArg = 'ChatScroll',
 }
 function CHAT:OnMouseScroll(dir)
-    if not _G.FREE_ADB.HelpTips.ChatScroll then
+    if not _G.ANDROMEDA_ADB.HelpTips.ChatScroll then
         _G.HelpTip:Show(_G.ChatFrame1, chatScrollTip)
     end
 

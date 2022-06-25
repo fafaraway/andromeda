@@ -98,7 +98,7 @@ function M:ContactButton_OnClick()
 end
 
 function M:ContactButton_Delete()
-    _G.FREE_ADB['ContactList'][self.__owner.name:GetText()] = nil
+    _G.ANDROMEDA_ADB['ContactList'][self.__owner.name:GetText()] = nil
     M:ContactList_Refresh()
 end
 
@@ -143,7 +143,7 @@ function M:ContactList_Refresh()
     table.wipe(contactList)
     table.wipe(contactListByRealm)
 
-    for fullname, color in pairs(_G.FREE_ADB['ContactList']) do
+    for fullname, color in pairs(_G.ANDROMEDA_ADB['ContactList']) do
         local name, realm = string.split('-', fullname)
         if not contactListByRealm[realm] then
             contactListByRealm[realm] = {}
@@ -249,12 +249,12 @@ function M:MailBox_ContactList()
         if not string.find(text, '-') then
             text = text .. '-' .. C.MY_REALM
         end -- complete player realm name
-        if _G.FREE_ADB['ContactList'][text] then
+        if _G.ANDROMEDA_ADB['ContactList'][text] then
             return
         end -- unit exists
 
         local r, g, b = swatch.tex:GetColor()
-        _G.FREE_ADB['ContactList'][text] = r .. ':' .. g .. ':' .. b
+        _G.ANDROMEDA_ADB['ContactList'][text] = r .. ':' .. g .. ':' .. b
         M:ContactList_Refresh()
         editbox:SetText('')
     end)
@@ -355,7 +355,7 @@ function M:MailBox_CreatButton(parent, width, height, text, anchor)
     button:SetSize(width, height)
     button:SetPoint(unpack(anchor))
     button:SetText(text)
-    if _G.FREE_ADB.ReskinBlizz then
+    if _G.ANDROMEDA_ADB.ReskinBlizz then
         F.Reskin(button)
     end
 

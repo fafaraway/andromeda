@@ -314,7 +314,7 @@ function ACTIONBAR:Bind_CreateDialog()
     ACTIONBAR.keybindDialog = frame
 end
 
-_G.SlashCmdList['FREEUI_KEYBIND'] = function(msg)
+_G.SlashCmdList['ANDROMEDA_KEYBIND'] = function(msg)
     if msg ~= '' then
         return
     end -- don't mess up with this
@@ -327,4 +327,4 @@ _G.SlashCmdList['FREEUI_KEYBIND'] = function(msg)
     ACTIONBAR:Bind_Activate()
     ACTIONBAR:Bind_CreateDialog()
 end
-_G.SLASH_FREEUI_KEYBIND1 = '/bind'
+_G.SLASH_ANDROMEDA_KEYBIND1 = '/bind'

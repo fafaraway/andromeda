@@ -374,18 +374,18 @@ end
 -- Theme
 local function UpdateBackdropAlpha()
     for _, frame in pairs(C.Frames) do
-        frame:SetBackdropColor(0, 0, 0, _G.FREE_ADB.BackdropAlpha)
+        frame:SetBackdropColor(0, 0, 0, _G.ANDROMEDA_ADB.BackdropAlpha)
     end
 end
 
 -- Combat
 local function UpdateWorldTextScale()
-    SetCVar('WorldTextScale', _G.FREE_ADB.WorldTextScale)
+    SetCVar('WorldTextScale', _G.ANDROMEDA_ADB.WorldTextScale)
 end
 
 local function UpdateBlizzardFloatingCombatText()
-    local enable = _G.FREE_ADB.FloatingCombatText
-    local oldStyle = _G.FREE_ADB.FloatingCombatTextOldStyle
+    local enable = _G.ANDROMEDA_ADB.FloatingCombatText
+    local oldStyle = _G.ANDROMEDA_ADB.FloatingCombatTextOldStyle
 
     SetCVar('floatingCombatTextCombatDamage', enable and 1 or 0) -- 黄色伤害数字
     SetCVar('floatingCombatTextCombatHealing', enable and 1 or 0) -- 绿色治疗数字

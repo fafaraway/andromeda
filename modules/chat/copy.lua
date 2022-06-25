@@ -78,7 +78,7 @@ function CHAT:ChatCopy_Create()
     editBox:SetMaxLetters(99999)
     editBox:EnableMouse(true)
     editBox:SetAutoFocus(false)
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = _G.ANDROMEDA_ADB.FontOutline
     editBox:SetFont(C.Assets.Font.Regular, 12, outline, '', nil, outline or 'THICK')
     editBox:SetWidth(scrollArea:GetWidth())
     editBox:SetHeight(scrollArea:GetHeight())

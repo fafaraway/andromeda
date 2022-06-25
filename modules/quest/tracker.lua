@@ -85,7 +85,7 @@ end
 
 function EOT:HandleTitleText(text)
     local font = C.Assets.Font.Bold
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = _G.ANDROMEDA_ADB.FontOutline
     F:SetFS(text, font, 14, outline, nil, nil, outline or 'THICK')
 
     local height = text:GetStringHeight() + 2
@@ -100,7 +100,7 @@ function EOT:HandleInfoText(text)
     self:ColorfulProgression(text)
 
     local font = C.Assets.Font.Regular
-    local outline = _G.FREE_ADB.FontOutline
+    local outline = _G.ANDROMEDA_ADB.FontOutline
     F:SetFS(text, font, 13, outline, nil, nil, outline or 'THICK')
     text:SetHeight(text:GetStringHeight())
 

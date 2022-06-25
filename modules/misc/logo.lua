@@ -99,13 +99,13 @@ end
 function LOGO:LoginAnimation()
     F:RegisterEvent('PLAYER_ENTERING_WORLD', LOGO.Logo_CheckStatus)
 
-    _G.SlashCmdList['FREEUI_PLAYLOGO'] = function()
+    _G.SlashCmdList['ANDROMEDA_PLAYLOGO'] = function()
         if not LOGO.logoFrame then
             LOGO:Logo_Create()
         end
         LOGO.logoFrame:Show()
     end
-    _G.SLASH_FREEUI_PLAYLOGO1 = '/logo'
+    _G.SLASH_ANDROMEDA_PLAYLOGO1 = '/logo'
 end
 
 function LOGO:OnLogin()

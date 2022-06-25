@@ -4,7 +4,6 @@
     <Script file="core.lua"/>
     <Script file="dev.lua"/>
     <Script file="math.lua"/>
-    <Script file="itemlevel.lua"/>
     <Script file="media.lua"/>
     <Script file="functions.lua"/>
     <Script file="animation.lua"/>

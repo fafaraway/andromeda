@@ -1,7 +1,7 @@
 do
     -- binding
-    _G.BINDING_HEADER_FREEUI = GetAddOnMetadata(..., 'Title')
-    _G.BINDING_NAME_FREEUI_TOGGLE_GUI = 'GUI'
+    _G.BINDING_HEADER_ANDROMEDA = GetAddOnMetadata(..., 'Title')
+    _G.BINDING_NAME_ANDROMEDA_TOGGLE_GUI = 'GUI'
 end
 
 local addonName, engine = ...
@@ -11,9 +11,9 @@ engine[1] = aceAddon:NewAddon(addonName, 'AceTimer-3.0')
 engine[2] = {}
 engine[3] = {}
 
-_G.FREE_ADB = {} -- account variables
-_G.FREE_PDB = {} -- profile variables
-_G.FREE_DB = {} -- character variables
+_G['ANDROMEDA_ADB'] = {} -- account variables
+_G['ANDROMEDA_PDB'] = {} -- profile variables
+_G['ANDROMEDA_CDB'] = {} -- character variables
 
 -- allow other addons to access andromeda engine
 -- for example: local F, C, L = unpack(_G.ANDROMEDA)
