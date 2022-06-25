@@ -3,42 +3,12 @@ local QUEST = F:GetModule('Quest')
 
 local linkQuest = 'http://www.wowhead.com/quest=%d'
 local linkAchievement = 'http://www.wowhead.com/achievement=%d'
-local selfText
 
-StaticPopupDialogs.WOWHEAD_LINK = {
-    text = L['Wowhead Link'],
-    button1 = _G.OKAY,
-    timeout = 0,
-    whileDead = true,
-    hasEditBox = true,
-    editBoxWidth = 350,
-    OnShow = function(self, text)
-        self.editBox:SetMaxLetters(0)
-        self.editBox:SetText(text)
-        self.editBox:HighlightText()
-        selfText = text
-    end,
-    EditBoxOnEnterPressed = function(self)
-        self:GetParent():Hide()
-    end,
-    EditBoxOnEscapePressed = function(self)
-        self:GetParent():Hide()
-    end,
-    EditBoxOnTextChanged = function(self)
-        if self:GetText():len() < 1 then
-            self:GetParent():Hide()
-        else
-            self:SetText(selfText)
-            self:HighlightText()
-        end
-    end,
-    preferredIndex = 5,
-}
 
 local function Button_Onclick(self)
     if self.id and IsControlKeyDown() then
         local text = linkAchievement:format(self.id)
-        _G.StaticPopup_Show('WOWHEAD_LINK', _, _, text)
+        _G.StaticPopup_Show('ANDROMEDA_WOWHEAD_LINK', _, _, text)
     end
 end
 
@@ -61,7 +31,7 @@ function QUEST:WowheadLink()
         info.text = L['Wowhead Link']
         info.func = function()
             local text = linkQuest:format(id)
-            _G.StaticPopup_Show('WOWHEAD_LINK', _, _, text)
+            _G.StaticPopup_Show('ANDROMEDA_WOWHEAD_LINK', _, _, text)
         end
         info.notCheckable = true
         _G.UIDropDownMenu_AddButton(info, _G.UIDROPDOWN_MENU_LEVEL)
@@ -73,7 +43,7 @@ function QUEST:WowheadLink()
         info.text = L['Wowhead Link']
         info.func = function()
             local text = linkQuest:format(id)
-            _G.StaticPopup_Show('WOWHEAD_LINK', _, _, text)
+            _G.StaticPopup_Show('ANDROMEDA_WOWHEAD_LINK', _, _, text)
         end
         info.notCheckable = true
         _G.UIDropDownMenu_AddButton(info, _G.UIDROPDOWN_MENU_LEVEL)
@@ -85,7 +55,7 @@ function QUEST:WowheadLink()
         info.text = L['Wowhead Link']
         info.func = function()
             local text = linkAchievement:format(id)
-            _G.StaticPopup_Show('WOWHEAD_LINK', _, _, text)
+            _G.StaticPopup_Show('ANDROMEDA_WOWHEAD_LINK', _, _, text)
         end
         info.notCheckable = true
         _G.UIDropDownMenu_AddButton(info, _G.UIDROPDOWN_MENU_LEVEL)

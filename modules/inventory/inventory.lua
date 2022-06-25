@@ -556,31 +556,11 @@ end
 
 local favouriteEnable
 
-local function GetCustomGroupTitle(index)
+function INVENTORY.GetCustomGroupTitle(index)
     return C.DB['Inventory']['CustomNamesList'][index] or (_G.PREFERENCES .. ' ' .. index)
 end
 
-StaticPopupDialogs['ANDROMEDA_INVENTORY_RENAME_CUSTOM_GROUP'] = {
-    text = _G.BATTLE_PET_RENAME,
-    button1 = _G.OKAY,
-    button2 = _G.CANCEL,
-    OnAccept = function(self)
-        local index = INVENTORY.selectGroupIndex
-        local text = self.editBox:GetText()
-        C.DB['Inventory']['CustomNamesList'][index] = text ~= '' and text or nil
 
-        INVENTORY.CustomMenu[index + 2].text = GetCustomGroupTitle(index)
-        INVENTORY.ContainerGroups['Bag'][index].label:SetText(GetCustomGroupTitle(index))
-        INVENTORY.ContainerGroups['Bank'][index].label:SetText(GetCustomGroupTitle(index))
-    end,
-    EditBoxOnEscapePressed = function(self)
-        self:GetParent():Hide()
-    end,
-    whileDead = 1,
-    showAlert = 1,
-    hasEditBox = 1,
-    editBoxWidth = 250,
-}
 
 function INVENTORY:RenameCustomGroup(index)
     INVENTORY.selectGroupIndex = index
@@ -627,7 +607,7 @@ local menuList = {
 function INVENTORY:CreateFavouriteButton()
     for i = 1, 5 do
         tinsert(menuList, {
-            text = GetCustomGroupTitle(i),
+            text = INVENTORY.GetCustomGroupTitle(i),
             arg1 = i,
             func = INVENTORY.MoveItemToCustomBag,
             checked = INVENTORY.IsItemInCustomBag,
@@ -699,7 +679,7 @@ function INVENTORY:CreateCustomJunkButton()
     end
     bu:SetScript('OnClick', function(self)
         if IsAltKeyDown() and IsControlKeyDown() then
-            _G.StaticPopup_Show('ANDROMEDA_RESET_JUNK_LIST')
+            _G.StaticPopup_Show('ANDROMEDA_INVENTORY_RESET_JUNK_LIST')
             return
         end
 
@@ -1251,7 +1231,7 @@ function INVENTORY:OnLogin()
         elseif name == 'BagRelic' then
             label = L['Korthia Relics']
         elseif strmatch(name, 'Custom%d') then
-            label = GetCustomGroupTitle(settings.Index)
+            label = INVENTORY.GetCustomGroupTitle(settings.Index)
         end
 
         local outline = _G.ANDROMEDA_ADB.FontOutline

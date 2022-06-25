@@ -1,4 +1,5 @@
 local F, C, L = unpack(select(2, ...))
+local INVENTORY = F:GetModule('Inventory')
 
 StaticPopupDialogs.ANDROMEDA_RELOADUI_REQUIRED = {
     text = C.RED_COLOR .. L['ReloadUI Required'],
@@ -48,7 +49,7 @@ StaticPopupDialogs.ANDROMEDA_RESET_MAJOR_SPELLS_LIST = {
     whileDead = 1,
 }
 
-StaticPopupDialogs['ANDROMEDA_RESET_PARTY_AURA_LIST'] = {
+StaticPopupDialogs.ANDROMEDA_RESET_PARTY_AURA_LIST = {
     text = C.RED_COLOR .. L['Reset to default list?'],
     button1 = _G.YES,
     button2 = _G.NO,
@@ -92,7 +93,7 @@ StaticPopupDialogs.ANDROMEDA_RESET_RAID_DEBUFFS = {
     whileDead = 1,
 }
 
-StaticPopupDialogs['ANDROMEDA_RESET_NAMEPLATE_SPECIAL_UNIT_FILTER'] = {
+StaticPopupDialogs.ANDROMEDA_RESET_NAMEPLATE_SPECIAL_UNIT_FILTER = {
     text = L['Reset to default list?'],
     button1 = _G.YES,
     button2 = _G.NO,
@@ -103,7 +104,7 @@ StaticPopupDialogs['ANDROMEDA_RESET_NAMEPLATE_SPECIAL_UNIT_FILTER'] = {
     whileDead = 1,
 }
 
-StaticPopupDialogs['ANDROMEDA_RESET_NAMEPLATE_DOT_SPELLS'] = {
+StaticPopupDialogs.ANDROMEDA_RESET_NAMEPLATE_DOT_SPELLS = {
     text = L['Reset to default list?'],
     button1 = _G.YES,
     button2 = _G.NO,
@@ -242,7 +243,7 @@ StaticPopupDialogs.ANDROMEDA_DELETE_UNIT_PROFILE = {
 }
 
 -- Inventory Custom Junk List
-StaticPopupDialogs.ANDROMEDA_RESET_JUNK_LIST = {
+StaticPopupDialogs.ANDROMEDA_INVENTORY_RESET_JUNK_LIST = {
     text = C.RED_COLOR .. L['Are you sure to reset Junk Items List?'],
     button1 = _G.YES,
     button2 = _G.NO,
@@ -253,9 +254,30 @@ StaticPopupDialogs.ANDROMEDA_RESET_JUNK_LIST = {
     whileDead = 1,
     hideOnEscape = true,
 }
+StaticPopupDialogs.ANDROMEDA_INVENTORY_RENAME_CUSTOM_GROUP = {
+    text = _G.BATTLE_PET_RENAME,
+    button1 = _G.OKAY,
+    button2 = _G.CANCEL,
+    OnAccept = function(self)
+        local index = INVENTORY.selectGroupIndex
+        local text = self.editBox:GetText()
+        C.DB['Inventory']['CustomNamesList'][index] = text ~= '' and text or nil
+
+        INVENTORY.CustomMenu[index + 2].text = INVENTORY.GetCustomGroupTitle(index)
+        INVENTORY.ContainerGroups['Bag'][index].label:SetText(INVENTORY.GetCustomGroupTitle(index))
+        INVENTORY.ContainerGroups['Bank'][index].label:SetText(INVENTORY.GetCustomGroupTitle(index))
+    end,
+    EditBoxOnEscapePressed = function(self)
+        self:GetParent():Hide()
+    end,
+    whileDead = 1,
+    showAlert = 1,
+    hasEditBox = 1,
+    editBoxWidth = 250,
+}
 
 -- Group Tool
-StaticPopupDialogs['ANDROMEDA_DISBAND_GROUP'] = {
+StaticPopupDialogs.ANDROMEDA_DISBAND_GROUP = {
     text = C.RED_COLOR .. L['Are you sure to disband your group?'],
     button1 = _G.YES,
     button2 = _G.NO,
@@ -283,4 +305,40 @@ StaticPopupDialogs['ANDROMEDA_DISBAND_GROUP'] = {
     end,
     timeout = 0,
     whileDead = 1,
+}
+
+local selfText
+StaticPopupDialogs.ANDROMEDA_WOWHEAD_LINK = {
+    text = L['Wowhead Link'],
+    button1 = _G.OKAY,
+    timeout = 0,
+    whileDead = true,
+    hasEditBox = true,
+    editBoxWidth = 350,
+
+    OnShow = function(self, text)
+        self.editBox:SetMaxLetters(0)
+        self.editBox:SetText(text)
+        self.editBox:HighlightText()
+        selfText = text
+    end,
+
+    EditBoxOnEnterPressed = function(self)
+        self:GetParent():Hide()
+    end,
+
+    EditBoxOnEscapePressed = function(self)
+        self:GetParent():Hide()
+    end,
+
+    EditBoxOnTextChanged = function(self)
+        if self:GetText():len() < 1 then
+            self:GetParent():Hide()
+        else
+            self:SetText(selfText)
+            self:HighlightText()
+        end
+    end,
+
+    preferredIndex = 5,
 }
