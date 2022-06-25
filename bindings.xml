@@ -1,0 +1,7 @@
+<Bindings>
+
+    <Binding name='ANDROMEDA_TOGGLE_GUI' category='BINDING_HEADER_ANDROMEDA' header='ANDROMEDA'>
+        ANDROMEDA[1].ToggleGUI()
+    </Binding>
+
+</Bindings>
