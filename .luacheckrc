@@ -1,8 +1,9 @@
 std = 'lua51'
 
 exclude_files = {
-    'libs/',
+    'libraries/',
     'locales/',
+    '.luacheckrc'
 }
 
 -- https://luacheck.readthedocs.io/en/stable/warnings.html#list-of-warnings
