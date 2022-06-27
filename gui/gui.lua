@@ -28,7 +28,7 @@ local tabsList = {
     L['Theme'],
     L['Profile'],
     L['About'],
-    L['Credit'],
+    L['Credits'],
 }
 
 local iconsList = {
@@ -468,30 +468,9 @@ local function CreateGUI()
     local verticalLine = F.SetGradient(guiFrame, 'V', 0.5, 0.5, 0.5, 0.25, 0.25, C.MULT, 540)
     verticalLine:SetPoint('TOPLEFT', 160, -50)
 
-    F.CreateFS(
-        guiFrame,
-        C.ASSET_PATH .. 'fonts\\header.ttf',
-        22,
-        nil,
-        F:StyleAddonName('%ADDONNAME%'),
-        nil,
-        'THICK',
-        'TOP',
-        0,
-        -4
-    )
-    F.CreateFS(
-        guiFrame,
-        C.Assets.Font.Regular,
-        10,
-        nil,
-        'Version: ' .. C.ADDON_VERSION,
-        { 0.7, 0.7, 0.7 },
-        'THICK',
-        'TOP',
-        0,
-        -30
-    )
+    local outline = _G.ANDROMEDA_ADB.FontOutline
+    F.CreateFS(guiFrame, C.ASSET_PATH .. 'fonts\\header.ttf', 22, outline, F:StyleAddonName('%ADDONNAME%'), nil, outline or 'THICK', 'TOP', 0, -4)
+    F.CreateFS(guiFrame, C.Assets.Font.Regular, 10, outline, 'Version: ' .. C.ADDON_VERSION, { 0.7, 0.7, 0.7 }, outline or 'THICK', 'TOP', 0, -30)
 
     GUI:CreateGradientLine(guiFrame, 140, -70, -26, 70, -26)
 

@@ -16,7 +16,7 @@ function GUI:CreateCreditsFrame(parent)
     F.CreateFS(
         credit,
         C.Assets.Font.Heavy,
-        20,
+        18,
         outline,
         L['Credits'],
         { 242 / 255, 211 / 255, 104 / 255 },

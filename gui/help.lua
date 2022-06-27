@@ -30,7 +30,7 @@ local strList = {
     },
 }
 
-local function FormatTextString(str)
+function GUI:FormatTextString(str)
     str = gsub(str, '&ADDON_NAME&', C.COLORFUL_ADDON_TITLE)
     str = gsub(str, '*', C.MY_CLASS_COLOR)
     str = gsub(str, '#', '|cffffeccb')
@@ -115,71 +115,27 @@ local function ConstructAnimation(f)
 end
 
 local function ConstructTextString(f)
-    f.title = F.CreateFS(
-        f,
-        C.ASSET_PATH .. 'fonts\\header.ttf',
-        56,
-        nil,
-        C.COLORFUL_ADDON_TITLE,
-        nil,
-        'THICK',
-        'TOP',
-        0,
-        -C.UI_GAP
-    )
-    f.version = F.CreateFS(
-        f,
-        C.Assets.Font.Bold,
-        12,
-        nil,
-        'Version: ' .. C.ADDON_VERSION,
-        'GREY',
-        'THICK',
-        'TOP',
-        0,
-        -90
-    )
+    f.title = F.CreateFS(f, C.ASSET_PATH .. 'fonts\\header.ttf', 56, nil, C.COLORFUL_ADDON_TITLE, nil, 'THICK', 'TOP', 0, -C.UI_GAP)
+    f.version = F.CreateFS(f, C.Assets.Font.Bold, 12, nil, 'Version: ' .. C.ADDON_VERSION, 'GREY', 'THICK', 'TOP', 0, -90)
     f.tip = F.CreateFS(f, C.Assets.Font.Bold, 12, nil, strList.tip, { 0.3, 0.3, 0.3 }, 'THICK', 'BOTTOM', 0, C.UI_GAP)
 
     local offset = 50
     for k, v in ipairs(strList.cmd.primary) do
         local a, b = string.split('~', v)
-        local str1 = FormatTextString(a)
-        local str2 = FormatTextString(b)
+        local str1 = GUI:FormatTextString(a)
+        local str2 = GUI:FormatTextString(b)
 
-        F.CreateFS(
-            f.box,
-            C.Assets.Font.Bold,
-            18,
-            nil,
-            str1,
-            { 0.7, 0.7, 0.7 },
-            'THICK',
-            'TOPLEFT',
-            0,
-            -(k * 50)
-        )
-
+        F.CreateFS(f.box, C.Assets.Font.Bold, 18, nil, str1, { 0.7, 0.7, 0.7 }, 'THICK', 'TOPLEFT', 0, -(k * 50))
         F.CreateFS(f.box, C.Assets.Font.Bold, 16, nil, str2, { 0.6, 0.6, 0.6 }, 'THICK', 'TOPLEFT', 0, -(k * 24) - offset)
+
         offset = offset + 26
     end
 
     for k, v in ipairs(strList.cmd.secondary) do
         local a, b = string.split('~', v)
-        local newStr = FormatTextString(a .. b)
+        local newStr = GUI:FormatTextString(a .. b)
 
-        F.CreateFS(
-            f.box,
-            C.Assets.Font.Bold,
-            14,
-            nil,
-            newStr,
-            { 0.6, 0.6, 0.6 },
-            'THICK',
-            'TOPLEFT',
-            0,
-            -(k * 24) - 340
-        )
+        F.CreateFS(f.box, C.Assets.Font.Bold, 14, nil, newStr, { 0.6, 0.6, 0.6 }, 'THICK', 'TOPLEFT', 0, -(k * 24) - 340)
     end
 end
 

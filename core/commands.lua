@@ -1,12 +1,13 @@
 local F, C = unpack(select(2, ...))
 local GUI = F:GetModule('GUI')
+local TUTORIAL = F:GetModule('Tutorial')
 
 F:RegisterSlashCommand('/free', function(msg)
     local str, _ = string.split(' ', string.lower(msg), 2)
     if string.match(str, 'reset') or string.match(str, 'init') then
         StaticPopup_Show('ANDROMEDA_RESET_ALL')
     elseif string.match(str, 'install') or string.match(str, 'tutorial') then
-        F:GetModule('Installation'):HelloWorld()
+        TUTORIAL:HelloWorld()
     elseif string.match(str, 'unlock') or string.match(str, 'layout') then
         F:MoverConsole()
     elseif string.match(str, 'gui') or string.match(str, 'config') then
@@ -108,10 +109,7 @@ end)
 
 -- Whisper current target
 hooksecurefunc('ChatEdit_OnSpacePressed', function(editBox)
-    if
-        editBox:GetText():sub(1, 3) == '/tt'
-        and (UnitCanCooperate('player', 'target') or UnitIsUnit('player', 'target'))
-    then
+    if editBox:GetText():sub(1, 3) == '/tt' and (UnitCanCooperate('player', 'target') or UnitIsUnit('player', 'target')) then
         editBox:SetText(_G.SLASH_SMART_WHISPER1 .. ' ' .. GetUnitName('target', true):gsub(' ', '') .. ' ')
         ChatEdit_ParseText(editBox, 0)
     end
@@ -125,8 +123,7 @@ end)
 
 -- Support cmd /way if TomTom disabled
 do
-    local pointString = C.INFO_COLOR
-        .. '|Hworldmap:%d+:%d+:%d+|h[|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a%s (%s, %s)%s]|h|r'
+    local pointString = C.INFO_COLOR .. '|Hworldmap:%d+:%d+:%d+|h[|A:Waypoint-MapPin-ChatIcon:13:13:0:0|a%s (%s, %s)%s]|h|r'
 
     local function GetCorrectCoord(x)
         x = tonumber(x)
@@ -250,10 +247,7 @@ end)
 F:RegisterSlashCommand('/iteminfo', function(msg)
     local itemID = tonumber(msg)
     if itemID then
-        local name, link, rarity, level, minLevel, type, subType, _, _, _, _, classID, subClassID, bindType =
-            GetItemInfo(
-                itemID
-            )
+        local name, link, rarity, level, minLevel, type, subType, _, _, _, _, classID, subClassID, bindType = GetItemInfo(itemID)
         if name then
             F:Print(C.LINE_STRING)
             F:Print('Name ' .. C.INFO_COLOR .. name)

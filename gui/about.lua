@@ -65,7 +65,7 @@ function GUI:CreateAboutFrame(parent)
     repo:SetSize(400, 120)
     repo:SetPoint('TOP', 0, -20)
 
-    F.CreateFS(repo, C.Assets.Font.Heavy, 20, outline, L['Development Repository'], { 242 / 255, 211 / 255, 104 / 255 }, outline or 'THICK', 'TOP', 0, -10)
+    F.CreateFS(repo, C.Assets.Font.Heavy, 18, outline, L['Development Repository'], { 242 / 255, 211 / 255, 104 / 255 }, outline or 'THICK', 'TOP', 0, -10)
 
     GUI:CreateGradientLine(repo, 120, -60, -34, 60, -34)
 
@@ -75,7 +75,7 @@ function GUI:CreateAboutFrame(parent)
     download:SetSize(400, 220)
     download:SetPoint('TOP', repo, 'BOTTOM')
 
-    F.CreateFS(download, C.Assets.Font.Heavy, 20, outline, L['Stable Version Download'], { 242 / 255, 211 / 255, 104 / 255 }, outline or 'THICK', 'TOP', 0, -10)
+    F.CreateFS(download, C.Assets.Font.Heavy, 18, outline, L['Stable Version Download'], { 242 / 255, 211 / 255, 104 / 255 }, outline or 'THICK', 'TOP', 0, -10)
 
     GUI:CreateGradientLine(download, 120, -60, -34, 60, -34)
 
@@ -87,7 +87,7 @@ function GUI:CreateAboutFrame(parent)
     feedback:SetSize(400, 220)
     feedback:SetPoint('TOP', download, 'BOTTOM')
 
-    F.CreateFS(feedback, C.Assets.Font.Heavy, 20, outline, L['Feedback'], { 242 / 255, 211 / 255, 104 / 255 }, outline or 'THICK', 'TOP', 0, -10)
+    F.CreateFS(feedback, C.Assets.Font.Heavy, 18, outline, L['Feedback'], { 242 / 255, 211 / 255, 104 / 255 }, outline or 'THICK', 'TOP', 0, -10)
 
     GUI:CreateGradientLine(feedback, 120, -60, -34, 60, -34)
 

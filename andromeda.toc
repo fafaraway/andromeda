@@ -5,7 +5,7 @@
 ## Interface: @toc-version-retail@
 ## Author: neotpravlennoye
 ## Version: @project-version@
-## Title: |cff6ea3faA|r|cff749ffcn|r|cff7b9afdd|r|cff8395fer|r|cff8c90fdo|r|cff968afcm|r|cffa083fae|r|cffaa7cf7d|r|cffb575f3a|r|cffc06ceeU|r|cffca63e8I|r
+## Title: |cff7269e5A|r|cff826fe2n|r|cff9076e0d|r|cff9d7dddr|r|cffaa84dao|r|cffb58bd7m|r|cffc192d4e|r|cffcb99d1d|r|cffd6a0cea|r|cffe0a8cbU|r|cffeaafc8I|r
 ## Notes: A user interface replacement for World of Warcraft.
 ## SavedVariables: ANDROMEDA_ADB, ANDROMEDA_PDB
 ## SavedVariablesPerCharacter: ANDROMEDA_CDB
@@ -17,12 +17,12 @@
 ## X-WoWI-ID: 23258
 ## X-Wago-ID: 0mNw8l6o
 
-libs\taintless.xml
-libs\libs.xml
-init.lua
-locales\locales.xml
-core\core.xml
-config\config.xml
-modules\modules.xml
-gui\gui.xml
+libraries\taintless.xml
+libraries\_loader.xml
+core\init.lua
+locales\_loader.xml
+core\_loader.xml
+config\_loader.xml
+modules\_loader.xml
+gui\_loader.xml
 

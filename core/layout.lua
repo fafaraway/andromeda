@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local M = F:RegisterModule('Layout')
+local M = F:GetModule('Layout')
 
 -- Grids
 local toggle = 0

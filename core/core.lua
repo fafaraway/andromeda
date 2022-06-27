@@ -20,6 +20,7 @@ do
     F:RegisterModule('GUI')
     F:RegisterModule('InfoBar')
     F:RegisterModule('Inventory')
+    F:RegisterModule('Layout')
     F:RegisterModule('Map')
     F:RegisterModule('Misc')
     F:RegisterModule('Nameplate')
@@ -27,6 +28,7 @@ do
     F:RegisterModule('Quest')
     F:RegisterModule('Theme')
     F:RegisterModule('Tooltip')
+    F:RegisterModule('Tutorial')
     F:RegisterModule('UnitFrame')
     F:RegisterModule('Vignetting')
 end
