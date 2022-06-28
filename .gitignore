@@ -1,6 +1,6 @@
 /__pycache__/
 /.vscode/
-/tools/
 *.code-workspace
 *.psd
+*.exe
 

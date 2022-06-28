@@ -108,10 +108,10 @@ def update_locales(keys, old: {str: str}, del_no_use: bool = True) -> {str: str}
 
 #
 
-addon_path = "./"
+addon_path = "../"
 
 # Scan all locale strings
-files = get_files(addon_path, ignore=["git", "github", "vscode", "locales", "libraries"])
+files = get_files(addon_path, ignore=[".git", ".github", ".vscode", "locales", "libraries", "utils"])
 keys = generate_keys(files)
 keys.sort()
 
