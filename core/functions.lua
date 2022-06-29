@@ -408,24 +408,29 @@ do
             fs:SetText(text)
         end
 
+        local r, g, b
+        if  colour == 'CLASS' then
+            r, g, b = C.r, C.g, C.b
+        elseif colour == 'INFO' then
+            r, g, b = F:HexToRgb(C.INFO_COLOR)
+        elseif colour == 'YELLOW' then
+            r, g, b = F:HexToRgb(C.YELLOW_COLOR)
+        elseif colour == 'RED' then
+            r, g, b = F:HexToRgb(C.RED_COLOR)
+        elseif colour == 'GREEN' then
+            r, g, b = F:HexToRgb(C.GREEN_COLOR)
+        elseif colour == 'BLUE' then
+            r, g, b = F:HexToRgb(C.BLUE_COLOR)
+        elseif colour == 'GREY' then
+            r, g, b = F:HexToRgb(C.GREY_COLOR)
+        else
+            r, g, b = 255, 255, 255
+        end
+
         if type(colour) == 'table' then
             fs:SetTextColor(colour[1], colour[2], colour[3])
-        elseif colour == 'CLASS' then
-            fs:SetTextColor(C.r, C.g, C.b)
-        elseif colour == 'INFO' then
-            fs:SetTextColor(0.9, 0.82, 0.62)
-        elseif colour == 'YELLOW' then
-            fs:SetTextColor(1, 0.8, 0)
-        elseif colour == 'RED' then
-            fs:SetTextColor(1, 0.15, 0.21)
-        elseif colour == 'GREEN' then
-            fs:SetTextColor(0.23, 0.62, 0.21)
-        elseif colour == 'BLUE' then
-            fs:SetTextColor(0.6, 0.8, 1)
-        elseif colour == 'GREY' then
-            fs:SetTextColor(0.5, 0.5, 0.5)
         else
-            fs:SetTextColor(1, 1, 1)
+            fs:SetTextColor(r / 255, g / 255, b / 255)
         end
 
         if type(shadow) == 'boolean' then
@@ -438,7 +443,9 @@ do
             fs:SetShadowColor(0, 0, 0, 0)
         end
 
-        if anchor and x and y then
+        if type(anchor) == 'table' then
+            fs:SetPoint(unpack(anchor))
+        elseif anchor and x and y then
             fs:SetPoint(anchor, x, y)
         else
             fs:SetPoint('CENTER', 1, 0)
@@ -458,22 +465,29 @@ do
             object:SetText(text)
         end
 
+        local r, g, b
+        if  colour == 'CLASS' then
+            r, g, b = C.r, C.g, C.b
+        elseif colour == 'INFO' then
+            r, g, b = F:HexToRgb(C.INFO_COLOR)
+        elseif colour == 'YELLOW' then
+            r, g, b = F:HexToRgb(C.YELLOW_COLOR)
+        elseif colour == 'RED' then
+            r, g, b = F:HexToRgb(C.RED_COLOR)
+        elseif colour == 'GREEN' then
+            r, g, b = F:HexToRgb(C.GREEN_COLOR)
+        elseif colour == 'BLUE' then
+            r, g, b = F:HexToRgb(C.BLUE_COLOR)
+        elseif colour == 'GREY' then
+            r, g, b = F:HexToRgb(C.GREY_COLOR)
+        else
+            r, g, b = 255, 255, 255
+        end
+
         if type(colour) == 'table' then
             object:SetTextColor(colour[1], colour[2], colour[3])
-        elseif type(colour) == 'string' then
-            if colour == 'CLASS' then
-                object:SetTextColor(C.r, C.g, C.b)
-            elseif colour == 'YELLOW' then
-                object:SetTextColor(0.9, 0.8, 0.6)
-            elseif colour == 'RED' then
-                object:SetTextColor(1, 0.2, 0.2)
-            elseif colour == 'GREEN' then
-                object:SetTextColor(0.2, 0.6, 0.2)
-            elseif colour == 'BLUE' then
-                object:SetTextColor(0.6, 0.8, 1)
-            elseif colour == 'GREY' then
-                object:SetTextColor(0.5, 0.5, 0.5)
-            end
+        else
+            object:SetTextColor(r / 255, g / 255, b / 255)
         end
 
         if type(shadow) == 'boolean' then
