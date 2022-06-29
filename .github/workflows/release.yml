@@ -10,6 +10,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        shell: bash
+
     env:
       GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
       WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
@@ -35,24 +39,18 @@ jobs:
       - name: Package and release
         uses: BigWigsMods/packager@v2
 
-      - name: failure notification
-        uses: rjstone/discord-webhook-notify@v1
+      - name: Create changelog text
+        id: changelog
+        uses: loopwerk/tag-changelog@v1
         with:
-            severity: error
-            username: Rick Bot
-            avatarUrl: https://cdn.discordapp.com/attachments/751929844920614932/934170534755860560/rick.png
-            description: 'FAILURE'
-            webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL_PRIVATE }}
-        if: failure()
+          token: ${{ secrets.GITHUB_TOKEN }}
+          config_file: .utils/tag_changelog_config.js
 
-      - name: Release notification
-        uses: rjstone/discord-webhook-notify@v1
+      - name: "Crosspost changelog to Discord"
+        uses: kludge-cs/gitcord-release-changelogger@v3.0.0
         with:
-            severity: info
-            username: Morty Bot
-            avatarUrl: https://cdn.discordapp.com/attachments/751929844920614932/934170534458056804/morty.png
-            text: '@here update available'
-            description: '${{ github.event.repository.name }} ${{ github.ref_name }} has been released.'
-            details: 'Please note that this is a STABLE version and it is recommended to update it as soon as possible.'
-            footer: '⭐ Stable Release'
-            webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          username: "Morty-Bot"
+          avatar-url: "https://cdn.discordapp.com/attachments/751929844920614932/934170534458056804/morty.png"
+          release-name: "${{ github.event.repository.name }}: new stable version has been released."
+          release-body: ${{ steps.changelog.outputs.changelog }}
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}

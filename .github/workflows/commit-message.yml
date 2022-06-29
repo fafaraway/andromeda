@@ -1,4 +1,4 @@
-name: discord-push
+name: commit message
 
 on:
   push:
@@ -11,7 +11,7 @@ jobs:
 
     steps:
     - name: Push commit message to discord
-      uses: Mist3r-Robot/classic-discord-webhook@main
+      uses: baked-libs/discord-webhook@main
       with:
         id: ${{ secrets.DISCORD_WEBHOOK_ID_PRIVATE }}
         token: ${{ secrets.DISCORD_WEBHOOK_TOKEN_PRIVATE }}

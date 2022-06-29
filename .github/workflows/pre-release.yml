@@ -9,8 +9,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        shell: bash
+
     env:
       GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
+      WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
+      CF_API_KEY: ${{ secrets.CF_API_KEY }}
+      WAGO_API_TOKEN: ${{ secrets.WAGO_API_TOKEN }}
 
     steps:
       - name: Clone project
@@ -31,26 +38,20 @@ jobs:
       - name: Package and release
         uses: BigWigsMods/packager@v2
 
-      - name: failure notification
-        uses: rjstone/discord-webhook-notify@v1
+      - name: Create changelog text
+        id: changelog
+        uses: loopwerk/tag-changelog@v1
         with:
-            severity: error
-            username: Rick Bot
-            avatarUrl: https://cdn.discordapp.com/attachments/751929844920614932/934170534755860560/rick.png
-            description: 'FAILURE'
-            webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL_PRIVATE }}
-        if: failure()
+          token: ${{ secrets.GITHUB_TOKEN }}
+          config_file: .utils/tag_changelog_config.js
 
-      - name: Release notification
-        uses: rjstone/discord-webhook-notify@v1
+      - name: "Crosspost changelog to Discord"
+        uses: kludge-cs/gitcord-release-changelogger@v3.0.0
         with:
-            severity: warn
-            username: Rick Bot
-            avatarUrl: https://cdn.discordapp.com/attachments/751929844920614932/934170534755860560/rick.png
-            text: '@here update available'
-            description: '${{ github.event.repository.name }} ${{ github.ref_name }} has been released.'
-            details: 'Please note that this is a BETA version and can only be downloaded from Github. https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}/releases/download/${{ github.ref_name }}/${{ github.event.repository.name }}-${{ github.ref_name }}.zip'
-            footer: '⚡ Beta Release'
-            webhookUrl: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          username: "Rick-Bot"
+          avatar-url: "https://cdn.discordapp.com/attachments/751929844920614932/934170534755860560/rick.png"
+          release-name: "${{ github.event.repository.name }}: new **BETA** version has been released ⚡"
+          release-body: ${{ steps.changelog.outputs.changelog }}
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
 
 
