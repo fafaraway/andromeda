@@ -3,7 +3,7 @@
 # ![Logo](https://i.imgur.com/Ap439Tr.png)
 [![WoW](https://img.shields.io/badge/WoW-Retail-f6e36a)]()
 [![Discord Channel](https://img.shields.io/discord/242811601260904450?color=7289DA&label=Discord)](https://discord.gg/86wbfZXxn7)
-[![QQ群](https://img.shields.io/badge/QQ群-203621176-f66a8d)](https://qm.qq.com/cgi-bin/qm/qr?k=ogz72zoE_fczw2Umsma71XALjWitQ3zk)
+[![QQ群](https://img.shields.io/badge/QQ群-203621176-f66a8d)](https://jq.qq.com/?_wv=1027&k=LStIpBBc)
 [![License](https://img.shields.io/github/license/neotpravlennoye/andromeda)](https://github.com/neotpravlennoye/andromeda/blob/development/LICENSE)
 [![Build Status](https://img.shields.io/github/workflow/status/neotpravlennoye/andromeda/Release)](https://github.com/neotpravlennoye/andromeda/actions)
 [![Latest Release](https://img.shields.io/github/v/release/neotpravlennoye/andromeda)](https://github.com/neotpravlennoye/andromeda/releases)
@@ -26,7 +26,7 @@ Accompany you through every challenging day in **Azeroth**. 💖💖💖
 ## Feedback
 *  Report issues on [GitHub](https://github.com/Solor/FreeUI/issues)
 *  Join discord channel [https://discord.gg/86wbfZXxn7](https://discord.gg/86wbfZXxn7)
-*  加入QQ群 [203621176](https://qm.qq.com/cgi-bin/qm/qr?k=ogz72zoE_fczw2Umsma71XALjWitQ3zk)
+*  加入QQ群 [203621176](https://jq.qq.com/?_wv=1027&k=LStIpBBc)
 
 ## Download
 *  Stable versions of **Andromeda** are automatically and synchronously released to various addon sites and can be downloaded or updated using third-party addon management software.
