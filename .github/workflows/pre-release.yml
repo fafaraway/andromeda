@@ -43,15 +43,13 @@ jobs:
         uses: loopwerk/tag-changelog@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          config_file: .utils/tag_changelog_config.js
+          config_file: .github/tag-changelog-config.js
 
-      - name: "Crosspost changelog to Discord"
+      - name: 'Crosspost changelog to Discord'
         uses: kludge-cs/gitcord-release-changelogger@v3.0.0
         with:
-          username: "Rick-Bot"
-          avatar-url: "https://cdn.discordapp.com/attachments/751929844920614932/934170534755860560/rick.png"
-          release-name: "${{ github.event.repository.name }}: new **BETA** version has been released ⚡"
+          username: 'Rick-Bot'
+          avatar-url: 'https://cdn.discordapp.com/attachments/751929844920614932/934170534755860560/rick.png'
+          release-name: '${{ github.event.repository.name }}: new test version has been released.'
           release-body: ${{ steps.changelog.outputs.changelog }}
           webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-
-
