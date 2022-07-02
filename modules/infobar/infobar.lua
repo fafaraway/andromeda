@@ -191,7 +191,7 @@ end
 local function BorderAnim_OnEvent(event)
     local bar = INFOBAR.Bar
     if event == 'PLAYER_REGEN_DISABLED' then
-        bar.bg:SetBackdropBorderColor(1, 0, 0)
+        bar.bg:SetBackdropBorderColor(C.r, C.g, C.b)
         bar.anim:Play()
     elseif not InCombatLockdown() then
         if C_Calendar.GetNumPendingInvites() > 0 then
