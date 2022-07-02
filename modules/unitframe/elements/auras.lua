@@ -89,8 +89,10 @@ function UNITFRAME.PostCreateIcon(element, button)
     local font = C.Assets.Font.Roadway
     local fontSize = math.max((element.width or element.size) * 0.4, 12)
     button.count = F.CreateFS(button, font, fontSize, true, nil, nil, true)
+    button.count:ClearAllPoints()
     button.count:SetPoint('RIGHT', button, 'TOPRIGHT')
     button.timer = F.CreateFS(button, font, fontSize, true, nil, nil, true)
+    button.timer:ClearAllPoints()
     button.timer:SetPoint('LEFT', button, 'BOTTOMLEFT')
 
     button.UpdateTooltip = UpdateAuraTooltip
