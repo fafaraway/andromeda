@@ -410,7 +410,7 @@ do
 
         local r, g, b
         if  colour == 'CLASS' then
-            r, g, b = C.r, C.g, C.b
+            r, g, b = F:HexToRgb(C.MY_CLASS_COLOR)
         elseif colour == 'INFO' then
             r, g, b = F:HexToRgb(C.INFO_COLOR)
         elseif colour == 'YELLOW' then
@@ -467,7 +467,7 @@ do
 
         local r, g, b
         if  colour == 'CLASS' then
-            r, g, b = C.r, C.g, C.b
+            r, g, b = F:HexToRgb(C.MY_CLASS_COLOR)
         elseif colour == 'INFO' then
             r, g, b = F:HexToRgb(C.INFO_COLOR)
         elseif colour == 'YELLOW' then
@@ -636,7 +636,6 @@ do
 
     -- Gradient Frame
     local orientationAbbr = { ['V'] = 'Vertical', ['H'] = 'Horizontal' }
-
     function F:SetGradient(orientation, r, g, b, a1, a2, width, height)
         orientation = orientationAbbr[orientation]
         if not orientation then
