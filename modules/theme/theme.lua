@@ -38,70 +38,72 @@ function THEME:LoadAddOnSkins()
     THEME:LoadSkins(C.AddonThemes) -- other addons
 
     F:RegisterEvent('ADDON_LOADED', function(_, addonName)
-        local func = C.Themes[addonName]
-        if func then
-            func()
+        local blizzFunc = C.Themes[addonName]
+        if blizzFunc then
+            blizzFunc()
             C.Themes[addonName] = nil
         end
 
-        local afunc = C.AddonThemes[addonName]
-        if afunc then
-            afunc()
+        local addonFunc = C.AddonThemes[addonName]
+        if addonFunc then
+            addonFunc()
             C.AddonThemes[addonName] = nil
         end
     end)
 end
 
-local function ReskinTimerBar(bar)
-    bar:SetSize(200, 18)
-    F.StripTextures(bar)
+do
+    local function ReskinTimerBar(bar)
+        bar:SetSize(200, 18)
+        F.StripTextures(bar)
 
-    local statusbar = _G[bar:GetName() .. 'StatusBar']
-    if statusbar then
-        statusbar:SetAllPoints()
-        statusbar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
-    else
-        bar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
+        local statusbar = _G[bar:GetName() .. 'StatusBar']
+        if statusbar then
+            statusbar:SetAllPoints()
+            statusbar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
+        else
+            bar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
+        end
+
+        bar.bg = F.SetBD(bar)
+        bar.bg:SetBackdropBorderColor(0, 0, 0)
     end
 
-    bar.bg = F.SetBD(bar)
-    bar.bg:SetBackdropBorderColor(0, 0, 0)
-end
+    local function UpdateTimerTracker()
+        for _, timer in pairs(_G.TimerTracker.timerList) do
+            if timer.bar and not timer.bar.styled then
+                ReskinTimerBar(timer.bar)
 
-local function UpdateTimerTracker()
-    for _, timer in pairs(_G.TimerTracker.timerList) do
-        if timer.bar and not timer.bar.styled then
-            ReskinTimerBar(timer.bar)
-
-            timer.bar.styled = true
+                timer.bar.styled = true
+            end
         end
     end
-end
 
-local function ReskinMirrorBars()
-    local previous
-    for i = 1, 3 do
-        local bar = _G['MirrorTimer' .. i]
-        ReskinTimerBar(bar)
+    local function ReskinMirrorBars()
+        local previous
+        for i = 1, 3 do
+            local bar = _G['MirrorTimer' .. i]
+            ReskinTimerBar(bar)
 
-        local text = _G['MirrorTimer' .. i .. 'Text']
-        text:ClearAllPoints()
-        text:SetPoint('CENTER', bar)
+            local text = _G['MirrorTimer' .. i .. 'Text']
+            text:ClearAllPoints()
+            text:SetPoint('CENTER', bar)
 
-        if previous then
-            bar:SetPoint('TOP', previous, 'BOTTOM', 0, -5)
+            if previous then
+                bar:SetPoint('TOP', previous, 'BOTTOM', 0, -5)
+            end
+            previous = bar
         end
-        previous = bar
-    end
-end
-
-function THEME:ReskinBlizzBars()
-    if not _G.ANDROMEDA_ADB.ReskinBlizz then
-        return
     end
 
-    ReskinMirrorBars()
-    F:RegisterEvent('START_TIMER', UpdateTimerTracker)
+    function THEME:ReskinBlizzBars()
+        if not _G.ANDROMEDA_ADB.ReskinBlizz then
+            return
+        end
+
+        ReskinMirrorBars()
+        F:RegisterEvent('START_TIMER', UpdateTimerTracker)
+    end
 end
 
 function THEME:OnLogin()

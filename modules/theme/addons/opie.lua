@@ -35,6 +35,10 @@ function methods:SetHighlighted(highlight)
 end
 
 local function constructor(name, parent, size)
+    if not _G.ANDROMEDA_ADB.ReskinOpie then
+        return
+    end
+
     local button = CreateFrame('CheckButton', name, parent, 'ActionButtonTemplate')
     button:SetSize(size, size)
     button:EnableMouse(false)
@@ -58,8 +62,5 @@ local function constructor(name, parent, size)
 end
 
 F:HookAddOn('OPie', function()
-    _G.OPie.UI:RegisterIndicatorConstructor(
-        C.ADDON_TITLE,
-        { name = C.ADDON_TITLE, apiLevel = 1, CreateIndicator = constructor }
-    )
+    _G.OPie.UI:RegisterIndicatorConstructor(C.ADDON_TITLE, { name = C.ADDON_TITLE, apiLevel = 1, CreateIndicator = constructor })
 end)

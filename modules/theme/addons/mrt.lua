@@ -69,6 +69,10 @@ function THEME:ReskinMRT()
         return
     end
 
+    if not _G.ANDROMEDA_ADB.ReskinMethodRaidTools then
+        return
+    end
+
     local isEnabled = _G.VMRT and _G.VMRT.ExCD2 and _G.VMRT.ExCD2.enabled
     if isEnabled then
         LoadMRTSkin()

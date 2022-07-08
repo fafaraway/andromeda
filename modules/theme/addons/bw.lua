@@ -83,7 +83,7 @@ local styleData = {
 }
 
 function THEME:RegisterBigWigsStyle()
-    if not _G.ANDROMEDA_ADB.ReskinAddons then
+    if not _G.ANDROMEDA_ADB.ReskinBigWigs then
         return
     end
 
@@ -109,7 +109,7 @@ function THEME:RegisterBigWigsStyle()
 end
 
 function THEME:RestyleBigWigsQueueTimer()
-    if not _G.ANDROMEDA_ADB.ReskinAddons then
+    if not _G.ANDROMEDA_ADB.ReskinBigWigs then
         return
     end
 
@@ -131,13 +131,6 @@ function THEME:RestyleBigWigsQueueTimer()
                 frame.styled = true
             end
         end)
-
-        -- BigWigsLoader.RegisterMessage(C.ADDON_TITLE, 'EmphasizedPrint', function(_, text)
-        --     if text and not text.styled then
-
-        --         text.styled = true
-        --     end
-        -- end)
     end
 end
 

@@ -68,7 +68,7 @@ local function RestyleObject(f, fType)
 end
 
 local function RestyleWeakAuras()
-    if not _G.ANDROMEDA_ADB.ReskinAddons then
+    if not _G.ANDROMEDA_ADB.ReskinWeakAuras then
         return
     end
 

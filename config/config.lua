@@ -591,6 +591,17 @@ C.AccountSettings = {
     GradientStyle = true,
     ReskinBlizz = true,
     ReskinAddons = true,
+
+    ReskinDeadlyBossMods = true,
+    ReskinBigWigs = true,
+    ReskinWeakAuras = true,
+    ReskinMethodRaidTools = true,
+    ReskinDetails = true,
+    ReskinImmersion = true,
+    ReskinOpie = true,
+    ReskinPremadeGroupsFilter = true,
+    ReskinREHack = true,
+
     NumberFormat = 1,
     FontOutline = false,
     WorldTextScale = 1,

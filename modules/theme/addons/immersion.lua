@@ -14,10 +14,7 @@ local function UpdateItemBorder(self)
         local name, texture, numItems, quality = GetQuestCurrencyInfo(self.type, self:GetID())
         local currencyID = GetQuestCurrencyID(self.type, self:GetID())
         if name and texture and numItems and quality and currencyID then
-            local currencyQuality = select(
-                4,
-                _G.CurrencyContainerUtil.GetCurrencyContainerInfo(currencyID, numItems, name, texture, quality)
-            )
+            local currencyQuality = select(4, _G.CurrencyContainerUtil.GetCurrencyContainerInfo(currencyID, numItems, name, texture, quality))
             local color = C.QualityColors[currencyQuality or 1]
             self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
         end
@@ -126,6 +123,10 @@ local function ReskinTooltip(self)
 end
 
 local function ReskinImmersion()
+    if not _G.ANDROMEDA_ADB.ReskinImmersion then
+        return
+    end
+
     local cr, cg, cb = C.r, C.g, C.b
 
     local talkBox = _G.ImmersionFrame.TalkBox
@@ -140,7 +141,7 @@ local function ReskinImmersion()
 
     local mainFrame = talkBox.MainFrame
     F.StripTextures(mainFrame)
-    F.SetBD(mainFrame, 0.45)
+    F.SetBD(mainFrame)
 
     local elements = talkBox.Elements
     F.StripTextures(elements)
