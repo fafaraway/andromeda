@@ -5,13 +5,15 @@ local strList = {
     tip = L['Double click left mouse button or press ESC key to exit this screen.'],
     cmd = {
         primary = {
-            [0] = L['*/free|r @--|r#install|r @or|r */free|r @--|r#tutorial|r ~ Open tutorial panel.'],
-            [1] = L['*/free|r @--|r#gui|r @or|r */free|r @--|r#config|r ~ Open GUI panel.'],
-            [2] = L['*/free|r @--|r#unlock|r @or|r */free|r @--|r#layout|r ~ Unlock &ADDON_NAME& interface to allow you to freely drag and drop the elements.'],
-            [3] = L['*/free|r @--|r#reset|r @or|r */free|r @--|r#init|r ~ Initialize &ADDON_NAME& and all settings will be reset to their default state.'],
-            [4] = L['*/free|r @--|r#ver|r @or|r */free|r @--|r#version|r ~ Output the current version number of &ADDON_NAME&.'],
-            [5] = L['*/free|r @--|r#help|r @or|r */free|r @--|r#command|r ~ View all available commands.'],
-            [6] = L['*/free|r @--|r#discord|r @or|r */free|r @--|r#feedback|r ~ Output the discord channel link of &ADDON_NAME&.'],
+            [0] = L['*/and|r @--|r#install|r @or|r */and|r @--|r#tutorial|r ~ Open the installation/tutorial panel.'],
+            [1] = L['*/and|r @--|r#gui|r @or|r */and|r @--|r#config|r ~ Open the control panel.'],
+            [2] = L['*/and|r @--|r#unlock|r @or|r */and|r @--|r#layout|r ~ Unlock the UI to freely move the position of each component.'],
+            [3] = L['*/and|r @--|r#reset|r @or|r */and|r @--|r#init|r ~ Initialize all settings and restore them to their default values.'],
+            [4] = L['*/and|r @--|r#ver|r @or|r */and|r @--|r#version|r ~ Show the current version number.'],
+            [5] = L['*/and|r @--|r#help|r @or|r */and|r @--|r#cheatsheet|r ~ Show all available command lines.'],
+            [6] = L['*/and|r @--|r#about|r ~ Show the basic information.'],
+            [7] = L['*/and|r @--|r#credits|r ~ Show the list of acknowledgements.'],
+            [8] = L['*/and|r @--|r#logo|r ~ Show the logo animation.'],
         },
         secondary = {
             [1] = L['*/lg|r ~ Leave the current group, support both party and raid.'],
@@ -115,9 +117,12 @@ local function ConstructAnimation(f)
 end
 
 local function ConstructTextString(f)
-    f.title = F.CreateFS(f, C.ASSET_PATH .. 'fonts\\header.ttf', 56, nil, C.COLORFUL_ADDON_TITLE, nil, 'THICK', 'TOP', 0, -C.UI_GAP)
-    f.version = F.CreateFS(f, C.Assets.Font.Bold, 12, nil, 'Version: ' .. C.ADDON_VERSION, 'GREY', 'THICK', 'TOP', 0, -90)
-    f.tip = F.CreateFS(f, C.Assets.Font.Bold, 12, nil, strList.tip, { 0.3, 0.3, 0.3 }, 'THICK', 'BOTTOM', 0, C.UI_GAP)
+    local outline = _G.ANDROMEDA_ADB.FontOutline
+    f.title = F.CreateFS(f, C.ASSET_PATH .. 'fonts\\header.ttf', 56, outline, C.COLORFUL_ADDON_TITLE, nil, outline or 'THICK', 'TOP', 0, -C.UI_GAP)
+    f.version = F.CreateFS(f, C.Assets.Font.Condensed, 12, outline, 'Version: ' .. C.ADDON_VERSION, { 0.7, 0.7, 0.7 }, outline or 'THICK', 'TOP', 0, -100)
+    f.tip = F.CreateFS(f, C.Assets.Font.Bold, 10, outline, strList.tip, { 0.3, 0.3, 0.3 }, outline or 'THICK', 'BOTTOM', 0, C.UI_GAP)
+
+    GUI:CreateGradientLine(f, 300, -150, -90, 150, -90)
 
     local offset = 50
     for k, v in ipairs(strList.cmd.primary) do
@@ -125,8 +130,8 @@ local function ConstructTextString(f)
         local str1 = GUI:FormatTextString(a)
         local str2 = GUI:FormatTextString(b)
 
-        F.CreateFS(f.box, C.Assets.Font.Bold, 18, nil, str1, { 0.7, 0.7, 0.7 }, 'THICK', 'TOPLEFT', 0, -(k * 50))
-        F.CreateFS(f.box, C.Assets.Font.Bold, 16, nil, str2, { 0.6, 0.6, 0.6 }, 'THICK', 'TOPLEFT', 0, -(k * 24) - offset)
+        F.CreateFS(f.lbox, C.Assets.Font.Bold, 18, outline, str1, { 0.7, 0.7, 0.7 }, outline or 'THICK', 'TOPLEFT', 0, -(k * 50))
+        F.CreateFS(f.lbox, C.Assets.Font.Condensed, 16, outline, str2, { 0.6, 0.6, 0.6 }, outline or 'THICK', 'TOPLEFT', 0, -(k * 24) - offset)
 
         offset = offset + 26
     end
@@ -135,7 +140,7 @@ local function ConstructTextString(f)
         local a, b = string.split('~', v)
         local newStr = GUI:FormatTextString(a .. b)
 
-        F.CreateFS(f.box, C.Assets.Font.Bold, 14, nil, newStr, { 0.6, 0.6, 0.6 }, 'THICK', 'TOPLEFT', 0, -(k * 24) - 340)
+        F.CreateFS(f.rbox, C.Assets.Font.Bold, 14, outline, newStr, { 0.6, 0.6, 0.6 }, outline or 'THICK', 'TOPLEFT', 0, -(k * 24) - 26)
     end
 end
 
@@ -157,9 +162,17 @@ function GUI:CreateCheatSheet()
     f.bg = F.SetBD(f)
     f.bg:SetBackdropColor(0, 0, 0, 0.7)
 
-    f.box = CreateFrame('Frame', nil, f)
-    f.box:SetSize(800, 700)
-    f.box:SetPoint('TOP', f, 0, -100)
+    -- f.box = CreateFrame('Frame', nil, f)
+    -- f.box:SetSize(500, 700)
+    -- f.box:SetPoint('TOP', f, 0, -100)
+
+    f.lbox = CreateFrame('Frame', nil, f)
+    f.lbox:SetSize(400, 600)
+    f.lbox:SetPoint('TOPRIGHT', f, 'TOP', -20, -140)
+
+    f.rbox = CreateFrame('Frame', nil, f)
+    f.rbox:SetSize(400, 600)
+    f.rbox:SetPoint('TOPLEFT', f, 'TOP', 20, -140)
 
     ConstructAnimation(f)
     ConstructTextString(f)

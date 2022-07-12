@@ -66,6 +66,15 @@ GUI.TexturesList = {
     },
 }
 
+function GUI:FormatTextString(str)
+    str = gsub(str, '&ADDON_NAME&', C.COLORFUL_ADDON_TITLE)
+    str = gsub(str, '*', C.MY_CLASS_COLOR)
+    str = gsub(str, '#', '|cffffeccb')
+    str = gsub(str, '@', C.GREY_COLOR)
+
+    return str
+end
+
 local function AddTextureToOption(parent, index)
     local tex = parent[index]:CreateTexture()
     tex:SetInside(nil, 4, 4)
@@ -289,7 +298,7 @@ local function updateDropdownClick(self)
     end
 end
 
-local function CreateOption(i)
+local function CreateOptions(i)
     local parent, offset = guiPage[i].child, 20
     local outline = _G.ANDROMEDA_ADB.FontOutline
 
@@ -450,7 +459,7 @@ local function ScrollBar_OnMouseWheel(self, delta)
     scrollBar:SetValue(scrollBar:GetValue() - delta * 35)
 end
 
-local function CreateGUI()
+local function CreateConsole(tabIndex)
     if _G[C.ADDON_TITLE .. 'GUI'] then
         _G[C.ADDON_TITLE .. 'GUI']:Show()
         return
@@ -469,8 +478,9 @@ local function CreateGUI()
     verticalLine:SetPoint('TOPLEFT', 160, -50)
 
     local outline = _G.ANDROMEDA_ADB.FontOutline
-    F.CreateFS(guiFrame, C.ASSET_PATH .. 'fonts\\header.ttf', 22, outline, F:StyleAddonName('%ADDONNAME%'), nil, outline or 'THICK', 'TOP', 0, -4)
-    F.CreateFS(guiFrame, C.Assets.Font.Regular, 10, outline, 'Version: ' .. C.ADDON_VERSION, { 0.7, 0.7, 0.7 }, outline or 'THICK', 'TOP', 0, -30)
+    local verStr = string.format('%s: %s', L['Version'], C.ADDON_VERSION)
+    F.CreateFS(guiFrame, C.ASSET_PATH .. 'fonts\\header.ttf', 22, outline, C.COLORFUL_ADDON_TITLE, nil, outline or 'THICK', 'TOP', 0, -4)
+    F.CreateFS(guiFrame, C.Assets.Font.Condensed, 10, outline, verStr, { 0.7, 0.7, 0.7 }, outline or 'THICK', 'TOP', 0, -30)
 
     GUI:CreateGradientLine(guiFrame, 140, -70, -26, 70, -26)
 
@@ -513,17 +523,21 @@ local function CreateGUI()
         F.ReskinScroll(guiPage[i].ScrollBar)
         guiPage[i]:SetScript('OnMouseWheel', ScrollBar_OnMouseWheel)
 
-        CreateOption(i)
+        CreateOptions(i)
     end
 
-    GUI:CreateProfileGUI(guiPage[15])
+    GUI:CreateProfileFrame(guiPage[15])
     GUI:CreateAboutFrame(guiPage[16])
     GUI:CreateCreditsFrame(guiPage[17])
 
-    SelectTab(1)
+    if tabIndex then
+        SelectTab(tabIndex)
+    else
+        SelectTab(1)
+    end
 end
 
-function F.ToggleGUI()
+function F.ToggleConsole(index)
     if _G[C.ADDON_TITLE .. 'GUI'] then
         if _G[C.ADDON_TITLE .. 'GUI']:IsShown() then
             _G[C.ADDON_TITLE .. 'GUI']:Hide()
@@ -531,9 +545,13 @@ function F.ToggleGUI()
             _G[C.ADDON_TITLE .. 'GUI']:Show()
         end
     else
-        CreateGUI()
+        if index then
+            CreateConsole(index)
+        else
+            CreateConsole()
+        end
     end
-    _G.PlaySound(_G.SOUNDKIT.IG_MAINMENU_OPTION)
+    PlaySound(_G.SOUNDKIT.IG_MAINMENU_OPTION)
 end
 
 local function MainMenu_OnShow(self)
@@ -568,8 +586,8 @@ local function Button_OnClick()
         return
     end
 
-    CreateGUI()
-    _G.HideUIPanel(_G.GameMenuFrame)
+    CreateConsole()
+    HideUIPanel(_G.GameMenuFrame)
 
     PlaySound(_G.SOUNDKIT.IG_MAINMENU_OPTION)
 end
@@ -577,8 +595,9 @@ end
 local function CreateGameMenuButton()
     local bu = CreateFrame('Button', 'GameMenuButton' .. C.ADDON_TITLE, _G.GameMenuFrame, 'GameMenuButtonTemplate')
     bu:SetText(C.COLORFUL_ADDON_TITLE)
-    -- bu.Text:SetFont(C.Assets.Font.Bold, 13, _G.ANDROMEDA_ADB.FontOutline and 'OUTLINE' or nil)
     bu:SetPoint('TOP', _G.GameMenuButtonAddons, 'BOTTOM', 0, -14)
+    bu:SetScript('OnClick', Button_OnClick)
+
     if _G.ANDROMEDA_ADB.ReskinBlizz then
         F.Reskin(bu)
     end
@@ -586,11 +605,12 @@ local function CreateGameMenuButton()
     GUI.GameMenuButton = bu
 
     _G.GameMenuFrame:HookScript('OnShow', MainMenu_OnShow)
-    bu:SetScript('OnClick', Button_OnClick)
 end
 
 function GUI:OnLogin()
     CreateGameMenuButton()
+
+    GUI:CreateAbout()
     GUI:CreateCheatSheet()
 
     F:RegisterEvent('PLAYER_REGEN_DISABLED', CombatLockdown)

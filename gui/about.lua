@@ -17,7 +17,7 @@ GUI.lablesList = {
     wowi = 'WoWI',
     github = 'Github',
     discord = 'Discord',
-    qq = 'QQ'
+    qq = 'QQ Group'
 }
 
 local function ResetUrlBox(self)
@@ -56,7 +56,7 @@ function GUI:CreateAboutFrame(parent)
     repo:SetSize(400, 90)
     repo:SetPoint('TOP', 0, -20)
 
-    F.CreateFS(repo, C.Assets.Font.Heavy, 18, outline, L['Repository'], 'YELLOW', outline or 'THICK', 'TOP', 0, -10)
+    F.CreateFS(repo, C.Assets.Font.Heavy, 18, outline, L['Repository'], 'CLASS', outline or 'THICK', 'TOP', 0, -10)
 
     GUI:CreateGradientLine(repo, 120, -60, -34, 60, -34)
 
@@ -66,7 +66,7 @@ function GUI:CreateAboutFrame(parent)
     tracker:SetSize(400, 90)
     tracker:SetPoint('TOP', repo, 'BOTTOM')
 
-    F.CreateFS(tracker, C.Assets.Font.Heavy, 18, outline, L['Issue Tracker'], 'YELLOW', outline or 'THICK', 'TOP', 0, -10)
+    F.CreateFS(tracker, C.Assets.Font.Heavy, 18, outline, L['Issue Tracker'], 'CLASS', outline or 'THICK', 'TOP', 0, -10)
 
     GUI:CreateGradientLine(tracker, 120, -60, -34, 60, -34)
 
@@ -76,7 +76,7 @@ function GUI:CreateAboutFrame(parent)
     download:SetSize(400, 150)
     download:SetPoint('TOP', tracker, 'BOTTOM')
 
-    F.CreateFS(download, C.Assets.Font.Heavy, 18, outline, L['Download'], 'YELLOW', outline or 'THICK', 'TOP', 0, -10)
+    F.CreateFS(download, C.Assets.Font.Heavy, 18, outline, L['Download'], 'CLASS', outline or 'THICK', 'TOP', 0, -10)
 
     GUI:CreateGradientLine(download, 120, -60, -34, 60, -34)
 
@@ -88,7 +88,7 @@ function GUI:CreateAboutFrame(parent)
     feedback:SetSize(400, 150)
     feedback:SetPoint('TOP', download, 'BOTTOM')
 
-    F.CreateFS(feedback, C.Assets.Font.Heavy, 18, outline, L['Discussion'], 'YELLOW', outline or 'THICK', 'TOP', 0, -10)
+    F.CreateFS(feedback, C.Assets.Font.Heavy, 18, outline, L['Discussion'], 'CLASS', outline or 'THICK', 'TOP', 0, -10)
 
     GUI:CreateGradientLine(feedback, 120, -60, -34, 60, -34)
 

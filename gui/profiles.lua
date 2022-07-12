@@ -232,7 +232,7 @@ function GUI:Delete_OnEscape()
     self:SetText('')
 end
 
-function GUI:CreateProfileGUI(parent)
+function GUI:CreateProfileFrame(parent)
     local reset = F.CreateButton(parent, 100, 24, _G.RESET)
     reset:SetPoint('BOTTOMRIGHT', -20, 20)
     reset:SetScript('OnClick', function()
