@@ -1,4 +1,9 @@
 package-as: andromeda
 
+move-folders:
+  andromeda/src: andromeda
+
 ignore:
-  - utils
+  - .vscode
+  - _docs
+  - _utils
