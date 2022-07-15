@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local LOGO = F:RegisterModule('Logo')
+local LOGO = F:GetModule('Logo')
 
 local needAnimation
 
@@ -96,22 +96,10 @@ function LOGO:Logo_Create()
     LOGO.logoFrame = frame
 end
 
-function LOGO:LoginAnimation()
-    F:RegisterEvent('PLAYER_ENTERING_WORLD', LOGO.Logo_CheckStatus)
-
-    _G.SlashCmdList['ANDROMEDA_PLAYLOGO'] = function()
-        if not LOGO.logoFrame then
-            LOGO:Logo_Create()
-        end
-        LOGO.logoFrame:Show()
-    end
-    _G.SLASH_ANDROMEDA_PLAYLOGO1 = '/logo'
-end
-
 function LOGO:OnLogin()
     if not C.DB.InstallationComplete then
         return
     end
 
-    self:LoginAnimation()
+    F:RegisterEvent('PLAYER_ENTERING_WORLD', LOGO.Logo_CheckStatus)
 end
