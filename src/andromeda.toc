@@ -22,7 +22,6 @@ libraries\_loader.xml
 core\init.lua
 locales\_loader.xml
 core\_loader.xml
-config\_loader.xml
 modules\_loader.xml
 gui\_loader.xml
 
