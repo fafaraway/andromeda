@@ -1,40 +1,32 @@
 local F, C = unpack(select(2, ...))
 local GUI = F:GetModule('GUI')
 local TUTORIAL = F:GetModule('Tutorial')
+local LOGO = F:GetModule('Logo')
 
 F:RegisterSlashCommand('/and', function(msg)
-
     local str, _ = string.split(' ', string.lower(msg), 2)
 
     if string.match(str, 'reset') or string.match(str, 'init') then
         StaticPopup_Show('ANDROMEDA_RESET_ALL')
-
     elseif string.match(str, 'install') or string.match(str, 'tutorial') then
         TUTORIAL:HelloWorld()
-
     elseif string.match(str, 'unlock') or string.match(str, 'layout') then
         F:MoverConsole()
-
     elseif string.match(str, 'gui') or string.match(str, 'config') then
         F.ToggleConsole()
-
     elseif string.match(str, 'help') or string.match(str, 'cheatsheet') then
         GUI:ToggleCheatSheet()
-
-    elseif string.match(str, 'credits') then
-        F.ToggleConsole(17)
-
-    elseif string.match(str, 'about') then
-        F.ToggleConsole(16)
-
+    elseif string.match(str, 'logo') then
+        if not LOGO.logoFrame then
+            LOGO:Logo_Create()
+        end
+        LOGO.logoFrame:Show()
     elseif string.match(str, 'ver') or string.match(str, 'version') then
         F:Printf('version: %s', C.ADDON_VERSION)
-
     else
         GUI:ToggleCheatSheet()
         -- PlaySoundFile(C.Assets.Sound.PhubIntro, 'Master')
     end
-
 end)
 
 -- Leave group

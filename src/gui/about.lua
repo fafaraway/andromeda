@@ -17,7 +17,7 @@ GUI.lablesList = {
     wowi = 'WoWI',
     github = 'Github',
     discord = 'Discord',
-    qq = 'QQ Group'
+    qq = 'QQ Group',
 }
 
 local function ResetUrlBox(self)

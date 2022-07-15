@@ -5,15 +5,13 @@ local strList = {
     tip = L['Double click left mouse button or press ESC key to exit this screen.'],
     cmd = {
         primary = {
-            [0] = L['*/and|r @--|r#install|r @or|r */and|r @--|r#tutorial|r ~ Open the installation/tutorial panel.'],
-            [1] = L['*/and|r @--|r#gui|r @or|r */and|r @--|r#config|r ~ Open the control panel.'],
-            [2] = L['*/and|r @--|r#unlock|r @or|r */and|r @--|r#layout|r ~ Unlock the UI to freely move the position of each component.'],
-            [3] = L['*/and|r @--|r#reset|r @or|r */and|r @--|r#init|r ~ Initialize all settings and restore them to their default values.'],
-            [4] = L['*/and|r @--|r#ver|r @or|r */and|r @--|r#version|r ~ Show the current version number.'],
-            [5] = L['*/and|r @--|r#help|r @or|r */and|r @--|r#cheatsheet|r ~ Show all available command lines.'],
-            [6] = L['*/and|r @--|r#about|r ~ Show the basic information.'],
-            [7] = L['*/and|r @--|r#credits|r ~ Show the list of acknowledgements.'],
-            [8] = L['*/and|r @--|r#logo|r ~ Show the logo animation.'],
+            [1] = L['*/and|r @--|r#tutorial|r ~ Open the installation/tutorial panel.'],
+            [2] = L['*/and|r @--|r#gui|r ~ Open the control panel.'],
+            [3] = L['*/and|r @--|r#layout|r ~ Unlock the user interface and move the components freely.'],
+            [4] = L['*/and|r @--|r#reset|r ~ Initialize all settings and restore them to their default values.'],
+            [5] = L['*/and|r @--|r#version|r ~ Show the current version number.'],
+            [6] = L['*/and|r @--|r#help|r ~ Show all available command lines.'],
+            [7] = L['*/and|r @--|r#logo|r ~ Show the logo animation.'],
         },
         secondary = {
             [1] = L['*/lg|r ~ Leave the current group, support both party and raid.'],
@@ -131,7 +129,7 @@ local function ConstructTextString(f)
         local str2 = GUI:FormatTextString(b)
 
         F.CreateFS(f.lbox, C.Assets.Font.Bold, 18, outline, str1, { 0.7, 0.7, 0.7 }, outline or 'THICK', 'TOPLEFT', 0, -(k * 50))
-        F.CreateFS(f.lbox, C.Assets.Font.Condensed, 16, outline, str2, { 0.6, 0.6, 0.6 }, outline or 'THICK', 'TOPLEFT', 0, -(k * 24) - offset)
+        F.CreateFS(f.lbox, C.Assets.Font.Bold, 16, outline, str2, { 0.6, 0.6, 0.6 }, outline or 'THICK', 'TOPLEFT', 0, -(k * 24) - offset)
 
         offset = offset + 26
     end
@@ -160,7 +158,7 @@ function GUI:CreateCheatSheet()
     f:Hide()
 
     f.bg = F.SetBD(f)
-    f.bg:SetBackdropColor(0, 0, 0, 0.7)
+    f.bg:SetBackdropColor(0, 0, 0, 0.85)
 
     -- f.box = CreateFrame('Frame', nil, f)
     -- f.box:SetSize(500, 700)
@@ -172,7 +170,7 @@ function GUI:CreateCheatSheet()
 
     f.rbox = CreateFrame('Frame', nil, f)
     f.rbox:SetSize(400, 600)
-    f.rbox:SetPoint('TOPLEFT', f, 'TOP', 20, -140)
+    f.rbox:SetPoint('TOPLEFT', f, 'TOP', 80, -140)
 
     ConstructAnimation(f)
     ConstructTextString(f)

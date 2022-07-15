@@ -2665,7 +2665,7 @@ GUI.OptionsList = {
             1,
             'ACCOUNT',
             'ReskinBigWigs',
-            L['Reskin BigWigs'],
+            L['Reskin BigWigs & LittleWigs'],
             true,
         },
         {

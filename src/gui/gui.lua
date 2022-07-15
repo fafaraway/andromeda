@@ -610,7 +610,6 @@ end
 function GUI:OnLogin()
     CreateGameMenuButton()
 
-    GUI:CreateAbout()
     GUI:CreateCheatSheet()
 
     F:RegisterEvent('PLAYER_REGEN_DISABLED', CombatLockdown)

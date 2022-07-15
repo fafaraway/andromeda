@@ -176,20 +176,20 @@ function TUTORIAL:HelloWorld()
     f.body:SetPoint('TOPLEFT', 10, -50)
     f.body.__bg = F.CreateBDFrame(f.body, 0.25)
 
-    local headerText = F.CreateFS(f.body, C.Assets.Font.Bold, 18, outline, nil, { 242 / 255, 211 / 255, 104 / 255 }, outline or 'THICK', 'TOPLEFT', 10, -16)
-    headerText:SetWidth(360)
+    local headerText = F.CreateFS(f.body, C.Assets.Font.Bold, 18, outline, nil, { 242 / 255, 211 / 255, 104 / 255 }, outline or 'THICK', 'TOPLEFT', 20, -16)
+    headerText:SetWidth(340)
 
     GUI:CreateGradientLine(f.body, 140, -70, -40, 70, -40)
 
-    local bodyText = F.CreateFS(f.body, C.Assets.Font.Regular, 13, outline, nil, { 0.7, 0.7, 0.7 }, outline or 'THICK', 'TOPLEFT', 10, -60)
+    local bodyText = F.CreateFS(f.body, C.Assets.Font.Regular, 13, outline, nil, { 0.7, 0.7, 0.7 }, outline or 'THICK', 'TOPLEFT', 20, -60)
     bodyText:SetJustifyH('LEFT')
     bodyText:SetWordWrap(true)
-    bodyText:SetWidth(360)
+    bodyText:SetWidth(340)
 
     local pBar = CreateFrame('StatusBar', nil, f.body)
     pBar:SetPoint('BOTTOM', f.body, 'BOTTOM', 0, 10)
-    pBar:SetSize(360, 20)
-    pBar:SetStatusBarTexture(C.Assets.Statusbar.Gradient)
+    pBar:SetSize(340, 20)
+    pBar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
     pBar:Hide()
     F:SmoothBar(pBar)
 
@@ -215,11 +215,7 @@ function TUTORIAL:HelloWorld()
         pBar:SetValue(600)
         PlaySoundFile('Sound\\Spells\\LevelUp.wav')
         headerText:SetText(L['Congratulations'])
-        bodyText:SetText(
-            GUI:FormatTextString(
-                L["The installation has been successfully completed.|n|nPlease keep in mind that you can always use the GUI panel to adjust the various options.|n|nTo open the GUI panel, you can press ESC and click on the '&ADDON_NAME&' button, or type '*/free|r @--|r#gui|r' in the chatbox and press ENTER.|n|nYou can also type '*/free|r' to see the other available commands.|n|nClick the '#Finish|r' button below to reload the user interface."]
-            )
-        )
+        bodyText:SetText(GUI:FormatTextString(L['TUTORIAL_BODY_TEXT_COMPLETED']))
         pBarText:SetText('6/6')
         lBtn:Hide()
 
@@ -235,11 +231,7 @@ function TUTORIAL:HelloWorld()
     local step5 = function()
         pBar:SetValue(500)
         headerText:SetText(L['Other AddOns'])
-        bodyText:SetText(
-            GUI:FormatTextString(
-                L["Set the options for other AddOns.|n|nClick the '#Continue|r' button below to apply the settings, or click the '#Skip|r' button to skip this step."]
-            )
-        )
+        bodyText:SetText(GUI:FormatTextString(L['TUTORIAL_BODY_TEXT_ADDONS']))
         pBarText:SetText('5/6')
 
         lBtn:SetScript('OnClick', step6)
@@ -251,12 +243,8 @@ function TUTORIAL:HelloWorld()
 
     local step4 = function()
         pBar:SetValue(400)
-        headerText:SetText(L['Actionbar'])
-        bodyText:SetText(
-            GUI:FormatTextString(
-                L["Set the options related to the Actionbar.|n|nClick the '#Continue|r' button below to apply the settings, or click the '#Skip|r' button to skip this step."]
-            )
-        )
+        headerText:SetText(L['Actionbars'])
+        bodyText:SetText(GUI:FormatTextString(L['TUTORIAL_BODY_TEXT_ACTIONBARS']))
         pBarText:SetText('4/6')
 
         lBtn:SetScript('OnClick', step5)
@@ -269,11 +257,7 @@ function TUTORIAL:HelloWorld()
     local step3 = function()
         pBar:SetValue(300)
         headerText:SetText(L['Chatbox'])
-        bodyText:SetText(
-            GUI:FormatTextString(
-                L["Set the options related to the Chatbox.|n|nClick the '#Continue|r' button below to apply the settings, or click the '#Skip|r' button to skip this step."]
-            )
-        )
+        bodyText:SetText(GUI:FormatTextString(L['TUTORIAL_BODY_TEXT_CHATBOX']))
         pBarText:SetText('3/6')
 
         lBtn:SetScript('OnClick', step4)
@@ -286,11 +270,7 @@ function TUTORIAL:HelloWorld()
     local step2 = function()
         pBar:SetValue(200)
         headerText:SetText(L['UI Scale'])
-        bodyText:SetText(
-            GUI:FormatTextString(
-                L["Set the appropriate global scaling for the current resolution.|n|nClick the '#Continue|r' button below to apply the settings, or click the '#Skip|r' button to skip this step."]
-            )
-        )
+        bodyText:SetText(GUI:FormatTextString(L['TUTORIAL_BODY_TEXT_UISCALE']))
         pBarText:SetText('2/6')
 
         lBtn:SetScript('OnClick', step3)
@@ -309,11 +289,7 @@ function TUTORIAL:HelloWorld()
         pBar:SetValue(100)
         pBar:SetStatusBarColor(C.r, C.g, C.b)
         headerText:SetText(L['CVars'])
-        bodyText:SetText(
-            GUI:FormatTextString(
-                L["Set some of the built-in CVar options.|n|nClick the '#Continue|r' button below to apply the settings, or click the '#Skip|r' button to skip this step."]
-            )
-        )
+        bodyText:SetText(GUI:FormatTextString(L['TUTORIAL_BODY_TEXT_CVARS']))
         pBarText:SetText('1/6')
 
         lBtn:Show()
@@ -328,11 +304,7 @@ function TUTORIAL:HelloWorld()
     end
 
     headerText:SetText(L['Hello there, adventurer!'])
-    bodyText:SetText(
-        GUI:FormatTextString(
-            L["Welcome to the '&ADDON_NAME&' AddOn.|n|nThis is an overall replacement AddOn for the user interface based on a minimalist design.|n|nIt provides a lot of convenient and useful features while maintaining beauty, elegance and efficiency.|n|nBefore you start using it, you need to complete some necessary adjustments first.|n|nClick the '#Install|r' button below to begin the installation steps."]
-        )
-    )
+    bodyText:SetText(GUI:FormatTextString(L['TUTORIAL_BODY_TEXT_WELCOME']))
 
     lBtn:SetText(L['Cancel'])
     rBtn:SetText(L['Install'])
