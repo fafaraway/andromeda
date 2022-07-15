@@ -21,6 +21,7 @@ do
     F:RegisterModule('InfoBar')
     F:RegisterModule('Inventory')
     F:RegisterModule('Layout')
+    F:RegisterModule('Logo')
     F:RegisterModule('Map')
     F:RegisterModule('Misc')
     F:RegisterModule('Nameplate')
