@@ -35,7 +35,7 @@ local addonPrefixes = {
 function M:GetCovenantIcon(covenantID)
     local covenant = covenantList[covenantID]
     if covenant then
-        return string.format('|A:sanctumupgrades-' .. covenantList[covenantID] .. '-32x32:16:16|a ')
+        return format('|A:sanctumupgrades-' .. covenantList[covenantID] .. '-32x32:16:16|a ')
     end
 
     return ''
@@ -92,9 +92,9 @@ function M:UpdateRosterInfo()
         local name = GetRaidRosterInfo(i)
         if name and name ~= C.MY_NAME and not cache[name] then
             if not DCLoaded then
-                C_ChatInfo.SendAddonMessage(DC_Prefix, string.format('ASK:%s', name), msgChannel())
+                C_ChatInfo.SendAddonMessage(DC_Prefix, format('ASK:%s', name), msgChannel())
             end
-            C_ChatInfo.SendAddonMessage(MRT_Prefix, string.format('inspect\tREQ\tS\t%s', name), msgChannel())
+            C_ChatInfo.SendAddonMessage(MRT_Prefix, format('inspect\tREQ\tS\t%s', name), msgChannel())
 
             cache[name] = true
         end
@@ -117,7 +117,7 @@ function M:HandleAddonMessage(...)
     end
 
     if prefix == ZT_Prefix then
-        local version, type, guid, _, _, _, _, covenantID = string.split(':', msg)
+        local version, type, guid, _, _, _, _, covenantID = strsplit(':', msg)
         version = tonumber(version)
         if (version and version > 3) and (type and type == 'H') and guid then
             covenantID = tonumber(covenantID)
@@ -126,16 +126,16 @@ function M:HandleAddonMessage(...)
             end
         end
     elseif prefix == OmniCD_Prefix then
-        local header, guid, body = string.match(msg, '(.-),(.-),(.+)')
+        local header, guid, body = strmatch(msg, '(.-),(.-),(.+)')
         if (header and guid and body) and (header == 'INF' or header == 'REQ' or header == 'UPD') then
-            local covenantID = select(15, string.split(',', body))
+            local covenantID = select(15, strsplit(',', body))
             covenantID = tonumber(covenantID)
             if covenantID and (not memberCovenants[guid] or memberCovenants[guid] ~= covenantID) then
                 memberCovenants[guid] = covenantID
             end
         end
     elseif prefix == DC_Prefix then
-        local playerName, covenantID = string.split(':', msg)
+        local playerName, covenantID = strsplit(':', msg)
         if playerName == 'ASK' then
             return
         end
@@ -146,14 +146,14 @@ function M:HandleAddonMessage(...)
             memberCovenants[guid] = covenantID
         end
     elseif prefix == MRT_Prefix then
-        local modPrefix, subPrefix, soulbinds = string.split('\t', msg)
+        local modPrefix, subPrefix, soulbinds = strsplit('\t', msg)
         if
             (modPrefix and modPrefix == 'inspect')
             and (subPrefix and subPrefix == 'R')
-            and (soulbinds and string.sub(soulbinds, 1, 1) == 'S')
+            and (soulbinds and strsub(soulbinds, 1, 1) == 'S')
         then
             local guid = UnitGUID(sender)
-            local covenantID = select(2, string.split(':', soulbinds))
+            local covenantID = select(2, strsplit(':', soulbinds))
             covenantID = tonumber(covenantID)
             if covenantID and guid and (not memberCovenants[guid] or memberCovenants[guid] ~= covenantID) then
                 memberCovenants[guid] = covenantID
@@ -184,7 +184,7 @@ function M:AddCovenantInfo()
 
     if covenantID and covenantID ~= 0 then
         _G.GameTooltip:AddLine(
-            string.format(
+            format(
                 '%s %s %s',
                 C.WHITE_COLOR .. L['Covenant'] .. ':|r',
                 M:GetCovenantName(covenantID),

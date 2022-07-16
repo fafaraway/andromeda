@@ -89,7 +89,7 @@ loader:SetScript('OnEvent', function(self, _, addon)
     if _G.ANDROMEDA_ADB['ProfileIndex'][C.MY_FULL_NAME] == 1 then
         C.DB = _G.ANDROMEDA_CDB
         if not C.DB['ShadowLands'] then
-            table.wipe(C.DB)
+            wipe(C.DB)
             C.DB['ShadowLands'] = true
         end
     else

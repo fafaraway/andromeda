@@ -52,7 +52,7 @@ do
             C.b = newColor.b
         end
 
-        C.MY_CLASS_COLOR = string.format('|cff%02x%02x%02x', C.r * 255, C.g * 255, C.b * 255)
+        C.MY_CLASS_COLOR = format('|cff%02x%02x%02x', C.r * 255, C.g * 255, C.b * 255)
     end
     F:RegisterEvent('ADDON_LOADED', F.UpdateCustomClassColors)
 end
@@ -88,9 +88,9 @@ do
     C.QualityColors[_G.LE_ITEM_QUALITY_COMMON] = { r = 0, g = 0, b = 0 }
     C.QualityColors[99] = { r = 1, g = 0, b = 0 }
 
-    _G.GOLD_AMOUNT_SYMBOL = string.format('|cffffd700%s|r', _G.GOLD_AMOUNT_SYMBOL)
-    _G.SILVER_AMOUNT_SYMBOL = string.format('|cffd0d0d0%s|r', _G.SILVER_AMOUNT_SYMBOL)
-    _G.COPPER_AMOUNT_SYMBOL = string.format('|cffc77050%s|r', _G.COPPER_AMOUNT_SYMBOL)
+    _G.GOLD_AMOUNT_SYMBOL = format('|cffffd700%s|r', _G.GOLD_AMOUNT_SYMBOL)
+    _G.SILVER_AMOUNT_SYMBOL = format('|cffd0d0d0%s|r', _G.SILVER_AMOUNT_SYMBOL)
+    _G.COPPER_AMOUNT_SYMBOL = format('|cffc77050%s|r', _G.COPPER_AMOUNT_SYMBOL)
     _G.COPPER_AMOUNT = '%d\124TInterface\\MoneyFrame\\UI-CopperIcon:0:0:2:0\124t'
     _G.SILVER_AMOUNT = '%d\124TInterface\\MoneyFrame\\UI-SilverIcon:0:0:2:0\124t'
     _G.GOLD_AMOUNT = '%d\124TInterface\\MoneyFrame\\UI-GoldIcon:0:0:2:0\124t'

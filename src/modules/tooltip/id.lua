@@ -36,7 +36,7 @@ function TOOLTIP:AddLineForID(id, linkType)
 end
 
 function TOOLTIP:SetHyperLinkID(link)
-    local linkType, id = string.match(link, '^(%a+):(%d+)')
+    local linkType, id = strmatch(link, '^(%a+):(%d+)')
     if not linkType or not id then
         return
     end
@@ -56,7 +56,7 @@ function TOOLTIP:SetItemID()
     local link = select(2, self:GetItem())
     if link then
         local id = GetItemInfoFromHyperlink(link)
-        local keystone = string.match(link, '|Hkeystone:([0-9]+):')
+        local keystone = strmatch(link, '|Hkeystone:([0-9]+):')
         if keystone then
             id = tonumber(keystone)
         end
@@ -91,7 +91,7 @@ function TOOLTIP:VariousID()
     end)
 
     hooksecurefunc('SetItemRef', function(link)
-        local id = tonumber(string.match(link, 'spell:(%d+)'))
+        local id = tonumber(strmatch(link, 'spell:(%d+)'))
         if id then
             TOOLTIP.AddLineForID(_G.ItemRefTooltip, id, types.spell)
         end
@@ -114,7 +114,7 @@ function TOOLTIP:VariousID()
 
     hooksecurefunc(_G.GameTooltip, 'SetRecipeReagentItem', function(self, recipeID, reagentIndex)
         local link = C_TradeSkillUI.GetRecipeReagentItemLink(recipeID, reagentIndex)
-        local id = link and string.match(link, 'item:(%d+):')
+        local id = link and strmatch(link, 'item:(%d+):')
         if id then
             TOOLTIP.AddLineForID(self, id, types.item)
         end
@@ -122,7 +122,7 @@ function TOOLTIP:VariousID()
 
     -- Currencies
     hooksecurefunc(_G.GameTooltip, 'SetCurrencyToken', function(self, index)
-        local id = tonumber(string.match(C_CurrencyInfo.GetCurrencyListLink(index), 'currency:(%d+)'))
+        local id = tonumber(strmatch(C_CurrencyInfo.GetCurrencyListLink(index), 'currency:(%d+)'))
         TOOLTIP.AddLineForID(self, id, types.currency)
     end)
 

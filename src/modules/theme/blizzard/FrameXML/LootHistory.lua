@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 
-table.insert(C.BlizzThemes, function()
+tinsert(C.BlizzThemes, function()
     if not _G.ANDROMEDA_ADB.ReskinBlizz then
         return
     end
@@ -117,7 +117,7 @@ table.insert(C.BlizzThemes, function()
         local name, class = C_LootHistory.GetPlayerInfo(self.itemIdx, self.playerIdx)
         local classColor = C.ClassColors[class]
         local colorCode = classColor.colorStr
-        info.text = string.format(_G.MASTER_LOOTER_GIVE_TO, colorCode .. name .. '|r')
+        info.text = format(_G.MASTER_LOOTER_GIVE_TO, colorCode .. name .. '|r')
         info.func = _G.LootHistoryDropDown_OnClick
         _G.UIDropDownMenu_AddButton(info)
     end

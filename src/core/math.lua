@@ -17,16 +17,16 @@ function F:Numb(n)
         end
     elseif _G.ANDROMEDA_ADB.NumberFormat == 2 then
         if n >= 1e12 then
-            return string.format('%.2f' .. numCap['CHINESE'][1], n / 1e12)
+            return format('%.2f' .. numCap['CHINESE'][1], n / 1e12)
         elseif n >= 1e8 then
-            return string.format('%.2f' .. numCap['CHINESE'][2], n / 1e8)
+            return format('%.2f' .. numCap['CHINESE'][2], n / 1e8)
         elseif n >= 1e4 then
-            return string.format('%.2f' .. numCap['CHINESE'][3], n / 1e4)
+            return format('%.2f' .. numCap['CHINESE'][3], n / 1e4)
         else
-            return string.format('%.0f', n)
+            return format('%.0f', n)
         end
     else
-        return string.format('%.0f', n)
+        return format('%.0f', n)
     end
 end
 
@@ -40,7 +40,7 @@ function F:RgbToHex(r, g, b, header, ending)
                 r, g, b = unpack(r)
             end
         end
-        return string.format('%s%02x%02x%02x%s', header or '|cff', r * 255, g * 255, b * 255, ending or '')
+        return format('%s%02x%02x%02x%s', header or '|cff', r * 255, g * 255, b * 255, ending or '')
     end
 end
 
@@ -126,10 +126,10 @@ function F:Round(num, idp)
 
     if idp and idp > 0 then
         local mult = 10 ^ idp
-        return math.floor(num * mult + 0.5) / mult
+        return floor(num * mult + 0.5) / mult
     end
 
-    return math.floor(num + 0.5)
+    return floor(num + 0.5)
 end
 
 -- Truncate a number off to n places
@@ -202,27 +202,27 @@ end
 local day, hour, minute = 86400, 3600, 60
 function F:FormatTime(s)
     if s >= day then
-        return string.format('|cffbebfb3%d|r', s / day + 0.5), s % day -- grey
+        return format('|cffbebfb3%d|r', s / day + 0.5), s % day -- grey
     elseif s >= hour then
-        return string.format('|cff4fcd35%d|r', s / hour + 0.5), s % hour -- white
+        return format('|cff4fcd35%d|r', s / hour + 0.5), s % hour -- white
     elseif s >= minute then
-        return string.format('|cff21c8de%d|r', s / minute + 0.5), s % minute -- blue
+        return format('|cff21c8de%d|r', s / minute + 0.5), s % minute -- blue
     elseif s > 3 then
-        return string.format('|cffffe700%d|r', s + 0.5), s - math.floor(s) -- yellow
+        return format('|cffffe700%d|r', s + 0.5), s - floor(s) -- yellow
     else
-        return string.format('|cfffd3612%.1f|r', s), s - string.format('%.1f', s) -- red
+        return format('|cfffd3612%.1f|r', s), s - format('%.1f', s) -- red
     end
 end
 
 function F:FormatTimeRaw(s)
     if s >= day then
-        return string.format('%dd', s / day + 0.5)
+        return format('%dd', s / day + 0.5)
     elseif s >= hour then
-        return string.format('%dh', s / hour + 0.5)
+        return format('%dh', s / hour + 0.5)
     elseif s >= minute then
-        return string.format('%dm', s / minute + 0.5)
+        return format('%dm', s / minute + 0.5)
     else
-        return string.format('%d', s + 0.5)
+        return format('%d', s + 0.5)
     end
 end
 
@@ -258,7 +258,7 @@ function F:WaitFunc(elapse)
         if data[1] > elapse then
             data[1], i = data[1] - elapse, i + 1
         else
-            table.remove(F.WaitTable, i)
+            tremove(F.WaitTable, i)
             data[2](unpack(data[3]))
 
             if #F.WaitTable == 0 then
@@ -280,7 +280,7 @@ function F:Delay(delay, func, ...)
     if select('#', ...) <= 0 then
         C_Timer.After(delay, func)
     else
-        table.insert(F.WaitTable, { delay, func, { ... } })
+        tinsert(F.WaitTable, { delay, func, { ... } })
         F.WaitFrame:Show()
     end
 

@@ -151,9 +151,9 @@ function TOOLTIP:SetupSpecLevel(spec, level)
     for i = 2, _G.GameTooltip:NumLines() do
         local line = _G['GameTooltipTextLeft' .. i]
         local text = line:GetText()
-        if text and string.find(text, specPrefix) then
+        if text and strfind(text, specPrefix) then
             specLine = line
-        elseif text and string.find(text, levelPrefix) then
+        elseif text and strfind(text, levelPrefix) then
             levelLine = line
         end
     end
@@ -215,7 +215,7 @@ function TOOLTIP:GetUnitItemLevel(unit)
                             if i < 16 then
                                 total = total + level
                             elseif i > 15 and quality == _G.LE_ITEM_QUALITY_ARTIFACT then
-                                local relics = { select(4, string.split(':', itemLink)) }
+                                local relics = { select(4, strsplit(':', itemLink)) }
                                 for i = 1, 3 do
                                     local relicID = relics[i] ~= '' and relics[i]
                                     local relicLink = select(2, GetItemGem(itemLink, i))
@@ -261,7 +261,7 @@ function TOOLTIP:GetUnitItemLevel(unit)
             ilvl = select(2, GetAverageItemLevel())
         else
             if hasArtifact or twohand == 2 then
-                local higher = math.max(weapon[1], weapon[2])
+                local higher = max(weapon[1], weapon[2])
                 total = total + higher * 2
             elseif twohand == 1 and haveWeapon == 1 then
                 total = total + weapon[1] * 2 + weapon[2] * 2
@@ -280,7 +280,7 @@ function TOOLTIP:GetUnitItemLevel(unit)
         end
 
         if ilvl > 0 then
-            ilvl = string.format('%.1f', ilvl)
+            ilvl = format('%.1f', ilvl)
         end
         if boa > 0 then
             ilvl = ilvl .. ' |cff00ccff(' .. boa .. _G.HEIRLOOMS .. ')'

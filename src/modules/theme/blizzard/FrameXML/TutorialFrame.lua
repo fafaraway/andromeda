@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 
-table.insert(C.BlizzThemes, function()
+tinsert(C.BlizzThemes, function()
     F.SetBD(_G.TutorialFrame)
 
     _G.TutorialFrameBackground:Hide()

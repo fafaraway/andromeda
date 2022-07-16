@@ -102,7 +102,7 @@ function TOOLTIP:Domination_UpdateText(name, rank)
         local textLine = select(2, tex:GetPoint())
         local text = textLine and textLine:GetText()
         if text then
-            textLine:SetText(text .. '|n' .. string.format(domiRankString, name, rank))
+            textLine:SetText(text .. '|n' .. format(domiRankString, name, rank))
         end
     end
 end
@@ -120,12 +120,12 @@ function TOOLTIP:Domination_CheckStatus()
         -- Domi rank on gems
         local textLine = _G[self:GetName() .. 'TextLeft2']
         local text = textLine and textLine:GetText()
-        if text and string.find(text, '|cFF66BBFF') then
+        if text and strfind(text, '|cFF66BBFF') then
             textLine:SetFormattedText(domiRankString, text, rank)
         end
     else
         -- Domi rank on gears
-        local gemID = string.match(link, 'item:%d+:%d*:(%d*):')
+        local gemID = strmatch(link, 'item:%d+:%d*:(%d*):')
         itemID = tonumber(gemID)
         rank = itemID and TOOLTIP.DomiRankData[itemID]
         if rank then

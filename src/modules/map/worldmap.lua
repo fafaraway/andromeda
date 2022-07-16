@@ -156,7 +156,7 @@ function MAP:SetupWorldMap()
     WorldMapFrame:SetAttribute('UIPanelLayout-area', nil)
     WorldMapFrame:SetAttribute('UIPanelLayout-enabled', false)
     WorldMapFrame:SetAttribute('UIPanelLayout-allowOtherPanels', true)
-    table.insert(_G.UISpecialFrames, 'WorldMapFrame')
+    tinsert(_G.UISpecialFrames, 'WorldMapFrame')
 
     -- Hide stuff
     WorldMapFrame.BlackoutFrame:SetAlpha(0)

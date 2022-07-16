@@ -139,7 +139,7 @@ local function ReskinWidgetGroups(self)
     end
 end
 
-table.insert(C.BlizzThemes, function()
+tinsert(C.BlizzThemes, function()
     hooksecurefunc(_G.UIWidgetTopCenterContainerFrame, 'UpdateWidgetLayout', ReskinWidgetGroups)
     ReskinWidgetGroups(_G.UIWidgetTopCenterContainerFrame)
 

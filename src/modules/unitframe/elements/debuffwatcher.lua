@@ -3,7 +3,7 @@ local UNITFRAME = F:GetModule('UnitFrame')
 
 local debuffList = {}
 function UNITFRAME:UpdateDebuffWatcher()
-    table.wipe(debuffList)
+    wipe(debuffList)
     for instName, value in pairs(C.DebuffWatcherList) do
         for spell, priority in pairs(value) do
             if
@@ -63,7 +63,7 @@ function UNITFRAME:CreateDebuffWatcher(self)
     parentFrame:SetFrameLevel(bu:GetFrameLevel() + 6)
 
     local font = C.Assets.Font.Roadway
-    local fontSize = math.max(bu:GetHeight() * 0.4, 12)
+    local fontSize = max(bu:GetHeight() * 0.4, 12)
     bu.count = F.CreateFS(parentFrame, font, fontSize, true, '', nil, true)
     bu.count:SetPoint('CENTER', bu, 'TOP')
     bu.timer = F.CreateFS(parentFrame, font, fontSize, true, '', nil, true)

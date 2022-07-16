@@ -4,25 +4,25 @@ local MAP = F:GetModule('Map')
 local shownMapCache, exploredCache, fileDataIDs = {}, {}, {}
 
 local function GetStringFromInfo(info)
-    return string.format('W%dH%dX%dY%d', info.textureWidth, info.textureHeight, info.offsetX, info.offsetY)
+    return format('W%dH%dX%dY%d', info.textureWidth, info.textureHeight, info.offsetX, info.offsetY)
 end
 
 local function GetShapesFromString(str)
-    local w, h, x, y = string.match(str, 'W(%d*)H(%d*)X(%d*)Y(%d*)')
+    local w, h, x, y = strmatch(str, 'W(%d*)H(%d*)X(%d*)Y(%d*)')
     return tonumber(w), tonumber(h), tonumber(x), tonumber(y)
 end
 
 local function RefreshFileIDsByString(str)
-    table.wipe(fileDataIDs)
+    wipe(fileDataIDs)
 
-    for fileID in string.gmatch(str, '%d+') do
-        table.insert(fileDataIDs, fileID)
+    for fileID in gmatch(str, '%d+') do
+        tinsert(fileDataIDs, fileID)
     end
 end
 
 function MAP:MapData_RefreshOverlays(fullUpdate)
-    table.wipe(shownMapCache)
-    table.wipe(exploredCache)
+    wipe(shownMapCache)
+    wipe(exploredCache)
 
     local mapID = _G.WorldMapFrame.mapID
     if not mapID then
@@ -59,8 +59,8 @@ function MAP:MapData_RefreshOverlays(fullUpdate)
         if not exploredCache[i] then
             local width, height, offsetX, offsetY = GetShapesFromString(i)
             RefreshFileIDsByString(exploredInfoString)
-            local numTexturesWide = math.ceil(width / TILE_SIZE_WIDTH)
-            local numTexturesTall = math.ceil(height / TILE_SIZE_HEIGHT)
+            local numTexturesWide = ceil(width / TILE_SIZE_WIDTH)
+            local numTexturesTall = ceil(height / TILE_SIZE_HEIGHT)
             local texturePixelWidth, textureFileWidth, texturePixelHeight, textureFileHeight
 
             for j = 1, numTexturesTall do
@@ -68,7 +68,7 @@ function MAP:MapData_RefreshOverlays(fullUpdate)
                     texturePixelHeight = TILE_SIZE_HEIGHT
                     textureFileHeight = TILE_SIZE_HEIGHT
                 else
-                    texturePixelHeight = math.fmod(height, TILE_SIZE_HEIGHT)
+                    texturePixelHeight = mod(height, TILE_SIZE_HEIGHT)
                     if texturePixelHeight == 0 then
                         texturePixelHeight = TILE_SIZE_HEIGHT
                     end
@@ -121,7 +121,7 @@ function MAP:MapData_RefreshOverlays(fullUpdate)
                     else
                         texture:Hide()
                     end
-                    table.insert(shownMapCache, texture)
+                    tinsert(shownMapCache, texture)
                 end
             end
         end

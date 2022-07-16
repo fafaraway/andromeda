@@ -27,7 +27,7 @@ function DS:DomiShard_ShowTooltip()
 end
 
 function DS:DomiShards_Refresh()
-    table.wipe(foundShards)
+    wipe(foundShards)
 
     for bagID = 0, 4 do
         for slotID = 1, GetContainerNumSlots(bagID) do
@@ -78,7 +78,7 @@ function DS:DomiShards_ListFrame()
         for itemID in pairs(value) do
             local button = CreateFrame('Button', nil, frame)
             button:SetSize(iconSize, iconSize)
-            button:SetPoint('TOPLEFT', math.fmod(index - 1, 3) * iconSize, -math.floor((index - 1) / 3) * iconSize)
+            button:SetPoint('TOPLEFT', mod(index - 1, 3) * iconSize, -floor((index - 1) / 3) * iconSize)
             F.PixelIcon(button, GetItemIcon(itemID), true)
             button:SetScript('OnClick', DS.DomiShard_Equip)
             button:SetScript('OnEnter', DS.DomiShard_ShowTooltip)

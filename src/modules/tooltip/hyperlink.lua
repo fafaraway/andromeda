@@ -22,7 +22,7 @@ local linkTypes = {
 function TOOLTIP:HyperLink_SetPet(link)
     _G.GameTooltip:SetOwner(self, 'ANCHOR_TOPRIGHT', -3, 5)
     _G.GameTooltip:Show()
-    local _, speciesID, level, breedQuality, maxHealth, power, speed = string.split(':', link)
+    local _, speciesID, level, breedQuality, maxHealth, power, speed = strsplit(':', link)
     _G.BattlePetToolTip_Show(
         tonumber(speciesID),
         tonumber(level),
@@ -43,7 +43,7 @@ function TOOLTIP:HyperLink_GetSectionInfo(id)
 end
 
 function TOOLTIP:HyperLink_SetJournal(link)
-    local _, idType, id, diffID = string.split(':', link)
+    local _, idType, id, diffID = strsplit(':', link)
     local name, description, icon, idString
     if idType == '0' then
         name, description = EJ_GetInstanceInfo(id)
@@ -77,7 +77,7 @@ function TOOLTIP:HyperLink_SetTypes(link)
 end
 
 function TOOLTIP:HyperLink_OnEnter(link, ...)
-    local linkType = string.match(link, '^([^:]+)')
+    local linkType = strmatch(link, '^([^:]+)')
     if linkType then
         if linkType == 'battlepet' then
             TOOLTIP.HyperLink_SetPet(self, link)

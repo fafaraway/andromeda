@@ -336,7 +336,7 @@ function GT:RaidTool_BuffChecker(parent)
             if count >= numPlayer then
                 sendMsg(L['Lack of'] .. BuffName[i] .. ': ' .. _G.ALL .. _G.PLAYER)
             elseif count >= 5 and i > 2 then
-                sendMsg(L['Lack of'] .. BuffName[i] .. ': ' .. string.format(L['%s players'], count))
+                sendMsg(L['Lack of'] .. BuffName[i] .. ': ' .. format(L['%s players'], count))
             else
                 local str = L['Lack of'] .. BuffName[i] .. ': '
                 for j = 1, count do
@@ -353,7 +353,7 @@ function GT:RaidTool_BuffChecker(parent)
 
     local function scanBuff()
         for i = 1, numGroups do
-            table.wipe(NoBuff[i])
+            wipe(NoBuff[i])
         end
         numPlayer = 0
 
@@ -376,8 +376,8 @@ function GT:RaidTool_BuffChecker(parent)
                         end
                     end
                     if not HasBuff then
-                        name = string.split('-', name) -- remove realm name
-                        table.insert(NoBuff[j], name)
+                        name = strsplit('-', name) -- remove realm name
+                        tinsert(NoBuff[j], name)
                     end
                 end
             end
@@ -555,8 +555,8 @@ function GT:RaidTool_CreateMenu(parent)
     for i, j in pairs(buttons) do
         bu[i] = F.CreateButton(frame, 84, 28, j[1], 12)
         bu[i]:SetPoint(
-            math.fmod(i, 2) == 0 and 'TOPRIGHT' or 'TOPLEFT',
-            math.fmod(i, 2) == 0 and -5 or 5,
+            mod(i, 2) == 0 and 'TOPRIGHT' or 'TOPLEFT',
+            mod(i, 2) == 0 and -5 or 5,
             i > 2 and -37 or -5
         )
         bu[i]:SetScript('OnClick', j[2])

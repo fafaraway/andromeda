@@ -3,7 +3,7 @@ local UNITFRAME = F:GetModule('UnitFrame')
 
 UNITFRAME.CornerSpellsList = {}
 function UNITFRAME:UpdateCornerSpells()
-    table.wipe(UNITFRAME.CornerSpellsList)
+    wipe(UNITFRAME.CornerSpellsList)
 
     for spellID, value in pairs(C.CornerSpellsList[C.MY_CLASS]) do
         local modData = _G.ANDROMEDA_ADB['CornerSpellsList'][C.MY_CLASS]
@@ -38,7 +38,7 @@ function UNITFRAME:UpdateCornerIndicator(event, unit)
     local buttons = self.BuffIndicator
     unit = self.unit
 
-    table.wipe(found)
+    wipe(found)
     for _, filter in next, auraFilter do
         for i = 1, 32 do
             local name, _, _, _, duration, expiration, caster, _, _, spellID = UnitAura(unit, i, filter)

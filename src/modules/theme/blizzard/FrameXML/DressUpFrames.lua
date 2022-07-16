@@ -9,7 +9,7 @@ local function ResetToggleTexture(button, texture)
     button:SetPushedTexture(texture)
 end
 
-table.insert(C.BlizzThemes, function()
+tinsert(C.BlizzThemes, function()
     -- Dressup Frame
 
     local DressUpFrame = _G.DressUpFrame

@@ -35,13 +35,13 @@ function CHAT:CompareStrDiff(sA, sB) -- arrays of bytes
     for i = 1, len_a do
         this[1] = i
         for j = 1, len_b do
-            this[j + 1] = (sA[i] == sB[j]) and last[j] or (math.min(last[j + 1], this[j], last[j]) + 1)
+            this[j + 1] = (sA[i] == sB[j]) and last[j] or (min(last[j + 1], this[j], last[j]) + 1)
         end
         for j = 0, len_b do
             last[j + 1] = this[j + 1]
         end
     end
-    return this[len_b + 1] / math.max(len_a, len_b)
+    return this[len_b + 1] / max(len_a, len_b)
 end
 
 C.BadBoys = {} -- debug
@@ -64,13 +64,13 @@ function CHAT:GetFilterResult(event, msg, name, flag, guid)
         return true
     end
 
-    local filterMsg = string.gsub(msg, '|H.-|h(.-)|h', '%1')
-    filterMsg = string.gsub(filterMsg, '|c%x%x%x%x%x%x%x%x', '')
-    filterMsg = string.gsub(filterMsg, '|r', '')
+    local filterMsg = gsub(msg, '|H.-|h(.-)|h', '%1')
+    filterMsg = gsub(filterMsg, '|c%x%x%x%x%x%x%x%x', '')
+    filterMsg = gsub(filterMsg, '|r', '')
 
     -- Trash Filter
     for _, symbol in ipairs(msgSymbols) do
-        filterMsg = string.gsub(filterMsg, symbol, '')
+        filterMsg = gsub(filterMsg, symbol, '')
     end
 
     if event == 'CHAT_MSG_CHANNEL' then
@@ -79,7 +79,7 @@ function CHAT:GetFilterResult(event, msg, name, flag, guid)
         for keyword in pairs(WhiteFilterList) do
             if keyword ~= '' then
                 found = true
-                local _, count = string.gsub(filterMsg, keyword, '')
+                local _, count = gsub(filterMsg, keyword, '')
                 if count > 0 then
                     matches = matches + 1
                 end
@@ -93,7 +93,7 @@ function CHAT:GetFilterResult(event, msg, name, flag, guid)
     local matches = 0
     for keyword in pairs(FilterList) do
         if keyword ~= '' then
-            local _, count = string.gsub(filterMsg, keyword, '')
+            local _, count = gsub(filterMsg, keyword, '')
             if count > 0 then
                 matches = matches + 1
             end
@@ -117,12 +117,12 @@ function CHAT:GetFilterResult(event, msg, name, flag, guid)
     for i = 1, chatLinesSize do
         local line = chatLines[i]
         if line[1] == msgTable[1] and ((event == 'CHAT_MSG_CHANNEL' and msgTable[3] - line[3] < 0.6) or CHAT:CompareStrDiff(line[2], msgTable[2]) <= 0.1) then
-            table.remove(chatLines, i)
+            tremove(chatLines, i)
             return true
         end
     end
     if chatLinesSize >= 30 then
-        table.remove(chatLines, 1)
+        tremove(chatLines, 1)
     end
 end
 
@@ -171,7 +171,7 @@ local addonBlockList = {
     'PS 死亡: .+>',
     '%*%*.+%*%*',
     '<iLvl>',
-    string.rep('%-', 20),
+    strrep('%-', 20),
     '<小队物品等级:.+>',
     '<LFG>',
     '进度:',
@@ -207,7 +207,7 @@ function CHAT:UpdateAddOnBlocker(event, msg, author)
     end
 
     for _, word in ipairs(addonBlockList) do
-        if string.find(msg, word) then
+        if strfind(msg, word) then
             if event == 'CHAT_MSG_SAY' or event == 'CHAT_MSG_YELL' then
                 CHAT:ToggleChatBubble()
             elseif event == 'CHAT_MSG_PARTY' or event == 'CHAT_MSG_PARTY_LEADER' then
@@ -243,7 +243,7 @@ function CHAT:CheckClubName()
     if self.toastType == BN_TOAST_TYPE_CLUB_INVITATION then
         local text = self.DoubleLine:GetText() or ''
         for _, name in pairs(trashClubs) do
-            if string.find(text, name) then
+            if strfind(text, name) then
                 self:Hide()
                 return
             end
@@ -293,7 +293,7 @@ end
 -- Filter azerite message on island expeditions
 local AZERITE_STR = _G.ISLANDS_QUEUE_WEEKLY_QUEST_PROGRESS:gsub('%%d/%%d ', '')
 local function filterAzeriteGain(_, _, msg)
-    if string.find(msg, AZERITE_STR) then
+    if strfind(msg, AZERITE_STR) then
         return true
     end
 end

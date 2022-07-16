@@ -178,7 +178,7 @@ local function ReskinMawBuffsContainer(container)
     blockList:HookScript('OnHide', BlockList_Hide)
 end
 
-table.insert(C.BlizzThemes, function()
+tinsert(C.BlizzThemes, function()
     local r, g, b = C.r, C.g, C.b
 
     -- QuestIcons

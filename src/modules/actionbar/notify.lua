@@ -13,9 +13,9 @@ end
 
 local function GetRemainTime(second)
     if second > 60 then
-        return string.format('%d:%.2d', second / 60, second % 60)
+        return format('%d:%.2d', second / 60, second % 60)
     else
-        return string.format('%ds', second)
+        return format('%ds', second)
     end
 end
 
@@ -25,9 +25,9 @@ function ACTIONBAR:SendCurrentSpell(thisTime, spellID)
     local spellLink = GetSpellLink(spellID)
     if start and duration > 0 then
         local remain = start + duration - thisTime
-        SendNotifyMessage(string.format(L['%s cooldown remaining %s.'], spellLink, GetRemainTime(remain)))
+        SendNotifyMessage(format(L['%s cooldown remaining %s.'], spellLink, GetRemainTime(remain)))
     else
-        SendNotifyMessage(string.format(L['%s is now available.'], spellLink))
+        SendNotifyMessage(format(L['%s is now available.'], spellLink))
     end
 end
 
@@ -35,9 +35,9 @@ function ACTIONBAR:SendCurrentItem(thisTime, itemID, itemLink)
     local start, duration = GetItemCooldown(itemID)
     if start and duration > 0 then
         local remain = start + duration - thisTime
-        SendNotifyMessage(string.format(L['%s cooldown remaining %s.'], itemLink, GetRemainTime(remain)))
+        SendNotifyMessage(format(L['%s cooldown remaining %s.'], itemLink, GetRemainTime(remain)))
     else
-        SendNotifyMessage(string.format(L['%s is now available.'], itemLink))
+        SendNotifyMessage(format(L['%s is now available.'], itemLink))
     end
 end
 

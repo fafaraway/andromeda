@@ -125,7 +125,7 @@ local function sortRosters(a, b)
 end
 
 function INFOBAR:GuildPanel_SortUpdate()
-    table.sort(INFOBAR.GuildTable, sortRosters)
+    sort(INFOBAR.GuildTable, sortRosters)
     INFOBAR:GuildPanel_Update()
 end
 
@@ -254,14 +254,14 @@ function INFOBAR:GuildPanel_Refresh()
         prevTime = thisTime
     end
 
-    table.wipe(INFOBAR.GuildTable)
+    wipe(INFOBAR.GuildTable)
     local count = 0
     local total, _, online = GetNumGuildMembers()
     local guildName, guildRank = GetGuildInfo('player')
 
     gName:SetText(F:RgbToHex({ 0.9, 0.8, 0.6 }) .. '<' .. (guildName or '') .. '>')
-    gOnline:SetText(string.format(C.INFO_COLOR .. '%s:' .. ' %d/%d', _G.GUILD_ONLINE_LABEL, online, total))
-    -- gApps:SetText(string.format(C.INFO_COLOR .. _G.GUILDINFOTAB_APPLICANTS, GetNumGuildApplicants()))
+    gOnline:SetText(format(C.INFO_COLOR .. '%s:' .. ' %d/%d', _G.GUILD_ONLINE_LABEL, online, total))
+    -- gApps:SetText(format(C.INFO_COLOR .. _G.GUILDINFOTAB_APPLICANTS, GetNumGuildApplicants()))
     gRank:SetText(C.INFO_COLOR .. _G.RANK .. ': ' .. (guildRank or ''))
 
     for i = 1, total do

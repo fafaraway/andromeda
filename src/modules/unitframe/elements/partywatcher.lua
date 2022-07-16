@@ -3,7 +3,7 @@ local UNITFRAME = F:GetModule('UnitFrame')
 
 UNITFRAME.PartySpellsList = {}
 function UNITFRAME:UpdatePartyWatcherSpells()
-    table.wipe(UNITFRAME.PartySpellsList)
+    wipe(UNITFRAME.PartySpellsList)
 
     for spellID, duration in pairs(C.PartySpellsList) do
         local name = GetSpellInfo(spellID)
@@ -37,7 +37,7 @@ function UNITFRAME:HandleCDMessage(...)
         return
     end
 
-    local _, msgType, guid, spellID, duration, remaining = string.split(':', msg)
+    local _, msgType, guid, spellID, duration, remaining = strsplit(':', msg)
     if msgType == 'U' then
         spellID = tonumber(spellID)
         duration = tonumber(duration)
@@ -77,7 +77,7 @@ function UNITFRAME:SendCDMessage()
                         remaining = 0
                     end
                     SendPartySyncMsg(
-                        string.format('3:U:%s:%d:%.2f:%.2f:%s', UNITFRAME.myGUID, spellID, duration, remaining, '-')
+                        format('3:U:%s:%d:%.2f:%.2f:%s', UNITFRAME.myGUID, spellID, duration, remaining, '-')
                     ) -- sync to others
                 end
             end
@@ -91,7 +91,7 @@ function UNITFRAME:UpdateSyncStatus()
     if IsInGroup() and not IsInRaid() and C.DB.Unitframe.PartyFrame then
         local thisTime = GetTime()
         if thisTime - lastSyncTime > 5 then
-            SendPartySyncMsg(string.format('3:H:%s:0::0:1', UNITFRAME.myGUID)) -- handshake to ZenTracker
+            SendPartySyncMsg(format('3:H:%s:0::0:1', UNITFRAME.myGUID)) -- handshake to ZenTracker
             lastSyncTime = thisTime
         end
         F:RegisterEvent('SPELL_UPDATE_COOLDOWN', UNITFRAME.SendCDMessage)

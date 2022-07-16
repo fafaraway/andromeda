@@ -2,12 +2,12 @@ local F, C = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 
 local function SetHyperlink(tooltip, refString)
-    if select(3, string.find(refString, '(%a-):')) ~= 'achievement' then
+    if select(3, strfind(refString, '(%a-):')) ~= 'achievement' then
         return
     end
 
-    local _, _, achievementID = string.find(refString, ':(%d+):')
-    local _, _, GUID = string.find(refString, ':%d+:(.-):')
+    local _, _, achievementID = strfind(refString, ':(%d+):')
+    local _, _, GUID = strfind(refString, ':%d+:(.-):')
 
     if GUID == UnitGUID('player') then
         tooltip:Show()
@@ -20,12 +20,12 @@ local function SetHyperlink(tooltip, refString)
     if completed then
         if earnedBy then
             if earnedBy ~= '' then
-                tooltip:AddLine(string.format(_G.ACHIEVEMENT_EARNED_BY, earnedBy))
+                tooltip:AddLine(format(_G.ACHIEVEMENT_EARNED_BY, earnedBy))
             end
             if not wasEarnedByMe then
-                tooltip:AddLine(string.format(_G.ACHIEVEMENT_NOT_COMPLETED_BY, C.MY_NAME))
+                tooltip:AddLine(format(_G.ACHIEVEMENT_NOT_COMPLETED_BY, C.MY_NAME))
             elseif C.MY_NAME ~= earnedBy then
-                tooltip:AddLine(string.format(_G.ACHIEVEMENT_COMPLETED_BY, C.MY_NAME))
+                tooltip:AddLine(format(_G.ACHIEVEMENT_COMPLETED_BY, C.MY_NAME))
             end
         end
     end

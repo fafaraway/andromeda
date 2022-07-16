@@ -119,7 +119,7 @@ function Talentless:CreateSpecButtons()
         _G.GameTooltip:AddLine(select(2, GetSpecializationInfo(self:GetID())))
         _G.GameTooltip:AddLine(' ')
         _G.GameTooltip:AddLine(
-            string.format('|cff33ff33%s|r - %s', _G.HELPFRAME_REPORT_PLAYER_RIGHT_CLICK, _G.EQUIPMENT_MANAGER)
+            format('|cff33ff33%s|r - %s', _G.HELPFRAME_REPORT_PLAYER_RIGHT_CLICK, _G.EQUIPMENT_MANAGER)
         )
         _G.GameTooltip:Show()
     end
@@ -175,7 +175,7 @@ function Talentless:CreateSpecButtons()
 
         F.Reskin(Button)
 
-        table.insert(self.Specs, Button)
+        tinsert(self.Specs, Button)
     end
 end
 
@@ -263,7 +263,7 @@ function Talentless:CreateItemButtons()
         Cooldown:SetAllPoints()
         Button.Cooldown = Cooldown
 
-        table.insert(self.Items, Button)
+        tinsert(self.Items, Button)
     end
 end
 
@@ -283,7 +283,7 @@ function Talentless:UpdateDropdown(spec)
     local info = { func = OnMenuClick }
     for _, setID in next, C_EquipmentSet.GetEquipmentSetIDs() do
         local name, icon = C_EquipmentSet.GetEquipmentSetInfo(setID)
-        info.text = string.format('|T%s:18|t %s', icon or _G.QUESTION_MARK_ICON, name)
+        info.text = format('|T%s:18|t %s', icon or _G.QUESTION_MARK_ICON, name)
         info.args = { setID, spec }
         info.checked = C_EquipmentSet.GetEquipmentSetAssignedSpec(setID) == spec
         Dropdown:AddLine(info)

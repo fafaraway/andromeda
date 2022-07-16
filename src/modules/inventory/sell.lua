@@ -44,7 +44,7 @@ local function UpdateSelling(event, ...)
             return
         end
         stop = false
-        table.wipe(cache)
+        wipe(cache)
         StartSelling()
         F:RegisterEvent('UI_ERROR_MESSAGE', UpdateSelling)
     elseif event == 'UI_ERROR_MESSAGE' and arg == errorText or event == 'MERCHANT_CLOSED' then

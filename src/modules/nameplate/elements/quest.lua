@@ -54,16 +54,16 @@ function NAMEPLATE:UpdateQuestUnit(_, unit)
             if isInGroup and text == C.MY_NAME or (not isInGroup and isQuestTitle(textLine)) then
                 startLooking = true
             elseif startLooking then
-                local current, goal = string.match(text, '(%d+)/(%d+)')
-                local progress = string.match(text, '(%d+)%%')
+                local current, goal = strmatch(text, '(%d+)/(%d+)')
+                local progress = strmatch(text, '(%d+)%%')
                 if current and goal then
-                    local diff = math.floor(goal - current)
+                    local diff = floor(goal - current)
                     if diff > 0 then
                         questProgress = diff
                         break
                     end
-                elseif progress and not string.match(text, _G.THREAT_TOOLTIP) then
-                    if math.floor(100 - progress) > 0 then
+                elseif progress and not strmatch(text, _G.THREAT_TOOLTIP) then
+                    if floor(100 - progress) > 0 then
                         questProgress = progress .. '%' -- lower priority on progress, keep looking
                     end
                 else

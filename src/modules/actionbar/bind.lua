@@ -3,8 +3,8 @@ local ACTIONBAR = F:GetModule('ActionBar')
 
 -- Button types
 local function hookActionButton(self)
-    local pet = self.commandName and string.find(self.commandName, '^BONUSACTION') and 'PET'
-    local stance = self.commandName and string.find(self.commandName, '^SHAPESHIFT') and 'STANCE'
+    local pet = self.commandName and strfind(self.commandName, '^BONUSACTION') and 'PET'
+    local stance = self.commandName and strfind(self.commandName, '^SHAPESHIFT') and 'STANCE'
     ACTIONBAR:Bind_Update(self, pet or stance or nil)
 end
 
@@ -193,7 +193,7 @@ function ACTIONBAR:Bind_Listener(key)
             end
         end
         F:Print(
-            string.format(L['All keybinds cleared for %s.'], C.GREEN_COLOR .. (frame.tipName or frame.name) .. '|r')
+            format(L['All keybinds cleared for %s.'], C.GREEN_COLOR .. (frame.tipName or frame.name) .. '|r')
         )
 
         ACTIONBAR:Bind_Update(frame.button, frame.spellmacro)
@@ -209,8 +209,8 @@ function ACTIONBAR:Bind_Listener(key)
     if key == 'MiddleButton' then
         key = 'BUTTON3'
     end
-    if string.find(key, 'Button%d') then
-        key = string.upper(key)
+    if strfind(key, 'Button%d') then
+        key = strupper(key)
     end
 
     local alt = IsAltKeyDown() and 'ALT-' or ''

@@ -100,9 +100,9 @@ function M:MissingStats()
     function _G.PaperDollFrame_SetAttackSpeed(statFrame, unit)
         local meleeHaste = GetMeleeHaste()
         local speed, offhandSpeed = UnitAttackSpeed(unit)
-        local displaySpeed = string.format('%.2f', speed)
+        local displaySpeed = format('%.2f', speed)
         if offhandSpeed then
-            offhandSpeed = string.format('%.2f', offhandSpeed)
+            offhandSpeed = format('%.2f', offhandSpeed)
         end
         if offhandSpeed then
             displaySpeed = BreakUpLargeNumbers(displaySpeed) .. ' / ' .. offhandSpeed
@@ -111,11 +111,11 @@ function M:MissingStats()
         end
         _G.PaperDollFrame_SetLabelAndText(statFrame, _G.WEAPON_SPEED, displaySpeed, false, speed)
         statFrame.tooltip = _G.HIGHLIGHT_FONT_COLOR_CODE
-            .. string.format(_G.PAPERDOLLFRAME_TOOLTIP_FORMAT, _G.ATTACK_SPEED)
+            .. format(_G.PAPERDOLLFRAME_TOOLTIP_FORMAT, _G.ATTACK_SPEED)
             .. ' '
             .. displaySpeed
             .. _G.FONT_COLOR_CODE_CLOSE
-        statFrame.tooltip2 = string.format(_G.STAT_ATTACK_SPEED_BASE_TOOLTIP, BreakUpLargeNumbers(meleeHaste))
+        statFrame.tooltip2 = format(_G.STAT_ATTACK_SPEED_BASE_TOOLTIP, BreakUpLargeNumbers(meleeHaste))
         statFrame:Show()
     end
 
@@ -127,9 +127,9 @@ function M:MissingStats()
 
         local avgItemLevel, avgItemLevelEquipped = GetAverageItemLevel()
         local minItemLevel = C_PaperDollInfo.GetMinItemLevel()
-        local displayItemLevel = math.max(minItemLevel or 0, avgItemLevelEquipped)
-        displayItemLevel = string.format('%.1f', displayItemLevel)
-        avgItemLevel = string.format('%.1f', avgItemLevel)
+        local displayItemLevel = max(minItemLevel or 0, avgItemLevelEquipped)
+        displayItemLevel = format('%.1f', displayItemLevel)
+        avgItemLevel = format('%.1f', avgItemLevel)
 
         if displayItemLevel ~= avgItemLevel then
             displayItemLevel = displayItemLevel .. ' / ' .. avgItemLevel

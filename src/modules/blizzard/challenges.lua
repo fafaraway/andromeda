@@ -14,11 +14,11 @@ function ECF:GuildBest_UpdateTooltip()
     _G.GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
     local name = C_ChallengeMode.GetMapUIInfo(leaderInfo.mapChallengeModeID)
     _G.GameTooltip:SetText(name, 1, 1, 1)
-    _G.GameTooltip:AddLine(string.format(_G.CHALLENGE_MODE_POWER_LEVEL, leaderInfo.keystoneLevel))
+    _G.GameTooltip:AddLine(format(_G.CHALLENGE_MODE_POWER_LEVEL, leaderInfo.keystoneLevel))
     for i = 1, #leaderInfo.members do
-        local classColorStr = string.sub(F:RgbToHex(F:ClassColor(leaderInfo.members[i].classFileName)), 3, 10)
+        local classColorStr = strsub(F:RgbToHex(F:ClassColor(leaderInfo.members[i].classFileName)), 3, 10)
         _G.GameTooltip:AddLine(
-            string.format(_G.CHALLENGE_MODE_GUILD_BEST_LINE, classColorStr, leaderInfo.members[i].name)
+            format(_G.CHALLENGE_MODE_GUILD_BEST_LINE, classColorStr, leaderInfo.members[i].name)
         )
     end
     _G.GameTooltip:Show()
@@ -67,8 +67,8 @@ function ECF:GuildBest_SetUp(leaderInfo)
         str = _G.CHALLENGE_MODE_GUILD_BEST_LINE_YOU
     end
 
-    local classColorStr = string.sub(F:RgbToHex(F:ClassColor(leaderInfo.classFileName)), 3, 10)
-    self.CharacterName:SetText(string.format(str, classColorStr, leaderInfo.name))
+    local classColorStr = strsub(F:RgbToHex(F:ClassColor(leaderInfo.classFileName)), 3, 10)
+    self.CharacterName:SetText(format(str, classColorStr, leaderInfo.name))
     self.Level:SetText(leaderInfo.keystoneLevel)
 end
 
@@ -145,13 +145,13 @@ function ECF:KeystoneInfo_WeeklyRuns()
         _G.GameTooltip:AddLine(' ')
         _G.GameTooltip:AddDoubleLine(
             isShiftKeyDown and _G.CHALLENGE_MODE_THIS_WEEK
-                or string.format(_G.WEEKLY_REWARDS_MYTHIC_TOP_RUNS, WeeklyRunsThreshold),
+                or format(_G.WEEKLY_REWARDS_MYTHIC_TOP_RUNS, WeeklyRunsThreshold),
             '(' .. numRuns .. ')',
             0.6,
             0.8,
             1
         )
-        table.sort(runHistory, sortHistory)
+        sort(runHistory, sortHistory)
 
         for i = 1, isShiftKeyDown and numRuns or WeeklyRunsThreshold do
             local runInfo = runHistory[i]
@@ -189,13 +189,13 @@ function ECF:KeystoneInfo_Create()
         _G.GameTooltip:AddLine(L['Account Keystones'])
         for name, info in pairs(_G.ANDROMEDA_ADB.KeystoneInfo) do
             local newName = Ambiguate(name, 'none')
-            local mapID, level, class, faction = string.split(':', info)
+            local mapID, level, class, faction = strsplit(':', info)
             local color = F:RgbToHex(F:ClassColor(class))
             local factionColor = faction == 'Horde' and '|cffff5040' or '|cff00adf0'
             local dungeon = C_ChallengeMode.GetMapUIInfo(tonumber(mapID))
             _G.GameTooltip:AddDoubleLine(
-                string.format(color .. '%s:|r', newName),
-                string.format('%s%s(%s)|r', factionColor, dungeon, level)
+                format(color .. '%s:|r', newName),
+                format('%s%s(%s)|r', factionColor, dungeon, level)
             )
         end
         _G.GameTooltip:AddDoubleLine(' ', C.LINE_STRING)
@@ -220,7 +220,7 @@ function ECF:KeystoneInfo_Create()
             end
             F:TogglePanel(_G.WeeklyRewardsFrame)
         elseif btn == 'MiddleButton' then
-            table.wipe(_G.ANDROMEDA_ADB.KeystoneInfo)
+            wipe(_G.ANDROMEDA_ADB.KeystoneInfo)
             ECF:KeystoneInfo_Update() -- update own keystone info after reset
         end
     end)

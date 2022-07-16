@@ -17,7 +17,7 @@ StaticPopupDialogs.ANDROMEDA_RESET_LAYOUT = {
     button1 = _G.OKAY,
     button2 = _G.CANCEL,
     OnAccept = function()
-        table.wipe(C.DB.UIAnchor)
+        wipe(C.DB.UIAnchor)
         _G.ReloadUI()
     end,
     timeout = 0,
@@ -76,7 +76,7 @@ StaticPopupDialogs.ANDROMEDA_RESET_PARTY_SPELLS = {
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
-        table.wipe(_G.ANDROMEDA_ADB['PartySpellsList'])
+        wipe(_G.ANDROMEDA_ADB['PartySpellsList'])
         _G.ReloadUI()
     end,
     whileDead = 1,
@@ -150,7 +150,7 @@ StaticPopupDialogs.ANDROMEDA_RESET_CURRENT_PROFILE = {
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
-        table.wipe(C.DB)
+        wipe(C.DB)
         _G.ReloadUI()
     end,
     timeout = 0,
@@ -215,7 +215,7 @@ StaticPopupDialogs.ANDROMEDA_DELETE_UNIT_PROFILE = {
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function(self)
-        local name, realm = string.split('-', self.text.text_arg1)
+        local name, realm = strsplit('-', self.text.text_arg1)
         if _G.ANDROMEDA_ADB['GoldStatistic'][realm] and _G.ANDROMEDA_ADB['GoldStatistic'][realm][name] then
             _G.ANDROMEDA_ADB['GoldStatistic'][realm][name] = nil
         end
@@ -230,7 +230,7 @@ StaticPopupDialogs.ANDROMEDA_DELETE_UNIT_PROFILE = {
             r, g, b = F:ClassColor(class)
         end
         self.text:SetText(
-            string.format(
+            format(
                 C.RED_COLOR .. L['Are you sure to delete %s%s|r profile?'],
                 F:RgbToHex(r, g, b),
                 self.text.text_arg1
@@ -248,7 +248,7 @@ StaticPopupDialogs.ANDROMEDA_INVENTORY_RESET_JUNK_LIST = {
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
-        table.wipe(_G.ANDROMEDA_ADB.CustomJunkList)
+        wipe(_G.ANDROMEDA_ADB.CustomJunkList)
     end,
     timeout = 0,
     whileDead = 1,

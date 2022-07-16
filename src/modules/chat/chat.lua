@@ -118,7 +118,7 @@ local function SetupChatFrame(self)
     eb.__owner = self
     UpdateEditBoxAnchor(eb)
     eb.bd = F.SetBD(eb)
-    table.insert(chatEditboxes, eb)
+    tinsert(chatEditboxes, eb)
 
     for i = 3, 8 do
         select(i, eb:GetRegions()):SetAlpha(0)
@@ -319,7 +319,7 @@ function CHAT:SwitchToChannel(chatType)
 end
 
 function CHAT:UpdateTabChannelSwitch()
-    if string.sub(self:GetText(), 1, 1) == '/' then
+    if strsub(self:GetText(), 1, 1) == '/' then
         return
     end
 
@@ -432,7 +432,7 @@ function CHAT.OnChatWhisper(event, ...)
     for word in pairs(whisperList) do
         if
             (not IsInGroup() or UnitIsGroupLeader('player') or UnitIsGroupAssistant('player'))
-            and string.lower(msg) == string.lower(word)
+            and strlower(msg) == strlower(word)
         then
             if event == 'CHAT_MSG_BN_WHISPER' then
                 local accountInfo = C_BattleNet.GetAccountInfoByID(presenceID)
@@ -519,8 +519,8 @@ function CHAT:AltClickToInvite(link)
         if player then
             C_PartyInfo.InviteUnit(player)
         elseif bplayer then
-            local _, value = string.match(link, '(%a+):(.+)')
-            local _, bnID = string.match(value, '([^:]*):([^:]*):')
+            local _, value = strmatch(link, '(%a+):(.+)')
+            local _, bnID = strmatch(value, '([^:]*):([^:]*):')
             if not bnID then
                 return
             end
@@ -550,7 +550,7 @@ end
 
 -- Save slash command typo
 local function TypoHistory_Posthook_AddMessage(chat, text)
-    if text and string.find(text, _G.HELP_TEXT_SIMPLE) then
+    if text and strfind(text, _G.HELP_TEXT_SIMPLE) then
         _G.ChatEdit_AddHistory(chat.editBox)
     end
 end
@@ -595,7 +595,7 @@ local function getColoredName(event, arg1, arg2, ...)
             role = UnitGroupRolesAssigned(arg2:gsub(' *-[^-]+$', ''))
         end
         if role and role ~= 'NONE' then
-            local str = string.format(texStr, texList[role])
+            local str = format(texStr, texList[role])
             ret = str .. ' ' .. ret
         end
     end

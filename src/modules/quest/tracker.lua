@@ -62,9 +62,9 @@ local function GetProgressColor(progress)
     local b = (progressColors.complete.r - progressColors.start.b) * progress + progressColors.start.b
 
     local addition = 0.35
-    r = math.min(r + math.abs(0.5 - progress) * addition, r)
-    g = math.min(g + math.abs(0.5 - progress) * addition, g)
-    b = math.min(b + math.abs(0.5 - progress) * addition, b)
+    r = min(r + abs(0.5 - progress) * addition, r)
+    g = min(g + abs(0.5 - progress) * addition, g)
+    b = min(b + abs(0.5 - progress) * addition, b)
 
     return { r = r, g = g, b = b }
 end
@@ -134,10 +134,10 @@ function EOT:ColorfulProgression(text)
         return
     end
 
-    local current, required, details = string.match(info, '^(%d-)/(%d-) (.+)')
+    local current, required, details = strmatch(info, '^(%d-)/(%d-) (.+)')
 
     if not (current and required and details) then
-        details, current, required = string.match(info, '(.+): (%d-)/(%d-)$')
+        details, current, required = strmatch(info, '(.+): (%d-)/(%d-)$')
     end
 
     if not (current and required and details) then

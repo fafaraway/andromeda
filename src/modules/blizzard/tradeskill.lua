@@ -138,7 +138,7 @@ function BLIZZARD:TradeTabs_Create(spellID, toyID, itemID)
     tab.cover:EnableMouse(true)
 
     tab:SetPoint('TOPLEFT', _G.TradeSkillFrame, 'TOPRIGHT', 3, -index * 42)
-    table.insert(tabList, tab)
+    tinsert(tabList, tab)
     index = index + 1
 end
 
@@ -233,7 +233,7 @@ local function IsRecipeEnchanting(self)
         local parentSkillLineID = select(6, C_TradeSkillUI.GetTradeSkillLine())
         if parentSkillLineID == 333 then
             isEnchanting = true
-            self.CreateButton.tooltip = string.format(
+            self.CreateButton.tooltip = format(
                 tooltipString,
                 L['Right click to use vellum'],
                 GetItemCount(ENCHANTING_VELLUM)

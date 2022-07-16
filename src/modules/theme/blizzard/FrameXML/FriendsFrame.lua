@@ -13,7 +13,7 @@ local function replaceInviteTex(self, atlas)
     end
 end
 
-table.insert(C.BlizzThemes, function()
+tinsert(C.BlizzThemes, function()
     if not _G.ANDROMEDA_ADB.ReskinBlizz then
         return
     end

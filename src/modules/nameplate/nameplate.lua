@@ -137,7 +137,7 @@ function NAMEPLATE:CheckUnitsList()
 end
 
 local function RefreshNameplateUnits(list, enable)
-    table.wipe(NAMEPLATE[list])
+    wipe(NAMEPLATE[list])
 
     if not C.DB['Nameplate'][enable] then
         return
@@ -177,7 +177,7 @@ local groupRoles, isInGroup = {}
 local function refreshGroupRoles()
     local isInRaid = IsInRaid()
     isInGroup = isInRaid or IsInGroup()
-    table.wipe(groupRoles)
+    wipe(groupRoles)
 
     if isInGroup then
         local numPlayers = (isInRaid and GetNumGroupMembers()) or GetNumSubgroupMembers()
@@ -193,7 +193,7 @@ end
 
 local function resetGroupRoles()
     isInGroup = IsInRaid() or IsInGroup()
-    table.wipe(groupRoles)
+    wipe(groupRoles)
 end
 
 function NAMEPLATE:UpdateGroupRoles()
@@ -404,7 +404,7 @@ end
 -- Major spells glow
 NAMEPLATE.MajorSpellsList = {}
 function NAMEPLATE:RefreshMajorSpellsFilter()
-    table.wipe(NAMEPLATE.MajorSpellsList)
+    wipe(NAMEPLATE.MajorSpellsList)
 
     for spellID in pairs(C.MajorSpellsList) do
         local name = GetSpellInfo(spellID)

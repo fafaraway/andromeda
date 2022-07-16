@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 
-table.insert(C.BlizzThemes, function()
+tinsert(C.BlizzThemes, function()
     local r, g, b, pairs = C.r, C.g, C.b, pairs
 
     -- Head Frame

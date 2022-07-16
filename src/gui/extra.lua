@@ -2525,7 +2525,7 @@ function GUI:SetupPartyWatcher(parent)
         for spellID, duration in pairs(value) do
             local spellName, _, texture = GetSpellInfo(spellID)
             if spellName then
-                table.insert(menuList[index].menuList, {
+                tinsert(menuList[index].menuList, {
                     text = spellName,
                     icon = texture,
                     tCoordLeft = 0.08,
@@ -2607,7 +2607,7 @@ do
         local function addNewDungeon(dungeons, dungeonID)
             local name = EJ_GetInstanceInfo(dungeonID)
             if name then
-                table.insert(dungeons, name)
+                tinsert(dungeons, name)
             end
         end
 
@@ -2659,8 +2659,8 @@ do
 
         local function analyzePrio(priority)
             priority = priority or 2
-            priority = math.min(priority, 6)
-            priority = math.max(priority, 1)
+            priority = min(priority, 6)
+            priority = max(priority, 1)
             return priority
         end
 

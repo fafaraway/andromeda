@@ -18,7 +18,7 @@ end
 
 function F:RandomAnimShake(index)
     local s = animShake[index]
-    return math.random(s[1], s[2]), math.random(s[3], s[4])
+    return random(s[1], s[2]), random(s[3], s[4])
 end
 
 function F:SetUpAnimGroup(obj, Type, ...)
@@ -26,7 +26,7 @@ function F:SetUpAnimGroup(obj, Type, ...)
         Type = 'Flash'
     end
 
-    if string.sub(Type, 1, 5) == 'Flash' then
+    if strsub(Type, 1, 5) == 'Flash' then
         obj.anim = obj:CreateAnimationGroup('Flash')
         obj.anim.fadein = obj.anim:CreateAnimation('ALPHA', 'FadeIn')
         obj.anim.fadein:SetFromAlpha(0)
@@ -41,7 +41,7 @@ function F:SetUpAnimGroup(obj, Type, ...)
         if Type == 'FlashLoop' then
             obj.anim:SetScript('OnFinished', F.FlashLoopFinished)
         end
-    elseif string.sub(Type, 1, 5) == 'Shake' then
+    elseif strsub(Type, 1, 5) == 'Shake' then
         local shake = obj:CreateAnimationGroup(Type)
         shake:SetLooping('REPEAT')
         shake.path = shake:CreateAnimation('Path')

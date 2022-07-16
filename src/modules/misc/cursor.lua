@@ -21,7 +21,7 @@ local function GetLength(startX, startY, endX, endY)
         dx, dy = -dx, -dy
     end
 
-    return math.sqrt((dx * dx) + (dy * dy))
+    return sqrt((dx * dx) + (dy * dy))
 end
 
 local function UpdateTrail()
@@ -59,7 +59,7 @@ local function UpdateGlow(self, elapsed)
     dX = x - dX
     dY = y - dY
     local weight = 2048 ^ -elapsed
-    speed = math.min(weight * speed + (1 - weight) * math.sqrt(dX * dX + dY * dY) / elapsed, 1024)
+    speed = min(weight * speed + (1 - weight) * sqrt(dX * dX + dY * dY) / elapsed, 1024)
     local size = speed / 6 - 16
     if size > 0 then
         local scale = _G.UIParent:GetEffectiveScale()

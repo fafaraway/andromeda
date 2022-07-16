@@ -40,7 +40,7 @@ end
 
 local fixedStrings = { ['横扫'] = '低扫', ['突刺'] = '突袭' }
 local function isActionMatch(msg, text)
-    return text and string.find(msg, text)
+    return text and strfind(msg, text)
 end
 
 function QH:QuestTool_SetGlow(msg)

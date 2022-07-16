@@ -47,7 +47,7 @@ end
 
 local function IsButtonIgnored(name)
     for addonName in pairs(ignoredButtons) do
-        if string.match(name, addonName) then
+        if strmatch(name, addonName) then
             return true
         end
     end
@@ -69,8 +69,8 @@ local function RestyleAddOnIcon(child, name)
             local texture = region:GetTexture() or ''
             if
                 removedTextures[texture]
-                or string.find(texture, 'Interface\\CharacterFrame')
-                or string.find(texture, 'Interface\\Minimap')
+                or strfind(texture, 'Interface\\CharacterFrame')
+                or strfind(texture, 'Interface\\Minimap')
             then
                 region:SetTexture(nil)
             end
@@ -89,7 +89,7 @@ local function RestyleAddOnIcon(child, name)
         child.bg:SetBackdropBorderColor(0, 0, 0)
     end
 
-    table.insert(buttons, child)
+    tinsert(buttons, child)
 end
 
 local function KillAddOnIcon()
@@ -137,7 +137,7 @@ local function CollectRubbish()
             local name = child and child.GetName and child:GetName()
             if name and not child.isExamed and not buttonBlackList[name] then
                 if
-                    (child:IsObjectType('Button') or string.match(string.upper(name), 'BUTTON'))
+                    (child:IsObjectType('Button') or strmatch(strupper(name), 'BUTTON'))
                     and not IsButtonIgnored(name)
                 then
                     RestyleAddOnIcon(child, name)
@@ -163,10 +163,10 @@ local function SortRubbish()
         return
     end
 
-    table.wipe(shownButtons)
+    wipe(shownButtons)
     for _, button in pairs(buttons) do
         if next(button) and button:IsShown() then -- fix for fuxking AHDB
-            table.insert(shownButtons, button)
+            tinsert(shownButtons, button)
         end
     end
 
@@ -179,7 +179,7 @@ local function SortRubbish()
         button:ClearAllPoints()
         if index == 1 then
             button:SetPoint('BOTTOMRIGHT', _G.Minimap.AddOnCollectorTray, -3, 3)
-        elseif row > 1 and math.fmod(index, row) == 1 or row == 1 then
+        elseif row > 1 and mod(index, row) == 1 or row == 1 then
             button:SetPoint('RIGHT', shownButtons[index - row], 'LEFT', -3, 0)
         else
             button:SetPoint('BOTTOM', shownButtons[index - 1], 'TOP', 0, 3)

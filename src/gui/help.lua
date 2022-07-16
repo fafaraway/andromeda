@@ -124,7 +124,7 @@ local function ConstructTextString(f)
 
     local offset = 50
     for k, v in ipairs(strList.cmd.primary) do
-        local a, b = string.split('~', v)
+        local a, b = strsplit('~', v)
         local str1 = GUI:FormatTextString(a)
         local str2 = GUI:FormatTextString(b)
 
@@ -135,7 +135,7 @@ local function ConstructTextString(f)
     end
 
     for k, v in ipairs(strList.cmd.secondary) do
-        local a, b = string.split('~', v)
+        local a, b = strsplit('~', v)
         local newStr = GUI:FormatTextString(a .. b)
 
         F.CreateFS(f.rbox, C.Assets.Font.Bold, 14, outline, newStr, { 0.6, 0.6, 0.6 }, outline or 'THICK', 'TOPLEFT', 0, -(k * 24) - 26)

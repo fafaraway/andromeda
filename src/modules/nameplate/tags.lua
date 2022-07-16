@@ -13,7 +13,7 @@ local function ColorHealthPerc(unit)
     r, g, b = r * 255, g * 255, b * 255
 
     if cur ~= max then
-        local perc = string.format('|cff%02x%02x%02x%d%%|r', r, g, b, math.floor(cur / max * 100 + 0.5))
+        local perc = format('|cff%02x%02x%02x%d%%|r', r, g, b, floor(cur / max * 100 + 0.5))
         return perc
     end
 end
@@ -100,11 +100,11 @@ local _tags = {
         local class, level = UnitClassification(unit), UnitLevel(unit)
 
         if class == 'worldboss' or level == -1 then
-            return string.format(texStr, C.Assets.Texture.Boss)
+            return format(texStr, C.Assets.Texture.Boss)
         elseif (class == 'rare') or (class == 'rareelite') then
-            return string.format(texStr, C.Assets.Texture.Rare)
+            return format(texStr, C.Assets.Texture.Rare)
         elseif class == 'elite' then
-            return string.format(texStr, C.Assets.Texture.Elite)
+            return format(texStr, C.Assets.Texture.Elite)
         end
     end,
 

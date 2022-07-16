@@ -48,7 +48,7 @@ local function fixAnim(frame)
     frame.hookded = true
 end
 
-table.insert(C.BlizzThemes, function()
+tinsert(C.BlizzThemes, function()
     hooksecurefunc('AlertFrame_PauseOutAnimation', fixBg)
 
     -- AlertFrames

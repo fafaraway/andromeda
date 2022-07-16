@@ -28,10 +28,10 @@ function THEME:LoadAddOnSkins()
         func()
     end
 
-    table.wipe(C.BlizzThemes)
+    wipe(C.BlizzThemes)
 
     if not _G.ANDROMEDA_ADB.ReskinBlizz then
-        table.wipe(C.Themes)
+        wipe(C.Themes)
     end
 
     THEME:LoadSkins(C.Themes) -- blizzard ui

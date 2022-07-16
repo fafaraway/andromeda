@@ -68,21 +68,21 @@ end
 local day, hour, minute = 86400, 3600, 60
 function AURA:FormatAuraTime(s)
     if s >= day then
-        return string.format('|cffbebfb3%d|r' .. C.INFO_COLOR .. 'd', s / day + 0.5), s % day
+        return format('|cffbebfb3%d|r' .. C.INFO_COLOR .. 'd', s / day + 0.5), s % day
     elseif s >= hour then
-        return string.format('|cff4fcd35%d|r' .. C.INFO_COLOR .. 'h', s / hour + 0.5), s % hour
+        return format('|cff4fcd35%d|r' .. C.INFO_COLOR .. 'h', s / hour + 0.5), s % hour
     elseif s >= 2 * hour then
-        return string.format('|cff4fcd35%d|r' .. C.INFO_COLOR .. 'h', s / hour + 0.5), s % hour
+        return format('|cff4fcd35%d|r' .. C.INFO_COLOR .. 'h', s / hour + 0.5), s % hour
     elseif s >= 10 * minute then
-        return string.format('|cff21c8de%d|r' .. C.INFO_COLOR .. 'm', s / minute + 0.5), s % minute
+        return format('|cff21c8de%d|r' .. C.INFO_COLOR .. 'm', s / minute + 0.5), s % minute
     elseif s >= minute then
-        return string.format('|cff21c8de%d:%.2d|r', s / minute, s % minute), s - math.floor(s)
+        return format('|cff21c8de%d:%.2d|r', s / minute, s % minute), s - floor(s)
     elseif s > 10 then
-        return string.format('|cffffe700%d|r' .. C.INFO_COLOR .. 's', s + 0.5), s - math.floor(s)
+        return format('|cffffe700%d|r' .. C.INFO_COLOR .. 's', s + 0.5), s - floor(s)
     elseif s > 5 then
-        return string.format('|cffffff00%.1f|r', s), s - string.format('%.1f', s)
+        return format('|cffffff00%.1f|r', s), s - format('%.1f', s)
     else
-        return string.format('|cffff0000%.1f|r', s), s - string.format('%.1f', s)
+        return format('|cffff0000%.1f|r', s), s - format('%.1f', s)
     end
 end
 
@@ -204,7 +204,7 @@ function AURA:UpdateHeader(header)
     if header.filter == 'HELPFUL' then
         cfg = AURA.settings.Buffs
         header:SetAttribute('consolidateTo', 0)
-        header:SetAttribute('weaponTemplate', string.format(C.ADDON_TITLE .. 'AuraTemplate%d', cfg.size))
+        header:SetAttribute('weaponTemplate', format(C.ADDON_TITLE .. 'AuraTemplate%d', cfg.size))
     end
 
     header:SetAttribute('separateOwn', 1)
@@ -219,13 +219,13 @@ function AURA:UpdateHeader(header)
     header:SetAttribute('yOffset', 0)
     header:SetAttribute('wrapXOffset', 0)
     header:SetAttribute('wrapYOffset', -(cfg.size + cfg.offset))
-    header:SetAttribute('template', string.format(C.ADDON_TITLE .. 'AuraTemplate%d', cfg.size))
+    header:SetAttribute('template', format(C.ADDON_TITLE .. 'AuraTemplate%d', cfg.size))
 
-    local fontSize = math.floor(cfg.size / 30 * 10 + 0.5)
+    local fontSize = floor(cfg.size / 30 * 10 + 0.5)
     local index = 1
     local child = select(index, header:GetChildren())
     while child do
-        if (math.floor(child:GetWidth() * 100 + 0.5) / 100) ~= cfg.size then
+        if (floor(child:GetWidth() * 100 + 0.5) / 100) ~= cfg.size then
             child:SetSize(cfg.size, cfg.size)
         end
 
@@ -290,14 +290,14 @@ function AURA:CreateAuraIcon(button)
     button.header = button:GetParent()
     button.filter = button.header.filter
     button.name = button:GetName()
-    local enchantIndex = tonumber(string.match(button.name, 'TempEnchant(%d)$'))
+    local enchantIndex = tonumber(strmatch(button.name, 'TempEnchant(%d)$'))
     button.enchantOffset = indexToOffset[enchantIndex]
 
     local cfg = AURA.settings.Debuffs
     if button.filter == 'HELPFUL' then
         cfg = AURA.settings.Buffs
     end
-    local fontSize = math.floor(cfg.size / 30 * 10 + 0.5)
+    local fontSize = floor(cfg.size / 30 * 10 + 0.5)
 
     button.icon = button:CreateTexture(nil, 'BORDER')
     button.icon:SetInside()

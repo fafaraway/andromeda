@@ -22,7 +22,7 @@ end
 
 local function isCloseEnough(new, target, range)
     if range > 0 then
-        return math.abs((new - target) / range) <= 0.001
+        return abs((new - target) / range) <= 0.001
     end
 
     return true

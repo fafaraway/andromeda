@@ -11,7 +11,7 @@ lootFrame:SetClampedToScreen(true)
 lootFrame:SetWidth(width)
 lootFrame:SetHeight(64)
 lootFrame:Hide()
-table.insert(_G.UISpecialFrames, C.ADDON_TITLE .. 'LootFrame')
+tinsert(_G.UISpecialFrames, C.ADDON_TITLE .. 'LootFrame')
 
 lootFrame.slots = {}
 
@@ -117,7 +117,7 @@ local AnchorLootSlots = function(self)
         end
     end
 
-    self:SetHeight(math.max(shownSlots * iconsize + 16, 20))
+    self:SetHeight(max(shownSlots * iconsize + 16, 20))
 end
 
 lootFrame.LOOT_CLOSED = function(self)
@@ -203,7 +203,7 @@ lootFrame.LOOT_OPENED = function(self, _, autoloot)
                 slot.name:SetWordWrap(false)
                 slot.icon:SetTexture(lootIcon)
 
-                maxQuality = math.max(maxQuality, lootQuality)
+                maxQuality = max(maxQuality, lootQuality)
 
                 slot:Enable()
                 slot:Show()

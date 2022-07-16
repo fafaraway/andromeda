@@ -35,7 +35,7 @@ function QUEST:OnLogin()
         F:RegisterEvent('QUEST_LOG_UPDATE', QUEST.CheckNormalQuest)
         F:RegisterEvent('QUEST_TURNED_IN', QUEST.CheckWorldQuest)
     else
-        table.wipe(completedQuest)
+        wipe(completedQuest)
         F:UnregisterEvent('QUEST_LOG_UPDATE', QUEST.CheckNormalQuest)
         F:UnregisterEvent('QUEST_TURNED_IN', QUEST.CheckWorldQuest)
     end

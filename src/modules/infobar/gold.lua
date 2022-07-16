@@ -2,7 +2,7 @@ local F, C, L = unpack(select(2, ...))
 local INFOBAR = F:GetModule('InfoBar')
 
 local function FormatMoney(money)
-    return string.format('%s: %s', L['Gold'], GetMoneyString(money))
+    return format('%s: %s', L['Gold'], GetMoneyString(money))
 end
 
 local crossRealms = GetAutoCompleteRealms()
@@ -17,7 +17,7 @@ StaticPopupDialogs.ANDROMEDA_RESET_ALL_GOLD_STATISTICS = {
     OnAccept = function()
         for _, realm in pairs(crossRealms) do
             if _G.ANDROMEDA_ADB['GoldStatistic'][realm] then
-                table.wipe(_G.ANDROMEDA_ADB['GoldStatistic'][realm])
+                wipe(_G.ANDROMEDA_ADB['GoldStatistic'][realm])
             end
         end
 

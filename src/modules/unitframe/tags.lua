@@ -37,7 +37,7 @@ local _tags = {
         local cur = UnitHealth(unit)
         local r, g, b = unpack(colors.reaction[UnitReaction(unit, 'player') or 5])
 
-        return string.format('|cff%02x%02x%02x%s|r', r * 255, g * 255, b * 255, F:Numb(cur))
+        return format('|cff%02x%02x%02x%s|r', r * 255, g * 255, b * 255, F:Numb(cur))
     end,
     -- health perc
     healthperc = function(unit)
@@ -50,7 +50,7 @@ local _tags = {
         r, g, b = r * 255, g * 255, b * 255
 
         if cur ~= max then
-            return string.format('|cff%02x%02x%02x%d%%|r', r, g, b, math.floor(cur / max * 100 + 0.5))
+            return format('|cff%02x%02x%02x%d%%|r', r, g, b, floor(cur / max * 100 + 0.5))
         end
     end,
     -- power value
@@ -68,7 +68,7 @@ local _tags = {
         local max = UnitPowerMax(unit, _G.ALTERNATE_POWER_INDEX)
 
         if max > 0 and not UnitIsDeadOrGhost(unit) then
-            return ('%s%%'):format(math.floor(cur / max * 100 + 0.5))
+            return ('%s%%'):format(floor(cur / max * 100 + 0.5))
         end
     end,
 

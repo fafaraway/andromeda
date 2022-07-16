@@ -120,9 +120,9 @@ do
     hooksecurefunc('ChatEdit_InsertLink', function(text) -- shift-clicked
         -- change from SearchBox:HasFocus to :IsShown again
         if text and _G.TradeSkillFrame and _G.TradeSkillFrame:IsShown() then
-            local spellId = string.match(text, 'enchant:(%d+)')
+            local spellId = strmatch(text, 'enchant:(%d+)')
             local spell = GetSpellInfo(spellId)
-            local item = GetItemInfo(string.match(text, 'item:(%d+)') or 0)
+            local item = GetItemInfo(strmatch(text, 'item:(%d+)') or 0)
             local search = spell or item
             if not search then
                 return

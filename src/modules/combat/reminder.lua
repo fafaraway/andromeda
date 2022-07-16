@@ -225,7 +225,7 @@ function BR:Reminder_Create(cfg)
     frame:Hide()
     cfg.frame = frame
 
-    table.insert(frames, frame)
+    tinsert(frames, frame)
 end
 
 function BR:Reminder_UpdateAnchor()
@@ -259,7 +259,7 @@ function BR:Reminder_AddItemGroup()
             if not groups then
                 groups = {}
             end
-            table.insert(groups, value)
+            tinsert(groups, value)
         end
     end
 end

@@ -12,9 +12,9 @@ local entered
 
 local function formatMemory(value)
     if value > 1024 then
-        return string.format('%.1f mb', value / 1024)
+        return format('%.1f mb', value / 1024)
     else
-        return string.format('%.0f kb', value)
+        return format('%.0f kb', value)
     end
 end
 
@@ -43,11 +43,11 @@ local function BuildAddonList()
         return
     end
 
-    table.wipe(infoTable)
+    wipe(infoTable)
     for i = 1, numAddons do
         local _, title, _, loadable = GetAddOnInfo(i)
         if loadable then
-            table.insert(infoTable, { i, title, 0, 0 })
+            tinsert(infoTable, { i, title, 0, 0 })
         end
     end
 end
@@ -63,7 +63,7 @@ local function UpdateMemory()
             total = total + mem
         end
     end
-    table.sort(infoTable, sortByMemory)
+    sort(infoTable, sortByMemory)
 
     return total
 end
@@ -79,7 +79,7 @@ local function UpdateCPU()
             total = total + addonCPU
         end
     end
-    table.sort(infoTable, sortByCPU)
+    sort(infoTable, sortByCPU)
 
     return total
 end
@@ -87,10 +87,10 @@ end
 local function SetStatsText(self)
     local time = _G.GameTime_GetTime(false)
     local _, _, latencyHome, latencyWorld = GetNetStats()
-    local fps = math.floor(GetFramerate() + 0.5)
+    local fps = floor(GetFramerate() + 0.5)
     local string = '|cffffffff%s|r fps   |cffffffff%s|r/|cffffffff%s|r ms   |cffffffff%s|r'
 
-    self.text:SetText(string.format(string, fps, latencyHome, latencyWorld, time))
+    self.text:SetText(format(string, fps, latencyHome, latencyWorld, time))
     self.text:SetTextColor(C.r, C.g, C.b)
 end
 
@@ -102,7 +102,7 @@ local function Block_OnEnter(self)
     end
     local isShiftKeyDown = IsShiftKeyDown()
     local maxAddOns = 10
-    local maxShown = isShiftKeyDown and #infoTable or math.min(maxAddOns, #infoTable)
+    local maxShown = isShiftKeyDown and #infoTable or min(maxAddOns, #infoTable)
 
     local anchorTop = C.DB.Infobar.AnchorTop
     _G.GameTooltip:SetOwner(self, (anchorTop and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (anchorTop and -6) or 6)
@@ -111,7 +111,7 @@ local function Block_OnEnter(self)
     local today = C_DateAndTime.GetCurrentCalendarTime()
     local w, m, d, y = today.weekday, today.month, today.monthDay, today.year
     _G.GameTooltip:AddLine(
-        string.format(_G.FULLDATE, _G.CALENDAR_WEEKDAY_NAMES[w], _G.CALENDAR_FULLDATE_MONTH_NAMES[m], d, y),
+        format(_G.FULLDATE, _G.CALENDAR_WEEKDAY_NAMES[w], _G.CALENDAR_FULLDATE_MONTH_NAMES[m], d, y),
         0.9,
         0.82,
         0.62
@@ -151,7 +151,7 @@ local function Block_OnEnter(self)
                 hiddenMemory = hiddenMemory + infoTable[i][3]
             end
             _G.GameTooltip:AddDoubleLine(
-                string.format(showMoreString, numEnabled - maxAddOns, L['Hidden'], L['Hold SHIFT for more details']),
+                format(showMoreString, numEnabled - maxAddOns, L['Hidden'], L['Hold SHIFT for more details']),
                 formatMemory(hiddenMemory),
                 0.6,
                 0.8,
@@ -163,11 +163,11 @@ local function Block_OnEnter(self)
         end
     else
         local totalCPU = UpdateCPU()
-        local passedTime = math.max(1, GetTime() - INFOBAR.loginTime)
+        local passedTime = max(1, GetTime() - INFOBAR.loginTime)
 
         _G.GameTooltip:AddDoubleLine(
             _G.ADDONS,
-            string.format(usageString, totalCPU / passedTime),
+            format(usageString, totalCPU / passedTime),
             0.6,
             0.8,
             1,
@@ -185,7 +185,7 @@ local function Block_OnEnter(self)
                     local r, g, b = smoothColor(data[4], totalCPU)
                     _G.GameTooltip:AddDoubleLine(
                         data[2],
-                        string.format(usageString, data[4] / passedTime),
+                        format(usageString, data[4] / passedTime),
                         1,
                         1,
                         1,
@@ -203,8 +203,8 @@ local function Block_OnEnter(self)
                 hiddenUsage = hiddenUsage + infoTable[i][4]
             end
             _G.GameTooltip:AddDoubleLine(
-                string.format(showMoreString, numEnabled - maxAddOns, L['Hidden'], L['Hold SHIFT for more details']),
-                string.format(usageString, hiddenUsage / passedTime),
+                format(showMoreString, numEnabled - maxAddOns, L['Hidden'], L['Hold SHIFT for more details']),
+                format(usageString, hiddenUsage / passedTime),
                 0.6,
                 0.8,
                 1,
@@ -263,7 +263,7 @@ local function Block_OnMouseUp(self, btn)
         end
         local before = gcinfo()
         collectgarbage('collect')
-        F:Print(string.format('%s %s', L['Collect Memory'], formatMemory(before - gcinfo())))
+        F:Print(format('%s %s', L['Collect Memory'], formatMemory(before - gcinfo())))
         Block_OnEnter(self)
     elseif btn == 'RightButton' and scriptProfileStatus then
         self.showMemory = not self.showMemory

@@ -93,7 +93,7 @@ function M:Bar_Update()
         self:Show()
         if rxp then
             rest:SetMinMaxValues(0, mxp)
-            rest:SetValue(math.min(xp + rxp, mxp))
+            rest:SetValue(min(xp + rxp, mxp))
             rest:Show()
         end
         if IsXPUserDisabled() then
@@ -106,7 +106,7 @@ function M:Bar_Update()
         )
         if C_Reputation.IsFactionParagon(factionID) then
             local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
-            currentValue = math.fmod(currentValue, threshold)
+            currentValue = mod(currentValue, threshold)
             barMin, barMax, value = 0, threshold, currentValue
         elseif friendID then
             if nextFriendThreshold then
@@ -154,7 +154,7 @@ function M:Bar_OnEnter()
                 .. ' / '
                 .. BreakUpLargeNumbers(mxp)
                 .. ' ('
-                .. string.format('%.1f%%)', xp / mxp * 100),
+                .. format('%.1f%%)', xp / mxp * 100),
             0.6,
             0.8,
             1,
@@ -165,7 +165,7 @@ function M:Bar_OnEnter()
         if rxp then
             _G.GameTooltip:AddDoubleLine(
                 _G.TUTORIAL_TITLE26 .. ':',
-                '+' .. BreakUpLargeNumbers(rxp) .. ' (' .. string.format('%.1f%%)', rxp / mxp * 100),
+                '+' .. BreakUpLargeNumbers(rxp) .. ' (' .. format('%.1f%%)', rxp / mxp * 100),
                 0.6,
                 0.8,
                 1,
@@ -209,7 +209,7 @@ function M:Bar_OnEnter()
                 .. ' / '
                 .. barMax - barMin
                 .. ' ('
-                .. math.floor((value - barMin) / (barMax - barMin) * 100)
+                .. floor((value - barMin) / (barMax - barMin) * 100)
                 .. '%)',
             colors.r,
             colors.g,
@@ -221,11 +221,11 @@ function M:Bar_OnEnter()
 
         if C_Reputation.IsFactionParagon(factionID) then
             local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
-            local paraCount = math.floor(currentValue / threshold)
-            currentValue = math.fmod(currentValue, threshold)
+            local paraCount = floor(currentValue / threshold)
+            currentValue = mod(currentValue, threshold)
             _G.GameTooltip:AddDoubleLine(
                 L['Paragon'] .. '(' .. paraCount .. ')',
-                currentValue .. ' / ' .. threshold .. ' (' .. math.floor(currentValue / threshold * 100) .. '%)',
+                currentValue .. ' / ' .. threshold .. ' (' .. floor(currentValue / threshold * 100) .. '%)',
                 0.6,
                 0.8,
                 1,
@@ -244,7 +244,7 @@ function M:Bar_OnEnter()
                 _G.GameTooltip:AddLine(repName, 0, 0.6, 1)
                 _G.GameTooltip:AddDoubleLine(
                     reaction,
-                    current .. ' / ' .. currentMax .. ' (' .. math.floor(current / currentMax * 100) .. '%)',
+                    current .. ' / ' .. currentMax .. ' (' .. floor(current / currentMax * 100) .. '%)',
                     0.6,
                     0.8,
                     1,

@@ -6,22 +6,22 @@ local iconString = '|T%s:18:22:0:0:64:64:5:59:5:59'
 
 local function getIconString(icon, known)
     if known then
-        return string.format(iconString .. ':255:255:255|t', icon)
+        return format(iconString .. ':255:255:255|t', icon)
     else
-        return string.format(iconString .. ':120:120:120|t', icon)
+        return format(iconString .. ':120:120:120|t', icon)
     end
 end
 
 function TT:Azerite_ScanTooltip()
-    table.wipe(tipList)
-    table.wipe(powerList)
+    wipe(tipList)
+    wipe(powerList)
 
     for i = 9, self:NumLines() do
         local line = _G[self:GetName() .. 'TextLeft' .. i]
         local text = line:GetText()
-        local powerName = text and string.match(text, '%- (.+)')
+        local powerName = text and strmatch(text, '%- (.+)')
         if powerName then
-            table.insert(tipList, i)
+            tinsert(tipList, i)
             powerList[i] = powerName
         end
     end

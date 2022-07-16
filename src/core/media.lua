@@ -175,7 +175,7 @@ do
     end
 
     local function registerSharedMedia()
-        local prefix = string.format('%s: ', C.COLORFUL_ADDON_TITLE)
+        local prefix = format('%s: ', C.COLORFUL_ADDON_TITLE)
 
         for k, v in pairs(C.Assets.Font) do
             LSM:Register(LSM.MediaType.FONT, prefix .. k, v, LOCALE_MASK)

@@ -94,7 +94,7 @@ local function GetCorrectRoleInfo(frame, i)
 end
 
 local function UpdateGroupRoles(self)
-    table.wipe(roleCache)
+    wipe(roleCache)
 
     if not self.__owner then
         self.__owner = self:GetParent():GetParent()
@@ -115,7 +115,7 @@ local function UpdateGroupRoles(self)
         end
     end
 
-    table.sort(roleCache, SortRoleOrder)
+    sort(roleCache, SortRoleOrder)
 end
 
 local function SetClassIcon(button, class)
@@ -201,7 +201,7 @@ function BLIZZARD:ShowLeaderOverallScore()
                 or activityInfo.isRatedPvpActivity and searchResultInfo.leaderPvpRatingInfo and searchResultInfo.leaderPvpRatingInfo.rating
             if showScore then
                 local oldName = self.ActivityName:GetText()
-                oldName = string.gsub(oldName, '.-' .. _G.HEADER_COLON, '') -- Tazavesh
+                oldName = gsub(oldName, '.-' .. _G.HEADER_COLON, '') -- Tazavesh
                 self.ActivityName:SetFormattedText(scoreFormat, TT.GetDungeonScore(showScore), oldName)
 
                 if not self.crossFactionLogo then
@@ -313,7 +313,7 @@ function BLIZZARD:AddDungeonsFilter()
 
     local function GetDungeonNameByID(mapID)
         local name = C_ChallengeMode.GetMapUIInfo(mapID)
-        name = string.gsub(name, '.-' .. _G.HEADER_COLON, '') -- abbr Tazavesh
+        name = gsub(name, '.-' .. _G.HEADER_COLON, '') -- abbr Tazavesh
         return name
     end
 
@@ -384,7 +384,7 @@ function BLIZZARD:AddDungeonsFilter()
             local searchResultInfo = C_LFGList.GetSearchResultInfo(resultID)
             local aID = searchResultInfo and searchResultInfo.activityID
             if aID and not filterIDs[aID] then
-                table.remove(results, i)
+                tremove(results, i)
             end
         end
         searchPanel.totalResults = #results
@@ -405,7 +405,7 @@ local function CreateSortButton(parent, texture, sortStr)
     bu:SetScript('OnClick', ClickSortButton)
     F.AddTooltip(bu, 'ANCHOR_RIGHT', _G.CLUB_FINDER_SORT_BY)
 
-    table.insert(parent.__sortBu, bu)
+    tinsert(parent.__sortBu, bu)
 end
 
 function BLIZZARD:AddPGFSortingExpression()

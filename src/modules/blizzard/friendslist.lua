@@ -102,7 +102,7 @@ local function UpdateFriendButton(button)
         -- 角色游戏好友
         game = _G.BNET_CLIENT_WOW
         local friendInfo = C_FriendList.GetFriendInfoByIndex(button.id)
-        name, server = string.split('-', friendInfo.name) -- 如果是同一个服务器，server 为 nil
+        name, server = strsplit('-', friendInfo.name) -- 如果是同一个服务器，server 为 nil
         level = friendInfo.level
         class = friendInfo.className
         area = friendInfo.area
@@ -152,12 +152,12 @@ local function UpdateFriendButton(button)
 
                 if gameAccountInfo.wowProjectID == _G.WOW_PROJECT_CLASSIC then
                     game = _G.BNET_CLIENT_WOW .. 'C' -- Classic
-                    local serverStrings = { string.split(' - ', gameAccountInfo.richPresence) }
+                    local serverStrings = { strsplit(' - ', gameAccountInfo.richPresence) }
                     server = serverStrings[#serverStrings] or _G.BNET_FRIEND_TOOLTIP_WOW_CLASSIC
                     server = server .. '*'
                 elseif gameAccountInfo.wowProjectID == WOW_PROJECT_CLASSIC_TBC then
                     game = _G.BNET_CLIENT_WOW .. 'C_TBC' -- TBC
-                    local serverStrings = { string.split(' - ', gameAccountInfo.richPresence) }
+                    local serverStrings = { strsplit(' - ', gameAccountInfo.richPresence) }
                     server = serverStrings[#serverStrings]
                         or _G.BNET_FRIEND_TOOLTIP_WOW_CLASSIC .. ' (' .. _G.CINEMATIC_NAME_2 .. ')'
                     server = server .. '*'
@@ -208,7 +208,7 @@ local function UpdateFriendButton(button)
 
             if not isInCurrentRegion and regionLocales[regionID] then
                 -- Unblocking profanity filter will change the region
-                local regionText = string.format('[%s]', regionLocales[regionID])
+                local regionText = format('[%s]', regionLocales[regionID])
                 buttonText = buttonText .. ' ' .. F.CreateColorString(regionText, { r = 0.62, g = 0.62, b = 0.62 })
             end
 

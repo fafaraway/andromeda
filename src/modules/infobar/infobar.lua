@@ -117,9 +117,9 @@ function INFOBAR:RegisterNewBlock(name, position, width, noFade)
         block.noFade = true
     end
 
-    INFOBAR.Modules[string.lower(name)] = block
+    INFOBAR.Modules[strlower(name)] = block
 
-    table.insert(INFOBAR.Blocks, block)
+    tinsert(INFOBAR.Blocks, block)
 
     ArrangeBlocks()
 

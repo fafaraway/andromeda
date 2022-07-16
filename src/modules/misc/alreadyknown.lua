@@ -24,7 +24,7 @@ local function IsAlreadyKnown(link, index)
         return
     end
 
-    local linkType, linkID = string.match(link, '|H(%a+):(%d+)')
+    local linkType, linkID = strmatch(link, '|H(%a+):(%d+)')
     linkID = tonumber(linkID)
 
     if linkType == 'battlepet' then
@@ -52,7 +52,7 @@ local function IsAlreadyKnown(link, index)
             F.ScanTip:SetHyperlink(link)
             for i = 1, F.ScanTip:NumLines() do
                 local text = _G[C.ADDON_TITLE .. 'ScanTooltipTextLeft' .. i]:GetText() or ''
-                if string.find(text, _G.COLLECTED) or text == _G.ITEM_SPELL_KNOWN then
+                if strfind(text, _G.COLLECTED) or text == _G.ITEM_SPELL_KNOWN then
                     knowns[link] = true
                     return true
                 end
@@ -117,12 +117,12 @@ local function Hook_UpdateAuctionHouse(self)
             if button.rowData.itemKey.itemID then
                 local itemLink
                 if button.rowData.itemKey.itemID == 82800 then -- BattlePet
-                    itemLink = string.format(
+                    itemLink = format(
                         '|Hbattlepet:%d::::::|h[Dummy]|h',
                         button.rowData.itemKey.battlePetSpeciesID
                     )
                 else -- Normal item
-                    itemLink = string.format('item:%d', button.rowData.itemKey.itemID)
+                    itemLink = format('item:%d', button.rowData.itemKey.itemID)
                 end
 
                 if itemLink and IsAlreadyKnown(itemLink) then
@@ -157,12 +157,12 @@ local function GuildBankFrame_Update(self)
     local button, index, column
     local tab = GetCurrentGuildBankTab()
     for i = 1, MAX_GUILDBANK_SLOTS_PER_TAB do
-        index = math.fmod(i, NUM_SLOTS_PER_GUILDBANK_GROUP)
+        index = mod(i, NUM_SLOTS_PER_GUILDBANK_GROUP)
         if index == 0 then
             index = NUM_SLOTS_PER_GUILDBANK_GROUP
         end
 
-        column = math.ceil((i - 0.5) / NUM_SLOTS_PER_GUILDBANK_GROUP)
+        column = ceil((i - 0.5) / NUM_SLOTS_PER_GUILDBANK_GROUP)
         button = self.Columns[column].Buttons[index]
         if button and button:IsShown() then
             local texture, _, locked = GetGuildBankItemInfo(tab, i)

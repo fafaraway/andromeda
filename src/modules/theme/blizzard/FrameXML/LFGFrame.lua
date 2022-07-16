@@ -73,7 +73,7 @@ local function styleRewardRole(roleIcon)
     end
 end
 
-table.insert(C.BlizzThemes, function()
+tinsert(C.BlizzThemes, function()
     -- LFDFrame
     hooksecurefunc('LFGDungeonListButton_SetDungeon', function(button)
         if not button.expandOrCollapseButton.styled then

@@ -29,7 +29,7 @@ local function ReskinBubble(chatbubble)
     chatbubble.styled = true
 end
 
-table.insert(C.BlizzThemes, function()
+tinsert(C.BlizzThemes, function()
     local events = {
         CHAT_MSG_SAY = 'chatBubbles',
         CHAT_MSG_YELL = 'chatBubbles',

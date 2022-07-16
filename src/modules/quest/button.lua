@@ -404,7 +404,7 @@ local function GetQuestDistanceWithItem(questID)
     if not itemLink then
         local fallbackItemID = questItems[questID]
         if fallbackItemID then
-            itemLink = string.format('|Hitem:%d|h', fallbackItemID)
+            itemLink = format('|Hitem:%d|h', fallbackItemID)
         end
     end
     if not itemLink then
@@ -428,7 +428,7 @@ local function GetQuestDistanceWithItem(questID)
     end
 
     local distanceSq = C_QuestLog.GetDistanceSqToQuest(questID)
-    local distanceYd = distanceSq and math.sqrt(distanceSq)
+    local distanceYd = distanceSq and sqrt(distanceSq)
     if IsQuestOnMap(questID) and distanceYd and distanceYd <= maxDistanceYards then
         return distanceYd, itemLink
     end

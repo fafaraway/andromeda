@@ -51,9 +51,9 @@ end
 local function FormatTimer(seconds)
     local units = ConvertSecondsToUnits(seconds)
     if units.hours > 0 then
-        return string.format('%.2d : %.2d : %.2d', units.hours, units.minutes, units.seconds)
+        return format('%.2d : %.2d : %.2d', units.hours, units.minutes, units.seconds)
     else
-        return string.format('%.2d : %.2d', units.minutes, units.seconds)
+        return format('%.2d : %.2d', units.minutes, units.seconds)
     end
 end
 
@@ -132,13 +132,13 @@ local function ConstructModel(f)
     f.galaxy = CreateFrame('PlayerModel', nil, f)
     f.galaxy:SetDisplayInfo(67918)
     f.galaxy:SetCamDistanceScale(2.4)
-    -- f.galaxy:SetRotation(math.rad(180))
+    -- f.galaxy:SetRotation(rad(180))
     f.galaxy:SetAllPoints()
 
     local height = f:GetHeight()
     f.model = CreateFrame('PlayerModel', nil, f.galaxy)
     f.model:SetUnit('player')
-    f.model:SetRotation(math.rad(-30))
+    f.model:SetRotation(rad(-30))
     f.model:SetAnimation(96)
     f.model:SetSize(height, height * 1.5)
     f.model:SetPoint('BOTTOMRIGHT', height * 0.25, -height * 0.2)

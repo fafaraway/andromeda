@@ -35,7 +35,7 @@ end
 
 local function Block_OnEvent(self)
     local info = C_CurrencyInfo.GetCurrencyInfo(1828)
-    self.text:SetText(string.format('%s: |cffdf5ed9%s|r', info.name, BreakUpLargeNumbers(info.quantity)))
+    self.text:SetText(format('%s: |cffdf5ed9%s|r', info.name, BreakUpLargeNumbers(info.quantity)))
 end
 
 local function Block_OnMouseUp(self, btn)
@@ -54,7 +54,7 @@ local function Block_OnEnter(self)
     for _, id in pairs(currPvE) do
         AddTitle('PvE')
         local info = C_CurrencyInfo.GetCurrencyInfo(id)
-        local amount = string.format('|cff20ff20%s|r', BreakUpLargeNumbers(info.quantity))
+        local amount = format('|cff20ff20%s|r', BreakUpLargeNumbers(info.quantity))
 
         _G.GameTooltip:AddDoubleLine(AddIcon(info.iconFileID) .. info.name, amount, 1, 1, 1)
     end
@@ -63,7 +63,7 @@ local function Block_OnEnter(self)
     for _, id in pairs(currPvP) do
         AddTitle('PvP')
         local info = C_CurrencyInfo.GetCurrencyInfo(id)
-        local amount = string.format('|cff20ff20%s|r', BreakUpLargeNumbers(info.quantity))
+        local amount = format('|cff20ff20%s|r', BreakUpLargeNumbers(info.quantity))
 
         _G.GameTooltip:AddDoubleLine(AddIcon(info.iconFileID) .. info.name, amount, 1, 1, 1)
     end

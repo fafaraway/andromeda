@@ -43,7 +43,7 @@ function MAP:RestyleMinimap()
     local Minimap = _G.Minimap
     local texturePath = C.Assets.Texture.MinimapMask
     local diff = 256 - 190
-    local halfDiff = math.ceil(diff / 2)
+    local halfDiff = ceil(diff / 2)
 
     local holder = CreateFrame('Frame', C.ADDON_TITLE .. 'MinimapHolder', _G.UIParent)
     holder:SetSize(256, 190)
@@ -170,16 +170,16 @@ local function UpdateDifficultyFlag()
     local numplayers = select(9, GetInstanceInfo())
     local mplusdiff = select(1, C_ChallengeMode.GetActiveKeystoneInfo()) or ''
 
-    local norm = string.format('|cff74a1ff%s|r', 'N') -- 蓝色
-    local hero = string.format('|cffff66ff%s|r', 'H') -- 紫色
-    local myth = string.format('|cffff9900%s|r', 'M') -- 橙色
-    local lfr = string.format('|cffcccccc%s|r', 'LFR') -- 白色
+    local norm = format('|cff74a1ff%s|r', 'N') -- 蓝色
+    local hero = format('|cffff66ff%s|r', 'H') -- 紫色
+    local myth = format('|cffff9900%s|r', 'M') -- 橙色
+    local lfr = format('|cffcccccc%s|r', 'LFR') -- 白色
 
-    local mp = string.format('|cffff9900%s|r', 'M+') -- 橙色
-    local pvp = string.format('|cffff0000%s|r', 'PvP') -- 红色
-    local wf = string.format('|cff00ff00%s|r', 'WF') -- 绿色
-    local tw = string.format('|cff00ff00%s|r', 'TW') -- 绿色
-    local scen = string.format('|cffffff00%s|r', 'SCEN') -- 黄色
+    local mp = format('|cffff9900%s|r', 'M+') -- 橙色
+    local pvp = format('|cffff0000%s|r', 'PvP') -- 红色
+    local wf = format('|cff00ff00%s|r', 'WF') -- 绿色
+    local tw = format('|cff00ff00%s|r', 'TW') -- 绿色
+    local scen = format('|cffffff00%s|r', 'SCEN') -- 黄色
 
     if instanceType == 'party' or instanceType == 'raid' or instanceType == 'scenario' then
         if difficulty == 1 then -- Normal

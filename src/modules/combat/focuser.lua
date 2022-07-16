@@ -11,7 +11,7 @@ function COMBAT:Focuser_Setup()
         return
     end
 
-    if self:GetName() and (not C.DB.Combat.EasyFocusOnUnitframe and string.match(self:GetName(), 'oUF_')) then
+    if self:GetName() and (not C.DB.Combat.EasyFocusOnUnitframe and strmatch(self:GetName(), 'oUF_')) then
         return
     end
 

@@ -893,7 +893,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     for _, name in pairs({ 'Left', 'Right' }) do
         local button = GarrisonMonumentFrame[name .. 'Btn']
         button.Texture:Hide()
-        F.ReskinArrow(button, string.lower(name))
+        F.ReskinArrow(button, strlower(name))
         button:SetSize(35, 35)
         button.__texture:SetSize(16, 16)
     end
@@ -1131,7 +1131,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
             self.isSetting = true
 
             local numFollowers = #C_Garrison.GetFollowers(123)
-            self:SetHeight(135 + 60 * math.ceil(numFollowers / 5)) -- 5 follower per row, support up to 35 followers in the future
+            self:SetHeight(135 + 60 * ceil(numFollowers / 5)) -- 5 follower per row, support up to 35 followers in the future
 
             self.isSetting = nil
         end
@@ -1187,7 +1187,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
             ability:SetSize(14, 14)
             ability.bg = F.ReskinIcon(ability)
             ability.bg:SetFrameLevel(4)
-            table.insert(frame.__abilities, ability)
+            tinsert(frame.__abilities, ability)
             select(2, ability:GetPoint()):SetAlpha(0)
             ability:SetPoint('CENTER', frame, 'LEFT', 11, first and 15 or 0)
         end
@@ -1253,7 +1253,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
                     widget:SetPushedTexture(nil)
                     widget.Icon:SetTexCoord(unpack(C.TEX_COORD))
                     widget:SetSize(46, 46)
-                    table.insert(VPBooks, widget)
+                    tinsert(VPBooks, widget)
                 elseif otype == 'AdventurerRoster' then
                     F.StripTextures(widget)
                     F.CreateBDFrame(widget, 0.25)
@@ -1266,7 +1266,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
                     end
                     for i, follower in pairs(VPFollowers) do
                         follower:ClearAllPoints()
-                        follower:SetPoint('TOPLEFT', ((i - 1) % 5) * 60 + 5, -math.floor((i - 1) / 5) * 60 - 130)
+                        follower:SetPoint('TOPLEFT', ((i - 1) % 5) * 60 + 5, -floor((i - 1) / 5) * 60 - 130)
                     end
                     for i, book in pairs(VPBooks) do
                         book:ClearAllPoints()

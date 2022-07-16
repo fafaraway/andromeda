@@ -155,7 +155,7 @@ local function AltPowerUpdateTooltip(self)
     local name, tooltip = GetUnitPowerBarStringsByID(self.__barID)
     _G.GameTooltip:SetText(name or '', 1, 1, 1)
     _G.GameTooltip:AddLine(tooltip or '', nil, nil, nil, true)
-    _G.GameTooltip:AddLine(string.format('%d (%d%%)', value, (value - min) / (max - min) * 100), 1, 1, 1)
+    _G.GameTooltip:AddLine(format('%d (%d%%)', value, (value - min) / (max - min) * 100), 1, 1, 1)
     _G.GameTooltip:Show()
 end
 

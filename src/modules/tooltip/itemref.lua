@@ -69,7 +69,7 @@ local function CreateTip(link)
     end)
     F.ReskinClose(close)
 
-    table.insert(_G.UISpecialFrames, tip:GetName())
+    tinsert(_G.UISpecialFrames, tip:GetName())
 
     tip.link = link
     tips[num] = tip
@@ -89,7 +89,7 @@ end
 
 local SetHyperlink = _G.ItemRefTooltip.SetHyperlink
 function _G.ItemRefTooltip:SetHyperlink(link, ...)
-    local handled = string.split(':', link)
+    local handled = strsplit(':', link)
     if not InCombatLockdown() and not IsModifiedClick() and handled and types[handled] and not TOOLTIP.MultiShown then
         local tip = CreateTip(link)
         if tip then

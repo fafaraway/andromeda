@@ -2,7 +2,7 @@ local F, C, L = unpack(select(2, ...))
 local INFOBAR = F:GetModule('InfoBar')
 local oUF = F.Libs.oUF
 
-local repairCostString = string.gsub(_G.REPAIR_COST, _G.HEADER_COLON, ' ')
+local repairCostString = gsub(_G.REPAIR_COST, _G.HEADER_COLON, ' ')
 local lowDurabilityCap = 0.25
 
 local localSlots = {
@@ -39,7 +39,7 @@ local function UpdateAllSlots()
             localSlots[i][4] = '|T' .. iconTexture .. ':13:15:0:0:50:50:4:46:4:46|t ' or ''
         end
     end
-    table.sort(localSlots, sortSlots)
+    sort(localSlots, sortSlots)
     return numSlots
 end
 
@@ -58,12 +58,12 @@ end
 
 local function Block_OnEvent(self, event)
     if UpdateAllSlots() > 0 then
-        local r, g, b = getDurabilityColor(math.floor(localSlots[1][3] * 100), 100)
+        local r, g, b = getDurabilityColor(floor(localSlots[1][3] * 100), 100)
         self.text:SetText(
-            string.format('%s: %s%s', L['Durability'], F:RgbToHex(r, g, b) .. math.floor(localSlots[1][3] * 100), '%')
+            format('%s: %s%s', L['Durability'], F:RgbToHex(r, g, b) .. floor(localSlots[1][3] * 100), '%')
         )
     else
-        self.text:SetText(string.format('%s: %s', L['Durability'], C.INFO_COLOR .. _G.NONE))
+        self.text:SetText(format('%s: %s', L['Durability'], C.INFO_COLOR .. _G.NONE))
     end
 
     if
@@ -99,7 +99,7 @@ local function Block_OnEnter(self)
     for i = 1, 10 do
         if localSlots[i][3] ~= 1000 then
             local slot = localSlots[i][1]
-            local cur = math.floor(localSlots[i][3] * 100)
+            local cur = floor(localSlots[i][3] * 100)
             local slotIcon = localSlots[i][4]
             _G.GameTooltip:AddDoubleLine(
                 slotIcon .. localSlots[i][2],

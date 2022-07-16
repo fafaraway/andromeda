@@ -7,10 +7,10 @@ end
 
 local lastVCTime, isVCInit = 0
 function NOTIFICATION:VersionCheck_Compare(new, old)
-    local new1, new2 = string.split('.', new)
+    local new1, new2 = strsplit('.', new)
     new1, new2 = tonumber(new1), tonumber(new2)
 
-    local old1, old2 = string.split('.', old)
+    local old1, old2 = strsplit('.', old)
     old1, old2 = tonumber(old1), tonumber(old2)
 
     if not old1 then
@@ -37,9 +37,9 @@ function NOTIFICATION:VersionCheck_Init()
     if not isVCInit then
         local status = NOTIFICATION:VersionCheck_Compare(_G.ANDROMEDA_ADB.DetectVersion, C.ADDON_VERSION)
         if status == 'IsNew' then
-            local ver = string.gsub(_G.ANDROMEDA_ADB.DetectVersion, '(%d+)$', '0')
+            local ver = gsub(_G.ANDROMEDA_ADB.DetectVersion, '(%d+)$', '0')
             NOTIFICATION:VersionCheck_Create(
-                string.format('%s has been out of date, the latest release is |cffff0000%s|r.', C.ADDON_NAME, ver)
+                format('%s has been out of date, the latest release is |cffff0000%s|r.', C.ADDON_NAME, ver)
             )
         elseif status == 'IsOld' then
             _G.ANDROMEDA_ADB.DetectVersion = C.ADDON_VERSION

@@ -7,7 +7,7 @@ local rareString = '|Hworldmap:%d+:%d+:%d+|h%s (%.1f, %.1f)%s|h|r'
 local function IsUsefulAtlas(info)
     local atlas = info.atlasName
     if atlas then
-        return string.find(atlas, '[Vv]ignette') or (atlas == 'nazjatar-nagaevent')
+        return strfind(atlas, '[Vv]ignette') or (atlas == 'nazjatar-nagaevent')
     end
 end
 
@@ -40,7 +40,7 @@ function NOTIFICATION:RareAlert_Update(id)
         local position = mapID and C_VignetteInfo.GetVignettePosition(info.vignetteGUID, mapID)
         if position then
             local x, y = position:GetXY()
-            nameString = string.format(rareString, mapID, x * 10000, y * 10000, info.name, x * 100, y * 100, '')
+            nameString = format(rareString, mapID, x * 10000, y * 10000, info.name, x * 100, y * 100, '')
         end
         F:Print(tex .. C.INFO_COLOR .. (nameString or info.name or ''))
 
@@ -48,7 +48,7 @@ function NOTIFICATION:RareAlert_Update(id)
     end
 
     if #cache > 666 then
-        table.wipe(cache)
+        wipe(cache)
     end
 end
 
@@ -68,7 +68,7 @@ function NOTIFICATION:RareNotify()
         self:RareAlert_CheckInstance()
         F:RegisterEvent('PLAYER_ENTERING_WORLD', self.RareAlert_CheckInstance)
     else
-        table.wipe(cache)
+        wipe(cache)
         F:UnregisterEvent('VIGNETTE_MINIMAP_UPDATED', self.RareAlert_Update)
         F:UnregisterEvent('PLAYER_ENTERING_WORLD', self.RareAlert_CheckInstance)
     end

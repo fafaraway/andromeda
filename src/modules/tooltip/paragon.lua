@@ -520,7 +520,7 @@ function TOOLTIP:AddParagonRewards()
         local color = _G.ITEM_QUALITY_COLORS[quality]
         if name then
             _G.GameTooltip:AddLine(
-                string.format(lineStr, collected and readyTex or notReadyTex, icon, name, data.covenant or data.type),
+                format(lineStr, collected and readyTex or notReadyTex, icon, name, data.covenant or data.type),
                 color.r,
                 color.g,
                 color.b

@@ -17,7 +17,7 @@ local function UpdateProgressItemQuality(self)
     button.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 end
 
-table.insert(C.BlizzThemes, function()
+tinsert(C.BlizzThemes, function()
     F.ReskinPortraitFrame(_G.QuestFrame)
 
     F.StripTextures(_G.QuestFrameDetailPanel, 0)

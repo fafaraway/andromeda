@@ -44,7 +44,7 @@ function GUI:FindProfleUser(icon)
     icon.list = {}
     for fullName, index in pairs(_G.ANDROMEDA_ADB['ProfileIndex']) do
         if index == icon.index then
-            local name, realm = string.split('-', fullName)
+            local name, realm = strsplit('-', fullName)
             if not icon.list[realm] then
                 icon.list[realm] = {}
             end
@@ -211,7 +211,7 @@ function GUI:Delete_OnEnter()
     if not text or text == '' then
         return
     end
-    local name, realm = string.split('-', text)
+    local name, realm = strsplit('-', text)
     if not realm then
         realm = C.MY_REALM
         text = name .. '-' .. realm

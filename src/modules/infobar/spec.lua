@@ -85,7 +85,7 @@ local function Block_OnEvent(self)
 
         if not lootname or name == lootname then
             self.text:SetText(
-                string.format(
+                format(
                     L['Spec'] .. ': ' .. C.MY_CLASS_COLOR .. '%s  |r' .. L['Loot'] .. ':' .. C.MY_CLASS_COLOR .. ' %s',
                     name,
                     name
@@ -93,7 +93,7 @@ local function Block_OnEvent(self)
             )
         else
             self.text:SetText(
-                string.format(
+                format(
                     L['Spec'] .. ': ' .. C.MY_CLASS_COLOR .. '%s  |r' .. L['Loot'] .. ':' .. C.MY_CLASS_COLOR .. ' %s',
                     name,
                     lootname
@@ -101,7 +101,7 @@ local function Block_OnEvent(self)
             )
         end
     else
-        self.text:SetText(string.format(L['Spec'] .. ': ' .. C.MY_CLASS_COLOR .. '%s  |r', _G.NONE))
+        self.text:SetText(format(L['Spec'] .. ': ' .. C.MY_CLASS_COLOR .. '%s  |r', _G.NONE))
     end
 end
 
@@ -141,7 +141,7 @@ local function Block_OnEnter(self)
             end
         end
 
-        table.wipe(pvpTalents)
+        wipe(pvpTalents)
     end
 
     _G.GameTooltip:AddLine(' ')

@@ -289,7 +289,7 @@ function COMBAT:ShowAlert(alertType)
 end
 
 function COMBAT:QueueAlert(alertType)
-    table.insert(alertQueue, alertType)
+    tinsert(alertQueue, alertType)
 end
 
 function COMBAT.LoadNextAlert()
@@ -297,7 +297,7 @@ function COMBAT.LoadNextAlert()
 
     if alertQueue and alertQueue[1] then
         COMBAT:ShowAlert(alertQueue[1])
-        table.remove(alertQueue, 1)
+        tremove(alertQueue, 1)
     end
 end
 

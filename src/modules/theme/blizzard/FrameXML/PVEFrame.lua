@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 
-table.insert(C.BlizzThemes, function()
+tinsert(C.BlizzThemes, function()
     local r, g, b = C.r, C.g, C.b
 
     _G.PVEFrameLeftInset:SetAlpha(0)

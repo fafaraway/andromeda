@@ -12,8 +12,8 @@ local bnetTable = {}
 local activeZone, inactiveZone = '|cff4cff4c', C.GREY_COLOR
 local noteString = '|TInterface\\Buttons\\UI-GuildButton-PublicNote-Up:12|t %s'
 local broadcastString = '|TInterface\\FriendsFrame\\BroadcastIcon:12|t %s (%s)'
-local onlineString = string.gsub(_G.ERR_FRIEND_ONLINE_SS, '.+h', '')
-local offlineString = string.gsub(_G.ERR_FRIEND_OFFLINE_S, '%%s', '')
+local onlineString = gsub(_G.ERR_FRIEND_ONLINE_SS, '.+h', '')
+local offlineString = gsub(_G.ERR_FRIEND_OFFLINE_S, '%%s', '')
 
 local menuList = { [1] = { text = L['Join or Invite'], isTitle = true, notCheckable = true } }
 
@@ -24,7 +24,7 @@ local function sortFriends(a, b)
 end
 
 local function buildFriendTable(num)
-    table.wipe(friendTable)
+    wipe(friendTable)
 
     for i = 1, num do
         local info = C_FriendList.GetFriendInfoByIndex(i)
@@ -36,11 +36,11 @@ local function buildFriendTable(num)
                 status = _G.FRIENDS_TEXTURE_DND
             end
             local class = C.ClassList[INFOBAR.className]
-            table.insert(friendTable, { INFOBAR.name, INFOBAR.level, class, INFOBAR.area, status })
+            tinsert(friendTable, { INFOBAR.name, INFOBAR.level, class, INFOBAR.area, status })
         end
     end
 
-    table.sort(friendTable, sortFriends)
+    sort(friendTable, sortFriends)
 end
 
 local function sortBNFriends(a, b)
@@ -60,9 +60,9 @@ local function GetOnlineInfoText(client, isMobile, rafLinkType, locationText)
     end
     if (client == _G.BNET_CLIENT_WOW) and (rafLinkType ~= _G.Enum.RafLinkType.None) and not isMobile then
         if rafLinkType == _G.Enum.RafLinkType.Recruit then
-            return string.format(_G.RAF_RECRUIT_FRIEND, locationText)
+            return format(_G.RAF_RECRUIT_FRIEND, locationText)
         else
-            return string.format(_G.RAF_RECRUITER_FRIEND, locationText)
+            return format(_G.RAF_RECRUITER_FRIEND, locationText)
         end
     end
 
@@ -70,7 +70,7 @@ local function GetOnlineInfoText(client, isMobile, rafLinkType, locationText)
 end
 
 local function buildBNetTable(num)
-    table.wipe(bnetTable)
+    wipe(bnetTable)
 
     for i = 1, num do
         local accountInfo = C_BattleNet.GetFriendAccountInfo(i)
@@ -114,7 +114,7 @@ local function buildBNetTable(num)
                 if wowProjectID == WOW_PROJECT_60 then
                     gameText = _G.EXPANSION_NAME0
                 elseif wowProjectID == _G.WOW_PROJECT_TBC then
-                    gameText = string.gsub(gameText, '%s%-.+', '')
+                    gameText = gsub(gameText, '%s%-.+', '')
                 end
 
                 local infoText = GetOnlineInfoText(client, isMobile, rafLinkType, gameText)
@@ -126,7 +126,7 @@ local function buildBNetTable(num)
                     client = CLIENT_WOW_DIFF
                 end
 
-                table.insert(bnetTable, {
+                tinsert(bnetTable, {
                     i,
                     accountName,
                     charName,
@@ -144,7 +144,7 @@ local function buildBNetTable(num)
         end
     end
 
-    table.sort(bnetTable, sortBNFriends)
+    sort(bnetTable, sortBNFriends)
 end
 
 local function isPanelCanHide(self, elapsed)
@@ -286,7 +286,7 @@ local function buttonOnClick(self, btn)
                 local index = 2
                 if #menuList > 1 then
                     for i = 2, #menuList do
-                        table.wipe(menuList[i])
+                        wipe(menuList[i])
                     end
                 end
 
@@ -365,7 +365,7 @@ local function buttonOnEnter(self)
 
                     -- Get TBC realm name from richPresence
                     if wowProjectID == WOW_PROJECT_TBC then
-                        local realm, count = string.gsub(gameText, '^.-%-%s', '')
+                        local realm, count = gsub(gameText, '^.-%-%s', '')
                         if count > 0 then
                             realmName = '-' .. realm
                         end
@@ -379,31 +379,31 @@ local function buttonOnEnter(self)
                         clientString = '|TInterface\\FriendsFrame\\PlusManz-Alliance:16:|t'
                     end
                     _G.GameTooltip:AddLine(
-                        string.format('%s%s %s%s%s', clientString, level, classColor, charName, realmName)
+                        format('%s%s %s%s%s', clientString, level, classColor, charName, realmName)
                     )
 
                     if wowProjectID ~= WOW_PROJECT_ID then
                         zoneName = '*' .. zoneName
                     end
-                    _G.GameTooltip:AddLine(string.format('%s%s', inactiveZone, zoneName))
+                    _G.GameTooltip:AddLine(format('%s%s', inactiveZone, zoneName))
                 end
             else
-                _G.GameTooltip:AddLine(string.format('|cffffffff%s%s', clientString, accountName))
+                _G.GameTooltip:AddLine(format('|cffffffff%s%s', clientString, accountName))
                 if gameText ~= '' then
-                    _G.GameTooltip:AddLine(string.format('%s%s', inactiveZone, gameText))
+                    _G.GameTooltip:AddLine(format('%s%s', inactiveZone, gameText))
                 end
             end
         end
 
         if note and note ~= '' then
             _G.GameTooltip:AddLine(' ')
-            _G.GameTooltip:AddLine(string.format(noteString, note), 1, 0.8, 0)
+            _G.GameTooltip:AddLine(format(noteString, note), 1, 0.8, 0)
         end
 
         if broadcastText and broadcastText ~= '' then
             _G.GameTooltip:AddLine(' ')
             _G.GameTooltip:AddLine(
-                string.format(broadcastString, broadcastText, _G.FriendsFrame_GetLastOnline(broadcastTime)),
+                format(broadcastString, broadcastText, _G.FriendsFrame_GetLastOnline(broadcastTime)),
                 0.3,
                 0.6,
                 0.8,
@@ -415,8 +415,8 @@ local function buttonOnEnter(self)
         _G.GameTooltip:AddLine(' ')
         local name, level, class, area = unpack(self.data)
         local classColor = F:RgbToHex(F:ClassColor(class))
-        _G.GameTooltip:AddLine(string.format('%s %s%s', level, classColor, name))
-        _G.GameTooltip:AddLine(string.format('%s%s', inactiveZone, area))
+        _G.GameTooltip:AddLine(format('%s %s%s', level, classColor, name))
+        _G.GameTooltip:AddLine(format('%s%s', inactiveZone, area))
     end
     _G.GameTooltip:Show()
 end
@@ -471,8 +471,8 @@ function INFOBAR:FriendsPanel_UpdateButton(button)
         local zoneColor = GetRealZoneText() == area and activeZone or inactiveZone
         local levelColor = F:RgbToHex(GetQuestDifficultyColor(level))
         local classColor = C.ClassColors[class] or levelColor
-        button.name:SetText(string.format('%s%s|r %s%s', levelColor, level, F:RgbToHex(classColor), name))
-        button.zone:SetText(string.format('%s%s', zoneColor, area))
+        button.name:SetText(format('%s%s|r %s%s', levelColor, level, F:RgbToHex(classColor), name))
+        button.zone:SetText(format('%s%s', zoneColor, area))
         button.gameIcon:SetTexture(_G.BNet_GetClientTexture(_G.BNET_CLIENT_WOW))
 
         button.isBNet = nil
@@ -492,8 +492,8 @@ function INFOBAR:FriendsPanel_UpdateButton(button)
             zoneColor = GetRealZoneText() == infoText and activeZone or inactiveZone
         end
 
-        button.name:SetText(string.format('%s%s|r (%s|r)', C.INFO_COLOR, accountName, name))
-        button.zone:SetText(string.format('%s%s', zoneColor, infoText))
+        button.name:SetText(format('%s%s|r (%s|r)', C.INFO_COLOR, accountName, name))
+        button.zone:SetText(format('%s%s', zoneColor, infoText))
 
         if client == CLIENT_WOW_DIFF then
             button.gameIcon:SetTexture(_G.BNet_GetClientTexture(_G.BNET_CLIENT_WOW))
@@ -594,7 +594,7 @@ local function Block_OnEnter(self)
         _G.GameTooltip:ClearLines()
         _G.GameTooltip:AddDoubleLine(
             _G.FRIENDS_LIST,
-            string.format('%s: %s/%s', _G.GUILD_ONLINE_LABEL, totalOnline, totalFriends),
+            format('%s: %s/%s', _G.GUILD_ONLINE_LABEL, totalOnline, totalFriends),
             0,
             0.6,
             1,
@@ -620,7 +620,7 @@ local function Block_OnEnter(self)
 
     INFOBAR:FriendsPanel_Init()
     INFOBAR:FriendsPanel_Update()
-    infoFrame.friendCountText:SetText(string.format('%s: %s/%s', _G.GUILD_ONLINE_LABEL, totalOnline, totalFriends))
+    infoFrame.friendCountText:SetText(format('%s: %s/%s', _G.GUILD_ONLINE_LABEL, totalOnline, totalFriends))
 end
 
 local function Block_OnLeave(self)
@@ -633,13 +633,13 @@ end
 
 local function Block_OnEvent(self, event, arg1)
     if event == 'CHAT_MSG_SYSTEM' then
-        if not string.find(arg1, onlineString) and not string.find(arg1, offlineString) then
+        if not strfind(arg1, onlineString) and not strfind(arg1, offlineString) then
             return
         end
     end
 
     INFOBAR:FriendsPanel_Refresh()
-    self.text:SetText(string.format('%s: ' .. C.MY_CLASS_COLOR .. '%d', _G.FRIENDS, INFOBAR.totalOnline))
+    self.text:SetText(format('%s: ' .. C.MY_CLASS_COLOR .. '%d', _G.FRIENDS, INFOBAR.totalOnline))
 
     updateRequest = false
     if infoFrame and infoFrame:IsShown() then

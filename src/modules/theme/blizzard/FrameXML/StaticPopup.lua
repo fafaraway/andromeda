@@ -18,7 +18,7 @@ local function updateMinorButtonState(button)
     end
 end
 
-table.insert(C.BlizzThemes, function()
+tinsert(C.BlizzThemes, function()
     for i = 1, 4 do
         local frame = _G['StaticPopup' .. i]
         local bu = _G['StaticPopup' .. i .. 'ItemFrame']

@@ -18,7 +18,7 @@ function TOOLTIP:SetupTooltipIcon(icon)
 
         local text = line:GetText()
         if text and text ~= ' ' then
-            local newText, count = string.gsub(text, '|T([^:]-):[%d+:]+|t', '|T%1:14:14:' .. newString .. '|t')
+            local newText, count = gsub(text, '|T([^:]-):[%d+:]+|t', '|T%1:14:14:' .. newString .. '|t')
             if count > 0 then
                 line:SetText(newText)
             end

@@ -16,7 +16,7 @@ local function CheckTimeWalker(event)
 
     for i = 1, numEvents do
         local info = C_Calendar.GetDayEvent(0, today, i)
-        if info and string.find(info.title, _G.PLAYER_DIFFICULTY_TIMEWALKER) and info.sequenceType ~= 'END' then
+        if info and strfind(info.title, _G.PLAYER_DIFFICULTY_TIMEWALKER) and info.sequenceType ~= 'END' then
             isTimeWalker = true
             walkerTexture = info.iconTexture
             break
@@ -58,7 +58,7 @@ local torgWidgets = {
 }
 
 local function CleanupLevelName(text)
-    return string.gsub(text, '|n', '')
+    return gsub(text, '|n', '')
 end
 
 local title

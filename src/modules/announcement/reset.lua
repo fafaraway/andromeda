@@ -21,10 +21,10 @@ end
 local function InstanceReset(_, text)
     for systemMessage, friendlyMessage in pairs(msgList) do
         systemMessage = _G[systemMessage]
-        if string.match(text, string.gsub(systemMessage, '%%s', '.+')) then
-            local instance = string.match(text, string.gsub(systemMessage, '%%s', '(.+)'))
+        if strmatch(text, gsub(systemMessage, '%%s', '.+')) then
+            local instance = strmatch(text, gsub(systemMessage, '%%s', '(.+)'))
 
-            SendMessage(string.format(friendlyMessage, instance))
+            SendMessage(format(friendlyMessage, instance))
 
             return
         end

@@ -135,7 +135,7 @@ local modules, initQueue = {}, {}
 function F:RegisterModule(name)
     if modules[name] then
         local L = engine[3]
-        F:Debug(string.format(L["module '%s' has been registered."], name))
+        F:Debug(format(L["module '%s' has been registered."], name))
 
         return
     end
@@ -144,7 +144,7 @@ function F:RegisterModule(name)
     module.name = name
     modules[name] = module
 
-    table.insert(initQueue, module)
+    tinsert(initQueue, module)
 
     return module
 end
@@ -152,7 +152,7 @@ end
 function F:GetModule(name)
     if not modules[name] then
         local L = engine[3]
-        F:Debug(string.format(L["module '%s' does not exist."], name))
+        F:Debug(format(L["module '%s' does not exist."], name))
 
         return
     end
@@ -173,7 +173,7 @@ F:RegisterEvent('PLAYER_LOGIN', function()
         if module.OnLogin then
             module:OnLogin()
         else
-            F:Debug(string.format(L["module '%s' does not loaded."], module.name))
+            F:Debug(format(L["module '%s' does not loaded."], module.name))
         end
     end
 

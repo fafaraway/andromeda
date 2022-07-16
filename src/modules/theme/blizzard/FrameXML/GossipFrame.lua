@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 local function replaceGossipFormat(button, textFormat, text)
-    local newFormat, count = string.gsub(textFormat, '000000', 'ffffff')
+    local newFormat, count = gsub(textFormat, '000000', 'ffffff')
     if count > 0 then
         button:SetFormattedText(newFormat, text)
     end
@@ -13,13 +13,13 @@ local replacedGossipColor = {
 }
 local function replaceGossipText(button, text)
     if text and text ~= '' then
-        local newText, count = string.gsub(text, ':32:32:0:0', ':32:32:0:0:64:64:5:59:5:59') -- replace icon texture
+        local newText, count = gsub(text, ':32:32:0:0', ':32:32:0:0:64:64:5:59:5:59') -- replace icon texture
         if count > 0 then
             text = newText
             button:SetFormattedText('%s', text)
         end
 
-        local colorStr, rawText = string.match(text, '|c[fF][fF](%x%x%x%x%x%x)(.-)|r')
+        local colorStr, rawText = strmatch(text, '|c[fF][fF](%x%x%x%x%x%x)(.-)|r')
         colorStr = replacedGossipColor[colorStr]
         if colorStr and rawText then
             button:SetFormattedText('|cff%s%s|r', colorStr, rawText)
@@ -27,7 +27,7 @@ local function replaceGossipText(button, text)
     end
 end
 
-table.insert(C.BlizzThemes, function()
+tinsert(C.BlizzThemes, function()
     if not _G.ANDROMEDA_ADB.ReskinBlizz then
         return
     end

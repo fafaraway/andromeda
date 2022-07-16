@@ -148,7 +148,7 @@ local function CombatLockdown(event)
 end
 
 local function CheckUIReload(name)
-    if not string.find(name, '%*') then
+    if not strfind(name, '%*') then
         GUI.NeedUIReload = true
     end
 end
@@ -394,7 +394,7 @@ local function CreateOptions(i)
         elseif optType == 4 then -- dropdown
             if value == 'TextureStyle' then
                 for _, v in ipairs(GUI.TexturesList) do
-                    table.insert(data, v.name)
+                    tinsert(data, v.name)
                 end
             end
 
@@ -466,7 +466,7 @@ local function CreateConsole(tabIndex)
     end
 
     local guiFrame = CreateFrame('Frame', C.ADDON_TITLE .. 'GUI', _G.UIParent)
-    table.insert(_G.UISpecialFrames, C.ADDON_TITLE .. 'GUI')
+    tinsert(_G.UISpecialFrames, C.ADDON_TITLE .. 'GUI')
     guiFrame:SetSize(GUI.width, GUI.height)
     guiFrame:SetPoint('CENTER')
     guiFrame:SetFrameStrata('HIGH')
@@ -478,7 +478,7 @@ local function CreateConsole(tabIndex)
     verticalLine:SetPoint('TOPLEFT', 160, -50)
 
     local outline = _G.ANDROMEDA_ADB.FontOutline
-    local verStr = string.format('%s: %s', L['Version'], C.ADDON_VERSION)
+    local verStr = format('%s: %s', L['Version'], C.ADDON_VERSION)
     F.CreateFS(guiFrame, C.ASSET_PATH .. 'fonts\\header.ttf', 22, outline, C.COLORFUL_ADDON_TITLE, nil, outline or 'THICK', 'TOP', 0, -4)
     F.CreateFS(guiFrame, C.Assets.Font.Condensed, 10, outline, verStr, { 0.7, 0.7, 0.7 }, outline or 'THICK', 'TOP', 0, -30)
 

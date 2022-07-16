@@ -6,7 +6,7 @@ local function reskinPanelSection(frame)
     _G[frame:GetName() .. 'Title']:SetPoint('BOTTOMLEFT', frame, 'TOPLEFT', 5, 2)
 end
 
-table.insert(C.BlizzThemes, function()
+tinsert(C.BlizzThemes, function()
     local styledOptions = false
 
     _G.VideoOptionsFrame:HookScript('OnShow', function()

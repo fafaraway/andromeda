@@ -103,7 +103,7 @@ local function dmgString(isIn, isHealing, spellID, amount, school, isCritical, H
     if isIn then
         if Hits and Hits > 1 then
             frame:AddMessage(
-                string.format(
+                format(
                     isCritical and '|T%s:0:0:0:-5|t |cff%s%s*%s* x%d|r' or '|T%s:0:0:0:-5|t |cff%s%s%s x%d|r',
                     GetSpellTexture(spellID) or '',
                     dmgcolor[school],
@@ -114,7 +114,7 @@ local function dmgString(isIn, isHealing, spellID, amount, school, isCritical, H
             )
         else
             frame:AddMessage(
-                string.format(
+                format(
                     isCritical and '|T%s:0:0:0:-5|t |cff%s%s*%s*|r' or '|T%s:0:0:0:-5|t |cff%s%s%s|r',
                     GetSpellTexture(spellID) or '',
                     dmgcolor[school],
@@ -126,7 +126,7 @@ local function dmgString(isIn, isHealing, spellID, amount, school, isCritical, H
     else
         if Hits and Hits > 1 then
             frame:AddMessage(
-                string.format(
+                format(
                     isCritical and '|cff%s%s*%s* x%d|r |T%s:0:0:0:-5|t' or '|cff%s%s%s x%d|r |T%s:0:0:0:-5|t',
                     dmgcolor[school],
                     symbol,
@@ -137,7 +137,7 @@ local function dmgString(isIn, isHealing, spellID, amount, school, isCritical, H
             )
         else
             frame:AddMessage(
-                string.format(
+                format(
                     isCritical and '|cff%s%s*%s*|r |T%s:0:0:0:-5|t' or '|cff%s%s%s|r |T%s:0:0:0:-5|t',
                     dmgcolor[school],
                     symbol,
@@ -155,7 +155,7 @@ local function missString(isIn, spellID, missType, amountMissed)
     if isIn then
         if missType == 'ABSORB' then
             frame:AddMessage(
-                string.format(
+                format(
                     '|T%s:0:0:0:-5|t %s(%s)',
                     GetSpellTexture(spellID) or '',
                     _G[missType],
@@ -163,12 +163,12 @@ local function missString(isIn, spellID, missType, amountMissed)
                 )
             )
         else
-            frame:AddMessage(string.format('|T%s:0:0:0:-5|t %s', GetSpellTexture(spellID) or '', _G[missType]))
+            frame:AddMessage(format('|T%s:0:0:0:-5|t %s', GetSpellTexture(spellID) or '', _G[missType]))
         end
     else
         if missType == 'ABSORB' then
             frame:AddMessage(
-                string.format(
+                format(
                     '%s(%s) |T%s:0:0:0:-5|t',
                     _G[missType],
                     F:Numb(amountMissed),
@@ -176,7 +176,7 @@ local function missString(isIn, spellID, missType, amountMissed)
                 )
             )
         else
-            frame:AddMessage(string.format('%s |T%s:0:0:0:-5|t', _G[missType], GetSpellTexture(spellID) or ''))
+            frame:AddMessage(format('%s |T%s:0:0:0:-5|t', _G[missType], GetSpellTexture(spellID) or ''))
         end
     end
 end
@@ -304,7 +304,7 @@ function COMBAT:FloatingCombatText()
         elseif Event == 'ENVIRONMENTAL_DAMAGE' then
             if toMe then
                 inFrame:AddMessage(
-                    string.format('|cff%s%s -%s|r', dmgcolor[arg4], environmentalTypeText[arg1], F:Numb(arg2))
+                    format('|cff%s%s -%s|r', dmgcolor[arg4], environmentalTypeText[arg1], F:Numb(arg2))
                 )
             end
         end

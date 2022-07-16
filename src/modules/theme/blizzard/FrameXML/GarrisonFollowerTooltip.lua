@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 
-table.insert(C.BlizzThemes, function()
+tinsert(C.BlizzThemes, function()
     -- Tooltip close buttons
     F.ReskinClose(_G.ItemRefTooltip.CloseButton)
     F.ReskinClose(_G.FloatingBattlePetTooltip.CloseButton)

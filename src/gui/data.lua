@@ -75,9 +75,9 @@ function GUI:ImportData()
     if LibBase64:IsBase64(profile) then
         profile = LibBase64:Decode(profile)
     end
-    local options = { string.split(';', profile) }
-    -- local title, _, _, class = string.split(':', options[1])
-    local title = string.split(':', options[1])
+    local options = { strsplit(';', profile) }
+    -- local title, _, _, class = strsplit(':', options[1])
+    local title = strsplit(':', options[1])
     if title ~= C.ADDON_TITLE .. 'Settings' then
         _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Import failed, due to data exception.'])
         return
@@ -88,28 +88,28 @@ function GUI:ImportData()
 
     for i = 2, #options do
         local option = options[i]
-        local key, value, arg1 = string.split(':', option)
+        local key, value, arg1 = strsplit(':', option)
         if arg1 == 'true' or arg1 == 'false' then
             C.DB[key][value] = toBoolean(arg1)
         elseif arg1 == 'EMPTYTABLE' then
             C.DB[key][value] = {}
-        elseif string.find(value, 'Color') and (arg1 == 'r' or arg1 == 'g' or arg1 == 'b') then
-            local color = select(4, string.split(':', option))
+        elseif strfind(value, 'Color') and (arg1 == 'r' or arg1 == 'g' or arg1 == 'b') then
+            local color = select(4, strsplit(':', option))
             if C.DB[key][value] then
                 C.DB[key][value][arg1] = tonumber(color)
             end
         elseif key == 'UIAnchor' then
-            local relFrom, parent, relTo, x, y = select(3, string.split(':', option))
+            local relFrom, parent, relTo, x, y = select(3, strsplit(':', option))
             value = tonumber(value) or value
             x = tonumber(x)
             y = tonumber(y)
             C.DB[key][value] = { relFrom, parent, relTo, x, y }
         elseif key == 'ACCOUNT' then
             if value == 'ProfileIndex' then
-                local name, index = select(3, string.split(':', option))
+                local name, index = select(3, strsplit(':', option))
                 _G.ANDROMEDA_ADB[value][name] = tonumber(index)
             elseif value == 'ProfileNames' then
-                local index, name = select(3, string.split(':', option))
+                local index, name = select(3, strsplit(':', option))
                 _G.ANDROMEDA_ADB[value][tonumber(index)] = name
             end
         elseif tonumber(arg1) then
@@ -127,8 +127,8 @@ local function UpdateTooltip()
     if LibBase64:IsBase64(profile) then
         profile = LibBase64:Decode(profile)
     end
-    local option = string.split(';', profile)
-    local title, version, name, class = string.split(':', option)
+    local option = strsplit(';', profile)
+    local title, version, name, class = strsplit(':', option)
     if title == C.ADDON_TITLE .. 'Settings' then
         dataFrame.version = version
         dataFrame.name = name

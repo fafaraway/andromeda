@@ -49,7 +49,7 @@ local socketWatchList = {
 }
 
 local function GetSocketTexture(socket, count)
-    return string.rep('|TInterface\\ItemSocketingFrame\\UI-EmptySocket-' .. socket .. ':0|t', count)
+    return strrep('|TInterface\\ItemSocketingFrame\\UI-EmptySocket-' .. socket .. ':0|t', count)
 end
 
 function F.IsItemHasGem(link)
@@ -81,17 +81,17 @@ function CHAT.ReplaceChatHyperlink(link, linkType, value)
         end
         local name, itemLevel = IsItemHasLevel(link)
         if name and itemLevel then
-            link = string.gsub(link, '|h%[(.-)%]|h', '|h[' .. name .. '(' .. itemLevel .. ')]|h' .. F.IsItemHasGem(link))
+            link = gsub(link, '|h%[(.-)%]|h', '|h[' .. name .. '(' .. itemLevel .. ')]|h' .. F.IsItemHasGem(link))
             itemCache[link] = link
         end
         return link
     elseif linkType == 'dungeonScore' then
-        return value and string.gsub(link, '|h%[(.-)%]|h', '|h[' .. string.format(L['MythicScore'], GetDungeonScoreInColor(value)) .. ']|h')
+        return value and gsub(link, '|h%[(.-)%]|h', '|h[' .. format(L['MythicScore'], GetDungeonScoreInColor(value)) .. ']|h')
     end
 end
 
 function CHAT:UpdateItemLevel(_, msg, ...)
-    msg = string.gsub(msg, '(|H([^:]+):(%d+):.-|h.-|h)', CHAT.ReplaceChatHyperlink)
+    msg = gsub(msg, '(|H([^:]+):(%d+):.-|h.-|h)', CHAT.ReplaceChatHyperlink)
     return false, msg, ...
 end
 
@@ -169,8 +169,8 @@ local function AddTradeIcon(link, id)
 end
 
 function CHAT:UpdateLinkIcon(_, msg, ...)
-    msg = string.gsub(msg, '(|c%x%x%x%x%x%x%x%x.-|H(%a+):(%d+).-|h.-|h.-|r)', AddChatIcon)
-    msg = string.gsub(msg, '(|c%x%x%x%x%x%x%x%x.-|Htrade:[^:]-:(%d+).-|h.-|h.-|r)', AddTradeIcon)
+    msg = gsub(msg, '(|c%x%x%x%x%x%x%x%x.-|H(%a+):(%d+).-|h.-|h.-|r)', AddChatIcon)
+    msg = gsub(msg, '(|c%x%x%x%x%x%x%x%x.-|Htrade:[^:]-:(%d+).-|h.-|h.-|r)', AddTradeIcon)
 
     return false, msg, ...
 end

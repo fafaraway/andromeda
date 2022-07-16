@@ -14,7 +14,7 @@ local function ReplaceCurrencyDisplay(self)
         return
     end
     local text = _G.GetCurrencyString(self.currencyID, self.amount, self.colorCode, self.abbreviate)
-    local newText, count = string.gsub(text, '|T([^:]-):[%d+:]+|t', '|T%1:14:14:0:0:64:64:5:59:5:59|t')
+    local newText, count = gsub(text, '|T([^:]-):[%d+:]+|t', '|T%1:14:14:0:0:64:64:5:59:5:59|t')
     if count > 0 then
         self:SetText(newText)
     end

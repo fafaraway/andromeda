@@ -349,6 +349,7 @@ function ITEMLEVEL.ItemLevel_UpdateTradePlayer(index)
     local link = GetTradePlayerItemLink(index)
     ITEMLEVEL.ItemLevel_UpdateMerchant(button, link)
 end
+
 function ITEMLEVEL.ItemLevel_UpdateTradeTarget(index)
     local button = _G['TradeRecipientItem' .. index]
     local link = GetTradeTargetItemLink(index)

@@ -115,7 +115,7 @@ local function OnUpdate(_, update)
             local cooldown = getCooldownDetails()
             local remaining = cooldown.duration - (GetTime() - cooldown.start)
             if remaining <= 0 then
-                table.insert(animating, { cooldown.texture, cooldown.isPet, cooldown.name })
+                tinsert(animating, { cooldown.texture, cooldown.isPet, cooldown.name })
                 cooldowns[i] = nil
             end
         end
@@ -130,7 +130,7 @@ local function OnUpdate(_, update)
     if #animating > 0 then
         runtimer = runtimer + update
         if runtimer > (fadeInTime + holdTime + fadeOutTime) then
-            table.remove(animating, 1)
+            tremove(animating, 1)
             runtimer = 0
             icon:SetTexture(nil)
             frame.bg:Hide()
@@ -201,8 +201,8 @@ function frame:PLAYER_ENTERING_WORLD()
     local _, instanceType = IsInInstance()
     if instanceType == 'arena' then
         self:SetScript('OnUpdate', nil)
-        table.wipe(cooldowns)
-        table.wipe(watching)
+        wipe(cooldowns)
+        wipe(watching)
     end
 end
 
@@ -252,7 +252,7 @@ function CDP:OnLogin()
 end
 
 _G.SlashCmdList.CDPULSE = function()
-    table.insert(animating, { GetSpellTexture(87214) })
+    tinsert(animating, { GetSpellTexture(87214) })
     frame:SetScript('OnUpdate', OnUpdate)
 end
 _G.SLASH_CDPULSE1 = '/cdpulse'

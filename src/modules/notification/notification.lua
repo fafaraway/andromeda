@@ -160,10 +160,10 @@ function F:CreateNotification(name, message, clickFunc, texture)
     end
 
     if UnitIsAFK('player') then
-        table.insert(incoming, { name, message, clickFunc, texture })
+        tinsert(incoming, { name, message, clickFunc, texture })
         handler:RegisterEvent('PLAYER_FLAGS_CHANGED')
     elseif bannerShown or #incoming ~= 0 then
-        table.insert(incoming, { name, message, clickFunc, texture })
+        tinsert(incoming, { name, message, clickFunc, texture })
         if not processing then
             HandleIncoming()
         end

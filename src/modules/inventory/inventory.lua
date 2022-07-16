@@ -38,7 +38,7 @@ end
 
 local anchorCache = {}
 function INVENTORY:UpdateBagsAnchor(parent, bags)
-    table.wipe(anchorCache)
+    wipe(anchorCache)
 
     local index = 1
     local perRow = C.DB.Inventory.BagsPerRow
@@ -64,7 +64,7 @@ function INVENTORY:UpdateBagsAnchor(parent, bags)
 end
 
 function INVENTORY:UpdateBankAnchor(parent, bags)
-    table.wipe(anchorCache)
+    wipe(anchorCache)
 
     local index = 1
     local perRow = C.DB.Inventory.BankPerRow
@@ -102,7 +102,7 @@ local function IsItemMatched(str, text)
         return
     end
 
-    return string.match(string.lower(str), text)
+    return strmatch(strlower(str), text)
 end
 
 function INVENTORY:CreateMoneyFrame()
@@ -340,7 +340,7 @@ function INVENTORY:CreateSortButton(name)
                     _G.UIErrorsFrame:AddMessage(C.INFO_COLOR .. _G.ERR_NOT_IN_COMBAT)
                 else
                     SortBags()
-                    table.wipe(sortCache)
+                    wipe(sortCache)
                     INVENTORY.Bags.isSorting = true
                     F:Delay(0.5, INVENTORY.ReverseSort)
                 end
@@ -374,7 +374,7 @@ function INVENTORY:CreateRepairButton()
     local bu = F.CreateButton(self, 16, 16, true, iconsList.Repair)
     bu.Icon:SetVertexColor(unpack(iconColor))
     bu:SetScript('OnClick', function(self)
-        _G.ANDROMEDA_ADB['RepairType'] = math.fmod(_G.ANDROMEDA_ADB['RepairType'] + 1, 3)
+        _G.ANDROMEDA_ADB['RepairType'] = mod(_G.ANDROMEDA_ADB['RepairType'] + 1, 3)
         updateRepairButtonStatus(bu)
         self:GetScript('OnEnter')(self)
     end)
@@ -420,7 +420,7 @@ end
 
 local smartFilter = {
     default = function(item, text)
-        text = string.lower(text)
+        text = strlower(text)
         if text == 'boe' then
             return item.bindOn == 'equip'
         else
@@ -746,7 +746,7 @@ local function CheckBoundStatus(itemLink, bagID, slotID, string)
         local line = _G[tip:GetName() .. 'TextLeft' .. i]
         if line then
             local text = line:GetText() or ''
-            local found = string.find(text, string)
+            local found = strfind(text, string)
             if found then
                 return true
             end
@@ -1170,7 +1170,7 @@ function INVENTORY:OnLogin()
         if self.freeSlot then
             if C.DB.Inventory.CombineFreeSlots then
                 local numSlots = #self.buttons + 1
-                local row = math.ceil(numSlots / columns)
+                local row = ceil(numSlots / columns)
                 local col = numSlots % columns
                 if col == 0 then
                     col = columns
@@ -1208,25 +1208,25 @@ function INVENTORY:OnLogin()
         end
 
         local label
-        if string.match(name, 'AzeriteItem$') then
+        if strmatch(name, 'AzeriteItem$') then
             label = L['Azerite armor']
-        elseif string.match(name, 'Equipment$') then
+        elseif strmatch(name, 'Equipment$') then
             label = _G.BAG_FILTER_EQUIPMENT
-        elseif string.match(name, 'EquipSet$') then
+        elseif strmatch(name, 'EquipSet$') then
             label = L['Equipement Set']
         elseif name == 'BankLegendary' then
             label = _G.LOOT_JOURNAL_LEGENDARIES
-        elseif string.match(name, 'Consumable$') then
+        elseif strmatch(name, 'Consumable$') then
             label = _G.BAG_FILTER_CONSUMABLES
         elseif name == 'Junk' then
             label = _G.BAG_FILTER_JUNK
-        elseif string.match(name, 'Collection') then
+        elseif strmatch(name, 'Collection') then
             label = _G.COLLECTIONS
-        elseif string.match(name, 'Goods') then
+        elseif strmatch(name, 'Goods') then
             label = _G.AUCTION_CATEGORY_TRADE_GOODS
-        elseif string.match(name, 'Quest') then
+        elseif strmatch(name, 'Quest') then
             label = _G.QUESTS_LABEL
-        elseif string.match(name, 'Anima') then
+        elseif strmatch(name, 'Anima') then
             label = _G.POWER_TYPE_ANIMA
         elseif name == 'BagRelic' then
             label = L['Korthia Relics']

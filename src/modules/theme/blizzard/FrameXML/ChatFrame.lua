@@ -24,7 +24,7 @@ local function ReskinChatScroll(self)
     self.ScrollBar:HookScript('OnLeave', scrollOnLeave)
 end
 
-table.insert(C.BlizzThemes, function()
+tinsert(C.BlizzThemes, function()
     -- Battlenet toast frame
     _G.BNToastFrame:SetBackdrop(nil)
     F.SetBD(_G.BNToastFrame)

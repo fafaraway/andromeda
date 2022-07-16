@@ -28,7 +28,7 @@ local function ReplaceApplicantRoles(texture, atlas)
     end
 end
 
-table.insert(C.BlizzThemes, function()
+tinsert(C.BlizzThemes, function()
     local r, g, b = C.r, C.g, C.b
 
     local LFGListFrame = _G.LFGListFrame

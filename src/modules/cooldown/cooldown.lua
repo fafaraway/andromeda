@@ -12,14 +12,14 @@ local day, hour, minute = 86400, 3600, 60
 function COOLDOWN.FormattedTimer(s, modRate)
     local onlyNumbers = C.DB.Cooldown.OnlyNumbers
     if s >= day then
-        return string.format(onlyNumbers and '|cffbebfb3%d|r' or '|cffbebfb3%d|r|cffa28d7bd|r', s / day + 0.5), s % day -- grey
+        return format(onlyNumbers and '|cffbebfb3%d|r' or '|cffbebfb3%d|r|cffa28d7bd|r', s / day + 0.5), s % day -- grey
     elseif s > hour then
-        return string.format(onlyNumbers and '|cff4fcd35%d|r' or '|cff4fcd35%d|r|cffa28d7bh|r', s / hour + 0.5), s % hour -- white
+        return format(onlyNumbers and '|cff4fcd35%d|r' or '|cff4fcd35%d|r|cffa28d7bh|r', s / hour + 0.5), s % hour -- white
     elseif s >= minute then
         if s < C.DB.Cooldown.MmssTH then
-            return string.format('|cff21c8de%d:%.2d|r', s / minute, s % minute), s - math.floor(s) -- blue
+            return format('|cff21c8de%d:%.2d|r', s / minute, s % minute), s - floor(s) -- blue
         else
-            return string.format(onlyNumbers and '|cff21c8de%d|r' or '|cff21c8de%d|r|cffa28d7bm|r', s / minute + 0.5), s % minute -- blue
+            return format(onlyNumbers and '|cff21c8de%d|r' or '|cff21c8de%d|r|cffa28d7bm|r', s / minute + 0.5), s % minute -- blue
         end
     else
         local colorStr = (s < 3 and '|cfffd3612') or (s < 10 and '|cfffd3612') or '|cffffe700' -- red / yellow
@@ -102,7 +102,7 @@ function COOLDOWN:OnCreate()
     timer.text = text
 
     if C.IS_DEVELOPER then
-        if (not C.DB.Cooldown.IgnoreWA and string.find(frameName, 'WeakAurasCooldown')) or string.find(frameName, C.ADDON_TITLE .. 'PartyWatcher') then
+        if (not C.DB.Cooldown.IgnoreWA and strfind(frameName, 'WeakAurasCooldown')) or strfind(frameName, C.ADDON_TITLE .. 'PartyWatcher') then
             text:SetPoint('CENTER', timer, 'BOTTOM')
         end
     end
@@ -123,7 +123,7 @@ function COOLDOWN:StartTimer(start, duration, modRate)
     end
 
     local frameName = self.GetName and self:GetName()
-    if C.DB.Cooldown.IgnoreWA and frameName and string.find(frameName, 'WeakAuras') then
+    if C.DB.Cooldown.IgnoreWA and frameName and strfind(frameName, 'WeakAuras') then
         self.noCooldownCount = true
         return
     end

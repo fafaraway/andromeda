@@ -121,10 +121,10 @@ local function updateWhoList()
                 race = '|cff00ff00' .. race
             end
 
-            table.wipe(columnTable)
-            table.insert(columnTable, zone)
-            table.insert(columnTable, guild)
-            table.insert(columnTable, race)
+            wipe(columnTable)
+            tinsert(columnTable, zone)
+            tinsert(columnTable, guild)
+            tinsert(columnTable, race)
 
             nameText:SetTextColor(classColor(class, true))
             levelText:SetText(diffColor(level) .. level)
@@ -145,10 +145,10 @@ do
     local AddMessage = {}
 
     local function FixClassColors(frame, message, ...)
-        if type(message) == 'string' and string.find(message, '|cff') then
+        if type(message) == 'string' and strfind(message, '|cff') then
             for hex, class in pairs(blizzHexColors) do
                 local color = C.ClassColors[class]
-                message = color and string.gsub(message, hex, color.colorStr) or message
+                message = color and gsub(message, hex, color.colorStr) or message
             end
         end
         return AddMessage[frame](frame, message, ...)
@@ -195,10 +195,10 @@ end)
 do
     local AddMessage = _G.RaidNotice_AddMessage
     _G.RaidNotice_AddMessage = function(frame, message, ...)
-        if string.find(message, '|cff') then
+        if strfind(message, '|cff') then
             for hex, class in pairs(blizzHexColors) do
                 local color = C.ClassColors[class]
-                message = string.gsub(message, hex, color.colorStr)
+                message = gsub(message, hex, color.colorStr)
             end
         end
         return AddMessage(frame, message, ...)

@@ -113,7 +113,7 @@ local function CreateButton(r, g, b, text, func)
         bu:HookScript('OnClick', SwitchTip)
     end
 
-    table.insert(buttonList, bu)
+    tinsert(buttonList, bu)
     return bu
 end
 

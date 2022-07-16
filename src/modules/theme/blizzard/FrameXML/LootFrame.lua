@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 
-table.insert(C.BlizzThemes, function()
+tinsert(C.BlizzThemes, function()
     hooksecurefunc('LootFrame_UpdateButton', function(index)
         local name = 'LootButton' .. index
         local bu = _G[name]

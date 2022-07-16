@@ -8,7 +8,7 @@ local function delayFunc()
         autoRepair(true)
     else
         F:Print(
-            string.format(
+            format(
                 C.GREEN_COLOR .. '%s|r %s',
                 L['Repair cost covered by Guild Bank'],
                 GetMoneyString(repairAllCost, true)
@@ -41,7 +41,7 @@ function autoRepair(override)
             if myMoney > repairAllCost then
                 RepairAllItems()
                 F:Print(
-                    string.format(C.GREEN_COLOR .. '%s|r %s', L['Repair cost'], GetMoneyString(repairAllCost, true))
+                    format(C.GREEN_COLOR .. '%s|r %s', L['Repair cost'], GetMoneyString(repairAllCost, true))
                 )
                 return
             else

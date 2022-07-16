@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 
-table.insert(C.BlizzThemes, function()
+tinsert(C.BlizzThemes, function()
     -- ready dialog
     local PVPReadyDialog = _G.PVPReadyDialog
 

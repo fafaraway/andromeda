@@ -284,8 +284,8 @@ local function SetupBackdrop(icon)
     icon:GetParent().__bg = bg
 end
 
-local keyButton = string.gsub(_G.KEY_BUTTON4, '%d', '')
-local keyNumpad = string.gsub(_G.KEY_NUMPAD1, '%d', '')
+local keyButton = gsub(_G.KEY_BUTTON4, '%d', '')
+local keyNumpad = gsub(_G.KEY_NUMPAD1, '%d', '')
 
 local replaces = {
     { '(' .. keyButton .. ')', 'M' },
@@ -321,7 +321,7 @@ function ACTIONBAR:UpdateHotKey()
     end
 
     for _, value in pairs(replaces) do
-        text = string.gsub(text, value[1], value[2])
+        text = gsub(text, value[1], value[2])
     end
 
     if text == _G.RANGE_INDICATOR then

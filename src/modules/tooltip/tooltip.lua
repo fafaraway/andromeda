@@ -55,7 +55,7 @@ function TOOLTIP:GetLevelLine()
     for i = 2, self:NumLines() do
         local tiptext = _G['GameTooltipTextLeft' .. i]
         local linetext = tiptext:GetText()
-        if linetext and string.find(linetext, _G.LEVEL) then
+        if linetext and strfind(linetext, _G.LEVEL) then
             return tiptext
         end
     end
@@ -63,7 +63,7 @@ end
 
 function TOOLTIP:GetTarget(unit)
     if UnitIsUnit(unit, 'player') then
-        return string.format('|cffff0000%s|r', '>' .. string.upper(_G.YOU) .. '<')
+        return format('|cffff0000%s|r', '>' .. strupper(_G.YOU) .. '<')
     else
         return F:RgbToHex(F:UnitColor(unit)) .. UnitName(unit) .. '|r'
     end
@@ -126,7 +126,7 @@ function TOOLTIP:OnTooltipSetUnit()
             or (UnitIsDND(unit) and _G.DND)
             or (not UnitIsConnected(unit) and _G.PLAYER_OFFLINE)
         if status then
-            status = string.format(' |cffffcc00[%s]|r', status)
+            status = format(' |cffffcc00[%s]|r', status)
         end
         _G.GameTooltipTextLeft1:SetFormattedText('%s', name .. (status or ''))
 
@@ -147,7 +147,7 @@ function TOOLTIP:OnTooltipSetUnit()
                 guildName = guildName .. '-' .. guildRealm
             end
             if not isAltKeyDown then
-                if string.len(guildName) > 31 then
+                if strlen(guildName) > 31 then
                     guildName = '...'
                 end
             end
@@ -183,17 +183,17 @@ function TOOLTIP:OnTooltipSetUnit()
 
         local diff = _G.GetCreatureDifficultyColor(level)
         local classify = UnitClassification(unit)
-        local textLevel = string.format(
+        local textLevel = format(
             '%s%s%s|r',
             F:RgbToHex(diff),
-            boss or string.format('%d', level),
+            boss or format('%d', level),
             classification[classify] or ''
         )
         local tiptextLevel = TOOLTIP.GetLevelLine(self)
         if tiptextLevel then
-            local pvpFlag = isPlayer and UnitIsPVP(unit) and string.format(' |cffff0000%s|r', _G.PVP) or ''
+            local pvpFlag = isPlayer and UnitIsPVP(unit) and format(' |cffff0000%s|r', _G.PVP) or ''
             local unitClass = isPlayer
-                    and string.format('%s %s', UnitRace(unit) or '', hexColor .. (UnitClass(unit) or '') .. '|r')
+                    and format('%s %s', UnitRace(unit) or '', hexColor .. (UnitClass(unit) or '') .. '|r')
                 or UnitCreatureType(unit)
                 or ''
             tiptextLevel:SetFormattedText(
@@ -211,7 +211,7 @@ function TOOLTIP:OnTooltipSetUnit()
         if tarRicon and tarRicon > 8 then
             tarRicon = nil
         end
-        local tar = string.format(
+        local tar = format(
             '%s%s',
             (tarRicon and _G.ICON_LIST[tarRicon] .. '10|t') or '',
             TOOLTIP:GetTarget(unit .. 'target')
@@ -329,7 +329,7 @@ function TOOLTIP:ScanTargets()
         return
     end
 
-    table.wipe(targetTable)
+    wipe(targetTable)
 
     for i = 1, GetNumGroupMembers() do
         local member = (IsInRaid() and 'raid' .. i or 'party' .. i)
@@ -340,7 +340,7 @@ function TOOLTIP:ScanTargets()
         then
             local color = F:RgbToHex(F:UnitColor(member))
             local name = color .. UnitName(member) .. '|r'
-            table.insert(targetTable, name)
+            tinsert(targetTable, name)
         end
     end
 
@@ -361,7 +361,7 @@ local function AuraSource(self, func, unit, index, filter)
     if srcUnit then
         local src = GetUnitName(srcUnit, true)
         if srcUnit == 'pet' or srcUnit == 'vehicle' then
-            src = string.format(
+            src = format(
                 '%s (|cff%02x%02x%02x%s|r)',
                 src,
                 C.r * 255,
@@ -373,21 +373,21 @@ local function AuraSource(self, func, unit, index, filter)
             local partypet = srcUnit:match('^partypet(%d+)$')
             local raidpet = srcUnit:match('^raidpet(%d+)$')
             if partypet then
-                src = string.format('%s (%s)', src, GetUnitName('party' .. partypet, true))
+                src = format('%s (%s)', src, GetUnitName('party' .. partypet, true))
             elseif raidpet then
-                src = string.format('%s (%s)', src, GetUnitName('raid' .. raidpet, true))
+                src = format('%s (%s)', src, GetUnitName('raid' .. raidpet, true))
             end
         end
         if UnitIsPlayer(srcUnit) then
             local class = select(2, UnitClass(srcUnit))
             local r, g, b = F:ClassColor(class)
             if r then
-                src = string.format('|cff%02x%02x%02x%s|r', r * 255, g * 255, b * 255, src)
+                src = format('|cff%02x%02x%02x%s|r', r * 255, g * 255, b * 255, src)
             end
         else
             local color = oUF.colors.reaction[UnitReaction(srcUnit, 'player')]
             if color then
-                src = string.format('|cff%02x%02x%02x%s|r', color[1] * 255, color[2] * 255, color[3] * 255, src)
+                src = format('|cff%02x%02x%02x%s|r', color[1] * 255, color[2] * 255, color[3] * 255, src)
             end
         end
         self:AddDoubleLine(L['CastBy'] .. ': ', src)
@@ -420,7 +420,7 @@ function TOOLTIP:SetUnitAura(unit, index, filter)
         local mountText
         if TOOLTIP.MountIDs[id] then
             local _, _, sourceText = C_MountJournal.GetMountInfoExtraByID(TOOLTIP.MountIDs[id])
-            mountText = sourceText and string.gsub(sourceText, blanchyFix, '|n')
+            mountText = sourceText and gsub(sourceText, blanchyFix, '|n')
 
             if mountText then
                 self:AddLine(' ')
@@ -455,7 +455,7 @@ function TOOLTIP:AddMythicPlusScore(unit)
     local score = summary and summary.currentSeasonScore
     if score and score > 0 then
         _G.GameTooltip:AddLine(
-            string.format('%s:|r %s', C.INFO_COLOR .. _G.DUNGEON_SCORE, TOOLTIP.GetDungeonScore(score))
+            format('%s:|r %s', C.INFO_COLOR .. _G.DUNGEON_SCORE, TOOLTIP.GetDungeonScore(score))
         )
     end
 end

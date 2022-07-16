@@ -28,7 +28,7 @@ local function ReskinVoicePicker(voicePicker)
     voicePicker:HookScript('OnShow', reskinPickerOptions)
 end
 
-table.insert(C.BlizzThemes, function()
+tinsert(C.BlizzThemes, function()
     F.StripTextures(_G.ChatConfigFrame)
     F.SetBD(_G.ChatConfigFrame)
     F.StripTextures(_G.ChatConfigFrame.Header)

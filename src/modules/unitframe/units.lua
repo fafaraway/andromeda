@@ -160,7 +160,7 @@ function UNITFRAME:CreateAndUpdatePartyHeader()
     if not party then
         party = CreatePartyHeader('oUF_Party', partyWidth, partyHeight)
         party.groupType = 'party'
-        table.insert(UNITFRAME.headers, party)
+        tinsert(UNITFRAME.headers, party)
         RegisterStateDriver(party, 'visibility', GetPartyVisibility())
         partyMover = F.Mover(party, L['PartyFrame'], 'PartyFrame', UNITFRAME.Positions.party)
         UNITFRAME.PartyMover = partyMover
@@ -329,7 +329,7 @@ function UNITFRAME:UpdateSimpleModeHeader()
     local unitsPerColumn = C.DB['Unitframe']['SMRPerCol']
     local numGroups = C.DB['Unitframe']['SMRGroups']
     local scale = C.DB['Unitframe']['SMRScale'] / 10
-    local maxColumns = math.ceil(numGroups * 5 / unitsPerColumn)
+    local maxColumns = ceil(numGroups * 5 / unitsPerColumn)
 
     simpleRaid:SetAttribute('groupingOrder', groupByTypes[groupByIndex][1])
     simpleRaid:SetAttribute('groupBy', groupByTypes[groupByIndex][2])
@@ -375,7 +375,7 @@ function UNITFRAME:SpawnSimpleRaid()
 
     local group = CreateGroup('oUF_Raid')
     group.groupType = 'raid'
-    table.insert(UNITFRAME.headers, group)
+    tinsert(UNITFRAME.headers, group)
     RegisterStateDriver(group, 'visibility', GetRaidVisibility())
     raidMover = F.Mover(group, L['RaidFrame'], 'RaidFrame', UNITFRAME.Positions.simple)
     group:ClearAllPoints()
@@ -496,7 +496,7 @@ function UNITFRAME:CreateAndUpdateRaidHeader(direction)
             group = CreateRaid('oUF_Raid' .. i, i, raidWidth, raidHeight)
             group.index = i
             group.groupType = 'raid'
-            table.insert(UNITFRAME.headers, group)
+            tinsert(UNITFRAME.headers, group)
             RegisterStateDriver(group, 'visibility', 'show')
             RegisterStateDriver(group, 'visibility', GetRaidVisibility())
             CreateTeamIndex(group)
@@ -511,8 +511,8 @@ function UNITFRAME:CreateAndUpdateRaidHeader(direction)
 
         local groupWidth = index < 5 and raidWidth + 5 or (raidWidth + 5) * 5
         local groupHeight = index < 5 and (raidHeight + 5) * 5 or raidHeight + 5
-        local numX = math.ceil(numGroups / rows)
-        local numY = math.min(rows, numGroups)
+        local numX = ceil(numGroups / rows)
+        local numY = min(rows, numGroups)
         local indexSpacings = indexSpacing * (numY - 1)
         if index < 5 then
             raidMover:SetSize(groupWidth * numX - 5, groupHeight * numY - 5 + indexSpacings)
@@ -533,7 +533,7 @@ function UNITFRAME:CreateAndUpdateRaidHeader(direction)
         elseif (i - 1) % rows == 0 then
             group:SetPoint(sortData.initAnchor, groups[i - rows], sortData.relAnchor, sortData.x, sortData.y)
         else
-            local x = math.floor((i - 1) / rows)
+            local x = floor((i - 1) / rows)
             local y = (i - 1) % rows
             if index < 5 then
                 group:SetPoint(

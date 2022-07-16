@@ -5,7 +5,7 @@ local Picker = _G.ColorPickerFrame
 
 local colorBuffer = {}
 local function AlphaValue(num)
-    return num and math.floor(((1 - num) * 100) + 0.05) or 0
+    return num and floor(((1 - num) * 100) + 0.05) or 0
 end
 
 local function UpdateAlphaText(alpha)
@@ -27,11 +27,11 @@ local function UpdateAlpha(tbox)
 end
 
 local function ExpandFromThree(r, g, b)
-    return string.join('', r, r, g, g, b, b)
+    return strjoin('', r, r, g, g, b, b)
 end
 
 local function ExtendToSix(str)
-    for _ = 1, 6 - string.len(str) do
+    for _ = 1, 6 - strlen(str) do
         str = str .. 0
     end
     return str
@@ -40,15 +40,15 @@ end
 local function GetHexColor(box)
     local rgb, rgbSize = box:GetText(), box:GetNumLetters()
     if rgbSize == 3 then
-        rgb = string.gsub(rgb, '(%x)(%x)(%x)$', ExpandFromThree)
+        rgb = gsub(rgb, '(%x)(%x)(%x)$', ExpandFromThree)
     elseif rgbSize < 6 then
-        rgb = string.gsub(rgb, '(.+)$', ExtendToSix)
+        rgb = gsub(rgb, '(.+)$', ExtendToSix)
     end
 
     local r, g, b =
-        tonumber(string.sub(rgb, 0, 2), 16) or 0,
-        tonumber(string.sub(rgb, 3, 4), 16) or 0,
-        tonumber(string.sub(rgb, 5, 6), 16) or 0
+        tonumber(strsub(rgb, 0, 2), 16) or 0,
+        tonumber(strsub(rgb, 3, 4), 16) or 0,
+        tonumber(strsub(rgb, 5, 6), 16) or 0
 
     return r / 255, g / 255, b / 255
 end
@@ -78,9 +78,9 @@ local function UpdateColorTexts(r, g, b, box)
     end
 
     if C.IS_DEVELOPER then
-        _G.ColorPPBoxR:SetText(string.format('%.3f', r))
-        _G.ColorPPBoxG:SetText(string.format('%.3f', g))
-        _G.ColorPPBoxB:SetText(string.format('%.3f', b))
+        _G.ColorPPBoxR:SetText(format('%.3f', r))
+        _G.ColorPPBoxG:SetText(format('%.3f', g))
+        _G.ColorPPBoxB:SetText(format('%.3f', b))
     end
 
     -- we want those /255 values
@@ -163,7 +163,7 @@ local function ConvertColor(r)
 end
 
 local function UpdateClassColor(self)
-    local r, g, b = string.match(self.colorStr, '(%x%x)(%x%x)(%x%x)$')
+    local r, g, b = strmatch(self.colorStr, '(%x%x)(%x%x)(%x%x)$')
     r = ConvertColor(r)
     g = ConvertColor(g)
     b = ConvertColor(b)
@@ -302,7 +302,7 @@ function BLIZZARD:EnhancedColorPicker()
     defaultButton:Disable() -- enable when something has been copied
     defaultButton:SetScript('OnHide', function(btn)
         if btn.colors then
-            table.wipe(btn.colors)
+            wipe(btn.colors)
         end
     end)
     defaultButton:SetScript('OnShow', function(btn)
@@ -363,7 +363,7 @@ function BLIZZARD:EnhancedColorPicker()
         if i == 5 then
             box:SetScript('OnKeyUp', function(eb, key)
                 local copyPaste = IsControlKeyDown() and key == 'V'
-                if key == 'BACKSPACE' or copyPaste or (string.len(key) == 1 and not IsModifierKeyDown()) then
+                if key == 'BACKSPACE' or copyPaste or (strlen(key) == 1 and not IsModifierKeyDown()) then
                     UpdateAlpha(eb)
                 elseif key == 'ENTER' or key == 'ESCAPE' then
                     eb:ClearFocus()
@@ -373,7 +373,7 @@ function BLIZZARD:EnhancedColorPicker()
         else
             box:SetScript('OnKeyUp', function(eb, key)
                 local copyPaste = IsControlKeyDown() and key == 'V'
-                if key == 'BACKSPACE' or copyPaste or (string.len(key) == 1 and not IsModifierKeyDown()) then
+                if key == 'BACKSPACE' or copyPaste or (strlen(key) == 1 and not IsModifierKeyDown()) then
                     if i ~= 4 then
                         UpdateColorTexts(nil, nil, nil, eb)
                     end

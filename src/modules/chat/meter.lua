@@ -68,7 +68,7 @@ local function FilterLine(event, source, message)
                     end
 
                     if toInsert then
-                        table.insert(j.data, message)
+                        tinsert(j.data, message)
                     end
                     return true, false, nil
                 end
@@ -87,11 +87,11 @@ local function FilterLine(event, source, message)
                 local elapsed = curTime - j.time
                 if j.source == source and j.event == event and elapsed < 1 then
                     newID = i
-                    return true, true, string.format('|Hspam:%1$d|h|cFFFFFF00[%2$s]|r|h', newID or 0, message or 'nil')
+                    return true, true, format('|Hspam:%1$d|h|cFFFFFF00[%2$s]|r|h', newID or 0, message or 'nil')
                 end
             end
 
-            table.insert(meters, { source = source, event = event, time = curTime, data = {}, title = message })
+            tinsert(meters, { source = source, event = event, time = curTime, data = {}, title = message })
 
             for i = 1, #meters do
                 local j = meters[i]
@@ -100,7 +100,7 @@ local function FilterLine(event, source, message)
                 end
             end
 
-            return true, true, string.format('|Hspam:%1$d|h|cFFFFFF00[%2$s]|r|h', newID or 0, message or 'nil')
+            return true, true, format('|Hspam:%1$d|h|cFFFFFF00[%2$s]|r|h', newID or 0, message or 'nil')
         end
     end
     return false, false, nil
@@ -108,12 +108,12 @@ end
 
 local SetHyperlink = _G.ItemRefTooltip.SetHyperlink
 function _G.ItemRefTooltip:SetHyperlink(link, ...)
-    if link and (string.sub(link, 1, 4) == 'spam') then
-        local _, id = string.split(':', link)
+    if link and (strsub(link, 1, 4) == 'spam') then
+        local _, id = strsplit(':', link)
         local meterID = tonumber(id)
         _G.ItemRefTooltip:ClearLines()
         _G.ItemRefTooltip:AddLine(meters[meterID].title)
-        _G.ItemRefTooltip:AddLine(string.format(_G.BY_SOURCE .. ': %s', meters[meterID].source))
+        _G.ItemRefTooltip:AddLine(format(_G.BY_SOURCE .. ': %s', meters[meterID].source))
         for _, v in ipairs(meters[meterID].data) do
             local left, right = v:match('^(.*)  (.*)$')
             if left and right then

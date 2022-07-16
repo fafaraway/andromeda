@@ -18,7 +18,7 @@ do
 
     local tmp = {}
     local function myPrint(...)
-        local prefix = string.format('[%s]', C.COLORFUL_ADDON_TITLE)
+        local prefix = format('[%s]', C.COLORFUL_ADDON_TITLE)
         local n = 0
 
         n = n + 1
@@ -38,7 +38,7 @@ do
     end
 
     function F:Printf(...)
-        return myPrint(string.format(...))
+        return myPrint(format(...))
     end
 
     function F:HookAddOn(addonName, callback)
@@ -54,7 +54,7 @@ do
     end
 
     function F:RegisterSlashCommand(...)
-        local name = C.ADDON_TITLE .. 'Slash' .. math.random()
+        local name = C.ADDON_TITLE .. 'Slash' .. random()
 
         local numArgs = select('#', ...)
         local callback = select(numArgs, ...)
@@ -120,7 +120,7 @@ do
 
     function F:SplitList(list, variable, cleanup)
         if cleanup then
-            table.wipe(list)
+            wipe(list)
         end
 
         for word in variable:gmatch('%S+') do
@@ -142,7 +142,7 @@ do
         local atlasHeight = height / (txBottom - txTop)
         local str = '|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t'
 
-        return string.format(
+        return format(
             str,
             file,
             (sizeX or 0),
@@ -158,7 +158,7 @@ do
 
     -- GUID to npcID
     function F:GetNpcId(guid)
-        local id = tonumber(string.match((guid or ''), '%-(%d-)%-%x-$'))
+        local id = tonumber(strmatch((guid or ''), '%-(%d-)%-%x-$'))
         return id
     end
 end
@@ -167,8 +167,8 @@ end
 
 do
     local iLvlDB = {}
-    local itemLevelString = '^' .. string.gsub(_G.ITEM_LEVEL, '%%d', '')
-    local enchantString = string.gsub(_G.ENCHANTED_TOOLTIP_LINE, '%%s', '(.+)')
+    local itemLevelString = '^' .. gsub(_G.ITEM_LEVEL, '%%d', '')
+    local enchantString = gsub(_G.ENCHANTED_TOOLTIP_LINE, '%%s', '(.+)')
     local essenceTextureID = 2975691
     local essenceDescription = GetSpellDescription(277253)
 
@@ -179,14 +179,14 @@ do
         if not tip.gems then
             tip.gems = {}
         else
-            table.wipe(tip.gems)
+            wipe(tip.gems)
         end
 
         if not tip.essences then
             tip.essences = {}
         else
             for _, essences in pairs(tip.essences) do
-                table.wipe(essences)
+                wipe(essences)
             end
         end
 
@@ -218,12 +218,12 @@ do
     end
 
     function F:InspectItemInfo(text, slotInfo)
-        local itemLevel = string.find(text, itemLevelString) and string.match(text, '(%d+)%)?$')
+        local itemLevel = strfind(text, itemLevelString) and strmatch(text, '(%d+)%)?$')
         if itemLevel then
             slotInfo.iLvl = tonumber(itemLevel)
         end
 
-        local enchant = string.match(text, enchantString)
+        local enchant = strmatch(text, enchantString)
         if enchant then
             slotInfo.enchantText = enchant
         end
@@ -236,15 +236,15 @@ do
             essence
             and next(essence)
             and (
-                string.find(lineText, _G.ITEM_SPELL_TRIGGER_ONEQUIP, nil, true)
-                and string.find(lineText, essenceDescription, nil, true)
+                strfind(lineText, _G.ITEM_SPELL_TRIGGER_ONEQUIP, nil, true)
+                and strfind(lineText, essenceDescription, nil, true)
             )
         then
             for i = 5, 2, -1 do
                 local line = _G[tip:GetName() .. 'TextLeft' .. index - i]
                 local text = line and line:GetText()
 
-                if text and (not string.match(text, '^[ +]')) and essence and next(essence) then
+                if text and (not strmatch(text, '^[ +]')) and essence and next(essence) then
                     local r, g, b = line:GetTextColor()
                     essence[4] = r
                     essence[5] = g
@@ -265,7 +265,7 @@ do
             if not tip.slotInfo then
                 tip.slotInfo = {}
             else
-                table.wipe(tip.slotInfo)
+                wipe(tip.slotInfo)
             end
 
             local slotInfo = tip.slotInfo
@@ -315,9 +315,9 @@ do
                 end
 
                 local text = line:GetText()
-                local found = text and string.find(text, itemLevelString)
+                local found = text and strfind(text, itemLevelString)
                 if found then
-                    local level = string.match(text, '(%d+)%)?$')
+                    local level = strmatch(text, '(%d+)%)?$')
                     iLvlDB[link] = tonumber(level)
                     break
                 end
@@ -566,14 +566,14 @@ do
     -- 'Lady Sylvanas Windrunner' to 'L. S. Windrunner'
     function F.AbbrNameString(string)
         if string then
-            return string.gsub(string, '%s?(.[\128-\191]*)%S+%s', '%1. ')
+            return gsub(string, '%s?(.[\128-\191]*)%S+%s', '%1. ')
         else
             return string
         end
     end
 
     function F:StyleAddonName(msg)
-        msg = string.gsub(msg, '%%ADDONNAME%%', C.COLORFUL_ADDON_TITLE)
+        msg = gsub(msg, '%%ADDONNAME%%', C.COLORFUL_ADDON_TITLE)
 
         return msg
     end
@@ -740,7 +740,7 @@ do
         F.SetBorderColor(self)
 
         if not alpha then
-            table.insert(C.Frames, self)
+            tinsert(C.Frames, self)
         end
     end
 
@@ -1095,8 +1095,8 @@ do
         if not text then
             return
         end
-        text = math.min(maxValue, text)
-        text = math.max(minValue, text)
+        text = min(maxValue, text)
+        text = max(minValue, text)
         slider:SetValue(text)
         self:SetText(text)
         self:ClearFocus()
@@ -1253,7 +1253,7 @@ do
         self.Icon:SetInside()
         self.Icon:SetTexCoord(unpack(C.TEX_COORD))
         if texture then
-            local atlas = string.match(texture, 'Atlas:(.+)$')
+            local atlas = strmatch(texture, 'Atlas:(.+)$')
             if atlas then
                 self.Icon:SetAtlas(atlas)
             else
@@ -1290,7 +1290,7 @@ do
     }
 
     local function UpdateIconBorderColorByAtlas(self, atlas)
-        local atlasAbbr = atlas and string.match(atlas, '%-(%w+)$')
+        local atlasAbbr = atlas and strmatch(atlas, '%-(%w+)$')
         local quality = atlasAbbr and atlasToQuality[atlasAbbr]
         local color = C.QualityColors[quality or 1]
         self.__owner.bg:SetBackdropBorderColor(color.r, color.g, color.b)
@@ -1576,7 +1576,7 @@ do
 
     local function GrabScrollBarElement(frame, element)
         local frameName = frame:GetDebugName()
-        return frame[element] or frameName and (_G[frameName .. element] or string.find(frameName, element)) or nil
+        return frame[element] or frameName and (_G[frameName .. element] or strfind(frameName, element)) or nil
     end
 
     function F:ReskinScroll()
@@ -1756,7 +1756,7 @@ do
 
     function F:SetupArrow(direction)
         self:SetTexture(C.Assets.Texture.Arrow)
-        self:SetRotation(math.rad(arrowDegree[direction]))
+        self:SetRotation(rad(arrowDegree[direction]))
     end
 
     function F:ReskinArrow(direction)
@@ -1961,7 +1961,7 @@ do
         thumb:SetBlendMode('ADD')
 
         if vertical then
-            thumb:SetRotation(math.rad(90))
+            thumb:SetRotation(rad(90))
         end
 
         local gradStyle = _G.ANDROMEDA_ADB.GradientStyle
@@ -2006,9 +2006,9 @@ do
         self:SetNormalTexture('')
 
         if texture and texture ~= '' then
-            if string.find(texture, 'Plus') or string.find(texture, 'Closed') then
+            if strfind(texture, 'Plus') or strfind(texture, 'Closed') then
                 self.__texture:DoCollapse(true)
-            elseif string.find(texture, 'Minus') or string.find(texture, 'Open') then
+            elseif strfind(texture, 'Minus') or strfind(texture, 'Open') then
                 self.__texture:DoCollapse(false)
             end
             self.bg:Show()
@@ -2050,6 +2050,7 @@ do
                 button:SetSize(16, 16)
                 button:ClearAllPoints()
                 button:SetPoint('CENTER', -3, 0)
+                button:SetHitRectInsets(1, 1, 1, 1)
                 F.Reskin(button)
 
                 local tex = button:CreateTexture()

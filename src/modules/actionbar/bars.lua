@@ -42,7 +42,7 @@ function BAR:UpdateActionBarSize(name)
     local size = C.DB['Actionbar'][name .. 'Size']
     local num = C.DB['Actionbar'][name .. 'Num']
     local perRow = C.DB['Actionbar'][name .. 'PerRow']
-    local fontSize = math.floor(size / 30 * 10 + 0.5)
+    local fontSize = floor(size / 30 * 10 + 0.5)
 
     if num == 0 then
         local column = 3
@@ -61,7 +61,7 @@ function BAR:UpdateActionBarSize(name)
                 button:SetPoint('TOPLEFT', frame, BAR.padding, -BAR.padding)
             elseif i == 7 then
                 button:SetPoint('TOPLEFT', frame.child, BAR.padding, -BAR.padding)
-            elseif math.fmod(i - 1, 3) == 0 then
+            elseif mod(i - 1, 3) == 0 then
                 button:SetPoint('TOP', frame.buttons[i - 3], 'BOTTOM', 0, -BAR.margin)
             else
                 button:SetPoint('LEFT', frame.buttons[i - 1], 'RIGHT', BAR.margin, 0)
@@ -77,7 +77,7 @@ function BAR:UpdateActionBarSize(name)
             button:ClearAllPoints()
             if i == 1 then
                 button:SetPoint('TOPLEFT', frame, BAR.padding, -BAR.padding)
-            elseif math.fmod(i - 1, perRow) == 0 then
+            elseif mod(i - 1, perRow) == 0 then
                 button:SetPoint('TOP', frame.buttons[i - perRow], 'BOTTOM', 0, -BAR.margin)
             else
                 button:SetPoint('LEFT', frame.buttons[i - 1], 'RIGHT', BAR.margin, 0)
@@ -96,8 +96,8 @@ function BAR:UpdateActionBarSize(name)
             button:Hide()
         end
 
-        local column = math.min(num, perRow)
-        local rows = math.ceil(num / perRow)
+        local column = min(num, perRow)
+        local rows = ceil(num / perRow)
         frame:SetWidth(column * size + (column - 1) * BAR.margin + 2 * BAR.padding)
         frame:SetHeight(size * rows + (rows - 1) * BAR.margin + 2 * BAR.padding)
         frame.mover:SetSize(frame:GetSize())
@@ -131,8 +131,8 @@ function BAR:CreateBar1()
 
     for i = 1, num do
         local button = _G['ActionButton' .. i]
-        table.insert(buttonList, button)
-        table.insert(BAR.buttons, button)
+        tinsert(buttonList, button)
+        tinsert(BAR.buttons, button)
 
         button:SetParent(frame)
     end
@@ -208,8 +208,8 @@ function BAR:CreateBar2()
 
     for i = 1, num do
         local button = _G['MultiBarBottomLeftButton' .. i]
-        table.insert(buttonList, button)
-        table.insert(BAR.buttons, button)
+        tinsert(buttonList, button)
+        tinsert(BAR.buttons, button)
     end
     frame.buttons = buttonList
 
@@ -247,8 +247,8 @@ function BAR:CreateBar3()
 
     for i = 1, num do
         local button = _G['MultiBarBottomRightButton' .. i]
-        table.insert(buttonList, button)
-        table.insert(BAR.buttons, button)
+        tinsert(buttonList, button)
+        tinsert(BAR.buttons, button)
     end
     frame.buttons = buttonList
 
@@ -311,8 +311,8 @@ function BAR:CreateBar4()
 
     for i = 1, num do
         local button = _G['MultiBarRightButton' .. i]
-        table.insert(buttonList, button)
-        table.insert(BAR.buttons, button)
+        tinsert(buttonList, button)
+        tinsert(BAR.buttons, button)
     end
     frame.buttons = buttonList
 
@@ -349,8 +349,8 @@ function BAR:CreateBar5()
 
     for i = 1, num do
         local button = _G['MultiBarLeftButton' .. i]
-        table.insert(buttonList, button)
-        table.insert(BAR.buttons, button)
+        tinsert(buttonList, button)
+        tinsert(BAR.buttons, button)
     end
     frame.buttons = buttonList
 
@@ -373,8 +373,8 @@ function BAR:CreatePetBar()
 
     for i = 1, num do
         local button = _G['PetActionButton' .. i]
-        table.insert(buttonList, button)
-        table.insert(BAR.buttons, button)
+        tinsert(buttonList, button)
+        tinsert(BAR.buttons, button)
     end
     frame.buttons = buttonList
 
@@ -392,7 +392,7 @@ function BAR:UpdateStanceBar()
 
     local size = C.DB['Actionbar']['BarStanceSize']
     local perRow = C.DB['Actionbar']['BarStancePerRow']
-    local fontSize = math.floor(size / 30 * 10 + 0.5)
+    local fontSize = floor(size / 30 * 10 + 0.5)
 
     for i = 1, 12 do
         local button = frame.buttons[i]
@@ -401,7 +401,7 @@ function BAR:UpdateStanceBar()
             button:ClearAllPoints()
             if i == 1 then
                 button:SetPoint('TOPLEFT', frame, BAR.padding, -BAR.padding)
-            elseif math.fmod(i - 1, perRow) == 0 then
+            elseif mod(i - 1, perRow) == 0 then
                 button:SetPoint('TOP', frame.buttons[i - perRow], 'BOTTOM', 0, -BAR.margin)
             else
                 button:SetPoint('LEFT', frame.buttons[i - 1], 'RIGHT', BAR.margin, 0)
@@ -410,8 +410,8 @@ function BAR:UpdateStanceBar()
         BAR:UpdateFontSize(button, fontSize)
     end
 
-    local column = math.min(num, perRow)
-    local rows = math.ceil(num / perRow)
+    local column = min(num, perRow)
+    local rows = ceil(num / perRow)
     frame:SetWidth(column * size + (column - 1) * BAR.margin + 2 * BAR.padding)
     frame:SetHeight(size * rows + (rows - 1) * BAR.margin + 2 * BAR.padding)
     frame.mover:SetSize(size, size)
@@ -442,8 +442,8 @@ function BAR:CreateStanceBar()
 
     for i = 1, num do
         local button = _G['StanceButton' .. i]
-        table.insert(buttonList, button)
-        table.insert(BAR.buttons, button)
+        tinsert(buttonList, button)
+        tinsert(BAR.buttons, button)
     end
 
     -- PossessBar
@@ -454,7 +454,7 @@ function BAR:CreateStanceBar()
 
     for i = 1, _G.NUM_POSSESS_SLOTS do
         local button = _G['PossessButton' .. i]
-        table.insert(buttonList, button)
+        tinsert(buttonList, button)
         button:ClearAllPoints()
         button:SetPoint('CENTER', buttonList[i])
     end
@@ -472,7 +472,7 @@ function BAR:UpdateExtraBar()
     end
 
     local size = C.DB['Actionbar']['BarExtraSize']
-    local fontSize = math.floor(size / 30 * 10 + 0.5)
+    local fontSize = floor(size / 30 * 10 + 0.5)
 
     local button = _G.ExtraActionButton1
     button:SetSize(size, size)
@@ -497,8 +497,8 @@ function BAR:CreateExtraBar()
     _G.ExtraAbilityContainer.ignoreFramePositionManager = true
 
     local button = _G.ExtraActionButton1
-    table.insert(buttonList, button)
-    table.insert(BAR.buttons, button)
+    tinsert(buttonList, button)
+    tinsert(BAR.buttons, button)
     button:SetSize(size, size)
 
     frame.frameVisibility = '[extrabar] show; hide'
@@ -567,7 +567,7 @@ function BAR:CreateLeaveVehicleBar()
         frame,
         'ActionButtonTemplate, SecureHandlerClickTemplate'
     )
-    table.insert(buttonList, button)
+    tinsert(buttonList, button)
     button:SetPoint('BOTTOMLEFT', frame, BAR.padding, BAR.padding)
     button:RegisterForClicks('AnyUp')
     button.icon:SetTexture('INTERFACE\\VEHICLES\\UI-Vehicles-Button-Exit-Up')

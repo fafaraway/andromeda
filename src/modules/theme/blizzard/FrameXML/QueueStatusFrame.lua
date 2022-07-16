@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 
-table.insert(C.BlizzThemes, function()
+tinsert(C.BlizzThemes, function()
     hooksecurefunc('QueueStatusFrame_Update', function()
         for frame in _G.QueueStatusFrame.statusEntriesPool:EnumerateActive() do
             frame.HealersFound.Texture:SetTexture(C.Assets.Texture.Roles)

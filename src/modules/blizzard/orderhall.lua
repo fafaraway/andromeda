@@ -58,7 +58,7 @@ function BLIZZARD:OrderHall_OnShiftDown(btn)
 end
 
 local function getIconString(texture)
-    return string.format('|T%s:12:12:0:0:64:64:5:59:5:59|t ', texture)
+    return format('|T%s:12:12:0:0:64:64:5:59:5:59|t ', texture)
 end
 
 function BLIZZARD:OrderHall_OnEnter()

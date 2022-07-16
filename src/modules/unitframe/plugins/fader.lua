@@ -123,14 +123,14 @@ local options = {
             end
 
             onRangeFrame:Show()
-            table.insert(onRangeObjects, self)
+            tinsert(onRangeObjects, self)
         end,
         disable = function(self)
             if onRangeFrame then
                 for idx, obj in next, onRangeObjects do
                     if obj == self then
                         self.Fader.RangeAlpha = nil
-                        table.remove(onRangeObjects, idx)
+                        tremove(onRangeObjects, idx)
                         break
                     end
                 end

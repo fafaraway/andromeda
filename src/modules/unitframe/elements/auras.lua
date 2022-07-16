@@ -87,7 +87,7 @@ function UNITFRAME.PostCreateIcon(element, button)
     button.HL:SetAllPoints()
 
     local font = C.Assets.Font.Roadway
-    local fontSize = math.max((element.width or element.size) * 0.4, 12)
+    local fontSize = max((element.width or element.size) * 0.4, 12)
     button.count = F.CreateFS(button, font, fontSize, true, nil, nil, true)
     button.count:ClearAllPoints()
     button.count:SetPoint('RIGHT', button, 'TOPRIGHT')
@@ -189,7 +189,7 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
         end
     end
 
-    local fontSize = math.max((element.width or element.size) * 0.4, 12)
+    local fontSize = max((element.width or element.size) * 0.4, 12)
     local font = C.Assets.Font.Roadway
     if button.count then
         button.count:SetFont(font, fontSize, 'OUTLINE')
@@ -536,7 +536,7 @@ end
 UNITFRAME.PartyAurasList = {}
 
 function UNITFRAME:RefreshPartyAurasFilter()
-    table.wipe(UNITFRAME.PartyAurasList)
+    wipe(UNITFRAME.PartyAurasList)
 
     for spellID in pairs(C.PartyAurasList) do
         local name = GetSpellInfo(spellID)

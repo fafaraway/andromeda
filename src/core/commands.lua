@@ -4,24 +4,24 @@ local TUTORIAL = F:GetModule('Tutorial')
 local LOGO = F:GetModule('Logo')
 
 F:RegisterSlashCommand('/and', function(msg)
-    local str, _ = string.split(' ', string.lower(msg), 2)
+    local str, _ = strsplit(' ', strlower(msg), 2)
 
-    if string.match(str, 'reset') or string.match(str, 'init') then
+    if strmatch(str, 'reset') or strmatch(str, 'init') then
         StaticPopup_Show('ANDROMEDA_RESET_ALL')
-    elseif string.match(str, 'install') or string.match(str, 'tutorial') then
+    elseif strmatch(str, 'install') or strmatch(str, 'tutorial') then
         TUTORIAL:HelloWorld()
-    elseif string.match(str, 'unlock') or string.match(str, 'layout') then
+    elseif strmatch(str, 'unlock') or strmatch(str, 'layout') then
         F:MoverConsole()
-    elseif string.match(str, 'gui') or string.match(str, 'config') then
+    elseif strmatch(str, 'gui') or strmatch(str, 'config') then
         F.ToggleConsole()
-    elseif string.match(str, 'help') or string.match(str, 'cheatsheet') then
+    elseif strmatch(str, 'help') or strmatch(str, 'cheatsheet') then
         GUI:ToggleCheatSheet()
-    elseif string.match(str, 'logo') then
+    elseif strmatch(str, 'logo') then
         if not LOGO.logoFrame then
             LOGO:Logo_Create()
         end
         LOGO.logoFrame:Show()
-    elseif string.match(str, 'ver') or string.match(str, 'version') then
+    elseif strmatch(str, 'ver') or strmatch(str, 'version') then
         F:Printf('version: %s', C.ADDON_VERSION)
     else
         GUI:ToggleCheatSheet()
@@ -147,8 +147,8 @@ do
         if IsAddOnLoaded('TomTom') then
             return
         end
-        msg = string.gsub(msg, '(%d)[%.,] (%d)', '%1 %2')
-        local x, y, z = string.match(msg, '(%S+)%s(%S+)(.*)')
+        msg = gsub(msg, '(%d)[%.,] (%d)', '%1 %2')
+        local x, y, z = strmatch(msg, '(%S+)%s(%S+)(.*)')
         if x and y then
             local mapID = C_Map.GetBestMapForUnit('player')
             if mapID then
@@ -159,7 +159,7 @@ do
                     y = GetCorrectCoord(y)
 
                     if x and y then
-                        print(string.format(pointString, mapID, x * 100, y * 100, mapName, x, y, z or ''))
+                        print(format(pointString, mapID, x * 100, y * 100, mapName, x, y, z or ''))
                     end
                 end
             end
@@ -170,7 +170,7 @@ end
 -- Clear chat
 F:RegisterSlashCommand('/clear', function()
     for i = 1, _G.NUM_CHAT_WINDOWS do
-        _G[string.format('ChatFrame%d', i)]:Clear()
+        _G[format('ChatFrame%d', i)]:Clear()
     end
 end)
 
@@ -297,7 +297,7 @@ end)
     for k in pairs(tempTable) do
         sortedKeys[#sortedKeys + 1] = k
     end
-    table.sort(sortedKeys)
+    sort(sortedKeys)
     for i, k in ipairs(sortedKeys) do
         local v = tempTable[k]
         F:Print(k, v)

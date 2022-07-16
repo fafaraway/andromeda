@@ -57,12 +57,12 @@ local function UpdateRep(self)
                 local extraChange = value - extraRep[name]
                 if extraChange > 0 and value < 10000 then
                     extraRep[name] = value
-                    local extra_msg = string.format(paraMsg, name, value, extraChange)
+                    local extra_msg = format(paraMsg, name, value, extraChange)
                     CreateMessage(extra_msg)
                 end
                 if extraChange ~= 0 and value > 10000 then
                     extraRep[name] = value
-                    local extra_msg2 = string.format(cacheMsg, name, value, extraChange)
+                    local extra_msg2 = format(cacheMsg, name, value, extraChange)
                     CreateMessage(extra_msg2)
                 end
             end
@@ -74,7 +74,7 @@ local function UpdateRep(self)
             local change = barValue - rep[name]
             if change > 0 then
                 rep[name] = barValue
-                local msg = string.format(repMsg, name, barValue - barMin, barMax - barMin, change)
+                local msg = format(repMsg, name, barValue - barMin, barMax - barMin, change)
                 CreateMessage(msg)
             end
         end
@@ -101,7 +101,7 @@ local function HookParagonRep()
                 local r, g, b = 0.9, 0.8, 0.6
 
                 if currentValue then
-                    local barValue = math.fmod(currentValue, threshold)
+                    local barValue = mod(currentValue, threshold)
                     if hasRewardPending then
                         local paragonFrame = _G.ReputationFrame.paragonFramesPool:Acquire()
                         paragonFrame.factionID = factionID
@@ -116,7 +116,7 @@ local function HookParagonRep()
                     factionBar:SetValue(barValue)
                     factionBar:SetStatusBarColor(r, g, b)
                     factionRow.rolloverText = C.INFO_COLOR
-                        .. string.format(_G.REPUTATION_PROGRESS_FORMAT, barValue, threshold)
+                        .. format(_G.REPUTATION_PROGRESS_FORMAT, barValue, threshold)
 
                     if hasRewardPending then
                         barValue = barValue - threshold
@@ -130,7 +130,7 @@ local function HookParagonRep()
                     factionRow.rolloverText = nil
 
                     if factionIndex == GetSelectedFaction() and _G.ReputationDetailFrame:IsShown() then
-                        local count = math.floor(currentValue / threshold)
+                        local count = floor(currentValue / threshold)
                         if hasRewardPending then
                             count = count - 1
                         end

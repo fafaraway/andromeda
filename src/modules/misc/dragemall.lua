@@ -162,7 +162,7 @@ local function HookFrame(name, moveParent)
     -- find frame
     -- name may contain dots for children, e.g. ReforgingFrame.InvisibleButton
     local frame = _G
-    for s in string.gmatch(name, '%w+') do
+    for s in gmatch(name, '%w+') do
         if frame then
             frame = frame[s]
         end

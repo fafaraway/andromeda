@@ -125,7 +125,7 @@ function F:Mover(text, value, anchor, width, height)
     mover:SetScript('OnDragStop', M.Mover_OnDragStop)
     mover:SetScript('OnMouseUp', M.Mover_OnClick)
 
-    table.insert(MoverList, mover)
+    tinsert(MoverList, mover)
 
     self:ClearAllPoints()
     self:SetPoint('TOPLEFT', mover)
@@ -382,7 +382,7 @@ local function CreateConsole()
         arrows[i]:SetPoint('CENTER', arrowData.x, arrowData.y)
         arrows[i].Icon:SetPoint('TOPLEFT', 3, -3)
         arrows[i].Icon:SetPoint('BOTTOMRIGHT', -3, 3)
-        arrows[i].Icon:SetRotation(math.rad(arrowData.degree))
+        arrows[i].Icon:SetRotation(rad(arrowData.degree))
     end
 
     local function showLater(event)

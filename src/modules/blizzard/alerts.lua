@@ -94,7 +94,7 @@ local function MoveTalkingHead()
 
     for index, alertFrameSubSystem in ipairs(_G.AlertFrame.alertFrameSubSystems) do
         if alertFrameSubSystem.anchorFrame and alertFrameSubSystem.anchorFrame == TalkingHeadFrame then
-            table.remove(_G.AlertFrame.alertFrameSubSystems, index)
+            tremove(_G.AlertFrame.alertFrameSubSystems, index)
         end
     end
 end

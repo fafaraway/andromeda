@@ -130,7 +130,7 @@ function MM:Constructor(bar, data)
     local tip, texture, func = unpack(data)
 
     local bu = CreateFrame('Button', nil, bar)
-    table.insert(buttonsList, bu)
+    tinsert(buttonsList, bu)
     bu:SetSize(C.DB.General.GameMenuButtonSize, C.DB.General.GameMenuButtonSize)
     bu:SetAlpha(C.DB.General.GameMenuButtonOutAlpha)
     bu.icon = bu:CreateTexture(nil, 'ARTWORK')

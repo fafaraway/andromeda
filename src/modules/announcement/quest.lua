@@ -11,14 +11,14 @@ end
 local function acceptText(questID, daily)
     local title = GetQuestLinkOrName(questID)
     if daily then
-        return string.format('%s [%s]%s', L['Quest accept:'], _G.DAILY, title)
+        return format('%s [%s]%s', L['Quest accept:'], _G.DAILY, title)
     else
-        return string.format('%s %s', L['Quest accept:'], title)
+        return format('%s %s', L['Quest accept:'], title)
     end
 end
 
 local function completeText(questID)
-    return string.format('%s %s', GetQuestLinkOrName(questID), _G.QUEST_COMPLETE)
+    return format('%s %s', GetQuestLinkOrName(questID), _G.QUEST_COMPLETE)
 end
 
 local function sendQuestMsg(msg)
@@ -32,10 +32,10 @@ local function sendQuestMsg(msg)
 end
 
 local function getPattern(pattern)
-    pattern = string.gsub(pattern, '%(', '%%%1')
-    pattern = string.gsub(pattern, '%)', '%%%1')
-    pattern = string.gsub(pattern, '%%%d?$?.', '(.+)')
-    return string.format('^%s$', pattern)
+    pattern = gsub(pattern, '%(', '%%%1')
+    pattern = gsub(pattern, '%)', '%%%1')
+    pattern = gsub(pattern, '%%%d?$?.', '(.+)')
+    return format('^%s$', pattern)
 end
 
 local questMatches = {
@@ -50,11 +50,11 @@ local questMatches = {
 
 function ANNOUNCEMENT:FindQuestProgress(_, msg)
     for _, pattern in pairs(questMatches) do
-        if string.match(msg, pattern) then
-            local _, _, _, cur, max = string.find(msg, '(.*)[:：]%s*([-%d]+)%s*/%s*([-%d]+)%s*$')
+        if strmatch(msg, pattern) then
+            local _, _, _, cur, max = strfind(msg, '(.*)[:：]%s*([-%d]+)%s*/%s*([-%d]+)%s*$')
             cur, max = tonumber(cur), tonumber(max)
             if cur and max and max >= 10 then
-                if math.fmod(cur, math.floor(max / 5)) == 0 then
+                if mod(cur, floor(max / 5)) == 0 then
                     sendQuestMsg(msg)
                 end
             else
@@ -119,7 +119,7 @@ function ANNOUNCEMENT:AnnounceQuest()
         F:RegisterEvent('QUEST_TURNED_IN', ANNOUNCEMENT.FindWorldQuestComplete)
         F:RegisterEvent('UI_INFO_MESSAGE', ANNOUNCEMENT.FindQuestProgress)
     else
-        table.wipe(completedQuest)
+        wipe(completedQuest)
         F:UnregisterEvent('QUEST_ACCEPTED', ANNOUNCEMENT.FindQuestAccept)
         F:UnregisterEvent('QUEST_LOG_UPDATE', ANNOUNCEMENT.FindQuestComplete)
         F:UnregisterEvent('QUEST_TURNED_IN', ANNOUNCEMENT.FindWorldQuestComplete)

@@ -240,7 +240,7 @@ local function Enable(self)
             OnRangeFrame:SetScript('OnUpdate', OnRangeUpdate)
         end
 
-        table.insert(_FRAMES, self)
+        tinsert(_FRAMES, self)
         OnRangeFrame:Show()
 
         return true
@@ -252,7 +252,7 @@ local function Disable(self)
     if element then
         for index, frame in next, _FRAMES do
             if frame == self then
-                table.remove(_FRAMES, index)
+                tremove(_FRAMES, index)
                 break
             end
         end

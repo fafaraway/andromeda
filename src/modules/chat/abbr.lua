@@ -19,7 +19,7 @@ local function formatWaypoint(mapID, x, y)
 end
 
 function CHAT:UpdateChannelNames(text, ...)
-    if string.find(text, _G.INTERFACE_ACTION_BLOCKED) and not C.IS_DEVELOPER then
+    if strfind(text, _G.INTERFACE_ACTION_BLOCKED) and not C.IS_DEVELOPER then
         return
     end
 
@@ -30,26 +30,26 @@ function CHAT:UpdateChannelNames(text, ...)
     end
 
     -- Dev logo
-    local unitName = string.match(text, '|Hplayer:([^|:]+)')
+    local unitName = strmatch(text, '|Hplayer:([^|:]+)')
     if unitName and C.DevsList[unitName] then
-        text = string.gsub(text, '(|Hplayer.+)', '|T' .. C.Assets.Texture.LogoChat .. ':12:12|t %1')
+        text = gsub(text, '(|Hplayer.+)', '|T' .. C.Assets.Texture.LogoChat .. ':12:12|t %1')
     end
 
     -- Remove realm and bracket
     text = gsub(text, '|Hplayer:(.-)|h%[(.-)%]|h', formatPlayer)
 
     -- Format waypoint
-    text = string.gsub(text, '|Hworldmap:(.-):(.-):(.-)|h%[(.-)%]|h', formatWaypoint)
+    text = gsub(text, '|Hworldmap:(.-):(.-):(.-)|h%[(.-)%]|h', formatWaypoint)
 
     -- Shorten channel name
     if C.DB.Chat.ShortenChannelName then
-        text = string.gsub(text, '|h%[(%d+)%. 大脚世界频道%]|h', '|h%[%1%. 世界%]|h')
-        text = string.gsub(text, '|h%[(%d+)%. 大腳世界頻道%]|h', '|h%[%1%. 世界%]|h')
-        -- text = string.gsub(text, '|h：', '|h ')
-        -- text = string.gsub(text, '|h:', '|h ')
-        text = string.gsub(text, '|h：', '|h:')
+        text = gsub(text, '|h%[(%d+)%. 大脚世界频道%]|h', '|h%[%1%. 世界%]|h')
+        text = gsub(text, '|h%[(%d+)%. 大腳世界頻道%]|h', '|h%[%1%. 世界%]|h')
+        -- text = gsub(text, '|h：', '|h ')
+        -- text = gsub(text, '|h:', '|h ')
+        text = gsub(text, '|h：', '|h:')
 
-        return self.oldAddMsg(self, string.gsub(text, '|h%[(%d+)%..-%]|h', '|h[%1]|h'), r, g, b)
+        return self.oldAddMsg(self, gsub(text, '|h%[(%d+)%..-%]|h', '|h[%1]|h'), r, g, b)
     end
 end
 
@@ -63,8 +63,8 @@ function CHAT:ShortenChannelNames()
     end
 
     -- online/offline info
-    _G.ERR_FRIEND_ONLINE_SS = string.gsub(_G.ERR_FRIEND_ONLINE_SS, '%]%|h', ']|h|cff00c957')
-    _G.ERR_FRIEND_OFFLINE_S = string.gsub(_G.ERR_FRIEND_OFFLINE_S, '%%s', '%%s|cffff7f50')
+    _G.ERR_FRIEND_ONLINE_SS = gsub(_G.ERR_FRIEND_ONLINE_SS, '%]%|h', ']|h|cff00c957')
+    _G.ERR_FRIEND_OFFLINE_S = gsub(_G.ERR_FRIEND_OFFLINE_S, '%%s', '%%s|cffff7f50')
 
     -- whisper
     _G.CHAT_WHISPER_INFORM_GET = L['Tell'] .. ' %s '

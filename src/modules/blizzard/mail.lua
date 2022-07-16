@@ -6,19 +6,19 @@ local isGoldCollecting
 
 function M:GetMoneyString(money, full)
     if money >= 1e6 and not full then
-        return string.format(' %.0f%s', money / 1e4, _G.GOLD_AMOUNT_SYMBOL)
+        return format(' %.0f%s', money / 1e4, _G.GOLD_AMOUNT_SYMBOL)
     else
         if money > 0 then
             local moneyString = ''
-            local gold = math.floor(money / 1e4)
+            local gold = floor(money / 1e4)
             if gold > 0 then
                 moneyString = ' ' .. gold .. _G.GOLD_AMOUNT_SYMBOL
             end
-            local silver = math.floor((money - (gold * 1e4)) / 100)
+            local silver = floor((money - (gold * 1e4)) / 100)
             if silver > 0 then
                 moneyString = moneyString .. ' ' .. silver .. _G.SILVER_AMOUNT_SYMBOL
             end
-            local copper = math.fmod(money, 100)
+            local copper = mod(money, 100)
             if copper > 0 then
                 moneyString = moneyString .. ' ' .. copper .. _G.COPPER_AMOUNT_SYMBOL
             end
@@ -57,7 +57,7 @@ function M:InboxItem_OnEnter()
     if not self.index then
         return
     end -- may receive fake mails from Narcissus
-    table.wipe(inboxItems)
+    wipe(inboxItems)
 
     local itemAttached = select(8, GetInboxHeaderInfo(self.index))
     if itemAttached then
@@ -133,18 +133,18 @@ end
 local function GenerateDataByRealm(realm)
     if contactListByRealm[realm] then
         for name, color in pairs(contactListByRealm[realm]) do
-            local r, g, b = string.split(':', color)
-            table.insert(contactList, { name = name .. '-' .. realm, r = r, g = g, b = b })
+            local r, g, b = strsplit(':', color)
+            tinsert(contactList, { name = name .. '-' .. realm, r = r, g = g, b = b })
         end
     end
 end
 
 function M:ContactList_Refresh()
-    table.wipe(contactList)
-    table.wipe(contactListByRealm)
+    wipe(contactList)
+    wipe(contactListByRealm)
 
     for fullname, color in pairs(_G.ANDROMEDA_ADB['ContactList']) do
-        local name, realm = string.split('-', fullname)
+        local name, realm = strsplit('-', fullname)
         if not contactListByRealm[realm] then
             contactListByRealm[realm] = {}
         end
@@ -246,7 +246,7 @@ function M:MailBox_ContactList()
         if text == '' or tonumber(text) then
             return
         end -- incorrect input
-        if not string.find(text, '-') then
+        if not strfind(text, '-') then
             text = text .. '-' .. C.MY_REALM
         end -- complete player realm name
         if _G.ANDROMEDA_ADB['ContactList'][text] then

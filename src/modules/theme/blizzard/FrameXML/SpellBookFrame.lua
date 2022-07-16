@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 
-table.insert(C.BlizzThemes, function()
+tinsert(C.BlizzThemes, function()
     F.ReskinPortraitFrame(_G.SpellBookFrame)
     _G.SpellBookFrame:DisableDrawLayer('BACKGROUND')
     _G.SpellBookFrameTabButton1:ClearAllPoints()
