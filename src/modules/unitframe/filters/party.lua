@@ -199,14 +199,6 @@ C.PartyAurasList = {
     [108416] = true, -- Dark Pact
 }
 
--- Bloodlust buffs
-C.BloodlustList = {
-    57723,
-    57724,
-    80354,
-    264689,
-}
-
 -- Corner spells
 -- [spellID] = {anchor, {r, g, b}, ALL}
 C.CornerSpellsList = {
@@ -273,6 +265,13 @@ C.CornerSpellsList = {
     ['DEMONHUNTER'] = {},
     ['MAGE'] = {},
     ['DEATHKNIGHT'] = {},
+}
+
+C.BloodlustDebuffsList = {
+    57723, -- Exhaustion
+    57724, -- Sated
+    80354, -- Temporal Displacement
+    264689, -- Fatigued
 }
 
 -- Party watcher spells

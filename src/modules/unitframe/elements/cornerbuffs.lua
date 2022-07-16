@@ -21,9 +21,9 @@ function UNITFRAME:UpdateCornerSpells()
     end
 end
 
-UNITFRAME.BloodlustList = {}
-for _, spellID in pairs(C.BloodlustList) do
-    UNITFRAME.BloodlustList[spellID] = { 'BOTTOMLEFT', { 1, 0.8, 0 }, true }
+UNITFRAME.BloodlustDebuffsList = {}
+for _, spellID in pairs(C.BloodlustDebuffsList) do
+    UNITFRAME.BloodlustDebuffsList[spellID] = { 'BOTTOMLEFT', { 1, 0.8, 0 }, true }
 end
 
 local found = {}
@@ -45,7 +45,7 @@ function UNITFRAME:UpdateCornerIndicator(event, unit)
             if not name then
                 break
             end
-            local value = spellList[spellID] or (C.MyRole ~= 'Healer' and UNITFRAME.BloodlustList[spellID])
+            local value = spellList[spellID] or (C.MyRole ~= 'Healer' and UNITFRAME.BloodlustDebuffsList[spellID])
             if value and (value[3] or caster == 'player' or caster == 'pet') then
                 local bu = buttons[value[1]]
                 if bu then
