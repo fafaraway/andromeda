@@ -14,11 +14,7 @@ function BLIZZARD:HookApplicationClick()
         _G.LFGListFrame.SearchPanel.SignUpButton:Click()
     end
 
-    if
-        (not IsAltKeyDown())
-        and _G.LFGListApplicationDialog:IsShown()
-        and _G.LFGListApplicationDialog.SignUpButton:IsEnabled()
-    then
+    if (not IsAltKeyDown()) and _G.LFGListApplicationDialog:IsShown() and _G.LFGListApplicationDialog.SignUpButton:IsEnabled() then
         _G.LFGListApplicationDialog.SignUpButton:Click()
     end
 end
@@ -79,16 +75,19 @@ local function GetPartyMemberInfo(index)
     if not class then
         return
     end
+
     local role = UnitGroupRolesAssigned(unit)
     if role == 'NONE' then
         role = 'DAMAGER'
     end
-    return role, class
+
+    return role, class, UnitIsGroupLeader(unit)
 end
 
 local function GetCorrectRoleInfo(frame, i)
     if frame.resultID then
-        return C_LFGList.GetSearchResultMemberInfo(frame.resultID, i)
+        local role, class = C_LFGList.GetSearchResultMemberInfo(frame.resultID, i)
+        return role, class, i == 1
     elseif frame == applicationViewerFrame then
         return GetPartyMemberInfo(i)
     end
@@ -103,7 +102,7 @@ local function UpdateGroupRoles(self)
 
     local count = 0
     for i = 1, 5 do
-        local role, class = GetCorrectRoleInfo(self.__owner, i)
+        local role, class, isLeader = GetCorrectRoleInfo(self.__owner, i)
         local roleIndex = role and roleOrder[role]
         if roleIndex then
             count = count + 1
@@ -112,7 +111,7 @@ local function UpdateGroupRoles(self)
             end
             roleCache[count][1] = roleIndex
             roleCache[count][2] = class
-            roleCache[count][3] = i == 1
+            roleCache[count][3] = isLeader
         end
     end
 
@@ -196,16 +195,10 @@ function BLIZZARD:ShowLeaderOverallScore()
     local resultID = self.resultID
     local searchResultInfo = resultID and C_LFGList.GetSearchResultInfo(resultID)
     if searchResultInfo then
-        local activityInfo = C_LFGList.GetActivityInfoTable(
-            searchResultInfo.activityID,
-            nil,
-            searchResultInfo.isWarMode
-        )
+        local activityInfo = C_LFGList.GetActivityInfoTable(searchResultInfo.activityID, nil, searchResultInfo.isWarMode)
         if activityInfo then
             local showScore = activityInfo.isMythicPlusActivity and searchResultInfo.leaderOverallDungeonScore
-                or activityInfo.isRatedPvpActivity
-                    and searchResultInfo.leaderPvpRatingInfo
-                    and searchResultInfo.leaderPvpRatingInfo.rating
+                or activityInfo.isRatedPvpActivity and searchResultInfo.leaderPvpRatingInfo and searchResultInfo.leaderPvpRatingInfo.rating
             if showScore then
                 local oldName = self.ActivityName:GetText()
                 oldName = string.gsub(oldName, '.-' .. _G.HEADER_COLON, '') -- Tazavesh
@@ -224,9 +217,7 @@ function BLIZZARD:ShowLeaderOverallScore()
             if searchResultInfo.crossFactionListing then
                 self.crossFactionLogo:Hide()
             else
-                self.crossFactionLogo:SetTexture(
-                    'Interface\\Timer\\' .. factionStr[searchResultInfo.leaderFactionGroup] .. '-Logo'
-                )
+                self.crossFactionLogo:SetTexture('Interface\\Timer\\' .. factionStr[searchResultInfo.leaderFactionGroup] .. '-Logo')
                 self.crossFactionLogo:Show()
             end
         end
@@ -294,12 +285,7 @@ function BLIZZARD:ReplaceFindGroupButton()
             categorySelection.FindGroupButton:Click()
         else
             PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
-            _G.LFGListSearchPanel_SetCategory(
-                searchPanel,
-                selectedCategory,
-                categorySelection.selectedFilters,
-                _G.LFGListFrame.baseFilters
-            )
+            _G.LFGListSearchPanel_SetCategory(searchPanel, selectedCategory, categorySelection.selectedFilters, _G.LFGListFrame.baseFilters)
             _G.LFGListSearchPanel_DoSearch(searchPanel)
             _G.LFGListFrame_SetActivePanel(_G.LFGListFrame, searchPanel)
         end
