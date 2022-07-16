@@ -1397,18 +1397,12 @@ do
         local newColor = _G.ANDROMEDA_ADB.WidgetHighlightColor
 
         if classColor then
-            self.__bg:SetBackdropColor(C.r, C.g, C.b, 0.25)
+            self.__bg:SetBackdropColor(C.r, C.g, C.b, 0.45)
             self.__bg:SetBackdropBorderColor(C.r, C.g, C.b)
         else
             self.__bg:SetBackdropColor(newColor.r, newColor.g, newColor.b, 0.25)
             self.__bg:SetBackdropBorderColor(newColor.r, newColor.g, newColor.b)
         end
-
-        -- if gradStyle then
-        --     self.__gradient:SetGradientAlpha('Vertical', C.r, C.g, C.b, alpha, 0, 0, 0, 0.25)
-        -- else
-        --     self.__gradient:SetVertexColor(C.r, C.g, C.b, alpha)
-        -- end
     end
 
     local function Button_OnLeave(self)
