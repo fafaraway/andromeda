@@ -2,7 +2,7 @@
     <Script file="nameplate.lua"/>
     <Script file="dungeon.lua"/>
     <Script file="nathria.lua"/>
-    <Script file="domination.lua"/>
+    <Script file="sanctum.lua"/>
     <Script file="sepulcher.lua"/>
     <Script file="party.lua"/>
 </Ui>

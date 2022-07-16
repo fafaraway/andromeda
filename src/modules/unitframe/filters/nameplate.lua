@@ -56,10 +56,14 @@ C.NameplateAuraWhiteList = {
     [347015] = true, -- 集市，强化防御
     [355934] = true, -- 集市，强光屏障
     [349933] = true, -- 集市，狂热鞭笞协议
+    [350931] = true, -- 爬塔软泥免疫
+    [164504] = true, -- 钢铁码头，威吓
+
     -- S3, Encrypted
     [368078] = true, -- 飘移力场
     [368103] = true, -- 加速力场
     [368243] = true, -- 能量弹幕
+
     -- Raids
     [334695] = true, -- 动荡能量，猎手
     [345902] = true, -- 破裂的联结，猎手
@@ -86,6 +90,7 @@ C.NameplateShowTargetNPCsList = {
 -- 无效目标
 C.TrashUnitsList = {
     [166589] = true, -- 活化武器，赤红
+    [169753] = true, -- 饥饿的虱子，赤红
     [175677] = true, -- 走私来的生物，集市
 }
 
@@ -122,8 +127,6 @@ C.SpecialUnitsList = {
     [169429] = true,
     [169421] = true,
     [169426] = true,
-
-    -- [153292] = true,
 }
 
 C.PowerUnitsList = {

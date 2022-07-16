@@ -2612,9 +2612,19 @@ do
         end
 
         local dungeons = {}
-        for dungeonID = 1182, 1189 do
-            addNewDungeon(dungeons, dungeonID)
-        end
+        addNewDungeon(dungeons, 1182) -- 通灵战潮
+        addNewDungeon(dungeons, 1183) -- 凋魂之殇
+        addNewDungeon(dungeons, 1184) -- 塞兹仙林的迷雾
+        addNewDungeon(dungeons, 1185) -- 赎罪大厅
+        addNewDungeon(dungeons, 1186) -- 晋升高塔
+        addNewDungeon(dungeons, 1187) -- 伤逝剧场
+        addNewDungeon(dungeons, 1188) -- 彼界
+        addNewDungeon(dungeons, 1189) -- 赤红深渊
+        addNewDungeon(dungeons, 1194) -- 集市
+        addNewDungeon(dungeons, 536)  -- 恐轨车站
+        addNewDungeon(dungeons, 558)  -- 钢铁码头
+        addNewDungeon(dungeons, 860)  -- 重返卡拉赞
+        addNewDungeon(dungeons, 1178) -- 麦卡贡
 
         local raids = {
             [1] = EJ_GetInstanceInfo(1190),

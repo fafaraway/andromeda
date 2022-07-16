@@ -5,7 +5,7 @@ local TIER = 9
 local INSTANCE = 1195 -- 初诞者圣墓
 local BOSS
 
-function UNITFRAME:AddSepulcherSpells()
+function UNITFRAME:RegisterSepulcherSpells()
     BOSS = 2458 -- 警戒卫士
     UNITFRAME:RegisterInstanceDebuff(TIER, INSTANCE, BOSS, 360458) -- 不稳定的核心
     UNITFRAME:RegisterInstanceDebuff(TIER, INSTANCE, BOSS, 364881) -- 物质分解

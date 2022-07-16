@@ -5,7 +5,7 @@ local TIER = 9
 local INSTANCE = 1190 -- 纳斯利亚堡
 local BOSS
 
-function UNITFRAME:AddNathriaSpells()
+function UNITFRAME:RegisterNathriaSpells()
     BOSS = 2393 -- 啸翼
     UNITFRAME:RegisterInstanceDebuff(TIER, INSTANCE, BOSS, 328897) -- 抽干
     UNITFRAME:RegisterInstanceDebuff(TIER, INSTANCE, BOSS, 330713) -- 耳鸣之痛

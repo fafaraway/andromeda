@@ -176,10 +176,10 @@ function UNITFRAME:UpdateAllElements()
 end
 
 function UNITFRAME:OnLogin()
-    UNITFRAME:AddDungeonSpells()
-    UNITFRAME:AddDominationSpells()
-    UNITFRAME:AddNathriaSpells()
-    UNITFRAME:AddSepulcherSpells()
+    UNITFRAME:RegisterDungeonSpells()
+    UNITFRAME:RegisterSanctumSpells()
+    UNITFRAME:RegisterNathriaSpells()
+    UNITFRAME:RegisterSepulcherSpells()
     UNITFRAME:SpawnUnits()
     UNITFRAME:UpdateAllElements()
 end
