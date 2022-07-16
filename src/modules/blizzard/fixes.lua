@@ -82,24 +82,7 @@ do
         F:UnregisterEvent(event, FixGuildNews)
     end
 
-    local function FixCommunitiesNews(event, addon)
-        if addon ~= 'Blizzard_Communities' then
-            return
-        end
-
-        local _CommunitiesGuildNewsButton_OnEnter = _G.CommunitiesGuildNewsButton_OnEnter
-        function _G.CommunitiesGuildNewsButton_OnEnter(self)
-            if not (self.newsInfo and self.newsInfo.whatText) then
-                return
-            end
-            _CommunitiesGuildNewsButton_OnEnter(self)
-        end
-
-        F:UnregisterEvent(event, FixCommunitiesNews)
-    end
-
     F:RegisterEvent('ADDON_LOADED', FixGuildNews)
-    F:RegisterEvent('ADDON_LOADED', FixCommunitiesNews)
 end
 
 -- Fix blizz bug in addon list
