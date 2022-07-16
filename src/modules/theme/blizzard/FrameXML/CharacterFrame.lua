@@ -275,10 +275,16 @@ table.insert(C.BlizzThemes, function()
     F.StripTextures(_G.ReputationDetailFrame)
     F.SetBD(_G.ReputationDetailFrame)
     F.ReskinClose(_G.ReputationDetailCloseButton)
-    F.ReskinCheck(_G.ReputationDetailAtWarCheckBox)
     F.ReskinCheck(_G.ReputationDetailInactiveCheckBox)
     F.ReskinCheck(_G.ReputationDetailMainScreenCheckBox)
     F.ReskinScroll(_G.ReputationListScrollFrameScrollBar)
+
+    local atWarCheck = _G.ReputationDetailAtWarCheckBox
+    F.ReskinCheck(atWarCheck)
+    local atWarCheckTex = atWarCheck:GetCheckedTexture()
+    atWarCheckTex:ClearAllPoints()
+    atWarCheckTex:SetSize(26, 26)
+    atWarCheckTex:SetPoint('CENTER')
 
     -- Token frame
     _G.TokenFramePopupCorner:Hide()

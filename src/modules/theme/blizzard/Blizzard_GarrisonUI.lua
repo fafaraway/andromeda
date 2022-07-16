@@ -362,7 +362,7 @@ local function ReskinMissionFrame(self)
     end
     F.ReskinScroll(FollowerList.listScroll.scrollBar)
     ReskinGarrMaterial(FollowerList)
-    hooksecurefunc(FollowerList, 'UpdateData', UpdateFollowerList)
+    hooksecurefunc(FollowerList, 'UpdateFollowers', UpdateFollowerList)
     hooksecurefunc(FollowerList, 'ShowFollower', UpdateFollowerAbilities)
 end
 
@@ -494,7 +494,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     followerList:DisableDrawLayer('BACKGROUND')
     followerList:DisableDrawLayer('BORDER')
     F.ReskinScroll(followerList.listScroll.scrollBar)
-    hooksecurefunc(followerList, 'UpdateData', UpdateFollowerList)
+    hooksecurefunc(followerList, 'UpdateFollowers', UpdateFollowerList)
     hooksecurefunc(followerList, 'ShowFollower', UpdateFollowerAbilities)
 
     -- Info box
@@ -643,7 +643,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
         F.StripTextures(followerList)
         F.ReskinInput(followerList.SearchBox)
         F.ReskinScroll(followerList.listScroll.scrollBar)
-        hooksecurefunc(_G.GarrisonLandingPageFollowerList, 'UpdateData', UpdateFollowerList)
+        hooksecurefunc(_G.GarrisonLandingPageFollowerList, 'UpdateFollowers', UpdateFollowerList)
         hooksecurefunc(_G.GarrisonLandingPageFollowerList, 'ShowFollower', UpdateFollowerAbilities)
     end
 
@@ -839,7 +839,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
         followerList:DisableDrawLayer('BORDER')
         F.ReskinScroll(followerList.listScroll.scrollBar)
         F.ReskinInput(followerList.SearchBox)
-        hooksecurefunc(followerList, 'UpdateData', UpdateFollowerList)
+        hooksecurefunc(followerList, 'UpdateFollowers', UpdateFollowerList)
         hooksecurefunc(followerList, 'ShowFollower', UpdateFollowerAbilities)
     end
 
@@ -1105,7 +1105,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
         end)
     end
 
-    -- VenturePlan, 4.12a and higher
+    -- VenturePlan, 4.22 and higher
     if IsAddOnLoaded('VenturePlan') then
         local ANIMA_TEXTURE = 3528288
         local ANIMA_SPELLID = { [347555] = 3, [345706] = 5, [336327] = 35, [336456] = 250 }
@@ -1254,10 +1254,11 @@ C.Themes['Blizzard_GarrisonUI'] = function()
                     widget.Icon:SetTexCoord(unpack(C.TEX_COORD))
                     widget:SetSize(46, 46)
                     table.insert(VPBooks, widget)
-                elseif otype == 'FollowerList' then
+                elseif otype == 'AdventurerRoster' then
                     F.StripTextures(widget)
                     F.CreateBDFrame(widget, 0.25)
                     hooksecurefunc(widget, 'SetHeight', AdjustFollowerList)
+                    F.Reskin(peek('HealAllButton'))
 
                     for i, troop in pairs(VPTroops) do
                         troop:ClearAllPoints()
@@ -1271,7 +1272,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
                         book:ClearAllPoints()
                         book:SetPoint('BOTTOMLEFT', 24, -46 + i * 50)
                     end
-                elseif otype == 'FollowerListButton' then
+                elseif otype == 'AdventurerButton' then
                     widget.bg = F.CreateBDFrame(peek('Portrait'), 1)
                     peek('Hi'):SetColorTexture(1, 1, 1, 0.25)
                     peek('Hi'):SetInside(widget.bg)
@@ -1280,14 +1281,14 @@ C.Themes['Blizzard_GarrisonUI'] = function()
                     peek('PortraitT').__owner = widget
                     hooksecurefunc(peek('PortraitT'), 'SetShown', updateSelectedBorder)
 
-                    if peek('EC') then
-                        peek('EC'):SetTexture(nil)
-                        peek('EC').__shadow = F.CreateSD(peek('Portrait'))
-                        peek('EC').__shadow:SetBackdropBorderColor(peek('EC'):GetVertexColor())
-                        hooksecurefunc(peek('EC'), 'SetShown', updateActiveGlow)
-                        table.insert(VPFollowers, widget)
+                    if peek('PortraitR'):GetAtlas() == 'Adventurers-Followers-Frame' then
+                        peek('UsedBorder'):SetTexture(nil)
+                        peek('UsedBorder').__shadow = F.CreateSD(peek('Portrait'), 5, true)
+                        peek('UsedBorder').__shadow:SetBackdropBorderColor(peek('UsedBorder'):GetVertexColor())
+                        hooksecurefunc(peek('UsedBorder'), 'SetShown', updateActiveGlow)
+                        tinsert(VPFollowers, widget)
                     else
-                        table.insert(VPTroops, widget)
+                        tinsert(VPTroops, widget)
                     end
 
                     peek('HealthBG'):ClearAllPoints()
@@ -1341,6 +1342,10 @@ C.Themes['Blizzard_GarrisonUI'] = function()
                 elseif otype == 'RewardFrame' then
                     widget.Quantity.__owner = widget
                     hooksecurefunc(widget.Quantity, 'SetText', SetAnimaActualCount)
+                elseif otype == 'MiniHealthBar' then
+                    local _, r1, r2 = widget:GetRegions()
+                    r1:Hide()
+                    r2:Hide()
                 end
             end
         end
