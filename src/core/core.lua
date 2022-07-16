@@ -20,6 +20,7 @@ do
     F:RegisterModule('GUI')
     F:RegisterModule('InfoBar')
     F:RegisterModule('Inventory')
+    F:RegisterModule('ItemLevel')
     F:RegisterModule('Layout')
     F:RegisterModule('Logo')
     F:RegisterModule('Map')

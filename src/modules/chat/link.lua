@@ -52,15 +52,19 @@ local function GetSocketTexture(socket, count)
     return string.rep('|TInterface\\ItemSocketingFrame\\UI-EmptySocket-' .. socket .. ':0|t', count)
 end
 
-local function IsItemHasGem(link)
+function F.IsItemHasGem(link)
     local text = ''
     local stats = GetItemStats(link)
-    for stat, count in pairs(stats) do
-        local socket = string.match(stat, 'EMPTY_SOCKET_(%S+)')
-        if socket and socketWatchList[socket] then
-            text = text .. GetSocketTexture(socket, count)
+
+    if stats then
+        for stat, count in pairs(stats) do
+            local socket = strmatch(stat, 'EMPTY_SOCKET_(%S+)')
+            if socket and socketWatchList[socket] then
+                text = text .. GetSocketTexture(socket, count)
+            end
         end
     end
+
     return text
 end
 
@@ -77,17 +81,12 @@ function CHAT.ReplaceChatHyperlink(link, linkType, value)
         end
         local name, itemLevel = IsItemHasLevel(link)
         if name and itemLevel then
-            link = string.gsub(link, '|h%[(.-)%]|h', '|h[' .. name .. '(' .. itemLevel .. ')]|h' .. IsItemHasGem(link))
+            link = string.gsub(link, '|h%[(.-)%]|h', '|h[' .. name .. '(' .. itemLevel .. ')]|h' .. F.IsItemHasGem(link))
             itemCache[link] = link
         end
         return link
     elseif linkType == 'dungeonScore' then
-        return value
-            and string.gsub(
-                link,
-                '|h%[(.-)%]|h',
-                '|h[' .. string.format(L['MythicScore'], GetDungeonScoreInColor(value)) .. ']|h'
-            )
+        return value and string.gsub(link, '|h%[(.-)%]|h', '|h[' .. string.format(L['MythicScore'], GetDungeonScoreInColor(value)) .. ']|h')
     end
 end
 
