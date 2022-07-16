@@ -1,3 +1,5 @@
+.github/
+.vscode/
 assets/
 libraries/
 locales/
