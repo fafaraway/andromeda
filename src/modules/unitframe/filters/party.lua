@@ -23,16 +23,17 @@ C.PartyAurasList = {
     [344388] = true, -- Bargast's Leash (Source)
 
     -- Bloodlust
-    [2825] = true, -- 嗜血
-    [32182] = true, -- 英勇
-    [80353] = true, -- 时间扭曲
-    [264667] = true, -- 原始狂怒
-    [178207] = true, -- 狂怒战鼓
-    [230935] = true, -- 高山战鼓
-    [256740] = true, -- 漩涡战鼓
-    [309658] = true, -- 死亡凶蛮战鼓
-    [102364] = true, -- 青铜龙的祝福
-    [292686] = true, -- 制皮鼓
+    [2825] = true, -- Bloodlust (Horde Shaman)
+    [32182] = true, -- Heroism (Alliance Shaman)
+    [80353] = true, -- Time Warp (Mage)
+    [272678] = true, -- Primal Rage (Hunter, cast by command pet)
+    [264667] = true, -- Primal Rage (Hunter, cast from pet spellbook)
+    [146555] = true, -- Drums of Rage (MoP)
+    [178207] = true, -- Drums of Fury (WoD)
+    [230935] = true, -- Drums of the Mountain (Legion)
+    [256740] = true, -- Drums of the Maelstrom (BfA)
+    [292686] = true, -- Mallet of Thunderous Skins (BfA)
+    [309658] = true, -- Drums of Deathly Ferocity (SL)
 
     -- Potion
     [307195] = true, -- Potion of the Hidden Spirit
