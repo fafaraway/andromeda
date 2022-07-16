@@ -5,43 +5,14 @@ local BN_TOAST_TYPE_CLUB_INVITATION = _G.BN_TOAST_TYPE_CLUB_INVITATION or 6
 
 -- Filter Chat symbols
 local msgSymbols = {
-    '`',
-    '～',
-    '＠',
-    '＃',
-    '^',
-    '＊',
-    '！',
-    '？',
-    '。',
-    '|',
-    ' ',
-    '—',
-    '——',
-    '￥',
-    '’',
-    '‘',
-    '“',
-    '”',
-    '【',
-    '】',
-    '『',
-    '』',
-    '《',
-    '》',
-    '〈',
-    '〉',
-    '（',
-    '）',
-    '〔',
-    '〕',
-    '、',
-    '，',
-    '：',
-    ',',
-    '_',
-    '/',
-    '~',
+    '`', '～', '＠', '＃', '^',
+    '＊', '！', '？', '。', '|',
+    ' ', '—', '——', '￥', '’',
+    '‘', '“', '”', '【', '】',
+    '『', '』', '《', '》', '〈',
+    '〉', '（', '）', '〔', '〕',
+    '、', '，', '：', ',', '_',
+    '/', '~',
 }
 
 local FilterList = {}
@@ -79,15 +50,7 @@ local chatLines, prevLineID, filterResult = {}, 0, false
 function CHAT:GetFilterResult(event, msg, name, flag, guid)
     if name == C.MY_NAME or (event == 'CHAT_MSG_WHISPER' and flag == 'GM') or flag == 'DEV' then
         return
-    elseif
-        guid
-        and (
-            IsGuildMember(guid)
-            or C_BattleNet.GetGameAccountInfoByGUID(guid)
-            or C_FriendList.IsFriend(guid)
-            or IsGUIDInGroup(guid)
-        )
-    then
+    elseif guid and (IsGuildMember(guid) or C_BattleNet.GetGameAccountInfoByGUID(guid) or C_FriendList.IsFriend(guid) or IsGUIDInGroup(guid)) then
         return
     end
 
@@ -153,13 +116,7 @@ function CHAT:GetFilterResult(event, msg, name, flag, guid)
     chatLines[chatLinesSize + 1] = msgTable
     for i = 1, chatLinesSize do
         local line = chatLines[i]
-        if
-            line[1] == msgTable[1]
-            and (
-                (event == 'CHAT_MSG_CHANNEL' and msgTable[3] - line[3] < 0.6)
-                or CHAT:CompareStrDiff(line[2], msgTable[2]) <= 0.1
-            )
-        then
+        if line[1] == msgTable[1] and ((event == 'CHAT_MSG_CHANNEL' and msgTable[3] - line[3] < 0.6) or CHAT:CompareStrDiff(line[2], msgTable[2]) <= 0.1) then
             table.remove(chatLines, i)
             return true
         end
