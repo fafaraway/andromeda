@@ -333,7 +333,7 @@ end
 
 function ITEMLEVEL:ItemLevel_UpdateMerchant(link)
     if not self.iLvl then
-        self.iLvl = F.CreateFS(self.ItemButton, C.Assets.Font.Bold, 11, true, '', nil, true, 'BOTTOMRIGHT', -1, 1)
+        self.iLvl = F.CreateFS(_G[self:GetName() .. 'ItemButton'], C.Assets.Font.Bold, 11, true, '', nil, true, 'BOTTOMRIGHT', -1, 1)
     end
     local quality = link and select(3, GetItemInfo(link)) or nil
     if quality and quality > 1 then
@@ -341,6 +341,8 @@ function ITEMLEVEL:ItemLevel_UpdateMerchant(link)
         local color = C.QualityColors[quality]
         self.iLvl:SetText(level)
         self.iLvl:SetTextColor(color.r, color.g, color.b)
+    else
+        self.iLvl:SetText('')
     end
 end
 
