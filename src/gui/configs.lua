@@ -86,6 +86,7 @@ C.CharacterSettings = {
         Outgoing = false,
         CooldownPulse = true,
         BuffReminder = true,
+        HeroismAlert = true,
     },
     Announcement = {
         Enable = true,

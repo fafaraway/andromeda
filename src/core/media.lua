@@ -85,7 +85,6 @@ C.Assets.Sound = {
     Pulse = C.ASSET_PATH .. 'sounds\\pulse.ogg',
     Error = C.ASSET_PATH .. 'sounds\\error.ogg',
     Warning = C.ASSET_PATH .. 'sounds\\warning.ogg',
-    ForTheHorde = C.ASSET_PATH .. 'sounds\\forthehorde.ogg',
     Mario = C.ASSET_PATH .. 'sounds\\mario.ogg',
     Alarm = C.ASSET_PATH .. 'sounds\\alarm.ogg',
     Ding = C.ASSET_PATH .. 'sounds\\ding.ogg',
@@ -101,6 +100,9 @@ C.Assets.Sound = {
     PhubIntro = C.ASSET_PATH .. 'sounds\\phub-intro.ogg',
     SonicDeath = C.ASSET_PATH .. 'sounds\\sonic-death.ogg',
     SekiroLowHealth = C.ASSET_PATH .. 'sounds\\sekiro-lowhealth.mp3',
+
+    ForTheHorde = C.ASSET_PATH .. 'sounds\\for-the-horde.ogg',
+    ForTheAlliance = C.ASSET_PATH .. 'sounds\\for-the-alliance.ogg',
 }
 
 C.Assets.Font = {

@@ -1228,12 +1228,12 @@ GUI.OptionsList = {
         {
             1,
             'Combat',
-            'SmartTab',
-            L['Smart TAB target'],
+            'HeroismAlert',
+            L['Heroism & Bloodlust Alert'],
             nil,
             nil,
             nil,
-            L['Change TAB binding to only target enemy players automatically when in PvP zones.'],
+            L['Play a sound effect when gaining Heroism or Bloodlust buff.|nIt only take effect when you are in a dungeon or raid.'],
         },
         {
             1,
@@ -1248,20 +1248,24 @@ GUI.OptionsList = {
         {
             1,
             'Combat',
-            'SimpleFloatingCombatText',
-            L['Floating Combat Text'],
+            'SmartTab',
+            L['Smart TAB target'],
             nil,
-            SetupSimpleFloatingCombatText,
             nil,
-            L['Display floating combat text, including damage healing and events (dodge, parry, absorb etc...).'],
+            nil,
+            L['Change TAB binding to only target enemy players automatically when in PvP zones.'],
         },
         {
             1,
             'Combat',
-            'EasyFocusOnUnitframe',
-            L['Easy focus on unitframes'],
+            'SimpleFloatingCombatText',
+            L['Floating Combat Text'],
             true,
+            SetupSimpleFloatingCombatText,
+            nil,
+            L['Display floating combat text, including damage healing and events (dodge, parry, absorb etc...).'],
         },
+
         {
             1,
             'Combat',
@@ -1282,6 +1286,7 @@ GUI.OptionsList = {
             nil,
             L['Track your spell cooldown using a pulse icon in the center of the screen.'],
         },
+        {},
         {
             4,
             'Combat',
@@ -1301,6 +1306,12 @@ GUI.OptionsList = {
             { 'CTRL', 'ALT', 'SHIFT', _G.DISABLE },
             nil,
             L['Use the left mouse button to click on any unit while holding down the specified modifier key to quickly mark it.'],
+        },
+        {
+            1,
+            'Combat',
+            'EasyFocusOnUnitframe',
+            L['Easy focus on unitframes'],
         },
     },
     [7] = { -- announcement
