@@ -1,6 +1,6 @@
 local _, C = unpack(select(2, ...))
 
-C.PartyDebuffsBlackList = {
+C.GroupDebuffsBlackList = {
     [23445] = true, -- 邪恶双子
     [36893] = true, -- 传送器故障
     [36895] = true, -- 传送器故障

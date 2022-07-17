@@ -680,7 +680,7 @@ end
 
 function UNITFRAME.GroupDebuffFilter(element, _, _, _, _, _, _, _, _, caster, _, _, spellID, _, isBossAura)
     local parent = element.__owner
-    if C.PartyDebuffsBlackList[spellID] then
+    if C.GroupDebuffsBlackList[spellID] then
         return false
     elseif
         (C.DB.Unitframe.CornerIndicator and UNITFRAME.CornerSpellsList[spellID])
@@ -688,7 +688,7 @@ function UNITFRAME.GroupDebuffFilter(element, _, _, _, _, _, _, _, _, caster, _,
         or parent.rawSpellID == spellID
     then
         return false
-    elseif isBossAura then
+    elseif isBossAura or SpellIsPriorityAura(spellID) then
         return true
     else
         local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(
