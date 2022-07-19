@@ -1228,26 +1228,6 @@ GUI.OptionsList = {
         {
             1,
             'Combat',
-            'HeroismAlert',
-            L['Heroism & Bloodlust Alert'],
-            nil,
-            nil,
-            nil,
-            L['Play a sound effect when gaining Heroism or Bloodlust buff.|nIt only take effect when you are in a dungeon or raid.'],
-        },
-        {
-            1,
-            'Combat',
-            'PvPSound',
-            L['PvP Sound'],
-            true,
-            nil,
-            nil,
-            L['Play DotA-like sounds on PvP killing blows.'],
-        },
-        {
-            1,
-            'Combat',
             'SmartTab',
             L['Smart TAB target'],
             nil,
@@ -1265,7 +1245,6 @@ GUI.OptionsList = {
             nil,
             L['Display floating combat text, including damage healing and events (dodge, parry, absorb etc...).'],
         },
-
         {
             1,
             'Combat',
@@ -1285,6 +1264,16 @@ GUI.OptionsList = {
             nil,
             nil,
             L['Track your spell cooldown using a pulse icon in the center of the screen.'],
+        },
+        {
+            1,
+            'Combat',
+            'PvPSound',
+            L['PvP Sound'],
+            nil,
+            nil,
+            nil,
+            L['Play DotA-like sounds on PvP killing blows.'],
         },
         {},
         {

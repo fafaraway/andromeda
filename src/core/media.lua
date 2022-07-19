@@ -89,8 +89,6 @@ C.Assets.Sound = {
     AnimeMoan = C.ASSET_PATH .. 'sounds\\animemoan.ogg',
     PhubIntro = C.ASSET_PATH .. 'sounds\\phub-intro.ogg',
     SekiroLowHealth = C.ASSET_PATH .. 'sounds\\sekiro-lowhealth.ogg',
-    ForTheHorde = C.ASSET_PATH .. 'sounds\\for-the-horde.ogg',
-    ForTheAlliance = C.ASSET_PATH .. 'sounds\\for-the-alliance.ogg',
 }
 
 C.Assets.Font = {

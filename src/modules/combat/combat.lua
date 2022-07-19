@@ -4,35 +4,8 @@ local COMBAT = F:GetModule('Combat')
 local playedLowHealth = false
 local playedLowMana = false
 
-local spellsList = {
-    [2825] = true, -- Bloodlust (Horde Shaman)
-    [32182] = true, -- Heroism (Alliance Shaman)
-    [80353] = true, -- Time Warp (Mage)
-    [272678] = true, -- Primal Rage (Hunter, cast by command pet)
-    [264667] = true, -- Primal Rage (Hunter, cast from pet spellbook)
-    [146555] = true, -- Drums of Rage (MoP)
-    [178207] = true, -- Drums of Fury (WoD)
-    [230935] = true, -- Drums of the Mountain (Legion)
-    [256740] = true, -- Drums of the Maelstrom (BfA)
-    [292686] = true, -- Mallet of Thunderous Skins (BfA)
-    [309658] = true, -- Drums of Deathly Ferocity (SL)
-}
-
 function COMBAT:COMBAT_LOG_EVENT_UNFILTERED()
-    local _, eventType, _, srcGUID, srcName, _, _, destGUID, _, _, _, spellID = CombatLogGetCurrentEventInfo()
-
-    if eventType == 'SPELL_CAST_SUCCESS' and spellsList[spellID] and C.DB.Combat.HeroismAlert then
-        if (UnitPlayerOrPetInParty(srcName) or UnitPlayerOrPetInRaid(srcName)) and IsInGroup() and IsInInstance() then
-            local faction = UnitFactionGroup(srcName) or 'None'
-            if faction == 'Alliance' then
-                print(faction, spellID)
-                PlaySoundFile(C.Assets.Sound.ForTheAlliance, 'Master')
-            elseif faction == 'Horde' then
-                print(faction, spellID)
-                PlaySoundFile(C.Assets.Sound.ForTheHorde, 'Master')
-            end
-        end
-    end
+    local _, eventType, _, srcGUID, _, _, _, destGUID = CombatLogGetCurrentEventInfo()
 
     if not (srcGUID == UnitGUID('player') or srcGUID == UnitGUID('pet')) then
         return
