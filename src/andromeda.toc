@@ -25,3 +25,8 @@ core\_loader.xml
 modules\_loader.xml
 gui\_loader.xml
 
+#@do-not-package@
+tests\_loader.xml
+#@end-do-not-package@
+
+
