@@ -37,7 +37,7 @@ tinsert(C.BlizzThemes, function()
 
     _G.NPCFriendshipStatusBar.icon:SetPoint('TOPLEFT', -30, 7)
     F.StripTextures(_G.NPCFriendshipStatusBar, 4)
-    _G.NPCFriendshipStatusBar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
+    _G.NPCFriendshipStatusBar:SetStatusBarTexture(C.Assets.Texture.StatusbarNormal)
     F.CreateBDFrame(_G.NPCFriendshipStatusBar, 0.25)
 
     for i = 1, 4 do

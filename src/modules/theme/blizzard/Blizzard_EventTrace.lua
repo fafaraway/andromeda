@@ -17,7 +17,7 @@ local function ReskinScrollChild(self)
 
             local checkButton = child.CheckButton
             if checkButton then
-                F.ReskinCheck(checkButton)
+                F.ReskinCheckbox(checkButton)
                 checkButton:SetSize(22, 22)
             end
 

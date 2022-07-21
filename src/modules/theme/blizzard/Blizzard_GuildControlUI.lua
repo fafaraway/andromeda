@@ -81,11 +81,11 @@ C.Themes['Blizzard_GuildControlUI'] = function()
         end
     end)
 
-    F.ReskinCheck(_G.GuildControlUIRankSettingsFrameOfficerCheckbox)
+    F.ReskinCheckbox(_G.GuildControlUIRankSettingsFrameOfficerCheckbox)
     for i = 1, 20 do
         local checbox = _G['GuildControlUIRankSettingsFrameCheckbox' .. i]
         if checbox then
-            F.ReskinCheck(checbox)
+            F.ReskinCheckbox(checbox)
         end
     end
 

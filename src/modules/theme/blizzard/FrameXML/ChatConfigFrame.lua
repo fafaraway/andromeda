@@ -46,7 +46,7 @@ tinsert(C.BlizzThemes, function()
                 checkbox:HideBackdrop()
                 local bg = F.CreateBDFrame(checkbox, 0.25)
                 bg:SetInside()
-                F.ReskinCheck(_G[checkBoxName .. 'Check'])
+                F.ReskinCheckbox(_G[checkBoxName .. 'Check'])
 
                 checkbox.styled = true
             end
@@ -61,11 +61,11 @@ tinsert(C.BlizzThemes, function()
         local nameString = frame:GetName() .. 'CheckBox'
         for index, value in ipairs(checkBoxTable) do
             local checkBoxName = nameString .. index
-            F.ReskinCheck(_G[checkBoxName])
+            F.ReskinCheckbox(_G[checkBoxName])
 
             if value.subTypes then
                 for i in ipairs(value.subTypes) do
-                    F.ReskinCheck(_G[checkBoxName .. '_' .. i])
+                    F.ReskinCheckbox(_G[checkBoxName .. '_' .. i])
                 end
             end
         end
@@ -140,7 +140,7 @@ tinsert(C.BlizzThemes, function()
         _G.CombatConfigSettingsRaid,
     }
     for _, box in pairs(combatBoxes) do
-        F.ReskinCheck(box)
+        F.ReskinCheckbox(box)
     end
 
     local bg = F.CreateBDFrame(_G.ChatConfigCombatSettingsFilters, 0.25)
@@ -191,7 +191,7 @@ tinsert(C.BlizzThemes, function()
     F.Reskin(_G.TextToSpeechFramePlaySampleButton)
     F.Reskin(_G.TextToSpeechFramePlaySampleAlternateButton)
     F.Reskin(_G.TextToSpeechDefaultButton)
-    F.ReskinCheck(_G.TextToSpeechCharacterSpecificButton)
+    F.ReskinCheckbox(_G.TextToSpeechCharacterSpecificButton)
 
     F.ReskinDropDown(_G.TextToSpeechFrameTtsVoiceDropdown)
     F.ReskinDropDown(_G.TextToSpeechFrameTtsVoiceAlternateDropdown)
@@ -206,7 +206,7 @@ tinsert(C.BlizzThemes, function()
         'UseAlternateVoiceForSystemMessagesCheckButton',
     }
     for _, checkbox in pairs(checkboxes) do
-        F.ReskinCheck(_G.TextToSpeechFramePanelContainer[checkbox])
+        F.ReskinCheckbox(_G.TextToSpeechFramePanelContainer[checkbox])
     end
 
     hooksecurefunc('TextToSpeechFrame_UpdateMessageCheckboxes', function(frame)
@@ -218,7 +218,7 @@ tinsert(C.BlizzThemes, function()
                 checkBoxName = checkBoxNameString .. index
                 checkBox = _G[checkBoxName]
                 if checkBox and not checkBox.styled then
-                    F.ReskinCheck(checkBox)
+                    F.ReskinCheckbox(checkBox)
                     checkBox.styled = true
                 end
             end

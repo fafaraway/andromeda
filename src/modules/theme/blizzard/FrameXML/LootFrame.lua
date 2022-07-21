@@ -61,7 +61,7 @@ tinsert(C.BlizzThemes, function()
 
     local promptFrame = _G.BonusRollFrame.PromptFrame
     F.ReskinIcon(promptFrame.Icon)
-    promptFrame.Timer.Bar:SetTexture(C.Assets.Statusbar.Normal)
+    promptFrame.Timer.Bar:SetTexture(C.Assets.Texture.StatusbarNormal)
     F.CreateBDFrame(promptFrame.Timer, 0.25)
 
     local from, to = '|T.+|t', '|T%%s:14:14:0:0:64:64:5:59:5:59|t'

@@ -197,7 +197,7 @@ C.Themes['Blizzard_Calendar'] = function()
     F.ReskinArrow(_G.CalendarNextMonthButton, 'right')
     _G.CalendarPrevMonthButton:SetSize(19, 19)
     _G.CalendarNextMonthButton:SetSize(19, 19)
-    F.ReskinCheck(_G.CalendarCreateEventLockEventCheck)
+    F.ReskinCheckbox(_G.CalendarCreateEventLockEventCheck)
 
     _G.CalendarCreateEventDifficultyOptionDropDown:SetWidth(150)
 end

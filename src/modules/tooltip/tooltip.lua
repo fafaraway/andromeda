@@ -273,7 +273,7 @@ function TOOLTIP:ReskinStatusBar()
     self.StatusBar:ClearAllPoints()
     self.StatusBar:SetPoint('BOTTOMLEFT', _G.GameTooltip, 'TOPLEFT', 1, -4)
     self.StatusBar:SetPoint('BOTTOMRIGHT', _G.GameTooltip, 'TOPRIGHT', -1, -4)
-    self.StatusBar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
+    self.StatusBar:SetStatusBarTexture(C.Assets.Texture.StatusbarNormal)
     self.StatusBar:SetHeight(3)
     F.CreateBDFrame(self.StatusBar)
 end
@@ -290,7 +290,7 @@ function TOOLTIP:GameTooltip_ShowStatusBar()
     if bar and not bar.styled then
         F.StripTextures(bar)
         F.CreateBDFrame(bar, 0.25)
-        bar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
+        bar:SetStatusBarTexture(C.Assets.Texture.StatusbarNormal)
 
         bar.styled = true
     end
@@ -308,7 +308,7 @@ function TOOLTIP:GameTooltip_ShowProgressBar()
     if bar and not bar.styled then
         F.StripTextures(bar.Bar)
         F.CreateBDFrame(bar.Bar, 0.25)
-        bar.Bar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
+        bar.Bar:SetStatusBarTexture(C.Assets.Texture.StatusbarNormal)
 
         bar.styled = true
     end

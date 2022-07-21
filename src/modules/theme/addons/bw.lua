@@ -34,7 +34,7 @@ local function ReskinBar(bar)
 
         bar.styled = true
     end
-    bar:SetTexture(C.Assets.Statusbar.Normal)
+    bar:SetTexture(C.Assets.Texture.StatusbarNormal)
 
     local tex = bar:GetIcon()
     if tex then
@@ -121,7 +121,7 @@ function THEME:RestyleBigWigsQueueTimer()
                 F.StripTextures(frame)
                 F.SetBD(frame)
 
-                frame:SetStatusBarTexture(C.Assets.Statusbar.Gradient)
+                frame:SetStatusBarTexture(C.Assets.Texture.StatusbarNormal)
                 frame:ClearAllPoints()
                 frame:SetPoint('BOTTOMLEFT', '$parent', 'BOTTOMLEFT')
                 frame:SetPoint('BOTTOMRIGHT', '$parent', 'BOTTOMRIGHT')

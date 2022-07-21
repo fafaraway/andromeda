@@ -10,7 +10,7 @@ tinsert(C.BlizzThemes, function()
     F.Reskin(_G.AddonListDisableAllButton)
     F.Reskin(_G.AddonListCancelButton)
     F.Reskin(_G.AddonListOkayButton)
-    F.ReskinCheck(_G.AddonListForceLoad, true)
+    F.ReskinCheckbox(_G.AddonListForceLoad, true)
     F.ReskinDropDown(_G.AddonCharacterDropDown)
     F.ReskinScroll(_G.AddonListScrollFrameScrollBar)
 
@@ -20,7 +20,7 @@ tinsert(C.BlizzThemes, function()
     for i = 1, _G.MAX_ADDONS_DISPLAYED do
         local checkbox = _G['AddonListEntry' .. i .. 'Enabled']
         checkbox:SetSize(18, 18)
-        F.ReskinCheck(checkbox, true, true)
+        F.ReskinCheckbox(checkbox, true, true)
         F.Reskin(_G['AddonListEntry' .. i .. 'Load'])
     end
 

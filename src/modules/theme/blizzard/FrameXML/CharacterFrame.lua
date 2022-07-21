@@ -247,7 +247,7 @@ tinsert(C.BlizzThemes, function()
         for i = 1, GetNumFactions() do
             local statusbar = _G['ReputationBar' .. i .. 'ReputationBar']
             if statusbar then
-                statusbar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
+                statusbar:SetStatusBarTexture(C.Assets.Texture.StatusbarNormal)
 
                 if not statusbar.reskinned then
                     F.CreateBDFrame(statusbar, 0.25)
@@ -275,12 +275,12 @@ tinsert(C.BlizzThemes, function()
     F.StripTextures(_G.ReputationDetailFrame)
     F.SetBD(_G.ReputationDetailFrame)
     F.ReskinClose(_G.ReputationDetailCloseButton)
-    F.ReskinCheck(_G.ReputationDetailInactiveCheckBox)
-    F.ReskinCheck(_G.ReputationDetailMainScreenCheckBox)
+    F.ReskinCheckbox(_G.ReputationDetailInactiveCheckBox)
+    F.ReskinCheckbox(_G.ReputationDetailMainScreenCheckBox)
     F.ReskinScroll(_G.ReputationListScrollFrameScrollBar)
 
     local atWarCheck = _G.ReputationDetailAtWarCheckBox
-    F.ReskinCheck(atWarCheck)
+    F.ReskinCheckbox(atWarCheck)
     local atWarCheckTex = atWarCheck:GetCheckedTexture()
     atWarCheckTex:ClearAllPoints()
     atWarCheckTex:SetSize(26, 26)
@@ -292,8 +292,8 @@ tinsert(C.BlizzThemes, function()
     F.StripTextures(_G.TokenFramePopup)
     F.SetBD(_G.TokenFramePopup)
     F.ReskinClose(_G.TokenFramePopupCloseButton)
-    F.ReskinCheck(_G.TokenFramePopupInactiveCheckBox)
-    F.ReskinCheck(_G.TokenFramePopupBackpackCheckBox)
+    F.ReskinCheckbox(_G.TokenFramePopupInactiveCheckBox)
+    F.ReskinCheckbox(_G.TokenFramePopupBackpackCheckBox)
     F.ReskinScroll(_G.TokenFrameContainerScrollBar)
 
     local function updateButtons()

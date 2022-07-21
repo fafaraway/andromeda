@@ -19,7 +19,7 @@ C.Themes['Blizzard_GuildRecruitmentUI'] = function()
 
     for _, name in next, { 'QuestButton', 'DungeonButton', 'RaidButton', 'PvPButton', 'RPButton' } do
         local button = _G.CommunitiesGuildRecruitmentFrameRecruitment.InterestFrame[name]
-        F.ReskinCheck(button)
+        F.ReskinCheckbox(button)
     end
 
     local rolesFrame = _G.CommunitiesGuildRecruitmentFrameRecruitment.RolesFrame
@@ -27,8 +27,8 @@ C.Themes['Blizzard_GuildRecruitmentUI'] = function()
     F.ReskinRole(rolesFrame.HealerButton, 'HEALER')
     F.ReskinRole(rolesFrame.DamagerButton, 'DPS')
 
-    F.ReskinCheck(_G.CommunitiesGuildRecruitmentFrameRecruitment.AvailabilityFrame.WeekdaysButton)
-    F.ReskinCheck(_G.CommunitiesGuildRecruitmentFrameRecruitment.AvailabilityFrame.WeekendsButton)
+    F.ReskinCheckbox(_G.CommunitiesGuildRecruitmentFrameRecruitment.AvailabilityFrame.WeekdaysButton)
+    F.ReskinCheckbox(_G.CommunitiesGuildRecruitmentFrameRecruitment.AvailabilityFrame.WeekendsButton)
     F.ReskinRadio(_G.CommunitiesGuildRecruitmentFrameRecruitment.LevelFrame.LevelAnyButton)
     F.ReskinRadio(_G.CommunitiesGuildRecruitmentFrameRecruitment.LevelFrame.LevelMaxButton)
     F.StripTextures(_G.CommunitiesGuildRecruitmentFrameRecruitment.CommentFrame.CommentInputFrame)

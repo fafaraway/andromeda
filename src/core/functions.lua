@@ -668,7 +668,7 @@ do
 
         local tex = frame:CreateTexture(nil, 'BACKGROUND', nil, 1)
         tex:SetAllPoints(self)
-        tex:SetTexture(C.ASSET_PATH .. 'textures\\bg_tex', true, true)
+        tex:SetTexture(C.Assets.Texture.BackdropStripes, true, true)
         tex:SetHorizTile(true)
         tex:SetVertTile(true)
         tex:SetBlendMode('ADD')
@@ -799,7 +799,7 @@ do
     end
 
     function F:CreateSB(spark, r, g, b)
-        self:SetStatusBarTexture(C.Assets.Statusbar.Normal)
+        self:SetStatusBarTexture(C.Assets.Texture.StatusbarNormal)
         if r and g and b then
             self:SetStatusBarColor(r, g, b)
         else
@@ -830,7 +830,7 @@ do
             for i = 1, numTicks - 1 do
                 if not ticks[i] then
                     ticks[i] = bar:CreateTexture(nil, 'OVERLAY')
-                    ticks[i]:SetTexture(C.Assets.Statusbar.Normal)
+                    ticks[i]:SetTexture(C.Assets.Texture.StatusbarFlat)
                     ticks[i]:SetVertexColor(0, 0, 0, 0.7)
                     ticks[i]:SetWidth(C.MULT)
                     ticks[i]:SetHeight(height)
@@ -858,7 +858,7 @@ do
     function F:CreateCheckbox(flat)
         local cb = CreateFrame('CheckButton', nil, self, 'InterfaceOptionsCheckButtonTemplate')
         cb:SetScript('OnClick', nil) -- reset onclick handler
-        F.ReskinCheck(cb, flat, true)
+        F.ReskinCheckbox(cb, flat, true)
 
         cb.Type = 'CheckBox'
         return cb
@@ -1071,8 +1071,8 @@ do
         end
 
         local gradStyle = _G.ANDROMEDA_ADB.GradientStyle
-        local normTex = C.Assets.Statusbar.Flat
-        local gradTex = C.Assets.Statusbar.Gradient
+        local normTex = C.Assets.Texture.StatusbarFlat
+        local gradTex = C.Assets.Texture.StatusbarGradient
 
         local tex = swatch:CreateTexture()
         tex:SetInside(swatch, 2, 2)
@@ -1832,7 +1832,7 @@ do
     end
 
     -- Handle checkbox and radio
-    function F:ReskinCheck(flat, forceSaturation)
+    function F:ReskinCheckbox(flat, forceSaturation)
         self:SetNormalTexture('')
         self:SetPushedTexture('')
 
@@ -1846,23 +1846,21 @@ do
             highligh:SetColorTexture(1, 1, 1, 0.25)
             -- highligh:SetPoint('TOPLEFT', self, 6, -6)
             -- highligh:SetPoint('BOTTOMRIGHT', self, -6, 6)
-            highligh:SetInside(self, 3, 3)
+            highligh:SetInside(self.bg, 1, 1)
             self:SetHighlightTexture(highligh)
         end
 
         if flat then
             local gradStyle = _G.ANDROMEDA_ADB.GradientStyle
-            local normTex = C.Assets.Statusbar.Flat
-            local gradTex = C.Assets.Statusbar.Gradient
+            local normTex = C.Assets.Texture.StatusbarFlat
+            local gradTex = C.Assets.Texture.StatusbarGradient
             local classColor = _G.ANDROMEDA_ADB.WidgetHighlightClassColor
             local newColor = _G.ANDROMEDA_ADB.WidgetHighlightColor
 
             if self.SetCheckedTexture then
                 local checked = self:CreateTexture()
                 checked:SetTexture(gradStyle and gradTex or normTex)
-                -- checked:SetPoint('TOPLEFT', self, 6, -6)
-                -- checked:SetPoint('BOTTOMRIGHT', self, -6, 6)
-                checked:SetInside(self, 3, 3)
+                checked:SetInside(self.bg, 1, 1)
                 checked:SetDesaturated(true)
 
                 if classColor then
@@ -1877,9 +1875,7 @@ do
             if self.SetDisabledCheckedTexture then
                 local disabled = self:CreateTexture()
                 disabled:SetTexture(gradStyle and gradTex or normTex)
-                -- disabled:SetPoint('TOPLEFT', self, 6, -6)
-                -- disabled:SetPoint('BOTTOMRIGHT', self, -6, 6)
-                disabled:SetInside(self, 3, 3)
+                disabled:SetInside(self.bg, 1, 1)
                 self:SetDisabledCheckedTexture(disabled)
             end
         else
@@ -1889,16 +1885,14 @@ do
             if self.SetCheckedTexture then
                 local checked = self:GetCheckedTexture()
                 checked:SetVertexColor(C.r, C.g, C.b)
-                checked:SetPoint('TOPLEFT', self, 5, -5)
-                checked:SetPoint('BOTTOMRIGHT', self, -5, 5)
+                checked:SetInside(self.bg, 1, 1)
                 checked:SetDesaturated(true)
             end
 
             if self.SetDisabledCheckedTexture then
                 local disabled = self:GetDisabledCheckedTexture()
                 disabled:SetVertexColor(0.3, 0.3, 0.3)
-                disabled:SetPoint('TOPLEFT', self, 5, -5)
-                disabled:SetPoint('BOTTOMRIGHT', self, -5, 5)
+                disabled:SetInside(self.bg, 1, 1)
             end
         end
 
@@ -1952,6 +1946,7 @@ do
 
         local thumb = self:GetThumbTexture()
         thumb:SetTexture(C.Assets.Texture.Spark)
+        thumb:SetSize(20, 20)
         thumb:SetBlendMode('ADD')
 
         if vertical then
@@ -1959,8 +1954,8 @@ do
         end
 
         local gradStyle = _G.ANDROMEDA_ADB.GradientStyle
-        local normTex = C.Assets.Statusbar.Flat
-        local gradTex = C.Assets.Statusbar.Gradient
+        local normTex = C.Assets.Texture.StatusbarFlat
+        local gradTex = C.Assets.Texture.StatusbarGradient
         local classColor = _G.ANDROMEDA_ADB.WidgetHighlightClassColor
         local newColor = _G.ANDROMEDA_ADB.WidgetHighlightColor
 
@@ -2147,7 +2142,7 @@ do
             background:SetPoint('TOPLEFT', self.squareBG, 'BOTTOMLEFT', 0, -2)
             background:SetPoint('TOPRIGHT', self.squareBG, 'BOTTOMRIGHT', -2, -2)
             background:SetHeight(2)
-            self.HealthBar.Health:SetTexture(C.Assets.Statusbar.Normal)
+            self.HealthBar.Health:SetTexture(C.Assets.Texture.StatusbarNormal)
         end
     end
 
@@ -2241,7 +2236,7 @@ do
             checkButton:SetFrameLevel(self:GetFrameLevel() + 2)
             checkButton:SetPoint('BOTTOMLEFT', -2, -2)
             checkButton:SetSize(20, 20)
-            F.ReskinCheck(checkButton, true)
+            F.ReskinCheckbox(checkButton, true)
         end
 
         local shortageBorder = self.shortageBorder

@@ -131,9 +131,9 @@ C.Themes['Blizzard_GuildUI'] = function()
     F.ReskinDropDown(_G.GuildRosterViewDropdown)
     F.ReskinDropDown(_G.GuildMemberRankDropdown)
 
-    F.ReskinCheck(_G.GuildRosterShowOfflineButton)
+    F.ReskinCheckbox(_G.GuildRosterShowOfflineButton)
     for i = 1, 7 do
-        F.ReskinCheck(_G.GuildNewsFiltersFrame.GuildNewsFilterButtons[i])
+        F.ReskinCheckbox(_G.GuildNewsFiltersFrame.GuildNewsFilterButtons[i])
     end
 
     local a1, p, a2, x, y = _G.GuildNewsBossModel:GetPoint()
@@ -149,7 +149,7 @@ C.Themes['Blizzard_GuildUI'] = function()
     _G.GuildLogFrame:SetPoint('TOPLEFT', _G.GuildFrame, 'TOPRIGHT', 3, 0)
     _G.GuildTextEditFrame:SetPoint('TOPLEFT', _G.GuildFrame, 'TOPRIGHT', 3, 0)
 
-    _G.GuildFactionBarProgress:SetTexture(C.Assets.Statusbar.Normal)
+    _G.GuildFactionBarProgress:SetTexture(C.Assets.Texture.StatusbarNormal)
     _G.GuildFactionBarLeft:Hide()
     _G.GuildFactionBarMiddle:Hide()
     _G.GuildFactionBarRight:Hide()

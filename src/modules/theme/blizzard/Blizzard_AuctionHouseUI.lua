@@ -34,7 +34,7 @@ local function reskinSellPanel(frame)
     F.ReskinDropDown(frame.DurationDropDown.DropDown)
     F.Reskin(frame.PostButton)
     if frame.BuyoutModeCheckButton then
-        F.ReskinCheck(frame.BuyoutModeCheckButton)
+        F.ReskinCheckbox(frame.BuyoutModeCheckButton)
         frame.BuyoutModeCheckButton:SetSize(28, 28)
     end
 end
@@ -250,7 +250,7 @@ C.Themes['Blizzard_AuctionHouseUI'] = function()
     local progressBar = multisellFrame.ProgressBar
     F.StripTextures(progressBar)
     F.ReskinIcon(progressBar.Icon)
-    progressBar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
+    progressBar:SetStatusBarTexture(C.Assets.Texture.StatusbarNormal)
     F.CreateBDFrame(progressBar, 0.25)
     local close = multisellFrame.CancelButton
     F.ReskinClose(close)
