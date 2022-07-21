@@ -12,8 +12,8 @@ function UNITFRAME:CreateGCDTicker(self)
     bar.spark = bar:CreateTexture(nil, 'OVERLAY')
     bar.spark:SetTexture(C.Assets.Texture.Spark)
     bar.spark:SetBlendMode('ADD')
-    bar.spark:SetPoint('TOPLEFT', bar:GetStatusBarTexture(), 'TOPRIGHT', -10, 10)
-    bar.spark:SetPoint('BOTTOMRIGHT', bar:GetStatusBarTexture(), 'BOTTOMRIGHT', 10, -10)
+    bar.spark:SetPoint('TOPLEFT', bar:GetStatusBarTexture(), 'TOPRIGHT', -10, 4)
+    bar.spark:SetPoint('BOTTOMRIGHT', bar:GetStatusBarTexture(), 'BOTTOMRIGHT', 10, -4)
 
     self.GCD = bar
 end

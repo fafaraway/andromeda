@@ -189,7 +189,7 @@ function TUTORIAL:HelloWorld()
     local pBar = CreateFrame('StatusBar', nil, f.body)
     pBar:SetPoint('BOTTOM', f.body, 'BOTTOM', 0, 10)
     pBar:SetSize(340, 20)
-    pBar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
+    pBar:SetStatusBarTexture(C.Assets.Texture.StatusbarNormal)
     pBar:Hide()
     F:SmoothBar(pBar)
 

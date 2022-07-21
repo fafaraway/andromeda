@@ -5,7 +5,7 @@ local buttonsList = {}
 local menuList = {
     {
         _G.CHARACTER_BUTTON,
-        C.ASSET_PATH .. 'textures\\menu\\player',
+        C.Assets.Texture.MenuBarPlayer,
         function()
             securecall(_G.ToggleFrame, _G.CharacterFrame)
         end,
@@ -13,91 +13,91 @@ local menuList = {
 
     {
         _G.SPELLBOOK_ABILITIES_BUTTON,
-        C.ASSET_PATH .. 'textures\\menu\\spellbook',
+        C.Assets.Texture.MenuBarSpellbook,
         function()
             securecall(_G.ToggleFrame, _G.SpellBookFrame)
         end,
     },
     {
         _G.TALENTS_BUTTON,
-        C.ASSET_PATH .. 'textures\\menu\\talent',
+        C.Assets.Texture.MenuBarTalent,
         function()
             ToggleTalentFrame()
         end,
     },
     {
         _G.SOCIAL_BUTTON,
-        C.ASSET_PATH .. 'textures\\menu\\friend',
+        C.Assets.Texture.MenuBarFriend,
         function()
             ToggleFriendsFrame()
         end,
     },
     {
         _G.GUILD,
-        C.ASSET_PATH .. 'textures\\menu\\guild',
+        C.Assets.Texture.MenuBarGuild,
         function()
             ToggleGuildFrame()
         end,
     },
     {
         _G.ACHIEVEMENT_BUTTON,
-        C.ASSET_PATH .. 'textures\\menu\\achievement',
+        C.Assets.Texture.MenuBarAchievement,
         function()
             ToggleAchievementFrame()
         end,
     },
     {
         _G.COLLECTIONS,
-        C.ASSET_PATH .. 'textures\\menu\\collection',
+        C.Assets.Texture.MenuBarCollection,
         function()
             ToggleCollectionsJournal()
         end,
     },
     {
         _G.LFG_TITLE,
-        C.ASSET_PATH .. 'textures\\menu\\lfg',
+        C.Assets.Texture.MenuBarLfg,
         function()
             ToggleLFDParentFrame()
         end,
     },
     {
         _G.ENCOUNTER_JOURNAL,
-        C.ASSET_PATH .. 'textures\\menu\\encounter',
+        C.Assets.Texture.MenuBarEncounter,
         function()
             ToggleEncounterJournal()
         end,
     },
     {
         L['Calendar'],
-        C.ASSET_PATH .. 'textures\\menu\\calendar',
+        C.Assets.Texture.MenuBarCalendar,
         function()
             ToggleCalendar()
         end,
     },
     {
         _G.MAP_AND_QUEST_LOG,
-        C.ASSET_PATH .. 'textures\\menu\\map',
+        C.Assets.Texture.MenuBarMap,
         function()
             ToggleWorldMap()
         end,
     },
     {
         _G.BAGSLOT,
-        C.ASSET_PATH .. 'textures\\menu\\bag',
+        C.Assets.Texture.MenuBarBag,
         function()
             ToggleAllBags()
         end,
     },
     {
         _G.BLIZZARD_STORE,
-        C.ASSET_PATH .. 'textures\\menu\\store',
+        C.Assets.Texture.MenuBarStore,
         function()
             ToggleStoreUI()
         end,
     },
     {
         _G.GAMEMENU_SUPPORT,
-        C.ASSET_PATH .. 'textures\\menu\\help',
+        C.Assets.Texture.MenuBarHelp,
         function()
             ToggleHelpFrame()
         end,

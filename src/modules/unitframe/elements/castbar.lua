@@ -228,7 +228,7 @@ function UNITFRAME:CreateCastBar(self)
     local iconAmp = 4
 
     local castbar = CreateFrame('StatusBar', 'oUF_Castbar' .. style, self)
-    castbar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
+    castbar:SetStatusBarTexture(C.Assets.Texture.StatusbarNormal)
     castbar.Backdrop = F.CreateBDFrame(castbar, 0.45)
     castbar.Border = F.CreateSD(castbar.Backdrop, 0.35, 6, 6, true)
     self.Castbar = castbar
@@ -237,7 +237,7 @@ function UNITFRAME:CreateCastBar(self)
     spark:SetTexture(C.Assets.Texture.Spark)
     spark:SetBlendMode('ADD')
     spark:SetAlpha(0.7)
-    spark:SetSize(12, castbar:GetHeight() * 2)
+    -- spark:SetSize(12, castbar:GetHeight() * 2)
     castbar.Spark = spark
 
     local icon = castbar:CreateTexture(nil, 'ARTWORK')
@@ -257,7 +257,7 @@ function UNITFRAME:CreateCastBar(self)
 
     if isPlayer then
         local safeZone = castbar:CreateTexture(nil, 'OVERLAY')
-        safeZone:SetTexture(C.Assets.Statusbar.Normal)
+        safeZone:SetTexture(C.Assets.Texture.StatusbarNormal)
         safeZone:SetVertexColor(0.87, 0.25, 0.42, 0.25)
         safeZone:SetPoint('TOPRIGHT')
         safeZone:SetPoint('BOTTOMRIGHT')
@@ -276,6 +276,8 @@ function UNITFRAME:CreateCastBar(self)
         icon:SetSize(self:GetHeight() + 6, self:GetHeight() + 6)
         icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
 
+        spark:SetSize(20, self:GetHeight() + 10)
+
         text:Hide()
         time:Hide()
     else
@@ -285,18 +287,24 @@ function UNITFRAME:CreateCastBar(self)
 
             icon:SetSize(playerHeight + iconAmp, playerHeight + iconAmp)
             icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
+
+            spark:SetSize(20, playerHeight + 10)
         elseif style == 'target' then
             castbar:SetSize(targetWidth, targetHeight)
             CreateCastBarMover(castbar, L['TargetCastbar'], 'TargetCastbar', { 'TOP', self, 'BOTTOM', 0, -4 })
 
             icon:SetSize(targetHeight + iconAmp, targetHeight + iconAmp)
             icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
+
+            spark:SetSize(20, targetHeight + 10)
         elseif style == 'focus' then
             castbar:SetSize(focusWidth, focusHeight)
             CreateCastBarMover(castbar, L['FocusCastbar'], 'FocusCastbar', { 'CENTER', _G.UIParent, 'CENTER', 0, 120 })
 
             icon:SetSize(focusHeight + iconAmp, focusHeight + iconAmp)
             icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
+
+            spark:SetSize(20, focusHeight + 10)
         end
 
         text:Show()
@@ -326,7 +334,7 @@ function NAMEPLATE:CreateCastBar(self)
     local iconAmp = 4
 
     local castbar = CreateFrame('StatusBar', 'oUF_Castbar' .. style, self)
-    castbar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
+    castbar:SetStatusBarTexture(C.Assets.Texture.StatusbarNormal)
     castbar.Backdrop = F.CreateBDFrame(castbar, 0.45)
     castbar.Border = F.CreateSD(castbar.Backdrop, 0.35, 6, 6, true)
     self.Castbar = castbar

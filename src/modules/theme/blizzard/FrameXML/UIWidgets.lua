@@ -16,7 +16,7 @@ local atlasColors = {
 
 function F:ReplaceWidgetBarTexture(atlas)
     if atlasColors[atlas] then
-        self:SetStatusBarTexture(C.Assets.Statusbar.Normal)
+        self:SetStatusBarTexture(C.Assets.Texture.StatusbarNormal)
         self:SetStatusBarColor(unpack(atlasColors[atlas]))
     end
 end
@@ -83,9 +83,9 @@ local function ReskinDoubleStatusBarWidget(self)
 end
 
 local function ReskinPVPCaptureBar(self)
-    self.LeftBar:SetTexture(C.Assets.Statusbar.Normal)
-    self.NeutralBar:SetTexture(C.Assets.Statusbar.Normal)
-    self.RightBar:SetTexture(C.Assets.Statusbar.Normal)
+    self.LeftBar:SetTexture(C.Assets.Texture.StatusbarNormal)
+    self.NeutralBar:SetTexture(C.Assets.Texture.StatusbarNormal)
+    self.RightBar:SetTexture(C.Assets.Texture.StatusbarNormal)
 
     self.LeftBar:SetVertexColor(0.2, 0.6, 1)
     self.NeutralBar:SetVertexColor(0.8, 0.8, 0.8)

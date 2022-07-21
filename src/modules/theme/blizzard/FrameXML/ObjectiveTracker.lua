@@ -48,7 +48,7 @@ local function ReskinBarTemplate(bar)
 
     if not bar.styled then
         F.StripTextures(bar)
-        bar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
+        bar:SetStatusBarTexture(C.Assets.Texture.StatusbarNormal)
         bar:SetStatusBarColor(C.r, C.g, C.b)
         bar.bg = F.SetBD(bar)
         F:SmoothBar(bar)
@@ -241,7 +241,7 @@ tinsert(C.BlizzThemes, function()
             block.timerbg:SetPoint('TOPLEFT', block.TimerBGBack, 6, -2)
             block.timerbg:SetPoint('BOTTOMRIGHT', block.TimerBGBack, -6, -5)
 
-            block.StatusBar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
+            block.StatusBar:SetStatusBarTexture(C.Assets.Texture.StatusbarNormal)
             block.StatusBar:SetStatusBarColor(r, g, b)
             block.StatusBar:SetHeight(10)
 

@@ -17,7 +17,7 @@ local function HandleRoleChecks(button, ...)
         checkButton:SetFrameLevel(button:GetFrameLevel() + 2)
         checkButton:SetPoint('BOTTOMLEFT', -2, -2)
         checkButton:SetSize(20, 20)
-        F.ReskinCheck(checkButton, true)
+        F.ReskinCheckbox(checkButton, true)
     end
 end
 

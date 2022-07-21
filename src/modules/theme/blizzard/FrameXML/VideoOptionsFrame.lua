@@ -65,7 +65,7 @@ tinsert(C.BlizzThemes, function()
                 for i = 1, frame:GetNumChildren() do
                     local child = select(i, frame:GetChildren())
                     if child:IsObjectType('CheckButton') then
-                        F.ReskinCheck(child)
+                        F.ReskinCheckbox(child)
                     elseif child:IsObjectType('Button') then
                         F.Reskin(child)
                     elseif child:IsObjectType('Slider') then

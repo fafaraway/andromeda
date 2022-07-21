@@ -77,7 +77,7 @@ tinsert(C.BlizzThemes, function()
     -- LFDFrame
     hooksecurefunc('LFGDungeonListButton_SetDungeon', function(button)
         if not button.expandOrCollapseButton.styled then
-            F.ReskinCheck(button.enableButton)
+            F.ReskinCheckbox(button.enableButton)
             F.ReskinCollapse(button.expandOrCollapseButton)
 
             button.expandOrCollapseButton.styled = true
@@ -328,7 +328,7 @@ tinsert(C.BlizzThemes, function()
             checkButton:SetFrameLevel(roleButton:GetFrameLevel() + 2)
             checkButton:SetPoint('BOTTOMLEFT', -2, -2)
             checkButton:SetSize(20, 20)
-            F.ReskinCheck(checkButton, true)
+            F.ReskinCheckbox(checkButton, true)
         end
     end
     ----------------------

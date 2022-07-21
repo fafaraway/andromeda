@@ -53,15 +53,15 @@ local iconsList = {
 
 GUI.TexturesList = {
     [1] = {
-        texture = C.ASSET_PATH .. 'textures\\statusbar\\norm',
+        texture = C.Assets.Texture.StatusbarNormal,
         name = L['Default'],
     },
     [2] = {
-        texture = C.ASSET_PATH .. 'textures\\statusbar\\grad',
+        texture = C.Assets.Texture.StatusbarGradient,
         name = L['Gradient'],
     },
     [3] = {
-        texture = C.ASSET_PATH .. 'textures\\statusbar\\flat',
+        texture = C.Assets.Texture.StatusbarFlat,
         name = L['Flat'],
     },
 }
@@ -306,7 +306,7 @@ local function CreateOptions(i)
         local optType, key, value, name, horizon, data, callback, tip = unpack(option)
         if optType == 1 then -- checkbox
             local cb = F.CreateCheckbox(parent, true, nil, true)
-            cb:SetSize(18, 18)
+            cb:SetSize(14, 14)
             cb:SetHitRectInsets(-5, -5, -5, -5)
 
             if horizon then

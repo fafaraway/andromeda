@@ -479,7 +479,7 @@ end
 function NAMEPLATE:CreateOverlayTexture(self)
     local overlay = self.Health:CreateTexture(nil, 'OVERLAY')
     overlay:SetAllPoints()
-    overlay:SetTexture(C.Assets.Statusbar.Overlay)
+    overlay:SetTexture(C.Assets.Texture.StatusbarStripesThick)
     overlay:SetVertexColor(0, 0, 0, 0.4)
     overlay:Hide()
 

@@ -144,7 +144,7 @@ C.Themes['Blizzard_TradeSkillUI'] = function()
     reagentList:SetPoint('BOTTOMLEFT', TradeSkillFrame, 'BOTTOMRIGHT', 40, 0)
 
     reagentList.HideUnownedButton:SetSize(24, 24)
-    F.ReskinCheck(reagentList.HideUnownedButton)
+    F.ReskinCheckbox(reagentList.HideUnownedButton)
     F.Reskin(reagentList.CloseButton)
 
     local scrollList = reagentList.ScrollList

@@ -102,7 +102,7 @@ function UNITFRAME:CreateClassPower(self)
         bars[i] = CreateFrame('StatusBar', C.ADDON_TITLE .. 'ClassPower' .. i, holder)
         bars[i]:SetHeight(barHeight)
         bars[i]:SetWidth((barWidth - 5 * gap) / 6)
-        bars[i]:SetStatusBarTexture(C.Assets.Statusbar.Normal)
+        bars[i]:SetStatusBarTexture(C.Assets.Texture.StatusbarNormal)
         bars[i]:SetFrameLevel(self:GetFrameLevel() + 5)
         bars[i].__bg = F.SetBD(bars[i], 0)
         bars[i].__bg:SetBackdropBorderColor(0, 0, 0, 1)
@@ -115,7 +115,7 @@ function UNITFRAME:CreateClassPower(self)
 
         bars[i].bg = bars[i]:CreateTexture(nil, 'BACKGROUND')
         bars[i].bg:SetAllPoints(bars[i])
-        bars[i].bg:SetTexture(C.Assets.Statusbar.Flat)
+        bars[i].bg:SetTexture(C.Assets.Texture.StatusbarFlat)
         bars[i].bg.multiplier = 0.25
 
         if isDK then

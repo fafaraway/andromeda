@@ -60,9 +60,9 @@ do
         local statusbar = _G[bar:GetName() .. 'StatusBar']
         if statusbar then
             statusbar:SetAllPoints()
-            statusbar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
+            statusbar:SetStatusBarTexture(C.Assets.Texture.StatusbarNormal)
         else
-            bar:SetStatusBarTexture(C.Assets.Statusbar.Normal)
+            bar:SetStatusBarTexture(C.Assets.Texture.StatusbarNormal)
         end
 
         bar.bg = F.SetBD(bar)
