@@ -1,36 +1,11 @@
 local F, C = unpack(select(2, ...))
 
-local function HandleRoleChecks(button, ...)
-    button:StripTextures()
-    button:DisableDrawLayer('ARTWORK')
-    button:DisableDrawLayer('OVERLAY')
-
-    button.tex = button:CreateTexture(nil, 'BACKGROUND', nil, -7)
-    button.tex:SetTexture(C.Assets.Texture.Roles)
-    button.tex:SetTexCoord(...)
-    button.tex:SetPoint('CENTER')
-    button.tex:SetSize(40, 40)
-    button.tex:SetAlpha(0.6)
-
-    local checkButton = button.checkButton or button.CheckButton or button.CheckBox
-    if checkButton then
-        checkButton:SetFrameLevel(button:GetFrameLevel() + 2)
-        checkButton:SetPoint('BOTTOMLEFT', -2, -2)
-        checkButton:SetSize(20, 20)
-        F.ReskinCheckbox(checkButton, true)
-    end
-end
-
 local function ReskinPvPFrame(frame)
     frame:DisableDrawLayer('BACKGROUND')
     frame:DisableDrawLayer('BORDER')
-    -- F.ReskinRole(frame.TankIcon, 'TANK')
-    -- F.ReskinRole(frame.HealerIcon, 'HEALER')
-    -- F.ReskinRole(frame.DPSIcon, 'DPS')
-
-    HandleRoleChecks(_G.HonorFrame.TankIcon, _G.LFDQueueFrameRoleButtonTank.background:GetTexCoord())
-    HandleRoleChecks(_G.HonorFrame.HealerIcon, _G.LFDQueueFrameRoleButtonHealer.background:GetTexCoord())
-    HandleRoleChecks(_G.HonorFrame.DPSIcon, _G.LFDQueueFrameRoleButtonDPS.background:GetTexCoord())
+    F.ReskinRole(frame.TankIcon, 'TANK')
+    F.ReskinRole(frame.HealerIcon, 'HEALER')
+    F.ReskinRole(frame.DPSIcon, 'DPS')
 
     local bar = frame.ConquestBar
     F.StripTextures(bar)
@@ -48,8 +23,6 @@ local function ConquestFrameButton_OnEnter(self)
     _G.ConquestTooltip:ClearAllPoints()
     _G.ConquestTooltip:SetPoint('TOPLEFT', self, 'TOPRIGHT', 1, 0)
 end
-
-
 
 C.Themes['Blizzard_PVPUI'] = function()
     local r, g, b = C.r, C.g, C.b

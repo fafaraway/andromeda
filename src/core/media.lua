@@ -44,8 +44,7 @@ C.Assets.Texture = {
     Vignetting = C.ASSET_PATH .. 'textures\\vignetting',
 
 
-    Leader = C.ASSET_PATH .. 'textures\\leader_big',
-    Roles = C.ASSET_PATH .. 'textures\\roles_big',
+
 
 
 
