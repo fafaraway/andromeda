@@ -590,8 +590,6 @@ C.AccountSettings = {
     GuildSortOrder = true,
     GradientStyle = true,
     ReskinBlizz = true,
-    ReskinAddons = true,
-
     ReskinDeadlyBossMods = true,
     ReskinBigWigs = true,
     ReskinWeakAuras = true,
@@ -601,7 +599,6 @@ C.AccountSettings = {
     ReskinOpie = true,
     ReskinPremadeGroupsFilter = true,
     ReskinREHack = true,
-
     NumberFormat = 1,
     FontOutline = false,
     WorldTextScale = 1,
