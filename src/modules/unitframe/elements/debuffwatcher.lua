@@ -62,7 +62,7 @@ function UNITFRAME:CreateDebuffWatcher(self)
     parentFrame:SetAllPoints()
     parentFrame:SetFrameLevel(bu:GetFrameLevel() + 6)
 
-    local font = C.Assets.Font.Roadway
+    local font = C.Assets.Fonts.HalfHeight
     local fontSize = max(bu:GetHeight() * 0.4, 12)
     bu.count = F.CreateFS(parentFrame, font, fontSize, true, '', nil, true)
     bu.count:SetPoint('CENTER', bu, 'TOP')

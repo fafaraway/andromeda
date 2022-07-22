@@ -117,8 +117,8 @@ end
 local function ConstructTextString(f)
     local outline = _G.ANDROMEDA_ADB.FontOutline
     f.title = F.CreateFS(f, C.ASSET_PATH .. 'fonts\\header.ttf', 56, outline, C.COLORFUL_ADDON_TITLE, nil, outline or 'THICK', 'TOP', 0, -C.UI_GAP)
-    f.version = F.CreateFS(f, C.Assets.Font.Condensed, 12, outline, 'Version: ' .. C.ADDON_VERSION, { 0.7, 0.7, 0.7 }, outline or 'THICK', 'TOP', 0, -100)
-    f.tip = F.CreateFS(f, C.Assets.Font.Bold, 10, outline, strList.tip, { 0.3, 0.3, 0.3 }, outline or 'THICK', 'BOTTOM', 0, C.UI_GAP)
+    f.version = F.CreateFS(f, C.Assets.Fonts.Condensed, 12, outline, 'Version: ' .. C.ADDON_VERSION, { 0.7, 0.7, 0.7 }, outline or 'THICK', 'TOP', 0, -100)
+    f.tip = F.CreateFS(f, C.Assets.Fonts.Bold, 10, outline, strList.tip, { 0.3, 0.3, 0.3 }, outline or 'THICK', 'BOTTOM', 0, C.UI_GAP)
 
     GUI:CreateGradientLine(f, 300, -150, -90, 150, -90)
 
@@ -128,8 +128,8 @@ local function ConstructTextString(f)
         local str1 = GUI:FormatTextString(a)
         local str2 = GUI:FormatTextString(b)
 
-        F.CreateFS(f.lbox, C.Assets.Font.Bold, 18, outline, str1, { 0.7, 0.7, 0.7 }, outline or 'THICK', 'TOPLEFT', 0, -(k * 50))
-        F.CreateFS(f.lbox, C.Assets.Font.Bold, 16, outline, str2, { 0.6, 0.6, 0.6 }, outline or 'THICK', 'TOPLEFT', 0, -(k * 24) - offset)
+        F.CreateFS(f.lbox, C.Assets.Fonts.Bold, 18, outline, str1, { 0.7, 0.7, 0.7 }, outline or 'THICK', 'TOPLEFT', 0, -(k * 50))
+        F.CreateFS(f.lbox, C.Assets.Fonts.Bold, 16, outline, str2, { 0.6, 0.6, 0.6 }, outline or 'THICK', 'TOPLEFT', 0, -(k * 24) - offset)
 
         offset = offset + 26
     end
@@ -138,7 +138,7 @@ local function ConstructTextString(f)
         local a, b = strsplit('~', v)
         local newStr = GUI:FormatTextString(a .. b)
 
-        F.CreateFS(f.rbox, C.Assets.Font.Bold, 14, outline, newStr, { 0.6, 0.6, 0.6 }, outline or 'THICK', 'TOPLEFT', 0, -(k * 24) - 26)
+        F.CreateFS(f.rbox, C.Assets.Fonts.Bold, 14, outline, newStr, { 0.6, 0.6, 0.6 }, outline or 'THICK', 'TOPLEFT', 0, -(k * 24) - 26)
     end
 end
 

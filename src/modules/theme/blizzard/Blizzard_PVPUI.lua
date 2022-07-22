@@ -10,7 +10,7 @@ local function ReskinPvPFrame(frame)
     local bar = frame.ConquestBar
     F.StripTextures(bar)
     F.CreateBDFrame(bar, 0.25)
-    bar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
+    bar:SetStatusBarTexture(C.Assets.Textures.Backdrop)
     bar:GetStatusBarTexture():SetGradient('VERTICAL', 1, 0.8, 0, 6, 0.4, 0)
 
     local reward = bar.Reward

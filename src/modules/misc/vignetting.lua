@@ -17,7 +17,7 @@ function M:OnLogin()
     f:SetFrameLevel(0)
 
     f.tex = f:CreateTexture()
-    f.tex:SetTexture(C.Assets.Texture.Vignetting)
+    f.tex:SetTexture(C.Assets.Textures.Vignetting)
     f.tex:SetAllPoints(f)
 
     M.Frame = f

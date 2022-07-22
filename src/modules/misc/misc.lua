@@ -222,7 +222,7 @@ end
 -- change the color of the current trader's name
 -- red stranger / blue guild / green friend
 do
-    local infoText = F.CreateFS(_G.TradeFrame, C.Assets.Font.Bold, 14, true)
+    local infoText = F.CreateFS(_G.TradeFrame, C.Assets.Fonts.Bold, 14, true)
     infoText:ClearAllPoints()
     infoText:SetPoint('TOP', _G.TradeFrameRecipientNameText, 'BOTTOM', 0, -5)
 

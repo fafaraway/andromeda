@@ -221,7 +221,7 @@ function BR:Reminder_Create(cfg)
         end
     end
     frame.Icon:SetTexture(texture)
-    frame.text = F.CreateFS(frame, C.Assets.Font.Regular, 12, nil, L['lacking'], 'RED', 'THICK', 'TOP', 1, 15)
+    frame.text = F.CreateFS(frame, C.Assets.Fonts.Regular, 12, nil, L['lacking'], 'RED', 'THICK', 'TOP', 1, 15)
     frame:Hide()
     cfg.frame = frame
 

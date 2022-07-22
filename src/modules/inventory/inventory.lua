@@ -1,7 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 local INVENTORY = F:GetModule('Inventory')
 local cargBags = F.Libs.cargBags
-local iconsList = C.Assets.Texture
+local iconsList = C.Assets.Textures
 
 local iconColor = { 0.5, 0.5, 0.5 }
 local bagTypeColor = {
@@ -112,7 +112,7 @@ function INVENTORY:CreateMoneyFrame()
 
     local tag = self:SpawnPlugin('TagDisplay', '[money] [currencies]', moneyFrame)
     local outline = _G.ANDROMEDA_ADB.FontOutline
-    F:SetFS(tag, C.Assets.Font.Bold, 12, outline, '', nil, outline or 'THICK')
+    F:SetFS(tag, C.Assets.Fonts.Bold, 12, outline, '', nil, outline or 'THICK')
     tag:SetPoint('TOPLEFT', 0, -4)
 end
 
@@ -524,7 +524,7 @@ function INVENTORY:CreateFreeSlots()
 
     local slot = CreateFrame('Button', name .. 'FreeSlot', self, 'BackdropTemplate')
     slot:SetSize(self.iconSize, self.iconSize)
-    slot:SetHighlightTexture(C.Assets.Texture.Backdrop)
+    slot:SetHighlightTexture(C.Assets.Textures.Backdrop)
     slot:GetHighlightTexture():SetVertexColor(1, 1, 1, 0.25)
     slot:GetHighlightTexture():SetInside()
     F.CreateBD(slot, 0.25)
@@ -537,7 +537,7 @@ function INVENTORY:CreateFreeSlots()
 
     local tag = self:SpawnPlugin('TagDisplay', '[space]', slot)
     local outline = _G.ANDROMEDA_ADB.FontOutline
-    F:SetFS(tag, C.Assets.Font.Bold, 11, outline, '', 'CLASS', outline or 'THICK')
+    F:SetFS(tag, C.Assets.Fonts.Bold, 11, outline, '', 'CLASS', outline or 'THICK')
     tag:SetPoint('BOTTOMRIGHT', -2, 2)
     tag.__name = name
     slot.tag = tag
@@ -889,7 +889,7 @@ function INVENTORY:OnLogin()
     function MyButton:OnCreate()
         self:SetNormalTexture(nil)
         self:SetPushedTexture(nil)
-        self:SetHighlightTexture(C.Assets.Texture.Backdrop)
+        self:SetHighlightTexture(C.Assets.Textures.Backdrop)
         self:GetHighlightTexture():SetVertexColor(1, 1, 1, 0.25)
         self:GetHighlightTexture():SetInside()
         self:SetSize(iconSize, iconSize)
@@ -897,7 +897,7 @@ function INVENTORY:OnLogin()
         self.Icon:SetInside()
         self.Icon:SetTexCoord(unpack(C.TEX_COORD))
         local outline = _G.ANDROMEDA_ADB.FontOutline
-        F:SetFS(self.Count, C.Assets.Font.Bold, 11, outline, '', nil, outline or 'THICK', 'BOTTOMRIGHT', -2, 2)
+        F:SetFS(self.Count, C.Assets.Fonts.Bold, 11, outline, '', nil, outline or 'THICK', 'BOTTOMRIGHT', -2, 2)
         self.Cooldown:SetInside()
         self.IconOverlay:SetInside()
         self.IconOverlay2:SetInside()
@@ -919,8 +919,8 @@ function INVENTORY:OnLogin()
         self.Quest:SetSize(24, 24)
         self.Quest:SetPoint('TOPLEFT', -2, -2)
 
-        self.iLvl = F.CreateFS(self, C.Assets.Font.Bold, 11, outline, '', nil, outline or 'THICK', 'BOTTOMRIGHT', -2, 2)
-        self.BindType = F.CreateFS(self, C.Assets.Font.Bold, 11, outline, '', nil, outline or 'THICK', 'TOPLEFT', 2, -2)
+        self.iLvl = F.CreateFS(self, C.Assets.Fonts.Bold, 11, outline, '', nil, outline or 'THICK', 'BOTTOMRIGHT', -2, 2)
+        self.BindType = F.CreateFS(self, C.Assets.Fonts.Bold, 11, outline, '', nil, outline or 'THICK', 'TOPLEFT', 2, -2)
 
         local flash = self:CreateTexture(nil, 'ARTWORK')
         flash:SetTexture('Interface\\Cooldown\\star4')
@@ -1234,7 +1234,7 @@ function INVENTORY:OnLogin()
 
         local outline = _G.ANDROMEDA_ADB.FontOutline
         if label then
-            self.label = F.CreateFS(self, C.Assets.Font.Bold, 11, outline, label, nil, outline or 'THICK', 'TOPLEFT', 5, -4)
+            self.label = F.CreateFS(self, C.Assets.Fonts.Bold, 11, outline, label, nil, outline or 'THICK', 'TOPLEFT', 5, -4)
             return
         end
 
@@ -1315,7 +1315,7 @@ function INVENTORY:OnLogin()
     function BagButton:OnCreate()
         self:SetNormalTexture(nil)
         self:SetPushedTexture(nil)
-        self:SetHighlightTexture(C.Assets.Texture.Backdrop)
+        self:SetHighlightTexture(C.Assets.Textures.Backdrop)
         self:GetHighlightTexture():SetVertexColor(1, 1, 1, 0.25)
 
         self:SetSize(iconSize, iconSize)

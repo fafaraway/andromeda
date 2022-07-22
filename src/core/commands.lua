@@ -25,7 +25,7 @@ F:RegisterSlashCommand('/and', function(msg)
         F:Printf('version: %s', C.ADDON_VERSION)
     else
         GUI:ToggleCheatSheet()
-        -- PlaySoundFile(C.Assets.Sound.PhubIntro, 'Master')
+        -- PlaySoundFile(C.Assets.Sounds.PhubIntro, 'Master')
     end
 end)
 

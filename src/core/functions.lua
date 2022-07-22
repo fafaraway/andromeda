@@ -161,6 +161,13 @@ do
         local id = tonumber(strmatch((guid or ''), '%-(%d-)%-%x-$'))
         return id
     end
+
+    do
+        local t, d = '|T%s%s|t', ''
+        function F:TextureString(texture, data)
+            return format(t, texture, data or d)
+        end
+    end
 end
 
 -- Scan Tooltip
@@ -401,7 +408,7 @@ do
                 fs:SetFont(font, size, flag and 'OUTLINE')
             end
         else
-            fs:SetFont(C.Assets.Font.Regular, 12, 'OUTLINE')
+            fs:SetFont(C.Assets.Fonts.Regular, 12, 'OUTLINE')
         end
 
         if text then
@@ -643,7 +650,7 @@ do
         end
 
         local tex = self:CreateTexture(nil, 'BACKGROUND')
-        tex:SetTexture(C.Assets.Texture.Backdrop)
+        tex:SetTexture(C.Assets.Textures.Backdrop)
         tex:SetGradientAlpha(orientation, r, g, b, a1, r, g, b, a2)
         if width then
             tex:SetWidth(width)
@@ -668,7 +675,7 @@ do
 
         local tex = frame:CreateTexture(nil, 'BACKGROUND', nil, 1)
         tex:SetAllPoints(self)
-        tex:SetTexture(C.Assets.Texture.BackdropStripes, true, true)
+        tex:SetTexture(C.Assets.Textures.BackdropStripes, true, true)
         tex:SetHorizTile(true)
         tex:SetVertTile(true)
         tex:SetBlendMode('ADD')
@@ -692,7 +699,7 @@ do
 
         local shadow = CreateFrame('Frame', nil, frame, 'BackdropTemplate')
         shadow:SetOutside(self, m or 5, m or 5)
-        shadow:SetBackdrop({ edgeFile = C.Assets.Texture.Shadow, edgeSize = s or 5 })
+        shadow:SetBackdrop({ edgeFile = C.Assets.Textures.Shadow, edgeSize = s or 5 })
         shadow:SetBackdropBorderColor(0, 0, 0, a or 0.25)
         -- shadow:SetFrameLevel(1)
         shadow:SetFrameStrata(frame:GetFrameStrata())
@@ -703,7 +710,7 @@ do
 
     function F:CreateGradient()
         local gradStyle = _G.ANDROMEDA_ADB.GradientStyle
-        local normTex = C.Assets.Texture.Backdrop
+        local normTex = C.Assets.Textures.Backdrop
 
         local tex = self:CreateTexture(nil, 'BORDER')
         tex:SetAllPoints(self)
@@ -731,8 +738,8 @@ do
         local backdropAlpha = _G.ANDROMEDA_ADB.BackdropAlpha
 
         self:SetBackdrop({
-            bgFile = C.Assets.Texture.Backdrop,
-            edgeFile = C.Assets.Texture.Backdrop,
+            bgFile = C.Assets.Textures.Backdrop,
+            edgeFile = C.Assets.Textures.Backdrop,
             edgeSize = C.MULT,
         })
         self:SetBackdropColor(backdropColor.r, backdropColor.g, backdropColor.b, alpha or backdropAlpha)
@@ -799,7 +806,7 @@ do
     end
 
     function F:CreateSB(spark, r, g, b)
-        self:SetStatusBarTexture(C.Assets.Texture.StatusbarNormal)
+        self:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
         if r and g and b then
             self:SetStatusBarColor(r, g, b)
         else
@@ -811,7 +818,7 @@ do
 
         if spark then
             self.Spark = self:CreateTexture(nil, 'OVERLAY')
-            self.Spark:SetTexture(C.Assets.Texture.Spark)
+            self.Spark:SetTexture(C.Assets.Textures.Spark)
             self.Spark:SetBlendMode('ADD')
             self.Spark:SetAlpha(0.8)
             self.Spark:SetPoint('TOPLEFT', self:GetStatusBarTexture(), 'TOPRIGHT', -10, 10)
@@ -830,7 +837,7 @@ do
             for i = 1, numTicks - 1 do
                 if not ticks[i] then
                     ticks[i] = bar:CreateTexture(nil, 'OVERLAY')
-                    ticks[i]:SetTexture(C.Assets.Texture.StatusbarFlat)
+                    ticks[i]:SetTexture(C.Assets.Textures.StatusbarFlat)
                     ticks[i]:SetVertexColor(0, 0, 0, 0.7)
                     ticks[i]:SetWidth(C.MULT)
                     ticks[i]:SetHeight(height)
@@ -849,7 +856,7 @@ do
             F.PixelIcon(bu, fontSize, true)
         else
             F.Reskin(bu)
-            bu.text = F.CreateFS(bu, C.Assets.Font.Regular, fontSize or 12, nil, text, nil, true)
+            bu.text = F.CreateFS(bu, C.Assets.Fonts.Regular, fontSize or 12, nil, text, nil, true)
         end
 
         return bu
@@ -873,7 +880,7 @@ do
         eb:SetSize(width, height)
         eb:SetAutoFocus(false)
         eb:SetTextInsets(5, 5, 5, 5)
-        eb:SetFont(C.Assets.Font.Regular, 11)
+        eb:SetFont(C.Assets.Fonts.Regular, 11)
         eb.bg = F.CreateBDFrame(eb, 0.25, true)
         eb.bg:SetAllPoints()
         F.SetBorderColor(eb.bg)
@@ -958,7 +965,7 @@ do
         F.CreateSD(dd.bg, 0.25)
         F.CreateTex(dd)
 
-        dd.Text = F.CreateFS(dd, C.Assets.Font.Regular, 11, outline, '', nil, outline or 'THICK', 'LEFT', 5, 0)
+        dd.Text = F.CreateFS(dd, C.Assets.Fonts.Regular, 11, outline, '', nil, outline or 'THICK', 'LEFT', 5, 0)
         dd.Text:SetPoint('RIGHT', -5, 0)
         dd.options = {}
 
@@ -994,7 +1001,7 @@ do
             opt[i]:SetSize(width - 8, height)
             F.CreateBD(opt[i])
 
-            local text = F.CreateFS(opt[i], C.Assets.Font.Regular, 11, nil, j, nil, true, 'LEFT', 5, 0)
+            local text = F.CreateFS(opt[i], C.Assets.Fonts.Regular, 11, nil, j, nil, true, 'LEFT', 5, 0)
             text:SetPoint('RIGHT', -5, 0)
             opt[i].text = j
             opt[i].index = i
@@ -1066,13 +1073,13 @@ do
         F.CreateSD(swatch.bg, 0.25)
 
         if name then
-            swatch.text = F.CreateFS(swatch, C.Assets.Font.Regular, 12, nil, name, nil, true)
+            swatch.text = F.CreateFS(swatch, C.Assets.Fonts.Regular, 12, nil, name, nil, true)
             swatch.text:SetPoint('LEFT', swatch, 'RIGHT', 6, 0)
         end
 
         local gradStyle = _G.ANDROMEDA_ADB.GradientStyle
-        local normTex = C.Assets.Texture.StatusbarFlat
-        local gradTex = C.Assets.Texture.StatusbarGradient
+        local normTex = C.Assets.Textures.StatusbarFlat
+        local gradTex = C.Assets.Textures.StatusbarGradient
 
         local tex = swatch:CreateTexture()
         tex:SetInside(swatch, 2, 2)
@@ -1135,7 +1142,7 @@ do
         slider.value = F.CreateEditBox(slider, 50, 20)
         slider.value:SetPoint('TOP', slider, 'BOTTOM', 0, -2)
         slider.value:SetJustifyH('CENTER')
-        slider.value:SetFont(C.Assets.Font.Regular, 11)
+        slider.value:SetFont(C.Assets.Fonts.Regular, 11)
         slider.value.__owner = slider
         slider.value:SetScript('OnEnterPressed', UpdateSliderEditBox)
 
@@ -1517,7 +1524,7 @@ do
         local classColor = _G.ANDROMEDA_ADB.WidgetHighlightClassColor
         local newColor = _G.ANDROMEDA_ADB.WidgetHighlightColor
 
-        self:SetHighlightTexture(C.Assets.Texture.Backdrop)
+        self:SetHighlightTexture(C.Assets.Textures.Backdrop)
         local hl = self:GetHighlightTexture()
         hl:ClearAllPoints()
         hl:SetInside(bg)
@@ -1703,14 +1710,14 @@ do
         local bg = F.CreateBDFrame(self, 0, true)
         bg:SetAllPoints()
 
-        self:SetDisabledTexture(C.Assets.Texture.Backdrop)
+        self:SetDisabledTexture(C.Assets.Textures.Backdrop)
         local dis = self:GetDisabledTexture()
         dis:SetVertexColor(0, 0, 0, 0.4)
         dis:SetDrawLayer('OVERLAY')
         dis:SetAllPoints()
 
         local tex = self:CreateTexture()
-        tex:SetTexture(C.Assets.Texture.Close)
+        tex:SetTexture(C.Assets.Textures.Close)
         tex:SetVertexColor(1, 1, 1)
         tex:SetAllPoints()
 
@@ -1749,14 +1756,14 @@ do
     local arrowDegree = { ['up'] = 0, ['down'] = 180, ['left'] = 90, ['right'] = -90 }
 
     function F:SetupArrow(direction)
-        self:SetTexture(C.Assets.Texture.Arrow)
+        self:SetTexture(C.Assets.Textures.Arrow)
         self:SetRotation(rad(arrowDegree[direction]))
     end
 
     function F:ReskinArrow(direction)
         F.StripTextures(self)
         self:SetSize(16, 16)
-        -- self:SetDisabledTexture(C.Assets.Texture.Backdrop)
+        -- self:SetDisabledTexture(C.Assets.Textures.Backdrop)
 
         -- local dis = self:GetDisabledTexture()
         -- dis:SetVertexColor(0, 0, 0, .3)
@@ -1782,7 +1789,7 @@ do
 
         local tex = self:CreateTexture(nil, 'ARTWORK')
         tex:SetInside(nil, 2, 2)
-        tex:SetTexture(C.Assets.Texture.Close)
+        tex:SetTexture(C.Assets.Textures.Close)
         tex:SetVertexColor(1, 0, 0)
     end
 
@@ -1820,7 +1827,7 @@ do
         F.Reskin(overflowButton, true)
 
         local tex = overflowButton:CreateTexture(nil, 'ARTWORK')
-        tex:SetTexture(C.Assets.Texture.Arrow)
+        tex:SetTexture(C.Assets.Textures.Arrow)
         tex:SetSize(8, 8)
         tex:SetPoint('CENTER')
         overflowButton.__texture = tex
@@ -1852,8 +1859,8 @@ do
 
         if flat then
             local gradStyle = _G.ANDROMEDA_ADB.GradientStyle
-            local normTex = C.Assets.Texture.StatusbarFlat
-            local gradTex = C.Assets.Texture.StatusbarGradient
+            local normTex = C.Assets.Textures.StatusbarFlat
+            local gradTex = C.Assets.Textures.StatusbarGradient
             local classColor = _G.ANDROMEDA_ADB.WidgetHighlightClassColor
             local newColor = _G.ANDROMEDA_ADB.WidgetHighlightColor
 
@@ -1879,8 +1886,8 @@ do
                 self:SetDisabledCheckedTexture(disabled)
             end
         else
-            self:SetCheckedTexture(C.Assets.Texture.Tick)
-            self:SetDisabledCheckedTexture(C.Assets.Texture.Tick)
+            self:SetCheckedTexture(C.Assets.Textures.Tick)
+            self:SetDisabledCheckedTexture(C.Assets.Textures.Tick)
 
             if self.SetCheckedTexture then
                 local checked = self:GetCheckedTexture()
@@ -1902,7 +1909,7 @@ do
     function F:ReskinRadio()
         self:SetNormalTexture('')
         self:SetHighlightTexture('')
-        self:SetCheckedTexture(C.Assets.Texture.Backdrop)
+        self:SetCheckedTexture(C.Assets.Textures.Backdrop)
 
         local ch = self:GetCheckedTexture()
         ch:SetPoint('TOPLEFT', 4, -4)
@@ -1928,7 +1935,7 @@ do
             swatchBg:SetInside(nil, 2, 2)
         end
 
-        self:SetNormalTexture(C.Assets.Texture.Backdrop)
+        self:SetNormalTexture(C.Assets.Textures.Backdrop)
         self:GetNormalTexture():SetInside(self, 3, 3)
     end
 
@@ -1945,7 +1952,7 @@ do
         F.CreateTex(bg)
 
         local thumb = self:GetThumbTexture()
-        thumb:SetTexture(C.Assets.Texture.Spark)
+        thumb:SetTexture(C.Assets.Textures.Spark)
         thumb:SetSize(20, 20)
         thumb:SetBlendMode('ADD')
 
@@ -1954,8 +1961,8 @@ do
         end
 
         local gradStyle = _G.ANDROMEDA_ADB.GradientStyle
-        local normTex = C.Assets.Texture.StatusbarFlat
-        local gradTex = C.Assets.Texture.StatusbarGradient
+        local normTex = C.Assets.Textures.StatusbarFlat
+        local gradTex = C.Assets.Textures.StatusbarGradient
         local classColor = _G.ANDROMEDA_ADB.WidgetHighlightClassColor
         local newColor = _G.ANDROMEDA_ADB.WidgetHighlightColor
 
@@ -2142,7 +2149,7 @@ do
             background:SetPoint('TOPLEFT', self.squareBG, 'BOTTOMLEFT', 0, -2)
             background:SetPoint('TOPRIGHT', self.squareBG, 'BOTTOMRIGHT', -2, -2)
             background:SetHeight(2)
-            self.HealthBar.Health:SetTexture(C.Assets.Texture.StatusbarNormal)
+            self.HealthBar.Health:SetTexture(C.Assets.Textures.StatusbarNormal)
         end
     end
 
@@ -2153,7 +2160,7 @@ do
         end
         F.CreateBDFrame(self, 0.25)
 
-        self:SetHighlightTexture(C.Assets.Texture.Backdrop)
+        self:SetHighlightTexture(C.Assets.Textures.Backdrop)
         local hl = self:GetHighlightTexture()
         hl:SetVertexColor(C.r, C.g, C.b, 0.25)
         hl:SetInside()
@@ -2197,11 +2204,11 @@ do
 
     function F:GetRoleTex()
         if self == 'TANK' then
-            return C.Assets.Texture.Tank
+            return C.Assets.Textures.RoleTank
         elseif self == 'DPS' or self == 'DAMAGER' then
-            return C.Assets.Texture.Damager
+            return C.Assets.Textures.RoleDamager
         elseif self == 'HEALER' then
-            return C.Assets.Texture.Healer
+            return C.Assets.Textures.RoleHealer
         end
     end
 
@@ -2226,7 +2233,7 @@ do
             or (self.SetTexture and self)
             or self.Icon
         if texture then
-            texture:SetTexture(C.Assets.Texture.LfgRole)
+            texture:SetTexture(C.Assets.Textures.RoleLfgIcons)
             texture:SetTexCoord(F.GetRoleTexCoord(role))
         end
         self.bg = F.CreateBDFrame(self)

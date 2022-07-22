@@ -258,7 +258,7 @@ function TOOLTIP:StatusBar_OnValueChanged(value)
     end
 
     if not self.text then
-        self.text = F.CreateFS(self, C.Assets.Font.Bold, 11, nil, '')
+        self.text = F.CreateFS(self, C.Assets.Fonts.Bold, 11, nil, '')
     end
 
     if value > 0 and max == 1 then
@@ -273,7 +273,7 @@ function TOOLTIP:ReskinStatusBar()
     self.StatusBar:ClearAllPoints()
     self.StatusBar:SetPoint('BOTTOMLEFT', _G.GameTooltip, 'TOPLEFT', 1, -4)
     self.StatusBar:SetPoint('BOTTOMRIGHT', _G.GameTooltip, 'TOPRIGHT', -1, -4)
-    self.StatusBar:SetStatusBarTexture(C.Assets.Texture.StatusbarNormal)
+    self.StatusBar:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
     self.StatusBar:SetHeight(3)
     F.CreateBDFrame(self.StatusBar)
 end
@@ -290,7 +290,7 @@ function TOOLTIP:GameTooltip_ShowStatusBar()
     if bar and not bar.styled then
         F.StripTextures(bar)
         F.CreateBDFrame(bar, 0.25)
-        bar:SetStatusBarTexture(C.Assets.Texture.StatusbarNormal)
+        bar:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
 
         bar.styled = true
     end
@@ -308,7 +308,7 @@ function TOOLTIP:GameTooltip_ShowProgressBar()
     if bar and not bar.styled then
         F.StripTextures(bar.Bar)
         F.CreateBDFrame(bar.Bar, 0.25)
-        bar.Bar:SetStatusBarTexture(C.Assets.Texture.StatusbarNormal)
+        bar.Bar:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
 
         bar.styled = true
     end

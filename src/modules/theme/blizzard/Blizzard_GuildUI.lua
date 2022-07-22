@@ -14,7 +14,7 @@ local function updateClassIcons()
         local bu = _G.GuildRosterContainer.buttons[i]
 
         if not bu.bg then
-            bu:SetHighlightTexture(C.Assets.Texture.Backdrop)
+            bu:SetHighlightTexture(C.Assets.Textures.Backdrop)
             bu:GetHighlightTexture():SetVertexColor(C.r, C.g, C.b, 0.2)
 
             bu.bg = F.CreateBDFrame(bu.icon)
@@ -149,7 +149,7 @@ C.Themes['Blizzard_GuildUI'] = function()
     _G.GuildLogFrame:SetPoint('TOPLEFT', _G.GuildFrame, 'TOPRIGHT', 3, 0)
     _G.GuildTextEditFrame:SetPoint('TOPLEFT', _G.GuildFrame, 'TOPRIGHT', 3, 0)
 
-    _G.GuildFactionBarProgress:SetTexture(C.Assets.Texture.StatusbarNormal)
+    _G.GuildFactionBarProgress:SetTexture(C.Assets.Textures.StatusbarNormal)
     _G.GuildFactionBarLeft:Hide()
     _G.GuildFactionBarMiddle:Hide()
     _G.GuildFactionBarRight:Hide()
@@ -229,7 +229,7 @@ C.Themes['Blizzard_GuildUI'] = function()
                     header.bg = F.CreateBDFrame(header, 0.25)
                     header.bg:SetAllPoints()
 
-                    header:SetHighlightTexture(C.Assets.Texture.Backdrop)
+                    header:SetHighlightTexture(C.Assets.Textures.Backdrop)
                     local hl = header:GetHighlightTexture()
                     hl:SetVertexColor(C.r, C.g, C.b, 0.25)
                     hl:SetInside()

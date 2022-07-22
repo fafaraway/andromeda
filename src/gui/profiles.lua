@@ -280,10 +280,10 @@ function GUI:CreateProfileFrame(parent)
         true
     )
 
-    F.CreateFS(parent, C.Assets.Font.Bold, 14, nil, L['Profile Management'], 'YELLOW', 'THICK', 'TOPLEFT', 20, -20)
+    F.CreateFS(parent, C.Assets.Fonts.Bold, 14, nil, L['Profile Management'], 'YELLOW', 'THICK', 'TOPLEFT', 20, -20)
     local description = F.CreateFS(
         parent,
-        C.Assets.Font.Regular,
+        C.Assets.Fonts.Regular,
         13,
         nil,
         L["You can manage your addon profile, please backup your settings before start. The default settings is based on your character, won't share within the same account. You can switch to the shared profile to share between your characters, and get rid of data transfer.|nData export and import only support the current profile."],

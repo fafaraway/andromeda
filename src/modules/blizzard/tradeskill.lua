@@ -88,7 +88,7 @@ function BLIZZARD:TradeTabs_Reskin()
     end
 
     for _, tab in pairs(tabList) do
-        tab:SetCheckedTexture(C.Assets.Button.Checked)
+        tab:SetCheckedTexture(C.Assets.Textures.ButtonChecked)
         tab:GetRegions():Hide()
         F.CreateBDFrame(tab)
         local texture = tab:GetNormalTexture()

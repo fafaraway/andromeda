@@ -32,13 +32,13 @@ local function ConstructFrame()
     sep:SetPoint('LEFT', icon, 'RIGHT', padding, 0)
     sep:SetColorTexture(0, 0, 0)
 
-    local title = F.CreateFS(f, C.Assets.Font.Bold, 14, nil, '', 'YELLOW', true)
+    local title = F.CreateFS(f, C.Assets.Fonts.Bold, 14, nil, '', 'YELLOW', true)
     title:SetPoint('TOPLEFT', sep, padding, -padding - 4)
     title:SetPoint('TOPRIGHT', f, -padding, -4)
     title:SetJustifyH('LEFT')
     NOTIFICATION.Title = title
 
-    local text = F.CreateFS(f, C.Assets.Font.Regular, 12, nil, '', nil, true)
+    local text = F.CreateFS(f, C.Assets.Fonts.Regular, 12, nil, '', nil, true)
     text:SetPoint('BOTTOMLEFT', sep, padding, padding + 4)
     text:SetPoint('BOTTOMRIGHT', f, -padding, 4)
     text:SetJustifyH('LEFT')
@@ -127,7 +127,7 @@ local function Display(name, message, clickFunc, texture)
     ShowBanner()
 
     if playSounds then
-        PlaySoundFile(C.Assets.Sound.Notification)
+        PlaySoundFile(C.Assets.Sounds.Notification)
     end
 end
 

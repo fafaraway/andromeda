@@ -95,7 +95,7 @@ function NAMEPLATE:CreateQuestIndicator(self)
     qicon:SetAtlas('adventureguide-microbutton-alert')
     qicon:Hide()
 
-    local count = F.CreateFS(self, C.Assets.Font.Condensed, 12, nil, '', nil, true)
+    local count = F.CreateFS(self, C.Assets.Fonts.Condensed, 12, nil, '', nil, true)
     count:SetPoint('LEFT', qicon, 'RIGHT', -3, 0)
     count:SetTextColor(0.6, 0.8, 1)
 

@@ -39,7 +39,7 @@ local function CreateExtraGUI(parent, name, title, bgFrame)
     F.SetBD(frame)
 
     if title then
-        F.CreateFS(frame, C.Assets.Font.Regular, 14, nil, title, 'YELLOW', true, 'TOPLEFT', 10, -25)
+        F.CreateFS(frame, C.Assets.Fonts.Regular, 14, nil, title, 'YELLOW', true, 'TOPLEFT', 10, -25)
     end
 
     if bgFrame then
@@ -68,7 +68,7 @@ function GUI:CreateScroll(parent, width, height, text, noBg)
     end
 
     if text then
-        F.CreateFS(scroll, C.Assets.Font.Regular, 12, true, text, nil, true, 'TOPLEFT', 5, 20)
+        F.CreateFS(scroll, C.Assets.Fonts.Regular, 12, true, text, nil, true, 'TOPLEFT', 5, 20)
     end
 
     if not noBg then
@@ -118,7 +118,7 @@ local function CreateBars(parent, spellID, table1, table2, table3)
         SortBars(table1)
     end)
 
-    local name = F.CreateFS(bar, C.Assets.Font.Regular, 12, nil, spellName, nil, true, 'LEFT', 30, 0)
+    local name = F.CreateFS(bar, C.Assets.Fonts.Regular, 12, nil, spellName, nil, true, 'LEFT', 30, 0)
     name:SetWidth(120)
     name:SetJustifyH('LEFT')
 
@@ -156,7 +156,7 @@ local function createBars(parent, spellID, newTable, tableName)
         SortBars(newTable)
     end)
 
-    local name = F.CreateFS(bar, C.Assets.Font.Regular, 12, nil, spellName, nil, true, 'LEFT', 30, 0)
+    local name = F.CreateFS(bar, C.Assets.Fonts.Regular, 12, nil, spellName, nil, true, 'LEFT', 30, 0)
     name:SetWidth(160)
     name:SetJustifyH('LEFT')
 
@@ -201,7 +201,7 @@ local function Label_OnEnter(self)
 end
 
 local function CreateLabel(parent, text, tip)
-    local font = C.Assets.Font.Regular
+    local font = C.Assets.Fonts.Regular
     local label = F.CreateFS(parent, font, 11, nil, text, nil, true)
     label:SetPoint('BOTTOM', parent, 'TOP', 0, 4)
     if not tip then
@@ -262,7 +262,7 @@ function GUI:CreateBarWidgets(parent, texture)
     close:SetPoint('RIGHT', -5, 0)
     close.Icon = close:CreateTexture(nil, 'ARTWORK')
     close.Icon:SetAllPoints()
-    close.Icon:SetTexture(C.Assets.Texture.Close)
+    close.Icon:SetTexture(C.Assets.Textures.Close)
     close.Icon:SetVertexColor(1, 0, 0)
     close:SetHighlightTexture(close.Icon:GetTexture())
 
@@ -274,7 +274,7 @@ local function CreateGroupTitle(parent, text, offset)
         return
     end
 
-    F.CreateFS(parent.child, C.Assets.Font.Regular, 13, nil, text, 'YELLOW', true, 'TOP', 0, offset)
+    F.CreateFS(parent.child, C.Assets.Fonts.Regular, 13, nil, text, 'YELLOW', true, 'TOP', 0, offset)
     local line = F.SetGradient(parent.child, 'H', 0.5, 0.5, 0.5, 0.25, 0.25, 200, C.MULT)
     line:SetPoint('TOPLEFT', 10, offset - 20)
 
@@ -296,7 +296,7 @@ local function CreateCheckbox(parent, offset, key, value, text, func, tip)
     box:SetSize(18, 18)
     box:SetHitRectInsets(-5, -5, -5, -5)
     box:SetPoint('TOPLEFT', 10, offset)
-    box.label = F.CreateFS(box, C.Assets.Font.Regular, 12, nil, text, nil, true)
+    box.label = F.CreateFS(box, C.Assets.Fonts.Regular, 12, nil, text, nil, true)
     box.label:SetPoint('LEFT', box, 'RIGHT', 4, 0)
 
     box:SetChecked(C.DB[key][value])
@@ -987,7 +987,7 @@ function GUI:SetupNameplateAuraFilter(parent)
             SortBars(frameData[index].barList)
         end)
 
-        local spellName = F.CreateFS(bar, C.Assets.Font.Regular, 12, nil, name, nil, true, 'LEFT', 30, 0)
+        local spellName = F.CreateFS(bar, C.Assets.Fonts.Regular, 12, nil, name, nil, true, 'LEFT', 30, 0)
         spellName:SetWidth(180)
         spellName:SetJustifyH('LEFT')
         if index == 2 then
@@ -1035,7 +1035,7 @@ function GUI:SetupNameplateAuraFilter(parent)
     }
 
     for index, value in ipairs(frameData) do
-        F.CreateFS(panel, C.Assets.Font.Regular, 14, nil, value.text, 'YELLOW', true, 'TOPLEFT', 20, value.offset)
+        F.CreateFS(panel, C.Assets.Fonts.Regular, 14, nil, value.text, 'YELLOW', true, 'TOPLEFT', 20, value.offset)
         local frame = CreateFrame('Frame', nil, panel, 'BackdropTemplate')
         frame:SetSize(240, 250)
         frame:SetPoint('TOPLEFT', 10, value.offset - 25)
@@ -1406,7 +1406,7 @@ function GUI:SetupNameplateUnitFilter(parent)
             SortBars(barTable)
         end)
 
-        local name = F.CreateFS(bar, C.Assets.Font.Regular, 12, nil, text, nil, true, 'LEFT', 30, 0)
+        local name = F.CreateFS(bar, C.Assets.Fonts.Regular, 12, nil, text, nil, true, 'LEFT', 30, 0)
         name:SetWidth(180)
         name:SetJustifyH('LEFT')
         if isNew then
@@ -1496,7 +1496,7 @@ function GUI:SetupNameplateColorByDot(parent)
             SortBars(barTable)
         end)
 
-        local name = F.CreateFS(bar, C.Assets.Font.Regular, 12, nil, spellName, nil, true, 'LEFT', 30, 0)
+        local name = F.CreateFS(bar, C.Assets.Fonts.Regular, 12, nil, spellName, nil, true, 'LEFT', 30, 0)
         name:SetWidth(180)
         name:SetJustifyH('LEFT')
         if isNew then
@@ -2426,7 +2426,7 @@ function GUI:SetupPartyWatcher(parent)
             SortBars(barTable)
         end)
 
-        local font = C.Assets.Font.Regular
+        local font = C.Assets.Fonts.Regular
         local name = F.CreateFS(bar, font, 12, nil, spellName, nil, true, 'LEFT', 30, 0)
         name:SetWidth(120)
         name:SetJustifyH('LEFT')
@@ -2765,7 +2765,7 @@ do
                 setupBars(bar.instName)
             end)
 
-            local spellName = F.CreateFS(bar, C.Assets.Font.Regular, 11, nil, '', nil, true, 'LEFT', 26, 0)
+            local spellName = F.CreateFS(bar, C.Assets.Fonts.Regular, 11, nil, '', nil, true, 'LEFT', 26, 0)
             spellName:SetWidth(120)
             spellName:SetJustifyH('LEFT')
             bar.spellName = spellName

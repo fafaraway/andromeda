@@ -86,7 +86,7 @@ function UNITFRAME.PostCreateIcon(element, button)
     button.HL:SetColorTexture(1, 1, 1, 0.25)
     button.HL:SetAllPoints()
 
-    local font = C.Assets.Font.Roadway
+    local font = C.Assets.Fonts.HalfHeight
     local fontSize = max((element.width or element.size) * 0.4, 12)
     button.count = F.CreateFS(button, font, fontSize, true, nil, nil, true)
     button.count:ClearAllPoints()
@@ -190,7 +190,7 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
     end
 
     local fontSize = max((element.width or element.size) * 0.4, 12)
-    local font = C.Assets.Font.Roadway
+    local font = C.Assets.Fonts.HalfHeight
     if button.count then
         button.count:SetFont(font, fontSize, 'OUTLINE')
     end

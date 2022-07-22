@@ -4,29 +4,29 @@ local BLIZZARD = F:GetModule('Blizzard')
 local WOW_PROJECT_CLASSIC_TBC = 5
 
 local gameIcons = {
-    [_G.BNET_CLIENT_WOW] = C.Assets.Texture.ClientWoWR,
-    [_G.BNET_CLIENT_WOW .. 'C'] = C.Assets.Texture.ClientWoWC,
-    [_G.BNET_CLIENT_WOW .. 'C_TBC'] = C.Assets.Texture.ClientWoWTBC,
-    [_G.BNET_CLIENT_D2] = C.Assets.Texture.ClientD2,
-    [_G.BNET_CLIENT_D3] = C.Assets.Texture.ClientD3,
-    [_G.BNET_CLIENT_WTCG] = C.Assets.Texture.ClientHS,
-    [_G.BNET_CLIENT_SC] = C.Assets.Texture.ClientSC,
-    [_G.BNET_CLIENT_SC2] = C.Assets.Texture.ClientSC2,
-    [_G.BNET_CLIENT_APP] = C.Assets.Texture.ClientApp,
-    ['BSAp'] = C.Assets.Texture.ClientMobile,
-    [_G.BNET_CLIENT_HEROES] = C.Assets.Texture.ClientHotS,
-    [_G.BNET_CLIENT_OVERWATCH] = C.Assets.Texture.ClientOW,
-    [_G.BNET_CLIENT_COD] = C.Assets.Texture.ClientCoD,
-    [_G.BNET_CLIENT_COD_BOCW] = C.Assets.Texture.ClientCoDCW,
-    [_G.BNET_CLIENT_COD_MW] = C.Assets.Texture.ClientCoDMW,
-    [_G.BNET_CLIENT_COD_MW2] = C.Assets.Texture.ClientCoDMW2,
-    [_G.BNET_CLIENT_WC3] = C.Assets.Texture.ClientWC3,
-    [_G.BNET_CLIENT_CLNT] = C.Assets.Texture.ClientCLNT,
-    [_G.BNET_CLIENT_CRASH4] = C.Assets.Texture.ClientCrash4,
-    [_G.BNET_CLIENT_ARCADE] = C.Assets.Texture.ClientArcade,
-    [_G.BNET_CLIENT_COD_VANGUARD] = C.Assets.Texture.ClientCoDVG,
-    [_G.BNET_CLIENT_DI] = C.Assets.Texture.ClientDI,
-    [_G.BNET_CLIENT_ARCLIGHT] = C.Assets.Texture.ClientArclight,
+    [_G.BNET_CLIENT_WOW] = C.Assets.Textures.ClientWoWR,
+    [_G.BNET_CLIENT_WOW .. 'C'] = C.Assets.Textures.ClientWoWC,
+    [_G.BNET_CLIENT_WOW .. 'C_TBC'] = C.Assets.Textures.ClientWoWTBC,
+    [_G.BNET_CLIENT_D2] = C.Assets.Textures.ClientD2,
+    [_G.BNET_CLIENT_D3] = C.Assets.Textures.ClientD3,
+    [_G.BNET_CLIENT_WTCG] = C.Assets.Textures.ClientHS,
+    [_G.BNET_CLIENT_SC] = C.Assets.Textures.ClientSC,
+    [_G.BNET_CLIENT_SC2] = C.Assets.Textures.ClientSC2,
+    [_G.BNET_CLIENT_APP] = C.Assets.Textures.ClientApp,
+    ['BSAp'] = C.Assets.Textures.ClientMobile,
+    [_G.BNET_CLIENT_HEROES] = C.Assets.Textures.ClientHotS,
+    [_G.BNET_CLIENT_OVERWATCH] = C.Assets.Textures.ClientOW,
+    [_G.BNET_CLIENT_COD] = C.Assets.Textures.ClientCoD,
+    [_G.BNET_CLIENT_COD_BOCW] = C.Assets.Textures.ClientCoDCW,
+    [_G.BNET_CLIENT_COD_MW] = C.Assets.Textures.ClientCoDMW,
+    [_G.BNET_CLIENT_COD_MW2] = C.Assets.Textures.ClientCoDMW2,
+    [_G.BNET_CLIENT_WC3] = C.Assets.Textures.ClientWC3,
+    [_G.BNET_CLIENT_CLNT] = C.Assets.Textures.ClientCLNT,
+    [_G.BNET_CLIENT_CRASH4] = C.Assets.Textures.ClientCrash4,
+    [_G.BNET_CLIENT_ARCADE] = C.Assets.Textures.ClientArcade,
+    [_G.BNET_CLIENT_COD_VANGUARD] = C.Assets.Textures.ClientCoDVG,
+    [_G.BNET_CLIENT_DI] = C.Assets.Textures.ClientDI,
+    [_G.BNET_CLIENT_ARCLIGHT] = C.Assets.Textures.ClientArclight,
 }
 
 local statusIcons = {
@@ -229,8 +229,8 @@ local function UpdateFriendButton(button)
         end
     end
 
-    F:SetFS(button.name, C.Assets.Font.Bold, 13, nil, nil, nil, true)
-    F:SetFS(button.info, C.Assets.Font.Condensed, 12, nil, nil, nil, true)
+    F:SetFS(button.name, C.Assets.Fonts.Bold, 13, nil, nil, nil, true)
+    F:SetFS(button.info, C.Assets.Fonts.Condensed, 12, nil, nil, nil, true)
 
     if button.Favorite:IsShown() then
         button.Favorite:ClearAllPoints()

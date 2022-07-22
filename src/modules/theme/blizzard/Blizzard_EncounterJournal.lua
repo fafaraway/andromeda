@@ -230,7 +230,7 @@ C.Themes['Blizzard_EncounterJournal'] = function()
             bu.icon.SetTexCoord = nop
             local bg = F.CreateBDFrame(bu, 0.25)
             bg:SetInside()
-            bu:SetHighlightTexture(C.Assets.Texture.Backdrop)
+            bu:SetHighlightTexture(C.Assets.Textures.Backdrop)
             local hl = bu:GetHighlightTexture()
             hl:SetVertexColor(r, g, b, 0.25)
             hl:SetInside(bg)

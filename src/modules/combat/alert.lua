@@ -27,7 +27,7 @@ function COMBAT:CreateAnimationFrame()
         'HIGH',
         3,
         true,
-        C.Assets.Texture.Shield,
+        C.Assets.Textures.CombatShield,
         false,
         { 1, 1, 1 }
     )
@@ -62,7 +62,7 @@ function COMBAT:CreateAnimationFrame()
         'HIGH',
         2,
         true,
-        C.Assets.Texture.Sword,
+        C.Assets.Textures.CombatSword,
         false,
         { 1, 1, 1 }
     )
@@ -95,7 +95,7 @@ function COMBAT:CreateAnimationFrame()
     self.animationFrame.swordLeftToRight = frame
 
     -- 剑 ↖
-    frame = F.CreateAnimationFrame(nil, self.animationFrame, 'HIGH', 2, true, C.Assets.Texture.Sword, true, { 1, 1, 1 })
+    frame = F.CreateAnimationFrame(nil, self.animationFrame, 'HIGH', 2, true, C.Assets.Textures.CombatSword, true, { 1, 1, 1 })
     anime = F.CreateAnimationGroup(frame, 'enter') -- 进入战斗
     F.AddTranslation(anime, 'moveToCenter')
     F.AddFadeIn(anime, 'fadeIn')
@@ -206,7 +206,7 @@ function COMBAT:UpdateTextFrame()
     local f = self.textFrame
 
     f:Hide()
-    f.text:SetFont(C.Assets.Font.Combat, 26)
+    f.text:SetFont(C.Assets.Fonts.Combat, 26)
     f.text:SetText(L['Enter Combat'])
     f:SetSize(f.text:GetStringWidth(), f.text:GetStringHeight())
 
@@ -264,7 +264,7 @@ function COMBAT:ShowAlert(alertType)
         a.swordLeftToRight.enter:Restart()
         a.swordRightToLeft.enter:Restart()
 
-        F:SetFS(t.text, C.Assets.Font.Combat, 26, nil, L['Enter Combat'], 'RED', 'THICK')
+        F:SetFS(t.text, C.Assets.Fonts.Combat, 26, nil, L['Enter Combat'], 'RED', 'THICK')
         t:SetSize(t.text:GetStringWidth(), t.text:GetStringHeight())
         t:SetPoint('TOP', self.animationFrame or _G.UIParent, 'BOTTOM', 0, textOffsetEnter)
         t:Show()
@@ -280,7 +280,7 @@ function COMBAT:ShowAlert(alertType)
         a.swordLeftToRight.leave:Restart()
         a.swordRightToLeft.leave:Restart()
 
-        F:SetFS(t.text, C.Assets.Font.Combat, 26, nil, L['Leave Combat'], 'GREEN', 'THICK')
+        F:SetFS(t.text, C.Assets.Fonts.Combat, 26, nil, L['Leave Combat'], 'GREEN', 'THICK')
         t:SetSize(t.text:GetStringWidth(), t.text:GetStringHeight())
         t:SetPoint('TOP', self.animationFrame or _G.UIParent, 'BOTTOM', 0, textOffsetLeave)
         t:Show()

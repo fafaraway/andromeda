@@ -69,9 +69,9 @@ function TOOLTIP:SetupFonts()
     local textSize = 14
     local headerSize = 16
 
-    RestyleFont(_G.GameTooltipHeaderText, C.Assets.Font.Bold, headerSize)
-    RestyleFont(_G.GameTooltipText, C.Assets.Font.Regular, textSize)
-    RestyleFont(_G.GameTooltipTextSmall, C.Assets.Font.Regular, textSize)
+    RestyleFont(_G.GameTooltipHeaderText, C.Assets.Fonts.Bold, headerSize)
+    RestyleFont(_G.GameTooltipText, C.Assets.Fonts.Regular, textSize)
+    RestyleFont(_G.GameTooltipTextSmall, C.Assets.Fonts.Regular, textSize)
 
     if not _G.GameTooltip.hasMoney then
         _G.SetTooltipMoney(_G.GameTooltip, 1, nil, '', '')
@@ -81,8 +81,8 @@ function TOOLTIP:SetupFonts()
 
     if _G.GameTooltip.hasMoney then
         for i = 1, _G.GameTooltip.numMoneyFrames do
-            RestyleFont(_G['GameTooltipMoneyFrame' .. i .. 'PrefixText'], C.Assets.Font.Regular, textSize)
-            RestyleFont(_G['GameTooltipMoneyFrame' .. i .. 'SuffixText'], C.Assets.Font.Regular, textSize)
+            RestyleFont(_G['GameTooltipMoneyFrame' .. i .. 'PrefixText'], C.Assets.Fonts.Regular, textSize)
+            RestyleFont(_G['GameTooltipMoneyFrame' .. i .. 'SuffixText'], C.Assets.Fonts.Regular, textSize)
         end
     end
 
@@ -90,7 +90,7 @@ function TOOLTIP:SetupFonts()
         for i = 1, tt:GetNumRegions() do
             local region = select(i, tt:GetRegions())
             if region:IsObjectType('FontString') then
-                RestyleFont(region, C.Assets.Font.Regular, textSize)
+                RestyleFont(region, C.Assets.Fonts.Regular, textSize)
             end
         end
     end

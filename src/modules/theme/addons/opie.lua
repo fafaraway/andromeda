@@ -1,9 +1,5 @@
 local F, C = unpack(select(2, ...))
 
-local maskTex = C.ASSET_PATH .. 'textures\\opie\\mask'
-local borderTex = C.ASSET_PATH .. 'textures\\opie\\border'
-local hlTex = C.ASSET_PATH .. 'textures\\opie\\highlight'
-
 local methods = {
     SetOverlayIcon = nop,
     SetOverlayIconVertexColor = nop,
@@ -44,17 +40,17 @@ local function constructor(name, parent, size)
     button:EnableMouse(false)
 
     local icon = button.icon
-    icon:SetMask(maskTex)
+    icon:SetMask(C.Assets.Textures.ButtonCircleMask)
 
     local texture = button.NormalTexture
     texture:ClearAllPoints()
     texture:SetPoint('TOPLEFT', icon, -6, 6)
     texture:SetPoint('BOTTOMRIGHT', icon, 6, -6)
-    texture:SetTexture(borderTex)
+    texture:SetTexture(C.Assets.Textures.ButtonCircleBorder)
 
     local highlight = button:CreateTexture(nil, 'OVERLAY')
     highlight:SetAllPoints()
-    highlight:SetTexture(hlTex)
+    highlight:SetTexture(C.Assets.Textures.ButtonCircleHighlight)
     highlight:SetVertexColor(1, 1, 1, 0.3)
     button.highlight = highlight
 

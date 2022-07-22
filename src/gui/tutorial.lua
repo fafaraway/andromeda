@@ -167,7 +167,7 @@ function TUTORIAL:HelloWorld()
 
     local outline = _G.ANDROMEDA_ADB.FontOutline
     f.logo = F.CreateFS(f, C.ASSET_PATH .. 'fonts\\header.ttf', 22, outline, C.COLORFUL_ADDON_TITLE, nil, outline or 'THICK', 'TOP', 0, -4)
-    f.desc = F.CreateFS(f, C.Assets.Font.Regular, 10, outline, 'installation', { 0.7, 0.7, 0.7 }, outline or 'THICK', 'TOP', 0, -30)
+    f.desc = F.CreateFS(f, C.Assets.Fonts.Regular, 10, outline, 'installation', { 0.7, 0.7, 0.7 }, outline or 'THICK', 'TOP', 0, -30)
 
     GUI:CreateGradientLine(f, 140, -70, -26, 70, -26)
 
@@ -176,12 +176,12 @@ function TUTORIAL:HelloWorld()
     f.body:SetPoint('TOPLEFT', 10, -50)
     f.body.__bg = F.CreateBDFrame(f.body, 0.25)
 
-    local headerText = F.CreateFS(f.body, C.Assets.Font.Bold, 18, outline, nil, { 242 / 255, 211 / 255, 104 / 255 }, outline or 'THICK', 'TOPLEFT', 20, -16)
+    local headerText = F.CreateFS(f.body, C.Assets.Fonts.Bold, 18, outline, nil, { 242 / 255, 211 / 255, 104 / 255 }, outline or 'THICK', 'TOPLEFT', 20, -16)
     headerText:SetWidth(340)
 
     GUI:CreateGradientLine(f.body, 140, -70, -40, 70, -40)
 
-    local bodyText = F.CreateFS(f.body, C.Assets.Font.Regular, 13, outline, nil, { 0.7, 0.7, 0.7 }, outline or 'THICK', 'TOPLEFT', 20, -60)
+    local bodyText = F.CreateFS(f.body, C.Assets.Fonts.Regular, 13, outline, nil, { 0.7, 0.7, 0.7 }, outline or 'THICK', 'TOPLEFT', 20, -60)
     bodyText:SetJustifyH('LEFT')
     bodyText:SetWordWrap(true)
     bodyText:SetWidth(340)
@@ -189,7 +189,7 @@ function TUTORIAL:HelloWorld()
     local pBar = CreateFrame('StatusBar', nil, f.body)
     pBar:SetPoint('BOTTOM', f.body, 'BOTTOM', 0, 10)
     pBar:SetSize(340, 20)
-    pBar:SetStatusBarTexture(C.Assets.Texture.StatusbarNormal)
+    pBar:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
     pBar:Hide()
     F:SmoothBar(pBar)
 
@@ -199,7 +199,7 @@ function TUTORIAL:HelloWorld()
         pBar.shadow:SetBackdropBorderColor(C.r, C.g, C.b, 0.25)
     end
 
-    local pBarText = F.CreateFS(pBar, C.Assets.Font.Regular, 11, outline, '', nil, outline or 'THICK', 'CENTER', 0, 0)
+    local pBarText = F.CreateFS(pBar, C.Assets.Fonts.Regular, 11, outline, '', nil, outline or 'THICK', 'CENTER', 0, 0)
 
     local lBtn = CreateFrame('Button', '', f, 'UIPanelButtonTemplate')
     lBtn:SetPoint('BOTTOM', -42, 10)

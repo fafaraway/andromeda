@@ -18,7 +18,7 @@ C.Themes['Blizzard_Calendar'] = function()
         local dayButtonName = 'CalendarDayButton' .. i
         local bu = _G[dayButtonName]
         bu:DisableDrawLayer('BACKGROUND')
-        bu:SetHighlightTexture(C.Assets.Texture.Backdrop)
+        bu:SetHighlightTexture(C.Assets.Textures.Backdrop)
         local bg = F.CreateBDFrame(bu, 0.25)
         bg:SetInside()
         local hl = bu:GetHighlightTexture()
@@ -135,7 +135,7 @@ C.Themes['Blizzard_Calendar'] = function()
     local line = _G.CalendarMassInviteFrame:CreateTexture(nil, 'BACKGROUND')
     line:SetSize(240, C.MULT)
     line:SetPoint('TOP', _G.CalendarMassInviteFrame, 'TOP', 0, -150)
-    line:SetTexture(C.Assets.Texture.Backdrop)
+    line:SetTexture(C.Assets.Textures.Backdrop)
     line:SetVertexColor(0, 0, 0)
 
     _G.CalendarMassInviteFrame:ClearAllPoints()

@@ -152,7 +152,7 @@ function GUI:CreateDataFrame()
     F.SetBD(dataFrame)
     dataFrame.Header = F.CreateFS(
         dataFrame,
-        C.Assets.Font.Regular,
+        C.Assets.Fonts.Regular,
         14,
         nil,
         L['Export settings'],
@@ -175,7 +175,7 @@ function GUI:CreateDataFrame()
     editBox:EnableMouse(true)
     editBox:SetAutoFocus(true)
     editBox:SetTextInsets(5, 5, 5, 5)
-    editBox:SetFont(C.Assets.Font.Regular, 12)
+    editBox:SetFont(C.Assets.Fonts.Regular, 12)
     editBox:SetWidth(scrollArea:GetWidth())
     editBox:SetHeight(scrollArea:GetHeight())
     editBox:SetScript('OnEscapePressed', function()

@@ -279,7 +279,7 @@ function ACTIONBAR:Bind_CreateDialog()
     frame:SetPoint('TOP', 0, -135)
     F.SetBD(frame)
 
-    local font = C.Assets.Font.Bold
+    local font = C.Assets.Fonts.Bold
     F.CreateFS(frame, font, 14, nil, _G.QUICK_KEYBIND_MODE, false, true, 'TOP', 0, -10)
 
     local helpInfo = F.CreateHelpInfo(

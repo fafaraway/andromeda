@@ -72,7 +72,7 @@ tinsert(C.BlizzThemes, function()
         local button = _G['MailItem' .. i .. 'Button']
         F.StripTextures(item)
         F.StripTextures(button)
-        button:SetCheckedTexture(C.Assets.Button.Checked)
+        button:SetCheckedTexture(C.Assets.Textures.ButtonChecked)
         button:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
         button.Icon:SetTexCoord(texL, texR, texT, texB)
         button.IconBorder:SetAlpha(0)

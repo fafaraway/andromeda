@@ -56,7 +56,7 @@ C.Themes['Blizzard_ArchaeologyUI'] = function()
     _G.ArchaeologyFrameSummaryPageNextPageButtonIcon:Hide()
 
     F.StripTextures(_G.ArchaeologyFrameRankBar)
-    _G.ArchaeologyFrameRankBarBar:SetTexture(C.Assets.Texture.Backdrop)
+    _G.ArchaeologyFrameRankBarBar:SetTexture(C.Assets.Textures.Backdrop)
     _G.ArchaeologyFrameRankBarBar:SetGradient('VERTICAL', 0, 0.65, 0, 0, 0.75, 0)
     _G.ArchaeologyFrameRankBar:SetHeight(14)
     F.CreateBDFrame(_G.ArchaeologyFrameRankBar, 0.25)
@@ -65,13 +65,13 @@ C.Themes['Blizzard_ArchaeologyUI'] = function()
     F.StripTextures(_G.ArchaeologyFrameArtifactPageSolveFrameStatusBar)
     F.CreateBDFrame(_G.ArchaeologyFrameArtifactPageSolveFrameStatusBar, 0.25)
     local barTexture = _G.ArchaeologyFrameArtifactPageSolveFrameStatusBar:GetStatusBarTexture()
-    barTexture:SetTexture(C.Assets.Texture.Backdrop)
+    barTexture:SetTexture(C.Assets.Textures.Backdrop)
     barTexture:SetGradient('VERTICAL', 0.65, 0.25, 0, 0.75, 0.35, 0.1)
 
     -- ArcheologyDigsiteProgressBar
     F.StripTextures(_G.ArcheologyDigsiteProgressBar)
     F.SetBD(_G.ArcheologyDigsiteProgressBar.FillBar)
-    _G.ArcheologyDigsiteProgressBar.FillBar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
+    _G.ArcheologyDigsiteProgressBar.FillBar:SetStatusBarTexture(C.Assets.Textures.Backdrop)
     _G.ArcheologyDigsiteProgressBar.FillBar:SetStatusBarColor(0.7, 0.3, 0.2)
 
     local ticks = {}

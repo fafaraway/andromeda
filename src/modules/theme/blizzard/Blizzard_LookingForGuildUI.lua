@@ -55,7 +55,7 @@ C.Themes['Blizzard_LookingForGuildUI'] = function()
             bu:SetHighlightTexture('')
 
             -- my client crashes if I put this in a var? :x
-            bu:GetRegions():SetTexture(C.Assets.Texture.Backdrop)
+            bu:GetRegions():SetTexture(C.Assets.Textures.Backdrop)
             bu:GetRegions():SetVertexColor(r, g, b, 0.2)
             bu:GetRegions():SetInside()
 

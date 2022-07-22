@@ -23,7 +23,7 @@ local atlasToRole = {
 local function ReplaceApplicantRoles(texture, atlas)
     local role = atlasToRole[atlas]
     if role then
-        texture:SetTexture(C.Assets.Texture.LfgRole)
+        texture:SetTexture(C.Assets.Textures.RoleLfgIcons)
         texture:SetTexCoord(F.GetRoleTexCoord(role))
     end
 end
@@ -109,7 +109,7 @@ tinsert(C.BlizzThemes, function()
             local bg = F.CreateBDFrame(result, 0.5)
             local hl = result:CreateTexture(nil, 'BACKGROUND')
             hl:SetInside(bg)
-            hl:SetTexture(C.Assets.Texture.Backdrop)
+            hl:SetTexture(C.Assets.Textures.Backdrop)
             hl:SetVertexColor(r, g, b, 0.25)
             hl:Hide()
             result.hl = hl
@@ -137,14 +137,14 @@ tinsert(C.BlizzThemes, function()
         local header = applicationViewer[headerName]
 
         F.StripTextures(header)
-        header.Label:SetFont(C.Assets.Font.Regular, 14, 'OUTLINE')
+        header.Label:SetFont(C.Assets.Fonts.Regular, 14, 'OUTLINE')
         header.Label:SetShadowColor(0, 0, 0, 0)
         header:SetHighlightTexture('')
 
         local bg = F.CreateBDFrame(header, 0.25)
         local hl = header:CreateTexture(nil, 'BACKGROUND')
         hl:SetInside(bg)
-        hl:SetTexture(C.Assets.Texture.Backdrop)
+        hl:SetTexture(C.Assets.Textures.Backdrop)
         hl:SetVertexColor(r, g, b, 0.25)
         hl:Hide()
         header.hl = hl
@@ -282,7 +282,7 @@ tinsert(C.BlizzThemes, function()
     F.Reskin(LFGListInviteDialog.AcknowledgeButton)
 
     local roleIcon = LFGListInviteDialog.RoleIcon
-    roleIcon:SetTexture(C.Assets.Texture.LfgRole)
+    roleIcon:SetTexture(C.Assets.Textures.RoleLfgIcons)
     F.CreateBDFrame(roleIcon)
 
     hooksecurefunc('LFGListInviteDialog_Show', function(self, resultID)

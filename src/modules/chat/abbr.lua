@@ -32,7 +32,7 @@ function CHAT:UpdateChannelNames(text, ...)
     -- Dev logo
     local unitName = strmatch(text, '|Hplayer:([^|:]+)')
     if unitName and C.DevsList[unitName] then
-        text = gsub(text, '(|Hplayer.+)', '|T' .. C.Assets.Texture.LogoChat .. ':12:12|t %1')
+        text = gsub(text, '(|Hplayer.+)', '|T' .. C.Assets.Textures.LogoChat .. ':12:12|t %1')
     end
 
     -- Remove realm and bracket

@@ -23,13 +23,13 @@ tinsert(C.BlizzThemes, function()
 
     do
         local line1 = LootHistoryFrame.ResizeButton:CreateTexture()
-        line1:SetTexture(C.Assets.Texture.Backdrop)
+        line1:SetTexture(C.Assets.Textures.Backdrop)
         line1:SetVertexColor(0.7, 0.7, 0.7)
         line1:SetSize(30, 1)
         line1:SetPoint('TOP')
 
         local line2 = LootHistoryFrame.ResizeButton:CreateTexture()
-        line2:SetTexture(C.Assets.Texture.Backdrop)
+        line2:SetTexture(C.Assets.Textures.Backdrop)
         line2:SetVertexColor(0.7, 0.7, 0.7)
         line2:SetSize(30, 1)
         line2:SetPoint('TOP', 0, -3)

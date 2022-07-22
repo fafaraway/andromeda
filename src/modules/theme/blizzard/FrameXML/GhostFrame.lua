@@ -14,6 +14,6 @@ tinsert(C.BlizzThemes, function()
 
     local bg = F.SetBD(_G.GhostFrame, 0)
     F.CreateGradient(bg)
-    _G.GhostFrame:SetHighlightTexture(C.Assets.Texture.Backdrop)
+    _G.GhostFrame:SetHighlightTexture(C.Assets.Textures.Backdrop)
     _G.GhostFrame:GetHighlightTexture():SetVertexColor(r, g, b, 0.25)
 end)

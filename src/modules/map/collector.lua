@@ -107,7 +107,7 @@ local function KillAddOnIcon()
             end
 
             if child:IsObjectType('Button') then
-                child:SetHighlightTexture(C.Assets.Texture.Backdrop) -- prevent nil function
+                child:SetHighlightTexture(C.Assets.Textures.Backdrop) -- prevent nil function
                 child:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
             elseif child:IsObjectType('Frame') then
                 child.highlight = child:CreateTexture(nil, 'HIGHLIGHT')
@@ -213,8 +213,8 @@ function MAP:AddOnIconCollector()
     bu:RegisterForClicks('LeftButtonUp', 'RightButtonUp')
     bu.Icon = bu:CreateTexture(nil, 'ARTWORK')
     bu.Icon:SetAllPoints()
-    bu.Icon:SetTexture(C.Assets.Texture.Collector)
-    bu:SetHighlightTexture(C.Assets.Texture.Collector)
+    bu.Icon:SetTexture(C.Assets.Textures.MinimapTray)
+    bu:SetHighlightTexture(C.Assets.Textures.MinimapTray)
     bu.title = C.INFO_COLOR .. L['AddOns Icon Collector']
     F.AddTooltip(bu, 'ANCHOR_LEFT')
     UpdateCollectorTip(bu)

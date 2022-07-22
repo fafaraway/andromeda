@@ -151,8 +151,8 @@ function Talentless:CreateSpecButtons()
         -- Border:SetTexture([[Interface\Buttons\UI-Quickslot2]])
 
         -- Button:SetNormalTexture(Border)
-        Button:SetPushedTexture(C.Assets.Button.Pushed)
-        Button:SetCheckedTexture(C.Assets.Button.Checked)
+        Button:SetPushedTexture(C.Assets.Textures.ButtonPushed)
+        Button:SetCheckedTexture(C.Assets.Textures.ButtonChecked)
         -- Button:SetHighlightTexture([[Interface\Buttons\ButtonHilight-Square]])
 
         local Set = CreateFrame('CheckButton', '$parentSetButton', Button)

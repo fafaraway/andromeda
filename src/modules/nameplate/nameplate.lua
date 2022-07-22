@@ -351,7 +351,7 @@ function NAMEPLATE:CreateThreatIndicator(self)
     threat:SetPoint('BOTTOMLEFT', frame, 'TOPLEFT')
     threat:SetPoint('BOTTOMRIGHT', frame, 'TOPRIGHT')
     threat:SetHeight(6)
-    threat:SetTexture(C.Assets.Texture.Glow)
+    threat:SetTexture(C.Assets.Textures.Glow)
     threat:Hide()
 
     self.ThreatIndicator = threat
@@ -444,7 +444,7 @@ end
 
 -- Spiteful indicator
 function NAMEPLATE:CreateSpitefulIndicator(self)
-    local font = C.Assets.Font.Condensed
+    local font = C.Assets.Fonts.Condensed
     local outline = _G.ANDROMEDA_ADB.FontOutline
 
     local tarName = F.CreateFS(self, font, 12, outline, nil, nil, outline or 'THICK')
@@ -479,7 +479,7 @@ end
 function NAMEPLATE:CreateOverlayTexture(self)
     local overlay = self.Health:CreateTexture(nil, 'OVERLAY')
     overlay:SetAllPoints()
-    overlay:SetTexture(C.Assets.Texture.StatusbarStripesThick)
+    overlay:SetTexture(C.Assets.Textures.StatusbarStripesThick)
     overlay:SetVertexColor(0, 0, 0, 0.4)
     overlay:Hide()
 

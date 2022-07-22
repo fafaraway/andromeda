@@ -156,7 +156,7 @@ local function ReskinImmersion()
     local reputationBar = talkBox.ReputationBar
     reputationBar.icon:SetPoint('TOPLEFT', -30, 6)
     F.StripTextures(reputationBar)
-    reputationBar:SetStatusBarTexture(C.Assets.Texture.StatusbarNormal)
+    reputationBar:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
     F.CreateBDFrame(reputationBar, 0.25)
 
     for i = 1, 4 do

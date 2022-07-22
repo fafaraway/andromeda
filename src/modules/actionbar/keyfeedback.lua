@@ -357,7 +357,7 @@ function keyFeedback:CreateFeedbackButton(autoKeyup)
         pushedCircle:SetSize(size, size)
         pushedCircle:SetPoint('CENTER', 0, 0)
         local pctex = pushedCircle:CreateTexture(nil, 'OVERLAY')
-        pctex:SetTexture(C.Assets.Button.Pushed)
+        pctex:SetTexture(C.Assets.Textures.ButtonPushed)
         pctex:SetBlendMode('ADD')
         pctex:SetAllPoints(pushedCircle)
         mirror.pushedCircle = pushedCircle

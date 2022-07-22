@@ -91,7 +91,7 @@ function MAP:AddCoords()
 
     playerCoords = F.CreateFS(
         WorldMapFrame.BorderFrame,
-        C.Assets.Font.Bold,
+        C.Assets.Fonts.Bold,
         12,
         nil,
         '',
@@ -103,7 +103,7 @@ function MAP:AddCoords()
     )
     cursorCoords = F.CreateFS(
         WorldMapFrame.BorderFrame,
-        C.Assets.Font.Bold,
+        C.Assets.Fonts.Bold,
         12,
         nil,
         '',

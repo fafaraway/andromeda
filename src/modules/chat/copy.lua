@@ -79,7 +79,7 @@ function CHAT:ChatCopy_Create()
     editBox:EnableMouse(true)
     editBox:SetAutoFocus(false)
     local outline = _G.ANDROMEDA_ADB.FontOutline
-    editBox:SetFont(C.Assets.Font.Regular, 12, outline, '', nil, outline or 'THICK')
+    editBox:SetFont(C.Assets.Fonts.Regular, 12, outline, '', nil, outline or 'THICK')
     editBox:SetWidth(scrollArea:GetWidth())
     editBox:SetHeight(scrollArea:GetHeight())
     editBox:SetScript('OnEscapePressed', function()

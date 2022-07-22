@@ -229,8 +229,8 @@ function AURA:UpdateHeader(header)
             child:SetSize(cfg.size, cfg.size)
         end
 
-        child.count:SetFont(C.Assets.Font.Roadway, fontSize, 'OUTLINE')
-        child.timer:SetFont(C.Assets.Font.Roadway, fontSize, 'OUTLINE')
+        child.count:SetFont(C.Assets.Fonts.HalfHeight, fontSize, 'OUTLINE')
+        child.timer:SetFont(C.Assets.Fonts.HalfHeight, fontSize, 'OUTLINE')
 
         -- Blizzard bug fix, icons arent being hidden when you reduce the amount of maximum buttons
         if index > (cfg.maxWraps * cfg.wrapAfter) and child:IsShown() then
@@ -305,11 +305,11 @@ function AURA:CreateAuraIcon(button)
 
     button.count = button:CreateFontString(nil, 'ARTWORK')
     button.count:SetPoint('CENTER', button, 'TOP')
-    button.count:SetFont(C.Assets.Font.Roadway, fontSize, 'OUTLINE')
+    button.count:SetFont(C.Assets.Fonts.HalfHeight, fontSize, 'OUTLINE')
 
     button.timer = button:CreateFontString(nil, 'ARTWORK')
     button.timer:SetPoint('CENTER', button, 'BOTTOM')
-    button.timer:SetFont(C.Assets.Font.Roadway, fontSize, 'OUTLINE')
+    button.timer:SetFont(C.Assets.Fonts.HalfHeight, fontSize, 'OUTLINE')
 
     button.highlight = button:CreateTexture(nil, 'HIGHLIGHT')
     button.highlight:SetColorTexture(1, 1, 1, 0.25)

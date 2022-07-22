@@ -5,7 +5,7 @@ local buttonsList = {}
 local menuList = {
     {
         _G.CHARACTER_BUTTON,
-        C.Assets.Texture.MenuBarPlayer,
+        C.Assets.Textures.MenuBarPlayer,
         function()
             securecall(_G.ToggleFrame, _G.CharacterFrame)
         end,
@@ -13,91 +13,91 @@ local menuList = {
 
     {
         _G.SPELLBOOK_ABILITIES_BUTTON,
-        C.Assets.Texture.MenuBarSpellbook,
+        C.Assets.Textures.MenuBarSpellbook,
         function()
             securecall(_G.ToggleFrame, _G.SpellBookFrame)
         end,
     },
     {
         _G.TALENTS_BUTTON,
-        C.Assets.Texture.MenuBarTalent,
+        C.Assets.Textures.MenuBarTalent,
         function()
             ToggleTalentFrame()
         end,
     },
     {
         _G.SOCIAL_BUTTON,
-        C.Assets.Texture.MenuBarFriend,
+        C.Assets.Textures.MenuBarFriend,
         function()
             ToggleFriendsFrame()
         end,
     },
     {
         _G.GUILD,
-        C.Assets.Texture.MenuBarGuild,
+        C.Assets.Textures.MenuBarGuild,
         function()
             ToggleGuildFrame()
         end,
     },
     {
         _G.ACHIEVEMENT_BUTTON,
-        C.Assets.Texture.MenuBarAchievement,
+        C.Assets.Textures.MenuBarAchievement,
         function()
             ToggleAchievementFrame()
         end,
     },
     {
         _G.COLLECTIONS,
-        C.Assets.Texture.MenuBarCollection,
+        C.Assets.Textures.MenuBarCollection,
         function()
             ToggleCollectionsJournal()
         end,
     },
     {
         _G.LFG_TITLE,
-        C.Assets.Texture.MenuBarLfg,
+        C.Assets.Textures.MenuBarLfg,
         function()
             ToggleLFDParentFrame()
         end,
     },
     {
         _G.ENCOUNTER_JOURNAL,
-        C.Assets.Texture.MenuBarEncounter,
+        C.Assets.Textures.MenuBarEncounter,
         function()
             ToggleEncounterJournal()
         end,
     },
     {
         L['Calendar'],
-        C.Assets.Texture.MenuBarCalendar,
+        C.Assets.Textures.MenuBarCalendar,
         function()
             ToggleCalendar()
         end,
     },
     {
         _G.MAP_AND_QUEST_LOG,
-        C.Assets.Texture.MenuBarMap,
+        C.Assets.Textures.MenuBarMap,
         function()
             ToggleWorldMap()
         end,
     },
     {
         _G.BAGSLOT,
-        C.Assets.Texture.MenuBarBag,
+        C.Assets.Textures.MenuBarBag,
         function()
             ToggleAllBags()
         end,
     },
     {
         _G.BLIZZARD_STORE,
-        C.Assets.Texture.MenuBarStore,
+        C.Assets.Textures.MenuBarStore,
         function()
             ToggleStoreUI()
         end,
     },
     {
         _G.GAMEMENU_SUPPORT,
-        C.Assets.Texture.MenuBarHelp,
+        C.Assets.Textures.MenuBarHelp,
         function()
             ToggleHelpFrame()
         end,
@@ -165,7 +165,7 @@ function MM:OnLogin()
     glow:SetPoint('BOTTOMLEFT', bar, 'BOTTOMLEFT', -30, 0)
     glow:SetPoint('BOTTOMRIGHT', bar, 'BOTTOMRIGHT', 30, 0)
     glow:SetHeight(C.DB.General.GameMenuButtonSize * 2)
-    glow:SetTexture(C.Assets.Texture.Glow)
+    glow:SetTexture(C.Assets.Textures.Glow)
     if C.DB.General.GameMenuClassColor then
         glow:SetVertexColor(C.r, C.g, C.b, C.DB.General.GameMenuBackdropAlpha)
     else

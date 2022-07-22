@@ -112,9 +112,9 @@ function GT:GetRaidMaxGroup()
 end
 
 local roleIcons = {
-    C.Assets.Texture.Tank,
-    C.Assets.Texture.Healer,
-    C.Assets.Texture.Damager,
+    C.Assets.Textures.RoleTank,
+    C.Assets.Textures.RoleHealer,
+    C.Assets.Textures.RoleDamager,
 }
 local eventList = {
     'GROUP_ROSTER_UPDATE',
@@ -132,7 +132,7 @@ function GT:RaidTool_RoleCount(parent)
         role[i]:SetPoint('LEFT', 36 * i - 30, 0)
         role[i]:SetSize(16, 16)
         role[i]:SetTexture(roleIcons[i])
-        role[i].text = F.CreateFS(frame, C.Assets.Font.Bold, 12, true, '0', 'YELLOW', true)
+        role[i].text = F.CreateFS(frame, C.Assets.Fonts.Bold, 12, true, '0', 'YELLOW', true)
         role[i].text:ClearAllPoints()
         role[i].text:SetPoint('CENTER', role[i], 'RIGHT', 10, -1)
     end
@@ -202,10 +202,10 @@ function GT:RaidTool_CombatRes(parent)
     F.PixelIcon(res, GetSpellTexture(20484))
     res.__owner = parent
 
-    res.Count = F.CreateFS(res, C.Assets.Font.Regular, 14, true, '0', nil, true)
+    res.Count = F.CreateFS(res, C.Assets.Fonts.Regular, 14, true, '0', nil, true)
     res.Count:ClearAllPoints()
     res.Count:SetPoint('LEFT', res, 'RIGHT', 10, 0)
-    res.Timer = F.CreateFS(frame, C.Assets.Font.Regular, 14, true, '00:00', nil, true, 'RIGHT', -5, 0)
+    res.Timer = F.CreateFS(frame, C.Assets.Fonts.Regular, 14, true, '00:00', nil, true, 'RIGHT', -5, 0)
     res:SetScript('OnUpdate', GT.RaidTool_UpdateRes)
 
     parent.resFrame = frame
@@ -220,8 +220,8 @@ function GT:RaidTool_ReadyCheck(parent)
         self:Hide()
     end)
     F.SetBD(frame)
-    F.CreateFS(frame, C.Assets.Font.Regular, 14, true, _G.READY_CHECK, nil, true, 'TOP', 0, -8)
-    local rc = F.CreateFS(frame, C.Assets.Font.Regular, 14, true, '', nil, true, 'TOP', 0, -28)
+    F.CreateFS(frame, C.Assets.Fonts.Regular, 14, true, _G.READY_CHECK, nil, true, 'TOP', 0, -8)
+    local rc = F.CreateFS(frame, C.Assets.Fonts.Regular, 14, true, '', nil, true, 'TOP', 0, -28)
 
     local count, total
     local function hideRCFrame()

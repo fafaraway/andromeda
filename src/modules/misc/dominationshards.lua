@@ -83,7 +83,7 @@ function DS:DomiShards_ListFrame()
             button:SetScript('OnClick', DS.DomiShard_Equip)
             button:SetScript('OnEnter', DS.DomiShard_ShowTooltip)
             button:SetScript('OnLeave', F.HideTooltip)
-            button.count = F.CreateFS(button, C.Assets.Font.Bold, 12, nil, '', 'YELLOW', true, 'BOTTOMRIGHT', -3, 3)
+            button.count = F.CreateFS(button, C.Assets.Fonts.Bold, 12, nil, '', 'YELLOW', true, 'BOTTOMRIGHT', -3, 3)
 
             frame.icons[index] = button
             break

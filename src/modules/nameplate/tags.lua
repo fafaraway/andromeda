@@ -100,11 +100,11 @@ local _tags = {
         local class, level = UnitClassification(unit), UnitLevel(unit)
 
         if class == 'worldboss' or level == -1 then
-            return format(texStr, C.Assets.Texture.Boss)
+            return format(texStr, C.Assets.Textures.ClassifyBoss)
         elseif (class == 'rare') or (class == 'rareelite') then
-            return format(texStr, C.Assets.Texture.Rare)
+            return format(texStr, C.Assets.Textures.ClassifyRare)
         elseif class == 'elite' then
-            return format(texStr, C.Assets.Texture.Elite)
+            return format(texStr, C.Assets.Textures.ClassifyElite)
         end
     end,
 
@@ -142,7 +142,7 @@ function NAMEPLATE.ConfigureNameTag(frame)
     name:ClearAllPoints()
 
     if nameOnly then
-        F:SetFS(name, C.Assets.Font.Header, 16, outline, nil, nil, outline or 'THICK')
+        F:SetFS(name, C.Assets.Fonts.Header, 16, outline, nil, nil, outline or 'THICK')
 
         name:SetParent(frame)
         name:SetPoint('CENTER', frame, 'TOP', 0, 8)
@@ -150,7 +150,7 @@ function NAMEPLATE.ConfigureNameTag(frame)
 
         frame:Tag(name, '[andromeda:color][andromeda:npnamefull]')
     else
-        F:SetFS(name, C.Assets.Font.Bold, 11, outline, nil, nil, outline or 'THICK')
+        F:SetFS(name, C.Assets.Fonts.Bold, 11, outline, nil, nil, outline or 'THICK')
 
         name:SetParent(frame.Health)
         name:SetPoint('LEFT', frame, 'TOPLEFT')
@@ -176,7 +176,7 @@ end
 
 function NAMEPLATE:CreateNameTag(self)
     local outline = _G.ANDROMEDA_ADB.FontOutline
-    local font = C.Assets.Font.Bold
+    local font = C.Assets.Fonts.Bold
 
     local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
 
@@ -198,7 +198,7 @@ function NAMEPLATE.ConfigureHealthTag(frame)
 end
 
 function NAMEPLATE:CreateHealthTag(self)
-    local font = C.Assets.Font.Condensed
+    local font = C.Assets.Fonts.Condensed
     local outline = _G.ANDROMEDA_ADB.FontOutline
 
     local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')

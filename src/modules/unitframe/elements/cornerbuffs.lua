@@ -75,7 +75,7 @@ end
 
 function UNITFRAME:RefreshCornerIndicator(bu)
     bu:SetScript('OnUpdate', nil)
-    bu.icon:SetTexture(C.Assets.Texture.Backdrop)
+    bu.icon:SetTexture(C.Assets.Textures.Backdrop)
     bu.icon:Show()
     bu.cd:Show()
     bu.bg:Show()

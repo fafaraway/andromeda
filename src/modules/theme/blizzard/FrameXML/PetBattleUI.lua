@@ -27,7 +27,7 @@ tinsert(C.BlizzThemes, function()
         unit.HealthBarBG:Hide()
         unit.HealthBarFrame:Hide()
         unit.healthBarWidth = 250
-        unit.ActualHealthBar:SetTexture(C.Assets.Texture.StatusbarNormal)
+        unit.ActualHealthBar:SetTexture(C.Assets.Textures.StatusbarNormal)
         unit.healthBg = F.SetBD(unit.ActualHealthBar)
         unit.healthBg:ClearAllPoints()
         unit.healthBg:SetWidth(252)
@@ -101,7 +101,7 @@ tinsert(C.BlizzThemes, function()
         unit.healthBarWidth = 36
         unit.ActualHealthBar:ClearAllPoints()
         unit.ActualHealthBar:SetPoint('TOPLEFT', unit.Icon, 'BOTTOMLEFT', 1, -4)
-        unit.ActualHealthBar:SetTexture(C.Assets.Texture.StatusbarNormal)
+        unit.ActualHealthBar:SetTexture(C.Assets.Textures.StatusbarNormal)
         unit.healthBg = F.SetBD(unit.ActualHealthBar)
         unit.healthBg:SetPoint('TOPLEFT', unit.ActualHealthBar, -1, 1)
         unit.healthBg:SetPoint('BOTTOMRIGHT', unit.ActualHealthBar, 'TOPLEFT', 37, -8)
@@ -223,14 +223,14 @@ tinsert(C.BlizzThemes, function()
             end
 
             bu:SetNormalTexture('')
-            bu:GetPushedTexture():SetTexture(C.Assets.Button.Checked)
+            bu:GetPushedTexture():SetTexture(C.Assets.Textures.ButtonChecked)
             bu:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
             if not bu.bg then
                 bu.bg = F.ReskinIcon(bu.Icon, true)
                 bu.Icon:SetInside()
             end
 
-            bu.Cooldown:SetFont(C.Assets.Font.Regular, 11, 'OUTLINE')
+            bu.Cooldown:SetFont(C.Assets.Fonts.Regular, 11, 'OUTLINE')
             bu.SelectedHighlight:ClearAllPoints()
             bu.SelectedHighlight:SetPoint('TOPLEFT', bu, -12, 12)
             bu.SelectedHighlight:SetPoint('BOTTOMRIGHT', bu, 12, -12)
@@ -245,13 +245,13 @@ tinsert(C.BlizzThemes, function()
     F.PixelIcon(skipButton, 'Interface\\Icons\\Ability_Foundryraid_Dormant', true)
     F.CreateSD(skipButton)
     skipButton.HL:SetAllPoints(skipButton)
-    skipButton:SetPushedTexture(C.Assets.Button.Checked)
+    skipButton:SetPushedTexture(C.Assets.Textures.ButtonChecked)
 
     local xpbar = _G.PetBattleFrameXPBar
     F.StripTextures(xpbar)
     xpbar:SetParent(bar)
     xpbar:SetWidth(bar:GetWidth())
-    xpbar:SetStatusBarTexture(C.Assets.Texture.StatusbarNormal)
+    xpbar:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
     F.SetBD(xpbar)
 
     local turnTimer = bottomFrame.TurnTimer
@@ -292,7 +292,7 @@ tinsert(C.BlizzThemes, function()
         unit.Name:SetPoint('TOPLEFT', icon, 'TOPRIGHT', 3, -3)
 
         unit.ActualHealthBar:SetPoint('BOTTOMLEFT', icon, 'BOTTOMRIGHT', 5, 0)
-        unit.ActualHealthBar:SetTexture(C.Assets.Texture.StatusbarNormal)
+        unit.ActualHealthBar:SetTexture(C.Assets.Textures.StatusbarNormal)
         local bg = F.SetBD(unit.ActualHealthBar)
         bg:SetPoint('TOPLEFT', unit.ActualHealthBar, -1, 1)
         bg:SetPoint('BOTTOMRIGHT', unit.ActualHealthBar, 'BOTTOMLEFT', 129, -1)

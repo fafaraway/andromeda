@@ -218,7 +218,7 @@ C.Themes['Blizzard_Collections'] = function()
         select(i, card.xpBar:GetRegions()):Hide()
     end
 
-    card.xpBar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
+    card.xpBar:SetStatusBarTexture(C.Assets.Textures.Backdrop)
     F.CreateBDFrame(card.xpBar, 0.25)
 
     _G.PetJournalPetCardHealthFramehealthStatusBarLeft:Hide()
@@ -226,7 +226,7 @@ C.Themes['Blizzard_Collections'] = function()
     _G.PetJournalPetCardHealthFramehealthStatusBarMiddle:Hide()
     _G.PetJournalPetCardHealthFramehealthStatusBarBGMiddle:Hide()
 
-    card.HealthFrame.healthBar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
+    card.HealthFrame.healthBar:SetStatusBarTexture(C.Assets.Textures.Backdrop)
     F.CreateBDFrame(card.HealthFrame.healthBar, 0.25)
 
     for i = 1, 6 do
@@ -274,11 +274,11 @@ C.Themes['Blizzard_Collections'] = function()
             select(i, bu.xpBar:GetRegions()):Hide()
         end
 
-        bu.xpBar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
+        bu.xpBar:SetStatusBarTexture(C.Assets.Textures.Backdrop)
         F.CreateBDFrame(bu.xpBar, 0.25)
 
         F.StripTextures(bu.healthFrame.healthBar)
-        bu.healthFrame.healthBar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
+        bu.healthFrame.healthBar:SetStatusBarTexture(C.Assets.Textures.Backdrop)
         F.CreateBDFrame(bu.healthFrame.healthBar, 0.25)
 
         for j = 1, 3 do
@@ -286,7 +286,7 @@ C.Themes['Blizzard_Collections'] = function()
 
             spell:SetPushedTexture('')
             spell:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
-            spell.selected:SetTexture(C.Assets.Button.Checked)
+            spell.selected:SetTexture(C.Assets.Textures.ButtonChecked)
             spell:GetRegions():Hide()
 
             local flyoutArrow = spell.FlyoutArrow
@@ -315,7 +315,7 @@ C.Themes['Blizzard_Collections'] = function()
     for i = 1, 2 do
         local bu = PetJournal.SpellSelect['Spell' .. i]
 
-        bu:SetCheckedTexture(C.Assets.Button.Checked)
+        bu:SetCheckedTexture(C.Assets.Textures.ButtonChecked)
         bu:SetPushedTexture('')
         bu:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
 
@@ -340,7 +340,7 @@ C.Themes['Blizzard_Collections'] = function()
     progressBar:DisableDrawLayer('BACKGROUND')
 
     progressBar.text:SetPoint('CENTER', 0, 1)
-    progressBar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
+    progressBar:SetStatusBarTexture(C.Assets.Textures.Backdrop)
 
     F.CreateBDFrame(progressBar, 0.25)
 
@@ -409,7 +409,7 @@ C.Themes['Blizzard_Collections'] = function()
     hjBar:DisableDrawLayer('BACKGROUND')
 
     hjBar.text:SetPoint('CENTER', 0, 1)
-    hjBar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
+    hjBar:SetStatusBarTexture(C.Assets.Textures.Backdrop)
 
     F.CreateBDFrame(hjBar, 0.25)
 
@@ -458,7 +458,7 @@ C.Themes['Blizzard_Collections'] = function()
             local header = HeirloomsJournal.heirloomHeaderFrames[i]
             if not header.styled then
                 header.text:SetTextColor(1, 1, 1)
-                header.text:SetFont(C.Assets.Font.Bold, 16, 'OUTLINE')
+                header.text:SetFont(C.Assets.Fonts.Bold, 16, 'OUTLINE')
 
                 header.styled = true
             end
@@ -528,7 +528,7 @@ C.Themes['Blizzard_Collections'] = function()
     warBar:DisableDrawLayer('BACKGROUND')
     select(2, warBar:GetRegions()):Hide()
     warBar.text:SetPoint('CENTER', 0, 1)
-    warBar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
+    warBar:SetStatusBarTexture(C.Assets.Textures.Backdrop)
     F.CreateBDFrame(warBar, 0.25)
 
     -- ItemSetsCollection
@@ -618,7 +618,7 @@ C.Themes['Blizzard_Collections'] = function()
         if slot then
             slot.Border:Hide()
             F.ReskinIcon(slot.Icon)
-            slot:SetHighlightTexture(C.Assets.Texture.Backdrop)
+            slot:SetHighlightTexture(C.Assets.Textures.Backdrop)
             local hl = slot:GetHighlightTexture()
             hl:SetVertexColor(1, 1, 1, 0.25)
             hl:SetAllPoints(slot.Icon)

@@ -20,7 +20,7 @@ function BAR:UpdateAllScale()
 end
 
 function BAR:UpdateFontSize(button, fontSize)
-    local font = C.Assets.Font.Condensed
+    local font = C.Assets.Fonts.Condensed
 
     if button.Name then
         button.Name:SetFont(font, fontSize, 'OUTLINE')
@@ -520,7 +520,7 @@ function BAR:CreateExtraBar()
         for spellButton in self.SpellButtonContainer:EnumerateActive() do
             if spellButton and not spellButton.styled then
                 spellButton.NormalTexture:SetAlpha(0)
-                spellButton:SetPushedTexture(C.Assets.Button.Pushed) -- force it to gain a texture
+                spellButton:SetPushedTexture(C.Assets.Textures.ButtonPushed) -- force it to gain a texture
                 spellButton:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
                 spellButton:GetHighlightTexture():SetInside()
                 spellButton.Icon:SetInside()

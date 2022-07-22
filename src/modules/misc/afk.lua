@@ -79,7 +79,7 @@ end
 local function ConstructTextString(f)
     f.text = F.CreateFS(
         f,
-        C.Assets.Font.Bold,
+        C.Assets.Fonts.Bold,
         12,
         nil,
         L['Double click left mouse button or press ESC key to exit this screen.'],

@@ -31,7 +31,7 @@ function LOGO:Logo_Create()
 
     local tex = frame:CreateTexture()
     tex:SetAllPoints()
-    tex:SetTexture(C.Assets.Texture.LogoSplash)
+    tex:SetTexture(C.Assets.Textures.LogoSplash)
     tex:SetBlendMode('ADD')
     tex:SetDesaturated(true)
     -- tex:SetGradientAlpha('Vertical', 1, 1, 1, .75, 1, 1, 1, .75)
@@ -90,7 +90,7 @@ function LOGO:Logo_Create()
         frame:Hide()
     end)
     anim.fadeIn:SetScript('OnFinished', function()
-        PlaySoundFile(C.Assets.Sound.Intro, 'Master')
+        PlaySoundFile(C.Assets.Sounds.Intro, 'Master')
     end)
 
     LOGO.logoFrame = frame

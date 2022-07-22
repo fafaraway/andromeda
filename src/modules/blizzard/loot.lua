@@ -93,10 +93,10 @@ local CreateLootSlot = function(id)
 
     local outline = _G.ANDROMEDA_ADB.FontOutline
 
-    local count = F.CreateFS(iconFrame, C.Assets.Font.Regular, 12, true, nil, nil, true, 'TOP', 1, -2)
+    local count = F.CreateFS(iconFrame, C.Assets.Fonts.Regular, 12, true, nil, nil, true, 'TOP', 1, -2)
     frame.count = count
 
-    local name = F.CreateFS(frame, C.Assets.Font.Regular, 12, outline, nil, nil, outline or 'THICK')
+    local name = F.CreateFS(frame, C.Assets.Fonts.Regular, 12, outline, nil, nil, outline or 'THICK')
     name:SetPoint('RIGHT', frame)
     name:SetPoint('LEFT', icon, 'RIGHT', 8, 0)
     name:SetJustifyH('LEFT')

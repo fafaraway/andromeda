@@ -103,7 +103,7 @@ function INFOBAR:RegisterNewBlock(name, position, width, noFade)
     block:SetBackdropBorderColor(0, 0, 0, 0)
 
     local outline = _G.ANDROMEDA_ADB.FontOutline
-    block.text = F.CreateFS(block, C.Assets.Font.Condensed, 11, outline, '', nil, outline or 'THICK', 'CENTER', 0, 0)
+    block.text = F.CreateFS(block, C.Assets.Fonts.Condensed, 11, outline, '', nil, outline or 'THICK', 'CENTER', 0, 0)
     block.position = position
 
     if C.DB.Infobar.Mouseover and not noFade then
@@ -150,7 +150,7 @@ function INFOBAR:CreateInfoBar()
     bar.bg:SetOutside(bar, 2, 2)
     bar.bg:SetFrameStrata('BACKGROUND')
     bar.bg:SetFrameLevel(1) -- Make sure the frame level is higher than the vignetting
-    bar.bg:SetBackdrop({ bgFile = C.Assets.Texture.Backdrop, edgeFile = C.Assets.Texture.Backdrop, edgeSize = 1 })
+    bar.bg:SetBackdrop({ bgFile = C.Assets.Textures.Backdrop, edgeFile = C.Assets.Textures.Backdrop, edgeSize = 1 })
     bar.bg:SetBackdropColor(0, 0, 0, mouseover and 0.25 or 0.65)
     bar.bg:SetBackdropBorderColor(0, 0, 0)
 

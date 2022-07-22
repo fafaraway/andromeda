@@ -129,7 +129,7 @@ tinsert(C.BlizzThemes, function()
     F.ReskinRole(leaderIcon, 'LEADER')
 
     local iconTexture = _G.LFGDungeonReadyDialogRoleIconTexture
-    iconTexture:SetTexture(C.Assets.Texture.LfgRole)
+    iconTexture:SetTexture(C.Assets.Textures.RoleLfgIcons)
     local bg = F.CreateBDFrame(iconTexture)
 
     hooksecurefunc('LFGDungeonReadyPopup_Update', function()
@@ -217,7 +217,7 @@ tinsert(C.BlizzThemes, function()
 
     hooksecurefunc('SetCheckButtonIsRadio', function(button)
         button:SetNormalTexture('')
-        button:SetHighlightTexture(C.Assets.Texture.Backdrop)
+        button:SetHighlightTexture(C.Assets.Textures.Backdrop)
         button:SetCheckedTexture('Interface\\Buttons\\UI-CheckBox-Check')
         button:GetCheckedTexture():SetTexCoord(0, 1, 0, 1)
         button:SetPushedTexture('')
@@ -246,7 +246,7 @@ tinsert(C.BlizzThemes, function()
 
     for i = 1, 5 do
         local roleButton = _G['LFGDungeonReadyStatusIndividualPlayer' .. i]
-        roleButton.texture:SetTexture(C.Assets.Texture.LfgRole)
+        roleButton.texture:SetTexture(C.Assets.Textures.RoleLfgIcons)
         F.CreateBDFrame(roleButton)
         if i == 1 then
             roleButton:SetPoint('LEFT', 7, 0)

@@ -58,7 +58,7 @@ C.Themes['Blizzard_VoidStorageUI'] = function()
     for i = 1, 2 do
         local tab = _G.VoidStorageFrame['Page' .. i]
         tab:GetRegions():Hide()
-        tab:SetCheckedTexture(C.Assets.Button.Checked)
+        tab:SetCheckedTexture(C.Assets.Textures.ButtonChecked)
         tab:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
         tab:GetNormalTexture():SetTexCoord(unpack(C.TEX_COORD))
         F.CreateBDFrame(tab)

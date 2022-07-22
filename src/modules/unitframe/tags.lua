@@ -210,7 +210,7 @@ for tag, func in next, _tags do
 end
 
 function UNITFRAME:CreateGroupLeaderTag(self)
-    local font = C.Assets.Font.Pixel
+    local font = C.Assets.Fonts.Pixel
     local text = F.CreateFS(self.Health, font, 8, 'OUTLINE, MONOCHROME')
     text:SetPoint('TOPLEFT', 2, -2)
 
@@ -219,7 +219,7 @@ function UNITFRAME:CreateGroupLeaderTag(self)
 end
 
 function UNITFRAME:CreateGroupRoleTag(self)
-    local font = C.Assets.Font.Pixel
+    local font = C.Assets.Fonts.Pixel
     local text = F.CreateFS(self.Health, font, 8, 'OUTLINE, MONOCHROME')
     text:SetPoint('BOTTOM', 1, 1)
 
@@ -228,7 +228,7 @@ function UNITFRAME:CreateGroupRoleTag(self)
 end
 
 function UNITFRAME:CreateGroupNameTag(self)
-    local font = C.Assets.Font.Condensed
+    local font = C.Assets.Fonts.Condensed
     local outline = _G.ANDROMEDA_ADB.FontOutline
     local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
 
@@ -238,7 +238,7 @@ function UNITFRAME:CreateGroupNameTag(self)
 end
 
 function UNITFRAME:CreateNameTag(self)
-    local font = C.Assets.Font.Condensed
+    local font = C.Assets.Fonts.Condensed
     local style = self.unitStyle
     local outline = _G.ANDROMEDA_ADB.FontOutline
 
@@ -267,7 +267,7 @@ end
 
 
 function UNITFRAME:CreateHealthTag(self)
-    local font = C.Assets.Font.Condensed
+    local font = C.Assets.Fonts.Condensed
     local style = self.unitStyle
     local outline = _G.ANDROMEDA_ADB.FontOutline
 
@@ -292,7 +292,7 @@ function UNITFRAME:CreateHealthTag(self)
 end
 
 function UNITFRAME:CreateAltPowerTag(self)
-    local font = C.Assets.Font.Condensed
+    local font = C.Assets.Fonts.Condensed
     local style = self.unitStyle
     local outline = _G.ANDROMEDA_ADB.FontOutline
 
@@ -340,7 +340,7 @@ local function UpdatePlayerTags(self)
 end
 
 function UNITFRAME:CreatePlayerTags(self)
-    local font = C.Assets.Font.Condensed
+    local font = C.Assets.Fonts.Condensed
     local outline = _G.ANDROMEDA_ADB.FontOutline
 
     local leftTag = F.CreateFS(self, font, 11, outline, nil, nil, outline or 'THICK')

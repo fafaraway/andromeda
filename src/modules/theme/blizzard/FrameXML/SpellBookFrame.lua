@@ -80,7 +80,7 @@ tinsert(C.BlizzThemes, function()
 
             if not tab.styled then
                 tab:GetRegions():Hide()
-                tab:SetCheckedTexture(C.Assets.Button.Checked)
+                tab:SetCheckedTexture(C.Assets.Textures.ButtonChecked)
                 tab:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
                 F.SetBD(tab)
 
@@ -110,7 +110,7 @@ tinsert(C.BlizzThemes, function()
 
         F.StripTextures(bu.statusBar)
         bu.statusBar:SetHeight(10)
-        bu.statusBar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
+        bu.statusBar:SetStatusBarTexture(C.Assets.Textures.Backdrop)
         bu.statusBar:GetStatusBarTexture():SetGradient('VERTICAL', 0, 0.6, 0, 0, 0.8, 0)
         bu.statusBar.rankText:SetPoint('CENTER')
         F.CreateBDFrame(bu.statusBar, 0.25)
@@ -146,7 +146,7 @@ tinsert(C.BlizzThemes, function()
 
         bu.highlightTexture:SetAllPoints(icon)
         local check = bu:GetCheckedTexture()
-        check:SetTexture(C.Assets.Button.Checked)
+        check:SetTexture(C.Assets.Textures.ButtonChecked)
         check:SetAllPoints(icon)
     end
 

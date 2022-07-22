@@ -41,7 +41,7 @@ end
 
 function MAP:RestyleMinimap()
     local Minimap = _G.Minimap
-    local texturePath = C.Assets.Texture.MinimapMask
+    local texturePath = C.Assets.Textures.MinimapMask
     local diff = 256 - 190
     local halfDiff = ceil(diff / 2)
 
@@ -78,7 +78,7 @@ function MAP:RestyleHybridMinimap()
     local mapCanvas = HybridMinimap.MapCanvas
     local rectangleMask = HybridMinimap:CreateMaskTexture()
 
-    rectangleMask:SetTexture(C.Assets.Texture.MinimapMask)
+    rectangleMask:SetTexture(C.Assets.Textures.MinimapMask)
     rectangleMask:SetAllPoints(HybridMinimap)
 
     HybridMinimap.RectangleMask = rectangleMask
@@ -123,7 +123,7 @@ function MAP:CreateMailButton()
 
     mail:ClearAllPoints()
     mail:SetPoint('BOTTOM', _G.Minimap, 'BOTTOM', 0, _G.Minimap.halfDiff - 4)
-    icon:SetTexture(C.Assets.Texture.Mail)
+    icon:SetTexture(C.Assets.Textures.MinimapMail)
     icon:SetSize(24, 24)
     icon:SetVertexColor(1, 1, 0)
 end
@@ -141,7 +141,7 @@ function MAP:CreatePendingInvitation()
     invt:SetSize(300, 80)
     invt:Hide()
     F.SetBD(invt)
-    F.CreateFS(invt, C.Assets.Font.Regular, 14, true, _G.GAMETIME_TOOLTIP_CALENDAR_INVITES, 'BLUE')
+    F.CreateFS(invt, C.Assets.Fonts.Regular, 14, true, _G.GAMETIME_TOOLTIP_CALENDAR_INVITES, 'BLUE')
 
     local function updateInviteVisibility()
         invt:SetShown(C_Calendar.GetNumPendingInvites() > 0)
@@ -251,9 +251,9 @@ function MAP:CreateDifficultyFlag()
     frame:SetFrameLevel(Minimap:GetFrameLevel() + 2)
     local texture = frame:CreateTexture(nil, 'BACKGROUND')
     texture:SetAllPoints()
-    texture:SetTexture(C.Assets.Texture.Diff)
+    texture:SetTexture(C.Assets.Textures.MinimapDifficulty)
     texture:SetVertexColor(0, 0, 0)
-    local text = F.CreateFS(frame, C.Assets.Font.Bold, 11, nil, '', nil, 'THICK')
+    local text = F.CreateFS(frame, C.Assets.Fonts.Bold, 11, nil, '', nil, 'THICK')
     text:SetPoint('CENTER', frame)
     text:SetJustifyH('CENTER')
 
@@ -324,7 +324,7 @@ function MAP:WhoPings()
 
     local f = CreateFrame('Frame', nil, _G.Minimap)
     f:SetAllPoints()
-    f.text = F.CreateFS(f, C.Assets.Font.Bold, 14, true, '', nil, true, 'TOP', 0, -4)
+    f.text = F.CreateFS(f, C.Assets.Fonts.Bold, 14, true, '', nil, true, 'TOP', 0, -4)
 
     local anim = f:CreateAnimationGroup()
     anim:SetScript('OnPlay', function()
@@ -372,12 +372,12 @@ function MAP:CreateZoneText()
     local Minimap = _G.Minimap
     _G.ZoneTextString:ClearAllPoints()
     _G.ZoneTextString:SetPoint('TOP', Minimap, 0, -Minimap.halfDiff - 10)
-    _G.ZoneTextString:SetFont(C.Assets.Font.Header, 22, outline, '', nil, outline or 'THICK')
-    _G.SubZoneTextString:SetFont(C.Assets.Font.Header, 22, outline, '', nil, outline or 'THICK')
-    _G.PVPInfoTextString:SetFont(C.Assets.Font.Header, 22, outline, '', nil, outline or 'THICK')
-    _G.PVPArenaTextString:SetFont(C.Assets.Font.Header, 22, outline, '', nil, outline or 'THICK')
+    _G.ZoneTextString:SetFont(C.Assets.Fonts.Header, 22, outline, '', nil, outline or 'THICK')
+    _G.SubZoneTextString:SetFont(C.Assets.Fonts.Header, 22, outline, '', nil, outline or 'THICK')
+    _G.PVPInfoTextString:SetFont(C.Assets.Fonts.Header, 22, outline, '', nil, outline or 'THICK')
+    _G.PVPArenaTextString:SetFont(C.Assets.Fonts.Header, 22, outline, '', nil, outline or 'THICK')
 
-    local text = F.CreateFS(Minimap, C.Assets.Font.Header, 16, outline, '', nil, outline or 'THICK')
+    local text = F.CreateFS(Minimap, C.Assets.Fonts.Header, 16, outline, '', nil, outline or 'THICK')
     text:SetPoint('TOP', Minimap, 0, -Minimap.halfDiff - 10)
     text:SetSize(Minimap:GetWidth(), 30)
     text:SetJustifyH('CENTER')
@@ -416,7 +416,7 @@ function MAP:SoundVolume()
 
     local f = CreateFrame('Frame', nil, _G.Minimap)
     f:SetAllPoints()
-    local text = F.CreateFS(f, C.Assets.Font.Heavy, 48, true)
+    local text = F.CreateFS(f, C.Assets.Fonts.Heavy, 48, true)
 
     local anim = f:CreateAnimationGroup()
     anim:SetScript('OnPlay', function()

@@ -199,7 +199,7 @@ tinsert(C.BlizzThemes, function()
         local bu = _G['GearManagerDialogPopupButton' .. i]
         local ic = _G['GearManagerDialogPopupButton' .. i .. 'Icon']
 
-        bu:SetCheckedTexture(C.Assets.Button.Checked)
+        bu:SetCheckedTexture(C.Assets.Textures.ButtonChecked)
         select(2, bu:GetRegions()):Hide()
         local hl = bu:GetHighlightTexture()
         hl:SetColorTexture(1, 1, 1, 0.25)
@@ -247,7 +247,7 @@ tinsert(C.BlizzThemes, function()
         for i = 1, GetNumFactions() do
             local statusbar = _G['ReputationBar' .. i .. 'ReputationBar']
             if statusbar then
-                statusbar:SetStatusBarTexture(C.Assets.Texture.StatusbarNormal)
+                statusbar:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
 
                 if not statusbar.reskinned then
                     F.CreateBDFrame(statusbar, 0.25)

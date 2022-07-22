@@ -48,7 +48,7 @@ local function ReskinBarTemplate(bar)
 
     if not bar.styled then
         F.StripTextures(bar)
-        bar:SetStatusBarTexture(C.Assets.Texture.StatusbarNormal)
+        bar:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
         bar:SetStatusBarColor(C.r, C.g, C.b)
         bar.bg = F.SetBD(bar)
         F:SmoothBar(bar)
@@ -68,7 +68,7 @@ local function ReskinProgressbar(_, _, line)
 
         label:ClearAllPoints()
         label:SetPoint('CENTER', bar)
-        label:SetFont(C.Assets.Font.Regular, 11, true)
+        label:SetFont(C.Assets.Fonts.Regular, 11, true)
         label:SetShadowColor(0, 0, 0, 1)
         label:SetShadowOffset(1, -1)
 
@@ -94,7 +94,7 @@ local function ReskinProgressbarWithIcon(_, _, line)
 
         label:ClearAllPoints()
         label:SetPoint('CENTER', bar)
-        label:SetFont(C.Assets.Font.Regular, 11, true)
+        label:SetFont(C.Assets.Fonts.Regular, 11, true)
         label:SetShadowColor(0, 0, 0, 1)
         label:SetShadowOffset(1, -1)
     end
@@ -241,7 +241,7 @@ tinsert(C.BlizzThemes, function()
             block.timerbg:SetPoint('TOPLEFT', block.TimerBGBack, 6, -2)
             block.timerbg:SetPoint('BOTTOMRIGHT', block.TimerBGBack, -6, -5)
 
-            block.StatusBar:SetStatusBarTexture(C.Assets.Texture.StatusbarNormal)
+            block.StatusBar:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
             block.StatusBar:SetStatusBarColor(r, g, b)
             block.StatusBar:SetHeight(10)
 

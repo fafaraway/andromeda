@@ -224,17 +224,17 @@ function UNITFRAME:CreateCastBar(self)
     local focusWidth = C.DB.Unitframe.FocusCastbarWidth
     local focusHeight = C.DB.Unitframe.FocusCastbarHeight
     local outline = _G.ANDROMEDA_ADB.FontOutline
-    local font = C.Assets.Font.Condensed
+    local font = C.Assets.Fonts.Condensed
     local iconAmp = 4
 
     local castbar = CreateFrame('StatusBar', 'oUF_Castbar' .. style, self)
-    castbar:SetStatusBarTexture(C.Assets.Texture.StatusbarNormal)
+    castbar:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
     castbar.Backdrop = F.CreateBDFrame(castbar, 0.45)
     castbar.Border = F.CreateSD(castbar.Backdrop, 0.35, 6, 6, true)
     self.Castbar = castbar
 
     local spark = castbar:CreateTexture(nil, 'OVERLAY')
-    spark:SetTexture(C.Assets.Texture.Spark)
+    spark:SetTexture(C.Assets.Textures.Spark)
     spark:SetBlendMode('ADD')
     spark:SetAlpha(0.7)
     -- spark:SetSize(12, castbar:GetHeight() * 2)
@@ -257,7 +257,7 @@ function UNITFRAME:CreateCastBar(self)
 
     if isPlayer then
         local safeZone = castbar:CreateTexture(nil, 'OVERLAY')
-        safeZone:SetTexture(C.Assets.Texture.StatusbarNormal)
+        safeZone:SetTexture(C.Assets.Textures.StatusbarNormal)
         safeZone:SetVertexColor(0.87, 0.25, 0.42, 0.25)
         safeZone:SetPoint('TOPRIGHT')
         safeZone:SetPoint('BOTTOMRIGHT')
@@ -325,7 +325,7 @@ function NAMEPLATE:CreateCastBar(self)
 
     local style = self.unitStyle
     local outline = _G.ANDROMEDA_ADB.FontOutline
-    local font = C.Assets.Font.Condensed
+    local font = C.Assets.Fonts.Condensed
     local color = C.DB.Unitframe.CastingColor
     local compact = not C.DB.Nameplate.SeparateCastbar
     local cbHeight = C.DB.Nameplate.CastbarHeight
@@ -334,13 +334,13 @@ function NAMEPLATE:CreateCastBar(self)
     local iconAmp = 4
 
     local castbar = CreateFrame('StatusBar', 'oUF_Castbar' .. style, self)
-    castbar:SetStatusBarTexture(C.Assets.Texture.StatusbarNormal)
+    castbar:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
     castbar.Backdrop = F.CreateBDFrame(castbar, 0.45)
     castbar.Border = F.CreateSD(castbar.Backdrop, 0.35, 6, 6, true)
     self.Castbar = castbar
 
     local spark = castbar:CreateTexture(nil, 'OVERLAY')
-    spark:SetTexture(C.Assets.Texture.Spark)
+    spark:SetTexture(C.Assets.Textures.Spark)
     spark:SetBlendMode('ADD')
     spark:SetAlpha(0.7)
     spark:SetSize(12, castbar:GetHeight() * 2)
@@ -364,7 +364,7 @@ function NAMEPLATE:CreateCastBar(self)
     castbar.Icon = icon
 
     local shield = castbar:CreateTexture(nil, 'OVERLAY')
-    shield:SetTexture(C.Assets.Texture.Uninterruptible)
+    shield:SetTexture(C.Assets.Textures.CastingShield)
     shield:SetSize(cbHeight + 4, cbHeight + 4)
     shield:SetPoint('CENTER', castbar, 'BOTTOMLEFT')
     castbar.Shield = shield

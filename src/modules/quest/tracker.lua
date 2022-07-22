@@ -79,13 +79,13 @@ function EOT:HandleHeaderText()
     for i = 1, #frame do
         local modules = frame[i]
         if modules and modules.Header and modules.Header.Text then
-            F:SetFS(modules.Header.Text, C.Assets.Font.Header, 15, outline, nil, 'CLASS', outline or 'THICK')
+            F:SetFS(modules.Header.Text, C.Assets.Fonts.Header, 15, outline, nil, 'CLASS', outline or 'THICK')
         end
     end
 end
 
 function EOT:HandleTitleText(text)
-    local font = C.Assets.Font.Bold
+    local font = C.Assets.Fonts.Bold
     local outline = _G.ANDROMEDA_ADB.FontOutline
     F:SetFS(text, font, 14, outline, nil, 'YELLOW', outline or 'THICK')
 
@@ -100,7 +100,7 @@ end
 function EOT:HandleInfoText(text)
     self:ColorfulProgression(text)
 
-    local font = C.Assets.Font.Regular
+    local font = C.Assets.Fonts.Regular
     local outline = _G.ANDROMEDA_ADB.FontOutline
     F:SetFS(text, font, 13, outline, nil, nil, outline or 'THICK')
     text:SetHeight(text:GetStringHeight())

@@ -41,7 +41,7 @@ tinsert(C.BlizzThemes, function()
         local ic = bu.gameIcon
 
         bu.background:Hide()
-        bu:SetHighlightTexture(C.Assets.Texture.Backdrop)
+        bu:SetHighlightTexture(C.Assets.Textures.Backdrop)
         bu:GetHighlightTexture():SetVertexColor(0.24, 0.56, 1, 0.2)
         ic:SetSize(22, 22)
         ic:SetTexCoord(0.17, 0.83, 0.17, 0.83)

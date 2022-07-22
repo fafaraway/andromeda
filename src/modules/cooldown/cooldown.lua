@@ -49,7 +49,7 @@ function COOLDOWN:OnSizeChanged(width, height)
     self.fontScale = fontScale
 
     local outline = _G.ANDROMEDA_ADB.FontOutline
-    local font = C.Assets.Font.Heavy
+    local font = C.Assets.Fonts.Heavy
 
     if fontScale < minScale then
         self:Hide()

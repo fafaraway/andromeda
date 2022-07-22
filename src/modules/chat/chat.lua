@@ -100,7 +100,7 @@ local function SetupChatFrame(self)
     local name = self:GetName()
     local maxLines = 1024
 
-    local font = C.Assets.Font.Bold
+    local font = C.Assets.Fonts.Bold
     local outline = _G.ANDROMEDA_ADB.FontOutline
     local fontSize = select(2, self:GetFont())
     F:SetFS(self, font, fontSize, outline, nil, nil, outline or 'THICK')
@@ -132,7 +132,7 @@ local function SetupChatFrame(self)
 
     local tab = _G[name .. 'Tab']
     tab:SetAlpha(1)
-    tab.Text:SetFont(C.Assets.Font.Bold, 12, C.DB.Chat.FontOutline and 'OUTLINE')
+    tab.Text:SetFont(C.Assets.Fonts.Bold, 12, C.DB.Chat.FontOutline and 'OUTLINE')
     tab.Text:SetShadowColor(0, 0, 0, C.DB.Chat.FontOutline and 0 or 1)
     tab.Text:SetShadowOffset(2, -2)
     F.StripTextures(tab, 7)
@@ -489,9 +489,9 @@ function CHAT:PlayWhisperSound(event, _, author)
 
         if not self.soundTimer or currentTime > self.soundTimer then
             if event == 'CHAT_MSG_WHISPER' then
-                PlaySoundFile(C.Assets.Sound.Whisper, 'Master')
+                PlaySoundFile(C.Assets.Sounds.Whisper, 'Master')
             elseif event == 'CHAT_MSG_BN_WHISPER' then
-                PlaySoundFile(C.Assets.Sound.WhisperBattleNet, 'Master')
+                PlaySoundFile(C.Assets.Sounds.WhisperBattleNet, 'Master')
             end
         end
 
@@ -580,9 +580,9 @@ local msgEvents = {
 
 local texStr = '|T%s:12:12:0:0:64:64:4:60:4:60|t'
 local texList = {
-    TANK = C.Assets.Texture.Tank,
-    HEALER = C.Assets.Texture.Healer,
-    DAMAGER = C.Assets.Texture.Damager,
+    TANK = C.Assets.Textures.RoleTank,
+    HEALER = C.Assets.Textures.RoleHealer,
+    DAMAGER = C.Assets.Textures.RoleDamager,
 }
 
 local GetColoredName_orig = _G.GetColoredName
@@ -627,7 +627,7 @@ local function FixLanguageFilterSideEffects()
 
     F.CreateFS(
         _G.HelpFrame,
-        C.Assets.Font.Bold,
+        C.Assets.Fonts.Bold,
         14,
         nil,
         L['You need to uncheck language filter in GUI and reload UI to get access into CN BattleNet support.'],

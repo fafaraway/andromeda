@@ -72,7 +72,7 @@ local function ReskinXPBar(self)
         xpBar.XPLeft:Hide()
         xpBar.XPRight:Hide()
         select(4, xpBar:GetRegions()):Hide()
-        xpBar:SetStatusBarTexture(C.Assets.Texture.Backdrop)
+        xpBar:SetStatusBarTexture(C.Assets.Textures.Backdrop)
         F.CreateBDFrame(xpBar, 0.25)
     end
 end
@@ -119,7 +119,7 @@ local function ReskinMissionList(self)
             end
             if rareOverlay then
                 rareOverlay:SetDrawLayer('BACKGROUND')
-                rareOverlay:SetTexture(C.Assets.Texture.Backdrop)
+                rareOverlay:SetTexture(C.Assets.Textures.Backdrop)
                 rareOverlay:SetAllPoints()
                 rareOverlay:SetVertexColor(0.098, 0.537, 0.969, 0.2)
             end
@@ -1239,7 +1239,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
                     F.Reskin(peek('UnButton'))
                     F.Reskin(peek('StartButton'))
                     if peek('StartButton'):GetWidth() < 50 then -- only adjust the unmodified VP
-                        peek('StartButton'):SetText('|T' .. C.Assets.Texture.Arrow .. ':16|t')
+                        peek('StartButton'):SetText('|T' .. C.Assets.Textures.Arrow .. ':16|t')
                     end
                 elseif otype == 'ILButton' then
                     widget:DisableDrawLayer('BACKGROUND')

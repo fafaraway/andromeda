@@ -86,7 +86,7 @@ function QH:OnLogin()
     local handler = CreateFrame('Frame', nil, _G.UIParent)
     QH.QuestHandler = handler
 
-    local text = F.CreateFS(handler, C.Assets.Font.Bold, 20, nil, nil, nil, 'THICK')
+    local text = F.CreateFS(handler, C.Assets.Fonts.Bold, 20, nil, nil, nil, 'THICK')
     text:ClearAllPoints()
     text:SetPoint('TOP', _G.UIParent, 0, -200)
     text:SetWidth(800)
