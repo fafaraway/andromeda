@@ -452,7 +452,7 @@ function NAMEPLATE:CreateSpitefulIndicator(self)
     tarName:SetPoint('TOP', self, 'BOTTOM', 0, -10)
     tarName:Hide()
 
-    self:Tag(tarName, '[free:tarname]')
+    self:Tag(tarName, '[andromeda:tarname]')
     self.tarName = tarName
 end
 

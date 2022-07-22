@@ -129,8 +129,8 @@ local _tags = {
 }
 
 for tag, func in next, _tags do
-    tagMethods['free:' .. tag] = func
-    tagEvents['free:' .. tag] = events[tag]
+    tagMethods['andromeda:' .. tag] = func
+    tagEvents['andromeda:' .. tag] = events[tag]
 end
 
 function NAMEPLATE.ConfigureNameTag(frame)
@@ -148,7 +148,7 @@ function NAMEPLATE.ConfigureNameTag(frame)
         name:SetPoint('CENTER', frame, 'TOP', 0, 8)
         name:SetJustifyH('CENTER')
 
-        frame:Tag(name, '[free:color][free:npnamefull]')
+        frame:Tag(name, '[andromeda:color][andromeda:npnamefull]')
     else
         F:SetFS(name, C.Assets.Font.Bold, 11, outline, nil, nil, outline or 'THICK')
 
@@ -159,15 +159,15 @@ function NAMEPLATE.ConfigureNameTag(frame)
         -- 1 name 2 level name 3 class level name 4 class name 5 none
         local nameTagType = C.DB.Nameplate.NameTagType
         if nameTagType == 1 then
-            frame:Tag(name, '[free:npname]')
+            frame:Tag(name, '[andromeda:npname]')
         elseif nameTagType == 2 then
-            frame:Tag(name, '[free:nplevel][free:npname]')
+            frame:Tag(name, '[andromeda:nplevel][andromeda:npname]')
         elseif nameTagType == 3 then
-            frame:Tag(name, '[free:npclassify][free:nplevel][free:npname]')
+            frame:Tag(name, '[andromeda:npclassify][andromeda:nplevel][andromeda:npname]')
         elseif nameTagType == 4 then
-            frame:Tag(name, '[free:npclassify][free:npname]')
+            frame:Tag(name, '[andromeda:npclassify][andromeda:npname]')
         elseif nameTagType == 5 then
-            frame:Tag(name, '[free:npnone]')
+            frame:Tag(name, '[andromeda:npnone]')
         end
     end
 
@@ -192,7 +192,7 @@ function NAMEPLATE.ConfigureHealthTag(frame)
     text:SetPoint('RIGHT', frame, 'TOPRIGHT')
     text:SetJustifyH('RIGHT')
 
-    frame:Tag(text, '[free:nphp]')
+    frame:Tag(text, '[andromeda:nphp]')
 
     text:UpdateTag()
 end

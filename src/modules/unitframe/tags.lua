@@ -205,8 +205,8 @@ local _tags = {
 }
 
 for tag, func in next, _tags do
-    tagMethods['free:' .. tag] = func
-    tagEvents['free:' .. tag] = events[tag]
+    tagMethods['andromeda:' .. tag] = func
+    tagEvents['andromeda:' .. tag] = events[tag]
 end
 
 function UNITFRAME:CreateGroupLeaderTag(self)
@@ -214,7 +214,7 @@ function UNITFRAME:CreateGroupLeaderTag(self)
     local text = F.CreateFS(self.Health, font, 8, 'OUTLINE, MONOCHROME')
     text:SetPoint('TOPLEFT', 2, -2)
 
-    self:Tag(text, '[free:groupleader]')
+    self:Tag(text, '[andromeda:groupleader]')
     self.GroupLeader = text
 end
 
@@ -223,7 +223,7 @@ function UNITFRAME:CreateGroupRoleTag(self)
     local text = F.CreateFS(self.Health, font, 8, 'OUTLINE, MONOCHROME')
     text:SetPoint('BOTTOM', 1, 1)
 
-    self:Tag(text, '[free:grouprole]')
+    self:Tag(text, '[andromeda:grouprole]')
     self.GroupRole = text
 end
 
@@ -232,7 +232,7 @@ function UNITFRAME:CreateGroupNameTag(self)
     local outline = _G.ANDROMEDA_ADB.FontOutline
     local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
 
-    self:Tag(text, '[free:color][free:groupname] [free:ddg]')
+    self:Tag(text, '[andromeda:color][andromeda:groupname] [andromeda:ddg]')
 
     self.GroupNameTag = text
 end
@@ -256,9 +256,9 @@ function UNITFRAME:CreateNameTag(self)
     end
 
     if style == 'arena' then
-        self:Tag(text, '[free:color][free:name] [arenaspec]')
+        self:Tag(text, '[andromeda:color][andromeda:name] [arenaspec]')
     else
-        self:Tag(text, '[free:color][free:name]')
+        self:Tag(text, '[andromeda:color][andromeda:name]')
     end
 
     self.NameTag = text
@@ -275,17 +275,17 @@ function UNITFRAME:CreateHealthTag(self)
     text:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
 
     if style == 'target' then
-        self:Tag(text, '[free:dead][free:offline][free:healthvalue] [free:healthperc]')
+        self:Tag(text, '[andromeda:dead][andromeda:offline][andromeda:healthvalue] [andromeda:healthperc]')
     elseif style == 'boss' then
         text:ClearAllPoints()
         text:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
         text:SetJustifyH('RIGHT')
-        self:Tag(text, '[free:dead][free:healthvalue] [free:healthperc]')
+        self:Tag(text, '[andromeda:dead][andromeda:healthvalue] [andromeda:healthperc]')
     elseif style == 'arena' then
         text:ClearAllPoints()
         text:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
         text:SetJustifyH('RIGHT')
-        self:Tag(text, '[free:dead][free:offline][free:healthvalue]')
+        self:Tag(text, '[andromeda:dead][andromeda:offline][andromeda:healthvalue]')
     end
 
     self.HealthTag = text
@@ -304,7 +304,7 @@ function UNITFRAME:CreateAltPowerTag(self)
         text:SetPoint('BOTTOM', self.Health, 'TOP', 0, 3)
     end
 
-    self:Tag(text, '[free:altpowerperc]')
+    self:Tag(text, '[andromeda:altpowerperc]')
 
     self.AltPowerTag = text
 end
@@ -346,12 +346,12 @@ function UNITFRAME:CreatePlayerTags(self)
     local leftTag = F.CreateFS(self, font, 11, outline, nil, nil, outline or 'THICK')
     leftTag:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
 
-    self:Tag(leftTag, '[free:healthvalue] [free:healthperc] [free:dead] [free:pvp] [free:resting]')
+    self:Tag(leftTag, '[andromeda:healthvalue] [andromeda:healthperc] [andromeda:dead] [andromeda:pvp] [andromeda:resting]')
 
     local rightTag = F.CreateFS(self, font, 11, outline, nil, nil, outline or 'THICK')
     rightTag:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
 
-    self:Tag(rightTag, '[powercolor][free:powervalue]')
+    self:Tag(rightTag, '[powercolor][andromeda:powervalue]')
 
     self.LeftTag = leftTag
     self.RightTag = rightTag
