@@ -148,7 +148,6 @@ C.CharacterSettings = {
     },
     Unitframe = {
         Enable = true,
-        TextureStyle = 1,
         ColorStyle = 2,
         InvertedColorMode = true,
         Smooth = true,
@@ -308,7 +307,6 @@ C.CharacterSettings = {
     },
     Nameplate = {
         Enable = true,
-        TextureStyle = 2,
         Width = 120,
         Height = 12,
         ClickableWidth = 120,
@@ -639,4 +637,8 @@ C.AccountSettings = {
     SmoothAmount = 0.25,
     MinimapAddOnCollector = true,
     IgnoredAddOns = '',
+    UnitframeTextureIndex = 1,
+    UnitframeCustomTexture = '',
+    NameplateTextureIndex = 1,
+    NameplateCustomTexture = '',
 }

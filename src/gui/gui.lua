@@ -148,7 +148,7 @@ local function CombatLockdown(event)
 end
 
 local function CheckUIReload(name)
-    if not strfind(name, '%*') then
+    if name and not strfind(name, '%*') then
         GUI.NeedUIReload = true
     end
 end
@@ -392,7 +392,7 @@ local function CreateOptions(i)
                 F.AddTooltip(s, 'ANCHOR_TOPLEFT', tip, 'BLUE', true)
             end
         elseif optType == 4 then -- dropdown
-            if value == 'TextureStyle' then
+            if value == 'UnitframeTextureIndex' or value == 'NameplateTextureIndex' then
                 for _, v in ipairs(GUI.TexturesList) do
                     tinsert(data, v.name)
                 end
@@ -418,7 +418,7 @@ local function CreateOptions(i)
 
             for j = 1, #data do
                 dd.options[j]:HookScript('OnClick', updateDropdownClick)
-                if value == 'TextureStyle' then
+                if value == 'UnitframeTextureIndex' or value == 'NameplateTextureIndex' then
                     AddTextureToOption(dd.options, j) -- texture preview
                 end
             end

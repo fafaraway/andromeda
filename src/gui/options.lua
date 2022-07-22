@@ -1656,18 +1656,28 @@ GUI.OptionsList = {
 
         {
             4,
-            'Unitframe',
-            'TextureStyle',
+            'ACCOUNT',
+            'UnitframeTextureIndex',
             L['Texture Style'],
             nil,
             {},
+        },
+        {
+            2,
+            'ACCOUNT',
+            'UnitframeCustomTexture',
+            L['Custom Texture'],
+            true,
+            nil,
+            nil,
+            L["Put your texture under 'Interface' folder, and input the texture name here to replace texture style.|nIncorrect texture would present as green block, you might need to restart your game client.|nLeave the editbox empty to disable custom texture. Require UI reload."]
         },
         {
             4,
             'Unitframe',
             'ColorStyle',
             L['Health Color'],
-            true,
+            nil,
             {
                 L['Default White'],
                 L['Class Color'],
@@ -2113,6 +2123,24 @@ GUI.OptionsList = {
             L['Uncheck this if you want to use another nameplate addon.'],
         },
         {
+            4,
+            'ACCOUNT',
+            'NameplateTextureIndex',
+            L['Texture Style'],
+            nil,
+            {},
+        },
+        {
+            2,
+            'ACCOUNT',
+            'NameplateCustomTexture',
+            L['Custom Texture'],
+            true,
+            nil,
+            nil,
+            L["Put your texture under 'Interface' folder, and input the texture name here to replace texture style.|nIncorrect texture would present as green block, you might need to restart your game client.|nLeave the editbox empty to disable custom texture. Require UI reload."]
+        },
+        {
             1,
             'Nameplate',
             'ForceCVars',
@@ -2123,19 +2151,11 @@ GUI.OptionsList = {
             L['Forcefully override the CVars related to the nameplate.'],
         },
         {
-            4,
-            'Nameplate',
-            'TextureStyle',
-            L['Texture Style'],
-            true,
-            {},
-        },
-        {
             1,
             'Nameplate',
             'NameOnlyMode',
             L['Name Only Mode'],
-            nil,
+            true,
             nil,
             nil,
             L["Friendly units' nameplate only display the enlarged name and hide the health bar."],

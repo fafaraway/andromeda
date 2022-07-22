@@ -101,16 +101,25 @@ loader:SetScript('OnEvent', function(self, _, addon)
 
     local GUI = F:GetModule('GUI')
     local NAMEPLATE = F:GetModule('Nameplate')
-    if not GUI.TexturesList[C.DB.Nameplate.TextureStyle] then
-        C.DB.Nameplate.TextureStyle = 1
-    end
-    NAMEPLATE.StatusBarTex = GUI.TexturesList[C.DB.Nameplate.TextureStyle].texture
-
     local UNITFRAME = F:GetModule('UnitFrame')
-    if not GUI.TexturesList[C.DB.Unitframe.TextureStyle] then
-        C.DB.Unitframe.TextureStyle = 1
+
+    if _G.ANDROMEDA_ADB['NameplateCustomTexture'] ~= '' then
+        NAMEPLATE.StatusBarTex = 'Interface\\' .. _G.ANDROMEDA_ADB['NameplateCustomTexture']
+    else
+        if not GUI.TexturesList[_G.ANDROMEDA_ADB['NameplateTextureIndex']] then
+            _G.ANDROMEDA_ADB['NameplateTextureIndex'] = 1 -- reset value if not exists
+        end
+        NAMEPLATE.StatusBarTex = GUI.TexturesList[_G.ANDROMEDA_ADB['NameplateTextureIndex']].texture
     end
-    UNITFRAME.StatusBarTex = GUI.TexturesList[C.DB.Unitframe.TextureStyle].texture
+
+    if _G.ANDROMEDA_ADB['UnitframeCustomTexture'] ~= '' then
+        UNITFRAME.StatusBarTex = 'Interface\\' .. _G.ANDROMEDA_ADB['UnitframeCustomTexture']
+    else
+        if not GUI.TexturesList[_G.ANDROMEDA_ADB['UnitframeTextureIndex']] then
+            _G.ANDROMEDA_ADB['UnitframeTextureIndex'] = 1
+        end
+        UNITFRAME.StatusBarTex = GUI.TexturesList[_G.ANDROMEDA_ADB['UnitframeTextureIndex']].texture
+    end
 
     self:UnregisterAllEvents()
 end)
