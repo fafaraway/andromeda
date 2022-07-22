@@ -910,14 +910,12 @@ function INVENTORY:OnLogin()
         parentFrame:SetFrameLevel(5)
 
         self.Favourite = parentFrame:CreateTexture(nil, 'ARTWORK')
-        self.Favourite:SetTexture(C.Assets.Texture.StateIcon)
-        self.Favourite:SetTexCoord(0.5, 1, 0.5, 1)
+        self.Favourite:SetTexture('')
         self.Favourite:SetSize(16, 16)
         self.Favourite:SetPoint('TOPLEFT')
 
         self.Quest = parentFrame:CreateTexture(nil, 'ARTWORK')
-        self.Quest:SetTexture(C.Assets.Texture.StateIcon)
-        self.Quest:SetTexCoord(0.5, 1, 0, 0.5)
+        self.Quest:SetTexture('Interface\\Buttons\\AdventureGuideMicrobuttonAlert')
         self.Quest:SetSize(24, 24)
         self.Quest:SetPoint('TOPLEFT', -2, -2)
 

@@ -39,7 +39,7 @@ C.Assets.Texture = {
     LogoSplash            = C.ASSET_PATH .. 'textures\\logo-splash',
     LogoChat              = C.ASSET_PATH .. 'textures\\logo-chat',
 
-    StateIcon = C.ASSET_PATH .. 'textures\\state_icons',
+
 
     Vignetting = C.ASSET_PATH .. 'textures\\vignetting',
 
