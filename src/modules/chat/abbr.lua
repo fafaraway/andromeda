@@ -3,7 +3,7 @@ local CHAT = F:GetModule('Chat')
 
 local playerString = '|Hplayer:%s|h%s|h'
 local function formatPlayer(info, name)
-    return playerString:format(info, name:gsub('%-[^|]+', ''))
+    return playerString:format(info, name:gsub('%-^|+', ''))
 end
 
 local waypointStringFar = '|Hworldmap:%d:%d:%d|h[%s: %.2f, %.2f]|h'
@@ -32,7 +32,7 @@ function CHAT:UpdateChannelNames(text, ...)
     -- Dev logo
     local unitName = strmatch(text, '|Hplayer:([^|:]+)')
     if unitName and C.DevsList[unitName] then
-        text = gsub(text, '(|Hplayer.+)', '|T' .. C.Assets.Textures.LogoChat .. ':12:12|t %1')
+        text = gsub(text, '(|Hplayer.+)', '|T' .. C.Assets.Textures.LogoChat .. ':14:14|t %1')
     end
 
     -- Remove realm and bracket

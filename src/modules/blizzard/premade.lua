@@ -143,8 +143,8 @@ function BLIZZARD:ReplaceGroupRoles(numPlayers, _, disabled)
             end
 
             icon.role = self:CreateTexture(nil, 'OVERLAY', nil, 2)
-            icon.role:SetSize(14, 14)
-            icon.role:SetPoint('TOPLEFT', icon, -4, 2)
+            icon.role:SetSize(22, 22)
+            icon.role:SetPoint('TOPLEFT', icon, -8, 8)
 
             icon.leader = self:CreateTexture(nil, 'OVERLAY', nil, 1)
             icon.leader:SetSize(14, 14)

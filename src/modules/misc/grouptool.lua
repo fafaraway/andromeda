@@ -129,12 +129,12 @@ function GT:RaidTool_RoleCount(parent)
     local role = {}
     for i = 1, 3 do
         role[i] = frame:CreateTexture(nil, 'OVERLAY')
-        role[i]:SetPoint('LEFT', 36 * i - 30, 0)
-        role[i]:SetSize(16, 16)
+        role[i]:SetPoint('LEFT', 36 * i - 34, 0)
+        role[i]:SetSize(28, 28)
         role[i]:SetTexture(roleIcons[i])
-        role[i].text = F.CreateFS(frame, C.Assets.Fonts.Bold, 12, true, '0', 'YELLOW', true)
+        role[i].text = F.CreateFS(frame, C.Assets.Fonts.Condensed, 11, true, '0', 'YELLOW', true)
         role[i].text:ClearAllPoints()
-        role[i].text:SetPoint('CENTER', role[i], 'RIGHT', 10, -1)
+        role[i].text:SetPoint('LEFT', role[i], 'RIGHT', -4, 0)
     end
 
     local raidCounts = { totalTANK = 0, totalHEALER = 0, totalDAMAGER = 0 }
