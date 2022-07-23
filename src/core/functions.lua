@@ -2215,6 +2215,7 @@ do
     function F:ReskinSmallRole(role)
         self:SetTexture(F.GetRoleTex(role))
         self:SetTexCoord(0, 1, 0, 1)
+        self:SetSize(32, 32)
     end
 
     function F:ReskinRole(role)

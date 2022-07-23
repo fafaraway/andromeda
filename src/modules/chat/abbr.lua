@@ -3,7 +3,7 @@ local CHAT = F:GetModule('Chat')
 
 local playerString = '|Hplayer:%s|h%s|h'
 local function formatPlayer(info, name)
-    return playerString:format(info, name:gsub('%-[^|]+', ''))
+    return playerString:format(info, name:gsub('%-^|+', ''))
 end
 
 local waypointStringFar = '|Hworldmap:%d:%d:%d|h[%s: %.2f, %.2f]|h'

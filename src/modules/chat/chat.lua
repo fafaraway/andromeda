@@ -578,12 +578,12 @@ local msgEvents = {
     CHAT_MSG_RAID_WARNING = 1,
 }
 
-local texStr = '|T%s:12:12:0:0:64:64:4:60:4:60|t'
-local texList = {
-    TANK = C.Assets.Textures.RoleTank,
-    HEALER = C.Assets.Textures.RoleHealer,
-    DAMAGER = C.Assets.Textures.RoleDamager,
+CHAT.roleIcons = {
+    TANK = F:TextureString(C.Assets.Textures.RoleTank, ':20:20:0:0:64:64:2:56:2:56'),
+    HEALER = F:TextureString(C.Assets.Textures.RoleHealer, ':20:20:0:0:64:64:2:56:2:56'),
+    DAMAGER = F:TextureString(C.Assets.Textures.RoleDamager, ':20:20:0:0:64:64:2:56:2:56')
 }
+
 
 local GetColoredName_orig = _G.GetColoredName
 local function getColoredName(event, arg1, arg2, ...)
@@ -591,12 +591,13 @@ local function getColoredName(event, arg1, arg2, ...)
 
     if msgEvents[event] then
         local role = UnitGroupRolesAssigned(arg2)
+
         if role == 'NONE' and arg2:match(' *- *' .. GetRealmName() .. '$') then
             role = UnitGroupRolesAssigned(arg2:gsub(' *-[^-]+$', ''))
         end
+
         if role and role ~= 'NONE' then
-            local str = format(texStr, texList[role])
-            ret = str .. ' ' .. ret
+            ret = CHAT.roleIcons[role] .. ' ' .. ret
         end
     end
 
