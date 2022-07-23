@@ -5,5 +5,7 @@ move-folders:
 
 ignore:
   - .vscode
-  - _docs
-  - _utils
+  - assets
+  - docs
+  - scripts
+  - utils
