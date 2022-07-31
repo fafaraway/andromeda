@@ -15,7 +15,7 @@
 **Andromeda** is a user interface replacement **AddOn** for **World of Warcraft**.  
 It provides many useful features while maintaining **beauty**, **elegance**, and **efficiency**.  
 Accompany you through every challenging day in **Azeroth**.  
-Made with ❤️ by **neotpravlennoye**.
+Made with ❤️ by [**neotpravlennoye**](https://github.com/neotpravlennoye).
 
 ## Screenshots
 *  https://imgur.com/a/0JfIGql
@@ -25,13 +25,15 @@ Made with ❤️ by **neotpravlennoye**.
 *  https://www.bilibili.com/video/BV1uR4y1V7VY/
 
 ## Feedback
-*  Report issues on [GitHub](https://github.com/Solor/FreeUI/issues)
-*  Join discord channel [https://discord.gg/86wbfZXxn7](https://discord.gg/86wbfZXxn7)
+*  Report issues on [GitHub](https://github.com/neotpravlennoye/andromeda/issues)
+*  Join [Discord Channel](https://discord.gg/86wbfZXxn7)
 *  加入QQ群 [203621176](https://jq.qq.com/?_wv=1027&k=LStIpBBc)
 
 ## Download
-*  New versions of **Andromeda** are automatically and synchronously released to various addon sites and can be downloaded or updated using third-party addon management software.
-*  [CurseForge](https://www.curseforge.com/wow/addons/freeui) [Wago](https://addons.wago.io/addons/freeui) [WoWInterface](https://www.wowinterface.com/downloads/info23258-FreeUI.html#info)
+New versions of **Andromeda** are automatically and synchronously released to various addon sites and can be downloaded or updated using third-party addon management software.
+*  [CurseForge](https://www.curseforge.com/wow/addons/andromeda)
+*  [Wago](https://addons.wago.io/addons/andromeda)
+*  [WoWInterface](https://www.wowinterface.com/downloads/fileinfo.php?id=23258)
 
 ## Usage
 ```
