@@ -255,8 +255,16 @@ function AURA:CreateAuraHeader(filter)
     header:SetAttribute('unit', 'player')
     header:SetAttribute('filter', filter)
     header.filter = filter
-    _G.RegisterStateDriver(header, 'visibility', '[petbattle] hide; show')
-    _G.RegisterAttributeDriver(header, 'unit', '[vehicleui] vehicle; player')
+    RegisterAttributeDriver(header, 'unit', '[vehicleui] vehicle; player')
+
+    header.visibility = CreateFrame('Frame', nil, _G.UIParent, 'SecureHandlerStateTemplate')
+    SecureHandlerSetFrameRef(header.visibility, 'AuraHeader', header)
+    RegisterStateDriver(header.visibility, 'customVisibility', '[petbattle] 0;1')
+    header.visibility:SetAttribute('_onstate-customVisibility', [[
+        local header = self:GetFrameRef('AuraHeader')
+        local hide, shown = newstate == 0, header:IsShown()
+        if hide and shown then header:Hide() elseif not hide and not shown then header:Show() end
+    ]]) -- use custom script that will only call hide when it needs to, this prevents spam to `SecureAuraHeader_Update`
 
     if filter == 'HELPFUL' then
         header:SetAttribute('consolidateDuration', -1)
