@@ -43,7 +43,7 @@ jobs:
         uses: loopwerk/tag-changelog@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          config_file: _utils/tag-changelog-config.js
+          config_file: scripts/tag-changelog-config.js
 
       - name: 'Crosspost changelog to Discord'
         uses: kludge-cs/gitcord-release-changelogger@v3.0.0
