@@ -479,7 +479,7 @@ local function CreateConsole(tabIndex)
 
     local outline = _G.ANDROMEDA_ADB.FontOutline
     local verStr = format('%s: %s', L['Version'], C.ADDON_VERSION)
-    F.CreateFS(guiFrame, C.ASSET_PATH .. 'fonts\\header.ttf', 22, outline, C.COLORFUL_ADDON_TITLE, nil, outline or 'THICK', 'TOP', 0, -4)
+    F.CreateFS(guiFrame, C.ASSET_PATH .. 'fonts\\suez-one.ttf', 22, outline, C.COLORFUL_ADDON_TITLE, nil, outline or 'THICK', 'TOP', 0, -4)
     F.CreateFS(guiFrame, C.Assets.Fonts.Condensed, 10, outline, verStr, { 0.7, 0.7, 0.7 }, outline or 'THICK', 'TOP', 0, -30)
 
     GUI:CreateGradientLine(guiFrame, 140, -70, -26, 70, -26)

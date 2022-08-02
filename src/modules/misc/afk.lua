@@ -91,7 +91,7 @@ local function ConstructTextString(f)
     )
     f.timer = F.CreateFS(
         f,
-        C.ASSET_PATH .. 'fonts\\header.ttf',
+        C.ASSET_PATH .. 'fonts\\suez-one.ttf',
         56,
         nil,
         'timer',

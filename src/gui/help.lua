@@ -116,7 +116,7 @@ end
 
 local function ConstructTextString(f)
     local outline = _G.ANDROMEDA_ADB.FontOutline
-    f.title = F.CreateFS(f, C.ASSET_PATH .. 'fonts\\header.ttf', 56, outline, C.COLORFUL_ADDON_TITLE, nil, outline or 'THICK', 'TOP', 0, -C.UI_GAP)
+    f.title = F.CreateFS(f, C.ASSET_PATH .. 'fonts\\suez-one.ttf', 56, outline, C.COLORFUL_ADDON_TITLE, nil, outline or 'THICK', 'TOP', 0, -C.UI_GAP)
     f.version = F.CreateFS(f, C.Assets.Fonts.Condensed, 12, outline, 'Version: ' .. C.ADDON_VERSION, { 0.7, 0.7, 0.7 }, outline or 'THICK', 'TOP', 0, -100)
     f.tip = F.CreateFS(f, C.Assets.Fonts.Bold, 10, outline, strList.tip, { 0.3, 0.3, 0.3 }, outline or 'THICK', 'BOTTOM', 0, C.UI_GAP)
 

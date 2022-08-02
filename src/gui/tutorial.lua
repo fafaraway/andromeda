@@ -166,7 +166,7 @@ function TUTORIAL:HelloWorld()
     F.SetBD(f)
 
     local outline = _G.ANDROMEDA_ADB.FontOutline
-    f.logo = F.CreateFS(f, C.ASSET_PATH .. 'fonts\\header.ttf', 22, outline, C.COLORFUL_ADDON_TITLE, nil, outline or 'THICK', 'TOP', 0, -4)
+    f.logo = F.CreateFS(f, C.ASSET_PATH .. 'fonts\\suez-one.ttf', 22, outline, C.COLORFUL_ADDON_TITLE, nil, outline or 'THICK', 'TOP', 0, -4)
     f.desc = F.CreateFS(f, C.Assets.Fonts.Regular, 10, outline, 'installation', { 0.7, 0.7, 0.7 }, outline or 'THICK', 'TOP', 0, -30)
 
     GUI:CreateGradientLine(f, 140, -70, -26, 70, -26)
