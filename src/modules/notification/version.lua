@@ -83,15 +83,15 @@ function NOTIFICATION:VersionCheck_UpdateGroup()
 end
 
 function NOTIFICATION:VersionCheck()
-    NOTIFICATION:VersionCheck_Init()
-    C_ChatInfo.RegisterAddonMessagePrefix('AndromedaUIVersionCheck')
-    F:RegisterEvent('CHAT_MSG_ADDON', NOTIFICATION.VersionCheck_Update)
+    -- NOTIFICATION:VersionCheck_Init()
+    -- C_ChatInfo.RegisterAddonMessagePrefix('AndromedaUIVersionCheck')
+    -- F:RegisterEvent('CHAT_MSG_ADDON', NOTIFICATION.VersionCheck_Update)
 
-    if IsInGuild() then
-        C_ChatInfo.SendAddonMessage('AndromedaUIVersionCheck', C.ADDON_VERSION, 'GUILD')
-        lastVCTime = GetTime()
-    end
+    -- if IsInGuild() then
+    --     C_ChatInfo.SendAddonMessage('AndromedaUIVersionCheck', C.ADDON_VERSION, 'GUILD')
+    --     lastVCTime = GetTime()
+    -- end
 
-    NOTIFICATION:VersionCheck_UpdateGroup()
-    F:RegisterEvent('GROUP_ROSTER_UPDATE', NOTIFICATION.VersionCheck_UpdateGroup)
+    -- NOTIFICATION:VersionCheck_UpdateGroup()
+    -- F:RegisterEvent('GROUP_ROSTER_UPDATE', NOTIFICATION.VersionCheck_UpdateGroup)
 end
