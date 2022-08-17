@@ -112,11 +112,12 @@ local filteredUnits = {
     ['arena'] = true,
 }
 
-local replaceEncryptedIcons = {
+UNITFRAME.ReplacedSpellIcons = {
     [368078] = 348567, -- 移速
     [368079] = 348567, -- 移速
     [368103] = 648208, -- 急速
     [368243] = 237538, -- CD
+    [373785] = 236293, -- S4，大魔王伪装
 }
 
 local dispellType = {
@@ -207,7 +208,7 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
         button.timer:SetFont(font, fontSize, 'OUTLINE')
     end
 
-    local newTexture = replaceEncryptedIcons[button.spellID]
+    local newTexture = UNITFRAME.ReplacedSpellIcons[button.spellID]
     if newTexture then
         button.icon:SetTexture(newTexture)
     end
@@ -418,6 +419,7 @@ function UNITFRAME:CreateAuras(self)
     bu.spacing = 4
     bu.numTotal = 32
     bu.disableCooldown = true
+    bu.tooltipAnchor = 'ANCHOR_BOTTOMLEFT'
 
     if style == 'player' then
         bu.initialAnchor = 'TOPLEFT'
@@ -507,6 +509,7 @@ function NAMEPLATE:CreateAuras(self)
     bu['growth-y'] = 'UP'
     bu.iconsPerRow = C.DB.Nameplate.AuraPerRow
     bu.disableCooldown = true
+    bu.tooltipAnchor = 'ANCHOR_BOTTOMLEFT'
 
     UNITFRAME:UpdateAuraContainer(self, bu, bu.numTotal)
 
@@ -603,6 +606,7 @@ function UNITFRAME:CreatePartyAuras(self)
     bu.size = C.DB.Unitframe.PartyAuraSize
     bu.numTotal = C.DB.Unitframe.PartyAura and C.DB.Unitframe.PartyAuraNum or 0
     bu.partyAura = true
+    bu.tooltipAnchor = 'ANCHOR_BOTTOMLEFT'
 
     UNITFRAME.PartyAuraUpdateAnchor(bu)
     UNITFRAME:UpdateAuraContainer(self, bu, bu.numTotal)
@@ -647,6 +651,7 @@ function UNITFRAME:CreatePartyBuffs(self)
     bu.spacing = 3
     bu.size = C.DB.Unitframe.PartyBuffSize
     bu.num = not C.DB.Unitframe.PartyBuff and 0 or C.DB.Unitframe.PartyBuffNum
+    bu.tooltipAnchor = 'ANCHOR_BOTTOMLEFT'
 
     UNITFRAME:UpdateAuraContainer(self, bu, bu.num)
 
@@ -666,6 +671,7 @@ function UNITFRAME:CreateRaidBuffs(self)
     bu.spacing = 3
     bu.size = C.DB.Unitframe.RaidBuffSize
     bu.num = not C.DB.Unitframe.RaidBuff and 0 or C.DB.Unitframe.RaidBuffNum
+    bu.tooltipAnchor = 'ANCHOR_BOTTOMLEFT'
 
     UNITFRAME:UpdateAuraContainer(self, bu, bu.num)
 
@@ -711,6 +717,7 @@ function UNITFRAME:CreatePartyDebuffs(self)
     bu.spacing = 3
     bu.size = C.DB.Unitframe.PartyDebuffSize
     bu.num = not C.DB.Unitframe.PartyDebuff and 0 or C.DB.Unitframe.PartyDebuffNum
+    bu.tooltipAnchor = 'ANCHOR_BOTTOMLEFT'
 
     UNITFRAME:UpdateAuraContainer(self, bu, bu.num)
 
@@ -732,6 +739,7 @@ function UNITFRAME:CreateRaidDebuffs(self)
     bu.spacing = 3
     bu.size = C.DB.Unitframe.RaidDebuffSize
     bu.num = not C.DB.Unitframe.RaidDebuff and 0 or C.DB.Unitframe.RaidDebuffNum
+    bu.tooltipAnchor = 'ANCHOR_BOTTOMLEFT'
 
     UNITFRAME:UpdateAuraContainer(self, bu, bu.num)
 
