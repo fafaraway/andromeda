@@ -238,33 +238,10 @@ NAMEPLATE.AuraFilterList = {
     [2] = {},
 }
 
-function UNITFRAME.AuraFilter(
-    element,
-    unit,
-    button,
-    name,
-    _,
-    _,
-    debuffType,
-    _,
-    _,
-    caster,
-    isStealable,
-    _,
-    spellID,
-    _,
-    isBossAura,
-    _,
-    nameplateShowAll
-)
+function UNITFRAME.AuraFilter(element, unit, button, name, _, _, debuffType, _, _, caster, isStealable, _, spellID, _, isBossAura, _, nameplateShowAll)
     local style = element.__owner.unitStyle
 
-    if
-        C.DB.Nameplate.ColorByDot
-        and style == 'nameplate'
-        and caster == 'player'
-        and C.DB['Nameplate']['DotSpellsList'][spellID]
-    then
+    if C.DB.Nameplate.ColorByDot and style == 'nameplate' and caster == 'player' and C.DB['Nameplate']['DotSpellsList'][spellID] then
         element.hasCustomDebuff = true
     end
 
@@ -285,11 +262,7 @@ function UNITFRAME.AuraFilter(
             return NAMEPLATE.AuraFilterList[1][spellID]
         elseif NAMEPLATE.AuraFilterList[2][spellID] then
             return false
-        elseif
-            (element.showStealableBuffs and isStealable or element.alwaysShowStealable and dispellType[debuffType])
-            and not UnitIsPlayer(unit)
-            and not button.isDebuff
-        then
+        elseif (element.showStealableBuffs and isStealable or element.alwaysShowStealable and dispellType[debuffType]) and not UnitIsPlayer(unit) and not button.isDebuff then
             return true
         elseif NAMEPLATE.AuraFilterList[1][spellID] then
             return true
@@ -303,10 +276,7 @@ function UNITFRAME.AuraFilter(
         -- return button.isDebuff or isBossAura or SpellIsPriorityAura(spellID)
         return true
     elseif style == 'target' then
-        return isStealable
-            or not button.isDebuff
-            or (element.onlyShowPlayer and button.isPlayer)
-            or (not element.onlyShowPlayer and name)
+        return isStealable or not button.isDebuff or (element.onlyShowPlayer and button.isPlayer) or (not element.onlyShowPlayer and name)
     elseif style == 'targettarget' then
         return isBossAura or SpellIsPriorityAura(spellID)
     elseif style == 'focus' then
@@ -632,10 +602,7 @@ function UNITFRAME.GroupBuffFilter(_, _, _, _, _, _, _, _, _, caster, _, _, spel
     if isBossAura then
         return true
     else
-        local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(
-            spellID,
-            UnitAffectingCombat('player') and 'RAID_INCOMBAT' or 'RAID_OUTOFCOMBAT'
-        )
+        local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellID, UnitAffectingCombat('player') and 'RAID_INCOMBAT' or 'RAID_OUTOFCOMBAT')
         local isPlayerSpell = (caster == 'player' or caster == 'pet' or caster == 'vehicle')
         if hasCustom then
             return showForMySpec or (alwaysShowMine and isPlayerSpell)
@@ -689,19 +656,12 @@ function UNITFRAME.GroupDebuffFilter(element, _, _, _, _, _, _, _, _, caster, _,
     local parent = element.__owner
     if C.GroupDebuffsBlackList[spellID] then
         return false
-    elseif
-        (C.DB.Unitframe.CornerIndicator and UNITFRAME.CornerSpellsList[spellID])
-        or parent.DebuffWatcher.spellID == spellID
-        or parent.rawSpellID == spellID
-    then
+    elseif (C.DB.Unitframe.CornerIndicator and UNITFRAME.CornerSpellsList[spellID]) or parent.DebuffWatcher.spellID == spellID or parent.rawSpellID == spellID then
         return false
     elseif isBossAura or SpellIsPriorityAura(spellID) then
         return true
     else
-        local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(
-            spellID,
-            UnitAffectingCombat('player') and 'RAID_INCOMBAT' or 'RAID_OUTOFCOMBAT'
-        )
+        local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellID, UnitAffectingCombat('player') and 'RAID_INCOMBAT' or 'RAID_OUTOFCOMBAT')
         if hasCustom then
             return showForMySpec or (alwaysShowMine and (caster == 'player' or caster == 'pet' or caster == 'vehicle'))
         else
