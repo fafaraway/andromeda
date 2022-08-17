@@ -19,8 +19,8 @@ tinsert(C.BlizzThemes, function()
 
     for i = 1, _G.MAX_ADDONS_DISPLAYED do
         local checkbox = _G['AddonListEntry' .. i .. 'Enabled']
-        checkbox:SetSize(18, 18)
-        F.ReskinCheckbox(checkbox, true, true)
+        checkbox:SetSize(16, 16)
+        F.ReskinCheckbox(checkbox, true)
         F.Reskin(_G['AddonListEntry' .. i .. 'Load'])
     end
 
