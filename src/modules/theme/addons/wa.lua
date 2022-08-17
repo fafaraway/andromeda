@@ -8,6 +8,7 @@ local function UpdateIconBgAlpha(icon, _, _, _, alpha)
     end
 end
 
+local x1, x2, y1, y2 = unpack(C.TEX_COORD)
 local function UpdateIconTexCoord(icon)
     if icon.isCutting then
         return
@@ -16,7 +17,7 @@ local function UpdateIconTexCoord(icon)
 
     local width, height = icon:GetSize()
     if width ~= 0 and height ~= 0 then
-        local left, right, top, bottom = unpack(C.TEX_COORD) -- normal icon
+        local left, right, top, bottom = x1, x2, y1, y2 -- normal icon
         local ratio = width / height
         if ratio > 1 then -- fat icon
             local offset = (1 - 1 / ratio) / 2
@@ -33,7 +34,7 @@ local function UpdateIconTexCoord(icon)
     icon.isCutting = nil
 end
 
-local function RestyleIcon(icon)
+local function HandleIcon(icon)
     UpdateIconTexCoord(icon)
     hooksecurefunc(icon, 'SetTexCoord', UpdateIconTexCoord)
     icon.bg = F.SetBD(icon, 0)
@@ -42,23 +43,23 @@ local function RestyleIcon(icon)
     hooksecurefunc(icon, 'SetVertexColor', UpdateIconBgAlpha)
 end
 
-local function RestyleBar(f)
+local function HandleBar(f)
     f.bg = F.SetBD(f.bar, 0)
     f.bg:SetFrameLevel(0)
     f.bg:SetBackdropBorderColor(0, 0, 0)
 end
 
-local function RestyleObject(f, fType)
+local function RestyleIconAndBar(f, fType)
     if fType == 'icon' then
         if not f.styled then
-            RestyleIcon(f.icon)
+            HandleIcon(f.icon)
 
             f.styled = true
         end
     elseif fType == 'aurabar' then
         if not f.styled then
-            RestyleBar(f)
-            RestyleIcon(f.icon)
+            HandleBar(f)
+            HandleIcon(f.icon)
 
             f.styled = true
         end
@@ -67,7 +68,7 @@ local function RestyleObject(f, fType)
     end
 end
 
-local function RestyleWeakAuras()
+local function RestyleObjects()
     if not _G.ANDROMEDA_ADB.ReskinWeakAuras then
         return
     end
@@ -78,31 +79,31 @@ local function RestyleWeakAuras()
 
     regionTypes.icon.create = function(parent, data)
         local region = Create_Icon(parent, data)
-        RestyleObject(region, 'icon')
+        RestyleIconAndBar(region, 'icon')
         return region
     end
 
     regionTypes.aurabar.create = function(parent)
         local region = Create_AuraBar(parent)
-        RestyleObject(region, 'aurabar')
+        RestyleIconAndBar(region, 'aurabar')
         return region
     end
 
     regionTypes.icon.modify = function(parent, region, data)
         Modify_Icon(parent, region, data)
-        RestyleObject(region, 'icon')
+        RestyleIconAndBar(region, 'icon')
     end
 
     regionTypes.aurabar.modify = function(parent, region, data)
         Modify_AuraBar(parent, region, data)
-        RestyleObject(region, 'aurabar')
+        RestyleIconAndBar(region, 'aurabar')
     end
 
     for _, regions in pairs(_G.WeakAuras.regions) do
         if regions.regionType == 'icon' or regions.regionType == 'aurabar' then
-            RestyleObject(regions.region, regions.regionType)
+            RestyleIconAndBar(regions.region, regions.regionType)
         end
     end
 end
 
-THEME:RegisterSkin('WeakAuras', RestyleWeakAuras)
+THEME:RegisterSkin('WeakAuras', RestyleObjects)
