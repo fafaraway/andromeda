@@ -74,7 +74,7 @@ end
 -- Chat
 
 local function UpdateWhisperSticky()
-    CHAT:ChatWhisperSticky()
+    CHAT:WhisperSticky()
 end
 
 local function UpdateWhisperList()
