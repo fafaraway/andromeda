@@ -1,12 +1,14 @@
+-- https://luacheck.readthedocs.io/en/stable/warnings.html#list-of-warnings
+
 std = 'lua51'
+max_line_length = false
 
 exclude_files = {
-    'libraries/',
-    'locales/',
-    '.luacheckrc'
+    '.luacheckrc',
+    '**/libraries/',
+    '**/locales/',
 }
 
--- https://luacheck.readthedocs.io/en/stable/warnings.html#list-of-warnings
 ignore = {
     '113/_',        -- accessing an undefined global variable '_'
     '211/F',        -- unused local variable 'F'
@@ -23,7 +25,7 @@ ignore = {
     '431',          -- shadowing upvalue
     '432',          -- shadowing upvalue argument
     '512',          -- loop can be executed at most once
-    '631',          -- line is too long
+
 }
 
 globals = {
@@ -2661,7 +2663,8 @@ globals = {
     'CooldownFrame_Set',
     'MouseIsOver',
     'HybridScrollFrame_GetOffset',
-    'FCF_SetChatWindowFontSize'
-
-
+    'FCF_SetChatWindowFontSize',
+    'BNet_GetClientTexture',
+    'RegisterAttributeDriver',
+    'SecureHandlerSetFrameRef'
 }
