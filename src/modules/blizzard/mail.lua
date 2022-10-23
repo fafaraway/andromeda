@@ -74,13 +74,7 @@ function M:InboxItem_OnEnter()
                 local itemName, _, itemQuality, _, _, _, _, _, _, itemTexture = GetItemInfo(itemID)
                 if itemName then
                     local r, g, b = GetItemQualityColor(itemQuality)
-                    _G.GameTooltip:AddDoubleLine(
-                        ' |T' .. itemTexture .. ':12:12:0:0:50:50:4:46:4:46|t ' .. itemName,
-                        count,
-                        r,
-                        g,
-                        b
-                    )
+                    _G.GameTooltip:AddDoubleLine(' |T' .. itemTexture .. ':12:12:0:0:50:50:4:46:4:46|t ' .. itemName, count, r, g, b)
                 end
             end
             _G.GameTooltip:Show()
@@ -401,13 +395,7 @@ function M:MailBox_CollectCurrent()
 end
 
 function M:CollectCurrentButton()
-    local button = M:MailBox_CreatButton(
-        _G.OpenMailFrame,
-        70,
-        20,
-        L['Take All'],
-        { 'RIGHT', 'OpenMailReplyButton', 'LEFT', -6, 0 }
-    )
+    local button = M:MailBox_CreatButton(_G.OpenMailFrame, 70, 20, L['Take All'], { 'RIGHT', 'OpenMailReplyButton', 'LEFT', -6, 0 })
     button:SetScript('OnClick', M.MailBox_CollectCurrent)
 
     _G.OpenMailCancelButton:SetSize(70, 20)
@@ -505,4 +493,36 @@ function M:OnLogin()
     M:CollectGoldButton()
     M:CollectCurrentButton()
     M:LastMailSaver()
+end
+
+-- Temp fix for GM mails
+function _G.OpenAllMail:AdvanceToNextItem()
+    local foundAttachment = false
+    while not foundAttachment do
+        local _, _, _, _, _, CODAmount, _, _, _, _, _, _, isGM = GetInboxHeaderInfo(self.mailIndex)
+        local itemID = select(2, GetInboxItem(self.mailIndex, self.attachmentIndex))
+        local hasBlacklistedItem = self:IsItemBlacklisted(itemID)
+        local hasCOD = CODAmount and CODAmount > 0
+        local hasMoneyOrItem = C_Mail.HasInboxMoney(self.mailIndex) or HasInboxItem(self.mailIndex, self.attachmentIndex)
+        if not hasBlacklistedItem and not isGM and not hasCOD and hasMoneyOrItem then
+            foundAttachment = true
+        else
+            self.attachmentIndex = self.attachmentIndex - 1
+            if self.attachmentIndex == 0 then
+                break
+            end
+        end
+    end
+
+    if not foundAttachment then
+        self.mailIndex = self.mailIndex + 1
+        self.attachmentIndex = _G.ATTACHMENTS_MAX
+        if self.mailIndex > GetInboxNumItems() then
+            return false
+        end
+
+        return self:AdvanceToNextItem()
+    end
+
+    return true
 end
