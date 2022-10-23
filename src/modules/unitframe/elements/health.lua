@@ -118,6 +118,7 @@ local function PostUpdateColor(self, unit)
             parent.backdrop:SetBackdropColor(r, g, b, alpha)
         else
             parent.backdrop:SetBackdropColor(color.r, color.g, color.b, alpha)
+            --parent.backdrop:SetBackdropColor(0, 0, 0, 0.4)
         end
     end
 end
@@ -169,7 +170,15 @@ function UNITFRAME:CreateHealthBar(self)
         health:SetHeight(C.DB.Unitframe.ArenaHealthHeight)
     end
 
-    if not inverted then
+    if inverted then
+        local gradient = health:CreateTexture(nil, 'BACKGROUND')
+        gradient:SetPoint('TOPLEFT')
+        gradient:SetPoint('BOTTOMRIGHT')
+        gradient:SetTexture(C.Assets.Textures.Backdrop)
+        gradient:SetGradientAlpha('VERTICAL', 0.3, 0.3, 0.3, 0.6, 0.1, 0.1, 0.1, 0.6)
+
+        self.gradient = gradient
+    else
         local bg = health:CreateTexture(nil, 'BACKGROUND')
         bg:SetAllPoints(health)
         bg:SetTexture(UNITFRAME.StatusBarTex)

@@ -41,14 +41,15 @@ function UNITFRAME:CreateBackdrop(self, onKeyDown)
     self:HookScript('OnEnter', UF_OnEnter)
     self:HookScript('OnLeave', UF_OnLeave)
 
-    self.backdrop = F.SetBD(self, 0)
-    if C.DB.Unitframe.InvertedColorMode then
-        local color = C.DB.Unitframe.InvertedHealthColor
-        local alpha = C.DB.Unitframe.InvertedHealthAlpha
-        self.backdrop:SetBackdropColor(color.r, color.g, color.b, alpha)
-    else
-        self.backdrop:SetBackdropColor(0, 0, 0, 0)
-    end
+    self.backdrop = F.SetBD(self)
+    -- if C.DB.Unitframe.InvertedColorMode then
+    --     local color = C.DB.Unitframe.InvertedHealthColor
+    --     local alpha = C.DB.Unitframe.InvertedHealthAlpha
+    --     self.backdrop:SetBackdropColor(color.r, color.g, color.b, alpha)
+
+    -- else
+    --     self.backdrop:SetBackdropColor(0, 0, 0, 0)
+    -- end
     self.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
     self.backdrop:SetFrameStrata('BACKGROUND')
     self.shadow = self.backdrop.__shadow
