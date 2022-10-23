@@ -273,6 +273,7 @@ function UNITFRAME:RegisterDungeonSpells()
     UNITFRAME:RegisterInstanceDebuff(tier, instance, 0, 228576)
     UNITFRAME:RegisterInstanceDebuff(tier, instance, 0, 228280)
     UNITFRAME:RegisterInstanceDebuff(tier, instance, 0, 228829)
+    UNITFRAME:RegisterInstanceDebuff(tier, instance, 0, 228993, 6) -- 腐蚀之池
 
     tier = 6
     instance = 536 -- 恐轨车站
@@ -312,4 +313,5 @@ function UNITFRAME:RegisterDungeonSpells()
     UNITFRAME:RegisterInstanceDebuff(tier, instance, 0, 172771) -- 燃烧弹
     UNITFRAME:RegisterInstanceDebuff(tier, instance, 0, 173307) -- 倒钩长矛
     UNITFRAME:RegisterInstanceDebuff(tier, instance, 0, 169341) -- 挫志怒吼
+    UNITFRAME:RegisterInstanceDebuff(tier, instance, 0, 172963, 6) -- 破门斩斧
 end
