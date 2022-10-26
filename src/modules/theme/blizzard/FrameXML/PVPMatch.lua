@@ -75,7 +75,7 @@ tinsert(C.BlizzThemes, function()
         if C.IS_NEW_PATCH then
             F.ReskinTrimScroll(content.scrollBar)
         else
-            F.ReskinScroll(content.scrollFrame.ScrollBar)
+            F.ReskinScroll(content.scrollFrame.scrollBar)
         end
 
         F.StripTextures(tabContainer)
