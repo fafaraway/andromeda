@@ -4,9 +4,9 @@
 [![WoW](https://img.shields.io/badge/WoW-Retail-f6e36a)]()
 [![Discord Channel](https://img.shields.io/discord/242811601260904450?color=7289DA&label=Discord)](https://discord.gg/86wbfZXxn7)
 [![QQ群](https://img.shields.io/badge/QQ群-203621176-f66a8d)](https://jq.qq.com/?_wv=1027&k=LStIpBBc)
-[![License](https://img.shields.io/github/license/neotpravlennoye/andromeda)](https://github.com/neotpravlennoye/andromeda/blob/development/LICENSE)
-[![Build Status](https://img.shields.io/github/workflow/status/neotpravlennoye/andromeda/Release)](https://github.com/neotpravlennoye/andromeda/actions)
-[![Latest Release](https://img.shields.io/github/v/release/neotpravlennoye/andromeda)](https://github.com/neotpravlennoye/andromeda/releases)
+[![License](https://img.shields.io/github/license/fafaraway/andromeda)](https://github.com/fafaraway/andromeda/blob/development/LICENSE)
+[![Build Status](https://img.shields.io/github/workflow/status/fafaraway/andromeda/Release)](https://github.com/fafaraway/andromeda/actions)
+[![Latest Release](https://img.shields.io/github/v/release/fafaraway/andromeda)](https://github.com/fafaraway/andromeda/releases)
 
 </div>
 
@@ -15,7 +15,6 @@
 **Andromeda** is a user interface replacement **AddOn** for **World of Warcraft**.  
 It provides many useful features while maintaining **beauty**, **elegance**, and **efficiency**.  
 Accompany you through every challenging day in **Azeroth**.  
-Made with ❤️ by [**neotpravlennoye**](https://github.com/neotpravlennoye).
 
 ## Screenshots
 *  https://imgur.com/a/0JfIGql
@@ -25,7 +24,7 @@ Made with ❤️ by [**neotpravlennoye**](https://github.com/neotpravlennoye).
 *  https://www.bilibili.com/video/BV1uR4y1V7VY/
 
 ## Feedback
-*  Report issues on [GitHub](https://github.com/neotpravlennoye/andromeda/issues)
+*  Report issues on [GitHub](https://github.com/fafaraway/andromeda/issues)
 *  Join [Discord Channel](https://discord.gg/86wbfZXxn7)
 *  加入QQ群 [203621176](https://jq.qq.com/?_wv=1027&k=LStIpBBc)
 
