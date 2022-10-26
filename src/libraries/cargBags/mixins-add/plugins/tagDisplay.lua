@@ -42,7 +42,8 @@ CALLBACKS
 local _, ns = ...
 local cargBags = ns.cargBags
 
-local GetContainerNumFreeSlots = ns[2].IS_BETA and C_Container.GetContainerNumFreeSlots or GetContainerNumFreeSlots
+local isBeta = select(4, GetBuildInfo()) == 100002 -- 10.0.2
+local GetContainerNumFreeSlots = isBeta and C_Container.GetContainerNumFreeSlots or GetContainerNumFreeSlots
 
 local tagPool, tagEvents, object = {}, {}
 local function tagger(tag, ...) return object.tags[tag] and object.tags[tag](object, ...) or "" end

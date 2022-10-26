@@ -20,7 +20,8 @@
 local _, ns = ...
 local cargBags = ns.cargBags
 
-local GetContainerNumSlots = ns[2].IS_BETA and C_Container.GetContainerNumSlots or GetContainerNumSlots
+local isBeta = select(4, GetBuildInfo()) == 100002 -- 10.0.2
+local GetContainerNumSlots = isBeta and C_Container.GetContainerNumSlots or GetContainerNumSlots
 
 --[[!
 	@class Implementation
@@ -333,7 +334,7 @@ function Implementation:GetItemInfo(bagID, slotID, i)
 	return i
 end
 
-if ns[2].IS_BETA then
+if isBeta then
 	function Implementation:GetItemInfo(bagID, slotID, i)
 		i = i or defaultItem
 		for k in pairs(i) do i[k] = nil end

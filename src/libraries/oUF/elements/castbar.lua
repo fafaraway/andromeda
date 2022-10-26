@@ -92,7 +92,7 @@ local oUF = ns.oUF
 local FALLBACK_ICON = 136243 -- Interface\ICONS\Trade_Engineering
 local FAILED = _G.FAILED or 'Failed'
 local INTERRUPTED = _G.INTERRUPTED or 'Interrupted'
-local isNewPatch = ANDROMEDA[2].IS_NEW_PATCH
+local isNewPatch = select(4, GetBuildInfo()) == 100000
 
 local function resetAttributes(self)
 	self.castID = nil
