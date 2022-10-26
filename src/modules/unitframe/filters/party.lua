@@ -265,13 +265,15 @@ C.CornerSpellsList = {
     ['DEMONHUNTER'] = {},
     ['MAGE'] = {},
     ['DEATHKNIGHT'] = {},
+    ['EVOKER'] = {},
 }
 
 C.BloodlustDebuffsList = {
-    57723, -- Exhaustion
-    57724, -- Sated
-    80354, -- Temporal Displacement
-    264689, -- Fatigued
+    57723, -- 筋疲力尽
+    57724, -- 心满意足
+    80354, -- 时空错位
+    264689, -- 疲倦
+    390435, -- 筋疲力尽，龙希尔
 }
 
 -- Party watcher spells
@@ -715,4 +717,5 @@ C.PartySpellsDB = {
         [307865] = 60, -- 晋升堡垒之矛，格里恩
         [324143] = 180, -- 征服者战旗，通灵
     },
+    ['EVOKER'] = {},
 }

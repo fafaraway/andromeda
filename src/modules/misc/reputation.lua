@@ -155,5 +155,7 @@ function ER:OnLogin()
         return true
     end)
 
-    hooksecurefunc('ReputationFrame_Update', HookParagonRep)
+    if not C.IS_NEW_PATCH then -- #TODO
+        hooksecurefunc('ReputationFrame_Update', HookParagonRep)
+    end
 end

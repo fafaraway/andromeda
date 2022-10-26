@@ -32,6 +32,21 @@ local function reskinCommunityCards(frame)
     F.ReskinScroll(frame.ListScrollFrame.scrollBar)
 end
 
+local function reskinCommunityCard(self) -- isNewPatch
+    for i = 1, self.ScrollTarget:GetNumChildren() do
+        local child = select(i, self.ScrollTarget:GetChildren())
+        if not child.styled then
+            child.CircleMask:Hide()
+            child.LogoBorder:Hide()
+            child.Background:Hide()
+            F.ReskinIcon(child.CommunityLogo)
+            F.Reskin(child)
+
+            child.styled = true
+        end
+    end
+end
+
 local function reskinRequestCheckbox(self)
     for button in self.SpecsPool:EnumerateActive() do
         if button.CheckBox then
@@ -120,7 +135,8 @@ C.Themes['Blizzard_Communities'] = function()
     local calendarButton = CommunitiesFrame.CommunitiesCalendarButton
     calendarButton:SetSize(24, 24)
     calendarButton:SetNormalTexture(1103070)
-    calendarButton:SetPushedTexture(nil)
+    calendarButton:SetPushedTexture(1103070)
+    calendarButton:GetPushedTexture():SetTexCoord(unpack(C.TEX_COORD))
     calendarButton:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
     F.ReskinIcon(calendarButton:GetNormalTexture())
 
@@ -186,11 +202,23 @@ C.Themes['Blizzard_Communities'] = function()
             if frame.PendingGuildCards then
                 reskinGuildCards(frame.PendingGuildCards)
             end
-            if frame.CommunityCards then
-                reskinCommunityCards(frame.CommunityCards)
-            end
-            if frame.PendingCommunityCards then
-                reskinCommunityCards(frame.PendingCommunityCards)
+
+            if C.IS_NEW_PATCH then
+                if frame.CommunityCards then
+                    F.ReskinTrimScroll(frame.CommunityCards.ScrollBar)
+                    hooksecurefunc(frame.CommunityCards.ScrollBox, 'Update', reskinCommunityCard)
+                end
+                if frame.PendingCommunityCards then
+                    F.ReskinTrimScroll(frame.PendingCommunityCards.ScrollBar)
+                    hooksecurefunc(frame.PendingCommunityCards.ScrollBox, 'Update', reskinCommunityCard)
+                end
+            else
+                if frame.CommunityCards then
+                    reskinCommunityCards(frame.CommunityCards)
+                end
+                if frame.PendingCommunityCards then
+                    reskinCommunityCards(frame.PendingCommunityCards)
+                end
             end
         end
     end
@@ -198,8 +226,35 @@ C.Themes['Blizzard_Communities'] = function()
     F.StripTextures(_G.CommunitiesFrameCommunitiesList)
     _G.CommunitiesFrameCommunitiesList.InsetFrame:Hide()
     _G.CommunitiesFrameCommunitiesList.FilligreeOverlay:Hide()
-    F.ReskinScroll(_G.CommunitiesFrameCommunitiesListListScrollFrame.ScrollBar)
-    _G.CommunitiesFrameCommunitiesListListScrollFrame.ScrollBar.Background:Hide()
+
+    if C.IS_NEW_PATCH then
+        _G.CommunitiesFrameCommunitiesList.ScrollBar:GetChildren():Hide()
+        F.ReskinTrimScroll(_G.CommunitiesFrameCommunitiesList.ScrollBar)
+
+        hooksecurefunc(_G.CommunitiesFrameCommunitiesList.ScrollBox, 'Update', function(self)
+            for i = 1, self.ScrollTarget:GetNumChildren() do
+                local child = select(i, self.ScrollTarget:GetChildren())
+                if not child.bg then
+                    child.bg = F.CreateBDFrame(child, 0, true)
+                    child.bg:SetPoint('TOPLEFT', 5, -5)
+                    child.bg:SetPoint('BOTTOMRIGHT', -10, 5)
+
+                    child:SetHighlightTexture(C.Assets.Textures.Blank)
+                    child.IconRing:SetAlpha(0)
+                    child.__iconBorder = F.ReskinIcon(child.Icon)
+                    child.Background:Hide()
+                    child.Selection:SetAlpha(0)
+                    hooksecurefunc(child.Selection, 'SetShown', updateCommunitiesSelection)
+                end
+
+                child.CircleMask:Hide()
+                child.__iconBorder:SetShown(child.IconRing:IsShown())
+            end
+        end)
+    else
+        F.ReskinScroll(_G.CommunitiesFrameCommunitiesListListScrollFrame.ScrollBar)
+        _G.CommunitiesFrameCommunitiesListListScrollFrame.ScrollBar.Background:Hide()
+    end
 
     hooksecurefunc(_G.CommunitiesFrameCommunitiesList, 'Update', function(self)
         local buttons = self.ListScrollFrame.buttons
@@ -298,9 +353,15 @@ C.Themes['Blizzard_Communities'] = function()
 
         dialog.InviteManager.ArtOverlay:Hide()
         F.StripTextures(dialog.InviteManager.ColumnDisplay)
-        dialog.InviteManager.ListScrollFrame.Background:Hide()
-        F.ReskinScroll(dialog.InviteManager.ListScrollFrame.scrollBar)
-        dialog.InviteManager.ListScrollFrame.scrollBar.Background:Hide()
+
+        if C.IS_NEW_PATCH then
+            -- #TODO
+            F.ReskinTrimScroll(dialog.InviteManager.ScrollBar)
+        else
+            dialog.InviteManager.ListScrollFrame.Background:Hide()
+            F.ReskinScroll(dialog.InviteManager.ListScrollFrame.scrollBar)
+            dialog.InviteManager.ListScrollFrame.scrollBar.Background:Hide()
+        end
 
         hooksecurefunc(dialog, 'Update', function(self)
             local column = self.InviteManager.ColumnDisplay
@@ -331,11 +392,46 @@ C.Themes['Blizzard_Communities'] = function()
 
     -- Roster
     CommunitiesFrame.MemberList.InsetFrame:Hide()
-    F.CreateBDFrame(CommunitiesFrame.MemberList.ListScrollFrame, 0.25)
     F.StripTextures(CommunitiesFrame.MemberList.ColumnDisplay)
     F.ReskinDropDown(CommunitiesFrame.GuildMemberListDropDownMenu)
-    F.ReskinScroll(CommunitiesFrame.MemberList.ListScrollFrame.scrollBar)
-    CommunitiesFrame.MemberList.ListScrollFrame.scrollBar.Background:Hide()
+
+    if C.IS_NEW_PATCH then
+        CommunitiesFrame.MemberList.ScrollBar:GetChildren():Hide()
+        F.ReskinTrimScroll(CommunitiesFrame.MemberList.ScrollBar)
+
+        hooksecurefunc(CommunitiesFrame.MemberList.ScrollBox, 'Update', function(self)
+            for i = 1, self.ScrollTarget:GetNumChildren() do
+                local child = select(i, self.ScrollTarget:GetChildren())
+                if not child.styled then
+                    hooksecurefunc(child, 'RefreshExpandedColumns', updateNameFrame)
+                    child.styled = true
+                end
+
+                local header = child.ProfessionHeader
+                if header and not header.styled then
+                    for i = 1, 3 do
+                        select(i, header:GetRegions()):Hide()
+                    end
+                    header.bg = F.CreateBDFrame(header, 0.25)
+                    header.bg:SetInside()
+                    header:SetHighlightTexture(C.Assets.Textures.Backdrop)
+                    header:GetHighlightTexture():SetVertexColor(r, g, b, 0.25)
+                    header:GetHighlightTexture():SetInside(header.bg)
+                    F.CreateBDFrame(header.Icon)
+                    header.styled = true
+                end
+
+                if child and child.bg then
+                    child.bg:SetShown(child.Class:IsShown())
+                end
+            end
+        end)
+    else
+        F.CreateBDFrame(CommunitiesFrame.MemberList.ListScrollFrame, 0.25)
+        F.ReskinScroll(CommunitiesFrame.MemberList.ListScrollFrame.scrollBar)
+        CommunitiesFrame.MemberList.ListScrollFrame.scrollBar.Background:Hide()
+    end
+
     F.ReskinCheckbox(CommunitiesFrame.MemberList.ShowOfflineButton)
     CommunitiesFrame.MemberList.ShowOfflineButton:SetSize(25, 25)
     F.Reskin(CommunitiesFrame.CommunitiesControlFrame.GuildControlButton)
@@ -385,28 +481,34 @@ C.Themes['Blizzard_Communities'] = function()
         local dialog = _G.CommunitiesAvatarPickerDialog
         F.StripTextures(dialog)
         F.SetBD(dialog)
-        F.ReskinScroll(_G.CommunitiesAvatarPickerDialogScrollBar)
         F.Reskin(dialog.OkayButton)
         F.Reskin(dialog.CancelButton)
 
-        hooksecurefunc(_G.CommunitiesAvatarPickerDialog.ScrollFrame, 'Refresh', function(self)
-            for i = 1, 5 do
-                for j = 1, 6 do
-                    local avatarButton = self.avatarButtons[i][j]
-                    if avatarButton:IsShown() and not avatarButton.bg then
-                        avatarButton.bg = F.ReskinIcon(avatarButton.Icon)
-                        avatarButton.Selected:SetTexture('')
-                        avatarButton:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
-                    end
+        if C.IS_NEW_PATCH then
+            -- #TODO
+            F.ReskinTrimScroll(_G.CommunitiesAvatarPickerDialog.ScrollBar)
+        else
+            F.ReskinScroll(_G.CommunitiesAvatarPickerDialogScrollBar)
 
-                    if avatarButton.Selected:IsShown() then
-                        avatarButton.bg:SetBackdropBorderColor(r, g, b)
-                    else
-                        avatarButton.bg:SetBackdropBorderColor(0, 0, 0)
+            hooksecurefunc(_G.CommunitiesAvatarPickerDialog.ScrollFrame, 'Refresh', function(self)
+                for i = 1, 5 do
+                    for j = 1, 6 do
+                        local avatarButton = self.avatarButtons[i][j]
+                        if avatarButton:IsShown() and not avatarButton.bg then
+                            avatarButton.bg = F.ReskinIcon(avatarButton.Icon)
+                            avatarButton.Selected:SetTexture('')
+                            avatarButton:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
+                        end
+
+                        if avatarButton.Selected:IsShown() then
+                            avatarButton.bg:SetBackdropBorderColor(r, g, b)
+                        else
+                            avatarButton.bg:SetBackdropBorderColor(0, 0, 0)
+                        end
                     end
                 end
-            end
-        end)
+            end)
+        end
     end
 
     hooksecurefunc(CommunitiesFrame.MemberList, 'RefreshListDisplay', function(self)
@@ -420,6 +522,9 @@ C.Themes['Blizzard_Communities'] = function()
             end
         end
 
+        if C.IS_NEW_PATCH then
+            return
+        end
         for _, button in ipairs(self.ListScrollFrame.buttons or {}) do
             if button and not button.hooked then
                 hooksecurefunc(button, 'RefreshExpandedColumns', updateNameFrame)
@@ -428,6 +533,7 @@ C.Themes['Blizzard_Communities'] = function()
                     for i = 1, 3 do
                         select(i, header:GetRegions()):Hide()
                     end
+
                     F.CreateBDFrame(header, 0.45)
                     header:SetHighlightTexture(C.Assets.Textures.Backdrop)
                     header:GetHighlightTexture():SetVertexColor(r, g, b, 0.25)
@@ -446,48 +552,72 @@ C.Themes['Blizzard_Communities'] = function()
     CommunitiesFrame.GuildBenefitsFrame.Perks:GetRegions():SetAlpha(0)
     CommunitiesFrame.GuildBenefitsFrame.Rewards.Bg:SetAlpha(0)
     F.StripTextures(CommunitiesFrame.GuildBenefitsFrame)
-    F.ReskinScroll(_G.CommunitiesFrameRewards.scrollBar)
+
+    if C.IS_NEW_PATCH then
+        F.ReskinTrimScroll(CommunitiesFrame.GuildBenefitsFrame.Rewards.ScrollBar)
+
+        local function handleRewardButton(self)
+            for i = 1, self.ScrollTarget:GetNumChildren() do
+                local child = select(i, self.ScrollTarget:GetChildren())
+                if not child.styled then
+                    local iconbg = F.ReskinIcon(child.Icon)
+                    F.StripTextures(child)
+                    child.bg = F.CreateBDFrame(child, 0.25)
+                    child.bg:ClearAllPoints()
+                    child.bg:SetPoint('TOPLEFT', iconbg)
+                    child.bg:SetPoint('BOTTOMLEFT', iconbg)
+                    child.bg:SetWidth(child:GetWidth() - 5)
+
+                    child.styled = true
+                end
+            end
+        end
+        hooksecurefunc(CommunitiesFrame.GuildBenefitsFrame.Perks.ScrollBox, 'Update', handleRewardButton)
+        hooksecurefunc(CommunitiesFrame.GuildBenefitsFrame.Rewards.ScrollBox, 'Update', handleRewardButton)
+    else
+        F.ReskinScroll(_G.CommunitiesFrameRewards.scrollBar)
+
+        hooksecurefunc('CommunitiesGuildPerks_Update', function(self)
+            local buttons = self.Container.buttons
+            for i = 1, #buttons do
+                local button = buttons[i]
+                if button and button:IsShown() and not button.bg then
+                    F.ReskinIcon(button.Icon)
+                    F.StripTextures(button)
+                    button.bg = F.CreateBDFrame(button, 0.25)
+                    button.bg:ClearAllPoints()
+                    button.bg:SetPoint('TOPLEFT', button.Icon, 0, C.Mult)
+                    button.bg:SetPoint('BOTTOMLEFT', button.Icon, 0, -C.Mult)
+                    button.bg:SetWidth(button:GetWidth())
+                end
+            end
+        end)
+
+        hooksecurefunc('CommunitiesGuildRewards_Update', function(self)
+            local buttons = self.RewardsContainer.buttons
+            for i = 1, #buttons do
+                local button = buttons[i]
+                if button then
+                    if not button.bg then
+                        F.ReskinIcon(button.Icon)
+                        select(6, button:GetRegions()):SetAlpha(0)
+                        select(7, button:GetRegions()):SetAlpha(0)
+
+                        button.bg = F.CreateBDFrame(button, 0.25)
+                        button.bg:SetPoint('TOPLEFT', button.Icon, -5, 5)
+                        button.bg:SetPoint('BOTTOMRIGHT', 0, 10)
+                    end
+                    button.DisabledBG:Hide()
+                end
+            end
+        end)
+    end
 
     local factionFrameBar = CommunitiesFrame.GuildBenefitsFrame.FactionFrame.Bar
     F.StripTextures(factionFrameBar)
     local bg = F.CreateBDFrame(factionFrameBar, 0.25)
     factionFrameBar.Progress:SetTexture(C.Assets.Textures.Backdrop)
     bg:SetOutside(factionFrameBar.Progress)
-
-    hooksecurefunc('CommunitiesGuildPerks_Update', function(self)
-        local buttons = self.Container.buttons
-        for i = 1, #buttons do
-            local button = buttons[i]
-            if button and button:IsShown() and not button.bg then
-                F.ReskinIcon(button.Icon)
-                F.StripTextures(button)
-                button.bg = F.CreateBDFrame(button, 0.25)
-                button.bg:ClearAllPoints()
-                button.bg:SetPoint('TOPLEFT', button.Icon, 0, C.MULT)
-                button.bg:SetPoint('BOTTOMLEFT', button.Icon, 0, -C.MULT)
-                button.bg:SetWidth(button:GetWidth())
-            end
-        end
-    end)
-
-    hooksecurefunc('CommunitiesGuildRewards_Update', function(self)
-        local buttons = self.RewardsContainer.buttons
-        for i = 1, #buttons do
-            local button = buttons[i]
-            if button then
-                if not button.bg then
-                    F.ReskinIcon(button.Icon)
-                    select(6, button:GetRegions()):SetAlpha(0)
-                    select(7, button:GetRegions()):SetAlpha(0)
-
-                    button.bg = F.CreateBDFrame(button, 0.25)
-                    button.bg:SetPoint('TOPLEFT', button.Icon, -5, 5)
-                    button.bg:SetPoint('BOTTOMRIGHT', 0, 10)
-                end
-                button.DisabledBG:Hide()
-            end
-        end
-    end)
 
     -- Guild Info
     F.Reskin(CommunitiesFrame.GuildLogButton)
@@ -511,7 +641,14 @@ C.Themes['Blizzard_Communities'] = function()
 
     F.ReskinScroll(_G.CommunitiesFrameGuildDetailsFrameInfoScrollBar)
     F.CreateBDFrame(_G.CommunitiesFrameGuildDetailsFrameInfo.DetailsFrame, 0.25)
-    F.ReskinScroll(_G.CommunitiesFrameGuildDetailsFrameNewsContainer.ScrollBar)
+
+    if C.IS_NEW_PATCH then
+        _G.CommunitiesFrameGuildDetailsFrameNews.ScrollBar:GetChildren():Hide()
+        F.ReskinTrimScroll(_G.CommunitiesFrameGuildDetailsFrameNews.ScrollBar)
+    else
+        F.ReskinScroll(_G.CommunitiesFrameGuildDetailsFrameNewsContainer.ScrollBar)
+    end
+
     F.StripTextures(_G.CommunitiesFrameGuildDetailsFrame)
 
     hooksecurefunc('GuildNewsButton_SetNews', function(button)
@@ -587,10 +724,32 @@ C.Themes['Blizzard_Communities'] = function()
     local applicantList = CommunitiesFrame.ApplicantList
     F.StripTextures(applicantList)
     F.StripTextures(applicantList.ColumnDisplay)
-    F.ReskinScroll(applicantList.ListScrollFrame.scrollBar)
+
     local listBG = F.CreateBDFrame(applicantList, 0.25)
     listBG:SetPoint('TOPLEFT', 0, 0)
     listBG:SetPoint('BOTTOMRIGHT', -15, 0)
+
+    local function reskinApplicant(button)
+        if button.styled then
+            return
+        end
+
+        button:SetPoint('LEFT', listBG, C.Mult, 0)
+        button:SetPoint('RIGHT', listBG, -C.Mult, 0)
+        button:SetHighlightTexture(C.Assets.Textures.Backdrop)
+        button:GetHighlightTexture():SetVertexColor(r, g, b, 0.25)
+        button.InviteButton:SetSize(66, 18)
+        button.CancelInvitationButton:SetSize(20, 18)
+
+        F.Reskin(button.InviteButton)
+        F.Reskin(button.CancelInvitationButton)
+        hooksecurefunc(button, 'UpdateMemberInfo', updateMemberName)
+
+        UpdateRoleTexture(button.RoleIcon1)
+        UpdateRoleTexture(button.RoleIcon2)
+        UpdateRoleTexture(button.RoleIcon3)
+        button.styled = true
+    end
 
     hooksecurefunc(applicantList, 'BuildList', function(self)
         local columnDisplay = self.ColumnDisplay
@@ -612,27 +771,27 @@ C.Themes['Blizzard_Communities'] = function()
             end
         end
 
+        if C.IS_NEW_PATCH then
+            return
+        end
+
         local buttons = self.ListScrollFrame.buttons
         for i = 1, #buttons do
-            local button = buttons[i]
-            if not button.styled then
-                button:SetPoint('LEFT', listBG, C.MULT, 0)
-                button:SetPoint('RIGHT', listBG, -C.MULT, 0)
-                button:SetHighlightTexture(C.Assets.Textures.Backdrop)
-                button:GetHighlightTexture():SetVertexColor(r, g, b, 0.25)
-                button.InviteButton:SetSize(66, 18)
-                button.CancelInvitationButton:SetSize(20, 18)
-
-                F.Reskin(button.InviteButton)
-                F.Reskin(button.CancelInvitationButton)
-                hooksecurefunc(button, 'UpdateMemberInfo', updateMemberName)
-
-                UpdateRoleTexture(button.RoleIcon1)
-                UpdateRoleTexture(button.RoleIcon2)
-                UpdateRoleTexture(button.RoleIcon3)
-
-                button.styled = true
-            end
+            reskinApplicant(buttons[i])
         end
     end)
+
+    if C.IS_NEW_PATCH then
+        applicantList.ScrollBar:GetChildren():Hide()
+        F.ReskinTrimScroll(applicantList.ScrollBar)
+
+        hooksecurefunc(applicantList.ScrollBox, 'Update', function(self)
+            for i = 1, self.ScrollTarget:GetNumChildren() do
+                local button = select(i, self.ScrollTarget:GetChildren())
+                reskinApplicant(button)
+            end
+        end)
+    else
+        F.ReskinScroll(applicantList.ListScrollFrame.scrollBar)
+    end
 end

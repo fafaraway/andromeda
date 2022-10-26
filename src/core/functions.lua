@@ -136,24 +136,12 @@ do
             return
         end
 
-        local width, height, txLeft, txRight, txTop, txBottom =
-            info.width, info.height, info.leftTexCoord, info.rightTexCoord, info.topTexCoord, info.bottomTexCoord
+        local width, height, txLeft, txRight, txTop, txBottom = info.width, info.height, info.leftTexCoord, info.rightTexCoord, info.topTexCoord, info.bottomTexCoord
         local atlasWidth = width / (txRight - txLeft)
         local atlasHeight = height / (txBottom - txTop)
         local str = '|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t'
 
-        return format(
-            str,
-            file,
-            (sizeX or 0),
-            (sizeY or 0),
-            atlasWidth,
-            atlasHeight,
-            atlasWidth * txLeft,
-            atlasWidth * txRight,
-            atlasHeight * txTop,
-            atlasHeight * txBottom
-        )
+        return format(str, file, (sizeX or 0), (sizeY or 0), atlasWidth, atlasHeight, atlasWidth * txLeft, atlasWidth * txRight, atlasHeight * txTop, atlasHeight * txBottom)
     end
 
     -- GUID to npcID
@@ -239,14 +227,7 @@ do
     function F:CollectEssenceInfo(index, lineText, slotInfo)
         local step = 1
         local essence = slotInfo.essences[step]
-        if
-            essence
-            and next(essence)
-            and (
-                strfind(lineText, _G.ITEM_SPELL_TRIGGER_ONEQUIP, nil, true)
-                and strfind(lineText, essenceDescription, nil, true)
-            )
-        then
+        if essence and next(essence) and (strfind(lineText, _G.ITEM_SPELL_TRIGGER_ONEQUIP, nil, true) and strfind(lineText, essenceDescription, nil, true)) then
             for i = 5, 2, -1 do
                 local line = _G[tip:GetName() .. 'TextLeft' .. index - i]
                 local text = line and line:GetText()
@@ -416,7 +397,7 @@ do
         end
 
         local r, g, b
-        if  colour == 'CLASS' then
+        if colour == 'CLASS' then
             r, g, b = F:HexToRgb(C.MY_CLASS_COLOR)
         elseif colour == 'INFO' then
             r, g, b = F:HexToRgb(C.INFO_COLOR)
@@ -473,7 +454,7 @@ do
         end
 
         local r, g, b
-        if  colour == 'CLASS' then
+        if colour == 'CLASS' then
             r, g, b = F:HexToRgb(C.MY_CLASS_COLOR)
         elseif colour == 'INFO' then
             r, g, b = F:HexToRgb(C.INFO_COLOR)
@@ -651,7 +632,13 @@ do
 
         local tex = self:CreateTexture(nil, 'BACKGROUND')
         tex:SetTexture(C.Assets.Textures.Backdrop)
-        tex:SetGradientAlpha(orientation, r, g, b, a1, r, g, b, a2)
+
+        if C.IS_NEW_PATCH then
+            tex:SetGradient(orientation, CreateColor(r, g, b, a1), CreateColor(r, g, b, a2))
+        else
+            tex:SetGradientAlpha(orientation, r, g, b, a1, r, g, b, a2)
+        end
+
         if width then
             tex:SetWidth(width)
         end
@@ -718,7 +705,11 @@ do
 
         local color = _G.ANDROMEDA_ADB.ButtonBackdropColor
         if gradStyle then
-            tex:SetGradientAlpha('Vertical', color.r, color.g, color.b, 0.65, 0, 0, 0, 0.25)
+            if C.IS_NEW_PATCH then
+                tex:SetGradient('Vertical', CreateColor(color.r, color.g, color.b, 0.65), CreateColor(0, 0, 0, 0.25))
+            else
+                tex:SetGradientAlpha('Vertical', color.r, color.g, color.b, 0.65, 0, 0, 0, 0.25)
+            end
         else
             tex:SetVertexColor(color.r, color.g, color.b, 0)
         end
@@ -838,7 +829,7 @@ do
                 if not ticks[i] then
                     ticks[i] = bar:CreateTexture(nil, 'OVERLAY')
                     ticks[i]:SetTexture(C.Assets.Textures.StatusbarFlat)
-                    ticks[i]:SetVertexColor(0, 0, 0, 0.7)
+                    ticks[i]:SetVertexColor(0, 0, 0)
                     ticks[i]:SetWidth(C.MULT)
                     ticks[i]:SetHeight(height)
                 end
@@ -863,7 +854,7 @@ do
     end
 
     function F:CreateCheckbox(flat)
-        local cb = CreateFrame('CheckButton', nil, self, 'InterfaceOptionsCheckButtonTemplate')
+        local cb = CreateFrame('CheckButton', nil, self, 'InterfaceOptionsBaseCheckButtonTemplate')
         cb:SetScript('OnClick', nil) -- reset onclick handler
         F.ReskinCheckbox(cb, flat, true)
 
@@ -1181,6 +1172,9 @@ do
     end
 
     function F:HideOption()
+        if not self then
+            return
+        end -- isNewPatch
         self:SetAlpha(0)
         self:SetScale(0.0001)
     end
@@ -1193,6 +1187,7 @@ do
         'RightInset',
         'NineSlice',
         'BG',
+        'Bg',
         'border',
         'Border',
         'Background',
@@ -1242,8 +1237,9 @@ do
     end
 
     -- Handle icons
+    local x1, x2, y1, y2 = unpack(C.TEX_COORD)
     function F:ReskinIcon(shadow)
-        self:SetTexCoord(unpack(C.TEX_COORD))
+        self:SetTexCoord(x1, x2, y1, y2)
         local bg = F.CreateBDFrame(self, 0.25) -- exclude from opacity control
         bg:SetBackdropBorderColor(0, 0, 0)
         if shadow then
@@ -1258,7 +1254,7 @@ do
         self.bg:SetAllPoints()
         self.Icon = self:CreateTexture(nil, 'ARTWORK')
         self.Icon:SetInside()
-        self.Icon:SetTexCoord(unpack(C.TEX_COORD))
+        self.Icon:SetTexCoord(x1, x2, y1, y2)
         if texture then
             local atlas = strmatch(texture, 'Atlas:(.+)$')
             if atlas then
@@ -1285,15 +1281,15 @@ do
 
     local atlasToQuality = {
         ['error'] = 99,
-        ['uncollected'] = _G.LE_ITEM_QUALITY_POOR,
-        ['gray'] = _G.LE_ITEM_QUALITY_POOR,
-        ['white'] = _G.LE_ITEM_QUALITY_COMMON,
-        ['green'] = _G.LE_ITEM_QUALITY_UNCOMMON,
-        ['blue'] = _G.LE_ITEM_QUALITY_RARE,
-        ['purple'] = _G.LE_ITEM_QUALITY_EPIC,
-        ['orange'] = _G.LE_ITEM_QUALITY_LEGENDARY,
-        ['artifact'] = _G.LE_ITEM_QUALITY_ARTIFACT,
-        ['account'] = _G.LE_ITEM_QUALITY_HEIRLOOM,
+        ['uncollected'] = Enum.ItemQuality.Poor,
+        ['gray'] = Enum.ItemQuality.Poor,
+        ['white'] = Enum.ItemQuality.Common,
+        ['green'] = Enum.ItemQuality.Uncommon,
+        ['blue'] = Enum.ItemQuality.Rare,
+        ['purple'] = Enum.ItemQuality.Epic,
+        ['orange'] = Enum.ItemQuality.Legendary,
+        ['artifact'] = Enum.ItemQuality.Artifact,
+        ['account'] = Enum.ItemQuality.Heirloom,
     }
 
     local function UpdateIconBorderColorByAtlas(self, atlas)
@@ -1303,8 +1299,9 @@ do
         self.__owner.bg:SetBackdropBorderColor(color.r, color.g, color.b)
     end
 
+    local greyRGB = C.QualityColors[0].r
     local function UpdateIconBorderColor(self, r, g, b)
-        if not r or (r == 0.65882 and g == 0.65882 and b == 0.65882) or (r > 0.99 and g > 0.99 and b > 0.99) then
+        if not r or r == greyRGB or (r > 0.99 and g > 0.99 and b > 0.99) then
             r, g, b = 0, 0, 0
         end
         self.__owner.bg:SetBackdropBorderColor(r, g, b)
@@ -1313,6 +1310,12 @@ do
     local function ResetIconBorderColor(self, texture)
         if not texture then
             self.__owner.bg:SetBackdropBorderColor(0, 0, 0)
+        end
+    end
+
+    local function resetIconBorder(button, quality)
+        if not quality then
+            button.IconBorder:Hide()
         end
     end
 
@@ -1335,6 +1338,10 @@ do
             end
         end
         hooksecurefunc(self, 'Hide', ResetIconBorderColor)
+
+        if self.__owner.SetItemButtonQuality then
+            hooksecurefunc(self.__owner, 'SetItemButtonQuality', resetIconBorder)
+        end
     end
 
     -- Handle button
@@ -1460,18 +1467,18 @@ do
         'Center',
     }
 
-    function F:Reskin(noGlow)
-        if self.SetNormalTexture then
-            self:SetNormalTexture('')
+    function F:Reskin(noGlow, override)
+        if self.SetNormalTexture and not override then
+            self:SetNormalTexture(C.Assets.Textures.Blank)
         end
         if self.SetHighlightTexture then
-            self:SetHighlightTexture('')
+            self:SetHighlightTexture(C.Assets.Textures.Blank)
         end
         if self.SetPushedTexture then
-            self:SetPushedTexture('')
+            self:SetPushedTexture(C.Assets.Textures.Blank)
         end
         if self.SetDisabledTexture then
-            self:SetDisabledTexture('')
+            self:SetDisabledTexture(C.Assets.Textures.Blank)
         end
 
         local buttonName = self.GetName and self:GetName()
@@ -1514,6 +1521,17 @@ do
     -- Handle tabs
     function F:ReskinTab()
         self:DisableDrawLayer('BACKGROUND')
+        if C.IS_NEW_PATCH then
+            if self.LeftHighlight then
+                self.LeftHighlight:SetAlpha(0)
+            end
+            if self.RightHighlight then
+                self.RightHighlight:SetAlpha(0)
+            end
+            if self.MiddleHighlight then
+                self.MiddleHighlight:SetAlpha(0)
+            end
+        end
 
         local bg = F.CreateBDFrame(self)
         bg:SetPoint('TOPLEFT', 10, -3)
@@ -1546,7 +1564,7 @@ do
     hooksecurefunc('PanelTemplates_DeselectTab', F.ResetTabAnchor)
 
     -- Handle scrollframe
-    local function Scroll_OnEnter(self)
+    --[[ local function Scroll_OnEnter(self)
         local thumb = self.thumb
         if not thumb then
             return
@@ -1584,9 +1602,7 @@ do
         F.StripTextures(self:GetParent())
         F.StripTextures(self)
 
-        local thumb = GrabScrollBarElement(self, 'ThumbTexture')
-            or GrabScrollBarElement(self, 'thumbTexture')
-            or self.GetThumbTexture and self:GetThumbTexture()
+        local thumb = GrabScrollBarElement(self, 'ThumbTexture') or GrabScrollBarElement(self, 'thumbTexture') or self.GetThumbTexture and self:GetThumbTexture()
         if thumb then
             thumb:SetAlpha(0)
             thumb:SetWidth(16)
@@ -1628,6 +1644,10 @@ do
             return
         end
 
+        if not self.Texture then
+            return
+        end -- CovenantMissonFrame, isNewPatch
+
         self.Texture:SetAlpha(0)
         self.Overlay:SetAlpha(0)
         local tex = self:CreateTexture(nil, 'ARTWORK')
@@ -1641,17 +1661,144 @@ do
         self.Texture.__owner = self
         hooksecurefunc(self.Texture, 'SetAtlas', updateTrimScrollArrow)
         self.Texture:SetAtlas(self.Texture:GetAtlas())
+    end --]]
+
+    local function Thumb_OnEnter(self)
+        local thumb = self.thumb or self
+        thumb.bg:SetBackdropColor(C.r, C.g, C.b, 0.75)
     end
 
-    function F:ReskinTrimScroll()
+    local function Thumb_OnLeave(self)
+        local thumb = self.thumb or self
+        if thumb.__isActive then
+            return
+        end
+        thumb.bg:SetBackdropColor(C.r, C.g, C.b, 0.25)
+    end
+
+    local function Thumb_OnMouseDown(self)
+        local thumb = self.thumb or self
+        thumb.__isActive = true
+        thumb.bg:SetBackdropColor(C.r, C.g, C.b, 0.75)
+    end
+
+    local function Thumb_OnMouseUp(self)
+        local thumb = self.thumb or self
+        thumb.__isActive = nil
+        thumb.bg:SetBackdropColor(C.r, C.g, C.b, 0.25)
+    end
+
+    local function updateScrollArrow(arrow)
+        if not arrow.__texture then
+            return
+        end
+
+        if arrow:IsEnabled() then
+            arrow.__texture:SetVertexColor(1, 1, 1)
+        else
+            arrow.__texture:SetVertexColor(0.5, 0.5, 0.5)
+        end
+    end
+
+    local function updateTrimScrollArrow(self, atlas)
+        local arrow = self.__owner
+        if not arrow.__texture then
+            return
+        end
+
+        if atlas == arrow.disabledTexture then
+            arrow.__texture:SetVertexColor(0.5, 0.5, 0.5)
+        else
+            arrow.__texture:SetVertexColor(1, 1, 1)
+        end
+    end
+
+    local function reskinScrollArrow(self, direction, minimal)
+        if not self then
+            return
+        end
+
+        if self.Texture then
+            self.Texture:SetAlpha(0)
+            if self.Overlay then
+                self.Overlay:SetAlpha(0)
+            end
+            if minimal then
+                self:SetHeight(17)
+            end
+        else
+            F.StripTextures(self)
+        end
+
+        local tex = self:CreateTexture(nil, 'ARTWORK')
+        tex:SetAllPoints()
+        F.SetupArrow(tex, direction)
+        self.__texture = tex
+
+        self:HookScript('OnEnter', F.Texture_OnEnter)
+        self:HookScript('OnLeave', F.Texture_OnLeave)
+
+        if self.Texture then
+            if minimal then
+                return
+            end
+            self.Texture.__owner = self
+            hooksecurefunc(self.Texture, 'SetAtlas', updateTrimScrollArrow)
+            updateTrimScrollArrow(self.Texture, self.Texture:GetAtlas())
+        else
+            hooksecurefunc(self, 'Enable', updateScrollArrow)
+            hooksecurefunc(self, 'Disable', updateScrollArrow)
+        end
+    end
+
+    function F:ReskinScroll()
+        F.StripTextures(self:GetParent())
         F.StripTextures(self)
-        reskinTrimScrollArrow(self.Back, 'up')
-        reskinTrimScrollArrow(self.Forward, 'down')
+
+        local thumb = self:GetThumbTexture()
+        if thumb then
+            thumb:SetAlpha(0)
+            thumb.bg = F.CreateBDFrame(thumb, 0.25)
+            thumb.bg:SetBackdropColor(C.r, C.g, C.b, 0.25)
+            thumb.bg:SetPoint('TOPLEFT', thumb, 4, -1)
+            thumb.bg:SetPoint('BOTTOMRIGHT', thumb, -4, 1)
+            self.thumb = thumb
+
+            self:HookScript('OnEnter', Thumb_OnEnter)
+            self:HookScript('OnLeave', Thumb_OnLeave)
+            self:HookScript('OnMouseDown', Thumb_OnMouseDown)
+            self:HookScript('OnMouseUp', Thumb_OnMouseUp)
+        end
+
+        local up, down = self:GetChildren()
+        reskinScrollArrow(up, 'up')
+        reskinScrollArrow(down, 'down')
+    end
+
+    -- WowTrimScrollBar
+    function F:ReskinTrimScroll(minimal)
+        F.StripTextures(self)
+        reskinScrollArrow(self.Back, 'up', minimal)
+        reskinScrollArrow(self.Forward, 'down', minimal)
+        if self.Track then
+            self.Track:DisableDrawLayer('ARTWORK')
+        end
 
         local thumb = self:GetThumb()
         if thumb then
-            F.StripTextures(thumb, 0)
-            F.CreateBDFrame(thumb, 0, true)
+            thumb:DisableDrawLayer('BACKGROUND')
+            thumb.bg = F.CreateBDFrame(thumb, 0.25)
+            thumb.bg:SetBackdropColor(C.r, C.g, C.b, 0.25)
+            if not minimal then
+                thumb.bg:SetPoint('TOPLEFT', 4, -1)
+                thumb.bg:SetPoint('BOTTOMRIGHT', -4, 1)
+            end
+            self.thumb = thumb
+
+            thumb:HookScript('OnEnter', Thumb_OnEnter)
+            thumb:HookScript('OnLeave', Thumb_OnLeave)
+            thumb:HookScript('OnMouseDown', Thumb_OnMouseDown)
+            thumb:HookScript('OnMouseUp', Thumb_OnMouseUp)
         end
     end
 
@@ -1741,7 +1888,7 @@ do
         bg:SetPoint('TOPLEFT', -2, 0)
         bg:SetPoint('BOTTOMRIGHT')
         F.CreateSD(bg, 0.25)
-        self.bg = bg
+        self.__bg = bg
 
         if height then
             self:SetHeight(height)
@@ -1840,8 +1987,8 @@ do
 
     -- Handle checkbox and radio
     function F:ReskinCheckbox(flat, forceSaturation)
-        self:SetNormalTexture('')
-        self:SetPushedTexture('')
+        self:SetNormalTexture(C.Assets.Textures.Blank)
+        self:SetPushedTexture(C.Assets.Textures.Blank)
 
         self.bg = F.CreateBDFrame(self, 0.25, true)
         F.SetBorderColor(self.bg)
@@ -1907,8 +2054,8 @@ do
     end
 
     function F:ReskinRadio()
-        self:SetNormalTexture('')
-        self:SetHighlightTexture('')
+        self:GetNormalTexture():SetAlpha(0)
+        self:GetHighlightTexture():SetAlpha(0)
         self:SetCheckedTexture(C.Assets.Textures.Backdrop)
 
         local ch = self:GetCheckedTexture()
@@ -1941,7 +2088,9 @@ do
 
     -- Handle slider
     function F:ReskinSlider(vertical)
-        self:SetBackdrop(nil)
+        if self.SetBackdrop then
+            self:SetBackdrop(nil)
+        end -- isNewPatch
         F.StripTextures(self)
 
         local bg = F.CreateBDFrame(self, 0.25, true)
@@ -1987,10 +2136,46 @@ do
         end
     end
 
+    local function reskinStepper(stepper, direction)
+        F.StripTextures(stepper)
+        stepper:SetWidth(19)
+
+        local tex = stepper:CreateTexture(nil, 'ARTWORK')
+        tex:SetAllPoints()
+        F.SetupArrow(tex, direction)
+        stepper.__texture = tex
+
+        stepper:HookScript('OnEnter', F.Texture_OnEnter)
+        stepper:HookScript('OnLeave', F.Texture_OnLeave)
+    end
+
+    function F:ReskinStepperSlider(minimal)
+        F.StripTextures(self)
+        reskinStepper(self.Back, 'left')
+        reskinStepper(self.Forward, 'right')
+        self.Slider:DisableDrawLayer('ARTWORK')
+
+        local thumb = self.Slider.Thumb
+        thumb:SetTexture(C.Assets.Textures.Spark)
+        thumb:SetBlendMode('ADD')
+        thumb:SetSize(20, 30)
+
+        local bg = F.CreateBDFrame(self.Slider, 0, true)
+        local offset = minimal and 10 or 13
+        bg:SetPoint('TOPLEFT', 10, -offset)
+        bg:SetPoint('BOTTOMRIGHT', -10, offset)
+
+        local bar = CreateFrame('StatusBar', nil, bg)
+        bar:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
+        bar:SetStatusBarColor(1, 0.8, 0, 0.5)
+        bar:SetPoint('TOPLEFT', bg, C.Mult, -C.Mult)
+        bar:SetPoint('BOTTOMLEFT', bg, C.Mult, C.Mult)
+        bar:SetPoint('RIGHT', thumb, 'CENTER')
+    end
+
     -- Handle collapse
     local function UpdateCollapseTexture(texture, collapsed)
-        local atlas = collapsed and 'Soulbinds_Collection_CategoryHeader_Expand'
-            or 'Soulbinds_Collection_CategoryHeader_Collapse'
+        local atlas = collapsed and 'Soulbinds_Collection_CategoryHeader_Expand' or 'Soulbinds_Collection_CategoryHeader_Collapse'
         texture:SetAtlas(atlas, true)
     end
 
@@ -2002,9 +2187,9 @@ do
         self:SetNormalTexture('')
 
         if texture and texture ~= '' then
-            if strfind(texture, 'Plus') or strfind(texture, 'Closed') then
+            if strfind(texture, 'Plus') or strfind(texture, '[Cc]losed') then
                 self.__texture:DoCollapse(true)
-            elseif strfind(texture, 'Minus') or strfind(texture, 'Open') then
+            elseif strfind(texture, 'Minus') or strfind(texture, '[Oo]pen') then
                 self.__texture:DoCollapse(false)
             end
             self.bg:Show()
@@ -2015,8 +2200,9 @@ do
     end
 
     function F:ReskinCollapse(isAtlas)
-        self:SetHighlightTexture('')
-        self:SetPushedTexture('')
+        self:SetNormalTexture(C.Assets.Textures.Blank)
+        self:SetHighlightTexture(C.Assets.Textures.Blank)
+        self:SetPushedTexture(C.Assets.Textures.Blank)
 
         local bg = F.CreateBDFrame(self)
         bg:ClearAllPoints()
@@ -2155,10 +2341,12 @@ do
 
     function F:StyleSearchButton()
         F.StripTextures(self)
-        if self.icon then
-            F.ReskinIcon(self.icon)
-        end
         F.CreateBDFrame(self, 0.25)
+
+        local icon = self.icon or self.Icon
+        if icon then
+            F.ReskinIcon(icon)
+        end
 
         self:SetHighlightTexture(C.Assets.Textures.Backdrop)
         local hl = self:GetHighlightTexture()
@@ -2228,11 +2416,7 @@ do
             cover:SetTexture('')
         end
 
-        local texture = self.GetNormalTexture and self:GetNormalTexture()
-            or self.texture
-            or self.Texture
-            or (self.SetTexture and self)
-            or self.Icon
+        local texture = self.GetNormalTexture and self:GetNormalTexture() or self.texture or self.Texture or (self.SetTexture and self) or self.Icon
         if texture then
             texture:SetTexture(C.Assets.Textures.RoleLfgIcons)
             texture:SetTexCoord(F.GetRoleTexCoord(role))

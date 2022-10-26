@@ -23,14 +23,7 @@ function TOOLTIP:HyperLink_SetPet(link)
     _G.GameTooltip:SetOwner(self, 'ANCHOR_TOPRIGHT', -3, 5)
     _G.GameTooltip:Show()
     local _, speciesID, level, breedQuality, maxHealth, power, speed = strsplit(':', link)
-    _G.BattlePetToolTip_Show(
-        tonumber(speciesID),
-        tonumber(level),
-        tonumber(breedQuality),
-        tonumber(maxHealth),
-        tonumber(power),
-        tonumber(speed)
-    )
+    _G.BattlePetToolTip_Show(tonumber(speciesID), tonumber(level), tonumber(breedQuality), tonumber(maxHealth), tonumber(power), tonumber(speed))
 end
 
 function TOOLTIP:HyperLink_GetSectionInfo(id)

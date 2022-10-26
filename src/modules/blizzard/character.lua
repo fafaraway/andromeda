@@ -5,6 +5,7 @@ function M:MissingStats()
     if not C.DB.General.MissingStats then
         return
     end
+
     if IsAddOnLoaded('DejaCharacterStats') then
         return
     end
@@ -12,22 +13,21 @@ function M:MissingStats()
     local statPanel = CreateFrame('Frame', nil, _G.CharacterFrameInsetRight)
     statPanel:SetSize(200, 350)
     statPanel:SetPoint('TOP', 0, -5)
+
     local scrollFrame = CreateFrame('ScrollFrame', nil, statPanel, 'UIPanelScrollFrameTemplate')
     scrollFrame:SetAllPoints()
     scrollFrame.ScrollBar:Hide()
     scrollFrame.ScrollBar.Show = nop
+
     local stat = CreateFrame('Frame', nil, scrollFrame)
     stat:SetSize(200, 1)
     scrollFrame:SetScrollChild(stat)
     _G.CharacterStatsPane:ClearAllPoints()
     _G.CharacterStatsPane:SetParent(stat)
     _G.CharacterStatsPane:SetAllPoints(stat)
+
     hooksecurefunc('PaperDollFrame_UpdateSidebarTabs', function()
-        if not _G[_G.PAPERDOLL_SIDEBARS[1].frame]:IsShown() then
-            statPanel:Hide()
-        else
-            statPanel:Show()
-        end
+        statPanel:SetShown(_G.CharacterStatsPane:IsShown())
     end)
 
     -- Change default data
@@ -101,20 +101,19 @@ function M:MissingStats()
         local meleeHaste = GetMeleeHaste()
         local speed, offhandSpeed = UnitAttackSpeed(unit)
         local displaySpeed = format('%.2f', speed)
+
         if offhandSpeed then
             offhandSpeed = format('%.2f', offhandSpeed)
         end
+
         if offhandSpeed then
             displaySpeed = BreakUpLargeNumbers(displaySpeed) .. ' / ' .. offhandSpeed
         else
             displaySpeed = BreakUpLargeNumbers(displaySpeed)
         end
+
         _G.PaperDollFrame_SetLabelAndText(statFrame, _G.WEAPON_SPEED, displaySpeed, false, speed)
-        statFrame.tooltip = _G.HIGHLIGHT_FONT_COLOR_CODE
-            .. format(_G.PAPERDOLLFRAME_TOOLTIP_FORMAT, _G.ATTACK_SPEED)
-            .. ' '
-            .. displaySpeed
-            .. _G.FONT_COLOR_CODE_CLOSE
+        statFrame.tooltip = _G.HIGHLIGHT_FONT_COLOR_CODE .. format(_G.PAPERDOLLFRAME_TOOLTIP_FORMAT, _G.ATTACK_SPEED) .. ' ' .. displaySpeed .. _G.FONT_COLOR_CODE_CLOSE
         statFrame.tooltip2 = format(_G.STAT_ATTACK_SPEED_BASE_TOOLTIP, BreakUpLargeNumbers(meleeHaste))
         statFrame:Show()
     end
@@ -134,13 +133,8 @@ function M:MissingStats()
         if displayItemLevel ~= avgItemLevel then
             displayItemLevel = displayItemLevel .. ' / ' .. avgItemLevel
         end
-        _G.PaperDollFrame_SetLabelAndText(
-            statFrame,
-            _G.STAT_AVERAGE_ITEM_LEVEL,
-            displayItemLevel,
-            false,
-            displayItemLevel
-        )
+
+        _G.PaperDollFrame_SetLabelAndText(statFrame, _G.STAT_AVERAGE_ITEM_LEVEL, displayItemLevel, false, displayItemLevel)
 
         _G.CharacterStatsPane.ItemLevelFrame.Value:SetFont(C.Assets.Fonts.Heavy, 18)
         _G.CharacterStatsPane.ItemLevelFrame.Value:SetShadowColor(0, 0, 0, 1)
@@ -184,6 +178,7 @@ function M:NakedButton()
     bu:SetScript('OnDoubleClick', function()
         for i = 1, 17 do
             local texture = GetInventoryItemTexture('player', i)
+
             if texture then
                 UnequipItemInSlot(i)
             end
@@ -192,6 +187,10 @@ function M:NakedButton()
 end
 
 function M:TitleFontSize()
+    if not C.IS_NEW_PATCH then
+        return
+    end
+
     hooksecurefunc('PaperDollTitlesPane_UpdateScrollFrame', function()
         local bu = _G.PaperDollTitlesPane.buttons
         for i = 1, #bu do

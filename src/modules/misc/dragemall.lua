@@ -10,7 +10,6 @@ local frames = {
 
     -- Blizz Frames
     ['AddonList'] = false,
-    ['AudioOptionsFrame'] = false,
     ['ChannelFrame'] = false,
     ['ChatConfigFrame'] = false,
     ['DressUpFrame'] = false,
@@ -19,7 +18,6 @@ local frames = {
     ['GuildInviteFrame'] = false,
     ['GuildRegistrarFrame'] = false,
     ['HelpFrame'] = false,
-    ['InterfaceOptionsFrame'] = false,
     ['ItemTextFrame'] = false,
     ['LootFrame'] = false,
     ['MailFrame'] = false,
@@ -42,11 +40,19 @@ local frames = {
     ['TokenFrame'] = true,
     ['TradeFrame'] = false,
     ['TutorialFrame'] = false,
-    ['VideoOptionsFrame'] = false,
 
     -- Addon Frames
     -- ['BindPadFrame'] = false
 }
+
+if C.IS_NEW_PATCH then
+    frames['SettingsPanel'] = false
+    frames['ProfessionsFrame'] = false
+else
+    frames['AudioOptionsFrame'] = false
+    frames['InterfaceOptionsFrame'] = false
+    frames['VideoOptionsFrame'] = false
+end
 
 -- Frame Existing Check
 local function IsFrameExists()
@@ -83,8 +89,9 @@ local lodFrames = {
         ['CalendarEventPickerFrame'] = false,
     },
     Blizzard_ChallengesUI = { ['ChallengesKeystoneFrame'] = false },
+    Blizzard_ClassTalentUI = { ['ClassTalentFrame'] = false },
     Blizzard_ClickBindingUI = { ['ClickBindingFrame'] = false },
-    Blizzard_Collections = {['WardrobeFrame'] = false, ['WardrobeOutfitEditFrame'] = false},
+    Blizzard_Collections = { ['WardrobeFrame'] = false, ['WardrobeOutfitEditFrame'] = false },
     Blizzard_CovenantRenown = { ['CovenantRenownFrame'] = false },
     Blizzard_CovenantSanctum = { ['CovenantSanctumFrame'] = false },
     Blizzard_Communities = {
@@ -98,6 +105,7 @@ local lodFrames = {
     },
     Blizzard_EncounterJournal = { ['EncounterJournal'] = false },
     Blizzard_FlightMap = { ['FlightMapFrame'] = false },
+    Blizzard_GenericTraitUI = { ['GenericTraitFrame'] = false },
     Blizzard_GMSurveyUI = { ['GMSurveyFrame'] = false },
     Blizzard_GuildBankUI = { ['GuildBankFrame'] = false, ['GuildBankEmblemFrame'] = true },
     Blizzard_GuildControlUI = { ['GuildControlUI'] = false },

@@ -25,6 +25,10 @@ local function ReskinChatScroll(self)
 end
 
 tinsert(C.BlizzThemes, function()
+    if not _G.ANDROMEDA_ADB.ReskinBlizz then
+        return
+    end
+
     -- Battlenet toast frame
     _G.BNToastFrame:SetBackdrop(nil)
     F.SetBD(_G.BNToastFrame)
@@ -48,7 +52,7 @@ tinsert(C.BlizzThemes, function()
 
     _G.QuickJoinToastButton.FriendsButton:SetTexture(friendTex)
     _G.QuickJoinToastButton.QueueButton:SetTexture(queueTex)
-    _G.QuickJoinToastButton:SetHighlightTexture('')
+    _G.QuickJoinToastButton:SetHighlightTexture(C.Assets.Textures.Blank)
     hooksecurefunc(_G.QuickJoinToastButton, 'ToastToFriendFinished', function(self)
         self.FriendsButton:SetShown(not self.displayedToast)
     end)
@@ -99,13 +103,18 @@ tinsert(C.BlizzThemes, function()
     F.Reskin(_G.ChannelFrame.NewButton)
     F.Reskin(_G.ChannelFrame.SettingsButton)
     F.ReskinScroll(_G.ChannelFrame.ChannelList.ScrollBar)
-    F.ReskinScroll(_G.ChannelFrame.ChannelRoster.ScrollFrame.scrollBar)
+
+    if C.IS_NEW_PATCH then
+        F.ReskinTrimScroll(_G.ChannelFrame.ChannelRoster.ScrollBar)
+    else
+        F.ReskinScroll(_G.ChannelFrame.ChannelRoster.ScrollFrame.scrollBar)
+    end
 
     hooksecurefunc(_G.ChannelFrame.ChannelList, 'Update', function(self)
         for i = 1, self.Child:GetNumChildren() do
             local tab = select(i, self.Child:GetChildren())
             if not tab.styled and tab:IsHeader() then
-                tab:SetNormalTexture('')
+                tab:SetNormalTexture(C.Assets.Textures.Blank)
                 tab.bg = F.CreateBDFrame(tab, 0.25)
                 tab.bg:SetAllPoints()
 

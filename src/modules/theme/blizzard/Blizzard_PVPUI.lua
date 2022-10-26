@@ -11,7 +11,7 @@ local function ReskinPvPFrame(frame)
     F.StripTextures(bar)
     F.CreateBDFrame(bar, 0.25)
     bar:SetStatusBarTexture(C.Assets.Textures.Backdrop)
-    bar:GetStatusBarTexture():SetGradient('VERTICAL', 1, 0.8, 0, 6, 0.4, 0)
+    bar:GetStatusBarTexture():SetGradient('VERTICAL', CreateColor(1, 0.8, 0, 1), CreateColor(6, 0.4, 0, 1))
 
     local reward = bar.Reward
     reward.Ring:Hide()
@@ -106,7 +106,12 @@ C.Themes['Blizzard_PVPUI'] = function()
     ReskinPvPFrame(HonorFrame)
     F.Reskin(HonorFrame.QueueButton)
     F.ReskinDropDown(_G.HonorFrameTypeDropDown)
-    F.ReskinScroll(_G.HonorFrameSpecificFrameScrollBar)
+
+    if C.IS_NEW_PATCH then
+        F.ReskinTrimScroll(HonorFrame.SpecificScrollBar)
+    else
+        F.ReskinScroll(_G.HonorFrameSpecificFrameScrollBar)
+    end
 
     local bonusFrame = HonorFrame.BonusFrame
     bonusFrame.WorldBattlesTexture:Hide()
@@ -135,23 +140,27 @@ C.Themes['Blizzard_PVPUI'] = function()
 
     -- Honor frame specific
 
-    for _, bu in pairs(HonorFrame.SpecificFrame.buttons) do
-        bu.Bg:Hide()
-        bu.Border:Hide()
+    if C.IS_NEW_PATCH then
+        -- #TODO
+    else
+        for _, bu in pairs(HonorFrame.SpecificFrame.buttons) do
+            bu.Bg:Hide()
+            bu.Border:Hide()
 
-        bu:SetNormalTexture('')
-        bu:SetHighlightTexture('')
+            bu:SetNormalTexture('')
+            bu:SetHighlightTexture('')
 
-        local bubg = F.CreateBDFrame(bu, 0, true)
-        bubg:SetPoint('TOPLEFT', 2, 0)
-        bubg:SetPoint('BOTTOMRIGHT', -1, 2)
+            local bg = F.CreateBDFrame(bu, 0, true)
+            bg:SetPoint('TOPLEFT', 2, 0)
+            bg:SetPoint('BOTTOMRIGHT', -1, 2)
 
-        bu.SelectedTexture:SetDrawLayer('BACKGROUND')
-        bu.SelectedTexture:SetColorTexture(r, g, b, 0.25)
-        bu.SelectedTexture:SetInside(bubg)
+            bu.SelectedTexture:SetDrawLayer('BACKGROUND')
+            bu.SelectedTexture:SetColorTexture(r, g, b, 0.25)
+            bu.SelectedTexture:SetInside(bg)
 
-        F.ReskinIcon(bu.Icon)
-        bu.Icon:SetPoint('TOPLEFT', 5, -3)
+            F.ReskinIcon(bu.Icon)
+            bu.Icon:SetPoint('TOPLEFT', 5, -3)
+        end
     end
 
     -- Conquest Frame
@@ -166,18 +175,22 @@ C.Themes['Blizzard_PVPUI'] = function()
     ConquestFrame.RatedBG:HookScript('OnEnter', ConquestFrameButton_OnEnter)
     F.Reskin(ConquestFrame.JoinButton)
 
-    for _, bu in pairs({ ConquestFrame.Arena2v2, ConquestFrame.Arena3v3, ConquestFrame.RatedBG }) do
-        F.Reskin(bu, true)
-        local reward = bu.Reward
-        if reward then
-            reward.Border:Hide()
-            reward.CircleMask:Hide()
-            reward.Icon.bg = F.ReskinIcon(reward.Icon)
-        end
+    local names = { 'RatedSoloShuffle', 'Arena2v2', 'Arena3v3', 'RatedBG' }
+    for _, name in pairs(names) do
+        local bu = ConquestFrame[name]
+        if bu then
+            F.Reskin(bu, true)
+            local reward = bu.Reward
+            if reward then
+                reward.Border:Hide()
+                reward.CircleMask:Hide()
+                reward.Icon.bg = F.ReskinIcon(reward.Icon)
+            end
 
-        bu.SelectedTexture:SetDrawLayer('BACKGROUND')
-        bu.SelectedTexture:SetColorTexture(r, g, b, 0.25)
-        bu.SelectedTexture:SetInside(bu.__bg)
+            bu.SelectedTexture:SetDrawLayer('BACKGROUND')
+            bu.SelectedTexture:SetColorTexture(r, g, b, 0.25)
+            bu.SelectedTexture:SetInside(bu.__bg)
+        end
     end
 
     -- Item Borders for HonorFrame & ConquestFrame
@@ -189,14 +202,8 @@ C.Themes['Blizzard_PVPUI'] = function()
             for _, reward in ipairs(currencyRewards) do
                 local info = C_CurrencyInfo.GetCurrencyInfo(reward.id)
                 local name, texture, quality = info.name, info.iconFileID, info.quality
-                if quality == _G.LE_ITEM_QUALITY_ARTIFACT then
-                    _, rewardTexture, _, rewardQuaility = _G.CurrencyContainerUtil_GetCurrencyContainerInfo(
-                        reward.id,
-                        reward.quantity,
-                        name,
-                        texture,
-                        quality
-                    )
+                if quality == Enum.ItemQuality.Artifact then
+                    _, rewardTexture, _, rewardQuaility = _G.CurrencyContainerUtil_GetCurrencyContainerInfo(reward.id, reward.quantity, name, texture, quality)
                 end
             end
         end

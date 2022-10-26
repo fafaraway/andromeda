@@ -4,7 +4,6 @@
     <Script file="achievement.lua"/>
     <Script file="conduit.lua"/>
     <Script file="covenant.lua"/>
-    <Script file="domination.lua"/>
     <Script file="hyperlink.lua"/>
     <Script file="icon.lua"/>
     <Script file="id.lua"/>

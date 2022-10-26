@@ -7,11 +7,16 @@ local mouseButton = '1' -- 1 = left, 2 = right, 3 = middle, 4 and 5 = thumb butt
 local pending = {}
 
 function COMBAT:Focuser_Setup()
+    if not C.DB.Combat.EasyFocusOnUnitframe then
+        return
+    end
+
     if not self or self.focuser then
         return
     end
 
-    if self:GetName() and (not C.DB.Combat.EasyFocusOnUnitframe and strmatch(self:GetName(), 'oUF_')) then
+    local name = self.GetName and self:GetName()
+    if name and strmatch(name, 'oUF_NPs') then
         return
     end
 
@@ -79,7 +84,6 @@ function COMBAT:EasyFocus()
     SetOverrideBindingClick(_G.FocuserButton, true, modifier .. '-BUTTON' .. mouseButton, 'FocuserButton')
 
     hooksecurefunc('CreateFrame', COMBAT.Focuser_CreateFrameHook)
-
     COMBAT:Focuser_OnEvent()
     F:RegisterEvent('PLAYER_REGEN_ENABLED', COMBAT.Focuser_OnEvent)
     F:RegisterEvent('GROUP_ROSTER_UPDATE', COMBAT.Focuser_OnEvent)

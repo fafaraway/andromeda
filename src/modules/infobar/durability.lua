@@ -59,27 +59,14 @@ end
 local function Block_OnEvent(self, event)
     if UpdateAllSlots() > 0 then
         local r, g, b = getDurabilityColor(floor(localSlots[1][3] * 100), 100)
-        self.text:SetText(
-            format('%s: %s%s', L['Durability'], F:RgbToHex(r, g, b) .. floor(localSlots[1][3] * 100), '%')
-        )
+        self.text:SetText(format('%s: %s%s', L['Durability'], F:RgbToHex(r, g, b) .. floor(localSlots[1][3] * 100), '%'))
     else
         self.text:SetText(format('%s: %s', L['Durability'], C.INFO_COLOR .. _G.NONE))
     end
 
-    if
-        event == 'PLAYER_ENTERING_WORLD'
-        or event == 'PLAYER_REGEN_ENABLED'
-            and C.DB.Notification.Enable
-            and C.DB.Notification.LowDurability
-            and not InCombatLockdown()
-    then
+    if event == 'PLAYER_ENTERING_WORLD' or event == 'PLAYER_REGEN_ENABLED' and C.DB.Notification.Enable and C.DB.Notification.LowDurability and not InCombatLockdown() then
         if isLowDurability() then
-            F:CreateNotification(
-                _G.MINIMAP_TRACKING_REPAIR,
-                L['You have slots in low durability!'],
-                nil,
-                'Interface\\ICONS\\Ability_Repair'
-            )
+            F:CreateNotification(_G.MINIMAP_TRACKING_REPAIR, L['You have slots in low durability!'], nil, 'Interface\\ICONS\\Ability_Repair')
         end
     end
 end
@@ -101,17 +88,12 @@ local function Block_OnEnter(self)
             local slot = localSlots[i][1]
             local cur = floor(localSlots[i][3] * 100)
             local slotIcon = localSlots[i][4]
-            _G.GameTooltip:AddDoubleLine(
-                slotIcon .. localSlots[i][2],
-                cur .. '%',
-                1,
-                1,
-                1,
-                getDurabilityColor(cur, 100)
-            )
+            _G.GameTooltip:AddDoubleLine(slotIcon .. localSlots[i][2], cur .. '%', 1, 1, 1, getDurabilityColor(cur, 100))
 
             F.ScanTip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
-            totalCost = totalCost + select(3, F.ScanTip:SetInventoryItem('player', slot))
+            local repairCost = select(3, F.ScanTip:SetInventoryItem('player', slot))
+            repairCost = repairCost or 0
+            totalCost = totalCost + repairCost
         end
     end
 

@@ -45,10 +45,7 @@ local function GetHexColor(box)
         rgb = gsub(rgb, '(.+)$', ExtendToSix)
     end
 
-    local r, g, b =
-        tonumber(strsub(rgb, 0, 2), 16) or 0,
-        tonumber(strsub(rgb, 3, 4), 16) or 0,
-        tonumber(strsub(rgb, 5, 6), 16) or 0
+    local r, g, b = tonumber(strsub(rgb, 0, 2), 16) or 0, tonumber(strsub(rgb, 3, 4), 16) or 0, tonumber(strsub(rgb, 5, 6), 16) or 0
 
     return r / 255, g / 255, b / 255
 end
@@ -176,7 +173,7 @@ local function CreateClassColorButton()
     colorBar:SetPoint('BOTTOM', 0, 50)
 
     local count = 0
-    for name, class in pairs(C.ClassList) do
+    for name, class in pairs(_G.LOCALIZED_CLASS_NAMES_MALE) do
         local value = C.ClassColors[class]
         if value then
             local bu = F.CreateButton(colorBar, 22, 18, true)

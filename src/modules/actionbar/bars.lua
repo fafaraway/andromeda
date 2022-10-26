@@ -194,12 +194,7 @@ function BAR:CreateBar2()
     local buttonList = {}
 
     local frame = CreateFrame('Frame', C.ADDON_TITLE .. 'ActionBar2', _G.UIParent, 'SecureHandlerStateTemplate')
-    frame.mover = F.Mover(
-        frame,
-        L['Actionbar'] .. '2',
-        'Bar2',
-        { 'BOTTOM', _G[C.ADDON_TITLE .. 'ActionBar1'], 'TOP', 0, -BAR.margin }
-    )
+    frame.mover = F.Mover(frame, L['Actionbar'] .. '2', 'Bar2', { 'BOTTOM', _G[C.ADDON_TITLE .. 'ActionBar1'], 'TOP', 0, -BAR.margin })
     BAR.movers[2] = frame.mover
 
     _G.MultiBarBottomLeft:SetParent(frame)
@@ -222,20 +217,10 @@ function BAR:CreateBar3()
     local buttonList = {}
 
     local frame = CreateFrame('Frame', C.ADDON_TITLE .. 'ActionBar3', _G.UIParent, 'SecureHandlerStateTemplate')
-    frame.mover = F.Mover(
-        frame,
-        L['Actionbar'] .. '3L',
-        'Bar3L',
-        { 'RIGHT', _G[C.ADDON_TITLE .. 'ActionBar1'], 'TOPLEFT', BAR.margin, -BAR.padding / 2 }
-    )
+    frame.mover = F.Mover(frame, L['Actionbar'] .. '3L', 'Bar3L', { 'RIGHT', _G[C.ADDON_TITLE .. 'ActionBar1'], 'TOPLEFT', BAR.margin, -BAR.padding / 2 })
     local child = CreateFrame('Frame', nil, frame)
     child:SetSize(1, 1)
-    child.mover = F.Mover(
-        child,
-        L['Actionbar'] .. '3R',
-        'Bar3R',
-        { 'LEFT', _G[C.ADDON_TITLE .. 'ActionBar1'], 'TOPRIGHT', -BAR.margin, -BAR.padding / 2 }
-    )
+    child.mover = F.Mover(child, L['Actionbar'] .. '3R', 'Bar3R', { 'LEFT', _G[C.ADDON_TITLE .. 'ActionBar1'], 'TOPRIGHT', -BAR.margin, -BAR.padding / 2 })
     frame.child = child
 
     BAR.movers[3] = frame.mover
@@ -329,12 +314,7 @@ function BAR:CreateBar5()
     local buttonList = {}
 
     local frame = CreateFrame('Frame', C.ADDON_TITLE .. 'ActionBar5', _G.UIParent, 'SecureHandlerStateTemplate')
-    frame.mover = F.Mover(
-        frame,
-        L['Actionbar'] .. '5',
-        'Bar5',
-        { 'RIGHT', _G[C.ADDON_TITLE .. 'ActionBar4'], 'LEFT', BAR.margin, 0 }
-    )
+    frame.mover = F.Mover(frame, L['Actionbar'] .. '5', 'Bar5', { 'RIGHT', _G[C.ADDON_TITLE .. 'ActionBar4'], 'LEFT', BAR.margin, 0 })
     BAR.movers[6] = frame.mover
 
     _G.MultiBarLeft:SetParent(frame)
@@ -366,10 +346,16 @@ function BAR:CreatePetBar()
     frame.mover = F.Mover(frame, L['PetBar'], 'PetBar', { 'BOTTOM', _G[C.ADDON_TITLE .. 'ActionBar2'], 'TOP', 0, BAR.margin })
     BAR.movers[7] = frame.mover
 
-    _G.PetActionBarFrame:SetParent(frame)
-    _G.PetActionBarFrame:EnableMouse(false)
-    _G.SlidingActionBarTexture0:SetTexture(nil)
-    _G.SlidingActionBarTexture1:SetTexture(nil)
+    if C.IS_NEW_PATCH then
+        -- #TODO
+        _G.PetActionBar:SetParent(frame)
+        _G.PetActionBar:EnableMouse(false)
+    else
+        _G.PetActionBarFrame:SetParent(frame)
+        _G.PetActionBarFrame:EnableMouse(false)
+        _G.SlidingActionBarTexture0:SetTexture(nil)
+        _G.SlidingActionBarTexture1:SetTexture(nil)
+    end
 
     for i = 1, num do
         local button = _G['PetActionButton' .. i]
@@ -378,8 +364,7 @@ function BAR:CreatePetBar()
     end
     frame.buttons = buttonList
 
-    frame.frameVisibility =
-        '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; [pet] show; hide'
+    frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; [pet] show; hide'
     _G.RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
 end
 
@@ -422,23 +407,24 @@ function BAR:CreateStanceBar()
         return
     end
 
-    local num = _G.NUM_STANCE_SLOTS
+    local num = _G.NUM_STANCE_SLOTS or 10
+    local NUM_POSSESS_SLOTS = _G.NUM_POSSESS_SLOTS or 2
+
     local buttonList = {}
     local frame = CreateFrame('Frame', C.ADDON_TITLE .. 'ActionBarStance', _G.UIParent, 'SecureHandlerStateTemplate')
-    frame.mover = F.Mover(
-        frame,
-        L['StanceBar'],
-        'StanceBar',
-        { 'BOTTOMLEFT', _G[C.ADDON_TITLE .. 'ActionBar2'], 'TOPLEFT', 0, BAR.margin }
-    )
+    frame.mover = F.Mover(frame, L['StanceBar'], 'StanceBar', { 'BOTTOMLEFT', _G[C.ADDON_TITLE .. 'ActionBar2'], 'TOPLEFT', 0, BAR.margin })
     BAR.movers[8] = frame.mover
 
     -- StanceBar
-    _G.StanceBarFrame:SetParent(frame)
-    _G.StanceBarFrame:EnableMouse(false)
-    _G.StanceBarLeft:SetTexture(nil)
-    _G.StanceBarMiddle:SetTexture(nil)
-    _G.StanceBarRight:SetTexture(nil)
+    if C.IS_NEW_PATCH then
+        -- #TODO
+    else
+        _G.StanceBarFrame:SetParent(frame)
+        _G.StanceBarFrame:EnableMouse(false)
+        _G.StanceBarLeft:SetTexture(nil)
+        _G.StanceBarMiddle:SetTexture(nil)
+        _G.StanceBarRight:SetTexture(nil)
+    end
 
     for i = 1, num do
         local button = _G['StanceButton' .. i]
@@ -447,12 +433,16 @@ function BAR:CreateStanceBar()
     end
 
     -- PossessBar
-    _G.PossessBarFrame:SetParent(frame)
-    _G.PossessBarFrame:EnableMouse(false)
-    _G.PossessBackground1:SetTexture(nil)
-    _G.PossessBackground2:SetTexture(nil)
+    if C.IS_NEW_PATCH then
+        -- #TODO
+    else
+        _G.PossessBarFrame:SetParent(frame)
+        _G.PossessBarFrame:EnableMouse(false)
+        _G.PossessBackground1:SetTexture(nil)
+        _G.PossessBackground2:SetTexture(nil)
+    end
 
-    for i = 1, _G.NUM_POSSESS_SLOTS do
+    for i = 1, NUM_POSSESS_SLOTS do
         local button = _G['PossessButton' .. i]
         tinsert(buttonList, button)
         button:ClearAllPoints()
@@ -561,12 +551,7 @@ function BAR:CreateLeaveVehicleBar()
     local frame = CreateFrame('Frame', C.ADDON_TITLE .. 'ActionBarExit', _G.UIParent, 'SecureHandlerStateTemplate')
     frame.mover = F.Mover(frame, L['LeaveVehicleButton'], 'LeaveVehicleButton', { 'CENTER', _G.UIParent, 'CENTER', 0, 200 })
 
-    local button = CreateFrame(
-        'CheckButton',
-        C.ADDON_TITLE .. 'LeaveVehicleButton',
-        frame,
-        'ActionButtonTemplate, SecureHandlerClickTemplate'
-    )
+    local button = CreateFrame('CheckButton', C.ADDON_TITLE .. 'LeaveVehicleButton', frame, 'ActionButtonTemplate, SecureHandlerClickTemplate')
     tinsert(buttonList, button)
     button:SetPoint('BOTTOMLEFT', frame, BAR.padding, BAR.padding)
     button:RegisterForClicks('AnyUp')

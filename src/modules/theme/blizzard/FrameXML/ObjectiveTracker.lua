@@ -7,8 +7,8 @@ local function ReskinQuestIcon(button)
 
     if not button.styled then
         button:SetSize(20, 20)
-        button:SetNormalTexture('')
-        button:SetPushedTexture('')
+        button:SetNormalTexture(C.Assets.Textures.Blank)
+        button:SetPushedTexture(C.Assets.Textures.Blank)
         button:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
         local icon = button.icon or button.Icon
         if icon then
@@ -86,7 +86,7 @@ local function ReskinProgressbarWithIcon(_, _, line)
         bar:SetPoint('LEFT', 22, 0)
         ReskinBarTemplate(bar)
 
-        icon:SetMask(nil)
+        icon:SetMask('')
         icon.bg = F.ReskinIcon(icon, true)
         icon:ClearAllPoints()
         icon:SetSize(20, 20)
@@ -232,6 +232,18 @@ tinsert(C.BlizzThemes, function()
         end
     end)
 
+    hooksecurefunc('ScenarioSpellButton_UpdateCooldown', function(spellButton)
+        if not spellButton.styled then
+            local bg = F.ReskinIcon(spellButton.Icon)
+            spellButton:SetNormalTexture(C.Assets.Textures.Blank)
+            spellButton:SetPushedTexture(C.Assets.Textures.Blank)
+            local hl = spellButton:GetHighlightTexture()
+            hl:SetColorTexture(1, 1, 1, 0.25)
+            hl:SetInside(bg)
+            spellButton.styled = true
+        end
+    end)
+
     hooksecurefunc('Scenario_ChallengeMode_ShowBlock', function()
         local block = _G.ScenarioChallengeModeBlock
         if not block.bg then
@@ -262,6 +274,7 @@ tinsert(C.BlizzThemes, function()
         _G.ObjectiveTrackerBlocksFrame.AchievementHeader,
         _G.ObjectiveTrackerBlocksFrame.ScenarioHeader,
         _G.ObjectiveTrackerBlocksFrame.CampaignQuestHeader,
+        _G.ObjectiveTrackerBlocksFrame.ProfessionHeader, -- isNewPatch
         _G.BONUS_OBJECTIVE_TRACKER_MODULE.Header,
         _G.WORLD_QUEST_TRACKER_MODULE.Header,
         _G.ObjectiveTrackerFrame.BlocksFrame.UIWidgetsHeader,

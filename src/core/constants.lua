@@ -2,6 +2,7 @@ local F, C, L = unpack(select(2, ...))
 
 do
     C.IS_NEW_PATCH = select(4, GetBuildInfo()) >= 100000 -- 10.0
+    C.IS_BETA = select(4, GetBuildInfo()) == 100002 -- 10.0.2
     C.MY_REALM = GetRealmName()
     C.MY_CLASS = select(2, UnitClass('player'))
     C.MY_NAME = UnitName('player')
@@ -68,24 +69,14 @@ do
 end
 
 do
-    -- Deprecated
-    _G.LE_ITEM_QUALITY_POOR = _G.Enum.ItemQuality.Poor
-    _G.LE_ITEM_QUALITY_COMMON = _G.Enum.ItemQuality.Common
-    _G.LE_ITEM_QUALITY_UNCOMMON = _G.Enum.ItemQuality.Uncommon
-    _G.LE_ITEM_QUALITY_RARE = _G.Enum.ItemQuality.Rare
-    _G.LE_ITEM_QUALITY_EPIC = _G.Enum.ItemQuality.Epic
-    _G.LE_ITEM_QUALITY_LEGENDARY = _G.Enum.ItemQuality.Legendary
-    _G.LE_ITEM_QUALITY_ARTIFACT = _G.Enum.ItemQuality.Artifact
-    _G.LE_ITEM_QUALITY_HEIRLOOM = _G.Enum.ItemQuality.Heirloom
-
     C.QualityColors = {}
     local qualityColors = _G.BAG_ITEM_QUALITY_COLORS
     for index, value in pairs(qualityColors) do
         C.QualityColors[index] = { r = value.r, g = value.g, b = value.b }
     end
     C.QualityColors[-1] = { r = 0, g = 0, b = 0 }
-    C.QualityColors[_G.LE_ITEM_QUALITY_POOR] = { r = 0.61, g = 0.61, b = 0.61 }
-    C.QualityColors[_G.LE_ITEM_QUALITY_COMMON] = { r = 0, g = 0, b = 0 }
+    C.QualityColors[Enum.ItemQuality.Poor] = { r = _G.COMMON_GRAY_COLOR.r, g = _G.COMMON_GRAY_COLOR.g, b = _G.COMMON_GRAY_COLOR.b }
+    C.QualityColors[Enum.ItemQuality.Common] = { r = 0, g = 0, b = 0 }
     C.QualityColors[99] = { r = 1, g = 0, b = 0 }
 
     _G.GOLD_AMOUNT_SYMBOL = format('|cffffd700%s|r', _G.GOLD_AMOUNT_SYMBOL)

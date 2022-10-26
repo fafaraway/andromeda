@@ -10,7 +10,6 @@ local function CreateCastBarMover(bar, text, value, anchor)
     bar.mover = mover
 end
 
-local ticks = {}
 local channelingTicks = {
     [740] = 4, -- 宁静
     [755] = 5, -- 生命通道
@@ -33,6 +32,7 @@ local channelingTicks = {
     [291944] = 6, -- 再生，赞达拉巨魔
     [314791] = 4, -- 变易幻能
     [324631] = 8, -- 血肉铸造，盟约
+    [356995] = 3, -- 裂解，龙希尔
 }
 
 if C.MY_CLASS == 'PRIEST' then
@@ -49,13 +49,15 @@ if C.MY_CLASS == 'PRIEST' then
 end
 
 function UNITFRAME:OnCastbarUpdate(elapsed)
-    if self.casting or self.channeling then
+    if self.casting or self.channeling or self.empowering then
+        local isCasting = self.casting or self.empowering
         local decimal = self.Decimal
-        local duration = self.casting and (self.duration + elapsed) or (self.duration - elapsed)
 
-        if (self.casting and duration >= self.max) or (self.channeling and duration <= 0) then
+        local duration = isCasting and (self.duration + elapsed) or (self.duration - elapsed)
+        if (isCasting and duration >= self.max) or (self.channeling and duration <= 0) then
             self.casting = nil
             self.channeling = nil
+            self.empowering = nil
             return
         end
 
@@ -74,6 +76,18 @@ function UNITFRAME:OnCastbarUpdate(elapsed)
         self.duration = duration
         self:SetValue(duration)
         self.Spark:SetPoint('CENTER', self, 'LEFT', (duration / self.max) * self:GetWidth(), 0)
+
+        if self.stageString then
+            self.stageString:SetText('')
+
+            if self.empowering then
+                for i = 1, self.numStages, 1 do
+                    if duration > self.castTicks[i].duration then
+                        self.stageString:SetText(i)
+                    end
+                end
+            end
+        end
     elseif self.holdTime > 0 then
         self.holdTime = self.holdTime - elapsed
     else
@@ -101,6 +115,39 @@ end
 local function ResetSpellTarget(self)
     if self.spellTarget then
         self.spellTarget:SetText('')
+    end
+end
+
+function UNITFRAME:CreateAndUpdateStagePip(bar, ticks, numStages, unit)
+    for i = 1, #ticks do
+        ticks[i]:Hide()
+        ticks[i].duration = 0
+    end
+
+    if numStages == 0 then
+        return
+    end
+
+    local width, height = bar:GetSize()
+    local sumDuration = 0
+    local stageMaxValue = bar.max * 1000
+    for i = 1, numStages, 1 do
+        local duration = GetUnitEmpowerStageDuration(unit, i - 1)
+        if duration > -1 then
+            sumDuration = sumDuration + duration
+            local portion = sumDuration / stageMaxValue
+            if not ticks[i] then
+                ticks[i] = bar:CreateTexture(nil, 'OVERLAY')
+                ticks[i]:SetTexture(C.Assets.Textures.StatusbarNormal)
+                ticks[i]:SetVertexColor(0, 0, 0)
+                ticks[i]:SetWidth(C.Mult)
+                ticks[i]:SetHeight(height)
+            end
+            ticks[i].duration = sumDuration / 1000
+            ticks[i]:ClearAllPoints()
+            ticks[i]:SetPoint('LEFT', bar, width * portion, 0)
+            ticks[i]:Show()
+        end
     end
 end
 
@@ -139,7 +186,11 @@ function UNITFRAME:PostCastStart(unit)
         if self.channeling then
             numTicks = channelingTicks[self.spellID] or 0
         end
-        F:CreateAndUpdateBarTicks(self, ticks, numTicks)
+        F:CreateAndUpdateBarTicks(self, self.castTicks, numTicks)
+    end
+
+    if C.IS_NEW_PATCH then
+        UNITFRAME:CreateAndUpdateStagePip(self, self.castTicks, self.numStages or 0, unit)
     end
 
     if (style == 'nameplate' and npCompact) or (style ~= 'nameplate' and compact) then
@@ -233,6 +284,8 @@ function UNITFRAME:CreateCastBar(self)
     castbar.Border = F.CreateSD(castbar.Backdrop, 0.35, 6, 6, true)
     self.Castbar = castbar
 
+    castbar.castTicks = {}
+
     local spark = castbar:CreateTexture(nil, 'OVERLAY')
     spark:SetTexture(C.Assets.Textures.Spark)
     spark:SetBlendMode('ADD')
@@ -266,6 +319,13 @@ function UNITFRAME:CreateCastBar(self)
         self:RegisterEvent('GLOBAL_MOUSE_UP', UNITFRAME.OnCastSent, true) -- Fix quests with WorldFrame interaction
         self:RegisterEvent('GLOBAL_MOUSE_DOWN', UNITFRAME.OnCastSent, true)
         self:RegisterEvent('CURRENT_SPELL_CAST_CHANGED', UNITFRAME.OnCastSent, true)
+    end
+
+    if C.IS_NEW_PATCH then -- Evoker charge stage
+        local stage = F.CreateFS(castbar, C.Assets.Fonts.Regular, 22, '')
+        stage:ClearAllPoints()
+        stage:SetPoint('TOPLEFT', castbar.Icon, -2, 2)
+        castbar.stageString = stage
     end
 
     if compact then

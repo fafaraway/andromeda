@@ -2,12 +2,22 @@ local F, C = unpack(select(2, ...))
 local MAP = F:GetModule('Map')
 local oUF = F.Libs.oUF
 
+local Minimap = _G.Minimap
+
 -- Cleanup Cluster
 
 function MAP:RemoveBlizzStuff()
     _G.MinimapCluster:EnableMouse(false)
     _G.Minimap:SetArchBlobRingScalar(0)
     _G.Minimap:SetQuestBlobRingScalar(0)
+
+    if C.IS_NEW_PATCH then
+        F.HideObject(Minimap.ZoomIn)
+        F.HideObject(Minimap.ZoomOut)
+        _G.MinimapCluster.Tracking:Hide()
+        _G.MinimapCluster.BorderTop:Hide()
+        _G.MinimapCluster.ZoneTextButton:Hide()
+    end
 
     -- ClockFrame
     LoadAddOn('Blizzard_TimeManager')
@@ -30,17 +40,20 @@ function MAP:RemoveBlizzStuff()
         'GuildInstanceDifficulty',
         'MiniMapChallengeMode',
         'GameTimeFrame',
+        'MinimapCompassTexture', -- isNewPatch
     }
 
     for _, v in pairs(frames) do
-        F.HideObject(_G[v])
+        local object = _G[v]
+        if object then
+            F.HideObject(object)
+        end
     end
 end
 
 -- Rectangular Minimap
 
 function MAP:RestyleMinimap()
-    local Minimap = _G.Minimap
     local texturePath = C.Assets.Textures.MinimapMask
     local diff = 256 - 190
     local halfDiff = ceil(diff / 2)
@@ -57,6 +70,15 @@ function MAP:RestyleMinimap()
 
     local pos = { 'BOTTOMRIGHT', _G.UIParent, 'BOTTOMRIGHT', -C.UI_GAP, C.UI_GAP }
     local mover = F.Mover(holder, _G.MINIMAP_LABEL, 'Minimap', pos)
+
+    if C.IS_NEW_PATCH then
+        hooksecurefunc(Minimap, 'SetPoint', function(frame, _, parent)
+            if parent ~= mover then
+                frame:SetPoint('TOPRIGHT', mover)
+            end
+        end)
+    end
+
     Minimap.mover = mover
 
     Minimap:SetClampedToScreen(true)
@@ -91,7 +113,6 @@ end
 -- Scale
 
 function MAP:UpdateMinimapScale()
-    local Minimap = _G.Minimap
     local scale = C.DB.Map.MinimapScale
 
     Minimap:SetScale(scale)
@@ -118,14 +139,20 @@ end
 -- Mail Icon
 
 function MAP:CreateMailButton()
-    local mail = _G.MiniMapMailFrame
+    local mail = C.IS_NEW_PATCH and _G.MinimapCluster.MailFrame or _G.MiniMapMailFrame
     local icon = _G.MiniMapMailIcon
 
     mail:ClearAllPoints()
-    mail:SetPoint('BOTTOM', _G.Minimap, 'BOTTOM', 0, _G.Minimap.halfDiff - 4)
-    icon:SetTexture(C.Assets.Textures.MinimapMail)
-    icon:SetSize(24, 24)
-    icon:SetVertexColor(1, 1, 0)
+
+    if C.IS_NEW_PATCH then
+        mail:SetPoint('BOTTOM', _G.Minimap, 'BOTTOM', 0, _G.Minimap.halfDiff - 4)
+        mail:SetFrameLevel(11)
+    else
+        mail:SetPoint('BOTTOM', _G.Minimap, 'BOTTOM', 0, _G.Minimap.halfDiff - 4)
+        icon:SetTexture(C.Assets.Textures.MinimapMail)
+        icon:SetSize(24, 24)
+        icon:SetVertexColor(1, 1, 0)
+    end
 end
 
 -- Calendar Invite
@@ -133,7 +160,7 @@ end
 function MAP:CreatePendingInvitation()
     -- Calendar invites
     _G.GameTimeCalendarInvitesTexture:ClearAllPoints()
-    _G.GameTimeCalendarInvitesTexture:SetParent('Minimap')
+    _G.GameTimeCalendarInvitesTexture:SetParent(Minimap)
     _G.GameTimeCalendarInvitesTexture:SetPoint('TOPRIGHT')
 
     local invt = CreateFrame('Button', nil, _G.UIParent)
@@ -243,8 +270,6 @@ local function UpdateDifficultyFlag()
 end
 
 function MAP:CreateDifficultyFlag()
-    local Minimap = _G.Minimap
-
     local frame = CreateFrame('Frame', nil, Minimap)
     frame:SetSize(64, 32)
     frame:SetPoint('TOPLEFT', Minimap, 4, -Minimap.halfDiff - 4)
@@ -276,43 +301,89 @@ end
 -- Garrision Icon
 
 function MAP:CreateGarrisonButton()
-    local Minimap = _G.Minimap
     _G.GarrisonLandingPageMinimapButton:SetScale(0.5)
-    hooksecurefunc('GarrisonLandingPageMinimapButton_UpdateIcon', function(self)
+
+    local function updateMinimapButtons(self)
         self:ClearAllPoints()
         self:SetPoint('BOTTOMLEFT', Minimap, 0, Minimap.halfDiff + 30)
-    end)
+    end
+
+    if C.IS_NEW_PATCH then
+        updateMinimapButtons(_G.ExpansionLandingPageMinimapButton)
+        _G.ExpansionLandingPageMinimapButton:HookScript('OnShow', updateMinimapButtons)
+        hooksecurefunc(_G.ExpansionLandingPageMinimapButton, 'UpdateIcon', updateMinimapButtons)
+    else
+        _G.GarrisonLandingPageMinimapButton:HookScript('OnShow', updateMinimapButtons)
+        hooksecurefunc('GarrisonLandingPageMinimapButton_UpdateIcon', updateMinimapButtons)
+    end
 end
 
 -- Queue Status
 
 function MAP:CreateQueueStatusButton()
-    local Minimap = _G.Minimap
-    _G.QueueStatusMinimapButton:ClearAllPoints()
-    _G.QueueStatusMinimapButton:SetPoint('BOTTOMRIGHT', Minimap, 0, Minimap.halfDiff)
-    _G.QueueStatusMinimapButtonBorder:Hide()
-    _G.QueueStatusMinimapButtonIconTexture:SetTexture(nil)
-    _G.QueueStatusFrame:ClearAllPoints()
-    _G.QueueStatusFrame:SetPoint('BOTTOMRIGHT', Minimap, 'BOTTOMLEFT', -4, Minimap.halfDiff)
+    if C.IS_NEW_PATCH then
+        _G.QueueStatusButton:SetParent(Minimap)
+        _G.QueueStatusButton:ClearAllPoints()
+        _G.QueueStatusButton:SetPoint('BOTTOMLEFT', Minimap, 'BOTTOMLEFT', -5, -5)
+        _G.QueueStatusButton:SetFrameLevel(999)
+        _G.QueueStatusButton:SetSize(33, 33)
+        _G.QueueStatusButtonIcon:SetAlpha(0)
+        _G.QueueStatusFrame:ClearAllPoints()
+        _G.QueueStatusFrame:SetPoint('TOPRIGHT', _G.QueueStatusButton, 'TOPLEFT')
 
-    local queueIcon = Minimap:CreateTexture(nil, 'ARTWORK')
-    queueIcon:SetPoint('CENTER', _G.QueueStatusMinimapButton)
-    queueIcon:SetSize(50, 50)
-    queueIcon:SetTexture('Interface\\Minimap\\Raid_Icon')
-    local anim = queueIcon:CreateAnimationGroup()
-    anim:SetLooping('REPEAT')
-    anim.rota = anim:CreateAnimation('Rotation')
-    anim.rota:SetDuration(2)
-    anim.rota:SetDegrees(360)
-    hooksecurefunc('QueueStatusFrame_Update', function()
-        queueIcon:SetShown(_G.QueueStatusMinimapButton:IsShown())
-    end)
-    hooksecurefunc('EyeTemplate_StartAnimating', function()
-        anim:Play()
-    end)
-    hooksecurefunc('EyeTemplate_StopAnimating', function()
-        anim:Stop()
-    end)
+        local queueIcon = Minimap:CreateTexture(nil, 'ARTWORK')
+        queueIcon:SetPoint('CENTER', _G.QueueStatusButton)
+        queueIcon:SetSize(50, 50)
+        queueIcon:SetTexture('Interface\\Minimap\\Raid_Icon')
+
+        local anim = queueIcon:CreateAnimationGroup()
+        anim:SetLooping('REPEAT')
+        anim.rota = anim:CreateAnimation('Rotation')
+        anim.rota:SetDuration(2)
+        anim.rota:SetDegrees(360)
+
+        hooksecurefunc(_G.QueueStatusFrame, 'Update', function()
+            queueIcon:SetShown(_G.QueueStatusButton:IsShown())
+        end)
+
+        hooksecurefunc(_G.QueueStatusButton.Eye, 'PlayAnim', function()
+            anim:Play()
+        end)
+
+        hooksecurefunc(_G.QueueStatusButton.Eye, 'StopAnimating', function()
+            anim:Pause()
+        end)
+    else
+        _G.QueueStatusMinimapButton:ClearAllPoints()
+        _G.QueueStatusMinimapButton:SetPoint('BOTTOMRIGHT', Minimap, 0, Minimap.halfDiff)
+        _G.QueueStatusMinimapButtonBorder:Hide()
+        _G.QueueStatusMinimapButtonIconTexture:SetTexture(nil)
+        _G.QueueStatusFrame:ClearAllPoints()
+        _G.QueueStatusFrame:SetPoint('BOTTOMRIGHT', Minimap, 'BOTTOMLEFT', -4, Minimap.halfDiff)
+
+        local queueIcon = Minimap:CreateTexture(nil, 'ARTWORK')
+        queueIcon:SetPoint('CENTER', _G.QueueStatusMinimapButton)
+        queueIcon:SetSize(50, 50)
+        queueIcon:SetTexture('Interface\\Minimap\\Raid_Icon')
+
+        local anim = queueIcon:CreateAnimationGroup()
+        anim:SetLooping('REPEAT')
+        anim.rota = anim:CreateAnimation('Rotation')
+        anim.rota:SetDuration(2)
+        anim.rota:SetDegrees(360)
+
+        hooksecurefunc('QueueStatusFrame_Update', function()
+            queueIcon:SetShown(_G.QueueStatusMinimapButton:IsShown())
+        end)
+
+        hooksecurefunc('EyeTemplate_StartAnimating', function()
+            anim:Play()
+        end)
+
+        hooksecurefunc('EyeTemplate_StopAnimating', function()
+            anim:Stop()
+        end)
+    end
 end
 
 -- Ping
@@ -358,18 +429,18 @@ end
 -- Zone Text
 
 local function UpdateZoneText()
-    local Minimap = _G.Minimap
     if GetSubZoneText() == '' then
         Minimap.ZoneText:SetText(GetZoneText())
     else
         Minimap.ZoneText:SetText(GetSubZoneText())
     end
+
     Minimap.ZoneText:SetTextColor(_G.ZoneTextString:GetTextColor())
 end
 
 function MAP:CreateZoneText()
     local outline = _G.ANDROMEDA_ADB.FontOutline
-    local Minimap = _G.Minimap
+
     _G.ZoneTextString:ClearAllPoints()
     _G.ZoneTextString:SetPoint('TOP', Minimap, 0, -Minimap.halfDiff - 10)
     _G.ZoneTextString:SetFont(C.Assets.Fonts.Header, 22, outline, '', nil, outline or 'THICK')
@@ -464,26 +535,48 @@ local function OnMouseWheel(self, zoom)
     end
 end
 
+function MAP:BuildDropDown()
+    local dropdown = CreateFrame('Frame', 'AndromedaMiniMapTrackingDropDown', _G.UIParent, 'UIDropDownMenuTemplate')
+    dropdown:SetID(1)
+    dropdown:SetClampedToScreen(true)
+    dropdown:Hide()
+    dropdown.noResize = true
+    _G.UIDropDownMenu_Initialize(dropdown, _G.MiniMapTrackingDropDown_Initialize, 'MENU')
+
+    if C.IS_NEW_PATCH then
+        hooksecurefunc(_G.MinimapCluster.Tracking.Button, 'Update', function()
+            if _G.UIDROPDOWNMENU_OPEN_MENU == dropdown then
+                UIDropDownMenu_RefreshAll(dropdown)
+            end
+        end)
+    end
+
+    MAP.MinimapTracking = dropdown
+end
+
 local function OnMouseUp(self, btn)
     if not C.DB.Map.Menu then
         return
     end
 
-    if btn == 'RightButton' then
+    if btn == 'MiddleButton' then
         if InCombatLockdown() then
             _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. _G.ERR_NOT_IN_COMBAT)
             return
         end
         EasyMenu(MAP.MenuList, F.EasyMenu, 'cursor', 0, 0, 'MENU', 3)
-    elseif btn == 'MiddleButton' then
-        ToggleDropDownMenu(1, nil, _G.MiniMapTrackingDropDown, self)
+    elseif btn == 'RightButton' then
+        ToggleDropDownMenu(1, nil, MAP.MinimapTracking, self, -100, 100)
     else
-        Minimap_OnClick(self)
+        if C.IS_NEW_PATCH then
+            Minimap:OnClick()
+        else
+            Minimap_OnClick(self)
+        end
     end
 end
 
 function MAP:MouseFunc()
-    local Minimap = _G.Minimap
     Minimap:EnableMouseWheel(true)
     Minimap:SetScript('OnMouseWheel', OnMouseWheel)
     Minimap:SetScript('OnMouseUp', OnMouseUp)
@@ -507,6 +600,7 @@ function MAP:SetupMinimap()
     MAP:CreateQueueStatusButton()
     MAP:AddOnIconCollector()
     MAP:WhoPings()
+    MAP:BuildDropDown()
     MAP:SoundVolume()
     MAP:MouseFunc()
     MAP:UpdateMinimapFader()
@@ -516,6 +610,4 @@ function MAP:SetupMinimap()
     F:HookAddOn('Blizzard_HybridMinimap', function(self)
         MAP:RestyleHybridMinimap()
     end)
-
-    _G.DropDownList1:SetClampedToScreen(true)
 end

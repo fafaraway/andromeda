@@ -20,7 +20,11 @@ tinsert(C.BlizzThemes, function()
     F.Reskin(_G.RaidInfoExtendButton)
     F.Reskin(_G.RaidInfoCancelButton)
     F.ReskinClose(_G.RaidInfoCloseButton)
-    F.ReskinScroll(_G.RaidInfoScrollFrameScrollBar)
+    if C.IS_NEW_PATCH then
+        F.ReskinTrimScroll(_G.RaidInfoFrame.ScrollBar)
+    else
+        F.ReskinScroll(_G.RaidInfoScrollFrameScrollBar)
+    end
     F.ReskinClose(_G.RaidParentFrameCloseButton)
 
     F.ReskinPortraitFrame(_G.RaidParentFrame)

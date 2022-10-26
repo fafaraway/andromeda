@@ -27,7 +27,11 @@ local function SetupInventorySize()
 end
 
 local function UpdateInventorySortOrder()
-    SetSortBagsRightToLeft(C.DB.Inventory.SortMode == 1)
+    if C.IS_BETA then
+        C_Container.SetSortBagsRightToLeft(C.DB.Inventory.SortMode == 1)
+    else
+        SetSortBagsRightToLeft(C.DB.Inventory.SortMode == 1)
+    end
 end
 
 local function SetupMinItemLevelToShow()
@@ -1325,9 +1329,7 @@ GUI.OptionsList = {
             _G.CHANNEL,
             true,
             {
-                _G.CHAT_MSG_PARTY
-                    .. '/'
-                    .. _G.CHAT_MSG_RAID,
+                _G.CHAT_MSG_PARTY .. '/' .. _G.CHAT_MSG_RAID,
                 _G.YELL,
                 _G.EMOTE,
                 _G.SAY,
@@ -1637,12 +1639,6 @@ GUI.OptionsList = {
             L['Show Unit Targeted By'],
             true,
         },
-        {
-            1,
-            'Tooltip',
-            'DomiRank',
-            L['Show Rank of Domination Shards'],
-        },
     },
     [11] = { -- unitframe
         {
@@ -1670,7 +1666,7 @@ GUI.OptionsList = {
             true,
             nil,
             nil,
-            L["Put your texture under 'Interface' folder, and input the texture name here to replace texture style.|nIncorrect texture would present as green block, you might need to restart your game client.|nLeave the editbox empty to disable custom texture. Require UI reload."]
+            L["Put your texture under 'Interface' folder, and input the texture name here to replace texture style.|nIncorrect texture would present as green block, you might need to restart your game client.|nLeave the editbox empty to disable custom texture. Require UI reload."],
         },
         {
             4,
@@ -1981,7 +1977,7 @@ GUI.OptionsList = {
             nil,
             nil,
             UpdatePartyElements,
-            L['Icons are displayed on the other side of the PartyFrame.']
+            L['Icons are displayed on the other side of the PartyFrame.'],
         },
         {
             1,
@@ -2108,7 +2104,7 @@ GUI.OptionsList = {
             true,
             nil,
             nil,
-            L["Debuff Icon ignore mouse hover and do not show tooltip."],
+            L['Debuff Icon ignore mouse hover and do not show tooltip.'],
         },
     },
     [13] = { -- nameplate
@@ -2138,7 +2134,7 @@ GUI.OptionsList = {
             true,
             nil,
             nil,
-            L["Put your texture under 'Interface' folder, and input the texture name here to replace texture style.|nIncorrect texture would present as green block, you might need to restart your game client.|nLeave the editbox empty to disable custom texture. Require UI reload."]
+            L["Put your texture under 'Interface' folder, and input the texture name here to replace texture style.|nIncorrect texture would present as green block, you might need to restart your game client.|nLeave the editbox empty to disable custom texture. Require UI reload."],
         },
         {
             1,
@@ -2168,7 +2164,7 @@ GUI.OptionsList = {
             nil,
             nil,
             UpdateNamePlateTags,
-            L["Abbreviat nameplate name, e.g. 'Lady Sylvanas Windrunner' convert to 'L. S. Windrunner'. |nNot valid for Chinese game client."]
+            L["Abbreviat nameplate name, e.g. 'Lady Sylvanas Windrunner' convert to 'L. S. Windrunner'. |nNot valid for Chinese game client."],
         },
         {
             1,
@@ -2178,7 +2174,7 @@ GUI.OptionsList = {
             true,
             SetupNameplateNameLength,
             UpdateNamePlateTags,
-            L['Limit the maximum length of the nameplate name.']
+            L['Limit the maximum length of the nameplate name.'],
         },
         {
             1,
@@ -2221,10 +2217,10 @@ GUI.OptionsList = {
                 _G.LEVEL .. ' ' .. _G.NAME,
                 L['Classification'] .. ' ' .. _G.LEVEL .. ' ' .. _G.NAME,
                 L['Classification'] .. ' ' .. _G.NAME,
-                _G.DISABLE
+                _G.DISABLE,
             },
             UpdateNamePlateTags,
-            L['The classification tag supports three types: Rare, Elite and Boss. |nRare is white, Elite is yellow, and Boss is red.|nWhen the unit has the same level as you, the level tag will be hidden.']
+            L['The classification tag supports three types: Rare, Elite and Boss. |nRare is white, Elite is yellow, and Boss is red.|nWhen the unit has the same level as you, the level tag will be hidden.'],
         },
         {
             4,
@@ -2242,7 +2238,7 @@ GUI.OptionsList = {
                 _G.DISABLE,
             },
             UpdateNamePlateTags,
-            L['The percentage will be hidden when the health value is full.']
+            L['The percentage will be hidden when the health value is full.'],
         },
 
         {},
@@ -2309,7 +2305,7 @@ GUI.OptionsList = {
                 L['List & Player & CC'],
             },
             RefreshAllPlates,
-            L['Black & White List: Strictly follow Black and White list filter.|nPlayer: Spells cast by YOU. |nCC: Spells of Crowd Control.']
+            L['Black & White List: Strictly follow Black and White list filter.|nPlayer: Spells cast by YOU. |nCC: Spells of Crowd Control.'],
         },
         {
             3,
@@ -2319,7 +2315,7 @@ GUI.OptionsList = {
             nil,
             { 4, 10, 1 },
             RefreshAllPlates,
-            L['The number of auras displayed in per row.']
+            L['The number of auras displayed in per row.'],
         },
         {},
         {
@@ -2370,7 +2366,7 @@ GUI.OptionsList = {
             nil,
             nil,
             UpdateNameplateRaidTargetIndicator,
-            L["Display raid target indicator on nameplate."],
+            L['Display raid target indicator on nameplate.'],
         },
         {
             1,

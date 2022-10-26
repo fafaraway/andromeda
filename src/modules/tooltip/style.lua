@@ -146,6 +146,11 @@ TOOLTIP:RegisterTooltips(C.ADDON_NAME, function()
         tip:HookScript('OnShow', TOOLTIP.ReskinTooltip)
     end
 
+    if _G.SettingsTooltip then -- isNewPatch
+        TOOLTIP.ReskinTooltip(_G.SettingsTooltip)
+        _G.SettingsTooltip:SetScale(_G.UIParent:GetScale())
+    end
+
     -- DropdownMenu
     local dropdowns = { 'DropDownList', 'L_DropDownList', 'Lib_DropDownList' }
     local function reskinDropdown()

@@ -66,12 +66,14 @@ C.Themes['Blizzard_GuildUI'] = function()
     F.CreateBDFrame(_G.GuildTextEditContainer, 0.25)
 
     for i = 1, 5 do
-        F.ReskinTab(_G['GuildFrameTab' .. i])
-    end
-
-    if GetLocale() == 'zhTW' then
-        _G.GuildFrameTab1:ClearAllPoints()
-        _G.GuildFrameTab1:SetPoint('TOPLEFT', _G.GuildFrame, 'BOTTOMLEFT', -7, 2)
+        local tab = _G['GuildFrameTab' .. i]
+        if tab then
+            F.ReskinTab(tab)
+            if i ~= 1 then
+                tab:ClearAllPoints()
+                tab:SetPoint('LEFT', _G['GuildFrameTab' .. (i - 1)], 'RIGHT', -15, 0)
+            end
+        end
     end
 
     _G.GuildFrameTabardBackground:Hide()
@@ -177,16 +179,14 @@ C.Themes['Blizzard_GuildUI'] = function()
         for i = 1, #buttons do
             local bu = buttons[i]
             if not bu.bg then
-                bu:SetNormalTexture('')
-                bu:SetHighlightTexture('')
+                bu:SetNormalTexture(C.Assets.Textures.Blank)
+                bu:SetHighlightTexture(C.Assets.Textures.Blank)
                 F.ReskinIcon(bu.icon)
                 bu.disabledBG:Hide()
                 bu.disabledBG.Show = nop
 
                 bu.bg = F.CreateBDFrame(bu, 0.25)
-                bu.bg:ClearAllPoints()
-                bu.bg:SetPoint('TOPLEFT', 1, -1)
-                bu.bg:SetPoint('BOTTOMRIGHT', 0, 0)
+                bu.bg:SetInside()
             end
         end
     end)

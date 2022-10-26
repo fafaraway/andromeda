@@ -75,6 +75,10 @@ local function styleRewardRole(roleIcon)
 end
 
 tinsert(C.BlizzThemes, function()
+    if not _G.ANDROMEDA_ADB.ReskinBlizz then
+        return
+    end
+
     -- LFDFrame
     hooksecurefunc('LFGDungeonListButton_SetDungeon', function(button)
         if not button.expandOrCollapseButton.styled then
@@ -93,7 +97,12 @@ tinsert(C.BlizzThemes, function()
     _G.LFDRoleCheckPopup.Border:Hide()
     F.Reskin(_G.LFDRoleCheckPopupAcceptButton)
     F.Reskin(_G.LFDRoleCheckPopupDeclineButton)
-    F.ReskinScroll(_G.LFDQueueFrameSpecificListScrollFrameScrollBar)
+    if C.IS_NEW_PATCH then
+        F.ReskinTrimScroll(_G.LFDQueueFrameSpecific.ScrollBar)
+    else
+        F.ReskinScroll(_G.LFDQueueFrameSpecificListScrollFrameScrollBar)
+        _G.LFDQueueFrameSpecificListScrollFrameScrollBarScrollDownButton:SetPoint('TOP', _G.LFDQueueFrameSpecificListScrollFrameScrollBar, 'BOTTOM', 0, 2)
+    end
     F.StripTextures(_G.LFDQueueFrameRandomScrollFrameScrollBar, 0)
     F.ReskinScroll(_G.LFDQueueFrameRandomScrollFrameScrollBar)
     F.ReskinDropDown(_G.LFDQueueFrameTypeDropDown)
@@ -104,7 +113,6 @@ tinsert(C.BlizzThemes, function()
     styleRewardButton(_G.LFDQueueFrameRandomScrollFrameChildFrameMoneyReward)
 
     _G.LFDQueueFrameRandomScrollFrame:SetWidth(_G.LFDQueueFrameRandomScrollFrame:GetWidth() + 1)
-    _G.LFDQueueFrameSpecificListScrollFrameScrollBarScrollDownButton:SetPoint('TOP', _G.LFDQueueFrameSpecificListScrollFrameScrollBar, 'BOTTOM', 0, 2)
     _G.LFDQueueFrameRandomScrollFrameScrollBarScrollDownButton:SetPoint('TOP', _G.LFDQueueFrameRandomScrollFrameScrollBar, 'BOTTOM', 0, 2)
 
     -- LFGFrame
@@ -216,11 +224,11 @@ tinsert(C.BlizzThemes, function()
     F.ReskinRole(_G.LFGDungeonReadyStatusRolelessReady, 'READY')
 
     hooksecurefunc('SetCheckButtonIsRadio', function(button)
-        button:SetNormalTexture('')
+        button:SetNormalTexture(C.Assets.Textures.Blank)
         button:SetHighlightTexture(C.Assets.Textures.Backdrop)
         button:SetCheckedTexture('Interface\\Buttons\\UI-CheckBox-Check')
         button:GetCheckedTexture():SetTexCoord(0, 1, 0, 1)
-        button:SetPushedTexture('')
+        button:SetPushedTexture(C.Assets.Textures.Blank)
         button:SetDisabledCheckedTexture('Interface\\Buttons\\UI-CheckBox-Check-Disabled')
         button:GetDisabledCheckedTexture():SetTexCoord(0, 1, 0, 1)
     end)

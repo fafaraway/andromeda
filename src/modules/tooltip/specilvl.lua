@@ -201,7 +201,7 @@ function TOOLTIP:GetUnitItemLevel(unit)
                     if not quality or not level then
                         delay = true
                     else
-                        if quality == _G.LE_ITEM_QUALITY_HEIRLOOM then
+                        if quality == Enum.ItemQuality.Heirloom then
                             boa = boa + 1
                         end
 
@@ -214,7 +214,7 @@ function TOOLTIP:GetUnitItemLevel(unit)
                             level = F.GetItemLevel(itemLink) or level
                             if i < 16 then
                                 total = total + level
-                            elseif i > 15 and quality == _G.LE_ITEM_QUALITY_ARTIFACT then
+                            elseif i > 15 and quality == Enum.ItemQuality.Artifact then
                                 local relics = { select(4, strsplit(':', itemLink)) }
                                 for i = 1, 3 do
                                     local relicID = relics[i] ~= '' and relics[i]
@@ -227,17 +227,13 @@ function TOOLTIP:GetUnitItemLevel(unit)
                             end
 
                             if i == 16 then
-                                if quality == _G.LE_ITEM_QUALITY_ARTIFACT then
+                                if quality == Enum.ItemQuality.Artifact then
                                     hasArtifact = true
                                 end
 
                                 weapon[1] = level
                                 haveWeapon = haveWeapon + 1
-                                if
-                                    slot == 'INVTYPE_2HWEAPON'
-                                    or slot == 'INVTYPE_RANGED'
-                                    or (slot == 'INVTYPE_RANGEDRIGHT' and class == 'HUNTER')
-                                then
+                                if slot == 'INVTYPE_2HWEAPON' or slot == 'INVTYPE_RANGED' or (slot == 'INVTYPE_RANGEDRIGHT' and class == 'HUNTER') then
                                     mainhand = true
                                     twohand = twohand + 1
                                 end

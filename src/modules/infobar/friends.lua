@@ -358,7 +358,7 @@ local function buttonOnEnter(self)
             local level = gameAccountInfo.characterLevel
             local gameText = gameAccountInfo.richPresence or ''
             local wowProjectID = gameAccountInfo.wowProjectID
-            local clientString = _G.BNet_GetClientEmbeddedTexture(client, 16)
+            local clientString = C.IS_NEW_PATCH and BNet_GetClientEmbeddedAtlas(client, 16) or BNet_GetClientEmbeddedTexture(client, 16)
             if client == _G.BNET_CLIENT_WOW then
                 if charName ~= '' then -- fix for weird account
                     realmName = (C.MY_REALM == realmName or realmName == '') and '' or '-' .. realmName
@@ -473,7 +473,12 @@ function INFOBAR:FriendsPanel_UpdateButton(button)
         local classColor = C.ClassColors[class] or levelColor
         button.name:SetText(format('%s%s|r %s%s', levelColor, level, F:RgbToHex(classColor), name))
         button.zone:SetText(format('%s%s', zoneColor, area))
-        button.gameIcon:SetTexture(_G.BNet_GetClientTexture(_G.BNET_CLIENT_WOW))
+
+        if C.IS_NEW_PATCH then
+            button.gameIcon:SetAtlas(BNet_GetBattlenetClientAtlas(_G.BNET_CLIENT_WOW))
+        else
+            button.gameIcon:SetTexture(BNet_GetClientTexture(_G.BNET_CLIENT_WOW))
+        end
 
         button.isBNet = nil
         button.data = friendTable[index]
@@ -496,11 +501,19 @@ function INFOBAR:FriendsPanel_UpdateButton(button)
         button.zone:SetText(format('%s%s', zoneColor, infoText))
 
         if client == CLIENT_WOW_DIFF then
-            button.gameIcon:SetTexture(_G.BNet_GetClientTexture(_G.BNET_CLIENT_WOW))
+            if C.IS_NEW_PATCH then
+                button.gameIcon:SetAtlas(BNet_GetBattlenetClientAtlas(_G.BNET_CLIENT_WOW))
+            else
+                button.gameIcon:SetTexture(BNet_GetClientTexture(_G.BNET_CLIENT_WOW))
+            end
         elseif client == _G.BNET_CLIENT_WOW then
             button.gameIcon:SetTexture('Interface\\FriendsFrame\\PlusManz-' .. factionName)
         else
-            button.gameIcon:SetTexture(_G.BNet_GetClientTexture(client))
+            if C.IS_NEW_PATCH then
+                button.gameIcon:SetAtlas(BNet_GetBattlenetClientAtlas(client))
+            else
+                button.gameIcon:SetTexture(BNet_GetClientTexture(client))
+            end
         end
 
         button.isBNet = true
@@ -514,7 +527,7 @@ function INFOBAR:FriendsPanel_Update()
     local buttons = scrollFrame.buttons
     local height = scrollFrame.buttonHeight
     local numFriendButtons = INFOBAR.totalOnline
-    local offset = _G.HybridScrollFrame_GetOffset(scrollFrame)
+    local offset = HybridScrollFrame_GetOffset(scrollFrame)
     for i = 1, #buttons do
         local button = buttons[i]
         local index = offset + i

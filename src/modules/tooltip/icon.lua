@@ -53,9 +53,10 @@ function TOOLTIP:HookTooltipSetSpell()
 end
 
 function TOOLTIP:HookTooltipMethod()
-    self:HookScript('OnTooltipSetItem', TOOLTIP.HookTooltipSetItem)
-    self:HookScript('OnTooltipSetSpell', TOOLTIP.HookTooltipSetSpell)
-    self:HookScript('OnTooltipCleared', TOOLTIP.HookTooltipCleared)
+    if not C.IS_BETA then
+        self:HookScript('OnTooltipSetItem', TOOLTIP.HookTooltipSetItem)
+        self:HookScript('OnTooltipSetSpell', TOOLTIP.HookTooltipSetSpell)
+    end
 end
 
 function TOOLTIP:ReskinRewardIcon()
@@ -69,9 +70,11 @@ function TOOLTIP:ReskinTipIcon()
         return
     end
 
+    -- Add Icons
     TOOLTIP.HookTooltipMethod(_G.GameTooltip)
     TOOLTIP.HookTooltipMethod(_G.ItemRefTooltip)
 
+    -- Cut Icons
     hooksecurefunc(_G.GameTooltip, 'SetUnitAura', function(self)
         TOOLTIP.SetupTooltipIcon(self)
     end)

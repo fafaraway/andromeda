@@ -1,6 +1,10 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.BlizzThemes, function()
+    if not _G.ANDROMEDA_ADB.ReskinBlizz then
+        return
+    end
+
     -- ready dialog
     local PVPReadyDialog = _G.PVPReadyDialog
 
@@ -39,7 +43,12 @@ tinsert(C.BlizzThemes, function()
     F.StripTextures(content)
     local bg = F.CreateBDFrame(content, 0.25)
     bg:SetPoint('BOTTOMRIGHT', tabContainer.InsetBorderTop, 4, -1)
-    F.ReskinScroll(content.ScrollFrame.ScrollBar)
+
+    if C.IS_NEW_PATCH then
+        F.ReskinTrimScroll(content.ScrollBar)
+    else
+        F.ReskinScroll(content.ScrollFrame.ScrollBar)
+    end
 
     F.StripTextures(tabContainer)
     for i = 1, 3 do
@@ -62,7 +71,12 @@ tinsert(C.BlizzThemes, function()
         local bg = F.CreateBDFrame(content, 0.25)
         bg:SetPoint('BOTTOMRIGHT', tabContainer.InsetBorderTop, 4, -1)
         F.StripTextures(content.earningsArt)
-        F.ReskinScroll(content.scrollFrame.scrollBar)
+
+        if C.IS_NEW_PATCH then
+            F.ReskinTrimScroll(content.scrollBar)
+        else
+            F.ReskinScroll(content.scrollFrame.ScrollBar)
+        end
 
         F.StripTextures(tabContainer)
         for i = 1, 3 do

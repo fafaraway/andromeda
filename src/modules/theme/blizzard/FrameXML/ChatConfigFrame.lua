@@ -29,6 +29,10 @@ local function ReskinVoicePicker(voicePicker)
 end
 
 tinsert(C.BlizzThemes, function()
+    if not _G.ANDROMEDA_ADB.ReskinBlizz then
+        return
+    end
+
     F.StripTextures(_G.ChatConfigFrame)
     F.SetBD(_G.ChatConfigFrame)
     F.StripTextures(_G.ChatConfigFrame.Header)
@@ -84,7 +88,14 @@ tinsert(C.BlizzThemes, function()
     end)
 
     for i = 1, 5 do
-        F.StripTextures(_G['CombatConfigTab' .. i])
+        local tab = _G['CombatConfigTab' .. i]
+        if tab then
+            F.StripTextures(tab)
+
+            if tab.Text then
+                tab.Text:SetWidth(tab.Text:GetWidth() + 10)
+            end
+        end
     end
 
     local line = _G.ChatConfigFrame:CreateTexture()
@@ -143,6 +154,25 @@ tinsert(C.BlizzThemes, function()
         F.ReskinCheckbox(box)
     end
 
+    hooksecurefunc('ChatConfig_UpdateSwatches', function(frame)
+        if not frame.swatchTable then
+            return
+        end
+
+        local nameString = frame:GetName() .. 'Swatch'
+        local baseName
+        for index in ipairs(frame.swatchTable) do
+            baseName = nameString .. index
+            local bu = _G[baseName]
+            if not bu.styled then
+                F.StripTextures(bu)
+                F.CreateBDFrame(bu, 0.25):SetInside()
+                F.ReskinColorSwatch(_G[baseName .. 'ColorSwatch'])
+                bu.styled = true
+            end
+        end
+    end)
+
     local bg = F.CreateBDFrame(_G.ChatConfigCombatSettingsFilters, 0.25)
     bg:SetPoint('TOPLEFT', 3, 0)
     bg:SetPoint('BOTTOMRIGHT', 0, 1)
@@ -163,25 +193,18 @@ tinsert(C.BlizzThemes, function()
     F.ReskinRadio(_G.CombatConfigColorsColorizeEntireLineByTarget)
     F.ReskinColorSwatch(_G.CombatConfigColorsColorizeSpellNamesColorSwatch)
     F.ReskinColorSwatch(_G.CombatConfigColorsColorizeDamageNumberColorSwatch)
-    F.ReskinScroll(_G.ChatConfigCombatSettingsFiltersScrollFrameScrollBar)
+
+    if C.IS_NEW_PATCH then
+        F.ReskinTrimScroll(_G.ChatConfigCombatSettingsFilters.ScrollBar)
+    else
+        F.ReskinScroll(_G.ChatConfigCombatSettingsFiltersScrollFrameScrollBar)
+    end
 
     _G.ChatConfigMoveFilterUpButton:SetSize(22, 22)
     _G.ChatConfigMoveFilterDownButton:SetSize(22, 22)
 
-    _G.ChatConfigCombatSettingsFiltersAddFilterButton:SetPoint(
-        'RIGHT',
-        _G.ChatConfigCombatSettingsFiltersDeleteButton,
-        'LEFT',
-        -1,
-        0
-    )
-    _G.ChatConfigCombatSettingsFiltersCopyFilterButton:SetPoint(
-        'RIGHT',
-        _G.ChatConfigCombatSettingsFiltersAddFilterButton,
-        'LEFT',
-        -1,
-        0
-    )
+    _G.ChatConfigCombatSettingsFiltersAddFilterButton:SetPoint('RIGHT', _G.ChatConfigCombatSettingsFiltersDeleteButton, 'LEFT', -1, 0)
+    _G.ChatConfigCombatSettingsFiltersCopyFilterButton:SetPoint('RIGHT', _G.ChatConfigCombatSettingsFiltersAddFilterButton, 'LEFT', -1, 0)
     _G.ChatConfigMoveFilterUpButton:SetPoint('TOPLEFT', _G.ChatConfigCombatSettingsFilters, 'BOTTOMLEFT', 3, 0)
     _G.ChatConfigMoveFilterDownButton:SetPoint('LEFT', _G.ChatConfigMoveFilterUpButton, 'RIGHT', 1, 0)
 
@@ -206,7 +229,9 @@ tinsert(C.BlizzThemes, function()
         'UseAlternateVoiceForSystemMessagesCheckButton',
     }
     for _, checkbox in pairs(checkboxes) do
-        F.ReskinCheckbox(_G.TextToSpeechFramePanelContainer[checkbox])
+        local check = _G.TextToSpeechFramePanelContainer[checkbox]
+        F.ReskinCheck(check)
+        check.bg:SetInside(check, 6, 6)
     end
 
     hooksecurefunc('TextToSpeechFrame_UpdateMessageCheckboxes', function(frame)
@@ -219,6 +244,7 @@ tinsert(C.BlizzThemes, function()
                 checkBox = _G[checkBoxName]
                 if checkBox and not checkBox.styled then
                     F.ReskinCheckbox(checkBox)
+                    checkBox.bg:SetInside(checkBox, 6, 6)
                     checkBox.styled = true
                 end
             end

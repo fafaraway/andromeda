@@ -2611,26 +2611,38 @@ do
             end
         end
 
+        local maxLevel = GetMaxPlayerLevel()
         local dungeons = {}
-        addNewDungeon(dungeons, 1182) -- 通灵战潮
-        addNewDungeon(dungeons, 1183) -- 凋魂之殇
-        addNewDungeon(dungeons, 1184) -- 塞兹仙林的迷雾
-        addNewDungeon(dungeons, 1185) -- 赎罪大厅
-        addNewDungeon(dungeons, 1186) -- 晋升高塔
-        addNewDungeon(dungeons, 1187) -- 伤逝剧场
-        addNewDungeon(dungeons, 1188) -- 彼界
-        addNewDungeon(dungeons, 1189) -- 赤红深渊
-        addNewDungeon(dungeons, 1194) -- 集市
-        addNewDungeon(dungeons, 536)  -- 恐轨车站
-        addNewDungeon(dungeons, 558)  -- 钢铁码头
-        addNewDungeon(dungeons, 860)  -- 重返卡拉赞
-        addNewDungeon(dungeons, 1178) -- 麦卡贡
+
+        if maxLevel == 70 then
+            for dungeonID = 1196, 1204 do
+                if dungeonID ~= 1200 then
+                    addNewDungeon(dungeons, dungeonID)
+                end
+            end
+            addNewDungeon(dungeons, 313)  -- 青龙寺
+            addNewDungeon(dungeons, 537)  -- 影月墓地
+            addNewDungeon(dungeons, 721)  -- 英灵殿
+            addNewDungeon(dungeons, 800)  -- 群星庭院
+        else
+            for dungeonID = 1182, 1189 do
+                addNewDungeon(dungeons, dungeonID)
+            end
+            addNewDungeon(dungeons, 1194) -- 集市
+            addNewDungeon(dungeons, 536)  -- 恐轨车站
+            addNewDungeon(dungeons, 558)  -- 钢铁码头
+            addNewDungeon(dungeons, 860)  -- 重返卡拉赞
+            addNewDungeon(dungeons, 1178) -- 麦卡贡
+        end
 
         local raids = {
             [1] = EJ_GetInstanceInfo(1190),
             [2] = EJ_GetInstanceInfo(1193),
             [3] = EJ_GetInstanceInfo(1195)
         }
+        if maxLevel == 70 then
+            raids[4] = EJ_GetInstanceInfo(1200)
+        end
 
         options[1] = createDropdown(frame, _G.DUNGEONS, 123, -30, dungeons, L['Select a specific dungeon.'], 107, 24)
         options[1].title = L['Hint']
@@ -3143,6 +3155,7 @@ function GUI:SetupCustomClassColor(parent)
         [10] = { text = 'DRUID', value = colors.DRUID },
         [11] = { text = 'MONK', value = colors.MONK },
         [12] = { text = 'PALADIN', value = colors.PALADIN },
+        [13] = { text = 'EVOKER', value = colors.EVOKER },
     }
 
     local offset = -10

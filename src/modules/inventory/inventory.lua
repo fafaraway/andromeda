@@ -3,6 +3,22 @@ local INVENTORY = F:GetModule('Inventory')
 local cargBags = F.Libs.cargBags
 local iconsList = C.Assets.Textures
 
+local GetContainerItemID = GetContainerItemID
+local GetContainerNumSlots = GetContainerNumSlots
+local SortBags = SortBags
+local SortBankBags = SortBankBags
+local SortReagentBankBags = SortReagentBankBags
+local PickupContainerItem = PickupContainerItem
+
+if C.IS_BETA then
+    GetContainerItemID = C_Container.GetContainerItemID
+    GetContainerNumSlots = C_Container.GetContainerNumSlots
+    SortBags = C_Container.SortBags
+    SortBankBags = C_Container.SortBankBags
+    SortReagentBankBags = C_Container.SortReagentBankBags
+    PickupContainerItem = C_Container.PickupContainerItem
+end
+
 local iconColor = { 0.5, 0.5, 0.5 }
 local bagTypeColor = {
     [0] = { 0, 0, 0, 0.25 }, -- 容器
@@ -16,6 +32,7 @@ local bagTypeColor = {
     [8] = { 0.8, 0.8, 0.8, 0.25 }, -- 铭文包
     [9] = { 0.4, 0.6, 1, 0.25 }, -- 工具箱
     [10] = { 0.8, 0, 0, 0.25 }, -- 烹饪包
+    [11] = { 0.2, 0.8, 0.2, 0.25 }, -- 材料包
 }
 
 local sortCache = {}
@@ -23,7 +40,15 @@ function INVENTORY:ReverseSort()
     for bag = 0, 4 do
         local numSlots = GetContainerNumSlots(bag)
         for slot = 1, numSlots do
-            local texture, _, locked = GetContainerItemInfo(bag, slot)
+            local texture, locked
+            if C.IS_BETA then
+                local info = C_Container.GetContainerItemInfo(bag, slot)
+                texture = info and info.iconFileID
+                locked = info and info.isLocked
+            else
+                texture, _, locked = GetContainerItemInfo(bag, slot)
+            end
+
             if (slot <= numSlots / 2) and texture and not locked and not sortCache['b' .. bag .. 's' .. slot] then
                 PickupContainerItem(bag, slot)
                 PickupContainerItem(bag, numSlots + 1 - slot)
@@ -380,13 +405,7 @@ function INVENTORY:CreateRepairButton()
     end)
 
     bu.title = L['Auto Repair']
-    F.AddTooltip(
-        bu,
-        'ANCHOR_TOP',
-        L['Repair your equipment automatically when you visit an able vendor.'],
-        'BLUE',
-        true
-    )
+    F.AddTooltip(bu, 'ANCHOR_TOP', L['Repair your equipment automatically when you visit an able vendor.'], 'BLUE', true)
     updateRepairButtonStatus(bu)
     return bu
 end
@@ -424,9 +443,7 @@ local smartFilter = {
         if text == 'boe' then
             return item.bindOn == 'equip'
         else
-            return IsItemMatched(item.subType, text)
-                or IsItemMatched(item.equipLoc, text)
-                or IsItemMatched(item.name, text)
+            return IsItemMatched(item.subType, text) or IsItemMatched(item.equipLoc, text) or IsItemMatched(item.name, text)
         end
     end,
     _default = 'default',
@@ -445,12 +462,7 @@ function INVENTORY:CreateSearchButton()
     searchBar:SetPoint('RIGHT', bu, 'RIGHT', -6, 0)
     searchBar:SetSize(80, 26)
     searchBar:DisableDrawLayer('BACKGROUND')
-    F.AddTooltip(
-        searchBar,
-        'ANCHOR_TOP',
-        L["You can type in item names or item equip locations.|n'boe' for items that bind on equip and 'quest' for quest items."],
-        'BLUE'
-    )
+    F.AddTooltip(searchBar, 'ANCHOR_TOP', L["You can type in item names or item equip locations.|n'boe' for items that bind on equip and 'quest' for quest items."], 'BLUE')
 
     local bg = F.CreateBDFrame(searchBar, 0, true)
     bg:SetPoint('TOPLEFT', -5, -5)
@@ -489,10 +501,19 @@ function INVENTORY:GetEmptySlot(name)
         if slotID then
             return -1, slotID
         end
-        for bagID = 5, 11 do
-            local slotID = INVENTORY:GetContainerEmptySlot(bagID)
-            if slotID then
-                return bagID, slotID
+        if C.IS_NEW_PATCH then
+            for bagID = 6, 12 do
+                local slotID = INVENTORY:GetContainerEmptySlot(bagID)
+                if slotID then
+                    return bagID, slotID
+                end
+            end
+        else
+            for bagID = 5, 11 do
+                local slotID = INVENTORY:GetContainerEmptySlot(bagID)
+                if slotID then
+                    return bagID, slotID
+                end
             end
         end
     elseif name == 'Reagent' then
@@ -560,8 +581,6 @@ function INVENTORY.GetCustomGroupTitle(index)
     return C.DB['Inventory']['CustomNamesList'][index] or (_G.PREFERENCES .. ' ' .. index)
 end
 
-
-
 function INVENTORY:RenameCustomGroup(index)
     INVENTORY.selectGroupIndex = index
     StaticPopup_Show('ANDROMEDA_INVENTORY_RENAME_CUSTOM_GROUP')
@@ -600,7 +619,7 @@ local menuList = {
         text = _G.NONE,
         arg1 = 0,
         func = INVENTORY.MoveItemToCustomBag,
-        checked = INVENTORY.IsItemInCustomBag
+        checked = INVENTORY.IsItemInCustomBag,
     },
 }
 
@@ -617,8 +636,7 @@ function INVENTORY:CreateFavouriteButton()
     end
     INVENTORY.CustomMenu = menuList
 
-    local enabledText =
-        L["You can now star items.|nIf 'Item Filter' enabled, the item you starred will add to Preferences filter slots.|nThis is not available to junk."]
+    local enabledText = L["You can now star items.|nIf 'Item Filter' enabled, the item you starred will add to Preferences filter slots.|nThis is not available to junk."]
 
     local bu = F.CreateButton(self, 16, 16, true, iconsList.BagFavourite)
     bu.Icon:SetVertexColor(unpack(iconColor))
@@ -655,8 +673,17 @@ local function favouriteOnClick(self)
         return
     end
 
-    local texture, _, _, quality, _, _, link, _, _, itemID = GetContainerItemInfo(self.bagID, self.slotID)
-    if texture and quality > _G.LE_ITEM_QUALITY_POOR then
+    local texture, quality, link, itemID
+    if C.IS_BETA then
+        local info = C_Container.GetContainerItemInfo(self.bagId, self.slotId)
+        texture = info and info.iconFileID
+        quality = info and info.quality
+        link = info and info.hyperlink
+        itemID = info and info.itemID
+    else
+        texture, _, _, quality, _, _, link, _, _, itemID = GetContainerItemInfo(self.bagId, self.slotId)
+    end
+    if texture and quality > Enum.ItemQuality.Poor then
         ClearCursor()
         INVENTORY.selectItemID = itemID
         INVENTORY.CustomMenu[1].text = link
@@ -709,7 +736,14 @@ local function customJunkOnClick(self)
         return
     end
 
-    local texture, _, _, _, _, _, _, _, _, itemID = GetContainerItemInfo(self.bagID, self.slotID)
+    local texture, itemID
+    if C.IS_BETA then
+        local info = C_Container.GetContainerItemInfo(self.bagId, self.slotId)
+        texture = info and info.iconFileID
+        itemID = info and info.itemID
+    else
+        texture, _, _, _, _, _, _, _, _, itemID = GetContainerItemInfo(self.bagId, self.slotId)
+    end
     local price = select(11, GetItemInfo(itemID))
     if texture and price > 0 then
         if _G.ANDROMEDA_ADB['CustomJunkList'][itemID] then
@@ -810,19 +844,20 @@ function INVENTORY:OnLogin()
     end
 
     function Backpack:OnInit()
-        AddNewContainer('Bag', 15, 'Junk', filters.bagsJunk)
+        AddNewContainer('Bag', 1, 'BagReagent', filters.onlyBagReagent)
+        AddNewContainer('Bag', 16, 'Junk', filters.bagsJunk)
         for i = 1, 5 do
-            AddNewContainer('Bag', i, 'BagCustom' .. i, filters['bagCustom' .. i])
+            AddNewContainer('Bag', i + 1, 'BagCustom' .. i, filters['bagCustom' .. i])
         end
-        AddNewContainer('Bag', 8, 'EquipSet', filters.bagEquipSet)
-        AddNewContainer('Bag', 6, 'AzeriteItem', filters.bagAzeriteItem)
-        AddNewContainer('Bag', 7, 'Equipment', filters.bagEquipment)
-        AddNewContainer('Bag', 9, 'BagCollection', filters.bagCollection)
-        AddNewContainer('Bag', 10, 'Consumable', filters.bagConsumable)
+        AddNewContainer('Bag', 9, 'EquipSet', filters.bagEquipSet)
+        AddNewContainer('Bag', 7, 'AzeriteItem', filters.bagAzeriteItem)
+        AddNewContainer('Bag', 8, 'Equipment', filters.bagEquipment)
+        AddNewContainer('Bag', 10, 'BagCollection', filters.bagCollection)
+        AddNewContainer('Bag', 14, 'Consumable', filters.bagConsumable)
         AddNewContainer('Bag', 11, 'BagGoods', filters.bagGoods)
-        AddNewContainer('Bag', 12, 'BagQuest', filters.bagQuest)
-        AddNewContainer('Bag', 13, 'BagAnima', filters.bagAnima)
-        AddNewContainer('Bag', 14, 'BagRelic', filters.bagRelic)
+        AddNewContainer('Bag', 15, 'BagQuest', filters.bagQuest)
+        AddNewContainer('Bag', 12, 'BagAnima', filters.bagAnima)
+        AddNewContainer('Bag', 13, 'BagRelic', filters.bagRelic)
 
         f.main = MyContainer:New('Bag', { Bags = 'bags', BagType = 'Bag' })
         f.main.__anchor = { 'BOTTOMRIGHT', -C.UI_GAP, C.UI_GAP }
@@ -887,8 +922,8 @@ function INVENTORY:OnLogin()
     MyButton:Scaffold('Default')
 
     function MyButton:OnCreate()
-        self:SetNormalTexture(nil)
-        self:SetPushedTexture(nil)
+        self:SetNormalTexture(C.Assets.Textures.Blank)
+        self:SetPushedTexture(C.Assets.Textures.Blank)
         self:SetHighlightTexture(C.Assets.Textures.Backdrop)
         self:GetHighlightTexture():SetVertexColor(1, 1, 1, 0.25)
         self:GetHighlightTexture():SetInside()
@@ -959,6 +994,11 @@ function INVENTORY:OnLogin()
             self.canIMogIt:SetSize(13, 13)
             self.canIMogIt:SetPoint(unpack(_G.CanIMogIt.ICON_LOCATIONS[_G.CanIMogItOptions['iconLocation']]))
         end
+
+        if C.IS_NEW_PATCH and not self.ProfessionQualityOverlay then
+            self.ProfessionQualityOverlay = self:CreateTexture(nil, 'OVERLAY')
+            self.ProfessionQualityOverlay:SetPoint('TOPLEFT', -3, 2)
+        end
     end
 
     function MyButton:ItemOnEnter()
@@ -996,7 +1036,7 @@ function INVENTORY:OnLogin()
             return
         end
 
-        local text, unmodifiedText = _G.CanIMogIt:GetTooltipText(nil, item.bagID, item.slotID)
+        local text, unmodifiedText = _G.CanIMogIt:GetTooltipText(nil, item.bagId, item.slotId)
         if text and text ~= '' then
             local icon = _G.CanIMogIt.tooltipOverlayIcons[unmodifiedText]
             self.canIMogIt:SetTexture(icon)
@@ -1014,17 +1054,13 @@ function INVENTORY:OnLogin()
             return
         end
         if self.UpgradeIcon then
-            self.UpgradeIcon:SetShown(_G.PawnIsContainerItemAnUpgrade(item.bagID, item.slotID))
+            self.UpgradeIcon:SetShown(_G.PawnIsContainerItemAnUpgrade(item.bagId, item.slotId))
         end
     end
 
-    function MyButton:OnUpdate(item)
+    function MyButton:OnUpdateButton(item)
         if self.JunkIcon then
-            if
-                (_G.MerchantFrame:IsShown() or customJunkEnable)
-                and (item.quality == _G.LE_ITEM_QUALITY_POOR or _G.ANDROMEDA_ADB['CustomJunkList'][item.id])
-                and item.hasPrice
-            then
+            if (_G.MerchantFrame:IsShown() or customJunkEnable) and (item.quality == Enum.ItemQuality.Poor or _G.ANDROMEDA_ADB['CustomJunkList'][item.id]) and item.hasPrice then
                 self.JunkIcon:Show()
             else
                 self.JunkIcon:Hide()
@@ -1048,6 +1084,11 @@ function INVENTORY:OnLogin()
             end
         end
 
+        if self.ProfessionQualityOverlay then -- isNewPatch
+            self.ProfessionQualityOverlay:SetAtlas(nil)
+            SetItemCraftingQualityOverlay(self, item.link)
+        end
+
         if C.DB['Inventory']['CustomItemsList'][item.id] and not C.DB.Inventory.ItemFilter then
             self.Favourite:Show()
         else
@@ -1055,7 +1096,7 @@ function INVENTORY:OnLogin()
         end
 
         if self.ShowNewItems then
-            if C_NewItems.IsNewItem(item.bagID, item.slotID) then
+            if C_NewItems.IsNewItem(item.bagId, item.slotId) then
                 self.anim:Play()
             else
                 if self.anim:IsPlaying() then
@@ -1069,7 +1110,7 @@ function INVENTORY:OnLogin()
             local level = item.level -- ilvl for keystone and battlepet
 
             if not level and isItemNeedsLevel(item) then
-                local ilvl = F.GetItemLevel(item.link, item.bagID ~= -1 and item.bagID, item.slotID) -- SetBagItem return nil for default bank slots
+                local ilvl = F.GetItemLevel(item.link, item.bagId ~= -1 and item.bagId, item.slotId) -- SetBagItem return nil for default bank slots
                 if ilvl then
                     level = ilvl
                 end
@@ -1083,7 +1124,7 @@ function INVENTORY:OnLogin()
         end
 
         if C.DB.Inventory.SpecialBagsColor then
-            local bagType = INVENTORY.BagsType[item.bagID]
+            local bagType = INVENTORY.BagsType[item.bagId]
             local color = bagTypeColor[bagType] or bagTypeColor[0]
             self:SetBackdropColor(unpack(color))
         else
@@ -1091,15 +1132,15 @@ function INVENTORY:OnLogin()
         end
 
         if C.DB.Inventory.BindType and isItemExist(item) then
-            local itemLink = GetContainerItemLink(item.bagID, item.slotID)
+            local itemLink = GetContainerItemLink(item.bagId, item.slotId)
             if not itemLink then
                 return
             end
 
-            local isBOA = CheckBoundStatus(item.link, item.bagID, item.slotID, _G.ITEM_BNETACCOUNTBOUND)
-                or CheckBoundStatus(item.link, item.bagID, item.slotID, _G.ITEM_BIND_TO_BNETACCOUNT)
-                or CheckBoundStatus(item.link, item.bagID, item.slotID, _G.ITEM_ACCOUNTBOUND)
-            local isSoulBound = CheckBoundStatus(item.link, item.bagID, item.slotID, _G.ITEM_SOULBOUND)
+            local isBOA = CheckBoundStatus(item.link, item.bagId, item.slotId, _G.ITEM_BNETACCOUNTBOUND)
+                or CheckBoundStatus(item.link, item.bagId, item.slotId, _G.ITEM_BIND_TO_BNETACCOUNT)
+                or CheckBoundStatus(item.link, item.bagId, item.slotId, _G.ITEM_ACCOUNTBOUND)
+            local isSoulBound = CheckBoundStatus(item.link, item.bagId, item.slotId, _G.ITEM_SOULBOUND)
             local _, _, itemRarity, _, _, _, _, _, _, _, _, _, _, bindType = GetItemInfo(itemLink)
 
             if isBOA or itemRarity == 7 or itemRarity == 8 then
@@ -1230,6 +1271,8 @@ function INVENTORY:OnLogin()
             label = L['Korthia Relics']
         elseif strmatch(name, 'Custom%d') then
             label = INVENTORY.GetCustomGroupTitle(settings.Index)
+        elseif name == 'BagReagent' then
+            label = L['Reagent Bag']
         end
 
         local outline = _G.ANDROMEDA_ADB.FontOutline
@@ -1246,7 +1289,7 @@ function INVENTORY:OnLogin()
         buttons[1] = INVENTORY.CreateRestoreButton(self, f)
         buttons[2] = INVENTORY.CreateSortButton(self, name)
         if name == 'Bag' then
-            INVENTORY.CreateBagBar(self, settings, 4)
+            INVENTORY.CreateBagBar(self, settings, C.IS_NEW_PATCH and 5 or 4)
             buttons[3] = INVENTORY.CreateBagToggle(self)
             buttons[4] = INVENTORY.CreateRepairButton(self)
             buttons[5] = INVENTORY.CreateSellButton(self)
@@ -1313,8 +1356,10 @@ function INVENTORY:OnLogin()
 
     local BagButton = Backpack:GetClass('BagButton', true, 'BagButton')
     function BagButton:OnCreate()
-        self:SetNormalTexture(nil)
-        self:SetPushedTexture(nil)
+        self:SetNormalTexture('')
+        self:GetNormalTexture():SetAlpha(0)
+        self:SetPushedTexture('')
+        self:GetPushedTexture():SetAlpha(0)
         self:SetHighlightTexture(C.Assets.Textures.Backdrop)
         self:GetHighlightTexture():SetVertexColor(1, 1, 1, 0.25)
 
@@ -1324,7 +1369,7 @@ function INVENTORY:OnLogin()
         self.Icon:SetTexCoord(unpack(C.TEX_COORD))
     end
 
-    function BagButton:OnUpdate()
+    function BagButton:OnUpdateButton()
         self:SetBackdropBorderColor(0, 0, 0)
 
         local id = GetInventoryItemID('player', (self.GetInventorySlot and self:GetInventorySlot()) or self.invID)
@@ -1342,16 +1387,21 @@ function INVENTORY:OnLogin()
             self:SetBackdropBorderColor(color.r, color.g, color.b)
         end
 
-        if classID == _G.LE_ITEM_CLASS_CONTAINER then
-            INVENTORY.BagsType[self.bagID] = subClassID or 0
+        if classID == Enum.ItemClass.Container then
+            INVENTORY.BagsType[self.bagId] = subClassID or 0
         else
-            INVENTORY.BagsType[self.bagID] = 0
+            INVENTORY.BagsType[self.bagId] = 0
         end
     end
 
     -- Sort order
-    SetSortBagsRightToLeft(C.DB.Inventory.SortMode == 1)
-    SetInsertItemsLeftToRight(false)
+    if C.IS_BETA then
+        C_Container.SetSortBagsRightToLeft(C.DB.Inventory.SortMode == 1)
+        C_Container.SetInsertItemsLeftToRight(false)
+    else
+        SetSortBagsRightToLeft(C.DB.Inventory.SortMode == 1)
+        SetInsertItemsLeftToRight(false)
+    end
 
     -- Init
     _G.ToggleAllBags()
@@ -1380,4 +1430,9 @@ function INVENTORY:OnLogin()
     end
     local shiftUpdater = CreateFrame('Frame', nil, f.main)
     shiftUpdater:SetScript('OnUpdate', onUpdate)
+
+    if C.IS_NEW_PATCH then
+        _G.MicroButtonAndBagsBar:Hide()
+        _G.MicroButtonAndBagsBar:UnregisterAllEvents()
+    end
 end

@@ -24,6 +24,8 @@ tinsert(C.BlizzThemes, function()
         _G.GameMenuButtonLogout,
         _G.GameMenuButtonQuit,
         _G.GameMenuButtonContinue,
+        _G.GameMenuButtonSettings, -- isNewPatch
+        _G.GameMenuButtonEditMode, -- isNewPatch
     }
 
     for _, button in next, buttons do

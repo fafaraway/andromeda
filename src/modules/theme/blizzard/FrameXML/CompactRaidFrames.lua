@@ -38,6 +38,7 @@ tinsert(C.BlizzThemes, function()
         _G.CompactRaidFrameManagerDisplayFrameLockedModeToggle,
         _G.CompactRaidFrameManagerDisplayFrameHiddenModeToggle,
         _G.CompactRaidFrameManagerDisplayFrameConvertToRaid,
+        _G.CompactRaidFrameManagerDisplayFrameEditMode, -- isNewPatch
     }
     for _, button in pairs(buttons) do
         for i = 1, 9 do
@@ -45,9 +46,7 @@ tinsert(C.BlizzThemes, function()
         end
         F.Reskin(button)
     end
-    _G.CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton:SetNormalTexture(
-        'Interface\\RaidFrame\\Raid-WorldPing'
-    )
+    _G.CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton:SetNormalTexture('Interface\\RaidFrame\\Raid-WorldPing')
 
     for i = 1, 8 do
         select(i, _G.CompactRaidFrameManager:GetRegions()):SetAlpha(0)
@@ -59,6 +58,10 @@ tinsert(C.BlizzThemes, function()
     local bd = F.SetBD(_G.CompactRaidFrameManager)
     bd:SetPoint('TOPLEFT')
     bd:SetPoint('BOTTOMRIGHT', -9, 9)
-    F.ReskinDropDown(_G.CompactRaidFrameManagerDisplayFrameProfileSelector)
-    F.ReskinCheckbox(_G.CompactRaidFrameManagerDisplayFrameEveryoneIsAssistButton)
+    if C.IS_NEW_PATCH then
+        -- #TODO
+    else
+        F.ReskinDropDown(_G.CompactRaidFrameManagerDisplayFrameProfileSelector)
+    end
+    F.ReskinCheck(_G.CompactRaidFrameManagerDisplayFrameEveryoneIsAssistButton)
 end)

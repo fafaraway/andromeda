@@ -59,10 +59,6 @@ tinsert(C.BlizzThemes, function()
         [_G.GarrisonShipFollowerAlertSystem] = true,
     }
 
-    if not _G.NewCosmeticAlertFrameSystem then
-        _G.NewCosmeticAlertFrameSystem = 123
-    end
-
     local newAlertTemplate = {
         [_G.NewPetAlertSystem] = true,
         [_G.NewMountAlertSystem] = true,
@@ -163,7 +159,7 @@ tinsert(C.BlizzThemes, function()
                 frame.Background:SetTexture('')
                 frame.IconBorder:SetTexture('')
             end
-        elseif frame.queue == _G.NewRecipeLearnedAlertSystem then
+        elseif frame.queue == _G.NewRecipeLearnedAlertSystem or frame.queue == _G.SkillLineSpecsUnlockedAlertSystem then
             if not frame.bg then
                 frame.bg = F.SetBD(frame)
                 frame.bg:SetPoint('TOPLEFT', 10, -5)
@@ -174,7 +170,7 @@ tinsert(C.BlizzThemes, function()
                 frame.glow:SetTexture('')
                 frame.shine:SetTexture('')
             end
-            frame.Icon:SetMask(nil)
+            frame.Icon:SetMask('')
             frame.Icon:SetTexCoord(unpack(C.TEX_COORD))
         elseif frame.queue == _G.WorldQuestCompleteAlertSystem then
             if not frame.bg then

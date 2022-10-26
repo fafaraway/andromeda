@@ -23,7 +23,7 @@ A default texture will be applied to the StatusBar and Texture widgets if they d
 ## Options
 
 .timeToHold      - Indicates for how many seconds the castbar should be visible after a _FAILED or _INTERRUPTED
-                   event. Defaults to 0 (number)
+				   event. Defaults to 0 (number)
 .hideTradeSkills - Makes the element ignore casts related to crafting professions (boolean)
 
 ## Attributes
@@ -36,54 +36,54 @@ A default texture will be applied to the StatusBar and Texture widgets if they d
 
 ## Examples
 
-    -- Position and size
-    local Castbar = CreateFrame('StatusBar', nil, self)
-    Castbar:SetSize(20, 20)
-    Castbar:SetPoint('TOP')
-    Castbar:SetPoint('LEFT')
-    Castbar:SetPoint('RIGHT')
+	-- Position and size
+	local Castbar = CreateFrame('StatusBar', nil, self)
+	Castbar:SetSize(20, 20)
+	Castbar:SetPoint('TOP')
+	Castbar:SetPoint('LEFT')
+	Castbar:SetPoint('RIGHT')
 
-    -- Add a background
-    local Background = Castbar:CreateTexture(nil, 'BACKGROUND')
-    Background:SetAllPoints(Castbar)
-    Background:SetTexture(1, 1, 1, .5)
+	-- Add a background
+	local Background = Castbar:CreateTexture(nil, 'BACKGROUND')
+	Background:SetAllPoints(Castbar)
+	Background:SetTexture(1, 1, 1, .5)
 
-    -- Add a spark
-    local Spark = Castbar:CreateTexture(nil, 'OVERLAY')
-    Spark:SetSize(20, 20)
-    Spark:SetBlendMode('ADD')
-    Spark:SetPoint('CENTER', Castbar:GetStatusBarTexture(), 'RIGHT', 0, 0)
+	-- Add a spark
+	local Spark = Castbar:CreateTexture(nil, 'OVERLAY')
+	Spark:SetSize(20, 20)
+	Spark:SetBlendMode('ADD')
+	Spark:SetPoint('CENTER', Castbar:GetStatusBarTexture(), 'RIGHT', 0, 0)
 
-    -- Add a timer
-    local Time = Castbar:CreateFontString(nil, 'OVERLAY', 'GameFontNormalSmall')
-    Time:SetPoint('RIGHT', Castbar)
+	-- Add a timer
+	local Time = Castbar:CreateFontString(nil, 'OVERLAY', 'GameFontNormalSmall')
+	Time:SetPoint('RIGHT', Castbar)
 
-    -- Add spell text
-    local Text = Castbar:CreateFontString(nil, 'OVERLAY', 'GameFontNormalSmall')
-    Text:SetPoint('LEFT', Castbar)
+	-- Add spell text
+	local Text = Castbar:CreateFontString(nil, 'OVERLAY', 'GameFontNormalSmall')
+	Text:SetPoint('LEFT', Castbar)
 
-    -- Add spell icon
-    local Icon = Castbar:CreateTexture(nil, 'OVERLAY')
-    Icon:SetSize(20, 20)
-    Icon:SetPoint('TOPLEFT', Castbar, 'TOPLEFT')
+	-- Add spell icon
+	local Icon = Castbar:CreateTexture(nil, 'OVERLAY')
+	Icon:SetSize(20, 20)
+	Icon:SetPoint('TOPLEFT', Castbar, 'TOPLEFT')
 
-    -- Add Shield
-    local Shield = Castbar:CreateTexture(nil, 'OVERLAY')
-    Shield:SetSize(20, 20)
-    Shield:SetPoint('CENTER', Castbar)
+	-- Add Shield
+	local Shield = Castbar:CreateTexture(nil, 'OVERLAY')
+	Shield:SetSize(20, 20)
+	Shield:SetPoint('CENTER', Castbar)
 
-    -- Add safezone
-    local SafeZone = Castbar:CreateTexture(nil, 'OVERLAY')
+	-- Add safezone
+	local SafeZone = Castbar:CreateTexture(nil, 'OVERLAY')
 
-    -- Register it with oUF
-    Castbar.bg = Background
-    Castbar.Spark = Spark
-    Castbar.Time = Time
-    Castbar.Text = Text
-    Castbar.Icon = Icon
-    Castbar.Shield = Shield
-    Castbar.SafeZone = SafeZone
-    self.Castbar = Castbar
+	-- Register it with oUF
+	Castbar.bg = Background
+	Castbar.Spark = Spark
+	Castbar.Time = Time
+	Castbar.Text = Text
+	Castbar.Icon = Icon
+	Castbar.Shield = Shield
+	Castbar.SafeZone = SafeZone
+	self.Castbar = Castbar
 --]]
 
 local _, ns = ...
@@ -92,6 +92,7 @@ local oUF = ns.oUF
 local FALLBACK_ICON = 136243 -- Interface\ICONS\Trade_Engineering
 local FAILED = _G.FAILED or 'Failed'
 local INTERRUPTED = _G.INTERRUPTED or 'Interrupted'
+local isNewPatch = ANDROMEDA[2].IS_NEW_PATCH
 
 local function resetAttributes(self)
 	self.castID = nil
@@ -102,9 +103,9 @@ local function resetAttributes(self)
 end
 
 local function resetSpellTarget(self)
-    if self.Text then
-        self.Text:SetText('')
-    end
+	if self.Text then
+		self.Text:SetText('')
+	end
 end
 
 local function CastStart(self, event, unit)
@@ -112,11 +113,13 @@ local function CastStart(self, event, unit)
 
 	local element = self.Castbar
 
-	local name, _, texture, startTime, endTime, isTradeSkill, castID, notInterruptible, spellID = UnitCastingInfo(unit)
+	local isChargeSpell, numStages
+	local name, text, texture, startTime, endTime, isTradeSkill, castID, notInterruptible, spellID = UnitCastingInfo(unit)
 	event = 'UNIT_SPELLCAST_START'
 	if(not name) then
-		name, _, texture, startTime, endTime, isTradeSkill, notInterruptible, spellID = UnitChannelInfo(unit)
-		event = 'UNIT_SPELLCAST_CHANNEL_START'
+		name, text, texture, startTime, endTime, isTradeSkill, notInterruptible, spellID, _, numStages = UnitChannelInfo(unit)
+		isChargeSpell = numStages and numStages > 0 -- isNewPatch
+		event = isChargeSpell and 'UNIT_SPELLCAST_EMPOWER_START' or 'UNIT_SPELLCAST_CHANNEL_START'
 	end
 
 	if(not name or (isTradeSkill and element.hideTradeSkills)) then
@@ -132,8 +135,10 @@ local function CastStart(self, event, unit)
 	element.max = endTime - startTime
 	element.startTime = startTime
 	element.delay = 0
-	element.casting = event == 'UNIT_SPELLCAST_START'
+	element.casting = event == 'UNIT_SPELLCAST_START' or event == 'UNIT_SPELLCAST_EMPOWER_START' -- isNewPatch
 	element.channeling = event == 'UNIT_SPELLCAST_CHANNEL_START'
+	element.numStages = numStages -- isNewPatch
+	element.isChargeSpell = isChargeSpell -- isNewPatch
 	element.notInterruptible = notInterruptible
 	element.holdTime = 0
 	element.castID = castID
@@ -151,23 +156,23 @@ local function CastStart(self, event, unit)
 	if(element.Icon) then element.Icon:SetTexture(texture or FALLBACK_ICON) end
 	if(element.Shield) then element.Shield:SetShown(notInterruptible) end
 	if(element.Spark) then element.Spark:Show() end
-	if(element.Text) then element.Text:SetText(name) end
+	if(element.Text) then element.Text:SetText(text or name) end
 	if(element.Time) then element.Time:SetText() end
 
-    local unitTarget = unit and unit .. 'target'
-    if unitTarget and UnitExists(unitTarget) then
-        local tarName = ns[1].ShortenString(UnitName(unitTarget), 4)
-        local hexStr = ns[1]:RgbToHex(ns[1]:UnitColor(unitTarget))
-        local nameStr
-        if UnitIsUnit(unitTarget, 'player') then
-            nameStr = string.format('|cffff0000%s|r', string.upper(_G.YOU))
-        else
-            nameStr = string.format('%s%s|r', hexStr, tarName)
-        end
-        if(element.Text and element.SpellTarget) then element.Text:SetFormattedText('%s (%s)', name, nameStr) end
-    else
-        resetSpellTarget(self) -- when unit loses target
-    end
+	local unitTarget = unit and unit .. 'target'
+	if unitTarget and UnitExists(unitTarget) then
+		local tarName = ns[1].ShortenString(UnitName(unitTarget), 4)
+		local hexStr = ns[1]:RgbToHex(ns[1]:UnitColor(unitTarget))
+		local nameStr
+		if UnitIsUnit(unitTarget, 'player') then
+			nameStr = format('|cffff0000%s|r', strupper(_G.YOU))
+		else
+			nameStr = format('%s%s|r', hexStr, tarName)
+		end
+		if(element.Text and element.SpellTarget) then element.Text:SetFormattedText('%s (%s)', name, nameStr) end
+	else
+		resetSpellTarget(self) -- when unit loses target
+	end
 
 	local safeZone = element.SafeZone
 	if(safeZone) then
@@ -405,6 +410,11 @@ local function Enable(self, unit)
 
 		self:RegisterEvent('UNIT_SPELLCAST_START', CastStart)
 		self:RegisterEvent('UNIT_SPELLCAST_CHANNEL_START', CastStart)
+		if isNewPatch then
+			self:RegisterEvent('UNIT_SPELLCAST_EMPOWER_START', CastStart)
+			self:RegisterEvent('UNIT_SPELLCAST_EMPOWER_UPDATE', CastUpdate)
+			self:RegisterEvent('UNIT_SPELLCAST_EMPOWER_STOP', CastStop)
+		end
 		self:RegisterEvent('UNIT_SPELLCAST_STOP', CastStop)
 		self:RegisterEvent('UNIT_SPELLCAST_CHANNEL_STOP', CastStop)
 		self:RegisterEvent('UNIT_SPELLCAST_DELAYED', CastUpdate)
@@ -419,7 +429,7 @@ local function Enable(self, unit)
 		element:SetScript('OnUpdate', element.OnUpdate or onUpdate)
 
 		if(self.unit == 'player' and not (self.hasChildren or self.isChild or self.isNamePlate)) then
-			if ANDROMEDA[2].IS_NEW_PATCH then
+			if isNewPatch then
 				PlayerCastingBarFrame.SetUnit(PlayerCastingBarFrame, nil)
 				PlayerCastingBarFrame.SetUnit(PetCastingBarFrame, nil)
 			else
@@ -460,6 +470,11 @@ local function Disable(self)
 
 		self:UnregisterEvent('UNIT_SPELLCAST_START', CastStart)
 		self:UnregisterEvent('UNIT_SPELLCAST_CHANNEL_START', CastStart)
+		if isNewPatch then
+			self:UnregisterEvent('UNIT_SPELLCAST_EMPOWER_START', CastStart)
+			self:UnregisterEvent('UNIT_SPELLCAST_EMPOWER_UPDATE', CastUpdate)
+			self:UnregisterEvent('UNIT_SPELLCAST_EMPOWER_STOP', CastStop)
+		end
 		self:UnregisterEvent('UNIT_SPELLCAST_DELAYED', CastUpdate)
 		self:UnregisterEvent('UNIT_SPELLCAST_CHANNEL_UPDATE', CastUpdate)
 		self:UnregisterEvent('UNIT_SPELLCAST_STOP', CastStop)

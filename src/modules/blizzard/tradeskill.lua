@@ -109,16 +109,14 @@ function BLIZZARD:TradeTabs_Create(spellID, toyID, itemID)
         name, _, texture = GetSpellInfo(spellID)
     end
 
-    local tab = CreateFrame(
-        'CheckButton',
-        nil,
-        _G.TradeSkillFrame,
-        'SpellBookSkillLineTabTemplate, SecureActionButtonTemplate'
-    )
+    local parent = C.IS_NEW_PATCH and _G.ProfessionsFrame or _G.TradeSkillFrame
+
+    local tab = CreateFrame('CheckButton', nil, parent, 'SpellBookSkillLineTabTemplate, SecureActionButtonTemplate')
     tab.tooltip = name
     tab.spellID = spellID
     tab.itemID = toyID or itemID
     tab.type = (toyID and 'toy') or (itemID and 'item') or 'spell'
+
     if spellID == 818 then -- cooking fire
         tab:SetAttribute('type', 'macro')
         tab:SetAttribute('macrotext', '/cast [@player]' .. name)
@@ -137,7 +135,7 @@ function BLIZZARD:TradeTabs_Create(spellID, toyID, itemID)
     tab.cover:SetAllPoints()
     tab.cover:EnableMouse(true)
 
-    tab:SetPoint('TOPLEFT', _G.TradeSkillFrame, 'TOPRIGHT', 3, -index * 42)
+    tab:SetPoint('TOPLEFT', parent, 'TOPRIGHT', 3, -index * 42)
     tinsert(tabList, tab)
     index = index + 1
 end
@@ -169,11 +167,17 @@ function BLIZZARD:TradeTabs_FilterIcons()
         end
     end
 
+    local parent = C.IS_NEW_PATCH and _G.ProfessionsFrame.CraftingPage or _G.TradeSkillFrame
+
     local buttons = {}
     for index, value in pairs(buttonList) do
-        local bu = CreateFrame('Button', nil, _G.TradeSkillFrame, 'BackdropTemplate')
+        local bu = CreateFrame('Button', nil, parent, 'BackdropTemplate')
         bu:SetSize(22, 22)
-        bu:SetPoint('RIGHT', _G.TradeSkillFrame.FilterButton, 'LEFT', -5 - (index - 1) * 27, 0)
+        if C.IS_NEW_PATCH then
+            bu:SetPoint('BOTTOMRIGHT', _G.ProfessionsFrame.CraftingPage.RecipeList.FilterButton, 'TOPRIGHT', -(index - 1) * 27, 10)
+        else
+            bu:SetPoint('RIGHT', _G.TradeSkillFrame.FilterButton, 'LEFT', -5 - (index - 1) * 27, 0)
+        end
         F.PixelIcon(bu, value[1], true)
         F.AddTooltip(bu, 'ANCHOR_TOP', value[2])
         bu.__value = value
@@ -233,30 +237,50 @@ local function IsRecipeEnchanting(self)
         local parentSkillLineID = select(6, C_TradeSkillUI.GetTradeSkillLine())
         if parentSkillLineID == 333 then
             isEnchanting = true
-            self.CreateButton.tooltip = format(
-                tooltipString,
-                L['Right click to use vellum'],
-                GetItemCount(ENCHANTING_VELLUM)
-            )
+            self.CreateButton.tooltip = format(tooltipString, L['Right click to use vellum'], GetItemCount(ENCHANTING_VELLUM))
         end
     end
 end
 
 function BLIZZARD:TradeTabs_QuickEnchanting()
-    if not _G.TradeSkillFrame then
-        return
-    end
-
-    local detailsFrame = _G.TradeSkillFrame.DetailsFrame
-    hooksecurefunc(detailsFrame, 'RefreshDisplay', IsRecipeEnchanting)
-
-    local createButton = detailsFrame.CreateButton
-    createButton:RegisterForClicks('AnyUp')
-    createButton:HookScript('OnClick', function(self, btn)
-        if btn == 'RightButton' and isEnchanting then
-            UseItemByName(ENCHANTING_VELLUM)
+    if C.IS_NEW_PATCH then
+        if _G.ProfessionsFrame.CraftingPage.ValidateControls then
+            hooksecurefunc(_G.ProfessionsFrame.CraftingPage, 'ValidateControls', function(self)
+                isEnchanting = nil
+                local currentRecipeInfo = self.SchematicForm:GetRecipeInfo()
+                if currentRecipeInfo and currentRecipeInfo.alternateVerb then
+                    local professionInfo = _G.ProfessionsFrame:GetProfessionInfo()
+                    if professionInfo and professionInfo.parentProfessionID == 333 then
+                        isEnchanting = true
+                        self.CreateButton.tooltipText = format(tooltipString, L['Right click to use vellum'], GetItemCount(ENCHANTING_VELLUM))
+                    end
+                end
+            end)
         end
-    end)
+
+        local createButton = _G.ProfessionsFrame.CraftingPage.CreateButton
+        createButton:RegisterForClicks('AnyUp')
+        createButton:HookScript('OnClick', function(_, btn)
+            if btn == 'RightButton' and isEnchanting then
+                UseItemByName(ENCHANTING_VELLUM)
+            end
+        end)
+    else
+        if not _G.TradeSkillFrame then
+            return
+        end
+
+        local detailsFrame = _G.TradeSkillFrame.DetailsFrame
+        hooksecurefunc(detailsFrame, 'RefreshDisplay', IsRecipeEnchanting)
+
+        local createButton = detailsFrame.CreateButton
+        createButton:RegisterForClicks('AnyUp')
+        createButton:HookScript('OnClick', function(_, btn)
+            if btn == 'RightButton' and isEnchanting then
+                UseItemByName(ENCHANTING_VELLUM)
+            end
+        end)
+    end
 end
 
 function BLIZZARD:TradeTabs()
@@ -264,7 +288,13 @@ function BLIZZARD:TradeTabs()
         return
     end
 
-    F:RegisterEvent('ADDON_LOADED', BLIZZARD.TradeTabs_OnEvent)
+    if C.IS_NEW_PATCH then
+        if _G.ProfessionsFrame then
+            BLIZZARD:TradeTabs_OnLoad()
+        end
+    else
+        F:RegisterEvent('ADDON_LOADED', BLIZZARD.TradeTabs_OnEvent)
+    end
 end
 
 BLIZZARD:RegisterBlizz('TradeTabs', BLIZZARD.TradeTabs)

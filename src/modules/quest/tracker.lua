@@ -2,6 +2,10 @@ local F, C, L = unpack(select(2, ...))
 local EOT = F:RegisterModule('EnhancedObjectiveTracker')
 
 function EOT:ObjectiveTrackerMover()
+    if C.IS_NEW_PATCH then
+        return
+    end
+
     local frame = CreateFrame('Frame', 'ObjectiveTrackerMover', _G.UIParent)
     frame:SetSize(240, 50)
     F.Mover(frame, L['ObjectiveTracker'], 'ObjectiveTracker', { 'TOPRIGHT', _G.UIParent, 'TOPRIGHT', -C.UI_GAP, -60 })
@@ -13,9 +17,17 @@ function EOT:ObjectiveTrackerMover()
     tracker:SetScale(1)
     tracker:SetClampedToScreen(false)
     tracker:SetMovable(true)
+
     if tracker:IsMovable() then
         tracker:SetUserPlaced(true)
     end
+
+    hooksecurefunc(tracker, 'SetPoint', function(self, _, parent)
+        if parent ~= frame then
+            self:ClearAllPoints()
+            self:SetPoint('TOPRIGHT', frame)
+        end
+    end)
 end
 
 local progressColors = {
@@ -27,11 +39,7 @@ local function SetTextColorHook(text)
     if not text.Hooked then
         local SetTextColorOld = text.SetTextColor
         text.SetTextColor = function(self, r, g, b, a)
-            if
-                r == _G.OBJECTIVE_TRACKER_COLOR['Header'].r
-                and g == _G.OBJECTIVE_TRACKER_COLOR['Header'].g
-                and b == _G.OBJECTIVE_TRACKER_COLOR['Header'].b
-            then
+            if r == _G.OBJECTIVE_TRACKER_COLOR['Header'].r and g == _G.OBJECTIVE_TRACKER_COLOR['Header'].g and b == _G.OBJECTIVE_TRACKER_COLOR['Header'].b then
                 r = 216 / 255
                 g = 197 / 255
                 b = 136 / 255
@@ -46,12 +54,7 @@ local function SetTextColorHook(text)
             end
             SetTextColorOld(self, r, g, b, a)
         end
-        text:SetTextColor(
-            _G.OBJECTIVE_TRACKER_COLOR['Header'].r,
-            _G.OBJECTIVE_TRACKER_COLOR['Header'].g,
-            _G.OBJECTIVE_TRACKER_COLOR['Header'].b,
-            1
-        )
+        text:SetTextColor(_G.OBJECTIVE_TRACKER_COLOR['Header'].r, _G.OBJECTIVE_TRACKER_COLOR['Header'].g, _G.OBJECTIVE_TRACKER_COLOR['Header'].b, 1)
         text.Hooked = true
     end
 end

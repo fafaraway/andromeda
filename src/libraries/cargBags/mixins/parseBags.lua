@@ -41,6 +41,18 @@ local bagStrings = {
 	["bank"]			= { 5, 6, 7, 8, 9, 10, 11 },
 	["keyring"]			= { -2 },
 }
+if ANDROMEDA[2].C.IS_NEW_PATCH then
+	bagStrings = {
+		["backpack"]		= { 0 },
+		["bags"]			= { 1, 2, 3, 4, 5 },
+		["backpack+bags"]	= { 0, 1, 2, 3, 4, 5 },
+		["bankframe"]		= { -1 },
+		["bankframe+bank"]	= { -1, 6, 7, 8, 9, 10, 11, 12 },
+		["bankreagent"]		= { -3 },
+		["bank"]			= { 6, 7, 8, 9, 10, 11, 12 },
+		["keyring"]			= { -2 },
+	}
+end
 cargBags.BagStrings = bagStrings
 
 --[[!

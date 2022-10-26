@@ -28,7 +28,7 @@ local function reskinMerchantItem(item)
 end
 
 local function reskinMerchantInteract(button)
-    button:SetPushedTexture('')
+    button:SetPushedTexture(C.Assets.Textures.Blank)
     button:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
     F.CreateBDFrame(button)
 end

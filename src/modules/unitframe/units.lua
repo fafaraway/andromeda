@@ -184,7 +184,6 @@ function UNITFRAME:SpawnParty()
     UNITFRAME:SyncWithZenTracker()
     UNITFRAME:UpdatePartyWatcherSpells()
 
-
     oUF:RegisterStyle('Party', CreatePartyStyle)
     oUF:SetActiveStyle('Party')
 
@@ -312,11 +311,7 @@ end
 
 local groupByTypes = {
     [1] = { '1,2,3,4,5,6,7,8', 'GROUP', 'INDEX' },
-    [2] = {
-        'DEATHKNIGHT,WARRIOR,DEMONHUNTER,ROGUE,MONK,PALADIN,DRUID,SHAMAN,HUNTER,PRIEST,MAGE,WARLOCK',
-        'CLASS',
-        'NAME',
-    },
+    [2] = { 'DEATHKNIGHT,WARRIOR,DEMONHUNTER,ROGUE,MONK,PALADIN,DRUID,SHAMAN,HUNTER,EVOKER,PRIEST,MAGE,WARLOCK', 'CLASS', 'NAME' },
     [3] = { 'TANK,HEALER,DAMAGER,NONE', 'ASSIGNEDROLE', 'NAME' },
 }
 
@@ -536,21 +531,9 @@ function UNITFRAME:CreateAndUpdateRaidHeader(direction)
             local x = floor((i - 1) / rows)
             local y = (i - 1) % rows
             if index < 5 then
-                group:SetPoint(
-                    sortData.initAnchor,
-                    raidMover,
-                    sortData.initAnchor,
-                    sortData.multX * groupWidth * x,
-                    sortData.multY * (groupHeight + indexSpacing) * y
-                )
+                group:SetPoint(sortData.initAnchor, raidMover, sortData.initAnchor, sortData.multX * groupWidth * x, sortData.multY * (groupHeight + indexSpacing) * y)
             else
-                group:SetPoint(
-                    sortData.initAnchor,
-                    raidMover,
-                    sortData.initAnchor,
-                    sortData.multX * (groupWidth + indexSpacing) * y,
-                    sortData.multY * groupHeight * x
-                )
+                group:SetPoint(sortData.initAnchor, raidMover, sortData.initAnchor, sortData.multX * (groupWidth + indexSpacing) * y, sortData.multY * groupHeight * x)
             end
         end
     end
@@ -612,23 +595,27 @@ function UNITFRAME:SetGroupFramePos()
     F:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED', UpdatePosBySpec)
 
     if UNITFRAME.RaidMover then
-        UNITFRAME.RaidMover:HookScript('OnDragStop', function()
+        local function updateRaidMover()
             local specIndex = GetSpecialization()
             if not specIndex then
                 return
             end
             C.DB['UIAnchor']['raid_position' .. specIndex] = C.DB['UIAnchor']['RaidFrame']
-        end)
+        end
+        UNITFRAME.RaidMover:HookScript('OnDragStop', updateRaidMover)
+        UNITFRAME.RaidMover:HookScript('OnHide', updateRaidMover)
     end
 
     if UNITFRAME.PartyMover then
-        UNITFRAME.PartyMover:HookScript('OnDragStop', function()
+        local function updatePartyMover()
             local specIndex = GetSpecialization()
             if not specIndex then
                 return
             end
             C.DB['UIAnchor']['party_position' .. specIndex] = C.DB['UIAnchor']['PartyFrame']
-        end)
+        end
+        UNITFRAME.PartyMover:HookScript('OnDragStop', updatePartyMover)
+        UNITFRAME.PartyMover:HookScript('OnHide', updatePartyMover)
     end
 end
 
@@ -659,8 +646,6 @@ function UNITFRAME:SpawnUnits()
 
     UNITFRAME:CheckPartyAurasFilter()
     UNITFRAME:RefreshPartyAurasFilter()
-
-
 
     UNITFRAME:SpawnPlayer()
     UNITFRAME:SpawnPet()

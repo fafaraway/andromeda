@@ -95,20 +95,27 @@ function ACTIONBAR:RemoveBlizzArt()
     _G.MainMenuBarVehicleLeaveButton:RegisterEvent('PLAYER_ENTERING_WORLD')
 
     -- Update button grid
-    ToggleButtonGrid()
-    hooksecurefunc('MultiActionBar_UpdateGridVisibility', ToggleButtonGrid)
+    if C.IS_NEW_PATCH then
+        -- #TODO
+    else
+        ToggleButtonGrid()
+        hooksecurefunc('MultiActionBar_UpdateGridVisibility', ToggleButtonGrid)
+    end
 
     -- Update token panel
     F:RegisterEvent('CURRENCY_DISPLAY_UPDATE', UpdateTokenVisibility)
 
-    -- F.HideOption(_G.InterfaceOptionsActionBarsPanelBottomLeft)
-    -- F.HideOption(_G.InterfaceOptionsActionBarsPanelBottomRight)
-    -- F.HideOption(_G.InterfaceOptionsActionBarsPanelRight)
-    -- F.HideOption(_G.InterfaceOptionsActionBarsPanelRightTwo)
-    -- F.HideOption(_G.InterfaceOptionsActionBarsPanelStackRightBars)
+    if C.IS_NEW_PATCH then
+        -- #TODO
+    else
+        _G.InterfaceOptionsActionBarsPanelStackRightBars:EnableMouse(false)
+        _G.InterfaceOptionsActionBarsPanelStackRightBars:SetAlpha(0)
+    end
 end
 
 -- Restyle actionbar buttons
+
+local NUM_STANCE_SLOTS = _G.NUM_STANCE_SLOTS or 10
 
 local function CallButtonFunctionByName(button, func, ...)
     if button and func and button[func] then
@@ -336,6 +343,10 @@ function ACTIONBAR:HookHotKey(button)
     if button.UpdateHotkeys then
         hooksecurefunc(button, 'UpdateHotkeys', ACTIONBAR.UpdateHotKey)
     end
+
+    if C.IS_NEW_PATCH and button.SetHotkeys then
+        hooksecurefunc(button, 'SetHotkeys', ACTIONBAR.UpdateHotKey)
+    end
 end
 
 function ACTIONBAR:UpdateEquipItemColor()
@@ -402,6 +413,18 @@ function ACTIONBAR:StyleActionButton(button, cfg)
     end
     if NewActionTexture then
         NewActionTexture:SetTexture(nil)
+    end
+    if button.SlotArt then
+        button.SlotArt:Hide()
+    end
+    if button.RightDivider then
+        button.RightDivider:Hide()
+    end
+    if button.SlotBackground then
+        button.SlotBackground:Hide()
+    end
+    if button.IconMask then
+        button.IconMask:Hide()
     end
 
     -- backdrop
@@ -522,7 +545,7 @@ function ACTIONBAR:StyleExtraActionButton(cfg)
 end
 
 function ACTIONBAR:UpdateStanceHotKey()
-    for i = 1, _G.NUM_STANCE_SLOTS do
+    for i = 1, NUM_STANCE_SLOTS do
         _G['StanceButton' .. i .. 'HotKey']:SetText(GetBindingKey('SHAPESHIFTBUTTON' .. i))
         ACTIONBAR:HookHotKey(_G['StanceButton' .. i])
     end
@@ -535,6 +558,12 @@ function ACTIONBAR:StyleAllActionButtons(cfg)
         ACTIONBAR:StyleActionButton(_G['MultiBarBottomRightButton' .. i], cfg)
         ACTIONBAR:StyleActionButton(_G['MultiBarRightButton' .. i], cfg)
         ACTIONBAR:StyleActionButton(_G['MultiBarLeftButton' .. i], cfg)
+
+        if C.IS_NEW_PATCH then
+            ACTIONBAR:StyleActionButton(_G['MultiBar5Button' .. i], cfg)
+            ACTIONBAR:StyleActionButton(_G['MultiBar6Button' .. i], cfg)
+            ACTIONBAR:StyleActionButton(_G['MultiBar7Button' .. i], cfg)
+        end
     end
 
     for i = 1, 6 do
@@ -547,7 +576,7 @@ function ACTIONBAR:StyleAllActionButtons(cfg)
     end
 
     -- stancebar buttons
-    for i = 1, _G.NUM_STANCE_SLOTS do
+    for i = 1, NUM_STANCE_SLOTS do
         ACTIONBAR:StyleActionButton(_G['StanceButton' .. i], cfg)
     end
 
@@ -563,9 +592,14 @@ function ACTIONBAR:StyleAllActionButtons(cfg)
     ACTIONBAR:StyleExtraActionButton(cfg)
 
     -- spell flyout
-    _G.SpellFlyoutBackgroundEnd:SetTexture(nil)
-    _G.SpellFlyoutHorizontalBackground:SetTexture(nil)
-    _G.SpellFlyoutVerticalBackground:SetTexture(nil)
+    if C.IS_NEW_PATCH then
+        _G.SpellFlyout.Background:Hide()
+    else
+        _G.SpellFlyoutBackgroundEnd:SetTexture(nil)
+        _G.SpellFlyoutHorizontalBackground:SetTexture(nil)
+        _G.SpellFlyoutVerticalBackground:SetTexture(nil)
+    end
+
     local function checkForFlyoutButtons()
         local i = 1
         local button = _G['SpellFlyoutButton' .. i]
@@ -629,7 +663,9 @@ function ACTIONBAR:RestyleButtons()
     ACTIONBAR:StyleAllActionButtons(cfg)
 
     -- Update hotkeys
-    hooksecurefunc('PetActionButton_SetHotkeys', ACTIONBAR.UpdateHotKey)
+    if not C.IS_NEW_PATCH then
+        hooksecurefunc('PetActionButton_SetHotkeys', ACTIONBAR.UpdateHotKey)
+    end
     ACTIONBAR:UpdateStanceHotKey()
     F:RegisterEvent('UPDATE_BINDINGS', ACTIONBAR.UpdateStanceHotKey)
 end

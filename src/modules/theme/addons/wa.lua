@@ -99,11 +99,16 @@ local function RestyleObjects()
         RestyleIconAndBar(region, 'aurabar')
     end
 
-    for _, regions in pairs(_G.WeakAuras.regions) do
-        if regions.regionType == 'icon' or regions.regionType == 'aurabar' then
-            RestyleIconAndBar(regions.region, regions.regionType)
-        end
+    local function OnPrototypeCreate(region)
+        RestyleIconAndBar(region, region.regionType)
     end
+
+    local function OnPrototypeModifyFinish(_, region)
+        RestyleIconAndBar(region, region.regionType)
+    end
+
+    hooksecurefunc(_G.WeakAuras.regionPrototype, 'create', OnPrototypeCreate)
+    hooksecurefunc(_G.WeakAuras.regionPrototype, 'modifyFinish', OnPrototypeModifyFinish)
 end
 
 THEME:RegisterSkin('WeakAuras', RestyleObjects)

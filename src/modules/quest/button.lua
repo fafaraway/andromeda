@@ -108,12 +108,7 @@ local completeHiddenItems = {
     [187516] = true, -- 菲历姆的锻炉阀门
 }
 
-local ExtraQuestButton = CreateFrame(
-    'Button',
-    'ExtraQuestButton',
-    _G.UIParent,
-    'SecureActionButtonTemplate, SecureHandlerStateTemplate, SecureHandlerAttributeTemplate'
-)
+local ExtraQuestButton = CreateFrame('Button', 'ExtraQuestButton', _G.UIParent, 'SecureActionButtonTemplate, SecureHandlerStateTemplate, SecureHandlerAttributeTemplate')
 ExtraQuestButton:SetMovable(true)
 ExtraQuestButton:RegisterEvent('PLAYER_LOGIN')
 ExtraQuestButton:Hide()
@@ -486,12 +481,7 @@ local function GetClosestQuestItem()
         for index = 1, C_QuestLog.GetNumQuestLogEntries() do
             local info = C_QuestLog.GetInfo(index)
             local questID = info and info.questID
-            if
-                questID
-                and not info.isHeader
-                and (not info.isHidden or C_QuestLog.IsWorldQuest(questID))
-                and QuestHasPOIInfo(questID)
-            then
+            if questID and not info.isHeader and (not info.isHidden or C_QuestLog.IsWorldQuest(questID)) and QuestHasPOIInfo(questID) then
                 local distance, itemLink = GetQuestDistanceWithItem(questID)
                 if distance and distance <= closestDistance then
                     closestDistance = distance

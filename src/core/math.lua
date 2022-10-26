@@ -240,7 +240,7 @@ function F:CooldownOnUpdate(elapsed, raw)
             self.timer:SetText(text)
         else
             self:SetScript('OnUpdate', nil)
-            self.timer:SetText(nil)
+            self.timer:SetText('')
         end
         self.elapsed = 0
     end

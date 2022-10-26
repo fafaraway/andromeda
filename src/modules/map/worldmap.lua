@@ -89,30 +89,8 @@ function MAP:AddCoords()
 
     local WorldMapFrame = _G.WorldMapFrame
 
-    playerCoords = F.CreateFS(
-        WorldMapFrame.BorderFrame,
-        C.Assets.Fonts.Bold,
-        12,
-        nil,
-        '',
-        nil,
-        'THICK',
-        'BOTTOMLEFT',
-        10,
-        10
-    )
-    cursorCoords = F.CreateFS(
-        WorldMapFrame.BorderFrame,
-        C.Assets.Fonts.Bold,
-        12,
-        nil,
-        '',
-        nil,
-        'THICK',
-        'BOTTOMLEFT',
-        130,
-        10
-    )
+    playerCoords = F.CreateFS(WorldMapFrame.BorderFrame, C.Assets.Fonts.Bold, 12, nil, '', nil, 'THICK', 'BOTTOMLEFT', 10, 10)
+    cursorCoords = F.CreateFS(WorldMapFrame.BorderFrame, C.Assets.Fonts.Bold, 12, nil, '', nil, 'THICK', 'BOTTOMLEFT', 130, 10)
 
     F.HideObject(WorldMapFrame.BorderFrame.Tutorial)
 

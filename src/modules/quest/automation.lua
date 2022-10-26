@@ -1,7 +1,8 @@
 -- Quick Quest
 -- Credit: p3lim
 -- https://github.com/p3lim-wow/QuickQuest
-local F, C = unpack(select(2, ...))
+
+local F, C, L = unpack(select(2, ...))
 
 local choiceQueue
 
@@ -66,9 +67,11 @@ local ignoreQuestNPC = {
     [162804] = true, -- 威娜莉
 }
 
+C.IgnoreQuestNPC = {}
+
 QuickQuest:Register('QUEST_GREETING', function()
     local npcID = GetNPCID()
-    if ignoreQuestNPC[npcID] then
+    if C.IgnoreQuestNPC[npcID] then
         return
     end
 
@@ -139,20 +142,21 @@ local ignoreGossipNPC = {
     [184587] = true, -- 集市，塔皮克斯
 }
 
-local rogueClassHallInsignia = {
-    [97004] = true, -- "Red" Jack Findle
-    [96782] = true, -- Lucian Trias
-    [93188] = true, -- Mongar
-    [107486] = true, -- CoS rumors
+local autoSelectFirstOptionList = {
+    [97004] = true, -- "Red" Jack Findle, Rogue ClassHall
+    [96782] = true, -- Lucian Trias, Rogue ClassHall
+    [93188] = true, -- Mongar, Rogue ClassHall
+    [107486] = true, -- 群星密探
     [167839] = true, -- 灵魂残渣，爬塔
 }
 
-local followerAssignees = {
-    [138708] = true, -- 半兽人迦罗娜
-    [135614] = true, -- 马迪亚斯·肖尔大师
+local autoGossipTypes = {
+    ['taxi'] = true,
+    ['gossip'] = true,
+    ['banker'] = true,
+    ['vendor'] = true,
+    ['trainer'] = true,
 }
-
-local autoGossipTypes = { ['taxi'] = true, ['gossip'] = true, ['banker'] = true, ['vendor'] = true, ['trainer'] = true }
 
 local ignoreInstances = {
     [1571] = true, -- 枯法者
@@ -161,7 +165,7 @@ local ignoreInstances = {
 
 QuickQuest:Register('GOSSIP_SHOW', function()
     local npcID = GetNPCID()
-    if ignoreQuestNPC[npcID] then
+    if C.IgnoreQuestNPC[npcID] then
         return
     end
 
@@ -170,8 +174,14 @@ QuickQuest:Register('GOSSIP_SHOW', function()
         for index, questInfo in ipairs(C_GossipInfo.GetActiveQuests()) do
             local questID = questInfo.questID
             local isWorldQuest = questID and C_QuestLog.IsWorldQuest(questID)
-            if questInfo.isComplete and (not questID or not isWorldQuest) then
-                C_GossipInfo.SelectActiveQuest(index)
+            if C.IS_NEW_PATCH then
+                if questInfo.isComplete and not isWorldQuest then
+                    C_GossipInfo.SelectActiveQuest(questID)
+                end
+            else
+                if questInfo.isComplete and (not questID or not isWorldQuest) then
+                    C_GossipInfo.SelectActiveQuest(index)
+                end
             end
         end
     end
@@ -181,33 +191,43 @@ QuickQuest:Register('GOSSIP_SHOW', function()
         for index, questInfo in ipairs(C_GossipInfo.GetAvailableQuests()) do
             local trivial = questInfo.isTrivial
             if not trivial or IsTrackingHidden() or (trivial and npcID == 64337) then
-                C_GossipInfo.SelectAvailableQuest(index)
+                if C.IS_NEW_PATCH then
+                    C_GossipInfo.SelectAvailableQuest(questInfo.questID)
+                else
+                    C_GossipInfo.SelectAvailableQuest(index)
+                end
             end
         end
     end
 
-    if rogueClassHallInsignia[npcID] then
-        return C_GossipInfo.SelectOption(1)
+    local gossipInfoTable = C_GossipInfo.GetOptions()
+    if not gossipInfoTable then
+        return
     end
 
-    if available == 0 and active == 0 then
-        local numOptions = C_GossipInfo.GetNumOptions()
-        if numOptions == 1 then
-            if npcID == 57850 then
-                return C_GossipInfo.SelectOption(1)
-            end
+    local numOptions = #gossipInfoTable
+    local firstOptionID = gossipInfoTable[1] and gossipInfoTable[1].gossipOptionID
 
-            local _, instance, _, _, _, _, _, mapID = GetInstanceInfo()
-            if instance ~= 'raid' and not ignoreGossipNPC[npcID] and not ignoreInstances[mapID] then
-                local gossipInfoTable = C_GossipInfo.GetOptions()
+    if autoSelectFirstOptionList[npcID] then
+        if C.IS_NEW_PATCH then
+            return C_GossipInfo.SelectOption(firstOptionID)
+        else
+            return C_GossipInfo.SelectOption(1)
+        end
+    end
+
+    if available == 0 and active == 0 and numOptions == 1 then
+        local _, instance, _, _, _, _, _, mapID = GetInstanceInfo()
+        if instance ~= 'raid' and not ignoreGossipNPC[npcID] and not ignoreInstances[mapID] then
+            if C.IS_NEW_PATCH then
+                return C_GossipInfo.SelectOption(firstOptionID)
+            else
                 local gType = gossipInfoTable[1] and gossipInfoTable[1].type
                 if gType and autoGossipTypes[gType] then
                     C_GossipInfo.SelectOption(1)
                     return
                 end
             end
-        elseif followerAssignees[npcID] and numOptions > 1 then
-            return C_GossipInfo.SelectOption(1)
         end
     end
 end)
@@ -222,25 +242,27 @@ QuickQuest:Register('GOSSIP_CONFIRM', function(index)
     local npcID = GetNPCID()
     if npcID and darkmoonNPC[npcID] then
         C_GossipInfo.SelectOption(index, '', true)
-        _G.StaticPopup_Hide('GOSSIP_CONFIRM')
+        StaticPopup_Hide('GOSSIP_CONFIRM')
     end
 end)
 
 QuickQuest:Register('QUEST_DETAIL', function()
     if QuestIsFromAreaTrigger() then
-        _G.AcceptQuest()
+        AcceptQuest()
     elseif QuestGetAutoAccept() then
         AcknowledgeAutoAcceptQuest()
     elseif not C_QuestLog.IsQuestTrivial(GetQuestID()) or IsTrackingHidden() then
-        _G.AcceptQuest()
+        if not C.IgnoreQuestNPC[GetNPCID()] then
+            AcceptQuest()
+        end
     end
 end)
 
-QuickQuest:Register('QUEST_ACCEPT_CONFIRM', _G.AcceptQuest)
+QuickQuest:Register('QUEST_ACCEPT_CONFIRM', AcceptQuest)
 
 QuickQuest:Register('QUEST_ACCEPTED', function()
     if _G.QuestFrame:IsShown() and QuestGetAutoAccept() then
-        _G.CloseQuest()
+        CloseQuest()
     end
 end)
 
@@ -310,7 +332,7 @@ QuickQuest:Register('QUEST_PROGRESS', function()
         end
 
         local npcID = GetNPCID()
-        if ignoreQuestNPC[npcID] then
+        if C.IgnoreQuestNPC[npcID] then
             return
         end
 
@@ -322,7 +344,7 @@ QuickQuest:Register('QUEST_PROGRESS', function()
                     local id = GetItemInfoFromHyperlink(link)
                     for _, itemID in next, itemBlacklist do
                         if itemID == id then
-                            _G.CloseQuest()
+                            CloseQuest()
                             return
                         end
                     end
@@ -334,13 +356,14 @@ QuickQuest:Register('QUEST_PROGRESS', function()
             end
         end
 
-        _G.CompleteQuest()
+        CompleteQuest()
     end
 end)
 
 local cashRewards = {
     [45724] = 1e5, -- Champion's Purse
     [64491] = 2e6, -- Royal Reward
+
     -- Items from the Sixtrigger brothers quest chain in Stormheim
     [138127] = 15, -- Mysterious Coin, 15 copper
     [138129] = 11, -- Swatch of Priceless Silk, 11 copper
@@ -381,7 +404,7 @@ QuickQuest:Register('QUEST_COMPLETE', function()
 
         local button = bestIndex and _G.QuestInfoRewardsFrame.RewardButtons[bestIndex]
         if button then
-            _G.QuestInfoItem_OnClick(button)
+            QuestInfoItem_OnClick(button)
         end
     end
 end)
@@ -407,5 +430,83 @@ local function AttemptAutoComplete(event)
         QuickQuest:UnregisterEvent(event)
     end
 end
-
 QuickQuest:Register('QUEST_LOG_UPDATE', AttemptAutoComplete)
+
+-- Handle ignore list
+local function UpdateIgnoreList()
+    wipe(C.IgnoreQuestNPC)
+
+    for npcID, value in pairs(ignoreQuestNPC) do
+        C.IgnoreQuestNPC[npcID] = value
+    end
+
+    for npcID, value in pairs(C.DB['Quest']['IgnoreQuestNPC']) do
+        if value and ignoreQuestNPC[npcID] then
+            C.DB['Quest']['IgnoreQuestNPC'][npcID] = nil
+        else
+            C.IgnoreQuestNPC[npcID] = value
+        end
+    end
+end
+
+local function UnitQuickQuestStatus(self)
+    if not self.__ignore then
+        local frame = CreateFrame('Frame', nil, self)
+        frame:SetSize(100, 14)
+        frame:SetPoint('TOP', self, 'BOTTOM', 0, -2)
+        F.AddTooltip(frame, 'ANCHOR_RIGHT', L['You no longer auto interact quests with current NPC. You can hold key ALT and click the name above to undo this.'], 'BLUE', true)
+        F.CreateFS(frame, C.Assets.Fonts.Regular, 14, '', _G.IGNORED):SetTextColor(1, 0, 0)
+
+        self.__ignore = frame
+
+        UpdateIgnoreList()
+    end
+
+    local npcID = GetNPCID()
+    local isIgnored = C.DB['Quest']['QuickQuest'] and npcID and C.IgnoreQuestNPC[npcID]
+    self.__ignore:SetShown(isIgnored)
+end
+
+local function ToggleQuickQuestStatus(self)
+    if not self.__ignore then
+        return
+    end
+    if not C.DB['Quest']['QuickQuest'] then
+        return
+    end
+    if not IsAltKeyDown() then
+        return
+    end
+
+    self.__ignore:SetShown(not self.__ignore:IsShown())
+    local npcID = GetNPCID()
+    if self.__ignore:IsShown() then
+        if ignoreQuestNPC[npcID] then
+            C.DB['Quest']['IgnoreQuestNPC'][npcID] = nil
+        else
+            C.DB['Quest']['IgnoreQuestNPC'][npcID] = true
+        end
+    else
+        if ignoreQuestNPC[npcID] then
+            C.DB['Quest']['IgnoreQuestNPC'][npcID] = false
+        else
+            C.DB['Quest']['IgnoreQuestNPC'][npcID] = nil
+        end
+    end
+
+    UpdateIgnoreList()
+end
+
+_G.QuestNpcNameFrame:HookScript('OnShow', UnitQuickQuestStatus)
+_G.QuestNpcNameFrame:HookScript('OnMouseDown', ToggleQuickQuestStatus)
+
+if C.IS_NEW_PATCH then
+    local frame = _G.GossipFrame.TitleContainer or _G.GossipFrame.NameFrame
+    if frame then
+        frame:HookScript('OnShow', UnitQuickQuestStatus)
+        frame:HookScript('OnMouseDown', ToggleQuickQuestStatus)
+    end
+else
+    _G.GossipNpcNameFrame:HookScript('OnShow', UnitQuickQuestStatus)
+    _G.GossipNpcNameFrame:HookScript('OnMouseDown', ToggleQuickQuestStatus)
+end

@@ -1,20 +1,20 @@
 local F, C = unpack(select(2, ...))
 
-local function OnEnable(self)
+local function onEnable(self)
     self:SetHeight(self.storedHeight) -- prevent it from resizing
     self.__bg:SetBackdropColor(0, 0, 0, 0)
 end
 
-local function OnDisable(self)
+local function onDisable(self)
     self.__bg:SetBackdropColor(C.r, C.g, C.b, 0.25)
 end
 
-local function OnClick(self)
+local function onClick(self)
     self:GetFontString():SetTextColor(1, 1, 1)
 end
 
 local bossIndex = 1
-local function ReskinBossButtons()
+local function reskinBossButtons()
     while true do
         local button = _G['EncounterJournalBossButton' .. bossIndex]
         if not button then
@@ -35,7 +35,7 @@ local function ReskinBossButtons()
 end
 
 local instIndex = 1
-local function ReskinInstanceButton()
+local function reskinInstanceButton()
     while true do
         local button = _G.EncounterJournal.instanceSelect.scroll.child['instance' .. instIndex]
         if not button then
@@ -54,7 +54,7 @@ local function ReskinInstanceButton()
     end
 end
 
-local function ReskinHeader(header)
+local function reskinHeader(header)
     header.flashAnim.Play = nop
     for i = 4, 18 do
         select(i, header.button:GetRegions()):SetTexture('')
@@ -68,7 +68,7 @@ local function ReskinHeader(header)
     header.button.expandedIcon:SetWidth(20) -- don't wrap the text
 end
 
-local function ReskinSectionHeader()
+local function reskinSectionHeader()
     local index = 1
     while true do
         local header = _G['EncounterJournalInfoHeader' .. index]
@@ -76,7 +76,7 @@ local function ReskinSectionHeader()
             return
         end
         if not header.styled then
-            ReskinHeader(header)
+            reskinHeader(header)
             header.button.bg = F.ReskinIcon(header.button.abilityIcon)
             header.styled = true
         end
@@ -91,46 +91,59 @@ local function ReskinSectionHeader()
     end
 end
 
-local function ReskinFilterToggle(button)
+local function reskinFilterToggle(button)
     F.StripTextures(button)
     F.Reskin(button)
 end
 
 C.Themes['Blizzard_EncounterJournal'] = function()
-    local r, g, b = C.r, C.g, C.b
+    local EncounterJournal = _G.EncounterJournal
 
     -- Tabs
-    for _, tabName in pairs({ 'suggestTab', 'dungeonsTab', 'raidsTab', 'LootJournalTab' }) do
-        local tab = _G.EncounterJournal.instanceSelect[tabName]
-        local text = tab:GetFontString()
-
-        F.StripTextures(tab)
-        tab:SetHeight(tab.storedHeight)
-        tab.grayBox:GetRegions():SetAllPoints(tab)
-        text:SetPoint('CENTER')
-        text:SetTextColor(1, 1, 1)
-        F.Reskin(tab)
-        if tabName == 'suggestTab' then
-            tab.__bg:SetBackdropColor(r, g, b, 0.25)
+    if C.IS_NEW_PATCH then
+        for i = 1, 4 do
+            local tab = EncounterJournal.Tabs[i]
+            if tab then
+                F.ReskinTab(tab)
+                if i ~= 1 then
+                    tab:ClearAllPoints()
+                    tab:SetPoint('TOPLEFT', EncounterJournal.Tabs[i - 1], 'TOPRIGHT', -15, 0)
+                end
+            end
         end
+    else
+        for _, tabName in pairs({ 'suggestTab', 'dungeonsTab', 'raidsTab', 'LootJournalTab' }) do
+            local tab = EncounterJournal.instanceSelect[tabName]
+            local text = tab:GetFontString()
 
-        tab:HookScript('OnEnable', OnEnable)
-        tab:HookScript('OnDisable', OnDisable)
-        tab:HookScript('OnClick', OnClick)
+            F.StripTextures(tab)
+            tab:SetHeight(tab.storedHeight)
+            tab.grayBox:GetRegions():SetAllPoints(tab)
+            text:SetPoint('CENTER')
+            text:SetTextColor(1, 1, 1)
+            F.Reskin(tab)
+            if tabName == 'suggestTab' then
+                tab.__bg:SetBackdropColor(C.r, C.g, C.b, 0.25)
+            end
+
+            tab:HookScript('OnEnable', onEnable)
+            tab:HookScript('OnDisable', onDisable)
+            tab:HookScript('OnClick', onClick)
+        end
     end
 
     -- Side tabs
     local tabs = { 'overviewTab', 'modelTab', 'bossTab', 'lootTab' }
     for _, name in pairs(tabs) do
-        local tab = _G.EncounterJournal.encounter.info[name]
+        local tab = EncounterJournal.encounter.info[name]
         local bg = F.SetBD(tab)
         bg:SetInside(tab, 2, 2)
 
-        tab:SetNormalTexture('')
-        tab:SetPushedTexture('')
-        tab:SetDisabledTexture('')
+        tab:SetNormalTexture(C.Assets.Textures.Blank)
+        tab:SetPushedTexture(C.Assets.Textures.Blank)
+        tab:SetDisabledTexture(C.Assets.Textures.Blank)
         local hl = tab:GetHighlightTexture()
-        hl:SetColorTexture(r, g, b, 0.2)
+        hl:SetColorTexture(C.r, C.g, C.b, 0.2)
         hl:SetInside(bg)
 
         if name == 'overviewTab' then
@@ -139,10 +152,31 @@ C.Themes['Blizzard_EncounterJournal'] = function()
     end
 
     -- Instance select
-    ReskinInstanceButton()
-    hooksecurefunc('EncounterJournal_ListInstances', ReskinInstanceButton)
+    if C.IS_NEW_PATCH then
+        F.ReskinTrimScroll(EncounterJournal.instanceSelect.ScrollBar)
+
+        hooksecurefunc(EncounterJournal.instanceSelect.ScrollBox, 'Update', function(self)
+            for i = 1, self.ScrollTarget:GetNumChildren() do
+                local child = select(i, self.ScrollTarget:GetChildren())
+                if not child.styled then
+                    child:SetNormalTexture(C.Assets.Textures.Blank)
+                    child:SetHighlightTexture(C.Assets.Textures.Blank)
+                    child:SetPushedTexture(C.Assets.Textures.Blank)
+
+                    local bg = F.CreateBDFrame(child.bgImage)
+                    bg:SetPoint('TOPLEFT', 3, -3)
+                    bg:SetPoint('BOTTOMRIGHT', -4, 2)
+
+                    child.styled = true
+                end
+            end
+        end)
+    else
+        reskinInstanceButton()
+        hooksecurefunc('EncounterJournal_ListInstances', reskinInstanceButton)
+        F.ReskinScroll(_G.EncounterJournalInstanceSelectScrollFrame.ScrollBar)
+    end
     F.ReskinDropDown(_G.EncounterJournalInstanceSelectTierDropDown)
-    F.ReskinScroll(_G.EncounterJournalInstanceSelectScrollFrame.ScrollBar)
 
     -- Encounter frame
     _G.EncounterJournalEncounterFrameInfo:DisableDrawLayer('BACKGROUND')
@@ -150,30 +184,50 @@ C.Themes['Blizzard_EncounterJournal'] = function()
     _G.EncounterJournalEncounterFrameInfoModelFrameShadow:Hide()
     _G.EncounterJournalEncounterFrameInfoModelFrame.dungeonBG:Hide()
 
-    _G.EncounterJournalEncounterFrameInfoEncounterTitle:SetTextColor(1, 1, 1)
-    _G.EncounterJournalEncounterFrameInstanceFrameLoreScrollFrameScrollChildLore:SetTextColor(1, 1, 1)
+    _G.EncounterJournalEncounterFrameInfoEncounterTitle:SetTextColor(1, 0.8, 0)
+    if C.IS_NEW_PATCH then
+        EncounterJournal.encounter.instance.LoreScrollingFont:SetTextColor(CreateColor(1, 1, 1))
+        _G.EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollChild.overviewDescription.Text:SetTextColor('P', 1, 1, 1)
+    else
+        _G.EncounterJournalEncounterFrameInstanceFrameLoreScrollFrameScrollChildLore:SetTextColor(1, 1, 1)
+        _G.EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollChild.overviewDescription.Text:SetTextColor(1, 1, 1)
+    end
     _G.EncounterJournalEncounterFrameInfoDetailsScrollFrameScrollChildDescription:SetTextColor(1, 1, 1)
     _G.EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollChildHeader:Hide()
     _G.EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollChildTitle:SetFontObject('GameFontNormalLarge')
     _G.EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollChildLoreDescription:SetTextColor(1, 1, 1)
-    _G.EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollChildTitle:SetTextColor(1, 1, 1)
-    _G.EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollChild.overviewDescription.Text:SetTextColor(1, 1, 1)
+    _G.EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollChildTitle:SetTextColor(1, 0.8, 0)
 
     F.CreateBDFrame(_G.EncounterJournalEncounterFrameInfoModelFrame, 0.25)
-    _G.EncounterJournalEncounterFrameInfoCreatureButton1:SetPoint(
-        'TOPLEFT',
-        _G.EncounterJournalEncounterFrameInfoModelFrame,
-        0,
-        -35
-    )
+    _G.EncounterJournalEncounterFrameInfoCreatureButton1:SetPoint('TOPLEFT', _G.EncounterJournalEncounterFrameInfoModelFrame, 0, -35)
 
-    hooksecurefunc('EncounterJournal_DisplayInstance', ReskinBossButtons)
-    hooksecurefunc('EncounterJournal_ToggleHeaders', ReskinSectionHeader)
+    if C.IS_NEW_PATCH then
+        hooksecurefunc(EncounterJournal.encounter.info.BossesScrollBox, 'Update', function(self)
+            for i = 1, self.ScrollTarget:GetNumChildren() do
+                local child = select(i, self.ScrollTarget:GetChildren())
+                if not child.styled then
+                    F.Reskin(child, true)
+                    local hl = child:GetHighlightTexture()
+                    hl:SetColorTexture(C.r, C.g, C.b, 0.25)
+                    hl:SetInside(child.__bg)
+
+                    child.text:SetTextColor(1, 1, 1)
+                    child.text.SetTextColor = nop
+                    child.creature:SetPoint('TOPLEFT', 0, -4)
+
+                    child.styled = true
+                end
+            end
+        end)
+    else
+        hooksecurefunc('EncounterJournal_DisplayInstance', reskinBossButtons)
+    end
+    hooksecurefunc('EncounterJournal_ToggleHeaders', reskinSectionHeader)
 
     hooksecurefunc('EncounterJournal_SetUpOverview', function(self, _, index)
         local header = self.overviews[index]
         if not header.styled then
-            ReskinHeader(header)
+            reskinHeader(header)
             header.styled = true
         end
     end)
@@ -183,28 +237,56 @@ C.Themes['Blizzard_EncounterJournal'] = function()
         if parent.Bullets then
             for _, bullet in pairs(parent.Bullets) do
                 if not bullet.styled then
-                    bullet.Text:SetTextColor(1, 1, 1)
+                    if C.IS_NEW_PATCH then
+                        bullet.Text:SetTextColor('P', 1, 1, 1)
+                    else
+                        bullet.Text:SetTextColor(1, 1, 1)
+                    end
                     bullet.styled = true
                 end
             end
         end
     end)
 
-    local items = _G.EncounterJournal.encounter.info.lootScroll.buttons
-    for i = 1, #items do
-        local item = items[i].lootFrame
-        item.boss:SetTextColor(1, 1, 1)
-        item.slot:SetTextColor(1, 1, 1)
-        item.armorType:SetTextColor(1, 1, 1)
-        item.bossTexture:SetAlpha(0)
-        item.bosslessTexture:SetAlpha(0)
-        item.IconBorder:SetAlpha(0)
-        item.icon:SetPoint('TOPLEFT', 1, -1)
-        F.ReskinIcon(item.icon)
+    if C.IS_NEW_PATCH then
+        hooksecurefunc(EncounterJournal.encounter.info.LootContainer.ScrollBox, 'Update', function(self)
+            for i = 1, self.ScrollTarget:GetNumChildren() do
+                local child = select(i, self.ScrollTarget:GetChildren())
+                if not child.styled then
+                    child.boss:SetTextColor(1, 1, 1)
+                    child.slot:SetTextColor(1, 1, 1)
+                    child.armorType:SetTextColor(1, 1, 1)
+                    child.bossTexture:SetAlpha(0)
+                    child.bosslessTexture:SetAlpha(0)
+                    child.IconBorder:SetAlpha(0)
+                    child.icon:SetPoint('TOPLEFT', 1, -1)
+                    F.ReskinIcon(child.icon)
 
-        local bg = F.CreateBDFrame(item, 0.25)
-        bg:SetPoint('TOPLEFT')
-        bg:SetPoint('BOTTOMRIGHT', 0, 1)
+                    local bg = F.CreateBDFrame(child, 0.25)
+                    bg:SetPoint('TOPLEFT')
+                    bg:SetPoint('BOTTOMRIGHT', 0, 1)
+
+                    child.styled = true
+                end
+            end
+        end)
+    else
+        local items = EncounterJournal.encounter.info.lootScroll.buttons
+        for i = 1, #items do
+            local item = items[i].lootFrame
+            item.boss:SetTextColor(1, 1, 1)
+            item.slot:SetTextColor(1, 1, 1)
+            item.armorType:SetTextColor(1, 1, 1)
+            item.bossTexture:SetAlpha(0)
+            item.bosslessTexture:SetAlpha(0)
+            item.IconBorder:SetAlpha(0)
+            item.icon:SetPoint('TOPLEFT', 1, -1)
+            F.ReskinIcon(item.icon)
+
+            local bg = F.CreateBDFrame(item, 0.25)
+            bg:SetPoint('TOPLEFT')
+            bg:SetPoint('BOTTOMRIGHT', 0, 1)
+        end
     end
 
     -- Search results
@@ -217,50 +299,83 @@ C.Themes['Blizzard_EncounterJournal'] = function()
 
     do
         local result = _G.EncounterJournalSearchResults
-        result:SetPoint('BOTTOMLEFT', _G.EncounterJournal, 'BOTTOMRIGHT', 15, -1)
+        result:SetPoint('BOTTOMLEFT', EncounterJournal, 'BOTTOMRIGHT', 15, -1)
         F.StripTextures(result)
         local bg = F.SetBD(result)
         bg:SetPoint('TOPLEFT', -10, 0)
         bg:SetPoint('BOTTOMRIGHT')
 
-        for i = 1, 9 do
-            local bu = _G['EncounterJournalSearchResultsScrollFrameButton' .. i]
-            F.StripTextures(bu)
-            F.ReskinIcon(bu.icon)
-            bu.icon.SetTexCoord = nop
-            local bg = F.CreateBDFrame(bu, 0.25)
-            bg:SetInside()
-            bu:SetHighlightTexture(C.Assets.Textures.Backdrop)
-            local hl = bu:GetHighlightTexture()
-            hl:SetVertexColor(r, g, b, 0.25)
-            hl:SetInside(bg)
+        F.ReskinClose(_G.EncounterJournalSearchResultsCloseButton)
+
+        if C.IS_NEW_PATCH then
+            F.ReskinTrimScroll(result.ScrollBar)
+
+            hooksecurefunc(result.ScrollBox, 'Update', function(self)
+                for i = 1, self.ScrollTarget:GetNumChildren() do
+                    local child = select(i, self.ScrollTarget:GetChildren())
+                    if not child.styled then
+                        F.StripTextures(child, 2)
+                        F.ReskinIcon(child.icon)
+                        local bg = F.CreateBDFrame(child, 0.25)
+                        bg:SetInside()
+
+                        child:SetHighlightTexture(C.Assets.Textures.Backdrop)
+                        local hl = child:GetHighlightTexture()
+                        hl:SetVertexColor(C.r, C.g, C.b, 0.25)
+                        hl:SetInside(bg)
+
+                        child.styled = true
+                    end
+                end
+            end)
+        else
+            for i = 1, 9 do
+                local bu = _G['EncounterJournalSearchResultsScrollFrameButton' .. i]
+                F.StripTextures(bu)
+                F.ReskinIcon(bu.icon)
+                bu.icon.SetTexCoord = nop
+                local bg = F.CreateBDFrame(bu, 0.25)
+                bg:SetInside()
+                bu:SetHighlightTexture(C.Assets.Textures.Backdrop)
+                local hl = bu:GetHighlightTexture()
+                hl:SetVertexColor(C.r, C.g, C.b, 0.25)
+                hl:SetInside(bg)
+            end
+            F.ReskinScroll(_G.EncounterJournalSearchResultsScrollFrameScrollBar)
         end
     end
 
-    F.ReskinClose(_G.EncounterJournalSearchResultsCloseButton)
-    F.ReskinScroll(_G.EncounterJournalSearchResultsScrollFrameScrollBar)
-
     -- Various controls
-    F.ReskinPortraitFrame(_G.EncounterJournal)
+    F.ReskinPortraitFrame(EncounterJournal)
     F.Reskin(_G.EncounterJournalEncounterFrameInfoResetButton)
     F.ReskinInput(_G.EncounterJournalSearchBox)
-    F.ReskinScroll(_G.EncounterJournalEncounterFrameInstanceFrameLoreScrollFrameScrollBar)
-    F.ReskinScroll(_G.EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollBar)
-    F.ReskinScroll(_G.EncounterJournalEncounterFrameInfoBossesScrollFrameScrollBar)
-    F.ReskinScroll(_G.EncounterJournalEncounterFrameInfoDetailsScrollFrameScrollBar)
-    F.ReskinScroll(_G.EncounterJournalEncounterFrameInfoLootScrollFrameScrollBar)
+    if C.IS_NEW_PATCH then
+        F.ReskinTrimScroll(EncounterJournal.encounter.instance.LoreScrollBar)
+        F.ReskinScroll(EncounterJournal.encounter.info.overviewScroll.ScrollBar)
+        F.ReskinTrimScroll(EncounterJournal.encounter.info.BossesScrollBar)
+        F.ReskinScroll(EncounterJournal.encounter.info.detailsScroll.ScrollBar)
+        F.ReskinTrimScroll(EncounterJournal.encounter.info.LootContainer.ScrollBar)
+    else
+        F.ReskinScroll(_G.EncounterJournalEncounterFrameInstanceFrameLoreScrollFrameScrollBar)
+        F.ReskinScroll(_G.EncounterJournalEncounterFrameInfoOverviewScrollFrameScrollBar)
+        F.ReskinScroll(_G.EncounterJournalEncounterFrameInfoBossesScrollFrameScrollBar)
+        F.ReskinScroll(_G.EncounterJournalEncounterFrameInfoDetailsScrollFrameScrollBar)
+        F.ReskinScroll(_G.EncounterJournalEncounterFrameInfoLootScrollFrameScrollBar)
+    end
 
     local buttons = {
         _G.EncounterJournalEncounterFrameInfoDifficulty,
         _G.EncounterJournalEncounterFrameInfoLootScrollFrameFilterToggle,
         _G.EncounterJournalEncounterFrameInfoLootScrollFrameSlotFilterToggle,
+        _G.EncounterJournalEncounterFrameInfoFilterToggle, -- isNewPatch
+        _G.EncounterJournalEncounterFrameInfoSlotFilterToggle, -- isNewPatch
     }
     for _, button in pairs(buttons) do
-        ReskinFilterToggle(button)
+        reskinFilterToggle(button)
     end
 
     -- Suggest frame
-    local suggestFrame = _G.EncounterJournal.suggestFrame
+    local suggestFrame = EncounterJournal.suggestFrame
 
     -- Suggestion 1
     local suggestion = suggestFrame.Suggestion1
@@ -315,7 +430,7 @@ C.Themes['Blizzard_EncounterJournal'] = function()
             suggestion.iconRing:Hide()
 
             if data.iconPath then
-                suggestion.icon:SetMask(nil)
+                suggestion.icon:SetMask('')
                 suggestion.icon:SetTexCoord(unpack(C.TEX_COORD))
             end
         end
@@ -331,7 +446,7 @@ C.Themes['Blizzard_EncounterJournal'] = function()
                 suggestion.iconRing:Hide()
 
                 if data.iconPath then
-                    suggestion.icon:SetMask(nil)
+                    suggestion.icon:SetMask('')
                     suggestion.icon:SetTexCoord(unpack(C.TEX_COORD))
                 end
             end
@@ -348,45 +463,70 @@ C.Themes['Blizzard_EncounterJournal'] = function()
 
     -- LootJournal
 
-    local lootJournal = _G.EncounterJournal.LootJournal
+    local lootJournal = EncounterJournal.LootJournal
     F.StripTextures(lootJournal)
-    F.ReskinScroll(lootJournal.PowersFrame.ScrollBar)
-    ReskinFilterToggle(lootJournal.RuneforgePowerFilterDropDownButton)
-    ReskinFilterToggle(lootJournal.ClassDropDownButton)
+    reskinFilterToggle(lootJournal.RuneforgePowerFilterDropDownButton)
+    reskinFilterToggle(lootJournal.ClassDropDownButton)
 
-    local iconColor = C.QualityColors[_G.LE_ITEM_QUALITY_LEGENDARY or 5] -- legendary color
-    hooksecurefunc(lootJournal.PowersFrame, 'RefreshListDisplay', function(self)
-        if not self.elements then
-            return
-        end
+    local iconColor = C.QualityColors[Enum.ItemQuality.Legendary or 5] -- legendary color
+    if C.IS_NEW_PATCH then
+        F.ReskinTrimScroll(lootJournal.ScrollBar)
 
-        for i = 1, self:GetNumElementFrames() do
-            local button = self.elements[i]
-            if button and not button.bg then
-                button.Background:SetAlpha(0)
-                button.BackgroundOverlay:SetAlpha(0)
-                button.UnavailableOverlay:SetAlpha(0)
-                button.UnavailableBackground:SetAlpha(0)
-                button.CircleMask:Hide()
-                button.bg = F.ReskinIcon(button.Icon)
-                button.bg:SetBackdropBorderColor(iconColor.r, iconColor.g, iconColor.b)
+        hooksecurefunc(lootJournal.ScrollBox, 'Update', function(self)
+            for i = 1, self.ScrollTarget:GetNumChildren() do
+                local child = select(i, self.ScrollTarget:GetChildren())
+                if not child.styled then
+                    child.Background:SetAlpha(0)
+                    child.BackgroundOverlay:SetAlpha(0)
+                    child.UnavailableOverlay:SetAlpha(0)
+                    child.UnavailableBackground:SetAlpha(0)
+                    child.CircleMask:Hide()
+                    child.bg = F.ReskinIcon(child.Icon)
+                    child.bg:SetBackdropBorderColor(iconColor.r, iconColor.g, iconColor.b)
 
-                local bg = F.CreateBDFrame(button, 0.25)
-                bg:SetPoint('TOPLEFT', 3, 0)
-                bg:SetPoint('BOTTOMRIGHT', -2, 1)
+                    local bg = F.CreateBDFrame(child, 0.25)
+                    bg:SetPoint('TOPLEFT', 3, 0)
+                    bg:SetPoint('BOTTOMRIGHT', -2, 1)
+
+                    child.styled = true
+                end
             end
-        end
-    end)
+        end)
+    else
+        F.ReskinScroll(lootJournal.PowersFrame.ScrollBar)
+
+        hooksecurefunc(lootJournal.PowersFrame, 'RefreshListDisplay', function(self)
+            if not self.elements then
+                return
+            end
+
+            for i = 1, self:GetNumElementFrames() do
+                local button = self.elements[i]
+                if button and not button.bg then
+                    button.Background:SetAlpha(0)
+                    button.BackgroundOverlay:SetAlpha(0)
+                    button.UnavailableOverlay:SetAlpha(0)
+                    button.UnavailableBackground:SetAlpha(0)
+                    button.CircleMask:Hide()
+                    button.bg = F.ReskinIcon(button.Icon)
+                    button.bg:SetBackdropBorderColor(iconColor.r, iconColor.g, iconColor.b)
+
+                    local bg = F.CreateBDFrame(button, 0.25)
+                    bg:SetPoint('TOPLEFT', 3, 0)
+                    bg:SetPoint('BOTTOMRIGHT', -2, 1)
+                end
+            end
+        end)
+    end
 
     -- ItemSetsFrame
+    if EncounterJournal.LootJournalItems then
+        F.StripTextures(EncounterJournal.LootJournalItems)
+        F.ReskinDropDown(EncounterJournal.LootJournalViewDropDown)
 
-    if _G.EncounterJournal.LootJournalItems then
-        F.StripTextures(_G.EncounterJournal.LootJournalItems)
-        F.ReskinDropDown(_G.EncounterJournal.LootJournalViewDropDown)
-
-        local itemSetsFrame = _G.EncounterJournal.LootJournalItems.ItemSetsFrame
+        local itemSetsFrame = EncounterJournal.LootJournalItems.ItemSetsFrame
         F.ReskinScroll(itemSetsFrame.scrollBar)
-        ReskinFilterToggle(itemSetsFrame.ClassButton)
+        reskinFilterToggle(itemSetsFrame.ClassButton)
 
         hooksecurefunc(itemSetsFrame, 'UpdateList', function(self)
             local buttons = self.buttons
