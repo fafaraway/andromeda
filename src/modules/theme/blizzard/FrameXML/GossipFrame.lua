@@ -75,7 +75,7 @@ tinsert(C.BlizzThemes, function()
             local notch = _G.NPCFriendshipStatusBar['Notch' .. i]
             if notch then
                 notch:SetColorTexture(0, 0, 0)
-                notch:SetSize(C.Mult, 16)
+                notch:SetSize(1, 16)
             end
         end
 
