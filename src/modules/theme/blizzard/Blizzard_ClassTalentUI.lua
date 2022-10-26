@@ -82,7 +82,7 @@ C.Themes['Blizzard_ClassTalentUI'] = function()
 
         local check = ed.UsesSharedActionBars
         if check then
-            F.ReskinCheck(check.CheckButton)
+            F.ReskinCheckbox(check.CheckButton)
             check.CheckButton.bg:SetInside(nil, 6, 6)
         end
     end

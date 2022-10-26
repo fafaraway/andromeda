@@ -107,13 +107,13 @@ C.Themes['Blizzard_Professions'] = function()
 
     local trackBox = form.TrackRecipeCheckBox
     if trackBox then
-        F.ReskinCheck(trackBox)
+        F.ReskinCheckbox(trackBox)
         trackBox:SetSize(24, 24)
     end
 
     local checkBox = form.AllocateBestQualityCheckBox
     if checkBox then
-        F.ReskinCheck(checkBox)
+        F.ReskinCheckbox(checkBox)
         checkBox:SetSize(24, 24)
     end
 

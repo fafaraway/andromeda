@@ -63,5 +63,5 @@ tinsert(C.BlizzThemes, function()
     else
         F.ReskinDropDown(_G.CompactRaidFrameManagerDisplayFrameProfileSelector)
     end
-    F.ReskinCheck(_G.CompactRaidFrameManagerDisplayFrameEveryoneIsAssistButton)
+    F.ReskinCheckbox(_G.CompactRaidFrameManagerDisplayFrameEveryoneIsAssistButton)
 end)

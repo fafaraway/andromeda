@@ -152,7 +152,7 @@ C.Themes['Blizzard_Collections'] = function()
     F.ReskinFilterButton(_G.MountJournalFilterButton)
 
     local togglePlayer = MountJournal.MountDisplay.ModelScene.TogglePlayer
-    F.ReskinCheck(togglePlayer)
+    F.ReskinCheckbox(togglePlayer)
     togglePlayer:SetSize(28, 28)
 
     F.StripTextures(MountJournal.BottomLeftInset)
@@ -734,7 +734,7 @@ C.Themes['Blizzard_Collections'] = function()
     F.StripTextures(WardrobeTransmogFrame.SpecButton)
     F.ReskinArrow(WardrobeTransmogFrame.SpecButton, 'down')
     WardrobeTransmogFrame.SpecButton:SetPoint('RIGHT', WardrobeTransmogFrame.ApplyButton, 'LEFT', -3, 0)
-    F.ReskinCheck(WardrobeTransmogFrame.ToggleSecondaryAppearanceCheckbox)
+    F.ReskinCheckbox(WardrobeTransmogFrame.ToggleSecondaryAppearanceCheckbox)
 
     local modelScene = WardrobeTransmogFrame.ModelScene
     modelScene.ClearAllPendingButton:DisableDrawLayer('BACKGROUND')

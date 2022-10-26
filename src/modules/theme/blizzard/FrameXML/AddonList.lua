@@ -35,7 +35,7 @@ tinsert(C.BlizzThemes, function()
             for i = 1, self.ScrollTarget:GetNumChildren() do
                 local child = select(i, self.ScrollTarget:GetChildren())
                 if not child.styled then
-                    F.ReskinCheck(child.Enabled, true)
+                    F.ReskinCheckbox(child.Enabled, true)
                     F.Reskin(child.LoadAddonButton)
                     hooksecurefunc(child.Enabled:GetCheckedTexture(), 'SetDesaturated', forceSaturation)
 
@@ -46,7 +46,7 @@ tinsert(C.BlizzThemes, function()
     else
         for i = 1, _G.MAX_ADDONS_DISPLAYED do
             local checkbox = _G['AddonListEntry' .. i .. 'Enabled']
-            F.ReskinCheck(checkbox, true)
+            F.ReskinCheckbox(checkbox, true)
             F.Reskin(_G['AddonListEntry' .. i .. 'Load'])
         end
     end

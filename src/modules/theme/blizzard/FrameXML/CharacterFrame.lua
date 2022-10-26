@@ -401,8 +401,8 @@ tinsert(C.BlizzThemes, function()
         if _G.TokenFramePopup.CloseButton then -- needs review, blizz typo
             F.ReskinClose(_G.TokenFramePopup.CloseButton)
         end
-        F.ReskinCheck(_G.TokenFramePopup.InactiveCheckBox)
-        F.ReskinCheck(_G.TokenFramePopup.BackpackCheckBox)
+        F.ReskinCheckbox(_G.TokenFramePopup.InactiveCheckBox)
+        F.ReskinCheckbox(_G.TokenFramePopup.BackpackCheckBox)
         F.ReskinTrimScroll(_G.TokenFrame.ScrollBar)
 
         hooksecurefunc(_G.TokenFrame.ScrollBox, 'Update', function(self)
@@ -448,8 +448,8 @@ tinsert(C.BlizzThemes, function()
     else
         _G.TokenFramePopupCorner:Hide()
         F.ReskinClose(_G.TokenFramePopupCloseButton)
-        F.ReskinCheck(_G.TokenFramePopupInactiveCheckBox)
-        F.ReskinCheck(_G.TokenFramePopupBackpackCheckBox)
+        F.ReskinCheckbox(_G.TokenFramePopupInactiveCheckBox)
+        F.ReskinCheckbox(_G.TokenFramePopupBackpackCheckBox)
         F.ReskinScroll(_G.TokenFrameContainerScrollBar)
         _G.TokenFramePopup:SetPoint('TOPLEFT', _G.TokenFrame, 'TOPRIGHT', 3, -28)
     end

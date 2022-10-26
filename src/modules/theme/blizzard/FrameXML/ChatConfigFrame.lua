@@ -230,7 +230,7 @@ tinsert(C.BlizzThemes, function()
     }
     for _, checkbox in pairs(checkboxes) do
         local check = _G.TextToSpeechFramePanelContainer[checkbox]
-        F.ReskinCheck(check)
+        F.ReskinCheckbox(check)
         check.bg:SetInside(check, 6, 6)
     end
 

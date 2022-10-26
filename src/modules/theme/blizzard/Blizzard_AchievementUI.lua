@@ -138,7 +138,7 @@ C.Themes['Blizzard_AchievementUI'] = function()
                     bg:SetPoint('BOTTOMRIGHT', 0, 2)
                     F.ReskinIcon(child.Icon.texture)
 
-                    F.ReskinCheck(child.Tracked)
+                    F.ReskinCheckbox(child.Tracked)
                     child.Tracked:SetSize(20, 20)
                     child.Check:SetAlpha(0)
 

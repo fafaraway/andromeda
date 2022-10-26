@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 local function reskinOptionCheck(button)
-    F.ReskinCheck(button)
+    F.ReskinCheckbox(button)
     button.bg:SetInside(button, 6, 6)
 end
 
@@ -60,7 +60,7 @@ tinsert(C.BlizzThemes, function()
 
         for check in self.pools:EnumerateActiveByTemplate('EditModeSettingCheckboxTemplate') do
             if not check.styled then
-                F.ReskinCheck(check.Button)
+                F.ReskinCheckbox(check.Button)
                 check.Button.bg:SetInside(nil, 6, 6)
                 check.styled = true
             end
@@ -96,7 +96,7 @@ tinsert(C.BlizzThemes, function()
 
         local check = dialog.CharacterSpecificLayoutCheckButton
         if check then
-            F.ReskinCheck(check.Button)
+            F.ReskinCheckbox(check.Button)
             check.Button.bg:SetInside(nil, 6, 6)
         end
 
