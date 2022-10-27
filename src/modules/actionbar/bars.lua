@@ -141,8 +141,7 @@ function BAR:CreateBar1()
     frame.frameVisibility = '[petbattle] hide; show'
     _G.RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
 
-    local actionPage =
-        '[bar:6]6;[bar:5]5;[bar:4]4;[bar:3]3;[bar:2]2;[possessbar]12;[overridebar]14;[shapeshift]13;[vehicleui]12;[bonusbar:5]11;[bonusbar:4]10;[bonusbar:3]9;[bonusbar:2]8;[bonusbar:1]7;1'
+    local actionPage = '[bar:6]6;[bar:5]5;[bar:4]4;[bar:3]3;[bar:2]2;[possessbar]16;[overridebar]18;[shapeshift]17;[vehicleui]16;[bonusbar:5]11;[bonusbar:4]10;[bonusbar:3]9;[bonusbar:2]8;[bonusbar:1]7;1'
     local buttonName = 'ActionButton'
     for i, button in next, buttonList do
         frame:SetFrameRef(buttonName .. i, button)
@@ -305,7 +304,7 @@ function BAR:CreateBar4()
     _G.RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
 
     -- Fix visibility when leaving vehicle or petbattle
-    BAR:FixSideBarVisibility()
+    -- BAR:FixSideBarVisibility()
     BAR:UpdateFrameClickThru()
 end
 
