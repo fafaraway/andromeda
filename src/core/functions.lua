@@ -446,7 +446,7 @@ do
         if type(font) == 'table' then
             object:SetFont(font[1], font[2], font[3] or nil)
         else
-            object:SetFont(font, size, flag and 'OUTLINE')
+            object:SetFont(font, size, flag and 'OUTLINE' or '')
         end
 
         if text then

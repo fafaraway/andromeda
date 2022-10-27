@@ -551,8 +551,8 @@ function F.AddScale(animationGroup, name, fromScale, toScale)
     end
 
     local animation = animationGroup:CreateAnimation('Scale')
-    -- animation:SetFromScale(unpack(fromScale))
-    -- animation:SetToScale(unpack(toScale))
+    animation:SetScaleFrom(unpack(fromScale))
+    animation:SetScaleTo(unpack(toScale))
     animation:SetParent(animationGroup)
     animationGroup[name] = animation
 end
