@@ -17,9 +17,7 @@ function ECF:GuildBest_UpdateTooltip()
     _G.GameTooltip:AddLine(format(_G.CHALLENGE_MODE_POWER_LEVEL, leaderInfo.keystoneLevel))
     for i = 1, #leaderInfo.members do
         local classColorStr = strsub(F:RgbToHex(F:ClassColor(leaderInfo.members[i].classFileName)), 3, 10)
-        _G.GameTooltip:AddLine(
-            format(_G.CHALLENGE_MODE_GUILD_BEST_LINE, classColorStr, leaderInfo.members[i].name)
-        )
+        _G.GameTooltip:AddLine(format(_G.CHALLENGE_MODE_GUILD_BEST_LINE, classColorStr, leaderInfo.members[i].name))
     end
     _G.GameTooltip:Show()
 end
@@ -119,7 +117,11 @@ end
 
 function ECF.GuildBest_OnLoad(event, addon)
     if addon == 'Blizzard_ChallengesUI' then
-        hooksecurefunc('ChallengesFrame_Update', ECF.GuildBest_Update)
+        if C.IS_NEW_PATCH then
+            hooksecurefunc(_G.ChallengesFrame, 'Update', ECF.GuildBest_Update)
+        else
+            hooksecurefunc('ChallengesFrame_Update', ECF.GuildBest_Update)
+        end
         ECF:KeystoneInfo_Create()
         _G.ChallengesFrame.WeeklyInfo.Child.WeeklyChest:HookScript('OnEnter', ECF.KeystoneInfo_WeeklyRuns)
 
@@ -144,8 +146,7 @@ function ECF:KeystoneInfo_WeeklyRuns()
 
         _G.GameTooltip:AddLine(' ')
         _G.GameTooltip:AddDoubleLine(
-            isShiftKeyDown and _G.CHALLENGE_MODE_THIS_WEEK
-                or format(_G.WEEKLY_REWARDS_MYTHIC_TOP_RUNS, WeeklyRunsThreshold),
+            isShiftKeyDown and _G.CHALLENGE_MODE_THIS_WEEK or format(_G.WEEKLY_REWARDS_MYTHIC_TOP_RUNS, WeeklyRunsThreshold),
             '(' .. numRuns .. ')',
             0.6,
             0.8,
@@ -177,7 +178,7 @@ end
 
 function ECF:KeystoneInfo_Create()
     local texture = select(10, GetItemInfo(158923)) or 525134
-    local iconColor = C.QualityColors[_G.LE_ITEM_QUALITY_EPIC or 4]
+    local iconColor = C.QualityColors[Enum.ItemQuality.Epic or 4]
     local button = CreateFrame('Frame', nil, _G.ChallengesFrame.WeeklyInfo, 'BackdropTemplate')
     button:SetPoint('BOTTOMLEFT', 10, 67)
     button:SetSize(35, 35)
@@ -193,23 +194,11 @@ function ECF:KeystoneInfo_Create()
             local color = F:RgbToHex(F:ClassColor(class))
             local factionColor = faction == 'Horde' and '|cffff5040' or '|cff00adf0'
             local dungeon = C_ChallengeMode.GetMapUIInfo(tonumber(mapID))
-            _G.GameTooltip:AddDoubleLine(
-                format(color .. '%s:|r', newName),
-                format('%s%s(%s)|r', factionColor, dungeon, level)
-            )
+            _G.GameTooltip:AddDoubleLine(format(color .. '%s:|r', newName), format('%s%s(%s)|r', factionColor, dungeon, level))
         end
         _G.GameTooltip:AddDoubleLine(' ', C.LINE_STRING)
         _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_LEFT_BUTTON .. _G.GREAT_VAULT_REWARDS .. ' ', 1, 1, 1, 0.6, 0.8, 1)
-        _G.GameTooltip:AddDoubleLine(
-            ' ',
-            C.MOUSE_MIDDLE_BUTTON .. L['Delete keystones info'] .. ' ',
-            1,
-            1,
-            1,
-            0.6,
-            0.8,
-            1
-        )
+        _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_MIDDLE_BUTTON .. L['Delete keystones info'] .. ' ', 1, 1, 1, 0.6, 0.8, 1)
         _G.GameTooltip:Show()
     end)
     button:SetScript('OnLeave', F.HideTooltip)

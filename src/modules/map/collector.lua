@@ -8,6 +8,7 @@ local buttonBlackList = {
     ['TimeManagerClockButton'] = true,
     ['FeedbackUIButton'] = true,
     ['MiniMapBattlefieldFrame'] = true,
+    ['QueueStatusButton'] = true,
     ['QueueStatusMinimapButton'] = true,
     ['GarrisonLandingPageMinimapButton'] = true,
     ['MinimapZoneTextButton'] = true,
@@ -28,10 +29,7 @@ local function UpdateCollectorTip(bu)
     bu.text = C.MOUSE_RIGHT_BUTTON
         .. L['Auto Hide']
         .. ': '
-        .. (
-            _G.ANDROMEDA_ADB['MinimapAddOnCollector'] and '|cff55ff55' .. _G.VIDEO_OPTIONS_ENABLED
-            or '|cffff5555' .. _G.VIDEO_OPTIONS_DISABLED
-        )
+        .. (_G.ANDROMEDA_ADB['MinimapAddOnCollector'] and '|cff55ff55' .. _G.VIDEO_OPTIONS_ENABLED or '|cffff5555' .. _G.VIDEO_OPTIONS_DISABLED)
 end
 
 local function HideCollectorTray()
@@ -67,11 +65,7 @@ local function RestyleAddOnIcon(child, name)
         local region = select(j, child:GetRegions())
         if region:IsObjectType('Texture') then
             local texture = region:GetTexture() or ''
-            if
-                removedTextures[texture]
-                or strfind(texture, 'Interface\\CharacterFrame')
-                or strfind(texture, 'Interface\\Minimap')
-            then
+            if removedTextures[texture] or strfind(texture, 'Interface\\CharacterFrame') or strfind(texture, 'Interface\\Minimap') then
                 region:SetTexture(nil)
             end
 
@@ -136,10 +130,7 @@ local function CollectRubbish()
             local child = select(i, _G.Minimap:GetChildren())
             local name = child and child.GetName and child:GetName()
             if name and not child.isExamed and not buttonBlackList[name] then
-                if
-                    (child:IsObjectType('Button') or strmatch(strupper(name), 'BUTTON'))
-                    and not IsButtonIgnored(name)
-                then
+                if (child:IsObjectType('Button') or strmatch(strupper(name), 'BUTTON')) and not IsButtonIgnored(name) then
                     RestyleAddOnIcon(child, name)
                 end
                 child.isExamed = true

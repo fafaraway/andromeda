@@ -8,6 +8,9 @@ C.Themes['Blizzard_InspectUI'] = function()
     _G.InspectPaperDollFrame.ViewButton:ClearAllPoints()
     _G.InspectPaperDollFrame.ViewButton:SetPoint('TOP', _G.InspectFrame, 0, -45)
     _G.InspectPVPFrame.BG:Hide()
+    if C.IS_NEW_PATCH then
+        F.Reskin(_G.InspectPaperDollItemsFrame.InspectTalents)
+    end
 
     -- Character
     local slots = {
@@ -101,9 +104,11 @@ C.Themes['Blizzard_InspectUI'] = function()
     _G.InspectFrameTab1:SetPoint('TOPLEFT', _G.InspectFrame, 'BOTTOMLEFT', 10, 1)
     for i = 1, 4 do
         local tab = _G['InspectFrameTab' .. i]
-        F.ReskinTab(tab)
-        if i ~= 1 then
-            tab:SetPoint('LEFT', _G['InspectFrameTab' .. i - 1], 'RIGHT', -15, 0)
+        if tab then
+            F.ReskinTab(tab)
+            if i ~= 1 then
+                tab:SetPoint('LEFT', _G['InspectFrameTab' .. i - 1], 'RIGHT', -15, 0)
+            end
         end
     end
 

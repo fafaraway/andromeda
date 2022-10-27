@@ -31,8 +31,8 @@ C.Themes['Blizzard_GuildBankUI'] = function()
 
         for j = 1, 14 do
             local button = column.Buttons[j]
-            button:SetNormalTexture('')
-            button:SetPushedTexture('')
+            button:SetNormalTexture(C.Assets.Textures.Blank)
+            button:SetPushedTexture(C.Assets.Textures.Blank)
             button:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
             button.icon:SetTexCoord(unpack(C.TEX_COORD))
             button.bg = F.CreateBDFrame(button, 0.3)
@@ -48,8 +48,8 @@ C.Themes['Blizzard_GuildBankUI'] = function()
         local icon = button.IconTexture
 
         F.StripTextures(tab)
-        button:SetNormalTexture('')
-        button:SetPushedTexture('')
+        button:SetNormalTexture(C.Assets.Textures.Blank)
+        button:SetPushedTexture(C.Assets.Textures.Blank)
         button:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
         button:SetCheckedTexture(C.Assets.Textures.ButtonChecked)
         F.CreateBDFrame(button)
@@ -59,32 +59,36 @@ C.Themes['Blizzard_GuildBankUI'] = function()
         button:SetPoint(a1, p, a2, x + C.MULT, y)
     end
 
-    local NUM_GUILDBANK_ICONS_PER_ROW = 10
-    local NUM_GUILDBANK_ICON_ROWS = 9
+    if C.IS_NEW_PATCH then
+        F.ReskinIconSelector(_G.GuildBankPopupFrame)
+    else
+        local NUM_GUILDBANK_ICONS_PER_ROW = 10
+        local NUM_GUILDBANK_ICON_ROWS = 9
 
-    _G.GuildBankPopupFrame.BorderBox:Hide()
-    _G.GuildBankPopupFrame.BG:Hide()
-    F.SetBD(_G.GuildBankPopupFrame)
-    _G.GuildBankPopupEditBox:DisableDrawLayer('BACKGROUND')
-    F.ReskinInput(_G.GuildBankPopupEditBox)
-    _G.GuildBankPopupFrame:SetHeight(525)
-    F.Reskin(_G.GuildBankPopupFrame.OkayButton)
-    F.Reskin(_G.GuildBankPopupFrame.CancelButton)
-    F.ReskinScroll(_G.GuildBankPopupFrame.ScrollFrame.ScrollBar)
+        _G.GuildBankPopupFrame.BorderBox:Hide()
+        _G.GuildBankPopupFrame.BG:Hide()
+        F.SetBD(_G.GuildBankPopupFrame)
+        _G.GuildBankPopupEditBox:DisableDrawLayer('BACKGROUND')
+        F.ReskinInput(_G.GuildBankPopupEditBox)
+        _G.GuildBankPopupFrame:SetHeight(525)
+        F.Reskin(_G.GuildBankPopupFrame.OkayButton)
+        F.Reskin(_G.GuildBankPopupFrame.CancelButton)
+        F.ReskinScroll(_G.GuildBankPopupFrame.ScrollFrame.ScrollBar)
 
-    _G.GuildBankPopupFrame:HookScript('OnShow', function()
-        for i = 1, NUM_GUILDBANK_ICONS_PER_ROW * NUM_GUILDBANK_ICON_ROWS do
-            local button = _G['GuildBankPopupButton' .. i]
-            if not button.styled then
-                button:SetCheckedTexture(C.Assets.Textures.ButtonChecked)
-                select(2, button:GetRegions()):Hide()
-                F.ReskinIcon(button.Icon)
-                local hl = button:GetHighlightTexture()
-                hl:SetColorTexture(1, 1, 1, 0.25)
-                hl:SetAllPoints(button.Icon)
+        _G.GuildBankPopupFrame:HookScript('OnShow', function()
+            for i = 1, NUM_GUILDBANK_ICONS_PER_ROW * NUM_GUILDBANK_ICON_ROWS do
+                local button = _G['GuildBankPopupButton' .. i]
+                if not button.styled then
+                    button:SetCheckedTexture(C.Assets.Textures.ButtonPushed)
+                    select(2, button:GetRegions()):Hide()
+                    F.ReskinIcon(button.Icon)
+                    local hl = button:GetHighlightTexture()
+                    hl:SetColorTexture(1, 1, 1, 0.25)
+                    hl:SetAllPoints(button.Icon)
 
-                button.styled = true
+                    button.styled = true
+                end
             end
-        end
-    end)
+        end)
+    end
 end

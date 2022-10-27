@@ -5,7 +5,6 @@
     <Script file="alreadyknown.lua"/>
     <Script file="camera.lua"/>
     <Script file="cursor.lua"/>
-    <Script file="dominationshards.lua"/>
     <Script file="dragemall.lua"/>
     <Script file="gamemenu.lua"/>
     <Script file="grouptool.lua"/>

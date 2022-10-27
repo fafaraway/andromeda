@@ -53,7 +53,7 @@ function UNITFRAME:OnUpdateRunes(elapsed)
     local duration = self.duration + elapsed
     self.duration = duration
     self:SetValue(duration)
-    self.timer:SetText(nil)
+    self.timer:SetText('')
     if C.DB.Unitframe.RunesTimer then
         local remain = self.runeDuration - duration
         if remain > 0 then
@@ -70,7 +70,7 @@ local function PostUpdateRunes(element, runemap)
             if runeReady then
                 rune:SetAlpha(1)
                 rune:SetScript('OnUpdate', nil)
-                rune.timer:SetText(nil)
+                rune.timer:SetText('')
             elseif start then
                 rune:SetAlpha(0.45)
                 rune.runeDuration = duration

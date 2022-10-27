@@ -17,7 +17,11 @@ function AURA:HideBlizBuff()
     end
 
     F.HideObject(_G.BuffFrame)
-    F.HideObject(_G.TemporaryEnchantFrame)
+    if C.IS_NEW_PATCH then
+        F.HideObject(_G.DebuffFrame)
+    else
+        F.HideObject(_G.TemporaryEnchantFrame)
+    end
 end
 
 function AURA:BuildBuffFrame()
@@ -45,22 +49,12 @@ function AURA:BuildBuffFrame()
 
     -- Movers
     AURA.BuffFrame = AURA:CreateAuraHeader('HELPFUL')
-    AURA.BuffFrame.mover = F.Mover(
-        AURA.BuffFrame,
-        L['BuffFrame'],
-        'BuffAnchor',
-        { 'TOPLEFT', _G.UIParent, 'TOPLEFT', C.UI_GAP, -C.UI_GAP }
-    )
+    AURA.BuffFrame.mover = F.Mover(AURA.BuffFrame, L['BuffFrame'], 'BuffAnchor', { 'TOPLEFT', _G.UIParent, 'TOPLEFT', C.UI_GAP, -C.UI_GAP })
     AURA.BuffFrame:ClearAllPoints()
     AURA.BuffFrame:SetPoint('TOPRIGHT', AURA.BuffFrame.mover)
 
     AURA.DebuffFrame = AURA:CreateAuraHeader('HARMFUL')
-    AURA.DebuffFrame.mover = F.Mover(
-        AURA.DebuffFrame,
-        L['DebuffFrame'],
-        'DebuffAnchor',
-        { 'TOPLEFT', AURA.BuffFrame.mover, 'BOTTOMLEFT', 0, 30 }
-    )
+    AURA.DebuffFrame.mover = F.Mover(AURA.DebuffFrame, L['DebuffFrame'], 'DebuffAnchor', { 'TOPLEFT', AURA.BuffFrame.mover, 'BOTTOMLEFT', 0, 30 })
     AURA.DebuffFrame:ClearAllPoints()
     AURA.DebuffFrame:SetPoint('TOPRIGHT', AURA.DebuffFrame.mover)
 end
@@ -260,11 +254,14 @@ function AURA:CreateAuraHeader(filter)
     header.visibility = CreateFrame('Frame', nil, _G.UIParent, 'SecureHandlerStateTemplate')
     SecureHandlerSetFrameRef(header.visibility, 'AuraHeader', header)
     RegisterStateDriver(header.visibility, 'customVisibility', '[petbattle] 0;1')
-    header.visibility:SetAttribute('_onstate-customVisibility', [[
+    header.visibility:SetAttribute(
+        '_onstate-customVisibility',
+        [[
         local header = self:GetFrameRef('AuraHeader')
         local hide, shown = newstate == 0, header:IsShown()
         if hide and shown then header:Hide() elseif not hide and not shown then header:Show() end
-    ]]) -- use custom script that will only call hide when it needs to, this prevents spam to `SecureAuraHeader_Update`
+    ]]
+    ) -- use custom script that will only call hide when it needs to, this prevents spam to `SecureAuraHeader_Update`
 
     if filter == 'HELPFUL' then
         header:SetAttribute('consolidateDuration', -1)

@@ -181,6 +181,7 @@ function UNITFRAME:OnLogin()
     UNITFRAME:RegisterSanctumSpells()
     UNITFRAME:RegisterNathriaSpells()
     UNITFRAME:RegisterSepulcherSpells()
+    UNITFRAME:RegisterIncarnatesSpells()
     UNITFRAME:SpawnUnits()
     UNITFRAME:UpdateAllElements()
 end

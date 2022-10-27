@@ -1,4 +1,4 @@
-local F = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 
 local COLLECTED_STRING = ' |cffff0000(' .. _G.COLLECTED .. ')|r'
@@ -42,6 +42,8 @@ function TOOLTIP:ConduitInfo()
         F:Delay(10, TOOLTIP.Conduit_UpdateCollection) -- might be empty on fist load
     end
     F:RegisterEvent('SOULBIND_CONDUIT_COLLECTION_UPDATED', TOOLTIP.Conduit_UpdateCollection)
+
+    if C.IS_BETA then return end -- #TODO
 
     _G.GameTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Conduit_CheckStatus)
     _G.ItemRefTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Conduit_CheckStatus)

@@ -1,4 +1,4 @@
-local F = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
 
 -- Fix Drag Collections taint
 do
@@ -102,6 +102,10 @@ end
 -- Fix WhoFrame level column width
 do
     hooksecurefunc('WhoList_Update', function()
+        if not C.IS_NEW_PATCH then
+            return
+        end
+
         local buttons = _G.WhoListScrollFrame.buttons
         for i = 1, #buttons do
             local button = buttons[i]
@@ -118,6 +122,10 @@ end
 -- Fix Trade Skill Search
 do
     hooksecurefunc('ChatEdit_InsertLink', function(text) -- shift-clicked
+        if C.IS_NEW_PATCH then
+            return
+        end
+
         -- change from SearchBox:HasFocus to :IsShown again
         if text and _G.TradeSkillFrame and _G.TradeSkillFrame:IsShown() then
             local spellId = strmatch(text, 'enchant:(%d+)')
@@ -154,13 +162,55 @@ end
 -- make it only split stacks with shift-rightclick if the TradeSkillFrame is open
 -- shift-leftclick should be reserved for the search box
 do
-    local function hideSplitFrame(_, button)
-        if _G.TradeSkillFrame and _G.TradeSkillFrame:IsShown() then
-            if button == 'LeftButton' then
-                _G.StackSplitFrame:Hide()
-            end
-        end
+    -- local function hideSplitFrame(_, button)
+    --     if _G.TradeSkillFrame and _G.TradeSkillFrame:IsShown() then
+    --         if button == 'LeftButton' then
+    --             _G.StackSplitFrame:Hide()
+    --         end
+    --     end
+    -- end
+    -- hooksecurefunc('ContainerFrameItemButton_OnModifiedClick', hideSplitFrame)
+    -- hooksecurefunc('MerchantItemButton_OnModifiedClick', hideSplitFrame)
+end
+
+-- SpellBook fix in 46157
+do
+    if not C.IS_BETA then
+        return
     end
-    hooksecurefunc('ContainerFrameItemButton_OnModifiedClick', hideSplitFrame)
-    hooksecurefunc('MerchantItemButton_OnModifiedClick', hideSplitFrame)
+
+    local function replaceOnEnter(self)
+        local slot = SpellBook_GetSpellBookSlot(self)
+        _G.GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
+
+        if InClickBindingMode() and not self.canClickBind then
+            _G.GameTooltip:AddLine(_G.CLICK_BINDING_NOT_AVAILABLE, _G.RED_FONT_COLOR.r, _G.RED_FONT_COLOR.g, _G.RED_FONT_COLOR.b)
+            _G.GameTooltip:Show()
+            return
+        end
+
+        _G.GameTooltip:SetSpellBookItem(slot, _G.SpellBookFrame.bookType)
+        self.UpdateTooltip = nil
+
+        if self.SpellHighlightTexture and self.SpellHighlightTexture:IsShown() then
+            _G.GameTooltip:AddLine(_G.SPELLBOOK_SPELL_NOT_ON_ACTION_BAR, _G.LIGHTBLUE_FONT_COLOR.r, _G.LIGHTBLUE_FONT_COLOR.g, _G.LIGHTBLUE_FONT_COLOR.b)
+        end
+        _G.GameTooltip:Show()
+    end
+
+    local function handleSpellButton(button)
+        button.OnEnter = replaceOnEnter
+        button:SetScript('OnEnter', replaceOnEnter)
+    end
+
+    for i = 1, _G.SPELLS_PER_PAGE do
+        handleSpellButton(_G['SpellButton' .. i])
+    end
+
+    local professions = { 'PrimaryProfession1', 'PrimaryProfession2', 'SecondaryProfession1', 'SecondaryProfession2', 'SecondaryProfession3' }
+    for _, button in pairs(professions) do
+        local bu = _G[button]
+        handleSpellButton(bu.SpellButton1)
+        handleSpellButton(bu.SpellButton2)
+    end
 end

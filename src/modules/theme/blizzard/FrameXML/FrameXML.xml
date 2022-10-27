@@ -1,14 +1,15 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
     <Script file="AddonList.lua"/>
     <Script file="AlertFrames.lua"/>
+    <Script file="Bags.lua"/>
     <Script file="CharacterFrame.lua"/>
     <Script file="ChatBubbles.lua"/>
     <Script file="ChatConfigFrame.lua"/>
     <Script file="ChatFrame.lua"/>
     <Script file="ColorPickerFrame.lua"/>
     <Script file="CompactRaidFrames.lua"/>
-
     <Script file="DressUpFrames.lua"/>
+    <Script file="EditModeManager.lua"/>
     <Script file="EquipmentFlyout.lua"/>
     <Script file="FriendsFrame.lua"/>
     <Script file="GameMenuFrame.lua"/>
@@ -20,7 +21,6 @@
     <Script file="HelpFrame.lua"/>
     <Script file="HelpTipTemplate.lua"/>
     <Script file="InterfaceOptionsFrame.lua"/>
-    <Script file="Inventory.lua"/>
     <Script file="ItemTextFrame.lua"/>
     <Script file="LFGFrame.lua"/>
     <Script file="LFGList.lua"/>
@@ -42,14 +42,17 @@
     <Script file="QuestInfo.lua"/>
     <Script file="QuestMapFrame.lua"/>
     <Script file="QueueStatusFrame.lua"/>
+    <Script file="QuickKeybind.lua"/>
     <Script file="RaidFrame.lua"/>
     <Script file="ReadyCheck.lua"/>
     <Script file="RecruitAFriendFrame.lua"/>
     <Script file="ScriptErrorsFrame.lua"/>
+    <Script file="SettingsPanel.lua"/>
     <Script file="SpellBookFrame.lua"/>
     <Script file="SplashFrame.lua"/>
     <Script file="StaticPopup.lua"/>
     <Script file="TabardFrame.lua"/>
+    <Script file="TalkingHeadUI.lua"/>
     <Script file="TaxiFrame.lua"/>
     <Script file="TimeManager.lua"/>
     <Script file="TradeFrame.lua"/>

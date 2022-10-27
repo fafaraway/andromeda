@@ -1,6 +1,15 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.BlizzThemes, function()
+    if not _G.ANDROMEDA_ADB.ReskinBlizz then
+        return
+    end
+
+    if C.IS_NEW_PATCH then
+        return
+    end
+    -- #TODO
+
     local styled
 
     _G.InterfaceOptionsFrame:HookScript('OnShow', function()

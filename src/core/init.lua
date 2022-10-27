@@ -179,5 +179,7 @@ F:RegisterEvent('PLAYER_LOGIN', function()
 
     F.Modules = modules
 
+    if F.InitCallback then F:InitCallback() end
+
     F:Printf(L['version: %s loaded.'], C.ADDON_VERSION)
 end)

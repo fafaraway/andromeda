@@ -29,6 +29,10 @@ local function ReplaceApplicantRoles(texture, atlas)
 end
 
 tinsert(C.BlizzThemes, function()
+    if not _G.ANDROMEDA_ADB.ReskinBlizz then
+        return
+    end
+
     local r, g, b = C.r, C.g, C.b
 
     local LFGListFrame = _G.LFGListFrame
@@ -78,9 +82,14 @@ tinsert(C.BlizzThemes, function()
     F.Reskin(searchPanel.BackButton)
     F.Reskin(searchPanel.BackToGroupButton)
     F.Reskin(searchPanel.SignUpButton)
-    F.Reskin(searchPanel.ScrollFrame.ScrollChild.StartGroupButton)
+    if C.IS_NEW_PATCH then
+        F.Reskin(searchPanel.ScrollBox.StartGroupButton)
+        F.ReskinTrimScroll(searchPanel.ScrollBar)
+    else
+        F.Reskin(searchPanel.ScrollFrame.ScrollChild.StartGroupButton)
+        F.ReskinScroll(searchPanel.ScrollFrame.scrollBar)
+    end
     F.ReskinInput(searchPanel.SearchBox)
-    F.ReskinScroll(searchPanel.ScrollFrame.scrollBar)
 
     searchPanel.RefreshButton:SetSize(24, 24)
     searchPanel.RefreshButton.Icon:SetPoint('CENTER')
@@ -102,9 +111,9 @@ tinsert(C.BlizzThemes, function()
                 result:SetPoint('TOPRIGHT', AutoCompleteFrame.Results[i - 1], 'BOTTOMRIGHT', 0, 1)
             end
 
-            result:SetNormalTexture('')
-            result:SetPushedTexture('')
-            result:SetHighlightTexture('')
+            result:SetNormalTexture(C.Assets.Textures.Blank)
+            result:SetPushedTexture(C.Assets.Textures.Blank)
+            result:SetHighlightTexture(C.Assets.Textures.Blank)
 
             local bg = F.CreateBDFrame(result, 0.5)
             local hl = result:CreateTexture(nil, 'BACKGROUND')
@@ -139,7 +148,7 @@ tinsert(C.BlizzThemes, function()
         F.StripTextures(header)
         header.Label:SetFont(C.Assets.Fonts.Regular, 14, 'OUTLINE')
         header.Label:SetShadowColor(0, 0, 0, 0)
-        header:SetHighlightTexture('')
+        header:SetHighlightTexture(C.Assets.Textures.Blank)
 
         local bg = F.CreateBDFrame(header, 0.25)
         local hl = header:CreateTexture(nil, 'BACKGROUND')
@@ -153,7 +162,7 @@ tinsert(C.BlizzThemes, function()
         header:HookScript('OnLeave', Highlight_OnLeave)
 
         if prevHeader then
-            header:SetPoint('LEFT', prevHeader, 'RIGHT', C.mult, 0)
+            header:SetPoint('LEFT', prevHeader, 'RIGHT', C.MULT, 0)
         end
         prevHeader = header
     end
@@ -163,7 +172,12 @@ tinsert(C.BlizzThemes, function()
     F.Reskin(applicationViewer.EditButton)
     F.Reskin(applicationViewer.BrowseGroupsButton)
     F.ReskinCheckbox(applicationViewer.AutoAcceptButton)
-    F.ReskinScroll(_G.LFGListApplicationViewerScrollFrameScrollBar)
+
+    if C.IS_NEW_PATCH then
+        F.ReskinTrimScroll(applicationViewer.ScrollBar)
+    else
+        F.ReskinScroll(_G.LFGListApplicationViewerScrollFrameScrollBar)
+    end
 
     applicationViewer.RefreshButton:SetSize(24, 24)
     applicationViewer.RefreshButton.Icon:SetPoint('CENTER')
@@ -219,7 +233,6 @@ tinsert(C.BlizzThemes, function()
     F.ReskinCheckbox(entryCreation.PrivateGroup.CheckButton)
     F.ReskinCheckbox(entryCreation.CrossFactionGroup.CheckButton)
 
-
     -- [[ Role count ]]
 
     hooksecurefunc('LFGListGroupDataDisplayRoleCount_Update', function(self)
@@ -258,7 +271,12 @@ tinsert(C.BlizzThemes, function()
     F.Reskin(finderDialog.SelectButton)
     F.Reskin(finderDialog.CancelButton)
     F.ReskinInput(finderDialog.EntryBox)
-    F.ReskinScroll(finderDialog.ScrollFrame.scrollBar)
+
+    if C.IS_NEW_PATCH then
+        F.ReskinTrimScroll(finderDialog.ScrollBar)
+    else
+        F.ReskinScroll(finderDialog.ScrollFrame.scrollBar)
+    end
 
     -- [[ Application dialog ]]
 

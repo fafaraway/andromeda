@@ -241,10 +241,6 @@ NAMEPLATE.AuraFilterList = {
 function UNITFRAME.AuraFilter(element, unit, button, name, _, _, debuffType, _, _, caster, isStealable, _, spellID, _, isBossAura, _, nameplateShowAll)
     local style = element.__owner.unitStyle
 
-    if C.DB.Nameplate.ColorByDot and style == 'nameplate' and caster == 'player' and C.DB['Nameplate']['DotSpellsList'][spellID] then
-        element.hasCustomDebuff = true
-    end
-
     if name and spellID == 209859 then
         element.bolster = element.bolster + 1
         if not element.bolsterIndex then
@@ -258,6 +254,10 @@ function UNITFRAME.AuraFilter(element, unit, button, name, _, _, debuffType, _, 
             return false
         end
     elseif style == 'nameplate' or style == 'boss' or style == 'arena' then
+        if C.DB.Nameplate.ColorByDot and isMine[caster] and C.DB['Nameplate']['DotSpellsList'][spellID] then
+            element.hasCustomDebuff = true
+        end
+
         if element.__owner.plateType == 'NameOnly' then
             return NAMEPLATE.AuraFilterList[1][spellID]
         elseif NAMEPLATE.AuraFilterList[2][spellID] then
@@ -656,7 +656,7 @@ function UNITFRAME.GroupDebuffFilter(element, _, _, _, _, _, _, _, _, caster, _,
     local parent = element.__owner
     if C.GroupDebuffsBlackList[spellID] then
         return false
-    elseif (C.DB.Unitframe.CornerIndicator and UNITFRAME.CornerSpellsList[spellID]) or parent.DebuffWatcher.spellID == spellID or parent.rawSpellID == spellID then
+    elseif (C.DB.Unitframe.CornerIndicator and UNITFRAME.CornerSpellsList[spellID]) or parent.DebuffWatcher.spellID == spellID then
         return false
     elseif isBossAura or SpellIsPriorityAura(spellID) then
         return true

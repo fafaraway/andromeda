@@ -42,6 +42,9 @@ CALLBACKS
 local _, ns = ...
 local cargBags = ns.cargBags
 
+local isBeta = select(4, GetBuildInfo()) == 100002 -- 10.0.2
+local GetContainerNumFreeSlots = isBeta and C_Container.GetContainerNumFreeSlots or GetContainerNumFreeSlots
+
 local tagPool, tagEvents, object = {}, {}
 local function tagger(tag, ...) return object.tags[tag] and object.tags[tag](object, ...) or "" end
 
@@ -93,11 +96,28 @@ end
 -- Tags
 local function GetNumFreeSlots(name)
 	if name == "Bag" then
-		return CalculateTotalNumberOfFreeBagSlots()
+		if ns[2].IS_NEW_PATCH then
+			local totalFree, freeSlots, bagFamily = 0
+			for i = 0, 4 do -- reagent bank excluded
+				freeSlots, bagFamily = GetContainerNumFreeSlots(i)
+				if bagFamily == 0 then
+					totalFree = totalFree + freeSlots
+				end
+			end
+			return totalFree
+		else
+			return CalculateTotalNumberOfFreeBagSlots()
+		end
 	elseif name == "Bank" then
 		local numFreeSlots = GetContainerNumFreeSlots(-1)
-		for bagID = 5, 11 do
-			numFreeSlots = numFreeSlots + GetContainerNumFreeSlots(bagID)
+		if ns[2].IS_NEW_PATCH then
+			for bagID = 6, 12 do
+				numFreeSlots = numFreeSlots + GetContainerNumFreeSlots(bagID)
+			end
+		else
+			for bagID = 5, 11 do
+				numFreeSlots = numFreeSlots + GetContainerNumFreeSlots(bagID)
+			end
 		end
 		return numFreeSlots
 	elseif name == "Reagent" then

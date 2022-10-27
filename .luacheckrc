@@ -25,7 +25,7 @@ ignore = {
     '431',          -- shadowing upvalue
     '432',          -- shadowing upvalue argument
     '512',          -- loop can be executed at most once
-
+    '542',          -- empty if branch.
 }
 
 globals = {
@@ -450,6 +450,7 @@ globals = {
     'ContainerRefundItemPurchase',
     'ConvertSecondsToUnits',
     'CopyToClipboard',
+    'CreateColor',
     'CreateFont',
     'CreateFrame',
     'CreateFromMixins',
@@ -1542,6 +1543,7 @@ globals = {
     'IsAutoRepeatAction',
     'IsAutoRepeatSpell',
     'IsAvailableQuestTrivial',
+    'IsAzeriteAvailable',
     'IsBNLogin',
     'IsBagSlotFlagEnabledOnOtherBags',
     'IsBagSlotFlagEnabledOnOtherBankBags',
@@ -2491,12 +2493,14 @@ globals = {
     'C_ChatInfo',
     'C_ChromieTime',
     'C_ClassColor',
+    'C_ClassTalents',
     'C_ClassTrial',
     'C_ClickBindings',
     'C_Club',
     'C_ClubFinder',
     'C_Commentator',
     'C_Console',
+    'C_Container',
     'C_ContributionCollector',
     'C_CovenantCallings',
     'C_CovenantPreview',
@@ -2538,6 +2542,7 @@ globals = {
     'C_LoreText',
     'C_LossOfControl',
     'C_Mail',
+    'C_MajorFactions',
     'C_Map',
     'C_MapExplorationInfo',
     'C_MerchantFrame',
@@ -2594,6 +2599,7 @@ globals = {
     'C_ToyBox',
     'C_ToyBoxInfo',
     'C_TradeSkillUI',
+    'C_Traits',
     'C_Transmog',
     'C_TransmogCollection',
     'C_Trophy',
@@ -2665,6 +2671,20 @@ globals = {
     'HybridScrollFrame_GetOffset',
     'FCF_SetChatWindowFontSize',
     'BNet_GetClientTexture',
+    'BNet_GetBattlenetClientAtlas',
+    'QuestInfoItem_OnClick',
     'RegisterAttributeDriver',
-    'SecureHandlerSetFrameRef'
+    'SecureHandlerSetFrameRef',
+    'SpellBook_GetSpellBookSlot',
+    'FCF_SavePositionAndDimensions',
+    'GetEmpowerStageDuration',
+    'SetItemCraftingQualityOverlay',
+    'ArtifactBarGetNumArtifactTraitsPurchasableFromXP',
+    'UpdateUIPanelPositions',
+    'GetUnitEmpowerStageDuration',
+    'BNet_GetClientEmbeddedTexture',
+    'BNet_GetClientEmbeddedAtlas',
+    'UIDropDownMenu_RefreshAll',
+    'UnitTokenFromGUID',
+    'InClickBindingMode'
 }

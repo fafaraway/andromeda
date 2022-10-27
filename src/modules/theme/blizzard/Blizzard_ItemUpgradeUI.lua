@@ -15,7 +15,7 @@ C.Themes['Blizzard_ItemUpgradeUI'] = function()
 
     hooksecurefunc(ItemUpgradeFrame, 'Update', function(self)
         if self.upgradeInfo then
-            self.UpgradeItemButton:SetPushedTexture(nil)
+            self.UpgradeItemButton:SetPushedTexture(C.Assets.Textures.Blank)
         end
     end)
 

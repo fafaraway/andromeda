@@ -27,7 +27,6 @@ function THEME:LoadAddOnSkins()
     for _, func in pairs(C.BlizzThemes) do
         func()
     end
-
     wipe(C.BlizzThemes)
 
     if not _G.ANDROMEDA_ADB.ReskinBlizz then
@@ -57,11 +56,13 @@ do
         bar:SetSize(200, 18)
         F.StripTextures(bar)
 
-        local statusbar = _G[bar:GetName() .. 'StatusBar']
+        local statusbar = bar.StatusBar or _G[bar:GetName() .. 'StatusBar'] -- isNewPatch
         if statusbar then
             statusbar:SetAllPoints()
-            statusbar:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
-        else
+            if not C.IS_NEW_PATCH then
+                statusbar:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
+            end
+        elseif bar.SetStatusBarTexture then
             bar:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
         end
 
@@ -85,9 +86,9 @@ do
             local bar = _G['MirrorTimer' .. i]
             ReskinTimerBar(bar)
 
-            local text = _G['MirrorTimer' .. i .. 'Text']
-            text:ClearAllPoints()
-            text:SetPoint('CENTER', bar)
+            -- local text = _G['MirrorTimer' .. i .. 'Text']
+            -- text:ClearAllPoints()
+            -- text:SetPoint('CENTER', bar)
 
             if previous then
                 bar:SetPoint('TOP', previous, 'BOTTOM', 0, -5)

@@ -1,5 +1,7 @@
 local F, C = unpack(select(2, ...))
 
+if C.IS_NEW_PATCH then return end
+
 C.Themes['Blizzard_TalkingHeadUI'] = function()
     local TalkingHeadFrame = _G.TalkingHeadFrame
     TalkingHeadFrame:SetScale(0.9)

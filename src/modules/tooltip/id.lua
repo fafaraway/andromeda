@@ -130,9 +130,11 @@ function TOOLTIP:VariousID()
         TOOLTIP.AddLineForID(self, id, types.currency)
     end)
 
-    hooksecurefunc(_G.GameTooltip, 'SetCurrencyTokenByID', function(self, id)
-        TOOLTIP.AddLineForID(self, id, types.currency)
-    end)
+    if not C.IS_NEW_PATCH then
+        hooksecurefunc(_G.GameTooltip, 'SetCurrencyTokenByID', function(self, id)
+            TOOLTIP.AddLineForID(self, id, types.currency)
+        end)
+    end
 
     -- NPCs
     _G.GameTooltip:HookScript('OnTooltipSetUnit', function(self)

@@ -31,9 +31,9 @@ tinsert(C.BlizzThemes, function()
 
         _G['StaticPopup' .. i .. 'ItemFrameNameFrame']:Hide()
 
-        bu:SetNormalTexture('')
-        bu:SetHighlightTexture('')
-        bu:SetPushedTexture('')
+        bu:SetNormalTexture(C.Assets.Textures.Blank)
+        bu:SetHighlightTexture(C.Assets.Textures.Blank)
+        bu:SetPushedTexture(C.Assets.Textures.Blank)
         bu.bg = F.ReskinIcon(icon)
         F.ReskinIconBorder(bu.IconBorder)
 
@@ -106,8 +106,8 @@ tinsert(C.BlizzThemes, function()
         if info.closeButton then
             local closeButton = _G[dialog:GetName() .. 'CloseButton']
 
-            closeButton:SetNormalTexture('')
-            closeButton:SetPushedTexture('')
+            closeButton:SetNormalTexture(C.Assets.Textures.Blank)
+            closeButton:SetPushedTexture(C.Assets.Textures.Blank)
 
             if info.closeButtonIsHide then
                 closeButton.__texture:Hide()

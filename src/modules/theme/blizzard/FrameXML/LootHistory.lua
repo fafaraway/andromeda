@@ -18,7 +18,7 @@ tinsert(C.BlizzThemes, function()
 
     -- [[ Resize button ]]
 
-    LootHistoryFrame.ResizeButton:SetNormalTexture('')
+    LootHistoryFrame.ResizeButton:SetNormalTexture(C.Assets.Textures.Blank)
     LootHistoryFrame.ResizeButton:SetHeight(8)
 
     do

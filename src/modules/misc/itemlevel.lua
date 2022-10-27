@@ -2,6 +2,8 @@ local F, C = unpack(select(2, ...))
 local ITEMLEVEL = F:GetModule('ItemLevel')
 local TT = F:GetModule('Tooltip')
 
+local GetContainerItemLink = C.IS_BETA and C_Container.GetContainerItemLink or _G.GetContainerItemLink
+
 local inspectSlots = {
     'Head',
     'Neck',

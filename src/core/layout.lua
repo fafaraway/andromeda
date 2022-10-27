@@ -2,65 +2,70 @@ local F, C, L = unpack(select(2, ...))
 local M = F:GetModule('Layout')
 
 -- Grids
+
 local toggle = 0
-local shadeFrame = CreateFrame('Frame')
-local shadeTexture = shadeFrame:CreateTexture(nil, 'BACKGROUND', nil, -8)
 
-shadeFrame:SetFrameStrata('BACKGROUND')
-shadeFrame:SetWidth(GetScreenWidth() * _G.UIParent:GetEffectiveScale())
-shadeFrame:SetHeight(GetScreenHeight() * _G.UIParent:GetEffectiveScale())
-shadeTexture:SetAllPoints(shadeFrame)
-shadeFrame:SetPoint('CENTER', 0, 0)
+do
+    -- local shadeFrame = CreateFrame('Frame')
+    -- local shadeTexture = shadeFrame:CreateTexture(nil, 'BACKGROUND', nil, -8)
 
-local crosshairFrameNS = CreateFrame('Frame')
-local crosshairTextureNS = crosshairFrameNS:CreateTexture(nil, 'TOOLTIP')
+    -- shadeFrame:SetFrameStrata('BACKGROUND')
+    -- shadeFrame:SetWidth(GetScreenWidth() * _G.UIParent:GetEffectiveScale())
+    -- shadeFrame:SetHeight(GetScreenHeight() * _G.UIParent:GetEffectiveScale())
+    -- shadeTexture:SetAllPoints(shadeFrame)
+    -- shadeFrame:SetPoint('CENTER', 0, 0)
 
-crosshairFrameNS:SetFrameStrata('TOOLTIP')
-crosshairFrameNS:SetWidth(1)
-crosshairFrameNS:SetHeight(GetScreenHeight() * _G.UIParent:GetEffectiveScale())
-crosshairTextureNS:SetAllPoints(crosshairFrameNS)
-crosshairTextureNS:SetColorTexture(0, 0, 0, 1)
+    -- M.crosshairFrameNS = CreateFrame('Frame')
+    -- M.crosshairTextureNS = M.crosshairFrameNS:CreateTexture(nil, 'TOOLTIP')
 
-local crosshairFrameEW = CreateFrame('Frame')
-local crosshairTextureEW = crosshairFrameEW:CreateTexture(nil, 'TOOLTIP')
+    -- M.crosshairFrameNS:SetFrameStrata('TOOLTIP')
+    -- M.crosshairFrameNS:SetWidth(1)
+    -- M.crosshairFrameNS:SetHeight(GetScreenHeight() * _G.UIParent:GetEffectiveScale())
+    -- M.crosshairTextureNS:SetAllPoints(M.crosshairFrameNS)
+    -- M.crosshairTextureNS:SetColorTexture(0, 0, 0, 1)
 
-crosshairFrameEW:SetFrameStrata('TOOLTIP')
-crosshairFrameEW:SetWidth(GetScreenWidth() * _G.UIParent:GetEffectiveScale())
-crosshairFrameEW:SetHeight(1)
-crosshairTextureEW:SetAllPoints(crosshairFrameEW)
-crosshairTextureEW:SetColorTexture(0, 0, 0, 1)
+    -- M.crosshairFrameEW = CreateFrame('Frame')
+    -- M.crosshairTextureEW = M.crosshairFrameEW:CreateTexture(nil, 'TOOLTIP')
 
-local function clear()
-    shadeFrame:Hide()
-    crosshairFrameNS:Hide()
-    crosshairFrameEW:Hide()
-end
+    -- M.crosshairFrameEW:SetFrameStrata('TOOLTIP')
+    -- M.crosshairFrameEW:SetWidth(GetScreenWidth() * _G.UIParent:GetEffectiveScale())
+    -- M.crosshairFrameEW:SetHeight(1)
+    -- M.crosshairTextureEW:SetAllPoints(M.crosshairFrameEW)
+    -- M.crosshairTextureEW:SetColorTexture(0, 0, 0, 1)
 
-local function shade(r, g, b, a)
-    shadeTexture:SetColorTexture(r, g, b, a)
-    shadeFrame:Show()
-end
+    -- function M.ClearCrosshair()
+    --     shadeFrame:Hide()
+    --     M.crosshairFrameNS:Hide()
+    --     M.crosshairFrameEW:Hide()
+    -- end
 
-local function follow()
-    local mouseX, mouseY = GetCursorPosition()
-    crosshairFrameNS:SetPoint('TOPLEFT', mouseX, 0)
-    crosshairFrameEW:SetPoint('BOTTOMLEFT', 0, mouseY)
-end
+    -- function M.ShadeCrosshair(r, g, b, a)
+    --     shadeTexture:SetColorTexture(r, g, b, a)
+    --     shadeFrame:Show()
+    -- end
 
-local function crosshair(arg)
-    local mouseX, mouseY = GetCursorPosition()
-    crosshairFrameNS:SetPoint('TOPLEFT', mouseX, 0)
-    crosshairFrameEW:SetPoint('BOTTOMLEFT', 0, mouseY)
-    crosshairFrameNS:Show()
-    crosshairFrameEW:Show()
-    if arg == 'follow' then
-        crosshairFrameNS:SetScript('OnUpdate', follow)
-    else
-        crosshairFrameNS:SetScript('OnUpdate', nil)
-    end
+    -- local function follow()
+    --     local mouseX, mouseY = GetCursorPosition()
+    --     M.crosshairFrameNS:SetPoint('TOPLEFT', mouseX, 0)
+    --     M.crosshairFrameEW:SetPoint('BOTTOMLEFT', 0, mouseY)
+    -- end
+
+    -- function M.ShowCrosshair(arg)
+    --     local mouseX, mouseY = GetCursorPosition()
+    --     M.crosshairFrameNS:SetPoint('TOPLEFT', mouseX, 0)
+    --     M.crosshairFrameEW:SetPoint('BOTTOMLEFT', 0, mouseY)
+    --     M.crosshairFrameNS:Show()
+    --     M.crosshairFrameEW:Show()
+    --     if arg == 'follow' then
+    --         M.crosshairFrameNS:SetScript('OnUpdate', follow)
+    --     else
+    --         M.crosshairFrameNS:SetScript('OnUpdate', nil)
+    --     end
+    -- end
 end
 
 -- Movable Frame
+
 function F:CreateMF(parent, saved)
     local frame = parent or self
     frame:SetMovable(true)
@@ -89,6 +94,31 @@ function F:RestoreMF()
         self:ClearAllPoints()
         self:SetPoint(unpack(C.DB['UIAnchorTemp'][name]))
     end
+end
+
+function F:UpdateBlizzFrame()
+    if InCombatLockdown() then
+        return
+    end
+    if self.isRestoring then
+        return
+    end
+    self.isRestoring = true
+    F.RestoreMF(self)
+    self.isRestoring = nil
+end
+
+function F:RestoreBlizzFrame()
+    if IsControlKeyDown() then
+        C.DB['UIAnchorTemp'][self:GetName()] = nil
+        UpdateUIPanelPositions(self)
+    end
+end
+
+function F:BlizzFrameMover(frame)
+    F.CreateMF(frame, nil, true)
+    hooksecurefunc(frame, 'SetPoint', F.UpdateBlizzFrame)
+    frame:HookScript('OnMouseUp', F.RestoreBlizzFrame)
 end
 
 -- Frame Mover
@@ -254,7 +284,7 @@ function M:LockElements()
     f:Hide()
 
     toggle = 0
-    clear()
+    -- M.ClearCrosshair()
 end
 
 -- Mover Console
@@ -286,16 +316,16 @@ local function CreateConsole()
 
     -- Grids
     bu[2]:SetScript('OnClick', function()
-        if toggle == 0 then
-            shade(1, 1, 1, 0.85)
-            crosshairTextureNS:SetColorTexture(0, 0, 0, 1)
-            crosshairTextureEW:SetColorTexture(0, 0, 0, 1)
-            crosshair('follow')
-            toggle = 1
-        else
-            toggle = 0
-            clear()
-        end
+        -- if toggle == 0 then
+        --     M.ShadeCrosshair(1, 1, 1, 0.85)
+        --     M.crosshairTextureNS:SetColorTexture(0, 0, 0, 1)
+        --     M.crosshairTextureEW:SetColorTexture(0, 0, 0, 1)
+        --     M.ShowCrosshair('follow')
+        --     toggle = 1
+        -- else
+        --     toggle = 0
+        --     M.ClearCrosshair()
+        -- end
     end)
 
     -- Reset
@@ -307,12 +337,7 @@ local function CreateConsole()
     header:SetSize(260, 30)
     header:SetPoint('TOP')
     F.CreateMF(header, f)
-    local tips = '|nCTRL +'
-        .. C.MOUSE_RIGHT_BUTTON
-        .. L['Reset default anchor']
-        .. '|nSHIFT +'
-        .. C.MOUSE_RIGHT_BUTTON
-        .. L['Hide the frame']
+    local tips = '|nCTRL +' .. C.MOUSE_RIGHT_BUTTON .. L['Reset default anchor'] .. '|nSHIFT +' .. C.MOUSE_RIGHT_BUTTON .. L['Hide the frame']
     header.title = L['Layout']
     F.AddTooltip(header, 'ANCHOR_TOP', tips, 'BLUE')
 
@@ -414,4 +439,116 @@ function M:OnLogin()
     updater:SetScript('OnUpdate', function()
         M.UpdateTrimFrame(updater.__owner)
     end)
+
+    M:DisableBlizzardMover()
+end
+
+-- Disable blizzard edit mode
+local function isUnitFrameEnable()
+    return C.DB['Unitframe']['Enable']
+end
+
+local function isBuffEnable()
+    return C.DB['Aura']['Enable'] or C.DB['Aura']['HideBlizFrame']
+end
+
+local function isActionbarEnable()
+    return C.DB['Actionbar']['Enable']
+end
+
+local function isCastbarEnable()
+    return C.DB['Unitframe']['Enable']
+end
+
+local function isPartyEnable()
+    return C.DB['Unitframe']['Enable'] and C.DB['Unitframe']['PartyFrame']
+end
+
+local function isRaidEnable()
+    return C.DB['Unitframe']['Enable'] and C.DB['Unitframe']['RaidFrame']
+end
+
+local function isArenaEnable()
+    return C.DB['Unitframe']['Enable'] and C.DB['Unitframe']['Arena']
+end
+
+local ignoredFrames = {
+    -- ActionBars
+    ['StanceBar'] = isActionbarEnable,
+    ['EncounterBar'] = isActionbarEnable,
+    ['PetActionBar'] = isActionbarEnable,
+    ['PossessActionBar'] = isActionbarEnable,
+    ['MainMenuBarVehicleLeaveButton'] = isActionbarEnable,
+    ['MultiBarBottomLeft'] = isActionbarEnable,
+    ['MultiBarBottomRight'] = isActionbarEnable,
+    ['MultiBarLeft'] = isActionbarEnable,
+    ['MultiBarRight'] = isActionbarEnable,
+    ['MultiBar5'] = isActionbarEnable,
+    ['MultiBar6'] = isActionbarEnable,
+    ['MultiBar7'] = isActionbarEnable,
+    -- Auras
+    ['BuffFrame'] = isBuffEnable,
+    ['DebuffFrame'] = isBuffEnable,
+    -- UnitFrames
+    ['PlayerFrame'] = isUnitFrameEnable,
+    ['PlayerCastingBarFrame'] = isCastbarEnable,
+    ['FocusFrame'] = isUnitFrameEnable,
+    ['TargetFrame'] = isUnitFrameEnable,
+    ['BossTargetFrameContainer'] = isUnitFrameEnable,
+    ['PartyFrame'] = isPartyEnable,
+    ['CompactRaidFrameContainer'] = isRaidEnable,
+    ['ArenaEnemyFramesContainer'] = isArenaEnable,
+    -- Misc
+    ['MinimapCluster'] = function()
+        return C.DB['Map']['Minimap']
+    end,
+    ['GameTooltipDefaultContainer'] = function()
+        return true
+    end,
+}
+
+function M:DisableBlizzardMover()
+    if not C.IS_NEW_PATCH then
+        return
+    end
+
+    local editMode = _G.EditModeManagerFrame
+
+    -- remove the initial registers
+    local registered = editMode.registeredSystemFrames
+    for i = #registered, 1, -1 do
+        local name = registered[i]:GetName()
+        local ignore = ignoredFrames[name]
+
+        if ignore and ignore() then
+            tremove(editMode.registeredSystemFrames, i)
+        end
+    end
+
+    -- account settings will be tainted
+    local mixin = editMode.AccountSettings
+    if isCastbarEnable() then
+        mixin.RefreshCastBar = nop
+    end
+    if isBuffEnable() then
+        mixin.RefreshAuraFrame = nop
+    end
+    if isRaidEnable() then
+        mixin.RefreshRaidFrames = nop
+    end
+    if isArenaEnable() then
+        mixin.RefreshArenaFrames = nop
+    end
+    if isPartyEnable() then
+        mixin.RefreshPartyFrames = nop
+    end
+    if isUnitFrameEnable() then
+        mixin.RefreshTargetAndFocus = nop
+        mixin.RefreshBossFrames = nop
+    end
+    if isActionbarEnable() then
+        mixin.RefreshEncounterBar = nop
+        mixin.RefreshActionBarShown = nop
+        mixin.RefreshVehicleLeaveButton = nop
+    end
 end

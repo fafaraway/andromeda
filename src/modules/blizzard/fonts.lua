@@ -19,7 +19,7 @@ local function ReplaceFont(obj, font, size, flag, shadow)
     if outline then
         obj:SetFont(font, size, 'OUTLINE')
     else
-        obj:SetFont(font, size, flag and 'OUTLINE')
+        obj:SetFont(font, size, flag and 'OUTLINE' or '')
     end
 
     if shadow then
@@ -215,6 +215,11 @@ local function SetupBlizFonts()
 
     ReplaceFont(_G.GameFontNormal, NORMAL, 13)
     ReplaceFont(_G.QuestFont, NORMAL, 15)
+
+    -- force to whiten some fonts
+    _G.GameFontBlack:SetTextColor(1, 1, 1)
+    _G.GameFontBlackMedium:SetTextColor(1, 1, 1)
+    _G.CoreAbilityFont:SetTextColor(1, 1, 1)
 
     F:UnregisterEvent('ADDON_LOADED', SetupBlizFonts)
 end

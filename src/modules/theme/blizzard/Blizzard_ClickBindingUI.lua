@@ -83,4 +83,8 @@ C.Themes['Blizzard_ClickBindingUI'] = function()
     frame.TutorialFrame.TitleBg:Hide()
     F.SetBD(frame.TutorialFrame)
     F.ReskinClose(frame.TutorialFrame.CloseButton)
+
+    if frame.EnableMouseoverCastCheckbox then -- isNewPatch
+        F.ReskinCheckbox(frame.EnableMouseoverCastCheckbox)
+    end
 end

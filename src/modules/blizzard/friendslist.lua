@@ -1,6 +1,8 @@
 local F, C, L = unpack(select(2, ...))
 local BLIZZARD = F:GetModule('Blizzard')
 
+if C.IS_NEW_PATCH then return end
+
 local WOW_PROJECT_CLASSIC_TBC = 5
 
 local gameIcons = {

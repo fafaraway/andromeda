@@ -60,8 +60,8 @@ C.Themes['Blizzard_GuildControlUI'] = function()
 
                 for _, name in pairs(checkboxes) do
                     local box = ownedTab[name]
-                    box:SetNormalTexture('')
-                    box:SetPushedTexture('')
+                    box:SetNormalTexture(C.Assets.Textures.Blank)
+                    box:SetPushedTexture(C.Assets.Textures.Blank)
                     box:SetHighlightTexture(C.Assets.Textures.Backdrop)
 
                     local check = box:GetCheckedTexture()

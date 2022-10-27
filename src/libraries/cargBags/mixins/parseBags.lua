@@ -31,6 +31,8 @@ DESCRIPTION
 local _, ns = ...
 local cargBags = ns.cargBags
 
+local isNewPatch = select(4, GetBuildInfo()) == 100000
+
 local bagStrings = {
 	["backpack"]		= { 0 },
 	["bags"]			= { 1, 2, 3, 4 },
@@ -41,6 +43,18 @@ local bagStrings = {
 	["bank"]			= { 5, 6, 7, 8, 9, 10, 11 },
 	["keyring"]			= { -2 },
 }
+if isNewPatch then
+	bagStrings = {
+		["backpack"]		= { 0 },
+		["bags"]			= { 1, 2, 3, 4, 5 },
+		["backpack+bags"]	= { 0, 1, 2, 3, 4, 5 },
+		["bankframe"]		= { -1 },
+		["bankframe+bank"]	= { -1, 6, 7, 8, 9, 10, 11, 12 },
+		["bankreagent"]		= { -3 },
+		["bank"]			= { 6, 7, 8, 9, 10, 11, 12 },
+		["keyring"]			= { -2 },
+	}
+end
 cargBags.BagStrings = bagStrings
 
 --[[!

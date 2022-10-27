@@ -39,7 +39,15 @@ tinsert(C.BlizzThemes, function()
     end)
 
     F.ReskinPortraitFrame(_G.PVEFrame)
-    F.ReskinTab(_G.PVEFrameTab1)
-    F.ReskinTab(_G.PVEFrameTab2)
-    F.ReskinTab(_G.PVEFrameTab3)
+
+    for i = 1, 3 do
+        local tab = _G['PVEFrameTab' .. i]
+        if tab then
+            F.ReskinTab(tab)
+            if C.IS_NEW_PATCH and i ~= 1 then
+                tab:ClearAllPoints()
+                tab:SetPoint('TOPLEFT', _G['PVEFrameTab' .. (i - 1)], 'TOPRIGHT', -15, 0)
+            end
+        end
+    end
 end)

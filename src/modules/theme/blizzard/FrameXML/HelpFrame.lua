@@ -7,7 +7,11 @@ tinsert(C.BlizzThemes, function()
 
     F.StripTextures(_G.HelpFrame)
     F.SetBD(_G.HelpFrame)
-    F.ReskinClose(_G.HelpFrameCloseButton)
+    if C.IS_NEW_PATCH then
+        F.ReskinClose(_G.HelpFrame.CloseButton)
+    else
+        F.ReskinClose(_G.HelpFrameCloseButton)
+    end
     F.StripTextures(_G.HelpBrowser.BrowserInset)
 
     F.StripTextures(_G.BrowserSettingsTooltip)

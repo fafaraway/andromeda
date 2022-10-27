@@ -49,7 +49,7 @@ C.Themes['Blizzard_GuildRecruitmentUI'] = function()
                     select(i, button:GetRegions()):Hide()
                 end
                 button.selectedTex:SetTexture('')
-                button:SetHighlightTexture('')
+                button:SetHighlightTexture(C.Assets.Textures.Blank)
                 button.bg = F.CreateBDFrame(button, 0.25)
                 button.bg:SetPoint('TOPLEFT', 3, -3)
                 button.bg:SetPoint('BOTTOMRIGHT', -3, 3)

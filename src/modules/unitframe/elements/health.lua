@@ -175,7 +175,12 @@ function UNITFRAME:CreateHealthBar(self)
         gradient:SetPoint('TOPLEFT')
         gradient:SetPoint('BOTTOMRIGHT')
         gradient:SetTexture(C.Assets.Textures.Backdrop)
-        gradient:SetGradientAlpha('VERTICAL', 0.3, 0.3, 0.3, 0.6, 0.1, 0.1, 0.1, 0.6)
+
+        if C.IS_NEW_PATCH then
+            gradient:SetGradient('VERTICAL', CreateColor(0.3, 0.3, 0.3, 0.6), CreateColor(0.1, 0.1, 0.1, 0.6))
+        else
+            gradient:SetGradientAlpha('VERTICAL', 0.3, 0.3, 0.3, 0.6, 0.1, 0.1, 0.1, 0.6)
+        end
 
         self.gradient = gradient
     else

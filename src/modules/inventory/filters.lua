@@ -22,11 +22,22 @@ end
 
 -- Default filter
 local function isItemInBag(item)
-    return item.bagID >= 0 and item.bagID <= 4
+    if C.IS_NEW_PATCH then
+        return item.bagId >= 0 and item.bagId <= 5
+    else
+        return item.bagId >= 0 and item.bagId <= 4
+    end
 end
 
 local function isItemInBank(item)
-    return item.bagID == -1 or item.bagID >= 5 and item.bagID <= 11
+    return item.bagId >= 0 and item.bagId <= 4
+end
+
+local function isItemInBagReagent(item)
+    if not C.IS_NEW_PATCH then
+        return
+    end
+    return item.bagId == 5
 end
 
 local function isItemJunk(item)
@@ -38,9 +49,7 @@ local function isItemJunk(item)
         return
     end
 
-    return (item.quality == _G.LE_ITEM_QUALITY_POOR or _G.ANDROMEDA_ADB['CustomJunkList'][item.id])
-        and item.hasPrice
-        and not INVENTORY:IsPetTrashCurrency(item.id)
+    return (item.quality == Enum.ItemQuality.Poor or _G.ANDROMEDA_ADB['CustomJunkList'][item.id]) and item.hasPrice and not INVENTORY:IsPetTrashCurrency(item.id)
 end
 
 local function isItemEquipSet(item)
@@ -72,9 +81,9 @@ local function isAzeriteArmor(item)
 end
 
 local iLvlClassIDs = {
-    [_G.LE_ITEM_CLASS_GEM] = _G.LE_ITEM_GEM_ARTIFACTRELIC,
-    [_G.LE_ITEM_CLASS_ARMOR] = 0,
-    [_G.LE_ITEM_CLASS_WEAPON] = 0,
+    [Enum.ItemClass.Gem] = Enum.ItemGemSubclass.Artifactrelic,
+    [Enum.ItemClass.Armor] = 0,
+    [Enum.ItemClass.Weapon] = 0,
 }
 
 function INVENTORY:IsItemHasLevel(item)
@@ -91,12 +100,12 @@ local function isItemEquipment(item)
         return
     end
 
-    return item.link and item.quality > _G.LE_ITEM_QUALITY_COMMON and INVENTORY:IsItemHasLevel(item)
+    return item.link and item.quality > Enum.ItemQuality.Common and INVENTORY:IsItemHasLevel(item)
 end
 
 local consumableIDs = {
-    [_G.LE_ITEM_CLASS_CONSUMABLE] = true,
-    [_G.LE_ITEM_CLASS_ITEM_ENHANCEMENT] = true,
+    [Enum.ItemClass.Consumable] = true,
+    [Enum.ItemClass.ItemEnhancement] = true,
 }
 
 local function isItemConsumable(item)
@@ -124,7 +133,7 @@ local function isItemLegendary(item)
         return
     end
 
-    return item.quality == _G.LE_ITEM_QUALITY_LEGENDARY
+    return item.quality == Enum.ItemQuality.Legendary
 end
 
 local isPetToy = {
@@ -132,8 +141,8 @@ local isPetToy = {
 }
 
 local collectionIDs = {
-    [_G.LE_ITEM_MISCELLANEOUS_MOUNT] = _G.LE_ITEM_CLASS_MISCELLANEOUS,
-    [_G.LE_ITEM_MISCELLANEOUS_COMPANION_PET] = _G.LE_ITEM_CLASS_MISCELLANEOUS,
+    [Enum.ItemMiscellaneousSubclass.Mount] = Enum.ItemClass.Miscellaneous,
+    [Enum.ItemMiscellaneousSubclass.CompanionPet] = Enum.ItemClass.Miscellaneous,
 }
 
 local function isMountOrPet(item)
@@ -186,7 +195,7 @@ local function isEmptySlot(item)
         return
     end
 
-    return INVENTORY.initComplete and not item.texture and INVENTORY.BagsType[item.bagID] == 0
+    return INVENTORY.initComplete and not item.texture and INVENTORY.BagsType[item.bagId] == 0
 end
 
 local function isTradeGoods(item)
@@ -202,7 +211,7 @@ local function isTradeGoods(item)
         return
     end
 
-    return item.classID == _G.LE_ITEM_CLASS_TRADEGOODS
+    return item.classID == Enum.ItemClass.Tradegoods
 end
 
 local function isQuestItem(item)
@@ -215,7 +224,6 @@ local function isQuestItem(item)
     end
 
     return item.questID or item.isQuestItem
-    --return item.classID == LE_ITEM_CLASS_QUESTITEM
 end
 
 local function isAnimaItem(item)
@@ -311,7 +319,7 @@ function INVENTORY:GetFilters()
     end
 
     filters.onlyReagent = function(item)
-        return item.bagID == -3 and not isEmptySlot(item)
+        return item.bagId == -3 and not isEmptySlot(item)
     end
 
     filters.bagCollection = function(item)
@@ -348,6 +356,10 @@ function INVENTORY:GetFilters()
 
     filters.bagRelic = function(item)
         return isItemInBag(item) and isKorthiaRelic(item)
+    end
+
+    filters.onlyBagReagent = function(item)
+        return isItemInBagReagent(item)
     end
 
     for i = 1, 5 do

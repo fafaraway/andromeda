@@ -17,7 +17,7 @@ end
 
 local function isQuestTitle(textLine)
     local r, g, b = textLine:GetTextColor()
-    if r > 0.99 and g > 0.82 and b == 0 then
+    if r > 0.99 and g > 0.8 and b == 0 then
         return true
     end
 end

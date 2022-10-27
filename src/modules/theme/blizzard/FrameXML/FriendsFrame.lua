@@ -5,12 +5,45 @@ local atlasToTex = {
     ['friendslist-invitebutton-alliance-normal'] = 'Interface\\FriendsFrame\\PlusManz-Alliance',
     ['friendslist-invitebutton-default-normal'] = 'Interface\\FriendsFrame\\PlusManz-PlusManz',
 }
-
 local function replaceInviteTex(self, atlas)
     local tex = atlasToTex[atlas]
     if tex then
-        self:SetTexture(tex)
+        self.ownerIcon:SetTexture(tex)
     end
+end
+
+local function reskinFriendButton(button)
+    if not button.styled then
+        local gameIcon = button.gameIcon
+        gameIcon:SetSize(22, 22)
+        gameIcon:SetTexCoord(0.17, 0.83, 0.17, 0.83)
+        button.background:Hide()
+        button:SetHighlightTexture(C.Assets.Textures.Backdrop)
+        button:GetHighlightTexture():SetVertexColor(0.24, 0.56, 1, 0.2)
+        button.bg = F.CreateBDFrame(gameIcon, 0)
+
+        local travelPass = button.travelPassButton
+        travelPass:SetSize(22, 22)
+        travelPass:SetPoint('TOPRIGHT', -3, -6)
+        F.CreateBDFrame(travelPass, 1)
+        travelPass.NormalTexture:SetAlpha(0)
+        travelPass.PushedTexture:SetAlpha(0)
+        travelPass.DisabledTexture:SetAlpha(0)
+        travelPass.HighlightTexture:SetColorTexture(1, 1, 1, 0.25)
+        travelPass.HighlightTexture:SetAllPoints()
+        gameIcon:SetPoint('TOPRIGHT', travelPass, 'TOPLEFT', -4, 0)
+
+        local icon = travelPass:CreateTexture(nil, 'ARTWORK')
+        icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+        icon:SetAllPoints()
+        button.newIcon = icon
+        travelPass.NormalTexture.ownerIcon = icon
+        hooksecurefunc(travelPass.NormalTexture, 'SetAtlas', replaceInviteTex)
+
+        button.styled = true
+    end
+
+    button.bg:SetShown(button.gameIcon:IsShown())
 end
 
 tinsert(C.BlizzThemes, function()
@@ -18,108 +51,99 @@ tinsert(C.BlizzThemes, function()
         return
     end
 
-    local loadInit
-    _G.FriendsFrame:HookScript('OnShow', function()
-        if loadInit then
-            return
-        end
-        for i = 1, 4 do
-            local tab = _G['FriendsFrameTab' .. i]
-            if tab then
-                F.ReskinTab(tab)
-                F.ResetTabAnchor(tab)
+    for i = 1, 4 do
+        local tab = _G['FriendsFrameTab' .. i]
+        if tab then
+            F.ReskinTab(tab)
+            F.ResetTabAnchor(tab)
+
+            if C.IS_NEW_PATCH and i ~= 1 then
+                tab:ClearAllPoints()
+                tab:SetPoint('TOPLEFT', _G['FriendsFrameTab' .. (i - 1)], 'TOPRIGHT', -15, 0)
             end
         end
-        loadInit = true
-    end)
-
+    end
     _G.FriendsFrameIcon:Hide()
     F.StripTextures(_G.IgnoreListFrame)
 
-    for i = 1, _G.FRIENDS_TO_DISPLAY do
-        local bu = _G['FriendsListFrameScrollFrameButton' .. i]
-        local ic = bu.gameIcon
-
-        bu.background:Hide()
-        bu:SetHighlightTexture(C.Assets.Textures.Backdrop)
-        bu:GetHighlightTexture():SetVertexColor(0.24, 0.56, 1, 0.2)
-        ic:SetSize(22, 22)
-        ic:SetTexCoord(0.17, 0.83, 0.17, 0.83)
-
-        bu.bg = CreateFrame('Frame', nil, bu)
-        bu.bg:SetAllPoints(ic)
-        F.CreateBDFrame(bu.bg, 0)
-
-        local travelPass = bu.travelPassButton
-        travelPass:SetSize(22, 22)
-        travelPass:SetPushedTexture(nil)
-        travelPass:SetDisabledTexture(nil)
-        travelPass:SetPoint('TOPRIGHT', -3, -6)
-        F.CreateBDFrame(travelPass, 1)
-        local nt = travelPass:GetNormalTexture()
-        nt:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-        hooksecurefunc(nt, 'SetAtlas', replaceInviteTex)
-        local hl = travelPass:GetHighlightTexture()
-        hl:SetColorTexture(1, 1, 1, 0.25)
-        hl:SetAllPoints()
-    end
-
-    local function UpdateScroll()
-        for i = 1, _G.FRIENDS_TO_DISPLAY do
-            local bu = _G['FriendsListFrameScrollFrameButton' .. i]
-            if bu.gameIcon:IsShown() then
-                bu.bg:Show()
-                bu.gameIcon:SetPoint('TOPRIGHT', bu.travelPassButton, 'TOPLEFT', -4, 0)
-            else
-                bu.bg:Hide()
+    if C.IS_NEW_PATCH then
+        local INVITE_RESTRICTION_NONE = 9
+        hooksecurefunc('FriendsFrame_UpdateFriendButton', function(button)
+            if button.gameIcon then
+                reskinFriendButton(button)
             end
-        end
-    end
-    hooksecurefunc('FriendsFrame_UpdateFriends', UpdateScroll)
-    hooksecurefunc(_G.FriendsListFrameScrollFrame, 'update', UpdateScroll)
 
-    local header = _G.FriendsListFrameScrollFrame.PendingInvitesHeaderButton
-    for i = 1, 11 do
-        select(i, header:GetRegions()):Hide()
-    end
-    local headerBg = F.CreateBDFrame(header, 0.25)
-    headerBg:SetPoint('TOPLEFT', 2, -2)
-    headerBg:SetPoint('BOTTOMRIGHT', -2, 2)
-
-    local function reskinInvites(self)
-        for invite in self:EnumerateActive() do
-            if not invite.styled then
-                F.Reskin(invite.AcceptButton)
-                F.Reskin(invite.DeclineButton)
-
-                invite.styled = true
+            if button.newIcon and button.buttonType == _G.FRIENDS_BUTTON_TYPE_BNET then
+                if FriendsFrame_GetInviteRestriction(button.id) == INVITE_RESTRICTION_NONE then
+                    button.newIcon:SetVertexColor(1, 1, 1)
+                else
+                    button.newIcon:SetVertexColor(0.5, 0.5, 0.5)
+                end
             end
-        end
-    end
+        end)
 
-    hooksecurefunc(_G.FriendsListFrameScrollFrame.invitePool, 'Acquire', reskinInvites)
+        hooksecurefunc('FriendsFrame_UpdateFriendInviteButton', function(button)
+            if not button.styled then
+                F.Reskin(button.AcceptButton)
+                F.Reskin(button.DeclineButton)
 
-    local INVITE_RESTRICTION_NONE = 9
-    hooksecurefunc('FriendsFrame_UpdateFriendButton', function(button)
-        if button.buttonType == _G.FRIENDS_BUTTON_TYPE_INVITE then
-            reskinInvites(_G.FriendsListFrameScrollFrame.invitePool)
-        elseif button.buttonType == _G.FRIENDS_BUTTON_TYPE_BNET then
-            local nt = button.travelPassButton:GetNormalTexture()
-            if FriendsFrame_GetInviteRestriction(button.id) == INVITE_RESTRICTION_NONE then
-                nt:SetVertexColor(1, 1, 1)
-            else
-                nt:SetVertexColor(0.3, 0.3, 0.3)
+                button.styled = true
             end
-        end
-    end)
+        end)
+
+        hooksecurefunc('FriendsFrame_UpdateFriendInviteHeaderButton', function(button)
+            if not button.styled then
+                button:DisableDrawLayer('BACKGROUND')
+                local bg = F.CreateBDFrame(button, 0.25)
+                bg:SetInside(button, 2, 2)
+                local hl = button:GetHighlightTexture()
+                hl:SetColorTexture(0.24, 0.56, 1, 0.2)
+                hl:SetInside(bg)
+
+                button.styled = true
+            end
+        end)
+    else
+        local pendingHeader = _G.FriendsListFrameScrollFrame.PendingInvitesHeaderButton
+        pendingHeader:DisableDrawLayer('BACKGROUND')
+        local bg = F.CreateBDFrame(pendingHeader, 0.25)
+        bg:SetInside(pendingHeader, 2, 2)
+        local hl = pendingHeader:GetHighlightTexture()
+        hl:SetColorTexture(0.24, 0.56, 1, 0.2)
+        hl:SetInside(bg)
+
+        local INVITE_RESTRICTION_NONE = 9
+        hooksecurefunc('FriendsFrame_UpdateFriendButton', function(button)
+            if button.gameIcon then
+                reskinFriendButton(button)
+            end
+
+            if button.buttonType == _G.FRIENDS_BUTTON_TYPE_INVITE then
+                for button in _G.FriendsListFrameScrollFrame.invitePool:EnumerateActive() do
+                    if not button.styled then
+                        F.Reskin(button.AcceptButton)
+                        F.Reskin(button.DeclineButton)
+
+                        button.styled = true
+                    end
+                end
+            elseif button.buttonType == _G.FRIENDS_BUTTON_TYPE_BNET then
+                if FriendsFrame_GetInviteRestriction(button.id) == INVITE_RESTRICTION_NONE then
+                    button.newIcon:SetVertexColor(1, 1, 1)
+                else
+                    button.newIcon:SetVertexColor(0.5, 0.5, 0.5)
+                end
+            end
+        end)
+    end
 
     _G.FriendsFrameStatusDropDown:ClearAllPoints()
     _G.FriendsFrameStatusDropDown:SetPoint('TOPLEFT', _G.FriendsFrame, 'TOPLEFT', 10, -28)
 
     for _, button in pairs({ _G.FriendsTabHeaderSoRButton, _G.FriendsTabHeaderRecruitAFriendButton }) do
-        button:SetPushedTexture('')
+        button:SetPushedTexture(C.Assets.Textures.Blank)
         button:GetRegions():SetTexCoord(unpack(C.TEX_COORD))
-        F.CreateBDFrame(button)
+        F.CreateBDFrame(button, 0.25)
     end
 
     -- FriendsFrameBattlenetFrame
@@ -132,6 +156,8 @@ tinsert(C.BlizzThemes, function()
 
     local broadcastButton = _G.FriendsFrameBattlenetFrame.BroadcastButton
     broadcastButton:SetSize(20, 20)
+    broadcastButton:GetNormalTexture():SetAlpha(0)
+    broadcastButton:GetPushedTexture():SetAlpha(0)
     F.Reskin(broadcastButton)
     local newIcon = broadcastButton:CreateTexture(nil, 'ARTWORK')
     newIcon:SetAllPoints()
@@ -142,21 +168,14 @@ tinsert(C.BlizzThemes, function()
     F.SetBD(broadcastFrame, nil, 10, -10, -10, 10)
     broadcastFrame.EditBox:DisableDrawLayer('BACKGROUND')
 
-    local bcfbg = F.CreateBDFrame(broadcastFrame.EditBox, 0, true)
-    bcfbg:SetPoint('TOPLEFT', -2, -2)
-    bcfbg:SetPoint('BOTTOMRIGHT', 2, 2)
+    local ebbg = F.CreateBDFrame(broadcastFrame.EditBox, 0, true)
+    ebbg:SetPoint('TOPLEFT', -2, -2)
+    ebbg:SetPoint('BOTTOMRIGHT', 2, 2)
 
     F.Reskin(broadcastFrame.UpdateButton)
     F.Reskin(broadcastFrame.CancelButton)
     broadcastFrame:ClearAllPoints()
     broadcastFrame:SetPoint('TOPLEFT', _G.FriendsFrame, 'TOPRIGHT', 3, 0)
-
-    local function BroadcastButton_SetTexture(self)
-        self.BroadcastButton:SetNormalTexture('')
-        self.BroadcastButton:SetPushedTexture('')
-    end
-    hooksecurefunc(broadcastFrame, 'ShowFrame', BroadcastButton_SetTexture)
-    hooksecurefunc(broadcastFrame, 'HideFrame', BroadcastButton_SetTexture)
 
     local unavailableFrame = _G.FriendsFrameBattlenetFrame.UnavailableInfoFrame
     F.StripTextures(unavailableFrame)
@@ -168,9 +187,17 @@ tinsert(C.BlizzThemes, function()
     F.Reskin(_G.FriendsFrameSendMessageButton)
     F.Reskin(_G.FriendsFrameIgnorePlayerButton)
     F.Reskin(_G.FriendsFrameUnsquelchButton)
-    F.ReskinScroll(_G.FriendsListFrameScrollFrame.scrollBar)
-    F.ReskinScroll(_G.IgnoreListFrameScrollFrame.scrollBar)
-    F.ReskinScroll(_G.WhoListScrollFrame.scrollBar)
+    if C.IS_NEW_PATCH then
+        F.ReskinTrimScroll(_G.FriendsListFrame.ScrollBar)
+        F.ReskinTrimScroll(_G.IgnoreListFrame.ScrollBar)
+        F.ReskinTrimScroll(_G.WhoFrame.ScrollBar)
+        F.ReskinTrimScroll(_G.FriendsFriendsFrame.ScrollBar)
+    else
+        F.ReskinScroll(_G.FriendsListFrameScrollFrame.scrollBar)
+        F.ReskinScroll(_G.IgnoreListFrameScrollFrame.scrollBar)
+        F.ReskinScroll(_G.WhoListScrollFrame.scrollBar)
+        F.ReskinScroll(_G.FriendsFriendsScrollFrame.scrollBar)
+    end
     F.ReskinDropDown(_G.FriendsFrameStatusDropDown)
     F.ReskinDropDown(_G.WhoFrameDropDown)
     F.ReskinDropDown(_G.FriendsFriendsFrameDropDown)
@@ -182,7 +209,6 @@ tinsert(C.BlizzThemes, function()
     F.SetBD(_G.FriendsFriendsFrame)
     F.Reskin(_G.FriendsFriendsFrame.SendRequestButton)
     F.Reskin(_G.FriendsFriendsFrame.CloseButton)
-    F.ReskinScroll(_G.FriendsFriendsScrollFrame.scrollBar)
     F.Reskin(_G.WhoFrameWhoButton)
     F.Reskin(_G.WhoFrameAddFriendButton)
     F.Reskin(_G.WhoFrameGroupInviteButton)

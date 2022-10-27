@@ -314,4 +314,31 @@ function UNITFRAME:RegisterDungeonSpells()
     UNITFRAME:RegisterInstanceDebuff(tier, instance, 0, 173307) -- 倒钩长矛
     UNITFRAME:RegisterInstanceDebuff(tier, instance, 0, 169341) -- 挫志怒吼
     UNITFRAME:RegisterInstanceDebuff(tier, instance, 0, 172963, 6) -- 破门斩斧
+
+    --[[ tier = 10
+    instance
+
+    instance = 1201 -- 艾杰斯亚学院
+    UNITFRAME:RegisterInstanceDebuff(tier, instance)
+
+    instance = 1196 -- 蕨皮山谷
+    UNITFRAME:RegisterInstanceDebuff(tier, instance)
+
+    instance = 1204 -- 注能大厅
+    UNITFRAME:RegisterInstanceDebuff(tier, instance)
+
+    instance = 1199 -- 奈萨鲁斯
+    UNITFRAME:RegisterInstanceDebuff(tier, instance)
+
+    instance = 1202 -- 红玉新生法池
+    UNITFRAME:RegisterInstanceDebuff(tier, instance)
+
+    instance = 1203 -- 碧蓝魔馆
+    UNITFRAME:RegisterInstanceDebuff(tier, instance)
+
+    instance = 1198 -- 诺库德阻击战
+    UNITFRAME:RegisterInstanceDebuff(tier, instance)
+
+    instance = 1197 -- 奥达曼：提尔的遗产
+    UNITFRAME:RegisterInstanceDebuff(tier, instance) --]]
 end

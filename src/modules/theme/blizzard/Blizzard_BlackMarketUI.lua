@@ -42,8 +42,8 @@ C.Themes['Blizzard_BlackMarketUI'] = function()
             if not bu.reskinned then
                 F.StripTextures(bu)
 
-                bu.Item:SetNormalTexture('')
-                bu.Item:SetPushedTexture('')
+                bu.Item:SetNormalTexture(C.Assets.Textures.Blank)
+                bu.Item:SetPushedTexture(C.Assets.Textures.Blank)
                 bu.Item:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
                 F.CreateBDFrame(bu.Item)
                 bu.Item.IconBorder:SetAlpha(0)

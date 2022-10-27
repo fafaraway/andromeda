@@ -2,10 +2,10 @@ local F, C = unpack(select(2, ...))
 
 local COLOR = { r = 0.1, g = 1, b = 0.1 }
 local knowables = {
-    [_G.LE_ITEM_CLASS_CONSUMABLE] = true,
-    [_G.LE_ITEM_CLASS_RECIPE] = true,
-    [_G.LE_ITEM_CLASS_MISCELLANEOUS] = true,
-    [_G.LE_ITEM_CLASS_ITEM_ENHANCEMENT] = true,
+    [Enum.ItemClass.Consumable] = true,
+    [Enum.ItemClass.Recipe] = true,
+    [Enum.ItemClass.Miscellaneous] = true,
+    [Enum.ItemClass.ItemEnhancement] = true,
 }
 local knowns = {}
 
@@ -35,7 +35,7 @@ local function IsAlreadyKnown(link, index)
             return
         end
 
-        if itemClassID == _G.LE_ITEM_CLASS_BATTLEPET and index then
+        if itemClassID == Enum.ItemClass.Battlepet and index then
             local speciesID = F.ScanTip:SetGuildBankItem(GetCurrentGuildBankTab(), index)
             return isPetCollected(speciesID)
         elseif F:GetModule('Tooltip').ConduitData[linkID] and F:GetModule('Tooltip').ConduitData[linkID] >= level then
@@ -117,10 +117,7 @@ local function Hook_UpdateAuctionHouse(self)
             if button.rowData.itemKey.itemID then
                 local itemLink
                 if button.rowData.itemKey.itemID == 82800 then -- BattlePet
-                    itemLink = format(
-                        '|Hbattlepet:%d::::::|h[Dummy]|h',
-                        button.rowData.itemKey.battlePetSpeciesID
-                    )
+                    itemLink = format('|Hbattlepet:%d::::::|h[Dummy]|h', button.rowData.itemKey.battlePetSpeciesID)
                 else -- Normal item
                     itemLink = format('item:%d', button.rowData.itemKey.itemID)
                 end
@@ -139,6 +136,40 @@ local function Hook_UpdateAuctionHouse(self)
                     -- Icon
                     button.cells[2].Icon:SetVertexColor(1, 1, 1)
                     button.cells[2].IconBorder:SetVertexColor(1, 1, 1)
+                end
+            end
+        end
+    end
+end
+
+local function Hook_UpdateAuctionItems(self)
+    for i = 1, self.ScrollTarget:GetNumChildren() do
+        local child = select(i, self.ScrollTarget:GetChildren())
+        if child.cells then
+            local button = child.cells[2]
+            local itemKey = button and button.rowData and button.rowData.itemKey
+            if itemKey and itemKey.itemID then
+                local itemLink
+                if itemKey.itemID == 82800 then
+                    itemLink = format('|Hbattlepet:%d::::::|h[Dummy]|h', itemKey.battlePetSpeciesID)
+                else
+                    itemLink = format('|Hitem:%d', itemKey.itemID)
+                end
+
+                if itemLink and IsAlreadyKnown(itemLink) then
+                    -- Highlight
+                    child.SelectedHighlight:Show()
+                    child.SelectedHighlight:SetVertexColor(COLOR.r, COLOR.g, COLOR.b)
+                    child.SelectedHighlight:SetAlpha(0.25)
+                    -- Icon
+                    button.Icon:SetVertexColor(COLOR.r, COLOR.g, COLOR.b)
+                    button.IconBorder:SetVertexColor(COLOR.r, COLOR.g, COLOR.b)
+                else
+                    -- Highlight
+                    child.SelectedHighlight:SetVertexColor(1, 1, 1)
+                    -- Icon
+                    button.Icon:SetVertexColor(1, 1, 1)
+                    button.IconBorder:SetVertexColor(1, 1, 1)
                 end
             end
         end
@@ -182,7 +213,11 @@ local f = CreateFrame('Frame')
 f:RegisterEvent('ADDON_LOADED')
 f:SetScript('OnEvent', function(_, event, addon)
     if addon == 'Blizzard_AuctionHouseUI' then
-        hooksecurefunc(_G.AuctionHouseFrame.BrowseResultsFrame.ItemList, 'RefreshScrollFrame', Hook_UpdateAuctionHouse)
+        if C.IS_NEW_PATCH then
+            hooksecurefunc(_G.AuctionHouseFrame.BrowseResultsFrame.ItemList.ScrollBox, 'Update', Hook_UpdateAuctionItems)
+        else
+            hooksecurefunc(_G.AuctionHouseFrame.BrowseResultsFrame.ItemList, 'RefreshScrollFrame', Hook_UpdateAuctionHouse)
+        end
         hookCount = hookCount + 1
     elseif addon == 'Blizzard_GuildBankUI' then
         hooksecurefunc(_G.GuildBankFrame, 'Update', GuildBankFrame_Update)

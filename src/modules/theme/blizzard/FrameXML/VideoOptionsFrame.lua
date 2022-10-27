@@ -7,6 +7,14 @@ local function reskinPanelSection(frame)
 end
 
 tinsert(C.BlizzThemes, function()
+    if not _G.ANDROMEDA_ADB.ReskinBlizz then
+        return
+    end
+
+    if C.IS_NEW_PATCH then
+        return
+    end
+
     local styledOptions = false
 
     _G.VideoOptionsFrame:HookScript('OnShow', function()

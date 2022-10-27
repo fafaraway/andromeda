@@ -193,9 +193,9 @@ tinsert(C.BlizzThemes, function()
     }
 
     hooksecurefunc(QuestMapFrame.QuestSessionManagement, 'UpdateExecuteCommandAtlases', function(self, command)
-        self.ExecuteSessionCommand:SetNormalTexture('')
-        self.ExecuteSessionCommand:SetPushedTexture('')
-        self.ExecuteSessionCommand:SetDisabledTexture('')
+        self.ExecuteSessionCommand:SetNormalTexture(C.Assets.Textures.Blank)
+        self.ExecuteSessionCommand:SetPushedTexture(C.Assets.Textures.Blank)
+        self.ExecuteSessionCommand:SetDisabledTexture(C.Assets.Textures.Blank)
 
         local atlas = sessionCommandToButtonAtlas[command]
         if atlas then

@@ -132,8 +132,11 @@ local function updateWhoList()
         end
     end
 end
-hooksecurefunc('WhoList_Update', updateWhoList)
-hooksecurefunc(_G.WhoListScrollFrame, 'update', updateWhoList)
+
+if not C.IS_NEW_PATCH then
+    hooksecurefunc('WhoList_Update', updateWhoList)
+    hooksecurefunc(_G.WhoListScrollFrame, 'update', updateWhoList)
+end
 
 local blizzHexColors = {}
 for class, color in pairs(_G.RAID_CLASS_COLORS) do

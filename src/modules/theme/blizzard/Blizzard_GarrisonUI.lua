@@ -93,41 +93,52 @@ local function ReskinGarrMaterial(self)
     bg:SetPoint('BOTTOMRIGHT', -5, 6)
 end
 
+local function ReskinMissionButton(button)
+    if not button.styled then
+        local rareOverlay = button.RareOverlay
+        local rareText = button.RareText
+
+        button.LocBG:SetDrawLayer('BACKGROUND')
+        if button.ButtonBG then
+            button.ButtonBG:Hide()
+        end
+        F.StripTextures(button)
+        F.CreateBDFrame(button, 0.25, true)
+        button.Highlight:SetColorTexture(0.6, 0.8, 1, 0.15)
+        button.Highlight:SetAllPoints()
+
+        if button.CompleteCheck then
+            button.CompleteCheck:SetAtlas('Adventures-Checkmark')
+        end
+        if rareText then
+            rareText:ClearAllPoints()
+            rareText:SetPoint('BOTTOMLEFT', button, 20, 10)
+        end
+        if rareOverlay then
+            rareOverlay:SetDrawLayer('BACKGROUND')
+            rareOverlay:SetTexture(C.Assets.Textures.Backdrop)
+            rareOverlay:SetAllPoints()
+            rareOverlay:SetVertexColor(0.098, 0.537, 0.969, 0.2)
+        end
+        if button.Overlay and button.Overlay.Overlay then
+            button.Overlay.Overlay:SetAllPoints()
+        end
+
+        button.styled = true
+    end
+end
+
 local function ReskinMissionList(self)
-    local buttons = self.listScroll.buttons
-    for i = 1, #buttons do
-        local button = buttons[i]
-        if not button.styled then
-            local rareOverlay = button.RareOverlay
-            local rareText = button.RareText
-
-            button.LocBG:SetDrawLayer('BACKGROUND')
-            if button.ButtonBG then
-                button.ButtonBG:Hide()
-            end
-            F.StripTextures(button)
-            F.CreateBDFrame(button, 0.25, true)
-            button.Highlight:SetColorTexture(0.6, 0.8, 1, 0.15)
-            button.Highlight:SetAllPoints()
-
-            if button.CompleteCheck then
-                button.CompleteCheck:SetAtlas('Adventures-Checkmark')
-            end
-            if rareText then
-                rareText:ClearAllPoints()
-                rareText:SetPoint('BOTTOMLEFT', button, 20, 10)
-            end
-            if rareOverlay then
-                rareOverlay:SetDrawLayer('BACKGROUND')
-                rareOverlay:SetTexture(C.Assets.Textures.Backdrop)
-                rareOverlay:SetAllPoints()
-                rareOverlay:SetVertexColor(0.098, 0.537, 0.969, 0.2)
-            end
-            if button.Overlay and button.Overlay.Overlay then
-                button.Overlay.Overlay:SetAllPoints()
-            end
-
-            button.styled = true
+    if C.IS_NEW_PATCH then
+        for i = 1, self.ScrollTarget:GetNumChildren() do
+            local button = select(i, self.ScrollTarget:GetChildren())
+            ReskinMissionButton(button)
+        end
+    else
+        local buttons = self.listScroll.buttons
+        for i = 1, #buttons do
+            local button = buttons[i]
+            ReskinMissionButton(button)
         end
     end
 end
@@ -188,6 +199,49 @@ local function UpdateFollowerQuality(self, followerInfo)
     end
 end
 
+local function ReskinFollowerButton(button)
+    if not button.styled then
+        button.BG:Hide()
+        button.Selection:SetTexture('')
+        button.AbilitiesBG:SetTexture('')
+        button.bg = F.CreateBDFrame(button, 0.25)
+
+        local hl = button:GetHighlightTexture()
+        hl:SetColorTexture(C.r, C.g, C.b, 0.1)
+        hl:ClearAllPoints()
+        hl:SetInside(button.bg)
+
+        local portrait = button.PortraitFrame
+        if portrait then
+            F.ReskinGarrisonPortrait(portrait)
+            portrait:ClearAllPoints()
+            portrait:SetPoint('TOPLEFT', 4, -1)
+            hooksecurefunc(portrait, 'SetupPortrait', UpdateFollowerQuality)
+        end
+
+        if button.BusyFrame then
+            button.BusyFrame:SetInside(button.bg)
+        end
+
+        button.styled = true
+    end
+
+    if button.Counters then
+        for i = 1, #button.Counters do
+            local counter = button.Counters[i]
+            if counter and not counter.bg then
+                counter.bg = F.ReskinIcon(counter.Icon)
+            end
+        end
+    end
+
+    if button.Selection:IsShown() then
+        button.bg:SetBackdropColor(C.r, C.g, 0.2)
+    else
+        button.bg:SetBackdropColor(0, 0, 0, 0.25)
+    end
+end
+
 local function UpdateFollowerList(self)
     local followerFrame = self:GetParent()
     local scrollFrame = followerFrame.FollowerList.listScroll
@@ -195,47 +249,22 @@ local function UpdateFollowerList(self)
 
     for i = 1, #buttons do
         local button = buttons[i].Follower
-        local portrait = button.PortraitFrame
+        ReskinFollowerButton(button)
+    end
+end
 
-        if not button.restyled then
-            button.BG:Hide()
-            button.Selection:SetTexture('')
-            button.AbilitiesBG:SetTexture('')
-            button.bg = F.CreateBDFrame(button, 0.25)
+local function ReskinFollowerButtons(self)
+    for i = 1, self.ScrollTarget:GetNumChildren() do
+        local child = select(i, self.ScrollTarget:GetChildren())
+        ReskinFollowerButton(child.Follower)
+    end
+end
 
-            local hl = button:GetHighlightTexture()
-            hl:SetColorTexture(C.r, C.g, C.b, 0.1)
-            hl:ClearAllPoints()
-            hl:SetInside(button.bg)
-
-            if portrait then
-                F.ReskinGarrisonPortrait(portrait)
-                portrait:ClearAllPoints()
-                portrait:SetPoint('TOPLEFT', 4, -1)
-                hooksecurefunc(portrait, 'SetupPortrait', UpdateFollowerQuality)
-            end
-
-            if button.BusyFrame then
-                button.BusyFrame:SetInside(button.bg)
-            end
-
-            button.restyled = true
-        end
-
-        if button.Counters then
-            for i = 1, #button.Counters do
-                local counter = button.Counters[i]
-                if counter and not counter.bg then
-                    counter.bg = F.ReskinIcon(counter.Icon)
-                end
-            end
-        end
-
-        if button.Selection:IsShown() then
-            button.bg:SetBackdropColor(C.r, C.g, C.b, 0.2)
-        else
-            button.bg:SetBackdropColor(0, 0, 0, 0.25)
-        end
+local function ReskinFollowerList(followerList)
+    if C.IS_NEW_PATCH then
+        hooksecurefunc(followerList.ScrollBox, 'Update', ReskinFollowerButtons)
+    else
+        hooksecurefunc(followerList, 'UpdateData', UpdateFollowerList)
     end
 end
 
@@ -349,20 +378,32 @@ local function ReskinMissionFrame(self)
 
     local missionList = self.MissionTab.MissionList
     F.StripTextures(missionList)
-    F.ReskinScroll(missionList.listScroll.scrollBar)
+    if C.IS_NEW_PATCH then
+        F.ReskinTrimScroll(missionList.ScrollBar)
+    else
+        F.ReskinScroll(missionList.listScroll.scrollBar)
+    end
     ReskinGarrMaterial(missionList)
     ReskinMissionTabs(missionList)
     F.Reskin(missionList.CompleteDialog.BorderFrame.ViewButton)
-    hooksecurefunc(missionList, 'Update', ReskinMissionList)
+    if C.IS_NEW_PATCH then
+        hooksecurefunc(missionList.ScrollBox, 'Update', ReskinMissionList)
+    else
+        hooksecurefunc(missionList, 'Update', ReskinMissionList)
+    end
 
     local FollowerList = self.FollowerList
     F.StripTextures(FollowerList)
     if FollowerList.SearchBox then
         F.ReskinInput(FollowerList.SearchBox)
     end
-    F.ReskinScroll(FollowerList.listScroll.scrollBar)
+    if C.IS_NEW_PATCH then
+        F.ReskinTrimScroll(FollowerList.ScrollBar)
+    else
+        F.ReskinScroll(FollowerList.listScroll.scrollBar)
+    end
     ReskinGarrMaterial(FollowerList)
-    hooksecurefunc(FollowerList, 'UpdateFollowers', UpdateFollowerList)
+    ReskinFollowerList(FollowerList)
     hooksecurefunc(FollowerList, 'ShowFollower', UpdateFollowerAbilities)
 end
 
@@ -493,8 +534,12 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     followerList:SetPoint('BOTTOMLEFT', 24, 34)
     followerList:DisableDrawLayer('BACKGROUND')
     followerList:DisableDrawLayer('BORDER')
-    F.ReskinScroll(followerList.listScroll.scrollBar)
-    hooksecurefunc(followerList, 'UpdateFollowers', UpdateFollowerList)
+    if C.IS_NEW_PATCH then
+        F.ReskinTrimScroll(followerList.ScrollBar)
+    else
+        F.ReskinScroll(followerList.listScroll.scrollBar)
+    end
+    ReskinFollowerList(followerList)
     hooksecurefunc(followerList, 'ShowFollower', UpdateFollowerAbilities)
 
     -- Info box
@@ -588,26 +633,49 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     F.StripTextures(report)
     F.StripTextures(report.List)
 
-    local scrollFrame = report.List.listScroll
-    F.ReskinScroll(scrollFrame.scrollBar)
+    if C.IS_NEW_PATCH then
+        F.ReskinTrimScroll(report.List.ScrollBar)
+        hooksecurefunc(report.List.ScrollBox, 'Update', function(self)
+            for i = 1, self.ScrollTarget:GetNumChildren() do
+                local button = select(i, self.ScrollTarget:GetChildren())
+                if not button.styled then
+                    button.BG:Hide()
+                    local bg = F.CreateBDFrame(button, 0.25)
+                    bg:SetPoint('TOPLEFT')
+                    bg:SetPoint('BOTTOMRIGHT', 0, 1)
 
-    local buttons = scrollFrame.buttons
-    for i = 1, #buttons do
-        local button = buttons[i]
-        button.BG:Hide()
-        local bg = F.CreateBDFrame(button, 0.25)
-        bg:SetPoint('TOPLEFT')
-        bg:SetPoint('BOTTOMRIGHT', 0, 1)
+                    for _, reward in pairs(button.Rewards) do
+                        reward:GetRegions():Hide()
+                        reward.bg = F.ReskinIcon(reward.Icon)
+                        F.ReskinIconBorder(reward.IconBorder)
+                    end
 
-        for _, reward in pairs(button.Rewards) do
-            reward:GetRegions():Hide()
-            reward.bg = F.ReskinIcon(reward.Icon)
-            F.ReskinIconBorder(reward.IconBorder)
+                    button.styled = true
+                end
+            end
+        end)
+    else
+        local scrollFrame = report.List.listScroll
+        F.ReskinScroll(scrollFrame.scrollBar)
+
+        local buttons = scrollFrame.buttons
+        for i = 1, #buttons do
+            local button = buttons[i]
+            button.BG:Hide()
+            local bg = F.CreateBDFrame(button, 0.25)
+            bg:SetPoint('TOPLEFT')
+            bg:SetPoint('BOTTOMRIGHT', 0, 1)
+
+            for _, reward in pairs(button.Rewards) do
+                reward:GetRegions():Hide()
+                reward.bg = F.ReskinIcon(reward.Icon)
+                F.ReskinIconBorder(reward.IconBorder)
+            end
         end
     end
 
     for _, tab in pairs({ report.InProgress, report.Available }) do
-        tab:SetHighlightTexture('')
+        tab:SetHighlightTexture(C.Assets.Textures.Blank)
         tab.Text:ClearAllPoints()
         tab.Text:SetPoint('CENTER')
 
@@ -631,9 +699,9 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     hooksecurefunc('GarrisonLandingPageReport_SetTab', function(self)
         local unselectedTab = report.unselectedTab
         unselectedTab:SetHeight(36)
-        unselectedTab:SetNormalTexture('')
+        unselectedTab:SetNormalTexture(C.Assets.Textures.Blank)
         unselectedTab.selectedTex:Hide()
-        self:SetNormalTexture('')
+        self:SetNormalTexture(C.Assets.Textures.Blank)
         self.selectedTex:Show()
     end)
 
@@ -642,8 +710,12 @@ C.Themes['Blizzard_GarrisonUI'] = function()
         local followerList = GarrisonLandingPage.FollowerList
         F.StripTextures(followerList)
         F.ReskinInput(followerList.SearchBox)
-        F.ReskinScroll(followerList.listScroll.scrollBar)
-        hooksecurefunc(_G.GarrisonLandingPageFollowerList, 'UpdateFollowers', UpdateFollowerList)
+        if C.IS_NEW_PATCH then
+            F.ReskinTrimScroll(followerList.ScrollBar)
+        else
+            F.ReskinScroll(followerList.listScroll.scrollBar)
+        end
+        ReskinFollowerList(_G.GarrisonLandingPageFollowerList)
         hooksecurefunc(_G.GarrisonLandingPageFollowerList, 'ShowFollower', UpdateFollowerAbilities)
     end
 
@@ -651,7 +723,11 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     local shipFollowerList = GarrisonLandingPage.ShipFollowerList
     F.StripTextures(shipFollowerList)
     F.ReskinInput(shipFollowerList.SearchBox)
-    F.ReskinScroll(shipFollowerList.listScroll.scrollBar)
+    if C.IS_NEW_PATCH then
+        F.ReskinTrimScroll(shipFollowerList.ScrollBar)
+    else
+        F.ReskinScroll(shipFollowerList.listScroll.scrollBar)
+    end
 
     -- Follower tab
     local followerTab = GarrisonLandingPage.FollowerTab
@@ -834,14 +910,16 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     F.ReskinClose(GarrisonRecruitSelectFrame.CloseButton)
 
     -- Follower list
-    do
-        local followerList = GarrisonRecruitSelectFrame.FollowerList
-        followerList:DisableDrawLayer('BORDER')
-        F.ReskinScroll(followerList.listScroll.scrollBar)
-        F.ReskinInput(followerList.SearchBox)
-        hooksecurefunc(followerList, 'UpdateFollowers', UpdateFollowerList)
-        hooksecurefunc(followerList, 'ShowFollower', UpdateFollowerAbilities)
+    local rsfollowerList = GarrisonRecruitSelectFrame.FollowerList
+    followerList:DisableDrawLayer('BORDER')
+    if C.IS_NEW_PATCH then
+        F.ReskinTrimScroll(rsfollowerList.ScrollBar)
+    else
+        F.ReskinScroll(rsfollowerList.listScroll.scrollBar)
     end
+    F.ReskinInput(rsfollowerList.SearchBox)
+    ReskinFollowerList(rsfollowerList)
+    hooksecurefunc(rsfollowerList, 'ShowFollower', UpdateFollowerAbilities)
 
     -- Follower selection
     local FollowerSelection = GarrisonRecruitSelectFrame.FollowerSelection
@@ -905,7 +983,11 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     GarrisonShipyardFrame.BackgroundTile:Hide()
     F.SetBD(GarrisonShipyardFrame)
     F.ReskinInput(_G.GarrisonShipyardFrameFollowers.SearchBox)
-    F.ReskinScroll(_G.GarrisonShipyardFrameFollowersListScrollFrameScrollBar)
+    if C.IS_NEW_PATCH then
+        F.ReskinTrimScroll(GarrisonShipyardFrame.FollowerList.ScrollBar)
+    else
+        F.ReskinScroll(_G.GarrisonShipyardFrameFollowersListScrollFrameScrollBar)
+    end
     F.StripTextures(_G.GarrisonShipyardFrameFollowers)
     ReskinGarrMaterial(_G.GarrisonShipyardFrameFollowers)
 
@@ -1183,7 +1265,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
 
         local function reskinFollowerAbility(frame, index, first)
             local ability = select(index, frame:GetRegions())
-            ability:SetMask(nil)
+            ability:SetMask('')
             ability:SetSize(14, 14)
             ability.bg = F.ReskinIcon(ability)
             ability.bg:SetFrameLevel(4)
@@ -1251,7 +1333,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
                 elseif otype == 'IconButton' then
                     F.ReskinIcon(widget.Icon)
                     widget:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
-                    widget:SetPushedTexture(nil)
+                    widget:SetPushedTexture(C.Assets.Textures.Blank)
                     widget:SetSize(46, 46)
                     tinsert(VPBooks, widget)
                 elseif otype == 'AdventurerRoster' then

@@ -31,12 +31,7 @@ local buttonInfo = {
                     _G.ChatFrame_OpenChat('/w ', chatFrame)
                 end
             else
-                if
-                    UnitExists('target')
-                    and UnitName('target')
-                    and UnitIsPlayer('target')
-                    and GetDefaultLanguage('player') == GetDefaultLanguage('target')
-                then
+                if UnitExists('target') and UnitName('target') and UnitIsPlayer('target') and GetDefaultLanguage('player') == GetDefaultLanguage('target') then
                     local name = GetUnitName('target', true)
                     _G.ChatFrame_OpenChat('/w ' .. name .. ' ', chatFrame)
                 else
@@ -117,28 +112,6 @@ local function CreateButton(r, g, b, text, func)
     return bu
 end
 
-local function EnableCombatLogging()
-    LoggingCombat(true)
-    F:Print(L['CombatLogging is now |cff20ff20ON|r.'])
-end
-
-local function DisableCombatLoggin()
-    LoggingCombat(false)
-    F:Print(L['CombatLogging is now |cffff2020OFF|r.'])
-end
-
-local function LoggingButton_OnClick()
-    local icon = CHAT.ChannelBar.LoggingButton.Icon
-
-    if LoggingCombat() then
-        DisableCombatLoggin()
-        icon:SetVertexColor(1, 1, 0)
-    else
-        EnableCombatLogging()
-        icon:SetVertexColor(0, 1, 0)
-    end
-end
-
 local function UpdateChannelInfo()
     local channelName = '大脚世界频道'
     local icon = CHAT.ChannelBar.WorldChannelButton.Icon
@@ -208,8 +181,9 @@ function CHAT:CreateChannelBar()
 
     -- COMBATLOG
     local clButton = CreateButton(1, 1, 0, _G.BINDING_NAME_TOGGLECOMBATLOG)
+    clButton:SetAttribute('type', 'macro')
+    clButton:SetAttribute('macrotext', '/combatlog')
     channelBar.LoggingButton = clButton
-    clButton:SetScript('OnClick', LoggingButton_OnClick)
 
     -- WORLD CHANNEL
     if GetCVar('portal') == 'CN' then

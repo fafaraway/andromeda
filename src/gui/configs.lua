@@ -400,7 +400,6 @@ C.CharacterSettings = {
         MythicPlusScore = true,
         PlayerInfoByAlt = true,
         TargetedBy = true,
-        DomiRank = true,
         IDs = true,
         IDsByAlt = true,
         ItemInfo = true,
@@ -566,6 +565,7 @@ C.CharacterSettings = {
         CompletedSound = true,
         AutoCollapseTracker = true,
         WowheadLink = true,
+        IgnoreQuestNPC = {},
     },
 }
 
@@ -631,6 +631,7 @@ C.AccountSettings = {
         DRUID = { r = 0.9, g = 0.49, b = 0.13, colorStr = 'ffe67e22' },
         MONK = { r = 0.2, g = 0.85, b = 0.69, colorStr = 'ff33d9b2' },
         PALADIN = { r = 1, g = 0.46, b = 0.46, colorStr = 'ffff7675' },
+        EVOKER = { r = 1, g = 0.46, b = 0.46, colorStr = 'ffff7675' },
     },
     ContactList = {},
     RenownLevels = {},

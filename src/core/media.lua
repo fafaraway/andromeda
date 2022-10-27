@@ -94,8 +94,8 @@ C.Assets = {
         ClientCoDVG           = C.ASSET_PATH .. 'textures\\client\\client-cod-vg',
         ClientArclight        = C.ASSET_PATH .. 'textures\\client\\client-arclight',
         ClientCrash4          = C.ASSET_PATH .. 'textures\\client\\client-crash4',
-        ClientCLNT            = BNet_GetClientTexture(_G.BNET_CLIENT_CLNT),
-        ClientArcade          = BNet_GetClientTexture(_G.BNET_CLIENT_ARCADE),
+        --ClientCLNT            = BNet_GetClientTexture(_G.BNET_CLIENT_CLNT),
+        --ClientArcade          = BNet_GetClientTexture(_G.BNET_CLIENT_ARCADE),
     },
     Sounds = {
         Intro            = C.ASSET_PATH .. 'sounds\\intro.ogg',

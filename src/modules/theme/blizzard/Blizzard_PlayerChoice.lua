@@ -53,6 +53,10 @@ C.Themes['Blizzard_PlayerChoice'] = function()
         end -- no border for some templates
         self.bg:SetShown(not ignoredTextureKit[self.uiTextureKit])
 
+        if not self.optionFrameTemplate then
+            return
+        end -- isNewPatch
+
         for optionFrame in self.optionPools:EnumerateActiveByTemplate(self.optionFrameTemplate) do
             local header = optionFrame.Header
             if header then
@@ -74,9 +78,7 @@ C.Themes['Blizzard_PlayerChoice'] = function()
 
             local rewards = optionFrame.Rewards
             if rewards then
-                for rewardFrame in
-                    rewards.rewardsPool:EnumerateActiveByTemplate('PlayerChoiceBaseOptionItemRewardTemplate')
-                do
+                for rewardFrame in rewards.rewardsPool:EnumerateActiveByTemplate('PlayerChoiceBaseOptionItemRewardTemplate') do
                     ReskinOptionText(rewardFrame.Name, 0.9, 0.8, 0.5)
                     if not rewardFrame.styled then
                         local itemButton = rewardFrame.itemButton

@@ -1,5 +1,5 @@
-local F = unpack(select(2, ...))
-local TT = F:GetModule('Tooltip')
+local F, C = unpack(select(2, ...))
+local TOOLTIP = F:GetModule('Tooltip')
 
 local tipList, powerList, powerCache, tierCache = {}, {}, {}, {}
 local iconString = '|T%s:18:22:0:0:64:64:5:59:5:59'
@@ -12,7 +12,7 @@ local function getIconString(icon, known)
     end
 end
 
-function TT:Azerite_ScanTooltip()
+function TOOLTIP:Azerite_ScanTooltip()
     wipe(tipList)
     wipe(powerList)
 
@@ -27,7 +27,7 @@ function TT:Azerite_ScanTooltip()
     end
 end
 
-function TT:Azerite_PowerToSpell(id)
+function TOOLTIP:Azerite_PowerToSpell(id)
     local spellID = powerCache[id]
     if not spellID then
         local powerInfo = C_AzeriteEmpoweredItem.GetPowerInfo(id)
@@ -39,7 +39,7 @@ function TT:Azerite_PowerToSpell(id)
     return spellID
 end
 
-function TT:Azerite_UpdateTier(link)
+function TOOLTIP:Azerite_UpdateTier(link)
     if not C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID(link) then
         return
     end
@@ -52,18 +52,18 @@ function TT:Azerite_UpdateTier(link)
     return allTierInfo
 end
 
-function TT:Azerite_UpdateItem()
+function TOOLTIP:Azerite_UpdateItem()
     local link = select(2, self:GetItem())
     if not link then
         return
     end
 
-    local allTierInfo = TT:Azerite_UpdateTier(link)
+    local allTierInfo = TOOLTIP:Azerite_UpdateTier(link)
     if not allTierInfo then
         return
     end
 
-    TT.Azerite_ScanTooltip(self)
+    TOOLTIP.Azerite_ScanTooltip(self)
     if #tipList == 0 then
         return
     end
@@ -82,7 +82,7 @@ function TT:Azerite_UpdateItem()
 
         local tooltipText = ''
         for _, id in ipairs(powerIDs) do
-            local spellID = TT:Azerite_PowerToSpell(id)
+            local spellID = TOOLTIP:Azerite_PowerToSpell(id)
             if not spellID then
                 break
             end
@@ -106,10 +106,11 @@ function TT:Azerite_UpdateItem()
     end
 end
 
-function TT:AzeriteArmor()
-    _G.GameTooltip:HookScript('OnTooltipSetItem', TT.Azerite_UpdateItem)
-    _G.ItemRefTooltip:HookScript('OnTooltipSetItem', TT.Azerite_UpdateItem)
-    _G.ShoppingTooltip1:HookScript('OnTooltipSetItem', TT.Azerite_UpdateItem)
-    _G.EmbeddedItemTooltip:HookScript('OnTooltipSetItem', TT.Azerite_UpdateItem)
-    _G.GameTooltipTooltip:HookScript('OnTooltipSetItem', TT.Azerite_UpdateItem)
+function TOOLTIP:AzeriteArmor()
+    if C.IS_BETA then return end -- #TODO
+    _G.GameTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Azerite_UpdateItem)
+    _G.ItemRefTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Azerite_UpdateItem)
+    _G.ShoppingTooltip1:HookScript('OnTooltipSetItem', TOOLTIP.Azerite_UpdateItem)
+    _G.EmbeddedItemTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Azerite_UpdateItem)
+    _G.GameTooltipTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Azerite_UpdateItem)
 end

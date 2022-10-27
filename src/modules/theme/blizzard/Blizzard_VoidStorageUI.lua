@@ -14,7 +14,7 @@ C.Themes['Blizzard_VoidStorageUI'] = function()
 
     local function reskinIcons(bu, quality)
         if not bu.bg then
-            bu:SetPushedTexture('')
+            bu:SetPushedTexture(C.Assets.Textures.Blank)
             bu:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
             bu.IconBorder:SetAlpha(0)
             bu.bg = F.CreateBDFrame(bu, 0.25)

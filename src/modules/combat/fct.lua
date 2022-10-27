@@ -86,7 +86,7 @@ local function createCTFrame(frameName, spacing, maxLines, fadeDuration, timeVis
     frame:SetTimeVisible(timeVisible)
     frame:SetJustifyH(justify)
     frame:SetSize(width, height)
-    frame:SetFont(C.Assets.Fonts.Regular, 14)
+    frame:SetFont(C.Assets.Fonts.Regular, 14, '')
     frame:SetShadowColor(0, 0, 0, 1)
     frame:SetShadowOffset(2, -2)
 

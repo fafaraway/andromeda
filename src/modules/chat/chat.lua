@@ -1,6 +1,18 @@
 local F, C, L = unpack(select(2, ...))
 local CHAT = F:GetModule('Chat')
 
+local function updateChatAnchor(self, _, _, _, x, y)
+    if not C.DB.Chat.LockPosition then
+        return
+    end
+    if not (x == 0 and y == 30) then
+        self:ClearAllPoints()
+        self:SetPoint('BOTTOMLEFT', _G.UIParent, 'BOTTOMLEFT', 0, 30)
+        self:SetWidth(C.DB.Chat.Width)
+        self:SetHeight(C.DB.Chat.Height)
+    end
+end
+
 local isScaling = false
 function CHAT:UpdateChatSize()
     if not C.DB.Chat.LockPosition then
@@ -103,14 +115,19 @@ local function SetupChatFrame(self)
     local font = C.Assets.Fonts.Bold
     local outline = _G.ANDROMEDA_ADB.FontOutline
     local fontSize = select(2, self:GetFont())
-    F:SetFS(self, font, fontSize, outline, nil, nil, outline or 'THICK')
+    F:SetFS(self, font, fontSize, outline and 'OUTLINE' or '', nil, nil, outline or 'THICK')
 
-    self:SetClampedToScreen(false)
-    self:SetMaxResize(C.SCREEN_WIDTH, C.SCREEN_HEIGHT)
-    self:SetMinResize(100, 50)
+    if not C.IS_NEW_PATCH then
+        self:SetMaxResize(C.SCREEN_WIDTH, C.SCREEN_HEIGHT)
+        self:SetMinResize(100, 50)
+    end
+
     if self:GetMaxLines() < maxLines then
         self:SetMaxLines(maxLines)
     end
+
+    self:SetClampRectInsets(0, 0, 0, 0)
+    self:SetClampedToScreen(false)
 
     local eb = _G[name .. 'EditBox']
     eb:SetAltArrowKeyMode(false)
@@ -217,20 +234,12 @@ function CHAT:UpdateEditBoxBorderColor()
             if id == 0 then
                 editBox.bd:SetBackdropBorderColor(0, 0, 0)
             else
-                editBox.bd:SetBackdropBorderColor(
-                    _G.ChatTypeInfo[mType .. id].r,
-                    _G.ChatTypeInfo[mType .. id].g,
-                    _G.ChatTypeInfo[mType .. id].b
-                )
+                editBox.bd:SetBackdropBorderColor(_G.ChatTypeInfo[mType .. id].r, _G.ChatTypeInfo[mType .. id].g, _G.ChatTypeInfo[mType .. id].b)
             end
         elseif mType == 'SAY' then
             editBox.bd:SetBackdropBorderColor(0, 0, 0)
         else
-            editBox.bd:SetBackdropBorderColor(
-                _G.ChatTypeInfo[mType].r,
-                _G.ChatTypeInfo[mType].g,
-                _G.ChatTypeInfo[mType].b
-            )
+            editBox.bd:SetBackdropBorderColor(_G.ChatTypeInfo[mType].r, _G.ChatTypeInfo[mType].g, _G.ChatTypeInfo[mType].b)
         end
     end)
 end
@@ -252,10 +261,17 @@ function CHAT:ResizeChatFrame()
 end
 
 function CHAT:UpdateChatFrame()
-    hooksecurefunc('FCF_SavePositionAndDimensions', CHAT.UpdateChatSize)
     F:RegisterEvent('UI_SCALE_CHANGED', CHAT.UpdateChatSize)
+
     CHAT:UpdateChatSize()
     CHAT:UpdateTextFading()
+
+    if C.IS_NEW_PATCH then
+        hooksecurefunc(_G.ChatFrame1, 'SetPoint', updateChatAnchor)
+    else
+        hooksecurefunc('FCF_SavePositionAndDimensions', CHAT.UpdateChatSize)
+        FCF_SavePositionAndDimensions(_G.ChatFrame1)
+    end
 end
 
 -- Swith channels by Tab
@@ -383,16 +399,7 @@ hooksecurefunc('FloatingChatFrame_OnMouseScroll', CHAT.OnMouseScroll)
 -- Smart bubble
 local function UpdateChatBubble()
     local name, instType = GetInstanceInfo()
-    if
-        name
-        and (
-            instType == 'raid'
-            or instType == 'party'
-            or instType == 'scenario'
-            or instType == 'pvp'
-            or instType == 'arena'
-        )
-    then
+    if name and (instType == 'raid' or instType == 'party' or instType == 'scenario' or instType == 'pvp' or instType == 'arena') then
         SetCVar('chatBubbles', 1)
     else
         SetCVar('chatBubbles', 0)
@@ -430,10 +437,7 @@ end
 function CHAT.OnChatWhisper(event, ...)
     local msg, author, _, _, _, _, _, _, _, _, _, guid, presenceID = ...
     for word in pairs(whisperList) do
-        if
-            (not IsInGroup() or UnitIsGroupLeader('player') or UnitIsGroupAssistant('player'))
-            and strlower(msg) == strlower(word)
-        then
+        if (not IsInGroup() or UnitIsGroupLeader('player') or UnitIsGroupAssistant('player')) and strlower(msg) == strlower(word) then
             if event == 'CHAT_MSG_BN_WHISPER' then
                 local accountInfo = C_BattleNet.GetAccountInfoByID(presenceID)
                 if accountInfo then
@@ -442,10 +446,7 @@ function CHAT.OnChatWhisper(event, ...)
                     if gameID then
                         local charName = gameAccountInfo.characterName
                         local realmName = gameAccountInfo.realmName
-                        if
-                            _G.CanCooperateWithGameAccount(accountInfo)
-                            and (not C.DB.Chat.GuildOnly or CHAT:IsUnitInGuild(charName .. '-' .. realmName))
-                        then
+                        if _G.CanCooperateWithGameAccount(accountInfo) and (not C.DB.Chat.GuildOnly or CHAT:IsUnitInGuild(charName .. '-' .. realmName)) then
                             BNInviteFriend(gameID)
                         end
                     end
@@ -525,10 +526,7 @@ function CHAT:AltClickToInvite(link)
                 return
             end
             local accountInfo = C_BattleNet.GetAccountInfoByID(bnID)
-            if
-                accountInfo.gameAccountInfo.clientProgram == _G.BNET_CLIENT_WOW
-                and _G.CanCooperateWithGameAccount(accountInfo)
-            then
+            if accountInfo.gameAccountInfo.clientProgram == _G.BNET_CLIENT_WOW and _G.CanCooperateWithGameAccount(accountInfo) then
                 BNInviteFriend(accountInfo.gameAccountInfo.gameAccountID)
             end
         end
@@ -581,9 +579,8 @@ local msgEvents = {
 CHAT.roleIcons = {
     TANK = F:TextureString(C.Assets.Textures.RoleTank, ':18:18'),
     HEALER = F:TextureString(C.Assets.Textures.RoleHealer, ':18:18'),
-    DAMAGER = F:TextureString(C.Assets.Textures.RoleDamager, ':18:18')
+    DAMAGER = F:TextureString(C.Assets.Textures.RoleDamager, ':18:18'),
 }
-
 
 local GetColoredName_orig = _G.GetColoredName
 local function getColoredName(event, arg1, arg2, ...)
