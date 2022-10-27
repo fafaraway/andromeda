@@ -108,6 +108,9 @@ function BLIZZARD:TradeTabs_Create(spellID, toyID, itemID)
     else
         name, _, texture = GetSpellInfo(spellID)
     end
+    if not name then
+        return
+    end -- precaution
 
     local parent = C.IS_NEW_PATCH and _G.ProfessionsFrame or _G.TradeSkillFrame
 
@@ -116,6 +119,7 @@ function BLIZZARD:TradeTabs_Create(spellID, toyID, itemID)
     tab.spellID = spellID
     tab.itemID = toyID or itemID
     tab.type = (toyID and 'toy') or (itemID and 'item') or 'spell'
+    tab:RegisterForClicks('AnyDown')
 
     if spellID == 818 then -- cooking fire
         tab:SetAttribute('type', 'macro')
@@ -198,7 +202,10 @@ function BLIZZARD:TradeTabs_FilterIcons()
     F:RegisterEvent('TRADE_SKILL_LIST_UPDATE', updateFilterStatus)
 end
 
+local init
 function BLIZZARD:TradeTabs_OnLoad()
+    init = true
+
     BLIZZARD:UpdateProfessions()
 
     BLIZZARD:TradeTabs_Reskin()
@@ -209,21 +216,8 @@ function BLIZZARD:TradeTabs_OnLoad()
 
     BLIZZARD:TradeTabs_FilterIcons()
     BLIZZARD:TradeTabs_QuickEnchanting()
-end
 
-function BLIZZARD.TradeTabs_OnEvent(event, addon)
-    if event == 'ADDON_LOADED' and addon == 'Blizzard_TradeSkillUI' then
-        F:UnregisterEvent(event, BLIZZARD.TradeTabs_OnEvent)
-
-        if InCombatLockdown() then
-            F:RegisterEvent('PLAYER_REGEN_ENABLED', BLIZZARD.TradeTabs_OnEvent)
-        else
-            BLIZZARD:TradeTabs_OnLoad()
-        end
-    elseif event == 'PLAYER_REGEN_ENABLED' then
-        F:UnregisterEvent(event, BLIZZARD.TradeTabs_OnEvent)
-        BLIZZARD:TradeTabs_OnLoad()
-    end
+    F:UnregisterEvent('PLAYER_REGEN_ENABLED', BLIZZARD.TradeTabs_OnLoad)
 end
 
 local isEnchanting
@@ -288,13 +282,20 @@ function BLIZZARD:TradeTabs()
         return
     end
 
-    if C.IS_NEW_PATCH then
-        if _G.ProfessionsFrame then
+    if not _G.ProfessionsFrame then
+        return
+    end
+
+    _G.ProfessionsFrame:HookScript('OnShow', function()
+        if init then
+            return
+        end
+        if InCombatLockdown() then
+            F:RegisterEvent('PLAYER_REGEN_ENABLED', BLIZZARD.TradeTabs_OnLoad)
+        else
             BLIZZARD:TradeTabs_OnLoad()
         end
-    else
-        F:RegisterEvent('ADDON_LOADED', BLIZZARD.TradeTabs_OnEvent)
-    end
+    end)
 end
 
 BLIZZARD:RegisterBlizz('TradeTabs', BLIZZARD.TradeTabs)
