@@ -33,9 +33,9 @@ tinsert(C.BlizzThemes, function()
         hooksecurefunc(LootFrame.ScrollBox, 'Update', function(self)
             for i = 1, self.ScrollTarget:GetNumChildren() do
                 local button = select(i, self.ScrollTarget:GetChildren())
+                local item = button.Item
                 local questTexture = button.IconQuestTexture
-                if not button.styled then
-                    local item = button.Item
+                if item and not button.styled then
                     F.StripTextures(item, 1)
                     item.bg = F.ReskinIcon(item.icon)
                     F.ReskinIconBorder(item.IconBorder, true)
@@ -54,7 +54,7 @@ tinsert(C.BlizzThemes, function()
                     button.styled = true
                 end
 
-                local itemBG = button.Item and button.Item.bg
+                local itemBG = item and item.bg
                 if itemBG then
                     if questTexture:IsShown() then
                         itemBG:SetBackdropBorderColor(1, 0.8, 0)
