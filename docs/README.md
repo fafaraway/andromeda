@@ -29,7 +29,7 @@ Accompany you through every challenging day in **Azeroth**.
 *  加入QQ群 [203621176](https://jq.qq.com/?_wv=1027&k=LStIpBBc)
 
 ## Download
-New versions of **Andromeda** are automatically and synchronously released to various addon sites and can be downloaded or updated using third-party addon management software.
+New versions of **Andromeda** are automatically and synchronously released to **CurseForge**, **WowInterface** and **Wago**, and can be downloaded directly from these sites or automatically updated using third-party addon managers.
 *  [CurseForge](https://www.curseforge.com/wow/addons/andromeda)
 *  [Wago](https://addons.wago.io/addons/andromeda)
 *  [WoWInterface](https://www.wowinterface.com/downloads/fileinfo.php?id=23258)
@@ -51,7 +51,7 @@ New versions of **Andromeda** are automatically and synchronously released to va
 *  [Interface Textures](https://1drv.ms/u/s!AocaDk73Gt7sgrlAYVUKxYvs3pCGFg?e=KpJOfv) *Textures replacement for chat bubble in protected area*
 
 ## License
-*  **Andromeda** is a free software/open source, and is distributed under the **GNU General Public License v3**.
+*  **Andromeda** is a free and open-source project written in Lua and distributed under the **GNU General Public License v3**.
 *  See [LICENSE](/LICENSE) for more information.
 
 ## Acknowledgments
