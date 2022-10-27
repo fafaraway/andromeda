@@ -76,12 +76,7 @@ function keyFeedback:PLAYER_LOGIN()
         local cooldownFrame = self.cooldown
         local castDuration = self.castDuration or 0
 
-        if
-            keyFeedback.db.enableCast
-            and self.castSpellID
-            and self.castSpellID == GetActionSpellID(action)
-            and castDuration > cooldownDuration
-        then
+        if keyFeedback.db.enableCast and self.castSpellID and self.castSpellID == GetActionSpellID(action) and castDuration > cooldownDuration then
             cooldownFrame:SetDrawEdge(true)
             cooldownFrame:SetReverse(self.castInverted)
             CooldownFrame_Set(cooldownFrame, self.castStartTime, castDuration, true, true, 1)
@@ -96,14 +91,7 @@ function keyFeedback:PLAYER_LOGIN()
 
     self:SetSize(30, 30)
 
-    local mover = F.Mover(
-        self,
-        L['SpellFeedback'],
-        'SpellFeedback',
-        { 'CENTER', _G.UIParent, 0, -300 },
-        settings.mirrorSize,
-        settings.mirrorSize
-    )
+    local mover = F.Mover(self, L['SpellFeedback'], 'SpellFeedback', { 'CENTER', _G.UIParent, 0, -300 }, settings.mirrorSize, settings.mirrorSize)
     self:ClearAllPoints()
     self:SetPoint('CENTER', mover)
 
@@ -295,8 +283,14 @@ function keyFeedback:RefreshSettings()
     end
 end
 
---
---
+local function MakeCompatibleAnimation(anim)
+    if anim:GetObjectType() == 'Scale' and anim.SetScaleFrom then
+        return anim
+    else
+        anim.SetScaleFrom = anim.SetFromScale
+        anim.SetScaleTo = anim.SetToScale
+    end
+end
 
 function keyFeedback:CreateFeedbackButton(autoKeyup)
     local db = self.db
@@ -305,13 +299,17 @@ function keyFeedback:CreateFeedbackButton(autoKeyup)
     mirror:SetHeight(db.mirrorSize)
     mirror:SetWidth(db.mirrorSize)
     mirror.NormalTexture:ClearAllPoints()
-    mirror.NormalTexture:SetPoint('TOPLEFT', -15, 15)
-    mirror.NormalTexture:SetPoint('BOTTOMRIGHT', 15, -15)
+    -- mirror.NormalTexture:SetPoint('TOPLEFT', -15, 15)
+    -- mirror.NormalTexture:SetPoint('BOTTOMRIGHT', 15, -15)
 
-    F.StripTextures(mirror)
+    --F.StripTextures(mirror)
     local bg = F.CreateBDFrame(mirror)
     bg:SetBackdropBorderColor(0, 0, 0)
     F.CreateSD(bg)
+
+    if mirror.SetPushedTexture then
+        mirror:SetPushedTexture(C.Assets.Textures.Blank)
+    end
 
     mirror.cooldown:SetEdgeTexture('Interface\\Cooldown\\edge')
     mirror.cooldown:SetSwipeColor(0, 0, 0)
@@ -366,9 +364,9 @@ function keyFeedback:CreateFeedbackButton(autoKeyup)
         local gag = pushedCircle:CreateAnimationGroup()
         pushedCircle.grow = gag
 
-        local ga1 = gag:CreateAnimation('Scale')
-        --ga1:SetFromScale(0.1, 0.1)
-        --ga1:SetToScale(1.3, 1.3)
+        local ga1 = MakeCompatibleAnimation(gag:CreateAnimation('Scale'))
+        ga1:SetScaleFrom(0.1, 0.1)
+        ga1:SetScaleTo(1.3, 1.3)
         ga1:SetDuration(0.3)
         ga1:SetOrder(2)
 
@@ -468,13 +466,13 @@ local PoolIconCreationFunc = function(pool)
     local translateX = -100
     local translateY = 0
 
-    local s1 = ag:CreateAnimation('Scale')
+    local s1 = MakeCompatibleAnimation(ag:CreateAnimation('Scale'))
     s1:SetScale(0.01, 1)
     s1:SetDuration(0)
     s1:SetOrigin(scaleOrigin, 0, 0)
     s1:SetOrder(1)
 
-    local s2 = ag:CreateAnimation('Scale')
+    local s2 = MakeCompatibleAnimation(ag:CreateAnimation('Scale'))
     s2:SetScale(100, 1)
     s2:SetDuration(0.5)
     s2:SetOrigin(scaleOrigin, 0, 0)
