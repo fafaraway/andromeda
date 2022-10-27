@@ -177,12 +177,14 @@ function CHAT:CreateChannelBar()
     local rollButton = CreateButton(0.8, 1, 0.6, _G.LOOT_ROLL)
     rollButton:SetAttribute('type', 'macro')
     rollButton:SetAttribute('macrotext', '/roll')
+    rollButton:RegisterForClicks('AnyDown')
     channelBar.RollButton = rollButton
 
     -- COMBATLOG
     local clButton = CreateButton(1, 1, 0, _G.BINDING_NAME_TOGGLECOMBATLOG)
     clButton:SetAttribute('type', 'macro')
     clButton:SetAttribute('macrotext', '/combatlog')
+    clButton:RegisterForClicks('AnyDown')
     channelBar.LoggingButton = clButton
 
     -- WORLD CHANNEL

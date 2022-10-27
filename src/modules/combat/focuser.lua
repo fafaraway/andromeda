@@ -82,6 +82,7 @@ function COMBAT:EasyFocus()
     f:SetAttribute('type1', 'macro')
     f:SetAttribute('macrotext', '/focus mouseover')
     SetOverrideBindingClick(_G.FocuserButton, true, modifier .. '-BUTTON' .. mouseButton, 'FocuserButton')
+    f:RegisterForClicks('LeftButtonDown')
 
     hooksecurefunc('CreateFrame', COMBAT.Focuser_CreateFrameHook)
     COMBAT:Focuser_OnEvent()
