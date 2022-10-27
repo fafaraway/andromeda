@@ -187,7 +187,7 @@ function M:NakedButton()
 end
 
 function M:TitleFontSize()
-    if not C.IS_NEW_PATCH then
+    if C.IS_NEW_PATCH then
         return
     end
 

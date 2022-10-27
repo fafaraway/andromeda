@@ -86,9 +86,9 @@ do
             local bar = _G['MirrorTimer' .. i]
             ReskinTimerBar(bar)
 
-            local text = _G['MirrorTimer' .. i .. 'Text']
-            text:ClearAllPoints()
-            text:SetPoint('CENTER', bar)
+            -- local text = _G['MirrorTimer' .. i .. 'Text']
+            -- text:ClearAllPoints()
+            -- text:SetPoint('CENTER', bar)
 
             if previous then
                 bar:SetPoint('TOP', previous, 'BOTTOM', 0, -5)

@@ -61,7 +61,7 @@ tinsert(C.BlizzThemes, function()
             local notch = GossipFrame.FriendshipStatusBar['Notch' .. i]
             if notch then
                 notch:SetColorTexture(0, 0, 0)
-                notch:SetSize(C.Mult, 16)
+                notch:SetSize(C.MULT, 16)
             end
         end
     else

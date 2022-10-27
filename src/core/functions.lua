@@ -871,7 +871,7 @@ do
         eb:SetSize(width, height)
         eb:SetAutoFocus(false)
         eb:SetTextInsets(5, 5, 5, 5)
-        eb:SetFont(C.Assets.Fonts.Regular, 11)
+        eb:SetFont(C.Assets.Fonts.Regular, 11, '')
         eb.bg = F.CreateBDFrame(eb, 0.25, true)
         eb.bg:SetAllPoints()
         F.SetBorderColor(eb.bg)
@@ -1133,7 +1133,7 @@ do
         slider.value = F.CreateEditBox(slider, 50, 20)
         slider.value:SetPoint('TOP', slider, 'BOTTOM', 0, -2)
         slider.value:SetJustifyH('CENTER')
-        slider.value:SetFont(C.Assets.Fonts.Regular, 11)
+        slider.value:SetFont(C.Assets.Fonts.Regular, 11, '')
         slider.value.__owner = slider
         slider.value:SetScript('OnEnterPressed', UpdateSliderEditBox)
 
@@ -1501,7 +1501,11 @@ do
         F.SetBorderColor(self.__bg)
 
         if gradStyle then
-            self.__gradient:SetGradientAlpha('Vertical', color.r, color.g, color.b, alpha, 0, 0, 0, 0.25)
+            if C.IS_NEW_PATCH then
+                self.__gradient:SetGradient('Vertical', CreateColor(color.r, color.g, color.b, alpha), CreateColor(0, 0, 0, 0.25))
+            else
+                self.__gradient:SetGradientAlpha('Vertical', color.r, color.g, color.b, alpha, 0, 0, 0, 0.25)
+            end
         else
             self.__gradient:SetVertexColor(color.r, color.g, color.b, alpha)
         end
@@ -2168,8 +2172,8 @@ do
         local bar = CreateFrame('StatusBar', nil, bg)
         bar:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
         bar:SetStatusBarColor(1, 0.8, 0, 0.5)
-        bar:SetPoint('TOPLEFT', bg, C.Mult, -C.Mult)
-        bar:SetPoint('BOTTOMLEFT', bg, C.Mult, C.Mult)
+        bar:SetPoint('TOPLEFT', bg, C.MULT, -C.MULT)
+        bar:SetPoint('BOTTOMLEFT', bg, C.MULT, C.MULT)
         bar:SetPoint('RIGHT', thumb, 'CENTER')
     end
 

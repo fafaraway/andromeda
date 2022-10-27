@@ -115,7 +115,7 @@ local function SetupChatFrame(self)
     local font = C.Assets.Fonts.Bold
     local outline = _G.ANDROMEDA_ADB.FontOutline
     local fontSize = select(2, self:GetFont())
-    F:SetFS(self, font, fontSize, outline, nil, nil, outline or 'THICK')
+    F:SetFS(self, font, fontSize, outline and 'OUTLINE' or '', nil, nil, outline or 'THICK')
 
     if not C.IS_NEW_PATCH then
         self:SetMaxResize(C.SCREEN_WIDTH, C.SCREEN_HEIGHT)

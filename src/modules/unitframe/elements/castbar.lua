@@ -140,7 +140,7 @@ function UNITFRAME:CreateAndUpdateStagePip(bar, ticks, numStages, unit)
                 ticks[i] = bar:CreateTexture(nil, 'OVERLAY')
                 ticks[i]:SetTexture(C.Assets.Textures.StatusbarNormal)
                 ticks[i]:SetVertexColor(0, 0, 0)
-                ticks[i]:SetWidth(C.Mult)
+                ticks[i]:SetWidth(C.MULT)
                 ticks[i]:SetHeight(height)
             end
             ticks[i].duration = sumDuration / 1000

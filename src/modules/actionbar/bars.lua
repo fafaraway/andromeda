@@ -369,7 +369,7 @@ function BAR:CreatePetBar()
 end
 
 function BAR:UpdateStanceBar()
-    local num = _G.NUM_STANCE_SLOTS
+    local num = _G.NUM_STANCE_SLOTS or 10
     local frame = _G[C.ADDON_TITLE .. 'ActionBarStance']
     if not frame then
         return

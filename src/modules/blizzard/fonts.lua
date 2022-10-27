@@ -19,7 +19,7 @@ local function ReplaceFont(obj, font, size, flag, shadow)
     if outline then
         obj:SetFont(font, size, 'OUTLINE')
     else
-        obj:SetFont(font, size, flag and 'OUTLINE')
+        obj:SetFont(font, size, flag and 'OUTLINE' or '')
     end
 
     if shadow then

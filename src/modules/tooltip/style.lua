@@ -50,7 +50,7 @@ end
 local function RestyleFont(obj, font, size)
     local outline = _G.ANDROMEDA_ADB.FontOutline
 
-    obj:SetFont(font, size, outline and 'OUTLINE')
+    obj:SetFont(font, size, outline and 'OUTLINE' or '')
     obj:SetShadowColor(0, 0, 0, 1)
     obj:SetShadowOffset(1, -1)
 end
@@ -146,10 +146,10 @@ TOOLTIP:RegisterTooltips(C.ADDON_NAME, function()
         tip:HookScript('OnShow', TOOLTIP.ReskinTooltip)
     end
 
-    if _G.SettingsTooltip then -- isNewPatch
-        TOOLTIP.ReskinTooltip(_G.SettingsTooltip)
-        _G.SettingsTooltip:SetScale(_G.UIParent:GetScale())
-    end
+    -- if _G.SettingsTooltip then -- isNewPatch
+    --     TOOLTIP.ReskinTooltip(_G.SettingsTooltip)
+    --     _G.SettingsTooltip:SetScale(_G.UIParent:GetScale())
+    -- end
 
     -- DropdownMenu
     local dropdowns = { 'DropDownList', 'L_DropDownList', 'Lib_DropDownList' }
@@ -167,7 +167,7 @@ TOOLTIP:RegisterTooltips(C.ADDON_NAME, function()
     hooksecurefunc('UIDropDownMenu_CreateFrames', reskinDropdown)
 
     -- IME
-    _G.IMECandidatesFrame.selection:SetVertexColor(C.r, C.g, C.b)
+    -- _G.IMECandidatesFrame.selection:SetVertexColor(C.r, C.g, C.b, 1)
 
     -- Pet Tooltip
     _G.PetBattlePrimaryUnitTooltip:HookScript('OnShow', function(self)

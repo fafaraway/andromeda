@@ -162,15 +162,15 @@ end
 -- make it only split stacks with shift-rightclick if the TradeSkillFrame is open
 -- shift-leftclick should be reserved for the search box
 do
-    local function hideSplitFrame(_, button)
-        if _G.TradeSkillFrame and _G.TradeSkillFrame:IsShown() then
-            if button == 'LeftButton' then
-                _G.StackSplitFrame:Hide()
-            end
-        end
-    end
-    hooksecurefunc('ContainerFrameItemButton_OnModifiedClick', hideSplitFrame)
-    hooksecurefunc('MerchantItemButton_OnModifiedClick', hideSplitFrame)
+    -- local function hideSplitFrame(_, button)
+    --     if _G.TradeSkillFrame and _G.TradeSkillFrame:IsShown() then
+    --         if button == 'LeftButton' then
+    --             _G.StackSplitFrame:Hide()
+    --         end
+    --     end
+    -- end
+    -- hooksecurefunc('ContainerFrameItemButton_OnModifiedClick', hideSplitFrame)
+    -- hooksecurefunc('MerchantItemButton_OnModifiedClick', hideSplitFrame)
 end
 
 -- SpellBook fix in 46157

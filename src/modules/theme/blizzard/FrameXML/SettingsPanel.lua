@@ -42,7 +42,7 @@ tinsert(C.BlizzThemes, function()
                     local line = child:CreateTexture(nil, 'ARTWORK')
                     line:SetPoint('BOTTOMRIGHT', child, -15, 3)
                     line:SetAtlas('Options_HorizontalDivider')
-                    line:SetSize(170, C.Mult)
+                    line:SetSize(170, C.MULT)
                 end
 
                 local toggle = child.Toggle

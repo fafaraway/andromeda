@@ -301,7 +301,7 @@ end
 -- Garrision Icon
 
 function MAP:CreateGarrisonButton()
-    _G.GarrisonLandingPageMinimapButton:SetScale(0.5)
+    -- _G.GarrisonLandingPageMinimapButton:SetScale(0.5)
 
     local function updateMinimapButtons(self)
         self:ClearAllPoints()

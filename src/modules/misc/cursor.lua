@@ -9,7 +9,7 @@ for i = 1, numLines do
     line:SetColorTexture(1, 1, 1)
 
     local startA, endA = _G.Lerp(1, 0, (i - 1) / numLines), _G.Lerp(1, 0, i / numLines)
-    line:SetGradientAlpha('HORIZONTAL', 1, 1, 1, startA, 1, 1, 1, endA)
+    line:SetGradient('HORIZONTAL', CreateColor(1, 1, 1, startA), CreateColor(1, 1, 1, endA))
 
     lines[i] = { line = line, x = 0, y = 0 }
 end

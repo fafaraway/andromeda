@@ -586,8 +586,8 @@ C.Themes['Blizzard_Communities'] = function()
                     F.StripTextures(button)
                     button.bg = F.CreateBDFrame(button, 0.25)
                     button.bg:ClearAllPoints()
-                    button.bg:SetPoint('TOPLEFT', button.Icon, 0, C.Mult)
-                    button.bg:SetPoint('BOTTOMLEFT', button.Icon, 0, -C.Mult)
+                    button.bg:SetPoint('TOPLEFT', button.Icon, 0, C.MULT)
+                    button.bg:SetPoint('BOTTOMLEFT', button.Icon, 0, -C.MULT)
                     button.bg:SetWidth(button:GetWidth())
                 end
             end
@@ -734,8 +734,8 @@ C.Themes['Blizzard_Communities'] = function()
             return
         end
 
-        button:SetPoint('LEFT', listBG, C.Mult, 0)
-        button:SetPoint('RIGHT', listBG, -C.Mult, 0)
+        button:SetPoint('LEFT', listBG, C.MULT, 0)
+        button:SetPoint('RIGHT', listBG, -C.MULT, 0)
         button:SetHighlightTexture(C.Assets.Textures.Backdrop)
         button:GetHighlightTexture():SetVertexColor(r, g, b, 0.25)
         button.InviteButton:SetSize(66, 18)

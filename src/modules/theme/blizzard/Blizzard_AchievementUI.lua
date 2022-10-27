@@ -223,8 +223,8 @@ C.Themes['Blizzard_AchievementUI'] = function()
                 if not child.styled then
                     F.StripTextures(child)
                     local bg = F.CreateBDFrame(child, 0.25)
-                    bg:SetPoint('TOPLEFT', 2, -C.Mult)
-                    bg:SetPoint('BOTTOMRIGHT', 4, C.Mult)
+                    bg:SetPoint('TOPLEFT', 2, -C.MULT)
+                    bg:SetPoint('BOTTOMRIGHT', 4, C.MULT)
                     SetupButtonHighlight(child, bg)
 
                     child.styled = true
@@ -483,8 +483,8 @@ C.Themes['Blizzard_AchievementUI'] = function()
             local bu = _G['AchievementFrameStatsContainerButton' .. i]
             F.StripTextures(bu)
             local bg = F.CreateBDFrame(bu, 0.25)
-            bg:SetPoint('TOPLEFT', 2, -C.Mult)
-            bg:SetPoint('BOTTOMRIGHT', 4, C.Mult)
+            bg:SetPoint('TOPLEFT', 2, -C.MULT)
+            bg:SetPoint('BOTTOMRIGHT', 4, C.MULT)
             SetupButtonHighlight(bu, bg)
         end
 
@@ -588,8 +588,8 @@ C.Themes['Blizzard_AchievementUI'] = function()
             local bu = _G['AchievementFrameComparisonStatsContainerButton' .. i]
             F.StripTextures(bu)
             local bg = F.CreateBDFrame(bu, 0.25)
-            bg:SetPoint('TOPLEFT', 2, -C.Mult)
-            bg:SetPoint('BOTTOMRIGHT', 4, C.Mult)
+            bg:SetPoint('TOPLEFT', 2, -C.MULT)
+            bg:SetPoint('BOTTOMRIGHT', 4, C.MULT)
             SetupButtonHighlight(bu, bg)
         end
         F.ReskinScroll(_G.AchievementFrameComparisonStatsContainerScrollBar)

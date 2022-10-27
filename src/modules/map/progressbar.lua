@@ -2,6 +2,11 @@ local F, C, L = unpack(select(2, ...))
 local M = F:GetModule('Map')
 local TOOLTIP = F:GetModule('Tooltip')
 
+local function IsAzeriteAvailable()
+    local itemLocation = C_AzeriteItem.FindActiveAzeriteItem()
+    return itemLocation and itemLocation:IsEquipmentSlot() and not C_AzeriteItem.IsAzeriteItemAtMaxLevel()
+end
+
 function M:InitRenownLevel()
     if not _G.ANDROMEDA_ADB['RenownLevels'][C.MY_REALM] then
         _G.ANDROMEDA_ADB['RenownLevels'][C.MY_REALM] = {}

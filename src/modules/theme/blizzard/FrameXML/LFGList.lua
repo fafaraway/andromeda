@@ -162,7 +162,7 @@ tinsert(C.BlizzThemes, function()
         header:HookScript('OnLeave', Highlight_OnLeave)
 
         if prevHeader then
-            header:SetPoint('LEFT', prevHeader, 'RIGHT', C.Mult, 0)
+            header:SetPoint('LEFT', prevHeader, 'RIGHT', C.MULT, 0)
         end
         prevHeader = header
     end

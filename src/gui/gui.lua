@@ -173,9 +173,9 @@ local function SelectTab(i)
         if num == i then
             if gradStyle then
                 if classColor then
-                    guiTab[num].__gradient:SetGradientAlpha('Vertical', r, g, b, 0.25, 0, 0, 0, 0.25)
+                    guiTab[num].__gradient:SetGradient('Vertical', CreateColor(r, g, b, 0.25), CreateColor(0, 0, 0, 0.25))
                 else
-                    guiTab[num].__gradient:SetGradientAlpha('Vertical', newColor.r, newColor.g, newColor.b, 0.25, 0, 0, 0, 0.25)
+                    guiTab[num].__gradient:SetGradient('Vertical', CreateColor(newColor.r, newColor.g, newColor.b, 0.25), CreateColor(0, 0, 0, 0.25))
                 end
             else
                 if classColor then
@@ -188,7 +188,7 @@ local function SelectTab(i)
             guiPage[num]:Show()
         else
             if gradStyle then
-                guiTab[num].__gradient:SetGradientAlpha('Vertical', color.r, color.g, color.b, alpha, 0, 0, 0, 0.25)
+                guiTab[num].__gradient:SetGradient('Vertical', CreateColor(color.r, color.g, color.b, alpha), CreateColor(0, 0, 0, 0.25))
             else
                 guiTab[num].__gradient:SetVertexColor(color.r, color.g, color.b, alpha)
             end
@@ -555,29 +555,29 @@ function F.ToggleConsole(index)
 end
 
 local function MainMenu_OnShow(self)
-    _G.GameMenuButtonLogout:SetPoint('TOP', GUI.GameMenuButton, 'BOTTOM', 0, -14)
-    self:SetHeight(self:GetHeight() + GUI.GameMenuButton:GetHeight() + 15 + 20)
+    -- _G.GameMenuButtonLogout:SetPoint('TOP', GUI.GameMenuButton, 'BOTTOM', 0, -14)
+    -- self:SetHeight(self:GetHeight() + GUI.GameMenuButton:GetHeight() + 15 + 20)
 
-    _G.GameMenuButtonStore:ClearAllPoints()
-    _G.GameMenuButtonStore:SetPoint('TOP', _G.GameMenuButtonHelp, 'BOTTOM', 0, -4)
+    -- _G.GameMenuButtonStore:ClearAllPoints()
+    -- _G.GameMenuButtonStore:SetPoint('TOP', _G.GameMenuButtonHelp, 'BOTTOM', 0, -4)
 
-    _G.GameMenuButtonWhatsNew:ClearAllPoints()
-    _G.GameMenuButtonWhatsNew:SetPoint('TOP', _G.GameMenuButtonStore, 'BOTTOM', 0, -4)
+    -- _G.GameMenuButtonWhatsNew:ClearAllPoints()
+    -- _G.GameMenuButtonWhatsNew:SetPoint('TOP', _G.GameMenuButtonStore, 'BOTTOM', 0, -4)
 
-    _G.GameMenuButtonUIOptions:ClearAllPoints()
-    _G.GameMenuButtonUIOptions:SetPoint('TOP', _G.GameMenuButtonOptions, 'BOTTOM', 0, -4)
+    -- _G.GameMenuButtonUIOptions:ClearAllPoints()
+    -- _G.GameMenuButtonUIOptions:SetPoint('TOP', _G.GameMenuButtonOptions, 'BOTTOM', 0, -4)
 
-    _G.GameMenuButtonKeybindings:ClearAllPoints()
-    _G.GameMenuButtonKeybindings:SetPoint('TOP', _G.GameMenuButtonUIOptions, 'BOTTOM', 0, -4)
+    -- _G.GameMenuButtonEditMode:ClearAllPoints()
+    -- _G.GameMenuButtonEditMode:SetPoint('TOP', _G.GameMenuButtonUIOptions, 'BOTTOM', 0, -4)
 
-    _G.GameMenuButtonMacros:ClearAllPoints()
-    _G.GameMenuButtonMacros:SetPoint('TOP', _G.GameMenuButtonKeybindings, 'BOTTOM', 0, -4)
+    -- _G.GameMenuButtonMacros:ClearAllPoints()
+    -- _G.GameMenuButtonMacros:SetPoint('TOP', _G.GameMenuButtonEditMode, 'BOTTOM', 0, -4)
 
-    _G.GameMenuButtonAddons:ClearAllPoints()
-    _G.GameMenuButtonAddons:SetPoint('TOP', _G.GameMenuButtonMacros, 'BOTTOM', 0, -4)
+    -- _G.GameMenuButtonAddons:ClearAllPoints()
+    -- _G.GameMenuButtonAddons:SetPoint('TOP', _G.GameMenuButtonMacros, 'BOTTOM', 0, -4)
 
-    _G.GameMenuButtonQuit:ClearAllPoints()
-    _G.GameMenuButtonQuit:SetPoint('TOP', _G.GameMenuButtonLogout, 'BOTTOM', 0, -4)
+    -- _G.GameMenuButtonQuit:ClearAllPoints()
+    -- _G.GameMenuButtonQuit:SetPoint('TOP', _G.GameMenuButtonLogout, 'BOTTOM', 0, -4)
 end
 
 local function Button_OnClick()
@@ -593,10 +593,22 @@ local function Button_OnClick()
 end
 
 local function CreateGameMenuButton()
-    local bu = CreateFrame('Button', 'GameMenuButton' .. C.ADDON_TITLE, _G.GameMenuFrame, 'GameMenuButtonTemplate')
+    local bu = CreateFrame('Button', 'GameMenuButton' .. C.ADDON_TITLE, _G.GameMenuFrame, 'GameMenuButtonTemplate, BackdropTemplate')
     bu:SetText(C.COLORFUL_ADDON_TITLE)
     bu:SetPoint('TOP', _G.GameMenuButtonAddons, 'BOTTOM', 0, -14)
-    bu:SetScript('OnClick', Button_OnClick)
+    --bu:SetScript('OnClick', Button_OnClick)
+
+    GameMenuFrame:HookScript("OnShow", function(self)
+		GameMenuButtonLogout:SetPoint("TOP", bu, "BOTTOM", 0, -21)
+		self:SetHeight(self:GetHeight() + bu:GetHeight() + 22)
+	end)
+
+    bu:SetScript("OnClick", function()
+		if InCombatLockdown() then UIErrorsFrame:AddMessage(C.RED_COLOR..ERR_NOT_IN_COMBAT) return end
+		CreateConsole()
+		HideUIPanel(GameMenuFrame)
+		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
+	end)
 
     if _G.ANDROMEDA_ADB.ReskinBlizz then
         F.Reskin(bu)

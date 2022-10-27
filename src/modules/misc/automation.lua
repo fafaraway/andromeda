@@ -36,37 +36,37 @@ end
 
 -- track repair vendors if we're severely damaged
 do
-    local function trackRepair()
-        local alert = 0
-        for index in next, _G.INVENTORY_ALERT_STATUS_SLOTS do
-            local status = GetInventoryAlertStatus(index)
-            if status > alert then
-                alert = status
-            end
-        end
+    -- local function trackRepair()
+    --     local alert = 0
+    --     for index in next, _G.INVENTORY_ALERT_STATUS_SLOTS do
+    --         local status = GetInventoryAlertStatus(index)
+    --         if status > alert then
+    --             alert = status
+    --         end
+    --     end
 
-        for index = 1, GetNumTrackingTypes() do
-            if GetTrackingInfo(index) == _G.MINIMAP_TRACKING_REPAIR then
-                return SetTracking(index, alert > 0)
-            end
-        end
-    end
+    --     for index = 1, GetNumTrackingTypes() do
+    --         if GetTrackingInfo(index) == _G.MINIMAP_TRACKING_REPAIR then
+    --             return SetTracking(index, alert > 0)
+    --         end
+    --     end
+    -- end
 
-    F:RegisterEvent('UPDATE_INVENTORY_DURABILITY', trackRepair)
+    -- F:RegisterEvent('UPDATE_INVENTORY_DURABILITY', trackRepair)
 end
 
 -- track mailbox if we have pending mail
 do
-    local function trackMailbox()
-        for index = 1, GetNumTrackingTypes() do
-            local name, _, active = GetTrackingInfo(index)
-            if name == _G.MINIMAP_TRACKING_MAILBOX then
-                return SetTracking(index, HasNewMail() and not active)
-            end
-        end
-    end
+    -- local function trackMailbox()
+    --     for index = 1, GetNumTrackingTypes() do
+    --         local name, _, active = GetTrackingInfo(index)
+    --         if name == _G.MINIMAP_TRACKING_MAILBOX then
+    --             return SetTracking(index, HasNewMail() and not active)
+    --         end
+    --     end
+    -- end
 
-    F:RegisterEvent('UPDATE_INVENTORY_DURABILITY', trackMailbox)
+    -- F:RegisterEvent('UPDATE_INVENTORY_DURABILITY', trackMailbox)
 end
 
 -- auto select current event boss from LFD tool
