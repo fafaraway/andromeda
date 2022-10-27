@@ -6,7 +6,7 @@ local function PostUpdateClassPower(element, cur, max, diff, powerType, chargedP
     local gap = 3
 
     if not cur or cur == 0 then
-        for i = 1, 6 do
+        for i = 1, 7 do
             element[i].bg:Hide()
         end
 
@@ -34,12 +34,12 @@ local function PostUpdateClassPower(element, cur, max, diff, powerType, chargedP
         for i = 1, max do
             element[i]:SetWidth((element.__owner.ClassPowerBar:GetWidth() - (max - 1) * gap) / max)
         end
-        for i = max + 1, 6 do
+        for i = max + 1, 7 do
             element[i].bg:Hide()
         end
     end
 
-    for i = 1, 6 do
+    for i = 1, 7 do
         local bar = element[i]
         if not bar.chargeStar then
             break
@@ -98,10 +98,10 @@ function UNITFRAME:CreateClassPower(self)
     end
 
     local bars = {}
-    for i = 1, 6 do
+    for i = 1, 7 do
         bars[i] = CreateFrame('StatusBar', C.ADDON_TITLE .. 'ClassPower' .. i, holder)
         bars[i]:SetHeight(barHeight)
-        bars[i]:SetWidth((barWidth - 5 * gap) / 6)
+        bars[i]:SetWidth((barWidth - 6 * gap) / 7)
         bars[i]:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
         bars[i]:SetFrameLevel(self:GetFrameLevel() + 5)
         bars[i].__bg = F.SetBD(bars[i], 0)
