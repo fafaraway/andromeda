@@ -558,19 +558,7 @@ function GUI:SetupInventorySize(parent)
 
     for _, v in ipairs(rowDatas) do
         CreateGroupTitle(scroll, L['Rows'], offset - 100)
-        CreateSlider(
-            scroll,
-            'Inventory',
-            v.key,
-            v.text,
-            v.min,
-            v.max,
-            1,
-            v.value,
-            20,
-            offset - 150,
-            UpdateInventoryAnchor
-        )
+        CreateSlider(scroll, 'Inventory', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 150, UpdateInventoryAnchor)
         offset = offset - 65
     end
 end
@@ -597,19 +585,7 @@ function GUI:SetupMinItemLevelToShow(parent)
 
     local offset = -10
     CreateGroupTitle(scroll, L['Item Level'], offset)
-    CreateSlider(
-        scroll,
-        'Inventory',
-        datas.key,
-        datas.text,
-        datas.min,
-        datas.max,
-        datas.step,
-        datas.value,
-        20,
-        offset - 50,
-        UpdateInventoryStatus
-    )
+    CreateSlider(scroll, 'Inventory', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset - 50, UpdateInventoryStatus)
 end
 
 -- Actionbar
@@ -751,19 +727,7 @@ function GUI:SetupVehicleButtonSize(parent)
 
     local offset = -10
     CreateGroupTitle(scroll, L['Leave Vehicle Button'], offset)
-    CreateSlider(
-        scroll,
-        mKey,
-        datas.key,
-        datas.text,
-        datas.min,
-        datas.max,
-        datas.step,
-        datas.value,
-        20,
-        offset - 50,
-        UpdateVehicleButton
-    )
+    CreateSlider(scroll, mKey, datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset - 50, UpdateVehicleButton)
 end
 
 function GUI:SetupStanceBarSize(parent)
@@ -974,10 +938,7 @@ function GUI:SetupNameplateAuraFilter(parent)
         close:SetScript('OnClick', function()
             bar:Hide()
 
-            if
-                (index == 1 and C.NameplateAuraWhiteList[spellID])
-                or (index == 2 and C.NameplateAuraBlackList[spellID])
-            then
+            if (index == 1 and C.NameplateAuraWhiteList[spellID]) or (index == 2 and C.NameplateAuraBlackList[spellID]) then
                 _G.ANDROMEDA_ADB['NameplateAuraFilterList'][index][spellID] = false
             else
                 _G.ANDROMEDA_ADB['NameplateAuraFilterList'][index][spellID] = nil
@@ -999,8 +960,7 @@ function GUI:SetupNameplateAuraFilter(parent)
 
     local function isAuraExisted(index, spellID)
         local modValue = _G.ANDROMEDA_ADB['NameplateAuraFilterList'][index][spellID]
-        local locValue = (index == 1 and C.NameplateAuraWhiteList[spellID])
-            or (index == 2 and C.NameplateAuraBlackList[spellID])
+        local locValue = (index == 1 and C.NameplateAuraWhiteList[spellID]) or (index == 2 and C.NameplateAuraBlackList[spellID])
 
         return modValue or (modValue == nil and locValue)
     end
@@ -1094,13 +1054,7 @@ function GUI:SetupNameplateMajorSpells(parent)
     local editBox = createEditBox(panel.bg, nil, 10, -10, nil, 110, 24)
     panel.editBox = editBox
     editBox.title = L['Hint']
-    F.AddTooltip(
-        editBox,
-        'ANCHOR_RIGHT',
-        L['Fill in SpellID, must be a number.|nSpell name is not supported.'],
-        'BLUE',
-        true
-    )
+    F.AddTooltip(editBox, 'ANCHOR_RIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE', true)
 
     local addBtn = F.CreateButton(panel.bg, 50, 24, _G.ADD)
     addBtn:SetPoint('TOPRIGHT', -8, -10)
@@ -1168,19 +1122,7 @@ function GUI:SetupNameplateCVars(parent)
     local offset = -10
     for _, v in ipairs(datas) do
         CreateGroupTitle(scroll, L['Nameplate CVars'], offset)
-        CreateSlider(
-            scroll,
-            'Nameplate',
-            v.key,
-            v.text,
-            v.min,
-            v.max,
-            v.step,
-            v.value,
-            20,
-            offset - 50,
-            UpdateNameplateCVars
-        )
+        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateNameplateCVars)
         offset = offset - 65
     end
 end
@@ -1289,19 +1231,7 @@ function GUI:SetupNameplateFriendlySize(parent)
     local offset = -10
     for _, v in ipairs(datas.size) do
         CreateGroupTitle(scroll, L['Friendly Nameplate Size'], offset)
-        CreateSlider(
-            scroll,
-            'Nameplate',
-            v.key,
-            v.text,
-            v.min,
-            v.max,
-            v.step,
-            v.value,
-            20,
-            offset - 50,
-            RefreshAllPlates
-        )
+        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, RefreshAllPlates)
         offset = offset - 65
     end
 
@@ -1329,18 +1259,7 @@ function GUI:SetupNameplateCastbarSize(parent)
 
     local offset = -10
     CreateGroupTitle(scroll, L['Nameplate Castbar'], offset)
-    CreateSlider(
-        scroll,
-        'Nameplate',
-        datas.key,
-        datas.text,
-        datas.min,
-        datas.max,
-        datas.step,
-        datas.value,
-        20,
-        offset - 50
-    )
+    CreateSlider(scroll, 'Nameplate', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset - 50)
 end
 
 function GUI:SetupNameplateExecuteIndicator(parent)
@@ -1516,12 +1435,7 @@ function GUI:SetupNameplateColorByDot(parent)
 
     scroll.box = F.CreateEditBox(frame, 100, 25)
     scroll.box:SetPoint('LEFT', swatch, 'RIGHT', 5, 0)
-    F.AddTooltip(
-        scroll.box,
-        'ANCHOR_TOPRIGHT',
-        L['Fill in SpellID, must be a number.|nSpell name is not supported.'],
-        'BLUE'
-    )
+    F.AddTooltip(scroll.box, 'ANCHOR_TOPRIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE')
 
     local function addClick(button)
         local parent = button.__owner
@@ -1659,17 +1573,7 @@ function GUI:SetupPartyFrame(parent)
         options[i] = UNITFRAME.PartyDirections[i].name
     end
 
-    CreateOptionDropdown(
-        scroll,
-        L['Growth Direction'],
-        offset - 60,
-        options,
-        nil,
-        mKey,
-        'PartyDirec',
-        1,
-        UpdatePartyFrameSize
-    )
+    CreateOptionDropdown(scroll, L['Growth Direction'], offset - 60, options, nil, mKey, 'PartyDirec', 1, UpdatePartyFrameSize)
 end
 
 local function UpdateRaidFrameDirection()
@@ -1788,17 +1692,7 @@ function GUI:SetupSimpleRaidFrame(parent)
     end
 
     CreateOptionDropdown(scroll, L['Growth Direction'], offset - 60, options, nil, mKey, 'SMRDirec', 1)
-    CreateOptionDropdown(
-        scroll,
-        L['Group By'],
-        offset - 110,
-        { _G.GROUP, _G.CLASS, _G.ROLE },
-        nil,
-        mKey,
-        'SMRGroupBy',
-        1,
-        UpdateSimpleRaidFrameSize
-    )
+    CreateOptionDropdown(scroll, L['Group By'], offset - 110, { _G.GROUP, _G.CLASS, _G.ROLE }, nil, mKey, 'SMRGroupBy', 1, UpdateSimpleRaidFrameSize)
 end
 
 function GUI:SetupUnitFrame(parent)
@@ -2249,18 +2143,7 @@ function GUI:SetupUnitFrameRangeCheck(parent)
 
     local offset = -10
     CreateGroupTitle(scroll, L['Range Check'], offset)
-    CreateSlider(
-        scroll,
-        'Unitframe',
-        datas.key,
-        datas.text,
-        datas.min,
-        datas.max,
-        datas.step,
-        datas.value,
-        20,
-        offset - 50
-    )
+    CreateSlider(scroll, 'Unitframe', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset - 50)
 end
 
 function GUI:SetupCastbar(parent)
@@ -2442,15 +2325,7 @@ function GUI:SetupPartyWatcher(parent)
     local frame = panel.bg
     local options = {}
 
-    options[1] = createEditBox(
-        frame,
-        L['SpellID'],
-        10,
-        -30,
-        L['Fill in SpellID, must be a number.|nSpell name is not supported.'],
-        107,
-        24
-    )
+    options[1] = createEditBox(frame, L['SpellID'], 10, -30, L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 107, 24)
     options[2] = createEditBox(
         frame,
         L['Spell Cooldown'],
@@ -2553,7 +2428,6 @@ function GUI:SetupPartyWatcher(parent)
 end
 
 do
-
     local function UpdateDebuffWatcher()
         UNITFRAME:UpdateDebuffWatcher()
     end
@@ -2611,36 +2485,36 @@ do
             end
         end
 
-        local maxLevel = GetMaxPlayerLevel()
+        local maxLevel = UnitLevel('player') > 60
         local dungeons = {}
 
-        if maxLevel == 70 then
+        if maxLevel then
             for dungeonID = 1196, 1204 do
                 if dungeonID ~= 1200 then
                     addNewDungeon(dungeons, dungeonID)
                 end
             end
-            addNewDungeon(dungeons, 313)  -- 青龙寺
-            addNewDungeon(dungeons, 537)  -- 影月墓地
-            addNewDungeon(dungeons, 721)  -- 英灵殿
-            addNewDungeon(dungeons, 800)  -- 群星庭院
+            addNewDungeon(dungeons, 313) -- 青龙寺
+            addNewDungeon(dungeons, 537) -- 影月墓地
+            addNewDungeon(dungeons, 721) -- 英灵殿
+            addNewDungeon(dungeons, 800) -- 群星庭院
         else
             for dungeonID = 1182, 1189 do
                 addNewDungeon(dungeons, dungeonID)
             end
             addNewDungeon(dungeons, 1194) -- 集市
-            addNewDungeon(dungeons, 536)  -- 恐轨车站
-            addNewDungeon(dungeons, 558)  -- 钢铁码头
-            addNewDungeon(dungeons, 860)  -- 重返卡拉赞
+            addNewDungeon(dungeons, 536) -- 恐轨车站
+            addNewDungeon(dungeons, 558) -- 钢铁码头
+            addNewDungeon(dungeons, 860) -- 重返卡拉赞
             addNewDungeon(dungeons, 1178) -- 麦卡贡
         end
 
         local raids = {
             [1] = EJ_GetInstanceInfo(1190),
             [2] = EJ_GetInstanceInfo(1193),
-            [3] = EJ_GetInstanceInfo(1195)
+            [3] = EJ_GetInstanceInfo(1195),
         }
-        if maxLevel == 70 then
+        if maxLevel then
             raids[4] = EJ_GetInstanceInfo(1200)
         end
 
@@ -2650,15 +2524,7 @@ do
         options[2] = createDropdown(frame, _G.RAID, 123, -30, raids, L['Select a specific raid.'], 107, 24)
         options[2].title = L['Hint']
         options[2]:Hide()
-        options[3] = createEditBox(
-            frame,
-            L['SpellID'],
-            10,
-            -90,
-            L['Fill in SpellID, must be a number.|nSpell name is not supported.'],
-            107,
-            24
-        )
+        options[3] = createEditBox(frame, L['SpellID'], 10, -90, L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 107, 24)
         options[4] = createEditBox(
             frame,
             L['Priority'],
@@ -2681,8 +2547,7 @@ do
             print(spellID)
             print(C.DebuffWatcherList[instName][spellID])
             local localPrio = C.DebuffWatcherList[instName][spellID]
-            local savedPrio = _G.ANDROMEDA_ADB['DebuffWatcherList'][instName]
-                and _G.ANDROMEDA_ADB['DebuffWatcherList'][instName][spellID]
+            local savedPrio = _G.ANDROMEDA_ADB['DebuffWatcherList'][instName] and _G.ANDROMEDA_ADB['DebuffWatcherList'][instName][spellID]
             if (localPrio and savedPrio and savedPrio == 0) or (not localPrio and not savedPrio) then
                 return false
             end
@@ -2718,9 +2583,6 @@ do
             GUI:ClearEdit(options[3])
             GUI:ClearEdit(options[4])
         end
-
-
-
 
         local scroll = GUI:CreateScroll(frame, 200, 380)
         scroll:ClearAllPoints()
@@ -2800,13 +2662,7 @@ do
                 self:SetText(prio)
             end)
             prioBox.title = L['Priority']
-            F.AddTooltip(
-                prioBox,
-                'ANCHOR_RIGHT',
-                L['Priority limit in 1-6.|nPress ENTER key when you finish typing.'],
-                'BLUE',
-                true
-            )
+            F.AddTooltip(prioBox, 'ANCHOR_RIGHT', L['Priority limit in 1-6.|nPress ENTER key when you finish typing.'], 'BLUE', true)
             bar.prioBox = prioBox
 
             return bar
@@ -2832,12 +2688,7 @@ do
 
             if C.DebuffWatcherList[instName] then
                 for spellID, priority in pairs(C.DebuffWatcherList[instName]) do
-                    if
-                        not (
-                            _G.ANDROMEDA_ADB['DebuffWatcherList'][instName]
-                            and _G.ANDROMEDA_ADB['DebuffWatcherList'][instName][spellID]
-                        )
-                    then
+                    if not (_G.ANDROMEDA_ADB['DebuffWatcherList'][instName] and _G.ANDROMEDA_ADB['DebuffWatcherList'][instName][spellID]) then
                         index = index + 1
                         applyData(index, instName, spellID, priority)
                     end
@@ -3074,13 +2925,7 @@ function GUI:SetupPartyAura(parent)
     local editBox = createEditBox(panel.bg, nil, 10, -10, nil, 110, 24)
     panel.editBox = editBox
     editBox.title = L['Hint']
-    F.AddTooltip(
-        editBox,
-        'ANCHOR_RIGHT',
-        L['Fill in SpellID, must be a number.|nSpell name is not supported.'],
-        'BLUE',
-        true
-    )
+    F.AddTooltip(editBox, 'ANCHOR_RIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE', true)
 
     local addBtn = F.CreateButton(panel.bg, 50, 24, _G.ADD)
     addBtn:SetPoint('TOPRIGHT', -8, -10)
@@ -3099,9 +2944,6 @@ function GUI:SetupPartyAura(parent)
         end
     end
 end
-
-
-
 
 -- General
 
@@ -3192,19 +3034,7 @@ function GUI:SetupVignettingVisibility(parent)
     }
 
     local offset = -30
-    CreateSlider(
-        scroll,
-        'General',
-        datas.key,
-        datas.text,
-        datas.min,
-        datas.max,
-        datas.step,
-        datas.value,
-        20,
-        offset,
-        UpdateVignettingVisibility
-    )
+    CreateSlider(scroll, 'General', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset, UpdateVignettingVisibility)
 end
 
 -- Chat
@@ -3341,13 +3171,7 @@ function GUI:SetupAnnounceableSpells(parent)
     local scroll = GUI:CreateScroll(frame, 200, 480)
     scroll.box = createEditBox(frame, nil, 10, -10, nil, 110, 24)
     scroll.box.title = L['SpellID']
-    F.AddTooltip(
-        scroll.box,
-        'ANCHOR_RIGHT',
-        L['Fill in SpellID, must be a number.|nSpell name is not supported.'],
-        'BLUE',
-        true
-    )
+    F.AddTooltip(scroll.box, 'ANCHOR_RIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE', true)
 
     scroll.add = F.CreateButton(frame, 50, 24, _G.ADD)
     scroll.add:SetPoint('LEFT', scroll.box, 'RIGHT', 5, 0)
