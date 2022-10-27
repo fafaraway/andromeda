@@ -115,7 +115,10 @@ local function SetupChatFrame(self)
     local font = C.Assets.Fonts.Bold
     local outline = _G.ANDROMEDA_ADB.FontOutline
     local fontSize = select(2, self:GetFont())
-    F:SetFS(self, font, fontSize, outline and 'OUTLINE' or '', nil, nil, outline or 'THICK')
+    --F:SetFS(self, font, fontSize, outline and 'OUTLINE' or '', nil, nil, outline or 'THICK')
+    self:SetFont(font, fontSize, outline and 'OUTLINE' or '')
+    self:SetShadowColor(0, 0, 0, outline and 0 or 1)
+    self:SetShadowOffset(2, -2)
 
     if not C.IS_NEW_PATCH then
         self:SetMaxResize(C.SCREEN_WIDTH, C.SCREEN_HEIGHT)
@@ -149,7 +152,7 @@ local function SetupChatFrame(self)
 
     local tab = _G[name .. 'Tab']
     tab:SetAlpha(1)
-    tab.Text:SetFont(C.Assets.Fonts.Bold, 12, C.DB.Chat.FontOutline and 'OUTLINE')
+    tab.Text:SetFont(C.Assets.Fonts.Bold, 12, C.DB.Chat.FontOutline and 'OUTLINE' or '')
     tab.Text:SetShadowColor(0, 0, 0, C.DB.Chat.FontOutline and 0 or 1)
     tab.Text:SetShadowOffset(2, -2)
     F.StripTextures(tab, 7)
