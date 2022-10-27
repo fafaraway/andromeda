@@ -109,14 +109,6 @@ local function NoTalkingHeads()
     end)
 end
 
-local function TalkingHeadOnLoad(event, addon)
-    if addon == 'Blizzard_TalkingHeadUI' then
-        MoveTalkingHead()
-        NoTalkingHeads()
-        F:UnregisterEvent(event, TalkingHeadOnLoad)
-    end
-end
-
 function BLIZZARD:AlertFrame_Setup()
     parentFrame = CreateFrame('Frame', nil, _G.UIParent)
     parentFrame:SetSize(200, 30)
@@ -136,11 +128,9 @@ function BLIZZARD:AlertFrame_Setup()
     hooksecurefunc(_G.AlertFrame, 'UpdateAnchors', BLIZZARD.AlertFrame_UpdateAnchor)
     hooksecurefunc('GroupLootContainer_Update', BLIZZARD.UpdatGroupLootContainer)
 
-    if IsAddOnLoaded('Blizzard_TalkingHeadUI') then
+    if _G.TalkingHeadFrame then
         MoveTalkingHead()
         NoTalkingHeads()
-    else
-        F:RegisterEvent('ADDON_LOADED', TalkingHeadOnLoad)
     end
 end
 
