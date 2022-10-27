@@ -585,6 +585,11 @@ function BAR:CreateLeaveVehicleBar()
     end
 end
 
+local function delayUpdateBars(event)
+    BAR:UpdateAllScale()
+    F:UnregisterEvent(event, delayUpdateBars)
+end
+
 function BAR:OnLogin()
     BAR.buttons = {}
 
@@ -606,7 +611,9 @@ function BAR:OnLogin()
 
     BAR:RemoveBlizzArt()
     BAR:RestyleButtons()
-    BAR:UpdateAllScale()
+
+    F:RegisterEvent('PLAYER_ENTERING_WORLD', delayUpdateBars)
+
     BAR:BarFade()
     BAR:CooldownNotify()
     BAR:CooldownDesaturate()
