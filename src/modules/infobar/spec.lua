@@ -39,18 +39,20 @@ local function refreshDefaultLootSpec()
     newMenu[numLocal - mult].text = format(_G.LOOT_SPECIALIZATION_DEFAULT, select(2, GetSpecializationInfo(currentSpecIndex)))
 end
 
-local function selectCurrentConfig(_, configID)
+local function selectCurrentConfig(_, configID, specID)
     if InCombatLockdown() then
         _G.UIErrorsFrame:AddMessage(C.INFO_COLOR .. _G.ERR_NOT_IN_COMBAT)
         return
     end
-    if not _G.ClassTalentFrame then
-        LoadAddOn('Blizzard_ClassTalentUI')
+
+    if configID == _G.Constants.TraitConsts.STARTER_BUILD_TRAIT_CONFIG_ID then
+        C_ClassTalents.SetStarterBuildActive(true)
+    else
+        C_ClassTalents.LoadConfig(configID, true)
+        C_ClassTalents.SetStarterBuildActive(false)
     end
-    if not _G.ClassTalentFrame:IsShown() then
-        ShowUIPanel(_G.ClassTalentFrame)
-    end
-    _G.ClassTalentFrame.TalentsTab:LoadConfigInternal(configID, true)
+
+    C_ClassTalents.UpdateLastSelectedSavedConfigID(specID or GetSpecializationInfo(currentSpecIndex), configID)
 end
 
 local function checkCurrentConfig(self)
@@ -112,15 +114,15 @@ local function BuildSpecMenu()
         { text = _G.SPECIALIZATION, isTitle = true, notCheckable = true },
         seperatorMenu,
         { text = _G.SELECT_LOOT_SPECIALIZATION, isTitle = true, notCheckable = true },
-        { text = '', arg1 = 0, func = _G.selectLootSpec, checked = _G.checkLootSpec },
+        { text = '', arg1 = 0, func = selectLootSpec, checked = checkLootSpec },
     }
 
     for i = 1, 4 do
         local id, name = GetSpecializationInfo(i)
         if id then
             numSpecs = (numSpecs or 0) + 1
-            tinsert(newMenu, i + 1, { text = name, arg1 = i, func = _G.selectSpec, checked = _G.checkSpec })
-            tinsert(newMenu, { text = name, arg1 = id, func = _G.selectLootSpec, checked = _G.checkLootSpec })
+            tinsert(newMenu, i + 1, { text = name, arg1 = i, func = selectSpec, checked = checkSpec })
+            tinsert(newMenu, { text = name, arg1 = id, func = selectLootSpec, checked = checkLootSpec })
         end
     end
 
