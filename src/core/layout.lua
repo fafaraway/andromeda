@@ -461,7 +461,7 @@ local function isCastbarEnable()
 end
 
 local function isPartyEnable()
-    return C.DB['Unitframe']['Enable'] and C.DB['Unitframe']['PartyFrame']
+    return C.DB['Unitframe']['Enable'] and C.DB['Unitframe']['RaidFrame'] and C.DB['Unitframe']['PartyFrame']
 end
 
 local function isRaidEnable()
@@ -470,6 +470,10 @@ end
 
 local function isArenaEnable()
     return C.DB['Unitframe']['Enable'] and C.DB['Unitframe']['Arena']
+end
+
+local function isTalkingHeadHidden()
+    return C.DB['General']['HideTalkingHead']
 end
 
 local ignoredFrames = {
@@ -505,6 +509,7 @@ local ignoredFrames = {
     ['GameTooltipDefaultContainer'] = function()
         return true
     end,
+    ['TalkingHeadFrame'] = isTalkingHeadHidden,
 }
 
 function M:DisableBlizzardMover()
@@ -542,7 +547,11 @@ function M:DisableBlizzardMover()
     if isPartyEnable() then
         mixin.RefreshPartyFrames = nop
     end
+    if isTalkingHeadHidden() then
+        mixin.RefreshTalkingHeadFrame = nop
+    end
     if isUnitFrameEnable() then
+        mixin.ResetTargetAndFocus = nop
         mixin.RefreshTargetAndFocus = nop
         mixin.RefreshBossFrames = nop
     end

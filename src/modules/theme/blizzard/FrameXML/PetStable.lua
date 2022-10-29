@@ -28,8 +28,8 @@ tinsert(C.BlizzThemes, function()
         local bu = _G['PetStableActivePet' .. i]
         bu.Background:Hide()
         bu.Border:Hide()
-        bu:SetNormalTexture(C.Assets.Textures.Blank)
-        bu:SetPushedTexture(C.Assets.Textures.Blank)
+        bu:SetNormalTexture(0)
+        bu:SetPushedTexture(0)
         bu.Checked:SetTexture(C.Assets.Textures.ButtonChecked)
         bu:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
 
@@ -39,8 +39,8 @@ tinsert(C.BlizzThemes, function()
 
     for i = 1, _G.NUM_PET_STABLE_SLOTS do
         local bu = _G['PetStableStabledPet' .. i]
-        bu:SetNormalTexture(C.Assets.Textures.Blank)
-        bu:SetPushedTexture(C.Assets.Textures.Blank)
+        bu:SetNormalTexture(0)
+        bu:SetPushedTexture(0)
         bu.Checked:SetTexture(C.Assets.Textures.ButtonChecked)
         bu:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
         bu:DisableDrawLayer('BACKGROUND')

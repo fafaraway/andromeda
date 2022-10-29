@@ -86,6 +86,7 @@ function UNITFRAME:CreateClassPower(self)
     local barHeight = C.DB.Unitframe.ClassPowerHeight
 
     local isDK = C.MY_CLASS == 'DEATHKNIGHT'
+    local maxBar = isDK and 6 or 7
     local holder = CreateFrame('Frame', '$parentClassPowerBar', self)
     holder:SetSize(barWidth, barHeight)
     holder:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -3)
@@ -98,10 +99,10 @@ function UNITFRAME:CreateClassPower(self)
     end
 
     local bars = {}
-    for i = 1, 7 do
+    for i = 1, maxBar do
         bars[i] = CreateFrame('StatusBar', C.ADDON_TITLE .. 'ClassPower' .. i, holder)
         bars[i]:SetHeight(barHeight)
-        bars[i]:SetWidth((barWidth - 6 * gap) / 7)
+        bars[i]:SetWidth((barWidth - (maxBar - 1) * gap) / maxBar)
         bars[i]:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
         bars[i]:SetFrameLevel(self:GetFrameLevel() + 5)
         bars[i].__bg = F.SetBD(bars[i], 0)

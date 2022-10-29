@@ -246,7 +246,7 @@ tinsert(C.BlizzThemes, function()
                 bu:SetPoint('LEFT', buttonList[i - 1], 'RIGHT', 3, 0)
             end
 
-            bu:SetNormalTexture(C.Assets.Textures.Blank)
+            bu:SetNormalTexture(0)
             bu:GetPushedTexture():SetTexture(C.Assets.Textures.ButtonChecked)
             bu:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
             if not bu.bg then

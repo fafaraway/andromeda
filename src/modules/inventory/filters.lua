@@ -22,22 +22,15 @@ end
 
 -- Default filter
 local function isItemInBag(item)
-    if C.IS_NEW_PATCH then
-        return item.bagId >= 0 and item.bagId <= 5
-    else
-        return item.bagId >= 0 and item.bagId <= 4
-    end
-end
-
-local function isItemInBank(item)
     return item.bagId >= 0 and item.bagId <= 4
 end
 
 local function isItemInBagReagent(item)
-    if not C.IS_NEW_PATCH then
-        return
-    end
     return item.bagId == 5
+end
+
+local function isItemInBank(item)
+    return item.bagId == -1 or (item.bagId > 5 and item.bagId < 13)
 end
 
 local function isItemJunk(item)

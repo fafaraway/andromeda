@@ -111,9 +111,9 @@ tinsert(C.BlizzThemes, function()
                 result:SetPoint('TOPRIGHT', AutoCompleteFrame.Results[i - 1], 'BOTTOMRIGHT', 0, 1)
             end
 
-            result:SetNormalTexture(C.Assets.Textures.Blank)
-            result:SetPushedTexture(C.Assets.Textures.Blank)
-            result:SetHighlightTexture(C.Assets.Textures.Blank)
+            result:SetNormalTexture(0)
+            result:SetPushedTexture(0)
+            result:SetHighlightTexture(0)
 
             local bg = F.CreateBDFrame(result, 0.5)
             local hl = result:CreateTexture(nil, 'BACKGROUND')
@@ -148,7 +148,7 @@ tinsert(C.BlizzThemes, function()
         F.StripTextures(header)
         header.Label:SetFont(C.Assets.Fonts.Regular, 14, 'OUTLINE')
         header.Label:SetShadowColor(0, 0, 0, 0)
-        header:SetHighlightTexture(C.Assets.Textures.Blank)
+        header:SetHighlightTexture(0)
 
         local bg = F.CreateBDFrame(header, 0.25)
         local hl = header:CreateTexture(nil, 'BACKGROUND')

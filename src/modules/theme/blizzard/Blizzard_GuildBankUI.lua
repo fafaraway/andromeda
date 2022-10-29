@@ -31,8 +31,8 @@ C.Themes['Blizzard_GuildBankUI'] = function()
 
         for j = 1, 14 do
             local button = column.Buttons[j]
-            button:SetNormalTexture(C.Assets.Textures.Blank)
-            button:SetPushedTexture(C.Assets.Textures.Blank)
+            button:SetNormalTexture(0)
+            button:SetPushedTexture(0)
             button:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
             button.icon:SetTexCoord(unpack(C.TEX_COORD))
             button.bg = F.CreateBDFrame(button, 0.3)
@@ -48,8 +48,8 @@ C.Themes['Blizzard_GuildBankUI'] = function()
         local icon = button.IconTexture
 
         F.StripTextures(tab)
-        button:SetNormalTexture(C.Assets.Textures.Blank)
-        button:SetPushedTexture(C.Assets.Textures.Blank)
+        button:SetNormalTexture(0)
+        button:SetPushedTexture(0)
         button:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
         button:SetCheckedTexture(C.Assets.Textures.ButtonChecked)
         F.CreateBDFrame(button)

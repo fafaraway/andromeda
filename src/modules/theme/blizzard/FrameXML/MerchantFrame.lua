@@ -28,7 +28,7 @@ local function reskinMerchantItem(item)
 end
 
 local function reskinMerchantInteract(button)
-    button:SetPushedTexture(C.Assets.Textures.Blank)
+    button:SetPushedTexture(0)
     button:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
     F.CreateBDFrame(button)
 end
@@ -85,9 +85,14 @@ tinsert(C.BlizzThemes, function()
             local bu = _G['MerchantToken' .. i]
             if bu and not bu.styled then
                 local icon = _G['MerchantToken' .. i .. 'Icon']
+                if icon then
+                    F.ReskinIcon(icon)
+                end
+
                 local count = _G['MerchantToken' .. i .. 'Count']
-                count:SetPoint('TOPLEFT', bu, 'TOPLEFT', -2, 0)
-                F.ReskinIcon(icon)
+                if count then
+                    count:SetPoint('TOPLEFT', bu, 'TOPLEFT', -2, 0) -- needs reveiw
+                end
 
                 bu.styled = true
             end

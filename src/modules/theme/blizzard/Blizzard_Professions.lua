@@ -2,8 +2,8 @@ local F, C = unpack(select(2, ...))
 
 local function reskinSlotButton(button)
     if button and not button.styled then
-        button:SetNormalTexture(C.Assets.Textures.Blank)
-        button:SetPushedTexture(C.Assets.Textures.Blank)
+        button:SetNormalTexture(0)
+        button:SetPushedTexture(0)
         button.bg = F.ReskinIcon(button.Icon)
         F.ReskinIconBorder(button.IconBorder, true)
         local hl = button:GetHighlightTexture()
@@ -26,9 +26,9 @@ end
 
 local function reskinQualityContainer(container)
     local button = container.Button
-    button:SetNormalTexture(C.Assets.Textures.Blank)
-    button:SetPushedTexture(C.Assets.Textures.Blank)
-    button:SetHighlightTexture(C.Assets.Textures.Blank)
+    button:SetNormalTexture(0)
+    button:SetPushedTexture(0)
+    button:SetHighlightTexture(0)
     button.bg = F.ReskinIcon(button.Icon)
     F.ReskinIconBorder(button.IconBorder, true)
     reskinArrowInput(container.EditBox)
@@ -75,8 +75,8 @@ C.Themes['Blizzard_Professions'] = function()
         if button then
             button.bg = F.ReskinIcon(button.icon)
             F.ReskinIconBorder(button.IconBorder) -- needs review, maybe no quality at all
-            button:SetNormalTexture(C.Assets.Textures.Blank)
-            button:SetPushedTexture(C.Assets.Textures.Blank)
+            button:SetNormalTexture(0)
+            button:SetPushedTexture(0)
         end
     end
 
@@ -135,9 +135,14 @@ C.Themes['Blizzard_Professions'] = function()
             reskinSlotButton(slot.Button)
         end
 
-        local slot = form.salvageSlot
-        if slot then
-            reskinSlotButton(slot.Button)
+        local salvageSlot = form.salvageSlot
+        if salvageSlot then
+            reskinSlotButton(salvageSlot.Button)
+        end
+
+        local enchantSlot = form.enchantSlot
+        if enchantSlot then
+            reskinSlotButton(enchantSlot.Button)
         end
         -- #TODO: salvage flyout, item flyout, recraft flyout
     end)
@@ -188,9 +193,9 @@ C.Themes['Blizzard_Professions'] = function()
                 local itemContainer = child.ItemContainer
                 if itemContainer then
                     local item = itemContainer.Item
-                    item:SetNormalTexture(C.Assets.Textures.Blank)
-                    item:SetPushedTexture(C.Assets.Textures.Blank)
-                    item:SetHighlightTexture(C.Assets.Textures.Blank)
+                    item:SetNormalTexture(0)
+                    item:SetPushedTexture(0)
+                    item:SetHighlightTexture(0)
 
                     local icon = item:GetRegions()
                     item.bg = F.ReskinIcon(icon)

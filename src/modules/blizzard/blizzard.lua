@@ -54,7 +54,7 @@ function BLIZZARD:VehicleIndicatorMover()
     F.Mover(frame, L['VehicleIndicator'], 'VehicleIndicator', { 'BOTTOMRIGHT', _G.Minimap, 'TOPRIGHT', 0, 0 })
 
     hooksecurefunc(_G.VehicleSeatIndicator, 'SetPoint', function(self, _, parent)
-        if parent == 'MinimapCluster' or parent == _G.MinimapCluster then
+        if parent ~= frame then
             self:ClearAllPoints()
             self:SetPoint('TOPLEFT', frame)
             self:SetScale(0.7)

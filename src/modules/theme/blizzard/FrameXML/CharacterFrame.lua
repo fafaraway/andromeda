@@ -146,8 +146,8 @@ tinsert(C.BlizzThemes, function()
         F.ReskinIconBorder(slot.IconBorder)
 
         local popout = slot.popoutButton
-        popout:SetNormalTexture(C.Assets.Textures.Blank)
-        popout:SetHighlightTexture(C.Assets.Textures.Blank)
+        popout:SetNormalTexture(0)
+        popout:SetHighlightTexture(0)
 
         local arrow = popout:CreateTexture(nil, 'OVERLAY')
         arrow:SetSize(14, 14)

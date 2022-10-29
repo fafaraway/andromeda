@@ -11,8 +11,8 @@ tinsert(C.BlizzThemes, function()
     hooksecurefunc('EquipmentFlyout_CreateButton', function()
         local button = EquipmentFlyoutFrame.buttons[#EquipmentFlyoutFrame.buttons]
 
-        button:SetNormalTexture(C.Assets.Textures.Blank)
-        button:SetPushedTexture(C.Assets.Textures.Blank)
+        button:SetNormalTexture(0)
+        button:SetPushedTexture(0)
         button:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
         button.bg = F.ReskinIcon(button.icon)
         F.ReskinIconBorder(button.IconBorder)

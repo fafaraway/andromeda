@@ -308,7 +308,7 @@ function keyFeedback:CreateFeedbackButton(autoKeyup)
     F.CreateSD(bg)
 
     if mirror.SetPushedTexture then
-        mirror:SetPushedTexture(C.Assets.Textures.Blank)
+        mirror:SetPushedTexture(0)
     end
 
     mirror.cooldown:SetEdgeTexture('Interface\\Cooldown\\edge')

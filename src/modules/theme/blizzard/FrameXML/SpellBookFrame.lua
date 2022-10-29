@@ -48,8 +48,8 @@ local function handleSkillButton(button)
     if not button then
         return
     end
-    button:SetCheckedTexture(C.Assets.Textures.Blank)
-    button:SetPushedTexture(C.Assets.Textures.Blank)
+    button:SetCheckedTexture(0)
+    button:SetPushedTexture(0)
     button.IconTexture:SetInside()
     button.bg = F.ReskinIcon(button.IconTexture)
     button.highlightTexture:SetInside(button.bg)
@@ -98,8 +98,8 @@ tinsert(C.BlizzThemes, function()
         bu.TextBackground:Hide()
         bu.TextBackground2:Hide()
         bu.UnlearnedFrame:SetAlpha(0)
-        bu:SetCheckedTexture(C.Assets.Textures.Blank)
-        bu:SetPushedTexture(C.Assets.Textures.Blank)
+        bu:SetCheckedTexture(0)
+        bu:SetPushedTexture(0)
 
         ic.bg = F.ReskinIcon(ic)
 
@@ -191,7 +191,7 @@ tinsert(C.BlizzThemes, function()
         for _, button in pairs(professionbuttons) do
             local bu = _G[button]
             F.StripTextures(bu)
-            bu:SetPushedTexture(C.Assets.Textures.Blank)
+            bu:SetPushedTexture(0)
 
             local icon = bu.iconTexture
             icon:ClearAllPoints()

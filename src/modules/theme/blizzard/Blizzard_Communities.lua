@@ -239,7 +239,7 @@ C.Themes['Blizzard_Communities'] = function()
                     child.bg:SetPoint('TOPLEFT', 5, -5)
                     child.bg:SetPoint('BOTTOMRIGHT', -10, 5)
 
-                    child:SetHighlightTexture(C.Assets.Textures.Blank)
+                    child:SetHighlightTexture(0)
                     child.IconRing:SetAlpha(0)
                     child.__iconBorder = F.ReskinIcon(child.Icon)
                     child.Background:Hide()

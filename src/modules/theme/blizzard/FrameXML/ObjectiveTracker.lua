@@ -7,8 +7,8 @@ local function ReskinQuestIcon(button)
 
     if not button.styled then
         button:SetSize(20, 20)
-        button:SetNormalTexture(C.Assets.Textures.Blank)
-        button:SetPushedTexture(C.Assets.Textures.Blank)
+        button:SetNormalTexture(0)
+        button:SetPushedTexture(0)
         button:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
         local icon = button.icon or button.Icon
         if icon then
@@ -235,8 +235,8 @@ tinsert(C.BlizzThemes, function()
     hooksecurefunc('ScenarioSpellButton_UpdateCooldown', function(spellButton)
         if not spellButton.styled then
             local bg = F.ReskinIcon(spellButton.Icon)
-            spellButton:SetNormalTexture(C.Assets.Textures.Blank)
-            spellButton:SetPushedTexture(C.Assets.Textures.Blank)
+            spellButton:SetNormalTexture(0)
+            spellButton:SetPushedTexture(0)
             local hl = spellButton:GetHighlightTexture()
             hl:SetColorTexture(1, 1, 1, 0.25)
             hl:SetInside(bg)

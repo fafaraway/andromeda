@@ -1469,16 +1469,16 @@ do
 
     function F:Reskin(noGlow, override)
         if self.SetNormalTexture and not override then
-            self:SetNormalTexture(C.Assets.Textures.Blank)
+            self:SetNormalTexture(0)
         end
         if self.SetHighlightTexture then
-            self:SetHighlightTexture(C.Assets.Textures.Blank)
+            self:SetHighlightTexture(0)
         end
         if self.SetPushedTexture then
-            self:SetPushedTexture(C.Assets.Textures.Blank)
+            self:SetPushedTexture(0)
         end
         if self.SetDisabledTexture then
-            self:SetDisabledTexture(C.Assets.Textures.Blank)
+            self:SetDisabledTexture(0)
         end
 
         local buttonName = self.GetName and self:GetName()
@@ -1991,8 +1991,8 @@ do
 
     -- Handle checkbox and radio
     function F:ReskinCheckbox(flat, forceSaturation)
-        self:SetNormalTexture(C.Assets.Textures.Blank)
-        self:SetPushedTexture(C.Assets.Textures.Blank)
+        self:SetNormalTexture(0)
+        self:SetPushedTexture(0)
 
         self.bg = F.CreateBDFrame(self, 0.25, true)
         F.SetBorderColor(self.bg)
@@ -2188,7 +2188,7 @@ do
             return
         end
         self.settingTexture = true
-        self:SetNormalTexture('')
+        self:SetNormalTexture(0)
 
         if texture and texture ~= '' then
             if strfind(texture, 'Plus') or strfind(texture, '[Cc]losed') then
@@ -2204,9 +2204,9 @@ do
     end
 
     function F:ReskinCollapse(isAtlas)
-        self:SetNormalTexture(C.Assets.Textures.Blank)
-        self:SetHighlightTexture(C.Assets.Textures.Blank)
-        self:SetPushedTexture(C.Assets.Textures.Blank)
+        self:SetNormalTexture(0)
+        self:SetHighlightTexture(0)
+        self:SetPushedTexture(0)
 
         local bg = F.CreateBDFrame(self)
         bg:ClearAllPoints()

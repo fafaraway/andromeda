@@ -40,6 +40,7 @@ function ACTIONBAR:FadeBlingTexture(cooldown, alpha)
     if not cooldown then
         return
     end
+    -- #TODO
     -- causing problem???
     -- cooldown:SetBlingTexture(alpha > 0.5 and [[Interface\Cooldown\star4]] or C.Assets.Textures.Blank)
 end

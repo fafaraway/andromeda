@@ -308,13 +308,7 @@ function INVENTORY:CreateDepositButton()
     end)
 
     bu.title = _G.REAGENTBANK_DEPOSIT
-    F.AddTooltip(
-        bu,
-        'ANCHOR_TOP',
-        L['Left click to deposit reagents, right click to switch deposit mode.|nIf the button is highlight, the reagents from your bags would auto deposit once you open the bank.'],
-        'BLUE',
-        true
-    )
+    F.AddTooltip(bu, 'ANCHOR_TOP', L['Left click to deposit reagents, right click to switch deposit mode.|nIf the button is highlight, the reagents from your bags would auto deposit once you open the bank.'], 'BLUE', true)
     updateDepositButtonStatus(bu)
 
     return bu
@@ -501,19 +495,10 @@ function INVENTORY:GetEmptySlot(name)
         if slotID then
             return -1, slotID
         end
-        if C.IS_NEW_PATCH then
-            for bagID = 6, 12 do
-                local slotID = INVENTORY:GetContainerEmptySlot(bagID)
-                if slotID then
-                    return bagID, slotID
-                end
-            end
-        else
-            for bagID = 5, 11 do
-                local slotID = INVENTORY:GetContainerEmptySlot(bagID)
-                if slotID then
-                    return bagID, slotID
-                end
+        for bagID = 6, 12 do
+            local slotID = INVENTORY:GetContainerEmptySlot(bagID)
+            if slotID then
+                return bagID, slotID
             end
         end
     elseif name == 'Reagent' then
@@ -694,8 +679,7 @@ end
 
 local customJunkEnable
 function INVENTORY:CreateCustomJunkButton()
-    local enabledText =
-        L["Click to tag item as junk.|nIf 'Auto sell junk' enabled, these items would be sold as well.|nThe list is saved account-wide, and won't be in the export data.|nYou can hold CTRL + ALT and click to wipe the custom junk list."]
+    local enabledText = L["Click to tag item as junk.|nIf 'Auto sell junk' enabled, these items would be sold as well.|nThe list is saved account-wide, and won't be in the export data.|nYou can hold CTRL + ALT and click to wipe the custom junk list."]
 
     local bu = F.CreateButton(self, 16, 16, true, iconsList.BagJunk)
     bu.Icon:SetVertexColor(unpack(iconColor))
@@ -922,8 +906,8 @@ function INVENTORY:OnLogin()
     MyButton:Scaffold('Default')
 
     function MyButton:OnCreate()
-        self:SetNormalTexture(C.Assets.Textures.Blank)
-        self:SetPushedTexture(C.Assets.Textures.Blank)
+        self:SetNormalTexture(0)
+        self:SetPushedTexture(0)
         self:SetHighlightTexture(C.Assets.Textures.Backdrop)
         self:GetHighlightTexture():SetVertexColor(1, 1, 1, 0.25)
         self:GetHighlightTexture():SetInside()
@@ -995,7 +979,7 @@ function INVENTORY:OnLogin()
             self.canIMogIt:SetPoint(unpack(_G.CanIMogIt.ICON_LOCATIONS[_G.CanIMogItOptions['iconLocation']]))
         end
 
-        if C.IS_NEW_PATCH and not self.ProfessionQualityOverlay then
+        if not self.ProfessionQualityOverlay then
             self.ProfessionQualityOverlay = self:CreateTexture(nil, 'OVERLAY')
             self.ProfessionQualityOverlay:SetPoint('TOPLEFT', -3, 2)
         end
@@ -1084,7 +1068,7 @@ function INVENTORY:OnLogin()
             end
         end
 
-        if self.ProfessionQualityOverlay then -- isNewPatch
+        if self.ProfessionQualityOverlay then
             self.ProfessionQualityOverlay:SetAtlas(nil)
             SetItemCraftingQualityOverlay(self, item.link)
         end
@@ -1289,7 +1273,7 @@ function INVENTORY:OnLogin()
         buttons[1] = INVENTORY.CreateRestoreButton(self, f)
         buttons[2] = INVENTORY.CreateSortButton(self, name)
         if name == 'Bag' then
-            INVENTORY.CreateBagBar(self, settings, C.IS_NEW_PATCH and 5 or 4)
+            INVENTORY.CreateBagBar(self, settings, C.isBeta and 5 or 4)
             buttons[3] = INVENTORY.CreateBagToggle(self)
             buttons[4] = INVENTORY.CreateRepairButton(self)
             buttons[5] = INVENTORY.CreateSellButton(self)
@@ -1356,12 +1340,11 @@ function INVENTORY:OnLogin()
 
     local BagButton = Backpack:GetClass('BagButton', true, 'BagButton')
     function BagButton:OnCreate()
-        self:SetNormalTexture('')
-        self:GetNormalTexture():SetAlpha(0)
-        self:SetPushedTexture('')
-        self:GetPushedTexture():SetAlpha(0)
+        self:SetNormalTexture(0)
+        self:SetPushedTexture(0)
         self:SetHighlightTexture(C.Assets.Textures.Backdrop)
         self:GetHighlightTexture():SetVertexColor(1, 1, 1, 0.25)
+        self:GetHighlightTexture():SetInside()
 
         self:SetSize(iconSize, iconSize)
         F.CreateBD(self, 0.25)
@@ -1430,9 +1413,4 @@ function INVENTORY:OnLogin()
     end
     local shiftUpdater = CreateFrame('Frame', nil, f.main)
     shiftUpdater:SetScript('OnUpdate', onUpdate)
-
-    if C.IS_NEW_PATCH then
-        _G.MicroButtonAndBagsBar:Hide()
-        _G.MicroButtonAndBagsBar:UnregisterAllEvents()
-    end
 end

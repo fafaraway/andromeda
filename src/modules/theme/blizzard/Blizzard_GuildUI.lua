@@ -179,8 +179,8 @@ C.Themes['Blizzard_GuildUI'] = function()
         for i = 1, #buttons do
             local bu = buttons[i]
             if not bu.bg then
-                bu:SetNormalTexture(C.Assets.Textures.Blank)
-                bu:SetHighlightTexture(C.Assets.Textures.Blank)
+                bu:SetNormalTexture(0)
+                bu:SetHighlightTexture(0)
                 F.ReskinIcon(bu.icon)
                 bu.disabledBG:Hide()
                 bu.disabledBG.Show = nop

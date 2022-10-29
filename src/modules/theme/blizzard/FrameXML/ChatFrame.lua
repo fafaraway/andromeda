@@ -52,7 +52,7 @@ tinsert(C.BlizzThemes, function()
 
     _G.QuickJoinToastButton.FriendsButton:SetTexture(friendTex)
     _G.QuickJoinToastButton.QueueButton:SetTexture(queueTex)
-    _G.QuickJoinToastButton:SetHighlightTexture(C.Assets.Textures.Blank)
+    _G.QuickJoinToastButton:SetHighlightTexture(0)
     hooksecurefunc(_G.QuickJoinToastButton, 'ToastToFriendFinished', function(self)
         self.FriendsButton:SetShown(not self.displayedToast)
     end)
@@ -114,7 +114,7 @@ tinsert(C.BlizzThemes, function()
         for i = 1, self.Child:GetNumChildren() do
             local tab = select(i, self.Child:GetChildren())
             if not tab.styled and tab:IsHeader() then
-                tab:SetNormalTexture(C.Assets.Textures.Blank)
+                tab:SetNormalTexture(0)
                 tab.bg = F.CreateBDFrame(tab, 0.25)
                 tab.bg:SetAllPoints()
 

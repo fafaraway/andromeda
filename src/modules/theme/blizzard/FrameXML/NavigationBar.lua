@@ -68,7 +68,7 @@ tinsert(C.BlizzThemes, function()
             -- arrow button
             local arrowButton = navButton.MenuArrowButton
             arrowButton.Art:Hide()
-            arrowButton:SetHighlightTexture(C.Assets.Textures.Blank)
+            arrowButton:SetHighlightTexture(0)
 
             local tex = arrowButton:CreateTexture(nil, 'ARTWORK')
             F.SetupArrow(tex, 'down')

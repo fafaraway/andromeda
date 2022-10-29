@@ -40,7 +40,7 @@ local isBeta = select(4, GetBuildInfo()) == 100002 -- 10.0.2
 local isNewPatch = select(4, GetBuildInfo()) == 100000
 
 local ContainerIDToInventoryID = isBeta and C_Container.ContainerIDToInventoryID or ContainerIDToInventoryID
-local maxBagSlots = isNewPatch and 5 or NUM_BAG_SLOTS
+local maxBagSlots = 5
 
 function Implementation:GetBagButtonClass()
 	return self:GetClass("BagButton", true, "BagButton")
@@ -62,12 +62,7 @@ local buttonNum = 0
 function BagButton:Create(bagID)
 	buttonNum = buttonNum+1
 	local name = addon.."BagButton"..buttonNum
-	local isBankBag
-	if ns[2].IS_NEW_PATCH then
-		isBankBag = bagID > 5 and bagID < 13
-	else
-		isBankBag = bagID > 4 and bagID < 12
-	end
+	local isBankBag = bagID > 5 and bagID < 13
 	local button = setmetatable(CreateFrame("ItemButton", name, nil, "BackdropTemplate"), self.__index)
 
 	local invID = (isBankBag and bagID - maxBagSlots) or ContainerIDToInventoryID(bagID)

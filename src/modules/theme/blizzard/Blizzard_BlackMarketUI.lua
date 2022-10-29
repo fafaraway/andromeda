@@ -31,19 +31,17 @@ C.Themes['Blizzard_BlackMarketUI'] = function()
     F.Reskin(BlackMarketFrame.BidButton)
     F.ReskinClose(BlackMarketFrame.CloseButton)
     F.ReskinInput(_G.BlackMarketBidPriceGold)
-    F.ReskinScroll(_G.BlackMarketScrollFrameScrollBar)
+    F.ReskinTrimScroll(BlackMarketFrame.ScrollBar)
 
-    hooksecurefunc('BlackMarketScrollFrame_Update', function()
-        local buttons = _G.BlackMarketScrollFrame.buttons
-        for i = 1, #buttons do
-            local bu = buttons[i]
-
+    hooksecurefunc(BlackMarketFrame.ScrollBox, 'Update', function(self)
+        for i = 1, self.ScrollTarget:GetNumChildren() do
+            local bu = select(i, self.ScrollTarget:GetChildren())
             bu.Item.IconTexture:SetTexCoord(unpack(C.TEX_COORD))
             if not bu.reskinned then
                 F.StripTextures(bu)
 
-                bu.Item:SetNormalTexture(C.Assets.Textures.Blank)
-                bu.Item:SetPushedTexture(C.Assets.Textures.Blank)
+                bu.Item:SetNormalTexture(0)
+                bu.Item:SetPushedTexture(0)
                 bu.Item:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
                 F.CreateBDFrame(bu.Item)
                 bu.Item.IconBorder:SetAlpha(0)
@@ -69,7 +67,9 @@ C.Themes['Blizzard_BlackMarketUI'] = function()
 
             if bu:IsShown() and bu.itemLink then
                 local _, _, quality = GetItemInfo(bu.itemLink)
-                bu.Name:SetTextColor(GetItemQualityColor(quality))
+                local r, g, b = GetItemQualityColor(quality or 1)
+
+                bu.Name:SetTextColor(r, g, b)
             end
         end
     end)
@@ -78,8 +78,11 @@ C.Themes['Blizzard_BlackMarketUI'] = function()
         local hotDeal = self.HotDeal
         if hotDeal:IsShown() and hotDeal.itemLink then
             local _, _, quality = GetItemInfo(hotDeal.itemLink)
-            hotDeal.Name:SetTextColor(GetItemQualityColor(quality))
+            local r, g, b = GetItemQualityColor(quality or 1)
+
+            hotDeal.Name:SetTextColor(r, g, b)
         end
+
         hotDeal.Item.IconBorder:Hide()
     end)
 end

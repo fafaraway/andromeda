@@ -85,25 +85,12 @@ function BLIZZARD:AlertFrame_AdjustPosition()
     end
 end
 
-local function MoveTalkingHead()
-    local TalkingHeadFrame = _G.TalkingHeadFrame
-
-    TalkingHeadFrame.ignoreFramePositionManager = true
-    TalkingHeadFrame:ClearAllPoints()
-    TalkingHeadFrame:SetPoint('BOTTOM', 0, 120)
-
-    for index, alertFrameSubSystem in ipairs(_G.AlertFrame.alertFrameSubSystems) do
-        if alertFrameSubSystem.anchorFrame and alertFrameSubSystem.anchorFrame == TalkingHeadFrame then
-            tremove(_G.AlertFrame.alertFrameSubSystems, index)
-        end
-    end
-end
-
 local function NoTalkingHeads()
     if not C.DB.General.HideTalkingHead then
         return
     end
 
+    _G.TalkingHeadFrame:UnregisterAllEvents() -- needs review
     hooksecurefunc(_G.TalkingHeadFrame, 'Show', function(self)
         self:Hide()
     end)
@@ -129,7 +116,6 @@ function BLIZZARD:AlertFrame_Setup()
     hooksecurefunc('GroupLootContainer_Update', BLIZZARD.UpdatGroupLootContainer)
 
     if _G.TalkingHeadFrame then
-        MoveTalkingHead()
         NoTalkingHeads()
     end
 end

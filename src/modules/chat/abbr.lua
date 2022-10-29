@@ -23,6 +23,10 @@ function CHAT:UpdateChannelNames(text, ...)
         return
     end
 
+    if strfind(text, 'NO QUALITY ') then
+        return
+    end -- blizz forgot to remove debug code
+
     -- Different whisper color
     local r, g, b = ...
     if strfind(text, L['Tell'] .. ' |H[BN]*player.+%]') then

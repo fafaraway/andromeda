@@ -2,10 +2,10 @@
     <Frame name='BetterWorldQuestPinTemplate' inherits='WorldMap_WorldQuestPinTemplate' mixin='BetterWorldQuestPinMixin' virtual='true'/>
 
     <Script file="quest.lua"/>
-    <Script file="automation.lua"/>
-    <Script file="button.lua"/>
+    <Script file="better-world-quests.lua"/>
+    <Script file="extra-quest-button.lua"/>
     <Script file="helper.lua"/>
-    <Script file="tracker.lua"/>
-    <Script file="world.lua"/>
-    <Script file="wowhead.lua"/>
+    <Script file="objective-tracker.lua"/>
+    <Script file="quick-quest.lua"/>
+    <Script file="wowhead-link.lua"/>
 </Ui>

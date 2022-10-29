@@ -141,7 +141,7 @@ tinsert(C.BlizzThemes, function()
     _G.FriendsFrameStatusDropDown:SetPoint('TOPLEFT', _G.FriendsFrame, 'TOPLEFT', 10, -28)
 
     for _, button in pairs({ _G.FriendsTabHeaderSoRButton, _G.FriendsTabHeaderRecruitAFriendButton }) do
-        button:SetPushedTexture(C.Assets.Textures.Blank)
+        button:SetPushedTexture(0)
         button:GetRegions():SetTexCoord(unpack(C.TEX_COORD))
         F.CreateBDFrame(button, 0.25)
     end

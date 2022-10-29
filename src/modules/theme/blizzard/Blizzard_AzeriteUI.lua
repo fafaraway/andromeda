@@ -81,7 +81,7 @@ local function reskinReforgeUI(frame, index)
         F.Reskin(buttonFrame.ActionButton)
     end
     if buttonFrame.Currency then
-        F.ReskinIcon(buttonFrame.Currency.icon)
+        F.ReskinIcon(buttonFrame.Currency.Icon)
     end
 
     if frame.DescriptionCurrencies then

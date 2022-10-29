@@ -5,7 +5,7 @@ local function reskinFrameButton(self)
         local child = select(i, self.ScrollTarget:GetChildren())
         if not child.styled then
             child:GetRegions():Hide()
-            child:SetHighlightTexture(C.Assets.Textures.Blank)
+            child:SetHighlightTexture(0)
             child.iconBorder:SetTexture('')
             child.selectedTexture:SetTexture('')
 
@@ -271,7 +271,7 @@ C.Themes['Blizzard_Collections'] = function()
         if border then
             border:Hide()
         end
-        button:SetPushedTexture(C.Assets.Textures.Blank)
+        button:SetPushedTexture(0)
         button:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
         F.ReskinIcon(button.texture)
     end
@@ -383,7 +383,7 @@ C.Themes['Blizzard_Collections'] = function()
         for j = 1, 3 do
             local spell = bu['spell' .. j]
 
-            spell:SetPushedTexture(C.Assets.Textures.Blank)
+            spell:SetPushedTexture(0)
             spell:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
             spell.selected:SetTexture(C.Assets.Textures.ButtonPushed)
             spell:GetRegions():Hide()
@@ -415,7 +415,7 @@ C.Themes['Blizzard_Collections'] = function()
         local bu = PetJournal.SpellSelect['Spell' .. i]
 
         bu:SetCheckedTexture(C.Assets.Textures.ButtonPushed)
-        bu:SetPushedTexture(C.Assets.Textures.Blank)
+        bu:SetPushedTexture(0)
         bu:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
 
         F.ReskinIcon(bu.icon)
@@ -474,7 +474,7 @@ C.Themes['Blizzard_Collections'] = function()
         local bu = buttons['spellButton' .. i]
         local ic = bu.iconTexture
 
-        bu:SetPushedTexture(C.Assets.Textures.Blank)
+        bu:SetPushedTexture(0)
         bu:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
         bu:GetHighlightTexture():SetAllPoints(ic)
         bu.cooldown:SetAllPoints(ic)
@@ -522,7 +522,7 @@ C.Themes['Blizzard_Collections'] = function()
             button.slotFrameCollected:SetTexture('')
             button.slotFrameUncollected:SetTexture('')
             button.levelBackground:SetAlpha(0)
-            button:SetPushedTexture(C.Assets.Textures.Blank)
+            button:SetPushedTexture(0)
             button:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
             button:GetHighlightTexture():SetAllPoints(ic)
 
@@ -617,7 +617,7 @@ C.Themes['Blizzard_Collections'] = function()
             for i = 1, 6 do
                 select(i, tab:GetRegions()):SetAlpha(0)
             end
-            tab:SetHighlightTexture(C.Assets.Textures.Blank)
+            tab:SetHighlightTexture(0)
             tab.bg = F.CreateBDFrame(tab, 0.25)
             tab.bg:SetPoint('TOPLEFT', 3, -3)
             tab.bg:SetPoint('BOTTOMRIGHT', -3, -1)
@@ -774,7 +774,7 @@ C.Themes['Blizzard_Collections'] = function()
             end
 
             if _G.PetJournalBandageButton then
-                _G.PetJournalBandageButton:SetPushedTexture(C.Assets.Textures.Blank)
+                _G.PetJournalBandageButton:SetPushedTexture(0)
                 _G.PetJournalBandageButton:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
                 _G.PetJournalBandageButtonBorder:Hide()
                 _G.PetJournalBandageButton:SetPoint('TOPRIGHT', _G.PetJournalHealPetButton, 'TOPLEFT', -3, 0)

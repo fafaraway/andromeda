@@ -150,14 +150,6 @@ local autoSelectFirstOptionList = {
     [167839] = true, -- 灵魂残渣，爬塔
 }
 
-local autoGossipTypes = {
-    ['taxi'] = true,
-    ['gossip'] = true,
-    ['banker'] = true,
-    ['vendor'] = true,
-    ['trainer'] = true,
-}
-
 local ignoreInstances = {
     [1571] = true, -- 枯法者
     [1626] = true, -- 群星庭院
@@ -174,14 +166,8 @@ QuickQuest:Register('GOSSIP_SHOW', function()
         for index, questInfo in ipairs(C_GossipInfo.GetActiveQuests()) do
             local questID = questInfo.questID
             local isWorldQuest = questID and C_QuestLog.IsWorldQuest(questID)
-            if C.IS_NEW_PATCH then
-                if questInfo.isComplete and not isWorldQuest then
-                    C_GossipInfo.SelectActiveQuest(questID)
-                end
-            else
-                if questInfo.isComplete and (not questID or not isWorldQuest) then
-                    C_GossipInfo.SelectActiveQuest(index)
-                end
+            if questInfo.isComplete and not isWorldQuest then
+                C_GossipInfo.SelectActiveQuest(questID)
             end
         end
     end
@@ -191,11 +177,7 @@ QuickQuest:Register('GOSSIP_SHOW', function()
         for index, questInfo in ipairs(C_GossipInfo.GetAvailableQuests()) do
             local trivial = questInfo.isTrivial
             if not trivial or IsTrackingHidden() or (trivial and npcID == 64337) then
-                if C.IS_NEW_PATCH then
-                    C_GossipInfo.SelectAvailableQuest(questInfo.questID)
-                else
-                    C_GossipInfo.SelectAvailableQuest(index)
-                end
+                C_GossipInfo.SelectAvailableQuest(questInfo.questID)
             end
         end
     end
@@ -209,25 +191,13 @@ QuickQuest:Register('GOSSIP_SHOW', function()
     local firstOptionID = gossipInfoTable[1] and gossipInfoTable[1].gossipOptionID
 
     if autoSelectFirstOptionList[npcID] then
-        if C.IS_NEW_PATCH then
-            return C_GossipInfo.SelectOption(firstOptionID)
-        else
-            return C_GossipInfo.SelectOption(1)
-        end
+        return C_GossipInfo.SelectOption(firstOptionID)
     end
 
     if available == 0 and active == 0 and numOptions == 1 then
         local _, instance, _, _, _, _, _, mapID = GetInstanceInfo()
         if instance ~= 'raid' and not ignoreGossipNPC[npcID] and not ignoreInstances[mapID] then
-            if C.IS_NEW_PATCH then
-                return C_GossipInfo.SelectOption(firstOptionID)
-            else
-                local gType = gossipInfoTable[1] and gossipInfoTable[1].type
-                if gType and autoGossipTypes[gType] then
-                    C_GossipInfo.SelectOption(1)
-                    return
-                end
-            end
+            return C_GossipInfo.SelectOption(firstOptionID)
         end
     end
 end)
@@ -500,13 +470,9 @@ end
 _G.QuestNpcNameFrame:HookScript('OnShow', UnitQuickQuestStatus)
 _G.QuestNpcNameFrame:HookScript('OnMouseDown', ToggleQuickQuestStatus)
 
-if C.IS_NEW_PATCH then
-    local frame = _G.GossipFrame.TitleContainer or _G.GossipFrame.NameFrame
-    if frame then
-        frame:HookScript('OnShow', UnitQuickQuestStatus)
-        frame:HookScript('OnMouseDown', ToggleQuickQuestStatus)
-    end
-else
-    _G.GossipNpcNameFrame:HookScript('OnShow', UnitQuickQuestStatus)
-    _G.GossipNpcNameFrame:HookScript('OnMouseDown', ToggleQuickQuestStatus)
+local frame = _G.GossipFrame.TitleContainer
+if frame then
+    _G.GossipFrameCloseButton:SetFrameLevel(frame:GetFrameLevel() + 1) -- fix clicking on gossip close button
+    frame:HookScript('OnShow', UnitQuickQuestStatus)
+    frame:HookScript('OnMouseDown', ToggleQuickQuestStatus)
 end

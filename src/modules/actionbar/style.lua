@@ -400,6 +400,7 @@ function ACTIONBAR:StyleActionButton(button, cfg)
     end
     -- checkedTexture:SetVertexColor(C.r, C.g, C.b, 1)
     local floatingBG = _G[buttonName .. 'FloatingBG']
+    local NormalTexture = _G[buttonName .. 'NormalTexture']
 
     -- pet stuff
     local petShine = _G[buttonName .. 'Shine']
@@ -425,6 +426,9 @@ function ACTIONBAR:StyleActionButton(button, cfg)
     end
     if button.IconMask then
         button.IconMask:Hide()
+    end
+    if NormalTexture then
+        NormalTexture:SetAlpha(0)
     end
 
     -- backdrop
@@ -501,6 +505,7 @@ function ACTIONBAR:StyleExtraActionButton(cfg)
     local count = _G[buttonName .. 'Count']
     local buttonstyle = button.style -- artwork around the button
     local cooldown = _G[buttonName .. 'Cooldown']
+    local NormalTexture = _G[buttonName .. 'NormalTexture']
 
     button:SetPushedTexture(C.Assets.Textures.ButtonPushed) -- force it to gain a texture
     local normalTexture = button:GetNormalTexture()
@@ -519,6 +524,10 @@ function ACTIONBAR:StyleExtraActionButton(cfg)
     SetupTexture(highlightTexture, cfg.highlightTexture, 'SetHighlightTexture', button)
     SetupTexture(checkedTexture, cfg.checkedTexture, 'SetCheckedTexture', button)
     -- highlightTexture:SetColorTexture(1, 1, 1, .25)
+
+    if NormalTexture then
+        NormalTexture:SetAlpha(0)
+    end
 
     -- cooldown
     SetupCooldown(cooldown, cfg.cooldown)

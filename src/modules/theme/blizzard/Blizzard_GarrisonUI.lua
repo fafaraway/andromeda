@@ -675,7 +675,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     end
 
     for _, tab in pairs({ report.InProgress, report.Available }) do
-        tab:SetHighlightTexture(C.Assets.Textures.Blank)
+        tab:SetHighlightTexture(0)
         tab.Text:ClearAllPoints()
         tab.Text:SetPoint('CENTER')
 
@@ -699,9 +699,9 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     hooksecurefunc('GarrisonLandingPageReport_SetTab', function(self)
         local unselectedTab = report.unselectedTab
         unselectedTab:SetHeight(36)
-        unselectedTab:SetNormalTexture(C.Assets.Textures.Blank)
+        unselectedTab:SetNormalTexture(0)
         unselectedTab.selectedTex:Hide()
-        self:SetNormalTexture(C.Assets.Textures.Blank)
+        self:SetNormalTexture(0)
         self.selectedTex:Show()
     end)
 
@@ -1333,7 +1333,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
                 elseif otype == 'IconButton' then
                     F.ReskinIcon(widget.Icon)
                     widget:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
-                    widget:SetPushedTexture(C.Assets.Textures.Blank)
+                    widget:SetPushedTexture(0)
                     widget:SetSize(46, 46)
                     tinsert(VPBooks, widget)
                 elseif otype == 'AdventurerRoster' then
