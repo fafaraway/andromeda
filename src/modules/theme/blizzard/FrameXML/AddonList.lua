@@ -19,7 +19,7 @@ tinsert(C.BlizzThemes, function()
         F.ReskinScroll(_G.AddonListScrollFrameScrollBar)
     end
 
-    _G.AddonListForceLoad:SetSize(20, 20)
+    _G.AddonListForceLoad:SetSize(16, 16)
     _G.AddonCharacterDropDown:SetWidth(170)
 
     if C.IS_NEW_PATCH then
@@ -36,6 +36,7 @@ tinsert(C.BlizzThemes, function()
                 local child = select(i, self.ScrollTarget:GetChildren())
                 if not child.styled then
                     F.ReskinCheckbox(child.Enabled, true)
+                    child.Enabled:SetSize(14, 14)
                     F.Reskin(child.LoadAddonButton)
                     hooksecurefunc(child.Enabled:GetCheckedTexture(), 'SetDesaturated', forceSaturation)
 
