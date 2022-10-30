@@ -197,8 +197,7 @@ function BLIZZARD:ShowLeaderOverallScore()
     if searchResultInfo then
         local activityInfo = C_LFGList.GetActivityInfoTable(searchResultInfo.activityID, nil, searchResultInfo.isWarMode)
         if activityInfo then
-            local showScore = activityInfo.isMythicPlusActivity and searchResultInfo.leaderOverallDungeonScore
-                or activityInfo.isRatedPvpActivity and searchResultInfo.leaderPvpRatingInfo and searchResultInfo.leaderPvpRatingInfo.rating
+            local showScore = activityInfo.isMythicPlusActivity and searchResultInfo.leaderOverallDungeonScore or activityInfo.isRatedPvpActivity and searchResultInfo.leaderPvpRatingInfo and searchResultInfo.leaderPvpRatingInfo.rating
             if showScore then
                 local oldName = self.ActivityName:GetText()
                 oldName = gsub(oldName, '.-' .. _G.HEADER_COLON, '') -- Tazavesh
@@ -299,14 +298,14 @@ end
 
 function BLIZZARD:AddDungeonsFilter()
     local mapData = {
-        [0] = {mapID = 166, aID = 183},  -- 车站
-        [1] = {mapID = 169, aID = 180},  -- 码头
-        [2] = {mapID = 234, aID = 473},  -- 卡上
-        [3] = {mapID = 227, aID = 471},  -- 卡下
-        [4] = {mapID = 369, aID = 679},  -- 垃圾场
-        [5] = {mapID = 370, aID = 683},  -- 车间
-        [6] = {mapID = 391, aID = 1016}, -- 街道
-        [7] = {mapID = 392, aID = 1017}, -- 宏图
+        [0] = { mapID = 166, aID = 183 }, -- 车站
+        [1] = { mapID = 169, aID = 180 }, -- 码头
+        [2] = { mapID = 234, aID = 473 }, -- 卡上
+        [3] = { mapID = 227, aID = 471 }, -- 卡下
+        [4] = { mapID = 369, aID = 679 }, -- 垃圾场
+        [5] = { mapID = 370, aID = 683 }, -- 车间
+        [6] = { mapID = 391, aID = 1016 }, -- 街道
+        [7] = { mapID = 392, aID = 1017 }, -- 宏图
     }
 
     local function GetDungeonNameByID(mapID)
@@ -426,6 +425,13 @@ function BLIZZARD:AddPGFSortingExpression()
             bu:SetPoint('BOTTOM', PGFDialog.__sortBu[i - 1], 'TOP', 0, 3)
         end
     end
+
+    if _G.PremadeGroupsFilterSettings then
+        _G.PremadeGroupsFilterSettings.classBar = false
+        _G.PremadeGroupsFilterSettings.classCircle = false
+        _G.PremadeGroupsFilterSettings.leaderCrown = false
+        _G.PremadeGroupsFilterSettings.ratingInfo = false
+    end
 end
 
 -- Fix duplicate application entry
@@ -446,14 +452,18 @@ function BLIZZARD:EnhancedPremade()
         return
     end
 
-    for i = 1, 10 do
-        local bu = _G['LFGListSearchPanelScrollFrameButton' .. i]
-        if bu then
-            bu.Name:SetFontObject(_G.Game14Font)
-            bu.ActivityName:SetFontObject(_G.Game12Font)
-            bu:HookScript('OnDoubleClick', BLIZZARD.HookApplicationClick)
+    hooksecurefunc(_G.LFGListFrame.SearchPanel.ScrollBox, 'Update', function(self)
+        for i = 1, self.ScrollTarget:GetNumChildren() do
+            local child = select(i, self.ScrollTarget:GetChildren())
+            if not child.hooked then
+                child.Name:SetFontObject(_G.Game14Font)
+                child.ActivityName:SetFontObject(_G.Game12Font)
+                child:HookScript('OnDoubleClick', BLIZZARD.HookApplicationClick)
+
+                child.hooked = true
+            end
         end
-    end
+    end)
 
     hooksecurefunc('LFGListInviteDialog_Accept', HidePvEFrame)
     hooksecurefunc('StaticPopup_Show', BLIZZARD.HookDialogOnShow)
