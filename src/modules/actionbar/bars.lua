@@ -75,6 +75,7 @@ function BAR:UpdateActionBarSize(name)
             local button = frame.buttons[i]
             button:SetSize(size, size)
             button:ClearAllPoints()
+
             if i == 1 then
                 button:SetPoint('TOPLEFT', frame, BAR.padding, -BAR.padding)
             elseif mod(i - 1, perRow) == 0 then
@@ -82,8 +83,14 @@ function BAR:UpdateActionBarSize(name)
             else
                 button:SetPoint('LEFT', frame.buttons[i - 1], 'RIGHT', BAR.margin, 0)
             end
+
+            if name == 'BarPet' then
+                button.SetPoint = nop
+            end
+
             button:SetAttribute('statehidden', false)
             button:Show()
+
             BAR:UpdateFontSize(button, fontSize)
         end
 
