@@ -1273,7 +1273,7 @@ function INVENTORY:OnLogin()
         buttons[1] = INVENTORY.CreateRestoreButton(self, f)
         buttons[2] = INVENTORY.CreateSortButton(self, name)
         if name == 'Bag' then
-            INVENTORY.CreateBagBar(self, settings, C.isBeta and 5 or 4)
+            INVENTORY.CreateBagBar(self, settings, 5)
             buttons[3] = INVENTORY.CreateBagToggle(self)
             buttons[4] = INVENTORY.CreateRepairButton(self)
             buttons[5] = INVENTORY.CreateSellButton(self)
