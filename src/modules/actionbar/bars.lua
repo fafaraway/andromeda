@@ -616,6 +616,7 @@ function BAR:OnLogin()
     BAR:CreateLeaveVehicleBar()
 
     BAR:RemoveBlizzArt()
+    BAR:RemoveDefaultStuff()
     BAR:RestyleButtons()
 
     F:RegisterEvent('PLAYER_ENTERING_WORLD', delayUpdateBars)

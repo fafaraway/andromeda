@@ -44,36 +44,9 @@ local function DisableAllScripts(frame)
     end
 end
 
-local function ButtonShowGrid(name, showgrid)
-    for i = 1, 12 do
-        local button = _G[name .. i]
-        if button then
-            button:SetAttribute('showgrid', showgrid)
-            button:ShowGrid(_G.ACTION_BUTTON_SHOW_GRID_REASON_CVAR)
-        end
-    end
-end
-
-local updateAfterCombat
-local function ToggleButtonGrid()
-    if InCombatLockdown() then
-        updateAfterCombat = true
-        F:RegisterEvent('PLAYER_REGEN_ENABLED', ToggleButtonGrid)
-    else
-        local showgrid = tonumber(GetCVar('alwaysShowActionBars'))
-        ButtonShowGrid('ActionButton', showgrid)
-        ButtonShowGrid('MultiBarBottomRightButton', showgrid)
-        if updateAfterCombat then
-            F:UnregisterEvent('PLAYER_REGEN_ENABLED', ToggleButtonGrid)
-            updateAfterCombat = false
-        end
-    end
-end
-
-local function UpdateTokenVisibility()
-    _G.TokenFrame_LoadUI()
-    _G.TokenFrame_Update()
-    _G.BackpackTokenFrame_Update()
+local function updateTokenVisibility()
+    TokenFrame_LoadUI()
+    TokenFrame_Update()
 end
 
 function ACTIONBAR:RemoveBlizzArt()
@@ -93,24 +66,19 @@ function ACTIONBAR:RemoveBlizzArt()
 
     -- Fix maw block anchor
     _G.MainMenuBarVehicleLeaveButton:RegisterEvent('PLAYER_ENTERING_WORLD')
-
-    -- Update button grid
-    if C.IS_NEW_PATCH then
-        -- #TODO
-    else
-        ToggleButtonGrid()
-        hooksecurefunc('MultiActionBar_UpdateGridVisibility', ToggleButtonGrid)
-    end
-
     -- Update token panel
-    F:RegisterEvent('CURRENCY_DISPLAY_UPDATE', UpdateTokenVisibility)
+    F:RegisterEvent('CURRENCY_DISPLAY_UPDATE', updateTokenVisibility)
+end
 
-    if C.IS_NEW_PATCH then
-        -- #TODO
-    else
-        _G.InterfaceOptionsActionBarsPanelStackRightBars:EnableMouse(false)
-        _G.InterfaceOptionsActionBarsPanelStackRightBars:SetAlpha(0)
+function ACTIONBAR:RemoveDefaultStuff()
+    if _G.MainMenuMicroButton.MainMenuBarPerformanceBar then
+        F.HideObject(_G.MainMenuMicroButton.MainMenuBarPerformanceBar)
     end
+    F.HideObject(_G.HelpOpenWebTicketButton)
+    _G.MainMenuMicroButton:SetScript('OnUpdate', nil)
+
+    _G.MicroButtonAndBagsBar:Hide()
+    _G.MicroButtonAndBagsBar:UnregisterAllEvents()
 end
 
 -- Restyle actionbar buttons
@@ -344,7 +312,7 @@ function ACTIONBAR:HookHotKey(button)
         hooksecurefunc(button, 'UpdateHotkeys', ACTIONBAR.UpdateHotKey)
     end
 
-    if C.IS_NEW_PATCH and button.SetHotkeys then
+    if button.SetHotkeys then
         hooksecurefunc(button, 'SetHotkeys', ACTIONBAR.UpdateHotKey)
     end
 end
@@ -567,12 +535,9 @@ function ACTIONBAR:StyleAllActionButtons(cfg)
         ACTIONBAR:StyleActionButton(_G['MultiBarBottomRightButton' .. i], cfg)
         ACTIONBAR:StyleActionButton(_G['MultiBarRightButton' .. i], cfg)
         ACTIONBAR:StyleActionButton(_G['MultiBarLeftButton' .. i], cfg)
-
-        if C.IS_NEW_PATCH then
-            ACTIONBAR:StyleActionButton(_G['MultiBar5Button' .. i], cfg)
-            ACTIONBAR:StyleActionButton(_G['MultiBar6Button' .. i], cfg)
-            ACTIONBAR:StyleActionButton(_G['MultiBar7Button' .. i], cfg)
-        end
+        ACTIONBAR:StyleActionButton(_G['MultiBar5Button' .. i], cfg)
+        ACTIONBAR:StyleActionButton(_G['MultiBar6Button' .. i], cfg)
+        ACTIONBAR:StyleActionButton(_G['MultiBar7Button' .. i], cfg)
     end
 
     for i = 1, 6 do
@@ -601,13 +566,7 @@ function ACTIONBAR:StyleAllActionButtons(cfg)
     ACTIONBAR:StyleExtraActionButton(cfg)
 
     -- spell flyout
-    if C.IS_NEW_PATCH then
-        _G.SpellFlyout.Background:Hide()
-    else
-        _G.SpellFlyoutBackgroundEnd:SetTexture(nil)
-        _G.SpellFlyoutHorizontalBackground:SetTexture(nil)
-        _G.SpellFlyoutVerticalBackground:SetTexture(nil)
-    end
+    _G.SpellFlyout.Background:SetAlpha(0)
 
     local function checkForFlyoutButtons()
         local i = 1
@@ -672,9 +631,6 @@ function ACTIONBAR:RestyleButtons()
     ACTIONBAR:StyleAllActionButtons(cfg)
 
     -- Update hotkeys
-    if not C.IS_NEW_PATCH then
-        hooksecurefunc('PetActionButton_SetHotkeys', ACTIONBAR.UpdateHotKey)
-    end
     ACTIONBAR:UpdateStanceHotKey()
     F:RegisterEvent('UPDATE_BINDINGS', ACTIONBAR.UpdateStanceHotKey)
 end
