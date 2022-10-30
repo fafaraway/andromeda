@@ -83,7 +83,7 @@ function THEME:ReskinPGF()
                 if check then
                     check:SetSize(26, 26)
                     check:SetPoint('TOPLEFT', 5, -3)
-                    F.ReskinCheck(check)
+                    F.ReskinCheckbox(check)
                 end
 
                 local input = frame.Min
