@@ -1,6 +1,9 @@
 local F, C, L = unpack(select(2, ...))
 local QUEST = F:GetModule('Quest')
 
+-- #TODO
+if C.IS_NEW_PATCH then return end
+
 local linkQuest = 'http://www.wowhead.com/quest=%d'
 local linkAchievement = 'http://www.wowhead.com/achievement=%d'
 
