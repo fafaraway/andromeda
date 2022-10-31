@@ -68,17 +68,17 @@ local function UpdateColor(self, event, unit, powerType)
 	if(not (unit and UnitIsUnit(unit, 'player') and powerType == ADDITIONAL_POWER_BAR_NAME)) then return end
 	local element = self.AdditionalPower
 
-	local r, g, b, t
+	local r, g, b, color
 	if(element.colorPower) then
-		t = self.colors.power[ADDITIONAL_POWER_BAR_INDEX]
+		color = self.colors.power[ADDITIONAL_POWER_BAR_INDEX]
 	elseif(element.colorClass) then
-		t = self.colors.class[playerClass]
+		color = self.colors.class[playerClass]
 	elseif(element.colorSmooth) then
 		r, g, b = self:ColorGradient(element.cur or 1, element.max or 1, unpack(element.smoothGradient or self.colors.smooth))
 	end
 
-	if(t) then
-		r, g, b = t[1], t[2], t[3]
+	if(color) then
+		r, g, b = color[1], color[2], color[3]
 	end
 
 	if(b) then
@@ -275,7 +275,7 @@ local function Enable(self, unit)
 			element.displayPairs = CopyTable(ALT_MANA_BAR_PAIR_DISPLAY_INFO)
 		end
 
-		if(element:IsObjectType('StatusBar') and not (element:GetStatusBarTexture() or element:GetStatusBarAtlas())) then
+		if(element:IsObjectType('StatusBar') and not element:GetStatusBarTexture()) then
 			element:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
 		end
 

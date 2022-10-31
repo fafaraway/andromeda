@@ -24,26 +24,7 @@ PetBattleFrameHider:SetAllPoints()
 PetBattleFrameHider:SetFrameStrata('LOW')
 RegisterStateDriver(PetBattleFrameHider, 'visibility', '[petbattle] hide; show')
 
--- updating of "invalid" units.
-local function enableTargetUpdate(object)
-	object.onUpdateFrequency = object.onUpdateFrequency or .5
-	object.__eventless = true
-
-	local total = 0
-	object:SetScript('OnUpdate', function(self, elapsed)
-		if(not self.unit) then
-			return
-		elseif(total > self.onUpdateFrequency) then
-			self:UpdateAllElements('OnUpdate')
-			total = 0
-		end
-
-		total = total + elapsed
-	end)
-end
-Private.enableTargetUpdate = enableTargetUpdate
-
-local function updateActiveUnit(self)
+local function updateActiveUnit(self, event)
 	-- Calculate units to work with
 	local realUnit, modUnit = SecureButton_GetUnit(self), SecureButton_GetModifiedUnit(self)
 
@@ -62,9 +43,15 @@ local function updateActiveUnit(self)
 
 	-- Change the active unit and run a full update.
 	if(Private.UpdateUnits(self, modUnit, realUnit)) then
-		self:UpdateAllElements('RefreshUnit')
+		self:UpdateAllElements(event or 'RefreshUnit')
 
 		return true
+	end
+end
+
+local function evalUnitAndUpdate(self, event)
+	if(not updateActiveUnit(self, event)) then
+		return self:UpdateAllElements(event)
 	end
 end
 
@@ -228,9 +215,7 @@ for k, v in next, {
 end
 
 local function onShow(self)
-	if(not updateActiveUnit(self, 'OnShow')) then
-		return self:UpdateAllElements('OnShow')
-	end
+	evalUnitAndUpdate(self, 'OnShow')
 end
 
 local function updatePet(self, event, unit)
@@ -245,9 +230,8 @@ local function updatePet(self, event, unit)
 	end
 
 	if(self.unit ~= petUnit) then return end
-	if(not updateActiveUnit(self, event)) then
-		return self:UpdateAllElements(event)
-	end
+
+	evalUnitAndUpdate(self, event)
 end
 
 local function updateRaid(self, event)
@@ -259,12 +243,30 @@ local function updateRaid(self, event)
 	end
 end
 
+-- boss6-8 exsist in some encounters, but unit event registration seems to be
+-- completely broken for them, so instead we use OnUpdate to update them.
+local eventlessUnits = {
+	boss6 = true,
+	boss7 = true,
+	boss8 = true,
+}
+
+local function isEventlessUnit(unit)
+	return unit:match('%w+target') or eventlessUnits[unit]
+end
+
 local function initObject(unit, style, styleFunc, header, ...)
 	local num = select('#', ...)
 	for i = 1, num do
 		local object = select(i, ...)
 		local objectUnit = object:GetAttribute('oUF-guessUnit') or unit
 		local suffix = object:GetAttribute('unitsuffix')
+
+		-- Handle the case where someone has modified the unitsuffix attribute in
+		-- oUF-initialConfigFunction.
+		if(suffix and not objectUnit:match(suffix)) then
+			objectUnit = objectUnit .. suffix
+		end
 
 		object.__elements = {}
 		object.style = style
@@ -274,20 +276,20 @@ local function initObject(unit, style, styleFunc, header, ...)
 		table.insert(objects, object)
 
 		-- We have to force update the frames when PEW fires.
-		object:RegisterEvent('PLAYER_ENTERING_WORLD', object.UpdateAllElements, true)
+		-- It's also important to evaluate units before running an update
+		-- because sometimes events that are required for unit updates end up
+		-- not firing because of loading screens. For instance, there's a slight
+		-- delay between UNIT_EXITING_VEHICLE and UNIT_EXITED_VEHICLE during
+		-- which a user can go through a loading screen after which the player
+		-- frame will be stuck with the 'vehicle' unit.
+		object:RegisterEvent('PLAYER_ENTERING_WORLD', evalUnitAndUpdate, true)
 
-		-- Handle the case where someone has modified the unitsuffix attribute in
-		-- oUF-initialConfigFunction.
-		if(suffix and not objectUnit:match(suffix)) then
-			objectUnit = objectUnit .. suffix
-		end
-
-		if(not (suffix == 'target' or objectUnit and objectUnit:match('target'))) then
-			object:RegisterEvent('UNIT_ENTERED_VEHICLE', updateActiveUnit)
-			object:RegisterEvent('UNIT_EXITED_VEHICLE', updateActiveUnit)
+		if(not isEventlessUnit(objectUnit)) then
+			object:RegisterEvent('UNIT_ENTERED_VEHICLE', evalUnitAndUpdate)
+			object:RegisterEvent('UNIT_EXITED_VEHICLE', evalUnitAndUpdate)
 
 			-- We don't need to register UNIT_PET for the player unit. We register it
-			-- mainly because UNIT_EXITED_VEHICLE and UNIT_ENTERED_VEHICLE doesn't always
+			-- mainly because UNIT_EXITED_VEHICLE and UNIT_ENTERED_VEHICLE don't always
 			-- have pet information when they fire for party and raid units.
 			if(objectUnit ~= 'player') then
 				object:RegisterEvent('UNIT_PET', updatePet)
@@ -298,15 +300,10 @@ local function initObject(unit, style, styleFunc, header, ...)
 			-- No header means it's a frame created through :Spawn().
 			object:SetAttribute('*type1', 'target')
 			object:SetAttribute('*type2', 'togglemenu')
+			object:SetAttribute('toggleForVehicle', true)
 
-			-- No need to enable this for *target frames.
-			if(not (unit:match('target') or suffix == 'target')) then
-				object:SetAttribute('toggleForVehicle', true)
-			end
-
-			-- Other boss and target units are handled by :HandleUnit().
-			if(suffix == 'target') then
-				enableTargetUpdate(object)
+			if(isEventlessUnit(objectUnit)) then
+				oUF:HandleEventlessUnit(object)
 			else
 				oUF:HandleUnit(object)
 			end
@@ -324,7 +321,7 @@ local function initObject(unit, style, styleFunc, header, ...)
 			end
 
 			if(suffix == 'target') then
-				enableTargetUpdate(object)
+				oUF:HandleEventlessUnit(object)
 			end
 		end
 
