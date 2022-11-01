@@ -10,6 +10,7 @@
     <Script file="partywatcher.lua"/>
     <Script file="portrait.lua"/>
     <Script file="power.lua"/>
+    <Script file="prediction.lua"/>
     <Script file="range.lua"/>
     <Script file="threat.lua"/>
 </Ui>
