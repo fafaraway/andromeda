@@ -93,7 +93,7 @@ local function ShowBanner()
         NOTIFICATION.Frame:SetScript('OnUpdate', function(self)
             scale = self:GetScale() + interval
             self:SetScale(scale)
-            self:SetAlpha(scale)
+            self:SetAlpha(F.TempFixSetAlpha(scale))
             if scale >= 1 then
                 self:SetScale(1)
                 self:SetScript('OnUpdate', nil)

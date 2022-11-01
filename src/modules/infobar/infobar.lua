@@ -20,14 +20,7 @@ local function FadeIn(self, elapsed)
 
     for _, block in pairs(INFOBAR.Blocks) do
         if not block.noFade then
-            if blockAlpha > 1 then
-                blockAlpha = 1
-            end
-            if blockAlpha < 0 then
-                blockAlpha = 0
-            end
-
-            block:SetAlpha(blockAlpha)
+            block:SetAlpha(F.TempFixSetAlpha(blockAlpha))
         end
     end
 end
@@ -47,14 +40,7 @@ local function FadeOut(self, elapsed)
 
     for _, block in pairs(INFOBAR.Blocks) do
         if not block.noFade then
-            if blockAlpha > 1 then
-                blockAlpha = 1
-            end
-            if blockAlpha < 0 then
-                blockAlpha = 0
-            end
-
-            block:SetAlpha(blockAlpha)
+            block:SetAlpha(F.TempFixSetAlpha(blockAlpha))
         end
     end
 end

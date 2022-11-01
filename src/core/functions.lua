@@ -156,6 +156,18 @@ do
             return format(t, texture, data or d)
         end
     end
+
+    -- #FIXME 10.0以后如果SetAlpha的值大于1或者小于0会报错，10.0以前则不会
+    -- 等以后有空了再仔细看看为什么有些地方的值会超出限制
+    function F.TempFixSetAlpha(n)
+        if n > 1 then
+            n = 1
+        elseif n < 0 then
+            n = 0
+        end
+
+        return n
+    end
 end
 
 -- Scan Tooltip
@@ -1365,7 +1377,7 @@ do
                 last = last + elapsed
                 if last > speed then
                     last = 0
-                    self:SetAlpha(alpha)
+                    self:SetAlpha(F.TempFixSetAlpha(alpha))
                 end
 
                 alpha = alpha - elapsed * mult
@@ -1568,105 +1580,6 @@ do
     hooksecurefunc('PanelTemplates_DeselectTab', F.ResetTabAnchor)
 
     -- Handle scrollframe
-    --[[ local function Scroll_OnEnter(self)
-        local thumb = self.thumb
-        if not thumb then
-            return
-        end
-
-        local classColor = _G.ANDROMEDA_ADB.WidgetHighlightClassColor
-        local newColor = _G.ANDROMEDA_ADB.WidgetHighlightColor
-
-        if classColor then
-            thumb.bg:SetBackdropColor(C.r, C.g, C.b, 0.65)
-            thumb.bg:SetBackdropBorderColor(C.r, C.g, C.b)
-        else
-            thumb.bg:SetBackdropColor(newColor.r, newColor.g, newColor.b, 0.65)
-            thumb.bg:SetBackdropBorderColor(newColor.r, newColor.g, newColor.b)
-        end
-    end
-
-    local function Scroll_OnLeave(self)
-        local thumb = self.thumb
-        if not thumb then
-            return
-        end
-
-        local color = _G.ANDROMEDA_ADB.ButtonBackdropColor
-        thumb.bg:SetBackdropColor(color.r, color.g, color.b, 0.25)
-        F.SetBorderColor(thumb.bg)
-    end
-
-    local function GrabScrollBarElement(frame, element)
-        local frameName = frame:GetDebugName()
-        return frame[element] or frameName and (_G[frameName .. element] or strfind(frameName, element)) or nil
-    end
-
-    function F:ReskinScroll()
-        F.StripTextures(self:GetParent())
-        F.StripTextures(self)
-
-        local thumb = GrabScrollBarElement(self, 'ThumbTexture') or GrabScrollBarElement(self, 'thumbTexture') or self.GetThumbTexture and self:GetThumbTexture()
-        if thumb then
-            thumb:SetAlpha(0)
-            thumb:SetWidth(16)
-            self.thumb = thumb
-
-            local color = _G.ANDROMEDA_ADB.ButtonBackdropColor
-            local bg = F.CreateBDFrame(self, 0.25, true)
-            bg:SetPoint('TOPLEFT', thumb, 0, -2)
-            bg:SetPoint('BOTTOMRIGHT', thumb, 0, 4)
-            bg:SetBackdropColor(color.r, color.g, color.b, 0.25)
-            bg:SetBackdropBorderColor(0, 0, 0)
-            thumb.bg = bg
-        end
-
-        local up, down = self:GetChildren()
-        F.ReskinArrow(up, 'up')
-        F.ReskinArrow(down, 'down')
-
-        self:HookScript('OnEnter', Scroll_OnEnter)
-        self:HookScript('OnLeave', Scroll_OnLeave)
-    end
-
-    -- WowTrimScrollBar
-    local function updateTrimScrollArrow(self, atlas)
-        local arrow = self.__owner
-        if not arrow.__texture then
-            return
-        end
-
-        if atlas == arrow.disabledTexture then
-            arrow.__texture:SetVertexColor(0.5, 0.5, 0.5)
-        else
-            arrow.__texture:SetVertexColor(1, 1, 1)
-        end
-    end
-
-    local function reskinTrimScrollArrow(self, direction)
-        if not self then
-            return
-        end
-
-        if not self.Texture then
-            return
-        end -- CovenantMissonFrame, isNewPatch
-
-        self.Texture:SetAlpha(0)
-        self.Overlay:SetAlpha(0)
-        local tex = self:CreateTexture(nil, 'ARTWORK')
-        tex:SetAllPoints()
-        F.CreateBDFrame(tex, 0.25)
-        F.SetupArrow(tex, direction)
-        self.__texture = tex
-
-        self:HookScript('OnEnter', F.Texture_OnEnter)
-        self:HookScript('OnLeave', F.Texture_OnLeave)
-        self.Texture.__owner = self
-        hooksecurefunc(self.Texture, 'SetAtlas', updateTrimScrollArrow)
-        self.Texture:SetAtlas(self.Texture:GetAtlas())
-    end --]]
-
     local function Thumb_OnEnter(self)
         local thumb = self.thumb or self
         thumb.bg:SetBackdropColor(C.r, C.g, C.b, 0.75)
