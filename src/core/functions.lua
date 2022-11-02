@@ -456,7 +456,7 @@ do
 
     function F:SetFS(object, font, size, flag, text, colour, shadow)
         if type(font) == 'table' then
-            object:SetFont(font[1], font[2], font[3] or nil)
+            object:SetFont(font[1], font[2], font[3])
         else
             object:SetFont(font, size, flag and 'OUTLINE' or '')
         end
@@ -1581,8 +1581,15 @@ do
 
     -- Handle scrollframe
     local function Thumb_OnEnter(self)
+        local classColor = _G.ANDROMEDA_ADB.WidgetHighlightClassColor
+        local newColor = _G.ANDROMEDA_ADB.WidgetHighlightColor
         local thumb = self.thumb or self
-        thumb.bg:SetBackdropColor(C.r, C.g, C.b, 0.75)
+
+        if classColor then
+            thumb.bg:SetBackdropColor(C.r, C.g, C.b, 0.45)
+        else
+            thumb.bg:SetBackdropColor(newColor.r, newColor.g, newColor.b, 0.45)
+        end
     end
 
     local function Thumb_OnLeave(self)
@@ -1590,19 +1597,32 @@ do
         if thumb.__isActive then
             return
         end
-        thumb.bg:SetBackdropColor(C.r, C.g, C.b, 0.25)
+
+        local color = _G.ANDROMEDA_ADB.ButtonBackdropColor
+        local alpha = _G.ANDROMEDA_ADB.ButtonBackdropAlpha
+        thumb.bg:SetBackdropColor(color.r, color.g, color.b, alpha)
     end
 
     local function Thumb_OnMouseDown(self)
+        local classColor = _G.ANDROMEDA_ADB.WidgetHighlightClassColor
+        local newColor = _G.ANDROMEDA_ADB.WidgetHighlightColor
         local thumb = self.thumb or self
         thumb.__isActive = true
-        thumb.bg:SetBackdropColor(C.r, C.g, C.b, 0.75)
+
+        if classColor then
+            thumb.bg:SetBackdropColor(C.r, C.g, C.b, 0.45)
+        else
+            thumb.bg:SetBackdropColor(newColor.r, newColor.g, newColor.b, 0.45)
+        end
     end
 
     local function Thumb_OnMouseUp(self)
         local thumb = self.thumb or self
         thumb.__isActive = nil
-        thumb.bg:SetBackdropColor(C.r, C.g, C.b, 0.25)
+
+        local color = _G.ANDROMEDA_ADB.ButtonBackdropColor
+        local alpha = _G.ANDROMEDA_ADB.ButtonBackdropAlpha
+        thumb.bg:SetBackdropColor(color.r, color.g, color.b, alpha)
     end
 
     local function updateScrollArrow(arrow)
@@ -1672,11 +1692,13 @@ do
         F.StripTextures(self:GetParent())
         F.StripTextures(self)
 
+        local color = _G.ANDROMEDA_ADB.ButtonBackdropColor
+        local alpha = _G.ANDROMEDA_ADB.ButtonBackdropAlpha
         local thumb = self:GetThumbTexture()
         if thumb then
             thumb:SetAlpha(0)
-            thumb.bg = F.CreateBDFrame(thumb, 0.25)
-            thumb.bg:SetBackdropColor(C.r, C.g, C.b, 0.25)
+            thumb.bg = F.CreateBDFrame(thumb)
+            thumb.bg:SetBackdropColor(color.r, color.g, color.b, alpha)
             thumb.bg:SetPoint('TOPLEFT', thumb, 4, -1)
             thumb.bg:SetPoint('BOTTOMRIGHT', thumb, -4, 1)
             self.thumb = thumb
@@ -1701,11 +1723,13 @@ do
             self.Track:DisableDrawLayer('ARTWORK')
         end
 
+        local color = _G.ANDROMEDA_ADB.ButtonBackdropColor
+        local alpha = _G.ANDROMEDA_ADB.ButtonBackdropAlpha
         local thumb = self:GetThumb()
         if thumb then
             thumb:DisableDrawLayer('BACKGROUND')
-            thumb.bg = F.CreateBDFrame(thumb, 0.25)
-            thumb.bg:SetBackdropColor(C.r, C.g, C.b, 0.25)
+            thumb.bg = F.CreateBDFrame(thumb)
+            thumb.bg:SetBackdropColor(color.r, color.g, color.b, alpha)
             if not minimal then
                 thumb.bg:SetPoint('TOPLEFT', 4, -1)
                 thumb.bg:SetPoint('BOTTOMRIGHT', -4, 1)
