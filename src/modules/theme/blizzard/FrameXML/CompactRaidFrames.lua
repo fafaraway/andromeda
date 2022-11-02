@@ -34,11 +34,11 @@ tinsert(C.BlizzThemes, function()
         _G.CompactRaidFrameManagerDisplayFrameLeaderOptionsInitiateRolePoll,
         _G.CompactRaidFrameManagerDisplayFrameLeaderOptionsCountdown,
         _G.CompactRaidFrameManagerDisplayFrameLeaderOptionsInitiateReadyCheck,
-        --CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton,
+        _G.CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton,
         _G.CompactRaidFrameManagerDisplayFrameLockedModeToggle,
         _G.CompactRaidFrameManagerDisplayFrameHiddenModeToggle,
         _G.CompactRaidFrameManagerDisplayFrameConvertToRaid,
-        _G.CompactRaidFrameManagerDisplayFrameEditMode, -- isNewPatch
+        _G.CompactRaidFrameManagerDisplayFrameEditMode,
     }
     for _, button in pairs(buttons) do
         for i = 1, 9 do
@@ -58,10 +58,6 @@ tinsert(C.BlizzThemes, function()
     local bd = F.SetBD(_G.CompactRaidFrameManager)
     bd:SetPoint('TOPLEFT')
     bd:SetPoint('BOTTOMRIGHT', -9, 9)
-    if C.IS_NEW_PATCH then
-        -- #TODO
-    else
-        F.ReskinDropDown(_G.CompactRaidFrameManagerDisplayFrameProfileSelector)
-    end
+    F.ReskinCheckbox(_G.CompactRaidFrameManagerDisplayFrameEveryoneIsAssistButton)
     F.ReskinCheckbox(_G.CompactRaidFrameManagerDisplayFrameEveryoneIsAssistButton)
 end)

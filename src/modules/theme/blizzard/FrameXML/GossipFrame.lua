@@ -36,70 +36,39 @@ tinsert(C.BlizzThemes, function()
 
     _G.QuestFont:SetTextColor(1, 1, 1)
 
-    if C.IS_NEW_PATCH then
-        F.Reskin(GossipFrame.GreetingPanel.GoodbyeButton)
-        F.ReskinTrimScroll(GossipFrame.GreetingPanel.ScrollBar)
+    F.Reskin(GossipFrame.GreetingPanel.GoodbyeButton)
+    F.ReskinTrimScroll(GossipFrame.GreetingPanel.ScrollBar)
 
-        hooksecurefunc(GossipFrame.GreetingPanel.ScrollBox, 'Update', function(self)
-            for i = 1, self.ScrollTarget:GetNumChildren() do
-                local button = select(i, self.ScrollTarget:GetChildren())
-                if not button.styled then
-                    local buttonText = select(3, button:GetRegions()) -- no parentKey atm
-                    if buttonText and buttonText:IsObjectType('FontString') then
-                        replaceGossipText(button, button:GetText())
-                        hooksecurefunc(button, 'SetText', replaceGossipText)
-                        hooksecurefunc(button, 'SetFormattedText', replaceGossipFormat)
-                    end
-
-                    button.styled = true
-                end
-            end
-        end)
-
-        -- #TODO
-        for i = 1, 4 do
-            local notch = GossipFrame.FriendshipStatusBar['Notch' .. i]
-            if notch then
-                notch:SetColorTexture(0, 0, 0)
-                notch:SetSize(C.MULT, 16)
-            end
-        end
-    else
-        _G.GossipGreetingText:SetTextColor(1, 1, 1)
-        _G.NPCFriendshipStatusBar.icon:SetPoint('TOPLEFT', -30, 7)
-        F.StripTextures(_G.NPCFriendshipStatusBar, 4)
-        _G.NPCFriendshipStatusBar:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
-        F.CreateBDFrame(_G.NPCFriendshipStatusBar, 0.25)
-
-        for i = 1, 4 do
-            local notch = _G.NPCFriendshipStatusBar['Notch' .. i]
-            if notch then
-                notch:SetColorTexture(0, 0, 0)
-                notch:SetSize(1, 16)
-            end
-        end
-
-        F.Reskin(_G.GossipFrameGreetingGoodbyeButton)
-        F.ReskinScroll(_G.GossipGreetingScrollFrameScrollBar)
-
-        hooksecurefunc('GossipFrameUpdate', function()
-            for button in _G.GossipFrame.titleButtonPool:EnumerateActive() do
-                if not button.styled then
+    hooksecurefunc(GossipFrame.GreetingPanel.ScrollBox, 'Update', function(self)
+        for i = 1, self.ScrollTarget:GetNumChildren() do
+            local button = select(i, self.ScrollTarget:GetChildren())
+            if not button.styled then
+                local buttonText = select(3, button:GetRegions()) -- no parentKey atm
+                if buttonText and buttonText:IsObjectType('FontString') then
                     replaceGossipText(button, button:GetText())
                     hooksecurefunc(button, 'SetText', replaceGossipText)
                     hooksecurefunc(button, 'SetFormattedText', replaceGossipFormat)
-
-                    button.styled = true
                 end
+
+                button.styled = true
             end
-        end)
+        end
+    end)
+
+    for i = 1, 4 do
+        local notch = GossipFrame.FriendshipStatusBar['Notch' .. i]
+        if notch then
+            notch:SetColorTexture(0, 0, 0)
+            notch:SetSize(C.MULT, 16)
+        end
     end
+    GossipFrame.FriendshipStatusBar.BarBorder:Hide()
 
     _G.GossipFrameInset:Hide()
-    if _G.GossipFrame.Background then
-        _G.GossipFrame.Background:Hide()
+    if GossipFrame.Background then
+        GossipFrame.Background:Hide()
     end
-    F.ReskinPortraitFrame(_G.GossipFrame)
+    F.ReskinPortraitFrame(GossipFrame)
 
     -- Text on QuestFrame
     _G.QuestFrameGreetingPanel:HookScript('OnShow', function(self)

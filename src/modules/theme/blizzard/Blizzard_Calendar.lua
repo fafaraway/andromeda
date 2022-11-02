@@ -3,12 +3,20 @@ local F, C = unpack(select(2, ...))
 local function ReskinEventList(frame)
     F.StripTextures(frame)
     F.CreateBDFrame(frame, 0.25)
+
+    if frame.ScrollBar then
+        F.ReskinTrimScroll(frame.ScrollBar)
+    end
 end
 
 local function ReskinCalendarPage(frame)
     F.StripTextures(frame)
     F.SetBD(frame)
     F.StripTextures(frame.Header)
+
+    if frame.ScrollBar then
+        F.ReskinTrimScroll(frame.ScrollBar)
+    end
 end
 
 C.Themes['Blizzard_Calendar'] = function()
@@ -180,18 +188,6 @@ C.Themes['Blizzard_Calendar'] = function()
     F.ReskinClose(_G.CalendarViewHolidayCloseButton)
     F.ReskinClose(_G.CalendarViewRaidCloseButton)
     F.ReskinClose(_G.CalendarMassInviteCloseButton)
-
-    if C.IS_NEW_PATCH then
-        F.ReskinTrimScroll(_G.CalendarTexturePickerFrame.ScrollBar)
-        F.ReskinTrimScroll(_G.CalendarEventPickerFrame.ScrollBar)
-        -- #TODO
-    else
-        F.ReskinScroll(_G.CalendarTexturePickerScrollBar)
-        F.ReskinScroll(_G.CalendarViewEventInviteListScrollFrameScrollBar)
-        F.ReskinScroll(_G.CalendarViewEventDescriptionScrollFrameScrollBar)
-        F.ReskinScroll(_G.CalendarCreateEventInviteListScrollFrameScrollBar)
-        F.ReskinScroll(_G.CalendarCreateEventDescriptionScrollFrameScrollBar)
-    end
 
     F.ReskinDropDown(_G.CalendarCreateEventCommunityDropDown)
     F.ReskinDropDown(_G.CalendarCreateEventTypeDropDown)

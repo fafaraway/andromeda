@@ -107,11 +107,32 @@ C.Themes['Blizzard_PVPUI'] = function()
     F.Reskin(HonorFrame.QueueButton)
     F.ReskinDropDown(_G.HonorFrameTypeDropDown)
 
-    if C.IS_NEW_PATCH then
-        F.ReskinTrimScroll(HonorFrame.SpecificScrollBar)
-    else
-        F.ReskinScroll(_G.HonorFrameSpecificFrameScrollBar)
-    end
+    F.ReskinTrimScroll(HonorFrame.SpecificScrollBar)
+
+    hooksecurefunc(HonorFrame.SpecificScrollBox, 'Update', function(self)
+        for i = 1, self.ScrollTarget:GetNumChildren() do
+            local button = select(i, self.ScrollTarget:GetChildren())
+            if not button.styled then
+                button.Bg:Hide()
+                button.Border:Hide()
+                button:SetNormalTexture(0)
+                button:SetHighlightTexture(0)
+
+                local bg = F.CreateBDFrame(button, 0.25)
+                bg:SetPoint('TOPLEFT', 2, 0)
+                bg:SetPoint('BOTTOMRIGHT', -1, 2)
+
+                button.SelectedTexture:SetDrawLayer('BACKGROUND')
+                button.SelectedTexture:SetColorTexture(r, g, b, 0.25)
+                button.SelectedTexture:SetInside(bg)
+
+                F.ReskinIcon(button.Icon)
+                button.Icon:SetPoint('TOPLEFT', 5, -3)
+
+                button.styled = true
+            end
+        end
+    end)
 
     local bonusFrame = HonorFrame.BonusFrame
     bonusFrame.WorldBattlesTexture:Hide()
@@ -135,31 +156,6 @@ C.Themes['Blizzard_PVPUI'] = function()
             reward.Border:Hide()
             reward.CircleMask:Hide()
             reward.Icon.bg = F.ReskinIcon(reward.Icon)
-        end
-    end
-
-    -- Honor frame specific
-
-    if C.IS_NEW_PATCH then
-        -- #TODO
-    else
-        for _, bu in pairs(HonorFrame.SpecificFrame.buttons) do
-            bu.Bg:Hide()
-            bu.Border:Hide()
-
-            bu:SetNormalTexture('')
-            bu:SetHighlightTexture('')
-
-            local bg = F.CreateBDFrame(bu, 0, true)
-            bg:SetPoint('TOPLEFT', 2, 0)
-            bg:SetPoint('BOTTOMRIGHT', -1, 2)
-
-            bu.SelectedTexture:SetDrawLayer('BACKGROUND')
-            bu.SelectedTexture:SetColorTexture(r, g, b, 0.25)
-            bu.SelectedTexture:SetInside(bg)
-
-            F.ReskinIcon(bu.Icon)
-            bu.Icon:SetPoint('TOPLEFT', 5, -3)
         end
     end
 

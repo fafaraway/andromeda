@@ -82,13 +82,8 @@ tinsert(C.BlizzThemes, function()
     F.Reskin(searchPanel.BackButton)
     F.Reskin(searchPanel.BackToGroupButton)
     F.Reskin(searchPanel.SignUpButton)
-    if C.IS_NEW_PATCH then
-        F.Reskin(searchPanel.ScrollBox.StartGroupButton)
-        F.ReskinTrimScroll(searchPanel.ScrollBar)
-    else
-        F.Reskin(searchPanel.ScrollFrame.ScrollChild.StartGroupButton)
-        F.ReskinScroll(searchPanel.ScrollFrame.scrollBar)
-    end
+    F.Reskin(searchPanel.ScrollBox.StartGroupButton)
+    F.ReskinTrimScroll(searchPanel.ScrollBar)
     F.ReskinInput(searchPanel.SearchBox)
 
     searchPanel.RefreshButton:SetSize(24, 24)
@@ -172,12 +167,7 @@ tinsert(C.BlizzThemes, function()
     F.Reskin(applicationViewer.EditButton)
     F.Reskin(applicationViewer.BrowseGroupsButton)
     F.ReskinCheckbox(applicationViewer.AutoAcceptButton)
-
-    if C.IS_NEW_PATCH then
-        F.ReskinTrimScroll(applicationViewer.ScrollBar)
-    else
-        F.ReskinScroll(_G.LFGListApplicationViewerScrollFrameScrollBar)
-    end
+    F.ReskinTrimScroll(applicationViewer.ScrollBar)
 
     applicationViewer.RefreshButton:SetSize(24, 24)
     applicationViewer.RefreshButton.Icon:SetPoint('CENTER')
@@ -271,12 +261,7 @@ tinsert(C.BlizzThemes, function()
     F.Reskin(finderDialog.SelectButton)
     F.Reskin(finderDialog.CancelButton)
     F.ReskinInput(finderDialog.EntryBox)
-
-    if C.IS_NEW_PATCH then
-        F.ReskinTrimScroll(finderDialog.ScrollBar)
-    else
-        F.ReskinScroll(finderDialog.ScrollFrame.scrollBar)
-    end
+    F.ReskinTrimScroll(finderDialog.ScrollBar)
 
     -- [[ Application dialog ]]
 
