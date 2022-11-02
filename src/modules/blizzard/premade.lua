@@ -455,7 +455,7 @@ function BLIZZARD:EnhancedPremade()
     hooksecurefunc(_G.LFGListFrame.SearchPanel.ScrollBox, 'Update', function(self)
         for i = 1, self.ScrollTarget:GetNumChildren() do
             local child = select(i, self.ScrollTarget:GetChildren())
-            if not child.hooked then
+            if child.Name and not child.hooked then
                 child.Name:SetFontObject(_G.Game14Font)
                 child.ActivityName:SetFontObject(_G.Game12Font)
                 child:HookScript('OnDoubleClick', BLIZZARD.HookApplicationClick)
