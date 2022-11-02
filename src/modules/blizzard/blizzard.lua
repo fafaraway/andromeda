@@ -25,7 +25,7 @@ function BLIZZARD:OnLogin()
     BLIZZARD:UIWidgetFrameMover()
     BLIZZARD:EnhancedColorPicker()
     BLIZZARD:EnhancedMerchant()
-    -- BLIZZARD:EnhancedFriendsList()
+    BLIZZARD:EnhancedFriendsList()
     BLIZZARD:EnhancedPremade()
     BLIZZARD:EnhancedDressup()
 end
