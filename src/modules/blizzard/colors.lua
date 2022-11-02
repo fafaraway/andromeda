@@ -48,9 +48,7 @@ local function updateGuildView()
                     button.string2:SetText('|cff00ff00' .. zone)
                 end
             else
-                local _, rank, rankIndex, level, _, zone, _, _, _, _, _, _, _, _, _, repStanding = GetGuildRosterInfo(
-                    button.guildIndex
-                )
+                local _, rank, rankIndex, level, _, zone, _, _, _, _, _, _, _, _, _, repStanding = GetGuildRosterInfo(button.guildIndex)
                 if currentView == 'playerStatus' then
                     button.string1:SetText(diffColor(level) .. level)
                     if zone == playerArea then
@@ -65,9 +63,7 @@ local function updateGuildView()
                 elseif currentView == 'reputation' then
                     button.string1:SetText(diffColor(level) .. level)
                     if repStanding then
-                        button.string3:SetText(
-                            smoothColor(repStanding - 4, 5, repColor) .. _G['FACTION_STANDING_LABEL' .. repStanding]
-                        )
+                        button.string3:SetText(smoothColor(repStanding - 4, 5, repColor) .. _G['FACTION_STANDING_LABEL' .. repStanding])
                     end
                 end
             end
@@ -89,55 +85,42 @@ F:RegisterEvent('ADDON_LOADED', updateGuildUI)
 
 -- Whoframe
 local columnTable = {}
-local function updateWhoList()
-    local scrollFrame = _G.WhoListScrollFrame
-    local offset = _G.HybridScrollFrame_GetOffset(scrollFrame)
-    local buttons = scrollFrame.buttons
-    local numButtons = #buttons
-    local numWhos = C_FriendList.GetNumWhoResults()
-
+hooksecurefunc(_G.WhoFrame.ScrollBox, 'Update', function(self)
     local playerZone = GetRealZoneText()
     local playerGuild = GetGuildInfo('player')
     local playerRace = UnitRace('player')
 
-    for i = 1, numButtons do
-        local button = buttons[i]
-        local index = offset + i
-        if index <= numWhos then
-            local nameText = button.Name
-            local levelText = button.Level
-            local variableText = button.Variable
+    for i = 1, self.ScrollTarget:GetNumChildren() do
+        local button = select(i, self.ScrollTarget:GetChildren())
 
-            local info = C_FriendList.GetWhoInfo(index)
-            local guild, level, race, zone, class =
-                info.fullGuildName, info.level, info.raceStr, info.area, info.filename
-            if zone == playerZone then
-                zone = '|cff00ff00' .. zone
-            end
-            if guild == playerGuild then
-                guild = '|cff00ff00' .. guild
-            end
-            if race == playerRace then
-                race = '|cff00ff00' .. race
-            end
+        local nameText = button.Name
+        local levelText = button.Level
+        local variableText = button.Variable
 
-            wipe(columnTable)
-            tinsert(columnTable, zone)
-            tinsert(columnTable, guild)
-            tinsert(columnTable, race)
-
-            nameText:SetTextColor(classColor(class, true))
-            levelText:SetText(diffColor(level) .. level)
-            variableText:SetText(columnTable[_G.UIDropDownMenu_GetSelectedID(_G.WhoFrameDropDown)])
+        local info = C_FriendList.GetWhoInfo(button.index)
+        local guild, level, race, zone, class = info.fullGuildName, info.level, info.raceStr, info.area, info.filename
+        if zone == playerZone then
+            zone = '|cff00ff00' .. zone
         end
+        if guild == playerGuild then
+            guild = '|cff00ff00' .. guild
+        end
+        if race == playerRace then
+            race = '|cff00ff00' .. race
+        end
+
+        wipe(columnTable)
+        tinsert(columnTable, zone)
+        tinsert(columnTable, guild)
+        tinsert(columnTable, race)
+
+        nameText:SetTextColor(classColor(class, true))
+        levelText:SetText(diffColor(level) .. level)
+        variableText:SetText(columnTable[UIDropDownMenu_GetSelectedID(_G.WhoFrameDropDown)])
     end
-end
+end)
 
-if not C.IS_NEW_PATCH then
-    hooksecurefunc('WhoList_Update', updateWhoList)
-    hooksecurefunc(_G.WhoListScrollFrame, 'update', updateWhoList)
-end
-
+--
 local blizzHexColors = {}
 for class, color in pairs(_G.RAID_CLASS_COLORS) do
     blizzHexColors[color.colorStr] = class
