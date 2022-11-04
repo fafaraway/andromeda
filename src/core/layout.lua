@@ -440,7 +440,7 @@ function M:OnLogin()
         M.UpdateTrimFrame(updater.__owner)
     end)
 
-    M:DisableBlizzardMover()
+    -- M:DisableBlizzardMover()
 end
 
 -- Disable blizzard edit mode
@@ -513,10 +513,6 @@ local ignoredFrames = {
 }
 
 function M:DisableBlizzardMover()
-    if not C.IS_NEW_PATCH then
-        return
-    end
-
     local editMode = _G.EditModeManagerFrame
 
     -- remove the initial registers
@@ -557,7 +553,7 @@ function M:DisableBlizzardMover()
     end
     if isActionbarEnable() then
         mixin.RefreshEncounterBar = nop
-        mixin.RefreshActionBarShown = nop
+        -- mixin.RefreshActionBarShown = nop -- taint, needs review
         mixin.RefreshVehicleLeaveButton = nop
     end
 end
