@@ -39,35 +39,64 @@ function NAMEPLATE:UpdateQuestUnit(_, unit)
     unit = unit or self.unit
 
     local startLooking, questProgress
-    F.ScanTip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
-    F.ScanTip:SetUnit(unit)
 
-    for i = 2, F.ScanTip:NumLines() do
-        local textLine = _G[C.ADDON_TITLE .. 'ScanTooltipTextLeft' .. i]
-        local text = textLine and textLine:GetText()
-
-        if not text then
-            break
+    if C.IS_BETA then
+        local data = C_TooltipInfo.GetUnit(unit)
+        if data then
+            for i = 1, #data.lines do
+                local lineData = data.lines[i]
+                local argVal = lineData and lineData.args
+                if argVal[1] and argVal[1].intVal == 8 then
+                    local text = argVal[2] and argVal[2].stringVal -- progress string
+                    if text then
+                        local current, goal = strmatch(text, '(%d+)/(%d+)')
+                        local progress = strmatch(text, '(%d+)%%')
+                        if current and goal then
+                            local diff = floor(goal - current)
+                            if diff > 0 then
+                                questProgress = diff
+                                break
+                            end
+                        elseif progress then
+                            if floor(100 - progress) > 0 then
+                                questProgress = progress .. '%' -- lower priority on progress, keep looking
+                            end
+                        end
+                    end
+                end
+            end
         end
+    else
+        F.ScanTip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
+        F.ScanTip:SetUnit(unit)
 
-        if text ~= ' ' then
-            if isInGroup and text == C.MY_NAME or (not isInGroup and isQuestTitle(textLine)) then
-                startLooking = true
-            elseif startLooking then
-                local current, goal = strmatch(text, '(%d+)/(%d+)')
-                local progress = strmatch(text, '(%d+)%%')
-                if current and goal then
-                    local diff = floor(goal - current)
-                    if diff > 0 then
-                        questProgress = diff
+        for i = 2, F.ScanTip:NumLines() do
+            local textLine = _G[C.ADDON_TITLE .. 'ScanTooltipTextLeft' .. i]
+            local text = textLine and textLine:GetText()
+
+            if not text then
+                break
+            end
+
+            if text ~= ' ' then
+                if isInGroup and text == C.MY_NAME or (not isInGroup and isQuestTitle(textLine)) then
+                    startLooking = true
+                elseif startLooking then
+                    local current, goal = strmatch(text, '(%d+)/(%d+)')
+                    local progress = strmatch(text, '(%d+)%%')
+                    if current and goal then
+                        local diff = floor(goal - current)
+                        if diff > 0 then
+                            questProgress = diff
+                            break
+                        end
+                    elseif progress and not strmatch(text, _G.THREAT_TOOLTIP) then
+                        if floor(100 - progress) > 0 then
+                            questProgress = progress .. '%' -- lower priority on progress, keep looking
+                        end
+                    else
                         break
                     end
-                elseif progress and not strmatch(text, _G.THREAT_TOOLTIP) then
-                    if floor(100 - progress) > 0 then
-                        questProgress = progress .. '%' -- lower priority on progress, keep looking
-                    end
-                else
-                    break
                 end
             end
         end
