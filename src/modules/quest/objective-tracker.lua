@@ -1,35 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 local EOT = F:RegisterModule('EnhancedObjectiveTracker')
 
-function EOT:ObjectiveTrackerMover()
-    if C.IS_NEW_PATCH then
-        return
-    end
-
-    local frame = CreateFrame('Frame', 'ObjectiveTrackerMover', _G.UIParent)
-    frame:SetSize(240, 50)
-    F.Mover(frame, L['ObjectiveTracker'], 'ObjectiveTracker', { 'TOPRIGHT', _G.UIParent, 'TOPRIGHT', -C.UI_GAP, -60 })
-
-    local tracker = _G.ObjectiveTrackerFrame
-    tracker:ClearAllPoints()
-    tracker:SetPoint('TOPRIGHT', frame)
-    tracker:SetHeight(C.SCREEN_HEIGHT / 1.5 * C.MULT)
-    tracker:SetScale(1)
-    tracker:SetClampedToScreen(false)
-    tracker:SetMovable(true)
-
-    if tracker:IsMovable() then
-        tracker:SetUserPlaced(true)
-    end
-
-    hooksecurefunc(tracker, 'SetPoint', function(self, _, parent)
-        if parent ~= frame then
-            self:ClearAllPoints()
-            self:SetPoint('TOPRIGHT', frame)
-        end
-    end)
-end
-
 local progressColors = {
     start = { r = 1.000, g = 0.647, b = 0.008 },
     complete = { r = 0.180, g = 0.835, b = 0.451 },
@@ -43,11 +14,7 @@ local function SetTextColorHook(text)
                 r = 216 / 255
                 g = 197 / 255
                 b = 136 / 255
-            elseif
-                r == _G.OBJECTIVE_TRACKER_COLOR['HeaderHighlight'].r
-                and g == _G.OBJECTIVE_TRACKER_COLOR['HeaderHighlight'].g
-                and b == _G.OBJECTIVE_TRACKER_COLOR['HeaderHighlight'].b
-            then
+            elseif r == _G.OBJECTIVE_TRACKER_COLOR['HeaderHighlight'].r and g == _G.OBJECTIVE_TRACKER_COLOR['HeaderHighlight'].g and b == _G.OBJECTIVE_TRACKER_COLOR['HeaderHighlight'].b then
                 r = 216 / 255
                 g = 181 / 255
                 b = 136 / 255
@@ -249,7 +216,6 @@ function EOT:AutoCollapse()
 end
 
 function EOT:OnLogin()
-    EOT:ObjectiveTrackerMover()
     EOT:RestyleObjectiveTrackerText()
 
     -- Kill reward animation when finished dungeon or bonus objectives
