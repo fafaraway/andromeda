@@ -8,9 +8,7 @@ C.Themes['Blizzard_InspectUI'] = function()
     _G.InspectPaperDollFrame.ViewButton:ClearAllPoints()
     _G.InspectPaperDollFrame.ViewButton:SetPoint('TOP', _G.InspectFrame, 0, -45)
     _G.InspectPVPFrame.BG:Hide()
-    if C.IS_NEW_PATCH then
-        F.Reskin(_G.InspectPaperDollItemsFrame.InspectTalents)
-    end
+    F.Reskin(_G.InspectPaperDollItemsFrame.InspectTalents)
 
     -- Character
     local slots = {

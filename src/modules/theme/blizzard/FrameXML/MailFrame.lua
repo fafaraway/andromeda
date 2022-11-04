@@ -20,9 +20,6 @@ tinsert(C.BlizzThemes, function()
     _G.SendStationeryBackgroundRight:Hide()
     _G.InboxPrevPageButton:GetRegions():Hide()
     _G.InboxNextPageButton:GetRegions():Hide()
-    if not C.IS_NEW_PATCH then
-        _G.InboxTitleText:SetPoint('CENTER', _G.MailFrame, 0, 195)
-    end
 
     F.ReskinPortraitFrame(_G.MailFrame)
     F.ReskinPortraitFrame(_G.OpenMailFrame)
@@ -61,6 +58,9 @@ tinsert(C.BlizzThemes, function()
     for i = 1, 2 do
         F.ReskinTab(_G['MailFrameTab' .. i])
     end
+
+    _G.MailFrameTab2:ClearAllPoints()
+    _G.MailFrameTab2:SetPoint('TOPLEFT', _G.MailFrameTab1, 'TOPRIGHT', -15, 0)
 
     for _, button in pairs({ _G.OpenMailLetterButton, _G.OpenMailMoneyButton }) do
         F.StripTextures(button)

@@ -1,10 +1,6 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.BlizzThemes, function()
-    if not C.IS_NEW_PATCH then
-        return
-    end
-
     if not _G.ANDROMEDA_ADB.ReskinBlizz then
         return
     end

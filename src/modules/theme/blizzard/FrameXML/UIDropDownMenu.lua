@@ -74,11 +74,7 @@ tinsert(C.BlizzThemes, function()
                     -- only reliable way to see if button is radio or or check...
                     local _, co = check:GetTexCoord()
                     if co == 0 then
-                        if C.IS_NEW_PATCH then
-                            check:SetAtlas('checkmark-minimal')
-                        else
-                            check:SetTexture('Interface\\Buttons\\UI-CheckBox-Check')
-                        end
+                        check:SetAtlas('checkmark-minimal')
                         check:SetVertexColor(C.r, C.g, C.b, 1)
                         check:SetSize(20, 20)
                         check:SetDesaturated(true)

@@ -103,93 +103,51 @@ tinsert(C.BlizzThemes, function()
         return
     end
 
-    if C.IS_NEW_PATCH then
-        for i = 1, 12 do
-            local frameName = 'ContainerFrame' .. i
-            local frame = _G[frameName]
-            local name = frame.TitleText or _G[frameName .. 'TitleText']
-            name:SetDrawLayer('OVERLAY')
-            name:ClearAllPoints()
-            name:SetPoint('TOP', 0, -10)
-            F.ReskinClose(frame.CloseButton)
+    for i = 1, 12 do
+        local frameName = 'ContainerFrame' .. i
+        local frame = _G[frameName]
+        local name = frame.TitleText or _G[frameName .. 'TitleText']
+        name:SetDrawLayer('OVERLAY')
+        name:ClearAllPoints()
+        name:SetPoint('TOP', 0, -10)
+        F.ReskinClose(frame.CloseButton)
 
-            F.StripTextures(frame)
-            F.SetBD(frame)
-            frame.PortraitContainer:Hide()
-            createBagIcon(frame, i)
-            hooksecurefunc(frame, 'Update', updateContainer)
+        F.StripTextures(frame)
+        F.SetBD(frame)
+        frame.PortraitContainer:Hide()
+        createBagIcon(frame, i)
+        hooksecurefunc(frame, 'Update', updateContainer)
 
-            for k = 1, MAX_CONTAINER_ITEMS do
-                local button = _G[frameName .. 'Item' .. k]
-                ReskinBagSlot(button)
-                hooksecurefunc(button, 'ChangeOwnership', emptySlotBG)
-            end
+        for k = 1, MAX_CONTAINER_ITEMS do
+            local button = _G[frameName .. 'Item' .. k]
+            ReskinBagSlot(button)
+            hooksecurefunc(button, 'ChangeOwnership', emptySlotBG)
         end
-
-        F.StripTextures(_G.BackpackTokenFrame)
-        F.CreateBDFrame(_G.BackpackTokenFrame, 0.25)
-
-        hooksecurefunc(_G.BackpackTokenFrame, 'Update', function(self)
-            local tokens = self.Tokens
-            if next(tokens) then
-                for i = 1, #tokens do
-                    local token = tokens[i]
-                    if not token.styled then
-                        F.ReskinIcon(token.Icon)
-                        token.styled = true
-                    end
-                end
-            end
-        end)
-
-        F.ReskinEditBox(_G.BagItemSearchBox)
-        ReskinSortButton(_G.BagItemAutoSortButton)
-
-        -- Combined bags
-        F.ReskinPortraitFrame(_G.ContainerFrameCombinedBags)
-        createBagIcon(_G.ContainerFrameCombinedBags, 1)
-        _G.ContainerFrameCombinedBags.PortraitButton.Highlight:SetTexture('')
-    else
-        -- [[ Bags ]]
-
-        _G.BackpackTokenFrame:GetRegions():Hide()
-
-        for i = 1, 12 do
-            local con = _G['ContainerFrame' .. i]
-            local name = _G['ContainerFrame' .. i .. 'Name']
-
-            F.StripTextures(con, true)
-            con.PortraitButton.Highlight:SetTexture('')
-            createBagIcon(con, i)
-
-            name:ClearAllPoints()
-            name:SetPoint('TOP', 0, -10)
-
-            for k = 1, MAX_CONTAINER_ITEMS do
-                local item = 'ContainerFrame' .. i .. 'Item' .. k
-                local button = _G[item]
-                if not button.IconQuestTexture then
-                    button.IconQuestTexture = _G[item .. 'IconQuestTexture']
-                end
-                ReskinBagSlot(button)
-            end
-
-            local f = F.SetBD(con)
-            f:SetPoint('TOPLEFT', 8, -4)
-            f:SetPoint('BOTTOMRIGHT', -4, 3)
-
-            F.ReskinClose(_G['ContainerFrame' .. i .. 'CloseButton'])
-        end
-
-        for i = 1, 3 do
-            local ic = _G['BackpackTokenFrameToken' .. i .. 'Icon']
-            F.ReskinIcon(ic)
-        end
-
-        F.ReskinInput(_G.BagItemSearchBox)
-        ReskinSortButton(_G.BagItemAutoSortButton)
-        hooksecurefunc('ContainerFrame_Update', updateContainer)
     end
+
+    F.StripTextures(_G.BackpackTokenFrame)
+    F.CreateBDFrame(_G.BackpackTokenFrame, 0.25)
+
+    hooksecurefunc(_G.BackpackTokenFrame, 'Update', function(self)
+        local tokens = self.Tokens
+        if next(tokens) then
+            for i = 1, #tokens do
+                local token = tokens[i]
+                if not token.styled then
+                    F.ReskinIcon(token.Icon)
+                    token.styled = true
+                end
+            end
+        end
+    end)
+
+    F.ReskinEditBox(_G.BagItemSearchBox)
+    ReskinSortButton(_G.BagItemAutoSortButton)
+
+    -- Combined bags
+    F.ReskinPortraitFrame(_G.ContainerFrameCombinedBags)
+    createBagIcon(_G.ContainerFrameCombinedBags, 1)
+    _G.ContainerFrameCombinedBags.PortraitButton.Highlight:SetTexture('')
 
     -- [[ Bank ]]
 

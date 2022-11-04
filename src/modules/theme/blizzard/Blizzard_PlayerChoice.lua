@@ -55,7 +55,7 @@ C.Themes['Blizzard_PlayerChoice'] = function()
 
         if not self.optionFrameTemplate then
             return
-        end -- isNewPatch
+        end
 
         for optionFrame in self.optionPools:EnumerateActiveByTemplate(self.optionFrameTemplate) do
             local header = optionFrame.Header

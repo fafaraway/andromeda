@@ -193,12 +193,7 @@ tinsert(C.BlizzThemes, function()
     F.ReskinRadio(_G.CombatConfigColorsColorizeEntireLineByTarget)
     F.ReskinColorSwatch(_G.CombatConfigColorsColorizeSpellNamesColorSwatch)
     F.ReskinColorSwatch(_G.CombatConfigColorsColorizeDamageNumberColorSwatch)
-
-    if C.IS_NEW_PATCH then
-        F.ReskinTrimScroll(_G.ChatConfigCombatSettingsFilters.ScrollBar)
-    else
-        F.ReskinScroll(_G.ChatConfigCombatSettingsFiltersScrollFrameScrollBar)
-    end
+    F.ReskinTrimScroll(_G.ChatConfigCombatSettingsFilters.ScrollBar)
 
     _G.ChatConfigMoveFilterUpButton:SetSize(22, 22)
     _G.ChatConfigMoveFilterDownButton:SetSize(22, 22)

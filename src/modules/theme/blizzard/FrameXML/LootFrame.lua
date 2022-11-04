@@ -7,107 +7,62 @@ tinsert(C.BlizzThemes, function()
 
     local LootFrame = _G.LootFrame
 
-    if C.IS_NEW_PATCH then
-        F.ReskinClose(LootFrame.ClosePanelButton)
-        F.StripTextures(LootFrame)
-        F.SetBD(LootFrame)
+    F.ReskinClose(LootFrame.ClosePanelButton)
+    F.StripTextures(LootFrame)
+    F.SetBD(LootFrame)
 
-        local function updateHighlight(self)
-            local button = self.__owner
-            if button.HighlightNameFrame:IsShown() then
-                button.bg:SetBackdropColor(1, 1, 1, 0.25)
-            else
-                button.bg:SetBackdropColor(0, 0, 0, 0.25)
-            end
+    local function updateHighlight(self)
+        local button = self.__owner
+        if button.HighlightNameFrame:IsShown() then
+            button.bg:SetBackdropColor(1, 1, 1, 0.25)
+        else
+            button.bg:SetBackdropColor(0, 0, 0, 0.25)
         end
-
-        local function updatePushed(self)
-            local button = self.__owner
-            if button.PushedNameFrame:IsShown() then
-                button.bg:SetBackdropBorderColor(1, 0.8, 0)
-            else
-                button.bg:SetBackdropColor(0, 0, 0)
-            end
-        end
-
-        hooksecurefunc(LootFrame.ScrollBox, 'Update', function(self)
-            for i = 1, self.ScrollTarget:GetNumChildren() do
-                local button = select(i, self.ScrollTarget:GetChildren())
-                local item = button.Item
-                local questTexture = button.IconQuestTexture
-                if item and not button.styled then
-                    F.StripTextures(item, 1)
-                    item.bg = F.ReskinIcon(item.icon)
-                    F.ReskinIconBorder(item.IconBorder, true)
-
-                    questTexture:SetAlpha(0)
-                    button.BorderFrame:SetAlpha(0)
-                    button.HighlightNameFrame:SetAlpha(0)
-                    button.PushedNameFrame:SetAlpha(0)
-                    button.bg = F.CreateBDFrame(button.HighlightNameFrame, 0.25)
-                    item.__owner = button
-                    item:HookScript('OnMouseUp', updatePushed)
-                    item:HookScript('OnMouseDown', updatePushed)
-                    item:HookScript('OnEnter', updateHighlight)
-                    item:HookScript('OnLeave', updateHighlight)
-
-                    button.styled = true
-                end
-
-                local itemBG = item and item.bg
-                if itemBG then
-                    if questTexture:IsShown() then
-                        itemBG:SetBackdropBorderColor(1, 0.8, 0)
-                    else
-                        itemBG:SetBackdropBorderColor(0, 0, 0)
-                    end
-                end
-            end
-        end)
-    else
-        hooksecurefunc('LootFrame_UpdateButton', function(index)
-            local name = 'LootButton' .. index
-            local bu = _G[name]
-            if not bu:IsShown() then
-                return
-            end
-
-            local nameFrame = _G[name .. 'NameFrame']
-            local questTexture = _G[name .. 'IconQuestTexture']
-
-            if not bu.bg then
-                nameFrame:Hide()
-                questTexture:SetAlpha(0)
-                bu:SetNormalTexture('')
-                bu:SetPushedTexture('')
-                bu:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
-                bu.IconBorder:SetAlpha(0)
-                bu.bg = F.ReskinIcon(bu.icon)
-
-                local bg = F.CreateBDFrame(bu, 0.25)
-                bg:SetPoint('TOPLEFT', bu.bg, 'TOPRIGHT', 1, 0)
-                bg:SetPoint('BOTTOMRIGHT', bu.bg, 115, 0)
-            end
-
-            if questTexture:IsShown() then
-                bu.bg:SetBackdropBorderColor(0.8, 0.8, 0)
-            else
-                bu.bg:SetBackdropBorderColor(0, 0, 0)
-            end
-        end)
-
-        _G.LootFrameDownButton:ClearAllPoints()
-        _G.LootFrameDownButton:SetPoint('BOTTOMRIGHT', -8, 6)
-        _G.LootFramePrev:ClearAllPoints()
-        _G.LootFramePrev:SetPoint('LEFT', _G.LootFrameUpButton, 'RIGHT', 4, 0)
-        _G.LootFrameNext:ClearAllPoints()
-        _G.LootFrameNext:SetPoint('RIGHT', _G.LootFrameDownButton, 'LEFT', -4, 0)
-
-        F.ReskinArrow(_G.LootFrameUpButton, 'up')
-        F.ReskinArrow(_G.LootFrameDownButton, 'down')
-        _G.LootFramePortraitOverlay:Hide()
-        F.ReskinPortraitFrame(LootFrame)
     end
+
+    local function updatePushed(self)
+        local button = self.__owner
+        if button.PushedNameFrame:IsShown() then
+            button.bg:SetBackdropBorderColor(1, 0.8, 0)
+        else
+            button.bg:SetBackdropColor(0, 0, 0)
+        end
+    end
+
+    hooksecurefunc(LootFrame.ScrollBox, 'Update', function(self)
+        for i = 1, self.ScrollTarget:GetNumChildren() do
+            local button = select(i, self.ScrollTarget:GetChildren())
+            local item = button.Item
+            local questTexture = button.IconQuestTexture
+            if item and not button.styled then
+                F.StripTextures(item, 1)
+                item.bg = F.ReskinIcon(item.icon)
+                F.ReskinIconBorder(item.IconBorder, true)
+
+                questTexture:SetAlpha(0)
+                button.BorderFrame:SetAlpha(0)
+                button.HighlightNameFrame:SetAlpha(0)
+                button.PushedNameFrame:SetAlpha(0)
+                button.bg = F.CreateBDFrame(button.HighlightNameFrame, 0.25)
+                item.__owner = button
+                item:HookScript('OnMouseUp', updatePushed)
+                item:HookScript('OnMouseDown', updatePushed)
+                item:HookScript('OnEnter', updateHighlight)
+                item:HookScript('OnLeave', updateHighlight)
+
+                button.styled = true
+            end
+
+            local itemBG = item and item.bg
+            if itemBG then
+                if questTexture:IsShown() then
+                    itemBG:SetBackdropBorderColor(1, 0.8, 0)
+                else
+                    itemBG:SetBackdropBorderColor(0, 0, 0)
+                end
+            end
+        end
+    end)
 
     -- Bonus roll
     local BonusRollFrame = _G.BonusRollFrame

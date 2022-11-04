@@ -77,17 +77,15 @@ tinsert(C.BlizzThemes, function()
         end
     end
 
-    if C.IS_NEW_PATCH then
-        hooksecurefunc('SpellBookFrame_Update', function()
-            for i = 2, 5 do
-                local tab = _G['SpellBookFrameTabButton' .. i]
-                if tab then
-                    tab:ClearAllPoints()
-                    tab:SetPoint('TOPLEFT', _G['SpellBookFrameTabButton' .. (i - 1)], 'TOPRIGHT', -15, 0)
-                end
+    hooksecurefunc('SpellBookFrame_Update', function()
+        for i = 2, 5 do
+            local tab = _G['SpellBookFrameTabButton' .. i]
+            if tab then
+                tab:ClearAllPoints()
+                tab:SetPoint('TOPLEFT', _G['SpellBookFrameTabButton' .. (i - 1)], 'TOPRIGHT', -15, 0)
             end
-        end)
-    end
+        end
+    end)
 
     for i = 1, _G.SPELLS_PER_PAGE do
         local bu = _G['SpellButton' .. i]
@@ -103,13 +101,7 @@ tinsert(C.BlizzThemes, function()
 
         ic.bg = F.ReskinIcon(ic)
 
-        if C.IS_NEW_PATCH then
-            hooksecurefunc(bu, 'UpdateButton', handleSpellButton)
-        end
-    end
-
-    if not C.IS_NEW_PATCH then
-        hooksecurefunc('SpellButton_UpdateButton', handleSpellButton)
+        hooksecurefunc(bu, 'UpdateButton', handleSpellButton)
     end
 
     _G.SpellBookSkillLineTab1:SetPoint('TOPLEFT', _G.SpellBookSideTabsFrame, 'TOPRIGHT', 2, -36)
@@ -156,11 +148,8 @@ tinsert(C.BlizzThemes, function()
         F.StripTextures(bu.statusBar)
         bu.statusBar:SetHeight(10)
         bu.statusBar:SetStatusBarTexture(C.Assets.Textures.Backdrop)
-        if C.IS_NEW_PATCH then
-            bu.statusBar:GetStatusBarTexture():SetGradient('VERTICAL', CreateColor(0, 0.6, 0, 1), CreateColor(0, 0.8, 0, 1))
-        else
-            bu.statusBar:GetStatusBarTexture():SetGradient('VERTICAL', 0, 0.6, 0, 0, 0.8, 0)
-        end
+        bu.statusBar:GetStatusBarTexture():SetGradient('VERTICAL', CreateColor(0, 0.6, 0, 1), CreateColor(0, 0.8, 0, 1))
+
         bu.statusBar.rankText:SetPoint('CENTER')
         F.CreateBDFrame(bu.statusBar, 0.25)
         if i > 2 then
@@ -168,41 +157,8 @@ tinsert(C.BlizzThemes, function()
             bu.statusBar:SetPoint('BOTTOMLEFT', 16, 3)
         end
 
-        if C.IS_NEW_PATCH then
-            handleSkillButton(bu.SpellButton1)
-            handleSkillButton(bu.SpellButton2)
-        end
-    end
-
-    if not C.IS_NEW_PATCH then
-        local professionbuttons = {
-            'PrimaryProfession1SpellButtonTop',
-            'PrimaryProfession1SpellButtonBottom',
-            'PrimaryProfession2SpellButtonTop',
-            'PrimaryProfession2SpellButtonBottom',
-            'SecondaryProfession1SpellButtonLeft',
-            'SecondaryProfession1SpellButtonRight',
-            'SecondaryProfession2SpellButtonLeft',
-            'SecondaryProfession2SpellButtonRight',
-            'SecondaryProfession3SpellButtonLeft',
-            'SecondaryProfession3SpellButtonRight',
-        }
-
-        for _, button in pairs(professionbuttons) do
-            local bu = _G[button]
-            F.StripTextures(bu)
-            bu:SetPushedTexture(0)
-
-            local icon = bu.iconTexture
-            icon:ClearAllPoints()
-            icon:SetPoint('TOPLEFT', 2, -2)
-            icon:SetPoint('BOTTOMRIGHT', -2, 2)
-            F.ReskinIcon(icon)
-            bu.highlightTexture:SetAllPoints(icon)
-            local check = bu:GetCheckedTexture()
-            check:SetTexture(C.Assets.Textures.ButtonPushed)
-            check:SetAllPoints(icon)
-        end
+        handleSkillButton(bu.SpellButton1)
+        handleSkillButton(bu.SpellButton2)
     end
 
     for i = 1, 2 do
@@ -251,7 +207,6 @@ tinsert(C.BlizzThemes, function()
         if self.subSpellString then
             self.subSpellString:SetTextColor(1, 1, 1)
         end
-        -- isNewPatch
         if self.SpellName then
             self.SpellName:SetTextColor(1, 1, 1)
         end

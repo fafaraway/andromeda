@@ -426,32 +426,26 @@ C.Themes['Blizzard_Communities'] = function()
         F.SetBD(dialog)
         F.Reskin(dialog.OkayButton)
         F.Reskin(dialog.CancelButton)
+        F.ReskinTrimScroll(_G.CommunitiesAvatarPickerDialog.ScrollBar)
 
-        if C.IS_NEW_PATCH then
-            -- #TODO
-            F.ReskinTrimScroll(_G.CommunitiesAvatarPickerDialog.ScrollBar)
-        else
-            F.ReskinScroll(_G.CommunitiesAvatarPickerDialogScrollBar)
-
-            hooksecurefunc(_G.CommunitiesAvatarPickerDialog.ScrollFrame, 'Refresh', function(self)
-                for i = 1, 5 do
-                    for j = 1, 6 do
-                        local avatarButton = self.avatarButtons[i][j]
-                        if avatarButton:IsShown() and not avatarButton.bg then
-                            avatarButton.bg = F.ReskinIcon(avatarButton.Icon)
-                            avatarButton.Selected:SetTexture('')
-                            avatarButton:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
-                        end
-
-                        if avatarButton.Selected:IsShown() then
-                            avatarButton.bg:SetBackdropBorderColor(r, g, b)
-                        else
-                            avatarButton.bg:SetBackdropBorderColor(0, 0, 0)
-                        end
+        -- #TODO, blizzard still buggy atm
+        --[=[hooksecurefunc(CommunitiesAvatarPickerDialog.ScrollFrame, "Refresh", function(self)
+            for i = 1, 5 do
+                for j = 1, 6 do
+                    local avatarButton = self.avatarButtons[i][j]
+                    if avatarButton:IsShown() and not avatarButton.bg then
+                        avatarButton.bg = B.ReskinIcon(avatarButton.Icon)
+                        avatarButton.Selected:SetTexture("")
+                        avatarButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+                    end
+                    if avatarButton.Selected:IsShown() then
+                        avatarButton.bg:SetBackdropBorderColor(r, g, b)
+                    else
+                        avatarButton.bg:SetBackdropBorderColor(0, 0, 0)
                     end
                 end
-            end)
-        end
+            end
+        end)]=]
     end
 
     hooksecurefunc(CommunitiesFrame.MemberList, 'RefreshListDisplay', function(self)

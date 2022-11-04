@@ -64,13 +64,7 @@ tinsert(C.BlizzThemes, function()
             unit.ActualHealthBar:SetPoint('BOTTOMLEFT', unit.Icon, 'BOTTOMRIGHT', 0, 0)
             unit.healthBg:SetPoint('TOPLEFT', unit.ActualHealthBar, -1, 1)
             unit.healthBg:SetPoint('BOTTOMLEFT', unit.ActualHealthBar, -1, -1)
-
-            if C.IS_NEW_PATCH then
-                unit.ActualHealthBar:SetGradient('VERTICAL', CreateColor(0.26, 1, 0.22, 1), CreateColor(0.13, 0.5, 0.11, 1))
-            else
-                unit.ActualHealthBar:SetGradient('VERTICAL', 0.26, 1, 0.22, 0.13, 0.5, 0.11)
-            end
-
+            unit.ActualHealthBar:SetGradient('VERTICAL', CreateColor(0.26, 1, 0.22, 1), CreateColor(0.13, 0.5, 0.11, 1))
             unit.petIcon:SetPoint('BOTTOMLEFT', unit.ActualHealthBar, 'TOPLEFT', 0, 4)
             unit.Name:SetPoint('LEFT', unit.petIcon, 'RIGHT', 5, 0)
             unit.Level:SetPoint('BOTTOMLEFT', unit.Icon, 2, 2)
@@ -82,13 +76,7 @@ tinsert(C.BlizzThemes, function()
             unit.ActualHealthBar:SetPoint('BOTTOMRIGHT', unit.Icon, 'BOTTOMLEFT', 0, 0)
             unit.healthBg:SetPoint('TOPRIGHT', unit.ActualHealthBar, 1, 1)
             unit.healthBg:SetPoint('BOTTOMRIGHT', unit.ActualHealthBar, 1, -1)
-
-            if C.IS_NEW_PATCH then
-                unit.ActualHealthBar:SetGradient('VERTICAL', CreateColor(1, 0.12, 0.24, 1), CreateColor(0.5, 0.06, 0.12, 1))
-            else
-                unit.ActualHealthBar:SetGradient('VERTICAL', 1, 0.12, 0.24, 0.5, 0.06, 0.12)
-            end
-
+            unit.ActualHealthBar:SetGradient('VERTICAL', CreateColor(1, 0.12, 0.24, 1), CreateColor(0.5, 0.06, 0.12, 1))
             unit.petIcon:SetPoint('BOTTOMRIGHT', unit.ActualHealthBar, 'TOPRIGHT', 0, 4)
             unit.Name:SetPoint('RIGHT', unit.petIcon, 'LEFT', -5, 0)
             unit.Level:SetPoint('BOTTOMRIGHT', unit.Icon, 2, 2)
@@ -124,17 +112,9 @@ tinsert(C.BlizzThemes, function()
         unit.healthBg:SetFrameLevel(unit:GetFrameLevel())
 
         if index < 3 then
-            if C.IS_NEW_PATCH then
-                unit.ActualHealthBar:SetGradient('VERTICAL', CreateColor(0.26, 1, 0.22, 1), CreateColor(0.13, 0.5, 0.11, 1))
-            else
-                unit.ActualHealthBar:SetGradient('VERTICAL', 0.26, 1, 0.22, 0.13, 0.5, 0.11)
-            end
+            unit.ActualHealthBar:SetGradient('VERTICAL', CreateColor(0.26, 1, 0.22, 1), CreateColor(0.13, 0.5, 0.11, 1))
         else
-            if C.IS_NEW_PATCH then
-                unit.ActualHealthBar:SetGradient('VERTICAL', CreateColor(1, 0.12, 0.24, 1), CreateColor(0.5, 0.06, 0.12, 1))
-            else
-                unit.ActualHealthBar:SetGradient('VERTICAL', 1, 0.12, 0.24, 0.5, 0.06, 0.12)
-            end
+            unit.ActualHealthBar:SetGradient('VERTICAL', CreateColor(1, 0.12, 0.24, 1), CreateColor(0.5, 0.06, 0.12, 1))
         end
     end
     frame.Ally2:SetPoint('BOTTOMRIGHT', frame.ActiveAlly, 'BOTTOMLEFT', -10, 20)

@@ -44,7 +44,7 @@ tinsert(C.BlizzThemes, function()
         local tab = _G['PVEFrameTab' .. i]
         if tab then
             F.ReskinTab(tab)
-            if C.IS_NEW_PATCH and i ~= 1 then
+            if i ~= 1 then
                 tab:ClearAllPoints()
                 tab:SetPoint('TOPLEFT', _G['PVEFrameTab' .. (i - 1)], 'TOPRIGHT', -15, 0)
             end

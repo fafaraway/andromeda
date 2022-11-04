@@ -5,10 +5,6 @@ tinsert(C.BlizzThemes, function()
         return
     end
 
-    if not C.IS_NEW_PATCH then
-        return
-    end
-
     local frame = _G.QuickKeybindFrame
     F.StripTextures(frame)
     F.StripTextures(frame.Header)

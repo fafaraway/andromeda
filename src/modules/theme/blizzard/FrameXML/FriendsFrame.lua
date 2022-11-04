@@ -57,7 +57,7 @@ tinsert(C.BlizzThemes, function()
             F.ReskinTab(tab)
             F.ResetTabAnchor(tab)
 
-            if C.IS_NEW_PATCH and i ~= 1 then
+            if i ~= 1 then
                 tab:ClearAllPoints()
                 tab:SetPoint('TOPLEFT', _G['FriendsFrameTab' .. (i - 1)], 'TOPRIGHT', -15, 0)
             end
@@ -66,76 +66,42 @@ tinsert(C.BlizzThemes, function()
     _G.FriendsFrameIcon:Hide()
     F.StripTextures(_G.IgnoreListFrame)
 
-    if C.IS_NEW_PATCH then
-        local INVITE_RESTRICTION_NONE = 9
-        hooksecurefunc('FriendsFrame_UpdateFriendButton', function(button)
-            if button.gameIcon then
-                reskinFriendButton(button)
+    local INVITE_RESTRICTION_NONE = 9
+    hooksecurefunc('FriendsFrame_UpdateFriendButton', function(button)
+        if button.gameIcon then
+            reskinFriendButton(button)
+        end
+
+        if button.newIcon and button.buttonType == _G.FRIENDS_BUTTON_TYPE_BNET then
+            if FriendsFrame_GetInviteRestriction(button.id) == INVITE_RESTRICTION_NONE then
+                button.newIcon:SetVertexColor(1, 1, 1)
+            else
+                button.newIcon:SetVertexColor(0.5, 0.5, 0.5)
             end
+        end
+    end)
 
-            if button.newIcon and button.buttonType == _G.FRIENDS_BUTTON_TYPE_BNET then
-                if FriendsFrame_GetInviteRestriction(button.id) == INVITE_RESTRICTION_NONE then
-                    button.newIcon:SetVertexColor(1, 1, 1)
-                else
-                    button.newIcon:SetVertexColor(0.5, 0.5, 0.5)
-                end
-            end
-        end)
+    hooksecurefunc('FriendsFrame_UpdateFriendInviteButton', function(button)
+        if not button.styled then
+            F.Reskin(button.AcceptButton)
+            F.Reskin(button.DeclineButton)
 
-        hooksecurefunc('FriendsFrame_UpdateFriendInviteButton', function(button)
-            if not button.styled then
-                F.Reskin(button.AcceptButton)
-                F.Reskin(button.DeclineButton)
+            button.styled = true
+        end
+    end)
 
-                button.styled = true
-            end
-        end)
+    hooksecurefunc('FriendsFrame_UpdateFriendInviteHeaderButton', function(button)
+        if not button.styled then
+            button:DisableDrawLayer('BACKGROUND')
+            local bg = F.CreateBDFrame(button, 0.25)
+            bg:SetInside(button, 2, 2)
+            local hl = button:GetHighlightTexture()
+            hl:SetColorTexture(0.24, 0.56, 1, 0.2)
+            hl:SetInside(bg)
 
-        hooksecurefunc('FriendsFrame_UpdateFriendInviteHeaderButton', function(button)
-            if not button.styled then
-                button:DisableDrawLayer('BACKGROUND')
-                local bg = F.CreateBDFrame(button, 0.25)
-                bg:SetInside(button, 2, 2)
-                local hl = button:GetHighlightTexture()
-                hl:SetColorTexture(0.24, 0.56, 1, 0.2)
-                hl:SetInside(bg)
-
-                button.styled = true
-            end
-        end)
-    else
-        local pendingHeader = _G.FriendsListFrameScrollFrame.PendingInvitesHeaderButton
-        pendingHeader:DisableDrawLayer('BACKGROUND')
-        local bg = F.CreateBDFrame(pendingHeader, 0.25)
-        bg:SetInside(pendingHeader, 2, 2)
-        local hl = pendingHeader:GetHighlightTexture()
-        hl:SetColorTexture(0.24, 0.56, 1, 0.2)
-        hl:SetInside(bg)
-
-        local INVITE_RESTRICTION_NONE = 9
-        hooksecurefunc('FriendsFrame_UpdateFriendButton', function(button)
-            if button.gameIcon then
-                reskinFriendButton(button)
-            end
-
-            if button.buttonType == _G.FRIENDS_BUTTON_TYPE_INVITE then
-                for button in _G.FriendsListFrameScrollFrame.invitePool:EnumerateActive() do
-                    if not button.styled then
-                        F.Reskin(button.AcceptButton)
-                        F.Reskin(button.DeclineButton)
-
-                        button.styled = true
-                    end
-                end
-            elseif button.buttonType == _G.FRIENDS_BUTTON_TYPE_BNET then
-                if FriendsFrame_GetInviteRestriction(button.id) == INVITE_RESTRICTION_NONE then
-                    button.newIcon:SetVertexColor(1, 1, 1)
-                else
-                    button.newIcon:SetVertexColor(0.5, 0.5, 0.5)
-                end
-            end
-        end)
-    end
+            button.styled = true
+        end
+    end)
 
     _G.FriendsFrameStatusDropDown:ClearAllPoints()
     _G.FriendsFrameStatusDropDown:SetPoint('TOPLEFT', _G.FriendsFrame, 'TOPLEFT', 10, -28)
@@ -187,17 +153,10 @@ tinsert(C.BlizzThemes, function()
     F.Reskin(_G.FriendsFrameSendMessageButton)
     F.Reskin(_G.FriendsFrameIgnorePlayerButton)
     F.Reskin(_G.FriendsFrameUnsquelchButton)
-    if C.IS_NEW_PATCH then
-        F.ReskinTrimScroll(_G.FriendsListFrame.ScrollBar)
-        F.ReskinTrimScroll(_G.IgnoreListFrame.ScrollBar)
-        F.ReskinTrimScroll(_G.WhoFrame.ScrollBar)
-        F.ReskinTrimScroll(_G.FriendsFriendsFrame.ScrollBar)
-    else
-        F.ReskinScroll(_G.FriendsListFrameScrollFrame.scrollBar)
-        F.ReskinScroll(_G.IgnoreListFrameScrollFrame.scrollBar)
-        F.ReskinScroll(_G.WhoListScrollFrame.scrollBar)
-        F.ReskinScroll(_G.FriendsFriendsScrollFrame.scrollBar)
-    end
+    F.ReskinTrimScroll(_G.FriendsListFrame.ScrollBar)
+    F.ReskinTrimScroll(_G.IgnoreListFrame.ScrollBar)
+    F.ReskinTrimScroll(_G.WhoFrame.ScrollBar)
+    F.ReskinTrimScroll(_G.FriendsFriendsFrame.ScrollBar)
     F.ReskinDropDown(_G.FriendsFrameStatusDropDown)
     F.ReskinDropDown(_G.WhoFrameDropDown)
     F.ReskinDropDown(_G.FriendsFriendsFrameDropDown)

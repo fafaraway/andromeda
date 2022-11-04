@@ -44,12 +44,7 @@ tinsert(C.BlizzThemes, function()
     local bg = F.CreateBDFrame(content, 0.25)
     bg:SetPoint('BOTTOMRIGHT', tabContainer.InsetBorderTop, 4, -1)
 
-    if C.IS_NEW_PATCH then
-        F.ReskinTrimScroll(content.ScrollBar)
-    else
-        F.ReskinScroll(content.ScrollFrame.ScrollBar)
-    end
-
+    F.ReskinTrimScroll(content.ScrollBar)
     F.StripTextures(tabContainer)
     for i = 1, 3 do
         F.ReskinTab(tabContainer.TabGroup['Tab' .. i])
@@ -72,12 +67,7 @@ tinsert(C.BlizzThemes, function()
         bg:SetPoint('BOTTOMRIGHT', tabContainer.InsetBorderTop, 4, -1)
         F.StripTextures(content.earningsArt)
 
-        if C.IS_NEW_PATCH then
-            F.ReskinTrimScroll(content.scrollBar)
-        else
-            F.ReskinScroll(content.scrollFrame.scrollBar)
-        end
-
+        F.ReskinTrimScroll(content.scrollBar)
         F.StripTextures(tabContainer)
         for i = 1, 3 do
             F.ReskinTab(tabContainer.tabGroup['tab' .. i])

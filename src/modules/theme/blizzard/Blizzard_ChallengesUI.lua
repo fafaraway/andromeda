@@ -42,12 +42,8 @@ C.Themes['Blizzard_ChallengesUI'] = function()
             angryStyle = true
         end
     end
-    if C.IS_NEW_PATCH then
-        hooksecurefunc(_G.ChallengesFrame, 'Update', UpdateIcons)
-    else
-        hooksecurefunc('ChallengesFrame_Update', UpdateIcons)
-    end
 
+    hooksecurefunc(_G.ChallengesFrame, 'Update', UpdateIcons)
     hooksecurefunc(_G.ChallengesFrame.WeeklyInfo, 'SetUp', function(self)
         local affixes = C_MythicPlus.GetCurrentAffixes()
         if affixes then

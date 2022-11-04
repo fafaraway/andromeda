@@ -103,12 +103,7 @@ tinsert(C.BlizzThemes, function()
     F.Reskin(_G.ChannelFrame.NewButton)
     F.Reskin(_G.ChannelFrame.SettingsButton)
     F.ReskinScroll(_G.ChannelFrame.ChannelList.ScrollBar)
-
-    if C.IS_NEW_PATCH then
-        F.ReskinTrimScroll(_G.ChannelFrame.ChannelRoster.ScrollBar)
-    else
-        F.ReskinScroll(_G.ChannelFrame.ChannelRoster.ScrollFrame.scrollBar)
-    end
+    F.ReskinTrimScroll(_G.ChannelFrame.ChannelRoster.ScrollBar)
 
     hooksecurefunc(_G.ChannelFrame.ChannelList, 'Update', function(self)
         for i = 1, self.Child:GetNumChildren() do

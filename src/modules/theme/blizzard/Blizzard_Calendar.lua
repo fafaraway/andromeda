@@ -65,11 +65,7 @@ C.Themes['Blizzard_Calendar'] = function()
     _G.CalendarMonthBackground:SetAlpha(0)
     _G.CalendarYearBackground:SetAlpha(0)
     _G.CalendarFrameModalOverlay:SetAlpha(0.25)
-    if C.IS_NEW_PATCH then
-        _G.CalendarViewHolidayFrame.Texture:SetAlpha(0)
-    else
-        _G.CalendarViewHolidayInfoTexture:SetAlpha(0)
-    end
+    _G.CalendarViewHolidayFrame.Texture:SetAlpha(0)
     _G.CalendarTexturePickerAcceptButtonBorder:Hide()
     _G.CalendarTexturePickerCancelButtonBorder:Hide()
     F.StripTextures(_G.CalendarClassTotalsButton)

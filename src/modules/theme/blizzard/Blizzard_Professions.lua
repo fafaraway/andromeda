@@ -51,9 +51,11 @@ C.Themes['Blizzard_Professions'] = function()
     F.StripTextures(guildFrame.Container)
     F.CreateBDFrame(guildFrame.Container, 0.25)
 
-    for i = 1, 2 do
+    for i = 1, 3 do
         local tab = select(i, frame.TabSystem:GetChildren())
-        F.ReskinTab(tab)
+        if tab then
+            F.ReskinTab(tab)
+        end
     end
 
     -- Tools
@@ -85,7 +87,7 @@ C.Themes['Blizzard_Professions'] = function()
     F.ReskinTrimScroll(recipeList.ScrollBar, true)
     if recipeList.BackgroundNineSlice then
         recipeList.BackgroundNineSlice:Hide()
-    end -- in cast blizz rename
+    end -- in case blizz rename
     F.CreateBDFrame(recipeList, 0.25):SetInside()
     F.ReskinEditBox(recipeList.SearchBox)
     F.ReskinFilterButton(recipeList.FilterButton)
@@ -135,14 +137,14 @@ C.Themes['Blizzard_Professions'] = function()
             reskinSlotButton(slot.Button)
         end
 
-        local salvageSlot = form.salvageSlot
-        if salvageSlot then
-            reskinSlotButton(salvageSlot.Button)
+        local slot = form.salvageSlot
+        if slot then
+            reskinSlotButton(slot.Button)
         end
 
-        local enchantSlot = form.enchantSlot
-        if enchantSlot then
-            reskinSlotButton(enchantSlot.Button)
+        local eslot = form.enchantSlot
+        if eslot then
+            reskinSlotButton(eslot.Button)
         end
         -- #TODO: salvage flyout, item flyout, recraft flyout
     end)
@@ -230,6 +232,92 @@ C.Themes['Blizzard_Professions'] = function()
                         itemBG:SetBackdropBorderColor(0, 0, 0)
                     end
                 end
+            end
+        end
+    end)
+
+    -- Item flyout
+    if _G.OpenProfessionsItemFlyout then
+        local function refreshFlyoutButtons(self)
+            for i = 1, self.ScrollTarget:GetNumChildren() do
+                local button = select(i, self.ScrollTarget:GetChildren())
+                if button.IconBorder and not button.styled then
+                    button.bg = F.ReskinIcon(button.icon)
+                    button:SetNormalTexture(0)
+                    button:SetPushedTexture(0)
+                    button:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
+                    F.ReskinIconBorder(button.IconBorder, true)
+
+                    button.styled = true
+                end
+            end
+        end
+
+        local flyout
+        hooksecurefunc('OpenProfessionsItemFlyout', function()
+            if not flyout then
+                for i = 1, frame:GetNumChildren() do
+                    local child = select(i, frame:GetChildren())
+                    if child.HideUnownedCheckBox then
+                        flyout = child
+
+                        F.StripTextures(flyout)
+                        F.SetBD(flyout):SetFrameLevel(2)
+                        F.ReskinCheckbox(flyout.HideUnownedCheckBox)
+                        flyout.HideUnownedCheckBox.bg:SetInside(nil, 6, 6)
+                        hooksecurefunc(flyout.ScrollBox, 'Update', refreshFlyoutButtons)
+
+                        break
+                    end
+                end
+            end
+        end)
+    end
+
+    -- Order page
+    if not frame.OrdersPage then
+        return
+    end -- not exists in retail yet
+
+    local browseFrame = frame.OrdersPage.BrowseFrame
+    F.Reskin(browseFrame.SearchButton)
+    F.Reskin(browseFrame.FavoritesSearchButton)
+
+    local bfRecipeList = browseFrame.RecipeList
+    F.StripTextures(bfRecipeList)
+    F.ReskinTrimScroll(bfRecipeList.ScrollBar, true)
+    if bfRecipeList.BackgroundNineSlice then
+        bfRecipeList.BackgroundNineSlice:Hide()
+    end -- in case blizz rename
+    F.CreateBDFrame(bfRecipeList, 0.25):SetInside()
+    F.ReskinEditBox(bfRecipeList.SearchBox)
+    F.ReskinFilterButton(bfRecipeList.FilterButton)
+
+    F.ReskinTab(browseFrame.PublicOrdersButton)
+    F.ReskinTab(browseFrame.GuildOrdersButton)
+    F.ReskinTab(browseFrame.PersonalOrdersButton)
+    F.StripTextures(browseFrame.OrdersRemainingDisplay)
+    F.CreateBDFrame(browseFrame.OrdersRemainingDisplay, 0.25)
+
+    local orderList = browseFrame.OrderList
+    F.StripTextures(orderList)
+    orderList.Background:SetAlpha(0)
+    F.CreateBDFrame(orderList, 0.25):SetInside()
+
+    hooksecurefunc(frame.OrdersPage, 'SetupTable', function()
+        local maxHeaders = orderList.HeaderContainer:GetNumChildren()
+        for i = 1, maxHeaders do
+            local header = select(i, orderList.HeaderContainer:GetChildren())
+            if not header.styled then
+                header:DisableDrawLayer('BACKGROUND')
+                header.bg = F.CreateBDFrame(header)
+                local hl = header:GetHighlightTexture()
+                hl:SetColorTexture(1, 1, 1, 0.1)
+                hl:SetAllPoints(header.bg)
+                header.bg:SetPoint('TOPLEFT', 0, -2)
+                header.bg:SetPoint('BOTTOMRIGHT', i < maxHeaders and -5 or 0, -2)
+
+                header.styled = true
             end
         end
     end)

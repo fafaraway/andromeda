@@ -13,22 +13,22 @@ tinsert(C.BlizzThemes, function()
     GameMenuFrame.Border:Hide()
 
     local buttons = {
-        _G.GameMenuButtonHelp,
-        _G.GameMenuButtonWhatsNew,
-        _G.GameMenuButtonStore,
-        _G.GameMenuButtonOptions,
-        _G.GameMenuButtonUIOptions,
-        _G.GameMenuButtonKeybindings,
-        _G.GameMenuButtonMacros,
-        _G.GameMenuButtonAddons,
-        _G.GameMenuButtonLogout,
-        _G.GameMenuButtonQuit,
-        _G.GameMenuButtonContinue,
-        _G.GameMenuButtonSettings, -- isNewPatch
-        _G.GameMenuButtonEditMode, -- isNewPatch
+        'GameMenuButtonHelp',
+        'GameMenuButtonWhatsNew',
+        'GameMenuButtonStore',
+        'GameMenuButtonMacros',
+        'GameMenuButtonAddons',
+        'GameMenuButtonLogout',
+        'GameMenuButtonQuit',
+        'GameMenuButtonContinue',
+        'GameMenuButtonSettings',
+        'GameMenuButtonEditMode',
     }
 
-    for _, button in next, buttons do
-        F.Reskin(button)
+    for _, buttonName in next, buttons do
+        local button = _G[buttonName]
+        if button then
+            F.Reskin(button)
+        end
     end
 end)

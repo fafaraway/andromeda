@@ -97,12 +97,7 @@ tinsert(C.BlizzThemes, function()
     _G.LFDRoleCheckPopup.Border:Hide()
     F.Reskin(_G.LFDRoleCheckPopupAcceptButton)
     F.Reskin(_G.LFDRoleCheckPopupDeclineButton)
-    if C.IS_NEW_PATCH then
-        F.ReskinTrimScroll(_G.LFDQueueFrameSpecific.ScrollBar)
-    else
-        F.ReskinScroll(_G.LFDQueueFrameSpecificListScrollFrameScrollBar)
-        _G.LFDQueueFrameSpecificListScrollFrameScrollBarScrollDownButton:SetPoint('TOP', _G.LFDQueueFrameSpecificListScrollFrameScrollBar, 'BOTTOM', 0, 2)
-    end
+    F.ReskinTrimScroll(_G.LFDQueueFrameSpecific.ScrollBar)
     F.StripTextures(_G.LFDQueueFrameRandomScrollFrameScrollBar, 0)
     F.ReskinScroll(_G.LFDQueueFrameRandomScrollFrameScrollBar)
     F.ReskinDropDown(_G.LFDQueueFrameTypeDropDown)
