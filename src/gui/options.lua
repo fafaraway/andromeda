@@ -197,7 +197,10 @@ end
 
 local function UpdateHealthColor()
     for _, frame in pairs(oUF.objects) do
-        UNITFRAME:UpdateHealthBarColor(frame, true)
+        local style = frame.unitStyle
+        if style and style ~= 'nameplate' then
+            UNITFRAME:UpdateHealthColor(frame, true)
+        end
     end
 end
 
@@ -1565,11 +1568,11 @@ GUI.OptionsList = {
             true,
         },
         {},
-        { 1, 'Tooltip', 'IDs', L['Show Spell&Item IDs'] },
+        { 1, 'Tooltip', 'ShowIDs', L['Show Spell&Item IDs'] },
         {
             1,
             'Tooltip',
-            'IDsByAlt',
+            'ShowIDsByAlt',
             L['Show Spell&Item IDs by ALT'],
             true,
         },
@@ -1675,9 +1678,12 @@ GUI.OptionsList = {
             L['Health Color'],
             nil,
             {
-                L['Default White'],
+                L['Default Black'],
                 L['Class Color'],
                 L['Percentage Gradient'],
+                L['rainbow'],
+                L['clear class color'],
+                L['clear gradient'],
             },
             UpdateHealthColor,
         },

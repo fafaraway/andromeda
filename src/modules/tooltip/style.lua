@@ -3,11 +3,16 @@ local TOOLTIP = F:GetModule('Tooltip')
 
 function TOOLTIP:ReskinTooltip()
     if not self then
+        if C.IS_DEVELOPER then
+            F:Debug('Unknown tooltip spotted.')
+        end
         return
     end
+
     if self:IsForbidden() then
         return
     end
+
     self:SetScale(1)
 
     if not self.tipStyled then
@@ -104,6 +109,14 @@ function TOOLTIP:RegisterTooltips(addon, func)
     tipTable[addon] = func
 end
 
+local function addonStyled(_, addon)
+    if tipTable[addon] then
+        tipTable[addon]()
+        tipTable[addon] = nil
+    end
+end
+F:RegisterEvent('ADDON_LOADED', addonStyled)
+
 TOOLTIP:RegisterTooltips(C.ADDON_NAME, function()
     local tooltips = {
         _G.ChatMenu,
@@ -140,16 +153,12 @@ TOOLTIP:RegisterTooltips(C.ADDON_NAME, function()
         _G.IMECandidatesFrame,
         _G.QuickKeybindTooltip,
         _G.GameSmallHeaderTooltip,
+        _G.SettingsTooltip,
     }
 
-    for _, tip in pairs(tooltips) do
-        tip:HookScript('OnShow', TOOLTIP.ReskinTooltip)
+    for _, f in pairs(tooltips) do
+        f:HookScript('OnShow', TOOLTIP.ReskinTooltip)
     end
-
-    -- if _G.SettingsTooltip then -- isNewPatch
-    --     TOOLTIP.ReskinTooltip(_G.SettingsTooltip)
-    --     _G.SettingsTooltip:SetScale(_G.UIParent:GetScale())
-    -- end
 
     -- DropdownMenu
     local dropdowns = { 'DropDownList', 'L_DropDownList', 'Lib_DropDownList' }
@@ -167,7 +176,8 @@ TOOLTIP:RegisterTooltips(C.ADDON_NAME, function()
     hooksecurefunc('UIDropDownMenu_CreateFrames', reskinDropdown)
 
     -- IME
-    -- _G.IMECandidatesFrame.selection:SetVertexColor(C.r, C.g, C.b, 1)
+    -- local r, g, b = C.r, C.g, C.b
+    -- _G.IMECandidatesFrame.selection:SetVertexColor(r, g, b, 1)
 
     -- Pet Tooltip
     _G.PetBattlePrimaryUnitTooltip:HookScript('OnShow', function(self)
@@ -191,7 +201,7 @@ TOOLTIP:RegisterTooltips(C.ADDON_NAME, function()
                     frame.Icon:SetTexCoord(unpack(C.TEX_COORD))
                 end
                 nextBuff = nextBuff + 1
-            elseif not isBuff and self.Debuffs then
+            elseif (not isBuff) and self.Debuffs then
                 local frame = self.Debuffs.frames[nextDebuff]
                 if frame and frame.Icon then
                     frame.DebuffBorder:Hide()
@@ -208,7 +218,7 @@ TOOLTIP:RegisterTooltips(C.ADDON_NAME, function()
         if _G.BSYC_EventAlertTooltip then
             TOOLTIP.ReskinTooltip(_G.BSYC_EventAlertTooltip)
         end
-        -- Lib
+        -- Libs
         if _G.LibDBIconTooltip then
             TOOLTIP.ReskinTooltip(_G.LibDBIconTooltip)
         end
@@ -314,11 +324,3 @@ TOOLTIP:RegisterTooltips('Blizzard_Calendar', function()
     _G.CalendarContextMenu:HookScript('OnShow', TOOLTIP.ReskinTooltip)
     _G.CalendarInviteStatusContextMenu:HookScript('OnShow', TOOLTIP.ReskinTooltip)
 end)
-
-function TOOLTIP:AddonStyled(addon)
-    if tipTable[addon] then
-        tipTable[addon]()
-        tipTable[addon] = nil
-    end
-end
-F:RegisterEvent('ADDON_LOADED', TOOLTIP.AddonStyled)

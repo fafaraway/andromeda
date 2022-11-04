@@ -51,6 +51,28 @@ function TOOLTIP:HideLines()
     end
 end
 
+local FACTION_COLORS = {
+    [_G.FACTION_ALLIANCE] = '|cff4080ff%s|r',
+    [_G.FACTION_HORDE] = '|cffff5040%s|r',
+}
+
+function TOOLTIP:UpdateFactionLine(lineData)
+    if self:IsForbidden() then
+        return
+    end
+
+    if not self:IsTooltipType(Enum.TooltipDataType.Unit) then
+        return
+    end
+
+    local linetext = lineData.leftText
+    if linetext == _G.PVP then
+        return true
+    elseif FACTION_COLORS[linetext] then
+        lineData.leftText = format(FACTION_COLORS[linetext], linetext)
+    end
+end
+
 function TOOLTIP:GetLevelLine()
     for i = 2, self:NumLines() do
         local tiptext = _G['GameTooltipTextLeft' .. i]
@@ -106,7 +128,9 @@ function TOOLTIP:OnTooltipSetUnit()
         return
     end
 
-    TOOLTIP.HideLines(self)
+    if not C.IS_BETA then
+        TOOLTIP.HideLines(self)
+    end
 
     local unit = TOOLTIP.GetUnit(self)
     if not unit or not UnitExists(unit) then
@@ -520,35 +544,37 @@ function TOOLTIP:OnLogin()
         return
     end
 
-    if not _G.GameTooltip.StatusBar then -- isNewPatch
+    if not _G.GameTooltip.StatusBar then -- isBeta
         _G.GameTooltip.StatusBar = _G.GameTooltipStatusBar
     end
 
     if C.IS_BETA then
-        hooksecurefunc(_G.GameTooltip, 'ProcessLines', TOOLTIP.RefreshLines)
+        _G.TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, TOOLTIP.OnTooltipSetUnit)
         hooksecurefunc(_G.GameTooltip.StatusBar, 'SetValue', TOOLTIP.RefreshStatusBar)
+        _G.TooltipDataProcessor.AddLinePreCall(Enum.TooltipDataLineType.None, TOOLTIP.UpdateFactionLine)
+        _G.TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TOOLTIP.FixRecipeItemNameWidth)
     else
         _G.GameTooltip:HookScript('OnTooltipSetUnit', TOOLTIP.OnTooltipSetUnit)
         _G.GameTooltip.StatusBar:SetScript('OnValueChanged', TOOLTIP.StatusBar_OnValueChanged)
+
+        hooksecurefunc('GameTooltip_AnchorComparisonTooltips', TOOLTIP.GameTooltip_ComparisonFix)
+        _G.GameTooltip:HookScript('OnTooltipSetItem', TOOLTIP.FixRecipeItemNameWidth)
+        _G.ItemRefTooltip:HookScript('OnTooltipSetItem', TOOLTIP.FixRecipeItemNameWidth)
+        _G.EmbeddedItemTooltip:HookScript('OnTooltipSetItem', TOOLTIP.FixRecipeItemNameWidth)
     end
 
     hooksecurefunc('GameTooltip_ShowStatusBar', TOOLTIP.GameTooltip_ShowStatusBar)
     hooksecurefunc('GameTooltip_ShowProgressBar', TOOLTIP.GameTooltip_ShowProgressBar)
     hooksecurefunc('GameTooltip_SetDefaultAnchor', TOOLTIP.GameTooltip_SetDefaultAnchor)
 
-    if not C.IS_BETA then
-        hooksecurefunc('GameTooltip_AnchorComparisonTooltips', TOOLTIP.GameTooltip_ComparisonFix)
-    end
-
     _G.GameTooltip:HookScript('OnTooltipCleared', TOOLTIP.OnTooltipCleared)
     _G.GameTooltip:HookScript('OnUpdate', TOOLTIP.GameTooltip_OnUpdate)
-
     _G.GameTooltip.FadeOut = FadeOut
 
     TOOLTIP:AuraSource()
     TOOLTIP:ReskinTipIcon()
     TOOLTIP:SetupFonts()
-    TOOLTIP:VariousID()
+    TOOLTIP:AddIDs()
     TOOLTIP:ItemInfo()
     TOOLTIP:MountSource()
     TOOLTIP:HyperLink()
