@@ -104,8 +104,12 @@ function BLIZZARD:AlertFrame_Setup()
     _G.GroupLootContainer:EnableMouse(false)
     _G.GroupLootContainer.ignoreFramePositionManager = true
 
-    for _, alertFrameSubSystem in ipairs(_G.AlertFrame.alertFrameSubSystems) do
-        BLIZZARD.AlertFrame_AdjustPosition(alertFrameSubSystem)
+    for index, alertFrameSubSystem in ipairs(_G.AlertFrame.alertFrameSubSystems) do
+        if alertFrameSubSystem.anchorFrame and alertFrameSubSystem.anchorFrame == _G.TalkingHeadFrame then
+            tremove(_G.AlertFrame.alertFrameSubSystems, index)
+        else
+            BLIZZARD.AlertFrame_AdjustPosition(alertFrameSubSystem)
+        end
     end
 
     hooksecurefunc(_G.AlertFrame, 'AddAlertFrameSubSystem', function(_, alertFrameSubSystem)

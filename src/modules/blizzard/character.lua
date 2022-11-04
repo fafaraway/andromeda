@@ -186,26 +186,7 @@ function M:NakedButton()
     end)
 end
 
-function M:TitleFontSize()
-    if C.IS_NEW_PATCH then
-        return
-    end
-
-    hooksecurefunc('PaperDollTitlesPane_UpdateScrollFrame', function()
-        local bu = _G.PaperDollTitlesPane.buttons
-        for i = 1, #bu do
-            if not bu[i].fontStyled then
-                bu[i].text:SetFont(C.Assets.Fonts.Bold, 12)
-                bu[i].text:SetShadowColor(0, 0, 0, 1)
-                bu[i].text:SetShadowOffset(1, -1)
-                bu[i].fontStyled = true
-            end
-        end
-    end)
-end
-
 function M:OnLogin()
     M.MissingStats()
     M.NakedButton()
-    M.TitleFontSize()
 end

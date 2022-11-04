@@ -169,13 +169,7 @@ function INFOBAR:FriendsPanel_Init()
 
     infoFrame = CreateFrame('Frame', C.ADDON_TITLE .. 'FriendsFrame', INFOBAR.Bar)
     infoFrame:SetSize(400, 495)
-    infoFrame:SetPoint(
-        anchorTop and 'TOP' or 'BOTTOM',
-        INFOBAR.FriendsBlock,
-        anchorTop and 'BOTTOM' or 'TOP',
-        0,
-        anchorTop and -6 or 6
-    )
+    infoFrame:SetPoint(anchorTop and 'TOP' or 'BOTTOM', INFOBAR.FriendsBlock, anchorTop and 'BOTTOM' or 'TOP', 0, anchorTop and -6 or 6)
     infoFrame:SetClampedToScreen(true)
     infoFrame:SetFrameStrata('DIALOG')
     F.SetBD(infoFrame)
@@ -184,37 +178,10 @@ function INFOBAR:FriendsPanel_Init()
         self:SetScript('OnUpdate', isPanelCanHide)
     end)
 
-    F.CreateFS(
-        infoFrame,
-        C.Assets.Fonts.Bold,
-        16,
-        nil,
-        F:RgbToHex({ 0.9, 0.8, 0.6 }) .. _G.FRIENDS_LIST,
-        nil,
-        true,
-        'TOPLEFT',
-        15,
-        -10
-    )
-    infoFrame.friendCountText = F.CreateFS(
-        infoFrame,
-        C.Assets.Fonts.Regular,
-        14,
-        nil,
-        '-/-',
-        nil,
-        true,
-        'TOPRIGHT',
-        -15,
-        -12
-    )
+    F.CreateFS(infoFrame, C.Assets.Fonts.Bold, 16, nil, F:RgbToHex({ 0.9, 0.8, 0.6 }) .. _G.FRIENDS_LIST, nil, true, 'TOPLEFT', 15, -10)
+    infoFrame.friendCountText = F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 14, nil, '-/-', nil, true, 'TOPRIGHT', -15, -12)
 
-    local scrollFrame = CreateFrame(
-        'ScrollFrame',
-        C.ADDON_TITLE .. 'FriendsInfobarScrollFrame',
-        infoFrame,
-        'HybridScrollFrameTemplate'
-    )
+    local scrollFrame = CreateFrame('ScrollFrame', C.ADDON_TITLE .. 'FriendsInfobarScrollFrame', infoFrame, 'HybridScrollFrameTemplate')
     scrollFrame:SetSize(370, 400)
     scrollFrame:SetPoint('TOPLEFT', 10, -35)
     infoFrame.scrollFrame = scrollFrame
@@ -271,12 +238,7 @@ local function GetButtonTexFromInviteType(guid, factionName)
 end
 
 local function GetNameAndInviteType(class, charName, guid, factionName)
-    return format(
-        '%s%s|r %s',
-        F:RgbToHex(F:ClassColor(C.ClassList[class])),
-        charName,
-        GetButtonTexFromInviteType(guid, factionName)
-    )
+    return format('%s%s|r %s', F:RgbToHex(F:ClassColor(C.ClassList[class])), charName, GetButtonTexFromInviteType(guid, factionName))
 end
 
 local function buttonOnClick(self, btn)
@@ -358,7 +320,7 @@ local function buttonOnEnter(self)
             local level = gameAccountInfo.characterLevel
             local gameText = gameAccountInfo.richPresence or ''
             local wowProjectID = gameAccountInfo.wowProjectID
-            local clientString = C.IS_NEW_PATCH and BNet_GetClientEmbeddedAtlas(client, 16) or BNet_GetClientEmbeddedTexture(client, 16)
+            local clientString = BNet_GetClientEmbeddedAtlas(client, 16)
             if client == _G.BNET_CLIENT_WOW then
                 if charName ~= '' then -- fix for weird account
                     realmName = (C.MY_REALM == realmName or realmName == '') and '' or '-' .. realmName
@@ -378,9 +340,7 @@ local function buttonOnEnter(self)
                     elseif faction == 'Alliance' then
                         clientString = '|TInterface\\FriendsFrame\\PlusManz-Alliance:16:|t'
                     end
-                    _G.GameTooltip:AddLine(
-                        format('%s%s %s%s%s', clientString, level, classColor, charName, realmName)
-                    )
+                    _G.GameTooltip:AddLine(format('%s%s %s%s%s', clientString, level, classColor, charName, realmName))
 
                     if wowProjectID ~= WOW_PROJECT_ID then
                         zoneName = '*' .. zoneName
@@ -402,13 +362,7 @@ local function buttonOnEnter(self)
 
         if broadcastText and broadcastText ~= '' then
             _G.GameTooltip:AddLine(' ')
-            _G.GameTooltip:AddLine(
-                format(broadcastString, broadcastText, _G.FriendsFrame_GetLastOnline(broadcastTime)),
-                0.3,
-                0.6,
-                0.8,
-                1
-            )
+            _G.GameTooltip:AddLine(format(broadcastString, broadcastText, _G.FriendsFrame_GetLastOnline(broadcastTime)), 0.3, 0.6, 0.8, 1)
         end
     else
         _G.GameTooltip:AddLine(L['WoW'], 1, 0.8, 0)
@@ -473,12 +427,7 @@ function INFOBAR:FriendsPanel_UpdateButton(button)
         local classColor = C.ClassColors[class] or levelColor
         button.name:SetText(format('%s%s|r %s%s', levelColor, level, F:RgbToHex(classColor), name))
         button.zone:SetText(format('%s%s', zoneColor, area))
-
-        if C.IS_NEW_PATCH then
-            button.gameIcon:SetAtlas(BNet_GetBattlenetClientAtlas(_G.BNET_CLIENT_WOW))
-        else
-            button.gameIcon:SetTexture(BNet_GetClientTexture(_G.BNET_CLIENT_WOW))
-        end
+        button.gameIcon:SetAtlas(BNet_GetBattlenetClientAtlas(_G.BNET_CLIENT_WOW))
 
         button.isBNet = nil
         button.data = friendTable[index]
@@ -501,19 +450,11 @@ function INFOBAR:FriendsPanel_UpdateButton(button)
         button.zone:SetText(format('%s%s', zoneColor, infoText))
 
         if client == CLIENT_WOW_DIFF then
-            if C.IS_NEW_PATCH then
-                button.gameIcon:SetAtlas(BNet_GetBattlenetClientAtlas(_G.BNET_CLIENT_WOW))
-            else
-                button.gameIcon:SetTexture(BNet_GetClientTexture(_G.BNET_CLIENT_WOW))
-            end
+            button.gameIcon:SetAtlas(BNet_GetBattlenetClientAtlas(_G.BNET_CLIENT_WOW))
         elseif client == _G.BNET_CLIENT_WOW then
             button.gameIcon:SetTexture('Interface\\FriendsFrame\\PlusManz-' .. factionName)
         else
-            if C.IS_NEW_PATCH then
-                button.gameIcon:SetAtlas(BNet_GetBattlenetClientAtlas(client))
-            else
-                button.gameIcon:SetTexture(BNet_GetClientTexture(client))
-            end
+            button.gameIcon:SetAtlas(BNet_GetBattlenetClientAtlas(client))
         end
 
         button.isBNet = true
@@ -605,16 +546,7 @@ local function Block_OnEnter(self)
         _G.GameTooltip:SetOwner(self, 'ANCHOR_NONE')
         _G.GameTooltip:SetPoint('TOPLEFT', _G.UIParent, 15, -30)
         _G.GameTooltip:ClearLines()
-        _G.GameTooltip:AddDoubleLine(
-            _G.FRIENDS_LIST,
-            format('%s: %s/%s', _G.GUILD_ONLINE_LABEL, totalOnline, totalFriends),
-            0,
-            0.6,
-            1,
-            0,
-            0.6,
-            1
-        )
+        _G.GameTooltip:AddDoubleLine(_G.FRIENDS_LIST, format('%s: %s/%s', _G.GUILD_ONLINE_LABEL, totalOnline, totalFriends), 0, 0.6, 1, 0, 0.6, 1)
         _G.GameTooltip:AddLine(' ')
         _G.GameTooltip:AddLine(L['No Online'], 1, 1, 1)
         _G.GameTooltip:Show()

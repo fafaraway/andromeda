@@ -90,10 +90,20 @@ local function Block_OnEnter(self)
             local slotIcon = localSlots[i][4]
             _G.GameTooltip:AddDoubleLine(slotIcon .. localSlots[i][2], cur .. '%', 1, 1, 1, getDurabilityColor(cur, 100))
 
-            F.ScanTip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
-            local repairCost = select(3, F.ScanTip:SetInventoryItem('player', slot))
-            repairCost = repairCost or 0
-            totalCost = totalCost + repairCost
+            if C.IS_BETA then
+                local data = C_TooltipInfo.GetInventoryItem('player', slot)
+                if data then
+                    local argVal = data.args and data.args[7]
+                    if argVal and argVal.field == 'repairCost' then
+                        totalCost = totalCost + argVal.intVal
+                    end
+                end
+            else
+                F.ScanTip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
+                local repairCost = select(3, F.ScanTip:SetInventoryItem('player', slot))
+                repairCost = repairCost or 0
+                totalCost = totalCost + repairCost
+            end
         end
     end
 

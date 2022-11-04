@@ -1,4 +1,5 @@
 local F, C = unpack(select(2, ...))
+local TOOLTIP = F:GetModule('Tooltip')
 
 local COLOR = { r = 0.1, g = 1, b = 0.1 }
 local knowables = {
@@ -36,9 +37,19 @@ local function IsAlreadyKnown(link, index)
         end
 
         if itemClassID == Enum.ItemClass.Battlepet and index then
-            local speciesID = F.ScanTip:SetGuildBankItem(GetCurrentGuildBankTab(), index)
-            return isPetCollected(speciesID)
-        elseif F:GetModule('Tooltip').ConduitData[linkID] and F:GetModule('Tooltip').ConduitData[linkID] >= level then
+            if C.IS_BETA then
+                local data = C_TooltipInfo.GetGuildBankItem(GetCurrentGuildBankTab(), index)
+                if data then
+                    local argVal = data.args and data.args[2]
+                    if argVal.field == 'battlePetSpeciesID' then
+                        return isPetCollected(argVal.intVal)
+                    end
+                end
+            else
+                local speciesID = F.ScanTip:SetGuildBankItem(GetCurrentGuildBankTab(), index)
+                return isPetCollected(speciesID)
+            end
+        elseif TOOLTIP.ConduitData[linkID] and TOOLTIP.ConduitData[linkID] >= level then
             return true
         else
             if knowns[link] then
@@ -48,13 +59,32 @@ local function IsAlreadyKnown(link, index)
                 return
             end
 
-            F.ScanTip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
-            F.ScanTip:SetHyperlink(link)
-            for i = 1, F.ScanTip:NumLines() do
-                local text = _G[C.ADDON_TITLE .. 'ScanTooltipTextLeft' .. i]:GetText() or ''
-                if strfind(text, _G.COLLECTED) or text == _G.ITEM_SPELL_KNOWN then
-                    knowns[link] = true
-                    return true
+            if C.IS_BETA then
+                local data = C_TooltipInfo.GetHyperlink(link, nil, nil, true)
+                if data then
+                    for i = 1, #data.lines do
+                        local lineData = data.lines[i]
+                        local argVal = lineData and lineData.args
+                        if argVal then
+                            local text = argVal[2] and argVal[2].stringVal
+                            if text then
+                                if strfind(text, _G.COLLECTED) or text == _G.ITEM_SPELL_KNOWN then
+                                    knowns[link] = true
+                                    return true
+                                end
+                            end
+                        end
+                    end
+                end
+            else
+                F.ScanTip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
+                F.ScanTip:SetHyperlink(link)
+                for i = 1, F.ScanTip:NumLines() do
+                    local text = _G[C.ADDON_TITLE .. 'ScanTooltipTextLeft' .. i]:GetText() or ''
+                    if strfind(text, _G.COLLECTED) or text == _G.ITEM_SPELL_KNOWN then
+                        knowns[link] = true
+                        return true
+                    end
                 end
             end
         end
@@ -104,44 +134,6 @@ end
 hooksecurefunc('MerchantFrame_UpdateBuybackInfo', Hook_UpdateBuybackInfo)
 
 -- auction house
-local function Hook_UpdateAuctionHouse(self)
-    local numResults = self.getNumEntries()
-
-    local buttons = _G.HybridScrollFrame_GetButtons(self.ScrollFrame)
-    local buttonCount = #buttons
-    local offset = self:GetScrollOffset()
-    for i = 1, buttonCount do
-        local visible = i + offset <= numResults
-        local button = buttons[i]
-        if visible then
-            if button.rowData.itemKey.itemID then
-                local itemLink
-                if button.rowData.itemKey.itemID == 82800 then -- BattlePet
-                    itemLink = format('|Hbattlepet:%d::::::|h[Dummy]|h', button.rowData.itemKey.battlePetSpeciesID)
-                else -- Normal item
-                    itemLink = format('item:%d', button.rowData.itemKey.itemID)
-                end
-
-                if itemLink and IsAlreadyKnown(itemLink) then
-                    -- Highlight
-                    button.SelectedHighlight:Show()
-                    button.SelectedHighlight:SetVertexColor(COLOR.r, COLOR.g, COLOR.b)
-                    button.SelectedHighlight:SetAlpha(0.25)
-                    -- Icon
-                    button.cells[2].Icon:SetVertexColor(COLOR.r, COLOR.g, COLOR.b)
-                    button.cells[2].IconBorder:SetVertexColor(COLOR.r, COLOR.g, COLOR.b)
-                else
-                    -- Highlight
-                    button.SelectedHighlight:SetVertexColor(1, 1, 1)
-                    -- Icon
-                    button.cells[2].Icon:SetVertexColor(1, 1, 1)
-                    button.cells[2].IconBorder:SetVertexColor(1, 1, 1)
-                end
-            end
-        end
-    end
-end
-
 local function Hook_UpdateAuctionItems(self)
     for i = 1, self.ScrollTarget:GetNumChildren() do
         local child = select(i, self.ScrollTarget:GetChildren())
@@ -213,11 +205,7 @@ local f = CreateFrame('Frame')
 f:RegisterEvent('ADDON_LOADED')
 f:SetScript('OnEvent', function(_, event, addon)
     if addon == 'Blizzard_AuctionHouseUI' then
-        if C.IS_NEW_PATCH then
-            hooksecurefunc(_G.AuctionHouseFrame.BrowseResultsFrame.ItemList.ScrollBox, 'Update', Hook_UpdateAuctionItems)
-        else
-            hooksecurefunc(_G.AuctionHouseFrame.BrowseResultsFrame.ItemList, 'RefreshScrollFrame', Hook_UpdateAuctionHouse)
-        end
+        hooksecurefunc(_G.AuctionHouseFrame.BrowseResultsFrame.ItemList.ScrollBox, 'Update', Hook_UpdateAuctionItems)
         hookCount = hookCount + 1
     elseif addon == 'Blizzard_GuildBankUI' then
         hooksecurefunc(_G.GuildBankFrame, 'Update', GuildBankFrame_Update)

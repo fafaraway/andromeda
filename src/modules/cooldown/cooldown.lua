@@ -233,6 +233,5 @@ function COOLDOWN:OnLogin()
     hooksecurefunc(_G.ActionBarButtonEventsFrameMixin, 'RegisterFrame', COOLDOWN.RegisterActionButton)
 
     -- Hide Default Cooldown
-    SetCVar('countdownForCooldowns', 0)
-    F.HideOption(_G.InterfaceOptionsActionBarsPanelCountdownCooldowns)
+    SetCVar('countdownForCooldowns', 0) -- #TODO: hide default option
 end

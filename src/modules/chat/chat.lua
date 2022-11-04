@@ -120,11 +120,6 @@ local function SetupChatFrame(self)
     self:SetShadowColor(0, 0, 0, outline and 0 or 1)
     self:SetShadowOffset(2, -2)
 
-    if not C.IS_NEW_PATCH then
-        self:SetMaxResize(C.SCREEN_WIDTH, C.SCREEN_HEIGHT)
-        self:SetMinResize(100, 50)
-    end
-
     if self:GetMaxLines() < maxLines then
         self:SetMaxLines(maxLines)
     end
@@ -163,9 +158,9 @@ local function SetupChatFrame(self)
     if _G.CHAT_OPTIONS then
         _G.CHAT_OPTIONS.HIDE_FRAME_ALERTS = true
     end -- only flash whisper
-    SetCVar('chatStyle', 'classic')
+    SetCVar('chatStyle', 'classic') -- #TODO: hide chatStyle option
+    SetCVar('chatMouseScroll', 1) -- enable mousescroll
     SetCVar('whisperMode', 'inline') -- blizz reset this on NPE
-    F.HideOption(_G.InterfaceOptionsSocialPanelChatStyle)
     _G.CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
 
     for i = 1, 15 do
@@ -269,12 +264,8 @@ function CHAT:UpdateChatFrame()
     CHAT:UpdateChatSize()
     CHAT:UpdateTextFading()
 
-    if C.IS_NEW_PATCH then
-        hooksecurefunc(_G.ChatFrame1, 'SetPoint', updateChatAnchor)
-    else
-        hooksecurefunc('FCF_SavePositionAndDimensions', CHAT.UpdateChatSize)
-        FCF_SavePositionAndDimensions(_G.ChatFrame1)
-    end
+    hooksecurefunc(_G.ChatFrame1, 'SetPoint', updateChatAnchor)
+    FCF_SavePositionAndDimensions(_G.ChatFrame1)
 end
 
 -- Swith channels by Tab
@@ -626,18 +617,7 @@ local function FixLanguageFilterSideEffects()
     end
     sideEffectFixed = true
 
-    F.CreateFS(
-        _G.HelpFrame,
-        C.Assets.Fonts.Bold,
-        14,
-        nil,
-        L['You need to uncheck language filter in GUI and reload UI to get access into CN BattleNet support.'],
-        'YELLOW',
-        'THICK',
-        'TOP',
-        0,
-        30
-    )
+    F.CreateFS(_G.HelpFrame, C.Assets.Fonts.Bold, 14, nil, L['You need to uncheck language filter in GUI and reload UI to get access into CN BattleNet support.'], 'YELLOW', 'THICK', 'TOP', 0, 30)
 
     local OLD_GetFriendGameAccountInfo = C_BattleNet.GetFriendGameAccountInfo
     function C_BattleNet.GetFriendGameAccountInfo(...)

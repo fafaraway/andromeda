@@ -27,6 +27,7 @@ local frames = {
     ['PaperDollFrame'] = true,
     ['PetitionFrame'] = false,
     ['PetStableFrame'] = false,
+    ['ProfessionsFrame'] = false,
     ['PVEFrame'] = false,
     ['QuestFrame'] = false,
     ['RaidParentFrame'] = false,
@@ -40,19 +41,11 @@ local frames = {
     ['TokenFrame'] = true,
     ['TradeFrame'] = false,
     ['TutorialFrame'] = false,
+    ['SettingsPanel'] = false,
 
     -- Addon Frames
     -- ['BindPadFrame'] = false
 }
-
-if C.IS_NEW_PATCH then
-    frames['SettingsPanel'] = false
-    frames['ProfessionsFrame'] = false
-else
-    frames['AudioOptionsFrame'] = false
-    frames['InterfaceOptionsFrame'] = false
-    frames['VideoOptionsFrame'] = false
-end
 
 -- Frame Existing Check
 local function IsFrameExists()

@@ -17,11 +17,7 @@ function AURA:HideBlizBuff()
     end
 
     F.HideObject(_G.BuffFrame)
-    if C.IS_NEW_PATCH then
-        F.HideObject(_G.DebuffFrame)
-    else
-        F.HideObject(_G.TemporaryEnchantFrame)
-    end
+    F.HideObject(_G.DebuffFrame)
 end
 
 function AURA:BuildBuffFrame()

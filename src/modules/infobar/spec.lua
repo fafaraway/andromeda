@@ -35,7 +35,7 @@ local function refreshDefaultLootSpec()
     if not currentSpecIndex or currentSpecIndex == 5 then
         return
     end
-    local mult = C.IS_NEW_PATCH and (3 + numSpecs) or numSpecs
+    local mult = 3 + numSpecs
     newMenu[numLocal - mult].text = format(_G.LOOT_SPECIALIZATION_DEFAULT, select(2, GetSpecializationInfo(currentSpecIndex)))
 end
 
@@ -126,30 +126,26 @@ local function BuildSpecMenu()
         end
     end
 
-    if C.IS_NEW_PATCH then
-        tinsert(newMenu, seperatorMenu)
-        tinsert(newMenu, { text = GetSpellInfo(384255), isTitle = true, notCheckable = true })
-        tinsert(newMenu, {
-            text = _G.BLUE_FONT_COLOR:WrapTextInColorCode(_G.TALENT_FRAME_DROP_DOWN_STARTER_BUILD),
-            func = selectCurrentConfig,
-            arg1 = _G.Constants.TraitConsts.STARTER_BUILD_TRAIT_CONFIG_ID,
-            checked = function()
-                return C_ClassTalents.GetStarterBuildActive()
-            end,
-        })
-    end
+    tinsert(newMenu, seperatorMenu)
+    tinsert(newMenu, { text = GetSpellInfo(384255), isTitle = true, notCheckable = true })
+    tinsert(newMenu, {
+        text = _G.BLUE_FONT_COLOR:WrapTextInColorCode(_G.TALENT_FRAME_DROP_DOWN_STARTER_BUILD),
+        func = selectCurrentConfig,
+        arg1 = _G.Constants.TraitConsts.STARTER_BUILD_TRAIT_CONFIG_ID,
+        checked = function()
+            return C_ClassTalents.GetStarterBuildActive()
+        end,
+    })
 
     numLocal = #newMenu
 
     refreshDefaultLootSpec()
     F:RegisterEvent('ACTIVE_TALENT_GROUP_CHANGED', refreshDefaultLootSpec)
 
-    if C.IS_NEW_PATCH then
-        refreshAllTraits()
-        F:RegisterEvent('TRAIT_CONFIG_DELETED', refreshAllTraits)
-        F:RegisterEvent('TRAIT_CONFIG_UPDATED', refreshAllTraits)
-        F:RegisterEvent('ACTIVE_TALENT_GROUP_CHANGED', refreshAllTraits)
-    end
+    refreshAllTraits()
+    F:RegisterEvent('TRAIT_CONFIG_DELETED', refreshAllTraits)
+    F:RegisterEvent('TRAIT_CONFIG_UPDATED', refreshAllTraits)
+    F:RegisterEvent('ACTIVE_TALENT_GROUP_CHANGED', refreshAllTraits)
 end
 
 local function Block_OnMouseUp(self, btn)
@@ -229,12 +225,10 @@ local function Block_OnEnter(self)
         end
     end
 
-    if C.IS_NEW_PATCH then
-        local configID = C_ClassTalents.GetLastSelectedSavedConfigID(specID)
-        local info = configID and C_Traits.GetConfigInfo(configID)
-        if info and info.name then
-            _G.GameTooltip:AddLine('   (' .. info.name .. ')', 1, 1, 1)
-        end
+    local configID = C_ClassTalents.GetLastSelectedSavedConfigID(specID)
+    local info = configID and C_Traits.GetConfigInfo(configID)
+    if info and info.name then
+        _G.GameTooltip:AddLine('   (' .. info.name .. ')', 1, 1, 1)
     end
 
     if C_SpecializationInfo.CanPlayerUsePVPTalentUI() then

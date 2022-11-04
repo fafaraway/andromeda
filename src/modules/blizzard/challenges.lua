@@ -117,11 +117,7 @@ end
 
 function ECF.GuildBest_OnLoad(event, addon)
     if addon == 'Blizzard_ChallengesUI' then
-        if C.IS_NEW_PATCH then
-            hooksecurefunc(_G.ChallengesFrame, 'Update', ECF.GuildBest_Update)
-        else
-            hooksecurefunc('ChallengesFrame_Update', ECF.GuildBest_Update)
-        end
+        hooksecurefunc(_G.ChallengesFrame, 'Update', ECF.GuildBest_Update)
         ECF:KeystoneInfo_Create()
         _G.ChallengesFrame.WeeklyInfo.Child.WeeklyChest:HookScript('OnEnter', ECF.KeystoneInfo_WeeklyRuns)
 
@@ -145,13 +141,7 @@ function ECF:KeystoneInfo_WeeklyRuns()
         local isShiftKeyDown = IsShiftKeyDown()
 
         _G.GameTooltip:AddLine(' ')
-        _G.GameTooltip:AddDoubleLine(
-            isShiftKeyDown and _G.CHALLENGE_MODE_THIS_WEEK or format(_G.WEEKLY_REWARDS_MYTHIC_TOP_RUNS, WeeklyRunsThreshold),
-            '(' .. numRuns .. ')',
-            0.6,
-            0.8,
-            1
-        )
+        _G.GameTooltip:AddDoubleLine(isShiftKeyDown and _G.CHALLENGE_MODE_THIS_WEEK or format(_G.WEEKLY_REWARDS_MYTHIC_TOP_RUNS, WeeklyRunsThreshold), '(' .. numRuns .. ')', 0.6, 0.8, 1)
         sort(runHistory, sortHistory)
 
         for i = 1, isShiftKeyDown and numRuns or WeeklyRunsThreshold do

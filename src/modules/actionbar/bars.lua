@@ -247,22 +247,6 @@ function BAR:CreateBar3()
     _G.RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
 end
 
-local function UpdateVisibility(event)
-    if InCombatLockdown() then
-        F:RegisterEvent('PLAYER_REGEN_ENABLED', UpdateVisibility)
-    else
-        _G.InterfaceOptions_UpdateMultiActionBars()
-        F:UnregisterEvent(event, UpdateVisibility)
-    end
-end
-
-function BAR:FixSideBarVisibility()
-    F:RegisterEvent('PET_BATTLE_OVER', UpdateVisibility)
-    F:RegisterEvent('PET_BATTLE_CLOSE', UpdateVisibility)
-    F:RegisterEvent('UNIT_EXITED_VEHICLE', UpdateVisibility)
-    F:RegisterEvent('UNIT_EXITING_VEHICLE', UpdateVisibility)
-end
-
 function BAR:UpdateFrameClickThru()
     local showBar4, showBar5
 
@@ -294,12 +278,6 @@ function BAR:CreateBar4()
     _G.MultiBarRight:EnableMouse(false)
     _G.MultiBarRight.QuickKeybindGlow:SetTexture('')
 
-    hooksecurefunc(_G.MultiBarRight, 'SetScale', function(self, scale, force)
-        if not force and scale ~= 1 then
-            self:SetScale(1, true)
-        end
-    end)
-
     for i = 1, num do
         local button = _G['MultiBarRightButton' .. i]
         tinsert(buttonList, button)
@@ -310,8 +288,6 @@ function BAR:CreateBar4()
     frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show'
     _G.RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
 
-    -- Fix visibility when leaving vehicle or petbattle
-    -- BAR:FixSideBarVisibility()
     BAR:UpdateFrameClickThru()
 end
 
@@ -326,12 +302,6 @@ function BAR:CreateBar5()
     _G.MultiBarLeft:SetParent(frame)
     _G.MultiBarLeft:EnableMouse(false)
     _G.MultiBarLeft.QuickKeybindGlow:SetTexture('')
-
-    hooksecurefunc(_G.MultiBarLeft, 'SetScale', function(self, scale, force)
-        if not force and scale ~= 1 then
-            self:SetScale(1, true)
-        end
-    end)
 
     for i = 1, num do
         local button = _G['MultiBarLeftButton' .. i]
@@ -352,16 +322,8 @@ function BAR:CreatePetBar()
     frame.mover = F.Mover(frame, L['PetBar'], 'PetBar', { 'BOTTOM', _G[C.ADDON_TITLE .. 'ActionBar2'], 'TOP', 0, BAR.margin })
     BAR.movers[7] = frame.mover
 
-    if C.IS_NEW_PATCH then
-        -- #TODO
-        _G.PetActionBar:SetParent(frame)
-        _G.PetActionBar:EnableMouse(false)
-    else
-        _G.PetActionBarFrame:SetParent(frame)
-        _G.PetActionBarFrame:EnableMouse(false)
-        _G.SlidingActionBarTexture0:SetTexture(nil)
-        _G.SlidingActionBarTexture1:SetTexture(nil)
-    end
+    _G.PetActionBar:SetParent(frame)
+    _G.PetActionBar:EnableMouse(false)
 
     for i = 1, num do
         local button = _G['PetActionButton' .. i]
@@ -388,6 +350,7 @@ function BAR:UpdateStanceBar()
     for i = 1, 12 do
         local button = frame.buttons[i]
         button:SetSize(size, size)
+
         if i < 11 then
             button:ClearAllPoints()
             if i == 1 then
@@ -397,7 +360,10 @@ function BAR:UpdateStanceBar()
             else
                 button:SetPoint('LEFT', frame.buttons[i - 1], 'RIGHT', BAR.margin, 0)
             end
+
+            button.SetPoint = nop
         end
+
         BAR:UpdateFontSize(button, fontSize)
     end
 
@@ -422,15 +388,8 @@ function BAR:CreateStanceBar()
     BAR.movers[8] = frame.mover
 
     -- StanceBar
-    if C.IS_NEW_PATCH then
-        -- #TODO
-    else
-        _G.StanceBarFrame:SetParent(frame)
-        _G.StanceBarFrame:EnableMouse(false)
-        _G.StanceBarLeft:SetTexture(nil)
-        _G.StanceBarMiddle:SetTexture(nil)
-        _G.StanceBarRight:SetTexture(nil)
-    end
+    _G.StanceBar:SetParent(frame)
+    _G.StanceBar:EnableMouse(false)
 
     for i = 1, num do
         local button = _G['StanceButton' .. i]
@@ -439,14 +398,8 @@ function BAR:CreateStanceBar()
     end
 
     -- PossessBar
-    if C.IS_NEW_PATCH then
-        -- #TODO
-    else
-        _G.PossessBarFrame:SetParent(frame)
-        _G.PossessBarFrame:EnableMouse(false)
-        _G.PossessBackground1:SetTexture(nil)
-        _G.PossessBackground2:SetTexture(nil)
-    end
+    _G.PossessActionBar:SetParent(frame)
+    _G.PossessActionBar:EnableMouse(false)
 
     for i = 1, NUM_POSSESS_SLOTS do
         local button = _G['PossessButton' .. i]

@@ -30,11 +30,7 @@ function BLIZZARD:PetTabs_Click(button)
 end
 
 function BLIZZARD:PetTabs_Create()
-    if C.IS_NEW_PATCH then
-        _G.PetJournal.ScrollBox:SetPoint('TOPLEFT', _G.PetJournalLeftInset, 3, -60)
-    else
-        _G.PetJournalListScrollFrame:SetPoint('TOPLEFT', _G.PetJournalLeftInset, 3, -60)
-    end
+    _G.PetJournal.ScrollBox:SetPoint('TOPLEFT', _G.PetJournalLeftInset, 3, -60)
 
     -- Create the pet type buttons, sorted according weakness
     -- Humanoid > Dragonkin > Magic > Flying > Aquatic > Elemental > Mechanical > Beast > Critter > Undead

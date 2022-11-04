@@ -49,6 +49,49 @@ local function updateTokenVisibility()
     TokenFrame_Update()
 end
 
+local function ReplaceSpellbookButtons()
+    if not C.IS_BETA then
+        return
+    end
+
+    local function replaceOnEnter(self)
+        local slot = SpellBook_GetSpellBookSlot(self)
+        _G.GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
+
+        if InClickBindingMode() and not self.canClickBind then
+            _G.GameTooltip:AddLine(_G.CLICK_BINDING_NOT_AVAILABLE, _G.RED_FONT_COLOR.r, _G.RED_FONT_COLOR.g, _G.RED_FONT_COLOR.b)
+            _G.GameTooltip:Show()
+            return
+        end
+
+        _G.GameTooltip:SetSpellBookItem(slot, _G.SpellBookFrame.bookType)
+        self.UpdateTooltip = nil
+
+        if self.SpellHighlightTexture and self.SpellHighlightTexture:IsShown() then
+            _G.GameTooltip:AddLine(_G.SPELLBOOK_SPELL_NOT_ON_ACTION_BAR, _G.LIGHTBLUE_FONT_COLOR.r, _G.LIGHTBLUE_FONT_COLOR.g, _G.LIGHTBLUE_FONT_COLOR.b)
+        end
+        _G.GameTooltip:Show()
+    end
+
+    local function handleSpellButton(button)
+        button.OnEnter = replaceOnEnter
+        button:SetScript('OnEnter', replaceOnEnter)
+        button.OnLeave = F.HideTooltip
+        button:SetScript('OnLeave', F.HideTooltip)
+    end
+
+    for i = 1, _G.SPELLS_PER_PAGE do
+        handleSpellButton(_G['SpellButton' .. i])
+    end
+
+    local professions = { 'PrimaryProfession1', 'PrimaryProfession2', 'SecondaryProfession1', 'SecondaryProfession2', 'SecondaryProfession3' }
+    for _, button in pairs(professions) do
+        local bu = _G[button]
+        handleSpellButton(bu.SpellButton1)
+        handleSpellButton(bu.SpellButton2)
+    end
+end
+
 function ACTIONBAR:RemoveBlizzArt()
     _G.MainMenuBar:SetMovable(true)
     _G.MainMenuBar:SetUserPlaced(true)
@@ -64,6 +107,10 @@ function ACTIONBAR:RemoveBlizzArt()
         DisableAllScripts(frame)
     end
 
+    -- Fix spellbook button taint with Editmode
+    ReplaceSpellbookButtons()
+    -- Hide blizz options
+    SetCVar('multiBarRightVerticalLayout', 0)
     -- Fix maw block anchor
     _G.MainMenuBarVehicleLeaveButton:RegisterEvent('PLAYER_ENTERING_WORLD')
     -- Update token panel
@@ -397,6 +444,9 @@ function ACTIONBAR:StyleActionButton(button, cfg)
     end
     if NormalTexture then
         NormalTexture:SetAlpha(0)
+    end
+    if button.SpellHighlightTexture then
+        button.SpellHighlightTexture:SetOutside()
     end
 
     -- backdrop
