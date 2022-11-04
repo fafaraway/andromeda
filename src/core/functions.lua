@@ -294,32 +294,63 @@ do
                 return iLvlDB[link]
             end
 
-            tip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
-            if arg1 and type(arg1) == 'string' then
-                tip:SetInventoryItem(arg1, arg2)
-            elseif arg1 and type(arg1) == 'number' then
-                tip:SetBagItem(arg1, arg2)
-            else
-                tip:SetHyperlink(link)
-            end
-
-            local firstLine = _G[C.ADDON_TITLE .. 'ScanTooltipTextLeft1']:GetText()
-            if firstLine == _G.RETRIEVING_ITEM_INFO then
-                return 'tooSoon'
-            end
-
-            for i = 2, 5 do
-                local line = _G[tip:GetName() .. 'TextLeft' .. i]
-                if not line then
-                    break
+            if C.IS_BETA then
+                local data
+                if arg1 and type(arg1) == 'string' then
+                    data = C_TooltipInfo.GetInventoryItem(arg1, arg2)
+                elseif arg1 and type(arg1) == 'number' then
+                    data = C_TooltipInfo.GetBagItem(arg1, arg2)
+                else
+                    data = C_TooltipInfo.GetHyperlink(link, nil, nil, true)
                 end
 
-                local text = line:GetText()
-                local found = text and strfind(text, itemLevelString)
-                if found then
-                    local level = strmatch(text, '(%d+)%)?$')
-                    iLvlDB[link] = tonumber(level)
-                    break
+                if data then
+                    for i = 2, 5 do
+                        local lineData = data.lines[i]
+                        if not lineData then
+                            break
+                        end
+
+                        local argVal = lineData.args
+                        if argVal then
+                            local text = argVal[2] and argVal[2].stringVal
+                            local found = text and strfind(text, itemLevelString)
+                            if found then
+                                local level = strmatch(text, '(%d+)%)?$')
+                                iLvlDB[link] = tonumber(level)
+                                break
+                            end
+                        end
+                    end
+                end
+            else
+                tip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
+                if arg1 and type(arg1) == 'string' then
+                    tip:SetInventoryItem(arg1, arg2)
+                elseif arg1 and type(arg1) == 'number' then
+                    tip:SetBagItem(arg1, arg2)
+                else
+                    tip:SetHyperlink(link)
+                end
+
+                local firstLine = _G[C.ADDON_TITLE .. 'ScanTooltipTextLeft1']:GetText()
+                if firstLine == _G.RETRIEVING_ITEM_INFO then
+                    return 'tooSoon'
+                end
+
+                for i = 2, 5 do
+                    local line = _G[tip:GetName() .. 'TextLeft' .. i]
+                    if not line then
+                        break
+                    end
+
+                    local text = line:GetText()
+                    local found = text and strfind(text, itemLevelString)
+                    if found then
+                        local level = strmatch(text, '(%d+)%)?$')
+                        iLvlDB[link] = tonumber(level)
+                        break
+                    end
                 end
             end
 
@@ -644,12 +675,7 @@ do
 
         local tex = self:CreateTexture(nil, 'BACKGROUND')
         tex:SetTexture(C.Assets.Textures.Backdrop)
-
-        if C.IS_NEW_PATCH then
-            tex:SetGradient(orientation, CreateColor(r, g, b, a1), CreateColor(r, g, b, a2))
-        else
-            tex:SetGradientAlpha(orientation, r, g, b, a1, r, g, b, a2)
-        end
+        tex:SetGradient(orientation, CreateColor(r, g, b, a1), CreateColor(r, g, b, a2))
 
         if width then
             tex:SetWidth(width)
@@ -717,11 +743,7 @@ do
 
         local color = _G.ANDROMEDA_ADB.ButtonBackdropColor
         if gradStyle then
-            if C.IS_NEW_PATCH then
-                tex:SetGradient('Vertical', CreateColor(color.r, color.g, color.b, 0.65), CreateColor(0, 0, 0, 0.25))
-            else
-                tex:SetGradientAlpha('Vertical', color.r, color.g, color.b, 0.65, 0, 0, 0, 0.25)
-            end
+            tex:SetGradient('Vertical', CreateColor(color.r, color.g, color.b, 0.65), CreateColor(0, 0, 0, 0.25))
         else
             tex:SetVertexColor(color.r, color.g, color.b, 0)
         end
@@ -1184,9 +1206,6 @@ do
     end
 
     function F:HideOption()
-        if not self then
-            return
-        end -- isNewPatch
         self:SetAlpha(0)
         self:SetScale(0.0001)
     end
@@ -1513,11 +1532,7 @@ do
         F.SetBorderColor(self.__bg)
 
         if gradStyle then
-            if C.IS_NEW_PATCH then
-                self.__gradient:SetGradient('Vertical', CreateColor(color.r, color.g, color.b, alpha), CreateColor(0, 0, 0, 0.25))
-            else
-                self.__gradient:SetGradientAlpha('Vertical', color.r, color.g, color.b, alpha, 0, 0, 0, 0.25)
-            end
+            self.__gradient:SetGradient('Vertical', CreateColor(color.r, color.g, color.b, alpha), CreateColor(0, 0, 0, 0.25))
         else
             self.__gradient:SetVertexColor(color.r, color.g, color.b, alpha)
         end
@@ -1537,16 +1552,17 @@ do
     -- Handle tabs
     function F:ReskinTab()
         self:DisableDrawLayer('BACKGROUND')
-        if C.IS_NEW_PATCH then
-            if self.LeftHighlight then
-                self.LeftHighlight:SetAlpha(0)
-            end
-            if self.RightHighlight then
-                self.RightHighlight:SetAlpha(0)
-            end
-            if self.MiddleHighlight then
-                self.MiddleHighlight:SetAlpha(0)
-            end
+
+        if self.LeftHighlight then
+            self.LeftHighlight:SetAlpha(0)
+        end
+
+        if self.RightHighlight then
+            self.RightHighlight:SetAlpha(0)
+        end
+
+        if self.MiddleHighlight then
+            self.MiddleHighlight:SetAlpha(0)
         end
 
         local bg = F.CreateBDFrame(self)
@@ -1978,10 +1994,16 @@ do
             self:SetDisabledCheckedTexture(C.Assets.Textures.Tick)
 
             if self.SetCheckedTexture then
+                -- local checked = self:GetCheckedTexture()
+                -- checked:SetVertexColor(C.r, C.g, C.b)
+                -- checked:SetInside(self.bg, 1, 1)
+                -- checked:SetDesaturated(true)
+
                 local checked = self:GetCheckedTexture()
-                checked:SetVertexColor(C.r, C.g, C.b)
-                checked:SetInside(self.bg, 1, 1)
+                checked:SetAtlas('checkmark-minimal')
                 checked:SetDesaturated(true)
+                checked:SetTexCoord(0, 1, 0, 1)
+                checked:SetVertexColor(C.r, C.g, C.b)
             end
 
             if self.SetDisabledCheckedTexture then
@@ -2029,9 +2051,6 @@ do
 
     -- Handle slider
     function F:ReskinSlider(vertical)
-        if self.SetBackdrop then
-            self:SetBackdrop(nil)
-        end -- isNewPatch
         F.StripTextures(self)
 
         local bg = F.CreateBDFrame(self, 0.25, true)
@@ -2388,18 +2407,6 @@ end
 -- Add APIs
 
 do
-    function F:SetPointsRestricted(frame)
-        if frame and not pcall(frame.GetPoint, frame) then
-            return true
-        end
-    end
-
-    function F:SafeGetPoint(frame)
-        if frame and frame.GetPoint and not F:SetPointsRestricted(frame) then
-            return frame:GetPoint()
-        end
-    end
-
     local function WatchPixelSnap(frame, snap)
         if (frame and not frame:IsForbidden()) and frame.PixelSnapDisabled and snap then
             frame.PixelSnapDisabled = nil
@@ -2423,50 +2430,26 @@ do
         end
     end
 
-    local function SetOutside(obj, anchor, xOffset, yOffset, anchor2, noScale)
-        if not anchor then
-            anchor = obj:GetParent()
-        end
+    local function SetOutside(frame, anchor, xOffset, yOffset, anchor2)
+        xOffset = xOffset or C.MULT
+        yOffset = yOffset or C.MULT
+        anchor = anchor or frame:GetParent()
 
-        if not xOffset then
-            xOffset = C.MULT
-        end
-        if not yOffset then
-            yOffset = C.MULT
-        end
-        local x = (noScale and xOffset) or xOffset
-        local y = (noScale and yOffset) or yOffset
-
-        if F:SetPointsRestricted(obj) or obj:GetPoint() then
-            obj:ClearAllPoints()
-        end
-
-        DisablePixelSnap(obj)
-        obj:SetPoint('TOPLEFT', anchor, 'TOPLEFT', -x, y)
-        obj:SetPoint('BOTTOMRIGHT', anchor2 or anchor, 'BOTTOMRIGHT', x, -y)
+        DisablePixelSnap(frame)
+        frame:ClearAllPoints()
+        frame:SetPoint('TOPLEFT', anchor, 'TOPLEFT', -xOffset, yOffset)
+        frame:SetPoint('BOTTOMRIGHT', anchor2 or anchor, 'BOTTOMRIGHT', xOffset, -yOffset)
     end
 
-    local function SetInside(obj, anchor, xOffset, yOffset, anchor2, noScale)
-        if not anchor then
-            anchor = obj:GetParent()
-        end
+    local function SetInside(frame, anchor, xOffset, yOffset, anchor2)
+        xOffset = xOffset or C.MULT
+        yOffset = yOffset or C.MULT
+        anchor = anchor or frame:GetParent()
 
-        if not xOffset then
-            xOffset = C.MULT
-        end
-        if not yOffset then
-            yOffset = C.MULT
-        end
-        local x = (noScale and xOffset) or xOffset
-        local y = (noScale and yOffset) or yOffset
-
-        if F:SetPointsRestricted(obj) or obj:GetPoint() then
-            obj:ClearAllPoints()
-        end
-
-        DisablePixelSnap(obj)
-        obj:SetPoint('TOPLEFT', anchor, 'TOPLEFT', x, -y)
-        obj:SetPoint('BOTTOMRIGHT', anchor2 or anchor, 'BOTTOMRIGHT', -x, y)
+        DisablePixelSnap(frame)
+        frame:ClearAllPoints()
+        frame:SetPoint('TOPLEFT', anchor, 'TOPLEFT', xOffset, -yOffset)
+        frame:SetPoint('BOTTOMRIGHT', anchor2 or anchor, 'BOTTOMRIGHT', -xOffset, yOffset)
     end
 
     local function Kill(object)
