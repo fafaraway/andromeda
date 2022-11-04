@@ -33,11 +33,11 @@ local function AddLines(self)
     end
 
     if itemStackCount and itemStackCount > 1 then
-        self:AddDoubleLine(L['Stack'] .. ':', itemStackCount, 0.5, 0.8, 1, 1, 1, 1)
+        self:AddDoubleLine(L['Stack Cap'] .. ':', itemStackCount, 0.5, 0.8, 1, 1, 1, 1)
     end
 
     if itemSellPrice and itemSellPrice > 0 then
-        self:AddDoubleLine(L['Price'] .. ':', GetMoneyString(itemSellPrice, true), 0.5, 0.8, 1, 1, 1, 1)
+        self:AddDoubleLine(L['Sale Price'] .. ':', GetMoneyString(itemSellPrice, true), 0.5, 0.8, 1, 1, 1, 1)
     end
 end
 

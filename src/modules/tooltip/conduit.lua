@@ -36,6 +36,33 @@ function TOOLTIP:Conduit_CheckStatus()
     end
 end
 
+function TOOLTIP:Conduit_CheckStatus2(data)
+    if self:IsForbidden() then
+        return
+    end
+
+    local link = data.hyperlink
+    if not link then
+        return
+    end
+
+    if not C_Soulbinds.IsItemConduitByItemInfo(link) then
+        return
+    end
+
+    local itemID = data.id
+    local level = select(4, GetItemInfo(link))
+    local knownLevel = itemID and TOOLTIP.ConduitData[itemID]
+
+    if knownLevel and level and knownLevel >= level then
+        local textLine = _G[self:GetName() .. 'TextLeft1']
+        local text = textLine and textLine:GetText()
+        if text then
+            textLine:SetText(text .. COLLECTED_STRING)
+        end
+    end
+end
+
 function TOOLTIP:ConduitInfo()
     TOOLTIP.Conduit_UpdateCollection()
     if not next(TOOLTIP.ConduitData) then
@@ -43,11 +70,17 @@ function TOOLTIP:ConduitInfo()
     end
     F:RegisterEvent('SOULBIND_CONDUIT_COLLECTION_UPDATED', TOOLTIP.Conduit_UpdateCollection)
 
-    if C.IS_BETA then return end -- #TODO
+    if not C.DB.Tooltip.Conduit then
+        return
+    end
 
-    _G.GameTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Conduit_CheckStatus)
-    _G.ItemRefTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Conduit_CheckStatus)
-    _G.ShoppingTooltip1:HookScript('OnTooltipSetItem', TOOLTIP.Conduit_CheckStatus)
-    _G.GameTooltipTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Conduit_CheckStatus)
-    _G.EmbeddedItemTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Conduit_CheckStatus)
+    if C.IS_BETA then
+        _G.TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TOOLTIP.Conduit_CheckStatus2)
+    else
+        _G.GameTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Conduit_CheckStatus)
+        _G.ItemRefTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Conduit_CheckStatus)
+        _G.ShoppingTooltip1:HookScript('OnTooltipSetItem', TOOLTIP.Conduit_CheckStatus)
+        _G.GameTooltipTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Conduit_CheckStatus)
+        _G.EmbeddedItemTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Conduit_CheckStatus)
+    end
 end
