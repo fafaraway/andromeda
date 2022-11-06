@@ -15,7 +15,7 @@ end
 
 local function replaceMessage(msg, r, g, b)
     local hexRGB = F:RgbToHex(r, g, b)
-    msg = gsub(msg, '|T(.-):.-|t', '%1') -- accept texture path or id
+    msg = gsub(msg, '|A(.-):.-|a', '%1') -- accept atlas path or id, needs review
     return format('%s%s|r', hexRGB, msg)
 end
 
@@ -63,13 +63,7 @@ function CHAT:ChatCopy_Create()
     frame.close = CreateFrame('Button', nil, frame, 'UIPanelCloseButton')
     frame.close:SetPoint('TOPRIGHT', frame)
 
-    local scrollArea = CreateFrame(
-        'ScrollFrame',
-        'ChatCopyScrollFrame',
-        frame,
-        'UIPanelScrollFrameTemplate',
-        'BackdropTemplate'
-    )
+    local scrollArea = CreateFrame('ScrollFrame', 'ChatCopyScrollFrame', frame, 'UIPanelScrollFrameTemplate', 'BackdropTemplate')
     scrollArea:SetPoint('TOPLEFT', 10, -30)
     scrollArea:SetPoint('BOTTOMRIGHT', -28, 10)
 

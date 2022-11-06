@@ -1,6 +1,7 @@
 -- Extra Quest Button
 -- Credit: p3lim
 -- https://github.com/p3lim-wow/ExtraQuestButton
+
 local F, C, L = unpack(select(2, ...))
 local ACTIONBAR = F:GetModule('ActionBar')
 
@@ -8,7 +9,11 @@ local onlyCurrentZone = true
 local maxDistanceYards = 1e4 -- needs review
 
 -- Warlords of Draenor intro quest items which inspired this addon
-local blacklist = { [113191] = true, [110799] = true, [109164] = true }
+local blacklist = {
+    [113191] = true,
+    [110799] = true,
+    [109164] = true,
+}
 
 -- quests that doesn't have a defined area on the map (questID = bool/mapID/{mapID,...})
 -- these have low priority during collision
@@ -34,8 +39,8 @@ local inaccurateQuestAreas = {
     [49846] = true, -- anywhere
     [49860] = true, -- anywhere
     [49864] = true, -- anywhere
-    [25798] = 64, -- Thousand Needles (TODO: test if we need to associate the item with the zone instead)
-    [25799] = 64, -- Thousand Needles (TODO: test if we need to associate the item with the zone instead)
+    [25798] = 64, -- Thousand Needles
+    [25799] = 64, -- Thousand Needles
     [34461] = 590, -- Horde Garrison
     [59809] = true,
     [60004] = 118, -- 前夕任务：英勇之举
@@ -45,7 +50,6 @@ local inaccurateQuestAreas = {
 -- items that should be used for a quest but aren't (questID = itemID)
 -- these have low priority during collision
 local questItems = {
-    -- (TODO: test if we need to associate any of these items with a zone directly instead)
     [10129] = 28038, -- Hellfire Peninsula
     [10146] = 28038, -- Hellfire Peninsula
     [10162] = 28132, -- Hellfire Peninsula
