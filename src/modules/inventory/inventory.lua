@@ -721,26 +721,27 @@ function INVENTORY:ButtonOnClick(btn)
 end
 
 local function CheckBoundStatus(itemLink, bagID, slotID, string)
-    local tip = F.ScanTip
-    tip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
-    if bagID and type(bagID) == 'string' then
-        tip:SetInventoryItem(bagID, slotID)
-    elseif bagID and type(bagID) == 'number' then
-        tip:SetBagItem(bagID, slotID)
-    else
-        tip:SetHyperlink(itemLink)
-    end
+    -- #FIXME
+    -- local tip = F.ScanTip
+    -- tip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
+    -- if bagID and type(bagID) == 'string' then
+    --     tip:SetInventoryItem(bagID, slotID)
+    -- elseif bagID and type(bagID) == 'number' then
+    --     tip:SetBagItem(bagID, slotID)
+    -- else
+    --     tip:SetHyperlink(itemLink)
+    -- end
 
-    for i = 2, 6 do
-        local line = _G[tip:GetName() .. 'TextLeft' .. i]
-        if line then
-            local text = line:GetText() or ''
-            local found = strfind(text, string)
-            if found then
-                return true
-            end
-        end
-    end
+    -- for i = 2, 6 do
+    --     local line = _G[tip:GetName() .. 'TextLeft' .. i]
+    --     if line then
+    --         local text = line:GetText() or ''
+    --         local found = strfind(text, string)
+    --         if found then
+    --             return true
+    --         end
+    --     end
+    -- end
 
     return false
 end
@@ -1087,7 +1088,7 @@ function INVENTORY:OnLogin()
         end
 
         if C.DB.Inventory.BindType and isItemExist(item) then
-            local itemLink = GetContainerItemLink(item.bagId, item.slotId)
+            local itemLink = C_Container.GetContainerItemLink(item.bagId, item.slotId)
             if not itemLink then
                 return
             end
