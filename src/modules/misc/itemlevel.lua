@@ -2,8 +2,6 @@ local F, C = unpack(select(2, ...))
 local ITEMLEVEL = F:GetModule('ItemLevel')
 local TT = F:GetModule('Tooltip')
 
-local GetContainerItemLink = C.IS_BETA and C_Container.GetContainerItemLink or _G.GetContainerItemLink
-
 local inspectSlots = {
     'Head',
     'Neck',
@@ -158,10 +156,15 @@ function ITEMLEVEL:ItemLevel_UpdateInfo(slotFrame, info, quality)
             local texture = slotFrame['textureIcon' .. i]
             local bg = texture.bg
             local gem = info.gems and info.gems[gemStep]
+            local color = info.gemsColor and info.gemsColor[gemStep]
             local essence = not gem and (info.essences and info.essences[essenceStep])
             if gem then
                 texture:SetTexture(gem)
-                bg:SetBackdropBorderColor(0, 0, 0)
+                if color then
+                    bg:SetBackdropBorderColor(color.r, color.g, color.b)
+                else
+                    bg:SetBackdropBorderColor(0, 0, 0)
+                end
                 bg:Show()
 
                 gemStep = gemStep + 1
@@ -254,7 +257,7 @@ function ITEMLEVEL:ItemLevel_FlyoutUpdate(bag, slot, quality)
 
     local link, level
     if bag then
-        link = GetContainerItemLink(bag, slot)
+        link = C_Container.GetContainerItemLink(bag, slot)
         level = F.GetItemLevel(link, bag, slot)
     else
         link = GetInventoryItemLink('player', slot)
@@ -385,6 +388,28 @@ function ITEMLEVEL:ItemLevel_ReplaceGuildNews()
     end
 end
 
+function ITEMLEVEL:ItemLevel_UpdateLoot()
+    for i = 1, self.ScrollTarget:GetNumChildren() do
+        local button = select(i, self.ScrollTarget:GetChildren())
+        if button and button.Item and button.GetElementData then
+            if not button.iLvl then
+                button.iLvl = F.CreateFS(button.Item, C.Assets.Fonts.Bold, 11, true, '', nil, true, 'BOTTOMLEFT', 1, 1)
+            end
+
+            local slotIndex = button:GetSlotIndex()
+            local quality = select(5, GetLootSlotInfo(slotIndex))
+            if quality and quality > 1 then
+                local level = F.GetItemLevel(GetLootSlotLink(slotIndex))
+                local color = C.QualityColors[quality]
+                button.iLvl:SetText(level)
+                button.iLvl:SetTextColor(color.r, color.g, color.b)
+            else
+                button.iLvl:SetText('')
+            end
+        end
+    end
+end
+
 function ITEMLEVEL:OnLogin()
     if not C.DB.General.ItemLevel then
         return
@@ -418,4 +443,7 @@ function ITEMLEVEL:OnLogin()
 
     -- iLvl on GuildNews
     hooksecurefunc('GuildNewsButton_SetText', ITEMLEVEL.ItemLevel_ReplaceGuildNews)
+
+    -- iLvl on LootFrame
+    hooksecurefunc(_G.LootFrame.ScrollBox, 'Update', ITEMLEVEL.ItemLevel_UpdateLoot)
 end
