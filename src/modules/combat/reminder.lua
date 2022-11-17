@@ -126,6 +126,24 @@ local buffsList = {
             pvp = true,
         },
     },
+    EVOKER = {
+        {
+            spells = { -- 青铜龙的祝福
+                [381748] = true,
+            },
+            depend = 364342,
+            instance = true,
+        },
+    },
+    DRUID = {
+        {
+            spells = { -- 野性印记
+                [1126] = true,
+            },
+            depend = 1126,
+            instance = true,
+        },
+    },
 }
 
 local groups = buffsList[C.MY_CLASS]
@@ -179,13 +197,7 @@ function BR:Reminder_Update(cfg)
     end
 
     frame:Hide()
-    if
-        isPlayerSpell
-        and isRightSpec
-        and (isInCombat or isInInst or isInPVP)
-        and not UnitInVehicle('player')
-        and not UnitIsDeadOrGhost('player')
-    then
+    if isPlayerSpell and isRightSpec and (isInCombat or isInInst or isInPVP) and not UnitInVehicle('player') and not UnitIsDeadOrGhost('player') then
         if weaponIndex then
             local hasMainHandEnchant, _, _, _, hasOffHandEnchant = GetWeaponEnchantInfo()
             if (hasMainHandEnchant and weaponIndex == 1) or (hasOffHandEnchant and weaponIndex == 2) then
