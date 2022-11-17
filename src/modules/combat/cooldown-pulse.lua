@@ -241,14 +241,6 @@ function CDP:OnLogin()
             watching[itemID] = { GetTime(), 'item', texture }
         end
     end)
-
-    hooksecurefunc('UseContainerItem', function(bag, slot)
-        local itemID = GetContainerItemID(bag, slot)
-        if itemID then
-            local texture = select(10, GetItemInfo(itemID))
-            watching[itemID] = { GetTime(), 'item', texture }
-        end
-    end)
 end
 
 _G.SlashCmdList.CDPULSE = function()
