@@ -112,14 +112,13 @@ tinsert(C.BlizzThemes, function()
             local nt = tab:GetNormalTexture()
             if nt then
                 nt:SetTexCoord(unpack(C.TEX_COORD))
-                nt:SetInside(tab)
             end
 
             if not tab.styled then
                 tab:GetRegions():Hide()
                 tab:SetCheckedTexture(C.Assets.Textures.ButtonChecked)
                 tab:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
-                F.SetBD(tab)
+                F.CreateBDFrame(tab, 0.25)
 
                 tab.styled = true
             end

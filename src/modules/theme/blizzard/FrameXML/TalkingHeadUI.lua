@@ -29,8 +29,5 @@ tinsert(C.BlizzThemes, function()
     text.SetTextColor = nop
     text:SetShadowColor(0, 0, 0, 0)
 
-    local closeButton = TalkingHeadFrame.MainFrame.CloseButton
-    F.ReskinClose(closeButton)
-    closeButton:ClearAllPoints()
-    closeButton:SetPoint('TOPRIGHT', -25, -25)
+    F.ReskinClose(TalkingHeadFrame.MainFrame.CloseButton, nil, -25, -25)
 end)

@@ -12,9 +12,8 @@ local function ReskinMissionPage(self)
     end
     self.StartMissionButton.Flash:SetTexture('')
     F.Reskin(self.StartMissionButton)
-    F.ReskinClose(self.CloseButton)
-    self.CloseButton:ClearAllPoints()
-    self.CloseButton:SetPoint('TOPRIGHT', -10, -5)
+    F.ReskinClose(self.CloseButton, nil, -10, -5)
+
     if self.EnemyBackground then
         self.EnemyBackground:Hide()
     end
@@ -234,17 +233,6 @@ local function ReskinFollowerButton(button)
     end
 end
 
-local function UpdateFollowerList(self)
-    local followerFrame = self:GetParent()
-    local scrollFrame = followerFrame.FollowerList.listScroll
-    local buttons = scrollFrame.buttons
-
-    for i = 1, #buttons do
-        local button = buttons[i].Follower
-        ReskinFollowerButton(button)
-    end
-end
-
 local function ReskinFollowerButtons(self)
     for i = 1, self.ScrollTarget:GetNumChildren() do
         local child = select(i, self.ScrollTarget:GetChildren())
@@ -330,10 +318,11 @@ local function reskinFollowerItem(item)
 end
 
 local function ReskinMissionFrame(self)
-    F.StripTextures(self)
+    F.StripTextures(self, 0)
     F.SetBD(self)
-    F.StripTextures(self.CloseButton)
+    F.StripTextures(self.CloseButton, 0)
     F.ReskinClose(self.CloseButton)
+
     self.GarrCorners:Hide()
     if self.OverlayElements then
         self.OverlayElements:SetAlpha(0)
@@ -1005,6 +994,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     local CovenantMissionFrame = _G.CovenantMissionFrame
     ReskinMissionFrame(CovenantMissionFrame)
     CovenantMissionFrame.RaisedBorder:SetAlpha(0)
+    F.StripTextures(_G.CovenantMissionFrameMissions, 0)
     _G.CovenantMissionFrameMissions.RaisedFrameEdges:SetAlpha(0)
 
     hooksecurefunc(CovenantMissionFrame, 'SetupTabs', function(self)
@@ -1021,6 +1011,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     local bg = F.CreateBDFrame(CovenantMissionFrame.FollowerTab, 0.25)
     bg:SetPoint('TOPLEFT', 3, 2)
     bg:SetPoint('BOTTOMRIGHT', -3, -10)
+    F.StripTextures(CovenantMissionFrame.FollowerTab, 0)
     CovenantMissionFrame.FollowerTab.RaisedFrameEdges:SetAlpha(0)
     CovenantMissionFrame.FollowerTab.HealFollowerFrame.ButtonFrame:SetAlpha(0)
     _G.CovenantMissionFrameFollowers.ElevatedFrame:SetAlpha(0)

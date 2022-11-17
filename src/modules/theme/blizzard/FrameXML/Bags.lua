@@ -2,7 +2,6 @@ local F, C = unpack(select(2, ...))
 
 local MAX_CONTAINER_ITEMS = 36
 local backpackTexture = 'Interface\\Buttons\\Button-Backpack-Up'
-local ContainerIDToInventoryID = C.IS_BETA and C_Container.ContainerIDToInventoryID or ContainerIDToInventoryID
 
 local function handleMoneyFrame(frame)
     if frame.MoneyFrame then
@@ -80,7 +79,7 @@ local function updateContainer(frame)
     end
 
     if frame.bagIcon and id ~= 0 then
-        local invID = ContainerIDToInventoryID(id)
+        local invID = C_Container.ContainerIDToInventoryID(id)
         if invID then
             local icon = GetInventoryItemTexture('player', invID)
             frame.bagIcon:SetTexture(icon or backpackTexture)

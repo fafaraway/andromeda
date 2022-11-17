@@ -189,6 +189,10 @@ tinsert(C.BlizzThemes, function()
 
     -- [[ Sidebar tabs ]]
 
+    if _G.PaperDollSidebarTabs.DecorRight then
+        _G.PaperDollSidebarTabs.DecorRight:Hide()
+    end
+
     for i = 1, #_G.PAPERDOLL_SIDEBARS do
         local tab = _G['PaperDollSidebarTab' .. i]
 
@@ -369,47 +373,6 @@ tinsert(C.BlizzThemes, function()
 
     F.StripTextures(_G.TokenFramePopup)
     F.SetBD(_G.TokenFramePopup)
-
-    local function updateButtons()
-        local buttons = _G.TokenFrameContainer.buttons
-        if not buttons then
-            return
-        end
-
-        for i = 1, #buttons do
-            local bu = buttons[i]
-
-            if not bu.styled then
-                bu.highlight:SetPoint('TOPLEFT', 1, 0)
-                bu.highlight:SetPoint('BOTTOMRIGHT', -1, 0)
-                bu.highlight.SetPoint = nop
-                bu.highlight:SetColorTexture(r, g, b, 0.2)
-                bu.highlight.SetTexture = nop
-
-                bu.categoryMiddle:SetAlpha(0)
-                bu.categoryLeft:SetAlpha(0)
-                bu.categoryRight:SetAlpha(0)
-
-                bu.bg = F.ReskinIcon(bu.icon)
-
-                if bu.expandIcon then
-                    bu.expBg = F.CreateBDFrame(bu.expandIcon, 0, true)
-                    bu.expBg:SetPoint('TOPLEFT', bu.expandIcon, -3, 3)
-                    bu.expBg:SetPoint('BOTTOMRIGHT', bu.expandIcon, 3, -3)
-                end
-
-                bu.styled = true
-            end
-
-            if bu.isHeader then
-                bu.bg:Hide()
-                bu.expBg:Show()
-            else
-                bu.bg:Show()
-                bu.expBg:Hide()
-            end
-        end
-    end
 
     -- Quick Join
     F.ReskinTrimScroll(_G.QuickJoinFrame.ScrollBar)

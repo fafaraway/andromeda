@@ -18,6 +18,18 @@ local function ReskinCustomizeTooltip(tooltip)
     tooltip:SetScale(_G.UIParent:GetScale())
 end
 
+local function ReskinCustomizeArrow(button, direction)
+    F.StripTextures(button, 0)
+
+    local tex = button:CreateTexture(nil, 'ARTWORK')
+    tex:SetInside(button, 3, 3)
+    F.SetupArrow(tex, direction)
+    button.__texture = tex
+
+    button:HookScript('OnEnter', F.Texture_OnEnter)
+    button:HookScript('OnLeave', F.Texture_OnLeave)
+end
+
 C.Themes['Blizzard_CharacterCustomize'] = function()
     local frame = _G.CharCustomizeFrame
 
@@ -31,8 +43,8 @@ C.Themes['Blizzard_CharacterCustomize'] = function()
     hooksecurefunc(frame, 'UpdateOptionButtons', function(self)
         for button in self.selectionPopoutPool:EnumerateActive() do
             if not button.styled then
-                F.ReskinArrow(button.DecrementButton, 'left')
-                F.ReskinArrow(button.IncrementButton, 'right')
+                ReskinCustomizeArrow(button.DecrementButton, 'left')
+                ReskinCustomizeArrow(button.IncrementButton, 'right')
 
                 local popoutButton = button.Button
                 popoutButton.HighlightTexture:SetAlpha(0)

@@ -47,7 +47,6 @@ C.Themes['Blizzard_PlayerChoice'] = function()
             self.bg = F.SetBD(self)
         end
 
-        self.CloseButton:SetPoint('TOPRIGHT', self.bg, -4, -4)
         if self.CloseButton.Border then
             self.CloseButton.Border:SetAlpha(0)
         end -- no border for some templates
