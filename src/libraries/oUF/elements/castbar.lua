@@ -213,6 +213,7 @@ local function CastStart(self, event, unit)
 	element.holdTime = 0
 	element.castID = castID
 	element.spellID = spellID
+	element.numStages = numStages
 
 	if(element.channeling) then
 		element.duration = endTime - GetTime()
