@@ -24,6 +24,7 @@ do
         ['PRIEST'] = { ['Magic'] = true, ['Disease'] = true },
         ['SHAMAN'] = { ['Magic'] = false, ['Curse'] = true },
         ['MAGE'] = { ['Curse'] = true },
+        ['EVOKER'] = { ['Magic'] = false, ['Poison'] = true },
     }
 
     DispellFilter = dispellClasses[C.MY_CLASS] or {}
@@ -31,29 +32,15 @@ end
 
 local function checkSpecs()
     if C.MY_CLASS == 'DRUID' then
-        if GetSpecialization() == 4 then
-            DispellFilter.Magic = true
-        else
-            DispellFilter.Magic = false
-        end
+        DispellFilter.Magic = GetSpecialization() == 4
     elseif C.MY_CLASS == 'MONK' then
-        if GetSpecialization() == 2 then
-            DispellFilter.Magic = true
-        else
-            DispellFilter.Magic = false
-        end
+        DispellFilter.Magic = GetSpecialization() == 2
     elseif C.MY_CLASS == 'PALADIN' then
-        if GetSpecialization() == 1 then
-            DispellFilter.Magic = true
-        else
-            DispellFilter.Magic = false
-        end
+        DispellFilter.Magic = GetSpecialization() == 1
     elseif C.MY_CLASS == 'SHAMAN' then
-        if GetSpecialization() == 3 then
-            DispellFilter.Magic = true
-        else
-            DispellFilter.Magic = false
-        end
+        DispellFilter.Magic = GetSpecialization() == 3
+    elseif C.MY_CLASS == 'EVOKER' then
+        DispellFilter.Magic = GetSpecialization() == 2
     end
 end
 
@@ -163,8 +150,7 @@ local function Update(self, _, unit)
 
             if prio and prio > rd.priority then
                 rd.priority, rd.index, rd.spellID = prio, i, spellId
-                _name, _icon, _count, _debuffType, _duration, _expiration =
-                    name, icon, count, debuffType, duration, expiration
+                _name, _icon, _count, _debuffType, _duration, _expiration = name, icon, count, debuffType, duration, expiration
             end
         end
 
@@ -176,8 +162,7 @@ local function Update(self, _, unit)
 
         if not debuffsIgnore[spellId] and instPrio and (instPrio == 6 or instPrio > rd.priority) then
             rd.priority, rd.index, rd.spellID = instPrio, i, spellId
-            _name, _icon, _count, _debuffType, _duration, _expiration =
-                name, icon, count, debuffType, duration, expiration
+            _name, _icon, _count, _debuffType, _duration, _expiration = name, icon, count, debuffType, duration, expiration
         end
     end
 
