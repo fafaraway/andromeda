@@ -2596,6 +2596,7 @@ globals = {
     'C_TaxiMap',
     'C_Texture',
     'C_Timer',
+    'C_TooltipInfo',
     'C_ToyBox',
     'C_ToyBoxInfo',
     'C_TradeSkillUI',
@@ -2606,6 +2607,7 @@ globals = {
     'C_Tutorial',
     'C_UI',
     'C_UIWidgetManager',
+    'C_UnitAuras',
     'C_UserFeedback',
     'C_VideoOptions',
     'C_VignetteInfo',
@@ -2686,5 +2688,13 @@ globals = {
     'BNet_GetClientEmbeddedAtlas',
     'UIDropDownMenu_RefreshAll',
     'UnitTokenFromGUID',
-    'InClickBindingMode'
+    'InClickBindingMode',
+    'TokenFrame_LoadUI',
+    'TokenFrame_Update',
+    'UIDropDownMenu_GetSelectedID',
+    'BNet_GetClientAtlas',
+    'ShowGarrisonLandingPage',
+    'AutoCastShine_AutoCastStart',
+    'AutoCastShine_AutoCastStop',
+    'SharedActionButton_RefreshSpellHighlight'
 }
