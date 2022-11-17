@@ -106,7 +106,7 @@ function QH:OnLogin()
     end
 
     -- Check npc in quests
-    _G.GameTooltip:HookScript('OnTooltipSetUnit', QH.QuestTool_SetQuestUnit)
+    _G.TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, QH.QuestTool_SetQuestUnit)
 
     -- Auto gossip
     local firstStep
