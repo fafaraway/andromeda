@@ -120,8 +120,10 @@ HarmSpells['WARLOCK'] = {
     686, -- Shadow Bolt (Demonology) (40 yards, lvl 1 spell)
 }
 
--- FriendSpells['EVOKER'] = {}
--- HarmSpells['EVOKER'] = {}
+FriendSpells['EVOKER'] = {}
+HarmSpells['EVOKER'] = {
+    361469,
+}
 
 local function IsUnitInRange(unit)
     if not unit then
