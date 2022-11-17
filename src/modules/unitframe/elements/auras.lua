@@ -642,7 +642,7 @@ function UNITFRAME:CreatePartyBuffs(self)
 
     bu.disableMouse = true
     bu.disableCooldown = true
-    bu.FilterAura = UNITFRAME.GroupBuffFilter
+    --bu.FilterAura = UNITFRAME.GroupBuffFilter
     bu.PostCreateButton = UNITFRAME.PostCreateButton
     bu.PostUpdateButton = UNITFRAME.PostUpdateButton
 
@@ -662,7 +662,7 @@ function UNITFRAME:CreateRaidBuffs(self)
 
     bu.disableMouse = true
     bu.disableCooldown = true
-    bu.FilterAura = UNITFRAME.GroupBuffFilter
+    --bu.FilterAura = UNITFRAME.GroupBuffFilter
     bu.PostCreateButton = UNITFRAME.PostCreateButton
     bu.PostUpdateButton = UNITFRAME.PostUpdateButton
 
@@ -702,7 +702,7 @@ function UNITFRAME:CreatePartyDebuffs(self)
     bu.disableMouse = true
     bu.disableCooldown = true
     bu.showDebuffType = C.DB.Unitframe.DebuffTypeColor
-    bu.FilterAura = UNITFRAME.GroupDebuffFilter
+    --bu.FilterAura = UNITFRAME.GroupDebuffFilter
     bu.PostCreateButton = UNITFRAME.PostCreateButton
     bu.PostUpdateButton = UNITFRAME.PostUpdateButton
 
@@ -724,7 +724,7 @@ function UNITFRAME:CreateRaidDebuffs(self)
     bu.disableMouse = true
     bu.disableCooldown = true
     bu.showDebuffType = C.DB.Unitframe.DebuffTypeColor
-    bu.FilterAura = UNITFRAME.GroupDebuffFilter
+    --bu.FilterAura = UNITFRAME.GroupDebuffFilter
     bu.PostCreateButton = UNITFRAME.PostCreateButton
     bu.PostUpdateButton = UNITFRAME.PostUpdateButton
 
