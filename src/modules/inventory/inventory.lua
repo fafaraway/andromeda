@@ -3,22 +3,6 @@ local INVENTORY = F:GetModule('Inventory')
 local cargBags = F.Libs.cargBags
 local iconsList = C.Assets.Textures
 
-local GetContainerItemID = GetContainerItemID
-local GetContainerNumSlots = GetContainerNumSlots
-local SortBags = SortBags
-local SortBankBags = SortBankBags
-local SortReagentBankBags = SortReagentBankBags
-local PickupContainerItem = PickupContainerItem
-
-if C.IS_BETA then
-    GetContainerItemID = C_Container.GetContainerItemID
-    GetContainerNumSlots = C_Container.GetContainerNumSlots
-    SortBags = C_Container.SortBags
-    SortBankBags = C_Container.SortBankBags
-    SortReagentBankBags = C_Container.SortReagentBankBags
-    PickupContainerItem = C_Container.PickupContainerItem
-end
-
 local iconColor = { 0.5, 0.5, 0.5 }
 local bagTypeColor = {
     [0] = { 0, 0, 0, 0.25 }, -- 容器
@@ -38,20 +22,15 @@ local bagTypeColor = {
 local sortCache = {}
 function INVENTORY:ReverseSort()
     for bag = 0, 4 do
-        local numSlots = GetContainerNumSlots(bag)
+        local numSlots = C_Container.GetContainerNumSlots(bag)
         for slot = 1, numSlots do
-            local texture, locked
-            if C.IS_BETA then
-                local info = C_Container.GetContainerItemInfo(bag, slot)
-                texture = info and info.iconFileID
-                locked = info and info.isLocked
-            else
-                texture, _, locked = GetContainerItemInfo(bag, slot)
-            end
+            local info = C_Container.GetContainerItemInfo(bag, slot)
+            local texture = info and info.iconFileID
+            local locked = info and info.isLocked
 
             if (slot <= numSlots / 2) and texture and not locked and not sortCache['b' .. bag .. 's' .. slot] then
-                PickupContainerItem(bag, slot)
-                PickupContainerItem(bag, numSlots + 1 - slot)
+                C_Container.PickupContainerItem(bag, slot)
+                C_Container.PickupContainerItem(bag, numSlots + 1 - slot)
                 sortCache['b' .. bag .. 's' .. slot] = true
             end
         end
@@ -348,17 +327,17 @@ function INVENTORY:CreateSortButton(name)
         end
 
         if name == 'Bank' then
-            SortBankBags()
+            C_Container.SortBankBags()
         elseif name == 'Reagent' then
-            SortReagentBankBags()
+            C_Container.SortReagentBankBags()
         else
             if C.DB.Inventory.SortMode == 1 then
-                SortBags()
+                C_Container.SortBags()
             elseif C.DB.Inventory.SortMode == 2 then
                 if InCombatLockdown() then
                     _G.UIErrorsFrame:AddMessage(C.INFO_COLOR .. _G.ERR_NOT_IN_COMBAT)
                 else
-                    SortBags()
+                    C_Container.SortBags()
                     wipe(sortCache)
                     INVENTORY.Bags.isSorting = true
                     F:Delay(0.5, INVENTORY.ReverseSort)
@@ -475,8 +454,8 @@ function INVENTORY:CreateSearchButton()
 end
 
 function INVENTORY:GetContainerEmptySlot(bagID)
-    for slotID = 1, GetContainerNumSlots(bagID) do
-        if not GetContainerItemID(bagID, slotID) then
+    for slotID = 1, C_Container.GetContainerNumSlots(bagID) do
+        if not C_Container.GetContainerItemID(bagID, slotID) then
             return slotID
         end
     end
@@ -512,7 +491,7 @@ end
 function INVENTORY:FreeSlotOnDrop()
     local bagID, slotID = INVENTORY:GetEmptySlot(self.__name)
     if slotID then
-        PickupContainerItem(bagID, slotID)
+        C_Container.PickupContainerItem(bagID, slotID)
     end
 end
 
@@ -658,16 +637,12 @@ local function favouriteOnClick(self)
         return
     end
 
-    local texture, quality, link, itemID
-    if C.IS_BETA then
-        local info = C_Container.GetContainerItemInfo(self.bagId, self.slotId)
-        texture = info and info.iconFileID
-        quality = info and info.quality
-        link = info and info.hyperlink
-        itemID = info and info.itemID
-    else
-        texture, _, _, quality, _, _, link, _, _, itemID = GetContainerItemInfo(self.bagId, self.slotId)
-    end
+    local info = C_Container.GetContainerItemInfo(self.bagId, self.slotId)
+    local texture = info and info.iconFileID
+    local quality = info and info.quality
+    local link = info and info.hyperlink
+    local itemID = info and info.itemID
+
     if texture and quality > Enum.ItemQuality.Poor then
         ClearCursor()
         INVENTORY.selectItemID = itemID
@@ -720,14 +695,10 @@ local function customJunkOnClick(self)
         return
     end
 
-    local texture, itemID
-    if C.IS_BETA then
-        local info = C_Container.GetContainerItemInfo(self.bagId, self.slotId)
-        texture = info and info.iconFileID
-        itemID = info and info.itemID
-    else
-        texture, _, _, _, _, _, _, _, _, itemID = GetContainerItemInfo(self.bagId, self.slotId)
-    end
+    local info = C_Container.GetContainerItemInfo(self.bagId, self.slotId)
+    local texture = info and info.iconFileID
+    local itemID = info and info.itemID
+
     local price = select(11, GetItemInfo(itemID))
     if texture and price > 0 then
         if _G.ANDROMEDA_ADB['CustomJunkList'][itemID] then
@@ -1378,13 +1349,8 @@ function INVENTORY:OnLogin()
     end
 
     -- Sort order
-    if C.IS_BETA then
-        C_Container.SetSortBagsRightToLeft(C.DB.Inventory.SortMode == 1)
-        C_Container.SetInsertItemsLeftToRight(false)
-    else
-        SetSortBagsRightToLeft(C.DB.Inventory.SortMode == 1)
-        SetInsertItemsLeftToRight(false)
-    end
+    C_Container.SetSortBagsRightToLeft(C.DB.Inventory.SortMode == 1)
+    C_Container.SetInsertItemsLeftToRight(false)
 
     -- Init
     _G.ToggleAllBags()

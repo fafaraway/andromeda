@@ -15,7 +15,6 @@ function TOOLTIP:SetupTooltipIcon(icon)
         if not line then
             break
         end
-
         local text = line:GetText()
         if text and text ~= ' ' then
             local newText, count = gsub(text, '|T([^:]-):[%d+:]+|t', '|T%1:14:14:' .. newString .. '|t')
@@ -30,33 +29,8 @@ function TOOLTIP:HookTooltipCleared()
     self.tipModified = false
 end
 
-function TOOLTIP:HookTooltipSetItem()
-    if not self.tipModified then
-        local _, link = self:GetItem()
-        if link then
-            TOOLTIP.SetupTooltipIcon(self, GetItemIcon(link))
-        end
-
-        self.tipModified = true
-    end
-end
-
-function TOOLTIP:HookTooltipSetSpell()
-    if not self.tipModified then
-        local _, id = self:GetSpell()
-        if id then
-            TOOLTIP.SetupTooltipIcon(self, GetSpellTexture(id))
-        end
-
-        self.tipModified = true
-    end
-end
-
 function TOOLTIP:HookTooltipMethod()
-    if not C.IS_BETA then
-        self:HookScript('OnTooltipSetItem', TOOLTIP.HookTooltipSetItem)
-        self:HookScript('OnTooltipSetSpell', TOOLTIP.HookTooltipSetSpell)
-    end
+    self:HookScript('OnTooltipCleared', TOOLTIP.HookTooltipCleared)
 end
 
 function TOOLTIP:ReskinRewardIcon()
@@ -70,23 +44,45 @@ function TOOLTIP:ReskinTipIcon()
         return
     end
 
+    local GameTooltip = _G.GameTooltip
+    local ItemRefTooltip = _G.ItemRefTooltip
+    local TooltipDataProcessor = _G.TooltipDataProcessor
+    local EmbeddedItemTooltip = _G.EmbeddedItemTooltip
+
     -- Add Icons
-    TOOLTIP.HookTooltipMethod(_G.GameTooltip)
-    TOOLTIP.HookTooltipMethod(_G.ItemRefTooltip)
+    TOOLTIP.HookTooltipMethod(GameTooltip)
+    TOOLTIP.HookTooltipMethod(ItemRefTooltip)
+
+    TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, function(self)
+        if self == GameTooltip or self == ItemRefTooltip then
+            local _, link = self:GetItem()
+            if link then
+                TOOLTIP.SetupTooltipIcon(self, GetItemIcon(link))
+            end
+        end
+    end)
+    TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Spell, function(self)
+        if self == GameTooltip or self == ItemRefTooltip then
+            local _, id = self:GetSpell()
+            if id then
+                TOOLTIP.SetupTooltipIcon(self, GetSpellTexture(id))
+            end
+        end
+    end)
 
     -- Cut Icons
-    hooksecurefunc(_G.GameTooltip, 'SetUnitAura', function(self)
+    hooksecurefunc(GameTooltip, 'SetUnitAura', function(self)
         TOOLTIP.SetupTooltipIcon(self)
     end)
 
-    hooksecurefunc(_G.GameTooltip, 'SetAzeriteEssence', function(self)
+    hooksecurefunc(GameTooltip, 'SetAzeriteEssence', function(self)
         TOOLTIP.SetupTooltipIcon(self)
     end)
-    hooksecurefunc(_G.GameTooltip, 'SetAzeriteEssenceSlot', function(self)
+    hooksecurefunc(GameTooltip, 'SetAzeriteEssenceSlot', function(self)
         TOOLTIP.SetupTooltipIcon(self)
     end)
 
     -- Tooltip rewards icon
-    TOOLTIP.ReskinRewardIcon(_G.GameTooltip.ItemTooltip)
-    TOOLTIP.ReskinRewardIcon(_G.EmbeddedItemTooltip.ItemTooltip)
+    TOOLTIP.ReskinRewardIcon(GameTooltip.ItemTooltip)
+    TOOLTIP.ReskinRewardIcon(EmbeddedItemTooltip.ItemTooltip)
 end

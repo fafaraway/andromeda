@@ -27,11 +27,7 @@ local function SetupInventorySize()
 end
 
 local function UpdateInventorySortOrder()
-    if C.IS_BETA then
-        C_Container.SetSortBagsRightToLeft(C.DB.Inventory.SortMode == 1)
-    else
-        SetSortBagsRightToLeft(C.DB.Inventory.SortMode == 1)
-    end
+    C_Container.SetSortBagsRightToLeft(C.DB.Inventory.SortMode == 1)
 end
 
 local function SetupMinItemLevelToShow()

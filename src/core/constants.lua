@@ -2,7 +2,6 @@ local F, C, L = unpack(select(2, ...))
 
 do
     C.IS_NEW_PATCH = select(4, GetBuildInfo()) >= 100000 -- 10.0
-    C.IS_BETA = select(4, GetBuildInfo()) == 100002 -- 10.0.2
     C.MY_REALM = GetRealmName()
     C.MY_CLASS = select(2, UnitClass('player'))
     C.MY_NAME = UnitName('player')

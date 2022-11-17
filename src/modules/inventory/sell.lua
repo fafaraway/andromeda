@@ -4,72 +4,41 @@ local INVENTORY = F:GetModule('Inventory')
 local stop, cache = true, {}
 local errorText = _G.ERR_VENDOR_DOESNT_BUY
 
-local function StartSelling()
+local function startSelling()
     if stop then
         return
     end
     for bag = 0, 4 do
-        for slot = 1, GetContainerNumSlots(bag) do
+        for slot = 1, C_Container.GetContainerNumSlots(bag) do
             if stop then
                 return
             end
 
-            local _, _, _, quality, _, _, link, _, noValue, itemID = GetContainerItemInfo(bag, slot)
-            local isInSet = GetContainerItemEquipmentSetInfo(bag, slot)
-            if
-                link
-                and not noValue
-                and not isInSet
-                and not INVENTORY:IsPetTrashCurrency(itemID)
-                and (quality == 0 or _G.ANDROMEDA_ADB['CustomJunkList'][itemID])
-                and not cache['b' .. bag .. 's' .. slot]
-            then
-                cache['b' .. bag .. 's' .. slot] = true
-                UseContainerItem(bag, slot)
-                F:Delay(0.2, StartSelling)
-                return
-            end
-        end
-    end
-end
+            local info = C_Container.GetContainerItemInfo(bag, slot)
+            if info then
+                local quality, link, noValue, itemID = info.quality, info.hyperlink, info.hasNoValue, info.itemID
+                local isInSet = C_Container.GetContainerItemEquipmentSetInfo(bag, slot)
 
-if C.IS_BETA then
-    function StartSelling()
-        if stop then
-            return
-        end
-        for bag = 0, 4 do
-            for slot = 1, C_Container.GetContainerNumSlots(bag) do
-                if stop then
+                if
+                    link
+                    and not noValue
+                    and not isInSet
+                    and not INVENTORY:IsPetTrashCurrency(itemID)
+                    and (quality == 0 or _G.ANDROMEDA_ADB['CustomJunkList'][itemID])
+                    and not cache['b' .. bag .. 's' .. slot]
+                then
+                    cache['b' .. bag .. 's' .. slot] = true
+                    C_Container.UseContainerItem(bag, slot)
+                    F:Delay(0.15, startSelling)
+
                     return
                 end
-
-                local info = C_Container.GetContainerItemInfo(bag, slot)
-                if info then
-                    local quality, link, noValue, itemID = info.quality, info.hyperlink, info.hasNoValue, info.itemID
-                    local isInSet = C_Container.GetContainerItemEquipmentSetInfo(bag, slot)
-
-                    if
-                        link
-                        and not noValue
-                        and not isInSet
-                        and not INVENTORY:IsPetTrashCurrency(itemID)
-                        and (quality == 0 or _G.ANDROMEDA_ADB['CustomJunkList'][itemID])
-                        and not cache['b' .. bag .. 's' .. slot]
-                    then
-                        cache['b' .. bag .. 's' .. slot] = true
-                        C_Container.UseContainerItem(bag, slot)
-                        F:Delay(0.15, StartSelling)
-
-                        return
-                    end
-                end
             end
         end
     end
 end
 
-local function UpdateSelling(event, ...)
+local function updateSelling(event, ...)
     if not C.DB.Inventory.AutoSellJunk then
         return
     end
@@ -81,14 +50,14 @@ local function UpdateSelling(event, ...)
         end
         stop = false
         wipe(cache)
-        StartSelling()
-        F:RegisterEvent('UI_ERROR_MESSAGE', UpdateSelling)
+        startSelling()
+        F:RegisterEvent('UI_ERROR_MESSAGE', updateSelling)
     elseif event == 'UI_ERROR_MESSAGE' and arg == errorText or event == 'MERCHANT_CLOSED' then
         stop = true
     end
 end
 
 function INVENTORY:AutoSellJunk()
-    F:RegisterEvent('MERCHANT_SHOW', UpdateSelling)
-    F:RegisterEvent('MERCHANT_CLOSED', UpdateSelling)
+    F:RegisterEvent('MERCHANT_SHOW', updateSelling)
+    F:RegisterEvent('MERCHANT_CLOSED', updateSelling)
 end

@@ -50,10 +50,6 @@ local function updateTokenVisibility()
 end
 
 local function ReplaceSpellbookButtons()
-    if not C.IS_BETA then
-        return
-    end
-
     local function replaceOnEnter(self)
         local slot = SpellBook_GetSpellBookSlot(self)
         _G.GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
@@ -108,7 +104,7 @@ function ACTIONBAR:RemoveBlizzArt()
     end
 
     -- Fix spellbook button taint with Editmode
-    ReplaceSpellbookButtons()
+    -- ReplaceSpellbookButtons()
     -- Hide blizz options
     SetCVar('multiBarRightVerticalLayout', 0)
     -- Fix maw block anchor

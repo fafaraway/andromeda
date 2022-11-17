@@ -14,29 +14,7 @@ function TOOLTIP:Conduit_UpdateCollection()
     end
 end
 
-function TOOLTIP:Conduit_CheckStatus()
-    local _, link = self:GetItem()
-    if not link then
-        return
-    end
-    if not C_Soulbinds.IsItemConduitByItemInfo(link) then
-        return
-    end
-
-    local itemID = GetItemInfoFromHyperlink(link)
-    local level = select(4, GetItemInfo(link))
-    local knownLevel = itemID and TOOLTIP.ConduitData[itemID]
-
-    if knownLevel and level and knownLevel >= level then
-        local textLine = _G[self:GetName() .. 'TextLeft1']
-        local text = textLine and textLine:GetText()
-        if text then
-            textLine:SetText(text .. COLLECTED_STRING)
-        end
-    end
-end
-
-function TOOLTIP:Conduit_CheckStatus2(data)
+function TOOLTIP:Conduit_CheckStatus(data)
     if self:IsForbidden() then
         return
     end
@@ -74,13 +52,5 @@ function TOOLTIP:ConduitInfo()
         return
     end
 
-    if C.IS_BETA then
-        _G.TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TOOLTIP.Conduit_CheckStatus2)
-    else
-        _G.GameTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Conduit_CheckStatus)
-        _G.ItemRefTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Conduit_CheckStatus)
-        _G.ShoppingTooltip1:HookScript('OnTooltipSetItem', TOOLTIP.Conduit_CheckStatus)
-        _G.GameTooltipTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Conduit_CheckStatus)
-        _G.EmbeddedItemTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Conduit_CheckStatus)
-    end
+    _G.TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TOOLTIP.Conduit_CheckStatus)
 end

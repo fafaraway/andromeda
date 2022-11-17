@@ -36,10 +36,7 @@ local addon, ns = ...
 local cargBags = ns.cargBags
 local Implementation = cargBags.classes.Implementation
 
-local isBeta = select(4, GetBuildInfo()) == 100002 -- 10.0.2
-local isNewPatch = select(4, GetBuildInfo()) == 100000
-
-local ContainerIDToInventoryID = isBeta and C_Container.ContainerIDToInventoryID or ContainerIDToInventoryID
+local ContainerIDToInventoryID = C_Container.ContainerIDToInventoryID
 local maxBagSlots = 5
 
 function Implementation:GetBagButtonClass()

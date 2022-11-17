@@ -176,213 +176,81 @@ do
     local iLvlDB = {}
     local itemLevelString = '^' .. gsub(_G.ITEM_LEVEL, '%%d', '')
     local enchantString = gsub(_G.ENCHANTED_TOOLTIP_LINE, '%%s', '(.+)')
-    local essenceTextureID = 2975691
-    local essenceDescription = GetSpellDescription(277253)
 
-    local tip = CreateFrame('GameTooltip', C.ADDON_TITLE .. 'ScanTooltip', nil, 'GameTooltipTemplate')
-    F.ScanTip = tip
-
-    function F:InspectItemTextures()
-        if not tip.gems then
-            tip.gems = {}
-        else
-            wipe(tip.gems)
-        end
-
-        if not tip.essences then
-            tip.essences = {}
-        else
-            for _, essences in pairs(tip.essences) do
-                wipe(essences)
-            end
-        end
-
-        local step = 1
-        for i = 1, 10 do
-            local tex = _G[tip:GetName() .. 'Texture' .. i]
-            local texture = tex and tex:IsShown() and tex:GetTexture()
-            if texture then
-                if texture == essenceTextureID then
-                    local selected = (tip.gems[i - 1] ~= essenceTextureID and tip.gems[i - 1]) or nil
-                    if not tip.essences[step] then
-                        tip.essences[step] = {}
-                    end
-                    tip.essences[step][1] = selected -- essence texture if selected or nil
-                    tip.essences[step][2] = tex:GetAtlas() -- atlas place 'tooltip-heartofazerothessence-major' or 'tooltip-heartofazerothessence-minor'
-                    tip.essences[step][3] = texture -- border texture placed by the atlas
-
-                    step = step + 1
-                    if selected then
-                        tip.gems[i - 1] = nil
-                    end
-                else
-                    tip.gems[i] = texture
-                end
-            end
-        end
-
-        return tip.gems, tip.essences
-    end
-
-    function F:InspectItemInfo(text, slotInfo)
-        local itemLevel = strfind(text, itemLevelString) and strmatch(text, '(%d+)%)?$')
-        if itemLevel then
-            slotInfo.iLvl = tonumber(itemLevel)
-        end
-
-        local enchant = strmatch(text, enchantString)
-        if enchant then
-            slotInfo.enchantText = enchant
-        end
-    end
-
-    function F:CollectEssenceInfo(index, lineText, slotInfo)
-        local step = 1
-        local essence = slotInfo.essences[step]
-        if essence and next(essence) and (strfind(lineText, _G.ITEM_SPELL_TRIGGER_ONEQUIP, nil, true) and strfind(lineText, essenceDescription, nil, true)) then
-            for i = 5, 2, -1 do
-                local line = _G[tip:GetName() .. 'TextLeft' .. index - i]
-                local text = line and line:GetText()
-
-                if text and (not strmatch(text, '^[ +]')) and essence and next(essence) then
-                    local r, g, b = line:GetTextColor()
-                    essence[4] = r
-                    essence[5] = g
-                    essence[6] = b
-
-                    step = step + 1
-                    essence = slotInfo.essences[step]
-                end
-            end
-        end
-    end
-
-    local slotData = { gems = {}, essence = {} }
+    local slotData = { gems = {}, gemsColor = {} }
     function F.GetItemLevel(link, arg1, arg2, fullScan)
         if fullScan then
-            if C.IS_BETA then
-                local data = C_TooltipInfo.GetInventoryItem(arg1, arg2)
-                if data then
-                    wipe(slotData.gems)
-                    wipe(slotData.essence)
-                    slotData.iLvl = nil
-                    slotData.enchantText = nil
-
-                    local num = 0
-                    for i = 2, #data.lines do
-                        local lineData = data.lines[i]
-                        local argVal = lineData and lineData.args
-                        if argVal then
-                            if not slotData.iLvl then
-                                local text = argVal[2] and argVal[2].stringVal
-                                local found = text and strfind(text, itemLevelString)
-                                if found then
-                                    local level = strmatch(text, '(%d+)%)?$')
-                                    slotData.iLvl = tonumber(level) or 0
-                                end
-                            else
-                                local lineInfo = argVal[4] and argVal[4].field
-                                if lineInfo == 'enchantID' then
-                                    local enchant = argVal[2] and argVal[2].stringVal
-                                    slotData.enchantText = strmatch(enchant, enchantString)
-                                elseif lineInfo == 'gemIcon' then
-                                    num = num + 1
-                                    slotData.gems[num] = argVal[4].intVal
-                                elseif lineInfo == 'socketType' then
-                                    num = num + 1
-                                    slotData.gems[num] = format('Interface\\ItemSocketingFrame\\UI-EmptySocket-%s', argVal[4].stringVal)
-                                end
-                            end
-                        end
-                    end
-                    return slotData
-                end
-            else
-                tip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
-                tip:SetInventoryItem(arg1, arg2)
-
-                if not tip.slotInfo then
-                    tip.slotInfo = {}
-                else
-                    wipe(tip.slotInfo)
-                end
-
-                local slotInfo = tip.slotInfo
-                slotInfo.gems, slotInfo.essences = F:InspectItemTextures()
-
-                for i = 1, tip:NumLines() do
-                    local line = _G[C.ADDON_TITLE .. 'ScanTooltipTextLeft1' .. i]
-                    if not line then
-                        break
-                    end
-
-                    local text = line:GetText()
-                    if text then
-                        if i == 1 and text == _G.RETRIEVING_ITEM_INFO then
-                            return 'tooSoon'
-                        else
-                            F:InspectItemInfo(text, slotInfo)
-                            F:CollectEssenceInfo(i, text, slotInfo)
-                        end
-                    end
-                end
-
-                return slotInfo
+            local data = C_TooltipInfo.GetInventoryItem(arg1, arg2)
+            if not data then
+                return
             end
+
+            wipe(slotData.gems)
+            wipe(slotData.gemsColor)
+            slotData.iLvl = nil
+            slotData.enchantText = nil
+
+            local isHoA = data.args and data.args[2] and data.args[2].intVal == 158075
+            local num = 0
+            for i = 2, #data.lines do
+                local lineData = data.lines[i]
+                local argVal = lineData and lineData.args
+                if argVal then
+                    if not slotData.iLvl then
+                        local text = argVal[2] and argVal[2].stringVal
+                        local found = text and strfind(text, itemLevelString)
+                        if found then
+                            local level = strmatch(text, '(%d+)%)?$')
+                            slotData.iLvl = tonumber(level) or 0
+                        end
+                    elseif isHoA then
+                        if argVal[6] and argVal[6].field == 'essenceIcon' then
+                            num = num + 1
+                            slotData.gems[num] = argVal[6].intVal
+                            slotData.gemsColor[num] = argVal[3] and argVal[3].colorVal
+                        end
+                    else
+                        local lineInfo = argVal[4] and argVal[4].field
+                        if lineInfo == 'enchantID' then
+                            local enchant = argVal[2] and argVal[2].stringVal
+                            slotData.enchantText = strmatch(enchant, enchantString)
+                        elseif lineInfo == 'gemIcon' then
+                            num = num + 1
+                            slotData.gems[num] = argVal[4].intVal
+                        elseif lineInfo == 'socketType' then
+                            num = num + 1
+                            slotData.gems[num] = format('Interface\\ItemSocketingFrame\\UI-EmptySocket-%s', argVal[4].stringVal)
+                        end
+                    end
+                end
+            end
+
+            return slotData
         else
             if iLvlDB[link] then
                 return iLvlDB[link]
             end
 
-            if C.IS_BETA then
-                local data
-                if arg1 and type(arg1) == 'string' then
-                    data = C_TooltipInfo.GetInventoryItem(arg1, arg2)
-                elseif arg1 and type(arg1) == 'number' then
-                    data = C_TooltipInfo.GetBagItem(arg1, arg2)
-                else
-                    data = C_TooltipInfo.GetHyperlink(link, nil, nil, true)
-                end
-                if data then
-                    for i = 2, 5 do
-                        local lineData = data.lines[i]
-                        if not lineData then
-                            break
-                        end
-                        local argVal = lineData.args
-                        if argVal then
-                            local text = argVal[2] and argVal[2].stringVal
-                            local found = text and strfind(text, itemLevelString)
-                            if found then
-                                local level = strmatch(text, '(%d+)%)?$')
-                                iLvlDB[link] = tonumber(level)
-                                break
-                            end
-                        end
-                    end
-                end
+            local data
+            if arg1 and type(arg1) == 'string' then
+                data = C_TooltipInfo.GetInventoryItem(arg1, arg2)
+            elseif arg1 and type(arg1) == 'number' then
+                data = C_TooltipInfo.GetBagItem(arg1, arg2)
             else
-                tip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
-                if arg1 and type(arg1) == 'string' then
-                    tip:SetInventoryItem(arg1, arg2)
-                elseif arg1 and type(arg1) == 'number' then
-                    tip:SetBagItem(arg1, arg2)
-                else
-                    tip:SetHyperlink(link)
+                data = C_TooltipInfo.GetHyperlink(link, nil, nil, true)
+            end
+            if not data then
+                return
+            end
+
+            for i = 2, 5 do
+                local lineData = data.lines[i]
+                if not lineData then
+                    break
                 end
-
-                local firstLine = _G[C.ADDON_TITLE .. 'ScanTooltipTextLeft1']:GetText()
-                if firstLine == _G.RETRIEVING_ITEM_INFO then
-                    return 'tooSoon'
-                end
-
-                for i = 2, 5 do
-                    local line = _G[C.ADDON_TITLE .. 'ScanTooltipTextLeft1' .. i]
-                    if not line then
-                        break
-                    end
-
-                    local text = line:GetText()
+                local argVal = lineData.args
+                if argVal then
+                    local text = argVal[2] and argVal[2].stringVal
                     local found = text and strfind(text, itemLevelString)
                     if found then
                         local level = strmatch(text, '(%d+)%)?$')
@@ -391,7 +259,6 @@ do
                     end
                 end
             end
-
             return iLvlDB[link]
         end
     end
@@ -431,9 +298,15 @@ do
     function F.GetNPCName(npcID, callback)
         local name = nameCache[npcID]
         if not name then
-            tip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
-            tip:SetHyperlink(format('unit:Creature-0-0-0-0-%d', npcID))
-            name = _G[C.ADDON_TITLE .. 'ScanTooltipTextLeft1']:GetText() or loadingStr
+            name = loadingStr
+            local data = C_TooltipInfo.GetHyperlink(format('unit:Creature-0-0-0-0-%d', npcID))
+            local lineData = data and data.lines
+            if lineData then
+                local argVal = lineData[1] and lineData[1].args
+                if argVal then
+                    name = argVal[2] and argVal[2].stringVal
+                end
+            end
             if name == loadingStr then
                 if not pendingNPCs[npcID] then
                     pendingNPCs[npcID] = 1
@@ -1376,7 +1249,7 @@ do
         self.__owner.bg:SetBackdropBorderColor(r, g, b)
     end
 
-    local function ResetIconBorderColor(self, texture)
+    local function resetIconBorderColor(self, texture)
         if not texture then
             self.__owner.bg:SetBackdropBorderColor(0, 0, 0)
         end
@@ -1388,6 +1261,12 @@ do
         end
     end
 
+    local function iconBorderShown(border, show)
+        if not show then
+            resetIconBorderColor(border)
+        end
+    end
+
     function F:ReskinIconBorder(needInit, useAtlas)
         self:SetAlpha(0)
         self.__owner = self:GetParent()
@@ -1396,7 +1275,7 @@ do
         end
         if useAtlas or self.__owner.useCircularIconBorder then -- for auction item display
             hooksecurefunc(self, 'SetAtlas', UpdateIconBorderColorByAtlas)
-            hooksecurefunc(self, 'SetTexture', ResetIconBorderColor)
+            hooksecurefunc(self, 'SetTexture', resetIconBorderColor)
             if needInit then
                 self:SetAtlas(self:GetAtlas()) -- for border with color before hook
             end
@@ -1406,11 +1285,12 @@ do
                 self:SetVertexColor(self:GetVertexColor()) -- for border with color before hook
             end
         end
-        hooksecurefunc(self, 'Hide', ResetIconBorderColor)
+        hooksecurefunc(self, 'Hide', resetIconBorderColor)
+        hooksecurefunc(self, 'SetShown', iconBorderShown)
 
-        if self.__owner.SetItemButtonQuality then
-            hooksecurefunc(self.__owner, 'SetItemButtonQuality', resetIconBorder)
-        end
+        -- if self.__owner.SetItemButtonQuality then
+        --     hooksecurefunc(self.__owner, 'SetItemButtonQuality', resetIconBorder)
+        -- end
     end
 
     -- Handle button
@@ -1836,6 +1716,18 @@ do
         end
     end
 
+    local function resetCloseButtonAnchor(button)
+        if button.isSetting then
+            return
+        end
+
+        button.isSetting = true
+        button:ClearAllPoints()
+        button:SetPoint('TOPRIGHT', button.__owner, 'TOPRIGHT', button.__xOffset, button.__yOffset)
+
+        button.isSetting = nil
+    end
+
     function F:ReskinClose(parent, xOffset, yOffset)
         parent = parent or self:GetParent()
         xOffset = xOffset or -6
@@ -1844,6 +1736,11 @@ do
         self:SetSize(16, 16)
         self:ClearAllPoints()
         self:SetPoint('TOPRIGHT', parent, 'TOPRIGHT', xOffset, yOffset)
+        self.__owner = parent
+        self.__xOffset = xOffset
+        self.__yOffset = yOffset
+
+        hooksecurefunc(self, 'SetPoint', resetCloseButtonAnchor)
 
         F.StripTextures(self)
         if self.Border then

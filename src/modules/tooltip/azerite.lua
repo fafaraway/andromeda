@@ -107,10 +107,7 @@ function TOOLTIP:Azerite_UpdateItem()
 end
 
 function TOOLTIP:AzeriteArmor()
-    if C.IS_BETA then return end -- #TODO
-    _G.GameTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Azerite_UpdateItem)
-    _G.ItemRefTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Azerite_UpdateItem)
-    _G.ShoppingTooltip1:HookScript('OnTooltipSetItem', TOOLTIP.Azerite_UpdateItem)
-    _G.EmbeddedItemTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Azerite_UpdateItem)
-    _G.GameTooltipTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Azerite_UpdateItem)
+    -- #TODO: update via C_TooltipInfo, requires on shopping tooltip
+
+    _G.TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TOOLTIP.Azerite_UpdateItem)
 end

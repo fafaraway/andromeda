@@ -37,17 +37,12 @@ local function IsAlreadyKnown(link, index)
         end
 
         if itemClassID == Enum.ItemClass.Battlepet and index then
-            if C.IS_BETA then
-                local data = C_TooltipInfo.GetGuildBankItem(GetCurrentGuildBankTab(), index)
-                if data then
-                    local argVal = data.args and data.args[2]
-                    if argVal.field == 'battlePetSpeciesID' then
-                        return isPetCollected(argVal.intVal)
-                    end
+            local data = C_TooltipInfo.GetGuildBankItem(GetCurrentGuildBankTab(), index)
+            if data then
+                local argVal = data.args and data.args[2]
+                if argVal.field == 'battlePetSpeciesID' then
+                    return isPetCollected(argVal.intVal)
                 end
-            else
-                local speciesID = F.ScanTip:SetGuildBankItem(GetCurrentGuildBankTab(), index)
-                return isPetCollected(speciesID)
             end
         elseif TOOLTIP.ConduitData[linkID] and TOOLTIP.ConduitData[linkID] >= level then
             return true
@@ -59,31 +54,19 @@ local function IsAlreadyKnown(link, index)
                 return
             end
 
-            if C.IS_BETA then
-                local data = C_TooltipInfo.GetHyperlink(link, nil, nil, true)
-                if data then
-                    for i = 1, #data.lines do
-                        local lineData = data.lines[i]
-                        local argVal = lineData and lineData.args
-                        if argVal then
-                            local text = argVal[2] and argVal[2].stringVal
-                            if text then
-                                if strfind(text, _G.COLLECTED) or text == _G.ITEM_SPELL_KNOWN then
-                                    knowns[link] = true
-                                    return true
-                                end
+            local data = C_TooltipInfo.GetHyperlink(link, nil, nil, true)
+            if data then
+                for i = 1, #data.lines do
+                    local lineData = data.lines[i]
+                    local argVal = lineData and lineData.args
+                    if argVal then
+                        local text = argVal[2] and argVal[2].stringVal
+                        if text then
+                            if strfind(text, _G.COLLECTED) or text == _G.ITEM_SPELL_KNOWN then
+                                knowns[link] = true
+                                return true
                             end
                         end
-                    end
-                end
-            else
-                F.ScanTip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
-                F.ScanTip:SetHyperlink(link)
-                for i = 1, F.ScanTip:NumLines() do
-                    local text = _G[C.ADDON_TITLE .. 'ScanTooltipTextLeft' .. i]:GetText() or ''
-                    if strfind(text, _G.COLLECTED) or text == _G.ITEM_SPELL_KNOWN then
-                        knowns[link] = true
-                        return true
                     end
                 end
             end
