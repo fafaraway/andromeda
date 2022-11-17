@@ -398,7 +398,7 @@ local function reskinMoneyInput(box)
     box.__bg:SetPoint('BOTTOMRIGHT', 0, 3)
 end
 
-C.themes['Blizzard_ProfessionsCustomerOrders'] = function()
+C.Themes['Blizzard_ProfessionsCustomerOrders'] = function()
     local frame = _G.ProfessionsCustomerOrdersFrame
 
     F.ReskinPortraitFrame(frame)
