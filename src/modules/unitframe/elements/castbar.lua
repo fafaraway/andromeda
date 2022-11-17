@@ -189,7 +189,7 @@ function UNITFRAME:PostCastStart(unit)
         F:CreateAndUpdateBarTicks(self, self.castTicks, numTicks)
     end
 
-    if C.IS_NEW_PATCH then
+    if not self.channeling then
         UNITFRAME:CreateAndUpdateStagePip(self, self.castTicks, self.numStages or 0, unit)
     end
 
@@ -321,12 +321,10 @@ function UNITFRAME:CreateCastBar(self)
         self:RegisterEvent('CURRENT_SPELL_CAST_CHANGED', UNITFRAME.OnCastSent, true)
     end
 
-    if C.IS_NEW_PATCH then -- Evoker charge stage
-        local stage = F.CreateFS(castbar, C.Assets.Fonts.Regular, 22, '')
-        stage:ClearAllPoints()
-        stage:SetPoint('TOPLEFT', castbar.Icon, -2, 2)
-        castbar.stageString = stage
-    end
+    local stage = F.CreateFS(castbar, C.Assets.Fonts.Regular, 22, '')
+    stage:ClearAllPoints()
+    stage:SetPoint('TOPLEFT', castbar.Icon, -2, 2)
+    castbar.stageString = stage
 
     if compact then
         castbar:SetStatusBarColor(0, 0, 0, 0)
@@ -376,6 +374,8 @@ function UNITFRAME:CreateCastBar(self)
     castbar.PostCastStop = UNITFRAME.PostCastStop
     castbar.PostCastFail = UNITFRAME.PostCastFailed
     castbar.PostCastInterruptible = UNITFRAME.PostUpdateInterruptible
+
+    castbar.UpdatePips = nop
 end
 
 function NAMEPLATE:CreateCastBar(self)

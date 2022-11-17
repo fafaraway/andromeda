@@ -59,27 +59,27 @@ function UNITFRAME:PLAYER_ENTERING_WORLD()
     end
 end
 
-function UNITFRAME.PostCreateIcon(element, button)
+function UNITFRAME.PostCreateButton(element, button)
     button.bg = F.CreateBDFrame(button, 0.25)
     button.glow = F.CreateSD(button.bg)
 
     button:SetFrameLevel(element:GetFrameLevel() + 4)
 
-    button.overlay:SetTexture(nil)
-    button.stealable:SetTexture(nil)
-    button.cd:SetReverse(true)
-    button.icon:SetDrawLayer('ARTWORK')
+    button.Overlay:SetTexture(nil)
+    button.Stealable:SetTexture(nil)
+    button.Cooldown:SetReverse(true)
+    button.Icon:SetDrawLayer('ARTWORK')
 
     local style = element.__owner.unitStyle
     local isGroup = style == 'party' or style == 'raid'
     local isNP = style == 'nameplate'
 
     if isGroup then
-        button.icon:SetTexCoord(unpack(C.TEX_COORD))
+        button.Icon:SetTexCoord(unpack(C.TEX_COORD))
     elseif isNP then
-        button.icon:SetTexCoord(0.1, 0.9, 0.26, 0.74) -- precise texcoord for rectangular icons
+        button.Icon:SetTexCoord(0.1, 0.9, 0.26, 0.74) -- precise texcoord for rectangular icons
     else
-        button.icon:SetTexCoord(0.1, 0.9, 0.22, 0.78) -- precise texcoord for rectangular icons
+        button.Icon:SetTexCoord(0.1, 0.9, 0.22, 0.78) -- precise texcoord for rectangular icons
     end
 
     button.HL = button:CreateTexture(nil, 'HIGHLIGHT')
@@ -88,12 +88,12 @@ function UNITFRAME.PostCreateIcon(element, button)
 
     local font = C.Assets.Fonts.HalfHeight
     local fontSize = max((element.width or element.size) * 0.4, 12)
-    button.count = F.CreateFS(button, font, fontSize, true, nil, nil, true)
-    button.count:ClearAllPoints()
-    button.count:SetPoint('RIGHT', button, 'TOPRIGHT')
-    button.timer = F.CreateFS(button, font, fontSize, true, nil, nil, true)
-    button.timer:ClearAllPoints()
-    button.timer:SetPoint('LEFT', button, 'BOTTOMLEFT')
+    button.Count = F.CreateFS(button, font, fontSize, true, nil, nil, true)
+    button.Count:ClearAllPoints()
+    button.Count:SetPoint('RIGHT', button, 'TOPRIGHT')
+    button.Timer = F.CreateFS(button, font, fontSize, true, nil, nil, true)
+    button.Timer:ClearAllPoints()
+    button.Timer:SetPoint('LEFT', button, 'BOTTOMLEFT')
 
     button.UpdateTooltip = UpdateAuraTooltip
     button:SetScript('OnEnter', Aura_OnEnter)
@@ -125,7 +125,9 @@ local dispellType = {
     [''] = true,
 }
 
-function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, expiration, debuffType)
+function UNITFRAME.PostUpdateButton(element, button, unit, data)
+    local duration, expiration, debuffType = data.duration, data.expirationTime, data.dispelName
+
     if duration then
         button.bg:Show()
 
@@ -146,85 +148,108 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
     print('element.icon_height', element.icon_height)
     print('element.icon_ratio', element.icon_ratio) ]]
 
-    local _, _, _, _, _, _, _, canStealOrPurge = UnitAura(unit, index, button.filter)
-    if element.desaturateDebuff and button.isDebuff and filteredUnits[style] and not button.isPlayer then
-        button.icon:SetDesaturated(true)
+    -- local _, _, _, _, _, _, _, canStealOrPurge = UnitAura(unit, index, button.filter)
+    if element.desaturateDebuff and button.isHarmful and filteredUnits[style] and not data.isPlayerAura then
+        button.Icon:SetDesaturated(true)
     else
-        button.icon:SetDesaturated(false)
+        button.Icon:SetDesaturated(false)
     end
 
-    if canStealOrPurge and element.showStealableBuffs then
-        button.bg:SetBackdropBorderColor(1, 1, 1)
-
-        if button.glow then
-            button.glow:SetBackdropBorderColor(1, 1, 1, 0.25)
-        end
-    elseif button.isDebuff and element.showDebuffType then
+    if element.showDebuffType and button.isHarmful then
         local color = oUF.colors.debuff[debuffType] or oUF.colors.debuff.none
-
         button.bg:SetBackdropBorderColor(color[1], color[2], color[3])
-
-        if button.glow then
-            button.glow:SetBackdropBorderColor(color[1], color[2], color[3], 0.25)
-        end
     else
         button.bg:SetBackdropBorderColor(0, 0, 0)
-
-        if button.glow then
-            button.glow:SetBackdropBorderColor(0, 0, 0, 0.25)
-        end
     end
 
-    if element.alwaysShowStealable and dispellType[debuffType] and not UnitIsPlayer(unit) and not button.isDebuff then
-        button.stealable:Show()
+    if element.alwaysShowStealable and dispellType[debuffType] and not UnitIsPlayer(unit) and not button.isHarmful then
+        button.Stealable:Show()
     end
 
     if element.disableCooldown then
         if duration and duration > 0 then
             button.expiration = expiration
             button:SetScript('OnUpdate', F.CooldownOnUpdate)
-            button.timer:Show()
+            button.Timer:Show()
         else
             button:SetScript('OnUpdate', nil)
-            button.timer:Hide()
+            button.Timer:Hide()
         end
-    end
-
-    local fontSize = max((element.width or element.size) * 0.4, 12)
-    local font = C.Assets.Fonts.HalfHeight
-    if button.count then
-        button.count:SetFont(font, fontSize, 'OUTLINE')
-    end
-    if button.timer then
-        button.timer:SetFont(font, fontSize, 'OUTLINE')
-    end
-
-    local isPartyAura = element.partyAura
-    if isPartyAura then
-        button.count:ClearAllPoints()
-        button.count:SetPoint('CENTER', button, 'TOP')
-        button.timer:ClearAllPoints()
-        button.timer:SetPoint('CENTER', button, 'BOTTOM')
-        button.timer:SetFont(font, fontSize, 'OUTLINE')
     end
 
     local newTexture = UNITFRAME.ReplacedSpellIcons[button.spellID]
     if newTexture then
-        button.icon:SetTexture(newTexture)
+        button.Icon:SetTexture(newTexture)
     end
+
+    -- if canStealOrPurge and element.showStealableBuffs then
+    --     button.bg:SetBackdropBorderColor(1, 1, 1)
+
+    --     if button.glow then
+    --         button.glow:SetBackdropBorderColor(1, 1, 1, 0.25)
+    --     end
+    -- elseif button.isDebuff and element.showDebuffType then
+    --     local color = oUF.colors.debuff[debuffType] or oUF.colors.debuff.none
+
+    --     button.bg:SetBackdropBorderColor(color[1], color[2], color[3])
+
+    --     if button.glow then
+    --         button.glow:SetBackdropBorderColor(color[1], color[2], color[3], 0.25)
+    --     end
+    -- else
+    --     button.bg:SetBackdropBorderColor(0, 0, 0)
+
+    --     if button.glow then
+    --         button.glow:SetBackdropBorderColor(0, 0, 0, 0.25)
+    --     end
+    -- end
+
+    -- if element.alwaysShowStealable and dispellType[debuffType] and not UnitIsPlayer(unit) and not button.isDebuff then
+    --     button.stealable:Show()
+    -- end
+
+    -- if element.disableCooldown then
+    --     if duration and duration > 0 then
+    --         button.expiration = expiration
+    --         button:SetScript('OnUpdate', F.CooldownOnUpdate)
+    --         button.timer:Show()
+    --     else
+    --         button:SetScript('OnUpdate', nil)
+    --         button.timer:Hide()
+    --     end
+    -- end
+
+    local fontSize = max((element.width or element.size) * 0.4, 12)
+    local font = C.Assets.Fonts.HalfHeight
+    if button.Count then
+        button.Count:SetFont(font, fontSize, 'OUTLINE')
+    end
+    if button.Timer then
+        button.Timer:SetFont(font, fontSize, 'OUTLINE')
+    end
+
+    local isPartyAura = element.partyAura
+    if isPartyAura then
+        button.Count:ClearAllPoints()
+        button.Count:SetPoint('CENTER', button, 'TOP')
+        button.Timer:ClearAllPoints()
+        button.Timer:SetPoint('CENTER', button, 'BOTTOM')
+        button.Timer:SetFont(font, fontSize, 'OUTLINE')
+    end
+
+    -- local newTexture = UNITFRAME.ReplacedSpellIcons[button.spellID]
+    -- if newTexture then
+    --     button.icon:SetTexture(newTexture)
+    -- end
+
+    if element.bolsterInstanceID and element.bolsterInstanceID == button.auraInstanceID then
+		button.Count:SetText(element.bolsterStacks)
+	end
 end
 
-local function BolsterPreUpdate(element)
-    element.bolster = 0
-    element.bolsterIndex = nil
-    element.hasCustomDebuff = nil
-end
-
-local function BolsterPostUpdate(element)
-    local button = element.bolsterIndex
-    if button then
-        button.count:SetText(element.bolster)
-    end
+function UNITFRAME.AurasPreUpdate(element)
+	element.bolsterStacks = 0
+	element.bolsterInstanceID = nil
 end
 
 local isMine = {
@@ -238,15 +263,16 @@ NAMEPLATE.AuraFilterList = {
     [2] = {},
 }
 
-function UNITFRAME.AuraFilter(element, unit, button, name, _, _, debuffType, _, _, caster, isStealable, _, spellID, _, isBossAura, _, nameplateShowAll)
+function UNITFRAME.AuraFilter(element, unit, data)
     local style = element.__owner.unitStyle
+    local name, debuffType, caster, isStealable, spellID, nameplateShowAll = data.name, data.dispelName, data.sourceUnit, data.isStealable, data.spellId, data.nameplateShowAll
 
     if name and spellID == 209859 then
-        element.bolster = element.bolster + 1
-        if not element.bolsterIndex then
-            element.bolsterIndex = button
-            return true
-        end
+        if not element.bolsterInstanceID then
+			element.bolsterInstanceID = data.auraInstanceID
+		end
+		element.bolsterStacks = element.bolsterStacks + 1
+		return element.bolsterStacks == 1
     elseif style == 'party' then
         if C.PartyAurasList[spellID] then
             return true
@@ -262,7 +288,7 @@ function UNITFRAME.AuraFilter(element, unit, button, name, _, _, debuffType, _, 
             return NAMEPLATE.AuraFilterList[1][spellID]
         elseif NAMEPLATE.AuraFilterList[2][spellID] then
             return false
-        elseif (element.showStealableBuffs and isStealable or element.alwaysShowStealable and dispellType[debuffType]) and not UnitIsPlayer(unit) and not button.isDebuff then
+        elseif (element.showStealableBuffs and isStealable or element.alwaysShowStealable and dispellType[debuffType]) and not UnitIsPlayer(unit) and not data.isHarmful then
             return true
         elseif NAMEPLATE.AuraFilterList[1][spellID] then
             return true
@@ -276,13 +302,13 @@ function UNITFRAME.AuraFilter(element, unit, button, name, _, _, debuffType, _, 
         -- return button.isDebuff or isBossAura or SpellIsPriorityAura(spellID)
         return true
     elseif style == 'target' then
-        return isStealable or not button.isDebuff or (element.onlyShowPlayer and button.isPlayer) or (not element.onlyShowPlayer and name)
-    elseif style == 'targettarget' then
-        return isBossAura or SpellIsPriorityAura(spellID)
-    elseif style == 'focus' then
-        return isStealable or isBossAura or SpellIsPriorityAura(spellID) or button.isPlayer
+        return isStealable or not data.isHarmful or (element.onlyShowPlayer and data.isPlayerAura) or (not element.onlyShowPlayer and name)
+    -- elseif style == 'targettarget' then
+    --     return isBossAura or SpellIsPriorityAura(spellID)
+    -- elseif style == 'focus' then
+    --     return isStealable or isBossAura or SpellIsPriorityAura(spellID) or data.isPlayerAura
     else
-        return (element.onlyShowPlayer and button.isPlayer) or (not element.onlyShowPlayer and name)
+        return (element.onlyShowPlayer and data.isPlayerAura) or (not element.onlyShowPlayer and name)
     end
 end
 
@@ -290,8 +316,10 @@ function UNITFRAME.ModifierCustomFilter()
     return true
 end
 
-function UNITFRAME.PostUpdateGapIcon(_, _, icon)
-    icon:Hide()
+function UNITFRAME.PostUpdateGapButton(_, _, button)
+    if button.bg and button.bg:IsShown() then
+        button.bg:Hide()
+    end
 end
 
 local function GetIconSize(width, num, size)
@@ -358,16 +386,7 @@ end
 local function UpdatePlayerAuraPosition(self)
     local specIndex = GetSpecialization()
 
-    if
-        (
-            C.MY_CLASS == 'ROGUE'
-            or C.MY_CLASS == 'PALADIN'
-            or C.MY_CLASS == 'WARLOCK'
-            or (C.MY_CLASS == 'DRUID' and specIndex == 2)
-            or (C.MY_CLASS == 'MONK' and specIndex == 3)
-            or (C.MY_CLASS == 'MAGE' and specIndex == 1)
-        ) and C.DB.Unitframe.ClassPower
-    then
+    if (C.MY_CLASS == 'ROGUE' or C.MY_CLASS == 'PALADIN' or C.MY_CLASS == 'WARLOCK' or (C.MY_CLASS == 'DRUID' and specIndex == 2) or (C.MY_CLASS == 'MONK' and specIndex == 3) or (C.MY_CLASS == 'MAGE' and specIndex == 1)) and C.DB.Unitframe.ClassPower then
         self.Auras:ClearAllPoints()
         self.Auras:SetPoint('TOP', self.ClassPowerBar, 'BOTTOM', 0, -5)
     else
@@ -457,12 +476,11 @@ function UNITFRAME:CreateAuras(self)
     bu.desaturateDebuff = C.DB.Unitframe.DesaturateIcon
     bu.showStealableBuffs = C.DB.Unitframe.StealableBuffs
 
-    bu.CustomFilter = UNITFRAME.AuraFilter
-    bu.PostCreateIcon = UNITFRAME.PostCreateIcon
-    bu.PostUpdateIcon = UNITFRAME.PostUpdateIcon
-    bu.PostUpdateGapIcon = UNITFRAME.PostUpdateGapIcon
-    bu.PreUpdate = BolsterPreUpdate
-    bu.PostUpdate = BolsterPostUpdate
+    bu.FilterAura = UNITFRAME.AuraFilter
+    bu.PostCreateButton = UNITFRAME.PostCreateButton
+    bu.PostUpdateButton = UNITFRAME.PostUpdateButton
+    bu.PostUpdateGapButton = UNITFRAME.PostUpdateGapButton
+    bu.PreUpdate = UNITFRAME.AurasPreUpdate
 
     self.Auras = bu
 
@@ -493,12 +511,11 @@ function NAMEPLATE:CreateAuras(self)
     bu.showStealableBuffs = C.DB.Nameplate.DispellMode == 1
     bu.alwaysShowStealable = C.DB.Nameplate.DispellMode == 2
 
-    bu.CustomFilter = UNITFRAME.AuraFilter
-    bu.PostCreateIcon = UNITFRAME.PostCreateIcon
-    bu.PostUpdateIcon = UNITFRAME.PostUpdateIcon
-    bu.PostUpdateGapIcon = UNITFRAME.PostUpdateGapIcon
-    bu.PreUpdate = BolsterPreUpdate
-    bu.PostUpdate = BolsterPostUpdate
+    bu.FilterAura = UNITFRAME.AuraFilter
+    bu.PostCreateButton = UNITFRAME.PostCreateButton
+    bu.PostUpdateButton = UNITFRAME.PostUpdateButton
+    bu.PostUpdateGapButton = UNITFRAME.PostUpdateGapButton
+    bu.PreUpdate = UNITFRAME.AurasPreUpdate
 
     self.Auras = bu
 end
@@ -585,10 +602,10 @@ function UNITFRAME:CreatePartyAuras(self)
     bu.gap = false
     bu.disableMouse = false
     bu.disableCooldown = true
-    bu.CustomFilter = UNITFRAME.PartyAuraFilter
-    bu.PostCreateIcon = UNITFRAME.PostCreateIcon
-    bu.PostUpdateIcon = UNITFRAME.PostUpdateIcon
-    bu.PostUpdateGapIcon = UNITFRAME.PostUpdateGapIcon
+    bu.FilterAura = UNITFRAME.PartyAuraFilter
+    bu.PostCreateButton = UNITFRAME.PostCreateButton
+    bu.PostUpdateButton = UNITFRAME.PostUpdateButton
+    bu.PostUpdateGapButton = UNITFRAME.PostUpdateGapButton
     bu.UpdateAnchor = UNITFRAME.PartyAuraUpdateAnchor
 
     self.Auras = bu
@@ -625,9 +642,9 @@ function UNITFRAME:CreatePartyBuffs(self)
 
     bu.disableMouse = true
     bu.disableCooldown = true
-    bu.CustomFilter = UNITFRAME.GroupBuffFilter
-    bu.PostCreateIcon = UNITFRAME.PostCreateIcon
-    bu.PostUpdateIcon = UNITFRAME.PostUpdateIcon
+    bu.FilterAura = UNITFRAME.GroupBuffFilter
+    bu.PostCreateButton = UNITFRAME.PostCreateButton
+    bu.PostUpdateButton = UNITFRAME.PostUpdateButton
 
     self.Buffs = bu
 end
@@ -645,9 +662,9 @@ function UNITFRAME:CreateRaidBuffs(self)
 
     bu.disableMouse = true
     bu.disableCooldown = true
-    bu.CustomFilter = UNITFRAME.GroupBuffFilter
-    bu.PostCreateIcon = UNITFRAME.PostCreateIcon
-    bu.PostUpdateIcon = UNITFRAME.PostUpdateIcon
+    bu.FilterAura = UNITFRAME.GroupBuffFilter
+    bu.PostCreateButton = UNITFRAME.PostCreateButton
+    bu.PostUpdateButton = UNITFRAME.PostUpdateButton
 
     self.Buffs = bu
 end
@@ -685,9 +702,9 @@ function UNITFRAME:CreatePartyDebuffs(self)
     bu.disableMouse = true
     bu.disableCooldown = true
     bu.showDebuffType = C.DB.Unitframe.DebuffTypeColor
-    bu.CustomFilter = UNITFRAME.GroupDebuffFilter
-    bu.PostCreateIcon = UNITFRAME.PostCreateIcon
-    bu.PostUpdateIcon = UNITFRAME.PostUpdateIcon
+    bu.FilterAura = UNITFRAME.GroupDebuffFilter
+    bu.PostCreateButton = UNITFRAME.PostCreateButton
+    bu.PostUpdateButton = UNITFRAME.PostUpdateButton
 
     self.Debuffs = bu
 end
@@ -707,9 +724,9 @@ function UNITFRAME:CreateRaidDebuffs(self)
     bu.disableMouse = true
     bu.disableCooldown = true
     bu.showDebuffType = C.DB.Unitframe.DebuffTypeColor
-    bu.CustomFilter = UNITFRAME.GroupDebuffFilter
-    bu.PostCreateIcon = UNITFRAME.PostCreateIcon
-    bu.PostUpdateIcon = UNITFRAME.PostUpdateIcon
+    bu.FilterAura = UNITFRAME.GroupDebuffFilter
+    bu.PostCreateButton = UNITFRAME.PostCreateButton
+    bu.PostUpdateButton = UNITFRAME.PostUpdateButton
 
     self.Debuffs = bu
 end
