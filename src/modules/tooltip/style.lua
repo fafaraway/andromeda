@@ -61,11 +61,15 @@ local function RestyleFont(obj, font, size)
 end
 
 function TOOLTIP:FixRecipeItemNameWidth()
+    if not self.GetName then
+        return
+    end
+
     local name = self:GetName()
     for i = 1, self:NumLines() do
         local line = _G[name .. 'TextLeft' .. i]
         if line:GetHeight() > 40 then
-            line:SetWidth(line:GetWidth() + 1)
+            line:SetWidth(line:GetWidth() + 2)
         end
     end
 end
@@ -100,7 +104,7 @@ function TOOLTIP:SetupFonts()
         end
     end
 
-    _G.GameTooltip:HookScript('OnTooltipSetItem', TOOLTIP.FixRecipeItemNameWidth)
+    _G.TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TOOLTIP.FixRecipeItemNameWidth)
 end
 
 -- Tooltip Registration

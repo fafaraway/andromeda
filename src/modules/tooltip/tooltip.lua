@@ -237,10 +237,10 @@ function TOOLTIP:RefreshStatusBar(value)
     local unit = self.guid and UnitTokenFromGUID(self.guid)
     local unitHealthMax = unit and UnitHealthMax(unit)
     if unitHealthMax and unitHealthMax ~= 0 then
-        self.text:SetText(F.Numb(value * unitHealthMax) .. ' | ' .. F.Numb(unitHealthMax))
+        --self.text:SetText(F.Numb(value * unitHealthMax) .. ' | ' .. F.Numb(unitHealthMax))
         self:SetStatusBarColor(F:UnitColor(unit))
     else
-        self.text:SetFormattedText('%d%%', value * 100)
+        --self.text:SetFormattedText('%d%%', value * 100)
     end
     self:SetStatusBarColor(F:UnitColor(unit))
 end
@@ -485,7 +485,6 @@ function TOOLTIP:OnLogin()
     TOOLTIP:ConduitInfo()
     TOOLTIP:Achievement()
     TOOLTIP:AzeriteArmor()
-    TOOLTIP:AlreadyUsed()
     TOOLTIP:ParagonRewards()
     TOOLTIP:FixStoneSoupError()
 

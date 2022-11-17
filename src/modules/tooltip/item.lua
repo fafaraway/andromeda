@@ -42,6 +42,6 @@ local function AddLines(self)
 end
 
 function TOOLTIP:ItemInfo()
-    _G.GameTooltip:HookScript('OnTooltipSetItem', RemoveLines)
-    _G.GameTooltip:HookScript('OnTooltipSetItem', AddLines)
+    _G.TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, RemoveLines)
+    _G.TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, AddLines)
 end
