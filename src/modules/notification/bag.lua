@@ -18,7 +18,7 @@ end
 alertBagsFull = function(self)
     local totalFree, freeSlots, bagFamily = 0
     for i = _G.BACKPACK_CONTAINER, _G.NUM_BAG_SLOTS do
-        freeSlots, bagFamily = GetContainerNumFreeSlots(i)
+        freeSlots, bagFamily = C_Container.GetContainerNumFreeSlots(i)
         if bagFamily == 0 then
             totalFree = totalFree + freeSlots
         end
