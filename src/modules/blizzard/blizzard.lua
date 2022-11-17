@@ -96,7 +96,7 @@ function BLIZZARD:UIWidgetFrameMover()
     F.Mover(frame1, L['UIWidgetFrame'], 'UIWidgetFrame', { 'TOP', 0, -80 })
 
     hooksecurefunc(_G.UIWidgetBelowMinimapContainerFrame, 'SetPoint', function(self, _, parent)
-        if parent == 'MinimapCluster' or parent == _G.MinimapCluster then
+        if parent ~= frame1 then
             self:ClearAllPoints()
             self:SetPoint('CENTER', frame1)
         end
@@ -107,7 +107,7 @@ function BLIZZARD:UIWidgetFrameMover()
     F.Mover(frame2, L['UIWidgetPowerBar'], 'UIWidgetPowerBar', { 'BOTTOM', _G.UIParent, 'BOTTOM', 0, 150 })
 
     hooksecurefunc(_G.UIWidgetPowerBarContainerFrame, 'SetPoint', function(self, _, parent)
-        if parent == 'UIParent' or parent == _G.UIParent then
+        if parent ~= frame2 then
             self:ClearAllPoints()
             self:SetPoint('CENTER', frame2)
         end
