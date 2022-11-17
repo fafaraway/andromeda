@@ -237,10 +237,10 @@ function F:CooldownOnUpdate(elapsed, raw)
             else
                 text = F:FormatTime(timeLeft)
             end
-            self.timer:SetText(text)
+            self.Timer:SetText(text)
         else
             self:SetScript('OnUpdate', nil)
-            self.timer:SetText('')
+            self.Timer:SetText('')
         end
         self.elapsed = 0
     end
