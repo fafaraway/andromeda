@@ -512,17 +512,27 @@ local ignoredFrames = {
     ['TalkingHeadFrame'] = isTalkingHeadHidden,
 }
 
+local shutdownMode = {
+    'OnEditModeEnter',
+    'OnEditModeExit',
+    'HasActiveChanges',
+    'HighlightSystem',
+    'SelectSystem',
+}
+
 function M:DisableBlizzardMover()
     local editMode = _G.EditModeManagerFrame
 
     -- remove the initial registers
     local registered = editMode.registeredSystemFrames
     for i = #registered, 1, -1 do
-        local name = registered[i]:GetName()
-        local ignore = ignoredFrames[name]
+        local frame = registered[i]
+        local ignore = ignoredFrames[frame:GetName()]
 
         if ignore and ignore() then
-            tremove(editMode.registeredSystemFrames, i)
+            for _, key in next, shutdownMode do
+                frame[key] = nop
+            end
         end
     end
 
@@ -535,12 +545,14 @@ function M:DisableBlizzardMover()
         mixin.RefreshAuraFrame = nop
     end
     if isRaidEnable() then
+        mixin.ResetRaidFrames = nop
         mixin.RefreshRaidFrames = nop
     end
     if isArenaEnable() then
         mixin.RefreshArenaFrames = nop
     end
     if isPartyEnable() then
+        mixin.ResetPartyFrames = nop
         mixin.RefreshPartyFrames = nop
     end
     if isTalkingHeadHidden() then
@@ -553,7 +565,8 @@ function M:DisableBlizzardMover()
     end
     if isActionbarEnable() then
         mixin.RefreshEncounterBar = nop
-        -- mixin.RefreshActionBarShown = nop -- taint, needs review
+        mixin.RefreshActionBarShown = nop
         mixin.RefreshVehicleLeaveButton = nop
     end
+    _G.ObjectiveTrackerFrame.IsInDefaultPosition = nop
 end

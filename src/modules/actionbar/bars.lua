@@ -84,9 +84,9 @@ function BAR:UpdateActionBarSize(name)
                 button:SetPoint('LEFT', frame.buttons[i - 1], 'RIGHT', BAR.margin, 0)
             end
 
-            if name == 'BarPet' then
-                button.SetPoint = nop
-            end
+            -- if name == 'BarPet' then
+            --     button.SetPoint = nop
+            -- end
 
             button:SetAttribute('statehidden', false)
             button:Show()
@@ -314,6 +314,81 @@ function BAR:CreateBar5()
     _G.RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
 end
 
+local function hasPetActionHighlightMark(index)
+    return _G.PET_ACTION_HIGHLIGHT_MARKS[index]
+end
+
+function BAR:UpdatePetBar()
+    local petActionButton, petActionIcon, petAutoCastableTexture, petAutoCastShine
+    for i = 1, _G.NUM_PET_ACTION_SLOTS, 1 do
+        petActionButton = self.actionButtons[i]
+        petActionIcon = petActionButton.icon
+        petAutoCastableTexture = petActionButton.AutoCastable
+        petAutoCastShine = petActionButton.AutoCastShine
+        local name, texture, isToken, isActive, autoCastAllowed, autoCastEnabled, spellID = GetPetActionInfo(i)
+        if not isToken then
+            petActionIcon:SetTexture(texture)
+            petActionButton.tooltipName = name
+        else
+            petActionIcon:SetTexture(_G[texture])
+            petActionButton.tooltipName = _G[name]
+        end
+        petActionButton.isToken = isToken
+        if spellID then
+            local spell = Spell:CreateFromSpellID(spellID)
+            petActionButton.spellDataLoadedCancelFunc = spell:ContinueWithCancelOnSpellLoad(function()
+                petActionButton.tooltipSubtext = spell:GetSpellSubtext()
+            end)
+        end
+        if isActive then
+            if IsPetAttackAction(i) then
+                petActionButton:StartFlash()
+                -- the checked texture looks a little confusing at full alpha (looks like you have an extra ability selected)
+                petActionButton:GetCheckedTexture():SetAlpha(0.5)
+            else
+                petActionButton:StopFlash()
+                petActionButton:GetCheckedTexture():SetAlpha(1.0)
+            end
+            petActionButton:SetChecked(true)
+        else
+            petActionButton:StopFlash()
+            petActionButton:SetChecked(false)
+        end
+        if autoCastAllowed then
+            petAutoCastableTexture:Show()
+        else
+            petAutoCastableTexture:Hide()
+        end
+        if autoCastEnabled then
+            AutoCastShine_AutoCastStart(petAutoCastShine)
+        else
+            AutoCastShine_AutoCastStop(petAutoCastShine)
+        end
+        if texture then
+            if GetPetActionSlotUsable(i) then
+                petActionIcon:SetVertexColor(1, 1, 1)
+            else
+                petActionIcon:SetVertexColor(0.4, 0.4, 0.4)
+            end
+            petActionIcon:Show()
+        else
+            petActionIcon:Hide()
+        end
+
+        SharedActionButton_RefreshSpellHighlight(petActionButton, hasPetActionHighlightMark(i))
+    end
+    self:UpdateCooldowns()
+    self.rangeTimer = -1
+end
+
+function BAR.PetBarOnEvent(event)
+    if event == 'PET_BAR_UPDATE_COOLDOWN' then
+        _G.PetActionBar:UpdateCooldowns()
+    else
+        BAR.UpdatePetBar(_G.PetActionBar)
+    end
+end
+
 function BAR:CreatePetBar()
     local num = _G.NUM_PET_ACTION_SLOTS
     local buttonList = {}
@@ -324,9 +399,11 @@ function BAR:CreatePetBar()
 
     _G.PetActionBar:SetParent(frame)
     _G.PetActionBar:EnableMouse(false)
+    _G.PetActionBar:UnregisterAllEvents()
 
     for i = 1, num do
         local button = _G['PetActionButton' .. i]
+        button:SetParent(frame)
         tinsert(buttonList, button)
         tinsert(BAR.buttons, button)
     end
@@ -334,6 +411,21 @@ function BAR:CreatePetBar()
 
     frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; [pet] show; hide'
     _G.RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
+
+    -- Fix pet bar updating
+    BAR:PetBarOnEvent()
+    F:RegisterEvent('UNIT_PET', BAR.PetBarOnEvent)
+    F:RegisterEvent('UNIT_FLAGS', BAR.PetBarOnEvent)
+    F:RegisterEvent('PET_UI_UPDATE', BAR.PetBarOnEvent)
+    F:RegisterEvent('PET_BAR_UPDATE', BAR.PetBarOnEvent)
+    F:RegisterEvent('PLAYER_CONTROL_LOST', BAR.PetBarOnEvent)
+    F:RegisterEvent('PET_BAR_UPDATE_USABLE', BAR.PetBarOnEvent)
+    F:RegisterEvent('PLAYER_CONTROL_GAINED', BAR.PetBarOnEvent)
+    F:RegisterEvent('PLAYER_TARGET_CHANGED', BAR.PetBarOnEvent)
+    F:RegisterEvent('PET_BAR_UPDATE_COOLDOWN', BAR.PetBarOnEvent)
+    F:RegisterEvent('UPDATE_VEHICLE_ACTIONBAR', BAR.PetBarOnEvent)
+    F:RegisterEvent('PLAYER_MOUNT_DISPLAY_CHANGED', BAR.PetBarOnEvent)
+    F:RegisterEvent('PLAYER_FARSIGHT_FOCUS_CHANGED', BAR.PetBarOnEvent)
 end
 
 function BAR:UpdateStanceBar()
@@ -360,8 +452,6 @@ function BAR:UpdateStanceBar()
             else
                 button:SetPoint('LEFT', frame.buttons[i - 1], 'RIGHT', BAR.margin, 0)
             end
-
-            button.SetPoint = nop
         end
 
         BAR:UpdateFontSize(button, fontSize)
@@ -390,9 +480,11 @@ function BAR:CreateStanceBar()
     -- StanceBar
     _G.StanceBar:SetParent(frame)
     _G.StanceBar:EnableMouse(false)
+    _G.StanceBar:UnregisterAllEvents()
 
     for i = 1, num do
         local button = _G['StanceButton' .. i]
+        button:SetParent(frame)
         tinsert(buttonList, button)
         tinsert(BAR.buttons, button)
     end
