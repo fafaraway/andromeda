@@ -141,6 +141,25 @@ function TOOLTIP:AddIDs()
         end
     end)
 
+    TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Macro, function(self, data)
+        if self:IsForbidden() then
+            return
+        end
+
+        local lineData = data.lines and data.lines[1]
+        local tooltipType = lineData and lineData.tooltipType
+
+        if not tooltipType then
+            return
+        end
+
+        if tooltipType == 0 then -- item
+            TOOLTIP.AddLineForID(self, lineData.tooltipID, typesList.item)
+        elseif tooltipType == 1 then -- spell
+            TOOLTIP.AddLineForID(self, lineData.tooltipID, typesList.spell)
+        end
+    end)
+
     -- Items
     local function addItemID(self, data)
         if self:IsForbidden() then
