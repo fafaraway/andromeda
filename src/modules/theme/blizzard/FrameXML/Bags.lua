@@ -102,7 +102,7 @@ tinsert(C.BlizzThemes, function()
         return
     end
 
-    for i = 1, 12 do
+    for i = 1, 13 do
         local frameName = 'ContainerFrame' .. i
         local frame = _G[frameName]
         local name = frame.TitleText or _G[frameName .. 'TitleText']

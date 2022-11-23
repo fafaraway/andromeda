@@ -206,11 +206,5 @@ tinsert(C.BlizzThemes, function()
         if self.subSpellString then
             self.subSpellString:SetTextColor(1, 1, 1)
         end
-        if self.SpellName then
-            self.SpellName:SetTextColor(1, 1, 1)
-        end
-        if self.SpellSubName then
-            self.SpellSubName:SetTextColor(1, 1, 1)
-        end
     end)
 end)

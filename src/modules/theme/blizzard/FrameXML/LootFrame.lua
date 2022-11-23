@@ -10,6 +10,7 @@ tinsert(C.BlizzThemes, function()
     F.ReskinClose(LootFrame.ClosePanelButton)
     F.StripTextures(LootFrame)
     F.SetBD(LootFrame)
+    F.ReskinTrimScroll(LootFrame.ScrollBar, true)
 
     local function updateHighlight(self)
         local button = self.__owner
@@ -41,10 +42,12 @@ tinsert(C.BlizzThemes, function()
                 F.ReskinIconBorder(item.IconBorder, true)
 
                 questTexture:SetAlpha(0)
+                button.NameFrame:SetAlpha(0)
                 button.BorderFrame:SetAlpha(0)
                 button.HighlightNameFrame:SetAlpha(0)
                 button.PushedNameFrame:SetAlpha(0)
                 button.bg = F.CreateBDFrame(button.HighlightNameFrame, 0.25)
+                button.bg:SetAllPoints()
                 item.__owner = button
                 item:HookScript('OnMouseUp', updatePushed)
                 item:HookScript('OnMouseDown', updatePushed)
