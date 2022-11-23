@@ -3,7 +3,7 @@ local UNITFRAME = F:GetModule('UnitFrame')
 local NAMEPLATE = F:GetModule('Nameplate')
 local LBG = F.Libs.LBG
 
-local function CreateCastBarMover(bar, text, value, anchor)
+local function createBarMover(bar, text, value, anchor)
     local mover = F.Mover(bar, text, value, anchor, bar:GetHeight() + bar:GetWidth() + 3, bar:GetHeight() + 3)
     bar:ClearAllPoints()
     bar:SetPoint('CENTER', mover)
@@ -105,11 +105,12 @@ end
 
 function UNITFRAME:OnCastSent()
     local element = self.Castbar
+
     if not element.SafeZone then
         return
     end
-    element.SafeZone.sendTime = GetTime()
-    element.SafeZone.castSent = true
+
+    element.__sendTime = GetTime()
 end
 
 local function ResetSpellTarget(self)
@@ -162,24 +163,22 @@ function UNITFRAME:PostCastStart(unit)
     self:SetAlpha(1)
     self.Spark:Show()
 
+    local safeZone = self.SafeZone
     if unit == 'vehicle' or UnitInVehicle('player') then
-        if self.SafeZone then
-            self.SafeZone:Hide()
-        end
-        if self.Lag then
-            self.Lag:Hide()
+        if safeZone then
+            safeZone:Hide()
         end
     elseif unit == 'player' then
-        local safeZone = self.SafeZone
         if safeZone then
-            safeZone.timeDiff = 0
-            if safeZone.castSent then
-                safeZone.timeDiff = GetTime() - safeZone.sendTime
-                safeZone.timeDiff = safeZone.timeDiff > self.max and self.max or safeZone.timeDiff
-                safeZone:SetWidth(self:GetWidth() * (safeZone.timeDiff + 0.001) / self.max)
+            local sendTime = self.__sendTime
+            local timeDiff = sendTime and min((GetTime() - sendTime), self.max)
+            if timeDiff and timeDiff ~= 0 then
+                safeZone:SetWidth(self:GetWidth() * timeDiff / self.max)
                 safeZone:Show()
-                safeZone.castSent = nil
+            else
+                safeZone:Hide()
             end
+            self.__sendTime = nil
         end
 
         local numTicks = 0
@@ -341,7 +340,7 @@ function UNITFRAME:CreateCastBar(self)
     else
         if style == 'player' then
             castbar:SetSize(playerWidth, playerHeight)
-            CreateCastBarMover(castbar, L['PlayerCastbar'], 'PlayerCastbar', { 'TOP', self, 'BOTTOM', 0, -20 })
+            createBarMover(castbar, L['PlayerCastbar'], 'PlayerCastbar', { 'TOP', self, 'BOTTOM', 0, -20 })
 
             icon:SetSize(playerHeight + iconAmp, playerHeight + iconAmp)
             icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
@@ -349,7 +348,7 @@ function UNITFRAME:CreateCastBar(self)
             spark:SetSize(20, playerHeight + 10)
         elseif style == 'target' then
             castbar:SetSize(targetWidth, targetHeight)
-            CreateCastBarMover(castbar, L['TargetCastbar'], 'TargetCastbar', { 'TOP', self, 'BOTTOM', 0, -4 })
+            createBarMover(castbar, L['TargetCastbar'], 'TargetCastbar', { 'TOP', self, 'BOTTOM', 0, -4 })
 
             icon:SetSize(targetHeight + iconAmp, targetHeight + iconAmp)
             icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
@@ -357,7 +356,7 @@ function UNITFRAME:CreateCastBar(self)
             spark:SetSize(20, targetHeight + 10)
         elseif style == 'focus' then
             castbar:SetSize(focusWidth, focusHeight)
-            CreateCastBarMover(castbar, L['FocusCastbar'], 'FocusCastbar', { 'CENTER', _G.UIParent, 'CENTER', 0, 120 })
+            createBarMover(castbar, L['FocusCastbar'], 'FocusCastbar', { 'CENTER', _G.UIParent, 'CENTER', 0, 120 })
 
             icon:SetSize(focusHeight + iconAmp, focusHeight + iconAmp)
             icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
@@ -453,7 +452,6 @@ function NAMEPLATE:CreateCastBar(self)
 
     castbar.SpellTarget = C.DB.Nameplate.TargetName
     castbar.OnUpdate = UNITFRAME.OnCastbarUpdate
-    castbar.PostCastStart = UNITFRAME.PostCastStart
     castbar.PostCastStop = UNITFRAME.PostCastStop
     castbar.PostCastFail = UNITFRAME.PostCastFailed
     castbar.PostCastInterruptible = UNITFRAME.PostUpdateInterruptible
