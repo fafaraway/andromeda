@@ -231,6 +231,12 @@ function BLIZZARD:AddAutoAcceptButton()
     F.CreateFS(bu, C.Assets.Fonts.Regular, 12, nil, _G.LFG_LIST_AUTO_ACCEPT, 'YELLOW', true, 'LEFT', 24, 0)
 
     local lastTime = 0
+    local function clickInviteButton(button)
+        if button.applicantID and button.InviteButton:IsEnabled() then
+            button.InviteButton:Click()
+        end
+    end
+
     F:RegisterEvent('LFG_LIST_APPLICANT_LIST_UPDATED', function()
         if not bu:GetChecked() then
             return
@@ -239,13 +245,7 @@ function BLIZZARD:AddAutoAcceptButton()
             return
         end
 
-        local buttons = applicationViewerFrame.ScrollFrame.buttons
-        for i = 1, #buttons do
-            local button = buttons[i]
-            if button.applicantID and button.InviteButton:IsEnabled() then
-                button.InviteButton:Click()
-            end
-        end
+        _G.ApplicationViewerFrame.ScrollBox:ForEachFrame(clickInviteButton)
 
         if applicationViewerFrame:IsShown() then
             local now = GetTime()
