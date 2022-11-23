@@ -183,12 +183,13 @@ local function isItemCustom(item, index)
     return customIndex and customIndex == index
 end
 
+local emptyBags = { [0] = true, [11] = true }
 local function isEmptySlot(item)
     if not C.DB.Inventory.CombineFreeSlots then
         return
     end
 
-    return INVENTORY.initComplete and not item.texture and INVENTORY.BagsType[item.bagId] == 0
+    return INVENTORY.initComplete and not item.texture and emptyBags[INVENTORY.BagsType[item.bagId]]
 end
 
 local function isTradeGoods(item)
@@ -352,7 +353,7 @@ function INVENTORY:GetFilters()
     end
 
     filters.onlyBagReagent = function(item)
-        return isItemInBagReagent(item)
+        return isItemInBagReagent(item) and not isEmptySlot(item)
     end
 
     for i = 1, 5 do

@@ -41,6 +41,16 @@ function INVENTORY:ReverseSort()
 end
 
 local anchorCache = {}
+
+local function CheckForBagReagent(name)
+    local pass = true
+    if name == 'BagReagent' and C_Container.GetContainerNumSlots(5) == 0 then
+        pass = false
+    end
+
+    return pass
+end
+
 function INVENTORY:UpdateBagsAnchor(parent, bags)
     wipe(anchorCache)
 
@@ -50,7 +60,7 @@ function INVENTORY:UpdateBagsAnchor(parent, bags)
 
     for i = 1, #bags do
         local bag = bags[i]
-        if bag:GetHeight() > 45 then
+        if bag:GetHeight() > 45 and CheckForBagReagent(bag.name) then
             bag:Show()
             index = index + 1
 
@@ -485,6 +495,11 @@ function INVENTORY:GetEmptySlot(name)
         if slotID then
             return -3, slotID
         end
+    elseif name == 'BagReagent' then
+        local slotID = INVENTORY:GetContainerEmptySlot(5)
+        if slotID then
+            return 5, slotID
+        end
     end
 end
 
@@ -499,6 +514,7 @@ local freeSlotContainer = {
     ['Bag'] = true,
     ['Bank'] = true,
     ['Reagent'] = true,
+    ['BagReagent'] = true,
 }
 
 function INVENTORY:CreateFreeSlots()
@@ -1202,6 +1218,9 @@ function INVENTORY:OnLogin()
             F.CreateMF(self, nil, true)
         end
 
+        self.iconSize = iconSize
+        INVENTORY.CreateFreeSlots(self)
+
         local label
         if strmatch(name, 'AzeriteItem$') then
             label = L['Azerite armor']
@@ -1237,8 +1256,6 @@ function INVENTORY:OnLogin()
             return
         end
 
-        self.iconSize = iconSize
-        INVENTORY.CreateFreeSlots(self)
         INVENTORY.CreateMoneyFrame(self)
 
         local buttons = {}
