@@ -53,6 +53,10 @@ function TOOLTIP:Azerite_UpdateTier(link)
 end
 
 function TOOLTIP:Azerite_UpdateItem()
+    if not self.GetItem then
+        return
+    end
+
     local link = select(2, self:GetItem())
     if not link then
         return
