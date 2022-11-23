@@ -9,7 +9,6 @@
     <Script file="id.lua"/>
     <Script file="item.lua"/>
     <Script file="itemref.lua"/>
-    <Script file="misc.lua"/>
     <Script file="paragon.lua"/>
     <Script file="specilvl.lua"/>
     <Script file="style.lua"/>
