@@ -4,6 +4,12 @@
 
 local parentMaps = {
     -- list of all continents and their sub-zones that have world quests
+    [1978] = { -- Dragon Isles
+        [2022] = true, -- The Walking Shores
+        [2023] = true, -- Ohn'ahran Plains
+        [2024] = true, -- The Azure Span
+        [2025] = true, -- Thaldraszus
+    },
     [1550] = {
         -- Shadowlands
         [1525] = true, -- Revendreth
@@ -13,8 +19,7 @@ local parentMaps = {
     },
 }
 
-local factionAssaultAtlasName = UnitFactionGroup('player') == 'Horde' and 'worldquest-icon-horde'
-    or 'worldquest-icon-alliance'
+local factionAssaultAtlasName = UnitFactionGroup('player') == 'Horde' and 'worldquest-icon-horde' or 'worldquest-icon-alliance'
 
 local function AdjustedMapID(mapID)
     -- this will replace the Argus map ID with the one used by the taxi UI, since one of the
@@ -148,7 +153,11 @@ function _G.BetterWorldQuestPinMixin:RefreshVisuals()
     -- set texture to the item/currency/value it rewards
     local questID = self.questID
     if GetNumQuestLogRewards(questID) > 0 then
-        local _, texture = GetQuestLogRewardInfo(1, questID)
+        local _, texture, _, _, _, itemID = GetQuestLogRewardInfo(1, questID)
+        if C_Item.IsAnimaItemByID(itemID) then
+            texture = 3528287 -- from item "Resonating Anima Core"
+        end
+
         SetPortraitToTexture(self.Texture, texture)
         self.Texture:SetSize(self:GetSize())
     elseif GetNumQuestLogRewardCurrencies(questID) > 0 then
@@ -161,7 +170,7 @@ function _G.BetterWorldQuestPinMixin:RefreshVisuals()
     end
 
     -- update our own widgets
-    local bountyQuestID = self.dataProvider:GetBountyQuestID()
+    local bountyQuestID = self.dataProvider:GetBountyInfo()
     self.Bounty:SetShown(bountyQuestID and C_QuestLog.IsQuestCriteriaForBounty(questID, bountyQuestID))
 
     local questInfo = C_QuestLog.GetQuestTagInfo(questID)
