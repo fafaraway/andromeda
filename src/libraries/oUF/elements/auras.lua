@@ -188,6 +188,7 @@ local function updateAura(element, unit, data, position)
 		element.createdButtons = element.createdButtons + 1
 	end
 
+	button.spellID = data.spellId -- Andromeda: need this for aura ignore list
 	-- for tooltips
 	button.auraInstanceID = data.auraInstanceID
 	button.isHarmful = data.isHarmful

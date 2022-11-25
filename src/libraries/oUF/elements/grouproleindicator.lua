@@ -97,7 +97,7 @@ local function Disable(self)
 		element:Hide()
 
 		self:UnregisterEvent('PLAYER_ROLES_ASSIGNED', Path)
-		self:UnregisterEvent('GROUP_ROSTER_UPDATE', Path, true)
+		self:UnregisterEvent('GROUP_ROSTER_UPDATE', Path)
 	end
 end
 

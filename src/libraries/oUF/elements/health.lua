@@ -215,8 +215,12 @@ local function SetColorDisconnected(element, state, isForced)
 		element.colorDisconnected = state
 		if(state) then
 			element.__owner:RegisterEvent('UNIT_CONNECTION', ColorPath)
+			element.__owner:RegisterEvent('PARTY_MEMBER_ENABLE', ColorPath)
+			element.__owner:RegisterEvent('PARTY_MEMBER_DISABLE', ColorPath)
 		else
 			element.__owner:UnregisterEvent('UNIT_CONNECTION', ColorPath)
+			element.__owner:UnregisterEvent('PARTY_MEMBER_ENABLE', ColorPath)
+			element.__owner:UnregisterEvent('PARTY_MEMBER_DISABLE', ColorPath)
 		end
 	end
 end
@@ -275,6 +279,38 @@ local function SetColorThreat(element, state, isForced)
 	end
 end
 
+local onUpdateElapsed, onUpdateWait = 0, 0.25
+local function onUpdateHealth(self, elapsed)
+	if onUpdateElapsed > onUpdateWait then
+		Path(self.__owner, 'OnUpdate', self.__owner.unit)
+
+		onUpdateElapsed = 0
+	else
+		onUpdateElapsed = onUpdateElapsed + elapsed
+	end
+end
+
+local function SetHealthUpdateSpeed(self, state)
+	if state < .1 then state = .1 end
+	onUpdateWait = state
+end
+
+local function SetHealthUpdateMethod(self, state, force)
+	if self.effectiveHealth ~= state or force then
+		self.effectiveHealth = state
+
+		if state then
+			self.Health:SetScript('OnUpdate', onUpdateHealth)
+			self:UnregisterEvent('UNIT_HEALTH', Path)
+			self:UnregisterEvent('UNIT_MAXHEALTH', Path)
+		else
+			self.Health:SetScript('OnUpdate', nil)
+			self:RegisterEvent('UNIT_HEALTH', Path) -- Needed for Pet Battles
+			self:RegisterEvent('UNIT_MAXHEALTH', Path)
+		end
+	end
+end
+
 local function Enable(self)
 	local element = self.Health
 	if(element) then
@@ -285,8 +321,14 @@ local function Enable(self)
 		element.SetColorTapping = SetColorTapping
 		element.SetColorThreat = SetColorThreat
 
+		self.SetHealthUpdateSpeed = SetHealthUpdateSpeed
+		self.SetHealthUpdateMethod = SetHealthUpdateMethod
+		SetHealthUpdateMethod(self, self.effectiveHealth, true)
+
 		if(element.colorDisconnected) then
 			self:RegisterEvent('UNIT_CONNECTION', ColorPath)
+			self:RegisterEvent('PARTY_MEMBER_ENABLE', ColorPath)
+			self:RegisterEvent('PARTY_MEMBER_DISABLE', ColorPath)
 		end
 
 		if(element.colorSelection) then
@@ -319,11 +361,15 @@ local function Disable(self)
 	if(element) then
 		element:Hide()
 
+		element:SetScript('OnUpdate', nil)
+
 		self:UnregisterEvent('UNIT_HEALTH', Path)
 		self:UnregisterEvent('UNIT_MAXHEALTH', Path)
 		self:UnregisterEvent('UNIT_CONNECTION', ColorPath)
 		self:UnregisterEvent('UNIT_FACTION', ColorPath)
 		self:UnregisterEvent('UNIT_FLAGS', ColorPath)
+		self:UnregisterEvent('PARTY_MEMBER_ENABLE', ColorPath)
+		self:UnregisterEvent('PARTY_MEMBER_DISABLE', ColorPath)
 		self:UnregisterEvent('UNIT_THREAT_LIST_UPDATE', ColorPath)
 	end
 end
