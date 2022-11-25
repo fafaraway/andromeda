@@ -186,10 +186,10 @@ function UNITFRAME:PostCastStart(unit)
             numTicks = channelingTicks[self.spellID] or 0
         end
         F:CreateAndUpdateBarTicks(self, self.castTicks, numTicks)
-    end
 
-    if not self.channeling then
-        UNITFRAME:CreateAndUpdateStagePip(self, self.castTicks, self.numStages or 0, unit)
+        if not self.channeling then
+            UNITFRAME:CreateAndUpdateStagePip(self, self.castTicks, self.numStages or 0, unit)
+        end
     end
 
     if (style == 'nameplate' and npCompact) or (style ~= 'nameplate' and compact) then
@@ -452,6 +452,7 @@ function NAMEPLATE:CreateCastBar(self)
 
     castbar.SpellTarget = C.DB.Nameplate.TargetName
     castbar.OnUpdate = UNITFRAME.OnCastbarUpdate
+    castbar.PostCastStart = UNITFRAME.PostCastStart
     castbar.PostCastStop = UNITFRAME.PostCastStop
     castbar.PostCastFail = UNITFRAME.PostCastFailed
     castbar.PostCastInterruptible = UNITFRAME.PostUpdateInterruptible
