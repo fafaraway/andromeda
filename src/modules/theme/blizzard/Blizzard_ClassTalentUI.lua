@@ -20,6 +20,11 @@ end
 
 C.Themes['Blizzard_ClassTalentUI'] = function()
     local frame = _G.ClassTalentFrame
+    frame.TalentsTab.Background:SetAlpha(0.4)
+    frame.TalentsTab.BlackBG:SetAlpha(0)
+    frame.TalentsTab.BottomBar:SetAlpha(0)
+    frame.SpecTab.Background:SetAlpha(0.4)
+    frame.SpecTab.BlackBG:SetAlpha(0)
 
     F.ReskinPortraitFrame(frame)
     F.Reskin(frame.TalentsTab.ApplyButton)
