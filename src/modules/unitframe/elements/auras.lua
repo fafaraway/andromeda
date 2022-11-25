@@ -88,12 +88,12 @@ function UNITFRAME.PostCreateButton(element, button)
 
     local font = C.Assets.Fonts.HalfHeight
     local fontSize = max((element.width or element.size) * 0.4, 12)
-    button.Count = F.CreateFS(button, font, fontSize, true, nil, nil, true)
-    button.Count:ClearAllPoints()
-    button.Count:SetPoint('RIGHT', button, 'TOPRIGHT')
-    button.Timer = F.CreateFS(button, font, fontSize, true, nil, nil, true)
-    button.Timer:ClearAllPoints()
-    button.Timer:SetPoint('LEFT', button, 'BOTTOMLEFT')
+    button.count = F.CreateFS(button, font, fontSize, true, nil, nil, true)
+    button.count:ClearAllPoints()
+    button.count:SetPoint('RIGHT', button, 'TOPRIGHT')
+    button.timer = F.CreateFS(button, font, fontSize, true, nil, nil, true)
+    button.timer:ClearAllPoints()
+    button.timer:SetPoint('LEFT', button, 'BOTTOMLEFT')
 
     button.UpdateTooltip = UpdateAuraTooltip
     button:SetScript('OnEnter', Aura_OnEnter)
@@ -170,10 +170,10 @@ function UNITFRAME.PostUpdateButton(element, button, unit, data)
         if duration and duration > 0 then
             button.expiration = expiration
             button:SetScript('OnUpdate', F.CooldownOnUpdate)
-            button.Timer:Show()
+            button.timer:Show()
         else
             button:SetScript('OnUpdate', nil)
-            button.Timer:Hide()
+            button.timer:Hide()
         end
     end
 
@@ -221,20 +221,20 @@ function UNITFRAME.PostUpdateButton(element, button, unit, data)
 
     local fontSize = max((element.width or element.size) * 0.4, 12)
     local font = C.Assets.Fonts.HalfHeight
-    if button.Count then
-        button.Count:SetFont(font, fontSize, 'OUTLINE')
+    if button.count then
+        button.count:SetFont(font, fontSize, 'OUTLINE')
     end
-    if button.Timer then
-        button.Timer:SetFont(font, fontSize, 'OUTLINE')
+    if button.timer then
+        button.timer:SetFont(font, fontSize, 'OUTLINE')
     end
 
     local isPartyAura = element.partyAura
     if isPartyAura then
-        button.Count:ClearAllPoints()
-        button.Count:SetPoint('CENTER', button, 'TOP')
-        button.Timer:ClearAllPoints()
-        button.Timer:SetPoint('CENTER', button, 'BOTTOM')
-        button.Timer:SetFont(font, fontSize, 'OUTLINE')
+        button.count:ClearAllPoints()
+        button.count:SetPoint('CENTER', button, 'TOP')
+        button.timer:ClearAllPoints()
+        button.timer:SetPoint('CENTER', button, 'BOTTOM')
+        button.timer:SetFont(font, fontSize, 'OUTLINE')
     end
 
     -- local newTexture = UNITFRAME.ReplacedSpellIcons[button.spellID]
@@ -243,7 +243,7 @@ function UNITFRAME.PostUpdateButton(element, button, unit, data)
     -- end
 
     if element.bolsterInstanceID and element.bolsterInstanceID == button.auraInstanceID then
-		button.Count:SetText(element.bolsterStacks)
+		button.count:SetText(element.bolsterStacks)
 	end
 end
 
@@ -317,8 +317,8 @@ function UNITFRAME.ModifierCustomFilter()
 end
 
 function UNITFRAME.PostUpdateGapButton(_, _, button)
-    if button.bg and button.bg:IsShown() then
-        button.bg:Hide()
+    if button and button:IsShown() then
+        button:Hide()
     end
 end
 
