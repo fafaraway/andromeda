@@ -37,7 +37,7 @@ local function AddLines(self)
     end
 
     if itemSellPrice and itemSellPrice > 0 then
-        self:AddDoubleLine(L['Sale Price'] .. ':', GetMoneyString(itemSellPrice, true), 0.5, 0.8, 1, 1, 1, 1)
+        self:AddDoubleLine(_G.AUCTION_PRICE .. ':', GetMoneyString(itemSellPrice, true), 0.5, 0.8, 1, 1, 1, 1)
     end
 end
 
