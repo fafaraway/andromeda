@@ -19,7 +19,7 @@ local function ConfigureBossStyle(self)
     UNITFRAME:CreateAuras(self)
     UNITFRAME:CreateRangeCheck(self)
     UNITFRAME:CreateRaidTargetIndicator(self)
-    UNITFRAME:CreateSelectedBorder(self)
+    UNITFRAME:CreateTargetBorder(self)
 end
 
 local boss = {}

@@ -15,7 +15,7 @@ local function ConfigureArenaStyle(self)
     UNITFRAME:CreateCastBar(self)
     UNITFRAME:CreateAuras(self)
     UNITFRAME:CreateRangeCheck(self)
-    UNITFRAME:CreateSelectedBorder(self)
+    UNITFRAME:CreateTargetBorder(self)
 end
 
 function UNITFRAME:SpawnArena()

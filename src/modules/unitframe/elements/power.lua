@@ -82,7 +82,7 @@ function UNITFRAME:CreatePowerBar(self)
     local power = CreateFrame('StatusBar', nil, self)
     power:SetPoint('LEFT')
     power:SetPoint('RIGHT')
-    power:SetPoint('TOP', self.Health, 'BOTTOM', 0, -C.MULT)
+    power:SetPoint('BOTTOM')
     power:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
     F:SmoothBar(power)
 

@@ -191,11 +191,11 @@ end
 
 -- Unitframe
 
-local function UpdateHealthColor()
+local function UpdateHealthBarColor()
     for _, frame in pairs(oUF.objects) do
         local style = frame.unitStyle
         if style and style ~= 'nameplate' then
-            UNITFRAME:UpdateHealthColor(frame, true)
+            UNITFRAME:UpdateHealthBarColor(frame, true)
         end
     end
 end
@@ -1670,18 +1670,17 @@ GUI.OptionsList = {
         {
             4,
             'Unitframe',
-            'ColorStyle',
+            'HealthColorStyle',
             L['Health Color'],
             nil,
             {
-                L['Default Black'],
-                L['Class Color'],
-                L['Percentage Gradient'],
-                L['rainbow'],
+                L['opaque grey'],
+                L['opaque Class Color'],
+                L['opaque gradient'],
                 L['clear class color'],
                 L['clear gradient'],
             },
-            UpdateHealthColor,
+            UpdateHealthBarColor,
         },
         {
             1,

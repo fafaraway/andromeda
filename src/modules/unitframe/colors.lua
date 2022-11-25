@@ -3,7 +3,7 @@ local UNITFRAME = F:GetModule('UnitFrame')
 
 local colors = F.Libs.oUF.colors
 
-function UNITFRAME:UpdateHealthColor()
+function UNITFRAME:UpdateHealthDefaultColor()
     local color = C.DB.Unitframe.HealthColor
     colors.health = { color.r, color.g, color.b }
 end

@@ -2,23 +2,16 @@ local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('UnitFrame')
 local oUF = F.Libs.oUF
 
-UNITFRAME.UnitFrames = {
-    ['player'] = true,
-    ['target'] = true,
-    ['focus'] = true,
-    ['pet'] = true,
-    ['targettarget'] = true,
-    ['focustarget'] = true,
-    ['boss'] = true,
-    ['arena'] = true,
-}
+local sbColor = { 0.1, 0.1, 0.1, 1 }
+local bgColor = { 0.6, 0.6, 0.6, 1 }
 
-UNITFRAME.GroupFrames = {
-    ['party'] = true,
-    ['raid'] = true,
-}
-
-local function SetHealthColor(health, index)
+-- 头像框体颜色风格
+-- 1: 统一黑色
+-- 2: 玩家单位根据职业染色，非玩家单位根据 reaction 染色
+-- 3: 根据生命值百分比渐变染色
+-- 4: 透明风格，损失血量染色同 2
+-- 5: 透明风格，职业色渐变，损失血量染色同 3
+local function updateHealthColorByIndex(health, index)
     health.colorClass = (index == 2)
     health.colorReaction = (index == 2)
 
@@ -37,23 +30,24 @@ local function SetHealthColor(health, index)
     health.colorSmooth = (index == 3)
 
     if index == 1 then
-        local color = C.DB.Unitframe.HealthColor
-        health:SetStatusBarColor(color.r, color.g, color.b)
-        if health.bg then
-            health.bg:SetVertexColor(0.35, 0.35, 0.35)
-        end
+        --local color = C.DB.Unitframe.HealthColor
+        health:SetStatusBarColor(sbColor[1], sbColor[2], sbColor[3], sbColor[4])
+
+        health.bg:SetVertexColor(bgColor[1], bgColor[2], bgColor[3], bgColor[4])
+
+    elseif index == 4 or index == 5 then
+        health:SetStatusBarColor(0.1, 0.1, 0.1, 0.45)
     end
 end
 
 function UNITFRAME:UpdateHealthBarColor(self, force)
     local style = self.unitStyle
-    local isRaid = (style == 'raid')
     local health = self.Health
 
-    if isRaid then
-        SetHealthColor(health, C.DB.Unitframe.RaidColorStyle)
+    if style == 'raid' then
+        updateHealthColorByIndex(health, C.DB.Unitframe.RaidHealthColorStyle)
     else
-        SetHealthColor(health, C.DB.Unitframe.ColorStyle)
+        updateHealthColorByIndex(health, C.DB.Unitframe.HealthColorStyle)
     end
 
     if force then
@@ -61,64 +55,42 @@ function UNITFRAME:UpdateHealthBarColor(self, force)
     end
 end
 
-local function PreUpdateHealth(self, unit)
-    if not unit or self.unit ~= unit then
-        return
-    end
+local endColor = CreateColor(0, 0, 0, 0.25)
+function UNITFRAME.PostUpdateHealth(element, unit, cur, max)
+    local self = element.__owner
+    local style = self.unitStyle
+    local useClassColor, useGradient, useGradientClass
 
-    local cur, max = UnitHealth(unit), UnitHealthMax(unit)
-    local isOffline = not UnitIsConnected(unit)
-    local isDead = UnitIsDead(unit)
-    local isGhost = UnitIsGhost(unit)
+    if style == 'raid' then
+        useClassColor = C.DB.Unitframe.RaidHealthColorStyle == 4
 
-    self:SetMinMaxValues(0, max)
-
-    if isOffline then
-        self:SetValue(0)
-    elseif isGhost or isDead then
-        self:SetValue(max)
+        useGradient = C.DB.Unitframe.RaidHealthColorStyle == 5
+        useGradientClass = C.DB.Unitframe.RaidHealthColorStyle == 5
     else
-        if max == cur then
-            self:SetValue(0)
-        else
-            self:SetValue(max - cur)
-        end
+        useClassColor = C.DB.Unitframe.HealthColorStyle == 4
+
+        useGradient = C.DB.Unitframe.HealthColorStyle == 5
+        useGradientClass = C.DB.Unitframe.HealthColorStyle == 5
     end
-end
 
-local function PostUpdateHealth(self, unit, cur, max)
-    local isOffline = not UnitIsConnected(unit)
-    local isDead = UnitIsDead(unit)
-    local isGhost = UnitIsGhost(unit)
-
-    if isOffline then
-        self:SetValue(0)
-    elseif isGhost or isDead then
-        self:SetValue(max)
-    else
-        if max == cur then
-            self:SetValue(0)
-        else
-            self:SetValue(max - cur)
-        end
+    if useGradient then
+        element.bg:SetVertexColor(self:ColorGradient(cur or 1, max or 1, 1, 0, 0, 1, 0.7, 0, 0.7, 1, 0))
     end
-end
 
-local function PostUpdateColor(self, unit)
-    local parent = self.__owner
-    local inverted = C.DB.Unitframe.InvertedColorMode
-    local isOffline = not UnitIsConnected(unit)
+    local color
+    if UnitIsPlayer(unit) then
+        local _, class = UnitClass(unit)
+        color = self.colors.class[class]
+    elseif UnitReaction(unit, 'player') then
+        color = self.colors.reaction[UnitReaction(unit, 'player')]
+    end
+    if color then
+        if useGradientClass then
+            element:GetStatusBarTexture():SetGradient('VERTICAL', CreateColor(color[1], color[2], color[3], 0.65), endColor)
+        end
 
-    if inverted then
-        local color = C.DB.Unitframe.InvertedHealthColor
-        local alpha = C.DB.Unitframe.InvertedHealthAlpha
-
-        if isOffline then
-            local r, g, b = unpack(oUF.colors.disconnected)
-            parent.backdrop:SetBackdropColor(r, g, b, alpha)
-        else
-            parent.backdrop:SetBackdropColor(color.r, color.g, color.b, alpha)
-            --parent.backdrop:SetBackdropColor(0, 0, 0, 0.4)
+        if useClassColor then
+            element.bg:SetVertexColor(color[1], color[2], color[3], 1)
         end
     end
 end
@@ -126,7 +98,6 @@ end
 function UNITFRAME:CreateHealthBar(self)
     local style = self.unitStyle
     local smooth = C.DB.Unitframe.Smooth
-    local inverted = C.DB.Unitframe.InvertedColorMode
     local isPlayer = style == 'player'
     local isPet = style == 'pet'
     local isTarget = style == 'target'
@@ -139,12 +110,12 @@ function UNITFRAME:CreateHealthBar(self)
     local isArena = style == 'arena'
 
     local health = CreateFrame('StatusBar', nil, self)
-    health:SetFrameStrata('LOW')
-    health:SetReverseFill(inverted)
-    health:SetStatusBarTexture(UNITFRAME.StatusBarTex)
     health:SetPoint('LEFT')
     health:SetPoint('RIGHT')
     health:SetPoint('TOP')
+    health:SetFrameStrata('LOW')
+    health:SetStatusBarTexture(UNITFRAME.StatusBarTex)
+    health:SetStatusBarColor(sbColor[1], sbColor[2], sbColor[3], sbColor[4])
     F:SmoothBar(health)
     health.Smooth = smooth
 
@@ -170,31 +141,28 @@ function UNITFRAME:CreateHealthBar(self)
         health:SetHeight(C.DB.Unitframe.ArenaHealthHeight)
     end
 
-    if inverted then
-        local gradient = health:CreateTexture(nil, 'BACKGROUND')
-        gradient:SetPoint('TOPLEFT')
-        gradient:SetPoint('BOTTOMRIGHT')
-        gradient:SetTexture(C.Assets.Textures.Backdrop)
-
-        if C.IS_NEW_PATCH then
-            gradient:SetGradient('VERTICAL', CreateColor(0.3, 0.3, 0.3, 0.6), CreateColor(0.1, 0.1, 0.1, 0.6))
-        else
-            gradient:SetGradientAlpha('VERTICAL', 0.3, 0.3, 0.3, 0.6, 0.1, 0.1, 0.1, 0.6)
-        end
-
-        self.gradient = gradient
-    else
-        local bg = health:CreateTexture(nil, 'BACKGROUND')
-        bg:SetAllPoints(health)
-        bg:SetTexture(UNITFRAME.StatusBarTex)
-        bg.multiplier = 0.25
-        health.bg = bg
-    end
+    local bg = health:CreateTexture(nil, 'BACKGROUND')
+    bg:SetTexture(UNITFRAME.StatusBarTex)
+    bg:SetPoint('TOPLEFT', health:GetStatusBarTexture(), 'TOPRIGHT')
+    bg:SetPoint('BOTTOMRIGHT', health)
+    bg:SetVertexColor(bgColor[1], bgColor[2], bgColor[3], bgColor[4])
+    bg.multiplier = 0.25
 
     self.Health = health
-    self.Health.PreUpdate = inverted and PreUpdateHealth
-    self.Health.PostUpdate = inverted and PostUpdateHealth
-    self.Health.PostUpdateColor = inverted and PostUpdateColor
+    self.Health.bg = bg
+
+    self.Health.PostUpdate = UNITFRAME.PostUpdateHealth
 
     UNITFRAME:UpdateHealthBarColor(self)
+end
+
+-- set health update frequency
+function UNITFRAME:UpdateRaidHealthMethod()
+    for _, frame in pairs(oUF.objects) do
+        if frame.unitStyle == 'raid' then
+            frame:SetHealthUpdateMethod(C.DB.Unitframe.FrequentHealth)
+            frame:SetHealthUpdateSpeed(C.DB.Unitframe.HealthFrequency)
+            frame.Health:ForceUpdate()
+        end
+    end
 end

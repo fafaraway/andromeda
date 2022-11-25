@@ -106,9 +106,9 @@ local function CreatePartyStyle(self)
     UNITFRAME:CreateGroupRoleTag(self)
     UNITFRAME:CreatePhaseIndicator(self)
     UNITFRAME:CreateSummonIndicator(self)
-    UNITFRAME:CreateThreatIndicator(self)
     UNITFRAME:CreateRaidTargetIndicator(self)
-    UNITFRAME:CreateSelectedBorder(self)
+    UNITFRAME:CreateTargetBorder(self)
+    UNITFRAME:CreateThreatBorder(self)
     UNITFRAME:CreateRangeCheck(self)
     UNITFRAME:CreatePartyAuras(self)
     UNITFRAME:CreatePartyBuffs(self)
@@ -394,7 +394,8 @@ local function CreateRaidStyle(self)
     UNITFRAME:CreatePhaseIndicator(self)
     UNITFRAME:CreateSummonIndicator(self)
     UNITFRAME:CreateRaidTargetIndicator(self)
-    UNITFRAME:CreateSelectedBorder(self)
+    UNITFRAME:CreateTargetBorder(self)
+    UNITFRAME:CreateThreatBorder(self)
     UNITFRAME:CreateRangeCheck(self)
     UNITFRAME:CreateCornerIndicator(self)
     UNITFRAME:CreateRaidBuffs(self)
@@ -619,30 +620,20 @@ function UNITFRAME:SetGroupFramePos()
     end
 end
 
--- set health update frequency
-
-function UNITFRAME:UpdateRaidHealthMethod()
-    for _, frame in pairs(oUF.objects) do
-        if frame.unitStyle == 'raid' then
-            frame:SetHealthUpdateMethod(C.DB.Unitframe.FrequentHealth)
-            frame:SetHealthUpdateSpeed(C.DB.Unitframe.HealthFrequency)
-            frame.Health:ForceUpdate()
-        end
-    end
-end
-
 function UNITFRAME:SpawnUnits()
     if not C.DB.Unitframe.Enable then
         return
     end
 
-    UNITFRAME:UpdateHealthColor()
+    UNITFRAME:UpdateHealthDefaultColor()
     UNITFRAME:UpdateClassColor()
     UNITFRAME:CreateTargetSound()
     UNITFRAME:CheckPartySpells()
     UNITFRAME:CheckCornerSpells()
     UNITFRAME:UpdateCornerSpells()
     UNITFRAME:InitDebuffWatcher()
+
+    --UNITFRAME:UpdateRaidInfo()
 
     UNITFRAME:CheckPartyAurasFilter()
     UNITFRAME:RefreshPartyAurasFilter()

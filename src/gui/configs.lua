@@ -148,7 +148,7 @@ C.CharacterSettings = {
     },
     Unitframe = {
         Enable = true,
-        ColorStyle = 2,
+        HealthColorStyle = 4,
         InvertedColorMode = true,
         Smooth = true,
         Portrait = true,
@@ -261,7 +261,7 @@ C.CharacterSettings = {
         PartyAuraNum = 4,
 
         RaidFrame = true,
-        RaidColorStyle = 2,
+        RaidHealthColorStyle = 4,
         TeamIndex = false,
         RaidDirec = 2,
         RaidRows = 1,

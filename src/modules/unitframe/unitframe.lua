@@ -17,64 +17,65 @@ UNITFRAME.Positions = {
 
 -- Backdrop
 
-local function UF_OnEnter(self)
+local function onEnter(self)
     UnitFrame_OnEnter(self)
-    self.Highlight:Show()
+    self.__highlight:Show()
 end
 
-local function UF_OnLeave(self)
+local function onLeave(self)
     UnitFrame_OnLeave(self)
-    self.Highlight:Hide()
+    self.__highlight:Hide()
 end
 
 function UNITFRAME:CreateBackdrop(self, onKeyDown)
-    local highlight = self:CreateTexture(nil, 'OVERLAY')
-    highlight:SetAllPoints()
-    highlight:SetTexture('Interface\\PETBATTLES\\PetBattle-SelectedPetGlow')
-    highlight:SetTexCoord(0, 1, 0.5, 1)
-    highlight:SetVertexColor(0.6, 0.6, 0.6)
-    highlight:SetBlendMode('BLEND')
-    highlight:Hide()
-    self.Highlight = highlight
+    local hl = self:CreateTexture(nil, 'OVERLAY')
+    hl:SetAllPoints()
+    hl:SetTexture('Interface\\PETBATTLES\\PetBattle-SelectedPetGlow')
+    hl:SetTexCoord(0, 1, 0.5, 1)
+    hl:SetVertexColor(0.6, 0.6, 0.6)
+    hl:SetBlendMode('ADD')
+    hl:Hide()
+
+    self.__highlight = hl
 
     self:RegisterForClicks(onKeyDown and 'AnyDown' or 'AnyUp')
-    self:HookScript('OnEnter', UF_OnEnter)
-    self:HookScript('OnLeave', UF_OnLeave)
+    self:HookScript('OnEnter', onEnter)
+    self:HookScript('OnLeave', onLeave)
 
-    self.backdrop = F.SetBD(self)
-    -- if C.DB.Unitframe.InvertedColorMode then
-    --     local color = C.DB.Unitframe.InvertedHealthColor
-    --     local alpha = C.DB.Unitframe.InvertedHealthAlpha
-    --     self.backdrop:SetBackdropColor(color.r, color.g, color.b, alpha)
+    local bg = F.SetBD(self)
+    bg:SetBackdropBorderColor(0, 0, 0, 1)
+    bg:SetFrameStrata('BACKGROUND')
 
-    -- else
-    --     self.backdrop:SetBackdropColor(0, 0, 0, 0)
-    -- end
-    self.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
-    self.backdrop:SetFrameStrata('BACKGROUND')
-    self.shadow = self.backdrop.__shadow
+    self.__bg = bg
+    self.__sd = bg.__shadow
+
+    -- self.backdrop = F.SetBD(self)
+    -- self.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
+    -- self.backdrop:SetFrameStrata('BACKGROUND')
+    -- self.shadow = self.backdrop.__shadow
 end
 
--- Selected border
+-- Target border
 
-local function UpdateSelectedBorder(self)
+local function updateTargetBorder(self)
     if UnitIsUnit('target', self.unit) then
-        self.Border:Show()
+        self.__tarBorder:Show()
     else
-        self.Border:Hide()
+        self.__tarBorder:Hide()
     end
 end
 
-function UNITFRAME:CreateSelectedBorder(self)
-    local border = F.CreateBDFrame(self)
-    border:SetBackdropBorderColor(1, 1, 1, 1)
-    border:SetBackdropColor(0, 0, 0, 0)
-    border:SetFrameLevel(self:GetFrameLevel() + 5)
-    border:Hide()
+function UNITFRAME:CreateTargetBorder(self)
+    local sd = F.CreateBDFrame(self, 0)
+    sd:SetBackdropBorderColor(1, 1, 1)
 
-    self.Border = border
-    self:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateSelectedBorder, true)
-    self:RegisterEvent('GROUP_ROSTER_UPDATE', UpdateSelectedBorder, true)
+    --sd:SetFrameLevel(self:GetFrameLevel() + 5)
+    sd:Hide()
+
+    self.__tarBorder = sd
+
+    self:RegisterEvent('PLAYER_TARGET_CHANGED', updateTargetBorder, true)
+    self:RegisterEvent('GROUP_ROSTER_UPDATE', updateTargetBorder, true)
 end
 
 -- Sound effect for target/focus changed
@@ -114,55 +115,15 @@ end
 
 -- Remove blizz raid frame
 
-local function HideBlizzPartyFrame(baseName, doNotReparent)
-    local frame = _G[baseName]
-
-    if frame then
-        frame:UnregisterAllEvents()
-        frame:Hide()
-
-        if not doNotReparent then
-            frame:SetParent(F.HiddenFrame)
-        end
-
-        local health = frame.healthBar or frame.healthbar
-        if health then
-            health:UnregisterAllEvents()
-        end
-
-        local power = frame.manabar
-        if power then
-            power:UnregisterAllEvents()
-        end
-
-        local spell = frame.castBar or frame.spellbar
-        if spell then
-            spell:UnregisterAllEvents()
-        end
-
-        local altpowerbar = frame.powerBarAlt
-        if altpowerbar then
-            altpowerbar:UnregisterAllEvents()
-        end
-
-        local buffFrame = frame.BuffFrame
-        if buffFrame then
-            buffFrame:UnregisterAllEvents()
-        end
-    end
-end
-
 function UNITFRAME:RemoveBlizzRaidFrame()
-    -- raid
+    if _G.CompactPartyFrame then
+        _G.CompactPartyFrame:UnregisterAllEvents()
+    end
+
     CompactRaidFrameManager_SetSetting('IsShown', '0')
     _G.UIParent:UnregisterEvent('GROUP_ROSTER_UPDATE')
     _G.CompactRaidFrameManager:UnregisterAllEvents()
     _G.CompactRaidFrameManager:SetParent(F.HiddenFrame)
-
-    -- party
-    for i = 1, 4 do
-        HideBlizzPartyFrame('PartyMemberFrame' .. i)
-    end
 end
 
 -- Make sure the state of each element is reliable #TODO
