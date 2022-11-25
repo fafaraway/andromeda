@@ -434,17 +434,42 @@ function BLIZZARD:AddPGFSortingExpression()
     end
 end
 
--- Fix duplicate application entry
-local function Fix(self)
-    if next(self.results) and next(self.applications) then
-        for _, value in ipairs(self.applications) do
-            tDeleteItem(self.results, value)
+--[[
+    Fix LFG taint
+    Credit: PremadeGroupsFilter
+--]]
+
+function BLIZZARD:FixListingTaint()
+    if IsAddOnLoaded('PremadeGroupsFilter') then
+        return
+    end
+
+    local activityIdOfArbitraryMythicPlusDungeon = 1160 -- Algeth'ar Academy
+    if not C_LFGList.IsPlayerAuthenticatedForLFG(activityIdOfArbitraryMythicPlusDungeon) then
+        return
+    end
+
+    C_LFGList.GetPlaystyleString = function(playstyle, activityInfo)
+        if not (activityInfo and playstyle and playstyle ~= 0 and C_LFGList.GetLfgCategoryInfo(activityInfo.categoryID).showPlaystyleDropdown) then
+            return nil
         end
 
-        self.totalResults = #self.results
+        local globalStringPrefix
+        if activityInfo.isMythicPlusActivity then
+            globalStringPrefix = 'GROUP_FINDER_PVE_PLAYSTYLE'
+        elseif activityInfo.isRatedPvpActivity then
+            globalStringPrefix = 'GROUP_FINDER_PVP_PLAYSTYLE'
+        elseif activityInfo.isCurrentRaidActivity then
+            globalStringPrefix = 'GROUP_FINDER_PVE_RAID_PLAYSTYLE'
+        elseif activityInfo.isMythicActivity then
+            globalStringPrefix = 'GROUP_FINDER_PVE_MYTHICZERO_PLAYSTYLE'
+        end
 
-        _G.LFGListSearchPanel_UpdateResults(self)
+        return globalStringPrefix and _G[globalStringPrefix .. tostring(playstyle)] or nil
     end
+
+    -- Disable automatic group titles to prevent tainting errors
+    _G.LFGListEntryCreation_SetTitleFromActivityInfo = function(_) end
 end
 
 function BLIZZARD:EnhancedPremade()
@@ -470,10 +495,10 @@ function BLIZZARD:EnhancedPremade()
     hooksecurefunc('LFGListInviteDialog_Show', BLIZZARD.HookDialogOnShow)
     hooksecurefunc('LFGListGroupDataDisplayEnumerate_Update', BLIZZARD.ReplaceGroupRoles)
     hooksecurefunc('LFGListSearchEntry_Update', BLIZZARD.ShowLeaderOverallScore)
-    hooksecurefunc('LFGListSearchPanel_UpdateResultList', Fix)
 
     BLIZZARD:AddAutoAcceptButton()
     BLIZZARD:ReplaceFindGroupButton()
     BLIZZARD:AddDungeonsFilter()
     BLIZZARD:AddPGFSortingExpression()
+    BLIZZARD:FixListingTaint()
 end
