@@ -95,6 +95,7 @@ function TOOLTIP:AddIDs()
         end
 
         if caster then
+            self:AddLine(' ')
             local name = GetUnitName(caster, true)
             local hexColor = F:RgbToHex(F:UnitColor(caster))
             self:AddDoubleLine(L['From'] .. ':', hexColor .. name)
@@ -115,6 +116,7 @@ function TOOLTIP:AddIDs()
         end
 
         if caster then
+            self:AddLine(' ')
             local name = GetUnitName(caster, true)
             local hexColor = F:RgbToHex(F:UnitColor(caster))
             self:AddDoubleLine(L['From'] .. ':', hexColor .. name)
