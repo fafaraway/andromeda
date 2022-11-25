@@ -9,6 +9,7 @@ function UNITFRAME:UpdatePartyWatcherSpells()
         local name = GetSpellInfo(spellID)
         if name then
             local modDuration = _G.ANDROMEDA_ADB['PartySpellsList'][spellID]
+
             if not modDuration or modDuration > 0 then
                 UNITFRAME.PartySpellsList[spellID] = duration
             end
@@ -28,10 +29,11 @@ function UNITFRAME:PartyWatcherPostUpdate(button, unit, spellID)
     if not watchingList[guid] then
         watchingList[guid] = {}
     end
+
     watchingList[guid][spellID] = button
 end
 
-function UNITFRAME:HandleCDMessage(...)
+function UNITFRAME:HandleCooldownMsg(...)
     local prefix, msg = ...
     if prefix ~= 'ZenTracker' then
         return
@@ -43,6 +45,7 @@ function UNITFRAME:HandleCDMessage(...)
         duration = tonumber(duration)
         remaining = tonumber(remaining)
         local button = watchingList[guid] and watchingList[guid][spellID]
+
         if button then
             local start = GetTime() + remaining - duration
             if start > 0 and duration > 1.5 then
@@ -52,10 +55,11 @@ function UNITFRAME:HandleCDMessage(...)
     end
 end
 
-local function SendPartySyncMsg(text)
+local function sendSyncMsg(text)
     if IsInRaid() or not IsInGroup() then
         return
     end
+
     if not IsInGroup(_G.LE_PARTY_CATEGORY_HOME) and IsInGroup(_G.LE_PARTY_CATEGORY_INSTANCE) then
         C_ChatInfo.SendAddonMessage('ZenTracker', text, 'INSTANCE_CHAT')
     else
@@ -64,7 +68,7 @@ local function SendPartySyncMsg(text)
 end
 
 local lastUpdate = 0
-function UNITFRAME:SendCDMessage()
+function UNITFRAME:SendCooldownMsg()
     local thisTime = GetTime()
     if thisTime - lastUpdate >= 5 then
         local value = watchingList[UNITFRAME.myGUID]
@@ -76,12 +80,14 @@ function UNITFRAME:SendCDMessage()
                     if remaining < 0 then
                         remaining = 0
                     end
-                    SendPartySyncMsg(
+
+                    sendSyncMsg(
                         format('3:U:%s:%d:%.2f:%.2f:%s', UNITFRAME.myGUID, spellID, duration, remaining, '-')
                     ) -- sync to others
                 end
             end
         end
+
         lastUpdate = thisTime
     end
 end
@@ -91,12 +97,12 @@ function UNITFRAME:UpdateSyncStatus()
     if IsInGroup() and not IsInRaid() and C.DB.Unitframe.PartyFrame then
         local thisTime = GetTime()
         if thisTime - lastSyncTime > 5 then
-            SendPartySyncMsg(format('3:H:%s:0::0:1', UNITFRAME.myGUID)) -- handshake to ZenTracker
+            sendSyncMsg(format('3:H:%s:0::0:1', UNITFRAME.myGUID)) -- handshake to ZenTracker
             lastSyncTime = thisTime
         end
-        F:RegisterEvent('SPELL_UPDATE_COOLDOWN', UNITFRAME.SendCDMessage)
+        F:RegisterEvent('SPELL_UPDATE_COOLDOWN', UNITFRAME.SendCooldownMsg)
     else
-        F:UnregisterEvent('SPELL_UPDATE_COOLDOWN', UNITFRAME.SendCDMessage)
+        F:UnregisterEvent('SPELL_UPDATE_COOLDOWN', UNITFRAME.SendCooldownMsg)
     end
 end
 
@@ -107,7 +113,7 @@ function UNITFRAME:SyncWithZenTracker()
 
     UNITFRAME.myGUID = UnitGUID('player')
     C_ChatInfo.RegisterAddonMessagePrefix('ZenTracker')
-    F:RegisterEvent('CHAT_MSG_ADDON', UNITFRAME.HandleCDMessage)
+    F:RegisterEvent('CHAT_MSG_ADDON', UNITFRAME.HandleCooldownMsg)
 
     UNITFRAME:UpdateSyncStatus()
     F:RegisterEvent('GROUP_ROSTER_UPDATE', UNITFRAME.UpdateSyncStatus)
