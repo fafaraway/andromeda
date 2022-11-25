@@ -137,7 +137,8 @@ do
         if type(message) == 'string' and strfind(message, '|cff') then
             for hex, class in pairs(blizzHexColors) do
                 local color = C.ClassColors[class]
-                message = color and gsub(message, hex, color.colorStr) or message
+                color = F:RgbToHex(color.r, color.g, color.b, 'ff')
+                message = color and gsub(message, hex, color) or message
             end
         end
         return AddMessage[frame](frame, message, ...)
@@ -160,7 +161,8 @@ end)
 local primaryTalentTree, specName
 hooksecurefunc('PaperDollFrame_SetLevel', function()
     local className, class = UnitClass('player')
-    local color = C.ClassColors[class].colorStr
+    local color = C.ClassColors[class]
+    color = F:RgbToHex(color.r, color.g, color.b, 'ff')
 
     primaryTalentTree, specName = GetSpecialization()
     if primaryTalentTree then

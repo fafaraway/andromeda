@@ -36,7 +36,6 @@ do
             C.ClassColors[class].r = value.r
             C.ClassColors[class].g = value.g
             C.ClassColors[class].b = value.b
-            C.ClassColors[class].colorStr = value.colorStr
         end
 
         local classColor = _G.ANDROMEDA_ADB.WidgetHighlightClassColor
