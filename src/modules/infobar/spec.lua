@@ -163,18 +163,19 @@ local function Block_OnMouseUp(self, btn)
 end
 
 local function Block_OnEvent(self)
-    --[[ local currentSpec = GetSpecialization()
-    local lootSpecID = GetLootSpecialization()
+    --local currentSpec = GetSpecialization()
 
-    if currentSpec then
-        local _, name = GetSpecializationInfo(currentSpec)
+    currentSpecIndex = GetSpecialization()
+    currentLootIndex = GetLootSpecialization()
+
+    if currentSpecIndex and currentSpecIndex < 5 then
+        local _, name = GetSpecializationInfo(currentSpecIndex)
+
         if not name then
             return
         end
-        local _, lootname = GetSpecializationInfoByID(lootSpecID)
-        -- local role = GetSpecializationRole(currentSpec)
-        -- local lootrole = GetSpecializationRoleByID(lootSpecID)
 
+        local _, lootname = GetSpecializationInfoByID(currentLootIndex)
         if not lootname or name == lootname then
             self.text:SetText(format(L['Spec'] .. ': ' .. C.MY_CLASS_COLOR .. '%s  |r' .. L['Loot'] .. ':' .. C.MY_CLASS_COLOR .. ' %s', name, name))
         else
@@ -182,23 +183,6 @@ local function Block_OnEvent(self)
         end
     else
         self.text:SetText(format(L['Spec'] .. ': ' .. C.MY_CLASS_COLOR .. '%s  |r', _G.NONE))
-    end --]]
-
-    currentSpecIndex = GetSpecialization()
-    if currentSpecIndex and currentSpecIndex < 5 then
-        local _, name, _, icon = GetSpecializationInfo(currentSpecIndex)
-        if not name then
-            return
-        end
-        currentLootIndex = GetLootSpecialization()
-        if currentLootIndex == 0 then
-            icon = addIcon(icon)
-        else
-            icon = addIcon(select(4, GetSpecializationInfoByID(currentLootIndex)))
-        end
-        self.text:SetText(C.MY_CLASS_COLOR .. name .. icon)
-    else
-        self.text:SetText(_G.SPECIALIZATION .. ': ' .. C.MY_CLASS_COLOR .. _G.NONE)
     end
 end
 
