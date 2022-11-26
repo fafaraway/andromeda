@@ -1521,6 +1521,7 @@ local function UpdateUnitFrameSize()
     SetUnitFrameSize(_G.oUF_Focus, 'Focus')
     SetUnitFrameSize(_G.oUF_FocusTarget, 'FocusTarget')
 
+    UNITFRAME:UpdateClassPower()
     UNITFRAME:UpdateAuras()
 end
 

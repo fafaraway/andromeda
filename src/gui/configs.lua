@@ -157,6 +157,7 @@ C.CharacterSettings = {
         InvertedHealthAlpha = 0.8,
         FrequentHealth = false,
         HealthFrequency = 0.2,
+        AlternativePower = true,
 
         Fader = true,
         MinAlpha = 0,

@@ -1,4 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="altpower.lua"/>
     <Script file="auras.lua"/>
     <Script file="castbar.lua"/>
     <Script file="classpower.lua"/>

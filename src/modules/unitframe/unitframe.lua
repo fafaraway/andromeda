@@ -15,6 +15,33 @@ UNITFRAME.Positions = {
     simple = { 'TOPLEFT', C.UI_GAP, -100 },
 }
 
+-- Utility
+
+function UNITFRAME:GetHeightVal(bar, val1, val2, val3, val4, val5, val6, val7, val8, val9, val10)
+    local style = bar.unitStyle
+    if style == 'player' then
+        return val1
+    elseif style == 'pet' then
+        return val2
+    elseif style == 'target' then
+        return val3
+    elseif style == 'targettarget' then
+        return val4
+    elseif style == 'focus' then
+        return val5
+    elseif style == 'focustarget' then
+        return val6
+    elseif style == 'party' then
+        return val7
+    elseif style == 'raid' then
+        return val8
+    elseif style == 'boss' then
+        return val9
+    elseif style == 'arena' then
+        return val10
+    end
+end
+
 -- Backdrop
 
 local function onEnter(self)
@@ -48,11 +75,6 @@ function UNITFRAME:CreateBackdrop(self, onKeyDown)
 
     self.__bg = bg
     self.__sd = bg.__shadow
-
-    -- self.backdrop = F.SetBD(self)
-    -- self.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
-    -- self.backdrop:SetFrameStrata('BACKGROUND')
-    -- self.shadow = self.backdrop.__shadow
 end
 
 -- Target border
@@ -68,8 +90,7 @@ end
 function UNITFRAME:CreateTargetBorder(self)
     local sd = F.CreateBDFrame(self, 0)
     sd:SetBackdropBorderColor(1, 1, 1)
-
-    --sd:SetFrameLevel(self:GetFrameLevel() + 5)
+    -- sd:SetFrameLevel(self:GetFrameLevel() + 5)
     sd:Hide()
 
     self.__tarBorder = sd

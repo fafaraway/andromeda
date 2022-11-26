@@ -1,14 +1,51 @@
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('UnitFrame')
-local oUF = F.Libs.oUF
 
-local function PostUpdatePower(power, unit, _, _, max)
+local function updatePowerColorByIndex(power, index)
+    power.colorPower = (index == 2)
+    power.colorClass = (index ~= 2)
+    power.colorReaction = (index ~= 2)
+
+    if power.SetColorTapping then
+        power:SetColorTapping(index ~= 2)
+    else
+        power.colorTapping = (index ~= 2)
+    end
+
+    if power.SetColorDisconnected then
+        power:SetColorDisconnected(index ~= 2)
+    else
+        power.colorDisconnected = (index ~= 2)
+    end
+end
+
+function UNITFRAME:UpdatePowerBarColor(self, force)
+    local power = self.Power
+    local style = self.unitStyle
+
+    if style == 'raid' then
+        updatePowerColorByIndex(power, C.DB.Unitframe.RaidHealthColorStyle)
+    else
+        updatePowerColorByIndex(power, C.DB.Unitframe.HealthColorStyle)
+
+        if style == 'player' then
+            power.colorPower = (C.DB.Unitframe.HealthColorStyle == 4 or C.DB.Unitframe.HealthColorStyle == 5)
+            power.colorClass = (C.DB.Unitframe.HealthColorStyle == 1 or C.DB.Unitframe.HealthColorStyle == 3)
+        end
+    end
+
+    if force then
+        power:ForceUpdate()
+    end
+end
+
+local function postUpdatePower(power, unit, _, _, max)
     if max == 0 or not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then
         power:SetValue(0)
     end
 end
 
-local function IsSpellAvailable(spellId)
+local function checkSpell(spellId)
     local _, noPower = IsUsableSpell(spellId)
     if noPower then
         return false
@@ -17,7 +54,7 @@ local function IsSpellAvailable(spellId)
     end
 end
 
-local function UpdatePowerColor(power, unit)
+local function updatePowerColorBySpell(power, unit)
     if unit ~= 'player' or UnitHasVehicleUI('player') then
         return
     end
@@ -34,29 +71,29 @@ local function UpdatePowerColor(power, unit)
     local r, g, b = power:GetStatusBarColor()
 
     if isBlood then -- Blood Death Knight
-        if IsSpellAvailable(49998) then -- Death Strike
+        if checkSpell(49998) then -- Death Strike
             power:SetStatusBarColor(r, g, b)
         else
             power:SetStatusBarColor(r * 0.5, g * 0.5, b * 0.5)
         end
     elseif isFrost then -- Frost Death Knight
-        if IsSpellAvailable(49143) then -- Frost Strike
+        if checkSpell(49143) then -- Frost Strike
             power:SetStatusBarColor(r, g, b)
         else
             power:SetStatusBarColor(r * 0.5, g * 0.5, b * 0.5)
         end
     elseif isVengeance then -- Vengeance Demon Hunter
-        if IsSpellAvailable(212084) then -- Fel Devastation
+        if checkSpell(212084) then -- Fel Devastation
             power:SetStatusBarColor(r, g, b)
-        elseif IsSpellAvailable(228477) then -- Soul Cleave
+        elseif checkSpell(228477) then -- Soul Cleave
             power:SetStatusBarColor(r * 0.5, g * 0.5, b * 0.5)
         else
             power:SetStatusBarColor(0.3, 0.3, 0.3)
         end
     elseif isHavoc then -- Havoc Demon Hunter
-        if IsSpellAvailable(162794) then -- Chaos Strike
+        if checkSpell(162794) then -- Chaos Strike
             power:SetStatusBarColor(r, g, b)
-        elseif IsSpellAvailable(198013) then -- Eye Beam
+        elseif checkSpell(198013) then -- Eye Beam
             power:SetStatusBarColor(r * 0.5, g * 0.5, b * 0.5)
         else
             power:SetStatusBarColor(0.3, 0.3, 0.3)
@@ -64,48 +101,39 @@ local function UpdatePowerColor(power, unit)
     end
 end
 
+local frequentUpdateCheck = {
+    ['player'] = true,
+    ['target'] = true,
+    ['focus'] = true,
+}
+
 function UNITFRAME:CreatePowerBar(self)
-    local style = self.unitStyle
-    local smooth = C.DB.Unitframe.Smooth
-    local inverted = C.DB.Unitframe.InvertedColorMode
-    local isPlayer = style == 'player'
-    local isPet = style == 'pet'
-    local isTarget = style == 'target'
-    local isToT = style == 'targettarget'
-    local isFocus = style == 'focus'
-    local isToF = style == 'focustarget'
-    local isParty = style == 'party'
-    local isRaid = style == 'raid'
-    local isBoss = style == 'boss'
-    local isArena = style == 'arena'
+    local powerHeight
+    -- stylua: ignore start
+    powerHeight = UNITFRAME:GetHeightVal(
+        self,
+        C.DB.Unitframe.PlayerPowerHeight,
+        C.DB.Unitframe.PetPowerHeight,
+        C.DB.Unitframe.TargetPowerHeight,
+        C.DB.Unitframe.TargetTargetPowerHeight,
+        C.DB.Unitframe.FocusPowerHeight,
+        C.DB.Unitframe.FocusTargetPowerHeight,
+        C.DB.Unitframe.PartyPowerHeight,
+        C.DB.Unitframe.RaidPowerHeight,
+        C.DB.Unitframe.BossPowerHeight,
+        C.DB.Unitframe.ArenaPowerHeight
+    )
+    -- stylua: ignore end
 
     local power = CreateFrame('StatusBar', nil, self)
     power:SetPoint('LEFT')
     power:SetPoint('RIGHT')
     power:SetPoint('BOTTOM')
+    power:SetHeight(powerHeight)
     power:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
-    F:SmoothBar(power)
 
-    if isPlayer then
-        power:SetHeight(C.DB.Unitframe.PlayerPowerHeight)
-    elseif isPet then
-        power:SetHeight(C.DB.Unitframe.PetPowerHeight)
-    elseif isTarget then
-        power:SetHeight(C.DB.Unitframe.TargetPowerHeight)
-    elseif isToT then
-        power:SetHeight(C.DB.Unitframe.TargetTargetPowerHeight)
-    elseif isFocus then
-        power:SetHeight(C.DB.Unitframe.FocusPowerHeight)
-    elseif isToF then
-        power:SetHeight(C.DB.Unitframe.FocusTargetPowerHeight)
-    elseif isParty then
-        power:SetHeight(C.DB.Unitframe.PartyPowerHeight)
-    elseif isRaid then
-        power:SetHeight(C.DB.Unitframe.RaidPowerHeight)
-    elseif isBoss then
-        power:SetHeight(C.DB.Unitframe.BossPowerHeight)
-    elseif isArena then
-        power:SetHeight(C.DB.Unitframe.ArenaPowerHeight)
+    if C.DB.Unitframe.Smooth then
+        F:SmoothBar(power)
     end
 
     local line = power:CreateTexture(nil, 'OVERLAY')
@@ -115,87 +143,20 @@ function UNITFRAME:CreatePowerBar(self)
     line:SetTexture(C.Assets.Textures.Backdrop)
     line:SetVertexColor(0, 0, 0)
 
-    if not inverted then
-        local bg = power:CreateTexture(nil, 'BACKGROUND')
-        bg:SetAllPoints()
-        bg:SetTexture(C.Assets.Textures.Backdrop)
-        bg.multiplier = 0.1
-        power.bg = bg
-    end
-
-    power.Smooth = smooth
-    power.frequentUpdates = true
-
-    power.colorTapping = true
-    power.colorDisconnected = true
-    power.colorPower = not inverted or style == 'player'
-    power.colorClass = inverted
-    power.colorReaction = inverted
+    local bg = power:CreateTexture(nil, 'BACKGROUND')
+    bg:SetAllPoints()
+    bg:SetTexture(C.Assets.Textures.Backdrop)
+    bg.multiplier = 0.25
+    power.bg = bg
 
     self.Power = power
-    self.Power.PostUpdate = PostUpdatePower
-    self.Power.PostUpdateColor = isPlayer and UpdatePowerColor
+    self.Power.bg = bg
 
-    F:RegisterEvent('PLAYER_TALENT_UPDATE', UpdatePowerColor)
-end
+    power.frequentUpdates = frequentUpdateCheck[self.unitStyle]
+    power.PostUpdate = postUpdatePower
+    power.PostUpdateColor = updatePowerColorBySpell
 
---[[ Alternative power ]]
-local function AltPowerOnEnter(self)
-    if not self:IsVisible() then
-        return
-    end
+    UNITFRAME:UpdatePowerBarColor(self)
 
-    _G.GameTooltip:SetOwner(self, 'ANCHOR_BOTTOMRIGHT')
-    self:UpdateTooltip()
-end
-
-local function AltPowerUpdateTooltip(self)
-    local value = self:GetValue()
-    local min, max = self:GetMinMaxValues()
-    local name, tooltip = GetUnitPowerBarStringsByID(self.__barID)
-    _G.GameTooltip:SetText(name or '', 1, 1, 1)
-    _G.GameTooltip:AddLine(tooltip or '', nil, nil, nil, true)
-    _G.GameTooltip:AddLine(format('%d (%d%%)', value, (value - min) / (max - min) * 100), 1, 1, 1)
-    _G.GameTooltip:Show()
-end
-
-local function PostUpdateAltPower(self, _, cur, _, max)
-    local parent = self.__owner
-
-    if cur and max then
-        local value = parent.AltPowerTag
-        local r, g, b = F:ColorGradient(cur / max, unpack(oUF.colors.smooth))
-
-        self:SetStatusBarColor(r, g, b)
-        value:SetTextColor(r, g, b)
-    end
-
-    if self:IsShown() then
-        if parent.ClassPowerBar then
-            parent.ClassPowerBar:ClearAllPoints()
-            parent.ClassPowerBar:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -3)
-        end
-    else
-        if parent.ClassPowerBar then
-            parent.ClassPowerBar:ClearAllPoints()
-            parent.ClassPowerBar:SetPoint('TOPLEFT', parent, 'BOTTOMLEFT', 0, -3)
-        end
-    end
-end
-
-function UNITFRAME:CreateAlternativePowerBar(self)
-    local smooth = C.DB.Unitframe.Smooth
-    local altPower = CreateFrame('StatusBar', nil, self)
-    altPower:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
-    altPower:SetPoint('TOP', self.Power, 'BOTTOM', 0, -2)
-    altPower:SetSize(self:GetWidth(), C.DB.Unitframe.AltPowerHeight)
-    altPower:EnableMouse(true)
-    altPower.Smooth = smooth
-    altPower.bg = F.SetBD(altPower)
-
-    altPower.UpdateTooltip = AltPowerUpdateTooltip
-    altPower:SetScript('OnEnter', AltPowerOnEnter)
-
-    self.AlternativePower = altPower
-    self.AlternativePower.PostUpdate = PostUpdateAltPower
+    F:RegisterEvent('PLAYER_TALENT_UPDATE', updatePowerColorBySpell)
 end

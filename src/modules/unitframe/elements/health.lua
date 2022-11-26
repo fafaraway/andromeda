@@ -5,12 +5,12 @@ local oUF = F.Libs.oUF
 local sbColor = { 0.1, 0.1, 0.1, 1 }
 local bgColor = { 0.6, 0.6, 0.6, 1 }
 
--- 头像框体颜色风格
--- 1: 统一黑色
--- 2: 玩家单位根据职业染色，非玩家单位根据 reaction 染色
--- 3: 根据生命值百分比渐变染色
--- 4: 透明风格，损失血量染色同 2
--- 5: 透明风格，职业色渐变，损失血量染色同 3
+--[[ 头像框体颜色风格
+    1: 不透明：默认黑色，损失血量灰色
+    2: 不透明：玩家单位根据职业染色，非玩家单位根据 reaction 染色
+    3: 不透明：根据生命值百分比渐变染色
+    4: 透明风格，损失血量染色同 2
+    5: 透明风格，损失血量染色同 3 --]]
 local function updateHealthColorByIndex(health, index)
     health.colorClass = (index == 2)
     health.colorReaction = (index == 2)
@@ -30,11 +30,9 @@ local function updateHealthColorByIndex(health, index)
     health.colorSmooth = (index == 3)
 
     if index == 1 then
-        --local color = C.DB.Unitframe.HealthColor
+        -- local color = C.DB.Unitframe.HealthColor
         health:SetStatusBarColor(sbColor[1], sbColor[2], sbColor[3], sbColor[4])
-
         health.bg:SetVertexColor(bgColor[1], bgColor[2], bgColor[3], bgColor[4])
-
     elseif index == 4 or index == 5 then
         health:SetStatusBarColor(0.1, 0.1, 0.1, 0.45)
     end
@@ -59,18 +57,16 @@ local endColor = CreateColor(0, 0, 0, 0.25)
 function UNITFRAME.PostUpdateHealth(element, unit, cur, max)
     local self = element.__owner
     local style = self.unitStyle
-    local useClassColor, useGradient, useGradientClass
+    local useClassColor, useGradient, useOverlay
 
     if style == 'raid' then
         useClassColor = C.DB.Unitframe.RaidHealthColorStyle == 4
-
         useGradient = C.DB.Unitframe.RaidHealthColorStyle == 5
-        useGradientClass = C.DB.Unitframe.RaidHealthColorStyle == 5
+        useOverlay = C.DB.Unitframe.RaidHealthColorStyle == 4 or C.DB.Unitframe.RaidHealthColorStyle == 5
     else
         useClassColor = C.DB.Unitframe.HealthColorStyle == 4
-
         useGradient = C.DB.Unitframe.HealthColorStyle == 5
-        useGradientClass = C.DB.Unitframe.HealthColorStyle == 5
+        useOverlay = C.DB.Unitframe.HealthColorStyle == 4 or C.DB.Unitframe.HealthColorStyle == 5
     end
 
     if useGradient then
@@ -85,7 +81,7 @@ function UNITFRAME.PostUpdateHealth(element, unit, cur, max)
         color = self.colors.reaction[UnitReaction(unit, 'player')]
     end
     if color then
-        if useGradientClass then
+        if useOverlay then
             element:GetStatusBarTexture():SetGradient('VERTICAL', CreateColor(color[1], color[2], color[3], 0.65), endColor)
         end
 
@@ -96,49 +92,34 @@ function UNITFRAME.PostUpdateHealth(element, unit, cur, max)
 end
 
 function UNITFRAME:CreateHealthBar(self)
-    local style = self.unitStyle
-    local smooth = C.DB.Unitframe.Smooth
-    local isPlayer = style == 'player'
-    local isPet = style == 'pet'
-    local isTarget = style == 'target'
-    local isToT = style == 'targettarget'
-    local isFocus = style == 'focus'
-    local isToF = style == 'focustarget'
-    local isParty = style == 'party'
-    local isRaid = style == 'raid'
-    local isBoss = style == 'boss'
-    local isArena = style == 'arena'
+    local healthHeight
+    -- stylua: ignore start
+    healthHeight = UNITFRAME:GetHeightVal(
+        self,
+        C.DB.Unitframe.PlayerHealthHeight,
+        C.DB.Unitframe.PetHealthHeight,
+        C.DB.Unitframe.TargetHealthHeight,
+        C.DB.Unitframe.TargetTargetHealthHeight,
+        C.DB.Unitframe.FocusHealthHeight,
+        C.DB.Unitframe.FocusTargetHealthHeight,
+        C.DB.Unitframe.PartyHealthHeight,
+        C.DB.Unitframe.RaidHealthHeight,
+        C.DB.Unitframe.BossHealthHeight,
+        C.DB.Unitframe.ArenaHealthHeight
+    )
+    -- stylua: ignore end
 
     local health = CreateFrame('StatusBar', nil, self)
     health:SetPoint('LEFT')
     health:SetPoint('RIGHT')
     health:SetPoint('TOP')
     health:SetFrameStrata('LOW')
+    health:SetHeight(healthHeight)
     health:SetStatusBarTexture(UNITFRAME.StatusBarTex)
     health:SetStatusBarColor(sbColor[1], sbColor[2], sbColor[3], sbColor[4])
-    F:SmoothBar(health)
-    health.Smooth = smooth
 
-    if isPlayer then
-        health:SetHeight(C.DB.Unitframe.PlayerHealthHeight)
-    elseif isPet then
-        health:SetHeight(C.DB.Unitframe.PetHealthHeight)
-    elseif isTarget then
-        health:SetHeight(C.DB.Unitframe.TargetHealthHeight)
-    elseif isToT then
-        health:SetHeight(C.DB.Unitframe.TargetTargetHealthHeight)
-    elseif isFocus then
-        health:SetHeight(C.DB.Unitframe.FocusHealthHeight)
-    elseif isToF then
-        health:SetHeight(C.DB.Unitframe.FocusTargetHealthHeight)
-    elseif isParty then
-        health:SetHeight(C.DB.Unitframe.PartyHealthHeight)
-    elseif isRaid then
-        health:SetHeight(C.DB.Unitframe.RaidHealthHeight)
-    elseif isBoss then
-        health:SetHeight(C.DB.Unitframe.BossHealthHeight)
-    elseif isArena then
-        health:SetHeight(C.DB.Unitframe.ArenaHealthHeight)
+    if C.DB.Unitframe.Smooth then
+        F:SmoothBar(health)
     end
 
     local bg = health:CreateTexture(nil, 'BACKGROUND')

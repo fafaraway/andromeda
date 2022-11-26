@@ -196,6 +196,7 @@ local function UpdateHealthBarColor()
         local style = frame.unitStyle
         if style and style ~= 'nameplate' then
             UNITFRAME:UpdateHealthBarColor(frame, true)
+            UNITFRAME:UpdatePowerBarColor(frame, true)
         end
     end
 end
