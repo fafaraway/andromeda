@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 
-local function UpdateNewGlow(self)
+local function updateNewGlow(self)
     if self.NewOutline:IsShown() then
         self.bg:SetBackdropBorderColor(0, 0.7, 0.08)
     else
@@ -8,7 +8,7 @@ local function UpdateNewGlow(self)
     end
 end
 
-local function UpdateIconGlow(self, show)
+local function updateIconGlow(self, show)
     if show then
         self.__owner.bg:SetBackdropBorderColor(0, 0.7, 0.08)
     else
@@ -16,7 +16,7 @@ local function UpdateIconGlow(self, show)
     end
 end
 
-local function ReskinScrollChild(self)
+local function reskinScrollChild(self)
     for i = 1, self.ScrollTarget:GetNumChildren() do
         local child = select(i, self.ScrollTarget:GetChildren())
         local icon = child and child.Icon
@@ -31,18 +31,18 @@ local function ReskinScrollChild(self)
             child.FrameHighlight:SetColorTexture(1, 1, 1, 0.15) -- 0.25 might be too much
 
             child.NewOutline:SetTexture('')
-            child.BindingText:SetFontObject(_G.Game12Font)
-            hooksecurefunc(child, 'Init', UpdateNewGlow)
+            child.BindingText:SetFontObject(Game12Font)
+            hooksecurefunc(child, 'Init', updateNewGlow)
 
             local iconHighlight = child.IconHighlight
             iconHighlight:SetTexture('')
             iconHighlight.__owner = icon
-            hooksecurefunc(iconHighlight, 'SetShown', UpdateIconGlow)
+            hooksecurefunc(iconHighlight, 'SetShown', updateIconGlow)
         end
     end
 end
 
-local function UpdateButtonSelection(button, isSelected)
+local function updateButtonSelection(button, isSelected)
     if isSelected then
         button.bg:SetBackdropBorderColor(1, 0.8, 0)
     else
@@ -50,14 +50,14 @@ local function UpdateButtonSelection(button, isSelected)
     end
 end
 
-local function ReskinPortraitIcon(button, texture)
+local function reskinPortraitIcon(button, texture)
     F.StripTextures(button)
     button.Portrait:SetTexture(texture)
     button.bg = F.ReskinIcon(button.Portrait)
     button.bg:SetBackdropColor(0, 0, 0)
     button.Highlight:SetColorTexture(1, 1, 1, 0.25)
     button.Highlight:SetInside(button.bg)
-    hooksecurefunc(button, 'SetSelectedState', UpdateButtonSelection)
+    hooksecurefunc(button, 'SetSelectedState', updateButtonSelection)
 end
 
 C.Themes['Blizzard_ClickBindingUI'] = function()
@@ -73,16 +73,13 @@ C.Themes['Blizzard_ClickBindingUI'] = function()
     F.ReskinTrimScroll(frame.ScrollBar)
 
     frame.ScrollBoxBackground:Hide()
-    hooksecurefunc(frame.ScrollBox, 'Update', ReskinScrollChild)
+    hooksecurefunc(frame.ScrollBox, 'Update', reskinScrollChild)
 
-    ReskinPortraitIcon(frame.SpellbookPortrait, 136830)
-    ReskinPortraitIcon(frame.MacrosPortrait, 136377)
+    reskinPortraitIcon(frame.SpellbookPortrait, 136830)
+    reskinPortraitIcon(frame.MacrosPortrait, 136377)
 
-    frame.TutorialFrame.Bg:Hide()
     frame.TutorialFrame.NineSlice:Hide()
-    frame.TutorialFrame.TitleBg:Hide()
     F.SetBD(frame.TutorialFrame)
-    F.ReskinClose(frame.TutorialFrame.CloseButton)
 
     if frame.EnableMouseoverCastCheckbox then
         F.ReskinCheckbox(frame.EnableMouseoverCastCheckbox)

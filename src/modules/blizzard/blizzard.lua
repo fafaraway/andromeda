@@ -28,6 +28,7 @@ function BLIZZARD:OnLogin()
     -- BLIZZARD:EnhancedFriendsList()
     BLIZZARD:EnhancedPremade()
     BLIZZARD:EnhancedDressup()
+    BLIZZARD:ClickBindingTab()
 end
 
 function BLIZZARD:UpdateBossBanner()
@@ -65,12 +66,7 @@ end
 function BLIZZARD:DurabilityFrameMover()
     local frame = CreateFrame('Frame', C.ADDON_TITLE .. 'DurabilityFrameMover', _G.UIParent)
     frame:SetSize(100, 100)
-    F.Mover(
-        frame,
-        L['DurabilityIndicator'],
-        'DurabilityIndicator',
-        { 'TOPRIGHT', _G.ObjectiveTrackerFrame, 'TOPLEFT', -10, 0 }
-    )
+    F.Mover(frame, L['DurabilityIndicator'], 'DurabilityIndicator', { 'TOPRIGHT', _G.ObjectiveTrackerFrame, 'TOPLEFT', -10, 0 })
 
     hooksecurefunc(_G.DurabilityFrame, 'SetPoint', function(self, _, parent)
         if parent == 'MinimapCluster' or parent == _G.MinimapCluster then
@@ -110,6 +106,35 @@ function BLIZZARD:UIWidgetFrameMover()
         if parent ~= frame2 then
             self:ClearAllPoints()
             self:SetPoint('CENTER', frame2)
+        end
+    end)
+end
+
+-- Add ClickBinding tab to SpellBookFrame
+function BLIZZARD:ClickBindingTab()
+    local cb = CreateFrame('CheckButton', C.ADDON_TITLE .. 'ClickCastingTab', _G.SpellBookSideTabsFrame, 'SpellBookSkillLineTabTemplate')
+    cb:SetNormalTexture('Interface\\Icons\\trade_engineering')
+    cb:Show()
+    cb.tooltip = L['Click Binding']
+
+    F.ReskinTab(cb)
+
+    cb:SetScript('OnShow', function()
+        local num = GetNumSpellTabs()
+        local lastTab = _G['SpellBookSkillLineTab' .. num]
+
+        cb:ClearAllPoints()
+        cb:SetPoint('TOPLEFT', lastTab, 'BOTTOMLEFT', 0, -30)
+
+        cb:SetChecked(InClickBindingMode())
+        cb:SetCheckedTexture(C.Assets.Textures.ButtonChecked)
+    end)
+
+    cb:SetScript('OnClick', function()
+        if InClickBindingMode() then
+            _G.ClickBindingFrame.SaveButton:Click()
+        else
+            ToggleClickBindingFrame()
         end
     end)
 end
