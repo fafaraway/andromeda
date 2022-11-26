@@ -11,9 +11,8 @@
 
 
 do
-    -- binding
+    -- binding header
     _G.BINDING_HEADER_ANDROMEDA = GetAddOnMetadata(..., 'Title')
-    _G.BINDING_NAME_ANDROMEDA_TOGGLE_GUI = 'GUI'
 end
 
 local addonName, engine = ...
