@@ -1,8 +1,13 @@
+local MINOR = 6
+local lib, minor = LibStub('LibDropDown')
+if minor > MINOR then
+	return
+end
+
 --[[ Menu:header
 Documentation for the [Menu](Menu) object.
 Created with [LibDropDown:NewMenu()](LibDropDown#libdropdownnewmenuparent-name).
 --]]
-local lib = LibStub('LibDropDown')
 
 local function OnShow(self)
 	-- gather some size data
@@ -20,6 +25,9 @@ local function OnShow(self)
 				lineWidth = Line.Text:GetWidth()
 			else
 				lineWidth = Line:GetTextWidth()
+			end
+			if(Line.Radio:IsShown()) then
+				lineWidth = lineWidth + Line.Radio:GetWidth() + padding
 			end
 			lineWidth = math.max(lineWidth, minWidth)
 
@@ -59,24 +67,6 @@ local function OnShow(self)
 		-- submenu
 		self:SetPoint('TOPLEFT', self:GetParent(), 'TOPRIGHT', self.parent.gap, 0)
 	end
-
-	-- start auto-hide timer
-	self.parent.timer:Play()
-end
-
-local function OnHide(self)
-	-- stop auto-hide timer
-	self.parent.timer:Stop()
-end
-
-local function OnEnter(self)
-	-- stop auto-hide timer
-	self.parent.timer:Stop()
-end
-
-local function OnLeave(self)
-	-- start auto-hide timer
-	self.parent.timer:Play()
 end
 
 local menuMixin = {}
@@ -91,6 +81,7 @@ function menuMixin:Toggle()
 	self:SetShown(not self:IsShown())
 end
 
+local dummyFontInstance = CreateFont('LibDropDownDummyFontObject')
 --[[ Menu:UpdateLine(_index, data_)
 Update a line with the given index with the supplied data.
 
@@ -113,13 +104,26 @@ function menuMixin:UpdateLine(index, data)
 	Line.tooltipTitle = data.tooltipTitle
 	Line.keepShown = data.keepShown
 
+	local fontName, fontSize, fontFlags
+	if(data.font) then
+		fontName = data.font
+		fontSize = data.fontSize or 12
+		fontFlags = data.fontFlags
+	elseif(data.disabled) then
+		dummyFontInstance:SetFontObject(data.fontObjectDisabled or self.parent.disabledFont)
+		fontName, fontSize, fontFlags = dummyFontInstance:GetFont()
+	else
+		dummyFontInstance:SetFontObject(data.fontObjectDisabled or self.parent.disabledFont)
+		fontName, fontSize, fontFlags = dummyFontInstance:GetFont()
+	end
+
 	if(data.isSpacer) then
 		Line.Spacer:Show()
 		Line:EnableMouse(false)
 	elseif(data.isTitle) then
 		local text = data.text
 		assert(text and type(text) == 'string', 'Missing required data "text"')
-		Line:SetText(text)
+		Line.Text:SetText(text)
 		Line:EnableMouse(false)
 		Line:SetNormalFontObject(self.parent.titleFont)
 	else
@@ -128,23 +132,8 @@ function menuMixin:UpdateLine(index, data)
 		local text = data.text
 		assert(text and type(text) == 'string', 'Missing required data "text"')
 
-		if(data.font) then
-			Line.Text:SetFont(data.font, data.fontSize or 12, data.fontFlags)
-			Line.Text:SetText(text)
-			Line.Text:Show()
-		else
-			if(data.fontObject) then
-				Line:SetNormalFontObject(data.fontObject)
-				Line:SetHighlightFontObject(data.fontObject)
-				Line:SetDisabledFontObject(data.fontObject)
-			else
-				Line:SetNormalFontObject(self.parent.normalFont)
-				Line:SetHighlightFontObject(self.parent.highlightFont)
-				Line:SetDisabledFontObject(self.parent.disabledFont)
-			end
-
-			Line:SetText(text)
-		end
+		Line.Text:SetFont(fontName, fontSize, fontFlags)
+		Line.Text:SetText(text)
 
 		Line:SetTexture(data.texture, data.textureColor)
 
@@ -187,7 +176,7 @@ function menuMixin:UpdateLine(index, data)
 
 		if(data.disabled) then
 			Line:Disable()
-			Line:SetMotionScriptsWhileDisabled(data.forceMotion)
+			Line:SetMotionScriptsWhileDisabled(not not data.forceMotion)
 		else
 			Line:Enable()
 		end
@@ -221,10 +210,22 @@ function menuMixin:UpdateLine(index, data)
 						Line.isRadio = data.isRadio
 					else
 						if(data.isRadio) then
-							Line:SetRadioState(data.checked)
+							Line:SetRadioState(not not data.checked)
 						else
-							Line:SetCheckedState(data.checked)
+							Line:SetCheckedState(not not data.checked)
 						end
+					end
+
+					if self.parent.checkButtonAlignment == 'LEFT' then
+						Line.Radio:ClearAllPoints()
+						Line.Radio:SetPoint('LEFT', Line)
+						Line.Text:ClearAllPoints()
+						Line.Text:SetPoint('LEFT', Line.Radio, 'RIGHT')
+					else
+						Line.Radio:ClearAllPoints()
+						Line.Radio:SetPoint('RIGHT')
+						Line.Text:ClearAllPoints()
+						Line.Text:SetPoint('LEFT')
 					end
 				end
 			end
@@ -236,11 +237,13 @@ function menuMixin:UpdateLine(index, data)
 	end
 
 	Line:Show()
+	Line:UpdateState()
+
 	return Line
 end
 
 --[[ Menu:AddLines(_..._)
-See [Menu:AddLine(_data_)](Menu#menuaddlinedata), this one does the exact same thing, except  
+See [Menu:AddLine(_data_)](Menu#menuaddlinedata), this one does the exact same thing, except
 this one can add more than one line at a time.
 
 * `...`: One or more tables containing line information.
@@ -252,14 +255,14 @@ function menuMixin:AddLines(...)
 end
 
 --[[ Menu:AddLine(_data_)
-Adds a line using the given data to the menu menu.  
+Adds a line using the given data to the menu menu.
 Everything™ is optional, some are exclusive with others.
 
 * `data`:
 	* `text`: Text to show on the line _(string)_
 	* `isTitle`: Turns the `text` into a title _(boolean)_
 	* `isSpacer`: Turns the line into a spacer _(boolean)_
-	* `func`: Function to execute when clicking the line _(function)_  
+	* `func`: Function to execute when clicking the line _(function)_
 		Arguments passed: `button`, `args` (unpacked).
 	* `keepShown`: Keeps the dropdown shown after clicking the line _(boolean)_
 	* `args`: Table of arguments to pass through to the click function _(table)_
@@ -273,7 +276,7 @@ Everything™ is optional, some are exclusive with others.
 	* `colorG`: Green color channel, 0-1 _(number)_
 	* `colorB`: Blue color channel, 0-1 _(number)_
 	* `colorOpacity`: Alpha channel, 0-1 _(number)_
-	* `colorPickerCallback`: Callback function for the color picker _(function)_  
+	* `colorPickerCallback`: Callback function for the color picker _(function)_
 		Arguments passed: `color`, see [SharedXML\Util.lua's ColorMixin](https://www.townlong-yak.com/framexml/live/go/ColorMixin).
 	* `icon`: Texture path for the icon to embed into the start of `text` _(string)_
 	* `iconTexCoords`: Texture coordinates for cropping the `icon` _(array)_
@@ -294,8 +297,8 @@ Everything™ is optional, some are exclusive with others.
 	* `fontSize`: Font size to use for the line, requires `font` to be set _(number)_
 	* `fontFlags`: Font flags to use for the line, requires `font` to be set _(string)_
 	* `fontObject`: Font object to use for the line _(string/[FontInstance](http://wowprogramming.com/docs/widgets/FontInstance))_
-	* `menu`: Sub-menu for the current menu line _(array)_  
-		This needs to contain one or more tables of `data` (all of the above) in an  
+	* `menu`: Sub-menu for the current menu line _(array)_
+		This needs to contain one or more tables of `data` (all of the above) in an
 		indexed array. Can be chained.
 
 #### Notes
@@ -351,7 +354,7 @@ function menuMixin:ClearLines()
 	if(self.data) then
 		table.wipe(self.data)
 
-		for index, Line in next, self.lines do
+		for _, Line in next, self.lines do
 			Line:Hide()
 		end
 	end
@@ -362,6 +365,18 @@ Returns the number of lines in the menu.
 --]]
 function menuMixin:NumLines()
 	return #self.lines
+end
+
+--[[ Menu:Refresh()
+Iterates through every line and refreshes it with the latest data.
+
+If used to refresh the checked state of a line, make sure to set the lines' `data.checked` to a
+function that will return the current state.
+--]]
+function menuMixin:Refresh()
+	for index, data in next, self.data do
+		self:UpdateLine(index, data)
+	end
 end
 
 --[[ Menu:SetStyle(_name_)
@@ -391,6 +406,7 @@ function menuMixin:SetStyle(name)
 	self.parent.radioTexture = data.radioTexture or [[Interface\Common\UI-DropDownRadioChecks]]
 	self.parent.highlightTexture = data.highlightTexture or [[Interface\QuestFrame\UI-QuestTitleHighlight]]
 	self.parent.expandTexture = data.expandTexture or [[Interface\ChatFrame\ChatFrameExpandArrow]]
+	self.parent.checkButtonAlignment = data.checkButtonAlignment or 'RIGHT'
 
 	self.Backdrop:SetBackdrop(data.backdrop)
 	self.Backdrop:SetBackdropColor((data.backdropColor or HIGHLIGHT_FONT_COLOR):GetRGBA())
@@ -439,29 +455,15 @@ function menuMixin:IsAnchorCursor()
 	return self.parent.anchorCursor
 end
 
---[[ Menu:SetTimeout(_timeout_)
-Sets the amount of time before the menu automatically hides.
+--[[ Menu:SetCheckAlignment(_alignment_)
+Sets the alignment of check/radio buttons within the menu.
 
-* `timeout`: Sets the timeout in seconds before hiding the menu(s) _(number)_
+* `alignment`: Either "LEFT" or "RIGHT" (default) _(string)_
 --]]
-function menuMixin:SetTimeout(timeout)
-	self.parent.timeout = timeout
-
-	local timer = self.parent.timer
-	timer:GetAnimations()[1]:SetDuration(timeout)
-
-	if(timer:IsPlaying()) then
-		-- restart the current timer
-		timer:Stop()
-		timer:Play()
+function menuMixin:SetCheckAlignment(alignment)
+	if alignment == 'LEFT' or alignment == 'RIGHT' then
+		self.parent.checkButtonAlignment = alignment
 	end
-end
-
---[[ Menu:GetTimeout()
-Returns the amount of time in seconds before the menu automatically hides itself.
---]]
-function menuMixin:GetTimeout()
-	return self.parent.timeout
 end
 
 --[[ LibDropDown:NewMenu(_parent_, _name_)
@@ -477,16 +479,13 @@ function lib:NewMenu(parent, name)
 		parent = _G[parent]
 	end
 
-	local Menu = Mixin(CreateFrame('Button', (name or parent:GetDebugName() .. 'Menu'), parent), menuMixin, CallbackRegistryBaseMixin or CallbackRegistryMixin)
+	local Menu = Mixin(CreateFrame('Button', (name or parent:GetDebugName() .. 'Menu'), parent), menuMixin, CallbackRegistryMixin)
 	Menu:Hide()
 	Menu:EnableMouse(true)
 	Menu:SetClampedToScreen(true)
 	Menu:SetScript('OnShow', OnShow)
-	Menu:SetScript('OnHide', OnHide)
-	Menu:SetScript('OnEnter', OnEnter)
-	Menu:SetScript('OnLeave', OnLeave)
 
-	local Backdrop = CreateFrame('Frame', '$parentBackdrop', Menu, BackdropTemplateMixin and 'BackdropTemplate')
+	local Backdrop = CreateFrame('Frame', '$parentBackdrop', Menu, 'BackdropTemplate')
 	Backdrop:SetPoint('CENTER')
 	Menu.Backdrop = Backdrop
 
@@ -501,16 +500,6 @@ function lib:NewMenu(parent, name)
 	Menu.anchor = {'TOP', Menu:GetParent(), 'BOTTOM', 0, -12} -- 8, 22
 	Menu.anchorCursor = false
 	Menu:SetClampRectInsets(-20, 20, 20, -20)
-
-	if(Menu.parent == Menu) then
-		-- create auto-hide timer on first menu
-		local animations = Menu:CreateAnimationGroup()
-		animations:CreateAnimation():SetDuration(Menu.timeout or 5)
-		animations:SetScript('OnFinished', function()
-			lib:CloseAll()
-		end)
-		Menu.timer = animations
-	end
 
 	lib.dropdowns[Menu] = true
 	return Menu

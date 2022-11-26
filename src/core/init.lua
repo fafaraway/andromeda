@@ -73,6 +73,7 @@ do
 
     F:AddLib('AceAddon', aceAddon, aceAddonMinor)
     F:AddLib('ACL', 'AceLocale-3.0')
+    F:AddLib('LAB', 'LibActionButton-1.0')
     F:AddLib('LBG', 'LibButtonGlow-1.0')
     F:AddLib('LRC', 'LibRangeCheck-2.0')
     F:AddLib('LSM', 'LibSharedMedia-3.0')

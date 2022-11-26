@@ -1,5 +1,11 @@
-local LDD = LibStub('LibDropDown')
-LDD:RegisterStyle('DEFAULT', {
+local MINOR = 6
+local lib, minor = LibStub('LibDropDown')
+if minor > MINOR then
+	return
+end
+
+
+lib:RegisterStyle('DEFAULT', {
 	padding = 18,
 	spacing = 2,
 	backdrop = {

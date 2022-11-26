@@ -1,18 +1,13 @@
+local MINOR = 6
+local lib, minor = LibStub('LibDropDown')
+if minor > MINOR then
+	return
+end
+
 --[[ Line:header
 Documentation for the [Line](Line) object.
 Created with [LibDropDown:CreateLine()](LibDropDown#libdropdowncreatelinemenu).
 --]]
-local lib = LibStub('LibDropDown')
-
-local function OnShow(self)
-	if(self.checked) then
-		if(self.isRadio) then
-			self:SetRadioState(self:checked())
-		else
-			self:SetCheckedState(self:checked())
-		end
-	end
-end
 
 local function OnEnter(self)
 	-- hide all submenues for the current menu
@@ -37,9 +32,6 @@ local function OnEnter(self)
 		GameTooltip:AddLine(self.tooltip, nil, nil, nil, true)
 		GameTooltip:Show()
 	end
-
-	-- cancel auto-hide timer
-	self:GetParent().parent.timer:Stop()
 end
 
 local function OnLeave(self)
@@ -48,9 +40,6 @@ local function OnLeave(self)
 	if(self.tooltip) then
 		GameTooltip:Hide()
 	end
-
-	-- start auto-hide timer
-	self:GetParent().parent.timer:Play()
 end
 
 local function OnClick(self, button)
@@ -75,7 +64,10 @@ local function OnClick(self, button)
 		ShowUIPanel(ColorPickerFrame)
 		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
 	else
-		pcall(self.func, self, button, unpack(self.args or {}))
+		local successful, err = pcall(self.func, self, button, unpack(self.args or {}))
+		if not successful then
+			error(err)
+		end
 	end
 
 	if(not self.keepShown) then
@@ -166,14 +158,14 @@ Sets the Line text.
 * `text` - text to set on the Line _(string)_
 --]]
 function lineMixin:SetText(text)
-	self:SetFormattedText('%s%s', self.__icon or self.__atlas or '', text)
+	self.Text:SetFormattedText('%s%s', self.__icon or self.__atlas or '', text)
 end
 
 --[[ Line:UpdateText()
 Updates the Line text.
 --]]
 function lineMixin:UpdateText()
-	local text = self:GetText():gsub('|T.*|t', ''):gsub('|A.*|a', '')
+	local text = self.Text:GetText():gsub('|T.*|t', ''):gsub('|A.*|a', '')
 	self:SetText(text)
 end
 
@@ -194,8 +186,21 @@ function lineMixin:SetTexture(texture, color)
 	self.Texture:Show()
 end
 
+--[[ Line:UpdateState()
+Updates the displayed state of the line.
+--]]
+function lineMixin:UpdateState()
+	if(self.checked) then
+		if(self.isRadio) then
+			self:SetRadioState(self:checked())
+		else
+			self:SetCheckedState(self:checked())
+		end
+	end
+end
+
 --[[ Line:Reset()
-Resets the state of the Line back to default.  
+Resets the state of the Line back to default.
 Is called at the start of [Menu:UpdateLine()](Menu#menuupdatelineindexdata).
 --]]
 function lineMixin:Reset()
@@ -209,10 +214,9 @@ function lineMixin:Reset()
 	self.Radio:Hide()
 	self.Expand:Hide()
 	self.Spacer:Hide()
-	self.Text:Hide()
 	self.ColorSwatch:Hide()
 
-	self:SetText('')
+	self.Text:SetText('')
 end
 
 --[[ LibDropDown:CreateLine(_Menu_)
@@ -223,7 +227,6 @@ Creates and returns a new [Line](Line) object for the given [Menu](Menu).
 function lib:CreateLine(Menu)
 	local Line = Mixin(CreateFrame('Button', nil, Menu), lineMixin)
 	Line:SetSize(1, 16)
-	Line:SetScript('OnShow', OnShow)
 	Line:SetScript('OnEnter', OnEnter)
 	Line:SetScript('OnLeave', OnLeave)
 	Line:SetScript('OnClick', OnClick)

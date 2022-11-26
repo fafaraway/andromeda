@@ -1,10 +1,15 @@
+local MINOR = 6
+local lib, minor = LibStub('LibDropDown')
+if minor > MINOR then
+	return
+end
+
 --[[ Button:header
 Documentation for the [Button](Button) object.
 Created with [LibDropDown:NewButton()](LibDropDown#libdropdownnewbuttonparent-name).
 
 For all intents and purposes, this is the equivalent to [UIDropDownMenuButtonTemplate](https://www.townlong-yak.com/framexml/live/go/UIDropDownMenuButtonTemplate).
 --]]
-local lib = LibStub('LibDropDown')
 
 local function OnEnter(self)
 	local script = self:GetParent():GetScript('OnEnter')
@@ -58,6 +63,13 @@ function buttonMixin:Toggle()
 	self.Menu:Toggle()
 end
 
+--[[ Menu:Refresh()
+See [Menu:Toggle()](Menu#refresh).
+--]]
+function buttonMixin:Refresh()
+	self.Menu:Refresh()
+end
+
 --[[ Button:SetAnchor(_..._)
 See [Menu:SetAnchor(_point, anchor, relativePoint, x, y_)](Menu#menusetanchorpointanchorrelativepointxy).
 --]]
@@ -100,20 +112,6 @@ function buttonMixin:GetStyle()
 	return self.Menu:GetStyle()
 end
 
---[[ Button:SetTimeout(_timeout_)
-See [Menu:SetTimeout(_timeout_)](Menu#menusettimeouttimeout).
---]]
-function buttonMixin:SetTimeout(...)
-	self.Menu:SetTimeout(...)
-end
-
---[[ Button:GetTimeout()
-See [Menu:GetTimeout()](Menu#menugettimeout).
---]]
-function buttonMixin:GetTimeout()
-	return self.Menu:GetTimeout()
-end
-
 --[[ Button:SetJustifyH(_..._)
 See [Widget:SetJustifyH](http://wowprogramming.com/docs/widgets/FontInstance/SetJustifyH).
 --]]
@@ -149,6 +147,13 @@ function buttonMixin:SetFormattedText(...)
 	self.Text:SetFormattedText(...)
 end
 
+--[[ Button:SetCheckAlignment(...)
+See [Menu:SetCheckAlignment(...)](Menu#menusetcheckalignment).
+--]]
+function buttonMixin:SetCheckAlignment(...)
+	self.Menu:SetCheckAlignment(...)
+end
+
 --[[ LibDropDown:NewButton(_parent[, name]_)
 Creates and returns a new menu button object.
 
@@ -162,7 +167,7 @@ function lib:NewButton(parent, name)
 		parent = _G[parent]
 	end
 
-	local Button = Mixin(CreateFrame('Frame', (name or parent:GetDebugName() .. 'MenuButton'), parent), buttonMixin, CallbackRegistryBaseMixin or CallbackRegistryMixin)
+	local Button = Mixin(CreateFrame('Frame', (name or parent:GetDebugName() .. 'MenuButton'), parent), buttonMixin, CallbackRegistryMixin)
 	Button:SetSize(165, 32)
 	Button:SetScript('OnHide', OnHide)
 	Button.Menu = lib:NewMenu(Button)
@@ -189,7 +194,7 @@ function lib:NewButton(parent, name)
 	Middle:SetTexCoord(0.1953125, 0.8046875, 0, 1)
 	Button.Middle = Middle
 
-	local Text = Button:CreateFontString('$parentText', 'ARTWORK', nil, 'GameFontHighlightSmall')
+	local Text = Button:CreateFontString('$parentText', 'ARTWORK', 'GameFontHighlightSmall')
 	Text:SetPoint('RIGHT', Right, -43, 2)
 	Text:SetPoint('LEFT', Left, 27, 2)
 	Text:SetSize(0, 10)

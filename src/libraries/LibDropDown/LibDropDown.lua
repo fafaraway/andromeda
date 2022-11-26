@@ -1,8 +1,8 @@
-local MAJOR, MINOR = 'LibDropDown', 4
+local MAJOR, MINOR = 'LibDropDown', 6
 assert(LibStub, MAJOR .. ' requires LibStub')
 
 local lib, oldMinor = LibStub:NewLibrary(MAJOR, MINOR)
-if(not lib) then
+if not lib then
 	return
 end
 
@@ -53,9 +53,9 @@ Register a style for use with [Button:SetStyle(name)](Button#buttonsetstylename)
 
 #### Notes
 
-* All fonts must be [font objects](http://wowprogramming.com/docs/widgets/Font) (by reference or name).  
+* All fonts must be [font objects](http://wowprogramming.com/docs/widgets/Font) (by reference or name).
 	See [CreateFont](http://wowprogramming.com/docs/api/CreateFont), and [SharedXML/SharedFontStyles.xml](https://www.townlong-yak.com/framexml/ptr/SharedFontStyles.xml).
-* All colors must be color objects (by reference).  
+* All colors must be color objects (by reference).
 	See [CreateColor](https://www.townlong-yak.com/framexml/live/go/CreateColor).
 * `radioTexture` is dependant on texture coordinates, see [Interface/Common/UI-DropDownRadioChecks](https://github.com/Gethe/wow-ui-textures/blob/live/COMMON/UI-DropDownRadioChecks.PNG).
 --]]
