@@ -52,16 +52,13 @@ function THEME:LoadAddOnSkins()
 end
 
 do
-    local function ReskinTimerBar(bar)
+    local function reskinTimerBar(bar)
         bar:SetSize(200, 18)
         F.StripTextures(bar)
 
-        local statusbar = bar.StatusBar or _G[bar:GetName() .. 'StatusBar'] -- isNewPatch
+        local statusbar = bar.StatusBar or _G[bar:GetName() .. 'StatusBar']
         if statusbar then
             statusbar:SetAllPoints()
-            if not C.IS_NEW_PATCH then
-                statusbar:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
-            end
         elseif bar.SetStatusBarTexture then
             bar:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
         end
@@ -70,25 +67,11 @@ do
         bar.bg:SetBackdropBorderColor(0, 0, 0)
     end
 
-    local function UpdateTimerTracker()
-        for _, timer in pairs(_G.TimerTracker.timerList) do
-            if timer.bar and not timer.bar.styled then
-                ReskinTimerBar(timer.bar)
-
-                timer.bar.styled = true
-            end
-        end
-    end
-
-    local function ReskinMirrorBars()
+    function THEME:ReskinMirrorBars()
         local previous
         for i = 1, 3 do
             local bar = _G['MirrorTimer' .. i]
-            ReskinTimerBar(bar)
-
-            -- local text = _G['MirrorTimer' .. i .. 'Text']
-            -- text:ClearAllPoints()
-            -- text:SetPoint('CENTER', bar)
+            reskinTimerBar(bar)
 
             if previous then
                 bar:SetPoint('TOP', previous, 'BOTTOM', 0, -5)
@@ -97,20 +80,32 @@ do
         end
     end
 
-    function THEME:ReskinBlizzBars()
+    local function updateTimerTracker()
+        for _, timer in pairs(_G.TimerTracker.timerList) do
+            if timer.bar and not timer.bar.styled then
+                reskinTimerBar(timer.bar)
+
+                timer.bar.styled = true
+            end
+        end
+    end
+
+    function THEME:ReskinTimerTrakcer()
         if not _G.ANDROMEDA_ADB.ReskinBlizz then
             return
         end
 
-        ReskinMirrorBars()
-        F:RegisterEvent('START_TIMER', UpdateTimerTracker)
+        updateTimerTracker()
+
+        F:RegisterEvent('START_TIMER', updateTimerTracker)
     end
 end
 
 function THEME:OnLogin()
     THEME:LoadAddOnSkins()
 
-    THEME:ReskinBlizzBars()
+    THEME:ReskinMirrorBars()
+    THEME:ReskinTimerTrakcer()
     THEME:ReskinDBM()
     THEME:ReskinPGF()
     THEME:ReskinREHack()
