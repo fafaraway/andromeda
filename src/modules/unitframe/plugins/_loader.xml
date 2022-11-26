@@ -3,5 +3,6 @@
     <Script file='gcd.lua'/>
     <Script file='partywatcher.lua'/>
     <Script file='debuffwatcher.lua'/>
+    <Script file='raidauras.lua'/>
     <Script file='rangecheck.lua'/>
 </Ui>
