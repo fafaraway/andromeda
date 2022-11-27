@@ -37,6 +37,7 @@ C.CharacterSettings = {
         EnhancedMerchant = true,
         EnhancedFriendsList = true,
         EnhancedDressup = true,
+        FasterAutoLoot = false,
         EnhancedLoot = true,
         EnhancedMailBox = true,
         SaveRecipient = false,
