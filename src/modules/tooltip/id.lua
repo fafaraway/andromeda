@@ -174,16 +174,13 @@ function TOOLTIP:AddIDs()
     TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, addItemID)
     TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Toy, addItemID)
 
-    -- Currencies, #TODO: replace via tooltip processor
-    hooksecurefunc(GameTooltip, 'SetCurrencyToken', function(self, index)
-        local id = tonumber(strmatch(C_CurrencyInfo.GetCurrencyListLink(index), 'currency:(%d+)'))
-        if id then
-            TOOLTIP.AddLineForID(self, id, typesList.currency)
+    -- Currencies
+    TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Currency, function(self, data)
+        if self:IsForbidden() then
+            return
         end
-    end)
-    hooksecurefunc(GameTooltip, 'SetCurrencyByID', function(self, id)
-        if id then
-            TOOLTIP.AddLineForID(self, id, typesList.currency)
+        if data.id then
+            TOOLTIP.AddLineForID(self, data.id, typesList.currency)
         end
     end)
 
