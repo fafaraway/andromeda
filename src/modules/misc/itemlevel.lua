@@ -410,6 +410,48 @@ function ITEMLEVEL:ItemLevel_UpdateLoot()
     end
 end
 
+function ITEMLEVEL:ItemLevel_UpdateBags()
+    local button = self.__owner
+
+    if not button.iLvl then
+        button.iLvl = F.CreateFS(button, C.Assets.Fonts.Bold, 11, true, '', nil, true, 'BOTTOMLEFT', 1, 1)
+    end
+
+    local bagID = button:GetBagID()
+    local slotID = button:GetID()
+    local info = C_Container.GetContainerItemInfo(bagID, slotID)
+    local link = info and info.hyperlink
+    local quality = info and info.quality
+
+    if quality and quality > 1 then
+        local level = F.GetItemLevel(link, bagID, slotID)
+        local color = C.QualityColors[quality]
+        button.iLvl:SetText(level)
+        button.iLvl:SetTextColor(color.r, color.g, color.b)
+    else
+        button.iLvl:SetText('')
+    end
+end
+
+function ITEMLEVEL:ItemLevel_Containers()
+    if C.DB['Inventory']['Enable'] then
+        return
+    end
+
+    for i = 1, 13 do
+        for _, button in _G['ContainerFrame' .. i]:EnumerateItems() do
+            button.IconBorder.__owner = button
+            hooksecurefunc(button.IconBorder, 'SetShown', ITEMLEVEL.ItemLevel_UpdateBags)
+        end
+    end
+
+    for i = 1, 28 do
+        local button = _G['BankFrameItem' .. i]
+        button.IconBorder.__owner = button
+        hooksecurefunc(button.IconBorder, 'SetShown', ITEMLEVEL.ItemLevel_UpdateBags)
+    end
+end
+
 function ITEMLEVEL:OnLogin()
     if not C.DB.General.ItemLevel then
         return
@@ -446,4 +488,7 @@ function ITEMLEVEL:OnLogin()
 
     -- iLvl on LootFrame
     hooksecurefunc(_G.LootFrame.ScrollBox, 'Update', ITEMLEVEL.ItemLevel_UpdateLoot)
+
+    -- iLvl on default Container
+    ITEMLEVEL:ItemLevel_Containers()
 end
