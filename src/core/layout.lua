@@ -6,62 +6,60 @@ local M = F:GetModule('Layout')
 local toggle = 0
 
 do
-    -- local shadeFrame = CreateFrame('Frame')
-    -- local shadeTexture = shadeFrame:CreateTexture(nil, 'BACKGROUND', nil, -8)
+    local shadeFrame = CreateFrame('Frame')
+    local shadeTexture = shadeFrame:CreateTexture(nil, 'BACKGROUND', nil, -8)
 
-    -- shadeFrame:SetFrameStrata('BACKGROUND')
-    -- shadeFrame:SetWidth(GetScreenWidth() * _G.UIParent:GetEffectiveScale())
-    -- shadeFrame:SetHeight(GetScreenHeight() * _G.UIParent:GetEffectiveScale())
-    -- shadeTexture:SetAllPoints(shadeFrame)
-    -- shadeFrame:SetPoint('CENTER', 0, 0)
+    shadeFrame:SetFrameStrata('BACKGROUND')
+    shadeFrame:SetWidth(GetScreenWidth() * _G.UIParent:GetEffectiveScale())
+    shadeFrame:SetHeight(GetScreenHeight() * _G.UIParent:GetEffectiveScale())
+    shadeTexture:SetAllPoints(shadeFrame)
+    shadeFrame:SetPoint('CENTER', 0, 0)
 
-    -- M.crosshairFrameNS = CreateFrame('Frame')
-    -- M.crosshairTextureNS = M.crosshairFrameNS:CreateTexture(nil, 'TOOLTIP')
+    M.crosshairFrameNS = CreateFrame('Frame')
+    M.crosshairTextureNS = M.crosshairFrameNS:CreateTexture(nil, 'ARTWORK')
 
-    -- M.crosshairFrameNS:SetFrameStrata('TOOLTIP')
-    -- M.crosshairFrameNS:SetWidth(1)
-    -- M.crosshairFrameNS:SetHeight(GetScreenHeight() * _G.UIParent:GetEffectiveScale())
-    -- M.crosshairTextureNS:SetAllPoints(M.crosshairFrameNS)
-    -- M.crosshairTextureNS:SetColorTexture(0, 0, 0, 1)
+    M.crosshairFrameNS:SetWidth(1)
+    M.crosshairFrameNS:SetHeight(GetScreenHeight() * _G.UIParent:GetEffectiveScale())
+    M.crosshairTextureNS:SetAllPoints(M.crosshairFrameNS)
+    M.crosshairTextureNS:SetColorTexture(0, 0, 0, 1)
 
-    -- M.crosshairFrameEW = CreateFrame('Frame')
-    -- M.crosshairTextureEW = M.crosshairFrameEW:CreateTexture(nil, 'TOOLTIP')
+    M.crosshairFrameEW = CreateFrame('Frame')
+    M.crosshairTextureEW = M.crosshairFrameEW:CreateTexture(nil, 'ARTWORK')
 
-    -- M.crosshairFrameEW:SetFrameStrata('TOOLTIP')
-    -- M.crosshairFrameEW:SetWidth(GetScreenWidth() * _G.UIParent:GetEffectiveScale())
-    -- M.crosshairFrameEW:SetHeight(1)
-    -- M.crosshairTextureEW:SetAllPoints(M.crosshairFrameEW)
-    -- M.crosshairTextureEW:SetColorTexture(0, 0, 0, 1)
+    M.crosshairFrameEW:SetWidth(GetScreenWidth() * _G.UIParent:GetEffectiveScale())
+    M.crosshairFrameEW:SetHeight(1)
+    M.crosshairTextureEW:SetAllPoints(M.crosshairFrameEW)
+    M.crosshairTextureEW:SetColorTexture(0, 0, 0, 1)
 
-    -- function M.ClearCrosshair()
-    --     shadeFrame:Hide()
-    --     M.crosshairFrameNS:Hide()
-    --     M.crosshairFrameEW:Hide()
-    -- end
+    function M.ClearCrosshair()
+        shadeFrame:Hide()
+        M.crosshairFrameNS:Hide()
+        M.crosshairFrameEW:Hide()
+    end
 
-    -- function M.ShadeCrosshair(r, g, b, a)
-    --     shadeTexture:SetColorTexture(r, g, b, a)
-    --     shadeFrame:Show()
-    -- end
+    function M.ShadeCrosshair(r, g, b, a)
+        shadeTexture:SetColorTexture(r, g, b, a)
+        shadeFrame:Show()
+    end
 
-    -- local function follow()
-    --     local mouseX, mouseY = GetCursorPosition()
-    --     M.crosshairFrameNS:SetPoint('TOPLEFT', mouseX, 0)
-    --     M.crosshairFrameEW:SetPoint('BOTTOMLEFT', 0, mouseY)
-    -- end
+    local function follow()
+        local mouseX, mouseY = GetCursorPosition()
+        M.crosshairFrameNS:SetPoint('TOPLEFT', mouseX, 0)
+        M.crosshairFrameEW:SetPoint('BOTTOMLEFT', 0, mouseY)
+    end
 
-    -- function M.ShowCrosshair(arg)
-    --     local mouseX, mouseY = GetCursorPosition()
-    --     M.crosshairFrameNS:SetPoint('TOPLEFT', mouseX, 0)
-    --     M.crosshairFrameEW:SetPoint('BOTTOMLEFT', 0, mouseY)
-    --     M.crosshairFrameNS:Show()
-    --     M.crosshairFrameEW:Show()
-    --     if arg == 'follow' then
-    --         M.crosshairFrameNS:SetScript('OnUpdate', follow)
-    --     else
-    --         M.crosshairFrameNS:SetScript('OnUpdate', nil)
-    --     end
-    -- end
+    function M.ShowCrosshair(arg)
+        local mouseX, mouseY = GetCursorPosition()
+        M.crosshairFrameNS:SetPoint('TOPLEFT', mouseX, 0)
+        M.crosshairFrameEW:SetPoint('BOTTOMLEFT', 0, mouseY)
+        M.crosshairFrameNS:Show()
+        M.crosshairFrameEW:Show()
+        if arg == 'follow' then
+            M.crosshairFrameNS:SetScript('OnUpdate', follow)
+        else
+            M.crosshairFrameNS:SetScript('OnUpdate', nil)
+        end
+    end
 end
 
 -- Movable Frame
@@ -284,7 +282,7 @@ function M:LockElements()
     f:Hide()
 
     toggle = 0
-    -- M.ClearCrosshair()
+    M.ClearCrosshair()
 end
 
 -- Mover Console
@@ -316,16 +314,16 @@ local function CreateConsole()
 
     -- Grids
     bu[2]:SetScript('OnClick', function()
-        -- if toggle == 0 then
-        --     M.ShadeCrosshair(1, 1, 1, 0.85)
-        --     M.crosshairTextureNS:SetColorTexture(0, 0, 0, 1)
-        --     M.crosshairTextureEW:SetColorTexture(0, 0, 0, 1)
-        --     M.ShowCrosshair('follow')
-        --     toggle = 1
-        -- else
-        --     toggle = 0
-        --     M.ClearCrosshair()
-        -- end
+        if toggle == 0 then
+            M.ShadeCrosshair(1, 1, 1, 0.85)
+            M.crosshairTextureNS:SetColorTexture(0, 0, 0, 1)
+            M.crosshairTextureEW:SetColorTexture(0, 0, 0, 1)
+            M.ShowCrosshair('follow')
+            toggle = 1
+        else
+            toggle = 0
+            M.ClearCrosshair()
+        end
     end)
 
     -- Reset
@@ -440,7 +438,7 @@ function M:OnLogin()
         M.UpdateTrimFrame(updater.__owner)
     end)
 
-    -- M:DisableBlizzardMover()
+    M:DisableBlizzardMover()
 end
 
 -- Disable blizzard edit mode
