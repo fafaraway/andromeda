@@ -172,7 +172,7 @@ function EOT:RestyleObjectiveTrackerText()
         end
     end)
 
-    _G.ObjectiveTracker_Update()
+    ObjectiveTracker_Update()
 end
 
 local headers = {
@@ -197,7 +197,7 @@ function EOT:AutoCollapse()
                     end
                 end
             else
-                _G.ObjectiveTracker_Collapse()
+                ObjectiveTracker_Collapse()
             end
         else
             if not InCombatLockdown() then
@@ -208,14 +208,41 @@ function EOT:AutoCollapse()
                     end
                 end
                 if _G.ObjectiveTrackerFrame.collapsed then
-                    _G.ObjectiveTracker_Expand()
+                    ObjectiveTracker_Expand()
                 end
             end
         end
     end)
 end
 
+function EOT:ObjectiveTrackerMover()
+    local frame = CreateFrame('Frame', 'ObjectiveTrackerMover', _G.UIParent)
+    frame:SetSize(240, 50)
+
+    F.Mover(frame, L['ObjectiveTracker'], 'ObjectiveTracker', { 'TOPRIGHT', _G.UIParent, 'TOPRIGHT', -C.UI_GAP, -60 })
+
+    local tracker = _G.ObjectiveTrackerFrame
+    tracker:ClearAllPoints()
+    tracker:SetPoint('TOPRIGHT', frame)
+    tracker:SetHeight(C.SCREEN_HEIGHT / 1.5 * C.MULT)
+    tracker:SetScale(1)
+    tracker:SetClampedToScreen(false)
+    tracker:SetMovable(true)
+
+    if tracker:IsMovable() then
+        tracker:SetUserPlaced(true)
+    end
+
+    hooksecurefunc(tracker, 'SetPoint', function(self, _, parent)
+        if parent ~= frame then
+            self:ClearAllPoints()
+            self:SetPoint('TOPRIGHT', frame)
+        end
+    end)
+end
+
 function EOT:OnLogin()
+    EOT:ObjectiveTrackerMover()
     EOT:RestyleObjectiveTrackerText()
 
     -- Kill reward animation when finished dungeon or bonus objectives
