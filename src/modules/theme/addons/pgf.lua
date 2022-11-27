@@ -91,8 +91,6 @@ function THEME:ReskinPGF()
                     F.ReskinInput(input)
                     F.ReskinInput(frame.Max)
                 end
-            else
-                F:Debug(name)
             end
         end
 

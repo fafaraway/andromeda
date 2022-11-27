@@ -431,6 +431,7 @@ function BLIZZARD:AddPGFSortingExpression()
         _G.PremadeGroupsFilterSettings.classCircle = false
         _G.PremadeGroupsFilterSettings.leaderCrown = false
         _G.PremadeGroupsFilterSettings.ratingInfo = false
+        _G.PremadeGroupsFilterSettings.oneClickSignUp = false
     end
 end
 
