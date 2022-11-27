@@ -21,6 +21,14 @@ F:RegisterSlashCommand('/and', function(msg)
             LOGO:Logo_Create()
         end
         LOGO.logoFrame:Show()
+    elseif strmatch(str, 'clickbinding') or strmatch(str, 'cb') then
+        if InClickBindingMode() then
+            _G.ClickBindingFrame.SaveButton:Click()
+        else
+            ToggleClickBindingFrame()
+        end
+    elseif strmatch(str, 'keybinding') or strmatch(str, 'kb') then
+        _G.SlashCmdList['ANDROMEDA_KEY_BINDING']('')
     elseif strmatch(str, 'ver') or strmatch(str, 'version') then
         F:Printf('version: %s', C.ADDON_VERSION)
     else
