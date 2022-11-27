@@ -52,7 +52,7 @@ function ACTIONBAR:SendCurrentItem(thisTime, itemID, itemLink)
 end
 
 function ACTIONBAR:AnalyzeButtonCooldown()
-    if not self.action then -- no action for pet actionbar
+    if not self._state_action then -- no action for pet actionbar
         return
     end
     if not C.DB.Actionbar.CooldownNotify then
@@ -68,7 +68,7 @@ function ACTIONBAR:AnalyzeButtonCooldown()
     end
     lastCDSend = thisTime
 
-    local spellType, id = GetActionInfo(self.action)
+    local spellType, id = GetActionInfo(self._state_action)
     if spellType == 'spell' then
         ACTIONBAR:SendCurrentSpell(thisTime, id)
     elseif spellType == 'item' then

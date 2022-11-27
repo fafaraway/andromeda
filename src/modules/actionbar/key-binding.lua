@@ -22,15 +22,27 @@ function ACTIONBAR:Bind_RegisterButton(button)
     end
 end
 
+local macroInit
 function ACTIONBAR:Bind_RegisterMacro()
     if self ~= 'Blizzard_MacroUI' then
         return
     end
 
-    for i = 1, _G.MAX_ACCOUNT_MACROS do
-        local button = _G['MacroButton' .. i]
-        button:HookScript('OnEnter', hookMacroButton)
+    if macroInit then
+        return
     end
+
+    hooksecurefunc(_G.MacroFrame.MacroSelector.ScrollBox, 'Update', function(self)
+        for i = 1, self.ScrollTarget:GetNumChildren() do
+            local button = select(i, self.ScrollTarget:GetChildren())
+            if not button.bindHooked then
+                button:HookScript('OnEnter', hookMacroButton)
+                button.bindHooked = true
+            end
+        end
+    end)
+
+    macroInit = true
 end
 
 function ACTIONBAR:Bind_Create()
@@ -115,13 +127,12 @@ function ACTIONBAR:Bind_Update(button, spellmacro)
     frame:Show()
 
     if spellmacro == 'SPELL' then
-        frame.id = _G.SpellBook_GetSpellBookSlot(frame.button)
+        frame.id = SpellBook_GetSpellBookSlot(button)
         frame.name = GetSpellBookItemName(frame.id, _G.SpellBookFrame.bookType)
         frame.bindings = { GetBindingKey(spellmacro .. ' ' .. frame.name) }
     elseif spellmacro == 'MACRO' then
-        frame.id = frame.button:GetID()
-        local colorIndex = F:Round(select(2, _G.MacroFrameTab1Text:GetTextColor()), 1)
-        if colorIndex == 0.8 then
+        frame.id = button.selectionIndex or button:GetID()
+        if _G.MacroFrame.selectedTab == 2 then
             frame.id = frame.id + _G.MAX_ACCOUNT_MACROS
         end
         frame.name = GetMacroInfo(frame.id)
@@ -131,7 +142,7 @@ function ACTIONBAR:Bind_Update(button, spellmacro)
         if not frame.name then
             return
         end
-        frame.tipName = button.commandName and _G.GetBindingName(button.commandName)
+        frame.tipName = button.commandName and GetBindingName(button.commandName)
 
         frame.id = tonumber(button:GetID())
         if not frame.id or frame.id < 1 or frame.id > (spellmacro == 'STANCE' and 10 or 12) then
@@ -145,10 +156,12 @@ function ACTIONBAR:Bind_Update(button, spellmacro)
         if not frame.name then
             return
         end
-        frame.tipName = button.commandName and _G.GetBindingName(button.commandName)
+        frame.tipName = button.commandName and GetBindingName(button.commandName)
 
         frame.action = tonumber(button.action)
-        if button.isCustomButton or not frame.action or frame.action < 1 or frame.action > 168 then
+        if button.keyBoundTarget then
+            frame.bindstring = button.keyBoundTarget
+        elseif not frame.action or frame.action < 1 or frame.action > 180 then
             frame.bindstring = 'CLICK ' .. frame.name .. ':LeftButton'
         else
             local modact = 1 + (frame.action - 1) % 12
@@ -170,7 +183,7 @@ function ACTIONBAR:Bind_Update(button, spellmacro)
     end
 
     -- Refresh tooltip
-    frame:GetScript('OnEnter')(self)
+    frame:GetScript('OnEnter')()
 end
 
 local ignoreKeys = {
@@ -192,9 +205,7 @@ function ACTIONBAR:Bind_Listener(key)
                 SetBinding(frame.bindings[i])
             end
         end
-        F:Print(
-            format(L['All keybinds cleared for %s.'], C.GREEN_COLOR .. (frame.tipName or frame.name) .. '|r')
-        )
+        F:Print(format(L['All keybinds cleared for %s.'], C.GREEN_COLOR .. (frame.tipName or frame.name) .. '|r'))
 
         ACTIONBAR:Bind_Update(frame.button, frame.spellmacro)
 
@@ -222,18 +233,7 @@ function ACTIONBAR:Bind_Listener(key)
     else
         SetBinding(alt .. ctrl .. shift .. key, frame.spellmacro .. ' ' .. frame.name)
     end
-    F:Print(
-        C.GREEN_COLOR
-            .. (frame.tipName or frame.name)
-            .. ' |r'
-            .. L['bound to']
-            .. ' '
-            .. C.RED_COLOR
-            .. alt
-            .. ctrl
-            .. shift
-            .. key
-    )
+    F:Print(C.GREEN_COLOR .. (frame.tipName or frame.name) .. ' |r' .. L['bound to'] .. ' ' .. C.RED_COLOR .. alt .. ctrl .. shift .. key)
 
     ACTIONBAR:Bind_Update(frame.button, frame.spellmacro)
 end
@@ -282,13 +282,7 @@ function ACTIONBAR:Bind_CreateDialog()
     local font = C.Assets.Fonts.Bold
     F.CreateFS(frame, font, 14, nil, _G.QUICK_KEYBIND_MODE, false, true, 'TOP', 0, -10)
 
-    local helpInfo = F.CreateHelpInfo(
-        frame,
-        '|n'
-            .. _G.QUICK_KEYBIND_DESCRIPTION
-            .. '|n|n'
-            .. L['You can even keybind your spellbook spells or macros without placing them to your actionbars.']
-    )
+    local helpInfo = F.CreateHelpInfo(frame, '|n' .. _G.QUICK_KEYBIND_DESCRIPTION .. '|n|n' .. L['You can even keybind your spellbook spells or macros without placing them to your actionbars.'])
     helpInfo:SetPoint('TOPRIGHT', 2, -2)
 
     local text = F.CreateFS(frame, font, 12, nil, _G.CHARACTER_SPECIFIC_KEYBINDINGS, 'YELLOW', true, 'TOP', 0, -40)
@@ -314,10 +308,11 @@ function ACTIONBAR:Bind_CreateDialog()
     ACTIONBAR.keybindDialog = frame
 end
 
-_G.SlashCmdList['ANDROMEDA_KEYBIND'] = function(msg)
+_G.SlashCmdList['ANDROMEDA_KEY_BINDING'] = function(msg)
     if msg ~= '' then
         return
     end -- don't mess up with this
+
     if InCombatLockdown() then
         _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. _G.ERR_NOT_IN_COMBAT)
         return
@@ -327,4 +322,4 @@ _G.SlashCmdList['ANDROMEDA_KEYBIND'] = function(msg)
     ACTIONBAR:Bind_Activate()
     ACTIONBAR:Bind_CreateDialog()
 end
-_G.SLASH_ANDROMEDA_KEYBIND1 = '/bind'
+_G.SLASH_ANDROMEDA_KEY_BINDING1 = '/bind'

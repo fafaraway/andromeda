@@ -1,11 +1,18 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-    <Script file="bars.lua"/>
-    <Script file="bind.lua"/>
-    <Script file="desaturate.lua"/>
-    <Script file="fader.lua"/>
-    <Script file="flash.lua"/>
-    <Script file="keyfeedback.lua"/>
-    <Script file="notify.lua"/>
-    <Script file="range.lua"/>
-    <Script file="style.lua"/>
+    <Script file="actionbar.lua"/>
+
+    <Script file="bars\bars.lua"/>
+    <Script file="bars\pet-bar.lua"/>
+    <Script file="bars\stance-bar.lua"/>
+    <Script file="bars\extra-bar.lua"/>
+    <Script file="bars\vehicle-bar.lua"/>
+    <Script file="bars\remove-blizz-stuff.lua"/>
+    <Script file="bars\bar-preset.lua"/>
+
+    <!-- <Script file="bar-fader.lua"/> -->
+    <Script file="button-flash.lua"/>
+    <Script file="button-style.lua"/>
+    <Script file="cooldown-notify.lua"/>
+    <Script file="key-binding.lua"/>
+    <Script file="key-feedback.lua"/>
 </Ui>

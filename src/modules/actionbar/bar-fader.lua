@@ -7,30 +7,25 @@ local barsList = {
     ['FadeBar3'] = C.ADDON_TITLE .. 'ActionBar3',
     ['FadeBar4'] = C.ADDON_TITLE .. 'ActionBar4',
     ['FadeBar5'] = C.ADDON_TITLE .. 'ActionBar5',
-    ['FadePetBar'] = C.ADDON_TITLE .. 'ActionBarPet',
-    ['FadeStanceBar'] = C.ADDON_TITLE .. 'ActionBarStance',
+    ['FadeBar6'] = C.ADDON_TITLE .. 'ActionBar6',
+    ['FadeBar7'] = C.ADDON_TITLE .. 'ActionBar7',
+    ['FadeBar8'] = C.ADDON_TITLE .. 'ActionBar8',
+    ['FadeBarPet'] = C.ADDON_TITLE .. 'ActionBarPet',
+    ['FadeBarStance'] = C.ADDON_TITLE .. 'ActionBarStance',
 }
 
-local function ClearTimers(object)
+local function clearTimers(object)
     if object.delayTimer then
         F:CancelTimer(object.delayTimer)
         object.delayTimer = nil
     end
 end
 
-local function DelayFadeOut(frame, timeToFade, startAlpha, endAlpha)
-    ClearTimers(frame)
+local function delayFadeOut(frame, timeToFade, startAlpha, endAlpha)
+    clearTimers(frame)
 
     if C.DB.Actionbar.Delay > 0 then
-        frame.delayTimer = F:ScheduleTimer(
-            F.UIFrameFadeOut,
-            C.DB.Actionbar.Delay,
-            F,
-            frame,
-            timeToFade,
-            startAlpha,
-            endAlpha
-        )
+        frame.delayTimer = F:ScheduleTimer(F.UIFrameFadeOut, C.DB.Actionbar.Delay, F, frame, timeToFade, startAlpha, endAlpha)
     else
         F:UIFrameFadeOut(frame, timeToFade, startAlpha, endAlpha)
     end
@@ -40,7 +35,7 @@ function ACTIONBAR:FadeBlingTexture(cooldown, alpha)
     if not cooldown then
         return
     end
-    -- #TODO
+    -- #FIXME
     -- causing problem???
     -- cooldown:SetBlingTexture(alpha > 0.5 and [[Interface\Cooldown\star4]] or C.Assets.Textures.Blank)
 end
@@ -55,7 +50,7 @@ function ACTIONBAR:Button_OnEnter()
     local parent = ACTIONBAR.fadeParent
 
     if not parent.mouseLock then
-        ClearTimers(parent)
+        clearTimers(parent)
         F:UIFrameFadeIn(parent, C.DB.Actionbar.FadeInDuration, parent:GetAlpha(), C.DB.Actionbar.FadeInAlpha)
         ACTIONBAR:FadeBlings(C.DB.Actionbar.FadeInAlpha)
     end
@@ -65,7 +60,7 @@ function ACTIONBAR:Button_OnLeave()
     local parent = ACTIONBAR.fadeParent
 
     if not parent.mouseLock then
-        DelayFadeOut(parent, C.DB.Actionbar.FadeOutDuration, parent:GetAlpha(), C.DB.Actionbar.FadeOutAlpha)
+        delayFadeOut(parent, C.DB.Actionbar.FadeOutDuration, parent:GetAlpha(), C.DB.Actionbar.FadeOutAlpha)
         ACTIONBAR:FadeBlings(C.DB.Actionbar.FadeOutAlpha)
     end
 end
@@ -74,9 +69,7 @@ function ACTIONBAR:FadeParent_OnEvent(event)
     if
         (event == 'ACTIONBAR_SHOWGRID')
         or (C.DB.Actionbar.Instance and IsInInstance())
-        or (C.DB.Actionbar.Vehicle and ((HasVehicleActionBar() and UnitVehicleSkin('player') and UnitVehicleSkin(
-            'player'
-        ) ~= '') or (HasOverrideActionBar() and GetOverrideBarSkin() and GetOverrideBarSkin() ~= '')))
+        or (C.DB.Actionbar.Vehicle and ((HasVehicleActionBar() and UnitVehicleSkin('player') and UnitVehicleSkin('player') ~= '') or (HasOverrideActionBar() and GetOverrideBarSkin() and GetOverrideBarSkin() ~= '')))
         or (C.DB.Actionbar.Combat and UnitAffectingCombat('player'))
         or (C.DB.Actionbar.Target and (UnitExists('target') or UnitExists('focus')))
         or (C.DB.Actionbar.Casting and (UnitCastingInfo('player') or UnitChannelInfo('player')))
@@ -84,13 +77,13 @@ function ACTIONBAR:FadeParent_OnEvent(event)
     then
         self.mouseLock = true
 
-        ClearTimers(ACTIONBAR.fadeParent)
+        clearTimers(ACTIONBAR.fadeParent)
         F:UIFrameFadeIn(self, C.DB.Actionbar.FadeInDuration, self:GetAlpha(), C.DB.Actionbar.FadeInAlpha)
         ACTIONBAR:FadeBlings(C.DB.Actionbar.FadeInAlpha)
     else
         self.mouseLock = false
 
-        DelayFadeOut(self, C.DB.Actionbar.FadeOutDuration, self:GetAlpha(), C.DB.Actionbar.FadeOutAlpha)
+        delayFadeOut(self, C.DB.Actionbar.FadeOutDuration, self:GetAlpha(), C.DB.Actionbar.FadeOutAlpha)
         ACTIONBAR:FadeBlings(C.DB.Actionbar.FadeOutAlpha)
     end
 end
@@ -171,14 +164,14 @@ function ACTIONBAR:UpdateFaderSettings()
     end
 end
 
-local function UpdateAfterCombat(event)
+local function updateAfterCombat(event)
     ACTIONBAR:UpdateFaderState()
-    F:UnregisterEvent(event, UpdateAfterCombat)
+    F:UnregisterEvent(event, updateAfterCombat)
 end
 
 function ACTIONBAR:UpdateFaderState()
     if InCombatLockdown() then
-        F:RegisterEvent('PLAYER_REGEN_ENABLED', UpdateAfterCombat)
+        F:RegisterEvent('PLAYER_REGEN_ENABLED', updateAfterCombat)
         return
     end
 
@@ -198,7 +191,7 @@ function ACTIONBAR:UpdateFaderState()
     end
 end
 
-local function DisableCooldownBling()
+local function disableCooldownBling()
     for _, v in pairs(_G) do
         if type(v) == 'table' and type(v.SetDrawBling) == 'function' then
             v:SetDrawBling(false)
@@ -221,5 +214,5 @@ function ACTIONBAR:BarFade()
     ACTIONBAR:UpdateFaderSettings()
     ACTIONBAR:UpdateFaderState()
 
-    DisableCooldownBling()
+    disableCooldownBling()
 end
