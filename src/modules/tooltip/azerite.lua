@@ -53,11 +53,15 @@ function TOOLTIP:Azerite_UpdateTier(link)
 end
 
 function TOOLTIP:Azerite_UpdateItem()
-    if not self.GetItem then
+    local data = self:GetTooltipData()
+
+    if not data then
         return
     end
 
-    local link = select(2, self:GetItem())
+    local argVal = data.args and data.args[3]
+    local guid = argVal and argVal.guidVal
+    local link = guid and C_Item.GetItemLinkByGUID(guid)
     if not link then
         return
     end
@@ -111,7 +115,5 @@ function TOOLTIP:Azerite_UpdateItem()
 end
 
 function TOOLTIP:AzeriteArmor()
-    -- #TODO: update via C_TooltipInfo, requires on shopping tooltip
-
     _G.TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TOOLTIP.Azerite_UpdateItem)
 end
