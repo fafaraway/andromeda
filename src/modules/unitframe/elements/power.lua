@@ -29,8 +29,8 @@ function UNITFRAME:UpdatePowerBarColor(self, force)
         updatePowerColorByIndex(power, C.DB.Unitframe.HealthColorStyle)
 
         if style == 'player' then
-            power.colorPower = (C.DB.Unitframe.HealthColorStyle == 4 or C.DB.Unitframe.HealthColorStyle == 5)
-            power.colorClass = (C.DB.Unitframe.HealthColorStyle == 1 or C.DB.Unitframe.HealthColorStyle == 3)
+            power.colorPower = (C.DB.Unitframe.HealthColorStyle >= 4 or C.DB.Unitframe.HealthColorStyle == 2)
+            power.colorClass = (C.DB.Unitframe.HealthColorStyle <= 3)
         end
     end
 
