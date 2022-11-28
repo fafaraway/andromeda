@@ -397,6 +397,11 @@ local function SetupAnnounceableSpells()
     GUI:SetupAnnounceableSpells(GUI.Page[7])
 end
 
+
+
+
+
+
 -- Options
 GUI.OptionsList = {
     [1] = { -- general
@@ -1026,6 +1031,27 @@ GUI.OptionsList = {
         {
             1,
             'Actionbar',
+            'Grid',
+            L['Show Grid'],
+            nil,
+            nil,
+            UpdateBarConfig,
+        },
+        {
+            4,
+            'Actionbar',
+            'BarPreset',
+            L['Bar Preset'],
+            true,
+            {
+                '6 + 24 + 6',
+                '3 * 12',
+                '12 + 24 + 12',
+            },
+        },
+        {
+            1,
+            'Actionbar',
             'ShowHotkey',
             L['Key Binding'],
             nil,
@@ -1063,15 +1089,7 @@ GUI.OptionsList = {
             UpdateBarConfig,
             L['Color the button backdrop of actionbar by player class.'],
         },
-        {
-            1,
-            'Actionbar',
-            'Grid',
-            L['Show Grid'],
-            nil,
-            nil,
-            UpdateBarConfig,
-        },
+
         {
             1,
             'Actionbar',

@@ -88,7 +88,7 @@ function ACTIONBAR:ImportBarLayout(preset)
     end
 
     local values = { strsplit(':', preset) }
-    if values[1] ~= 'ANDROMEDAAB' then
+    if values[1] ~= 'AAB' then
         return
     end -- Andromeda Actionbar
 
@@ -99,7 +99,7 @@ function ACTIONBAR:ImportBarLayout(preset)
         local value = values[index]
         value = tonumber(value)
         if not value then -- stop if string incorrect
-            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['StyleStringError'])
+            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Your actionbar layout string is incorrect.'])
             return
         end
         C.DB['Actionbar'][optionValues[index - 1]] = value
@@ -118,7 +118,7 @@ function ACTIONBAR:ImportBarLayout(preset)
                 mover:SetPoint(point, _G.UIParent, point, x, y)
                 C.DB['UIAnchor'][moverValues[moverIndex]] = { point, 'UIParent', point, x, y }
             else
-                _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['StyleStringError'])
+                _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Your actionbar layout string is incorrect.'])
                 return
             end
         end
@@ -126,7 +126,7 @@ function ACTIONBAR:ImportBarLayout(preset)
 end
 
 function ACTIONBAR:ExportBarLayout()
-    local styleStr = 'ANDROMEDAAB'
+    local styleStr = 'AAB'
     for _, value in ipairs(optionValues) do
         styleStr = styleStr .. ':' .. C.DB['Actionbar'][value]
     end

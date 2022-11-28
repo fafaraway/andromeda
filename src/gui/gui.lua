@@ -1,5 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 local GUI = F:GetModule('GUI')
+local ACTIONBAR = F:GetModule('ActionBar')
 
 GUI.width = 700
 GUI.height = 640
@@ -289,12 +290,32 @@ local function updateDropdownSelection(self)
     end
 end
 
+local abPreStr = {
+    [1] = 'AAB:34:12:12:12:34:12:12:12:34:12:0:12:30:12:12:1:30:12:12:1:32:12:12:12:32:12:12:12:32:12:12:12:26:12:10:30:12:10:   0B33:0B70:  -278B33:278B33:  0R0:-33R0:  0B500:0B536:0B572:  0B112:-202B100',
+    [2] = 'AAB:34:12:12:12:34:12:12:12:34:12:12:12:30:12:12:1:30:12:12:1:32:12:10:10:32:12:10:12:32:12:12:12:26:12:10:30:12:10:  0B33:0B70:  0B106:278B33:    0R0:-33R0:  0B500:0B536:0B572:  0B148:-202B100',
+    [3] = 'AAB:34:12:12:12:34:12:12:12:34:12:12:6:34:12:12:6:30:12:12:1:32:12:10:10:32:12:10:12:32:12:12:12:26:12:10:30:12:10:  0B33:0B70:  -334B33:334B33:  334B33:0R0:  0B500:0B536:0B572:  0B112:-202B100',
+}
+
+local function updateBarLayout(self)
+    local str = abPreStr[self.index]
+
+    if not str then
+        return
+    end
+
+    ACTIONBAR:ImportBarLayout(str)
+end
+
 local function updateDropdownClick(self)
     local dd = self.__owner
     UpdateValue(dd.__key, dd.__value, self.index)
     CheckUIReload(dd.__name)
     if dd.__callback then
         dd:__callback()
+    end
+
+    if dd.__value == 'BarPreset' then
+        updateBarLayout(self)
     end
 end
 
@@ -598,17 +619,20 @@ local function CreateGameMenuButton()
     bu:SetPoint('TOP', _G.GameMenuButtonAddons, 'BOTTOM', 0, -14)
     --bu:SetScript('OnClick', Button_OnClick)
 
-    GameMenuFrame:HookScript("OnShow", function(self)
-		GameMenuButtonLogout:SetPoint("TOP", bu, "BOTTOM", 0, -21)
-		self:SetHeight(self:GetHeight() + bu:GetHeight() + 22)
-	end)
+    GameMenuFrame:HookScript('OnShow', function(self)
+        GameMenuButtonLogout:SetPoint('TOP', bu, 'BOTTOM', 0, -21)
+        self:SetHeight(self:GetHeight() + bu:GetHeight() + 22)
+    end)
 
-    bu:SetScript("OnClick", function()
-		if InCombatLockdown() then UIErrorsFrame:AddMessage(C.RED_COLOR..ERR_NOT_IN_COMBAT) return end
-		CreateConsole()
-		HideUIPanel(GameMenuFrame)
-		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
-	end)
+    bu:SetScript('OnClick', function()
+        if InCombatLockdown() then
+            UIErrorsFrame:AddMessage(C.RED_COLOR .. ERR_NOT_IN_COMBAT)
+            return
+        end
+        CreateConsole()
+        HideUIPanel(GameMenuFrame)
+        PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
+    end)
 
     if _G.ANDROMEDA_ADB.ReskinBlizz then
         F.Reskin(bu)

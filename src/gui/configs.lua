@@ -495,6 +495,7 @@ C.CharacterSettings = {
         KeyFeedback = true,
         Grid = true,
 
+        BarPreset = 1,
         ButtonMargin = 3,
         BarPadding = 3,
 
@@ -535,21 +536,21 @@ C.CharacterSettings = {
 
         Bar6 = false,
         Bar6FontSize = 11,
-        Bar6ButtonSize = 34,
+        Bar6ButtonSize = 32,
         Bar6ButtonNum = 12,
         Bar6ButtonPerRow = 12,
         Bar6Flyout = 1,
 
         Bar7 = false,
         Bar7FontSize = 11,
-        Bar7ButtonSize = 34,
+        Bar7ButtonSize = 32,
         Bar7ButtonNum = 12,
         Bar7ButtonPerRow = 12,
         Bar7Flyout = 1,
 
         Bar8 = false,
         Bar8FontSize = 11,
-        Bar8ButtonSize = 34,
+        Bar8ButtonSize = 32,
         Bar8ButtonNum = 12,
         Bar8ButtonPerRow = 12,
         Bar8Flyout = 1,

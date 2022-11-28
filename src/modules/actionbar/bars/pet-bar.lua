@@ -82,19 +82,16 @@ function ACTIONBAR:CreatePetBar()
         return
     end
 
-    local size = C.DB['Actionbar']['BarPetButtonSize']
-    local fontSize = C.DB['Actionbar']['BarPetFontSize']
     local margin = C.DB['Actionbar']['ButtonMargin']
     local num = _G.NUM_PET_ACTION_SLOTS
     local buttonList = {}
 
     local frame = CreateFrame('Frame', C.ADDON_TITLE .. 'ActionBarPet', _G.UIParent, 'SecureHandlerStateTemplate')
     frame.mover = F.Mover(frame, L['PetBar'], 'PetBar', { 'BOTTOM', _G[C.ADDON_TITLE .. 'ActionBar2'], 'TOP', 0, margin })
-    ACTIONBAR.movers[11] = frame.mover
+    ACTIONBAR.movers[10] = frame.mover
 
     for i = 1, num do
         local button = _G['PetActionButton' .. i]
-        button:SetSize(size, size)
         button:SetParent(frame)
         tinsert(buttonList, button)
         tinsert(ACTIONBAR.buttons, button)

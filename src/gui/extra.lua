@@ -8,7 +8,6 @@ local ANNOUNCEMENT = F:GetModule('Announcement')
 local MAP = F:GetModule('Map')
 local INVENTORY = F:GetModule('Inventory')
 local VIGNETTING = F:GetModule('Vignetting')
-local BAR = F:GetModule('ActionBar')
 local AURA = F:GetModule('Aura')
 local oUF = F.Libs.oUF
 
@@ -592,7 +591,7 @@ end
 local barsList = { 'Bar1', 'Bar2', 'Bar3', 'Bar4', 'Bar5', 'Bar6', 'Bar7', 'Bar8', 'BarPet' }
 local function UpdateActionBarSize()
     for _, v in ipairs(barsList) do
-        BAR:UpdateSize(v)
+        ACTIONBAR:UpdateSize(v)
     end
 end
 
@@ -747,7 +746,7 @@ function GUI:SetupActionBarSize(parent)
 
     for _, v in ipairs(datas.barPet) do
         CreateGroupTitle(scroll, L['Pet Bar'], offset - 400)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 450, UpdateActionBarSize)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 450, ACTIONBAR.UpdatePetBar)
         offset = offset - 65
     end
 
@@ -755,7 +754,7 @@ function GUI:SetupActionBarSize(parent)
 
     for _, v in ipairs(datas.barStance) do
         CreateGroupTitle(scroll, L['Stance Bar'], offset - 450)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 500, BAR.UpdateStanceBar)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 500, ACTIONBAR.UpdateStanceBar)
         offset = offset - 65
     end
 
@@ -763,7 +762,7 @@ function GUI:SetupActionBarSize(parent)
 
     for _, v in ipairs(datas.barExtra) do
         CreateGroupTitle(scroll, L['Extra Button'], offset - 500)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 550, BAR.UpdateStanceBar)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 550, ACTIONBAR.UpdateStanceBar)
         offset = offset - 65
     end
 
@@ -771,7 +770,7 @@ function GUI:SetupActionBarSize(parent)
 
     for _, v in ipairs(datas.barVehicle) do
         CreateGroupTitle(scroll, L['Vehicle Button'], offset - 550)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 600, BAR.UpdateStanceBar)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 600, ACTIONBAR.UpdateStanceBar)
         offset = offset - 65
     end
 end
