@@ -777,7 +777,12 @@ function GUI:SetupActionBarSize(parent)
 end
 
 local function UpdateActionBarFader()
+    if not ACTIONBAR.fadeParent then
+        return
+    end
+
     ACTIONBAR:UpdateFaderState()
+    ACTIONBAR.fadeParent:SetAlpha(C.DB.Actionbar.FadeOutAlpha)
 end
 
 function GUI:SetupActionbarFader(parent)
@@ -794,13 +799,16 @@ function GUI:SetupActionbarFader(parent)
 
     local datas = {
         bars = {
-            [1] = { value = 'FadeBar1', text = L['Enable Fade on Bar1'] },
-            [2] = { value = 'FadeBar2', text = L['Enable Fade on Bar2'] },
-            [3] = { value = 'FadeBar3', text = L['Enable Fade on Bar3'] },
-            [4] = { value = 'FadeBar4', text = L['Enable Fade on SideBar1'] },
-            [5] = { value = 'FadeBar5', text = L['Enable Fade on SideBar2'] },
-            [6] = { value = 'FadePetBar', text = L['Enable Fade on PetBar'] },
-            [7] = { value = 'FadeStanceBar', text = L['Enable Fade on StanceBar'] },
+            [1] = { value = 'FadeBar1', text = L['Enable Fade on Bar 1'] },
+            [2] = { value = 'FadeBar2', text = L['Enable Fade on Bar 2'] },
+            [3] = { value = 'FadeBar3', text = L['Enable Fade on Bar 3'] },
+            [4] = { value = 'FadeBar4', text = L['Enable Fade on Bar 4'] },
+            [5] = { value = 'FadeBar5', text = L['Enable Fade on Bar 5'] },
+            [6] = { value = 'FadeBar6', text = L['Enable Fade on Bar 6'] },
+            [7] = { value = 'FadeBar7', text = L['Enable Fade on Bar 7'] },
+            [8] = { value = 'FadeBar8', text = L['Enable Fade on Bar 8'] },
+            [9] = { value = 'FadePetBar', text = L['Enable Fade on PetBar'] },
+            [10] = { value = 'FadeStanceBar', text = L['Enable Fade on StanceBar'] },
         },
         conditions = {
             [1] = { value = 'Instance', text = L['Inside Instance'] },

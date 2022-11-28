@@ -22,7 +22,7 @@ function ACTIONBAR:OnLogin()
     ACTIONBAR:UpdateAllSize()
     ACTIONBAR:RemoveBlizzStuff()
     ACTIONBAR:CooldownNotify()
-    ACTIONBAR:BarFade()
+    ACTIONBAR:BarFader()
 
     if C_PetBattles.IsInBattle() then
         ACTIONBAR:ClearBindings()

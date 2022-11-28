@@ -1,3 +1,5 @@
+-- Credit: elvui, ndui_plus
+
 local F, C = unpack(select(2, ...))
 local ACTIONBAR = F:GetModule('ActionBar')
 
@@ -13,80 +15,6 @@ local barsList = {
     ['FadeBarPet'] = C.ADDON_TITLE .. 'ActionBarPet',
     ['FadeBarStance'] = C.ADDON_TITLE .. 'ActionBarStance',
 }
-
-local function clearTimers(object)
-    if object.delayTimer then
-        F:CancelTimer(object.delayTimer)
-        object.delayTimer = nil
-    end
-end
-
-local function delayFadeOut(frame, timeToFade, startAlpha, endAlpha)
-    clearTimers(frame)
-
-    if C.DB.Actionbar.Delay > 0 then
-        frame.delayTimer = F:ScheduleTimer(F.UIFrameFadeOut, C.DB.Actionbar.Delay, F, frame, timeToFade, startAlpha, endAlpha)
-    else
-        F:UIFrameFadeOut(frame, timeToFade, startAlpha, endAlpha)
-    end
-end
-
-function ACTIONBAR:FadeBlingTexture(cooldown, alpha)
-    if not cooldown then
-        return
-    end
-    -- #FIXME
-    -- causing problem???
-    -- cooldown:SetBlingTexture(alpha > 0.5 and [[Interface\Cooldown\star4]] or C.Assets.Textures.Blank)
-end
-
-function ACTIONBAR:FadeBlings(alpha)
-    for _, button in pairs(ACTIONBAR.buttons) do
-        ACTIONBAR:FadeBlingTexture(button.cooldown, alpha)
-    end
-end
-
-function ACTIONBAR:Button_OnEnter()
-    local parent = ACTIONBAR.fadeParent
-
-    if not parent.mouseLock then
-        clearTimers(parent)
-        F:UIFrameFadeIn(parent, C.DB.Actionbar.FadeInDuration, parent:GetAlpha(), C.DB.Actionbar.FadeInAlpha)
-        ACTIONBAR:FadeBlings(C.DB.Actionbar.FadeInAlpha)
-    end
-end
-
-function ACTIONBAR:Button_OnLeave()
-    local parent = ACTIONBAR.fadeParent
-
-    if not parent.mouseLock then
-        delayFadeOut(parent, C.DB.Actionbar.FadeOutDuration, parent:GetAlpha(), C.DB.Actionbar.FadeOutAlpha)
-        ACTIONBAR:FadeBlings(C.DB.Actionbar.FadeOutAlpha)
-    end
-end
-
-function ACTIONBAR:FadeParent_OnEvent(event)
-    if
-        (event == 'ACTIONBAR_SHOWGRID')
-        or (C.DB.Actionbar.Instance and IsInInstance())
-        or (C.DB.Actionbar.Vehicle and ((HasVehicleActionBar() and UnitVehicleSkin('player') and UnitVehicleSkin('player') ~= '') or (HasOverrideActionBar() and GetOverrideBarSkin() and GetOverrideBarSkin() ~= '')))
-        or (C.DB.Actionbar.Combat and UnitAffectingCombat('player'))
-        or (C.DB.Actionbar.Target and (UnitExists('target') or UnitExists('focus')))
-        or (C.DB.Actionbar.Casting and (UnitCastingInfo('player') or UnitChannelInfo('player')))
-        or (C.DB.Actionbar.Health and (UnitHealth('player') ~= UnitHealthMax('player')))
-    then
-        self.mouseLock = true
-
-        clearTimers(ACTIONBAR.fadeParent)
-        F:UIFrameFadeIn(self, C.DB.Actionbar.FadeInDuration, self:GetAlpha(), C.DB.Actionbar.FadeInAlpha)
-        ACTIONBAR:FadeBlings(C.DB.Actionbar.FadeInAlpha)
-    else
-        self.mouseLock = false
-
-        delayFadeOut(self, C.DB.Actionbar.FadeOutDuration, self:GetAlpha(), C.DB.Actionbar.FadeOutAlpha)
-        ACTIONBAR:FadeBlings(C.DB.Actionbar.FadeOutAlpha)
-    end
-end
 
 local options = {
     Instance = {
@@ -148,6 +76,69 @@ local options = {
     },
 }
 
+local function disableCooldownBling()
+    for _, v in pairs(_G) do
+        if type(v) == 'table' and type(v.SetDrawBling) == 'function' then
+            v:SetDrawBling(false)
+        end
+    end
+end
+
+local function clearTimers(object)
+    if object.delayTimer then
+        F:CancelTimer(object.delayTimer)
+        object.delayTimer = nil
+    end
+end
+
+local function delayFadeOut(frame, timeToFade, startAlpha, endAlpha)
+    clearTimers(frame)
+
+    if C.DB.Actionbar.Delay > 0 then
+        frame.delayTimer = F:ScheduleTimer(F.UIFrameFadeOut, C.DB.Actionbar.Delay, F, frame, timeToFade, startAlpha, endAlpha)
+    else
+        F:UIFrameFadeOut(frame, timeToFade, startAlpha, endAlpha)
+    end
+end
+
+function ACTIONBAR:Button_OnEnter()
+    local parent = ACTIONBAR.fadeParent
+
+    if not parent.mouseLock then
+        clearTimers(parent)
+        F:UIFrameFadeIn(parent, C.DB.Actionbar.FadeInDuration, parent:GetAlpha(), C.DB.Actionbar.FadeInAlpha)
+    end
+end
+
+function ACTIONBAR:Button_OnLeave()
+    local parent = ACTIONBAR.fadeParent
+
+    if not parent.mouseLock then
+        delayFadeOut(parent, C.DB.Actionbar.FadeOutDuration, parent:GetAlpha(), C.DB.Actionbar.FadeOutAlpha)
+    end
+end
+
+function ACTIONBAR:FadeParent_OnEvent(event)
+    if
+        (event == 'ACTIONBAR_SHOWGRID')
+        or (C.DB.Actionbar.Instance and IsInInstance())
+        or (C.DB.Actionbar.Vehicle and ((HasVehicleActionBar() and UnitVehicleSkin('player') and UnitVehicleSkin('player') ~= '') or (HasOverrideActionBar() and GetOverrideBarSkin() and GetOverrideBarSkin() ~= '')))
+        or (C.DB.Actionbar.Combat and UnitAffectingCombat('player'))
+        or (C.DB.Actionbar.Target and (UnitExists('target') or UnitExists('focus')))
+        or (C.DB.Actionbar.Casting and (UnitCastingInfo('player') or UnitChannelInfo('player')))
+        or (C.DB.Actionbar.Health and (UnitHealth('player') ~= UnitHealthMax('player')))
+    then
+        self.mouseLock = true
+
+        clearTimers(ACTIONBAR.fadeParent)
+        F:UIFrameFadeIn(self, C.DB.Actionbar.FadeInDuration, self:GetAlpha(), C.DB.Actionbar.FadeInAlpha)
+    else
+        self.mouseLock = false
+
+        delayFadeOut(self, C.DB.Actionbar.FadeOutDuration, self:GetAlpha(), C.DB.Actionbar.FadeOutAlpha)
+    end
+end
+
 function ACTIONBAR:UpdateFaderSettings()
     for key, option in pairs(options) do
         if C.DB.Actionbar[key] then
@@ -191,25 +182,18 @@ function ACTIONBAR:UpdateFaderState()
     end
 end
 
-local function disableCooldownBling()
-    for _, v in pairs(_G) do
-        if type(v) == 'table' and type(v.SetDrawBling) == 'function' then
-            v:SetDrawBling(false)
-        end
-    end
-end
-
-function ACTIONBAR:BarFade()
+function ACTIONBAR:BarFader()
     if not C.DB.Actionbar.Fader then
         return
     end
 
     ACTIONBAR.fadeParent = CreateFrame('Frame', C.ADDON_TITLE .. 'ActionbarFadeParent', _G.UIParent, 'SecureHandlerStateTemplate')
-    RegisterStateDriver(ACTIONBAR.fadeParent, 'visibility', '[petbattle] hide; show')
     ACTIONBAR.fadeParent:SetAlpha(C.DB.Actionbar.FadeOutAlpha)
     ACTIONBAR.fadeParent:RegisterEvent('ACTIONBAR_SHOWGRID')
     ACTIONBAR.fadeParent:RegisterEvent('ACTIONBAR_HIDEGRID')
     ACTIONBAR.fadeParent:SetScript('OnEvent', ACTIONBAR.FadeParent_OnEvent)
+
+    RegisterStateDriver(ACTIONBAR.fadeParent, 'visibility', '[petbattle] hide; show')
 
     ACTIONBAR:UpdateFaderSettings()
     ACTIONBAR:UpdateFaderState()

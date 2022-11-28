@@ -35,16 +35,9 @@ local function SetupMinItemLevelToShow()
 end
 
 -- Actionbar
+
 local function SetupActionBarSize()
     GUI:SetupActionBarSize(GUI.Page[5])
-end
-
-local function SetupVehicleButtonSize()
-    GUI:SetupVehicleButtonSize(GUI.Page[5])
-end
-
-local function SetupStanceBarSize()
-    GUI:SetupStanceBarSize(GUI.Page[5])
 end
 
 local function SetupActionbarFader()
@@ -58,8 +51,6 @@ end
 local function UpdateVisibility()
     ACTIONBAR:UpdateVisibility()
 end
-
-
 
 local function SetupCooldownCount()
     GUI:SetupCooldownCount(GUI.Page[5])

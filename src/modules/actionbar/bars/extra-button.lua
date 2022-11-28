@@ -10,7 +10,7 @@ function ACTIONBAR:CreateExtraBar()
     local frame = CreateFrame('Frame', C.ADDON_TITLE .. 'ActionBarExtra', _G.UIParent, 'SecureHandlerStateTemplate')
     frame:SetWidth(size + 2 * padding)
     frame:SetHeight(size + 2 * padding)
-    frame.mover = F.Mover(frame, L['ExtraBar'], 'ExtraBar', { 'BOTTOM', _G.UIParent, 'BOTTOM', 250, 100 })
+    frame.mover = F.Mover(frame, L['ExtraButton'], 'ExtraButton', { 'CENTER', _G.UIParent, 'CENTER', 0, 250 })
 
     local ExtraActionBarFrame = _G.ExtraActionBarFrame
     ExtraActionBarFrame:EnableMouse(false)
@@ -36,7 +36,7 @@ function ACTIONBAR:CreateExtraBar()
     local zoneFrame = CreateFrame('Frame', C.ADDON_TITLE .. 'ActionBarZone', _G.UIParent)
     zoneFrame:SetWidth(size + 2 * padding)
     zoneFrame:SetHeight(size + 2 * padding)
-    zoneFrame.mover = F.Mover(zoneFrame, L['ZoneAbility'], 'ZoneAbility', { 'BOTTOM', _G.UIParent, 'BOTTOM', -250, 100 })
+    zoneFrame.mover = F.Mover(zoneFrame, L['ZoneAbilityButton'], 'ZoneAbilityButton', { 'CENTER', _G.UIParent, 'CENTER', 0, 200 })
 
     local ZoneAbilityFrame = _G.ZoneAbilityFrame
     ZoneAbilityFrame:SetParent(zoneFrame)

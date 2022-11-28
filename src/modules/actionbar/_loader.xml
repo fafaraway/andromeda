@@ -4,8 +4,8 @@
     <Script file="bars\bars.lua"/>
     <Script file="bars\pet-bar.lua"/>
     <Script file="bars\stance-bar.lua"/>
-    <Script file="bars\extra-bar.lua"/>
-    <Script file="bars\vehicle-bar.lua"/>
+    <Script file="bars\extra-button.lua"/>
+    <Script file="bars\leave-vehicle-button.lua"/>
     <Script file="bars\remove-blizz-stuff.lua"/>
     <Script file="bars\bar-preset.lua"/>
 
