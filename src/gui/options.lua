@@ -51,21 +51,15 @@ local function SetupActionbarFader()
     GUI:SetupActionbarFader(GUI.Page[5])
 end
 
-local function UpdateHotkeys()
-    for _, button in pairs(ACTIONBAR.buttons) do
-        if button.UpdateHotkeys then
-            button:UpdateHotkeys(button.buttonType)
-        end
-    end
+local function UpdateBarConfig()
+    ACTIONBAR:UpdateBarConfig()
 end
 
-local function UpdateEquipColor()
-    for _, button in pairs(ACTIONBAR.buttons) do
-        if button.Border and button.Update then
-            ACTIONBAR.UpdateEquipItemColor(button)
-        end
-    end
+local function UpdateVisibility()
+    ACTIONBAR:UpdateVisibility()
 end
+
+
 
 local function SetupCooldownCount()
     GUI:SetupCooldownCount(GUI.Page[5])
@@ -1041,42 +1035,22 @@ GUI.OptionsList = {
         {
             1,
             'Actionbar',
-            'Hotkey',
+            'ShowHotkey',
             L['Key Binding'],
             nil,
             nil,
-            UpdateHotkeys,
+            UpdateBarConfig,
             L['Display key binding on the actionbar buttons.'],
         },
         {
             1,
             'Actionbar',
-            'MacroName',
+            'ShowMacroName',
             L['Macro Name'],
             true,
             nil,
-            nil,
+            UpdateBarConfig,
             L['Display macro name on the actionbar buttons.'],
-        },
-        {
-            1,
-            'Actionbar',
-            'CountNumber',
-            L['Count and Charge'],
-            nil,
-            nil,
-            nil,
-            L['Display item count and spell charge on the actionbar buttons.'],
-        },
-        {
-            1,
-            'Actionbar',
-            'ButtonFlash',
-            L['Flash Animation'],
-            true,
-            nil,
-            nil,
-            L['Add flash animation to the pressed actionbar buttons.'],
         },
         {
             1,
@@ -1085,7 +1059,7 @@ GUI.OptionsList = {
             L['Equipped Item Border'],
             nil,
             nil,
-            UpdateEquipColor,
+            UpdateBarConfig,
             L['Color the button border of equipped item.'],
         },
         {
@@ -1095,8 +1069,17 @@ GUI.OptionsList = {
             L['Button Class Color'],
             true,
             nil,
-            nil,
+            UpdateBarConfig,
             L['Color the button backdrop of actionbar by player class.'],
+        },
+        {
+            1,
+            'Actionbar',
+            'Grid',
+            L['Show Grid'],
+            nil,
+            nil,
+            UpdateBarConfig,
         },
         {
             1,
@@ -1128,22 +1111,13 @@ GUI.OptionsList = {
             nil,
             L['You can mouse wheel on actionbar buttons, and send its cooldown status to your group.'],
         },
-        {
-            1,
-            'Actionbar',
-            'CooldownDesaturate',
-            L['Desaturate Icon'],
-            true,
-            nil,
-            nil,
-            L['Desaturate actionbar buttons when they are on cooldown.'],
-        },
+
         {
             1,
             'Actionbar',
             'KeyFeedback',
             L['Key Feedback'],
-            nil,
+            true,
             nil,
             nil,
             L['Display spell you are currently pressing.'],
@@ -1152,7 +1126,87 @@ GUI.OptionsList = {
         {
             1,
             'Actionbar',
-            'EnablePetBar',
+            'Bar1',
+            L['Bar 1'],
+            nil,
+            nil,
+            UpdateVisibility,
+            L['Enable actionbar 1.'],
+        },
+        {
+            1,
+            'Actionbar',
+            'Bar2',
+            L['Bar 2'],
+            true,
+            nil,
+            UpdateVisibility,
+            L['Enable actionbar 2.'],
+        },
+        {
+            1,
+            'Actionbar',
+            'Bar3',
+            L['Bar 3'],
+            nil,
+            nil,
+            UpdateVisibility,
+            L['Enable actionbar 3.'],
+        },
+        {
+            1,
+            'Actionbar',
+            'Bar4',
+            L['Bar 4'],
+            true,
+            nil,
+            UpdateVisibility,
+            L['Enable actionbar 4.'],
+        },
+        {
+            1,
+            'Actionbar',
+            'Bar5',
+            L['Bar 5'],
+            nil,
+            nil,
+            UpdateVisibility,
+            L['Enable actionbar 5.'],
+        },
+        {
+            1,
+            'Actionbar',
+            'Bar6',
+            L['Bar 6'],
+            true,
+            nil,
+            UpdateVisibility,
+            L['Enable actionbar 6.'],
+        },
+        {
+            1,
+            'Actionbar',
+            'Bar7',
+            L['Bar 7'],
+            nil,
+            nil,
+            UpdateVisibility,
+            L['Enable actionbar 7.'],
+        },
+        {
+            1,
+            'Actionbar',
+            'Bar8',
+            L['Bar 8'],
+            true,
+            nil,
+            UpdateVisibility,
+            L['Enable actionbar 8.'],
+        },
+        {
+            1,
+            'Actionbar',
+            'BarPet',
             L['Pet Bar'],
             nil,
             nil,
@@ -1162,20 +1216,30 @@ GUI.OptionsList = {
         {
             1,
             'Actionbar',
-            'EnableStanceBar',
+            'BarStance',
             L['Stance Bar'],
             true,
-            SetupStanceBarSize,
             nil,
-            L['Enable stance bar.'],
+            nil,
+            L['Enable stance actionbar.'],
         },
         {
             1,
             'Actionbar',
-            'EnableVehicleBar',
-            L['Leave Vehicle Button'],
+            'BarExtra',
+            L['Extra Button'],
             nil,
-            SetupVehicleButtonSize,
+            nil,
+            nil,
+            L['Enable extra button.'],
+        },
+        {
+            1,
+            'Actionbar',
+            'BarVehicle',
+            L['Leave Vehicle Button'],
+            true,
+            nil,
             nil,
             L['Enable leave vehicle button.'],
         },
@@ -1649,7 +1713,6 @@ GUI.OptionsList = {
             nil,
             SetupUnitFrame,
         },
-
         {
             4,
             'ACCOUNT',
@@ -1675,11 +1738,11 @@ GUI.OptionsList = {
             L['Health Color'],
             nil,
             {
-                L['opaque grey'],
-                L['opaque Class Color'],
-                L['opaque gradient'],
-                L['clear class color'],
-                L['clear gradient'],
+                L['Opaque: Grey'],
+                L['Opaque: Class Color'],
+                L['Opaque: Gradient'],
+                L['Clear: Class Color'],
+                L['Clear: Gradient'],
             },
             UpdateHealthBarColor,
         },
@@ -1703,7 +1766,6 @@ GUI.OptionsList = {
             nil,
             L['Smoothly animate unit frame bars.'],
         },
-
         {
             1,
             'Unitframe',

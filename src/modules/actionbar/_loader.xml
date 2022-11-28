@@ -9,8 +9,7 @@
     <Script file="bars\remove-blizz-stuff.lua"/>
     <Script file="bars\bar-preset.lua"/>
 
-    <!-- <Script file="bar-fader.lua"/> -->
-    <Script file="button-flash.lua"/>
+    <Script file="bar-fader.lua"/>
     <Script file="button-style.lua"/>
     <Script file="cooldown-notify.lua"/>
     <Script file="key-binding.lua"/>

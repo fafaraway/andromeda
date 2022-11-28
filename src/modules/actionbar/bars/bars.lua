@@ -246,8 +246,8 @@ function ACTIONBAR:CreateBars()
     local margin = C.DB['Actionbar']['ButtonMargin']
     local padding = C.DB['Actionbar']['BarPadding']
 
-    local BAR_DATA = {
-        [1] = { page = 1, bindName = 'ACTIONBUTTON', anchor = { 'BOTTOM', _G.UIParent, 'BOTTOM', 0, 24 } },
+    local barData = {
+        [1] = { page = 1, bindName = 'ACTIONBUTTON', anchor = { 'BOTTOM', _G.UIParent, 'BOTTOM', 0, 33 } },
         [2] = { page = 6, bindName = 'MULTIACTIONBAR1BUTTON', anchor = { 'BOTTOM', _G[C.ADDON_TITLE .. 'ActionBar1'], 'TOP', 0, -margin } },
         [3] = { page = 5, bindName = 'MULTIACTIONBAR2BUTTON', anchor = { 'RIGHT', _G[C.ADDON_TITLE .. 'ActionBar1'], 'TOPLEFT', -margin, -padding / 2 } },
         [4] = { page = 3, bindName = 'MULTIACTIONBAR3BUTTON', anchor = { 'RIGHT', _G.UIParent, 'RIGHT', -1, 0 } },
@@ -259,7 +259,7 @@ function ACTIONBAR:CreateBars()
 
     local mIndex = 1
     for index = 1, 8 do
-        local data = BAR_DATA[index]
+        local data = barData[index]
         local frame = ACTIONBAR.headers[index]
 
         if index == 3 then

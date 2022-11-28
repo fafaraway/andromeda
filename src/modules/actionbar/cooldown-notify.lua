@@ -26,17 +26,17 @@ function ACTIONBAR:SendCurrentSpell(thisTime, spellID)
     if charges and maxCharges then
         if charges ~= maxCharges then
             local remain = chargeStart + chargeDuration - thisTime
-            SendChatMessage(format(L['%s %s/%s next charge remaining %s.'], spellLink, charges, maxCharges, GetRemainTime(remain)), ACTIONBAR:GetMsgChannel())
+            SendChatMessage(format(L['%s %s/%s next charge remaining %s.'], spellLink, charges, maxCharges, GetRemainTime(remain)), 'PARTY')
         else
-            SendChatMessage(format(L['%s %s/%s all charges ready.'], spellLink, charges, maxCharges), ACTIONBAR:GetMsgChannel())
+            SendChatMessage(format(L['%s %s/%s all charges ready.'], spellLink, charges, maxCharges), 'PARTY')
         end
     else
         local start, duration = GetSpellCooldown(spellID)
         if start and duration > 0 then
             local remain = start + duration - thisTime
-            SendChatMessage(format(L['%s cooldown remaining %s.'], spellLink, GetRemainTime(remain)), ACTIONBAR:GetMsgChannel())
+            SendChatMessage(format(L['%s cooldown remaining %s.'], spellLink, GetRemainTime(remain)), 'PARTY')
         else
-            SendChatMessage(format(L['%s is now available.'], spellLink), ACTIONBAR:GetMsgChannel())
+            SendChatMessage(format(L['%s is now available.'], spellLink), 'PARTY')
         end
     end
 end

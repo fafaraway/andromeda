@@ -4,7 +4,7 @@ local ACTIONBAR = F:GetModule('ActionBar')
 function ACTIONBAR:CreateExtraBar()
     local padding = C.DB['Actionbar']['BarPadding']
     local buttonList = {}
-    local size = 52
+    local size = C.DB['Actionbar']['BarExtraButtonSize']
 
     -- ExtraActionButton
     local frame = CreateFrame('Frame', C.ADDON_TITLE .. 'ActionBarExtra', _G.UIParent, 'SecureHandlerStateTemplate')

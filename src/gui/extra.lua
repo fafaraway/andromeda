@@ -589,15 +589,11 @@ function GUI:SetupMinItemLevelToShow(parent)
 end
 
 -- Actionbar
-local barsList = { 'Bar1', 'Bar2', 'Bar3', 'Bar4', 'Bar5' }
+local barsList = { 'Bar1', 'Bar2', 'Bar3', 'Bar4', 'Bar5', 'Bar6', 'Bar7', 'Bar8', 'BarPet' }
 local function UpdateActionBarSize()
     for _, v in ipairs(barsList) do
-        BAR:UpdateActionBarSize(v)
+        BAR:UpdateSize(v)
     end
-end
-
-local function UpdateExtraBar()
-    BAR:UpdateExtraBar()
 end
 
 function GUI:SetupActionBarSize(parent)
@@ -614,37 +610,73 @@ function GUI:SetupActionBarSize(parent)
 
     local datas = {
         bar1 = {
-            [1] = { key = 'Bar1Size', value = db.Bar1Size, text = L['Size'], min = 20, max = 60, step = 1 },
-            [2] = { key = 'Bar1Num', value = db.Bar1Num, text = L['Number'], min = 1, max = 12, step = 1 },
-            [3] = { key = 'Bar1PerRow', value = db.Bar1PerRow, text = L['Per Row'], min = 1, max = 12, step = 1 },
-            [4] = { key = 'Bar1Font', value = db.Bar1Font, text = L['Font Size'], min = 8, max = 16, step = 1 },
+            [1] = { key = 'Bar1ButtonSize', value = db.Bar1ButtonSize, text = L['Size'], min = 20, max = 60, step = 1 },
+            [2] = { key = 'Bar1ButtonNum', value = db.Bar1ButtonNum, text = L['Number'], min = 1, max = 12, step = 1 },
+            [3] = { key = 'Bar1ButtonPerRow', value = db.Bar1ButtonPerRow, text = L['Per Row'], min = 1, max = 12, step = 1 },
+            [4] = { key = 'Bar1FontSize', value = db.Bar1FontSize, text = L['Font Size'], min = 8, max = 16, step = 1 },
         },
         bar2 = {
-            [1] = { key = 'Bar2Size', value = db.Bar2Size, text = L['Size'], min = 20, max = 60, step = 1 },
-            [2] = { key = 'Bar2Num', value = db.Bar2Num, text = L['Number'], min = 1, max = 12, step = 1 },
-            [3] = { key = 'Bar2PerRow', value = db.Bar2PerRow, text = L['Per Row'], min = 1, max = 12, step = 1 },
-            [4] = { key = 'Bar2Font', value = db.Bar2Font, text = L['Font Size'], min = 8, max = 16, step = 1 },
+            [1] = { key = 'Bar2ButtonSize', value = db.Bar2ButtonSize, text = L['Size'], min = 20, max = 60, step = 1 },
+            [2] = { key = 'Bar2ButtonNum', value = db.Bar2ButtonNum, text = L['Number'], min = 1, max = 12, step = 1 },
+            [3] = { key = 'Bar2ButtonPerRow', value = db.Bar2ButtonPerRow, text = L['Per Row'], min = 1, max = 12, step = 1 },
+            [4] = { key = 'Bar2FontSize', value = db.Bar2FontSize, text = L['Font Size'], min = 8, max = 16, step = 1 },
         },
         bar3 = {
-            [1] = { key = 'Bar3Size', value = db.Bar3Size, text = L['Size'], min = 20, max = 60, step = 1 },
-            [2] = { key = 'Bar3Num', value = db.Bar3Num, text = L['Number'], min = 0, max = 12, step = 1 },
-            [3] = { key = 'Bar3PerRow', value = db.Bar3PerRow, text = L['Per Row'], min = 1, max = 12, step = 1 },
-            [4] = { key = 'Bar3Font', value = db.Bar3Font, text = L['Font Size'], min = 8, max = 16, step = 1 },
+            [1] = { key = 'Bar3ButtonSize', value = db.Bar3ButtonSize, text = L['Size'], min = 20, max = 60, step = 1 },
+            [2] = { key = 'Bar3ButtonNum', value = db.Bar3ButtonNum, text = L['Number'], min = 0, max = 12, step = 1 },
+            [3] = { key = 'Bar3ButtonPerRow', value = db.Bar3ButtonPerRow, text = L['Per Row'], min = 1, max = 12, step = 1 },
+            [4] = { key = 'Bar3FontSize', value = db.Bar3FontSize, text = L['Font Size'], min = 8, max = 16, step = 1 },
         },
         bar4 = {
-            [1] = { key = 'Bar4Size', value = db.Bar4Size, text = L['Size'], min = 20, max = 60, step = 1 },
-            [2] = { key = 'Bar4Num', value = db.Bar4Num, text = L['Number'], min = 1, max = 12, step = 1 },
-            [3] = { key = 'Bar4PerRow', value = db.Bar4PerRow, text = L['Per Row'], min = 1, max = 12, step = 1 },
-            [4] = { key = 'Bar4Font', value = db.Bar4Font, text = L['Font Size'], min = 8, max = 16, step = 1 },
+            [1] = { key = 'Bar4ButtonSize', value = db.Bar4ButtonSize, text = L['Size'], min = 20, max = 60, step = 1 },
+            [2] = { key = 'Bar4ButtonNum', value = db.Bar4ButtonNum, text = L['Number'], min = 1, max = 12, step = 1 },
+            [3] = { key = 'Bar4ButtonPerRow', value = db.Bar4ButtonPerRow, text = L['Per Row'], min = 1, max = 12, step = 1 },
+            [4] = { key = 'Bar4FontSize', value = db.Bar4FontSize, text = L['Font Size'], min = 8, max = 16, step = 1 },
         },
         bar5 = {
-            [1] = { key = 'Bar5Size', value = db.Bar5Size, text = L['Size'], min = 20, max = 60, step = 1 },
-            [2] = { key = 'Bar5Num', value = db.Bar5Num, text = L['Number'], min = 1, max = 12, step = 1 },
-            [3] = { key = 'Bar5PerRow', value = db.Bar5PerRow, text = L['Per Row'], min = 1, max = 12, step = 1 },
-            [4] = { key = 'Bar5Font', value = db.Bar5Font, text = L['Font Size'], min = 8, max = 16, step = 1 },
+            [1] = { key = 'Bar5ButtonSize', value = db.Bar5ButtonSize, text = L['Size'], min = 20, max = 60, step = 1 },
+            [2] = { key = 'Bar5ButtonNum', value = db.Bar5ButtonNum, text = L['Number'], min = 1, max = 12, step = 1 },
+            [3] = { key = 'Bar5ButtonPerRow', value = db.Bar5ButtonPerRow, text = L['Per Row'], min = 1, max = 12, step = 1 },
+            [4] = { key = 'Bar5FontSize', value = db.Bar5FontSize, text = L['Font Size'], min = 8, max = 16, step = 1 },
         },
-        extrabar = {
-            [1] = { key = 'BarExtraSize', value = db.BarExtraSize, text = L['Size'], min = 20, max = 60, step = 1 },
+
+        bar6 = {
+            [1] = { key = 'Bar6ButtonSize', value = db.Bar6ButtonSize, text = L['Size'], min = 20, max = 60, step = 1 },
+            [2] = { key = 'Bar6ButtonNum', value = db.Bar6ButtonNum, text = L['Number'], min = 1, max = 12, step = 1 },
+            [3] = { key = 'Bar6ButtonPerRow', value = db.Bar6ButtonPerRow, text = L['Per Row'], min = 1, max = 12, step = 1 },
+            [4] = { key = 'Bar6FontSize', value = db.Bar6FontSize, text = L['Font Size'], min = 8, max = 16, step = 1 },
+        },
+        bar7 = {
+            [1] = { key = 'Bar7ButtonSize', value = db.Bar7ButtonSize, text = L['Size'], min = 20, max = 60, step = 1 },
+            [2] = { key = 'Bar7ButtonNum', value = db.Bar7ButtonNum, text = L['Number'], min = 1, max = 12, step = 1 },
+            [3] = { key = 'Bar7ButtonPerRow', value = db.Bar7ButtonPerRow, text = L['Per Row'], min = 1, max = 12, step = 1 },
+            [4] = { key = 'Bar7FontSize', value = db.Bar7FontSize, text = L['Font Size'], min = 8, max = 16, step = 1 },
+        },
+        bar8 = {
+            [1] = { key = 'Bar8ButtonSize', value = db.Bar8ButtonSize, text = L['Size'], min = 20, max = 60, step = 1 },
+            [2] = { key = 'Bar8ButtonNum', value = db.Bar8ButtonNum, text = L['Number'], min = 1, max = 12, step = 1 },
+            [3] = { key = 'Bar8ButtonPerRow', value = db.Bar8ButtonPerRow, text = L['Per Row'], min = 1, max = 12, step = 1 },
+            [4] = { key = 'Bar8FontSize', value = db.Bar8FontSize, text = L['Font Size'], min = 8, max = 16, step = 1 },
+        },
+
+        barPet = {
+            [1] = { key = 'BarPetButtonSize', value = db.BarPetButtonSize, text = L['Size'], min = 20, max = 60, step = 1 },
+            [2] = { key = 'BarPetButtonPerRow', value = db.BarPetButtonPerRow, text = L['Per Row'], min = 1, max = 12, step = 1 },
+            [3] = { key = 'BarPetFontSize', value = db.BarPetFontSize, text = L['Font Size'], min = 8, max = 16, step = 1 },
+        },
+
+        barStance = {
+            [1] = { key = 'BarStanceButtonSize', value = db.BarStanceButtonSize, text = L['Size'], min = 20, max = 60, step = 1 },
+            [2] = { key = 'BarStanceButtonPerRow', value = db.BarStanceButtonPerRow, text = L['Per Row'], min = 1, max = 12, step = 1 },
+            [3] = { key = 'BarStanceFontSize', value = db.BarStanceFontSize, text = L['Font Size'], min = 8, max = 16, step = 1 },
+        },
+
+        barExtra = {
+            [1] = { key = 'BarExtraButtonSize', value = db.BarExtraButtonSize, text = L['Size'], min = 20, max = 60, step = 1 },
+        },
+
+        barVehicle = {
+            [1] = { key = 'BarVehicleButtonSize', value = db.BarVehicleButtonSize, text = L['Size'], min = 20, max = 60, step = 1 },
         },
     }
 
@@ -674,7 +706,7 @@ function GUI:SetupActionBarSize(parent)
     scroll.groupTitle = nil
 
     for _, v in ipairs(datas.bar4) do
-        CreateGroupTitle(scroll, L['SideBar 1'], offset - 150)
+        CreateGroupTitle(scroll, L['Bar 4'], offset - 150)
         CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 200, UpdateActionBarSize)
         offset = offset - 65
     end
@@ -682,81 +714,64 @@ function GUI:SetupActionBarSize(parent)
     scroll.groupTitle = nil
 
     for _, v in ipairs(datas.bar5) do
-        CreateGroupTitle(scroll, L['SideBar 2'], offset - 200)
+        CreateGroupTitle(scroll, L['Bar 5'], offset - 200)
         CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 250, UpdateActionBarSize)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
-    for _, v in ipairs(datas.extrabar) do
-        CreateGroupTitle(scroll, L['Extra Button'], offset - 250)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 300, UpdateExtraBar)
+    for _, v in ipairs(datas.bar6) do
+        CreateGroupTitle(scroll, L['Bar 6'], offset - 250)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 300, UpdateActionBarSize)
         offset = offset - 65
     end
-end
 
-local function UpdateVehicleButton()
-    BAR:UpdateVehicleButton()
-end
+    scroll.groupTitle = nil
 
-local function UpdateStanceBar()
-    BAR:UpdateStanceBar()
-end
-
-function GUI:SetupVehicleButtonSize(parent)
-    local guiName = C.ADDON_TITLE .. 'GUIVehicleButtonSize'
-    TogglePanel(guiName)
-    if extraGUIs[guiName] then
-        return
+    for _, v in ipairs(datas.bar7) do
+        CreateGroupTitle(scroll, L['Bar 7'], offset - 300)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 350, UpdateActionBarSize)
+        offset = offset - 65
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
-    local db = C.DB.Actionbar
-    local mKey = 'Actionbar'
+    scroll.groupTitle = nil
 
-    local datas = {
-        key = 'VehicleButtonSize',
-        value = db.VehicleButtonSize,
-        text = L['Button Size'],
-        min = 20,
-        max = 80,
-        step = 1,
-    }
-
-    local offset = -10
-    CreateGroupTitle(scroll, L['Leave Vehicle Button'], offset)
-    CreateSlider(scroll, mKey, datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset - 50, UpdateVehicleButton)
-end
-
-function GUI:SetupStanceBarSize(parent)
-    local guiName = C.ADDON_TITLE .. 'GUIStanceBarSize'
-    TogglePanel(guiName)
-    if extraGUIs[guiName] then
-        return
+    for _, v in ipairs(datas.bar8) do
+        CreateGroupTitle(scroll, L['Bar 8'], offset - 350)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 400, UpdateActionBarSize)
+        offset = offset - 65
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
-    local db = C.DB.Actionbar
-    local mKey = 'Actionbar'
+    scroll.groupTitle = nil
 
-    local datas = {
-        [1] = {
-            key = 'BarStanceSize',
-            value = db.BarStanceSize,
-            text = L['Button Size'],
-            min = 20,
-            max = 80,
-            step = 1,
-        },
-    }
+    for _, v in ipairs(datas.barPet) do
+        CreateGroupTitle(scroll, L['Pet Bar'], offset - 400)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 450, UpdateActionBarSize)
+        offset = offset - 65
+    end
 
-    local offset = -10
-    for _, v in ipairs(datas) do
-        CreateGroupTitle(scroll, L['Stance Bar'], offset)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateStanceBar)
+    scroll.groupTitle = nil
+
+    for _, v in ipairs(datas.barStance) do
+        CreateGroupTitle(scroll, L['Stance Bar'], offset - 450)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 500, BAR.UpdateStanceBar)
+        offset = offset - 65
+    end
+
+    scroll.groupTitle = nil
+
+    for _, v in ipairs(datas.barExtra) do
+        CreateGroupTitle(scroll, L['Extra Button'], offset - 500)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 550, BAR.UpdateStanceBar)
+        offset = offset - 65
+    end
+
+    scroll.groupTitle = nil
+
+    for _, v in ipairs(datas.barVehicle) do
+        CreateGroupTitle(scroll, L['Vehicle Button'], offset - 550)
+        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 600, BAR.UpdateStanceBar)
         offset = offset - 65
     end
 end
