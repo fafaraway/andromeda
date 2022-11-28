@@ -1,12 +1,12 @@
 <Bindings>
 
-    <Binding name='Open GUI' category='BINDING_HEADER_ANDROMEDA' header='ANDROMEDA'>
+    <Binding category='BINDING_HEADER_ANDROMEDA' name='Open GUI'>
         ANDROMEDA[1].ToggleConsole()
     </Binding>
-    <Binding name='Inspect Target Unit' category='BINDING_HEADER_ANDROMEDA' header='ANDROMEDA'>
+    <Binding category='BINDING_HEADER_ANDROMEDA' name='Inspect Target Unit'>
         InspectUnit('target')
     </Binding>
-    <Binding name='Inspect MouseOver Unit' category='BINDING_HEADER_ANDROMEDA' header='ANDROMEDA'>
+    <Binding category='BINDING_HEADER_ANDROMEDA' name='Inspect MouseOver Unit'>
         InspectUnit('mouseover')
     </Binding>
 
