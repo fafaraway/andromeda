@@ -246,53 +246,6 @@ do
     hooksecurefunc('TradeFrame_Update', updateColor)
 end
 
--- kill blizzard tutorials
-do
-    local function onEvent()
-        local lastInfoFrame = C_CVar.GetCVarBitfield('closedInfoFrames', _G.NUM_LE_FRAME_TUTORIALS)
-        if not lastInfoFrame then
-            C_CVar.SetCVar('showTutorials', 0)
-            C_CVar.SetCVar('showNPETutorials', 0)
-            C_CVar.SetCVar('hideAdventureJournalAlerts', 1)
-            -- help plates
-            for i = 1, _G.NUM_LE_FRAME_TUTORIALS do
-                C_CVar.SetCVarBitfield('closedInfoFrames', i, true)
-            end
-            for i = 1, _G.NUM_LE_FRAME_TUTORIAL_ACCCOUNTS do
-                C_CVar.SetCVarBitfield('closedInfoFramesAccountWide', i, true)
-            end
-        end
-
-        -- hide talent alert
-        function _G.MainMenuMicroButton_AreAlertsEnabled()
-            return false
-        end
-
-        -- disable spells are automatically added to actionbar
-        _G.IconIntroTracker:UnregisterEvent('SPELL_PUSHED_TO_ACTIONBAR')
-    end
-
-    -- if you're in Exile's Reach and level 1 this cvar gets automatically enabled
-    hooksecurefunc('NPE_CheckTutorials', function()
-        if C_PlayerInfo.IsPlayerNPERestricted() and UnitLevel('player') == 1 then
-            SetCVar('showTutorials', 0)
-            _G.NewPlayerExperience:Shutdown()
-            -- for some reason this window still shows up
-            _G.NPE_TutorialKeyboardMouseFrame_Frame:Hide()
-        end
-    end)
-
-    F:RegisterEvent('ADDON_LOADED', onEvent)
-
-    for i = 1, _G.NUM_LE_FRAME_TUTORIALS do
-        C_CVar.SetCVarBitfield('closedInfoFrames', i, true)
-    end
-
-    for i = 1, _G.NUM_LE_FRAME_TUTORIAL_ACCCOUNTS do
-        C_CVar.SetCVarBitfield('closedInfoFramesAccountWide', i, true)
-    end
-end
-
 -- weekly lottery
 do
     local function OnMouseUp(self)

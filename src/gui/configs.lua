@@ -3,6 +3,7 @@ local _, C = unpack(select(2, ...))
 C.CharacterSettings = {
     ShadowLands = false,
     InstallationComplete = false,
+    HideTutorial = 0,
     UIAnchor = {},
     UIAnchorTemp = {},
     General = {

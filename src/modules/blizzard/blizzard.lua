@@ -138,3 +138,58 @@ function BLIZZARD:ClickBindingTab()
         end
     end)
 end
+
+-- Kill blizz tutorial, real man dont need these crap
+-- Credit: ketho
+-- https://github.com/ketho-wow/HideTutorial
+
+do
+    local pendingChanges
+
+    local function addonLoaded(_, _, addon)
+        if addon ~= C.ADDON_NAME then
+            return
+        end
+
+        local tocVersion = select(4, GetBuildInfo())
+        if not C.DB.HideTutorial or C.DB.HideTutorial < tocVersion then
+            C.DB.HideTutorial = tocVersion
+            pendingChanges = true
+        end
+
+        F:UnregisterEvent('ADDON_LOADED', addonLoaded)
+    end
+
+    local function variablesLoaded()
+        local lastInfoFrame = C_CVar.GetCVarBitfield('closedInfoFrames', _G.NUM_LE_FRAME_TUTORIALS)
+        if pendingChanges or not lastInfoFrame then
+            C_CVar.SetCVar('showTutorials', 0)
+            C_CVar.SetCVar('showNPETutorials', 0)
+            C_CVar.SetCVar('hideAdventureJournalAlerts', 1)
+            for i = 1, _G.NUM_LE_FRAME_TUTORIALS do
+                C_CVar.SetCVarBitfield('closedInfoFrames', i, true)
+            end
+            for i = 1, _G.NUM_LE_FRAME_TUTORIAL_ACCCOUNTS do
+                C_CVar.SetCVarBitfield('closedInfoFramesAccountWide', i, true)
+            end
+        end
+
+        if not IsAddOnLoaded(C.ADDON_NAME) then
+            function MainMenuMicroButton_AreAlertsEnabled()
+                return false
+            end
+        end
+
+        F:UnregisterEvent('VARIABLES_LOADED', variablesLoaded)
+    end
+
+    F:RegisterEvent('ADDON_LOADED', addonLoaded)
+    F:RegisterEvent('VARIABLES_LOADED', variablesLoaded)
+
+    hooksecurefunc('NPE_CheckTutorials', function()
+        if C_PlayerInfo.IsPlayerNPERestricted() and UnitLevel('player') == 1 then
+            F:Print('Disabling NPE tutorial.')
+            SetCVar('showTutorials', 0)
+        end
+    end)
+end
