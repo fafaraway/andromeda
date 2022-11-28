@@ -376,7 +376,7 @@ function ExtraQuestButton:SetItem(itemLink)
         else
             HotKey:Hide()
         end
-        ACTIONBAR.UpdateHotKey(self)
+        ACTIONBAR.UpdateHotkey(self)
 
         self:UpdateAttributes()
         self:UpdateCount()
