@@ -1,18 +1,18 @@
 local F, C = unpack(select(2, ...))
 local AS = F:RegisterModule('AutoScreenshot')
 
-local function AchievementEarned(...)
+local function AchievementEarned(_, _, alreadyEarned)
     if not C.DB.General.EarnedNewAchievement then
         return
     end
-
-    local _, _, alreadyEarned = ...
 
     if alreadyEarned then
         return
     end
 
-    F:Delay(1, _G.Screenshot)
+    F:Delay(1, function()
+        Screenshot()
+    end)
 end
 
 local function ChallengeModeCompleted()
@@ -21,7 +21,9 @@ local function ChallengeModeCompleted()
     end
 
     _G.ChallengeModeCompleteBanner:HookScript('OnShow', function()
-        F:Delay(1, _G.Screenshot)
+        F:Delay(1, function()
+            Screenshot()
+        end)
     end)
 end
 
@@ -30,7 +32,9 @@ local function PlayerLevelUp()
         return
     end
 
-    F:Delay(1, _G.Screenshot)
+    F:Delay(1, function()
+        Screenshot()
+    end)
 end
 
 local function PlayerDead()
@@ -38,7 +42,9 @@ local function PlayerDead()
         return
     end
 
-    F:Delay(1, _G.Screenshot)
+    F:Delay(1, function()
+        Screenshot()
+    end)
 end
 
 function AS:OnLogin()
