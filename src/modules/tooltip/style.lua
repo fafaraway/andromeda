@@ -36,27 +36,27 @@ function TOOLTIP:ReskinTooltip()
     if self.bg.__shadow then
         self.bg.__shadow:SetBackdropBorderColor(0, 0, 0, 0.25)
     end
+end
 
-    if C.DB.Tooltip.BorderColor and self.GetTooltipData then
-        local data = self:GetTooltipData()
+function TOOLTIP:UpdateTooltipBorder()
+    if not self.bg then
+        return
+    end
 
-        if not data then
-            return
-        end
+    if not C.DB.Tooltip.BorderColor then
+        return
+    end
 
-        local argVal = data.args and data.args[3]
-        if argVal then
-            local guid = argVal.guidVal
-            local link = guid and C_Item.GetItemLinkByGUID(guid)
-            if link then
-                local quality = select(3, GetItemInfo(link))
-                local color = C.QualityColors[quality or 1]
-                if color then
-                    self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
-                    if self.bg.__shadow then
-                        self.bg.__shadow:SetBackdropBorderColor(color.r, color.g, color.b, 0.25)
-                    end
-                end
+    local data = self:GetTooltipData()
+    local guid = data and data.guid
+    local link = guid and C_Item.GetItemLinkByGUID(guid)
+    if link then
+        local quality = select(3, GetItemInfo(link))
+        local color = C.QualityColors[quality or 1]
+        if color then
+            self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
+            if self.bg.__shadow then
+                self.bg.__shadow:SetBackdropBorderColor(color.r, color.g, color.b, 0.25)
             end
         end
     end

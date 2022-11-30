@@ -2,6 +2,7 @@ local F, C, L = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 local oUF = F.Libs.oUF
 
+local npcIDstring = '%s ' .. C.INFO_COLOR .. '%s'
 local blanchyFix = '|n%s+|n'
 
 TOOLTIP.MountIDs = {}
@@ -23,13 +24,11 @@ local function CanAccessObject(obj)
 end
 
 function TOOLTIP:GetUnit()
-    local _, unit = self:GetUnit()
-    if not unit then
-        local mFocus = GetMouseFocus()
-        unit = mFocus and (mFocus.unit or (mFocus.GetAttribute and mFocus:GetAttribute('unit')))
-    end
+    local data = self:GetTooltipData()
+    local guid = data and data.guid
+    local unit = guid and UnitTokenFromGUID(guid)
 
-    return unit
+    return unit, guid
 end
 
 local FACTION_COLORS = {
@@ -109,7 +108,7 @@ function TOOLTIP:OnTooltipSetUnit()
         return
     end
 
-    local unit = TOOLTIP.GetUnit(self)
+    local unit, guid = TOOLTIP.GetUnit(self)
     if not unit or not UnitExists(unit) then
         return
     end
@@ -209,6 +208,15 @@ function TOOLTIP:OnTooltipSetUnit()
         end
         local tar = format('%s%s', (tarRicon and _G.ICON_LIST[tarRicon] .. '10|t') or '', TOOLTIP:GetTarget(unit .. 'target'))
         self:AddLine(C.INFO_COLOR .. _G.TARGET .. ':|r ' .. tar)
+    end
+
+    if not isPlayer and IsAltKeyDown() then
+        local npcID = F:GetNpcId(guid)
+        if npcID then
+            local reaction = UnitReaction(unit, 'player')
+            local standingText = reaction and hexColor .. _G['FACTION_STANDING_LABEL' .. reaction]
+            self:AddLine(format(npcIDstring, standingText or '', npcID))
+        end
     end
 
     TOOLTIP.InspectUnitSpecAndLevel(self, unit)
@@ -416,6 +424,7 @@ function TOOLTIP:OnLogin()
     _G.TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, TOOLTIP.OnTooltipSetUnit)
     hooksecurefunc(_G.GameTooltip.StatusBar, 'SetValue', TOOLTIP.RefreshStatusBar)
     _G.TooltipDataProcessor.AddLinePreCall(Enum.TooltipDataLineType.None, TOOLTIP.UpdateFactionLine)
+    _G.TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TOOLTIP.UpdateTooltipBorder)
     _G.TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, TOOLTIP.FixRecipeItemNameWidth)
 
     hooksecurefunc('GameTooltip_ShowStatusBar', TOOLTIP.GameTooltip_ShowStatusBar)
