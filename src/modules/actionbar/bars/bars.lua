@@ -163,11 +163,14 @@ function ACTIONBAR:UpdateButtonConfig(i)
     hideElements.macro = not C.DB['Actionbar']['ShowMacroName']
     hideElements.equipped = not C.DB['Actionbar']['EquipColor']
 
+    local lockBars = GetCVarBool('lockActionBars')
     for _, button in next, self.buttons do
         self.buttonConfig.keyBoundTarget = button.bindName
         button.keyBoundTarget = self.buttonConfig.keyBoundTarget
 
-        button:SetAttribute('buttonlock', GetCVarBool('lockActionBars'))
+        button:SetAttribute('buttonlock', lockBars)
+
+        button:SetAttribute('unlockedpreventdrag', not lockBars) -- make sure button can drag without being click
         button:SetAttribute('checkmouseovercast', true)
         button:SetAttribute('checkfocuscast', true)
         button:SetAttribute('checkselfcast', true)
@@ -190,9 +193,11 @@ function ACTIONBAR:UpdateVisibility()
         if frame then
             if C.DB['Actionbar']['Bar' .. i] then
                 frame:Show()
+                frame.mover.isDisable = false
                 RegisterStateDriver(frame, 'visibility', frame.visibility)
             else
                 frame:Hide()
+                frame.mover.isDisable = true
                 UnregisterStateDriver(frame, 'visibility')
             end
         end

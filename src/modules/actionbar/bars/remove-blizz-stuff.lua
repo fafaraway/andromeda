@@ -117,9 +117,6 @@ function ACTIONBAR:RemoveBlizzStuff()
 
     disableDefaultBarEvents()
 
-    -- Hide blizz options
-    SetCVar('multiBarRightVerticalLayout', 0)
-
     -- Fix maw block anchor
     _G.MainMenuBarVehicleLeaveButton:RegisterEvent('PLAYER_ENTERING_WORLD')
 
