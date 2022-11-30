@@ -82,7 +82,7 @@ function UNITFRAME.PostUpdateHealth(element, unit, cur, max)
     end
     if color then
         if useOverlay then
-            element:GetStatusBarTexture():SetGradient('VERTICAL', CreateColor(color[1], color[2], color[3], 0.65), endColor)
+            element:GetStatusBarTexture():SetGradient('VERTICAL', CreateColor(color[1], color[2], color[3], 0.45), endColor)
         end
 
         if useClassColor then
