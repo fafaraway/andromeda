@@ -17,6 +17,5 @@
     <Script file="merchant.lua"/>
     <Script file="orderhall.lua"/>
     <Script file="premade.lua"/>
-    <Script file="talent.lua"/>
     <Script file="tradeskill.lua"/>
 </Ui>

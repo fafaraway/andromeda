@@ -9,7 +9,6 @@
 
 --]]
 
-
 do
     -- binding header
     _G.BINDING_HEADER_ANDROMEDA = GetAddOnMetadata(..., 'Title')
@@ -52,7 +51,6 @@ do
     C.ADDON_TITLE = gsub(C.COLORFUL_ADDON_TITLE, '|c........([^|]+)|r', '%1')
 end
 
-
 -- Libraries
 do
     F.Libs = {}
@@ -77,7 +75,6 @@ do
     F:AddLib('LBG', 'LibButtonGlow-1.0')
     F:AddLib('LRC', 'LibRangeCheck-2.0')
     F:AddLib('LSM', 'LibSharedMedia-3.0')
-    F:AddLib('LDD', 'LibDropDown')
     F:AddLib('Base64', 'LibBase64-1.0')
 
     F.Libs.oUF = engine.oUF
@@ -179,7 +176,9 @@ F:RegisterEvent('PLAYER_LOGIN', function()
 
     F.Modules = modules
 
-    if F.InitCallback then F:InitCallback() end
+    if F.InitCallback then
+        F:InitCallback()
+    end
 
     F:Printf(L['version: %s loaded.'], C.ADDON_VERSION)
 end)
