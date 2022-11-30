@@ -174,11 +174,11 @@ do
             end
         end
 
-        if not IsAddOnLoaded(C.ADDON_NAME) then
+        --if not IsAddOnLoaded(C.ADDON_NAME) then
             function MainMenuMicroButton_AreAlertsEnabled()
                 return false
             end
-        end
+        --end
 
         F:UnregisterEvent('VARIABLES_LOADED', variablesLoaded)
     end
