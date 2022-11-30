@@ -314,6 +314,7 @@ tinsert(C.BlizzThemes, function()
     F.ReskinClose(_G.ReputationDetailCloseButton)
     F.ReskinCheckbox(_G.ReputationDetailInactiveCheckBox)
     F.ReskinCheckbox(_G.ReputationDetailMainScreenCheckBox)
+    F.Reskin(_G.ReputationDetailViewRenownButton)
 
     local atWarCheck = _G.ReputationDetailAtWarCheckBox
     F.ReskinCheckbox(atWarCheck)

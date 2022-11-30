@@ -217,7 +217,7 @@ tinsert(C.BlizzThemes, function()
 
                 local bar = widgetFrame.TimerBar
                 if bar and not bar.bg then
-                    hooksecurefunc(bar, 'SetStatusBarAtlas', F.ReplaceWidgetBarTexture)
+                    hooksecurefunc(bar, 'SetStatusBarTexture', F.ReplaceWidgetBarTexture)
                     bar.bg = F.CreateBDFrame(bar, 0.25)
                 end
 
