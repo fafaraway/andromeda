@@ -651,6 +651,8 @@ function UNITFRAME:SpawnUnits()
     end
 
     if C.DB.Unitframe.RaidFrame then
+        F:LockCVar('predictedHealth', '1')
+
         UNITFRAME:RemoveBlizzRaidFrame()
 
         if C.DB.Unitframe.SimpleMode then

@@ -157,6 +157,27 @@ do
         end
     end
 
+    -- Lock CVar
+    do
+        local lockedCVars = {}
+        function F:LockCVar(name, value)
+            SetCVar(name, value)
+            lockedCVars[name] = value
+        end
+
+        function F:UpdateCVars(var, state)
+            local lockedVar = lockedCVars[var]
+            if lockedVar ~= nil and state ~= lockedVar then
+                SetCVar(var, lockedVar)
+                if C.IS_DEVELOPER then
+                    F:Print('CVar reset', var, lockedVar)
+                end
+            end
+        end
+
+        F:RegisterEvent('CVAR_UPDATE', F.UpdateCVars)
+    end
+
     -- #FIXME 10.0以后如果SetAlpha的值大于1或者小于0会报错，10.0以前则不会
     -- 等以后有空了再仔细看看为什么有些地方的值会超出限制
     function F.TempFixSetAlpha(n)
@@ -1287,10 +1308,6 @@ do
         end
         hooksecurefunc(self, 'Hide', resetIconBorderColor)
         hooksecurefunc(self, 'SetShown', iconBorderShown)
-
-        -- if self.__owner.SetItemButtonQuality then
-        --     hooksecurefunc(self.__owner, 'SetItemButtonQuality', resetIconBorder)
-        -- end
     end
 
     -- Handle button

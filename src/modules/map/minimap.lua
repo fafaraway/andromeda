@@ -42,7 +42,7 @@ function MAP:RemoveBlizzStuff()
         'GuildInstanceDifficulty',
         'MiniMapChallengeMode',
         'GameTimeFrame',
-        'MinimapCompassTexture', -- isNewPatch
+        'MinimapCompassTexture',
     }
 
     for _, v in pairs(frames) do
@@ -569,7 +569,7 @@ function MAP:BuildDropDown()
             UIDropDownMenu_RefreshAll(dropdown)
         end
     end)
-    SetCVar('minimapTrackingShowAll', 1)
+    F:LockCVar('minimapTrackingShowAll', '1')
 
     MAP.MinimapTracking = dropdown
 end
