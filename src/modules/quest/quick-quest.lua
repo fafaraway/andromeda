@@ -1,4 +1,3 @@
--- Quick Quest
 -- Credit: p3lim
 -- https://github.com/p3lim-wow/QuickQuest
 
@@ -199,6 +198,21 @@ QuickQuest:Register('GOSSIP_SHOW', function()
         if instance ~= 'raid' and not ignoreGossipNPC[npcID] and not ignoreInstances[mapID] then
             return C_GossipInfo.SelectOption(firstOptionID)
         end
+    end
+
+    -- 自动选择只有一个带有任务选项的任务
+    local numQuestGossips = 0
+    local questGossipID
+    for i = 1, numOptions do
+        local option = gossipInfoTable[i]
+        if option.name and strfind(option.name, 'cFF0000FF') then
+            numQuestGossips = numQuestGossips + 1
+            questGossipID = option.gossipOptionID
+        end
+    end
+
+    if numQuestGossips == 1 then
+        return C_GossipInfo.SelectOption(questGossipID)
     end
 end)
 
