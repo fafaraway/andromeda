@@ -17,6 +17,7 @@ local buffsList = {
                 [367405] = true, -- 永久符文buff
             },
             instance = true,
+            disable = true,
         },
         {
             itemID = 190958, -- 究极秘术
