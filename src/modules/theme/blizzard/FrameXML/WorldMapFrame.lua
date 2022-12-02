@@ -27,4 +27,12 @@ tinsert(C.BlizzThemes, function()
     F.ReskinArrow(sideToggle.CloseButton, 'left')
 
     F.ReskinNavBar(WorldMapFrame.NavBar)
+
+    for i = 1, #overlayFrames do
+        local frame = overlayFrames[i]
+        if frame.BountyDropdownButton then
+            F.ReskinArrow(frame.BountyDropdownButton, 'right')
+            break
+        end
+    end
 end)

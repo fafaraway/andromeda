@@ -5,22 +5,6 @@ local Type_CaptureBar = _G.Enum.UIWidgetVisualizationType.CaptureBar
 local Type_SpellDisplay = _G.Enum.UIWidgetVisualizationType.SpellDisplay
 local Type_DoubleStatusBar = _G.Enum.UIWidgetVisualizationType.DoubleStatusBar
 
-local atlasColors = {
-    ['UI-Frame-Bar-Fill-Blue'] = { 0.2, 0.6, 1 },
-    ['UI-Frame-Bar-Fill-Red'] = { 0.9, 0.2, 0.2 },
-    ['UI-Frame-Bar-Fill-Yellow'] = { 1, 0.6, 0 },
-    ['objectivewidget-bar-fill-left'] = { 0.2, 0.6, 1 },
-    ['objectivewidget-bar-fill-right'] = { 0.9, 0.2, 0.2 },
-    ['EmberCourtScenario-Tracker-barfill'] = { 0.9, 0.2, 0.2 },
-}
-
-function F:ReplaceWidgetBarTexture(atlas)
-    if atlasColors[atlas] then
-        self:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
-        self:SetStatusBarColor(unpack(atlasColors[atlas]))
-    end
-end
-
 local function ResetLabelColor(text, _, _, _, _, force)
     if not force then
         text:SetTextColor(1, 1, 1, 1, true)
@@ -32,44 +16,51 @@ local function ReskinWidgetStatusBar(bar)
         if bar.BG then
             bar.BG:SetAlpha(0)
         end
+
         if bar.BGLeft then
             bar.BGLeft:SetAlpha(0)
         end
+
         if bar.BGRight then
             bar.BGRight:SetAlpha(0)
         end
+
         if bar.BGCenter then
             bar.BGCenter:SetAlpha(0)
         end
+
         if bar.BorderLeft then
             bar.BorderLeft:SetAlpha(0)
         end
+
         if bar.BorderRight then
             bar.BorderRight:SetAlpha(0)
         end
+
         if bar.BorderCenter then
             bar.BorderCenter:SetAlpha(0)
         end
+
         if bar.Spark then
             bar.Spark:SetAlpha(0)
         end
+
         if bar.SparkGlow then
             bar.SparkGlow:SetAlpha(0)
         end
+
         if bar.BorderGlow then
             bar.BorderGlow:SetAlpha(0)
         end
+
         if bar.Label then
             bar.Label:SetPoint('CENTER')
             bar.Label:SetFontObject(_G.Game12Font)
             ResetLabelColor(bar.Label)
             hooksecurefunc(bar.Label, 'SetTextColor', ResetLabelColor)
         end
+
         F.SetBD(bar)
-        if bar.GetStatusBarTexture then
-            F.ReplaceWidgetBarTexture(bar, bar:GetStatusBarTexture())
-            hooksecurefunc(bar, 'SetStatusBarTexture', F.ReplaceWidgetBarTexture)
-        end
 
         bar.styled = true
     end

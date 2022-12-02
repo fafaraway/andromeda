@@ -28,7 +28,10 @@ tinsert(C.BlizzThemes, function()
     reskinSettingsTab(frame.GameTab)
     reskinSettingsTab(frame.AddOnsTab)
 
-    F.CreateBDFrame(frame.CategoryList, 0.25):SetInside()
+    local clBg = F.CreateBDFrame(frame.CategoryList, 0.25)
+    clBg:SetInside()
+    clBg:SetPoint('TOPLEFT', 1, 6)
+
     hooksecurefunc(frame.CategoryList.ScrollBox, 'Update', function(self)
         for i = 1, self.ScrollTarget:GetNumChildren() do
             local child = select(i, self.ScrollTarget:GetChildren())
@@ -53,7 +56,9 @@ tinsert(C.BlizzThemes, function()
         end
     end)
 
-    F.CreateBDFrame(frame.Container, 0.25):SetInside()
+    local cBg = F.CreateBDFrame(frame.Container, 0.25)
+    cBg:SetInside()
+    cBg:SetPoint('TOPLEFT', 1, 6)
     F.Reskin(frame.Container.SettingsList.Header.DefaultsButton)
     F.ReskinTrimScroll(frame.Container.SettingsList.ScrollBar, true)
 

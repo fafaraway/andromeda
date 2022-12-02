@@ -29,7 +29,7 @@ local function reskinProfessionsFlyout(_, parent)
 
             F.StripTextures(flyoutFrame)
             F.SetBD(flyoutFrame):SetFrameLevel(2)
-            F.ReskinCheck(flyoutFrame.HideUnownedCheckBox)
+            F.ReskinCheckbox(flyoutFrame.HideUnownedCheckBox)
             flyoutFrame.HideUnownedCheckBox.bg:SetInside(nil, 6, 6)
             hooksecurefunc(flyoutFrame.ScrollBox, 'Update', refreshFlyoutButtons)
 
@@ -288,6 +288,7 @@ C.Themes['Blizzard_Professions'] = function()
     local browseFrame = frame.OrdersPage.BrowseFrame
     F.Reskin(browseFrame.SearchButton)
     F.Reskin(browseFrame.FavoritesSearchButton)
+    browseFrame.FavoritesSearchButton:SetSize(22, 22)
 
     local bfRecipeList = browseFrame.RecipeList
     F.StripTextures(bfRecipeList)
@@ -309,6 +310,7 @@ C.Themes['Blizzard_Professions'] = function()
     F.StripTextures(orderList)
     orderList.Background:SetAlpha(0)
     F.CreateBDFrame(orderList, 0.25):SetInside()
+    F.ReskinTrimScroll(orderList.ScrollBar, true)
 
     hooksecurefunc(frame.OrdersPage, 'SetupTable', function()
         local maxHeaders = orderList.HeaderContainer:GetNumChildren()
@@ -327,4 +329,5 @@ C.Themes['Blizzard_Professions'] = function()
             end
         end
     end)
+    frame.OrdersPage:SetupTable() -- init header
 end
