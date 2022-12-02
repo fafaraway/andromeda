@@ -59,6 +59,14 @@ function UNITFRAME:PLAYER_ENTERING_WORLD()
     end
 end
 
+local x1, x2, y1, y2 = unpack(C.TEX_COORD)
+function UNITFRAME:UpdateIconTexCoord(width, height)
+	local ratio = height / width
+	local mult = (1 - ratio) / 2
+
+	self.Icon:SetTexCoord(x1, x2, y1 + mult, y2 - mult)
+end
+
 function UNITFRAME.PostCreateButton(element, button)
     button.bg = F.CreateBDFrame(button, 0.25)
     button.glow = F.CreateSD(button.bg)
@@ -95,14 +103,14 @@ function UNITFRAME.PostCreateButton(element, button)
     button.timer:ClearAllPoints()
     button.timer:SetPoint('LEFT', button, 'BOTTOMLEFT')
 
-    button.UpdateTooltip = UpdateAuraTooltip
-    button:SetScript('OnEnter', Aura_OnEnter)
-    button:SetScript('OnLeave', Aura_OnLeave)
-    button:SetScript('OnClick', function(self, btn)
-        if not InCombatLockdown() and btn == 'RightButton' then
-            CancelUnitBuff('player', self:GetID(), self.filter)
-        end
-    end)
+    -- button.UpdateTooltip = UpdateAuraTooltip
+    -- button:SetScript('OnEnter', Aura_OnEnter)
+    -- button:SetScript('OnLeave', Aura_OnLeave)
+    -- button:SetScript('OnClick', function(self, btn)
+    --     if not InCombatLockdown() and btn == 'RightButton' then
+    --         CancelUnitBuff('player', self:GetID(), self.filter)
+    --     end
+    -- end)
 end
 
 local filteredUnits = {
@@ -243,13 +251,13 @@ function UNITFRAME.PostUpdateButton(element, button, unit, data)
     -- end
 
     if element.bolsterInstanceID and element.bolsterInstanceID == button.auraInstanceID then
-		button.count:SetText(element.bolsterStacks)
-	end
+        button.count:SetText(element.bolsterStacks)
+    end
 end
 
 function UNITFRAME.AurasPreUpdate(element)
-	element.bolsterStacks = 0
-	element.bolsterInstanceID = nil
+    element.bolsterStacks = 0
+    element.bolsterInstanceID = nil
 end
 
 local isMine = {
@@ -269,10 +277,10 @@ function UNITFRAME.AuraFilter(element, unit, data)
 
     if name and spellID == 209859 then
         if not element.bolsterInstanceID then
-			element.bolsterInstanceID = data.auraInstanceID
-		end
-		element.bolsterStacks = element.bolsterStacks + 1
-		return element.bolsterStacks == 1
+            element.bolsterInstanceID = data.auraInstanceID
+        end
+        element.bolsterStacks = element.bolsterStacks + 1
+        return element.bolsterStacks == 1
     elseif style == 'party' then
         if C.PartyAurasList[spellID] then
             return true
