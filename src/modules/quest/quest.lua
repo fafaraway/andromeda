@@ -40,6 +40,5 @@ function QUEST:OnLogin()
         F:UnregisterEvent('QUEST_TURNED_IN', QUEST.CheckWorldQuest)
     end
 
-    if C.IS_NEW_PATCH then return end
     QUEST:WowheadLink()
 end

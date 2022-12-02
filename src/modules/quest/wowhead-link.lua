@@ -1,12 +1,8 @@
 local F, C, L = unpack(select(2, ...))
 local QUEST = F:GetModule('Quest')
 
--- #TODO
-if C.IS_NEW_PATCH then return end
-
 local linkQuest = 'http://www.wowhead.com/quest=%d'
 local linkAchievement = 'http://www.wowhead.com/achievement=%d'
-
 
 local function Button_Onclick(self)
     if self.id and IsControlKeyDown() then
@@ -64,9 +60,9 @@ function QUEST:WowheadLink()
         _G.UIDropDownMenu_AddButton(info, _G.UIDROPDOWN_MENU_LEVEL)
     end)
 
-    if IsAddOnLoaded('Blizzard_AchievementUI') then
-        hooksecurefunc('AchievementButton_OnClick', Button_Onclick)
-    else
-        F:RegisterEvent('ADDON_LOADED', QUEST.Load)
-    end
+    -- if IsAddOnLoaded('Blizzard_AchievementUI') then
+    --     hooksecurefunc('AchievementButton_OnClick', Button_Onclick)
+    -- else
+    --     F:RegisterEvent('ADDON_LOADED', QUEST.Load)
+    -- end
 end
