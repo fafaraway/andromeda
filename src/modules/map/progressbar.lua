@@ -135,7 +135,8 @@ function M:Bar_Update()
             end
         end
 
-        self:SetStatusBarColor(_G.FACTION_BAR_COLORS[standing].r, _G.FACTION_BAR_COLORS[standing].g, _G.FACTION_BAR_COLORS[standing].b, 0.85)
+        local color = _G.FACTION_BAR_COLORS[standing] or _G.FACTION_BAR_COLORS[5]
+        self:SetStatusBarColor(color.r, color.g, color.b, 0.85)
         self:SetMinMaxValues(barMin, barMax)
         self:SetValue(value)
         self:Show()
