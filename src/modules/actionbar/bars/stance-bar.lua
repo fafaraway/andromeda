@@ -4,6 +4,10 @@ local ACTIONBAR = F:GetModule('ActionBar')
 local num = _G.NUM_STANCE_SLOTS or 10
 
 function ACTIONBAR:UpdateStanceBar()
+    if InCombatLockdown() then
+        return
+    end
+
     local frame = _G[C.ADDON_TITLE .. 'ActionBarStance']
     if not frame then
         return
@@ -37,17 +41,17 @@ function ACTIONBAR:UpdateStanceBar()
 end
 
 function ACTIONBAR:UpdateStance()
-    if InCombatLockdown() then
-        return
-    end
-
+    local inCombat = InCombatLockdown()
     local numForms = GetNumShapeshiftForms()
     local texture, isActive, isCastable
     local icon, cooldown
     local start, duration, enable
 
     for i, button in pairs(self.actionButtons) do
-        button:Hide()
+        if not inCombat then
+            button:Hide()
+        end
+
         icon = button.icon
         if i <= numForms then
             texture, isActive, isCastable = GetShapeshiftFormInfo(i)
@@ -56,7 +60,9 @@ function ACTIONBAR:UpdateStance()
             --Cooldown stuffs
             cooldown = button.cooldown
             if texture then
-                button:Show()
+                if not inCombat then
+                    button:Show()
+                end
                 cooldown:Show()
             else
                 cooldown:Hide()
@@ -80,9 +86,6 @@ function ACTIONBAR:UpdateStance()
 end
 
 function ACTIONBAR:StanceBarOnEvent()
-    if InCombatLockdown() then
-        return
-    end
     ACTIONBAR:UpdateStanceBar()
     ACTIONBAR.UpdateStance(_G.StanceBar)
 end
