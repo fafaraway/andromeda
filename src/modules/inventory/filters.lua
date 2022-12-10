@@ -152,6 +152,9 @@ local petTrashCurrenies = {
     [36812] = true,
     [62072] = true,
     [67410] = true,
+
+    [192644] = true, -- 气态微尘
+    [192648] = true, -- 完好的野兽毛皮
 }
 
 function INVENTORY:IsPetTrashCurrency(itemID)
@@ -167,7 +170,7 @@ local function isItemCollection(item)
         return
     end
 
-    return item.id and C_ToyBox.GetToyInfo(item.id) or isMountOrPet(item) or INVENTORY:IsPetTrashCurrency(item.id)
+    return item.id and C_ToyBox.GetToyInfo(item.id) or isMountOrPet(item)
 end
 
 local function isItemCustom(item, index)
