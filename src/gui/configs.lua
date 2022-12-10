@@ -400,7 +400,6 @@ C.CharacterSettings = {
         HideInCombat = false,
         SpecIlvl = true,
         Covenant = true,
-        Conduit = true,
         MythicPlusScore = true,
         PlayerInfoByAlt = true,
         TargetedBy = true,
