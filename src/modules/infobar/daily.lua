@@ -37,7 +37,6 @@ end
 local questlist = {
     { name = L['Winter Veil Daily'], id = 6983 },
     { name = L['Blingtron Daily Pack'], id = 34774 },
-    { name = L['Tormentors of Torghast'], id = 63854 },
     { name = L['Timewarped Badge Reward'], id = 40168, texture = 1129674 }, -- TBC
     { name = L['Timewarped Badge Reward'], id = 40173, texture = 1129686 }, -- WotLK
     { name = L['Timewarped Badge Reward'], id = 40786, texture = 1304688 }, -- Cata
@@ -45,21 +44,6 @@ local questlist = {
     { name = L['Timewarped Badge Reward'], id = 55499, texture = 1129683 }, -- WoD
     { name = L['Timewarped Badge Reward'], id = 64710, texture = 1467047 }, -- Legion
 }
-
--- Torghast
-local torgInfo
-local torgWidgets = {
-    { nameID = 2925, levelID = 2930 }, -- Fracture Chambers
-    { nameID = 2926, levelID = 2932 }, -- Skoldus Hall
-    { nameID = 2924, levelID = 2934 }, -- Soulforges
-    { nameID = 2927, levelID = 2936 }, -- Coldheart Interstitia
-    { nameID = 2928, levelID = 2938 }, -- Mort'regar
-    { nameID = 2929, levelID = 2940 }, -- The Upper Reaches
-}
-
-local function CleanupLevelName(text)
-    return gsub(text, '|n', '')
-end
 
 local title
 local function AddTitle(text)
@@ -137,27 +121,6 @@ local function Block_OnEnter(self)
                 g,
                 b
             )
-        end
-    end
-
-    -- Torghast
-    if not torgInfo then
-        torgInfo = C_AreaPoiInfo.GetAreaPOIInfo(1543, 6640)
-    end
-    if torgInfo and C_QuestLog.IsQuestFlaggedCompleted(60136) then
-        title = false
-        for _, value in pairs(torgWidgets) do
-            local nameInfo = C_UIWidgetManager.GetTextWithStateWidgetVisualizationInfo(value.nameID)
-            if nameInfo and nameInfo.shownState == 1 then
-                AddTitle(torgInfo.name)
-                local nameText = CleanupLevelName(nameInfo.text)
-                local levelInfo = C_UIWidgetManager.GetTextWithStateWidgetVisualizationInfo(value.levelID)
-                local levelText = _G.AVAILABLE
-                if levelInfo and levelInfo.shownState == 1 then
-                    levelText = CleanupLevelName(levelInfo.text)
-                end
-                _G.GameTooltip:AddDoubleLine(nameText, levelText)
-            end
         end
     end
 
