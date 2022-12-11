@@ -1,3 +1,6 @@
+-- Credit: rgd87
+-- https://github.com/rgd87/NugKeyFeedback
+
 local F, C, L = unpack(select(2, ...))
 -- local ACTIONBAR = F:GetModule('ActionBar')
 

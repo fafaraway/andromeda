@@ -214,6 +214,7 @@ local function CastStart(self, event, unit)
 	element.castID = castID
 	element.spellID = spellID
 	element.numStages = numStages -- Andromeda
+	-- print(spellID)
 
 	if(element.channeling) then
 		element.duration = endTime - GetTime()

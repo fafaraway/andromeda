@@ -1,3 +1,6 @@
+-- Credit: aduth
+-- https://github.com/aduth/Doom_CooldownPulse
+
 local F, C, L = unpack(select(2, ...))
 local CDP = F:RegisterModule('CooldownPulse')
 

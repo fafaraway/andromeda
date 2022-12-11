@@ -1,3 +1,5 @@
+-- Credit: ElvUI, ElvUI_WindTool
+
 local F = unpack(select(2, ...))
 
 local animShake = {
@@ -253,9 +255,7 @@ function F:UIFrameFade_OnUpdate(elapsed)
                 if info.mode == 'IN' then
                     frame:SetAlpha((info.fadeTimer / info.timeToFade) * info.diffAlpha + info.startAlpha)
                 else
-                    frame:SetAlpha(
-                        ((info.timeToFade - info.fadeTimer) / info.timeToFade) * info.diffAlpha + info.endAlpha
-                    )
+                    frame:SetAlpha(((info.timeToFade - info.fadeTimer) / info.timeToFade) * info.diffAlpha + info.endAlpha)
                 end
             else
                 frame:SetAlpha(info.endAlpha)
@@ -271,13 +271,7 @@ function F:UIFrameFade_OnUpdate(elapsed)
                         if info.finishedArgs then
                             info.finishedFunc(unpack(info.finishedArgs))
                         else -- optional method
-                            info.finishedFunc(
-                                info.finishedArg1,
-                                info.finishedArg2,
-                                info.finishedArg3,
-                                info.finishedArg4,
-                                info.finishedArg5
-                            )
+                            info.finishedFunc(info.finishedArg1, info.finishedArg2, info.finishedArg3, info.finishedArg4, info.finishedArg5)
                         end
 
                         if not info.finishedFuncKeep then
@@ -294,7 +288,6 @@ function F:UIFrameFade_OnUpdate(elapsed)
     end
 end
 
--- Generic fade function
 function F:UIFrameFade(frame, info)
     if not frame or frame:IsForbidden() then
         return
@@ -342,7 +335,6 @@ function F:UIFrameFade(frame, info)
     end
 end
 
--- Convenience function to do a simple fade in
 function F:UIFrameFadeIn(frame, timeToFade, startAlpha, endAlpha)
     if not frame or frame:IsForbidden() then
         return
@@ -363,7 +355,6 @@ function F:UIFrameFadeIn(frame, timeToFade, startAlpha, endAlpha)
     F:UIFrameFade(frame, frame.FadeObject)
 end
 
--- Convenience function to do a simple fade out
 function F:UIFrameFadeOut(frame, timeToFade, startAlpha, endAlpha)
     if not frame or frame:IsForbidden() then
         return
@@ -394,19 +385,6 @@ function F:UIFrameFadeRemoveFrame(frame)
     end
 end
 
--- From ElvUI_WindTool
-
---[[
-    创建动画窗体
-    @param {string} [name] 动画窗体名
-    @param {object} [parent=ElvUIParent] 父窗体
-    @param {strata} [string] 窗体层级
-    @param {level} [number] 窗体等级
-    @param {hidden} [boolean] 窗体创建后隐藏
-    @param {texture} [string] 材质路径
-    @param {isMirror} [boolean] 使材质沿 y 轴翻折
-    @returns object 创建的窗体
-]]
 function F.CreateAnimationFrame(name, parent, strata, level, hidden, texture, isMirror, color)
     parent = parent or _G.UIParent
 
@@ -445,14 +423,9 @@ function F.CreateAnimationFrame(name, parent, strata, level, hidden, texture, is
     return frame
 end
 
---[[
-    创建动画组
-    @param {object} parent 父窗体
-    @param {string} [name] 动画组名
-    @returns object 生成的动画组
-]]
 function F.CreateAnimationGroup(frame, name)
     if not frame then
+        F:Debug('Animation.CreateAnimationGroup: frame not found')
         return
     end
 
@@ -464,16 +437,12 @@ function F.CreateAnimationGroup(frame, name)
     return animationGroup
 end
 
---[[
-    添加移动动画
-    @param {object} animationGroup 从属动画组
-    @param {string} name 动画索引名
-]]
 function F.AddTranslation(animationGroup, name)
     if not (animationGroup and animationGroup:IsObjectType('AnimationGroup')) then
         return
     end
     if not name then
+        F:Debug('Animation.AddTranslation: name not found')
         return
     end
 
@@ -482,17 +451,14 @@ function F.AddTranslation(animationGroup, name)
     animationGroup[name] = animation
 end
 
---[[
-    添加渐入动画
-    @param {object} animationGroup 从属动画组
-    @param {string} name 动画索引名
-]]
 function F.AddFadeIn(animationGroup, name)
     if not (animationGroup and animationGroup:IsObjectType('AnimationGroup')) then
+        F:Debug('Animation.AddFadeIn: animation group not found')
         return
     end
 
     if not name then
+        F:Debug('Animation.AddFadeIn: name not found')
         return
     end
 
@@ -504,17 +470,14 @@ function F.AddFadeIn(animationGroup, name)
     animationGroup[name] = animation
 end
 
---[[
-    添加渐隐动画
-    @param {object} animationGroup 从属动画组
-    @param {string} name 动画索引名
-]]
 function F.AddFadeOut(animationGroup, name)
     if not (animationGroup and animationGroup:IsObjectType('AnimationGroup')) then
+        F:Debug('Animation.AddFadeOut: animation group not found')
         return
     end
 
     if not name then
+        F:Debug('Animation.AddFadeOut: name not found')
         return
     end
 
@@ -526,27 +489,24 @@ function F.AddFadeOut(animationGroup, name)
     animationGroup[name] = animation
 end
 
---[[
-    添加缩放动画
-    @param {object} animationGroup 从属动画组
-    @param {string} name 动画索引名
-    @param {number[2]} fromScale 原尺寸 x, y
-    @param {number[2]} toScale 动画后尺寸 x, y
-]]
 function F.AddScale(animationGroup, name, fromScale, toScale)
     if not (animationGroup and animationGroup:IsObjectType('AnimationGroup')) then
+        F:Debug('Animation.AddScale: animation group not found')
         return
     end
 
     if not name then
+        F:Debug('Animation.AddScale: name not found')
         return
     end
 
-    if not fromScale or type(fromScale) ~= 'table' or #fromScale < 2 then
+    if not fromScale or type(fromScale) ~= 'table' or getn(fromScale) < 2 then
+        F:Debug('Animation.AddScale: invalid fromScale (x, y)')
         return
     end
 
-    if not toScale or type(toScale) ~= 'table' or #toScale < 2 then
+    if not toScale or type(toScale) ~= 'table' or getn(toScale) < 2 then
+        F:Debug('Animation.AddScale: invalid toScale (x, y)')
         return
     end
 
@@ -557,17 +517,13 @@ function F.AddScale(animationGroup, name, fromScale, toScale)
     animationGroup[name] = animation
 end
 
---[[
-    设定动画随显示属性而播放
-    @param {object} frame 动画窗体
-    @param {object} animationGroup 动画组
-]]
 function F.PlayAnimationOnShow(frame, animationGroup)
     if not animationGroup or type(animationGroup) == 'string' then
         animationGroup = frame[animationGroup]
     end
 
     if not (animationGroup and animationGroup:IsObjectType('AnimationGroup')) then
+        F:Debug('Animation.PlayAnimationOnShow: animation group not found')
         return
     end
 
@@ -576,18 +532,13 @@ function F.PlayAnimationOnShow(frame, animationGroup)
     end)
 end
 
---[[
-    设定动画随显示属性而播放
-    @param {object} frame 动画窗体
-    @param {object} animationGroup 动画组
-    @param {function} [callback] 结束时的回调
-]]
 function F.CloseAnimationOnHide(frame, animationGroup, callback)
     if not animationGroup or type(animationGroup) == 'string' then
         animationGroup = frame[animationGroup]
     end
 
     if not (animationGroup and animationGroup:IsObjectType('AnimationGroup')) then
+        F:Debug('Animation.CloseAnimationOnHide: animation group not found')
         return
     end
 
@@ -599,21 +550,19 @@ function F.CloseAnimationOnHide(frame, animationGroup, callback)
     end)
 end
 
---[[
-    调整动画组速度
-    @param {object} animationGroup 动画组
-    @param {number} speed 相较于原速度的倍数
-]]
 function F.SpeedAnimationGroup(animationGroup, speed)
     if not speed or type(speed) ~= 'number' then
+        F:Debug('Animation.SpeedAnimationGroup: speed not found')
         return
     end
 
     if not (animationGroup and animationGroup:IsObjectType('AnimationGroup')) then
+        F:Debug('Animation.SpeedAnimationGroup: animation group not found')
         return
     end
 
     if not animationGroup.GetAnimations then
+        F:Debug('Animation.SpeedAnimationGroup: animation not found')
         return
     end
 
