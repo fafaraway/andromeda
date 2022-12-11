@@ -5,7 +5,9 @@ local function ReskinQuestHeader(header, isCalling)
         return
     end
 
-    header.Background:SetAlpha(0.7)
+    if header.Background then
+        header.Background:SetAlpha(0.7)
+    end
     if header.Divider then
         header.Divider:Hide()
     end
@@ -115,6 +117,10 @@ tinsert(C.BlizzThemes, function()
         end
 
         for header in QuestScrollFrame.campaignHeaderFramePool:EnumerateActive() do
+            ReskinQuestHeader(header)
+        end
+
+        for header in QuestScrollFrame.campaignHeaderMinimalFramePool:EnumerateActive() do
             ReskinQuestHeader(header)
         end
 
