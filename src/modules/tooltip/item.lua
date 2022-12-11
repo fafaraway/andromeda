@@ -1,13 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 
-local function RemoveLines()
-    _G.ITEM_CREATED_BY = '' -- Remove creator name
-    _G.PVP_ENABLED = '' -- Remove PvP text
-    _G.GameTooltip_OnTooltipAddMoney = nop -- Remove sell price
-end
-
-local function AddLines(self)
+local function addLinesForItem(self)
     if not C.DB.Tooltip.ItemInfo then
         return
     end
@@ -15,7 +9,9 @@ local function AddLines(self)
         return
     end
 
-    local _, link = self:GetItem()
+    local data = self:GetTooltipData()
+    local guid = data and data.guid
+    local link = guid and C_Item.GetItemLinkByGUID(guid)
 
     if not link then
         return
@@ -42,6 +38,9 @@ local function AddLines(self)
 end
 
 function TOOLTIP:ItemInfo()
-    _G.TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, RemoveLines)
-    _G.TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, AddLines)
+    _G.ITEM_CREATED_BY = '' -- Remove creator name
+    -- _G.PVP_ENABLED = '' -- Remove PvP text
+    _G.GameTooltip_OnTooltipAddMoney = nop -- Remove sell price
+
+    _G.TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, addLinesForItem)
 end
