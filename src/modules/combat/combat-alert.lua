@@ -1,8 +1,5 @@
---[[
-    Combat alert
-    Credit: ElvUI_WindTools by fang2hou
-    https://github.com/fang2hou/ElvUI_WindTools
---]]
+-- Credit: fang2hou
+-- https://github.com/fang2hou/ElvUI_WindTools/blob/development/Modules/Combat/CombatAlert.lua
 
 local F, C, L = unpack(select(2, ...))
 local COMBAT = F:GetModule('Combat')
@@ -16,21 +13,12 @@ function COMBAT:CreateAnimationFrame()
     end
 
     local frame, anime
-    frame = CreateFrame('Frame', nil, _G.UIParent)
-    frame:SetPoint('TOP', 0, -200)
+    frame = CreateFrame('Frame', nil, self.combatAlertHolder)
+    frame:SetPoint('CENTER')
     self.animationFrame = frame
 
     -- 盾
-    frame = F.CreateAnimationFrame(
-        nil,
-        self.animationFrame,
-        'HIGH',
-        3,
-        true,
-        C.Assets.Textures.CombatShield,
-        false,
-        { 1, 1, 1 }
-    )
+    frame = F.CreateAnimationFrame(nil, self.animationFrame, 'HIGH', 3, true, C.Assets.Textures.CombatShield, false, { 1, 1, 1 })
     anime = F.CreateAnimationGroup(frame, 'enter') -- 进入战斗
     F.AddTranslation(anime, 'moveToCenter')
     F.AddFadeIn(anime, 'fadeIn')
@@ -56,16 +44,7 @@ function COMBAT:CreateAnimationFrame()
     self.animationFrame.shield = frame
 
     -- 剑 ↗
-    frame = F.CreateAnimationFrame(
-        nil,
-        self.animationFrame,
-        'HIGH',
-        2,
-        true,
-        C.Assets.Textures.CombatSword,
-        false,
-        { 1, 1, 1 }
-    )
+    frame = F.CreateAnimationFrame(nil, self.animationFrame, 'HIGH', 2, true, C.Assets.Textures.CombatSword, false, { 1, 1, 1 })
     anime = F.CreateAnimationGroup(frame, 'enter') -- 进入战斗
     F.AddTranslation(anime, 'moveToCenter')
     F.AddFadeIn(anime, 'fadeIn')
@@ -126,10 +105,10 @@ function COMBAT:UpdateAnimationFrame()
         return
     end
 
-    local animationFrameSize = { 240 * C.DB.Combat.AlertScale, 220 * C.DB.Combat.AlertScale }
-    local textureSize = 200 * C.DB.Combat.AlertScale
-    local swordAnimationRange = 130 * C.DB.Combat.AlertScale
-    local shieldAnimationRange = 65 * C.DB.Combat.AlertScale
+    local animationFrameSize = { 240 * C.DB.Combat.CombatAlertScale, 220 * C.DB.Combat.CombatAlertScale }
+    local textureSize = 200 * C.DB.Combat.CombatAlertScale
+    local swordAnimationRange = 130 * C.DB.Combat.CombatAlertScale
+    local shieldAnimationRange = 65 * C.DB.Combat.CombatAlertScale
 
     local f = self.animationFrame
 
@@ -149,12 +128,12 @@ function COMBAT:UpdateAnimationFrame()
     f.swordRightToLeft.enter.moveToCenter:SetOffset(-swordAnimationRange, swordAnimationRange)
     f.swordRightToLeft.leave.moveToCorner:SetOffset(-swordAnimationRange, swordAnimationRange)
 
-    F.SpeedAnimationGroup(f.shield.enter, C.DB.Combat.AlertSpeed)
-    F.SpeedAnimationGroup(f.swordLeftToRight.enter, C.DB.Combat.AlertSpeed)
-    F.SpeedAnimationGroup(f.swordRightToLeft.enter, C.DB.Combat.AlertSpeed)
-    F.SpeedAnimationGroup(f.shield.leave, C.DB.Combat.AlertSpeed)
-    F.SpeedAnimationGroup(f.swordLeftToRight.leave, C.DB.Combat.AlertSpeed)
-    F.SpeedAnimationGroup(f.swordRightToLeft.leave, C.DB.Combat.AlertSpeed)
+    F.SpeedAnimationGroup(f.shield.enter, C.DB.Combat.CombatAlertSpeed)
+    F.SpeedAnimationGroup(f.swordLeftToRight.enter, C.DB.Combat.CombatAlertSpeed)
+    F.SpeedAnimationGroup(f.swordRightToLeft.enter, C.DB.Combat.CombatAlertSpeed)
+    F.SpeedAnimationGroup(f.shield.leave, C.DB.Combat.CombatAlertSpeed)
+    F.SpeedAnimationGroup(f.swordLeftToRight.leave, C.DB.Combat.CombatAlertSpeed)
+    F.SpeedAnimationGroup(f.swordRightToLeft.leave, C.DB.Combat.CombatAlertSpeed)
 end
 
 function COMBAT:CreateTextFrame()
@@ -162,9 +141,9 @@ function COMBAT:CreateTextFrame()
         return
     end
 
-    local frame = F.CreateAnimationFrame(nil, _G.UIParent, 'HIGH', 4, true)
+    local frame = F.CreateAnimationFrame(nil, self.combatAlertHolder, 'HIGH', 4, true)
     frame.text = frame:CreateFontString()
-    frame.text:SetPoint('CENTER', 0, 0)
+    frame.text:SetPoint('CENTER')
     frame.text:SetJustifyV('MIDDLE')
     frame.text:SetJustifyH('CENTER')
 
@@ -200,8 +179,8 @@ function COMBAT:UpdateTextFrame()
         return
     end
 
-    local moveUpOffset = 160 * C.DB.Combat.AlertScale
-    local moveDownOffset = -40 * C.DB.Combat.AlertScale
+    local moveUpOffset = 160 * C.DB.Combat.CombatAlertScale
+    local moveDownOffset = -40 * C.DB.Combat.CombatAlertScale
 
     local f = self.textFrame
 
@@ -214,8 +193,8 @@ function COMBAT:UpdateTextFrame()
     f.enter.moveDown:SetOffset(0, moveDownOffset)
     f.leave.moveUp:SetOffset(0, -moveDownOffset)
 
-    F.SpeedAnimationGroup(f.enter, C.DB.Combat.AlertSpeed)
-    F.SpeedAnimationGroup(f.leave, C.DB.Combat.AlertSpeed)
+    F.SpeedAnimationGroup(f.enter, C.DB.Combat.CombatAlertSpeed)
+    F.SpeedAnimationGroup(f.leave, C.DB.Combat.CombatAlertSpeed)
 
     -- 上方动画窗体如果不存在，确认下个提示的工作就交给文字窗体了
     -- if not self.db.animation then
@@ -237,12 +216,12 @@ function COMBAT:ShowAlert(alertType)
 
     local a = self.animationFrame
     local t = self.textFrame
-    local swordOffsetEnter = 150 * C.DB.Combat.AlertScale
-    local swordOffsetLeave = 20 * C.DB.Combat.AlertScale
-    local shieldOffsetEnter = 50 * C.DB.Combat.AlertScale
-    local shieldOffsetLeave = -15 * C.DB.Combat.AlertScale
-    local textOffsetEnter = -120 * C.DB.Combat.AlertScale
-    local textOffsetLeave = -20 * C.DB.Combat.AlertScale
+    local swordOffsetEnter = 150 * C.DB.Combat.CombatAlertScale
+    local swordOffsetLeave = 20 * C.DB.Combat.CombatAlertScale
+    local shieldOffsetEnter = 50 * C.DB.Combat.CombatAlertScale
+    local shieldOffsetLeave = -15 * C.DB.Combat.CombatAlertScale
+    local textOffsetEnter = -120 * C.DB.Combat.CombatAlertScale
+    local textOffsetLeave = -20 * C.DB.Combat.CombatAlertScale
 
     a.shield.enter:Stop()
     a.swordLeftToRight.enter:Stop()
@@ -266,7 +245,7 @@ function COMBAT:ShowAlert(alertType)
 
         F:SetFS(t.text, C.Assets.Fonts.Combat, 26, nil, L['Enter Combat'], 'RED', 'THICK')
         t:SetSize(t.text:GetStringWidth(), t.text:GetStringHeight())
-        t:SetPoint('TOP', self.animationFrame or _G.UIParent, 'BOTTOM', 0, textOffsetEnter)
+        t:SetPoint('TOP', self.animationFrame or self.combatAlertHolder, 'BOTTOM', 0, textOffsetEnter)
         t:Show()
         t.enter:Restart()
     else
@@ -282,7 +261,7 @@ function COMBAT:ShowAlert(alertType)
 
         F:SetFS(t.text, C.Assets.Fonts.Combat, 26, nil, L['Leave Combat'], 'GREEN', 'THICK')
         t:SetSize(t.text:GetStringWidth(), t.text:GetStringHeight())
-        t:SetPoint('TOP', self.animationFrame or _G.UIParent, 'BOTTOM', 0, textOffsetLeave)
+        t:SetPoint('TOP', self.animationFrame or self.combatAlertHolder, 'BOTTOM', 0, textOffsetLeave)
         t:Show()
         t.leave:Restart()
     end
@@ -309,15 +288,44 @@ function COMBAT:PLAYER_REGEN_ENABLED()
     COMBAT:ShowAlert('LEAVE')
 end
 
+function COMBAT:UpdateHolderSize()
+    if not self.combatAlertHolder then
+        return
+    end
+
+    if self.animationFrame then
+        self.combatAlertWidth = self.combatAlertWidth + (self.animationFrame:GetWidth() or 0)
+        self.combatAlertHeight = self.combatAlertHeight + (self.animationFrame:GetHeight() or 0)
+    end
+
+    if self.textFrame then
+        self.combatAlertWidth = max(self.combatAlertWidth, self.animationFrame:GetWidth())
+        self.combatAlertHeight = self.combatAlertHeight + self.textFrame:GetHeight()
+    end
+
+    if self.combatAlertWidth ~= 0 and self.combatAlertHeight ~= 0 then
+        self.combatAlertHolder:SetSize(self.combatAlertWidth, self.combatAlertHeight)
+    end
+end
+
 function COMBAT:CombatAlert()
     if not C.DB.Combat.CombatAlert then
         return
     end
 
+    self.combatAlertHolder = CreateFrame('Frame', nil, _G.UIParent)
+    self.combatAlertHolder:SetPoint('CENTER')
+
+    self.combatAlertWidth = 0
+    self.combatAlertHeight = 0
+
     COMBAT:CreateAnimationFrame()
     COMBAT:CreateTextFrame()
     COMBAT:UpdateAnimationFrame()
     COMBAT:UpdateTextFrame()
+    COMBAT:UpdateHolderSize()
+
+    F.Mover(self.combatAlertHolder, L['CombatAlert'], 'CombatAlert', { 'CENTER', _G.UIParent, 0, 200 }, self.combatAlertWidth, self.combatAlertHeight)
 
     F:RegisterEvent('PLAYER_REGEN_DISABLED', COMBAT.PLAYER_REGEN_DISABLED)
     F:RegisterEvent('PLAYER_REGEN_ENABLED', COMBAT.PLAYER_REGEN_ENABLED)
