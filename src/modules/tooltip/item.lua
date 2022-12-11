@@ -2,10 +2,10 @@ local F, C, L = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 
 local function addLinesForItem(self)
-    if not C.DB.Tooltip.ItemInfo then
+    if not C.DB.Tooltip.ShowItemInfo then
         return
     end
-    if C.DB.Tooltip.ItemInfoByAlt and not IsAltKeyDown() then
+    if C.DB.Tooltip.ShowItemInfoByAlt and not IsAltKeyDown() then
         return
     end
 

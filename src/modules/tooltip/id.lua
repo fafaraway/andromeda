@@ -13,12 +13,12 @@ local typesList = {
     azerite = L['Trait'] .. 'ID:',
 }
 
-function TOOLTIP:AddLineForID(id, linkType, noadd)
+function TOOLTIP:AddLineForId(id, linkType, noadd)
     if self:IsForbidden() then
         return
     end
 
-    if C.DB.Tooltip.ShowIDsByAlt and not IsAltKeyDown() then
+    if C.DB.Tooltip.ShowIdByAlt and not IsAltKeyDown() then
         return
     end
 
@@ -56,22 +56,22 @@ function TOOLTIP:SetHyperLinkID(link)
     end
 
     if linkType == 'spell' or linkType == 'enchant' or linkType == 'trade' then
-        TOOLTIP.AddLineForID(self, id, typesList.spell)
+        TOOLTIP.AddLineForId(self, id, typesList.spell)
     elseif linkType == 'talent' then
-        TOOLTIP.AddLineForID(self, id, typesList.talent, true)
+        TOOLTIP.AddLineForId(self, id, typesList.talent, true)
     elseif linkType == 'quest' then
-        TOOLTIP.AddLineForID(self, id, typesList.quest)
+        TOOLTIP.AddLineForId(self, id, typesList.quest)
     elseif linkType == 'achievement' then
-        TOOLTIP.AddLineForID(self, id, typesList.achievement)
+        TOOLTIP.AddLineForId(self, id, typesList.achievement)
     elseif linkType == 'item' then
-        TOOLTIP.AddLineForID(self, id, typesList.item)
+        TOOLTIP.AddLineForId(self, id, typesList.item)
     elseif linkType == 'currency' then
-        TOOLTIP.AddLineForID(self, id, typesList.currency)
+        TOOLTIP.AddLineForId(self, id, typesList.currency)
     end
 end
 
 function TOOLTIP:AddIDs()
-    if not C.DB.Tooltip.ShowIDs then
+    if not C.DB.Tooltip.ShowId then
         return
     end
 
@@ -91,7 +91,7 @@ function TOOLTIP:AddIDs()
 
         local _, _, _, _, _, _, caster, _, _, id = UnitAura(...)
         if id then
-            TOOLTIP.AddLineForID(self, id, typesList.spell)
+            TOOLTIP.AddLineForId(self, id, typesList.spell)
         end
 
         if caster then
@@ -112,7 +112,7 @@ function TOOLTIP:AddIDs()
 
         local id, caster = data.spellId, data.sourceUnit
         if id then
-            TOOLTIP.AddLineForID(self, id, typesList.spell)
+            TOOLTIP.AddLineForId(self, id, typesList.spell)
         end
 
         if caster then
@@ -130,7 +130,7 @@ function TOOLTIP:AddIDs()
     hooksecurefunc('SetItemRef', function(link)
         local id = tonumber(strmatch(link, 'spell:(%d+)'))
         if id then
-            TOOLTIP.AddLineForID(ItemRefTooltip, id, typesList.spell)
+            TOOLTIP.AddLineForId(ItemRefTooltip, id, typesList.spell)
         end
     end)
 
@@ -139,7 +139,7 @@ function TOOLTIP:AddIDs()
             return
         end
         if data.id then
-            TOOLTIP.AddLineForID(self, data.id, typesList.spell)
+            TOOLTIP.AddLineForId(self, data.id, typesList.spell)
         end
     end)
 
@@ -156,9 +156,9 @@ function TOOLTIP:AddIDs()
         end
 
         if tooltipType == 0 then -- item
-            TOOLTIP.AddLineForID(self, lineData.tooltipID, typesList.item)
+            TOOLTIP.AddLineForId(self, lineData.tooltipID, typesList.item)
         elseif tooltipType == 1 then -- spell
-            TOOLTIP.AddLineForID(self, lineData.tooltipID, typesList.spell)
+            TOOLTIP.AddLineForId(self, lineData.tooltipID, typesList.spell)
         end
     end
     TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Macro, UpdateActionTooltip)
@@ -170,7 +170,7 @@ function TOOLTIP:AddIDs()
             return
         end
         if data.id then
-            TOOLTIP.AddLineForID(self, data.id, typesList.item)
+            TOOLTIP.AddLineForId(self, data.id, typesList.item)
         end
     end
     TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, addItemID)
@@ -182,21 +182,21 @@ function TOOLTIP:AddIDs()
             return
         end
         if data.id then
-            TOOLTIP.AddLineForID(self, data.id, typesList.currency)
+            TOOLTIP.AddLineForId(self, data.id, typesList.currency)
         end
     end)
 
     -- Azerite traits
     hooksecurefunc(GameTooltip, 'SetAzeritePower', function(self, _, _, id)
         if id then
-            TOOLTIP.AddLineForID(self, id, typesList.azerite, true)
+            TOOLTIP.AddLineForId(self, id, typesList.azerite, true)
         end
     end)
 
     -- Quests
     hooksecurefunc('QuestMapLogTitleButton_OnEnter', function(self)
         if self.questID then
-            TOOLTIP.AddLineForID(GameTooltip, self.questID, typesList.quest)
+            TOOLTIP.AddLineForId(GameTooltip, self.questID, typesList.quest)
         end
     end)
 end
