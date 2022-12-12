@@ -490,5 +490,5 @@ function ITEMLEVEL:OnLogin()
     hooksecurefunc(_G.LootFrame.ScrollBox, 'Update', ITEMLEVEL.ItemLevel_UpdateLoot)
 
     -- iLvl on default Container
-    ITEMLEVEL:ItemLevel_Containers()
+    -- ITEMLEVEL:ItemLevel_Containers()
 end
