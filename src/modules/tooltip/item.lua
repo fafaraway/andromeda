@@ -1,6 +1,19 @@
 local F, C, L = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 
+local expansionList = {
+    [0] = _G.EXPANSION_NAME0,
+    [1] = _G.EXPANSION_NAME1,
+    [2] = _G.EXPANSION_NAME2,
+    [3] = _G.EXPANSION_NAME3,
+    [4] = _G.EXPANSION_NAME4,
+    [5] = _G.EXPANSION_NAME5,
+    [6] = _G.EXPANSION_NAME6,
+    [7] = _G.EXPANSION_NAME7,
+    [8] = _G.EXPANSION_NAME8,
+    [9] = _G.EXPANSION_NAME9,
+}
+
 local function addLinesForItem(self)
     if not C.DB.Tooltip.ShowItemInfo then
         return
@@ -21,6 +34,7 @@ local function addLinesForItem(self)
     local bankCount = GetItemCount(link, true) - bagCount
     local itemStackCount = select(8, GetItemInfo(link))
     local itemSellPrice = select(11, GetItemInfo(link))
+    local expacID = select(15, GetItemInfo(link))
 
     if bankCount > 0 then
         self:AddDoubleLine(_G.BAGSLOT .. '/' .. _G.BANK .. ':', bagCount .. '/' .. bankCount, 0.5, 0.8, 1, 1, 1, 1)
@@ -34,6 +48,10 @@ local function addLinesForItem(self)
 
     if itemSellPrice and itemSellPrice > 0 then
         self:AddDoubleLine(_G.AUCTION_PRICE .. ':', GetMoneyString(itemSellPrice, true), 0.5, 0.8, 1, 1, 1, 1)
+    end
+
+    if expacID then
+        self:AddDoubleLine(L['Expansion'] .. ':', expansionList[expacID], 0.5, 0.8, 1)
     end
 end
 
