@@ -1385,6 +1385,17 @@ function INVENTORY:OnLogin()
     end
     _G.BankFrameItemButton_Update = nop
 
+    -- Get rid of blizz annoying tutorial
+    local passedSystems = {
+        ['TutorialReagentBag'] = true,
+        ['First Time Profession'] = true,
+    }
+    hooksecurefunc(_G.HelpTip, 'Show', function(self, _, info)
+        if info and passedSystems[info.system] then
+            self:HideAllSystem(info.system)
+        end
+    end)
+
     -- Shift key alert
     local function onUpdate(self, elapsed)
         if IsShiftKeyDown() then
