@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 local oUF = F.Libs.oUF
-local LRC = F.Libs.LRC
+local LRC = F.Libs.LibRangeCheck
 
 local updateFrequency = 0.25
 local _FRAMES = {}

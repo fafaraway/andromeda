@@ -1,6 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 local ACTIONBAR = F:GetModule('ActionBar')
-local LAB = F.Libs.LAB
+local LAB = F.Libs.LibActionButton
 
 function ACTIONBAR:UpdateAllSize()
     if not C.DB['Actionbar']['Enable'] then

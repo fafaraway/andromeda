@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 local oUF = F.Libs.oUF
-local LBG = F.Libs.LBG
+local LBG = F.Libs.LibButtonGlow
 
 local debugMode = false
 local debuffsIgnore = {}

@@ -1,7 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('UnitFrame')
 local NAMEPLATE = F:GetModule('Nameplate')
-local LBG = F.Libs.LBG
+local LBG = F.Libs.LibButtonGlow
 
 local function createBarMover(bar, text, value, anchor)
     local mover = F.Mover(bar, text, value, anchor, bar:GetHeight() + bar:GetWidth() + 3, bar:GetHeight() + 3)

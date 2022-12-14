@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local LSM = F.Libs.LSM
+local LSM = F.Libs.LibSharedMedia
 
 C.Assets = {
     Textures = {

@@ -135,7 +135,7 @@ for lang_code, path in locale_files.items():
     file.write('-- https://github.com/fang2hou/WindToolsScripts/tree/master/MergeLocales\n\n')
 
     file.write('local F, C = unpack(select(2, ...))\n')
-    file.write('local L = F.Libs.ACL:NewLocale(C.ADDON_NAME, ')
+    file.write('local L = F.Libs.AceLocale:NewLocale(C.ADDON_NAME, ')
 
     if lang_code == "enUS":
         file.write('"enUS", true, not C.IS_DEVELOPER)\n')

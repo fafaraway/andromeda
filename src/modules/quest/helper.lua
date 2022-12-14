@@ -1,6 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 local QH = F:RegisterModule('QuestHelper')
-local LBG = F.Libs.LBG
+local LBG = F.Libs.LibButtonGlow
 
 local watchQuests = {
     -- check npc

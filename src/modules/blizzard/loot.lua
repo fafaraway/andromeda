@@ -3,7 +3,7 @@
 
 local F, C, L = unpack(select(2, ...))
 local EL = F:RegisterModule('EnhancedLoot')
-local LBG = F.Libs.LBG
+local LBG = F.Libs.LibButtonGlow
 
 local lootFrame
 local iconSize = 32

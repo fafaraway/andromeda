@@ -70,13 +70,13 @@ do
     end
 
     F:AddLib('AceAddon', aceAddon, aceAddonMinor)
-    F:AddLib('ACL', 'AceLocale-3.0')
-    F:AddLib('LAB', 'LibActionButton-1.0')
-    F:AddLib('LBG', 'LibButtonGlow-1.0')
-    F:AddLib('LCG', 'LibCustomGlow-1.0')
-    F:AddLib('LRC', 'LibRangeCheck-2.0')
-    F:AddLib('LSM', 'LibSharedMedia-3.0')
-    F:AddLib('Base64', 'LibBase64-1.0')
+    F:AddLib('AceLocale', 'AceLocale-3.0')
+    F:AddLib('LibActionButton', 'LibActionButton-1.0')
+    F:AddLib('LibButtonGlow', 'LibButtonGlow-1.0')
+    F:AddLib('LibCustomGlow', 'LibCustomGlow-1.0')
+    F:AddLib('LibRangeCheck', 'LibRangeCheck-2.0')
+    F:AddLib('LibSharedMedia', 'LibSharedMedia-3.0')
+    F:AddLib('LibBase64', 'LibBase64-1.0')
 
     F.Libs.oUF = engine.oUF
     F.Libs.cargBags = engine.cargBags

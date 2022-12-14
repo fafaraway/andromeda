@@ -4,7 +4,7 @@ local F = engine[1]
 local C = engine[2]
 
 -- Get locale strings from AceLocale
-engine[3] = F.Libs.ACL:GetLocale(addonName, GetLocale())
+engine[3] = F.Libs.AceLocale:GetLocale(addonName, GetLocale())
 
 -- Prepare modules
 do
