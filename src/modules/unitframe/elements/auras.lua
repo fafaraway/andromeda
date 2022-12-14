@@ -3,23 +3,6 @@ local UNITFRAME = F:GetModule('UnitFrame')
 local NAMEPLATE = F:GetModule('Nameplate')
 local oUF = F.Libs.oUF
 
-local function Aura_OnEnter(self)
-    if not self:IsVisible() then
-        return
-    end
-
-    _G.GameTooltip:SetOwner(self, 'ANCHOR_TOPLEFT')
-    self:UpdateTooltip()
-end
-
-local function Aura_OnLeave()
-    _G.GameTooltip:Hide()
-end
-
-local function UpdateAuraTooltip(aura)
-    _G.GameTooltip:SetUnitAura(aura:GetParent().__owner.unit, aura:GetID(), aura.filter)
-end
-
 function UNITFRAME:MODIFIER_STATE_CHANGED(key, state)
     if key ~= 'RALT' then
         return
@@ -61,10 +44,10 @@ end
 
 local x1, x2, y1, y2 = unpack(C.TEX_COORD)
 function UNITFRAME:UpdateIconTexCoord(width, height)
-	local ratio = height / width
-	local mult = (1 - ratio) / 2
+    local ratio = height / width
+    local mult = (1 - ratio) / 2
 
-	self.Icon:SetTexCoord(x1, x2, y1 + mult, y2 - mult)
+    self.Icon:SetTexCoord(x1, x2, y1 + mult, y2 - mult)
 end
 
 function UNITFRAME.PostCreateButton(element, button)
@@ -102,15 +85,6 @@ function UNITFRAME.PostCreateButton(element, button)
     button.timer = F.CreateFS(button, font, fontSize, true, nil, nil, true)
     button.timer:ClearAllPoints()
     button.timer:SetPoint('LEFT', button, 'BOTTOMLEFT')
-
-    -- button.UpdateTooltip = UpdateAuraTooltip
-    -- button:SetScript('OnEnter', Aura_OnEnter)
-    -- button:SetScript('OnLeave', Aura_OnLeave)
-    -- button:SetScript('OnClick', function(self, btn)
-    --     if not InCombatLockdown() and btn == 'RightButton' then
-    --         CancelUnitBuff('player', self:GetID(), self.filter)
-    --     end
-    -- end)
 end
 
 local filteredUnits = {
@@ -134,7 +108,10 @@ local dispellType = {
 }
 
 function UNITFRAME.PostUpdateButton(element, button, unit, data)
-    local duration, expiration, debuffType = data.duration, data.expirationTime, data.dispelName
+    local duration = data.duration
+    local expiration = data.expirationTime
+    local debuffType = data.dispelName
+    local isStealable = data.isStealable
 
     if duration then
         button.bg:Show()
@@ -156,22 +133,37 @@ function UNITFRAME.PostUpdateButton(element, button, unit, data)
     print('element.icon_height', element.icon_height)
     print('element.icon_ratio', element.icon_ratio) ]]
 
-    -- local _, _, _, _, _, _, _, canStealOrPurge = UnitAura(unit, index, button.filter)
     if element.desaturateDebuff and button.isHarmful and filteredUnits[style] and not data.isPlayerAura then
         button.Icon:SetDesaturated(true)
     else
         button.Icon:SetDesaturated(false)
     end
 
+    if element.alwaysShowStealable and dispellType[debuffType] and not UnitIsPlayer(unit) and not button.isHarmful then
+        button.Stealable:Show()
+    end
+
+    if isStealable then
+        button.bg:SetBackdropBorderColor(1, 1, 1)
+
+        if button.glow then
+            button.glow:SetBackdropBorderColor(1, 1, 1, 0.25)
+        end
+    end
+
     if element.showDebuffType and button.isHarmful then
         local color = oUF.colors.debuff[debuffType] or oUF.colors.debuff.none
         button.bg:SetBackdropBorderColor(color[1], color[2], color[3])
+
+        if button.glow then
+            button.glow:SetBackdropBorderColor(color[1], color[2], color[3], 0.25)
+        end
     else
         button.bg:SetBackdropBorderColor(0, 0, 0)
-    end
 
-    if element.alwaysShowStealable and dispellType[debuffType] and not UnitIsPlayer(unit) and not button.isHarmful then
-        button.Stealable:Show()
+        if button.glow then
+            button.glow:SetBackdropBorderColor(0, 0, 0, 0.25)
+        end
     end
 
     if element.disableCooldown then
@@ -189,43 +181,6 @@ function UNITFRAME.PostUpdateButton(element, button, unit, data)
     if newTexture then
         button.Icon:SetTexture(newTexture)
     end
-
-    -- if canStealOrPurge and element.showStealableBuffs then
-    --     button.bg:SetBackdropBorderColor(1, 1, 1)
-
-    --     if button.glow then
-    --         button.glow:SetBackdropBorderColor(1, 1, 1, 0.25)
-    --     end
-    -- elseif button.isDebuff and element.showDebuffType then
-    --     local color = oUF.colors.debuff[debuffType] or oUF.colors.debuff.none
-
-    --     button.bg:SetBackdropBorderColor(color[1], color[2], color[3])
-
-    --     if button.glow then
-    --         button.glow:SetBackdropBorderColor(color[1], color[2], color[3], 0.25)
-    --     end
-    -- else
-    --     button.bg:SetBackdropBorderColor(0, 0, 0)
-
-    --     if button.glow then
-    --         button.glow:SetBackdropBorderColor(0, 0, 0, 0.25)
-    --     end
-    -- end
-
-    -- if element.alwaysShowStealable and dispellType[debuffType] and not UnitIsPlayer(unit) and not button.isDebuff then
-    --     button.stealable:Show()
-    -- end
-
-    -- if element.disableCooldown then
-    --     if duration and duration > 0 then
-    --         button.expiration = expiration
-    --         button:SetScript('OnUpdate', F.CooldownOnUpdate)
-    --         button.timer:Show()
-    --     else
-    --         button:SetScript('OnUpdate', nil)
-    --         button.timer:Hide()
-    --     end
-    -- end
 
     local fontSize = max((element.width or element.size) * 0.4, 12)
     local font = C.Assets.Fonts.HalfHeight
@@ -245,19 +200,19 @@ function UNITFRAME.PostUpdateButton(element, button, unit, data)
         button.timer:SetFont(font, fontSize, 'OUTLINE')
     end
 
-    -- local newTexture = UNITFRAME.ReplacedSpellIcons[button.spellID]
-    -- if newTexture then
-    --     button.icon:SetTexture(newTexture)
-    -- end
-
     if element.bolsterInstanceID and element.bolsterInstanceID == button.auraInstanceID then
         button.count:SetText(element.bolsterStacks)
     end
 end
 
-function UNITFRAME.AurasPreUpdate(element)
+function UNITFRAME.AurasPreUpdate(element, _, isFullUpdate)
+    if not isFullUpdate then
+        return
+    end
+
     element.bolsterStacks = 0
     element.bolsterInstanceID = nil
+    element.hasTheDot = nil
 end
 
 local isMine = {
@@ -307,14 +262,9 @@ function UNITFRAME.AuraFilter(element, unit, data)
     elseif style == 'player' then
         return true
     elseif style == 'pet' then
-        -- return button.isDebuff or isBossAura or SpellIsPriorityAura(spellID)
         return true
     elseif style == 'target' then
         return isStealable or not data.isHarmful or (element.onlyShowPlayer and data.isPlayerAura) or (not element.onlyShowPlayer and name)
-    -- elseif style == 'targettarget' then
-    --     return isBossAura or SpellIsPriorityAura(spellID)
-    -- elseif style == 'focus' then
-    --     return isStealable or isBossAura or SpellIsPriorityAura(spellID) or data.isPlayerAura
     else
         return (element.onlyShowPlayer and data.isPlayerAura) or (not element.onlyShowPlayer and name)
     end
