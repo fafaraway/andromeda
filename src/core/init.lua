@@ -17,7 +17,7 @@ end
 local addonName, engine = ...
 local aceAddon, aceAddonMinor = _G.LibStub('AceAddon-3.0')
 
-engine[1] = aceAddon:NewAddon(addonName, 'AceTimer-3.0')
+engine[1] = aceAddon:NewAddon(addonName, 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.0')
 engine[2] = {}
 engine[3] = {}
 
@@ -73,6 +73,7 @@ do
     F:AddLib('ACL', 'AceLocale-3.0')
     F:AddLib('LAB', 'LibActionButton-1.0')
     F:AddLib('LBG', 'LibButtonGlow-1.0')
+    F:AddLib('LCG', 'LibCustomGlow-1.0')
     F:AddLib('LRC', 'LibRangeCheck-2.0')
     F:AddLib('LSM', 'LibSharedMedia-3.0')
     F:AddLib('Base64', 'LibBase64-1.0')
