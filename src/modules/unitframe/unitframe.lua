@@ -101,37 +101,37 @@ end
 
 -- Sound effect for target/focus changed
 
-function UNITFRAME:PLAYER_TARGET_CHANGED()
-    if UnitExists('target') then
+function UNITFRAME:PlayerTargetChanged()
+    if UnitExists('target') and not C_PlayerInteractionManager.IsReplacingUnit() then
         if UnitIsEnemy('target', 'player') then
-            PlaySound(873)
+            PlaySound(SOUNDKIT.IG_CREATURE_AGGRO_SELECT)
         elseif UnitIsFriend('target', 'player') then
-            PlaySound(867)
+            PlaySound(SOUNDKIT.IG_CHARACTER_NPC_SELECT)
         else
-            PlaySound(871)
+            PlaySound(SOUNDKIT.IG_CREATURE_NEUTRAL_SELECT)
         end
     else
-        PlaySound(684)
+        PlaySound(SOUNDKIT.INTERFACE_SOUND_LOST_TARGET_UNIT)
     end
 end
 
-function UNITFRAME:PLAYER_FOCUS_CHANGED()
-    if UnitExists('focus') then
+function UNITFRAME:PlayerFocusChanged()
+    if UnitExists('focus') and not C_PlayerInteractionManager.IsReplacingUnit() then
         if UnitIsEnemy('focus', 'player') then
-            PlaySound(873)
+            PlaySound(SOUNDKIT.IG_CREATURE_AGGRO_SELECT)
         elseif UnitIsFriend('focus', 'player') then
-            PlaySound(867)
+            PlaySound(SOUNDKIT.IG_CHARACTER_NPC_SELECT)
         else
-            PlaySound(871)
+            PlaySound(SOUNDKIT.IG_CREATURE_NEUTRAL_SELECT)
         end
     else
-        PlaySound(684)
+        PlaySound(SOUNDKIT.INTERFACE_SOUND_LOST_TARGET_UNIT)
     end
 end
 
 function UNITFRAME:CreateTargetSound()
-    F:RegisterEvent('PLAYER_TARGET_CHANGED', UNITFRAME.PLAYER_TARGET_CHANGED)
-    F:RegisterEvent('PLAYER_FOCUS_CHANGED', UNITFRAME.PLAYER_FOCUS_CHANGED)
+    F:RegisterEvent('PLAYER_TARGET_CHANGED', UNITFRAME.PlayerTargetChanged)
+    F:RegisterEvent('PLAYER_FOCUS_CHANGED', UNITFRAME.PlayerFocusChanged)
 end
 
 -- Remove blizz raid frame
