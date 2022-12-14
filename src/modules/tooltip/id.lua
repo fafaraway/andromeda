@@ -41,7 +41,7 @@ function TOOLTIP:AddLineForId(id, linkType, noadd)
         self:AddLine(' ')
     end
 
-    self:AddDoubleLine(linkType, format(C.INFO_COLOR .. '%s|r', id))
+    self:AddDoubleLine(linkType, format(C.INFO_COLOR .. '%s|r', id), 0.5, 0.8, 1)
     self:Show()
 end
 
