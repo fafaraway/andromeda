@@ -289,6 +289,7 @@ C.CharacterSettings = {
         PositionBySpec = false,
         CornerIndicator = true,
         CornerIndicatorScale = 1,
+        CornerIndicatorSize = 5,
         DebuffWatcher = true,
         InstanceDebuffs = true,
         DispellableOnly = false,

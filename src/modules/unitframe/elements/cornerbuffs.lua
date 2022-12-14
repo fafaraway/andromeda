@@ -95,7 +95,7 @@ function UNITFRAME:CreateCornerIndicator(self)
     for _, anchor in pairs(anchors) do
         local bu = CreateFrame('Frame', nil, parent)
         bu:SetFrameLevel(self:GetFrameLevel() + 10)
-        bu:SetSize(5, 5)
+        bu:SetSize(C.DB.Unitframe.CornerIndicatorSize, C.DB.Unitframe.CornerIndicatorSize)
         bu:SetScale(C.DB.Unitframe.CornerIndicatorScale)
         bu:SetPoint(anchor)
         bu:Hide()
