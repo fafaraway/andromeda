@@ -110,6 +110,19 @@ function BLIZZARD:UIWidgetFrameMover()
     end)
 end
 
+do
+    local distanceText = _G.SuperTrackedFrame.DistanceText
+    if not distanceText.__SetText then
+        distanceText.__SetText = distanceText.SetText
+        hooksecurefunc(distanceText, 'SetText', function(frame, text)
+            if strmatch(text, '%d%d%d%d.%d+') then
+                text = gsub(text, '(%d+)%.%d+', '%1')
+                frame:__SetText(text)
+            end
+        end)
+    end
+end
+
 -- Add ClickBinding tab to SpellBookFrame
 function BLIZZARD:ClickBindingTab()
     local cb = CreateFrame('CheckButton', C.ADDON_TITLE .. 'ClickCastingTab', _G.SpellBookSideTabsFrame, 'SpellBookSkillLineTabTemplate')
@@ -175,9 +188,9 @@ do
         end
 
         --if not IsAddOnLoaded(C.ADDON_NAME) then
-            function MainMenuMicroButton_AreAlertsEnabled()
-                return false
-            end
+        function MainMenuMicroButton_AreAlertsEnabled()
+            return false
+        end
         --end
 
         F:UnregisterEvent('VARIABLES_LOADED', variablesLoaded)
