@@ -568,3 +568,12 @@ function M:DisableBlizzardMover()
     end
     _G.ObjectiveTrackerFrame.IsInDefaultPosition = nop
 end
+
+do
+    local function onClick()
+        F:MoverConsole()
+        HideUIPanel(_G.GameMenuFrame)
+    end
+
+    _G.GameMenuButtonEditMode:SetScript('OnClick', onClick)
+end
