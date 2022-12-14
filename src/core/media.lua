@@ -118,14 +118,15 @@ C.Assets = {
         SekiroLowHealth  = C.ASSET_PATH .. 'sounds\\sekiro-lowhealth.ogg',
     },
     Fonts = {
-        Regular   = C.ASSET_PATH .. 'fonts\\firasans-regular.ttf',
-        Bold      = C.ASSET_PATH .. 'fonts\\firasans-bold.ttf',
-        Heavy     = C.ASSET_PATH .. 'fonts\\firasans-heavy.ttf',
-        Condensed = C.ASSET_PATH .. 'fonts\\firasans-condensed.ttf',
-        Combat    = C.ASSET_PATH .. 'fonts\\carter-one.ttf',
-        Header    = C.ASSET_PATH .. 'fonts\\suez-one.ttf',
-        Pixel     = C.ASSET_PATH .. 'fonts\\tempesta-seven.ttf',
-        HalfHeight   = C.ASSET_PATH .. 'fonts\\roadway.ttf',
+        Regular    = C.ASSET_PATH .. 'fonts\\firasans-regular.ttf',
+        Bold       = C.ASSET_PATH .. 'fonts\\firasans-bold.ttf',
+        Heavy      = C.ASSET_PATH .. 'fonts\\firasans-heavy.ttf',
+        Condensed  = C.ASSET_PATH .. 'fonts\\firasans-condensed.ttf',
+        Combat     = C.ASSET_PATH .. 'fonts\\carter-one.ttf',
+        Header     = C.ASSET_PATH .. 'fonts\\suez-one.ttf',
+        Pixel      = C.ASSET_PATH .. 'fonts\\tempesta-seven.ttf',
+        HalfHeight = C.ASSET_PATH .. 'fonts\\roadway.ttf',
+        Small      = C.ASSET_PATH .. 'fonts\\super-effective.ttf',
     },
 }
 
