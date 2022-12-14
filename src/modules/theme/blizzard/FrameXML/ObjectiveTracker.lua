@@ -51,7 +51,7 @@ local function ReskinBarTemplate(bar)
         bar:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
         bar:SetStatusBarColor(C.r, C.g, C.b)
         bar.bg = F.SetBD(bar)
-        F:SmoothBar(bar)
+        F:SetSmoothing(bar, true)
 
         bar.styled = true
     end

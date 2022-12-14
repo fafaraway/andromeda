@@ -1,3 +1,5 @@
+-- Credit: lightspark
+
 local F = unpack(select(2, ...))
 
 local activeObjects = {}
@@ -29,10 +31,9 @@ local function isCloseEnough(new, target, range)
 end
 
 local frame = CreateFrame('Frame')
-
 local function onUpdate(_, elapsed)
     for object, target in next, activeObjects do
-        local new = _G.Lerp(object._value, target, clamp(AMOUNT * elapsed * TARGET_FPS))
+        local new = Lerp(object._value, target, clamp(AMOUNT * elapsed * TARGET_FPS))
         if isCloseEnough(new, target, object._max - object._min) then
             new = target
             activeObjects[object] = nil
@@ -44,11 +45,19 @@ local function onUpdate(_, elapsed)
 end
 
 local function bar_SetSmoothedValue(self, value)
+    value = tonumber(value)
+
+    assert(value, 'bar_SetSmoothedValue requires (value) to be a number.')
+
     self._value = self:GetValue()
     activeObjects[self] = clamp(value, self._min, self._max)
 end
 
 local function bar_SetSmoothedMinMaxValues(self, min, max)
+    min, max = tonumber(min), tonumber(max)
+
+    assert(min and max, 'bar_SetSmoothedMinMaxValues requires (min and max) to be a number.')
+
     self:SetMinMaxValues_(min, max)
 
     if self._max and self._max ~= max then
@@ -73,39 +82,44 @@ local function bar_SetSmoothedMinMaxValues(self, min, max)
     self._max = max
 end
 
-function F:SmoothBar(bar)
+local function smoothBar(bar)
     bar._min, bar._max = bar:GetMinMaxValues()
     bar._value = bar:GetValue()
 
-    bar.SetValue_ = bar.SetValue
-    bar.SetMinMaxValues_ = bar.SetMinMaxValues
-    bar.SetValue = bar_SetSmoothedValue
-    bar.SetMinMaxValues = bar_SetSmoothedMinMaxValues
-
-    handledObjects[bar] = true
+    if not bar.SetValue_ then
+        bar.SetValue_ = bar.SetValue
+        bar.SetValue = bar_SetSmoothedValue
+    end
+    if not bar.SetMinMaxValues_ then
+        bar.SetMinMaxValues_ = bar.SetMinMaxValues
+        bar.SetMinMaxValues = bar_SetSmoothedMinMaxValues
+    end
 
     if not frame:GetScript('OnUpdate') then
         frame:SetScript('OnUpdate', onUpdate)
     end
+
+    handledObjects[bar] = true
 end
 
-function F:DesmoothBar(bar)
+local function desmoothBar(bar)
     if activeObjects[bar] then
         bar:SetValue_(activeObjects[bar])
         activeObjects[bar] = nil
+    end
+
+    if handledObjects[bar] then
+        handledObjects[bar] = nil
     end
 
     if bar.SetValue_ then
         bar.SetValue = bar.SetValue_
         bar.SetValue_ = nil
     end
-
     if bar.SetMinMaxValues_ then
         bar.SetMinMaxValues = bar.SetMinMaxValues_
         bar.SetMinMaxValues_ = nil
     end
-
-    handledObjects[bar] = nil
 
     if not next(handledObjects) then
         frame:SetScript('OnUpdate', nil)
@@ -113,7 +127,15 @@ function F:DesmoothBar(bar)
 end
 
 function F:SetSmoothingAmount(amount)
-    AMOUNT = clamp(amount, 0.15, 0.6)
+    AMOUNT = clamp(amount, 0.2, 0.8)
+end
+
+function F:SetSmoothing(bar, enable)
+    if enable then
+        smoothBar(bar)
+    else
+        desmoothBar(bar)
+    end
 end
 
 F:RegisterEvent('PLAYER_LOGIN', function()

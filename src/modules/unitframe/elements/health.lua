@@ -118,9 +118,7 @@ function UNITFRAME:CreateHealthBar(self)
     health:SetStatusBarTexture(UNITFRAME.StatusBarTex)
     health:SetStatusBarColor(sbColor[1], sbColor[2], sbColor[3], sbColor[4])
 
-    if C.DB.Unitframe.Smooth then
-        F:SmoothBar(health)
-    end
+    F:SetSmoothing(health, C.DB.Unitframe.Smooth)
 
     local bg = health:CreateTexture(nil, 'BACKGROUND')
     bg:SetTexture(UNITFRAME.StatusBarTex)

@@ -191,7 +191,7 @@ function TUTORIAL:HelloWorld()
     pBar:SetSize(340, 20)
     pBar:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
     pBar:Hide()
-    F:SmoothBar(pBar)
+    F:SetSmoothing(pBar, true)
 
     F.CreateBDFrame(pBar, 0.3)
     pBar.shadow = F.CreateSD(pBar, 0.25)

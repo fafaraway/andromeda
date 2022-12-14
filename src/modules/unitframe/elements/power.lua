@@ -132,9 +132,7 @@ function UNITFRAME:CreatePowerBar(self)
     power:SetHeight(powerHeight)
     power:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
 
-    if C.DB.Unitframe.Smooth then
-        F:SmoothBar(power)
-    end
+    F:SetSmoothing(power, C.DB.Unitframe.Smooth)
 
     local line = power:CreateTexture(nil, 'OVERLAY')
     line:SetHeight(C.MULT)

@@ -52,9 +52,7 @@ function UNITFRAME:CreateAlternativePowerBar(self)
     altPower:SetSize(self:GetWidth(), C.DB.Unitframe.AltPowerHeight)
     altPower:EnableMouse(true)
 
-    if C.DB.Unitframe.Smooth then
-        F:SmoothBar(altPower)
-    end
+    F:SetSmoothing(altPower, C.DB.Unitframe.Smooth)
 
     altPower.bg = F.SetBD(altPower)
 

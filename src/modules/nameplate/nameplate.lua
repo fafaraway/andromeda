@@ -495,7 +495,7 @@ function NAMEPLATE:CreateHealthBar(self)
     health.backdrop:SetBackdropColor(0, 0, 0, 0.6)
     health.backdrop:SetBackdropBorderColor(0, 0, 0, 1)
 
-    health.Smooth = C.DB.Unitframe.Smooth
+    F:SetSmoothing(health, C.DB.Unitframe.Smooth)
 
     self.Health = health
     self.Health.UpdateColor = NAMEPLATE.UpdateColor
