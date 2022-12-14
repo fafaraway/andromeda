@@ -29,6 +29,7 @@ end
 local ignoredTextureKit = {
     ['jailerstower'] = true,
     ['cypherchoice'] = true,
+    ['genericplayerchoice'] = true,
 }
 
 C.Themes['Blizzard_PlayerChoice'] = function()
@@ -45,6 +46,10 @@ C.Themes['Blizzard_PlayerChoice'] = function()
             F.CreateBDFrame(self.Title, 0.25)
             F.ReskinClose(self.CloseButton)
             self.bg = F.SetBD(self)
+
+            if _G.GenericPlayerChoiceToggleButton then
+                F.Reskin(_G.GenericPlayerChoiceToggleButton)
+            end
         end
 
         if self.CloseButton.Border then
