@@ -233,6 +233,8 @@ function EOT:ObjectiveTrackerMover()
         tracker:SetUserPlaced(true)
     end
 
+    F:DisableEditMode(tracker)
+
     hooksecurefunc(tracker, 'SetPoint', function(self, _, parent)
         if parent ~= frame then
             self:ClearAllPoints()

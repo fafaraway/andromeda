@@ -150,6 +150,12 @@ do
         return id
     end
 
+    -- Disable blizz EditMode
+    function F:DisableEditMode(object)
+        object.HighlightSystem = nop
+        object.ClearHighlight = nop
+    end
+
     do
         local t, d = '|T%s%s|t', ''
         function F:TextureString(texture, data)

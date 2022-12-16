@@ -35,6 +35,8 @@ function CHAT:UpdateChatSize()
     _G.ChatFrame1:SetPoint('BOTTOMLEFT', _G.UIParent, 'BOTTOMLEFT', C.UI_GAP, C.UI_GAP)
     _G.ChatFrame1:SetSize(C.DB.Chat.Width, C.DB.Chat.Height)
 
+    F:DisableEditMode(_G.ChatFrame1)
+
     isScaling = false
 end
 

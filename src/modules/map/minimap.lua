@@ -10,6 +10,7 @@ function MAP:RemoveBlizzStuff()
     local MinimapCompassTexture = _G.MinimapCompassTexture
     local TimeManagerClockButton = _G.TimeManagerClockButton
 
+    F:DisableEditMode(MinimapCluster)
     MinimapCluster:EnableMouse(false)
     MinimapCluster.Tracking:Hide()
     MinimapCluster.BorderTop:Hide()
