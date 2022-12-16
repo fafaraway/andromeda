@@ -149,9 +149,7 @@ function UNITFRAME.PostUpdateButton(element, button, unit, data)
         if button.glow then
             button.glow:SetBackdropBorderColor(1, 1, 1, 0.25)
         end
-    end
-
-    if element.showDebuffType and button.isHarmful then
+    elseif element.showDebuffType and button.isHarmful then
         local color = oUF.colors.debuff[debuffType] or oUF.colors.debuff.none
         button.bg:SetBackdropBorderColor(color[1], color[2], color[3])
 
