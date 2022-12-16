@@ -1,19 +1,13 @@
 local F, C, L = unpack(select(2, ...))
 local INFOBAR = F:GetModule('InfoBar')
 
+local currShow = 2003 -- Dragon Isles Supplies 巨龙群岛补给
 local currPvE = {
-    ['Reservoir Anima'] = 1813,
-    ['Grateful Offering'] = 1885,
-    ['Infused Ruby'] = 1820,
-    ['Stygia'] = 1767,
-    ['Stygian Ember'] = 1977,
-    ['Cataloged Research'] = 1931,
-    ['Valor'] = 1191,
-    ['Tower Knowledge'] = 1904,
-    ['Soul Ash'] = 1828,
-    ['Soul Cinders'] = 1906,
+    ['Elemental Overflow'] = 2118, -- 元素涌流
+    ['Storm Sigil'] = 2122, -- 风暴徽记
+    ['Valor'] = 1191, -- 勇气点数
+    ['Timewarped Badge'] = 1166 -- 时空扭曲徽章
 }
-
 local currPvP = {
     ['Honor'] = 1792,
     ['Conquest'] = 1602,
@@ -34,7 +28,7 @@ local function AddTitle(text)
 end
 
 local function Block_OnEvent(self)
-    local info = C_CurrencyInfo.GetCurrencyInfo(1828)
+    local info = C_CurrencyInfo.GetCurrencyInfo(currShow)
     self.text:SetText(format('%s: |cffdf5ed9%s|r', info.name, BreakUpLargeNumbers(info.quantity)))
 end
 
