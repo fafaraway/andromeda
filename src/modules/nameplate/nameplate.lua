@@ -208,11 +208,7 @@ function NAMEPLATE:CheckThreatStatus(unit)
     end
 
     local unitTarget = unit .. 'target'
-    local unitRole = isInGroup
-            and UnitExists(unitTarget)
-            and not UnitIsUnit(unitTarget, 'player')
-            and groupRoles[UnitName(unitTarget)]
-        or 'NONE'
+    local unitRole = isInGroup and UnitExists(unitTarget) and not UnitIsUnit(unitTarget, 'player') and groupRoles[UnitName(unitTarget)] or 'NONE'
 
     if C.MyRole == 'Tank' and unitRole == 'TANK' then
         return true, UnitThreatSituation(unitTarget, unit)
@@ -689,8 +685,9 @@ end
 function NAMEPLATE:RefreshPlateType(unit)
     self.reaction = UnitReaction(unit, 'player')
     self.isFriendly = self.reaction and self.reaction >= 4 and not UnitCanAttack('player', unit)
+    self.isSoftTarget = GetCVarBool('SoftTargetIconGameObject') and UnitIsUnit(unit, 'softinteract')
 
-    if C.DB.Nameplate.NameOnlyMode and self.isFriendly or self.widgetsOnly then
+    if C.DB.Nameplate.NameOnlyMode and self.isFriendly or self.widgetsOnly or self.isSoftTarget then
         self.plateType = 'NameOnly'
     elseif C.DB.Nameplate.FriendlyPlate and self.isFriendly then
         self.plateType = 'FriendlyPlate'
@@ -712,8 +709,28 @@ function NAMEPLATE:OnUnitFactionChanged(unit)
     end
 end
 
-function NAMEPLATE:RefreshPlateOnFactionChanged()
+function NAMEPLATE:OnUnitSoftTargetChanged(previousTarget, currentTarget)
+    if not GetCVarBool('SoftTargetIconGameObject') then
+        return
+    end
+
+    for _, nameplate in pairs(C_NamePlate.GetNamePlates()) do
+        local unitFrame = nameplate and nameplate.unitFrame
+        local guid = unitFrame and unitFrame.unitGUID
+
+        if guid and (guid == previousTarget or guid == currentTarget) then
+            print(previousTarget, currentTarget)
+            unitFrame.previousType = nil
+            NAMEPLATE.RefreshPlateType(unitFrame, unitFrame.unit)
+            NAMEPLATE.UpdateSelectedChange(unitFrame)
+            unitFrame.RaidTargetIndicator:ForceUpdate()
+        end
+    end
+end
+
+function NAMEPLATE:RefreshPlateByEvents()
     F:RegisterEvent('UNIT_FACTION', NAMEPLATE.OnUnitFactionChanged)
+    F:RegisterEvent('PLAYER_SOFT_INTERACT_CHANGED', NAMEPLATE.OnUnitSoftTargetChanged)
 end
 
 function NAMEPLATE:PostUpdatePlates(event, unit)
@@ -729,10 +746,18 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
         self.widgetsOnly = UnitNameplateShowsWidgetsOnly(unit)
 
         local blizzPlate = self:GetParent().UnitFrame
-        self.widgetContainer = blizzPlate and blizzPlate.WidgetContainer
-        if self.widgetContainer then
-            self.widgetContainer:SetParent(self)
-            -- self.widgetContainer:SetScale(_G.ANDROMEDA_ADB.UIScale)
+        if blizzPlate then
+            self.widgetContainer = blizzPlate.WidgetContainer
+            if self.widgetContainer then
+                self.widgetContainer:SetParent(self)
+                -- self.widgetContainer:SetScale(1/_G.ANDROMEDA_ADB.UIScale)
+            end
+
+            self.softTargetFrame = blizzPlate.SoftTargetFrame
+            if self.softTargetFrame then
+                self.softTargetFrame:SetParent(self)
+                -- self.softTargetFrame:SetScale(1/_G.ANDROMEDA_ADB.UIScale)
+            end
         end
 
         NAMEPLATE.RefreshPlateType(self, unit)
@@ -818,7 +843,7 @@ function NAMEPLATE:OnLogin()
     NAMEPLATE:BlockAddons()
     NAMEPLATE:CheckExplosives()
     NAMEPLATE:UpdateGroupRoles()
-    NAMEPLATE:RefreshPlateOnFactionChanged()
+    NAMEPLATE:RefreshPlateByEvents()
     NAMEPLATE:CheckMajorSpellsFilter()
     NAMEPLATE:RefreshMajorSpellsFilter()
     NAMEPLATE:CheckNameplateAuraFilters()
