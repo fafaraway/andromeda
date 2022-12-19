@@ -58,6 +58,8 @@ C.CharacterSettings = {
         GroupTool = true,
         RuneCheck = false,
         Countdown = '10',
+
+        MuteAnnoyingSounds = true,
     },
     Combat = {
         Enable = true,
