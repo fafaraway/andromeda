@@ -4,24 +4,19 @@ local BR = F:RegisterModule('BuffReminder')
 local buffsList = {
     ITEMS = {
         {
-            itemID = 178742, -- 瓶装毒素饰品
-            spells = { [345545] = true },
-            equip = true,
-            instance = true,
-            combat = true,
-        },
-        {
             itemID = 190384, -- 9.0永久属性符文
             spells = {
-                [347901] = true, -- 普通符文buff
+                [393438] = true, -- 巨龙强化符文 itemID 201325
                 [367405] = true, -- 永久符文buff
             },
             instance = true,
-            disable = true,
+            disable = true, -- 禁用直到出了新符文
         },
         {
-            itemID = 190958, -- 究极秘术
-            spells = { [368512] = true },
+            itemID = 194307, -- 巢穴守护者的诺言
+            spells = {
+                [394457] = true,
+            },
             equip = true,
             instance = true,
             inGroup = true,
