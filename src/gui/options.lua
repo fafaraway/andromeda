@@ -354,6 +354,10 @@ local function UpdateScreenSaver()
     F:GetModule('ScreenSaver'):UpdateScreenSaver()
 end
 
+local function MuteAnnoyingSounds()
+    F:GetModule('Misc'):MuteAnnoyingSounds()
+end
+
 -- Infobar
 
 local function UpdateCombatPulse()
@@ -579,12 +583,11 @@ GUI.OptionsList = {
         {
             1,
             'General',
-            'FasterMovieSkip',
-            L['Faster Movie Skip'],
+            'MuteAnnoyingSounds',
+            L['Mute Annoying Sounds'],
             true,
             nil,
-            nil,
-            L['Allow space bar, escape key and enter key to cancel cinematic without confirmation.'],
+            MuteAnnoyingSounds,
         },
         {
             1,
@@ -625,6 +628,16 @@ GUI.OptionsList = {
             SetupAutoScreenshot,
             nil,
             L['Take screenshots automatically based on specific events.'],
+        },
+        {
+            1,
+            'General',
+            'FasterMovieSkip',
+            L['Faster Movie Skip'],
+            nil,
+            nil,
+            nil,
+            L['Allow space bar, escape key and enter key to cancel cinematic without confirmation.'],
         },
         {},
         {
@@ -1764,12 +1777,12 @@ GUI.OptionsList = {
         {
             1,
             'Unitframe',
-            'InvertedColorMode',
-            L['Inverted Color Mode'],
+            'HidePlayerTags',
+            L['Hide Player Tags'],
             nil,
             nil,
-            nil,
-            L['The health bar color and the background color are inverted.|nThe unitframe module is designed based on the Inverted Color Mode, which may cause some visual problems if disabled.'],
+            UpdateUnitTags,
+            L['Only show player tags on mouseover.'],
         },
         {
             1,
@@ -1839,16 +1852,6 @@ GUI.OptionsList = {
             SetupClassPower,
             UpdateClassPower,
             L['Show special resources of the class, such as Combo Points, Holy Power, Chi, Runes, etc.'],
-        },
-        {
-            1,
-            'Unitframe',
-            'HidePlayerTags',
-            L['Hide Player Tags'],
-            nil,
-            nil,
-            UpdateUnitTags,
-            L['Only show player tags on mouseover.'],
         },
         {},
         {
