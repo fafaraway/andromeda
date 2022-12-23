@@ -8,15 +8,6 @@ function ACTIONBAR:OnLogin()
         return
     end
 
-    -- make sure bar2 - bar5 are enabled in blizz options
-    _G.Settings.SetValue('PROXY_SHOW_ACTIONBAR_2', true)
-    _G.Settings.SetValue('PROXY_SHOW_ACTIONBAR_3', true)
-    _G.Settings.SetValue('PROXY_SHOW_ACTIONBAR_4', true)
-    _G.Settings.SetValue('PROXY_SHOW_ACTIONBAR_5', true)
-    _G.Settings.SetValue('PROXY_SHOW_ACTIONBAR_6', true)
-    _G.Settings.SetValue('PROXY_SHOW_ACTIONBAR_7', true)
-    _G.Settings.SetValue('PROXY_SHOW_ACTIONBAR_8', true)
-
     ACTIONBAR.movers = {}
 
     ACTIONBAR:CreateBars()
