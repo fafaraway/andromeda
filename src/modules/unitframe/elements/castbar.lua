@@ -81,9 +81,19 @@ function UNITFRAME:OnCastbarUpdate(elapsed)
             self.stageString:SetText('')
 
             if self.empowering then
-                for i = 1, self.numStages, 1 do
-                    if duration > self.castTicks[i].duration then
+                for i = self.numStages, 1, -1 do
+                    local pip = self.Pips[i]
+                    if pip and duration > pip.duration then
                         self.stageString:SetText(i)
+
+                        if self.pipStage ~= i then
+                            self.pipStage = i
+                            local nextStage = self.numStages == i and 1 or i + 1
+                            local nextPip = self.Pips[nextStage]
+                            UIFrameFadeIn(nextPip.tex, 0.25, 0.3, 1)
+                        end
+
+                        break
                     end
                 end
             end
@@ -116,39 +126,6 @@ end
 local function ResetSpellTarget(self)
     if self.spellTarget then
         self.spellTarget:SetText('')
-    end
-end
-
-function UNITFRAME:CreateAndUpdateStagePip(bar, ticks, numStages, unit)
-    for i = 1, #ticks do
-        ticks[i]:Hide()
-        ticks[i].duration = 0
-    end
-
-    if numStages == 0 then
-        return
-    end
-
-    local width, height = bar:GetSize()
-    local sumDuration = 0
-    local stageMaxValue = bar.max * 1000
-    for i = 1, numStages, 1 do
-        local duration = GetUnitEmpowerStageDuration(unit, i - 1)
-        if duration > -1 then
-            sumDuration = sumDuration + duration
-            local portion = sumDuration / stageMaxValue
-            if not ticks[i] then
-                ticks[i] = bar:CreateTexture(nil, 'OVERLAY')
-                ticks[i]:SetTexture(C.Assets.Textures.StatusbarNormal)
-                ticks[i]:SetVertexColor(0, 0, 0)
-                ticks[i]:SetWidth(C.MULT)
-                ticks[i]:SetHeight(height)
-            end
-            ticks[i].duration = sumDuration / 1000
-            ticks[i]:ClearAllPoints()
-            ticks[i]:SetPoint('LEFT', bar, width * portion, 0)
-            ticks[i]:Show()
-        end
     end
 end
 
@@ -185,11 +162,8 @@ function UNITFRAME:PostCastStart(unit)
         if self.channeling then
             numTicks = channelingTicks[self.spellID] or 0
         end
-        F:CreateAndUpdateBarTicks(self, self.castTicks, numTicks)
 
-        if not self.channeling then
-            UNITFRAME:CreateAndUpdateStagePip(self, self.castTicks, self.numStages or 0, unit)
-        end
+        F:CreateAndUpdateBarTicks(self, self.castTicks, numTicks)
     end
 
     if (style == 'nameplate' and npCompact) or (style ~= 'nameplate' and compact) then
@@ -259,6 +233,51 @@ function UNITFRAME:PostCastFailed()
     ResetSpellTarget(self)
 end
 
+UNITFRAME.PipColors = {
+    [1] = { 0.08, 1, 0, 0.2 },
+    [2] = { 1, 0.1, 0.1, 0.2 },
+    [3] = { 1, 0.5, 0, 0.2 },
+    [4] = { 0.1, 0.9, 0.9, 0.2 },
+}
+
+function UNITFRAME:CreatePip(stage)
+    local _, height = self:GetSize()
+
+    local pip = CreateFrame('Frame', nil, self, 'CastingBarFrameStagePipTemplate')
+    pip.BasePip:SetTexture(C.Assets.Textures.StatusbarFlat)
+    pip.BasePip:SetVertexColor(0, 0, 0)
+    pip.BasePip:SetWidth(C.MULT)
+    pip.BasePip:SetHeight(height)
+
+    pip.tex = pip:CreateTexture(nil, 'ARTWORK', nil, 2)
+    pip.tex:SetTexture(C.Assets.Textures.StatusbarNormal)
+    pip.tex:SetVertexColor(unpack(UNITFRAME.PipColors[stage]))
+
+    return pip
+end
+
+function UNITFRAME:PostUpdatePip(_, stage, stageTotalDuration)
+    local pips = self.Pips
+    local pip = pips[stage]
+    local numStages = self.numStages
+
+    pip.tex:SetAlpha(0.2) -- reset pip alpha
+    pip.duration = stageTotalDuration / 1000 -- save pip duration
+
+    if stage == numStages then
+        local firstPip = pips[1]
+        local anchor = pips[numStages]
+        firstPip.tex:SetPoint('BOTTOMRIGHT', self)
+        firstPip.tex:SetPoint('TOPLEFT', anchor.BasePip, 'TOPRIGHT')
+    end
+
+    if stage ~= 1 then
+        local anchor = pips[stage - 1]
+        pip.tex:SetPoint('BOTTOMRIGHT', pip.BasePip, 'BOTTOMLEFT')
+        pip.tex:SetPoint('TOPLEFT', anchor.BasePip, 'TOPRIGHT')
+    end
+end
+
 function UNITFRAME:CreateCastBar(self)
     if not C.DB.Unitframe.Castbar then
         return
@@ -320,9 +339,9 @@ function UNITFRAME:CreateCastBar(self)
         self:RegisterEvent('CURRENT_SPELL_CAST_CHANGED', UNITFRAME.OnCastSent, true)
     end
 
-    local stage = F.CreateFS(castbar, C.Assets.Fonts.Regular, 22, '')
+    local stage = F.CreateFS(castbar, C.Assets.Fonts.Condensed, 11, '')
     stage:ClearAllPoints()
-    stage:SetPoint('TOPLEFT', castbar.Icon, -2, 2)
+    stage:SetPoint('CENTER', castbar.Icon, 'TOP')
     castbar.stageString = stage
 
     if compact then
@@ -373,8 +392,8 @@ function UNITFRAME:CreateCastBar(self)
     castbar.PostCastStop = UNITFRAME.PostCastStop
     castbar.PostCastFail = UNITFRAME.PostCastFailed
     castbar.PostCastInterruptible = UNITFRAME.PostUpdateInterruptible
-
-    castbar.UpdatePips = nop
+    castbar.CreatePip = UNITFRAME.CreatePip
+    castbar.PostUpdatePip = UNITFRAME.PostUpdatePip
 end
 
 function NAMEPLATE:CreateCastBar(self)
