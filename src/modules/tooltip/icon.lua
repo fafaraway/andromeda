@@ -39,6 +39,24 @@ function TOOLTIP:ReskinRewardIcon()
     F.ReskinIconBorder(self.IconBorder)
 end
 
+local getTooltipTextureByType = {
+    [Enum.TooltipDataType.Item] = function(id)
+        return GetItemIcon(id)
+    end,
+
+    [Enum.TooltipDataType.Toy] = function(id)
+        return GetItemIcon(id)
+    end,
+
+    [Enum.TooltipDataType.Spell] = function(id)
+        return GetSpellTexture(id)
+    end,
+
+    [Enum.TooltipDataType.Mount] = function(id)
+        return select(3, C_MountJournal.GetMountInfoByID(id))
+    end,
+}
+
 function TOOLTIP:ReskinTipIcon()
     if not C.DB.Tooltip.Icon then
         return
@@ -53,24 +71,18 @@ function TOOLTIP:ReskinTipIcon()
     TOOLTIP.HookTooltipMethod(GameTooltip)
     TOOLTIP.HookTooltipMethod(ItemRefTooltip)
 
-    TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Item, function(self)
-        if self == GameTooltip or self == ItemRefTooltip then
-            local data = self:GetTooltipData()
-            local id = data and data.id
-            if id then
-                TOOLTIP.SetupTooltipIcon(self, GetItemIcon(id))
+    for tooltipType, getTex in next, getTooltipTextureByType do
+        TooltipDataProcessor.AddTooltipPostCall(tooltipType, function(self)
+            if self == GameTooltip or self == ItemRefTooltip then
+                local data = self:GetTooltipData()
+                local id = data and data.id
+
+                if id then
+                    TOOLTIP.SetupTooltipIcon(self, getTex(id))
+                end
             end
-        end
-    end)
-    TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Spell, function(self)
-        if self == GameTooltip or self == ItemRefTooltip then
-            local data = self:GetTooltipData()
-            local id = data and data.id
-            if id then
-                TOOLTIP.SetupTooltipIcon(self, GetSpellTexture(id))
-            end
-        end
-    end)
+        end)
+    end
 
     -- Cut Icons
     hooksecurefunc(GameTooltip, 'SetUnitAura', function(self)
@@ -80,6 +92,7 @@ function TOOLTIP:ReskinTipIcon()
     hooksecurefunc(GameTooltip, 'SetAzeriteEssence', function(self)
         TOOLTIP.SetupTooltipIcon(self)
     end)
+
     hooksecurefunc(GameTooltip, 'SetAzeriteEssenceSlot', function(self)
         TOOLTIP.SetupTooltipIcon(self)
     end)

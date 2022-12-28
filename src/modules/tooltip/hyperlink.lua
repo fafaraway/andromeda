@@ -17,6 +17,7 @@ local linkTypes = {
     azessence = true,
     mawpower = true,
     conduit = true,
+    mount = true,
 }
 
 function TOOLTIP:HyperLink_SetPet(link)
