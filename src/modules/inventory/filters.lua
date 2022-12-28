@@ -153,7 +153,6 @@ local petTrashCurrenies = {
     [62072] = true,
     [67410] = true,
 
-    [192644] = true, -- 气态微尘
     [192648] = true, -- 完好的野兽毛皮
 }
 
