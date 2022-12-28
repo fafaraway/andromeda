@@ -470,6 +470,11 @@ do
         end
     end
 
+    function F:SetFontSize(size)
+        local name, _, flag = self:GetFont()
+        self:SetFont(name, size, flag)
+    end
+
     function F:CreateColorString(text, color)
         if not text or not type(text) == 'string' then
             return
