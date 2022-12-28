@@ -1,7 +1,6 @@
 local _, C = unpack(select(2, ...))
 
 C.CharacterSettings = {
-    ShadowLands = false,
     InstallationComplete = false,
     HideTutorial = 0,
     UIAnchor = {},
@@ -163,6 +162,12 @@ C.CharacterSettings = {
         HealthFrequency = 0.2,
         AlternativePower = true,
 
+        ShowAuras = true,
+        OnlyShowPlayer = true,
+        DesaturateIcon = true,
+        DebuffTypeColor = true,
+        StealableBuffs = true,
+
         Fader = true,
         MinAlpha = 0,
         MaxAlpha = 1,
@@ -231,10 +236,26 @@ C.CharacterSettings = {
         FocusTargetPowerHeight = 1,
         FocusTargetAuraPerRow = 0,
 
-        OnlyShowPlayer = true,
-        DesaturateIcon = true,
-        DebuffTypeColor = true,
-        StealableBuffs = true,
+
+        ShowRaidDebuff = true,
+        RaidDebuffSize = 14,
+        RaidDebuffClickThru = true,
+        ShowRaidBuff = true,
+        RaidBuffSize = 12,
+        RaidBuffClickThru = true,
+
+
+        CornerIndicator = true,
+        CornerIndicatorScale = 1,
+        CornerIndicatorSize = 6,
+
+        InstanceAuras = true,
+        DispellType = 1,
+        RaidDebuffScale = 1,
+        AuraClickThru = true,
+
+
+
 
         SimpleMode = false,
         SMRScale = 10,
@@ -255,12 +276,6 @@ C.CharacterSettings = {
         PartyWatcherSync = true,
         PartyWatcherOnRight = false,
         PartyWatcherSize = 26,
-        PartyBuff = true,
-        PartyBuffSize = 16,
-        PartyBuffNum = 3,
-        PartyDebuff = true,
-        PartyDebuffSize = 16,
-        PartyDebuffNum = 3,
         PartyAura = true,
         PartyAuraSize = 26,
         PartyAuraNum = 4,
@@ -275,12 +290,7 @@ C.CharacterSettings = {
         RaidHealthHeight = 30,
         RaidPowerHeight = 2,
         RaidNameLength = 2,
-        RaidBuff = false,
-        RaidBuffSize = 12,
-        RaidBuffNum = 3,
-        RaidDebuff = false,
-        RaidDebuffSize = 12,
-        RaidDebuffNum = 3,
+
 
         RaidTargetIndicator = true,
         ThreatIndicator = true,
@@ -289,13 +299,7 @@ C.CharacterSettings = {
         GroupLeader = true,
         SmartRaid = true,
         PositionBySpec = false,
-        CornerIndicator = true,
-        CornerIndicatorScale = 1,
-        CornerIndicatorSize = 5,
-        DebuffWatcher = true,
-        InstanceDebuffs = true,
-        DispellableOnly = false,
-        DebuffClickThrough = true,
+
 
         Boss = true,
         BossWidth = 100,
@@ -372,7 +376,7 @@ C.CharacterSettings = {
         DesaturateIcon = true,
         DebuffTypeColor = true,
         DispellMode = 2,
-        DisableMouse = true,
+
 
         TotemIcon = true,
 
@@ -649,11 +653,24 @@ C.AccountSettings = {
     ChatFilterWhiteList = '',
     RepairType = 1,
     CustomJunkList = {},
-    NameplateAuraFilterList = { [1] = {}, [2] = {} },
+    -- NameplateAuraFilterList = { [1] = {}, [2] = {} },
+
+
+
+
+    NameplateAuraWhiteList = {},
+    NameplateAuraBlackList = {},
+
+    RaidDebuffsBlackList = {},
+    RaidBuffsWhiteList = {},
+    RaidDebuffsList = {},
+    CornerSpellsList = {},
+
+
     DebuffWatcherList = {},
     RaidAuraWatch = {},
     MajorSpellsList = {},
-    CornerSpellsList = {},
+
     PartySpellsList = {},
     PartyAurasList = {},
     AnnounceableSpellsList = {},

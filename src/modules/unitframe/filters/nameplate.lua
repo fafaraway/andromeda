@@ -1,4 +1,5 @@
-local _, C = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
+local NAMEPLATE = F:GetModule('Nameplate')
 
 C.NameplateAuraWhiteList = {
     -- Buffs
@@ -128,6 +129,7 @@ C.SpecialUnitsList = {
     [180433] = true, -- 集市，流浪的脉冲星
     [104251] = true, -- 群星庭院，哨兵
     [101008] = true, -- 黑鸦堡垒，针刺虫群
+    [196548] = true, -- 古树树枝，学院
     -- Raids
     [175992] = true, -- 猩红议会，忠实的侍从
     [165762] = true, -- 凯子，灵能灌注者
@@ -203,4 +205,10 @@ C.MajorSpellsList = {
     [356407] = true, -- 集市，上古恐慌
     [347721] = true, -- 集市，打开牢笼
     [353783] = true, -- 集市，传送
+    [156718] = true, -- 骨疽爆裂，影月墓地
 }
+
+--
+
+NAMEPLATE.AuraWhiteList = {}
+NAMEPLATE.AuraBlackList = {}

@@ -187,16 +187,4 @@ function UNITFRAME:CreatePartyWatcher(self)
     end
 end
 
-function UNITFRAME:CheckPartySpells()
-    for spellID, duration in pairs(C.PartySpellsList) do
-        local name = GetSpellInfo(spellID)
-        if name then
-            local modDuration = _G.ANDROMEDA_ADB['PartySpellsList'][spellID]
-            if modDuration and modDuration == duration then
-                _G.ANDROMEDA_ADB['PartySpellsList'][spellID] = nil
-            end
-        else
-            F:Debug('CheckPartySpells: Invalid Spell ID ' .. spellID)
-        end
-    end
-end
+

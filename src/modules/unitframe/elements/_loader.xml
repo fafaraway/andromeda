@@ -3,7 +3,7 @@
     <Script file="auras.lua"/>
     <Script file="castbar.lua"/>
     <Script file="classpower.lua"/>
-    <Script file="cornerbuffs.lua"/>
+    <Script file="cornerspell.lua"/>
     <Script file="debuffwatcher.lua"/>
     <Script file="gcd.lua"/>
     <Script file="health.lua"/>
@@ -12,6 +12,7 @@
     <Script file="portrait.lua"/>
     <Script file="power.lua"/>
     <Script file="prediction.lua"/>
+    <Script file="raidauras.lua"/>
     <Script file="range.lua"/>
     <Script file="threat.lua"/>
 </Ui>

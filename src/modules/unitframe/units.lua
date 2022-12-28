@@ -110,13 +110,15 @@ local function CreatePartyStyle(self)
     UNITFRAME:CreateTargetBorder(self)
     UNITFRAME:CreateThreatBorder(self)
     UNITFRAME:CreateRangeCheck(self)
-    UNITFRAME:CreatePartyAuras(self)
-    UNITFRAME:CreatePartyBuffs(self)
-    UNITFRAME:CreatePartyDebuffs(self)
-    UNITFRAME:CreateDebuffWatcher(self)
-    UNITFRAME:RefreshAurasByCombat(self)
-    UNITFRAME:CreateCornerIndicator(self)
-    UNITFRAME:CreatePartyWatcher(self)
+
+
+    -- UNITFRAME:CreatePartyAuras(self)
+    -- UNITFRAME:CreatePartyBuffs(self)
+    -- UNITFRAME:CreatePartyDebuffs(self)
+    -- UNITFRAME:CreateDebuffWatcher(self)
+    -- UNITFRAME:RefreshAurasByCombat(self)
+    -- UNITFRAME:CreateCornerIndicator(self)
+    -- UNITFRAME:CreatePartyWatcher(self)
 end
 
 UNITFRAME.PartyDirections = {
@@ -397,11 +399,16 @@ local function CreateRaidStyle(self)
     UNITFRAME:CreateTargetBorder(self)
     UNITFRAME:CreateThreatBorder(self)
     UNITFRAME:CreateRangeCheck(self)
-    UNITFRAME:CreateCornerIndicator(self)
-    UNITFRAME:CreateRaidBuffs(self)
-    UNITFRAME:CreateRaidDebuffs(self)
-    UNITFRAME:CreateDebuffWatcher(self)
-    UNITFRAME:RefreshAurasByCombat(self)
+
+
+    UNITFRAME:CreateRaidAuras(self)
+
+
+    -- UNITFRAME:CreateCornerIndicator(self)
+    -- UNITFRAME:CreateRaidBuffs(self)
+    -- UNITFRAME:CreateRaidDebuffs(self)
+    -- UNITFRAME:CreateDebuffWatcher(self)
+    -- UNITFRAME:RefreshAurasByCombat(self)
 end
 
 local teamIndexes = {}
@@ -628,15 +635,8 @@ function UNITFRAME:SpawnUnits()
     UNITFRAME:UpdateHealthDefaultColor()
     UNITFRAME:UpdateClassColor()
     UNITFRAME:CreateTargetSound()
-    UNITFRAME:CheckPartySpells()
-    UNITFRAME:CheckCornerSpells()
-    UNITFRAME:UpdateCornerSpells()
-    UNITFRAME:InitDebuffWatcher()
 
     --UNITFRAME:UpdateRaidInfo()
-
-    UNITFRAME:CheckPartyAurasFilter()
-    UNITFRAME:RefreshPartyAurasFilter()
 
     UNITFRAME:SpawnPlayer()
     UNITFRAME:SpawnPet()
@@ -654,6 +654,19 @@ function UNITFRAME:SpawnUnits()
         F:LockCVar('predictedHealth', '1')
 
         UNITFRAME:RemoveBlizzRaidFrame()
+
+        UNITFRAME:UpdateRaidBuffsWhiteList()
+		UNITFRAME:UpdateRaidDebuffsBlackList()
+
+        -- UNITFRAME:CheckPartySpells()
+        -- UNITFRAME:CheckCornerSpells()
+        -- UNITFRAME:UpdateCornerSpells()
+        -- UNITFRAME:InitDebuffWatcher()
+
+
+
+        UNITFRAME:CheckPartyAurasFilter()
+        UNITFRAME:RefreshPartyAurasFilter()
 
         if C.DB.Unitframe.SimpleMode then
             UNITFRAME:SpawnSimpleRaid()

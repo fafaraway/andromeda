@@ -1,9 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="filters.lua"/>
     <Script file="nameplate.lua"/>
     <Script file="dungeon.lua"/>
-    <Script file="nathria.lua"/>
-    <Script file="sanctum.lua"/>
-    <Script file="sepulcher.lua"/>
     <Script file="incarnates.lua"/>
-    <Script file="party.lua"/>
+    <Script file="group.lua"/>
 </Ui>

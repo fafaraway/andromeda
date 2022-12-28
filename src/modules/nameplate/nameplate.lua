@@ -52,11 +52,11 @@ function NAMEPLATE:UpdatePlateClickThrough()
 end
 
 function NAMEPLATE:UpdateNameOnlyMode()
-    SetCVar('nameplateShowFriends', 1)
-    SetCVar('nameplateShowFriendlyNPCs', 1)
-    SetCVar('nameplateShowFriendlyPets', 1)
-    SetCVar('nameplateShowFriendlyMinions', 1)
-    SetCVar('nameplateShowFriendlyGuardians', 1)
+    -- SetCVar('nameplateShowFriends', 1)
+    -- SetCVar('nameplateShowFriendlyNPCs', 1)
+    -- SetCVar('nameplateShowFriendlyPets', 1)
+    -- SetCVar('nameplateShowFriendlyMinions', 1)
+    -- SetCVar('nameplateShowFriendlyGuardians', 1)
     SetCVar('nameplateShowOnlyNames', C.DB.Nameplate.NameOnlyMode)
     SetCVar('nameplateShowDebuffsOnFriendly', not C.DB.Nameplate.NameOnlyMode)
 end
@@ -419,24 +419,7 @@ function NAMEPLATE:RefreshMajorSpellsFilter()
     end
 end
 
-function NAMEPLATE:CheckMajorSpellsFilter()
-    for spellID in pairs(C.MajorSpellsList) do
-        local name = GetSpellInfo(spellID)
-        if name then
-            if _G.ANDROMEDA_ADB['MajorSpellsList'][spellID] then
-                _G.ANDROMEDA_ADB['MajorSpellsList'][spellID] = nil
-            end
-        else
-            F:Debug('CheckMajorSpells: Invalid Spell ID ' .. spellID)
-        end
-    end
 
-    for spellID, value in pairs(_G.ANDROMEDA_ADB['MajorSpellsList']) do
-        if value == false and C.MajorSpellsList[spellID] == nil then
-            _G.ANDROMEDA_ADB['MajorSpellsList'][spellID] = nil
-        end
-    end
-end
 
 -- Spiteful indicator
 function NAMEPLATE:CreateSpitefulIndicator(self)
@@ -775,60 +758,78 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
     NAMEPLATE.UpdateTotemIcon(self, event, unit)
 end
 
-local function CheckNameplateAuraFilter(index)
-    local value = (index == 1 and C.NameplateAuraWhiteList) or (index == 2 and C.NameplateAuraBlackList)
-    if value then
-        for spellID in pairs(value) do
-            local name = GetSpellInfo(spellID)
-            if name then
-                if _G.ANDROMEDA_ADB['NameplateAuraFilterList'][index][spellID] then
-                    _G.ANDROMEDA_ADB['NameplateAuraFilterList'][index][spellID] = nil
-                end
-            else
-                if C.IS_DEVELOPER then
-                    F:Print('Invalid nameplate filter ID: ' .. spellID)
-                end
-            end
-        end
+-- local function CheckNameplateAuraFilter(index)
+--     local value = (index == 1 and C.NameplateAuraWhiteList) or (index == 2 and C.NameplateAuraBlackList)
+--     if value then
+--         for spellID in pairs(value) do
+--             local name = GetSpellInfo(spellID)
+--             if name then
+--                 if _G.ANDROMEDA_ADB['NameplateAuraFilterList'][index][spellID] then
+--                     _G.ANDROMEDA_ADB['NameplateAuraFilterList'][index][spellID] = nil
+--                 end
+--             else
+--                 if C.IS_DEVELOPER then
+--                     F:Print('Invalid nameplate filter ID: ' .. spellID)
+--                 end
+--             end
+--         end
 
-        for spellID, val in pairs(_G.ANDROMEDA_ADB['NameplateAuraFilterList'][index]) do
-            if val == false and value[spellID] == nil then
-                _G.ANDROMEDA_ADB['NameplateAuraFilterList'][index][spellID] = nil
-            end
-        end
-    end
-end
+--         for spellID, val in pairs(_G.ANDROMEDA_ADB['NameplateAuraFilterList'][index]) do
+--             if val == false and value[spellID] == nil then
+--                 _G.ANDROMEDA_ADB['NameplateAuraFilterList'][index][spellID] = nil
+--             end
+--         end
+--     end
+-- end
 
-function NAMEPLATE:CheckNameplateAuraFilters()
-    CheckNameplateAuraFilter(1)
-    CheckNameplateAuraFilter(2)
-end
+-- function NAMEPLATE:CheckNameplateAuraFilters()
+--     CheckNameplateAuraFilter(1)
+--     CheckNameplateAuraFilter(2)
+-- end
 
-local function RefreshNameplateAuraFilter(index)
-    wipe(NAMEPLATE.AuraFilterList[index])
+local function RefreshNameplateAuraFilter(list, key)
+    wipe(NAMEPLATE[key])
 
-    local VALUE = (index == 1 and C.NameplateAuraWhiteList) or (index == 2 and C.NameplateAuraBlackList)
-    if VALUE then
-        for spellID in pairs(VALUE) do
-            local name = GetSpellInfo(spellID)
-            if name then
-                if _G.ANDROMEDA_ADB['NameplateAuraFilterList'][index][spellID] == nil then
-                    NAMEPLATE.AuraFilterList[index][spellID] = true
-                end
-            end
-        end
-    end
+    -- local VALUE = (index == 1 and C.NameplateAuraWhiteList) or (index == 2 and C.NameplateAuraBlackList)
+    -- if VALUE then
+    --     for spellID in pairs(VALUE) do
+    --         local name = GetSpellInfo(spellID)
+    --         if name then
+    --             if _G.ANDROMEDA_ADB['NameplateAuraFilterList'][index][spellID] == nil then
+    --                 NAMEPLATE.AuraFilterList[index][spellID] = true
+    --             end
+    --         end
+    --     end
+    -- end
 
-    for spellID, value in pairs(_G.ANDROMEDA_ADB['NameplateAuraFilterList'][index]) do
-        if value then
-            NAMEPLATE.AuraFilterList[index][spellID] = true
-        end
-    end
+    -- for spellID, value in pairs(_G.ANDROMEDA_ADB['NameplateAuraFilterList'][index]) do
+    --     if value then
+    --         NAMEPLATE.AuraFilterList[index][spellID] = true
+    --     end
+    -- end
+
+    for spellID in pairs(list) do
+		local name = GetSpellInfo(spellID)
+		if name then
+			if _G.ANDROMEDA_ADB['Nameplate'..key][spellID] == nil then
+				NAMEPLATE[key][spellID] = true
+			end
+		end
+	end
+
+	for spellID, value in pairs(_G.ANDROMEDA_ADB['Nameplate'..key]) do
+		if value then
+			NAMEPLATE[key][spellID] = true
+		end
+	end
 end
 
 function NAMEPLATE:RefreshNameplateAuraFilters()
-    RefreshNameplateAuraFilter(1)
-    RefreshNameplateAuraFilter(2)
+    -- RefreshNameplateAuraFilter(1)
+    -- RefreshNameplateAuraFilter(2)
+
+    RefreshNameplateAuraFilter(C.NameplateAuraWhiteList, "AuraWhiteList")
+	RefreshNameplateAuraFilter(C.NameplateAuraBlackList, "AuraBlackList")
 end
 
 function NAMEPLATE:OnLogin()
@@ -844,9 +845,8 @@ function NAMEPLATE:OnLogin()
     NAMEPLATE:CheckExplosives()
     NAMEPLATE:UpdateGroupRoles()
     NAMEPLATE:RefreshPlateByEvents()
-    NAMEPLATE:CheckMajorSpellsFilter()
     NAMEPLATE:RefreshMajorSpellsFilter()
-    NAMEPLATE:CheckNameplateAuraFilters()
+    --NAMEPLATE:CheckNameplateAuraFilters()
     NAMEPLATE:RefreshNameplateAuraFilters()
     NAMEPLATE:CheckUnitsList()
     NAMEPLATE:RefreshSpecialUnitsList()

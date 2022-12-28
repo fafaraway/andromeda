@@ -1,3 +1,5 @@
+-- Credit: p3lim, Azilroka, Simpy
+
 local F = unpack(select(2, ...))
 local oUF = F.Libs.oUF
 
