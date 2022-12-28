@@ -1388,13 +1388,15 @@ function INVENTORY:OnLogin()
     -- Get rid of blizz annoying tutorial
     local passedSystems = {
         ['TutorialReagentBag'] = true,
-        ['First Time Profession'] = true,
     }
     hooksecurefunc(_G.HelpTip, 'Show', function(self, _, info)
         if info and passedSystems[info.system] then
             self:HideAllSystem(info.system)
         end
     end)
+    SetCVarBitfield('closedInfoFrames', _G.LE_FRAME_TUTORIAL_EQUIP_REAGENT_BAG, true)
+    SetCVar('professionToolSlotsExampleShown', 1)
+    SetCVar('professionAccessorySlotsExampleShown', 1)
 
     -- Shift key alert
     local function onUpdate(self, elapsed)
