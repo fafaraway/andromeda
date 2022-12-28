@@ -9,4 +9,5 @@ C.Themes['Blizzard_MajorFactions'] = function()
 
     frame.NineSlice:SetAlpha(0)
     frame.Background:SetAlpha(0)
+    F.Reskin(frame.LevelSkipButton)
 end

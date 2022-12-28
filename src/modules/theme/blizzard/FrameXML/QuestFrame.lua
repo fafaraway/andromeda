@@ -97,4 +97,16 @@ tinsert(C.BlizzThemes, function()
         x = x + 6
         _G.QuestModelScene:SetPoint('TOPLEFT', parentFrame, 'TOPRIGHT', x, y)
     end)
+
+    -- Friendship
+
+    for i = 1, 4 do
+        local notch = _G.QuestFrame.FriendshipStatusBar['Notch' .. i]
+        if notch then
+            notch:SetColorTexture(0, 0, 0)
+            notch:SetSize(C.MULT, 16)
+        end
+    end
+
+    _G.QuestFrame.FriendshipStatusBar.BarBorder:Hide()
 end)
