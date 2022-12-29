@@ -702,4 +702,5 @@ C.AccountSettings = {
     UnitframeCustomTexture = '',
     NameplateTextureIndex = 1,
     NameplateCustomTexture = '',
+    CommunityFeastTime = 0,
 }

@@ -141,7 +141,7 @@ local huntAreaToMapID = { -- 狩猎区域ID转换为地图ID
     [7345] = 2024, -- 碧蓝林海
 }
 
-local stormOrders = {2022,2025,2024,2023}
+local stormOrders = { 2022, 2025, 2024, 2023 }
 
 local atlasCache = {}
 local function getElementalType(element) -- 获取入侵类型图标
@@ -159,6 +159,39 @@ end
 
 local function getFormattedTimeLeft(timeLeft)
     return format('%.2d:%.2d', timeLeft / 60, timeLeft % 60)
+end
+
+local function getCurrentFeastTime()
+    local prepareRemain = C_AreaPoiInfo.GetAreaPOISecondsLeft(7219)
+    if prepareRemain then -- 准备盛宴，15分钟
+        return prepareRemain + time(), 1 -- 开始时间=剩余准备时间+现在时间
+    end
+
+    local cookingRemain = C_AreaPoiInfo.GetAreaPOISecondsLeft(7218)
+    if cookingRemain then -- 盛宴进行中，15分钟
+        return time() - (15 * 60 - cookingRemain), 2 -- 开始时间=现在时间-盛宴已进行时长
+    end
+
+    local soupRemain = C_AreaPoiInfo.GetAreaPOISecondsLeft(7220)
+    if soupRemain then -- 盛宴结束，喝汤1小时
+        return time() - (60 * 60 - soupRemain) - 15 * 60, 3 -- 开始时间=现在时间-盛宴已结束时长-盛宴进行时长
+    end
+end
+
+local lastCheck = 0
+local function refreshFeastTime()
+    local currentTime = GetTime()
+
+    if currentTime - lastCheck < 60 then
+        return
+    end
+
+    lastCheck = currentTime
+
+    local currentFeast = getCurrentFeastTime()
+    if currentFeast then
+        _G.ANDROMEDA_ADB['CommunityFeastTime'] = currentFeast
+    end
 end
 
 local title
@@ -307,6 +340,30 @@ local function onEnter(self)
         end
     end
 
+    -- Community feast
+    title = false
+    if _G.ANDROMEDA_ADB['CommunityFeastTime'] ~= 0 then
+        local currentTime = time()
+        local duration = 12600 -- 3.5 hrs
+        local elapsed = mod(currentTime - _G.ANDROMEDA_ADB['CommunityFeastTime'], duration)
+        local nextTime = duration - elapsed + currentTime
+
+        addTitle(L['Community Feast'])
+
+        if C_QuestLog.IsQuestFlaggedCompleted(70893) then
+            GameTooltip:AddDoubleLine((select(2, GetItemInfo(200095))), _G.QUEST_COMPLETE, 1, 1, 1, 1, 0, 0)
+        end
+
+        if currentTime - (nextTime - duration) < 900 then
+            r, g, b = 0, 1, 0
+        else
+            r, g, b = 0.6, 0.6, 0.6
+        end -- green text if progressing
+
+        GameTooltip:AddDoubleLine(date('%m/%d %H:%M', nextTime - duration * 2), date('%m/%d %H:%M', nextTime - duration), 0.6, 0.6, 0.6, r, g, b)
+        GameTooltip:AddDoubleLine(date('%m/%d %H:%M', nextTime), date('%m/%d %H:%M', nextTime + duration), 1, 1, 1, 1, 1, 1)
+    end
+
     if IsShiftKeyDown() then
         -- Nzoth relavants
         for _, v in ipairs(horrificVisions) do
@@ -360,7 +417,7 @@ local function onEnter(self)
         end
     else
         GameTooltip:AddLine(' ')
-        GameTooltip:AddLine(L['Hold Shift'], 0.6, 0.8, 1)
+        GameTooltip:AddLine(L['Hold SHIFT key for more events'], 0.6, 0.8, 1)
     end
 
     GameTooltip:AddLine(' ')
@@ -391,6 +448,8 @@ function INFOBAR:CreateDailyBlock()
     end
 
     F:RegisterEvent('PLAYER_ENTERING_WORLD', checkTimeWalker)
+    F:RegisterEvent('PLAYER_ENTERING_WORLD', refreshFeastTime)
+    F:RegisterEvent('QUEST_LOG_UPDATE', refreshFeastTime)
 
     local daily = INFOBAR:RegisterNewBlock('daily', 'RIGHT', 150)
     daily.onEnter = onEnter
