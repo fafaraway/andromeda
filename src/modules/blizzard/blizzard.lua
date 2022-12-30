@@ -174,11 +174,13 @@ do
     end
 
     local function variablesLoaded()
+        C_CVar.SetCVar('showTutorials', 0)
+        C_CVar.SetCVar('showNPETutorials', 0)
+        C_CVar.SetCVar('hideAdventureJournalAlerts', 1)
+        C_CVar.RegisterCVar('hideHelptips', 1)
+
         local lastInfoFrame = C_CVar.GetCVarBitfield('closedInfoFrames', _G.NUM_LE_FRAME_TUTORIALS)
         if pendingChanges or not lastInfoFrame then
-            C_CVar.SetCVar('showTutorials', 0)
-            C_CVar.SetCVar('showNPETutorials', 0)
-            C_CVar.SetCVar('hideAdventureJournalAlerts', 1)
             for i = 1, _G.NUM_LE_FRAME_TUTORIALS do
                 C_CVar.SetCVarBitfield('closedInfoFrames', i, true)
             end
