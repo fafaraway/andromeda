@@ -25,8 +25,8 @@ local function GetNPCID()
 end
 
 local function IsTrackingHidden()
-    for index = 1, GetNumTrackingTypes() do
-        local name, _, active = GetTrackingInfo(index)
+    for index = 1, C_Minimap.GetNumTrackingTypes() do
+        local name, _, active = C_Minimap.GetTrackingInfo(index)
         if name == _G.MINIMAP_TRACKING_TRIVIAL_QUESTS then
             return active
         end
