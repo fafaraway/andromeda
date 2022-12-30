@@ -45,8 +45,8 @@ do
     --         end
     --     end
 
-    --     for index = 1, GetNumTrackingTypes() do
-    --         if GetTrackingInfo(index) == _G.MINIMAP_TRACKING_REPAIR then
+    --     for index = 1, C_Minimap.GetNumTrackingTypes() do
+    --         if C_Minimap.GetTrackingInfo(index) == _G.MINIMAP_TRACKING_REPAIR then
     --             return SetTracking(index, alert > 0)
     --         end
     --     end
@@ -58,8 +58,8 @@ end
 -- track mailbox if we have pending mail
 do
     -- local function trackMailbox()
-    --     for index = 1, GetNumTrackingTypes() do
-    --         local name, _, active = GetTrackingInfo(index)
+    --     for index = 1, C_Minimap.GetNumTrackingTypes() do
+    --         local name, _, active = C_Minimap.GetTrackingInfo(index)
     --         if name == _G.MINIMAP_TRACKING_MAILBOX then
     --             return SetTracking(index, HasNewMail() and not active)
     --         end
