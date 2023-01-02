@@ -141,7 +141,33 @@ local huntAreaToMapID = { -- 狩猎区域ID转换为地图ID
     [7345] = 2024, -- 碧蓝林海
 }
 
-local stormOrders = { 2022, 2025, 2024, 2023 }
+local stormPoiIDs = {
+    [2022] = {
+        { 7249, 7250, 7251, 7252 },
+        { 7253, 7254, 7255, 7256 },
+        { 7257, 7258, 7259, 7260 },
+    },
+
+    [2023] = {
+        { 7221, 7222, 7223, 7224 },
+        { 7225, 7226, 7227, 7228 },
+    },
+
+    [2024] = {
+        { 7229, 7230, 7231, 7232 },
+        { 7233, 7234, 7235, 7236 },
+        { 7237, 7238, 7239, 7240 },
+    },
+
+    [2025] = {
+        { 7245, 7246, 7247, 7248 },
+        { 7298, 7299, 7300, 7301 },
+    },
+
+    [2085] = {
+        { 7241, 7242, 7243, 7244 },
+    },
+}
 
 local atlasCache = {}
 local function getElementalType(element) -- 获取入侵类型图标
@@ -180,6 +206,10 @@ end
 
 local lastCheck = 0
 local function refreshFeastTime()
+    if InCombatLockdown() then
+        return
+    end
+
     local currentTime = GetTime()
 
     if currentTime - lastCheck < 60 then
@@ -290,28 +320,30 @@ local function onEnter(self)
 
     -- Elemental threats
     title = false
-    local poiCache = {}
-    for _, mapID in next, stormOrders do
-        local areaPoiIDs = C_AreaPoiInfo.GetAreaPOIForMap(mapID)
-        for _, areaPoiID in next, areaPoiIDs do
-            local poiInfo = C_AreaPoiInfo.GetAreaPOIInfo(mapID, areaPoiID)
-            local elementType = poiInfo and poiInfo.atlasName and strmatch(poiInfo.atlasName, 'ElementalStorm%-Lesser%-(.+)')
+    for mapID, stormGroup in next, stormPoiIDs do
+        for _, areaPoiIDs in next, stormGroup do
+            for _, areaPoiID in next, areaPoiIDs do
+                local poiInfo = C_AreaPoiInfo.GetAreaPOIInfo(mapID, areaPoiID)
+                local elementType = poiInfo and poiInfo.atlasName and strmatch(poiInfo.atlasName, 'ElementalStorm%-Lesser%-(.+)')
 
-            if elementType and not poiCache[areaPoiID] then
-                poiCache[areaPoiID] = true
-                addTitle(poiInfo.name)
+                if elementType then
+                    addTitle(poiInfo.name)
 
-                local mapInfo = C_Map.GetMapInfo(mapID)
-                local timeLeft = C_AreaPoiInfo.GetAreaPOISecondsLeft(areaPoiID) or 0
-                timeLeft = timeLeft / 60
+                    local mapInfo = C_Map.GetMapInfo(mapID)
+                    local timeLeft = C_AreaPoiInfo.GetAreaPOISecondsLeft(areaPoiID) or 0
 
-                if timeLeft < 60 then
-                    r, g, b = 1, 0, 0
-                else
-                    r, g, b = 0, 1, 0
+                    timeLeft = timeLeft / 60
+
+                    if timeLeft < 60 then
+                        r, g, b = 1, 0, 0
+                    else
+                        r, g, b = 0, 1, 0
+                    end
+
+                    GameTooltip:AddDoubleLine(mapInfo.name .. getElementalType(elementType), getFormattedTimeLeft(timeLeft), 1, 1, 1, r, g, b)
+
+                    break
                 end
-
-                GameTooltip:AddDoubleLine(mapInfo.name .. getElementalType(elementType), getFormattedTimeLeft(timeLeft), 1, 1, 1, r, g, b)
             end
         end
     end
