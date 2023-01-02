@@ -21,20 +21,19 @@ function TOOLTIP:ReskinTooltip()
         self.bg = F.SetBD(self)
         self.bg:SetInside(self)
         self.bg:SetFrameLevel(self:GetFrameLevel())
+        -- F.SetBorderColor(self.bg)
+        local color = _G.ANDROMEDA_ADB.BackdropColor
+        local alpha = C.DB.Tooltip.BackdropAlpha
+        self.bg:SetBackdropBorderColor(color.r, color.g, color.b, alpha)
+        if self.bg.__shadow then
+            self.bg.__shadow:SetBackdropBorderColor(0, 0, 0, 0.25)
+        end
 
         if self.StatusBar then
             TOOLTIP.ReskinStatusBar(self)
         end
 
         self.tipStyled = true
-    end
-
-    local color = _G.ANDROMEDA_ADB.BackdropColor
-    local alpha = C.DB.Tooltip.BackdropAlpha
-    self.bg:SetBackdropColor(color.r, color.g, color.b, alpha)
-    F.SetBorderColor(self.bg)
-    if self.bg.__shadow then
-        self.bg.__shadow:SetBackdropBorderColor(0, 0, 0, 0.25)
     end
 end
 
@@ -47,6 +46,7 @@ function TOOLTIP:UpdateTooltipBorder()
         return
     end
 
+    F.SetBorderColor(self.bg)
     local data = self:GetTooltipData()
     local guid = data and data.guid
     local link = guid and C_Item.GetItemLinkByGUID(guid)
