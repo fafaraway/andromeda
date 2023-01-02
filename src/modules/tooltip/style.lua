@@ -21,6 +21,13 @@ function TOOLTIP:ReskinTooltip()
         self.bg = F.SetBD(self)
         self.bg:SetInside(self)
         self.bg:SetFrameLevel(self:GetFrameLevel())
+        -- F.SetBorderColor(self.bg)
+        local color = _G.ANDROMEDA_ADB.BackdropColor
+        local alpha = C.DB.Tooltip.BackdropAlpha
+        self.bg:SetBackdropBorderColor(color.r, color.g, color.b, alpha)
+        if self.bg.__shadow then
+            self.bg.__shadow:SetBackdropBorderColor(0, 0, 0, 0.25)
+        end
 
         if self.StatusBar then
             TOOLTIP.ReskinStatusBar(self)
@@ -29,40 +36,29 @@ function TOOLTIP:ReskinTooltip()
         self.tipStyled = true
     end
 
-    local color = _G.ANDROMEDA_ADB.BackdropColor
-    local alpha = C.DB.Tooltip.BackdropAlpha
-    self.bg:SetBackdropColor(color.r, color.g, color.b, alpha)
     F.SetBorderColor(self.bg)
-    if self.bg.__shadow then
-        self.bg.__shadow:SetBackdropBorderColor(0, 0, 0, 0.25)
-    end
-end
-
-function TOOLTIP:UpdateTooltipBorder()
-    if not self.bg then
-        return
-    end
 
     if not C.DB.Tooltip.BorderColor then
         return
     end
 
-    local data = self:GetTooltipData()
-    local guid = data and data.guid
-    local link = guid and C_Item.GetItemLinkByGUID(guid)
-    if link then
-        local quality = select(3, GetItemInfo(link))
-        local color = C.QualityColors[quality or 1]
-        if color then
-            self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
-            if self.bg.__shadow then
-                self.bg.__shadow:SetBackdropBorderColor(color.r, color.g, color.b, 0.25)
+    local data = self.GetTooltipData and self:GetTooltipData()
+    if data then
+        local link = data.guid and C_Item.GetItemLinkByGUID(data.guid) or data.hyperlink
+        if link then
+            local quality = select(3, GetItemInfo(link))
+            local color = C.QualityColors[quality or 1]
+            if color then
+                self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
+                if self.bg.__shadow then
+                    self.bg.__shadow:SetBackdropBorderColor(color.r, color.g, color.b, 0.25)
+                end
             end
         end
     end
 end
 
-local function RestyleFont(obj, font, size)
+local function reskinFont(obj, font, size)
     local outline = _G.ANDROMEDA_ADB.FontOutline
 
     obj:SetFont(font, size, outline and 'OUTLINE' or '')
@@ -88,9 +84,9 @@ function TOOLTIP:SetupFonts()
     local textSize = 14
     local headerSize = 16
 
-    RestyleFont(_G.GameTooltipHeaderText, C.Assets.Fonts.Bold, headerSize)
-    RestyleFont(_G.GameTooltipText, C.Assets.Fonts.Regular, textSize)
-    RestyleFont(_G.GameTooltipTextSmall, C.Assets.Fonts.Regular, textSize)
+    reskinFont(_G.GameTooltipHeaderText, C.Assets.Fonts.Bold, headerSize)
+    reskinFont(_G.GameTooltipText, C.Assets.Fonts.Regular, textSize)
+    reskinFont(_G.GameTooltipTextSmall, C.Assets.Fonts.Regular, textSize)
 
     if not _G.GameTooltip.hasMoney then
         _G.SetTooltipMoney(_G.GameTooltip, 1, nil, '', '')
@@ -100,8 +96,8 @@ function TOOLTIP:SetupFonts()
 
     if _G.GameTooltip.hasMoney then
         for i = 1, _G.GameTooltip.numMoneyFrames do
-            RestyleFont(_G['GameTooltipMoneyFrame' .. i .. 'PrefixText'], C.Assets.Fonts.Regular, textSize)
-            RestyleFont(_G['GameTooltipMoneyFrame' .. i .. 'SuffixText'], C.Assets.Fonts.Regular, textSize)
+            reskinFont(_G['GameTooltipMoneyFrame' .. i .. 'PrefixText'], C.Assets.Fonts.Regular, textSize)
+            reskinFont(_G['GameTooltipMoneyFrame' .. i .. 'SuffixText'], C.Assets.Fonts.Regular, textSize)
         end
     end
 
@@ -109,7 +105,7 @@ function TOOLTIP:SetupFonts()
         for i = 1, tt:GetNumRegions() do
             local region = select(i, tt:GetRegions())
             if region:IsObjectType('FontString') then
-                RestyleFont(region, C.Assets.Fonts.Regular, textSize)
+                reskinFont(region, C.Assets.Fonts.Regular, textSize)
             end
         end
     end
