@@ -18,10 +18,10 @@ end
 do
     local function autoKeystone()
         for bagID = _G.BACKPACK_CONTAINER, _G.NUM_BAG_SLOTS do
-            for slotID = 1, GetContainerNumSlots(bagID) do
-                local itemLink = GetContainerItemLink(bagID, slotID)
+            for slotID = 1, C_Container.GetContainerNumSlots(bagID) do
+                local itemLink = C_Container.GetContainerItemLink(bagID, slotID)
                 if itemLink and itemLink:match('|Hkeystone:') then
-                    PickupContainerItem(bagID, slotID)
+                    C_Container.PickupContainerItem(bagID, slotID)
                     if CursorHasItem() then
                         C_ChallengeMode.SlotKeystone()
                         return
