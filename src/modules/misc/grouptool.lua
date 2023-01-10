@@ -4,9 +4,15 @@ local GT = F:RegisterModule('GroupTool')
 local buffsList = {
     [1] = {
         -- 合剂
-        307166, -- 大锅
-        307185, -- 通用合剂
-        307187, -- 耐力合剂
+        370652, -- 静电赋能瓶剂
+        370653, -- 冰寒庇护瓶剂
+        371172, -- 温存全能瓶剂
+        371204, -- 止风瓶剂
+        371339, -- 元素混沌瓶剂
+        371354, -- 风暴之眼瓶剂
+        371386, -- 疏离注能瓶剂
+        373257, -- 冰川之怒瓶剂
+        374000, -- 腐化之怒冰冻瓶剂
     },
     [2] = {
         -- 进食充分
@@ -383,14 +389,7 @@ function GT:RaidTool_BuffChecker(parent)
             NoBuff[numGroups] = {}
         end
 
-        if
-            #NoBuff[1] == 0
-            and #NoBuff[2] == 0
-            and #NoBuff[3] == 0
-            and #NoBuff[4] == 0
-            and #NoBuff[5] == 0
-            and #NoBuff[6] == 0
-        then
+        if #NoBuff[1] == 0 and #NoBuff[2] == 0 and #NoBuff[3] == 0 and #NoBuff[4] == 0 and #NoBuff[5] == 0 and #NoBuff[6] == 0 then
             sendMsg(L['All Buffs Ready!'])
         else
             sendMsg(L['Raid Buff Checker:'])
@@ -414,12 +413,7 @@ function GT:RaidTool_BuffChecker(parent)
         _G.GameTooltip:AddLine(C.MOUSE_MIDDLE_BUTTON .. L['Start/Cancel count down'], 0, 0.6, 1)
         _G.GameTooltip:AddLine(C.MOUSE_RIGHT_BUTTON .. C.RED_COLOR .. '(Ctrl)|r ' .. L['Check Flask & Food'], 0, 0.6, 1)
         if potionCheck then
-            _G.GameTooltip:AddLine(
-                C.MOUSE_RIGHT_BUTTON .. C.RED_COLOR .. '(Alt)|r ' .. L['MRT Potion Check'],
-                0,
-                0.6,
-                1
-            )
+            _G.GameTooltip:AddLine(C.MOUSE_RIGHT_BUTTON .. C.RED_COLOR .. '(Alt)|r ' .. L['MRT Potion Check'], 0, 0.6, 1)
         end
         _G.GameTooltip:Show()
     end)
@@ -529,11 +523,7 @@ function GT:RaidTool_CreateMenu(parent)
         {
             _G.ROLE_POLL,
             function()
-                if
-                    IsInGroup()
-                    and not HasLFGRestrictions()
-                    and (UnitIsGroupLeader('player') or (UnitIsGroupAssistant('player') and IsInRaid()))
-                then
+                if IsInGroup() and not HasLFGRestrictions() and (UnitIsGroupLeader('player') or (UnitIsGroupAssistant('player') and IsInRaid())) then
                     InitiateRolePoll()
                 else
                     _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. _G.ERR_NOT_LEADER)
@@ -551,11 +541,7 @@ function GT:RaidTool_CreateMenu(parent)
     local bu = {}
     for i, j in pairs(buttons) do
         bu[i] = F.CreateButton(frame, 84, 28, j[1], 12)
-        bu[i]:SetPoint(
-            mod(i, 2) == 0 and 'TOPRIGHT' or 'TOPLEFT',
-            mod(i, 2) == 0 and -5 or 5,
-            i > 2 and -37 or -5
-        )
+        bu[i]:SetPoint(mod(i, 2) == 0 and 'TOPRIGHT' or 'TOPLEFT', mod(i, 2) == 0 and -5 or 5, i > 2 and -37 or -5)
         bu[i]:SetScript('OnClick', j[2])
     end
 
