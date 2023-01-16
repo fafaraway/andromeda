@@ -3,11 +3,20 @@ local NOTIFICATION = F:GetModule('Notification')
 
 local cache = {}
 local rareString = '|Hworldmap:%d+:%d+:%d+|h%s (%.1f, %.1f)%s|h|r'
+local mapID
+local position
 
 local function IsUsefulAtlas(info)
     local atlas = info.atlasName
     if atlas then
         return strfind(atlas, '[Vv]ignette') or (atlas == 'nazjatar-nagaevent')
+    end
+end
+
+local function createMapPin()
+    local mapPoint = UiMapPoint.CreateFromVector2D(mapID, position)
+    if mapPoint then
+        C_Map.SetUserWaypoint(mapPoint)
     end
 end
 
@@ -31,7 +40,7 @@ function NOTIFICATION:RareAlert_Update(id)
         F:CreateNotification(
             _G.GARRISON_MISSION_RARE,
             tex .. (info.name or ''),
-            nil,
+            createMapPin,
             'Interface\\ICONS\\INV_Misc_Map_01'
         )
 
