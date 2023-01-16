@@ -258,8 +258,10 @@ tinsert(C.BlizzThemes, function()
     end)
 
     -- Reputation Frame
-    _G.ReputationDetailCorner:Hide()
-    _G.ReputationDetailDivider:Hide()
+    if not C.IS_NEW_PATCH then
+        _G.ReputationDetailCorner:Hide()
+        _G.ReputationDetailDivider:Hide()
+    end
     _G.ReputationDetailFrame:SetPoint('TOPLEFT', _G.ReputationFrame, 'TOPRIGHT', 3, -28)
 
     local function UpdateFactionSkins()

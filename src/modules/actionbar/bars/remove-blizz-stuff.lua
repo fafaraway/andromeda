@@ -132,4 +132,9 @@ function ACTIONBAR:RemoveBlizzStuff()
 
     _G.MicroButtonAndBagsBar:Hide()
     _G.MicroButtonAndBagsBar:UnregisterAllEvents()
+
+    if C.IS_NEW_PATCH then
+        _G.BagsBar:Hide()
+        _G.BagsBar:UnregisterAllEvents()
+    end
 end

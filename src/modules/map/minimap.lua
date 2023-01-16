@@ -142,7 +142,7 @@ end
 -- Mail Icon
 
 function MAP:CreateMailButton()
-    local mail = _G.MinimapCluster.MailFrame
+    local mail = C.IS_NEW_PATCH and _G.MinimapCluster.IndicatorFrame.MailFrame or _G.MinimapCluster.MailFrame
     local icon = _G.MiniMapMailIcon
 
     mail:ClearAllPoints()

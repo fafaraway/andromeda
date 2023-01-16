@@ -13,7 +13,9 @@ tinsert(C.BlizzThemes, function()
     _G.RaidInfoFrame:SetPoint('TOPLEFT', _G.RaidFrame, 'TOPRIGHT', 1, -28)
     _G.RaidInfoDetailFooter:Hide()
     _G.RaidInfoDetailHeader:Hide()
-    _G.RaidInfoDetailCorner:Hide()
+    if not C.IS_NEW_PATCH then
+        _G.RaidInfoDetailCorner:Hide()
+    end
 
     F.Reskin(_G.RaidFrameRaidInfoButton)
     F.Reskin(_G.RaidFrameConvertToRaidButton)

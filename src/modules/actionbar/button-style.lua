@@ -15,6 +15,7 @@ local replaces = {
     { _G.KEY_MOUSEWHEELDOWN, 'MD' },
     { _G.KEY_SPACE, 'Sp' },
     { 'CAPSLOCK', 'CL' },
+    { 'Capslock', 'CL' },
     { 'BUTTON', 'M' },
     { 'NUMPAD', 'N' },
     { '(ALT%-)', 'a' },
