@@ -13,9 +13,9 @@ local oUF = F.Libs.oUF
 
 local extraGUIs = {}
 
--- Functions
+-- utility
 
-local function TogglePanel(guiName)
+local function togglePanel(guiName)
     for name, frame in pairs(extraGUIs) do
         if name == guiName then
             F:TogglePanel(frame)
@@ -25,13 +25,13 @@ local function TogglePanel(guiName)
     end
 end
 
-local function HidePanels()
+local function hidePanels()
     for _, frame in pairs(extraGUIs) do
         frame:Hide()
     end
 end
 
-local function CreateExtraGUI(parent, name, title, bgFrame)
+local function createPanel(parent, name, title, bgFrame)
     local frame = CreateFrame('Frame', name, parent)
     frame:SetSize(GUI.exWidth, GUI.height)
     frame:SetPoint('TOPLEFT', parent:GetParent(), 'TOPRIGHT', 3, 0)
@@ -49,7 +49,7 @@ local function CreateExtraGUI(parent, name, title, bgFrame)
     end
 
     if not parent.extraGUIHook then
-        parent:HookScript('OnHide', HidePanels)
+        parent:HookScript('OnHide', hidePanels)
         parent.extraGUIHook = true
     end
     extraGUIs[name] = frame
@@ -57,7 +57,7 @@ local function CreateExtraGUI(parent, name, title, bgFrame)
     return frame
 end
 
-function GUI:CreateScroll(parent, width, height, text, noBg)
+local function createScrollFrame(parent, width, height, text, noBg)
     local scroll = CreateFrame('ScrollFrame', nil, parent, 'UIPanelScrollFrameTemplate')
     scroll:SetSize(width, height)
     if parent.bg then
@@ -82,7 +82,7 @@ function GUI:CreateScroll(parent, width, height, text, noBg)
     return scroll
 end
 
-local function SortBars(barTable)
+local function sortBars(barTable)
     local num = 1
     for _, bar in pairs(barTable) do
         bar:SetPoint('TOPLEFT', 0, -32 * (num - 1))
@@ -90,43 +90,23 @@ local function SortBars(barTable)
     end
 end
 
-local function CreateBars(parent, spellID, table1, table2, table3)
-    -- table1 barTable
-    -- table2 C.table
-    -- table3 ANDROMEDA_ADB.table
-    local spellName = GetSpellInfo(spellID)
-    local texture = GetSpellTexture(spellID)
+local function createBarWidgets(parent, texture)
+    local icon = CreateFrame('Frame', nil, parent)
+    icon:SetSize(16, 16)
+    icon:SetPoint('LEFT', 5, 0)
+    F.PixelIcon(icon, texture, true)
 
-    local bar = CreateFrame('Frame', nil, parent, 'BackdropTemplate')
-    bar:SetSize(200, 30)
-    F.CreateBD(bar, 0.25)
-    table1[spellID] = bar
+    local close = CreateFrame('Button', nil, parent)
+    close:SetSize(16, 16)
+    close:SetPoint('RIGHT', -5, 0)
+    close.Icon = close:CreateTexture(nil, 'ARTWORK')
+    close.Icon:SetAllPoints()
+    close.Icon:SetTexture(C.Assets.Textures.Close)
+    close.Icon:SetVertexColor(1, 0, 0)
+    close:SetHighlightTexture(close.Icon:GetTexture())
 
-    local icon, delBtn = GUI:CreateBarWidgets(bar, texture)
-    F.AddTooltip(icon, 'ANCHOR_RIGHT', spellID)
-    delBtn:SetScript('OnClick', function()
-        bar:Hide()
-
-        if C[table2][spellID] then
-            _G.ANDROMEDA_ADB[table3][spellID] = false
-        else
-            _G.ANDROMEDA_ADB[table3][spellID] = nil
-        end
-
-        table1[spellID] = nil
-        SortBars(table1)
-    end)
-
-    local name = F.CreateFS(bar, C.Assets.Fonts.Regular, 12, nil, spellName, nil, true, 'LEFT', 30, 0)
-    name:SetWidth(120)
-    name:SetJustifyH('LEFT')
-
-    SortBars(table1)
+    return icon, close
 end
-
---[[
-
- ]]
 
 local function createBars(parent, spellID, newTable, tableName)
     -- table1 barTable
@@ -140,7 +120,7 @@ local function createBars(parent, spellID, newTable, tableName)
     F.CreateBD(bar, 0.25)
     newTable[spellID] = bar
 
-    local icon, delBtn = GUI:CreateBarWidgets(bar, texture)
+    local icon, delBtn = createBarWidgets(bar, texture)
     F.AddTooltip(icon, 'ANCHOR_RIGHT', spellID)
     delBtn:SetScript('OnClick', function()
         bar:Hide()
@@ -152,17 +132,17 @@ local function createBars(parent, spellID, newTable, tableName)
         end
 
         newTable[spellID] = nil
-        SortBars(newTable)
+        sortBars(newTable)
     end)
 
     local name = F.CreateFS(bar, C.Assets.Fonts.Regular, 12, nil, spellName, nil, true, 'LEFT', 30, 0)
     name:SetWidth(160)
     name:SetJustifyH('LEFT')
 
-    SortBars(newTable)
+    sortBars(newTable)
 end
 
-local function addOnClick(btn)
+local function addButtonOnClick(btn)
     local parent = btn.__owner
     local newTable = parent.barTable
     local tableName = parent.tableName
@@ -186,11 +166,7 @@ local function addOnClick(btn)
     parent.editBox:SetText('')
 end
 
---[[
-
- ]]
-
-local function Label_OnEnter(self)
+local function labelOnEnter(self)
     _G.GameTooltip:ClearLines()
     _G.GameTooltip:SetOwner(self:GetParent(), 'ANCHOR_RIGHT', 0, 3)
     _G.GameTooltip:AddLine(self.text)
@@ -199,7 +175,7 @@ local function Label_OnEnter(self)
     _G.GameTooltip:Show()
 end
 
-local function CreateLabel(parent, text, tip)
+local function createLabel(parent, text, tip)
     local font = C.Assets.Fonts.Regular
     local label = F.CreateFS(parent, font, 11, nil, text, nil, true)
     label:SetPoint('BOTTOM', parent, 'TOP', 0, 4)
@@ -210,11 +186,11 @@ local function CreateLabel(parent, text, tip)
     frame:SetAllPoints(label)
     frame.text = text
     frame.tip = tip
-    frame:SetScript('OnEnter', Label_OnEnter)
+    frame:SetScript('OnEnter', labelOnEnter)
     frame:SetScript('OnLeave', F.HideTooltip)
 end
 
-function GUI:ClearEdit(element)
+local function resetWidgetStatus(element)
     if element.Type == 'EditBox' then
         element:ClearFocus()
         element:SetText('')
@@ -228,19 +204,17 @@ function GUI:ClearEdit(element)
     end
 end
 
-local function ClearEdit(options)
+local function clearOptions(options)
     for i = 1, #options do
-        GUI:ClearEdit(options[i])
+        resetWidgetStatus(options[i])
     end
 end
-
--- Widgets
 
 local function createEditBox(parent, text, x, y, tip, width, height)
     local eb = F.CreateEditBox(parent, width or 90, height or 24)
     eb:SetPoint('TOPLEFT', x, y)
     eb:SetMaxLetters(255)
-    CreateLabel(eb, text)
+    createLabel(eb, text)
 
     if tip then
         eb.title = L['Hint']
@@ -250,25 +224,7 @@ local function createEditBox(parent, text, x, y, tip, width, height)
     return eb
 end
 
-function GUI:CreateBarWidgets(parent, texture)
-    local icon = CreateFrame('Frame', nil, parent)
-    icon:SetSize(16, 16)
-    icon:SetPoint('LEFT', 5, 0)
-    F.PixelIcon(icon, texture, true)
-
-    local close = CreateFrame('Button', nil, parent)
-    close:SetSize(16, 16)
-    close:SetPoint('RIGHT', -5, 0)
-    close.Icon = close:CreateTexture(nil, 'ARTWORK')
-    close.Icon:SetAllPoints()
-    close.Icon:SetTexture(C.Assets.Textures.Close)
-    close.Icon:SetVertexColor(1, 0, 0)
-    close:SetHighlightTexture(close.Icon:GetTexture())
-
-    return icon, close
-end
-
-local function CreateGroupTitle(parent, text, offset)
+local function createGroupTitle(parent, text, offset)
     if parent.groupTitle then
         return
     end
@@ -280,7 +236,7 @@ local function CreateGroupTitle(parent, text, offset)
     parent.groupTitle = true
 end
 
-local function Checkbox_OnClick(self)
+local function checkboxOnClick(self)
     local key = self.__key
     local value = self.__value
     C.DB[key][value] = not C.DB[key][value]
@@ -290,7 +246,7 @@ local function Checkbox_OnClick(self)
     end
 end
 
-local function CreateCheckbox(parent, offset, key, value, text, func, tip)
+local function createCheckbox(parent, offset, key, value, text, func, tip)
     local box = F.CreateCheckbox(parent.child, true)
     box:SetSize(18, 18)
     box:SetHitRectInsets(-5, -5, -5, -5)
@@ -301,7 +257,7 @@ local function CreateCheckbox(parent, offset, key, value, text, func, tip)
     box:SetChecked(C.DB[key][value])
     box.__value = value
     box.__key = key
-    box:SetScript('OnClick', Checkbox_OnClick)
+    box:SetScript('OnClick', checkboxOnClick)
     box.__func = func
 
     if tip then
@@ -312,7 +268,7 @@ local function CreateCheckbox(parent, offset, key, value, text, func, tip)
     return box
 end
 
-local function CreateColorSwatch(parent, value, text, defaultV, offset, x, y)
+local function createColorSwatch(parent, text, value, defaultV, offset, x, y)
     local swatch = F.CreateColorSwatch(parent, text, value)
     swatch:SetSize(22, 14)
     swatch.__default = defaultV
@@ -322,9 +278,11 @@ local function CreateColorSwatch(parent, value, text, defaultV, offset, x, y)
     else
         swatch:SetPoint('TOPLEFT', 14, offset)
     end
+
+    return swatch
 end
 
-local function Slider_OnValueChanged(self, v)
+local function sliderOnValueChanged(self, v)
     local current = F:Round(tonumber(v), 2)
     self.value:SetText(current)
     C.DB[self.__key][self.__value] = current
@@ -334,7 +292,7 @@ local function Slider_OnValueChanged(self, v)
     end
 end
 
-local function CreateSlider(parent, key, value, text, minV, maxV, step, defaultV, x, y, func, tip)
+local function createSlider(parent, key, value, text, minV, maxV, step, defaultV, x, y, func, tip)
     local slider = F.CreateSlider(parent.child, text, minV, maxV, step, x, y, 180)
     slider:SetValue(C.DB[key][value])
     slider.value:SetText(C.DB[key][value])
@@ -343,7 +301,7 @@ local function CreateSlider(parent, key, value, text, minV, maxV, step, defaultV
     slider.__update = func
     slider.__default = defaultV
     slider.__step = step
-    slider:SetScript('OnValueChanged', Slider_OnValueChanged)
+    slider:SetScript('OnValueChanged', sliderOnValueChanged)
 
     if tip then
         slider.title = tostring(key)
@@ -376,7 +334,7 @@ end
 local function createDropdown(parent, text, x, y, data, tip, width, height)
     local dd = F.CreateDropDown(parent, width or 90, height or 30, data)
     dd:SetPoint('TOPLEFT', x, y)
-    CreateLabel(dd, text)
+    createLabel(dd, text)
 
     if tip then
         dd.title = L['Hint']
@@ -386,7 +344,7 @@ local function createDropdown(parent, text, x, y, data, tip, width, height)
     return dd
 end
 
-local function CreateOptionDropdown(parent, title, yOffset, options, tooltip, key, value, default, func)
+local function createOptionDropdown(parent, title, yOffset, options, tooltip, key, value, default, func)
     local dd = createDropdown(parent.child, title, 20, yOffset, options, tooltip, 180, 20)
     dd.__key = key
     dd.__value = value
@@ -417,13 +375,13 @@ end
 
 function GUI:SetupAuraSize(parent)
     local guiName = C.ADDON_TITLE .. 'GUIAuraSize'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
     local db = C.CharacterSettings.Aura
     local mKey = 'Aura'
 
@@ -444,24 +402,24 @@ function GUI:SetupAuraSize(parent)
 
     local offset = -10
     for _, v in ipairs(datas.layout) do
-        CreateGroupTitle(scroll, L['Layout'], offset)
-        CreateCheckbox(scroll, offset - 30, mKey, v.value, v.text, UpdateAuraSize)
+        createGroupTitle(scroll, L['Layout'], offset)
+        createCheckbox(scroll, offset - 30, mKey, v.value, v.text, UpdateAuraSize)
         offset = offset - 35
     end
 
     scroll.groupTitle = nil
 
     for _, v in ipairs(datas.buff) do
-        CreateGroupTitle(scroll, L['Buff'], offset - 30)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 80, UpdateAuraSize)
+        createGroupTitle(scroll, L['Buff'], offset - 30)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 80, UpdateAuraSize)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
     for _, v in ipairs(datas.debuff) do
-        CreateGroupTitle(scroll, L['Debuff'], offset - 80)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 130, UpdateAuraSize)
+        createGroupTitle(scroll, L['Debuff'], offset - 80)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 130, UpdateAuraSize)
         offset = offset - 65
     end
 end
@@ -481,13 +439,13 @@ end
 
 function GUI:SetupInventoryFilter(parent)
     local guiName = C.ADDON_TITLE .. 'GUIInventoryFilter'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
 
     local datas = {
         [1] = { value = 'FilterJunk', text = _G.BAG_FILTER_JUNK },
@@ -505,21 +463,21 @@ function GUI:SetupInventoryFilter(parent)
 
     local offset = -10
     for _, data in ipairs(datas) do
-        CreateGroupTitle(scroll, L['Item Filter'], offset)
-        CreateCheckbox(scroll, offset - 30, 'Inventory', data.value, data.text)
+        createGroupTitle(scroll, L['Item Filter'], offset)
+        createCheckbox(scroll, offset - 30, 'Inventory', data.value, data.text)
         offset = offset - 35
     end
 end
 
 function GUI:SetupInventorySize(parent)
     local guiName = C.ADDON_TITLE .. 'GUIInventorySize'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
 
     local values = C.DB.Inventory
 
@@ -540,37 +498,37 @@ function GUI:SetupInventorySize(parent)
 
     local offset = -10
     for _, v in ipairs(sizeDatas) do
-        CreateGroupTitle(scroll, L['Size and Spacing'], offset)
-        CreateSlider(scroll, 'Inventory', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateBagSize)
+        createGroupTitle(scroll, L['Size and Spacing'], offset)
+        createSlider(scroll, 'Inventory', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateBagSize)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
     for _, v in ipairs(colDatas) do
-        CreateGroupTitle(scroll, L['Columns'], offset - 50)
-        CreateSlider(scroll, 'Inventory', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 100, UpdateBagSize)
+        createGroupTitle(scroll, L['Columns'], offset - 50)
+        createSlider(scroll, 'Inventory', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 100, UpdateBagSize)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
     for _, v in ipairs(rowDatas) do
-        CreateGroupTitle(scroll, L['Rows'], offset - 100)
-        CreateSlider(scroll, 'Inventory', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 150, UpdateInventoryAnchor)
+        createGroupTitle(scroll, L['Rows'], offset - 100)
+        createSlider(scroll, 'Inventory', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 150, UpdateInventoryAnchor)
         offset = offset - 65
     end
 end
 
 function GUI:SetupMinItemLevelToShow(parent)
     local guiName = C.ADDON_TITLE .. 'GUIMinItemLevelToShow'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
     local values = C.DB.Inventory
 
     local datas = {
@@ -583,8 +541,8 @@ function GUI:SetupMinItemLevelToShow(parent)
     }
 
     local offset = -10
-    CreateGroupTitle(scroll, L['Item Level'], offset)
-    CreateSlider(scroll, 'Inventory', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset - 50, UpdateInventoryStatus)
+    createGroupTitle(scroll, L['Item Level'], offset)
+    createSlider(scroll, 'Inventory', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset - 50, UpdateInventoryStatus)
 end
 
 -- Actionbar
@@ -597,13 +555,13 @@ end
 
 function GUI:SetupActionBarSize(parent)
     local guiName = C.ADDON_TITLE .. 'GUIActionBarSize'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
     local db = C.CharacterSettings.Actionbar
     local mKey = 'Actionbar'
 
@@ -681,96 +639,96 @@ function GUI:SetupActionBarSize(parent)
 
     local offset = -10
     for _, v in ipairs(datas.bar1) do
-        CreateGroupTitle(scroll, L['Bar 1'], offset)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateActionBarSize)
+        createGroupTitle(scroll, L['Bar 1'], offset)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateActionBarSize)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
     for _, v in ipairs(datas.bar2) do
-        CreateGroupTitle(scroll, L['Bar 2'], offset - 50)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 100, UpdateActionBarSize)
+        createGroupTitle(scroll, L['Bar 2'], offset - 50)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 100, UpdateActionBarSize)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
     for _, v in ipairs(datas.bar3) do
-        CreateGroupTitle(scroll, L['Bar 3'], offset - 100)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 150, UpdateActionBarSize)
+        createGroupTitle(scroll, L['Bar 3'], offset - 100)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 150, UpdateActionBarSize)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
     for _, v in ipairs(datas.bar4) do
-        CreateGroupTitle(scroll, L['Bar 4'], offset - 150)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 200, UpdateActionBarSize)
+        createGroupTitle(scroll, L['Bar 4'], offset - 150)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 200, UpdateActionBarSize)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
     for _, v in ipairs(datas.bar5) do
-        CreateGroupTitle(scroll, L['Bar 5'], offset - 200)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 250, UpdateActionBarSize)
+        createGroupTitle(scroll, L['Bar 5'], offset - 200)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 250, UpdateActionBarSize)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
     for _, v in ipairs(datas.bar6) do
-        CreateGroupTitle(scroll, L['Bar 6'], offset - 250)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 300, UpdateActionBarSize)
+        createGroupTitle(scroll, L['Bar 6'], offset - 250)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 300, UpdateActionBarSize)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
     for _, v in ipairs(datas.bar7) do
-        CreateGroupTitle(scroll, L['Bar 7'], offset - 300)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 350, UpdateActionBarSize)
+        createGroupTitle(scroll, L['Bar 7'], offset - 300)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 350, UpdateActionBarSize)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
     for _, v in ipairs(datas.bar8) do
-        CreateGroupTitle(scroll, L['Bar 8'], offset - 350)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 400, UpdateActionBarSize)
+        createGroupTitle(scroll, L['Bar 8'], offset - 350)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 400, UpdateActionBarSize)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
     for _, v in ipairs(datas.barPet) do
-        CreateGroupTitle(scroll, L['Pet Bar'], offset - 400)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 450, ACTIONBAR.UpdatePetBar)
+        createGroupTitle(scroll, L['Pet Bar'], offset - 400)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 450, ACTIONBAR.UpdatePetBar)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
     for _, v in ipairs(datas.barStance) do
-        CreateGroupTitle(scroll, L['Stance Bar'], offset - 450)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 500, ACTIONBAR.UpdateStanceBar)
+        createGroupTitle(scroll, L['Stance Bar'], offset - 450)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 500, ACTIONBAR.UpdateStanceBar)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
     for _, v in ipairs(datas.barExtra) do
-        CreateGroupTitle(scroll, L['Extra Button'], offset - 500)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 550, ACTIONBAR.UpdateStanceBar)
+        createGroupTitle(scroll, L['Extra Button'], offset - 500)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 550, ACTIONBAR.UpdateStanceBar)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
     for _, v in ipairs(datas.barVehicle) do
-        CreateGroupTitle(scroll, L['Vehicle Button'], offset - 550)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 600, ACTIONBAR.UpdateStanceBar)
+        createGroupTitle(scroll, L['Vehicle Button'], offset - 550)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 600, ACTIONBAR.UpdateStanceBar)
         offset = offset - 65
     end
 end
@@ -786,13 +744,13 @@ end
 
 function GUI:SetupActionbarFader(parent)
     local guiName = C.ADDON_TITLE .. 'GUIActionbarFader'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
     local db = C.CharacterSettings.Actionbar
     local mKey = 'Actionbar'
 
@@ -827,8 +785,8 @@ function GUI:SetupActionbarFader(parent)
 
     local offset = -10
     for _, v in ipairs(datas.bars) do
-        CreateGroupTitle(scroll, L['Bars'], offset)
-        CreateCheckbox(scroll, offset - 30, mKey, v.value, v.text, UpdateActionBarFader)
+        createGroupTitle(scroll, L['Bars'], offset)
+        createCheckbox(scroll, offset - 30, mKey, v.value, v.text, UpdateActionBarFader)
         offset = offset - 35
     end
 
@@ -836,29 +794,29 @@ function GUI:SetupActionbarFader(parent)
     scroll.groupTitle = nil
 
     for _, v in ipairs(datas.conditions) do
-        CreateGroupTitle(scroll, L['Conditions'], offset)
-        CreateCheckbox(scroll, offset - 30, mKey, v.value, v.text, UpdateActionBarFader)
+        createGroupTitle(scroll, L['Conditions'], offset)
+        createCheckbox(scroll, offset - 30, mKey, v.value, v.text, UpdateActionBarFader)
         offset = offset - 35
     end
 
     scroll.groupTitle = nil
 
     for _, v in ipairs(datas.sliders) do
-        CreateGroupTitle(scroll, L['Fading Parameters'], offset - 30)
-        CreateSlider(scroll, mKey, v.key, v.text, 0, 1, 0.1, v.value, 20, offset - 80, UpdateActionBarFader)
+        createGroupTitle(scroll, L['Fading Parameters'], offset - 30)
+        createSlider(scroll, mKey, v.key, v.text, 0, 1, 0.1, v.value, 20, offset - 80, UpdateActionBarFader)
         offset = offset - 65
     end
 end
 
 function GUI:SetupCooldownCount(parent)
     local guiName = C.ADDON_TITLE .. 'GUICooldownCount'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
     local db = C.CharacterSettings.Cooldown
     local mKey = 'Cooldown'
 
@@ -899,16 +857,16 @@ function GUI:SetupCooldownCount(parent)
 
     local offset = -10
     for _, v in ipairs(datas.checkbox) do
-        CreateGroupTitle(scroll, L['Cooldown'], offset)
-        CreateCheckbox(scroll, offset - 30, mKey, v.value, v.text, nil, v.tip)
+        createGroupTitle(scroll, L['Cooldown'], offset)
+        createCheckbox(scroll, offset - 30, mKey, v.value, v.text, nil, v.tip)
         offset = offset - 35
     end
 
     scroll.groupTitle = nil
 
     for _, v in ipairs(datas.slider) do
-        CreateGroupTitle(scroll, L['Threhold'], offset - 30)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 80, nil, v.tip)
+        createGroupTitle(scroll, L['Threhold'], offset - 30)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 80, nil, v.tip)
         offset = offset - 65
     end
 end
@@ -925,12 +883,12 @@ end
 
 function GUI:SetupNameplateAuraFilter(parent)
     local guiName = C.ADDON_TITLE .. 'GUINamePlateAuraFilter'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
+    local panel = createPanel(parent, guiName)
     panel:SetScript('OnHide', RefreshNameplateAuraFilters)
 
     local frameData = {
@@ -955,7 +913,7 @@ function GUI:SetupNameplateAuraFilter(parent)
         bar.bg = F.CreateBD(bar, 0.25)
         frameData[index].barList[spellID] = bar
 
-        local icon, close = GUI:CreateBarWidgets(bar, texture)
+        local icon, close = createBarWidgets(bar, texture)
         F.AddTooltip(icon, 'ANCHOR_RIGHT', spellID)
         close:SetScript('OnClick', function()
             bar:Hide()
@@ -967,7 +925,7 @@ function GUI:SetupNameplateAuraFilter(parent)
             end
 
             frameData[index].barList[spellID] = nil
-            SortBars(frameData[index].barList)
+            sortBars(frameData[index].barList)
         end)
 
         local spellName = F.CreateFS(bar, C.Assets.Fonts.Regular, 12, nil, name, nil, true, 'LEFT', 30, 0)
@@ -977,7 +935,7 @@ function GUI:SetupNameplateAuraFilter(parent)
             spellName:SetTextColor(1, 0, 0)
         end
 
-        SortBars(frameData[index].barList)
+        sortBars(frameData[index].barList)
     end
 
     local function isAuraExisted(index, spellID)
@@ -1023,7 +981,7 @@ function GUI:SetupNameplateAuraFilter(parent)
         frame:SetPoint('TOPLEFT', 10, value.offset - 25)
         frame.bg = F.CreateBDFrame(frame, 0.25)
 
-        local scroll = GUI:CreateScroll(frame, 200, 200, nil, true)
+        local scroll = createScrollFrame(frame, 200, 200, nil, true)
         scroll:ClearAllPoints()
         scroll:SetPoint('BOTTOMLEFT', 10, 10)
 
@@ -1058,19 +1016,19 @@ end
 
 function GUI:SetupNameplateMajorSpells(parent)
     local guiName = C.ADDON_TITLE .. 'GUINamePlateCastbarGlow'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName, L['Major Spells Filter'], true)
+    local panel = createPanel(parent, guiName, L['Major Spells Filter'], true)
     panel:SetScript('OnHide', RefreshMajorSpellsFilter)
     parent.panel = panel
 
     panel.barTable = {}
     panel.tableName = 'MajorSpellsList'
 
-    local scrollArea = GUI:CreateScroll(panel.bg, 200, 485)
+    local scrollArea = createScrollFrame(panel.bg, 200, 485)
     panel.scrollArea = scrollArea
 
     local editBox = createEditBox(panel.bg, nil, 10, -10, nil, 110, 24)
@@ -1080,7 +1038,7 @@ function GUI:SetupNameplateMajorSpells(parent)
 
     local addBtn = F.CreateButton(panel.bg, 50, 24, _G.ADD)
     addBtn:SetPoint('TOPRIGHT', -8, -10)
-    addBtn:HookScript('OnClick', addOnClick)
+    addBtn:HookScript('OnClick', addButtonOnClick)
     addBtn.__owner = panel
 
     local resetBtn = F.CreateButton(panel.bg, 50, 24, _G.RESET)
@@ -1102,13 +1060,13 @@ end
 
 function GUI:SetupNameplateCVars(parent)
     local guiName = C.ADDON_TITLE .. 'GUINamePlateCvars'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
     local db = C.CharacterSettings.Nameplate
 
     local datas = {
@@ -1143,8 +1101,8 @@ function GUI:SetupNameplateCVars(parent)
 
     local offset = -10
     for _, v in ipairs(datas) do
-        CreateGroupTitle(scroll, L['Nameplate CVars'], offset)
-        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateNameplateCVars)
+        createGroupTitle(scroll, L['Nameplate CVars'], offset)
+        createSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateNameplateCVars)
         offset = offset - 65
     end
 end
@@ -1155,13 +1113,13 @@ end
 
 function GUI:SetupNameplateSize(parent)
     local guiName = C.ADDON_TITLE .. 'GUINamePlateSize'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
     local db = C.CharacterSettings.Nameplate
     local mKey = 'Nameplate'
 
@@ -1192,29 +1150,29 @@ function GUI:SetupNameplateSize(parent)
 
     local offset = -10
     for _, v in ipairs(datas.size) do
-        CreateGroupTitle(scroll, L['Nameplate Size'], offset)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, RefreshAllPlates)
+        createGroupTitle(scroll, L['Nameplate Size'], offset)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, RefreshAllPlates)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
     for _, v in ipairs(datas.clickableSize) do
-        CreateGroupTitle(scroll, L['Clickable Size'], offset - 50)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 100, UpdateClickableSize)
+        createGroupTitle(scroll, L['Clickable Size'], offset - 50)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 100, UpdateClickableSize)
         offset = offset - 65
     end
 end
 
 function GUI:SetupNameplateFriendlySize(parent)
     local guiName = C.ADDON_TITLE .. 'GUINamePlateFriendlySize'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
     local db = C.CharacterSettings.Nameplate
     local mKey = 'Nameplate'
 
@@ -1252,47 +1210,47 @@ function GUI:SetupNameplateFriendlySize(parent)
 
     local offset = -10
     for _, v in ipairs(datas.size) do
-        CreateGroupTitle(scroll, L['Friendly Nameplate Size'], offset)
-        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, RefreshAllPlates)
+        createGroupTitle(scroll, L['Friendly Nameplate Size'], offset)
+        createSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, RefreshAllPlates)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
     for _, v in ipairs(datas.clickableSize) do
-        CreateGroupTitle(scroll, L['Clickable Size'], offset - 50)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 100, UpdateClickableSize)
+        createGroupTitle(scroll, L['Clickable Size'], offset - 50)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 100, UpdateClickableSize)
         offset = offset - 65
     end
 end
 
 function GUI:SetupNameplateCastbarSize(parent)
     local guiName = C.ADDON_TITLE .. 'GUINamePlateCastbarSize'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
     local db = C.CharacterSettings.Nameplate
 
     local datas = { key = 'CastbarHeight', value = db.CastbarHeight, text = L['Height'], min = 6, max = 20, step = 1 }
 
     local offset = -10
-    CreateGroupTitle(scroll, L['Nameplate Castbar'], offset)
-    CreateSlider(scroll, 'Nameplate', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset - 50)
+    createGroupTitle(scroll, L['Nameplate Castbar'], offset)
+    createSlider(scroll, 'Nameplate', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset - 50)
 end
 
 function GUI:SetupNameplateExecuteIndicator(parent)
     local guiName = C.ADDON_TITLE .. 'GUINameplateExecuteIndicator'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
     local values = C.DB.Nameplate
 
     local datas = {
@@ -1305,7 +1263,7 @@ function GUI:SetupNameplateExecuteIndicator(parent)
     }
 
     local offset = -30
-    CreateSlider(scroll, 'Nameplate', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset)
+    createSlider(scroll, 'Nameplate', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset)
 end
 
 local function RefreshSpecialUnitsList()
@@ -1314,12 +1272,12 @@ end
 
 function GUI:SetupNameplateUnitFilter(parent)
     local guiName = C.ADDON_TITLE .. 'GUINamePlateUnitFilter'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName, nil, true)
+    local panel = createPanel(parent, guiName, nil, true)
     panel:SetScript('OnHide', RefreshSpecialUnitsList)
 
     local barTable = {}
@@ -1332,7 +1290,7 @@ function GUI:SetupNameplateUnitFilter(parent)
         F.CreateBD(bar, 0.25)
         barTable[text] = bar
 
-        local icon, close = GUI:CreateBarWidgets(bar, npcID and 136243 or 132288)
+        local icon, close = createBarWidgets(bar, npcID and 136243 or 132288)
         if npcID then
             F.AddTooltip(icon, 'ANCHOR_RIGHT', 'ID: ' .. npcID)
         end
@@ -1344,7 +1302,7 @@ function GUI:SetupNameplateUnitFilter(parent)
             else
                 C.DB['Nameplate']['SpecialUnitsList'][text] = nil
             end
-            SortBars(barTable)
+            sortBars(barTable)
         end)
 
         local name = F.CreateFS(bar, C.Assets.Fonts.Regular, 12, nil, text, nil, true, 'LEFT', 30, 0)
@@ -1362,13 +1320,13 @@ function GUI:SetupNameplateUnitFilter(parent)
             end)
         end
 
-        SortBars(barTable)
+        sortBars(barTable)
     end
 
     local frame = panel.bg
-    local scroll = GUI:CreateScroll(frame, 200, 485)
+    local scroll = createScrollFrame(frame, 200, 485)
 
-    local swatch = F.CreateColorSwatch(frame, nil, C.DB['Nameplate']['SpecialUnitColor'])
+    local swatch = createColorSwatch(frame, nil, C.DB['Nameplate']['SpecialUnitColor'])
     swatch:SetPoint('TOPLEFT', frame, 'TOPLEFT', 10, -10)
     swatch.__default = C.CharacterSettings['Nameplate']['SpecialUnitColor']
     swatch:SetSize(25, 25)
@@ -1410,12 +1368,12 @@ end
 
 function GUI:SetupNameplateColorByDot(parent)
     local guiName = C.ADDON_TITLE .. 'GUINamePlateColorByDot'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName, nil, true)
+    local panel = createPanel(parent, guiName, nil, true)
 
     local barTable = {}
 
@@ -1428,13 +1386,13 @@ function GUI:SetupNameplateColorByDot(parent)
         F.CreateBD(bar, 0.25)
         barTable[spellID] = bar
 
-        local icon, close = GUI:CreateBarWidgets(bar, texture)
+        local icon, close = createBarWidgets(bar, texture)
         F.AddTooltip(icon, 'ANCHOR_RIGHT', spellID)
         close:SetScript('OnClick', function()
             bar:Hide()
             barTable[spellID] = nil
             C.DB['Nameplate']['DotSpellsList'][spellID] = nil
-            SortBars(barTable)
+            sortBars(barTable)
         end)
 
         local name = F.CreateFS(bar, C.Assets.Fonts.Regular, 12, nil, spellName, nil, true, 'LEFT', 30, 0)
@@ -1444,13 +1402,13 @@ function GUI:SetupNameplateColorByDot(parent)
             name:SetTextColor(0, 1, 0)
         end
 
-        SortBars(barTable)
+        sortBars(barTable)
     end
 
     local frame = panel.bg
-    local scroll = GUI:CreateScroll(frame, 200, 485)
+    local scroll = createScrollFrame(frame, 200, 485)
 
-    local swatch = F.CreateColorSwatch(frame, nil, C.DB['Nameplate']['DotColor'])
+    local swatch = createColorSwatch(frame, nil, C.DB['Nameplate']['DotColor'])
     swatch:SetPoint('TOPLEFT', frame, 'TOPLEFT', 10, -10)
     swatch.__default = C.CharacterSettings['Nameplate']['DotColor']
     swatch:SetSize(25, 25)
@@ -1500,13 +1458,13 @@ end
 
 function GUI:SetupNameplateNameLength(parent)
     local guiName = C.ADDON_TITLE .. 'GUISetupNameplateNameLength'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scrollArea = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scrollArea = createScrollFrame(panel, 220, 540)
 
     local mKey = 'Nameplate'
     local db = C.CharacterSettings.Nameplate
@@ -1517,8 +1475,8 @@ function GUI:SetupNameplateNameLength(parent)
 
     local offset = -10
     for _, v in ipairs(datas) do
-        CreateGroupTitle(scrollArea, L['Name Length'], offset)
-        CreateSlider(scrollArea, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdateNamePlateTags)
+        createGroupTitle(scrollArea, L['Name Length'], offset)
+        createSlider(scrollArea, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdateNamePlateTags)
         offset = offset - 65
     end
 end
@@ -1561,13 +1519,13 @@ end
 
 function GUI:SetupPartyFrame(parent)
     local guiName = C.ADDON_TITLE .. 'GUISetupPartyFrame'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
 
     local mKey = 'Unitframe'
     local db = C.CharacterSettings.Unitframe
@@ -1586,8 +1544,8 @@ function GUI:SetupPartyFrame(parent)
 
     local offset = -10
     for _, v in ipairs(datas) do
-        CreateGroupTitle(scroll, L['Party Frame'], offset)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdatePartyFrameSize)
+        createGroupTitle(scroll, L['Party Frame'], offset)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdatePartyFrameSize)
         offset = offset - 65
     end
 
@@ -1596,7 +1554,7 @@ function GUI:SetupPartyFrame(parent)
         options[i] = UNITFRAME.PartyDirections[i].name
     end
 
-    CreateOptionDropdown(scroll, L['Growth Direction'], offset - 60, options, nil, mKey, 'PartyDirec', 1, UpdatePartyFrameSize)
+    createOptionDropdown(scroll, L['Growth Direction'], offset - 60, options, nil, mKey, 'PartyDirec', 1, UpdatePartyFrameSize)
 end
 
 local function UpdateRaidFrameDirection()
@@ -1620,13 +1578,13 @@ end
 
 function GUI:SetupRaidFrame(parent)
     local guiName = C.ADDON_TITLE .. 'GUISetupRaidFrame'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
 
     local mKey = 'Unitframe'
     local db = C.CharacterSettings.Unitframe
@@ -1641,8 +1599,8 @@ function GUI:SetupRaidFrame(parent)
 
     local offset = -10
     for _, v in ipairs(datas) do
-        CreateGroupTitle(scroll, L['Raid Frame'], offset)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdateRaidFrameSize)
+        createGroupTitle(scroll, L['Raid Frame'], offset)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdateRaidFrameSize)
         offset = offset - 65
     end
 
@@ -1651,7 +1609,7 @@ function GUI:SetupRaidFrame(parent)
         options[i] = UNITFRAME.RaidDirections[i].name
     end
 
-    CreateOptionDropdown(
+    createOptionDropdown(
         scroll,
         L['Growth Direction'],
         offset - 60,
@@ -1685,13 +1643,13 @@ end
 
 function GUI:SetupSimpleRaidFrame(parent)
     local guiName = C.ADDON_TITLE .. 'GUISetupSimpleRaidFrame'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
 
     local mKey = 'Unitframe'
     local db = C.CharacterSettings.Unitframe
@@ -1704,8 +1662,8 @@ function GUI:SetupSimpleRaidFrame(parent)
 
     local offset = -10
     for _, v in ipairs(datas) do
-        CreateGroupTitle(scroll, L['Simple Raid Frames'], offset)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdateSimpleRaidFrameSize)
+        createGroupTitle(scroll, L['Simple Raid Frames'], offset)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdateSimpleRaidFrameSize)
         offset = offset - 65
     end
 
@@ -1714,19 +1672,19 @@ function GUI:SetupSimpleRaidFrame(parent)
         options[i] = UNITFRAME.RaidDirections[i].name
     end
 
-    CreateOptionDropdown(scroll, L['Growth Direction'], offset - 60, options, nil, mKey, 'SMRDirec', 1)
-    CreateOptionDropdown(scroll, L['Group By'], offset - 110, { _G.GROUP, _G.CLASS, _G.ROLE }, nil, mKey, 'SMRGroupBy', 1, UpdateSimpleRaidFrameSize)
+    createOptionDropdown(scroll, L['Growth Direction'], offset - 60, options, nil, mKey, 'SMRDirec', 1)
+    createOptionDropdown(scroll, L['Group By'], offset - 110, { _G.GROUP, _G.CLASS, _G.ROLE }, nil, mKey, 'SMRGroupBy', 1, UpdateSimpleRaidFrameSize)
 end
 
 function GUI:SetupUnitFrame(parent)
     local guiName = C.ADDON_TITLE .. 'GUISetupUnitFrame'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
 
     local mKey = 'Unitframe'
     local db = C.CharacterSettings.Unitframe
@@ -1912,61 +1870,61 @@ function GUI:SetupUnitFrame(parent)
 
     local offset = -10
     for _, v in ipairs(datas.player) do
-        CreateGroupTitle(scroll, L['Player Frame'], offset)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateUnitFrameSize)
+        createGroupTitle(scroll, L['Player Frame'], offset)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateUnitFrameSize)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
     for _, v in ipairs(datas.pet) do
-        CreateGroupTitle(scroll, L['Pet Frame'], offset - 50)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 100, UpdateUnitFrameSize)
+        createGroupTitle(scroll, L['Pet Frame'], offset - 50)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 100, UpdateUnitFrameSize)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
     for _, v in ipairs(datas.target) do
-        CreateGroupTitle(scroll, L['Target Frame'], offset - 100)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 150, UpdateUnitFrameSize)
+        createGroupTitle(scroll, L['Target Frame'], offset - 100)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 150, UpdateUnitFrameSize)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
     for _, v in ipairs(datas.tot) do
-        CreateGroupTitle(scroll, L['Target of Target Frame'], offset - 150)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 200, UpdateUnitFrameSize)
+        createGroupTitle(scroll, L['Target of Target Frame'], offset - 150)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 200, UpdateUnitFrameSize)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
     for _, v in ipairs(datas.focus) do
-        CreateGroupTitle(scroll, L['Focus Frame'], offset - 200)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 250, UpdateUnitFrameSize)
+        createGroupTitle(scroll, L['Focus Frame'], offset - 200)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 250, UpdateUnitFrameSize)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
     for _, v in ipairs(datas.tof) do
-        CreateGroupTitle(scroll, L['Target of Focus Frame'], offset - 250)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 300, UpdateUnitFrameSize)
+        createGroupTitle(scroll, L['Target of Focus Frame'], offset - 250)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 300, UpdateUnitFrameSize)
         offset = offset - 65
     end
 end
 
 function GUI:SetupBossFrame(parent)
     local guiName = C.ADDON_TITLE .. 'GUISetupBossFrame'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
 
     local mKey = 'Unitframe'
     local db = C.CharacterSettings.Unitframe
@@ -2002,21 +1960,21 @@ function GUI:SetupBossFrame(parent)
 
     local offset = -10
     for _, v in ipairs(bossDatas) do
-        CreateGroupTitle(scroll, L['Boss Frame'], offset)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50)
+        createGroupTitle(scroll, L['Boss Frame'], offset)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50)
         offset = offset - 65
     end
 end
 
 function GUI:SetupArenaFrame(parent)
     local guiName = C.ADDON_TITLE .. 'GUISetupArenaFrame'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
 
     local mKey = 'Unitframe'
     local db = C.CharacterSettings.Unitframe
@@ -2052,21 +2010,21 @@ function GUI:SetupArenaFrame(parent)
 
     local offset = -10
     for _, v in ipairs(bossDatas) do
-        CreateGroupTitle(scroll, L['Arena Frame'], offset)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50)
+        createGroupTitle(scroll, L['Arena Frame'], offset)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50)
         offset = offset - 65
     end
 end
 
 function GUI:SetupClassPower(parent)
     local guiName = C.ADDON_TITLE .. 'GUISetupClassPower'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
     local db = C.CharacterSettings.Unitframe
     local mKey = 'Unitframe'
 
@@ -2086,15 +2044,15 @@ function GUI:SetupClassPower(parent)
 
     local offset = -10
     for _, v in ipairs(datas.slider) do
-        CreateGroupTitle(scroll, L['Class Power'], offset)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50)
+        createGroupTitle(scroll, L['Class Power'], offset)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50)
     end
 
     scroll.groupTitle = nil
 
     for _, v in ipairs(datas.checkbox) do
-        CreateGroupTitle(scroll, L['Runes'], offset - 100)
-        CreateCheckbox(scroll, offset - 130, mKey, v.value, v.text, nil, v.tip)
+        createGroupTitle(scroll, L['Runes'], offset - 100)
+        createCheckbox(scroll, offset - 130, mKey, v.value, v.text, nil, v.tip)
         offset = offset - 35
     end
 end
@@ -2105,13 +2063,13 @@ end
 
 function GUI:SetupUnitFrameFader(parent)
     local guiName = C.ADDON_TITLE .. 'GUIUnitFrameFader'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
     local mKey = 'Unitframe'
 
     local datas = {
@@ -2130,29 +2088,29 @@ function GUI:SetupUnitFrameFader(parent)
 
     local offset = -10
     for _, v in ipairs(datas.conditions) do
-        CreateGroupTitle(scroll, L['Conditions'], offset)
-        CreateCheckbox(scroll, offset - 30, mKey, v.value, v.text, UpdateFader)
+        createGroupTitle(scroll, L['Conditions'], offset)
+        createCheckbox(scroll, offset - 30, mKey, v.value, v.text, UpdateFader)
         offset = offset - 35
     end
 
     scroll.groupTitle = nil
 
     for _, v in ipairs(datas.fader) do
-        CreateGroupTitle(scroll, L['Fading Parameters'], offset - 30)
-        CreateSlider(scroll, mKey, v.key, v.text, 0, 1, 0.1, v.value, 20, offset - 80, UpdateFader)
+        createGroupTitle(scroll, L['Fading Parameters'], offset - 30)
+        createSlider(scroll, mKey, v.key, v.text, 0, 1, 0.1, v.value, 20, offset - 80, UpdateFader)
         offset = offset - 65
     end
 end
 
 function GUI:SetupUnitFrameRangeCheck(parent)
     local guiName = C.ADDON_TITLE .. 'GUIRangeCheck'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
     local db = C.CharacterSettings.Unitframe
 
     local datas = {
@@ -2165,19 +2123,19 @@ function GUI:SetupUnitFrameRangeCheck(parent)
     }
 
     local offset = -10
-    CreateGroupTitle(scroll, L['Range Check'], offset)
-    CreateSlider(scroll, 'Unitframe', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset - 50)
+    createGroupTitle(scroll, L['Range Check'], offset)
+    createSlider(scroll, 'Unitframe', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset - 50)
 end
 
 function GUI:SetupCastbar(parent)
     local guiName = C.ADDON_TITLE .. 'GUISetupCastbar'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
 
     local mKey = 'Unitframe'
     local db = C.CharacterSettings.Unitframe
@@ -2241,37 +2199,37 @@ function GUI:SetupCastbar(parent)
 
     local offset = -10
     for _, v in ipairs(datas.player) do
-        CreateGroupTitle(scroll, L['Player Castbar'], offset)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50)
+        createGroupTitle(scroll, L['Player Castbar'], offset)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
     for _, v in ipairs(datas.target) do
-        CreateGroupTitle(scroll, L['Target Castbar'], offset - 50)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 100)
+        createGroupTitle(scroll, L['Target Castbar'], offset - 50)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 100)
         offset = offset - 65
     end
 
     scroll.groupTitle = nil
 
     for _, v in ipairs(datas.focus) do
-        CreateGroupTitle(scroll, L['Focus Castbar'], offset - 100)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 150)
+        createGroupTitle(scroll, L['Focus Castbar'], offset - 100)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 150)
         offset = offset - 65
     end
 end
 
 function GUI:SetupCastbarColor(parent)
     local guiName = C.ADDON_TITLE .. 'GUICastbarColor'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
     local db = C.DB.Unitframe
 
     local datas = {
@@ -2283,8 +2241,8 @@ function GUI:SetupCastbarColor(parent)
 
     local offset = -10
     for _, v in ipairs(datas) do
-        CreateGroupTitle(scroll, L['Castbar Color'], offset)
-        CreateColorSwatch(scroll, v.value, v.text, C.CharacterSettings.Unitframe[v.key], offset - 34)
+        createGroupTitle(scroll, L['Castbar Color'], offset)
+        createColorSwatch(scroll, v.text, v.value, C.CharacterSettings.Unitframe[v.key], offset - 34)
 
         offset = offset - 30
     end
@@ -2296,12 +2254,12 @@ end
 
 function GUI:SetupPartyWatcher(parent)
     local guiName = C.ADDON_TITLE .. 'GUIPartySpellSetup'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName, nil, true)
+    local panel = createPanel(parent, guiName, nil, true)
     panel:SetScript('OnHide', UpdatePartyWatcherSpells)
 
     local barTable = {}
@@ -2319,7 +2277,7 @@ function GUI:SetupPartyWatcher(parent)
         F.CreateBD(bar, 0.25)
         barTable[spellID] = bar
 
-        local icon, close = GUI:CreateBarWidgets(bar, texture)
+        local icon, close = createBarWidgets(bar, texture)
         F.AddTooltip(icon, 'ANCHOR_RIGHT', spellID)
         close:SetScript('OnClick', function()
             bar:Hide()
@@ -2329,7 +2287,7 @@ function GUI:SetupPartyWatcher(parent)
                 _G.ANDROMEDA_ADB['PartySpellsList'][spellID] = nil
             end
             barTable[spellID] = nil
-            SortBars(barTable)
+            sortBars(barTable)
         end)
 
         local font = C.Assets.Fonts.Regular
@@ -2342,7 +2300,7 @@ function GUI:SetupPartyWatcher(parent)
         timer:SetJustifyH('RIGHT')
         timer:SetTextColor(0, 1, 0)
 
-        SortBars(barTable)
+        sortBars(barTable)
     end
 
     local frame = panel.bg
@@ -2359,7 +2317,7 @@ function GUI:SetupPartyWatcher(parent)
         24
     )
 
-    local scroll = GUI:CreateScroll(frame, 200, 440)
+    local scroll = createScrollFrame(frame, 200, 440)
     scroll:ClearAllPoints()
     scroll:SetPoint('TOPLEFT', 10, -94)
 
@@ -2392,7 +2350,7 @@ function GUI:SetupPartyWatcher(parent)
 
         _G.ANDROMEDA_ADB['PartySpellsList'][spellID] = duration
         createBar(scroll.child, spellID, duration)
-        ClearEdit(options)
+        clearOptions(options)
     end
 
     scroll.add = F.CreateButton(frame, 51, 24, _G.ADD, 11)
@@ -2404,7 +2362,7 @@ function GUI:SetupPartyWatcher(parent)
     scroll.clear = F.CreateButton(frame, 51, 24, _G.KEY_NUMLOCK_MAC, 11)
     scroll.clear:SetPoint('RIGHT', scroll.add, 'LEFT', -5, 0)
     scroll.clear:SetScript('OnClick', function()
-        ClearEdit(options)
+        clearOptions(options)
     end)
 
     local menuList = {}
@@ -2457,12 +2415,12 @@ do
 
     function GUI:SetupDebuffWatcher(parent)
         local guiName = C.ADDON_TITLE .. 'GUISetupDebuffWatcher'
-        TogglePanel(guiName)
+        togglePanel(guiName)
         if extraGUIs[guiName] then
             return
         end
 
-        local panel = CreateExtraGUI(parent, guiName, L['Instance Debuffs Filter'], true)
+        local panel = createPanel(parent, guiName, L['Instance Debuffs Filter'], true)
         panel:SetScript('OnHide', UpdateDebuffWatcher)
 
         local setupBars
@@ -2483,7 +2441,7 @@ do
         for i = 1, 3 do
             iType.options[i]:HookScript('OnClick', function()
                 for j = 1, 2 do
-                    GUI:ClearEdit(options[j])
+                    resetWidgetStatus(options[j])
                     if i == j then
                         options[j]:Show()
                     else
@@ -2577,7 +2535,7 @@ do
             return true
         end
 
-        local function addOnClick(options)
+        local function addButtonOnClick(options)
             local dungeonName = options[1].Text:GetText()
             local raidName = options[2].Text:GetText()
             local spellID = tonumber(options[3]:GetText())
@@ -2603,11 +2561,11 @@ do
             end
             _G.ANDROMEDA_ADB['DebuffWatcherList'][instName][spellID] = priority
             setupBars(instName)
-            GUI:ClearEdit(options[3])
-            GUI:ClearEdit(options[4])
+            resetWidgetStatus(options[3])
+            resetWidgetStatus(options[4])
         end
 
-        local scroll = GUI:CreateScroll(frame, 200, 380)
+        local scroll = createScrollFrame(frame, 200, 380)
         scroll:ClearAllPoints()
         scroll:SetPoint('TOPLEFT', 10, -150)
         scroll.reset = F.CreateButton(frame, 70, 24, _G.RESET)
@@ -2619,12 +2577,12 @@ do
         scroll.add = F.CreateButton(frame, 70, 24, _G.ADD)
         scroll.add:SetPoint('TOPRIGHT', -10, -120)
         scroll.add:SetScript('OnClick', function()
-            addOnClick(options)
+            addButtonOnClick(options)
         end)
         scroll.clear = F.CreateButton(frame, 70, 24, _G.KEY_NUMLOCK_MAC)
         scroll.clear:SetPoint('RIGHT', scroll.add, 'LEFT', -5, 0)
         scroll.clear:SetScript('OnClick', function()
-            ClearEdit(options)
+            clearOptions(options)
         end)
 
         local function iconOnEnter(self)
@@ -2644,7 +2602,7 @@ do
             F.CreateBD(bar, 0.25)
             bar.index = index
 
-            local icon, close = GUI:CreateBarWidgets(bar, texture)
+            local icon, close = createBarWidgets(bar, texture)
             icon:SetScript('OnEnter', iconOnEnter)
             icon:SetScript('OnLeave', F.HideTooltip)
             bar.icon = icon
@@ -2771,13 +2729,13 @@ end
 
 function GUI:SetupNameLength(parent)
     local guiName = C.ADDON_TITLE .. 'GUISetupNameLength'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scrollArea = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scrollArea = createScrollFrame(panel, 220, 540)
 
     local mKey = 'Unitframe'
     local db = C.CharacterSettings.Unitframe
@@ -2789,8 +2747,8 @@ function GUI:SetupNameLength(parent)
 
     local offset = -10
     for _, v in ipairs(datas) do
-        CreateGroupTitle(scrollArea, L['Name Length'], offset)
-        CreateSlider(scrollArea, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdateGroupTags)
+        createGroupTitle(scrollArea, L['Name Length'], offset)
+        createSlider(scrollArea, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdateGroupTags)
         offset = offset - 65
     end
 end
@@ -2801,13 +2759,13 @@ end
 
 function GUI:SetupPartyBuff(parent)
     local guiName = C.ADDON_TITLE .. 'GUISetupPartyBuffSize'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scrollArea = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scrollArea = createScrollFrame(panel, 220, 540)
 
     local mKey = 'Unitframe'
     local db = C.CharacterSettings.Unitframe
@@ -2819,21 +2777,21 @@ function GUI:SetupPartyBuff(parent)
 
     local offset = -10
     for _, v in ipairs(datas) do
-        CreateGroupTitle(scrollArea, L['Party Buff'], offset)
-        CreateSlider(scrollArea, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateGroupAuras)
+        createGroupTitle(scrollArea, L['Party Buff'], offset)
+        createSlider(scrollArea, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateGroupAuras)
         offset = offset - 65
     end
 end
 
 function GUI:SetupPartyDebuff(parent)
     local guiName = C.ADDON_TITLE .. 'GUISetupPartyDebuff'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scrollArea = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scrollArea = createScrollFrame(panel, 220, 540)
 
     local mKey = 'Unitframe'
     local db = C.CharacterSettings.Unitframe
@@ -2859,21 +2817,21 @@ function GUI:SetupPartyDebuff(parent)
 
     local offset = -10
     for _, v in ipairs(datas) do
-        CreateGroupTitle(scrollArea, L['Party Debuff'], offset)
-        CreateSlider(scrollArea, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateGroupAuras)
+        createGroupTitle(scrollArea, L['Party Debuff'], offset)
+        createSlider(scrollArea, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateGroupAuras)
         offset = offset - 65
     end
 end
 
 function GUI:SetupRaidBuff(parent)
     local guiName = C.ADDON_TITLE .. 'GUISetupRaidBuff'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scrollArea = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scrollArea = createScrollFrame(panel, 220, 540)
 
     local mKey = 'Unitframe'
     local db = C.CharacterSettings.Unitframe
@@ -2885,21 +2843,21 @@ function GUI:SetupRaidBuff(parent)
 
     local offset = -10
     for _, v in ipairs(datas) do
-        CreateGroupTitle(scrollArea, L['Raid Buff'], offset)
-        CreateSlider(scrollArea, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateGroupAuras)
+        createGroupTitle(scrollArea, L['Raid Buff'], offset)
+        createSlider(scrollArea, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateGroupAuras)
         offset = offset - 65
     end
 end
 
 function GUI:SetupRaidDebuff(parent)
     local guiName = C.ADDON_TITLE .. 'GUISetupRaidDebuff'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scrollArea = GUI:CreateScroll(panel, 200, 535)
+    local panel = createPanel(parent, guiName)
+    local scrollArea = createScrollFrame(panel, 200, 535)
 
     local mKey = 'Unitframe'
     local db = C.CharacterSettings.Unitframe
@@ -2918,8 +2876,8 @@ function GUI:SetupRaidDebuff(parent)
 
     local offset = -10
     for _, v in ipairs(datas) do
-        CreateGroupTitle(scrollArea, L['Raid Debuff'], offset)
-        CreateSlider(scrollArea, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateGroupAuras)
+        createGroupTitle(scrollArea, L['Raid Debuff'], offset)
+        createSlider(scrollArea, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateGroupAuras)
         offset = offset - 65
     end
 end
@@ -2930,19 +2888,19 @@ end
 
 function GUI:SetupPartyAura(parent)
     local guiName = C.ADDON_TITLE .. 'GUISetupPartyAura'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName, L['Party Actived Auras Filter'], true)
+    local panel = createPanel(parent, guiName, L['Party Actived Auras Filter'], true)
     panel:SetScript('OnHide', RefreshPartyAurasFilter)
     parent.panel = panel
 
     panel.barTable = {}
     panel.tableName = 'PartyAurasList'
 
-    local scrollArea = GUI:CreateScroll(panel.bg, 200, 485)
+    local scrollArea = createScrollFrame(panel.bg, 200, 485)
     panel.scrollArea = scrollArea
 
     local editBox = createEditBox(panel.bg, nil, 10, -10, nil, 110, 24)
@@ -2952,7 +2910,7 @@ function GUI:SetupPartyAura(parent)
 
     local addBtn = F.CreateButton(panel.bg, 50, 24, _G.ADD)
     addBtn:SetPoint('TOPRIGHT', -8, -10)
-    addBtn:HookScript('OnClick', addOnClick)
+    addBtn:HookScript('OnClick', addButtonOnClick)
     addBtn.__owner = panel
 
     local resetBtn = F.CreateButton(panel.bg, 50, 24, _G.RESET)
@@ -2972,13 +2930,13 @@ end
 
 function GUI:SetupAutoScreenshot(parent)
     local guiName = C.ADDON_TITLE .. 'GUIAutoScreenshot'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
 
     local datas = {
         [1] = { value = 'EarnedNewAchievement', text = L['Earned new achievement'] },
@@ -2989,21 +2947,21 @@ function GUI:SetupAutoScreenshot(parent)
 
     local offset = -10
     for _, data in ipairs(datas) do
-        CreateGroupTitle(scroll, L['Auto Screenshot'], offset)
-        CreateCheckbox(scroll, offset - 30, 'General', data.value, data.text)
+        createGroupTitle(scroll, L['Auto Screenshot'], offset)
+        createCheckbox(scroll, offset - 30, 'General', data.value, data.text)
         offset = offset - 35
     end
 end
 
 function GUI:SetupCustomClassColor(parent)
     local guiName = C.ADDON_TITLE .. 'GUICustomClassColor'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
 
     local colors = _G.ANDROMEDA_ADB.CustomClassColors
 
@@ -3025,8 +2983,8 @@ function GUI:SetupCustomClassColor(parent)
 
     local offset = -10
     for _, v in ipairs(datas) do
-        CreateGroupTitle(scroll, L['Class Color Customization'], offset)
-        CreateColorSwatch(scroll, v.value, v.text, C.AccountSettings.CustomClassColors[v.text], offset - 34)
+        createGroupTitle(scroll, L['Class Color Customization'], offset)
+        createColorSwatch(scroll, v.text, v.value, C.AccountSettings.CustomClassColors[v.text], offset - 34)
 
         offset = offset - 30
     end
@@ -3038,13 +2996,13 @@ end
 
 function GUI:SetupVignettingVisibility(parent)
     local guiName = C.ADDON_TITLE .. 'GUIVignetting'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
     local values = C.DB.General
 
     local datas = {
@@ -3057,7 +3015,7 @@ function GUI:SetupVignettingVisibility(parent)
     }
 
     local offset = -30
-    CreateSlider(scroll, 'General', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset, UpdateVignettingVisibility)
+    createSlider(scroll, 'General', datas.key, datas.text, datas.min, datas.max, datas.step, datas.value, 20, offset, UpdateVignettingVisibility)
 end
 
 -- Chat
@@ -3067,13 +3025,13 @@ end
 
 function GUI:SetupChatSize(parent)
     local guiName = C.ADDON_TITLE .. 'GUIChatSize'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
 
     local datas = {
         [1] = { key = 'Width', value = '300', text = L['Width'], min = 50, max = 500 },
@@ -3082,8 +3040,8 @@ function GUI:SetupChatSize(parent)
 
     local offset = -10
     for _, v in ipairs(datas) do
-        CreateGroupTitle(scroll, L['Chat Window Size'], offset)
-        CreateSlider(scroll, 'Chat', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdateChatSize)
+        createGroupTitle(scroll, L['Chat Window Size'], offset)
+        createSlider(scroll, 'Chat', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdateChatSize)
         offset = offset - 65
     end
 end
@@ -3094,13 +3052,13 @@ end
 
 function GUI:SetupChatTextFading(parent)
     local guiName = C.ADDON_TITLE .. 'GUIChatTextFading'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
 
     local mKey = 'Chat'
     local db = C.CharacterSettings.Chat
@@ -3112,8 +3070,8 @@ function GUI:SetupChatTextFading(parent)
 
     local offset = -10
     for _, v in ipairs(datas) do
-        CreateGroupTitle(scroll, L['Chat Text Fading'], offset)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdateTextFading)
+        createGroupTitle(scroll, L['Chat Text Fading'], offset)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdateTextFading)
         offset = offset - 65
     end
 end
@@ -3121,13 +3079,13 @@ end
 -- Combat
 function GUI:SetupSimpleFloatingCombatText(parent)
     local guiName = C.ADDON_TITLE .. 'GUIFCT'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
 
     local datas = {
         [1] = { value = 'Incoming', text = L['Incoming'] },
@@ -3139,21 +3097,21 @@ function GUI:SetupSimpleFloatingCombatText(parent)
 
     local offset = -10
     for _, data in ipairs(datas) do
-        CreateGroupTitle(scroll, L['Floating Combat Text'], offset)
-        CreateCheckbox(scroll, offset - 30, 'Combat', data.value, data.text)
+        createGroupTitle(scroll, L['Floating Combat Text'], offset)
+        createCheckbox(scroll, offset - 30, 'Combat', data.value, data.text)
         offset = offset - 35
     end
 end
 
 function GUI:SetupSoundAlert(parent)
     local guiName = C.ADDON_TITLE .. 'GUISoundAlert'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
 
     local datas = {
         [1] = { value = 'Interrupt', text = L['Interrupt'] },
@@ -3166,8 +3124,8 @@ function GUI:SetupSoundAlert(parent)
 
     local offset = -10
     for _, data in ipairs(datas) do
-        CreateGroupTitle(scroll, L['Sound Alert'], offset)
-        CreateCheckbox(scroll, offset - 30, 'Combat', data.value, data.text)
+        createGroupTitle(scroll, L['Sound Alert'], offset)
+        createCheckbox(scroll, offset - 30, 'Combat', data.value, data.text)
         offset = offset - 35
     end
 end
@@ -3179,19 +3137,19 @@ end
 
 function GUI:SetupAnnounceableSpells(parent)
     local guiName = C.ADDON_TITLE .. 'GUIAnnounceableSpells'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName, nil, true)
+    local panel = createPanel(parent, guiName, nil, true)
     panel:SetScript('OnHide', RefreshAnnounceableSpells)
     parent.panel = panel
 
     panel.barTable = {}
     panel.tableName = 'AnnounceableSpellsList'
 
-    local scrollArea = GUI:CreateScroll(panel.bg, 200, 485)
+    local scrollArea = createScrollFrame(panel.bg, 200, 485)
     panel.scrollArea = scrollArea
 
     local editBox = createEditBox(panel.bg, nil, 10, -10, nil, 110, 24)
@@ -3201,7 +3159,7 @@ function GUI:SetupAnnounceableSpells(parent)
 
     local addBtn = F.CreateButton(panel.bg, 50, 24, _G.ADD)
     addBtn:SetPoint('TOPRIGHT', -8, -10)
-    addBtn:HookScript('OnClick', addOnClick)
+    addBtn:HookScript('OnClick', addButtonOnClick)
     addBtn.__owner = panel
 
     local resetBtn = F.CreateButton(panel.bg, 50, 24, _G.RESET)
@@ -3224,13 +3182,13 @@ end
 
 function GUI:SetupMapScale(parent)
     local guiName = C.ADDON_TITLE .. 'GUIMapScale'
-    TogglePanel(guiName)
+    togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
+    local panel = createPanel(parent, guiName)
+    local scroll = createScrollFrame(panel, 220, 540)
     local mKey = 'Map'
     local db = C.CharacterSettings.Map
 
@@ -3248,8 +3206,8 @@ function GUI:SetupMapScale(parent)
 
     local offset = -10
     for _, v in ipairs(datas) do
-        CreateGroupTitle(scroll, L['Map Scale'], offset)
-        CreateSlider(scroll, mKey, v.key, v.text, v.min, v.max, 0.1, v.value, 20, offset - 50, UpdateMapScale)
+        createGroupTitle(scroll, L['Map Scale'], offset)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, 0.1, v.value, 20, offset - 50, UpdateMapScale)
         offset = offset - 65
     end
 end
