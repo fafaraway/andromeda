@@ -59,6 +59,7 @@ C.CharacterSettings = {
         Countdown = '10',
 
         MuteAnnoyingSounds = true,
+        WeeklyLottery = true,
     },
     Combat = {
         Enable = true,
