@@ -3188,46 +3188,31 @@ function GUI:SetupAnnounceableSpells(parent)
     panel:SetScript('OnHide', RefreshAnnounceableSpells)
     parent.panel = panel
 
-    local barTable = {}
+    panel.barTable = {}
+    panel.tableName = 'AnnounceableSpellsList'
 
-    local frame = panel.bg
-    local scroll = GUI:CreateScroll(frame, 200, 480)
-    scroll.box = createEditBox(frame, nil, 10, -10, nil, 110, 24)
-    scroll.box.title = L['SpellID']
-    F.AddTooltip(scroll.box, 'ANCHOR_RIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE', true)
+    local scrollArea = GUI:CreateScroll(panel.bg, 200, 485)
+    panel.scrollArea = scrollArea
 
-    scroll.add = F.CreateButton(frame, 50, 24, _G.ADD)
-    scroll.add:SetPoint('LEFT', scroll.box, 'RIGHT', 5, 0)
-    scroll.add.__owner = scroll
-    scroll.add:SetScript('OnClick', function(button)
-        local parent = button.__owner
-        local spellID = tonumber(parent.box:GetText())
+    local editBox = createEditBox(panel.bg, nil, 10, -10, nil, 110, 24)
+    panel.editBox = editBox
+    editBox.title = L['SpellID']
+    F.AddTooltip(editBox, 'ANCHOR_RIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE', true)
 
-        if not spellID or not GetSpellInfo(spellID) then
-            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Incorrect SpellID'])
-            return
-        end
+    local addBtn = F.CreateButton(panel.bg, 50, 24, _G.ADD)
+    addBtn:SetPoint('TOPRIGHT', -8, -10)
+    addBtn:HookScript('OnClick', addOnClick)
+    addBtn.__owner = panel
 
-        local modValue = _G.ANDROMEDA_ADB['AnnounceableSpellsList'][spellID]
-        if modValue or modValue == nil and C.AnnounceableSpellsList[spellID] then
-            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is existed'])
-            return
-        end
-
-        _G.ANDROMEDA_ADB['AnnounceableSpellsList'][spellID] = true
-        CreateBars(scroll, spellID, barTable, 'AnnounceableSpellsList', 'AnnounceableSpellsList')
-        parent.box:SetText('')
-    end)
-
-    scroll.reset = F.CreateButton(frame, 50, 24, _G.RESET)
-    scroll.reset:SetPoint('LEFT', scroll.add, 'RIGHT', 5, 0)
-    scroll.reset:SetScript('OnClick', function()
+    local resetBtn = F.CreateButton(panel.bg, 50, 24, _G.RESET)
+    resetBtn:SetPoint('RIGHT', addBtn, 'LEFT', -5, 0)
+    resetBtn:HookScript('OnClick', function()
         StaticPopup_Show('ANDROMEDA_RESET_ANNOUNCEABLE_SPELLS')
     end)
 
-    for spellID, value in pairs(ANNOUNCEMENT.AnnounceableSpellsList) do
+    for spellID, value in pairs(ANNOUNCEMENT[panel.tableName]) do
         if value then
-            CreateBars(scroll, spellID, barTable, 'AnnounceableSpellsList', 'AnnounceableSpellsList')
+            createBars(scrollArea, spellID, panel.barTable, panel.tableName)
         end
     end
 end
