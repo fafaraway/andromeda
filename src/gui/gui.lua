@@ -326,7 +326,7 @@ local function CreateOptions(i)
     for _, option in pairs(GUI.OptionsList[i]) do
         local optType, key, value, name, horizon, data, callback, tip = unpack(option)
         if optType == 1 then -- checkbox
-            local cb = F.CreateCheckbox(parent, true, nil, true)
+            local cb = F.CreateCheckButton(parent, true, nil, true)
             cb:SetSize(14, 14)
             cb:SetHitRectInsets(-5, -5, -5, -5)
 

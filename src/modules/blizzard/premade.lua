@@ -224,7 +224,7 @@ function BLIZZARD:ShowLeaderOverallScore()
 end
 
 function BLIZZARD:AddAutoAcceptButton()
-    local bu = F.CreateCheckbox(searchPanel, true)
+    local bu = F.CreateCheckButton(searchPanel, true)
     bu:SetSize(20, 20)
     bu:SetHitRectInsets(0, -130, 0, 0)
     bu:SetPoint('RIGHT', searchPanel.RefreshButton, 'LEFT', -130, 0)

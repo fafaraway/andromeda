@@ -414,7 +414,7 @@ function M:LastMailSaver()
     mailSaver:SetHitRectInsets(0, 0, 0, 0)
     mailSaver:SetPoint('LEFT', _G.SendMailNameEditBox, 'RIGHT', 0, 0)
     mailSaver:SetSize(24, 24)
-    F.ReskinCheckbox(mailSaver)
+    F.ReskinCheckButton(mailSaver)
 
     mailSaver:SetChecked(C.DB.General.SaveRecipient)
     mailSaver:SetScript('OnClick', function(self)

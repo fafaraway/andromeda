@@ -29,7 +29,7 @@ local function reskinProfessionsFlyout(_, parent)
 
             F.StripTextures(flyoutFrame)
             F.SetBD(flyoutFrame):SetFrameLevel(2)
-            F.ReskinCheckbox(flyoutFrame.HideUnownedCheckBox)
+            F.ReskinCheckButton(flyoutFrame.HideUnownedCheckBox)
             flyoutFrame.HideUnownedCheckBox.bg:SetInside(nil, 6, 6)
             hooksecurefunc(flyoutFrame.ScrollBox, 'Update', refreshFlyoutButtons)
 
@@ -85,13 +85,13 @@ local function reskinProfessionForm(form)
 
     local trackBox = form.TrackRecipeCheckBox
     if trackBox then
-        F.ReskinCheckbox(trackBox)
+        F.ReskinCheckButton(trackBox)
         trackBox:SetSize(24, 24)
     end
 
     local checkBox = form.AllocateBestQualityCheckBox
     if checkBox then
-        F.ReskinCheckbox(checkBox)
+        F.ReskinCheckButton(checkBox)
         checkBox:SetSize(24, 24)
     end
 

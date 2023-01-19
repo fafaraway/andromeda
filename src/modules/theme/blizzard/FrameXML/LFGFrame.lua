@@ -82,7 +82,7 @@ tinsert(C.BlizzThemes, function()
     -- LFDFrame
     hooksecurefunc('LFGDungeonListButton_SetDungeon', function(button)
         if not button.expandOrCollapseButton.styled then
-            F.ReskinCheckbox(button.enableButton)
+            F.ReskinCheckButton(button.enableButton)
             F.ReskinCollapse(button.expandOrCollapseButton)
 
             button.expandOrCollapseButton.styled = true

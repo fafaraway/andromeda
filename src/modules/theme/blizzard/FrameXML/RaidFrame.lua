@@ -7,7 +7,7 @@ tinsert(C.BlizzThemes, function()
 
     F.StripTextures(_G.RaidInfoFrame)
     F.SetBD(_G.RaidInfoFrame)
-    F.ReskinCheckbox(_G.RaidFrameAllAssistCheckButton)
+    F.ReskinCheckButton(_G.RaidFrameAllAssistCheckButton)
     F.StripTextures(_G.RaidInfoFrame.Header)
 
     _G.RaidInfoFrame:SetPoint('TOPLEFT', _G.RaidFrame, 'TOPRIGHT', 1, -28)

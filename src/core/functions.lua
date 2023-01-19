@@ -830,10 +830,10 @@ do
         return bu
     end
 
-    function F:CreateCheckbox(flat)
+    function F:CreateCheckButton(flat)
         local cb = CreateFrame('CheckButton', nil, self, 'InterfaceOptionsBaseCheckButtonTemplate')
         cb:SetScript('OnClick', nil) -- reset onclick handler
-        F.ReskinCheckbox(cb, flat, true)
+        F.ReskinCheckButton(cb, flat, true)
 
         cb.Type = 'CheckBox'
         return cb
@@ -1226,9 +1226,11 @@ do
         self.bg = F.CreateBDFrame(self)
         self.bg:SetBackdropBorderColor(0, 0, 0)
         self.bg:SetAllPoints()
+
         self.Icon = self:CreateTexture(nil, 'ARTWORK')
         self.Icon:SetInside()
         self.Icon:SetTexCoord(x1, x2, y1, y2)
+
         if texture then
             local atlas = strmatch(texture, 'Atlas:(.+)$')
             if atlas then
@@ -1237,6 +1239,7 @@ do
                 self.Icon:SetTexture(texture)
             end
         end
+
         if highlight and type(highlight) == 'boolean' then
             self:EnableMouse(true)
             self.HL = self:CreateTexture(nil, 'HIGHLIGHT')
@@ -1900,7 +1903,7 @@ do
     end
 
     -- Handle checkbox and radio
-    function F:ReskinCheckbox(flat, forceSaturation)
+    function F:ReskinCheckButton(flat, forceSaturation)
         self:SetNormalTexture(0)
         self:SetPushedTexture(0)
 
@@ -2345,7 +2348,7 @@ do
             checkButton:SetFrameLevel(self:GetFrameLevel() + 2)
             checkButton:SetPoint('BOTTOMLEFT', -2, -2)
             checkButton:SetSize(20, 20)
-            F.ReskinCheckbox(checkButton, true)
+            F.ReskinCheckButton(checkButton, true)
         end
 
         local shortageBorder = self.shortageBorder

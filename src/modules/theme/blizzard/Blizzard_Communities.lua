@@ -39,7 +39,7 @@ end
 local function reskinRequestCheckbox(self)
     for button in self.SpecsPool:EnumerateActive() do
         if button.CheckBox then
-            F.ReskinCheckbox(button.CheckBox)
+            F.ReskinCheckButton(button.CheckBox)
             button.CheckBox:SetSize(26, 26)
         end
     end
@@ -259,7 +259,7 @@ C.Themes['Blizzard_Communities'] = function()
             F.Reskin(dialog.Selector.OkayButton)
             F.Reskin(dialog.Selector.CancelButton)
         end
-        F.ReskinCheckbox(dialog.ScrollFrame.Child.QuickJoinButton)
+        F.ReskinCheckButton(dialog.ScrollFrame.Child.QuickJoinButton)
         dialog.ScrollFrame.Child.QuickJoinButton:SetSize(25, 25)
         F.Reskin(dialog.ScrollFrame.Child.AllButton)
         F.Reskin(dialog.ScrollFrame.Child.NoneButton)
@@ -289,7 +289,7 @@ C.Themes['Blizzard_Communities'] = function()
         bg:SetPoint('BOTTOMRIGHT', -4, 3)
         F.StripTextures(dialog.Description)
         F.CreateBDFrame(dialog.Description, 0.25)
-        F.ReskinCheckbox(dialog.TypeCheckBox)
+        F.ReskinCheckButton(dialog.TypeCheckBox)
         F.Reskin(dialog.Accept)
         F.Reskin(dialog.Delete)
         F.Reskin(dialog.Cancel)
@@ -378,7 +378,7 @@ C.Themes['Blizzard_Communities'] = function()
         end
     end)
 
-    F.ReskinCheckbox(CommunitiesFrame.MemberList.ShowOfflineButton)
+    F.ReskinCheckButton(CommunitiesFrame.MemberList.ShowOfflineButton)
     CommunitiesFrame.MemberList.ShowOfflineButton:SetSize(25, 25)
     F.Reskin(CommunitiesFrame.CommunitiesControlFrame.GuildControlButton)
     F.Reskin(CommunitiesFrame.CommunitiesControlFrame.GuildRecruitmentButton)
@@ -413,10 +413,10 @@ C.Themes['Blizzard_Communities'] = function()
         F.CreateBDFrame(dialog.Description, 0.25)
         F.StripTextures(dialog.MessageOfTheDay)
         F.CreateBDFrame(dialog.MessageOfTheDay, 0.25)
-        F.ReskinCheckbox(dialog.ShouldListClub.Button)
-        F.ReskinCheckbox(dialog.AutoAcceptApplications.Button)
-        F.ReskinCheckbox(dialog.MaxLevelOnly.Button)
-        F.ReskinCheckbox(dialog.MinIlvlOnly.Button)
+        F.ReskinCheckButton(dialog.ShouldListClub.Button)
+        F.ReskinCheckButton(dialog.AutoAcceptApplications.Button)
+        F.ReskinCheckButton(dialog.MaxLevelOnly.Button)
+        F.ReskinCheckButton(dialog.MinIlvlOnly.Button)
         F.ReskinInput(dialog.MinIlvlOnly.EditBox)
         F.ReskinDropDown(_G.ClubFinderFocusDropdown)
         F.ReskinDropDown(_G.ClubFinderLookingForDropdown)
@@ -527,7 +527,7 @@ C.Themes['Blizzard_Communities'] = function()
         }
     do
         local filter = _G.CommunitiesGuildNewsFiltersFrame[name]
-        F.ReskinCheckbox(filter)
+        F.ReskinCheckButton(filter)
     end
 
     F.StripTextures(_G.CommunitiesGuildLogFrame)
@@ -558,9 +558,9 @@ C.Themes['Blizzard_Communities'] = function()
         local dialog = CommunitiesFrame.RecruitmentDialog
         F.StripTextures(dialog)
         F.SetBD(dialog)
-        F.ReskinCheckbox(dialog.ShouldListClub.Button)
-        F.ReskinCheckbox(dialog.MaxLevelOnly.Button)
-        F.ReskinCheckbox(dialog.MinIlvlOnly.Button)
+        F.ReskinCheckButton(dialog.ShouldListClub.Button)
+        F.ReskinCheckButton(dialog.MaxLevelOnly.Button)
+        F.ReskinCheckButton(dialog.MinIlvlOnly.Button)
         F.ReskinDropDown(dialog.ClubFocusDropdown)
         F.ReskinDropDown(dialog.LookingForDropdown)
         F.ReskinDropDown(dialog.LanguageDropdown)

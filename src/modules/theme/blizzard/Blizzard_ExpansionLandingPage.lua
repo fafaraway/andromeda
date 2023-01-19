@@ -37,7 +37,7 @@ C.Themes['Blizzard_AdventureMap'] = function()
                 local child = select(i, self.ScrollTarget:GetChildren())
                 if child.UnlockedState and not child.styled then
                     child.UnlockedState.WatchFactionButton:SetSize(28, 28)
-                    F.ReskinCheckbox(child.UnlockedState.WatchFactionButton)
+                    F.ReskinCheckButton(child.UnlockedState.WatchFactionButton)
                     child.UnlockedState.WatchFactionButton.Label:SetFontObject(_G.Game20Font)
                     child.styled = true
                 end

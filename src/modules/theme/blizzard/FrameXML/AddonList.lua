@@ -10,7 +10,7 @@ tinsert(C.BlizzThemes, function()
     F.Reskin(_G.AddonListDisableAllButton)
     F.Reskin(_G.AddonListCancelButton)
     F.Reskin(_G.AddonListOkayButton)
-    F.ReskinCheckbox(_G.AddonListForceLoad)
+    F.ReskinCheckButton(_G.AddonListForceLoad)
     F.ReskinDropDown(_G.AddonCharacterDropDown)
     F.ReskinTrimScroll(_G.AddonList.ScrollBar)
 
@@ -29,7 +29,7 @@ tinsert(C.BlizzThemes, function()
         for i = 1, self.ScrollTarget:GetNumChildren() do
             local child = select(i, self.ScrollTarget:GetChildren())
             if not child.styled then
-                F.ReskinCheckbox(child.Enabled, true)
+                F.ReskinCheckButton(child.Enabled, true)
                 child.Enabled:SetSize(14, 14)
                 F.Reskin(child.LoadAddonButton)
                 hooksecurefunc(child.Enabled:GetCheckedTexture(), 'SetDesaturated', forceSaturation)

@@ -124,7 +124,7 @@ tinsert(C.BlizzThemes, function()
             local child = select(i, self.ScrollTarget:GetChildren())
             if not child.styled then
                 if child.CheckBox then
-                    F.ReskinCheckbox(child.CheckBox)
+                    F.ReskinCheckButton(child.CheckBox)
                     child.CheckBox.bg:SetInside(nil, 6, 6)
                     hooksecurefunc(child, 'DesaturateHierarchy', forceSaturation)
                 end
@@ -196,7 +196,7 @@ tinsert(C.BlizzThemes, function()
             for i = 1, frame:GetNumChildren() do
                 local child = select(i, frame:GetChildren())
                 if child:IsObjectType('CheckButton') then
-                    F.ReskinCheckbox(child)
+                    F.ReskinCheckButton(child)
                 elseif child:IsObjectType('Button') then
                     F.Reskin(child)
                 elseif child:IsObjectType('Frame') and child.Left and child.Middle and child.Right then

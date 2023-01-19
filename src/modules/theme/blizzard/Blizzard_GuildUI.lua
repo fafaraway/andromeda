@@ -133,9 +133,9 @@ C.Themes['Blizzard_GuildUI'] = function()
     F.ReskinDropDown(_G.GuildRosterViewDropdown)
     F.ReskinDropDown(_G.GuildMemberRankDropdown)
 
-    F.ReskinCheckbox(_G.GuildRosterShowOfflineButton)
+    F.ReskinCheckButton(_G.GuildRosterShowOfflineButton)
     for i = 1, 7 do
-        F.ReskinCheckbox(_G.GuildNewsFiltersFrame.GuildNewsFilterButtons[i])
+        F.ReskinCheckButton(_G.GuildNewsFiltersFrame.GuildNewsFilterButtons[i])
     end
 
     local a1, p, a2, x, y = _G.GuildNewsBossModel:GetPoint()

@@ -82,6 +82,6 @@ C.Themes['Blizzard_ClickBindingUI'] = function()
     F.SetBD(frame.TutorialFrame)
 
     if frame.EnableMouseoverCastCheckbox then
-        F.ReskinCheckbox(frame.EnableMouseoverCastCheckbox)
+        F.ReskinCheckButton(frame.EnableMouseoverCastCheckbox)
     end
 end

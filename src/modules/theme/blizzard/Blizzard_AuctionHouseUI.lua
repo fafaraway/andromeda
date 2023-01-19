@@ -34,7 +34,7 @@ local function reskinSellPanel(frame)
     F.ReskinDropDown(frame.DurationDropDown.DropDown)
     F.Reskin(frame.PostButton)
     if frame.BuyoutModeCheckButton then
-        F.ReskinCheckbox(frame.BuyoutModeCheckButton)
+        F.ReskinCheckButton(frame.BuyoutModeCheckButton)
         frame.BuyoutModeCheckButton:SetSize(28, 28)
     end
 end

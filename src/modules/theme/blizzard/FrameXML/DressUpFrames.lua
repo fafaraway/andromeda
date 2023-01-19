@@ -48,7 +48,7 @@ tinsert(C.BlizzThemes, function()
     DressUpFrame.ModelBackground:Hide()
     F.CreateBDFrame(DressUpFrame.ModelScene)
 
-    F.ReskinCheckbox(_G.TransmogAndMountDressupFrame.ShowMountCheckButton)
+    F.ReskinCheckButton(_G.TransmogAndMountDressupFrame.ShowMountCheckButton)
 
     -- SideDressUp
 

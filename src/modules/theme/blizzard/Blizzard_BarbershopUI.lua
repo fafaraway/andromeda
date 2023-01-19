@@ -61,7 +61,7 @@ C.Themes['Blizzard_CharacterCustomize'] = function()
         local optionPool = self.pools:GetPool('CharCustomizeOptionCheckButtonTemplate')
         for button in optionPool:EnumerateActive() do
             if not button.styled then
-                F.ReskinCheckbox(button.Button)
+                F.ReskinCheckButton(button.Button)
                 button.styled = true
             end
         end

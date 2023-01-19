@@ -123,7 +123,7 @@ C.Themes['Blizzard_ProfessionsCustomerOrders'] = function()
 
     -- Form
     F.Reskin(frame.Form.BackButton)
-    F.ReskinCheckbox(frame.Form.TrackRecipeCheckBox.Checkbox)
+    F.ReskinCheckButton(frame.Form.TrackRecipeCheckBox.Checkbox)
     frame.Form.RecipeHeader:Hide() -- needs review
     F.CreateBDFrame(frame.Form.RecipeHeader, 0.25)
     F.StripTextures(frame.Form.LeftPanelBackground)
@@ -188,7 +188,7 @@ C.Themes['Blizzard_ProfessionsCustomerOrders'] = function()
                 if button.SlotBackground then
                     button.SlotBackground:Hide()
                 end
-                F.ReskinCheckbox(slot.Checkbox)
+                F.ReskinCheckButton(slot.Checkbox)
                 button.HighlightTexture:SetColorTexture(1, 0.8, 0, 0.5)
                 button.HighlightTexture:SetInside(button.bg)
 

@@ -314,12 +314,12 @@ tinsert(C.BlizzThemes, function()
     F.StripTextures(_G.ReputationDetailFrame)
     F.SetBD(_G.ReputationDetailFrame)
     F.ReskinClose(_G.ReputationDetailCloseButton)
-    F.ReskinCheckbox(_G.ReputationDetailInactiveCheckBox)
-    F.ReskinCheckbox(_G.ReputationDetailMainScreenCheckBox)
+    F.ReskinCheckButton(_G.ReputationDetailInactiveCheckBox)
+    F.ReskinCheckButton(_G.ReputationDetailMainScreenCheckBox)
     F.Reskin(_G.ReputationDetailViewRenownButton)
 
     local atWarCheck = _G.ReputationDetailAtWarCheckBox
-    F.ReskinCheckbox(atWarCheck)
+    F.ReskinCheckButton(atWarCheck)
     local atWarCheckTex = atWarCheck:GetCheckedTexture()
     atWarCheckTex:ClearAllPoints()
     atWarCheckTex:SetSize(26, 26)
@@ -329,8 +329,8 @@ tinsert(C.BlizzThemes, function()
     if _G.TokenFramePopup.CloseButton then -- needs review, blizz typo
         F.ReskinClose(_G.TokenFramePopup.CloseButton)
     end
-    F.ReskinCheckbox(_G.TokenFramePopup.InactiveCheckBox)
-    F.ReskinCheckbox(_G.TokenFramePopup.BackpackCheckBox)
+    F.ReskinCheckButton(_G.TokenFramePopup.InactiveCheckBox)
+    F.ReskinCheckButton(_G.TokenFramePopup.BackpackCheckBox)
     F.ReskinTrimScroll(_G.TokenFrame.ScrollBar)
 
     hooksecurefunc(_G.TokenFrame.ScrollBox, 'Update', function(self)

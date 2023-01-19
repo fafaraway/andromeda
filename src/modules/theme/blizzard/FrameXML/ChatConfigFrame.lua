@@ -50,7 +50,7 @@ tinsert(C.BlizzThemes, function()
                 checkbox:HideBackdrop()
                 local bg = F.CreateBDFrame(checkbox, 0.25)
                 bg:SetInside()
-                F.ReskinCheckbox(_G[checkBoxName .. 'Check'])
+                F.ReskinCheckButton(_G[checkBoxName .. 'Check'])
 
                 checkbox.styled = true
             end
@@ -65,11 +65,11 @@ tinsert(C.BlizzThemes, function()
         local nameString = frame:GetName() .. 'CheckBox'
         for index, value in ipairs(checkBoxTable) do
             local checkBoxName = nameString .. index
-            F.ReskinCheckbox(_G[checkBoxName])
+            F.ReskinCheckButton(_G[checkBoxName])
 
             if value.subTypes then
                 for i in ipairs(value.subTypes) do
-                    F.ReskinCheckbox(_G[checkBoxName .. '_' .. i])
+                    F.ReskinCheckButton(_G[checkBoxName .. '_' .. i])
                 end
             end
         end
@@ -151,7 +151,7 @@ tinsert(C.BlizzThemes, function()
         _G.CombatConfigSettingsRaid,
     }
     for _, box in pairs(combatBoxes) do
-        F.ReskinCheckbox(box)
+        F.ReskinCheckButton(box)
     end
 
     hooksecurefunc('ChatConfig_UpdateSwatches', function(frame)
@@ -209,7 +209,7 @@ tinsert(C.BlizzThemes, function()
     F.Reskin(_G.TextToSpeechFramePlaySampleButton)
     F.Reskin(_G.TextToSpeechFramePlaySampleAlternateButton)
     F.Reskin(_G.TextToSpeechDefaultButton)
-    F.ReskinCheckbox(_G.TextToSpeechCharacterSpecificButton)
+    F.ReskinCheckButton(_G.TextToSpeechCharacterSpecificButton)
 
     F.ReskinDropDown(_G.TextToSpeechFrameTtsVoiceDropdown)
     F.ReskinDropDown(_G.TextToSpeechFrameTtsVoiceAlternateDropdown)
@@ -225,7 +225,7 @@ tinsert(C.BlizzThemes, function()
     }
     for _, checkbox in pairs(checkboxes) do
         local check = _G.TextToSpeechFramePanelContainer[checkbox]
-        F.ReskinCheckbox(check)
+        F.ReskinCheckButton(check)
         check.bg:SetInside(check, 6, 6)
     end
 
@@ -238,7 +238,7 @@ tinsert(C.BlizzThemes, function()
                 checkBoxName = checkBoxNameString .. index
                 checkBox = _G[checkBoxName]
                 if checkBox and not checkBox.styled then
-                    F.ReskinCheckbox(checkBox)
+                    F.ReskinCheckButton(checkBox)
                     checkBox.bg:SetInside(checkBox, 6, 6)
                     checkBox.styled = true
                 end
