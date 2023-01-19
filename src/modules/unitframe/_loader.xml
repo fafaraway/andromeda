@@ -3,7 +3,6 @@
     <Include file="plugins\_loader.xml"/>
     <Include file="elements\_loader.xml"/>
     <Script file="unitframe.lua"/>
-    <Script file="colors.lua"/>
     <Script file="fader.lua"/>
     <Script file="tags.lua"/>
     <Script file="units.lua"/>
