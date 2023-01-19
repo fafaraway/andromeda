@@ -1222,10 +1222,14 @@ do
         return bg
     end
 
-    function F:PixelIcon(texture, highlight)
+    function F:PixelIcon(texture, highlight, shadow)
         self.bg = F.CreateBDFrame(self)
         self.bg:SetBackdropBorderColor(0, 0, 0)
         self.bg:SetAllPoints()
+
+        if shadow then
+            F.CreateSD(self.bg)
+        end
 
         self.Icon = self:CreateTexture(nil, 'ARTWORK')
         self.Icon:SetInside()
