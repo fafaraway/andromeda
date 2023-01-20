@@ -1,5 +1,4 @@
 local F, C = unpack(select(2, ...))
-local NAMEPLATE = F:GetModule('Nameplate')
 
 C.NameplateAuraWhiteList = {
     -- Buffs
@@ -217,8 +216,3 @@ C.MajorSpellsList = {
     [395859] = true, -- 游荡尖啸，青龙寺
     [397878] = true, -- 魔化涟漪，青龙寺
 }
-
---
-
-NAMEPLATE.AuraWhiteList = {}
-NAMEPLATE.AuraBlackList = {}

@@ -240,20 +240,22 @@ C.CharacterSettings = {
 
         ShowRaidDebuff = true,
         RaidDebuffSize = 14,
+        RaidDebuffScale = 1,
         RaidDebuffClickThru = true,
         ShowRaidBuff = true,
-        RaidBuffSize = 12,
         RaidBuffClickThru = true,
+        RaidBuffScale = 1,
+        RaidBuffAuto = false,
 
 
-        CornerIndicator = true,
-        CornerIndicatorScale = 1,
-        CornerIndicatorSize = 6,
+        CornerSpell = true,
+        CornerSpellType = 1,
+        CornerSpellScale = 1,
 
-        InstanceAuras = true,
-        DispellType = 1,
-        RaidDebuffScale = 1,
-        AuraClickThru = true,
+        InstanceDebuff = true,
+        DebuffWatcherDispellType = 1,
+        DebuffWatcherScale = 1,
+        DebuffWatcherClickThru = true,
 
 
 
@@ -277,9 +279,7 @@ C.CharacterSettings = {
         PartyWatcherSync = true,
         PartyWatcherOnRight = false,
         PartyWatcherSize = 26,
-        PartyAura = true,
-        PartyAuraSize = 26,
-        PartyAuraNum = 4,
+
 
         RaidFrame = true,
         RaidHealthColorStyle = 4,
@@ -667,14 +667,12 @@ C.AccountSettings = {
     RaidDebuffsList = {},
     CornerSpellsList = {},
 
-
     DebuffWatcherList = {},
     RaidAuraWatch = {},
     MajorSpellsList = {},
-
     PartySpellsList = {},
-    PartyAurasList = {},
     AnnounceableSpellsList = {},
+
     KeystoneInfo = {},
     ProfileIndex = {},
     ProfileNames = {},

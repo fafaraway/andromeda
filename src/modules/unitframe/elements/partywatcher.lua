@@ -2,7 +2,7 @@ local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('UnitFrame')
 
 UNITFRAME.PartySpellsList = {}
-function UNITFRAME:UpdatePartyWatcherSpells()
+function UNITFRAME:UpdatePartyWatcherSpellsList()
     wipe(UNITFRAME.PartySpellsList)
 
     for spellID, duration in pairs(C.PartySpellsList) do
@@ -137,7 +137,7 @@ local function UpdateWatcherAnchor(element)
     end
     local rel1 = not horizon and not otherSide and 'RIGHT' or 'LEFT'
     local rel2 = not horizon and not otherSide and 'LEFT' or 'RIGHT'
-    local iconSize = C.DB.Unitframe.PartyAuraSize
+    local iconSize = (C.DB.Unitframe.PartyHealthHeight + C.DB.Unitframe.PartyPowerHeight) * 0.85
 
     for i = 1, element.__max do
         local bu = element[i]

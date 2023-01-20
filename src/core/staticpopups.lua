@@ -49,19 +49,8 @@ StaticPopupDialogs.ANDROMEDA_RESET_MAJOR_SPELLS_LIST = {
     whileDead = 1,
 }
 
-StaticPopupDialogs.ANDROMEDA_RESET_PARTY_AURA_LIST = {
-    text = C.RED_COLOR .. L['Reset to default list?'],
-    button1 = _G.YES,
-    button2 = _G.NO,
-    OnAccept = function()
-        _G.ANDROMEDA_ADB['PartyAurasList'] = {}
-        _G.ReloadUI()
-    end,
-    whileDead = 1,
-}
-
 StaticPopupDialogs.ANDROMEDA_RESET_ANNOUNCEABLE_SPELLS = {
-    text = C.RED_COLOR .. L['Are you sure to restore default Announceable Spells List?'],
+    text = C.RED_COLOR .. L['Reset to default list!'],
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
@@ -72,7 +61,7 @@ StaticPopupDialogs.ANDROMEDA_RESET_ANNOUNCEABLE_SPELLS = {
 }
 
 StaticPopupDialogs.ANDROMEDA_RESET_PARTY_SPELLS = {
-    text = C.RED_COLOR .. L['Are you sure to restore default Party Spells List?'],
+    text = C.RED_COLOR .. L['Reset to default list!'],
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
@@ -82,12 +71,34 @@ StaticPopupDialogs.ANDROMEDA_RESET_PARTY_SPELLS = {
     whileDead = 1,
 }
 
-StaticPopupDialogs.ANDROMEDA_RESET_RAID_DEBUFFS = {
-    text = C.RED_COLOR .. L['Are you sure to restore default Raid Debuffs List?'],
+StaticPopupDialogs.ANDROMEDA_RESET_RAID_DEBUFFS_BLACK = {
+    text = C.RED_COLOR .. L['Reset to default list!'],
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
-        _G.ANDROMEDA_ADB['DebuffWatcherList'] = {}
+        _G.ANDROMEDA_ADB['RaidDebuffsBlackList'] = {}
+        _G.ReloadUI()
+    end,
+    whileDead = 1,
+}
+
+StaticPopupDialogs.ANDROMEDA_RESET_RAID_BUFFS_WHITE = {
+    text = C.RED_COLOR .. L['Reset to default list!'],
+    button1 = _G.YES,
+    button2 = _G.NO,
+    OnAccept = function()
+        _G.ANDROMEDA_ADB['RaidBuffsWhiteList'] = {}
+        _G.ReloadUI()
+    end,
+    whileDead = 1,
+}
+
+StaticPopupDialogs.ANDROMEDA_RESET_CORNER_SPELLS = {
+    text = C.RED_COLOR .. L['Reset to default list!'],
+    button1 = _G.YES,
+    button2 = _G.NO,
+    OnAccept = function()
+        _G.ANDROMEDA_ADB['CornerSpellsList'][C.MY_CLASS] = {}
         _G.ReloadUI()
     end,
     whileDead = 1,

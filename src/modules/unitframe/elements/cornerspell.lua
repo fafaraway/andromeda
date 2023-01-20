@@ -1,6 +1,28 @@
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('UnitFrame')
 
+local counterOffsets = {
+    ['TOPLEFT'] = { { 6, 1 }, { 'LEFT', 'RIGHT', -2, 0 } },
+    ['TOPRIGHT'] = { { -6, 1 }, { 'RIGHT', 'LEFT', 2, 0 } },
+    ['BOTTOMLEFT'] = { { 6, 1 }, { 'LEFT', 'RIGHT', -2, 0 } },
+    ['BOTTOMRIGHT'] = { { -6, 1 }, { 'RIGHT', 'LEFT', 2, 0 } },
+    ['LEFT'] = { { 6, 1 }, { 'LEFT', 'RIGHT', -2, 0 } },
+    ['RIGHT'] = { { -6, 1 }, { 'RIGHT', 'LEFT', 2, 0 } },
+    ['TOP'] = { { 0, 0 }, { 'RIGHT', 'LEFT', 2, 0 } },
+    ['BOTTOM'] = { { 0, 0 }, { 'RIGHT', 'LEFT', 2, 0 } },
+}
+
+local anchors = {
+    'TOPLEFT',
+    'TOP',
+    'TOPRIGHT',
+    'LEFT',
+    'RIGHT',
+    'BOTTOMLEFT',
+    'BOTTOM',
+    'BOTTOMRIGHT',
+}
+
 function UNITFRAME:SpellsIndicator_OnUpdate(elapsed)
     F.CooldownOnUpdate(self, elapsed, true)
 end
@@ -25,19 +47,8 @@ function UNITFRAME:UpdateCornerSpellsList()
     end
 end
 
-local anchors = {
-    'TOPLEFT',
-    'TOP',
-    'TOPRIGHT',
-    'LEFT',
-    'RIGHT',
-    'BOTTOMLEFT',
-    'BOTTOM',
-    'BOTTOMRIGHT',
-}
-
 function UNITFRAME:CreateSpellsIndicator(self)
-    local spellSize = C.DB.Unitframe.CornerIndicatorSize or 6
+    local spellSize = 8
 
     local buttons = {}
     for _, anchor in pairs(anchors) do
@@ -56,6 +67,11 @@ function UNITFRAME:CreateSpellsIndicator(self)
         button.cd:SetReverse(true)
         button.cd:SetHideCountdownNumbers(true)
 
+        local font = C.Assets.Fonts.Small
+        local fontSize = 11
+        button.timer = F.CreateFS(button, font, fontSize, true, nil, nil, true, 'CENTER', -counterOffsets[anchor][2][3], 0)
+        button.count = F.CreateFS(button, font, fontSize, true, nil, nil, true)
+
         button.anchor = anchor
         buttons[anchor] = button
 
@@ -68,15 +84,31 @@ function UNITFRAME:CreateSpellsIndicator(self)
 end
 
 function UNITFRAME:SpellsIndicator_UpdateButton(button, aura, r, g, b)
-    if aura.duration and aura.duration > 0 then
-        button.cd:SetCooldown(aura.expiration - aura.duration, aura.duration)
-        button.cd:Show()
+    if C.DB.Unitframe.CornerSpellType == 3 then
+        if aura.duration and aura.duration > 0 then
+            button.expiration = aura.expiration
+            button:SetScript('OnUpdate', UNITFRAME.SpellsIndicator_OnUpdate)
+        else
+            button:SetScript('OnUpdate', nil)
+        end
+
+        button.timer:SetTextColor(r, g, b)
     else
-        button.cd:Hide()
+        if aura.duration and aura.duration > 0 then
+            button.cd:SetCooldown(aura.expiration - aura.duration, aura.duration)
+            button.cd:Show()
+        else
+            button.cd:Hide()
+        end
+
+        if C.DB.Unitframe.CornerSpellType == 1 then
+            button.icon:SetVertexColor(r, g, b)
+        else
+            button.icon:SetTexture(aura.texture)
+        end
     end
 
-    button.icon:SetVertexColor(r, g, b)
-
+    button.count:SetText(aura.count > 1 and aura.count or '')
     button:Show()
 end
 
@@ -87,12 +119,30 @@ function UNITFRAME:SpellsIndicator_HideButtons()
 end
 
 function UNITFRAME:RefreshBuffIndicator(bu)
-    bu:SetScript('OnUpdate', nil)
+    if C.DB.Unitframe.CornerSpellType == 3 then
+        local point, anchorPoint, x, y = unpack(counterOffsets[bu.anchor][2])
+        bu.timer:Show()
+        bu.count:ClearAllPoints()
+        bu.count:SetPoint(point, bu.timer, anchorPoint, x, y)
+        bu.icon:Hide()
+        bu.cd:Hide()
+        bu.bg:Hide()
+    else
+        bu:SetScript('OnUpdate', nil)
+        bu.timer:Hide()
+        bu.count:ClearAllPoints()
+        bu.count:SetPoint('CENTER', unpack(counterOffsets[bu.anchor][1]))
 
-    bu.icon:SetTexture(C.Assets.Textures.Backdrop)
-    bu.icon:Show()
-    bu.cd:Show()
-    bu.bg:Show()
+        if C.DB.Unitframe.CornerSpellType == 1 then
+            bu.icon:SetTexture(C.Assets.Textures.StatusbarFlat)
+        else
+            bu.icon:SetVertexColor(1, 1, 1)
+        end
+
+        bu.icon:Show()
+        bu.cd:Show()
+        bu.bg:Show()
+    end
 end
 
 function UNITFRAME:SpellsIndicator_UpdateOptions()
@@ -102,7 +152,7 @@ function UNITFRAME:SpellsIndicator_UpdateOptions()
     end
 
     for anchor, button in pairs(spells) do
-        button:SetScale(C.DB.Unitframe.CornerIndicatorScale)
+        button:SetScale(C.DB.Unitframe.CornerSpellScale)
         UNITFRAME:RefreshBuffIndicator(button)
     end
 end

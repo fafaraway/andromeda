@@ -31,6 +31,26 @@ local function hidePanels()
     end
 end
 
+local function resetOption(element)
+    if element.Type == 'EditBox' then
+        element:ClearFocus()
+        element:SetText('')
+    elseif element.Type == 'CheckBox' then
+        element:SetChecked(false)
+    elseif element.Type == 'DropDown' then
+        element.Text:SetText('')
+        for i = 1, #element.options do
+            element.options[i].selected = false
+        end
+    end
+end
+
+local function clearOption(options)
+    for i = 1, #options do
+        resetOption(options[i])
+    end
+end
+
 local function createPanel(parent, name, title, bgFrame)
     local frame = CreateFrame('Frame', name, parent)
     frame:SetSize(GUI.exWidth, GUI.height)
@@ -38,7 +58,7 @@ local function createPanel(parent, name, title, bgFrame)
     F.SetBD(frame)
 
     if title then
-        F.CreateFS(frame, C.Assets.Fonts.Regular, 14, nil, title, 'YELLOW', true, 'TOPLEFT', 10, -25)
+        F.CreateFS(frame, C.Assets.Fonts.Bold, 13, nil, title, 'YELLOW', true, 'TOPLEFT', 10, -30)
     end
 
     if bgFrame then
@@ -67,7 +87,7 @@ local function createScrollFrame(parent, width, height, text, noBg)
     end
 
     if text then
-        F.CreateFS(scroll, C.Assets.Fonts.Regular, 12, true, text, nil, true, 'TOPLEFT', 5, 20)
+        F.CreateFS(scroll, C.Assets.Fonts.Bold, 13, true, text, nil, true, 'TOPLEFT', 5, 32)
     end
 
     if not noBg then
@@ -82,15 +102,15 @@ local function createScrollFrame(parent, width, height, text, noBg)
     return scroll
 end
 
-local function sortBars(barTable)
+local function sortSpellBar(barTable)
     local num = 1
     for _, bar in pairs(barTable) do
-        bar:SetPoint('TOPLEFT', 0, -32 * (num - 1))
+        bar:SetPoint('TOPLEFT', 0, -30 * (num - 1))
         num = num + 1
     end
 end
 
-local function createBarWidgets(parent, texture)
+local function createSpellBarWidget(parent, texture)
     local icon = CreateFrame('Frame', nil, parent)
     icon:SetSize(16, 16)
     icon:SetPoint('LEFT', 5, 0)
@@ -108,19 +128,22 @@ local function createBarWidgets(parent, texture)
     return icon, close
 end
 
-local function createBars(parent, spellID, newTable, tableName)
-    -- table1 barTable
-    -- table2 C.table
-    -- table3 ANDROMEDA_ADB.table
+---comment
+---@param parent any
+---@param spellID any
+---@param barTable any
+---@param tableName any
+---@param isNew any
+local function createSpellBar(parent, spellID, barTable, tableName, isNew)
     local spellName = GetSpellInfo(spellID)
     local texture = GetSpellTexture(spellID)
 
     local bar = CreateFrame('Frame', nil, parent.child, 'BackdropTemplate')
-    bar:SetSize(200, 30)
-    F.CreateBD(bar, 0.25)
-    newTable[spellID] = bar
+    bar:SetSize(200, 28)
+    bar.bg = F.CreateBDFrame(bar, 0.25)
+    barTable[spellID] = bar
 
-    local icon, delBtn = createBarWidgets(bar, texture)
+    local icon, delBtn = createSpellBarWidget(bar, texture)
     F.AddTooltip(icon, 'ANCHOR_RIGHT', spellID)
     delBtn:SetScript('OnClick', function()
         bar:Hide()
@@ -131,42 +154,53 @@ local function createBars(parent, spellID, newTable, tableName)
             _G.ANDROMEDA_ADB[tableName][spellID] = nil
         end
 
-        newTable[spellID] = nil
-        sortBars(newTable)
+        barTable[spellID] = nil
+        sortSpellBar(barTable)
     end)
 
-    local name = F.CreateFS(bar, C.Assets.Fonts.Regular, 12, nil, spellName, nil, true, 'LEFT', 30, 0)
+    local font = C.Assets.Fonts.Condensed
+    local name = F.CreateFS(bar, font, 12, nil, spellName, nil, true, 'LEFT', 26, 0)
     name:SetWidth(160)
     name:SetJustifyH('LEFT')
 
-    sortBars(newTable)
+    if isNew then
+        name:SetTextColor(0, 1, 0)
+    end
+
+    sortSpellBar(barTable)
 end
 
-local function addButtonOnClick(btn)
-    local parent = btn.__owner
+local function isSpellIdExisted(table, spellID)
+    local modValue = _G.ANDROMEDA_ADB[table][spellID]
+    local locValue = C[table][spellID]
+
+    return modValue or (modValue == nil and locValue)
+end
+
+local function addButton_OnClick(self)
+    local parent = self.__owner
     local newTable = parent.barTable
     local tableName = parent.tableName
-
     local spellID = tonumber(parent.editBox:GetText())
+
     if not spellID or not GetSpellInfo(spellID) then
         _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Incorrect SpellID'])
         return
     end
 
-    local modValue = _G.ANDROMEDA_ADB[tableName][spellID]
-    if modValue or modValue == nil and C[tableName][spellID] then
+    if isSpellIdExisted(tableName, spellID) then
         _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is existed'])
         return
     end
 
     _G.ANDROMEDA_ADB[tableName][spellID] = true
 
-    createBars(parent.scrollArea, spellID, newTable, tableName)
+    createSpellBar(parent.scrollArea, spellID, newTable, tableName, true)
 
     parent.editBox:SetText('')
 end
 
-local function labelOnEnter(self)
+local function label_OnEnter(self)
     _G.GameTooltip:ClearLines()
     _G.GameTooltip:SetOwner(self:GetParent(), 'ANCHOR_RIGHT', 0, 3)
     _G.GameTooltip:AddLine(self.text)
@@ -186,31 +220,11 @@ local function createLabel(parent, text, tip)
     frame:SetAllPoints(label)
     frame.text = text
     frame.tip = tip
-    frame:SetScript('OnEnter', labelOnEnter)
+    frame:SetScript('OnEnter', label_OnEnter)
     frame:SetScript('OnLeave', F.HideTooltip)
 end
 
-local function resetWidgetStatus(element)
-    if element.Type == 'EditBox' then
-        element:ClearFocus()
-        element:SetText('')
-    elseif element.Type == 'CheckBox' then
-        element:SetChecked(false)
-    elseif element.Type == 'DropDown' then
-        element.Text:SetText('')
-        for i = 1, #element.options do
-            element.options[i].selected = false
-        end
-    end
-end
-
-local function clearOptions(options)
-    for i = 1, #options do
-        resetWidgetStatus(options[i])
-    end
-end
-
-local function createEditBox(parent, text, x, y, tip, width, height)
+local function createEditbox(parent, text, x, y, tip, width, height)
     local eb = F.CreateEditBox(parent, width or 90, height or 24)
     eb:SetPoint('TOPLEFT', x, y)
     eb:SetMaxLetters(255)
@@ -236,7 +250,7 @@ local function createGroupTitle(parent, text, offset)
     parent.groupTitle = true
 end
 
-local function checkboxOnClick(self)
+local function checkbox_OnClick(self)
     local key = self.__key
     local value = self.__value
     C.DB[key][value] = not C.DB[key][value]
@@ -247,7 +261,7 @@ local function checkboxOnClick(self)
 end
 
 local function createCheckbox(parent, offset, key, value, text, func, tip)
-    local box = F.CreateCheckbox(parent.child, true)
+    local box = F.CreateCheckButton(parent.child, true)
     box:SetSize(18, 18)
     box:SetHitRectInsets(-5, -5, -5, -5)
     box:SetPoint('TOPLEFT', 10, offset)
@@ -257,7 +271,7 @@ local function createCheckbox(parent, offset, key, value, text, func, tip)
     box:SetChecked(C.DB[key][value])
     box.__value = value
     box.__key = key
-    box:SetScript('OnClick', checkboxOnClick)
+    box:SetScript('OnClick', checkbox_OnClick)
     box.__func = func
 
     if tip then
@@ -282,7 +296,7 @@ local function createColorSwatch(parent, text, value, defaultV, offset, x, y)
     return swatch
 end
 
-local function sliderOnValueChanged(self, v)
+local function slider_OnValueChanged(self, v)
     local current = F:Round(tonumber(v), 2)
     self.value:SetText(current)
     C.DB[self.__key][self.__value] = current
@@ -301,7 +315,7 @@ local function createSlider(parent, key, value, text, minV, maxV, step, defaultV
     slider.__update = func
     slider.__default = defaultV
     slider.__step = step
-    slider:SetScript('OnValueChanged', sliderOnValueChanged)
+    slider:SetScript('OnValueChanged', slider_OnValueChanged)
 
     if tip then
         slider.title = tostring(key)
@@ -893,13 +907,13 @@ function GUI:SetupNameplateAuraFilter(parent)
 
     local frameData = {
         [1] = {
-            text = L['Nameplate Aura White List'],
+            text = L['Auras White List'],
             tip = L['Fill in SpellID, must be a number.|nSpell name is not supported.'],
             offset = -25,
             barList = {},
         },
         [2] = {
-            text = L['Nameplate Aura Black List'],
+            text = L['Auras Black List'],
             tip = L['Fill in SpellID, must be a number.|nSpell name is not supported.'],
             offset = -315,
             barList = {},
@@ -909,37 +923,46 @@ function GUI:SetupNameplateAuraFilter(parent)
     local function createBar(parent, index, spellID)
         local name, _, texture = GetSpellInfo(spellID)
         local bar = CreateFrame('Frame', nil, parent, 'BackdropTemplate')
-        bar:SetSize(200, 30)
+        bar:SetSize(200, 28)
         bar.bg = F.CreateBD(bar, 0.25)
         frameData[index].barList[spellID] = bar
 
-        local icon, close = createBarWidgets(bar, texture)
+        local icon, close = createSpellBarWidget(bar, texture)
         F.AddTooltip(icon, 'ANCHOR_RIGHT', spellID)
         close:SetScript('OnClick', function()
             bar:Hide()
 
-            if (index == 1 and C.NameplateAuraWhiteList[spellID]) or (index == 2 and C.NameplateAuraBlackList[spellID]) then
-                _G.ANDROMEDA_ADB['NameplateAuraFilterList'][index][spellID] = false
-            else
-                _G.ANDROMEDA_ADB['NameplateAuraFilterList'][index][spellID] = nil
+            if index == 1 then
+                if C.NameplateAuraWhiteList[spellID] then
+                    _G.ANDROMEDA_ADB['NameplateAuraWhiteList'][spellID] = false
+                else
+                    _G.ANDROMEDA_ADB['NameplateAuraWhiteList'][spellID] = nil
+                end
+            elseif index == 2 then
+                if C.NameplateAuraBlackList[spellID] then
+                    _G.ANDROMEDA_ADB['NameplateAuraBlackList'][spellID] = false
+                else
+                    _G.ANDROMEDA_ADB['NameplateAuraBlackList'][spellID] = nil
+                end
             end
 
             frameData[index].barList[spellID] = nil
-            sortBars(frameData[index].barList)
+            sortSpellBar(frameData[index].barList)
         end)
 
-        local spellName = F.CreateFS(bar, C.Assets.Fonts.Regular, 12, nil, name, nil, true, 'LEFT', 30, 0)
+        local spellName = F.CreateFS(bar, C.Assets.Fonts.Condensed, 12, nil, name, nil, true, 'LEFT', 26, 0)
         spellName:SetWidth(180)
         spellName:SetJustifyH('LEFT')
         if index == 2 then
             spellName:SetTextColor(1, 0, 0)
         end
 
-        sortBars(frameData[index].barList)
+        sortSpellBar(frameData[index].barList)
     end
 
     local function isAuraExisted(index, spellID)
-        local modValue = _G.ANDROMEDA_ADB['NameplateAuraFilterList'][index][spellID]
+        local key = index == 1 and 'NameplateAuraWhiteList' or 'NameplateAuraBlackList'
+        local modValue = _G.ANDROMEDA_ADB[key][spellID]
         local locValue = (index == 1 and C.NameplateAuraWhiteList[spellID]) or (index == 2 and C.NameplateAuraBlackList[spellID])
 
         return modValue or (modValue == nil and locValue)
@@ -957,25 +980,27 @@ function GUI:SetupNameplateAuraFilter(parent)
             return
         end
 
-        _G.ANDROMEDA_ADB['NameplateAuraFilterList'][index][spellID] = true
+        local key = index == 1 and 'NameplateAuraWhiteList' or 'NameplateAuraBlackList'
+        _G.ANDROMEDA_ADB[key][spellID] = true
+
         createBar(parent.child, index, spellID)
         parent.box:SetText('')
     end
 
     local filterIndex
-    StaticPopupDialogs['ANDROMEDA_RESET_NAMEPLATE_AURA_FILTER'] = {
+    StaticPopupDialogs['ANDROMEDA_RESET_NAMEPLATE_AURAS'] = {
         text = C.RED_COLOR .. L['Reset to default list?'],
         button1 = _G.YES,
         button2 = _G.NO,
         OnAccept = function()
-            wipe(_G.ANDROMEDA_ADB['NameplateAuraFilterList'][filterIndex])
-            ReloadUI()
+            local key = filterIndex == 1 and 'NameplateAuraWhiteList' or 'NameplateAuraBlackList'
+            wipe(_G.ANDROMEDA_ADB[key])
         end,
         whileDead = 1,
     }
 
     for index, value in ipairs(frameData) do
-        F.CreateFS(panel, C.Assets.Fonts.Regular, 14, nil, value.text, 'YELLOW', true, 'TOPLEFT', 20, value.offset)
+        F.CreateFS(panel, C.Assets.Fonts.Bold, 13, nil, value.text, 'YELLOW', true, 'TOPLEFT', 10, value.offset - 5)
         local frame = CreateFrame('Frame', nil, panel, 'BackdropTemplate')
         frame:SetSize(240, 250)
         frame:SetPoint('TOPLEFT', 10, value.offset - 25)
@@ -985,24 +1010,25 @@ function GUI:SetupNameplateAuraFilter(parent)
         scroll:ClearAllPoints()
         scroll:SetPoint('BOTTOMLEFT', 10, 10)
 
-        scroll.box = F.CreateEditBox(frame, 130, 25)
+        scroll.box = F.CreateEditBox(frame, 130, 24)
         scroll.box:SetPoint('TOPLEFT', 10, -10)
         F.AddTooltip(scroll.box, 'ANCHOR_RIGHT', value.tip, 'BLUE')
 
-        scroll.add = F.CreateButton(frame, 40, 25, _G.ADD, 11)
-        scroll.add:SetPoint('TOPRIGHT', -8, -10)
+        scroll.add = F.CreateButton(frame, 35, 24, _G.ADD, 11)
+        scroll.add:SetPoint('TOPRIGHT', -10, -10)
         scroll.add:SetScript('OnClick', function()
             addClick(scroll, index)
         end)
 
-        scroll.reset = F.CreateButton(frame, 40, 25, _G.RESET, 11)
+        scroll.reset = F.CreateButton(frame, 35, 24, _G.RESET, 11)
         scroll.reset:SetPoint('RIGHT', scroll.add, 'LEFT', -5, 0)
         scroll.reset:SetScript('OnClick', function()
             filterIndex = index
-            StaticPopup_Show('ANDROMEDA_RESET_NAMEPLATE_AURA_FILTER')
+            StaticPopup_Show('ANDROMEDA_RESET_NAMEPLATE_AURAS')
         end)
 
-        for spellID, value in pairs(NAMEPLATE.AuraFilterList[index]) do
+        local key = index == 1 and 'NameplateAuraWhiteList' or 'NameplateAuraBlackList'
+        for spellID, value in pairs(NAMEPLATE[key]) do
             if value then
                 createBar(scroll.child, index, spellID)
             end
@@ -1010,46 +1036,48 @@ function GUI:SetupNameplateAuraFilter(parent)
     end
 end
 
-local function RefreshMajorSpellsFilter()
-    NAMEPLATE:RefreshMajorSpellsFilter()
-end
-
-function GUI:SetupNameplateMajorSpells(parent)
-    local guiName = C.ADDON_TITLE .. 'GUINamePlateCastbarGlow'
-    togglePanel(guiName)
-    if extraGUIs[guiName] then
-        return
+do
+    local function refreshMajorSpells()
+        NAMEPLATE:RefreshMajorSpellsFilter()
     end
 
-    local panel = createPanel(parent, guiName, L['Major Spells Filter'], true)
-    panel:SetScript('OnHide', RefreshMajorSpellsFilter)
-    parent.panel = panel
+    function GUI:SetupNameplateMajorSpells(parent)
+        local guiName = C.ADDON_TITLE .. 'GUINamePlateMajorSpells'
+        togglePanel(guiName)
+        if extraGUIs[guiName] then
+            return
+        end
 
-    panel.barTable = {}
-    panel.tableName = 'MajorSpellsList'
+        local panel = createPanel(parent, guiName, L['Major Spells List'], true)
+        panel:SetScript('OnHide', refreshMajorSpells)
+        parent.panel = panel
 
-    local scrollArea = createScrollFrame(panel.bg, 200, 485)
-    panel.scrollArea = scrollArea
+        panel.barTable = {}
+        panel.tableName = 'MajorSpellsList'
 
-    local editBox = createEditBox(panel.bg, nil, 10, -10, nil, 110, 24)
-    panel.editBox = editBox
-    editBox.title = L['Hint']
-    F.AddTooltip(editBox, 'ANCHOR_RIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE', true)
+        local scrollArea = createScrollFrame(panel.bg, 200, 485)
+        panel.scrollArea = scrollArea
 
-    local addBtn = F.CreateButton(panel.bg, 50, 24, _G.ADD)
-    addBtn:SetPoint('TOPRIGHT', -8, -10)
-    addBtn:HookScript('OnClick', addButtonOnClick)
-    addBtn.__owner = panel
+        local editBox = createEditbox(panel.bg, nil, 10, -10, nil, 130, 24)
+        panel.editBox = editBox
+        editBox.title = L['Hint']
+        F.AddTooltip(editBox, 'ANCHOR_RIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE', true)
 
-    local resetBtn = F.CreateButton(panel.bg, 50, 24, _G.RESET)
-    resetBtn:SetPoint('RIGHT', addBtn, 'LEFT', -5, 0)
-    resetBtn:HookScript('OnClick', function()
-        StaticPopup_Show('ANDROMEDA_RESET_MAJOR_SPELLS_LIST')
-    end)
+        local addBtn = F.CreateButton(panel.bg, 35, 24, _G.ADD, 11)
+        addBtn:SetPoint('TOPRIGHT', -10, -10)
+        addBtn:HookScript('OnClick', addButton_OnClick)
+        addBtn.__owner = panel
 
-    for spellID, value in pairs(NAMEPLATE[panel.tableName]) do
-        if value then
-            createBars(scrollArea, spellID, panel.barTable, panel.tableName)
+        local resetBtn = F.CreateButton(panel.bg, 35, 24, _G.RESET, 11)
+        resetBtn:SetPoint('RIGHT', addBtn, 'LEFT', -5, 0)
+        resetBtn:HookScript('OnClick', function()
+            StaticPopup_Show('ANDROMEDA_RESET_MAJOR_SPELLS_LIST')
+        end)
+
+        for spellID, value in pairs(NAMEPLATE[panel.tableName]) do
+            if value then
+                createSpellBar(scrollArea, spellID, panel.barTable, panel.tableName)
+            end
         end
     end
 end
@@ -1277,7 +1305,7 @@ function GUI:SetupNameplateUnitFilter(parent)
         return
     end
 
-    local panel = createPanel(parent, guiName, nil, true)
+    local panel = createPanel(parent, guiName, L['Special Units List'], true)
     panel:SetScript('OnHide', RefreshSpecialUnitsList)
 
     local barTable = {}
@@ -1286,11 +1314,11 @@ function GUI:SetupNameplateUnitFilter(parent)
         local npcID = tonumber(text)
 
         local bar = CreateFrame('Frame', nil, parent, 'BackdropTemplate')
-        bar:SetSize(200, 30)
+        bar:SetSize(200, 28)
         F.CreateBD(bar, 0.25)
         barTable[text] = bar
 
-        local icon, close = createBarWidgets(bar, npcID and 136243 or 132288)
+        local icon, close = createSpellBarWidget(bar, npcID and 136243 or 132288)
         if npcID then
             F.AddTooltip(icon, 'ANCHOR_RIGHT', 'ID: ' .. npcID)
         end
@@ -1302,10 +1330,10 @@ function GUI:SetupNameplateUnitFilter(parent)
             else
                 C.DB['Nameplate']['SpecialUnitsList'][text] = nil
             end
-            sortBars(barTable)
+            sortSpellBar(barTable)
         end)
 
-        local name = F.CreateFS(bar, C.Assets.Fonts.Regular, 12, nil, text, nil, true, 'LEFT', 30, 0)
+        local name = F.CreateFS(bar, C.Assets.Fonts.Condensed, 12, nil, text, nil, true, 'LEFT', 26, 0)
         name:SetWidth(180)
         name:SetJustifyH('LEFT')
         if isNew then
@@ -1320,7 +1348,7 @@ function GUI:SetupNameplateUnitFilter(parent)
             end)
         end
 
-        sortBars(barTable)
+        sortSpellBar(barTable)
     end
 
     local frame = panel.bg
@@ -1329,9 +1357,9 @@ function GUI:SetupNameplateUnitFilter(parent)
     local swatch = createColorSwatch(frame, nil, C.DB['Nameplate']['SpecialUnitColor'])
     swatch:SetPoint('TOPLEFT', frame, 'TOPLEFT', 10, -10)
     swatch.__default = C.CharacterSettings['Nameplate']['SpecialUnitColor']
-    swatch:SetSize(25, 25)
+    swatch:SetSize(24, 24)
 
-    scroll.box = F.CreateEditBox(frame, 100, 25)
+    scroll.box = F.CreateEditBox(frame, 100, 24)
     scroll.box:SetPoint('LEFT', swatch, 'RIGHT', 5, 0)
     F.AddTooltip(scroll.box, 'ANCHOR_TOPRIGHT', L['Enter NPC ID or name directly.'], 'BLUE')
 
@@ -1350,12 +1378,12 @@ function GUI:SetupNameplateUnitFilter(parent)
         end
     end
 
-    scroll.add = F.CreateButton(frame, 40, 25, _G.ADD, 11)
-    scroll.add:SetPoint('TOPRIGHT', -8, -10)
+    scroll.add = F.CreateButton(frame, 35, 24, _G.ADD, 11)
+    scroll.add:SetPoint('TOPRIGHT', -10, -10)
     scroll.add.__owner = scroll
     scroll.add:SetScript('OnClick', addClick)
 
-    scroll.reset = F.CreateButton(frame, 40, 25, _G.RESET, 11)
+    scroll.reset = F.CreateButton(frame, 35, 24, _G.RESET, 11)
     scroll.reset:SetPoint('RIGHT', scroll.add, 'LEFT', -5, 0)
     scroll.reset:SetScript('OnClick', function()
         StaticPopup_Show('ANDROMEDA_RESET_NAMEPLATE_SPECIAL_UNIT_FILTER')
@@ -1373,7 +1401,7 @@ function GUI:SetupNameplateColorByDot(parent)
         return
     end
 
-    local panel = createPanel(parent, guiName, nil, true)
+    local panel = createPanel(parent, guiName, L['Dot Spells List'], true)
 
     local barTable = {}
 
@@ -1382,27 +1410,27 @@ function GUI:SetupNameplateColorByDot(parent)
         local texture = GetSpellTexture(spellID)
 
         local bar = CreateFrame('Frame', nil, parent, 'BackdropTemplate')
-        bar:SetSize(200, 30)
+        bar:SetSize(200, 28)
         F.CreateBD(bar, 0.25)
         barTable[spellID] = bar
 
-        local icon, close = createBarWidgets(bar, texture)
+        local icon, close = createSpellBarWidget(bar, texture)
         F.AddTooltip(icon, 'ANCHOR_RIGHT', spellID)
         close:SetScript('OnClick', function()
             bar:Hide()
             barTable[spellID] = nil
             C.DB['Nameplate']['DotSpellsList'][spellID] = nil
-            sortBars(barTable)
+            sortSpellBar(barTable)
         end)
 
-        local name = F.CreateFS(bar, C.Assets.Fonts.Regular, 12, nil, spellName, nil, true, 'LEFT', 30, 0)
+        local name = F.CreateFS(bar, C.Assets.Fonts.Condensed, 12, nil, spellName, nil, true, 'LEFT', 26, 0)
         name:SetWidth(180)
         name:SetJustifyH('LEFT')
         if isNew then
             name:SetTextColor(0, 1, 0)
         end
 
-        sortBars(barTable)
+        sortSpellBar(barTable)
     end
 
     local frame = panel.bg
@@ -1411,9 +1439,9 @@ function GUI:SetupNameplateColorByDot(parent)
     local swatch = createColorSwatch(frame, nil, C.DB['Nameplate']['DotColor'])
     swatch:SetPoint('TOPLEFT', frame, 'TOPLEFT', 10, -10)
     swatch.__default = C.CharacterSettings['Nameplate']['DotColor']
-    swatch:SetSize(25, 25)
+    swatch:SetSize(24, 24)
 
-    scroll.box = F.CreateEditBox(frame, 100, 25)
+    scroll.box = F.CreateEditBox(frame, 100, 24)
     scroll.box:SetPoint('LEFT', swatch, 'RIGHT', 5, 0)
     F.AddTooltip(scroll.box, 'ANCHOR_TOPRIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE')
 
@@ -1436,12 +1464,12 @@ function GUI:SetupNameplateColorByDot(parent)
         parent.box:SetText('')
     end
 
-    scroll.add = F.CreateButton(frame, 40, 25, _G.ADD, 11)
-    scroll.add:SetPoint('TOPRIGHT', -8, -10)
+    scroll.add = F.CreateButton(frame, 35, 24, _G.ADD, 11)
+    scroll.add:SetPoint('TOPRIGHT', -10, -10)
     scroll.add.__owner = scroll
     scroll.add:SetScript('OnClick', addClick)
 
-    scroll.reset = F.CreateButton(frame, 40, 25, _G.RESET, 11)
+    scroll.reset = F.CreateButton(frame, 35, 24, _G.RESET, 11)
     scroll.reset:SetPoint('RIGHT', scroll.add, 'LEFT', -5, 0)
     scroll.reset:SetScript('OnClick', function()
         StaticPopup_Show('ANDROMEDA_RESET_NAMEPLATE_DOT_SPELLS')
@@ -2248,169 +2276,179 @@ function GUI:SetupCastbarColor(parent)
     end
 end
 
-local function UpdatePartyWatcherSpells()
-    UNITFRAME:UpdatePartyWatcherSpells()
+local function UpdateGroupTags()
+    UNITFRAME:UpdateGroupTags()
 end
 
-function GUI:SetupPartyWatcher(parent)
-    local guiName = C.ADDON_TITLE .. 'GUIPartySpellSetup'
+function GUI:SetupNameLength(parent)
+    local guiName = C.ADDON_TITLE .. 'GUISetupNameLength'
     togglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = createPanel(parent, guiName, nil, true)
-    panel:SetScript('OnHide', UpdatePartyWatcherSpells)
+    local panel = createPanel(parent, guiName)
+    local scrollArea = createScrollFrame(panel, 220, 540)
 
-    local barTable = {}
-    local ARCANE_TORRENT = GetSpellInfo(25046)
+    local mKey = 'Unitframe'
+    local db = C.CharacterSettings.Unitframe
 
-    local function createBar(parent, spellID, duration)
-        local spellName = GetSpellInfo(spellID)
-        if spellName == ARCANE_TORRENT then
-            return
-        end
-        local texture = GetSpellTexture(spellID)
+    local datas = {
+        [1] = { key = 'PartyNameLength', value = db.PartyNameLength, text = L['Party Name Length'], min = 0, max = 10 },
+        [2] = { key = 'RaidNameLength', value = db.RaidNameLength, text = L['Raid Name Length'], min = 0, max = 10 },
+    }
 
-        local bar = CreateFrame('Frame', nil, parent, 'BackdropTemplate')
-        bar:SetSize(200, 30)
-        F.CreateBD(bar, 0.25)
-        barTable[spellID] = bar
-
-        local icon, close = createBarWidgets(bar, texture)
-        F.AddTooltip(icon, 'ANCHOR_RIGHT', spellID)
-        close:SetScript('OnClick', function()
-            bar:Hide()
-            if C.PartySpellsList[spellID] then
-                _G.ANDROMEDA_ADB['PartySpellsList'][spellID] = 0
-            else
-                _G.ANDROMEDA_ADB['PartySpellsList'][spellID] = nil
-            end
-            barTable[spellID] = nil
-            sortBars(barTable)
-        end)
-
-        local font = C.Assets.Fonts.Regular
-        local name = F.CreateFS(bar, font, 12, nil, spellName, nil, true, 'LEFT', 30, 0)
-        name:SetWidth(120)
-        name:SetJustifyH('LEFT')
-
-        local timer = F.CreateFS(bar, font, 12, nil, duration, nil, true, 'RIGHT', -30, 0)
-        timer:SetWidth(60)
-        timer:SetJustifyH('RIGHT')
-        timer:SetTextColor(0, 1, 0)
-
-        sortBars(barTable)
-    end
-
-    local frame = panel.bg
-    local options = {}
-
-    options[1] = createEditBox(frame, L['SpellID'], 10, -30, L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 107, 24)
-    options[2] = createEditBox(
-        frame,
-        L['Spell Cooldown'],
-        122,
-        -30,
-        L["Enter the spell's cooldown duration.|nParty watcher only support regular spells and abilities.|nFor spells like 'Aspect of the Wild' (BM Hunter), you need to sync cooldown with your party members."],
-        108,
-        24
-    )
-
-    local scroll = createScrollFrame(frame, 200, 440)
-    scroll:ClearAllPoints()
-    scroll:SetPoint('TOPLEFT', 10, -94)
-
-    scroll.reset = F.CreateButton(frame, 51, 24, _G.RESET, 11)
-    scroll.reset:SetPoint('TOPLEFT', 10, -60)
-    scroll.reset.text:SetTextColor(1, 0, 0)
-
-    scroll.reset:SetScript('OnClick', function()
-        StaticPopup_Show('ANDROMEDA_RESET_PARTY_SPELLS')
-    end)
-
-    local function addClick(scroll, options)
-        local spellID, duration = tonumber(options[1]:GetText()), tonumber(options[2]:GetText())
-        if not spellID or not duration then
-            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['You need to complete all optinos'])
-            return
-        end
-
-        if not GetSpellInfo(spellID) then
-            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Incorrect SpellID'])
-            return
-        end
-
-        local modDuration = _G.ANDROMEDA_ADB['PartySpellsList'][spellID]
-
-        if modDuration and modDuration ~= 0 or C.PartySpellsList[spellID] and not modDuration then
-            _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is existed'])
-            return
-        end
-
-        _G.ANDROMEDA_ADB['PartySpellsList'][spellID] = duration
-        createBar(scroll.child, spellID, duration)
-        clearOptions(options)
-    end
-
-    scroll.add = F.CreateButton(frame, 51, 24, _G.ADD, 11)
-    scroll.add:SetPoint('TOPRIGHT', -10, -60)
-    scroll.add:SetScript('OnClick', function()
-        addClick(scroll, options)
-    end)
-
-    scroll.clear = F.CreateButton(frame, 51, 24, _G.KEY_NUMLOCK_MAC, 11)
-    scroll.clear:SetPoint('RIGHT', scroll.add, 'LEFT', -5, 0)
-    scroll.clear:SetScript('OnClick', function()
-        clearOptions(options)
-    end)
-
-    local menuList = {}
-    local function AddSpellFromPreset(_, spellID, duration)
-        options[1]:SetText(spellID)
-        options[2]:SetText(duration)
-        _G.DropDownList1:Hide()
-    end
-
-    local index = 1
-    for class, value in pairs(C.PartySpellsDB) do
-        local color = F:RgbToHex(F:ClassColor(class))
-        local localClassName = _G.LOCALIZED_CLASS_NAMES_MALE[class]
-        menuList[index] = { text = color .. localClassName, notCheckable = true, hasArrow = true, menuList = {} }
-
-        for spellID, duration in pairs(value) do
-            local spellName, _, texture = GetSpellInfo(spellID)
-            if spellName then
-                tinsert(menuList[index].menuList, {
-                    text = spellName,
-                    icon = texture,
-                    tCoordLeft = 0.08,
-                    tCoordRight = 0.92,
-                    tCoordTop = 0.08,
-                    tCoordBottom = 0.92,
-                    arg1 = spellID,
-                    arg2 = duration,
-                    func = AddSpellFromPreset,
-                    notCheckable = true,
-                })
-            end
-        end
-        index = index + 1
-    end
-    scroll.preset = F.CreateButton(frame, 51, 24, L['Preset'], 11)
-    scroll.preset:SetPoint('RIGHT', scroll.clear, 'LEFT', -5, 0)
-    scroll.preset:SetScript('OnClick', function(self)
-        EasyMenu(menuList, F.EasyMenu, self, -100, 100, 'MENU', 1)
-    end)
-
-    for spellID, duration in pairs(UNITFRAME.PartySpellsList) do
-        createBar(scroll.child, spellID, duration)
+    local offset = -10
+    for _, v in ipairs(datas) do
+        createGroupTitle(scrollArea, L['Name Length'], offset)
+        createSlider(scrollArea, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdateGroupTags)
+        offset = offset - 65
     end
 end
 
+-- Party watcher
+
 do
-    local function UpdateDebuffWatcher()
-        UNITFRAME:UpdateDebuffWatcher()
+    local function refreshPartyWatcher()
+        UNITFRAME:UpdatePartyWatcherSpellsList()
+    end
+
+    function GUI:SetupPartyWatcher(parent)
+        local guiName = C.ADDON_TITLE .. 'GUISetupPartyWatcher'
+        togglePanel(guiName)
+        if extraGUIs[guiName] then
+            return
+        end
+
+        local panel = createPanel(parent, guiName, L['Party Spells List'], true)
+        panel:SetScript('OnHide', refreshPartyWatcher)
+        parent.panel = panel
+
+        panel.barTable = {}
+        panel.tableName = 'PartySpellsList'
+
+        local ARCANE_TORRENT = GetSpellInfo(25046)
+        local function createBar(parent, spellID, duration)
+            local spellName = GetSpellInfo(spellID)
+            if spellName == ARCANE_TORRENT then
+                return
+            end
+            local texture = GetSpellTexture(spellID)
+
+            local bar = CreateFrame('Frame', nil, parent, 'BackdropTemplate')
+            bar:SetSize(200, 30)
+            F.CreateBD(bar, 0.25)
+            panel.barTable[spellID] = bar
+
+            local icon, close = createSpellBarWidget(bar, texture)
+            F.AddTooltip(icon, 'ANCHOR_RIGHT', spellID)
+            close:SetScript('OnClick', function()
+                bar:Hide()
+                if C.PartySpellsList[spellID] then
+                    _G.ANDROMEDA_ADB['PartySpellsList'][spellID] = 0
+                else
+                    _G.ANDROMEDA_ADB['PartySpellsList'][spellID] = nil
+                end
+                panel.barTable[spellID] = nil
+                sortSpellBar(panel.barTable)
+            end)
+
+            local font = C.Assets.Fonts.Condensed
+            local name = F.CreateFS(bar, font, 11, nil, spellName, nil, true, 'LEFT', 30, 0)
+            name:SetWidth(120)
+            name:SetJustifyH('LEFT')
+
+            local timer = F.CreateFS(bar, font, 11, nil, duration, nil, true, 'RIGHT', -30, 0)
+            timer:SetWidth(60)
+            timer:SetJustifyH('RIGHT')
+            timer:SetTextColor(0, 1, 0)
+
+            sortSpellBar(panel.barTable)
+        end
+
+        local options = {}
+        options[1] = createEditbox(panel.bg, nil, 10, -10, L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 60, 24)
+        options[2] =
+            createEditbox(panel.bg, nil, 76, -10, L["Enter the spell's cooldown duration.|nParty watcher only support regular spells and abilities.|nFor spells like 'Aspect of the Wild' (BM Hunter), you need to sync cooldown with your party members."], 60, 24)
+
+        local scrollArea = createScrollFrame(panel.bg, 200, 485)
+        panel.scrollArea = scrollArea
+
+        local function addClick(scroll, options)
+            local spellID, duration = tonumber(options[1]:GetText()), tonumber(options[2]:GetText())
+            if not spellID or not duration then
+                _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['You need to complete all optinos'])
+                return
+            end
+
+            if not GetSpellInfo(spellID) then
+                _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Incorrect SpellID'])
+                return
+            end
+
+            local modDuration = _G.ANDROMEDA_ADB['PartySpellsList'][spellID]
+
+            if modDuration and modDuration ~= 0 or C.PartySpellsList[spellID] and not modDuration then
+                _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is existed'])
+                return
+            end
+
+            _G.ANDROMEDA_ADB['PartySpellsList'][spellID] = duration
+            createBar(scroll.child, spellID, duration)
+            clearOption(options)
+        end
+
+        local addBtn = F.CreateButton(panel.bg, 35, 24, _G.ADD, 11)
+        addBtn.__owner = panel
+        addBtn:SetPoint('TOPRIGHT', -10, -10)
+        addBtn:SetScript('OnClick', function()
+            addClick(scrollArea, options)
+        end)
+
+        local rstBtn = F.CreateButton(panel.bg, 35, 24, _G.RESET, 11)
+        rstBtn:SetPoint('RIGHT', addBtn, 'LEFT', -5, 0)
+        rstBtn:SetScript('OnClick', function()
+            StaticPopup_Show('ANDROMEDA_RESET_PARTY_SPELLS')
+        end)
+
+        for spellID, duration in pairs(UNITFRAME.PartySpellsList) do
+            createSpellBar(scrollArea, spellID, panel.barTable, panel.tableName)
+        end
+    end
+end
+
+-- Debuff watcher
+
+do
+    local function refreshDebuffWatcher()
+        UNITFRAME:UpdateRaidDebuffsList()
+    end
+
+    local function addNewDungeon(dungeons, dungeonID)
+        local name = EJ_GetInstanceInfo(dungeonID)
+        if name then
+            tinsert(dungeons, name)
+        end
+    end
+
+    local function analyzePrio(priority)
+        priority = priority or 2
+        priority = min(priority, 6)
+        priority = max(priority, 1)
+
+        return priority
+    end
+
+    local function isAuraExisted(instName, spellID)
+        F:Debug(instName, spellID, C.RaidDebuffsList[instName][spellID])
+
+        local localPrio = C.RaidDebuffsList[instName][spellID]
+        local savedPrio = _G.ANDROMEDA_ADB['RaidDebuffsList'][instName] and _G.ANDROMEDA_ADB['RaidDebuffsList'][instName][spellID]
+        if (localPrio and savedPrio and savedPrio == 0) or (not localPrio and not savedPrio) then
+            return false
+        end
+
+        return true
     end
 
     function GUI:SetupDebuffWatcher(parent)
@@ -2420,28 +2458,19 @@ do
             return
         end
 
-        local panel = createPanel(parent, guiName, L['Instance Debuffs Filter'], true)
-        panel:SetScript('OnHide', UpdateDebuffWatcher)
+        local panel = createPanel(parent, guiName, L['Instance Debuffs List'], true)
+        panel:SetScript('OnHide', refreshDebuffWatcher)
 
         local setupBars
         local frame = panel.bg
         local bars, options = {}, {}
 
-        local iType = createDropdown(
-            frame,
-            L['Instance Type'],
-            10,
-            -30,
-            { _G.DUNGEONS, _G.RAID, _G.OTHER },
-            L['Select the type of instance.|nThe list of debuffs is saved separately for each instance.'],
-            107,
-            24
-        )
+        local iType = createDropdown(frame, L['Instance Type'], 10, -30, { _G.DUNGEONS, _G.RAID, _G.OTHER }, L['Select the type of instance.|nThe list of debuffs is saved separately for each instance.'], 107, 24)
         iType.title = L['Hint']
         for i = 1, 3 do
             iType.options[i]:HookScript('OnClick', function()
                 for j = 1, 2 do
-                    resetWidgetStatus(options[j])
+                    resetOption(options[j])
                     if i == j then
                         options[j]:Show()
                     else
@@ -2459,45 +2488,20 @@ do
             end)
         end
 
-        local function addNewDungeon(dungeons, dungeonID)
-            local name = EJ_GetInstanceInfo(dungeonID)
-            if name then
-                tinsert(dungeons, name)
-            end
-        end
-
-        local maxLevel = UnitLevel('player') > 60
         local dungeons = {}
-
-        if maxLevel then
-            for dungeonID = 1196, 1204 do
-                if dungeonID ~= 1200 then
-                    addNewDungeon(dungeons, dungeonID)
-                end
-            end
-            addNewDungeon(dungeons, 313) -- 青龙寺
-            addNewDungeon(dungeons, 537) -- 影月墓地
-            addNewDungeon(dungeons, 721) -- 英灵殿
-            addNewDungeon(dungeons, 800) -- 群星庭院
-        else
-            for dungeonID = 1182, 1189 do
+        for dungeonID = 1196, 1204 do
+            if dungeonID ~= 1200 then
                 addNewDungeon(dungeons, dungeonID)
             end
-            addNewDungeon(dungeons, 1194) -- 集市
-            addNewDungeon(dungeons, 536) -- 恐轨车站
-            addNewDungeon(dungeons, 558) -- 钢铁码头
-            addNewDungeon(dungeons, 860) -- 重返卡拉赞
-            addNewDungeon(dungeons, 1178) -- 麦卡贡
         end
+        addNewDungeon(dungeons, 313) -- 青龙寺
+        addNewDungeon(dungeons, 537) -- 影月墓地
+        addNewDungeon(dungeons, 721) -- 英灵殿
+        addNewDungeon(dungeons, 800) -- 群星庭院
 
         local raids = {
-            [1] = EJ_GetInstanceInfo(1190),
-            [2] = EJ_GetInstanceInfo(1193),
-            [3] = EJ_GetInstanceInfo(1195),
+            [1] = EJ_GetInstanceInfo(1200),
         }
-        if maxLevel then
-            raids[4] = EJ_GetInstanceInfo(1200)
-        end
 
         options[1] = createDropdown(frame, _G.DUNGEONS, 123, -30, dungeons, L['Select a specific dungeon.'], 107, 24)
         options[1].title = L['Hint']
@@ -2505,8 +2509,8 @@ do
         options[2] = createDropdown(frame, _G.RAID, 123, -30, raids, L['Select a specific raid.'], 107, 24)
         options[2].title = L['Hint']
         options[2]:Hide()
-        options[3] = createEditBox(frame, L['SpellID'], 10, -90, L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 107, 24)
-        options[4] = createEditBox(
+        options[3] = createEditbox(frame, L['SpellID'], 10, -90, L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 107, 24)
+        options[4] = createEditbox(
             frame,
             L['Priority'],
             123,
@@ -2516,26 +2520,7 @@ do
             24
         )
 
-        local function analyzePrio(priority)
-            priority = priority or 2
-            priority = min(priority, 6)
-            priority = max(priority, 1)
-            return priority
-        end
-
-        local function isDebuffExisted(instName, spellID)
-            print(instName)
-            print(spellID)
-            print(C.DebuffWatcherList[instName][spellID])
-            local localPrio = C.DebuffWatcherList[instName][spellID]
-            local savedPrio = _G.ANDROMEDA_ADB['DebuffWatcherList'][instName] and _G.ANDROMEDA_ADB['DebuffWatcherList'][instName][spellID]
-            if (localPrio and savedPrio and savedPrio == 0) or (not localPrio and not savedPrio) then
-                return false
-            end
-            return true
-        end
-
-        local function addButtonOnClick(options)
+        local function addClick(options)
             local dungeonName = options[1].Text:GetText()
             local raidName = options[2].Text:GetText()
             local spellID = tonumber(options[3]:GetText())
@@ -2546,43 +2531,47 @@ do
                 _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['You need to complete all optinos'])
                 return
             end
+
             if spellID and not GetSpellInfo(spellID) then
                 _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Incorrect SpellID'])
                 return
             end
-            if isDebuffExisted(instName, spellID) then
+
+            if isAuraExisted(instName, spellID) then
                 _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is existed'])
                 return
             end
 
             priority = analyzePrio(priority)
-            if not _G.ANDROMEDA_ADB['DebuffWatcherList'][instName] then
-                _G.ANDROMEDA_ADB['DebuffWatcherList'][instName] = {}
+            if not _G.ANDROMEDA_ADB['RaidDebuffsList'][instName] then
+                _G.ANDROMEDA_ADB['RaidDebuffsList'][instName] = {}
             end
-            _G.ANDROMEDA_ADB['DebuffWatcherList'][instName][spellID] = priority
+            _G.ANDROMEDA_ADB['RaidDebuffsList'][instName][spellID] = priority
             setupBars(instName)
-            resetWidgetStatus(options[3])
-            resetWidgetStatus(options[4])
+            resetOption(options[3])
+            resetOption(options[4])
         end
 
         local scroll = createScrollFrame(frame, 200, 380)
         scroll:ClearAllPoints()
         scroll:SetPoint('TOPLEFT', 10, -150)
-        scroll.reset = F.CreateButton(frame, 70, 24, _G.RESET)
+
+        scroll.reset = F.CreateButton(frame, 70, 24, _G.RESET, 11)
         scroll.reset:SetPoint('TOPLEFT', 10, -120)
-        scroll.reset.text:SetTextColor(1, 0, 0)
         scroll.reset:SetScript('OnClick', function()
             StaticPopup_Show('ANDROMEDA_RESET_RAID_DEBUFFS')
         end)
-        scroll.add = F.CreateButton(frame, 70, 24, _G.ADD)
+
+        scroll.add = F.CreateButton(frame, 70, 24, _G.ADD, 11)
         scroll.add:SetPoint('TOPRIGHT', -10, -120)
         scroll.add:SetScript('OnClick', function()
-            addButtonOnClick(options)
+            addClick(options)
         end)
-        scroll.clear = F.CreateButton(frame, 70, 24, _G.KEY_NUMLOCK_MAC)
+
+        scroll.clear = F.CreateButton(frame, 70, 24, _G.KEY_NUMLOCK_MAC, 11)
         scroll.clear:SetPoint('RIGHT', scroll.add, 'LEFT', -5, 0)
         scroll.clear:SetScript('OnClick', function()
-            clearOptions(options)
+            clearOption(options)
         end)
 
         local function iconOnEnter(self)
@@ -2602,25 +2591,25 @@ do
             F.CreateBD(bar, 0.25)
             bar.index = index
 
-            local icon, close = createBarWidgets(bar, texture)
+            local icon, close = createSpellBarWidget(bar, texture)
             icon:SetScript('OnEnter', iconOnEnter)
             icon:SetScript('OnLeave', F.HideTooltip)
             bar.icon = icon
 
             close:SetScript('OnClick', function()
                 bar:Hide()
-                if C.DebuffWatcherList[bar.instName][bar.spellID] then
-                    if not _G.ANDROMEDA_ADB['DebuffWatcherList'][bar.instName] then
-                        _G.ANDROMEDA_ADB['DebuffWatcherList'][bar.instName] = {}
+                if C.RaidDebuffsList[bar.instName][bar.spellID] then
+                    if not _G.ANDROMEDA_ADB['RaidDebuffsList'][bar.instName] then
+                        _G.ANDROMEDA_ADB['RaidDebuffsList'][bar.instName] = {}
                     end
-                    _G.ANDROMEDA_ADB['DebuffWatcherList'][bar.instName][bar.spellID] = 0
+                    _G.ANDROMEDA_ADB['RaidDebuffsList'][bar.instName][bar.spellID] = 0
                 else
-                    _G.ANDROMEDA_ADB['DebuffWatcherList'][bar.instName][bar.spellID] = nil
+                    _G.ANDROMEDA_ADB['RaidDebuffsList'][bar.instName][bar.spellID] = nil
                 end
                 setupBars(bar.instName)
             end)
 
-            local spellName = F.CreateFS(bar, C.Assets.Fonts.Regular, 11, nil, '', nil, true, 'LEFT', 26, 0)
+            local spellName = F.CreateFS(bar, C.Assets.Fonts.Condensed, 11, nil, '', nil, true, 'LEFT', 26, 0)
             spellName:SetWidth(120)
             spellName:SetJustifyH('LEFT')
             bar.spellName = spellName
@@ -2636,10 +2625,10 @@ do
             end)
             prioBox:HookScript('OnEnterPressed', function(self)
                 local prio = analyzePrio(tonumber(self:GetText()))
-                if not _G.ANDROMEDA_ADB['DebuffWatcherList'][bar.instName] then
-                    _G.ANDROMEDA_ADB['DebuffWatcherList'][bar.instName] = {}
+                if not _G.ANDROMEDA_ADB['RaidDebuffsList'][bar.instName] then
+                    _G.ANDROMEDA_ADB['RaidDebuffsList'][bar.instName] = {}
                 end
-                _G.ANDROMEDA_ADB['DebuffWatcherList'][bar.instName][bar.spellID] = prio
+                _G.ANDROMEDA_ADB['RaidDebuffsList'][bar.instName][bar.spellID] = prio
                 self:SetText(prio)
             end)
             prioBox.title = L['Priority']
@@ -2667,17 +2656,17 @@ do
             local instName = tonumber(self) or self.text or self
             local index = 0
 
-            if C.DebuffWatcherList[instName] then
-                for spellID, priority in pairs(C.DebuffWatcherList[instName]) do
-                    if not (_G.ANDROMEDA_ADB['DebuffWatcherList'][instName] and _G.ANDROMEDA_ADB['DebuffWatcherList'][instName][spellID]) then
+            if C.RaidDebuffsList[instName] then
+                for spellID, priority in pairs(C.RaidDebuffsList[instName]) do
+                    if not (_G.ANDROMEDA_ADB['RaidDebuffsList'][instName] and _G.ANDROMEDA_ADB['RaidDebuffsList'][instName][spellID]) then
                         index = index + 1
                         applyData(index, instName, spellID, priority)
                     end
                 end
             end
 
-            if _G.ANDROMEDA_ADB['DebuffWatcherList'][instName] then
-                for spellID, priority in pairs(_G.ANDROMEDA_ADB['DebuffWatcherList'][instName]) do
+            if _G.ANDROMEDA_ADB['RaidDebuffsList'][instName] then
+                for spellID, priority in pairs(_G.ANDROMEDA_ADB['RaidDebuffsList'][instName]) do
                     if priority > 0 then
                         index = index + 1
                         applyData(index, instName, spellID, priority)
@@ -2723,205 +2712,263 @@ do
     end
 end
 
-local function UpdateGroupTags()
-    UNITFRAME:UpdateGroupTags()
+-- Corner spell
+
+do
+    local function refreshCornerSpell()
+        UNITFRAME:UpdateCornerSpellsList()
+    end
+
+    function GUI:SetupCornerSpell(parent)
+        local guiName = C.ADDON_TITLE .. 'GUISetupCornerSpell'
+        togglePanel(guiName)
+        if extraGUIs[guiName] then
+            return
+        end
+
+        local panel = createPanel(parent, guiName, L['Corner Spells List'], true)
+        panel:SetScript('OnHide', refreshCornerSpell)
+        parent.panel = panel
+
+        local barList = {}
+
+        local decodeAnchor = {
+            ['TL'] = 'TOPLEFT',
+            ['T'] = 'TOP',
+            ['TR'] = 'TOPRIGHT',
+            ['L'] = 'LEFT',
+            ['R'] = 'RIGHT',
+            ['BL'] = 'BOTTOMLEFT',
+            ['B'] = 'BOTTOM',
+            ['BR'] = 'BOTTOMRIGHT',
+        }
+
+        local anchors = {
+            'TL',
+            'T',
+            'TR',
+            'L',
+            'R',
+            'BL',
+            'B',
+            'BR',
+        }
+
+        local function createBar(parent, spellID, anchor, r, g, b, showAll)
+            local name, _, texture = GetSpellInfo(spellID)
+            local bar = CreateFrame('Frame', nil, parent, 'BackdropTemplate')
+            bar:SetSize(220, 30)
+            F.CreateBD(bar, 0.25)
+            barList[spellID] = bar
+
+            local icon, close = createSpellBarWidget(bar, texture)
+            F.AddTooltip(icon, 'ANCHOR_RIGHT', spellID)
+            close:SetScript('OnClick', function()
+                bar:Hide()
+                local value = C.CornerSpellsList[C.MY_CLASS][spellID]
+                if value then
+                    _G.ANDROMEDA_ADB['CornerSpellsList'][C.MY_CLASS][spellID] = {}
+                else
+                    _G.ANDROMEDA_ADB['CornerSpellsList'][C.MY_CLASS][spellID] = nil
+                end
+                barList[spellID] = nil
+                sortSpellBar(barList)
+            end)
+
+            name = L[anchor] or name
+            local font = C.Assets.Fonts.Condensed
+            local text = F.CreateFS(bar, font, 12, nil, name, nil, true, 'LEFT', 30, 0)
+            text:SetWidth(180)
+            text:SetJustifyH('LEFT')
+            if anchor then
+                text:SetTextColor(r, g, b)
+            end
+            if showAll then
+                F.CreateFS(bar, font, 12, nil, 'ALL', nil, true, 'RIGHT', -30, 0)
+            end
+
+            sortSpellBar(barList)
+        end
+
+        local function addClick(parent)
+            local spellID = tonumber(panel.editBox:GetText())
+
+            if not spellID or not GetSpellInfo(spellID) then
+                _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['Incorrect SpellID'])
+                return
+            end
+
+            local anchor, r, g, b, showAll
+            anchor, r, g, b = parent.dd.Text:GetText(), parent.swatch.tex:GetColor()
+            showAll = parent.showAll:GetChecked() or nil
+
+            local modValue = _G.ANDROMEDA_ADB['CornerSpells'][C.MY_CLASS][spellID]
+            if (modValue and next(modValue)) or (C.CornerSpellsList[C.MY_CLASS][spellID] and not modValue) then
+                _G.UIErrorsFrame:AddMessage(C.RED_COLOR .. L['The SpellID is existed'])
+                return
+            end
+            anchor = decodeAnchor[anchor]
+            _G.ANDROMEDA_ADB['CornerSpellsList'][C.MY_CLASS][spellID] = { anchor, { r, g, b }, showAll }
+
+            createBar(parent.child, spellID, anchor, r, g, b, showAll)
+            panel.editBox:SetText('')
+        end
+
+        local function optionOnEnter(self)
+            _G.GameTooltip:SetOwner(self, 'ANCHOR_TOP')
+            _G.GameTooltip:ClearLines()
+            _G.GameTooltip:AddLine(L[decodeAnchor[self.text]], 1, 1, 1)
+            _G.GameTooltip:Show()
+        end
+
+        local scrollArea = createScrollFrame(panel.bg, 200, 485)
+        panel.scrollArea = scrollArea
+
+        local editBox = createEditbox(panel.bg, nil, 10, -10, nil, 50, 24)
+        panel.editBox = editBox
+        editBox.title = L['Hint']
+        F.AddTooltip(editBox, 'ANCHOR_TOPRIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE', true)
+
+        local addBtn = F.CreateButton(panel.bg, 35, 24, _G.ADD, 11)
+        addBtn.__owner = panel
+        addBtn:SetPoint('TOPRIGHT', -10, -10)
+        addBtn:SetScript('OnClick', function()
+            addClick(scrollArea)
+        end)
+
+        local rstBtn = F.CreateButton(panel.bg, 35, 24, _G.RESET, 11)
+        rstBtn:SetPoint('RIGHT', addBtn, 'LEFT', -5, 0)
+        rstBtn:SetScript('OnClick', function()
+            StaticPopup_Show('ANDROMEDA_RESET_CORNER_SPELLS')
+        end)
+
+        scrollArea.dd = F.CreateDropDown(panel.bg, 50, 24, anchors)
+        scrollArea.dd:SetPoint('TOPLEFT', 10, -10)
+        scrollArea.dd.options[1]:Click()
+
+        for i = 1, 8 do
+            scrollArea.dd.options[i]:HookScript('OnEnter', optionOnEnter)
+            scrollArea.dd.options[i]:HookScript('OnLeave', F.HideTooltip)
+        end
+        editBox:SetPoint('TOPLEFT', scrollArea.dd, 'TOPRIGHT', 5, 0)
+
+        local swatch = F.CreateColorSwatch(panel.bg)
+        swatch:SetPoint('LEFT', editBox, 'RIGHT', 5, 0)
+        swatch:SetSize(24, 24)
+        scrollArea.swatch = swatch
+
+        local showAll = F.CreateCheckButton(panel.bg, true)
+        showAll:SetPoint('BOTTOMRIGHT', panel.bg, 'TOPRIGHT', 0, 5)
+        showAll:SetSize(18, 18)
+        showAll.title = L['Hint']
+        F.AddTooltip(showAll, 'ANCHOR_TOPRIGHT', L['If unchecked, you can only see the aura you cast.|nIf checked, the aura would be tracked from all casters.'], 'BLUE', true)
+        scrollArea.showAll = showAll
+
+        for spellID, value in pairs(UNITFRAME.CornerSpellsList) do
+            local r, g, b = unpack(value[2])
+            createBar(scrollArea.child, spellID, value[1], r, g, b, value[3])
+        end
+    end
 end
 
-function GUI:SetupNameLength(parent)
-    local guiName = C.ADDON_TITLE .. 'GUISetupNameLength'
-    togglePanel(guiName)
-    if extraGUIs[guiName] then
-        return
+-- Raid buff/debuff
+
+do
+    local function refreshBuffsIndicator()
+        UNITFRAME:UpdateRaidBuffsWhiteList()
     end
 
-    local panel = createPanel(parent, guiName)
-    local scrollArea = createScrollFrame(panel, 220, 540)
+    function GUI:SetupRaidBuff(parent)
+        local guiName = C.ADDON_TITLE .. 'GUISetupRaidBuff'
+        togglePanel(guiName)
+        if extraGUIs[guiName] then
+            return
+        end
 
-    local mKey = 'Unitframe'
-    local db = C.CharacterSettings.Unitframe
+        local panel = createPanel(parent, guiName, L['Buffs White List'], true)
+        panel:SetScript('OnHide', refreshBuffsIndicator)
+        parent.panel = panel
 
-    local datas = {
-        [1] = { key = 'PartyNameLength', value = db.PartyNameLength, text = L['Party Name Length'], min = 0, max = 10 },
-        [2] = { key = 'RaidNameLength', value = db.RaidNameLength, text = L['Raid Name Length'], min = 0, max = 10 },
-    }
+        panel.barTable = {}
+        panel.tableName = 'RaidBuffsWhiteList'
 
-    local offset = -10
-    for _, v in ipairs(datas) do
-        createGroupTitle(scrollArea, L['Name Length'], offset)
-        createSlider(scrollArea, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdateGroupTags)
-        offset = offset - 65
-    end
-end
+        local scrollArea = createScrollFrame(panel.bg, 200, 485)
+        panel.scrollArea = scrollArea
 
-local function UpdateGroupAuras()
-    UNITFRAME:UpdateGroupAuras()
-end
+        local editBox = createEditbox(panel.bg, nil, 10, -10, nil, 130, 24)
+        panel.editBox = editBox
+        editBox.title = L['Hint']
+        F.AddTooltip(editBox, 'ANCHOR_RIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE', true)
 
-function GUI:SetupPartyBuff(parent)
-    local guiName = C.ADDON_TITLE .. 'GUISetupPartyBuffSize'
-    togglePanel(guiName)
-    if extraGUIs[guiName] then
-        return
-    end
+        local addBtn = F.CreateButton(panel.bg, 35, 24, _G.ADD, 11)
+        addBtn.__owner = panel
+        addBtn:SetPoint('TOPRIGHT', -10, -10)
+        addBtn:HookScript('OnClick', addButton_OnClick)
 
-    local panel = createPanel(parent, guiName)
-    local scrollArea = createScrollFrame(panel, 220, 540)
+        local resetBtn = F.CreateButton(panel.bg, 35, 24, _G.RESET, 11)
+        resetBtn:SetPoint('RIGHT', addBtn, 'LEFT', -5, 0)
+        resetBtn:HookScript('OnClick', function()
+            StaticPopup_Show('ANDROMEDA_RESET_RAID_BUFFS_WHITE')
+        end)
 
-    local mKey = 'Unitframe'
-    local db = C.CharacterSettings.Unitframe
+        for spellID, value in pairs(UNITFRAME[panel.tableName]) do
+            if value then
+                createSpellBar(scrollArea, spellID, panel.barTable, panel.tableName)
+            end
+        end
 
-    local datas = {
-        [1] = { key = 'PartyBuffSize', value = db.PartyBuffSize, text = L['Icon Size'], min = 8, max = 36, step = 1 },
-        [2] = { key = 'PartyBuffNum', value = db.PartyBuffNum, text = L['Icon Number'], min = 1, max = 6, step = 1 },
-    }
-
-    local offset = -10
-    for _, v in ipairs(datas) do
-        createGroupTitle(scrollArea, L['Party Buff'], offset)
-        createSlider(scrollArea, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateGroupAuras)
-        offset = offset - 65
-    end
-end
-
-function GUI:SetupPartyDebuff(parent)
-    local guiName = C.ADDON_TITLE .. 'GUISetupPartyDebuff'
-    togglePanel(guiName)
-    if extraGUIs[guiName] then
-        return
+        local cb = F.CreateCheckButton(panel.bg, true)
+        cb:SetPoint('BOTTOMRIGHT', panel.bg, 'TOPRIGHT', 0, 5)
+        cb:SetChecked(C.DB.Unitframe.RaidBuffAuto)
+        cb:SetSize(18, 18)
+        cb:SetScript('OnClick', function()
+            C.DB.Unitframe.RaidBuffAuto = cb:GetChecked()
+        end)
+        cb.title = L['Hint']
+        F.AddTooltip(cb, 'ANCHOR_TOPRIGHT', L['If checked, use blizzard API logic to display buffs, no longer use the white list below, up to 3.'], 'BLUE', true)
     end
 
-    local panel = createPanel(parent, guiName)
-    local scrollArea = createScrollFrame(panel, 220, 540)
-
-    local mKey = 'Unitframe'
-    local db = C.CharacterSettings.Unitframe
-
-    local datas = {
-        [1] = {
-            key = 'PartyDebuffSize',
-            value = db.PartyDebuffSize,
-            text = L['Icon Size'],
-            min = 8,
-            max = 36,
-            step = 1,
-        },
-        [2] = {
-            key = 'PartyDebuffNum',
-            value = db.PartyDebuffNum,
-            text = L['Icon Number'],
-            min = 1,
-            max = 6,
-            step = 1,
-        },
-    }
-
-    local offset = -10
-    for _, v in ipairs(datas) do
-        createGroupTitle(scrollArea, L['Party Debuff'], offset)
-        createSlider(scrollArea, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateGroupAuras)
-        offset = offset - 65
-    end
-end
-
-function GUI:SetupRaidBuff(parent)
-    local guiName = C.ADDON_TITLE .. 'GUISetupRaidBuff'
-    togglePanel(guiName)
-    if extraGUIs[guiName] then
-        return
+    local function refreshDebuffsIndicator()
+        UNITFRAME:UpdateRaidDebuffsBlackList()
     end
 
-    local panel = createPanel(parent, guiName)
-    local scrollArea = createScrollFrame(panel, 220, 540)
+    function GUI:SetupRaidDebuff(parent)
+        local guiName = C.ADDON_TITLE .. 'GUISetupRaidDebuff'
+        togglePanel(guiName)
+        if extraGUIs[guiName] then
+            return
+        end
 
-    local mKey = 'Unitframe'
-    local db = C.CharacterSettings.Unitframe
+        local panel = createPanel(parent, guiName, L['Debuffs Black List'], true)
+        panel:SetScript('OnHide', refreshDebuffsIndicator)
+        parent.panel = panel
 
-    local datas = {
-        [1] = { key = 'RaidBuffSize', value = db.RaidBuffSize, text = L['Icon Size'], min = 8, max = 36, step = 1 },
-        [2] = { key = 'RaidBuffNum', value = db.RaidBuffNum, text = L['Icon Number'], min = 1, max = 6, step = 1 },
-    }
+        panel.barTable = {}
+        panel.tableName = 'RaidDebuffsBlackList'
 
-    local offset = -10
-    for _, v in ipairs(datas) do
-        createGroupTitle(scrollArea, L['Raid Buff'], offset)
-        createSlider(scrollArea, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateGroupAuras)
-        offset = offset - 65
-    end
-end
+        local scrollArea = createScrollFrame(panel.bg, 200, 485)
+        panel.scrollArea = scrollArea
 
-function GUI:SetupRaidDebuff(parent)
-    local guiName = C.ADDON_TITLE .. 'GUISetupRaidDebuff'
-    togglePanel(guiName)
-    if extraGUIs[guiName] then
-        return
-    end
+        local editBox = createEditbox(panel.bg, nil, 10, -10, nil, 130, 24)
+        panel.editBox = editBox
+        editBox.title = L['Hint']
+        F.AddTooltip(editBox, 'ANCHOR_RIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE', true)
 
-    local panel = createPanel(parent, guiName)
-    local scrollArea = createScrollFrame(panel, 200, 535)
+        local addBtn = F.CreateButton(panel.bg, 35, 24, _G.ADD, 11)
+        addBtn.__owner = panel
+        addBtn:SetPoint('TOPRIGHT', -10, -10)
+        addBtn:HookScript('OnClick', addButton_OnClick)
 
-    local mKey = 'Unitframe'
-    local db = C.CharacterSettings.Unitframe
+        local resetBtn = F.CreateButton(panel.bg, 35, 24, _G.RESET, 11)
+        resetBtn:SetPoint('RIGHT', addBtn, 'LEFT', -5, 0)
+        resetBtn:HookScript('OnClick', function()
+            StaticPopup_Show('ANDROMEDA_RESET_RAID_DEBUFFS_BLACK')
+        end)
 
-    local datas = {
-        [1] = {
-            key = 'RaidDebuffSize',
-            value = db.RaidDebuffSize,
-            text = L['Icon Size'],
-            min = 8,
-            max = 36,
-            step = 1,
-        },
-        [2] = { key = 'RaidDebuffNum', value = db.RaidDebuffNum, text = L['Icon Number'], min = 1, max = 6, step = 1 },
-    }
-
-    local offset = -10
-    for _, v in ipairs(datas) do
-        createGroupTitle(scrollArea, L['Raid Debuff'], offset)
-        createSlider(scrollArea, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateGroupAuras)
-        offset = offset - 65
-    end
-end
-
-local function RefreshPartyAurasFilter()
-    UNITFRAME:RefreshPartyAurasFilter()
-end
-
-function GUI:SetupPartyAura(parent)
-    local guiName = C.ADDON_TITLE .. 'GUISetupPartyAura'
-    togglePanel(guiName)
-    if extraGUIs[guiName] then
-        return
-    end
-
-    local panel = createPanel(parent, guiName, L['Party Actived Auras Filter'], true)
-    panel:SetScript('OnHide', RefreshPartyAurasFilter)
-    parent.panel = panel
-
-    panel.barTable = {}
-    panel.tableName = 'PartyAurasList'
-
-    local scrollArea = createScrollFrame(panel.bg, 200, 485)
-    panel.scrollArea = scrollArea
-
-    local editBox = createEditBox(panel.bg, nil, 10, -10, nil, 110, 24)
-    panel.editBox = editBox
-    editBox.title = L['Hint']
-    F.AddTooltip(editBox, 'ANCHOR_RIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE', true)
-
-    local addBtn = F.CreateButton(panel.bg, 50, 24, _G.ADD)
-    addBtn:SetPoint('TOPRIGHT', -8, -10)
-    addBtn:HookScript('OnClick', addButtonOnClick)
-    addBtn.__owner = panel
-
-    local resetBtn = F.CreateButton(panel.bg, 50, 24, _G.RESET)
-    resetBtn:SetPoint('RIGHT', addBtn, 'LEFT', -5, 0)
-    resetBtn:HookScript('OnClick', function()
-        StaticPopup_Show('ANDROMEDA_RESET_PARTY_AURA_LIST')
-    end)
-
-    for spellID, value in pairs(UNITFRAME[panel.tableName]) do
-        if value then
-            createBars(scrollArea, spellID, panel.barTable, panel.tableName)
+        for spellID, value in pairs(UNITFRAME[panel.tableName]) do
+            if value then
+                createSpellBar(scrollArea, spellID, panel.barTable, panel.tableName)
+            end
         end
     end
 end
@@ -3131,46 +3178,48 @@ function GUI:SetupSoundAlert(parent)
 end
 
 -- Announcement
-local function RefreshAnnounceableSpells()
-    ANNOUNCEMENT:RefreshSpells()
-end
-
-function GUI:SetupAnnounceableSpells(parent)
-    local guiName = C.ADDON_TITLE .. 'GUIAnnounceableSpells'
-    togglePanel(guiName)
-    if extraGUIs[guiName] then
-        return
+do
+    local function refreshAnnounceableSpells()
+        ANNOUNCEMENT:RefreshSpells()
     end
 
-    local panel = createPanel(parent, guiName, nil, true)
-    panel:SetScript('OnHide', RefreshAnnounceableSpells)
-    parent.panel = panel
+    function GUI:SetupAnnounceableSpells(parent)
+        local guiName = C.ADDON_TITLE .. 'GUIAnnounceableSpells'
+        togglePanel(guiName)
+        if extraGUIs[guiName] then
+            return
+        end
 
-    panel.barTable = {}
-    panel.tableName = 'AnnounceableSpellsList'
+        local panel = createPanel(parent, guiName, L['Announceable Spells List'], true)
+        panel:SetScript('OnHide', refreshAnnounceableSpells)
+        parent.panel = panel
 
-    local scrollArea = createScrollFrame(panel.bg, 200, 485)
-    panel.scrollArea = scrollArea
+        panel.barTable = {}
+        panel.tableName = 'AnnounceableSpellsList'
 
-    local editBox = createEditBox(panel.bg, nil, 10, -10, nil, 110, 24)
-    panel.editBox = editBox
-    editBox.title = L['SpellID']
-    F.AddTooltip(editBox, 'ANCHOR_RIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE', true)
+        local scrollArea = createScrollFrame(panel.bg, 200, 485)
+        panel.scrollArea = scrollArea
 
-    local addBtn = F.CreateButton(panel.bg, 50, 24, _G.ADD)
-    addBtn:SetPoint('TOPRIGHT', -8, -10)
-    addBtn:HookScript('OnClick', addButtonOnClick)
-    addBtn.__owner = panel
+        local editBox = createEditbox(panel.bg, nil, 10, -10, nil, 130, 24)
+        panel.editBox = editBox
+        editBox.title = L['Hint']
+        F.AddTooltip(editBox, 'ANCHOR_RIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE', true)
 
-    local resetBtn = F.CreateButton(panel.bg, 50, 24, _G.RESET)
-    resetBtn:SetPoint('RIGHT', addBtn, 'LEFT', -5, 0)
-    resetBtn:HookScript('OnClick', function()
-        StaticPopup_Show('ANDROMEDA_RESET_ANNOUNCEABLE_SPELLS')
-    end)
+        local addBtn = F.CreateButton(panel.bg, 35, 24, _G.ADD, 11)
+        addBtn.__owner = panel
+        addBtn:SetPoint('TOPRIGHT', -10, -10)
+        addBtn:HookScript('OnClick', addButton_OnClick)
 
-    for spellID, value in pairs(ANNOUNCEMENT[panel.tableName]) do
-        if value then
-            createBars(scrollArea, spellID, panel.barTable, panel.tableName)
+        local resetBtn = F.CreateButton(panel.bg, 35, 24, _G.RESET, 11)
+        resetBtn:SetPoint('RIGHT', addBtn, 'LEFT', -5, 0)
+        resetBtn:HookScript('OnClick', function()
+            StaticPopup_Show('ANDROMEDA_RESET_ANNOUNCEABLE_SPELLS')
+        end)
+
+        for spellID, value in pairs(ANNOUNCEMENT[panel.tableName]) do
+            if value then
+                createSpellBar(scrollArea, spellID, panel.barTable, panel.tableName)
+            end
         end
     end
 end

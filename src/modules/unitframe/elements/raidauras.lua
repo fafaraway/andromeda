@@ -27,14 +27,14 @@ function UNITFRAME.RaidAurasPostUpdate(element, unit)
     local debuffs = self.DebuffsIndicator
     local buffs = self.BuffsIndicator
 
-    local enableSpells = C.DB.Unitframe.CornerIndicator
+    local enableSpells = C.DB.Unitframe.CornerSpell
     local auraIndex, debuffIndex, buffIndex = 0, 0, 0
     local numBuffs = element.buffList.num
     local numDebuffs = element.debuffList.num
 
     element.isInCombat = UnitAffectingCombat('player')
 
-    if C.DB.Unitframe.DispellType ~= 3 or C.DB.Unitframe.InstanceAuras then
+    if C.DB.Unitframe.DebuffWatcherDispellType ~= 3 or C.DB.Unitframe.InstanceDebuff then
         UNITFRAME.AurasIndicator_UpdatePriority(self, numDebuffs, unit)
         UNITFRAME.AurasIndicator_HideButtons(self)
 

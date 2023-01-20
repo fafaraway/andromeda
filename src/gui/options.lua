@@ -273,6 +273,10 @@ local function SetupDebuffWatcher()
     GUI:SetupDebuffWatcher(GUI.Page[12])
 end
 
+local function UpdateRaidAurasOptions()
+    UNITFRAME:RaidAuras_UpdateOptions()
+end
+
 local function UpdateAllHeaders()
     UNITFRAME:UpdateAllHeaders()
 end
@@ -289,24 +293,16 @@ local function SetupNameLength()
     GUI:SetupNameLength(GUI.Page[12])
 end
 
-local function SetupPartyBuff()
-    GUI:SetupPartyBuff(GUI.Page[12])
-end
-
-local function SetupPartyAura()
-    GUI:SetupPartyAura(GUI.Page[12])
-end
-
-local function SetupPartyDebuff()
-    GUI:SetupPartyDebuff(GUI.Page[12])
-end
-
 local function SetupRaidBuff()
     GUI:SetupRaidBuff(GUI.Page[12])
 end
 
 local function SetupRaidDebuff()
     GUI:SetupRaidDebuff(GUI.Page[12])
+end
+
+local function SetupCornerSpell()
+    GUI:SetupCornerSpell(GUI.Page[12])
 end
 
 local function UpdateGroupAuras()
@@ -1972,26 +1968,7 @@ GUI.OptionsList = {
             nil,
             UpdateRaidHeader,
         },
-        {
-            1,
-            'Unitframe',
-            'RaidBuff',
-            L['Display Buffs'],
-            nil,
-            SetupRaidBuff,
-            UpdateGroupAuras,
-            L['Display buffs on RaidFrame by blizzard API logic, up to 3 icons.|nThis may overlap with the Corner Indicator and is best not enabled at the same time.'],
-        },
-        {
-            1,
-            'Unitframe',
-            'RaidDebuff',
-            L['Display Debuffs'],
-            true,
-            SetupRaidDebuff,
-            UpdateGroupAuras,
-            L['Display debuffs on RaidFrame by blizzard API logic, up to 3 icons.|nThis may overlap with the Corner Indicator and is best not enabled at the same time.'],
-        },
+
         {},
         {
             1,
@@ -2006,7 +1983,7 @@ GUI.OptionsList = {
             'Unitframe',
             'ShowSolo',
             L['Display PartyFrame on Solo'],
-            true,
+            nil,
             nil,
             UpdateAllHeaders,
             L['If checked, the PartyFrame would be visible even you are solo.'],
@@ -2016,40 +1993,10 @@ GUI.OptionsList = {
             'Unitframe',
             'DescRole',
             L['Sort by Reverse Roles'],
-            nil,
+            true,
             nil,
             UpdatePartyHeader,
             L["If checked, sort your party order by 'Damager Healer Tank' within growth direction.|nIf unchecked, sort your party order by 'Tank Healer Damager' within growth direction."],
-        },
-        {
-            1,
-            'Unitframe',
-            'PartyAura',
-            L['Display Important Auras'],
-            true,
-            SetupPartyAura,
-            nil,
-            L['Display the important offensive and defensive spells, displayed by default on the right side of the PartyFrame.'],
-        },
-        {
-            1,
-            'Unitframe',
-            'PartyBuff',
-            L['Display Buffs'],
-            nil,
-            SetupPartyBuff,
-            UpdateGroupAuras,
-            L['Display buffs on PartyFrame by blizzard API logic, up to 3 icons, displayed by default in the inner top left of the PartyFrame.|nThis may overlap with the Corner Indicator and is best not enabled at the same time.'],
-        },
-        {
-            1,
-            'Unitframe',
-            'PartyDebuff',
-            L['Display Debuffs'],
-            true,
-            SetupPartyDebuff,
-            UpdateGroupAuras,
-            L['Display debuffs on PartyFrame by blizzard API logic, up to 3 icons, displayed by default in the inner bottom right of the PartyFrame.|nThis may overlap with the Corner Indicator and is best not enabled at the same time.'],
         },
         {
             1,
@@ -2081,6 +2028,124 @@ GUI.OptionsList = {
             nil,
             L["Sync the cooldown status with players who using 'AndromedaUI' or 'WeakAuras ZenTracker'."],
         },
+        {},
+        {
+            1,
+            'Unitframe',
+            'ShowRaidBuff',
+            L['Show Buffs'],
+            nil,
+            SetupRaidBuff,
+            UpdateRaidAurasOptions,
+            L['Click the gear icon to setup auras white list, up to 3 icons.'],
+        },
+        {
+            1,
+            'Unitframe',
+            'RaidBuffClickThru',
+            L['Disable Buff Tooltip'],
+            nil,
+            nil,
+            UpdateRaidAurasOptions,
+            L['Buff Icon ignore mouse hover and do not show tooltip.'],
+        },
+        {
+            3,
+            'Unitframe',
+            'RaidBuffScale',
+            L['Buff Scale'],
+            true,
+            { 0.5, 2, 0.1 },
+            UpdateRaidAurasOptions,
+        },
+        {
+            1,
+            'Unitframe',
+            'ShowRaidDebuff',
+            L['Show Debuffs'],
+            nil,
+            SetupRaidDebuff,
+            UpdateRaidAurasOptions,
+            L['Show debuffs on raid/party frame by blizzard API logic, up to 3 icons.'],
+        },
+        {
+            1,
+            'Unitframe',
+            'RaidDebuffClickThru',
+            L['Disable Debuff Tooltip'],
+            nil,
+            nil,
+            UpdateRaidAurasOptions,
+            L['Debuff Icon ignore mouse hover and do not show tooltip.'],
+        },
+        {
+            3,
+            'Unitframe',
+            'RaidDebuffScale',
+            L['Debuff Scale'],
+            true,
+            { 0.5, 2, 0.1 },
+            UpdateRaidAurasOptions,
+        },
+        {
+            1,
+            'Unitframe',
+            'CornerSpell',
+            L['Show Corner Spells'],
+            nil,
+            SetupCornerSpell,
+            UpdateRaidAurasOptions,
+            L["Display important auras in color blocks at the corner of the GroupFrame, such as healer's HoT Paladin's 'Forbearance' and Priest's 'Weakened Soul', etc."],
+        },
+        {
+            4,
+            'Unitframe',
+            'CornerSpellType',
+            L['Corner Spell Type'],
+            nil,
+            {L["Type: Block"], L["Type: Icon"], L["Type: Number"]},
+            UpdateRaidAurasOptions,
+        },
+        {
+            3,
+            'Unitframe',
+            'CornerSpellScale',
+            L['Corner Spell Scale'],
+            true,
+            { 0.5, 2, 0.1 },
+            UpdateRaidAurasOptions,
+        },
+        {
+            1,
+            'Unitframe',
+            'InstanceDebuff',
+            L['Show Instance Debuffs'],
+            nil,
+            SetupDebuffWatcher,
+            nil,
+            L['Display major debuffs in raid and dungeons.|nYou can customize which debuffs are monitored, and their priority.'],
+        },
+        {
+            4,
+            'Unitframe',
+            'DebuffWatcherDispellType',
+            L['Debuff Watcher'],
+            nil,
+            { L['Filter Display'], L['Always Display'], _G.DISABLE },
+            UpdateRaidAurasOptions,
+            L['Filter Display: Only show dispellable Magic and Enrage buffs that you can dispell.|nAlways Display: Always show dispellable Magic and Enrage buffs, whether you can dispel them or not.'],
+        },
+        {
+            3,
+            'Unitframe',
+            'DebuffWatcherScale',
+            L['Debuff Watcher Scale'],
+            true,
+            { .3, 2, .1 },
+            UpdateRaidAurasOptions,
+        },
+
+
         {},
         {
             1,
@@ -2121,22 +2186,13 @@ GUI.OptionsList = {
             UpdateRaidTargetIndicator,
             L['Display raid target indicator on GroupFrame.'],
         },
-        {
-            1,
-            'Unitframe',
-            'CornerIndicator',
-            L['Display Corner Indicator'],
-            nil,
-            nil,
-            nil,
-            L["Display important auras in color blocks at the corner of the GroupFrame, such as healer's HoT Paladin's 'Forbearance' and Priest's 'Weakened Soul', etc."],
-        },
+
         {
             1,
             'Unitframe',
             'ThreatIndicator',
             L['Display Threat Indicator'],
-            true,
+            nil,
             nil,
             nil,
             L['The glow on the outside of the PartyFrame represents the threat status.'],
@@ -2161,43 +2217,8 @@ GUI.OptionsList = {
             UpdateAllHeaders,
             L['Only show RaidFrame if there are more than 5 members in your group.|nIf disabled, show RaidFrame when in raid, show PartyFrame when in party.'],
         },
-        {},
-        {
-            1,
-            'Unitframe',
-            'DebuffWatcher',
-            L['Enable Debuff Watcher'],
-        },
-        {
-            1,
-            'Unitframe',
-            'InstanceDebuffs',
-            L['Monitor Instance Debuffs'],
-            true,
-            SetupDebuffWatcher,
-            nil,
-            L['Display major debuffs in raid and dungeons.|nYou can customize which debuffs are monitored, and their priority.'],
-        },
-        {
-            1,
-            'Unitframe',
-            'DispellableOnly',
-            L['Display Dispellable Debuffs Only'],
-            nil,
-            nil,
-            nil,
-            L['Display only the debuffs you can dispel.'],
-        },
-        {
-            1,
-            'Unitframe',
-            'DebuffClickThrough',
-            L['Disable Icon Tooltip'],
-            true,
-            nil,
-            nil,
-            L['Debuff Icon ignore mouse hover and do not show tooltip.'],
-        },
+
+
     },
     [13] = { -- nameplate
         {

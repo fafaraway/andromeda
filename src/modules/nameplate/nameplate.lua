@@ -3,7 +3,8 @@ local NAMEPLATE = F:GetModule('Nameplate')
 local UNITFRAME = F:GetModule('UnitFrame')
 local oUF = F.Libs.oUF
 
---[[ CVars ]]
+-- CVars
+
 function NAMEPLATE:PlateInsideView()
     if C.DB.Nameplate.InsideView then
         SetCVar('nameplateOtherTopInset', 0.05)
@@ -91,7 +92,8 @@ function NAMEPLATE:UpdateNameplateCVars()
     end
 end
 
---[[ AddOn ]]
+-- AddOn
+
 function NAMEPLATE:BlockAddons()
     if not _G.DBM or not _G.DBM.Nameplate then
         return
@@ -112,7 +114,7 @@ function NAMEPLATE:BlockAddons()
     hooksecurefunc(_G.DBM.Nameplate, 'Show', showAurasForDBM)
 end
 
---[[ Elements ]]
+-- Elements
 
 NAMEPLATE.SpecialUnitsList = {}
 NAMEPLATE.PowerUnitsList = {}
@@ -418,8 +420,6 @@ function NAMEPLATE:RefreshMajorSpellsFilter()
         end
     end
 end
-
-
 
 -- Spiteful indicator
 function NAMEPLATE:CreateSpitefulIndicator(self)
@@ -809,27 +809,27 @@ local function RefreshNameplateAuraFilter(list, key)
     -- end
 
     for spellID in pairs(list) do
-		local name = GetSpellInfo(spellID)
-		if name then
-			if _G.ANDROMEDA_ADB['Nameplate'..key][spellID] == nil then
-				NAMEPLATE[key][spellID] = true
-			end
-		end
-	end
+        local name = GetSpellInfo(spellID)
+        if name then
+            if _G.ANDROMEDA_ADB[key][spellID] == nil then
+                NAMEPLATE[key][spellID] = true
+            end
+        end
+    end
 
-	for spellID, value in pairs(_G.ANDROMEDA_ADB['Nameplate'..key]) do
-		if value then
-			NAMEPLATE[key][spellID] = true
-		end
-	end
+    for spellID, value in pairs(_G.ANDROMEDA_ADB[key]) do
+        if value then
+            NAMEPLATE[key][spellID] = true
+        end
+    end
 end
 
-function NAMEPLATE:RefreshNameplateAuraFilters()
-    -- RefreshNameplateAuraFilter(1)
-    -- RefreshNameplateAuraFilter(2)
+NAMEPLATE.NameplateAuraWhiteList = {}
+NAMEPLATE.NameplateAuraBlackList = {}
 
-    RefreshNameplateAuraFilter(C.NameplateAuraWhiteList, "AuraWhiteList")
-	RefreshNameplateAuraFilter(C.NameplateAuraBlackList, "AuraBlackList")
+function NAMEPLATE:RefreshNameplateAuraFilters()
+    RefreshNameplateAuraFilter(C.NameplateAuraWhiteList, 'NameplateAuraWhiteList')
+    RefreshNameplateAuraFilter(C.NameplateAuraBlackList, 'NameplateAuraBlackList')
 end
 
 function NAMEPLATE:OnLogin()

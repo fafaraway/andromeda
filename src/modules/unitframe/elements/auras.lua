@@ -48,739 +48,470 @@ do
     end
 end
 
-local x1, x2, y1, y2 = unpack(C.TEX_COORD)
-function UNITFRAME:UpdateIconTexCoord(width, height)
-    local ratio = height / width
-    local mult = (1 - ratio) / 2
+do
+    local x1, x2, y1, y2 = unpack(C.TEX_COORD)
+    function UNITFRAME:UpdateIconTexCoord(width, height)
+        local ratio = height / width
+        local mult = (1 - ratio) / 2
 
-    self.Icon:SetTexCoord(x1, x2, y1 + mult, y2 - mult)
-end
-
-function UNITFRAME.PostCreateButton(element, button)
-    button.bg = F.CreateBDFrame(button, 0.25)
-    button.glow = F.CreateSD(button.bg)
-
-    button:SetFrameLevel(element:GetFrameLevel() + 4)
-
-    button.Overlay:SetTexture(nil)
-    button.Stealable:SetTexture(nil)
-    button.Cooldown:SetReverse(true)
-    button.Icon:SetDrawLayer('ARTWORK')
-
-    local style = element.__owner.unitStyle
-    local isGroup = style == 'party' or style == 'raid'
-    local isNP = style == 'nameplate'
-
-    if isGroup then
-        button.Icon:SetTexCoord(unpack(C.TEX_COORD))
-    elseif isNP then
-        button.Icon:SetTexCoord(0.1, 0.9, 0.26, 0.74) -- precise texcoord for rectangular icons
-    else
-        button.Icon:SetTexCoord(0.1, 0.9, 0.22, 0.78) -- precise texcoord for rectangular icons
+        self.Icon:SetTexCoord(x1, x2, y1 + mult, y2 - mult)
     end
 
-    -- hooksecurefunc(button, "SetSize", UNITFRAME.UpdateIconTexCoord)
+    function UNITFRAME.PostCreateButton(element, button)
+        button.bg = F.CreateBDFrame(button, 0.25)
+        button.glow = F.CreateSD(button.bg)
 
-    button.HL = button:CreateTexture(nil, 'HIGHLIGHT')
-    button.HL:SetColorTexture(1, 1, 1, 0.25)
-    button.HL:SetAllPoints()
+        button:SetFrameLevel(element:GetFrameLevel() + 4)
 
-    local font = C.Assets.Fonts.HalfHeight
-    local fontSize = max((element.width or element.size) * 0.4, 12)
-    button.Count = F.CreateFS(button, font, fontSize, true, nil, nil, true)
-    button.Count:ClearAllPoints()
-    button.Count:SetPoint('RIGHT', button, 'TOPRIGHT')
-    button.timer = F.CreateFS(button, font, fontSize, true, nil, nil, true)
-    button.timer:ClearAllPoints()
-    button.timer:SetPoint('LEFT', button, 'BOTTOMLEFT')
-end
+        button.Overlay:SetTexture(nil)
+        button.Stealable:SetTexture(nil)
+        button.Cooldown:SetReverse(true)
+        button.Icon:SetDrawLayer('ARTWORK')
 
-local filteredUnits = {
-    ['target'] = true,
-    ['nameplate'] = true,
-    ['boss'] = true,
-    ['arena'] = true,
-}
+        local style = element.__owner.unitStyle
+        local isGroup = style == 'party' or style == 'raid'
+        local isNP = style == 'nameplate'
 
-UNITFRAME.ReplacedSpellIcons = {
-    [368078] = 348567, -- 移速
-    [368079] = 348567, -- 移速
-    [368103] = 648208, -- 急速
-    [368243] = 237538, -- CD
-    [373785] = 236293, -- S4，大魔王伪装
-}
-
-local dispellType = {
-    ['Magic'] = true,
-    [''] = true,
-}
-
-function UNITFRAME.PostUpdateButton(element, button, unit, data)
-    local duration = data.duration
-    local expiration = data.expirationTime
-    local debuffType = data.dispelName
-    local isStealable = data.isStealable
-
-    if duration then
-        button.bg:Show()
-
-        if button.glow then
-            button.glow:Show()
-        end
-    end
-
-    local style = element.__owner.unitStyle
-    local isGroup = style == 'party' or style == 'raid'
-    local isNP = style == 'nameplate'
-    button:SetSize(element.size, (isGroup and element.size) or (isNP and element.size * 0.6) or element.size * 0.7)
-
-    --[[ local squareness = .6
-    element.icon_height = element.size * squareness
-    element.icon_ratio = (1 - (element.icon_height / element.size)) / 2.5
-    element.tex_coord = {.1,.9,.1+element.icon_ratio,.9-element.icon_ratio}
-    print('element.icon_height', element.icon_height)
-    print('element.icon_ratio', element.icon_ratio) ]]
-
-    if element.desaturateDebuff and button.isHarmful and filteredUnits[style] and not data.isPlayerAura then
-        button.Icon:SetDesaturated(true)
-    else
-        button.Icon:SetDesaturated(false)
-    end
-
-    if element.alwaysShowStealable and dispellType[debuffType] and not UnitIsPlayer(unit) and not button.isHarmful then
-        button.Stealable:Show()
-    end
-
-    if isStealable then
-        button.bg:SetBackdropBorderColor(1, 1, 1)
-
-        if button.glow then
-            button.glow:SetBackdropBorderColor(1, 1, 1, 0.25)
-        end
-    elseif element.showDebuffType and button.isHarmful then
-        local color = oUF.colors.debuff[debuffType] or oUF.colors.debuff.none
-        button.bg:SetBackdropBorderColor(color[1], color[2], color[3])
-
-        if button.glow then
-            button.glow:SetBackdropBorderColor(color[1], color[2], color[3], 0.25)
-        end
-    else
-        button.bg:SetBackdropBorderColor(0, 0, 0)
-
-        if button.glow then
-            button.glow:SetBackdropBorderColor(0, 0, 0, 0.25)
-        end
-    end
-
-    if element.disableCooldown then
-        if duration and duration > 0 then
-            button.expiration = expiration
-            button:SetScript('OnUpdate', F.CooldownOnUpdate)
-            button.timer:Show()
+        if isGroup then
+            button.Icon:SetTexCoord(unpack(C.TEX_COORD))
+        elseif isNP then
+            button.Icon:SetTexCoord(0.1, 0.9, 0.26, 0.74) -- precise texcoord for rectangular icons
         else
-            button:SetScript('OnUpdate', nil)
-            button.timer:Hide()
+            button.Icon:SetTexCoord(0.1, 0.9, 0.22, 0.78) -- precise texcoord for rectangular icons
+        end
+
+        -- hooksecurefunc(button, "SetSize", UNITFRAME.UpdateIconTexCoord)
+
+        button.HL = button:CreateTexture(nil, 'HIGHLIGHT')
+        button.HL:SetColorTexture(1, 1, 1, 0.25)
+        button.HL:SetAllPoints()
+
+        local font = C.Assets.Fonts.HalfHeight
+        local fontSize = max((element.width or element.size) * 0.4, 12)
+        button.Count = F.CreateFS(button, font, fontSize, true, nil, nil, true)
+        button.Count:ClearAllPoints()
+        button.Count:SetPoint('RIGHT', button, 'TOPRIGHT')
+        button.timer = F.CreateFS(button, font, fontSize, true, nil, nil, true)
+        button.timer:ClearAllPoints()
+        button.timer:SetPoint('LEFT', button, 'BOTTOMLEFT')
+    end
+
+    local filteredUnits = {
+        ['target'] = true,
+        ['nameplate'] = true,
+        ['boss'] = true,
+        ['arena'] = true,
+    }
+
+    UNITFRAME.ReplacedSpellIcons = {
+        [368078] = 348567, -- 移速
+        [368079] = 348567, -- 移速
+        [368103] = 648208, -- 急速
+        [368243] = 237538, -- CD
+        [373785] = 236293, -- S4，大魔王伪装
+    }
+
+    local dispellType = {
+        ['Magic'] = true,
+        [''] = true,
+    }
+
+    function UNITFRAME.PostUpdateButton(element, button, unit, data)
+        local duration = data.duration
+        local expiration = data.expirationTime
+        local debuffType = data.dispelName
+        local isStealable = data.isStealable
+
+        if duration then
+            button.bg:Show()
+
+            if button.glow then
+                button.glow:Show()
+            end
+        end
+
+        local style = element.__owner.unitStyle
+        local isGroup = style == 'party' or style == 'raid'
+        local isNP = style == 'nameplate'
+        button:SetSize(element.size, (isGroup and element.size) or (isNP and element.size * 0.6) or element.size * 0.7)
+
+        --[[ local squareness = .6
+        element.icon_height = element.size * squareness
+        element.icon_ratio = (1 - (element.icon_height / element.size)) / 2.5
+        element.tex_coord = {.1,.9,.1+element.icon_ratio,.9-element.icon_ratio}
+        print('element.icon_height', element.icon_height)
+        print('element.icon_ratio', element.icon_ratio) ]]
+
+        if element.desaturateDebuff and button.isHarmful and filteredUnits[style] and not data.isPlayerAura then
+            button.Icon:SetDesaturated(true)
+        else
+            button.Icon:SetDesaturated(false)
+        end
+
+        if element.alwaysShowStealable and dispellType[debuffType] and not UnitIsPlayer(unit) and not button.isHarmful then
+            button.Stealable:Show()
+        end
+
+        if isStealable then
+            button.bg:SetBackdropBorderColor(1, 1, 1)
+
+            if button.glow then
+                button.glow:SetBackdropBorderColor(1, 1, 1, 0.25)
+            end
+        elseif element.showDebuffType and button.isHarmful then
+            local color = oUF.colors.debuff[debuffType] or oUF.colors.debuff.none
+            button.bg:SetBackdropBorderColor(color[1], color[2], color[3])
+
+            if button.glow then
+                button.glow:SetBackdropBorderColor(color[1], color[2], color[3], 0.25)
+            end
+        else
+            button.bg:SetBackdropBorderColor(0, 0, 0)
+
+            if button.glow then
+                button.glow:SetBackdropBorderColor(0, 0, 0, 0.25)
+            end
+        end
+
+        if element.disableCooldown then
+            if duration and duration > 0 then
+                button.expiration = expiration
+                button:SetScript('OnUpdate', F.CooldownOnUpdate)
+                button.timer:Show()
+            else
+                button:SetScript('OnUpdate', nil)
+                button.timer:Hide()
+            end
+        end
+
+        local newTexture = UNITFRAME.ReplacedSpellIcons[button.spellID]
+        if newTexture then
+            button.Icon:SetTexture(newTexture)
+        end
+
+        if element.bolsterInstanceID and element.bolsterInstanceID == button.auraInstanceID then
+            button.Count:SetText(element.bolsterStacks)
         end
     end
 
-    local newTexture = UNITFRAME.ReplacedSpellIcons[button.spellID]
-    if newTexture then
-        button.Icon:SetTexture(newTexture)
-    end
-
-    if element.bolsterInstanceID and element.bolsterInstanceID == button.auraInstanceID then
-        button.Count:SetText(element.bolsterStacks)
-    end
-end
-
-function UNITFRAME.AurasPostUpdateInfo(element, _, _, debuffsChanged)
-    element.bolsterStacks = 0
-    element.bolsterInstanceID = nil
-    element.hasTheDot = nil
-
-    for auraInstanceID, data in next, element.allBuffs do
-        if data.spellId == 209859 then
-            if not element.bolsterInstanceID then
-                element.bolsterInstanceID = auraInstanceID
-                element.activeBuffs[auraInstanceID] = true
-            end
-
-            element.bolsterStacks = element.bolsterStacks + 1
-
-            if element.bolsterStacks > 1 then
-                element.activeBuffs[auraInstanceID] = nil
-            end
-        end
-    end
-
-    if element.bolsterStacks > 0 then
-        for i = 1, element.visibleButtons do
-            local button = element[i]
-            if element.bolsterInstanceID and element.bolsterInstanceID == button.auraInstanceID then
-                button.Count:SetText(element.bolsterStacks)
-                break
-            end
-        end
-    end
-
-    if debuffsChanged then
+    function UNITFRAME.AurasPostUpdateInfo(element, _, _, debuffsChanged)
+        element.bolsterStacks = 0
+        element.bolsterInstanceID = nil
         element.hasTheDot = nil
 
-        if C.DB['Nameplate']['ColorByDot'] then
-            for _, data in next, element.allDebuffs do
-                if data.isPlayerAura and C.DB['Nameplate']['DotSpellsList'][data.spellId] then
-                    element.hasTheDot = true
+        for auraInstanceID, data in next, element.allBuffs do
+            if data.spellId == 209859 then
+                if not element.bolsterInstanceID then
+                    element.bolsterInstanceID = auraInstanceID
+                    element.activeBuffs[auraInstanceID] = true
+                end
+
+                element.bolsterStacks = element.bolsterStacks + 1
+
+                if element.bolsterStacks > 1 then
+                    element.activeBuffs[auraInstanceID] = nil
+                end
+            end
+        end
+
+        if element.bolsterStacks > 0 then
+            for i = 1, element.visibleButtons do
+                local button = element[i]
+                if element.bolsterInstanceID and element.bolsterInstanceID == button.auraInstanceID then
+                    button.Count:SetText(element.bolsterStacks)
                     break
                 end
             end
         end
+
+        if debuffsChanged then
+            element.hasTheDot = nil
+
+            if C.DB['Nameplate']['ColorByDot'] then
+                for _, data in next, element.allDebuffs do
+                    if data.isPlayerAura and C.DB['Nameplate']['DotSpellsList'][data.spellId] then
+                        element.hasTheDot = true
+                        break
+                    end
+                end
+            end
+        end
     end
-end
 
-function UNITFRAME.FilterAura(element, unit, data)
-    local style = element.__owner.unitStyle
-    local name = data.name
-    local debuffType = data.dispelName
-    local isStealable = data.isStealable
-    local spellID = data.spellId
-    local nameplateShowAll = data.nameplateShowAll
+    function UNITFRAME.FilterAura(element, unit, data)
+        local style = element.__owner.unitStyle
+        local name = data.name
+        local debuffType = data.dispelName
+        local isStealable = data.isStealable
+        local spellID = data.spellId
+        local nameplateShowAll = data.nameplateShowAll
 
-    if style == 'nameplate' or style == 'boss' or style == 'arena' then
-        if element.__owner.plateType == 'NameOnly' then
-            return NAMEPLATE.AuraWhiteList[spellID]
-        elseif NAMEPLATE.AuraBlackList[spellID] then
-            return false
-        elseif (element.showStealableBuffs and isStealable or element.alwaysShowStealable and dispellType[debuffType]) and not UnitIsPlayer(unit) and not data.isHarmful then
+        if style == 'nameplate' or style == 'boss' or style == 'arena' then
+            if element.__owner.plateType == 'NameOnly' then
+                return NAMEPLATE.NameplateAuraWhiteList[spellID]
+            elseif NAMEPLATE.NameplateAuraBlackList[spellID] then
+                return false
+            elseif (element.showStealableBuffs and isStealable or element.alwaysShowStealable and dispellType[debuffType]) and not UnitIsPlayer(unit) and not data.isHarmful then
+                return true
+            elseif NAMEPLATE.NameplateAuraWhiteList[spellID] then
+                return true
+            else
+                local auraFilter = C.DB.Nameplate.AuraFilterMode
+                return (auraFilter == 3 and nameplateShowAll) or (auraFilter ~= 1 and data.isPlayerAura)
+            end
+        elseif style == 'player' then
             return true
-        elseif NAMEPLATE.AuraWhiteList[spellID] then
+        elseif style == 'pet' then
             return true
+        elseif style == 'target' then
+            return isStealable or not data.isHarmful or (element.onlyShowPlayer and data.isPlayerAura) or (not element.onlyShowPlayer and name)
         else
-            local auraFilter = C.DB.Nameplate.AuraFilterMode
-            return (auraFilter == 3 and nameplateShowAll) or (auraFilter ~= 1 and data.isPlayerAura)
+            return (element.onlyShowPlayer and data.isPlayerAura) or (not element.onlyShowPlayer and name)
         end
-    elseif style == 'party' then
-        if C.PartyAurasList[spellID] then
-            return true
+    end
+
+    function UNITFRAME.PostUpdateGapButton(_, _, button)
+        if button and button:IsShown() then
+            button:Hide()
+        end
+    end
+
+    local function calcIconSize(width, num, size)
+        return (width - (num - 1) * size) / num
+    end
+
+    function UNITFRAME:UpdateAuraContainer(parent, element, maxAuras)
+        local width = parent:GetWidth()
+        local iconsPerRow = element.iconsPerRow
+        local maxLines = iconsPerRow and F:Round(maxAuras / iconsPerRow) or 2
+
+        element.size = iconsPerRow and calcIconSize(width, iconsPerRow, element.spacing) or element.size
+        element:SetWidth(width)
+        element:SetHeight((element.size + element.spacing) * maxLines)
+
+        local fontSize = max((element.width or element.size) * 0.4, 12)
+        for i = 1, #element do
+            local button = element[i]
+            if button then
+                if button.timer then
+                    F.SetFontSize(button.timer, fontSize)
+                end
+                if button.Count then
+                    F.SetFontSize(button.Count, fontSize)
+                end
+            end
+        end
+    end
+
+    function UNITFRAME:ConfigureAuras(element)
+        local value = element.__value
+
+        element.iconsPerRow = C.DB['Unitframe'][value .. 'AuraPerRow']
+
+        element.showDebuffType = C.DB.Unitframe.DebuffTypeColor
+        element.desaturateDebuff = C.DB.Unitframe.DesaturateIcon
+        element.onlyShowPlayer = C.DB.Unitframe.OnlyShowPlayer
+        element.showStealableBuffs = C.DB.Unitframe.StealableBuffs
+    end
+
+    local function refreshAuras(frame)
+        if not (frame and frame.Auras) then
+            return
+        end
+        local element = frame.Auras
+        if not element then
+            return
+        end
+
+        UNITFRAME:ConfigureAuras(element)
+        UNITFRAME:UpdateAuraContainer(frame, element, element.numBuffs + element.numDebuffs)
+
+        -- if element.iconsPerRow > 0 then
+        --     if not frame:IsElementEnabled('Auras') then
+        --         frame:EnableElement('Auras')
+        --     end
+        -- else
+        --     if frame:IsElementEnabled('Auras') then
+        --         frame:DisableElement('Auras')
+        --     end
+        -- end
+
+        element:ForceUpdate()
+    end
+
+    function UNITFRAME:RefreshAuras()
+        refreshAuras(_G.oUF_Player)
+        refreshAuras(_G.oUF_Pet)
+        refreshAuras(_G.oUF_Target)
+        refreshAuras(_G.oUF_TargetTarget)
+        refreshAuras(_G.oUF_Focus)
+        refreshAuras(_G.oUF_FocusTarget)
+
+        for i = 1, 5 do
+            refreshAuras(_G['oUF_Boss' .. i])
+            refreshAuras(_G['oUF_Arena' .. i])
+        end
+    end
+
+    function UNITFRAME:UpdateAuras()
+        for _, frame in pairs(oUF.objects) do
+            if C.DB.Unitframe.ShowAuras then
+                if not frame:IsElementEnabled('Auras') then
+                    frame:EnableElement('Auras')
+                    refreshAuras(frame)
+                end
+            else
+                if frame:IsElementEnabled('Auras') then
+                    frame:DisableElement('Auras')
+                end
+            end
+        end
+    end
+
+    function UNITFRAME:ToggleAllAuras()
+        local enable = C.DB.Unitframe.ShowAuras
+        UNITFRAME:ToggleAuras(_G.oUF_Player)
+        UNITFRAME:ToggleAuras(_G.oUF_Pet)
+        UNITFRAME:ToggleAuras(_G.oUF_Target)
+        UNITFRAME:ToggleAuras(_G.oUF_TargetTarget)
+        UNITFRAME:ToggleAuras(_G.oUF_Focus)
+        UNITFRAME:ToggleAuras(_G.oUF_FocusTarget)
+    end
+
+    local function UpdatePlayerAuraPosition(self)
+        local specIndex = GetSpecialization()
+
+        if (C.MY_CLASS == 'ROGUE' or C.MY_CLASS == 'PALADIN' or C.MY_CLASS == 'WARLOCK' or (C.MY_CLASS == 'DRUID' and specIndex == 2) or (C.MY_CLASS == 'MONK' and specIndex == 3) or (C.MY_CLASS == 'MAGE' and specIndex == 1)) and C.DB.Unitframe.ClassPower then
+            self.Auras:ClearAllPoints()
+            self.Auras:SetPoint('TOP', self.ClassPowerBar, 'BOTTOM', 0, -5)
         else
-            return false
+            self.Auras:ClearAllPoints()
+            self.Auras:SetPoint('TOP', self.Power, 'BOTTOM', 0, -5)
         end
-    elseif style == 'player' then
-        return true
-    elseif style == 'pet' then
-        return true
-    elseif style == 'target' then
-        return isStealable or not data.isHarmful or (element.onlyShowPlayer and data.isPlayerAura) or (not element.onlyShowPlayer and name)
-    else
-        return (element.onlyShowPlayer and data.isPlayerAura) or (not element.onlyShowPlayer and name)
+
+        self:UnregisterEvent('PLAYER_ENTERING_WORLD', UpdatePlayerAuraPosition, true)
     end
-end
 
-function UNITFRAME.PostUpdateGapButton(_, _, button)
-    if button and button:IsShown() then
-        button:Hide()
+    function UNITFRAME:UpdatePlayerAuraPosition(self)
+        self:RegisterEvent('PLAYER_ENTERING_WORLD', UpdatePlayerAuraPosition, true)
+        self:RegisterEvent('PLAYER_TALENT_UPDATE', UpdatePlayerAuraPosition, true)
     end
-end
 
-local function calcIconSize(width, num, size)
-    return (width - (num - 1) * size) / num
-end
+    function UNITFRAME:CreateAuras(self)
+        local style = self.unitStyle
+        local bu = CreateFrame('Frame', nil, self)
+        bu.gap = true
+        bu.spacing = 5
+        bu.numBuffs = 32
+        bu.numDebuffs = 40
+        bu.disableCooldown = true
+        bu.tooltipAnchor = 'ANCHOR_TOPRIGHT'
 
-function UNITFRAME:UpdateAuraContainer(parent, element, maxAuras)
-    local width = parent:GetWidth()
-    local iconsPerRow = element.iconsPerRow
-    local maxLines = iconsPerRow and F:Round(maxAuras / iconsPerRow) or 2
-
-    element.size = iconsPerRow and calcIconSize(width, iconsPerRow, element.spacing) or element.size
-    element:SetWidth(width)
-    element:SetHeight((element.size + element.spacing) * maxLines)
-
-    local fontSize = max((element.width or element.size) * 0.4, 12)
-    for i = 1, #element do
-        local button = element[i]
-        if button then
-            if button.timer then
-                F.SetFontSize(button.timer, fontSize)
-            end
-            if button.Count then
-                F.SetFontSize(button.Count, fontSize)
-            end
+        if style == 'player' then
+            bu.initialAnchor = 'TOPLEFT'
+            bu:SetPoint('TOP', self.Power, 'BOTTOM', 0, -5)
+            bu['growth-x'] = 'RIGHT'
+            bu['growth-y'] = 'DOWN'
+            bu.__value = 'Player'
+            UNITFRAME:ConfigureAuras(bu)
+        elseif style == 'pet' then
+            bu.initialAnchor = 'TOPLEFT'
+            bu:SetPoint('TOP', self.Power, 'BOTTOM', 0, -4)
+            bu['growth-x'] = 'RIGHT'
+            bu['growth-y'] = 'DOWN'
+            bu.__value = 'Pet'
+            UNITFRAME:ConfigureAuras(bu)
+        elseif style == 'target' then
+            bu.initialAnchor = 'BOTTOMLEFT'
+            bu:SetPoint('BOTTOM', self, 'TOP', 0, 24)
+            bu['growth-x'] = 'RIGHT'
+            bu['growth-y'] = 'UP'
+            bu.__value = 'Target'
+            UNITFRAME:ConfigureAuras(bu)
+        elseif style == 'targettarget' then
+            bu.initialAnchor = 'TOPLEFT'
+            bu:SetPoint('TOP', self.Power, 'BOTTOM', 0, -4)
+            bu['growth-x'] = 'RIGHT'
+            bu['growth-y'] = 'DOWN'
+            bu.__value = 'TargetTarget'
+            UNITFRAME:ConfigureAuras(bu)
+        elseif style == 'focus' then
+            bu.initialAnchor = 'TOPLEFT'
+            bu:SetPoint('TOP', self.Power, 'BOTTOM', 0, -4)
+            bu['growth-x'] = 'RIGHT'
+            bu['growth-y'] = 'DOWN'
+            bu.__value = 'Focus'
+            UNITFRAME:ConfigureAuras(bu)
+        elseif style == 'focustarget' then
+            bu.initialAnchor = 'TOPRIGHT'
+            bu:SetPoint('TOP', self.Power, 'BOTTOM', 0, -4)
+            bu['growth-x'] = 'LEFT'
+            bu['growth-y'] = 'DOWN'
+            bu.__value = 'FocusTarget'
+            UNITFRAME:ConfigureAuras(bu)
+        elseif style == 'boss' then
+            bu.initialAnchor = 'TOPLEFT'
+            bu:SetPoint('TOP', self.Power, 'BOTTOM', 0, -4)
+            bu['growth-x'] = 'RIGHT'
+            bu['growth-y'] = 'DOWN'
+            bu.__value = 'Boss'
+            UNITFRAME:ConfigureAuras(bu)
+        elseif style == 'arena' then
+            bu.initialAnchor = 'TOPLEFT'
+            bu:SetPoint('TOP', self.Power, 'BOTTOM', 0, -4)
+            bu['growth-x'] = 'RIGHT'
+            bu['growth-y'] = 'DOWN'
+            bu.__value = 'Arena'
+            UNITFRAME:ConfigureAuras(bu)
         end
-    end
-end
 
-function UNITFRAME:ConfigureAuras(element)
-    local value = element.__value
+        UNITFRAME:UpdateAuraContainer(self, bu, bu.numTotal or bu.numBuffs + bu.numDebuffs)
 
-    element.iconsPerRow = C.DB['Unitframe'][value .. 'AuraPerRow']
+        bu.FilterAura = UNITFRAME.FilterAura
+        bu.PostCreateButton = UNITFRAME.PostCreateButton
+        bu.PostUpdateButton = UNITFRAME.PostUpdateButton
+        bu.PostUpdateGapButton = UNITFRAME.PostUpdateGapButton
 
-    element.showDebuffType = C.DB.Unitframe.DebuffTypeColor
-    element.desaturateDebuff = C.DB.Unitframe.DesaturateIcon
-    element.onlyShowPlayer = C.DB.Unitframe.OnlyShowPlayer
-    element.showStealableBuffs = C.DB.Unitframe.StealableBuffs
-end
+        self.Auras = bu
 
-local function refreshAuras(frame)
-    if not (frame and frame.Auras) then
-        return
-    end
-    local element = frame.Auras
-    if not element then
-        return
+        F:RegisterEvent('PLAYER_ENTERING_WORLD', UNITFRAME.UpdateAuraFilter)
     end
 
-    UNITFRAME:ConfigureAuras(element)
-    UNITFRAME:UpdateAuraContainer(frame, element, element.numBuffs + element.numDebuffs)
-
-    -- if element.iconsPerRow > 0 then
-    --     if not frame:IsElementEnabled('Auras') then
-    --         frame:EnableElement('Auras')
-    --     end
-    -- else
-    --     if frame:IsElementEnabled('Auras') then
-    --         frame:DisableElement('Auras')
-    --     end
-    -- end
-
-    element:ForceUpdate()
-end
-
-function UNITFRAME:RefreshAuras()
-    refreshAuras(_G.oUF_Player)
-    refreshAuras(_G.oUF_Pet)
-    refreshAuras(_G.oUF_Target)
-    refreshAuras(_G.oUF_TargetTarget)
-    refreshAuras(_G.oUF_Focus)
-    refreshAuras(_G.oUF_FocusTarget)
-
-    for i = 1, 5 do
-        refreshAuras(_G['oUF_Boss' .. i])
-        refreshAuras(_G['oUF_Arena' .. i])
-    end
-end
-
-function UNITFRAME:UpdateAuras()
-    for _, frame in pairs(oUF.objects) do
-        if C.DB.Unitframe.ShowAuras then
-            if not frame:IsElementEnabled('Auras') then
-                frame:EnableElement('Auras')
-                refreshAuras(frame)
-            end
-        else
-            if frame:IsElementEnabled('Auras') then
-                frame:DisableElement('Auras')
-            end
-        end
-    end
-end
-
-function UNITFRAME:ToggleAllAuras()
-    local enable = C.DB.Unitframe.ShowAuras
-    UNITFRAME:ToggleAuras(_G.oUF_Player)
-    UNITFRAME:ToggleAuras(_G.oUF_Pet)
-    UNITFRAME:ToggleAuras(_G.oUF_Target)
-    UNITFRAME:ToggleAuras(_G.oUF_TargetTarget)
-    UNITFRAME:ToggleAuras(_G.oUF_Focus)
-    UNITFRAME:ToggleAuras(_G.oUF_FocusTarget)
-end
-
-local function UpdatePlayerAuraPosition(self)
-    local specIndex = GetSpecialization()
-
-    if (C.MY_CLASS == 'ROGUE' or C.MY_CLASS == 'PALADIN' or C.MY_CLASS == 'WARLOCK' or (C.MY_CLASS == 'DRUID' and specIndex == 2) or (C.MY_CLASS == 'MONK' and specIndex == 3) or (C.MY_CLASS == 'MAGE' and specIndex == 1)) and C.DB.Unitframe.ClassPower then
-        self.Auras:ClearAllPoints()
-        self.Auras:SetPoint('TOP', self.ClassPowerBar, 'BOTTOM', 0, -5)
-    else
-        self.Auras:ClearAllPoints()
-        self.Auras:SetPoint('TOP', self.Power, 'BOTTOM', 0, -5)
-    end
-
-    self:UnregisterEvent('PLAYER_ENTERING_WORLD', UpdatePlayerAuraPosition, true)
-end
-
-function UNITFRAME:UpdatePlayerAuraPosition(self)
-    self:RegisterEvent('PLAYER_ENTERING_WORLD', UpdatePlayerAuraPosition, true)
-    self:RegisterEvent('PLAYER_TALENT_UPDATE', UpdatePlayerAuraPosition, true)
-end
-
-function UNITFRAME:CreateAuras(self)
-    local style = self.unitStyle
-    local bu = CreateFrame('Frame', nil, self)
-    bu.gap = true
-    bu.spacing = 5
-    bu.numBuffs = 32
-    bu.numDebuffs = 40
-    bu.disableCooldown = true
-    bu.tooltipAnchor = 'ANCHOR_TOPRIGHT'
-
-    if style == 'player' then
-        bu.initialAnchor = 'TOPLEFT'
-        bu:SetPoint('TOP', self.Power, 'BOTTOM', 0, -5)
-        bu['growth-x'] = 'RIGHT'
-        bu['growth-y'] = 'DOWN'
-        bu.__value = 'Player'
-        UNITFRAME:ConfigureAuras(bu)
-    elseif style == 'pet' then
-        bu.initialAnchor = 'TOPLEFT'
-        bu:SetPoint('TOP', self.Power, 'BOTTOM', 0, -4)
-        bu['growth-x'] = 'RIGHT'
-        bu['growth-y'] = 'DOWN'
-        bu.__value = 'Pet'
-        UNITFRAME:ConfigureAuras(bu)
-    elseif style == 'target' then
+    function NAMEPLATE:CreateAuras(self)
+        local bu = CreateFrame('Frame', nil, self)
+        bu.gap = true
+        bu.spacing = 5
+        bu.numTotal = 32
         bu.initialAnchor = 'BOTTOMLEFT'
-        bu:SetPoint('BOTTOM', self, 'TOP', 0, 24)
+        bu:SetPoint('BOTTOM', self, 'TOP', 0, 16)
         bu['growth-x'] = 'RIGHT'
         bu['growth-y'] = 'UP'
-        bu.__value = 'Target'
-        UNITFRAME:ConfigureAuras(bu)
-    elseif style == 'targettarget' then
-        bu.initialAnchor = 'TOPLEFT'
-        bu:SetPoint('TOP', self.Power, 'BOTTOM', 0, -4)
-        bu['growth-x'] = 'RIGHT'
-        bu['growth-y'] = 'DOWN'
-        bu.__value = 'TargetTarget'
-        UNITFRAME:ConfigureAuras(bu)
-    elseif style == 'focus' then
-        bu.initialAnchor = 'TOPLEFT'
-        bu:SetPoint('TOP', self.Power, 'BOTTOM', 0, -4)
-        bu['growth-x'] = 'RIGHT'
-        bu['growth-y'] = 'DOWN'
-        bu.__value = 'Focus'
-        UNITFRAME:ConfigureAuras(bu)
-    elseif style == 'focustarget' then
-        bu.initialAnchor = 'TOPRIGHT'
-        bu:SetPoint('TOP', self.Power, 'BOTTOM', 0, -4)
-        bu['growth-x'] = 'LEFT'
-        bu['growth-y'] = 'DOWN'
-        bu.__value = 'FocusTarget'
-        UNITFRAME:ConfigureAuras(bu)
-    elseif style == 'boss' then
-        bu.initialAnchor = 'TOPLEFT'
-        bu:SetPoint('TOP', self.Power, 'BOTTOM', 0, -4)
-        bu['growth-x'] = 'RIGHT'
-        bu['growth-y'] = 'DOWN'
-        bu.__value = 'Boss'
-        UNITFRAME:ConfigureAuras(bu)
-    elseif style == 'arena' then
-        bu.initialAnchor = 'TOPLEFT'
-        bu:SetPoint('TOP', self.Power, 'BOTTOM', 0, -4)
-        bu['growth-x'] = 'RIGHT'
-        bu['growth-y'] = 'DOWN'
-        bu.__value = 'Arena'
-        UNITFRAME:ConfigureAuras(bu)
-    end
+        bu.iconsPerRow = C.DB.Nameplate.AuraPerRow
+        bu.disableCooldown = true
+        bu.tooltipAnchor = 'ANCHOR_BOTTOMLEFT'
 
-    UNITFRAME:UpdateAuraContainer(self, bu, bu.numTotal or bu.numBuffs + bu.numDebuffs)
+        UNITFRAME:UpdateAuraContainer(self, bu, bu.numTotal)
 
-    bu.FilterAura = UNITFRAME.FilterAura
-    bu.PostCreateButton = UNITFRAME.PostCreateButton
-    bu.PostUpdateButton = UNITFRAME.PostUpdateButton
-    bu.PostUpdateGapButton = UNITFRAME.PostUpdateGapButton
+        bu.onlyShowPlayer = C.DB.Nameplate.OnlyShowPlayer
+        bu.desaturateDebuff = C.DB.Nameplate.DesaturateIcon
+        bu.showDebuffType = C.DB.Nameplate.DebuffTypeColor
+        bu.showStealableBuffs = C.DB.Nameplate.DispellMode == 1
+        bu.alwaysShowStealable = C.DB.Nameplate.DispellMode == 2
+        bu.disableMouse = true
+        bu.disableCooldown = true
 
-    self.Auras = bu
+        bu.FilterAura = UNITFRAME.FilterAura
+        bu.PostCreateButton = UNITFRAME.PostCreateButton
+        bu.PostUpdateButton = UNITFRAME.PostUpdateButton
+        bu.PostUpdateGapButton = UNITFRAME.PostUpdateGapButton
+        bu.PostUpdateInfo = UNITFRAME.AurasPostUpdateInfo
 
-    F:RegisterEvent('PLAYER_ENTERING_WORLD', UNITFRAME.UpdateAuraFilter)
-end
-
-function NAMEPLATE:CreateAuras(self)
-    local bu = CreateFrame('Frame', nil, self)
-    bu.gap = true
-    bu.spacing = 5
-    bu.numTotal = 32
-    bu.initialAnchor = 'BOTTOMLEFT'
-    bu:SetPoint('BOTTOM', self, 'TOP', 0, 16)
-    bu['growth-x'] = 'RIGHT'
-    bu['growth-y'] = 'UP'
-    bu.iconsPerRow = C.DB.Nameplate.AuraPerRow
-    bu.disableCooldown = true
-    bu.tooltipAnchor = 'ANCHOR_BOTTOMLEFT'
-
-    UNITFRAME:UpdateAuraContainer(self, bu, bu.numTotal)
-
-    bu.onlyShowPlayer = C.DB.Nameplate.OnlyShowPlayer
-    bu.desaturateDebuff = C.DB.Nameplate.DesaturateIcon
-    bu.showDebuffType = C.DB.Nameplate.DebuffTypeColor
-    bu.showStealableBuffs = C.DB.Nameplate.DispellMode == 1
-    bu.alwaysShowStealable = C.DB.Nameplate.DispellMode == 2
-    bu.disableMouse = true
-    bu.disableCooldown = true
-
-    bu.FilterAura = UNITFRAME.FilterAura
-    bu.PostCreateButton = UNITFRAME.PostCreateButton
-    bu.PostUpdateButton = UNITFRAME.PostUpdateButton
-    bu.PostUpdateGapButton = UNITFRAME.PostUpdateGapButton
-    bu.PostUpdateInfo = UNITFRAME.AurasPostUpdateInfo
-
-    self.Auras = bu
-end
-
---[[
-
---]]
-
-UNITFRAME.PartyAurasList = {}
-
-function UNITFRAME:RefreshPartyAurasFilter()
-    wipe(UNITFRAME.PartyAurasList)
-
-    for spellID in pairs(C.PartyAurasList) do
-        local name = GetSpellInfo(spellID)
-        if name then
-            local modValue = _G.ANDROMEDA_ADB['PartyAurasList'][spellID]
-            if modValue == nil then
-                UNITFRAME.PartyAurasList[spellID] = true
-            end
-        end
-    end
-
-    for spellID, value in pairs(_G.ANDROMEDA_ADB['PartyAurasList']) do
-        if value then
-            UNITFRAME.PartyAurasList[spellID] = true
-        end
+        self.Auras = bu
     end
 end
 
-function UNITFRAME:CheckPartyAurasFilter()
-    for spellID in pairs(C.PartyAurasList) do
-        local name = GetSpellInfo(spellID)
-        if name then
-            if _G.ANDROMEDA_ADB['PartyAurasList'][spellID] then
-                _G.ANDROMEDA_ADB['PartyAurasList'][spellID] = nil
-            end
-        else
-            F:Debug('CheckPartyAurasFilter: Invalid Spell ID ' .. spellID)
-        end
-    end
 
-    for spellID, value in pairs(_G.ANDROMEDA_ADB['PartyAurasList']) do
-        if value == false and C.PartyAurasList[spellID] == nil then
-            _G.ANDROMEDA_ADB['PartyAurasList'][spellID] = nil
-        end
-    end
-end
 
-function UNITFRAME.PartyAuraFilter(_, _, _, _, _, _, _, _, _, _, _, _, spellID)
-    if UNITFRAME.PartyAurasList[spellID] then
-        return true
-    else
-        return false
-    end
-end
-
-function UNITFRAME.PartyAuraUpdateAnchor(element)
-    local self = element:GetParent()
-    local horizon = C.DB.Unitframe.PartyDirec > 2
-
-    if horizon then
-        element:ClearAllPoints()
-        element.initialAnchor = 'TOPLEFT'
-        element:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -5)
-    else
-        element:ClearAllPoints()
-        element.initialAnchor = 'LEFT'
-        element:SetPoint('LEFT', self, 'RIGHT', 5, 0)
-    end
-end
-
-function UNITFRAME:CreatePartyAuras(self)
-    local bu = CreateFrame('Frame', nil, self)
-    bu.spacing = 4
-    bu.size = C.DB.Unitframe.PartyAuraSize
-    bu.numTotal = C.DB.Unitframe.PartyAura and C.DB.Unitframe.PartyAuraNum or 0
-    bu.partyAura = true
-    bu.tooltipAnchor = 'ANCHOR_BOTTOMLEFT'
-
-    UNITFRAME.PartyAuraUpdateAnchor(bu)
-    UNITFRAME:UpdateAuraContainer(self, bu, bu.numTotal)
-
-    bu.gap = false
-    bu.disableMouse = false
-    bu.disableCooldown = true
-    bu.FilterAura = UNITFRAME.PartyAuraFilter
-    bu.PostCreateButton = UNITFRAME.PostCreateButton
-    bu.PostUpdateButton = UNITFRAME.PostUpdateButton
-    bu.PostUpdateGapButton = UNITFRAME.PostUpdateGapButton
-    bu.UpdateAnchor = UNITFRAME.PartyAuraUpdateAnchor
-
-    self.Auras = bu
-end
-
---[[
-
---]]
-
---[[ function UNITFRAME.GroupBuffFilter(_, _, _, _, _, _, _, _, _, caster, _, _, spellID, canApplyAura, isBossAura)
-    if isBossAura then
-        return true
-    else
-        local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellID, UnitAffectingCombat('player') and 'RAID_INCOMBAT' or 'RAID_OUTOFCOMBAT')
-        local isPlayerSpell = (caster == 'player' or caster == 'pet' or caster == 'vehicle')
-        if hasCustom then
-            return showForMySpec or (alwaysShowMine and isPlayerSpell)
-        else
-            return isPlayerSpell and canApplyAura and not SpellIsSelfBuff(spellID)
-        end
-    end
-end
-
-function UNITFRAME:CreatePartyBuffs(self)
-    local bu = CreateFrame('Frame', nil, self)
-    bu:SetPoint('TOPLEFT', self.Health, 'TOPLEFT', 2, -2)
-    bu.initialAnchor = 'TOPLEFT'
-    bu.spacing = 3
-    bu.size = C.DB.Unitframe.PartyBuffSize
-    bu.num = not C.DB.Unitframe.PartyBuff and 0 or C.DB.Unitframe.PartyBuffNum
-    bu.tooltipAnchor = 'ANCHOR_BOTTOMLEFT'
-
-    UNITFRAME:UpdateAuraContainer(self, bu, bu.num)
-
-    bu.disableMouse = true
-    bu.disableCooldown = true
-    --bu.FilterAura = UNITFRAME.GroupBuffFilter
-    bu.PostCreateButton = UNITFRAME.PostCreateButton
-    bu.PostUpdateButton = UNITFRAME.PostUpdateButton
-
-    self.Buffs = bu
-end
-
-function UNITFRAME:CreateRaidBuffs(self)
-    local bu = CreateFrame('Frame', nil, self)
-    bu:SetPoint('TOPLEFT', self.Health, 'TOPLEFT', 2, -2)
-    bu.initialAnchor = 'TOPLEFT'
-    bu.spacing = 3
-    bu.size = C.DB.Unitframe.RaidBuffSize
-    bu.num = not C.DB.Unitframe.RaidBuff and 0 or C.DB.Unitframe.RaidBuffNum
-    bu.tooltipAnchor = 'ANCHOR_BOTTOMLEFT'
-
-    UNITFRAME:UpdateAuraContainer(self, bu, bu.num)
-
-    bu.disableMouse = true
-    bu.disableCooldown = true
-    --bu.FilterAura = UNITFRAME.GroupBuffFilter
-    bu.PostCreateButton = UNITFRAME.PostCreateButton
-    bu.PostUpdateButton = UNITFRAME.PostUpdateButton
-
-    self.Buffs = bu
-end
-
-function UNITFRAME.GroupDebuffFilter(element, _, _, _, _, _, _, _, _, caster, _, _, spellID, _, isBossAura)
-    local parent = element.__owner
-    if C.GroupDebuffsBlackList[spellID] then
-        return false
-    elseif (C.DB.Unitframe.CornerIndicator and UNITFRAME.CornerSpellsList[spellID]) or parent.DebuffWatcher.spellID == spellID then
-        return false
-    elseif isBossAura or SpellIsPriorityAura(spellID) then
-        return true
-    else
-        local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellID, UnitAffectingCombat('player') and 'RAID_INCOMBAT' or 'RAID_OUTOFCOMBAT')
-        if hasCustom then
-            return showForMySpec or (alwaysShowMine and (caster == 'player' or caster == 'pet' or caster == 'vehicle'))
-        else
-            return true
-        end
-    end
-end
-
-function UNITFRAME:CreatePartyDebuffs(self)
-    local bu = CreateFrame('Frame', nil, self)
-    bu:SetPoint('BOTTOMRIGHT', self.Health, 'BOTTOMRIGHT', -2, 2)
-    bu.initialAnchor = 'BOTTOMRIGHT'
-    bu['growth-x'] = 'LEFT'
-    bu.spacing = 3
-    bu.size = C.DB.Unitframe.PartyDebuffSize
-    bu.num = not C.DB.Unitframe.PartyDebuff and 0 or C.DB.Unitframe.PartyDebuffNum
-    bu.tooltipAnchor = 'ANCHOR_BOTTOMLEFT'
-
-    UNITFRAME:UpdateAuraContainer(self, bu, bu.num)
-
-    bu.disableMouse = true
-    bu.disableCooldown = true
-    bu.showDebuffType = C.DB.Unitframe.DebuffTypeColor
-    --bu.FilterAura = UNITFRAME.GroupDebuffFilter
-    bu.PostCreateButton = UNITFRAME.PostCreateButton
-    bu.PostUpdateButton = UNITFRAME.PostUpdateButton
-
-    self.Debuffs = bu
-end
-
-function UNITFRAME:CreateRaidDebuffs(self)
-    local bu = CreateFrame('Frame', nil, self)
-    bu:SetPoint('BOTTOMRIGHT', self.Health, 'BOTTOMRIGHT', -2, 2)
-    bu.initialAnchor = 'BOTTOMRIGHT'
-    bu['growth-x'] = 'LEFT'
-    bu.spacing = 3
-    bu.size = C.DB.Unitframe.RaidDebuffSize
-    bu.num = not C.DB.Unitframe.RaidDebuff and 0 or C.DB.Unitframe.RaidDebuffNum
-    bu.tooltipAnchor = 'ANCHOR_BOTTOMLEFT'
-
-    UNITFRAME:UpdateAuraContainer(self, bu, bu.num)
-
-    bu.disableMouse = true
-    bu.disableCooldown = true
-    bu.showDebuffType = C.DB.Unitframe.DebuffTypeColor
-    --bu.FilterAura = UNITFRAME.GroupDebuffFilter
-    bu.PostCreateButton = UNITFRAME.PostCreateButton
-    bu.PostUpdateButton = UNITFRAME.PostUpdateButton
-
-    self.Debuffs = bu
-end
-
-function UNITFRAME:UpdateGroupAuras()
-    for _, frame in pairs(oUF.objects) do
-        local buffs = frame.Buffs
-        local debuffs = frame.Debuffs
-
-        if frame.unitStyle == 'party' then
-            if debuffs then
-                debuffs.num = not C.DB.Unitframe.PartyDebuff and 0 or C.DB.Unitframe.PartyDebuffNum
-                debuffs.size = C.DB.Unitframe.PartyDebuffSize
-                UNITFRAME:UpdateAuraContainer(frame, debuffs, debuffs.num)
-                debuffs:ForceUpdate()
-            end
-
-            if buffs then
-                buffs.num = not C.DB.Unitframe.PartyBuff and 0 or C.DB.Unitframe.PartyBuffNum
-                buffs.size = C.DB.Unitframe.PartyBuffSize
-                UNITFRAME:UpdateAuraContainer(frame, buffs, buffs.num)
-                buffs:ForceUpdate()
-            end
-        elseif frame.unitStyle == 'raid' then
-            if debuffs then
-                debuffs.num = not C.DB.Unitframe.RaidDebuff and 0 or C.DB.Unitframe.RaidDebuffNum
-                debuffs.size = C.DB.Unitframe.RaidDebuffSize
-                UNITFRAME:UpdateAuraContainer(frame, debuffs, debuffs.num)
-                debuffs:ForceUpdate()
-            end
-
-            if buffs then
-                buffs.num = not C.DB.Unitframe.RaidBuff and 0 or C.DB.Unitframe.RaidBuffNum
-                buffs.size = C.DB.Unitframe.RaidBuffSize
-                UNITFRAME:UpdateAuraContainer(frame, buffs, buffs.num)
-                buffs:ForceUpdate()
-            end
-        end
-    end
-end
-
-local function RefreshAurasElements(self)
-    local buffs = self.Buffs
-    if buffs then
-        buffs:ForceUpdate()
-    end
-
-    local debuffs = self.Debuffs
-    if debuffs then
-        debuffs:ForceUpdate()
-    end
-end
-
-function UNITFRAME:RefreshAurasByCombat(self)
-    self:RegisterEvent('PLAYER_REGEN_ENABLED', RefreshAurasElements, true)
-    self:RegisterEvent('PLAYER_REGEN_DISABLED', RefreshAurasElements, true)
-end ]]
-
----------------------------------------------
----------------------------------------------
 
 -- Debuffs on party/raid frames
 
@@ -930,12 +661,14 @@ do
 
         debuffs.enable = C.DB.Unitframe.ShowRaidDebuff
         local size = C.DB.Unitframe.RaidDebuffSize
+        local scale = C.DB.Unitframe.RaidDebuffScale
         local disableMouse = C.DB.Unitframe.RaidDebuffClickThru
 
         for i = 1, 3 do
             local button = debuffs.buttons[i]
             if button then
                 button:SetSize(size, size)
+                button:SetScale(scale)
                 button:EnableMouse(not disableMouse)
             end
         end
@@ -968,14 +701,14 @@ do
     function UNITFRAME:CreateBuffsIndicator(self)
         local buffFrame = CreateFrame('Frame', nil, self)
         buffFrame:SetSize(1, 1)
-        buffFrame:SetPoint('BOTTOMRIGHT', -C.MULT, C.MULT)
+        buffFrame:SetPoint('LEFT', self, 'RIGHT', 5, 0)
         buffFrame:SetFrameLevel(5)
 
         buffFrame.buttons = {}
         local prevBuff
         for i = 1, 3 do
             local button = CreateFrame('Frame', nil, buffFrame)
-            F.PixelIcon(button)
+            F.PixelIcon(button, nil, nil, true)
             button:SetScript('OnEnter', UNITFRAME.AuraButton_OnEnter)
             button:SetScript('OnLeave', F.HideTooltip)
             button:Hide()
@@ -994,9 +727,9 @@ do
             button.cd:SetHideCountdownNumbers(true)
 
             if not prevBuff then
-                button:SetPoint('BOTTOMRIGHT', self.Health)
+                button:SetPoint('LEFT', self, 'RIGHT', 5, 0)
             else
-                button:SetPoint('RIGHT', prevBuff, 'LEFT')
+                button:SetPoint('LEFT', prevBuff, 'RIGHT', 3, 0)
             end
             prevBuff = button
             buffFrame.buttons[i] = button
@@ -1046,15 +779,15 @@ do
         local spellID = aura.spellID
         if aura.isBossAura then
             return true
-        else
+        elseif C.DB.Unitframe.RaidBuffAuto then
             local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellID, raidAuras.isInCombat and 'RAID_INCOMBAT' or 'RAID_OUTOFCOMBAT')
             if hasCustom then
                 return showForMySpec or (alwaysShowMine and aura.isPlayerAura)
             else
                 return aura.isPlayerAura and aura.canApply and not SpellIsSelfBuff(spellID)
             end
-
-            -- return UNITFRAME.RaidBuffsWhiteList[spellID]
+        else
+            return UNITFRAME.RaidBuffsWhiteList[spellID]
         end
     end
 
@@ -1065,13 +798,15 @@ do
         end
 
         buffs.enable = C.DB.Unitframe.ShowRaidBuff
-        local size = C.DB.Unitframe.RaidBuffSize
+        local size = (C.DB.Unitframe.PartyHealthHeight + C.DB.Unitframe.PartyPowerHeight) * 0.85
+        local scale = C.DB.Unitframe.RaidBuffScale
         local disableMouse = C.DB.Unitframe.BuffClickThru
 
         for i = 1, 3 do
             local button = buffs.buttons[i]
             if button then
                 button:SetSize(size, size)
+                button:SetScale(scale)
                 button:EnableMouse(not disableMouse)
             end
         end

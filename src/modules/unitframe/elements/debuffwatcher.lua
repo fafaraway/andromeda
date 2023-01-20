@@ -1,5 +1,6 @@
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('UnitFrame')
+local LBG = F.Libs.LibButtonGlow
 
 local invalidPrio = -1
 local instName
@@ -79,6 +80,7 @@ UNITFRAME.RaidDebuffsList = {}
 
 function UNITFRAME:UpdateRaidDebuffsList()
     wipe(UNITFRAME.RaidDebuffsList)
+
     for instName, value in pairs(C.RaidDebuffsList) do
         for spell, priority in pairs(value) do
             if not (_G.ANDROMEDA_ADB['RaidDebuffsList'][instName] and _G.ANDROMEDA_ADB['RaidDebuffsList'][instName][spell]) then
@@ -89,6 +91,7 @@ function UNITFRAME:UpdateRaidDebuffsList()
             end
         end
     end
+
     for instName, value in pairs(_G.ANDROMEDA_ADB['RaidDebuffsList']) do
         for spell, priority in pairs(value) do
             if priority > 0 then
@@ -120,13 +123,13 @@ function UNITFRAME:AuraButton_OnEnter()
 end
 
 function UNITFRAME:CreateAurasIndicator(self)
-    local auraSize = 18
+    local auraSize = (C.DB.Unitframe.PartyHealthHeight + C.DB.Unitframe.PartyPowerHeight) * 0.65
 
     local auraFrame = CreateFrame('Frame', nil, self)
     auraFrame:SetSize(1, 1)
-    auraFrame:SetPoint('RIGHT', -15, 0)
-    auraFrame.instAura = C.DB.Unitframe.InstanceAuras
-    auraFrame.dispellType = C.DB.Unitframe.DispellType
+    auraFrame:SetPoint('CENTER')
+    auraFrame.instAura = C.DB.Unitframe.InstanceDebuff
+    auraFrame.dispellType = C.DB.Unitframe.DebuffWatcherDispellType
 
     auraFrame.buttons = {}
     local prevAura
@@ -157,9 +160,9 @@ function UNITFRAME:CreateAurasIndicator(self)
         button.glowFrame = F.CreateGlowFrame(button, auraSize)
 
         if not prevAura then
-            button:SetPoint('RIGHT')
+            button:SetPoint('CENTER')
         else
-            button:SetPoint('RIGHT', prevAura, 'LEFT', -5, 0)
+            button:SetPoint('LEFT', prevAura, 'RIGHT', 5, 0)
         end
         prevAura = button
         auraFrame.buttons[i] = button
@@ -245,9 +248,9 @@ function UNITFRAME:AurasIndicator_UpdateButton(button, aura)
     end
     if button.glowFrame then
         if aura.priority == 6 then
-            F.ShowOverlayGlow(button.glowFrame)
+            LBG.ShowOverlayGlow(button.glowFrame)
         else
-            F.HideOverlayGlow(button.glowFrame)
+            LBG.HideOverlayGlow(button.glowFrame)
         end
     end
     button:Show()
@@ -267,10 +270,10 @@ function UNITFRAME:AurasIndicator_UpdateOptions()
         return
     end
 
-    auras.instAura = C.DB.Unitframe.InstanceAuras
-    auras.dispellType = C.DB.Unitframe.DispellType
-    local scale = C.DB.Unitframe.RaidDebuffScale
-    local disableMouse = C.DB.Unitframe.AuraClickThru
+    auras.instAura = C.DB.Unitframe.InstanceDebuff
+    auras.dispellType = C.DB.Unitframe.DebuffWatcherDispellType
+    local scale = C.DB.Unitframe.DebuffWatcherScale
+    local disableMouse = C.DB.Unitframe.DebuffWatcherClickThru
 
     for i = 1, 2 do
         local button = auras.buttons[i]
