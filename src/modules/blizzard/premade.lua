@@ -442,10 +442,8 @@ function BLIZZARD:AddPGFSortingExpression()
     end
 end
 
---[[
-    Fix LFG taint
-    Credit: PremadeGroupsFilter
---]]
+-- Fix LFG taint
+-- Credit: PremadeGroupsFilter
 
 function BLIZZARD:FixListingTaint()
     if IsAddOnLoaded('PremadeGroupsFilter') then
@@ -480,6 +478,24 @@ function BLIZZARD:FixListingTaint()
     _G.LFGListEntryCreation_SetTitleFromActivityInfo = function(_) end
 end
 
+-- Show groups created by Chinese players
+
+function BLIZZARD:AddCNFilter()
+    local filters = C_LFGList.GetAvailableLanguageSearchFilter() or {}
+
+    for i = 1, #filters do
+        if filters[i] == 'zhCN' then
+            return
+        end
+    end
+
+    tinsert(filters, 'zhCN')
+
+    C_LFGList.GetAvailableLanguageSearchFilter = function()
+        return filters
+    end
+end
+
 function BLIZZARD:EnhancedPremade()
     if not C.DB.General.EnhancedPremade then
         return
@@ -509,4 +525,5 @@ function BLIZZARD:EnhancedPremade()
     BLIZZARD:AddDungeonsFilter()
     BLIZZARD:AddPGFSortingExpression()
     BLIZZARD:FixListingTaint()
+    BLIZZARD:AddCNFilter()
 end
