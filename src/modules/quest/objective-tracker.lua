@@ -139,6 +139,7 @@ function EOT:RestyleObjectiveTrackerText()
         _G.CAMPAIGN_QUEST_TRACKER_MODULE,
         _G.QUEST_TRACKER_MODULE,
         _G.ACHIEVEMENT_TRACKER_MODULE,
+        _G.MONTHLY_ACTIVITIES_TRACKER_MODULE,
     }
 
     for _, module in pairs(trackerModules) do
@@ -183,6 +184,7 @@ local headers = {
     _G.QUEST_TRACKER_MODULE,
     _G.ACHIEVEMENT_TRACKER_MODULE,
     _G.WORLD_QUEST_TRACKER_MODULE,
+    _G.MONTHLY_ACTIVITIES_TRACKER_MODULE,
 }
 
 function EOT:AutoCollapse()
