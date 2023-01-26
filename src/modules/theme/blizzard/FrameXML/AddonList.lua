@@ -14,7 +14,7 @@ tinsert(C.BlizzThemes, function()
     F.ReskinDropDown(_G.AddonCharacterDropDown)
     F.ReskinTrimScroll(_G.AddonList.ScrollBar)
 
-    _G.AddonListForceLoad:SetSize(16, 16)
+    _G.AddonListForceLoad:SetSize(18, 18)
     _G.AddonCharacterDropDown:SetWidth(170)
 
     local function forceSaturation(self, _, force)
@@ -30,7 +30,7 @@ tinsert(C.BlizzThemes, function()
             local child = select(i, self.ScrollTarget:GetChildren())
             if not child.styled then
                 F.ReskinCheckButton(child.Enabled, true)
-                child.Enabled:SetSize(14, 14)
+                child.Enabled:SetSize(18, 18)
                 F.Reskin(child.LoadAddonButton)
                 hooksecurefunc(child.Enabled:GetCheckedTexture(), 'SetDesaturated', forceSaturation)
 

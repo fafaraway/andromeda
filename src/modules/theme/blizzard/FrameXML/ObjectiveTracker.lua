@@ -276,6 +276,7 @@ tinsert(C.BlizzThemes, function()
         _G.ObjectiveTrackerBlocksFrame.ProfessionHeader,
         _G.BONUS_OBJECTIVE_TRACKER_MODULE.Header,
         _G.WORLD_QUEST_TRACKER_MODULE.Header,
+        _G.MONTHLY_ACTIVITIES_TRACKER_MODULE.Header,
         _G.ObjectiveTrackerFrame.BlocksFrame.UIWidgetsHeader,
     }
 

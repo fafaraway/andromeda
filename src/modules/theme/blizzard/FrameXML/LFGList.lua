@@ -85,6 +85,7 @@ tinsert(C.BlizzThemes, function()
     F.Reskin(searchPanel.ScrollBox.StartGroupButton)
     F.ReskinTrimScroll(searchPanel.ScrollBar)
     F.ReskinInput(searchPanel.SearchBox)
+    F.ReskinFilterButton(searchPanel.FilterButton)
 
     searchPanel.RefreshButton:SetSize(24, 24)
     searchPanel.RefreshButton.Icon:SetPoint('CENTER')

@@ -403,12 +403,10 @@ tinsert(C.BlizzThemes, function()
     hooksecurefunc(_G.EventToastManagerFrame, 'DisplayToast', function(self)
         local toast = self.currentDisplayingToast
         local border = toast and toast.IconBorder
-        if border then
-            if not border.bg then
-                border:SetTexture('')
-                border.bg = F.ReskinIcon(toast.Icon)
-            end
-            border.bg:SetBackdropBorderColor(border:GetVertexColor())
+        if border and not toast.bg then
+            toast.bg = F.ReskinIcon(toast.Icon)
+            border:SetTexture('')
+            F.ReskinIconBorder(border, true)
         end
     end)
 end)
