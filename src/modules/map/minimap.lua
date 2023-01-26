@@ -610,6 +610,25 @@ function MAP:MouseFunc()
     _G.Minimap:SetScript('OnMouseUp', OnMouseUp)
 end
 
+-- Help Tip
+
+local minimapInfo = {
+    text = L['Mouse scroll to zoom in or out, hold down the alt key and mouse scroll to adjust game volume, middle click to toggle game menu, right click to toggle track menu.'],
+    buttonStyle = _G.HelpTip.ButtonStyle.GotIt,
+    targetPoint = _G.HelpTip.Point.LeftEdgeCenter,
+    onAcknowledgeCallback = F.HelpInfoAcknowledge,
+    callbackArg = 'MinimapInfo',
+    alignment = 3,
+}
+
+function MAP:CreateHelpTip()
+    _G.Minimap:HookScript('OnEnter', function()
+        if not _G.ANDROMEDA_ADB.HelpTips.MinimapInfo then
+            _G.HelpTip:Show(_G.MinimapCluster, minimapInfo)
+        end
+    end)
+end
+
 --
 
 function MAP:SetupMinimap()
@@ -631,6 +650,7 @@ function MAP:SetupMinimap()
     MAP:BuildDropDown()
     MAP:SoundVolume()
     MAP:MouseFunc()
+    MAP:CreateHelpTip()
     MAP:UpdateMinimapFader()
     MAP:CreateProgressBar()
     MAP:SetGetMinimapShape()
