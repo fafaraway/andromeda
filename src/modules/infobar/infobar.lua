@@ -1,11 +1,12 @@
 local F, C = unpack(select(2, ...))
 local INFOBAR = F:GetModule('InfoBar')
 
-INFOBAR.Modules = {}
-INFOBAR.Blocks = {}
 local barAlpha, blockAlpha
 
-local function FadeIn(self, elapsed)
+INFOBAR.Modules = {}
+INFOBAR.Blocks = {}
+
+local function fadeIn(self, elapsed)
     local bar = INFOBAR.Bar
     if barAlpha < 0.5 then
         barAlpha = barAlpha + elapsed
@@ -16,7 +17,9 @@ local function FadeIn(self, elapsed)
         bar:SetScript('OnUpdate', nil)
     end
 
-    bar.bg:SetBackdropColor(0, 0, 0, barAlpha)
+    if bar.bg then
+        bar.bg:SetBackdropColor(0, 0, 0, barAlpha)
+    end
 
     for _, block in pairs(INFOBAR.Blocks) do
         if not block.noFade then
@@ -25,7 +28,7 @@ local function FadeIn(self, elapsed)
     end
 end
 
-local function FadeOut(self, elapsed)
+local function fadeOut(self, elapsed)
     local bar = INFOBAR.Bar
     if barAlpha > 0.25 then
         barAlpha = barAlpha - elapsed
@@ -36,7 +39,9 @@ local function FadeOut(self, elapsed)
         bar:SetScript('OnUpdate', nil)
     end
 
-    bar.bg:SetBackdropColor(0, 0, 0, barAlpha)
+    if bar.bg then
+        bar.bg:SetBackdropColor(0, 0, 0, barAlpha)
+    end
 
     for _, block in pairs(INFOBAR.Blocks) do
         if not block.noFade then
@@ -45,34 +50,39 @@ local function FadeOut(self, elapsed)
     end
 end
 
-local function Bar_OnEnter()
-    if not C.DB.Infobar.Mouseover then
-        return
-    end
-    local bar = INFOBAR.Bar
-    bar:SetScript('OnUpdate', FadeIn)
-end
-
-local function Bar_OnLeave(self)
+local function bar_OnEnter()
     if not C.DB.Infobar.Mouseover then
         return
     end
 
     local bar = INFOBAR.Bar
-    bar:SetScript('OnUpdate', FadeOut)
+    bar:SetScript('OnUpdate', fadeIn)
 end
 
-local function Block_OnEnter(block)
-    Bar_OnEnter()
+local function bar_OnLeave()
+    if not C.DB.Infobar.Mouseover then
+        return
+    end
+
+    local bar = INFOBAR.Bar
+    bar:SetScript('OnUpdate', fadeOut)
+end
+
+local function block_OnEnter(block)
+    bar_OnEnter()
     block:SetBackdropColor(C.r, C.g, C.b, 0.25)
 end
 
-local function Block_OnLeave(block)
-    Bar_OnLeave()
+local function block_OnLeave(block)
+    bar_OnLeave()
     block:SetBackdropColor(0, 0, 0, 0)
 end
 
-local function ArrangeBlocks()
+local function block_OnEvent(block, ...)
+    block:onEvent(...)
+end
+
+local function sortBlock()
     local bar = INFOBAR.Bar
     local leftOffset, rightOffset = 0, 0
 
@@ -110,8 +120,8 @@ function INFOBAR:RegisterNewBlock(name, position, width, noFade)
         block:SetAlpha(0)
     end
 
-    block:SetScript('OnEnter', Block_OnEnter)
-    block:SetScript('OnLeave', Block_OnLeave)
+    block:SetScript('OnEnter', block_OnEnter)
+    block:SetScript('OnLeave', block_OnLeave)
 
     if noFade then
         block.noFade = true
@@ -121,7 +131,7 @@ function INFOBAR:RegisterNewBlock(name, position, width, noFade)
 
     tinsert(INFOBAR.Blocks, block)
 
-    ArrangeBlocks()
+    sortBlock()
 
     return block
 end
@@ -139,8 +149,8 @@ function INFOBAR:CreateInfoBar()
     barAlpha = mouseover and 0.25 or 0.65
     blockAlpha = mouseover and 0 or 1
 
-    bar:SetScript('OnEnter', Bar_OnEnter)
-    bar:SetScript('OnLeave', Bar_OnLeave)
+    bar:SetScript('OnEnter', bar_OnEnter)
+    bar:SetScript('OnLeave', bar_OnLeave)
 
     _G.RegisterStateDriver(bar, 'visibility', '[petbattle] hide; show')
 
@@ -163,32 +173,32 @@ function INFOBAR:CreateInfoBar()
     bar.anim.fader:SetSmoothing('OUT')
 end
 
-local function Block_OnEvent(self, ...)
-    self:onEvent(...)
-end
-
 function INFOBAR:LoadInfobar(block)
     if block.eventList then
         for _, event in pairs(block.eventList) do
             block:RegisterEvent(event)
         end
-        block:HookScript('OnEvent', Block_OnEvent)
+        block:HookScript('OnEvent', block_OnEvent)
     end
+
     if block.onEnter then
         block:HookScript('OnEnter', block.onEnter)
     end
+
     if block.onLeave then
         block:HookScript('OnLeave', block.onLeave)
     end
+
     if block.onMouseUp then
         block:HookScript('OnMouseUp', block.onMouseUp)
     end
+
     if block.onUpdate then
         block:HookScript('OnUpdate', block.onUpdate)
     end
 end
 
-local function BorderAnim_OnEvent(event)
+local function UpdateCombatPulse(event)
     local bar = INFOBAR.Bar
     if event == 'PLAYER_REGEN_DISABLED' then
         bar.bg:SetBackdropBorderColor(C.r, C.g, C.b)
@@ -204,15 +214,15 @@ local function BorderAnim_OnEvent(event)
     end
 end
 
-function INFOBAR:UpdateCombatPulse()
+function INFOBAR:CreateCombatPulse()
     if C.DB.Infobar.CombatPulse then
-        F:RegisterEvent('PLAYER_REGEN_ENABLED', BorderAnim_OnEvent)
-        F:RegisterEvent('PLAYER_REGEN_DISABLED', BorderAnim_OnEvent)
-        F:RegisterEvent('CALENDAR_UPDATE_PENDING_INVITES', BorderAnim_OnEvent)
+        F:RegisterEvent('PLAYER_REGEN_ENABLED', UpdateCombatPulse)
+        F:RegisterEvent('PLAYER_REGEN_DISABLED', UpdateCombatPulse)
+        F:RegisterEvent('CALENDAR_UPDATE_PENDING_INVITES', UpdateCombatPulse)
     else
-        F:UnregisterEvent('PLAYER_REGEN_ENABLED', BorderAnim_OnEvent)
-        F:UnregisterEvent('PLAYER_REGEN_DISABLED', BorderAnim_OnEvent)
-        F:UnregisterEvent('CALENDAR_UPDATE_PENDING_INVITES', BorderAnim_OnEvent)
+        F:UnregisterEvent('PLAYER_REGEN_ENABLED', UpdateCombatPulse)
+        F:UnregisterEvent('PLAYER_REGEN_DISABLED', UpdateCombatPulse)
+        F:UnregisterEvent('CALENDAR_UPDATE_PENDING_INVITES', UpdateCombatPulse)
     end
 end
 
@@ -222,7 +232,7 @@ function INFOBAR:OnLogin()
     end
 
     INFOBAR:CreateInfoBar()
-    INFOBAR:UpdateCombatPulse()
+    INFOBAR:CreateCombatPulse()
 
     INFOBAR:CreateSystemBlock()
     INFOBAR:CreateDurabilityBlock()
