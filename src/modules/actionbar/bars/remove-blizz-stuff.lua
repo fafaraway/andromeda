@@ -26,8 +26,19 @@ local framesToHide = {
     _G.OverrideActionBar,
     _G.PossessActionBar,
     _G.PetActionBar,
-    _G.MicroButtonAndBagsBar,
+    _G.MainMenuMicroButton,
+    _G.StoreMicroButton,
+    _G.CollectionsMicroButton,
+    _G.EJMicroButton,
+    _G.LFDMicroButton,
+    _G.GuildMicroButton,
+    _G.QuestLogMicroButton,
+    _G.AchievementMicroButton,
+    _G.TalentMicroButton,
+    _G.SpellbookMicroButton,
+    _G.CharacterMicroButton,
     _G.BagsBar,
+    _G.MicroButtonAndBagsBar
 }
 
 local framesToDisable = {
@@ -49,7 +60,19 @@ local framesToDisable = {
     _G.OverrideActionBarHealthBar,
     _G.OverrideActionBarPowerBar,
     _G.OverrideActionBarPitchFrame,
+    _G.MainMenuMicroButton,
+    _G.StoreMicroButton,
+    _G.CollectionsMicroButton,
+    _G.EJMicroButton,
+    _G.LFDMicroButton,
+    _G.GuildMicroButton,
+    _G.QuestLogMicroButton,
+    _G.AchievementMicroButton,
+    _G.TalentMicroButton,
+    _G.SpellbookMicroButton,
+    _G.CharacterMicroButton,
     _G.BagsBar,
+    _G.MicroButtonAndBagsBar
 }
 
 local function disableAllScripts(frame)
@@ -125,11 +148,4 @@ function ACTIONBAR:RemoveBlizzStuff()
 
     -- Update token panel
     F:RegisterEvent('CURRENCY_DISPLAY_UPDATE', updateTokenVisibility)
-
-    -- Remove main menu micro buttons
-    if _G.MainMenuMicroButton.MainMenuBarPerformanceBar then
-        F.HideObject(_G.MainMenuMicroButton.MainMenuBarPerformanceBar)
-    end
-    F.HideObject(_G.HelpOpenWebTicketButton)
-    _G.MainMenuMicroButton:SetScript('OnUpdate', nil)
 end
