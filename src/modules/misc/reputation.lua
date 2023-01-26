@@ -1,6 +1,8 @@
 local F, C, L = unpack(select(2, ...))
 local ER = F:RegisterModule('EnhancedReputation')
 
+-- #FIXME
+
 local rep = {}
 local extraRep = {}
 

@@ -11,7 +11,7 @@
     <Script file="itemlevel.lua"/>
     <Script file="logo.lua"/>
     <Script file="proposaltimer.lua"/>
-    <Script file="reputation.lua"/>
+    <!-- <Script file="reputation.lua"/> -->
     <Script file="screenshot.lua"/>
     <Script file="vignetting.lua"/>
 </Ui>
