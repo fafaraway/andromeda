@@ -118,11 +118,6 @@ end
 
 function MAP:WorldMapScale()
     local WorldMapFrame = _G.WorldMapFrame
-    WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
-        local x, y = _G.MapCanvasScrollControllerMixin.GetCursorPosition(f)
-        local scale = WorldMapFrame:GetScale()
-        return x / scale, y / scale
-    end
 
     F.CreateMF(WorldMapFrame, nil, true)
     hooksecurefunc(WorldMapFrame, 'SynchronizeDisplayState', self.UpdateMapAnchor)
