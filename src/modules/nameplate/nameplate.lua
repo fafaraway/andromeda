@@ -758,55 +758,8 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
     NAMEPLATE.UpdateTotemIcon(self, event, unit)
 end
 
--- local function CheckNameplateAuraFilter(index)
---     local value = (index == 1 and C.NameplateAuraWhiteList) or (index == 2 and C.NameplateAuraBlackList)
---     if value then
---         for spellID in pairs(value) do
---             local name = GetSpellInfo(spellID)
---             if name then
---                 if _G.ANDROMEDA_ADB['NameplateAuraFilterList'][index][spellID] then
---                     _G.ANDROMEDA_ADB['NameplateAuraFilterList'][index][spellID] = nil
---                 end
---             else
---                 if C.IS_DEVELOPER then
---                     F:Print('Invalid nameplate filter ID: ' .. spellID)
---                 end
---             end
---         end
-
---         for spellID, val in pairs(_G.ANDROMEDA_ADB['NameplateAuraFilterList'][index]) do
---             if val == false and value[spellID] == nil then
---                 _G.ANDROMEDA_ADB['NameplateAuraFilterList'][index][spellID] = nil
---             end
---         end
---     end
--- end
-
--- function NAMEPLATE:CheckNameplateAuraFilters()
---     CheckNameplateAuraFilter(1)
---     CheckNameplateAuraFilter(2)
--- end
-
 local function RefreshNameplateAuraFilter(list, key)
     wipe(NAMEPLATE[key])
-
-    -- local VALUE = (index == 1 and C.NameplateAuraWhiteList) or (index == 2 and C.NameplateAuraBlackList)
-    -- if VALUE then
-    --     for spellID in pairs(VALUE) do
-    --         local name = GetSpellInfo(spellID)
-    --         if name then
-    --             if _G.ANDROMEDA_ADB['NameplateAuraFilterList'][index][spellID] == nil then
-    --                 NAMEPLATE.AuraFilterList[index][spellID] = true
-    --             end
-    --         end
-    --     end
-    -- end
-
-    -- for spellID, value in pairs(_G.ANDROMEDA_ADB['NameplateAuraFilterList'][index]) do
-    --     if value then
-    --         NAMEPLATE.AuraFilterList[index][spellID] = true
-    --     end
-    -- end
 
     for spellID in pairs(list) do
         local name = GetSpellInfo(spellID)

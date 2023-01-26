@@ -50,8 +50,6 @@ C.RaidBuffsWhiteList = {
     [363916] = true, -- 黑曜鳞片
 }
 
--- Corner spells
--- [spellID] = {anchor, {r, g, b}, ALL}
 C.CornerSpellsList = {
     ['PRIEST'] = {
         [194384] = { 'TOPRIGHT', { 1, 1, 0.66 } }, -- 救赎
@@ -125,16 +123,6 @@ C.CornerSpellsList = {
     ['DEATHKNIGHT'] = {},
 }
 
-C.BloodlustDebuffsList = {
-    57723, -- 筋疲力尽
-    57724, -- 心满意足
-    80354, -- 时空错位
-    264689, -- 疲倦
-    390435, -- 筋疲力尽，龙希尔
-}
-
--- Party watcher spells
--- [spellID] = duration in seconds
 C.PartySpellsList = {
     [57994] = 12, -- 风剪
     [1766] = 15, -- 脚踢
@@ -198,7 +186,6 @@ C.PartySpellsList = {
     [196555] = 180, -- 虚空行走
 }
 
--- Talent modification
 C.TalentCDFixList = {
     [740] = 120, -- 宁静
     [2094] = 90, -- 致盲
