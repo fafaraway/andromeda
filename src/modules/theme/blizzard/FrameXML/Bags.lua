@@ -151,7 +151,6 @@ tinsert(C.BlizzThemes, function()
     -- [[ Bank ]]
 
     _G.BankSlotsFrame:DisableDrawLayer('BORDER')
-    _G.BankPortraitTexture:Hide()
     _G.BankFrameMoneyFrameInset:Hide()
     _G.BankFrameMoneyFrameBorder:Hide()
 
