@@ -26,6 +26,8 @@ local framesToHide = {
     _G.OverrideActionBar,
     _G.PossessActionBar,
     _G.PetActionBar,
+    _G.MicroButtonAndBagsBar,
+    _G.BagsBar,
 }
 
 local framesToDisable = {
@@ -47,6 +49,7 @@ local framesToDisable = {
     _G.OverrideActionBarHealthBar,
     _G.OverrideActionBarPowerBar,
     _G.OverrideActionBarPitchFrame,
+    _G.BagsBar,
 }
 
 local function disableAllScripts(frame)
@@ -129,12 +132,4 @@ function ACTIONBAR:RemoveBlizzStuff()
     end
     F.HideObject(_G.HelpOpenWebTicketButton)
     _G.MainMenuMicroButton:SetScript('OnUpdate', nil)
-
-    _G.MicroButtonAndBagsBar:Hide()
-    _G.MicroButtonAndBagsBar:UnregisterAllEvents()
-
-    if C.IS_NEW_PATCH then
-        _G.BagsBar:Hide()
-        _G.BagsBar:UnregisterAllEvents()
-    end
 end
