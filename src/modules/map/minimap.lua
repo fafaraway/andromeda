@@ -141,12 +141,21 @@ end
 
 -- Mail Icon
 
+local function updateMailFrameAnchor(frame, _, _, _, _, _, force)
+    if force then
+        return
+    end
+
+    frame:ClearAllPoints()
+    frame:SetPoint('BOTTOM', _G.Minimap, 'BOTTOM', 0, _G.Minimap.halfDiff + 10, true)
+end
+
 function MAP:CreateMailButton()
-    local mail = C.IS_NEW_PATCH and _G.MinimapCluster.IndicatorFrame.MailFrame or _G.MinimapCluster.MailFrame
+    local mail = _G.MinimapCluster.IndicatorFrame.MailFrame
     local icon = _G.MiniMapMailIcon
 
-    mail:ClearAllPoints()
-    mail:SetPoint('BOTTOM', _G.Minimap, 'BOTTOM', 0, _G.Minimap.halfDiff + 10)
+    updateMailFrameAnchor(mail)
+
     mail:SetFrameLevel(11)
     icon:SetScale(1.2)
     icon:SetPoint('CENTER', mail)
