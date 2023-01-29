@@ -778,8 +778,8 @@ function GUI:SetupActionbarFader(parent)
             [6] = { value = 'FadeBar6', text = L['Enable Fade on Bar 6'] },
             [7] = { value = 'FadeBar7', text = L['Enable Fade on Bar 7'] },
             [8] = { value = 'FadeBar8', text = L['Enable Fade on Bar 8'] },
-            [9] = { value = 'FadePetBar', text = L['Enable Fade on PetBar'] },
-            [10] = { value = 'FadeStanceBar', text = L['Enable Fade on StanceBar'] },
+            [9] = { value = 'FadeBarPet', text = L['Enable Fade on PetBar'] },
+            [10] = { value = 'FadeBarStance', text = L['Enable Fade on StanceBar'] },
         },
         conditions = {
             [1] = { value = 'Instance', text = L['Inside Instance'] },
