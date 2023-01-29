@@ -21,7 +21,6 @@ function TOOLTIP:ReskinTooltip()
         self.bg = F.SetBD(self)
         self.bg:SetInside(self)
         self.bg:SetFrameLevel(self:GetFrameLevel())
-        -- F.SetBorderColor(self.bg)
         local color = _G.ANDROMEDA_ADB.BackdropColor
         local alpha = C.DB.Tooltip.BackdropAlpha
         self.bg:SetBackdropBorderColor(color.r, color.g, color.b, alpha)
@@ -37,6 +36,7 @@ function TOOLTIP:ReskinTooltip()
     end
 
     F.SetBorderColor(self.bg)
+    F.SetShadowColor(self.bg)
 
     if not C.DB.Tooltip.BorderColor then
         return

@@ -676,6 +676,14 @@ do
         return self.__shadow
     end
 
+    function F:SetShadowColor(alpha)
+        if not self.__shadow then
+            return
+        end
+
+        self.__shadow:SetBackdropBorderColor(0, 0, 0, alpha or 0.25)
+    end
+
     function F:CreateGradient()
         local gradStyle = _G.ANDROMEDA_ADB.GradientStyle
         local normTex = C.Assets.Textures.Backdrop
