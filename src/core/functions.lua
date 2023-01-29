@@ -204,6 +204,9 @@ do
     local itemLevelString = '^' .. gsub(_G.ITEM_LEVEL, '%%d', '')
     local enchantString = gsub(_G.ENCHANTED_TOOLTIP_LINE, '%%s', '(.+)')
 
+    local tip = CreateFrame('GameTooltip', C.ADDON_TITLE .. 'ScanTooltip', nil, 'GameTooltipTemplate')
+    F.ScanTip = tip
+
     local slotData = { gems = {}, gemsColor = {} }
     function F.GetItemLevel(link, arg1, arg2, fullScan)
         if fullScan then
