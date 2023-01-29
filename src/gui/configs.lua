@@ -112,7 +112,7 @@ C.CharacterSettings = {
         DebuffSize = 50,
         DebuffPerRow = 12,
         DebuffReverse = true,
-        HideBlizFrame = false,
+        HideBlizzFrame = false,
     },
     Inventory = {
         Enable = true,

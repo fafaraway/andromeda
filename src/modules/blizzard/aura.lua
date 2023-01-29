@@ -2,26 +2,19 @@ local F, C, L = unpack(select(2, ...))
 local AURA = F:GetModule('Aura')
 local oUF = F.Libs.oUF
 
-function AURA:OnLogin()
-    if not C.DB.Aura.Enable then
-        return
+local function onEvent(_, isLogin, isReload)
+    if isLogin or isReload then
+        F.HideObject(_G.BuffFrame)
+        F.HideObject(_G.DebuffFrame)
     end
-
-    AURA:HideBlizBuff()
-    AURA:BuildBuffFrame()
 end
 
-function AURA:HideBlizBuff()
-    if not C.DB.Aura.Enable and not C.DB.Auras.HideBlizFrame then
+function AURA:HideBlizzFrame()
+    if not C.DB.Aura.Enable and not C.DB.Auras.HideBlizzFrame then
         return
     end
 
-    F:RegisterEvent('PLAYER_ENTERING_WORLD', function(_, isLogin, isReload)
-        if isLogin or isReload then
-            F.HideObject(_G.BuffFrame)
-            F.HideObject(_G.DebuffFrame)
-        end
-    end)
+    F:RegisterEvent('PLAYER_ENTERING_WORLD', onEvent)
 end
 
 function AURA:BuildBuffFrame()
@@ -290,7 +283,6 @@ function AURA:Button_OnEnter()
 end
 
 local indexToOffset = { 2, 6, 10 }
-
 function AURA:CreateAuraIcon(button)
     button.header = button:GetParent()
     button.filter = button.header.filter
@@ -327,4 +319,13 @@ function AURA:CreateAuraIcon(button)
     button:SetScript('OnAttributeChanged', AURA.OnAttributeChanged)
     button:SetScript('OnEnter', AURA.Button_OnEnter)
     button:SetScript('OnLeave', F.HideTooltip)
+end
+
+function AURA:OnLogin()
+    if not C.DB.Aura.Enable then
+        return
+    end
+
+    AURA:HideBlizzFrame()
+    AURA:BuildBuffFrame()
 end

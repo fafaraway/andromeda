@@ -447,7 +447,7 @@ local function isUnitFrameEnable()
 end
 
 local function isBuffEnable()
-    return C.DB['Aura']['Enable'] or C.DB['Aura']['HideBlizFrame']
+    return C.DB['Aura']['Enable'] or C.DB['Aura']['HideBlizzFrame']
 end
 
 local function isActionbarEnable()
