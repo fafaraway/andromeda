@@ -58,7 +58,13 @@ function NAMEPLATE:UpdateNameOnlyMode()
     -- SetCVar('nameplateShowFriendlyPets', 1)
     -- SetCVar('nameplateShowFriendlyMinions', 1)
     -- SetCVar('nameplateShowFriendlyGuardians', 1)
-    SetCVar('nameplateShowOnlyNames', C.DB.Nameplate.NameOnlyMode)
+
+    -- ensure this is still available and usable for our purposes, as it was removed with 10.0.5
+    C_CVar.RegisterCVar('nameplateShowOnlyNames')
+    if GetCVarBool('nameplateShowOnlyNames') then
+        SetCVar('nameplateShowOnlyNames', C.DB.Nameplate.NameOnlyMode)
+    end
+
     SetCVar('nameplateShowDebuffsOnFriendly', not C.DB.Nameplate.NameOnlyMode)
 end
 
