@@ -59,8 +59,6 @@ function NAMEPLATE:UpdateNameOnlyMode()
     -- SetCVar('nameplateShowFriendlyMinions', 1)
     -- SetCVar('nameplateShowFriendlyGuardians', 1)
 
-    -- ensure this is still available and usable for our purposes, as it was removed with 10.0.5
-    C_CVar.RegisterCVar('nameplateShowOnlyNames')
     if GetCVarBool('nameplateShowOnlyNames') then
         SetCVar('nameplateShowOnlyNames', C.DB.Nameplate.NameOnlyMode)
     end
@@ -792,6 +790,9 @@ function NAMEPLATE:RefreshNameplateAuraFilters()
 end
 
 function NAMEPLATE:OnLogin()
+    -- ensure this is still available and usable for our purposes, as it was removed with 10.0.5
+    C_CVar.RegisterCVar('nameplateShowOnlyNames')
+
     if not C.DB.Nameplate.Enable then
         return
     end
