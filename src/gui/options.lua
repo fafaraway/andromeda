@@ -74,8 +74,8 @@ local function UpdateFilterWhiteList()
     CHAT:UpdateFilterWhiteList()
 end
 
-local function SetupChatSize()
-    GUI:SetupChatSize(GUI.Page[4])
+local function UpdateChatSize()
+    CHAT:UpdateChatSize()
 end
 
 local function UpdateLanguageFilter()
@@ -88,10 +88,6 @@ end
 
 local function UpdateTextFading()
     CHAT:UpdateTextFading()
-end
-
-local function SetupChatTextFading()
-    GUI:SetupChatTextFading(GUI.Page[4])
 end
 
 -- Map
@@ -305,10 +301,6 @@ local function SetupCornerSpell()
     GUI:SetupCornerSpell(GUI.Page[12])
 end
 
-local function UpdateGroupAuras()
-    UNITFRAME:UpdateGroupAuras()
-end
-
 local function UpdateRaidTargetIndicator()
     UNITFRAME:UpdateRaidTargetIndicator()
 end
@@ -396,11 +388,6 @@ end
 local function SetupAnnounceableSpells()
     GUI:SetupAnnounceableSpells(GUI.Page[7])
 end
-
-
-
-
-
 
 -- Options
 GUI.OptionsList = {
@@ -812,29 +799,99 @@ GUI.OptionsList = {
             1,
             'Chat',
             'LockPosition',
-            L['Lock Position'],
+            L['Lock Chat Window'],
             nil,
-            SetupChatSize,
+            nil,
             nil,
             L['Lock postion and size of chat frame.|nDisable this if you want to adjust chat frame.'],
         },
+        {
+            3,
+            'Chat',
+            'Width',
+            L['Chat Window Width'],
+            nil,
+            { 100, 600, 1 },
+            UpdateChatSize,
+        },
+        {
+            3,
+            'Chat',
+            'Height',
+            L['Chat Window Height'],
+            true,
+            { 100, 600, 1 },
+            UpdateChatSize,
+        },
+        {},
         {
             1,
             'Chat',
             'TextFading',
             L['Text Fade Out'],
-            true,
-            SetupChatTextFading,
+            nil,
+            nil,
             UpdateTextFading,
             L['Text will fade out after a period of time without receiving new messages.'],
         },
-        { 1, 'Chat', 'CopyButton', L['Copy Button'] },
+        {
+            3,
+            'Chat',
+            'TimeVisible',
+            L['Time Visible'],
+            nil,
+            { 10, 600, 1 },
+            UpdateTextFading,
+        },
+        {
+            3,
+            'Chat',
+            'FadeDuration',
+            L['Fade Out Duration'],
+            true,
+            { 1, 6, 1 },
+            UpdateTextFading,
+        },
+        {},
+        {
+            1,
+            'Chat',
+            'CopyButton',
+            L['Copy Button'],
+            nil,
+            nil,
+            nil,
+            L['Enable copy button.'],
+        },
         {
             1,
             'Chat',
             'VoiceButton',
             L['Voice Button'],
             true,
+            nil,
+            nil,
+            L['Enable voice button.'],
+        },
+        {
+            1,
+            'Chat',
+            'ChannelBar',
+            L['Channel Bar'],
+            nil,
+            nil,
+            nil,
+            L['Enable channel bar.'],
+        },
+        {
+            1,
+            'Chat',
+            'BottomEditBox',
+            L['EditBox On Bottom'],
+            true,
+            nil,
+            UpdateEditBoxAnchor,
+            L['Anchor the editbox to the bottom.'],
         },
         {
             1,
@@ -855,14 +912,6 @@ GUI.OptionsList = {
             nil,
             nil,
             L['You can use TAB key to cycle channels after the input box is activated.'],
-        },
-        { 1, 'Chat', 'ChannelBar', L['Channel Bar'] },
-        {
-            1,
-            'Chat',
-            'GroupRoleIcon',
-            L['Group Role Icon'],
-            true,
         },
         {
             1,
@@ -886,12 +935,9 @@ GUI.OptionsList = {
         {
             1,
             'Chat',
-            'SmartChatBubble',
-            L['Smart Bubble'],
+            'GroupRoleIcon',
+            L['Group Role Icon'],
             nil,
-            nil,
-            nil,
-            L['Only show chat bubbles in raid.'],
         },
         {
             1,
@@ -903,25 +949,25 @@ GUI.OptionsList = {
         {
             1,
             'Chat',
-            'BottomEditBox',
-            L['EditBox On Bottom'],
-            nil,
-            nil,
-            UpdateEditBoxAnchor,
-            L['Anchor the editbox to the bottom.'],
-        },
-        {
-            1,
-            'Chat',
             'HideInCombat',
             L['Hidden in Combat'],
         },
         {
             1,
             'Chat',
+            'SmartChatBubble',
+            L['Smart Bubble'],
+            true,
+            nil,
+            nil,
+            L['Only show chat bubbles in raid.'],
+        },
+        {
+            1,
+            'Chat',
             'DisableProfanityFilter',
             L['Disable Profanity Filter'],
-            true,
+            nil,
             nil,
             UpdateLanguageFilter,
         },
@@ -1666,7 +1712,7 @@ GUI.OptionsList = {
             true,
             nil,
             nil,
-            L['Hold the ALT key to show various IDs.|nSupport spells, items, quests, talents, achievements, currency, etc.']
+            L['Hold the ALT key to show various IDs.|nSupport spells, items, quests, talents, achievements, currency, etc.'],
         },
         {
             1,
@@ -1682,7 +1728,7 @@ GUI.OptionsList = {
             true,
             nil,
             nil,
-            L['Hold the ALT key to show extra item info.']
+            L['Hold the ALT key to show extra item info.'],
         },
         {},
         { 1, 'Tooltip', 'SpecIlvl', L['Show Spec&iLvl'] },
@@ -2103,7 +2149,7 @@ GUI.OptionsList = {
             'CornerSpellType',
             L['Corner Spell Type'],
             nil,
-            {L["Type: Block"], L["Type: Icon"], L["Type: Number"]},
+            { L['Type: Block'], L['Type: Icon'], L['Type: Number'] },
             UpdateRaidAurasOptions,
         },
         {
@@ -2141,10 +2187,9 @@ GUI.OptionsList = {
             'DebuffWatcherScale',
             L['Debuff Watcher Scale'],
             true,
-            { .3, 2, .1 },
+            { 0.3, 2, 0.1 },
             UpdateRaidAurasOptions,
         },
-
 
         {},
         {
@@ -2217,8 +2262,6 @@ GUI.OptionsList = {
             UpdateAllHeaders,
             L['Only show RaidFrame if there are more than 5 members in your group.|nIf disabled, show RaidFrame when in raid, show PartyFrame when in party.'],
         },
-
-
     },
     [13] = { -- nameplate
         {

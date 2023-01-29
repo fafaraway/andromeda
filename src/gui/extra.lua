@@ -3066,62 +3066,8 @@ function GUI:SetupVignettingVisibility(parent)
 end
 
 -- Chat
-local function UpdateChatSize()
-    CHAT:UpdateChatSize()
-end
 
-function GUI:SetupChatSize(parent)
-    local guiName = C.ADDON_TITLE .. 'GUIChatSize'
-    togglePanel(guiName)
-    if extraGUIs[guiName] then
-        return
-    end
 
-    local panel = createPanel(parent, guiName)
-    local scroll = createScrollFrame(panel, 220, 540)
-
-    local datas = {
-        [1] = { key = 'Width', value = '300', text = L['Width'], min = 50, max = 500 },
-        [2] = { key = 'Height', value = '100', text = L['Height'], min = 50, max = 500 },
-    }
-
-    local offset = -10
-    for _, v in ipairs(datas) do
-        createGroupTitle(scroll, L['Chat Window Size'], offset)
-        createSlider(scroll, 'Chat', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdateChatSize)
-        offset = offset - 65
-    end
-end
-
-local function UpdateTextFading()
-    CHAT:UpdateTextFading()
-end
-
-function GUI:SetupChatTextFading(parent)
-    local guiName = C.ADDON_TITLE .. 'GUIChatTextFading'
-    togglePanel(guiName)
-    if extraGUIs[guiName] then
-        return
-    end
-
-    local panel = createPanel(parent, guiName)
-    local scroll = createScrollFrame(panel, 220, 540)
-
-    local mKey = 'Chat'
-    local db = C.CharacterSettings.Chat
-
-    local datas = {
-        [1] = { key = 'TimeVisible', value = db.TimeVisible, text = L['Time Visible'], min = 10, max = 300 },
-        [2] = { key = 'FadeDuration', value = db.FadeDuration, text = L['Fade Duration'], min = 1, max = 6 },
-    }
-
-    local offset = -10
-    for _, v in ipairs(datas) do
-        createGroupTitle(scroll, L['Chat Text Fading'], offset)
-        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdateTextFading)
-        offset = offset - 65
-    end
-end
 
 -- Combat
 function GUI:SetupSimpleFloatingCombatText(parent)

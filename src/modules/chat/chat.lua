@@ -5,9 +5,10 @@ local function updateChatAnchor(self, _, _, _, x, y)
     if not C.DB.Chat.LockPosition then
         return
     end
-    if not (x == 0 and y == 30) then
+
+    if not (x == C.UI_GAP and y == C.UI_GAP) then
         self:ClearAllPoints()
-        self:SetPoint('BOTTOMLEFT', _G.UIParent, 'BOTTOMLEFT', 0, 30)
+        self:SetPoint('BOTTOMLEFT', _G.UIParent, 'BOTTOMLEFT', C.UI_GAP, C.UI_GAP)
         self:SetWidth(C.DB.Chat.Width)
         self:SetHeight(C.DB.Chat.Height)
     end
@@ -18,6 +19,7 @@ function CHAT:UpdateChatSize()
     if not C.DB.Chat.LockPosition then
         return
     end
+
     if isScaling then
         return
     end
@@ -34,8 +36,6 @@ function CHAT:UpdateChatSize()
     _G.ChatFrame1:ClearAllPoints()
     _G.ChatFrame1:SetPoint('BOTTOMLEFT', _G.UIParent, 'BOTTOMLEFT', C.UI_GAP, C.UI_GAP)
     _G.ChatFrame1:SetSize(C.DB.Chat.Width, C.DB.Chat.Height)
-
-    F:DisableEditMode(_G.ChatFrame1)
 
     isScaling = false
 end
@@ -685,4 +685,11 @@ function CHAT:OnLogin()
     CHAT:AddRoleIcon()
     CHAT:UpdateLanguageFilter()
     CHAT:HideInCombat()
+
+    if C.DB.Chat.LockPosition then
+        CHAT:UpdateChatSize()
+        F:RegisterEvent('UI_SCALE_CHANGED', CHAT.UpdateChatSize)
+        hooksecurefunc(_G.ChatFrame1, 'SetPoint', updateChatAnchor)
+        FCF_SavePositionAndDimensions(_G.ChatFrame1)
+    end
 end

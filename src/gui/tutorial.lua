@@ -87,6 +87,7 @@ local function SetupCVars()
     SetCVar('nameplateShowEnemyPets', 1)
     SetCVar('nameplateShowEnemyTotems', 1)
     SetCVar('nameplateShowEnemyMinus', 1)
+    SetCVar('nameplateShowFriendlyNPCs', 1)
     SetCVar('nameplateMotion', 1)
     SetCVar('nameplateMotionSpeed', 0.2)
 
@@ -144,17 +145,7 @@ end
 
 local function SetupActionbars() end
 
-local function SetupChatFrame()
-    F:GetModule('Chat'):UpdateChatSize()
-
-    for i = 1, _G.NUM_CHAT_WINDOWS do
-        local cf = _G['ChatFrame' .. i]
-        _G.ChatFrame_RemoveMessageGroup(cf, 'CHANNEL')
-    end
-    _G.FCF_SavePositionAndDimensions(_G.ChatFrame1)
-
-    C.DB.Chat.LockPosition = true
-end
+local function SetupChatFrame() end
 
 local function SetupAddons() end
 
