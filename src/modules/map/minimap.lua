@@ -155,6 +155,7 @@ function MAP:CreateMailButton()
     local icon = _G.MiniMapMailIcon
 
     updateMailFrameAnchor(mail)
+    hooksecurefunc(mail, 'SetPoint', updateMailFrameAnchor)
 
     mail:SetFrameLevel(11)
     icon:SetScale(1.2)
