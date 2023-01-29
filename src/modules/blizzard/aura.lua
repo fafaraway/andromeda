@@ -16,8 +16,12 @@ function AURA:HideBlizBuff()
         return
     end
 
-    F.HideObject(_G.BuffFrame)
-    F.HideObject(_G.DebuffFrame)
+    F:RegisterEvent('PLAYER_ENTERING_WORLD', function(_, isLogin, isReload)
+        if isLogin or isReload then
+            F.HideObject(_G.BuffFrame)
+            F.HideObject(_G.DebuffFrame)
+        end
+    end)
 end
 
 function AURA:BuildBuffFrame()
