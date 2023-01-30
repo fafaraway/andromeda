@@ -47,13 +47,13 @@ C.Themes['Blizzard_EncounterJournal'] = function()
     local EncounterJournal = _G.EncounterJournal
 
     -- Tabs
-    for i = 1, 4 do
+    for i = 1, 5 do
         local tab = EncounterJournal.Tabs[i]
         if tab then
             F.ReskinTab(tab)
             if i ~= 1 then
                 tab:ClearAllPoints()
-                tab:SetPoint('TOPLEFT', EncounterJournal.Tabs[i - 1], 'TOPRIGHT', -15, 0)
+                tab:SetPoint('TOPLEFT', EncounterJournal.Tabs[i - 1], 'TOPRIGHT', -10, 0)
             end
         end
     end
@@ -78,6 +78,7 @@ C.Themes['Blizzard_EncounterJournal'] = function()
     end
 
     -- Instance select
+    _G.EncounterJournalInstanceSelectBG:SetAlpha(0)
     F.ReskinDropDown(EncounterJournal.instanceSelect.tierDropDown)
     F.ReskinTrimScroll(EncounterJournal.instanceSelect.ScrollBar)
 

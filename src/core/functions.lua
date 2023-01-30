@@ -1400,7 +1400,7 @@ do
         local newColor = _G.ANDROMEDA_ADB.WidgetHighlightColor
 
         if classColor then
-            self.__bg:SetBackdropColor(C.r, C.g, C.b, 0.45)
+            self.__bg:SetBackdropColor(C.r, C.g, C.b, 0.25)
             self.__bg:SetBackdropBorderColor(C.r, C.g, C.b)
         else
             self.__bg:SetBackdropColor(newColor.r, newColor.g, newColor.b, 0.25)
@@ -1524,8 +1524,8 @@ do
         end
 
         local bg = F.CreateBDFrame(self)
-        bg:SetPoint('TOPLEFT', 10, -3)
-        bg:SetPoint('BOTTOMRIGHT', -10, 0)
+        bg:SetPoint('TOPLEFT', 8, -3)
+        bg:SetPoint('BOTTOMRIGHT', -8, 0)
         F.CreateSD(bg)
         self.bg = bg
 

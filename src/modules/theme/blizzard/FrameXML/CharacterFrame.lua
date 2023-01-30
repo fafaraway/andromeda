@@ -46,7 +46,7 @@ tinsert(C.BlizzThemes, function()
             F.ReskinTab(tab)
             if i ~= 1 then
                 tab:ClearAllPoints()
-                tab:SetPoint('TOPLEFT', _G['CharacterFrameTab' .. (i - 1)], 'TOPRIGHT', -15, 0)
+                tab:SetPoint('TOPLEFT', _G['CharacterFrameTab' .. (i - 1)], 'TOPRIGHT', -10, 0)
             end
         end
     end
