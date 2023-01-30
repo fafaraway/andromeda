@@ -1,65 +1,63 @@
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('UnitFrame')
 
-local function postUpdate(element, unit)
-    local r, g, b = F:UnitColor(unit)
-
-    if element.myBar then
-        element.myBar:SetStatusBarColor(r / 2, g / 2, b / 2, 0.6)
-    end
-
-    if element.otherBar then
-        element.otherBar:SetStatusBarColor(r / 2, g / 2, b / 2, 0.6)
-    end
-
-    if element.absorbBar then
-        element.absorbBar:SetStatusBarColor(r / 2, g / 2, b / 2, 0.6)
-    end
-end
-
 function UNITFRAME:CreateHealPrediction(self)
-    local inverted = C.DB.Unitframe.InvertedColorMode
+    local frame = CreateFrame('Frame', nil, self)
+    frame:SetAllPoints()
 
-    local myBar = CreateFrame('StatusBar', nil, self.Health)
-    myBar:SetPoint('TOP')
-    myBar:SetPoint('BOTTOM')
-    myBar:SetPoint('LEFT', self.Health:GetStatusBarTexture(), inverted and 'LEFT' or 'RIGHT')
-    myBar:SetStatusBarTexture(UNITFRAME.StatusBarTex)
-    myBar:SetWidth(self:GetWidth())
+    local mhpb = frame:CreateTexture(nil, 'BORDER', nil, 5)
+    mhpb:SetWidth(1)
+    mhpb:SetTexture(UNITFRAME.StatusBarTex)
+    mhpb:SetVertexColor(0, 1, 0.5, 0.5)
 
-    local otherBar = CreateFrame('StatusBar', nil, self.Health)
-    otherBar:SetPoint('TOP')
-    otherBar:SetPoint('BOTTOM')
-    otherBar:SetPoint('LEFT', myBar:GetStatusBarTexture(), inverted and 'LEFT' or 'RIGHT')
-    otherBar:SetStatusBarTexture(UNITFRAME.StatusBarTex)
-    otherBar:SetWidth(self:GetWidth())
+    local ohpb = frame:CreateTexture(nil, 'BORDER', nil, 5)
+    ohpb:SetWidth(1)
+    ohpb:SetTexture(UNITFRAME.StatusBarTex)
+    ohpb:SetVertexColor(0, 1, 0, 0.5)
 
-    local absorbBar = CreateFrame('StatusBar', nil, self.Health)
-    absorbBar:SetPoint('TOP')
-    absorbBar:SetPoint('BOTTOM')
-    absorbBar:SetPoint('LEFT', otherBar:GetStatusBarTexture(), inverted and 'LEFT' or 'RIGHT')
-    absorbBar:SetStatusBarTexture(C.Assets.Textures.StatusbarStripesThin)
-    absorbBar:GetStatusBarTexture():SetBlendMode('ADD')
-    -- absorbBar:GetStatusBarTexture():SetHorizTile(true)
-    -- absorbBar:GetStatusBarTexture():SetVertTile(true)
+    local abb = frame:CreateTexture(nil, 'BORDER', nil, 5)
+    abb:SetWidth(1)
+    abb:SetTexture(UNITFRAME.StatusBarTex)
+    abb:SetVertexColor(0.66, 1, 1, 0.7)
 
-    absorbBar:SetStatusBarColor(0.3, 0.3, 0.3, 0.8)
-    absorbBar:SetWidth(self:GetWidth())
+    local abbo = frame:CreateTexture(nil, 'ARTWORK', nil, 1)
+    abbo:SetAllPoints(abb)
+    abbo:SetTexture('Interface\\RaidFrame\\Shield-Overlay', true, true)
+    abbo.tileSize = 32
 
-    local overAbsorb = self.Health:CreateTexture(nil, 'OVERLAY')
-    overAbsorb:SetPoint('TOP', self.Health, 'TOPRIGHT', -1, 4)
-    overAbsorb:SetPoint('BOTTOM', self.Health, 'BOTTOMRIGHT', -1, -4)
-    overAbsorb:SetWidth(12)
-    overAbsorb:SetTexture(C.Assets.Textures.Spark)
-    overAbsorb:SetBlendMode('ADD')
+    local oag = frame:CreateTexture(nil, 'ARTWORK', nil, 1)
+    oag:SetWidth(15)
+    oag:SetTexture('Interface\\RaidFrame\\Shield-Overshield')
+    oag:SetBlendMode('ADD')
+    oag:SetAlpha(0.7)
+    oag:SetPoint('TOPLEFT', self.Health, 'TOPRIGHT', -7, 2)
+    oag:SetPoint('BOTTOMLEFT', self.Health, 'BOTTOMRIGHT', -7, -2)
 
-    self.HealthPrediction = {
-        myBar = myBar,
-        otherBar = otherBar,
-        absorbBar = absorbBar,
-        overAbsorb = overAbsorb,
+    local hab = CreateFrame('StatusBar', nil, frame)
+    hab:SetPoint('TOPLEFT', self.Health)
+    hab:SetPoint('BOTTOMRIGHT', self.Health:GetStatusBarTexture())
+    hab:SetReverseFill(true)
+    hab:SetStatusBarTexture(UNITFRAME.StatusBarTex)
+    hab:SetStatusBarColor(0, 0.5, 0.8, 0.5)
+    hab:SetFrameLevel(frame:GetFrameLevel())
+
+    local ohg = frame:CreateTexture(nil, 'ARTWORK', nil, 1)
+    ohg:SetWidth(15)
+    ohg:SetTexture('Interface\\RaidFrame\\Absorb-Overabsorb')
+    ohg:SetBlendMode('ADD')
+    ohg:SetAlpha(0.5)
+    ohg:SetPoint('TOPRIGHT', self.Health, 'TOPLEFT', 5, 2)
+    ohg:SetPoint('BOTTOMRIGHT', self.Health, 'BOTTOMLEFT', 5, -2)
+
+    self.HealPredictionAndAbsorb = {
+        myBar = mhpb,
+        otherBar = ohpb,
+        absorbBar = abb,
+        absorbBarOverlay = abbo,
+        overAbsorbGlow = oag,
+        healAbsorbBar = hab,
+        overHealAbsorbGlow = ohg,
         maxOverflow = 1,
-        frequentUpdates = true,
     }
-    self.HealthPrediction.PostUpdate = postUpdate
+    self.predicFrame = frame
 end
