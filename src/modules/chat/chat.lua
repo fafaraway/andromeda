@@ -106,6 +106,41 @@ function CHAT:UpdateTextFading()
     end
 end
 
+local function updateBackground(frame)
+    if C.DB.Chat.BackgroundType == 1 then
+        if frame.bg then
+            frame.bg:Hide()
+        end
+        frame:DisableDrawLayer('BORDER')
+        frame:DisableDrawLayer('BACKGROUND')
+    elseif C.DB.Chat.BackgroundType == 2 then
+        if frame.bg then
+            frame.bg:Hide()
+        end
+        frame:EnableDrawLayer('BORDER')
+        frame:EnableDrawLayer('BACKGROUND')
+    elseif C.DB.Chat.BackgroundType == 3 then
+        frame:DisableDrawLayer('BORDER')
+        frame:DisableDrawLayer('BACKGROUND')
+        if frame.bg then
+            frame.bg:Show()
+        else
+            frame.bg = F.SetBD(frame, C.DB.Chat.BackgroundAlpha)
+        end
+    end
+end
+
+function CHAT:UpdateBackground()
+    for _, chatFrameName in ipairs(_G.CHAT_FRAMES) do
+        local frame = _G[chatFrameName]
+        updateBackground(frame)
+        if frame.bg then
+            frame.bg:SetBackdropColor(0, 0, 0, C.DB.Chat.BackgroundAlpha)
+            frame.bg:SetBackdropBorderColor(0, 0, 0, 1)
+        end
+    end
+end
+
 local function SetupChatFrame(self)
     if not self or self.styled then
         return
@@ -155,7 +190,7 @@ local function SetupChatFrame(self)
     F.StripTextures(tab, 7)
     hooksecurefunc(tab, 'SetAlpha', CHAT.TabSetAlpha)
 
-    F.StripTextures(self)
+    --updateBackground(self)
 
     if _G.CHAT_OPTIONS then
         _G.CHAT_OPTIONS.HIDE_FRAME_ALERTS = true
@@ -667,6 +702,7 @@ function CHAT:OnLogin()
     hooksecurefunc('SetItemRef', CHAT.AltClickToInvite)
 
     CHAT:SetupChatFrame()
+    CHAT:UpdateBackground()
     CHAT:SetupToastFrame()
     CHAT:SetupTemporaryWindow()
     CHAT:ResizeChatFrame()

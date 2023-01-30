@@ -79,6 +79,10 @@ local function UpdateChatSize()
     CHAT:UpdateChannelBar()
 end
 
+local function UpdateBackground()
+    CHAT:UpdateBackground()
+end
+
 local function UpdateLanguageFilter()
     CHAT:UpdateLanguageFilter()
 end
@@ -823,6 +827,28 @@ GUI.OptionsList = {
             true,
             { 100, 600, 1 },
             UpdateChatSize,
+        },
+        {
+            4,
+            'Chat',
+            'BackgroundType',
+            L['Background Type'],
+            nil,
+            {
+                _G.DISABLE,
+                L['Default'],
+                L['Black'],
+            },
+            UpdateBackground,
+        },
+        {
+            3,
+            'Chat',
+            'BackgroundAlpha',
+            L['Background Alpha'],
+            true,
+            { 0.1, 1, 0.01 },
+            UpdateBackground,
         },
         {},
         {
