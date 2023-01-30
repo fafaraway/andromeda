@@ -76,6 +76,7 @@ end
 
 local function UpdateChatSize()
     CHAT:UpdateChatSize()
+    CHAT:UpdateChannelBar()
 end
 
 local function UpdateLanguageFilter()
