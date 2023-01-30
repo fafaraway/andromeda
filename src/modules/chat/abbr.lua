@@ -47,7 +47,7 @@ function CHAT:UpdateChannelNames(text, ...)
         text = gsub(text, '|h%[(%d+)%. 大腳世界頻道%]|h', '|h%[%1%. 世界%]|h')
         -- text = gsub(text, '|h：', '|h ')
         -- text = gsub(text, '|h:', '|h ')
-        text = gsub(text, '|h：', '|h:')
+        -- text = gsub(text, '|h：', '|h: ')
 
         return self.oldAddMsg(self, gsub(text, '|h%[(%d+)%..-%]|h', '|h[%1]|h'), r, g, b)
     end

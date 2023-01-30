@@ -359,13 +359,13 @@ local function CreateOptions(i)
                 F.AddTooltip(cb, 'ANCHOR_TOPLEFT', tip, 'BLUE', true)
             end
         elseif optType == 2 then -- editbox
-            local eb = F.CreateEditBox(parent, 170, 24)
+            local eb = F.CreateEditBox(parent, 170, 22)
             eb:SetMaxLetters(999)
 
             if horizon then
-                eb:SetPoint('TOPLEFT', 260, -offset + 45)
+                eb:SetPoint('TOPLEFT', 260, -offset + 55)
             else
-                eb:SetPoint('TOPLEFT', 20, -offset - 25)
+                eb:SetPoint('TOPLEFT', 20, -offset - 15)
                 offset = offset + 70
             end
 
@@ -390,9 +390,9 @@ local function CreateOptions(i)
 
             local x, y
             if horizon then
-                x, y = 250, -offset + 45
+                x, y = 250, -offset + 55
             else
-                x, y = 15, -offset - 25
+                x, y = 15, -offset - 15
                 offset = offset + 70
             end
 
@@ -421,9 +421,9 @@ local function CreateOptions(i)
 
             local dd = F.CreateDropDown(parent, 170, 20, data)
             if horizon then
-                dd:SetPoint('TOPLEFT', 260, -offset + 45)
+                dd:SetPoint('TOPLEFT', 260, -offset + 55)
             else
-                dd:SetPoint('TOPLEFT', 26, -offset - 25)
+                dd:SetPoint('TOPLEFT', 26, -offset - 15)
                 offset = offset + 70
             end
 
