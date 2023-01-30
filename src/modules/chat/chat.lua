@@ -1,8 +1,8 @@
 local F, C, L = unpack(select(2, ...))
 local CHAT = F:GetModule('Chat')
 
-local function updateChatAnchor(self, _, _, _, x, y)
-    if not C.DB.Chat.LockPosition then
+local function updateAnchor(self, _, _, _, x, y)
+    if not C.DB.Chat.Lock then
         return
     end
 
@@ -15,8 +15,8 @@ local function updateChatAnchor(self, _, _, _, x, y)
 end
 
 local isScaling = false
-function CHAT:UpdateChatSize()
-    if not C.DB.Chat.LockPosition then
+function CHAT:UpdateSizeAndPosition()
+    if not C.DB.Chat.Lock then
         return
     end
 
@@ -76,7 +76,7 @@ function CHAT:UpdateTabEventColors(event)
 end
 
 local chatEditboxes = {}
-local function UpdateEditBoxAnchor(eb)
+local function updateEditBoxAnchor(eb)
     local parent = eb.__owner
     eb:ClearAllPoints()
     if C.DB.Chat.BottomEditBox then
@@ -90,11 +90,11 @@ end
 
 function CHAT:ToggleEditBoxAnchor()
     for _, eb in pairs(chatEditboxes) do
-        UpdateEditBoxAnchor(eb)
+        updateEditBoxAnchor(eb)
     end
 end
 
-local function UpdateTextFading(self)
+local function updateTextFading(self)
     self:SetFading(C.DB.Chat.TextFading)
     self:SetTimeVisible(C.DB.Chat.TimeVisible)
     self:SetFadeDuration(C.DB.Chat.FadeDuration)
@@ -102,7 +102,7 @@ end
 
 function CHAT:UpdateTextFading()
     for i = 1, _G.NUM_CHAT_WINDOWS do
-        UpdateTextFading(_G['ChatFrame' .. i])
+        updateTextFading(_G['ChatFrame' .. i])
     end
 end
 
@@ -130,7 +130,7 @@ local function updateBackground(frame)
     end
 end
 
-function CHAT:UpdateBackground()
+function CHAT:SetupBackground()
     for _, chatFrameName in ipairs(_G.CHAT_FRAMES) do
         local frame = _G[chatFrameName]
         updateBackground(frame)
@@ -141,34 +141,33 @@ function CHAT:UpdateBackground()
     end
 end
 
-local function SetupChatFrame(self)
-    if not self or self.styled then
+local function setupChatFrame(frame)
+    if not frame or frame.styled then
         return
     end
 
-    local name = self:GetName()
+    local name = frame:GetName()
     local maxLines = 1024
 
     local font = C.Assets.Fonts.Bold
     local outline = _G.ANDROMEDA_ADB.FontOutline
-    local fontSize = select(2, self:GetFont())
-    --F:SetFS(self, font, fontSize, outline and 'OUTLINE' or '', nil, nil, outline or 'THICK')
-    self:SetFont(font, fontSize, outline and 'OUTLINE' or '')
-    self:SetShadowColor(0, 0, 0, outline and 0 or 1)
-    self:SetShadowOffset(2, -2)
+    local fontSize = select(2, frame:GetFont())
+    frame:SetFont(font, fontSize, outline and 'OUTLINE' or '')
+    frame:SetShadowColor(0, 0, 0, outline and 0 or 1)
+    frame:SetShadowOffset(2, -2)
 
-    if self:GetMaxLines() < maxLines then
-        self:SetMaxLines(maxLines)
+    if frame:GetMaxLines() < maxLines then
+        frame:SetMaxLines(maxLines)
     end
 
-    self:SetClampRectInsets(0, 0, 0, 0)
-    self:SetClampedToScreen(false)
+    frame:SetClampRectInsets(0, 0, 0, 0)
+    frame:SetClampedToScreen(false)
 
     local eb = _G[name .. 'EditBox']
     eb:SetAltArrowKeyMode(false)
     eb:SetClampedToScreen(true)
-    eb.__owner = self
-    UpdateEditBoxAnchor(eb)
+    eb.__owner = frame
+    updateEditBoxAnchor(eb)
     eb.bd = F.SetBD(eb)
     tinsert(chatEditboxes, eb)
 
@@ -190,8 +189,6 @@ local function SetupChatFrame(self)
     F.StripTextures(tab, 7)
     hooksecurefunc(tab, 'SetAlpha', CHAT.TabSetAlpha)
 
-    --updateBackground(self)
-
     if _G.CHAT_OPTIONS then
         _G.CHAT_OPTIONS.HIDE_FRAME_ALERTS = true
     end -- only flash whisper
@@ -204,9 +201,18 @@ local function SetupChatFrame(self)
         _G.CHAT_FONT_HEIGHTS[i] = i + 9
     end
 
-    F.HideObject(self.buttonFrame)
-    F.HideObject(self.ScrollBar)
-    F.HideObject(self.ScrollToBottomButton)
+    CHAT:UpdateTextFading()
+
+    if C.DB.Chat.Lock then
+        CHAT:UpdateSizeAndPosition()
+        F:RegisterEvent('UI_SCALE_CHANGED', CHAT.UpdateSizeAndPosition)
+        hooksecurefunc(_G.ChatFrame1, 'SetPoint', updateAnchor)
+        FCF_SavePositionAndDimensions(_G.ChatFrame1)
+    end
+
+    F.HideObject(frame.buttonFrame)
+    F.HideObject(frame.ScrollBar)
+    F.HideObject(frame.ScrollToBottomButton)
 
     F.HideObject(_G.ChatFrameMenuButton)
     F.HideObject(_G.QuickJoinToastButton)
@@ -222,9 +228,9 @@ local function SetupChatFrame(self)
         F.HideObject(_G.ChatFrameToggleVoiceMuteButton)
     end
 
-    self.oldAlpha = self.oldAlpha or 0 -- fix blizz error, need reviewed
+    frame.oldAlpha = frame.oldAlpha or 0 -- fix blizz error, need reviewed
 
-    self.styled = true
+    frame.styled = true
 end
 
 function CHAT:SetupToastFrame()
@@ -243,11 +249,11 @@ end
 
 function CHAT:SetupChatFrame()
     for i = 1, _G.NUM_CHAT_WINDOWS do
-        SetupChatFrame(_G['ChatFrame' .. i])
+        setupChatFrame(_G['ChatFrame' .. i])
     end
 end
 
-local function SetupTemporaryWindow()
+local function setupTemporaryWindow()
     for _, chatFrameName in ipairs(_G.CHAT_FRAMES) do
         local frame = _G[chatFrameName]
         if frame.isTemporary then
@@ -257,7 +263,7 @@ local function SetupTemporaryWindow()
 end
 
 function CHAT:SetupTemporaryWindow()
-    hooksecurefunc('FCF_OpenTemporaryWindow', SetupTemporaryWindow)
+    hooksecurefunc('FCF_OpenTemporaryWindow', setupTemporaryWindow)
 end
 
 function CHAT:UpdateEditBoxBorderColor()
@@ -277,32 +283,6 @@ function CHAT:UpdateEditBoxBorderColor()
             editBox.bd:SetBackdropBorderColor(_G.ChatTypeInfo[mType].r, _G.ChatTypeInfo[mType].g, _G.ChatTypeInfo[mType].b)
         end
     end)
-end
-
-function CHAT:ResizeChatFrame()
-    _G.ChatFrame1Tab:HookScript('OnMouseDown', function(_, btn)
-        if btn == 'LeftButton' then
-            if select(8, GetChatWindowInfo(1)) then
-                _G.ChatFrame1:StartSizing('TOP')
-            end
-        end
-    end)
-    _G.ChatFrame1Tab:SetScript('OnMouseUp', function(_, btn)
-        if btn == 'LeftButton' then
-            _G.ChatFrame1:StopMovingOrSizing()
-            _G.FCF_SavePositionAndDimensions(_G.ChatFrame1)
-        end
-    end)
-end
-
-function CHAT:UpdateChatFrame()
-    F:RegisterEvent('UI_SCALE_CHANGED', CHAT.UpdateChatSize)
-
-    CHAT:UpdateChatSize()
-    CHAT:UpdateTextFading()
-
-    hooksecurefunc(_G.ChatFrame1, 'SetPoint', updateChatAnchor)
-    FCF_SavePositionAndDimensions(_G.ChatFrame1)
 end
 
 -- Swith channels by Tab
@@ -428,7 +408,7 @@ end
 hooksecurefunc('FloatingChatFrame_OnMouseScroll', CHAT.OnMouseScroll)
 
 -- Smart bubble
-local function UpdateChatBubble()
+local function updateChatBubble()
     local name, instType = GetInstanceInfo()
     if name and (instType == 'raid' or instType == 'party' or instType == 'scenario' or instType == 'pvp' or instType == 'arena') then
         SetCVar('chatBubbles', 1)
@@ -442,7 +422,7 @@ function CHAT:AutoToggleChatBubble()
         return
     end
 
-    F:RegisterEvent('PLAYER_ENTERING_WORLD', UpdateChatBubble)
+    F:RegisterEvent('PLAYER_ENTERING_WORLD', updateChatBubble)
 end
 
 -- Auto invite by whisper
@@ -578,7 +558,7 @@ function CHAT:PauseToSlash()
 end
 
 -- Save slash command typo
-local function TypoHistory_Posthook_AddMessage(chat, text)
+local function postHook(chat, text)
     if text and strfind(text, _G.HELP_TEXT_SIMPLE) then
         _G.ChatEdit_AddHistory(chat.editBox)
     end
@@ -587,7 +567,7 @@ end
 function CHAT:SaveSlashCommandTypo()
     for i = 1, _G.NUM_CHAT_WINDOWS do
         if i ~= 2 then
-            hooksecurefunc(_G['ChatFrame' .. i], 'AddMessage', TypoHistory_Posthook_AddMessage)
+            hooksecurefunc(_G['ChatFrame' .. i], 'AddMessage', postHook)
         end
     end
 end
@@ -648,7 +628,7 @@ end
 
 -- Disable profanity filter
 local sideEffectFixed
-local function FixLanguageFilterSideEffects()
+local function fixLanguageFilterSideEffects()
     if sideEffectFixed then
         return
     end
@@ -679,7 +659,7 @@ function CHAT:UpdateLanguageFilter()
     if C.DB.Chat.DisableProfanityFilter then
         if GetCVar('portal') == 'CN' then
             ConsoleExec('portal TW')
-            FixLanguageFilterSideEffects()
+            fixLanguageFilterSideEffects()
         end
         SetCVar('profanityFilter', 0)
     else
@@ -702,11 +682,9 @@ function CHAT:OnLogin()
     hooksecurefunc('SetItemRef', CHAT.AltClickToInvite)
 
     CHAT:SetupChatFrame()
-    CHAT:UpdateBackground()
+    CHAT:SetupBackground()
     CHAT:SetupToastFrame()
     CHAT:SetupTemporaryWindow()
-    CHAT:ResizeChatFrame()
-    CHAT:UpdateChatFrame()
     CHAT:UpdateEditBoxBorderColor()
     CHAT:ChatFilter()
     CHAT:ShortenChannelNames()
@@ -721,11 +699,4 @@ function CHAT:OnLogin()
     CHAT:AddRoleIcon()
     CHAT:UpdateLanguageFilter()
     CHAT:HideInCombat()
-
-    if C.DB.Chat.LockPosition then
-        CHAT:UpdateChatSize()
-        F:RegisterEvent('UI_SCALE_CHANGED', CHAT.UpdateChatSize)
-        hooksecurefunc(_G.ChatFrame1, 'SetPoint', updateChatAnchor)
-        FCF_SavePositionAndDimensions(_G.ChatFrame1)
-    end
 end

@@ -74,13 +74,13 @@ local function UpdateFilterWhiteList()
     CHAT:UpdateFilterWhiteList()
 end
 
-local function UpdateChatSize()
-    CHAT:UpdateChatSize()
+local function UpdateSizeAndPosition()
+    CHAT:UpdateSizeAndPosition()
     CHAT:UpdateChannelBar()
 end
 
 local function UpdateBackground()
-    CHAT:UpdateBackground()
+    CHAT:SetupBackground()
 end
 
 local function UpdateLanguageFilter()
@@ -803,7 +803,7 @@ GUI.OptionsList = {
         {
             1,
             'Chat',
-            'LockPosition',
+            'Lock',
             L['Lock Chat Window'],
             nil,
             nil,
@@ -817,7 +817,7 @@ GUI.OptionsList = {
             L['Chat Window Width'],
             nil,
             { 100, 600, 1 },
-            UpdateChatSize,
+            UpdateSizeAndPosition,
         },
         {
             3,
@@ -826,7 +826,7 @@ GUI.OptionsList = {
             L['Chat Window Height'],
             true,
             { 100, 600, 1 },
-            UpdateChatSize,
+            UpdateSizeAndPosition,
         },
         {
             4,

@@ -458,7 +458,7 @@ C.CharacterSettings = {
     },
     Chat = {
         Enable = true,
-        LockPosition = true,
+        Lock = true,
         Width = 300,
         Height = 100,
         BackgroundType = 1,

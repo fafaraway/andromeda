@@ -145,7 +145,14 @@ end
 
 local function SetupActionbars() end
 
-local function SetupChatFrame() end
+local function SetupChatFrame()
+    if C.DB.Chat.Lock then
+        CHAT:UpdateSizeAndPosition()
+        F:RegisterEvent('UI_SCALE_CHANGED', CHAT.UpdateSizeAndPosition)
+        hooksecurefunc(_G.ChatFrame1, 'SetPoint', updateAnchor)
+        FCF_SavePositionAndDimensions(_G.ChatFrame1)
+    end
+end
 
 local function SetupAddons() end
 
