@@ -6,6 +6,10 @@ local function updateAnchor(self, _, _, _, x, y)
         return
     end
 
+    if InCombatLockdown() then
+        return
+    end
+
     if not (x == C.UI_GAP and y == C.UI_GAP) then
         self:ClearAllPoints()
         self:SetPoint('BOTTOMLEFT', _G.UIParent, 'BOTTOMLEFT', C.UI_GAP, C.UI_GAP)
