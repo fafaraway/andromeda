@@ -2208,7 +2208,7 @@ GUI.OptionsList = {
             'DebuffWatcherDispellType',
             L['Debuff Watcher'],
             nil,
-            { L['Filter Display'], L['Always Display'], _G.DISABLE },
+            { L['Filter: Dispellable'], L['Filter: Always'], _G.DISABLE },
             UpdateRaidAurasOptions,
             L['Filter Display: Only show dispellable Magic and Enrage buffs that you can dispell.|nAlways Display: Always show dispellable Magic and Enrage buffs, whether you can dispel them or not.'],
         },
