@@ -220,7 +220,7 @@ function INVENTORY:CreateRestoreButton(f)
     bu:RegisterForClicks('AnyUp')
     bu.__owner = f
     bu:SetScript('OnClick', CloseOrRestoreBags)
-    bu.title = _G.CLOSE .. '/' .. _G.RESET
+    bu.tipHeader = _G.CLOSE .. '/' .. _G.RESET
     F.AddTooltip(bu, 'ANCHOR_TOP')
 
     return bu
@@ -246,7 +246,7 @@ function INVENTORY:CreateReagentButton(f)
         end
     end)
 
-    bu.title = _G.REAGENT_BANK
+    bu.tipHeader = _G.REAGENT_BANK
     F.AddTooltip(bu, 'ANCHOR_TOP')
 
     return bu
@@ -263,7 +263,7 @@ function INVENTORY:CreateBankButton(f)
         f.bank:Show()
     end)
 
-    bu.title = _G.BANK
+    bu.tipHeader = _G.BANK
     F.AddTooltip(bu, 'ANCHOR_TOP')
 
     return bu
@@ -296,8 +296,8 @@ function INVENTORY:CreateDepositButton()
         end
     end)
 
-    bu.title = _G.REAGENTBANK_DEPOSIT
-    F.AddTooltip(bu, 'ANCHOR_TOP', L['Left click to deposit reagents, right click to switch deposit mode.|nIf the button is highlight, the reagents from your bags would auto deposit once you open the bank.'], 'BLUE', true)
+    bu.tipHeader = _G.REAGENTBANK_DEPOSIT
+    F.AddTooltip(bu, 'ANCHOR_TOP', L['Left click to deposit reagents, right click to switch deposit mode.|nIf the button is highlight, the reagents from your bags would auto deposit once you open the bank.'], 'BLUE')
     updateDepositButtonStatus(bu)
 
     return bu
@@ -321,7 +321,7 @@ function INVENTORY:CreateBagToggle()
     bu.__owner = self
     bu:SetScript('OnClick', ToggleBackpacks)
 
-    bu.title = _G.BACKPACK_TOOLTIP
+    bu.tipHeader = _G.BACKPACK_TOOLTIP
     F.AddTooltip(bu, 'ANCHOR_TOP')
 
     return bu
@@ -356,7 +356,7 @@ function INVENTORY:CreateSortButton(name)
         end
     end)
 
-    bu.title = L['Inventory Sort']
+    bu.tipHeader = L['Inventory Sort']
     F.AddTooltip(bu, 'ANCHOR_TOP')
 
     return bu
@@ -387,8 +387,8 @@ function INVENTORY:CreateRepairButton()
         self:GetScript('OnEnter')(self)
     end)
 
-    bu.title = L['Auto Repair']
-    F.AddTooltip(bu, 'ANCHOR_TOP', L['Repair your equipment automatically when you visit an able vendor.'], 'BLUE', true)
+    bu.tipHeader = L['Auto Repair']
+    F.AddTooltip(bu, 'ANCHOR_TOP', L['Repair your equipment automatically when you visit an able vendor.'], 'BLUE')
     updateRepairButtonStatus(bu)
     return bu
 end
@@ -414,8 +414,8 @@ function INVENTORY:CreateSellButton()
         self:GetScript('OnEnter')(self)
     end)
 
-    bu.title = L['Auto Sell Junk']
-    F.AddTooltip(bu, 'ANCHOR_TOP', L['Sell junk items automtically when you visit an able vendor.'], 'BLUE', true)
+    bu.tipHeader = L['Auto Sell Junk']
+    F.AddTooltip(bu, 'ANCHOR_TOP', L['Sell junk items automtically when you visit an able vendor.'], 'BLUE')
     updateSellButtonStatus(bu)
     return bu
 end
@@ -436,7 +436,7 @@ function INVENTORY:CreateSearchButton()
     local bu = F.CreateButton(self, 16, 16, true, iconsList.BagSearch)
     bu.Icon:SetVertexColor(unpack(iconColor))
 
-    bu.title = L['Search']
+    bu.tipHeader = L['Search']
     F.AddTooltip(bu, 'ANCHOR_TOP')
 
     local searchBar = self:SpawnPlugin('SearchBar', bu)
@@ -445,6 +445,7 @@ function INVENTORY:CreateSearchButton()
     searchBar:SetPoint('RIGHT', bu, 'RIGHT', -6, 0)
     searchBar:SetSize(80, 26)
     searchBar:DisableDrawLayer('BACKGROUND')
+    searchBar.tipHeader = L['Search']
     F.AddTooltip(searchBar, 'ANCHOR_TOP', L["You can type in item names or item equip locations.|n'boe' for items that bind on equip and 'quest' for quest items."], 'BLUE')
 
     local bg = F.CreateBDFrame(searchBar, 0, true)
@@ -640,8 +641,8 @@ function INVENTORY:CreateFavouriteButton()
     end)
 
     bu:SetScript('OnHide', bu.__turnOff)
-    bu.title = L['Mark Favourite']
-    F.AddTooltip(bu, 'ANCHOR_TOP', bu.text, 'BLUE', true)
+    bu.tipHeader = L['Mark Favourite']
+    F.AddTooltip(bu, 'ANCHOR_TOP', bu.text, 'BLUE')
 
     toggleButtons[2] = bu
 
@@ -698,8 +699,8 @@ function INVENTORY:CreateCustomJunkButton()
     end)
 
     bu:SetScript('OnHide', bu.__turnOff)
-    bu.title = L['Mark Junk']
-    F.AddTooltip(bu, 'ANCHOR_TOP', bu.text, 'RED', true)
+    bu.tipHeader = L['Mark Junk']
+    F.AddTooltip(bu, 'ANCHOR_TOP', bu.text, 'BLUE')
 
     toggleButtons[3] = bu
 

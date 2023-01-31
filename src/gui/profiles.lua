@@ -6,7 +6,7 @@ function GUI:CreateProfileIcon(bar, index, texture, title, description)
     button:SetSize(32, 32)
     button:SetPoint('RIGHT', -5 - (index - 1) * 37, 0)
     F.PixelIcon(button, texture, true)
-    button.title = title
+    button.tipHeader = title
     F.AddTooltip(button, 'ANCHOR_RIGHT', description, 'BLUE')
 
     return button
@@ -127,13 +127,12 @@ function GUI:CreateProfileBar(parent, index)
     note.index = index
     note:HookScript('OnEnterPressed', GUI.Note_OnEnter)
     note:HookScript('OnEscapePressed', GUI.Note_OnEscape)
-    note.title = L['Profile name']
+    note.tipHeader = L['Profile name']
     F.AddTooltip(
         note,
         'ANCHOR_TOP',
         L['Customize your profile name. If empty the editbox, the name would reset to default string.|n|nPress KEY ENTER when you finish typing.'],
-        'BLUE',
-        true
+        'BLUE'
     )
 
     local reset = GUI:CreateProfileIcon(
@@ -254,7 +253,7 @@ function GUI:CreateProfileFrame(parent)
         GUI.ProfileDataFrame.text:SetText(L['Import'])
         GUI.ProfileDataFrame.editBox:SetText('')
     end)
-    F.AddTooltip(import, 'ANCHOR_TOP', L['Import settings.'], 'BLUE')
+    F.AddTooltip(import, 'ANCHOR_TOP', L['Import settings.'])
 
     local export = F.CreateButton(parent, 100, 24, L['Export'])
     export:SetPoint('LEFT', import, 'RIGHT', 5, 0)
@@ -265,19 +264,18 @@ function GUI:CreateProfileFrame(parent)
         GUI.ProfileDataFrame.text:SetText(_G.OKAY)
         GUI:ExportData()
     end)
-    F.AddTooltip(export, 'ANCHOR_TOP', L['Export settings.'], 'BLUE')
+    F.AddTooltip(export, 'ANCHOR_TOP', L['Export settings.'])
 
     local delete = F.CreateEditBox(parent, 205, 24)
     delete:SetPoint('BOTTOMLEFT', import, 'TOPLEFT', 0, 10)
     delete:HookScript('OnEnterPressed', GUI.Delete_OnEnter)
     delete:HookScript('OnEscapePressed', GUI.Delete_OnEscape)
-    delete.title = L['Delete unit profile']
+    delete.tipHeader = L['Delete unit profile']
     F.AddTooltip(
         delete,
         'ANCHOR_TOP',
         L["Enter the character name that you intend to delete its profile, the input format is 'UnitName-RealmName'. You only need to enter name if unit is in the same realm with you.|n|nThis will delete unit gold info as well.|n|nPress key ESC to clear editbox, press key Enter to confirm."],
-        'BLUE',
-        true
+        'BLUE'
     )
 
     local outline = _G.ANDROMEDA_ADB.FontOutline

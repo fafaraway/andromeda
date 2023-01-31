@@ -228,8 +228,8 @@ local function createEditbox(parent, text, x, y, tip, width, height)
     createLabel(eb, text)
 
     if tip then
-        eb.title = L['Hint']
-        F.AddTooltip(eb, 'ANCHOR_RIGHT', tip, 'BLUE', true)
+        eb.tipHeader = L['Hint']
+        F.AddTooltip(eb, 'ANCHOR_RIGHT', tip, 'BLUE')
     end
 
     return eb
@@ -275,8 +275,8 @@ local function createCheckbox(parent, offset, key, value, text, func, tip)
     box.__func = func
 
     if tip then
-        box.title = text
-        F.AddTooltip(box, 'ANCHOR_TOPLEFT', tip, 'BLUE', true)
+        box.tipHeader = text
+        F.AddTooltip(box, 'ANCHOR_TOPLEFT', tip, 'BLUE')
     end
 
     return box
@@ -318,8 +318,8 @@ local function createSlider(parent, key, value, text, minV, maxV, step, defaultV
     slider:SetScript('OnValueChanged', slider_OnValueChanged)
 
     if tip then
-        slider.title = tostring(key)
-        F.AddTooltip(slider, 'ANCHOR_TOPLEFT', tip, 'BLUE', true)
+        slider.tipHeader = tostring(key)
+        F.AddTooltip(slider, 'ANCHOR_TOPLEFT', tip, 'BLUE')
     end
 end
 
@@ -351,8 +351,8 @@ local function createDropdown(parent, text, x, y, data, tip, width, height)
     createLabel(dd, text)
 
     if tip then
-        dd.title = L['Hint']
-        F.AddTooltip(dd, 'ANCHOR_RIGHT', tip, 'BLUE', true)
+        dd.tipHeader = L['Hint']
+        F.AddTooltip(dd, 'ANCHOR_RIGHT', tip, 'BLUE')
     end
 
     return dd
@@ -1014,6 +1014,7 @@ function GUI:SetupNameplateAuraFilter(parent)
 
         scroll.box = F.CreateEditBox(frame, 130, 24)
         scroll.box:SetPoint('TOPLEFT', 10, -10)
+        scroll.box.tipHeader = L['Hint']
         F.AddTooltip(scroll.box, 'ANCHOR_RIGHT', value.tip, 'BLUE')
 
         scroll.add = F.CreateButton(frame, 35, 24, _G.ADD, 11)
@@ -1062,8 +1063,8 @@ do
 
         local editBox = createEditbox(panel.bg, nil, 10, -10, nil, 130, 24)
         panel.editBox = editBox
-        editBox.title = L['Hint']
-        F.AddTooltip(editBox, 'ANCHOR_RIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE', true)
+        editBox.tipHeader = L['Hint']
+        F.AddTooltip(editBox, 'ANCHOR_RIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE')
 
         local addBtn = F.CreateButton(panel.bg, 35, 24, _G.ADD, 11)
         addBtn:SetPoint('TOPRIGHT', -10, -10)
@@ -1364,6 +1365,7 @@ function GUI:SetupNameplateUnitFilter(parent)
 
     scroll.box = F.CreateEditBox(frame, 100, 24)
     scroll.box:SetPoint('LEFT', swatch, 'RIGHT', 5, 0)
+    scroll.box.tipHeader = L['Hint']
     F.AddTooltip(scroll.box, 'ANCHOR_TOPRIGHT', L['Enter NPC ID or name directly.'], 'BLUE')
 
     local function addClick(button)
@@ -1447,6 +1449,7 @@ function GUI:SetupNameplateColorByDot(parent)
 
     scroll.box = F.CreateEditBox(frame, 100, 24)
     scroll.box:SetPoint('LEFT', swatch, 'RIGHT', 5, 0)
+    scroll.box.tipHeader = L['Hint']
     F.AddTooltip(scroll.box, 'ANCHOR_TOPRIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE')
 
     local function addClick(button)
@@ -2638,8 +2641,8 @@ do
                 _G.ANDROMEDA_ADB['RaidDebuffsList'][bar.instName][bar.spellID] = prio
                 self:SetText(prio)
             end)
-            prioBox.title = L['Priority']
-            F.AddTooltip(prioBox, 'ANCHOR_RIGHT', L['Priority limit in 1-6.|nPress ENTER key when you finish typing.'], 'BLUE', true)
+            prioBox.tipHeader = L['Priority']
+            F.AddTooltip(prioBox, 'ANCHOR_RIGHT', L['Priority limit in 1-6.|nPress ENTER key when you finish typing.'], 'BLUE')
             bar.prioBox = prioBox
 
             return bar
@@ -2838,8 +2841,8 @@ do
         local editBox = createEditbox(panel.bg, nil, nil, nil, nil, 40, 24)
         editBox:SetPoint('TOPLEFT', scrollArea.dd, 'TOPRIGHT', 5, 0)
         panel.editBox = editBox
-        editBox.title = L['Hint']
-        F.AddTooltip(editBox, 'ANCHOR_TOPRIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE', true)
+        editBox.tipHeader = L['Hint']
+        F.AddTooltip(editBox, 'ANCHOR_TOPRIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE')
 
         local swatch = F.CreateColorSwatch(panel.bg)
         swatch:SetPoint('LEFT', editBox, 'RIGHT', 5, 0)
@@ -2849,8 +2852,8 @@ do
         local showAll = F.CreateCheckButton(panel.bg, true)
         showAll:SetPoint('LEFT', swatch, 'RIGHT', 3, 0)
         showAll:SetSize(24, 24)
-        showAll.title = L['Hint']
-        F.AddTooltip(showAll, 'ANCHOR_TOPRIGHT', L['If unchecked, you can only see the aura you cast.|nIf checked, the aura would be tracked from all casters.'], 'BLUE', true)
+        showAll.tipHeader = L['Hint']
+        F.AddTooltip(showAll, 'ANCHOR_TOPRIGHT', L['If unchecked, you can only see the aura you cast.|nIf checked, the aura would be tracked from all casters.'], 'BLUE')
         scrollArea.showAll = showAll
 
         local addBtn = F.CreateButton(panel.bg, 35, 24, _G.ADD, 11)
@@ -2904,8 +2907,8 @@ do
 
         local editBox = createEditbox(panel.bg, nil, 10, -10, nil, 130, 24)
         panel.editBox = editBox
-        editBox.title = L['Hint']
-        F.AddTooltip(editBox, 'ANCHOR_RIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE', true)
+        editBox.tipHeader = L['Hint']
+        F.AddTooltip(editBox, 'ANCHOR_RIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE')
 
         local addBtn = F.CreateButton(panel.bg, 35, 24, _G.ADD, 11)
         addBtn.__owner = panel
@@ -2931,8 +2934,8 @@ do
         -- cb:SetScript('OnClick', function()
         --     C.DB.Unitframe.RaidBuffAuto = cb:GetChecked()
         -- end)
-        -- cb.title = L['Hint']
-        -- F.AddTooltip(cb, 'ANCHOR_TOPRIGHT', L['If checked, use blizzard API logic to display buffs, no longer use the white list below, up to 3.'], 'BLUE', true)
+        -- cb.tipHeader = L['Hint']
+        -- F.AddTooltip(cb, 'ANCHOR_TOPRIGHT', L['If checked, use blizzard API logic to display buffs, no longer use the white list below, up to 3.'], 'BLUE')
     end
 
     local function refreshDebuffsIndicator()
@@ -2958,8 +2961,8 @@ do
 
         local editBox = createEditbox(panel.bg, nil, 10, -10, nil, 130, 24)
         panel.editBox = editBox
-        editBox.title = L['Hint']
-        F.AddTooltip(editBox, 'ANCHOR_RIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE', true)
+        editBox.tipHeader = L['Hint']
+        F.AddTooltip(editBox, 'ANCHOR_RIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE')
 
         local addBtn = F.CreateButton(panel.bg, 35, 24, _G.ADD, 11)
         addBtn.__owner = panel
@@ -3155,8 +3158,8 @@ do
 
         local editBox = createEditbox(panel.bg, nil, 10, -10, nil, 130, 24)
         panel.editBox = editBox
-        editBox.title = L['Hint']
-        F.AddTooltip(editBox, 'ANCHOR_RIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE', true)
+        editBox.tipHeader = L['Hint']
+        F.AddTooltip(editBox, 'ANCHOR_RIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE')
 
         local addBtn = F.CreateButton(panel.bg, 35, 24, _G.ADD, 11)
         addBtn.__owner = panel

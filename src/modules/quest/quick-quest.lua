@@ -440,7 +440,7 @@ local function UnitQuickQuestStatus(self)
         local frame = CreateFrame('Frame', nil, self)
         frame:SetSize(100, 14)
         frame:SetPoint('TOP', self, 'BOTTOM', 0, -2)
-        F.AddTooltip(frame, 'ANCHOR_RIGHT', L['You no longer auto interact quests with current NPC. You can hold key ALT and click the name above to undo this.'], 'BLUE', true)
+        F.AddTooltip(frame, 'ANCHOR_RIGHT', L['You no longer auto interact quests with current NPC. You can hold key ALT and click the name above to undo this.'])
 
         local outline = _G.ANDROMEDA_ADB.FontOutline
         F.CreateFS(frame, C.Assets.Fonts.Regular, 14, outline or nil, _G.IGNORED, nil, outline and 'NONE' or 'THICK'):SetTextColor(1, 0, 0)

@@ -50,7 +50,7 @@ function M:MailItem_AddDelete(i)
 
     bu.id = i
     bu:SetScript('OnClick', M.MailBox_DelectClick)
-    F.AddTooltip(bu, 'ANCHOR_RIGHT', _G.DELETE, 'BLUE')
+    F.AddTooltip(bu, 'ANCHOR_RIGHT', _G.DELETE)
 end
 
 function M:InboxItem_OnEnter()
@@ -225,13 +225,11 @@ function M:MailBox_ContactList()
 
     local editbox = F.CreateEditBox(list, 120, 20)
     editbox:SetPoint('TOPLEFT', 4, -25)
-    editbox.title = L['Add Contacts']
+    editbox.tipHeader = L['Add Contacts']
     F.AddTooltip(
         editbox,
         'ANCHOR_BOTTOMRIGHT',
-        L["Modify the contact list you need, the input format is 'UnitName-RealmName'.|nYou only need to enter name if unit is in the same realm with you.|nYou can customize text color for classify."],
-        'BLUE',
-        true
+        L["Modify the contact list you need, the input format is 'UnitName-RealmName'.|nYou only need to enter name if unit is in the same realm with you.|nYou can customize text color for classify."]
     )
     local swatch = F.CreateColorSwatch(list, '')
     swatch:SetSize(18, 18)

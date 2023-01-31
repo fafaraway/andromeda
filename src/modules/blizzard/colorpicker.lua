@@ -337,6 +337,7 @@ function BLIZZARD:EnhancedColorPicker()
         box:SetJustifyH('CENTER')
         box:SetHeight(24)
         box:SetID(i)
+        box:SetFont(C.Assets.Fonts.Condensed, 11, '')
         F.ReskinEditBox(box)
 
         -- hex entry box

@@ -355,8 +355,8 @@ local function CreateOptions(i)
             end
 
             if tip then
-                cb.title = name
-                F.AddTooltip(cb, 'ANCHOR_TOPLEFT', tip, 'BLUE', true)
+                cb.tipHeader = name
+                F.AddTooltip(cb, 'ANCHOR_TOPLEFT', tip, 'BLUE')
             end
         elseif optType == 2 then -- editbox
             local eb = F.CreateEditBox(parent, 170, 22)
@@ -382,8 +382,8 @@ local function CreateOptions(i)
             eb:HookScript('OnEnterPressed', Editbox_OnEnterPressed)
 
             if tip then
-                eb.title = name
-                F.AddTooltip(eb, 'ANCHOR_TOPLEFT', tip, 'BLUE', true)
+                eb.tipHeader = name
+                F.AddTooltip(eb, 'ANCHOR_TOPLEFT', tip, 'BLUE')
             end
         elseif optType == 3 then -- slider
             local min, max, step = unpack(data)
@@ -409,8 +409,8 @@ local function CreateOptions(i)
             s.value:SetText(F:Round(UpdateValue(key, value), 2))
 
             if tip then
-                s.title = name
-                F.AddTooltip(s, 'ANCHOR_TOPLEFT', tip, 'BLUE', true)
+                s.tipHeader = name
+                F.AddTooltip(s, 'ANCHOR_TOPLEFT', tip, 'BLUE')
             end
         elseif optType == 4 then -- dropdown
             if value == 'UnitframeTextureIndex' or value == 'NameplateTextureIndex' then
@@ -447,8 +447,8 @@ local function CreateOptions(i)
             dd.label = F.CreateFS(dd, C.Assets.Fonts.Condensed, 11, outline or nil, name, nil, outline and 'NONE' or 'THICK')
             dd.label:SetPoint('BOTTOM', dd, 'TOP', 0, 4)
             if tip then
-                dd.title = name
-                F.AddTooltip(dd, 'ANCHOR_RIGHT', tip, 'BLUE', true)
+                dd.tipHeader = name
+                F.AddTooltip(dd, 'ANCHOR_RIGHT', tip, 'BLUE')
             end
         elseif optType == 5 then -- colorswatch
             local swatch = F.CreateColorSwatch(parent, name, UpdateValue(key, value))

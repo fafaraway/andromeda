@@ -338,7 +338,7 @@ local function CreateConsole()
     header:SetPoint('TOP')
     F.CreateMF(header, f)
     local tips = '|nCTRL +' .. C.MOUSE_RIGHT_BUTTON .. L['Reset default anchor'] .. '|nSHIFT +' .. C.MOUSE_RIGHT_BUTTON .. L['Hide the frame']
-    header.title = L['Layout']
+    header.tipHeader = L['Layout']
     F.AddTooltip(header, 'ANCHOR_TOP', tips, 'BLUE')
 
     local frame = CreateFrame('Frame', nil, f, 'BackdropTemplate')

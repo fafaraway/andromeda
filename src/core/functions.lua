@@ -577,8 +577,8 @@ do
         _G.GameTooltip:SetOwner(self, self.anchor, 0, 4)
         _G.GameTooltip:ClearLines()
 
-        if self.title then
-            _G.GameTooltip:AddLine(self.title)
+        if self.tipHeader then
+            _G.GameTooltip:AddLine(self.tipHeader)
         end
 
         local r, g, b
@@ -594,6 +594,8 @@ do
                 r, g, b = 0.6, 0.8, 1
             elseif self.color == 'RED' then
                 r, g, b = 0.9, 0.3, 0.3
+            else
+                r, g, b = 1, 1, 1
             end
 
             if self.blankLine then
@@ -784,7 +786,7 @@ do
         bu.Icon:SetTexture(616343)
         bu:SetHighlightTexture(616343)
         if tooltip then
-            bu.title = L['Hint']
+            bu.tipHeader = L['Hint']
             F.AddTooltip(bu, 'ANCHOR_BOTTOMLEFT', tooltip, 'BLUE')
         end
 
