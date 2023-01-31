@@ -95,6 +95,12 @@ function ACTIONBAR:CreatePetBar()
         button:SetParent(frame)
         tinsert(buttonList, button)
         tinsert(ACTIONBAR.buttons, button)
+
+        local hotkey = button.HotKey
+        if hotkey then
+            hotkey:ClearAllPoints()
+            hotkey:SetPoint('TOPRIGHT')
+        end
     end
     frame.buttons = buttonList
 
