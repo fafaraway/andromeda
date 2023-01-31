@@ -5,11 +5,11 @@ local chatFrame = _G.SELECTED_DOCK_FRAME
 local editBox = chatFrame.editBox
 local buttonsList = {}
 
-local wcStr
+local nameStr
 if GetCVar('portal') == 'CN' then
-    wcStr = '大脚世界频道'
+    nameStr = '大脚世界频道'
 elseif GetCVar('portal') == 'KR' then
-    wcStr = '組隊頻道'
+    nameStr = '組隊頻道'
 end
 
 local buttonsData = {
@@ -137,7 +137,7 @@ end
 
 local function updateChannelInfo()
     local icon = CHAT.ChannelBar.WorldChannelButton.Icon
-    local id = GetChannelName(wcStr)
+    local id = GetChannelName(nameStr)
     if not id or id == 0 then
         CHAT.InWorldChannel = false
         CHAT.WorldChannelID = nil
@@ -178,15 +178,15 @@ end
 local function lobbyButton_OnClick(self, btn)
     if CHAT.InWorldChannel then
         if btn == 'RightButton' then
-            LeaveChannelByName(wcStr)
+            LeaveChannelByName(nameStr)
             F:Print('|cffd82026' .. _G.QUIT .. '|r ' .. C.INFO_COLOR .. L['World Channel'])
             CHAT.InWorldChannel = false
         elseif CHAT.WorldChannelID then
             _G.ChatFrame_OpenChat('/' .. CHAT.WorldChannelID, chatFrame)
         end
     else
-        JoinPermanentChannel(wcStr, nil, 1)
-        _G.ChatFrame_AddChannel(_G.ChatFrame1, wcStr)
+        JoinPermanentChannel(nameStr, nil, 1)
+        _G.ChatFrame_AddChannel(_G.ChatFrame1, nameStr)
         F:Print('|cff27ba24' .. _G.JOIN .. '|r ' .. C.INFO_COLOR .. L['World Channel'])
         CHAT.InWorldChannel = true
     end
