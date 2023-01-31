@@ -177,7 +177,9 @@ function MAP:CreatePendingInvitation()
     invt:SetSize(300, 80)
     invt:Hide()
     F.SetBD(invt)
-    F.CreateFS(invt, C.Assets.Fonts.Regular, 14, true, _G.GAMETIME_TOOLTIP_CALENDAR_INVITES, 'BLUE')
+
+    local outline = _G.ANDROMEDA_ADB.FontOutline
+    F.CreateFS(invt, C.Assets.Fonts.Regular, 14, outline or nil, _G.GAMETIME_TOOLTIP_CALENDAR_INVITES, 'BLUE', outline and 'NONE' or 'THICK')
 
     local function updateInviteVisibility()
         invt:SetShown(C_Calendar.GetNumPendingInvites() > 0)
@@ -290,7 +292,9 @@ function MAP:CreateDifficultyFlag()
     texture:SetAllPoints()
     texture:SetTexture(C.Assets.Textures.MinimapDifficulty)
     texture:SetVertexColor(0, 0, 0)
-    local text = F.CreateFS(frame, C.Assets.Fonts.Bold, 11, nil, '', nil, 'THICK')
+
+    local outline = _G.ANDROMEDA_ADB.FontOutline
+    local text = F.CreateFS(frame, C.Assets.Fonts.Bold, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK')
     text:SetPoint('CENTER', frame)
     text:SetJustifyH('CENTER')
 
@@ -426,7 +430,9 @@ function MAP:WhoPings()
 
     local f = CreateFrame('Frame', nil, _G.Minimap)
     f:SetAllPoints()
-    f.text = F.CreateFS(f, C.Assets.Fonts.Bold, 14, true, '', nil, true, 'TOP', 0, -4)
+
+    local outline = _G.ANDROMEDA_ADB.FontOutline
+    f.text = F.CreateFS(f, C.Assets.Fonts.Bold, 14, outline or nil, '', nil, outline and 'NONE' or 'THICK', 'TOP', 0, -4)
 
     local anim = f:CreateAnimationGroup()
     anim:SetScript('OnPlay', function()
@@ -477,12 +483,12 @@ function MAP:CreateZoneText()
 
     _G.ZoneTextString:ClearAllPoints()
     _G.ZoneTextString:SetPoint('TOP', Minimap, 0, -Minimap.halfDiff - 10)
-    _G.ZoneTextString:SetFont(C.Assets.Fonts.Header, 22, outline, '', nil, outline or 'THICK')
-    _G.SubZoneTextString:SetFont(C.Assets.Fonts.Header, 22, outline, '', nil, outline or 'THICK')
-    _G.PVPInfoTextString:SetFont(C.Assets.Fonts.Header, 22, outline, '', nil, outline or 'THICK')
-    _G.PVPArenaTextString:SetFont(C.Assets.Fonts.Header, 22, outline, '', nil, outline or 'THICK')
+    _G.ZoneTextString:SetFont(C.Assets.Fonts.Header, 22, outline or nil, '', nil, outline and 'NONE' or 'THICK')
+    _G.SubZoneTextString:SetFont(C.Assets.Fonts.Header, 22, outline or nil, '', nil, outline and 'NONE' or 'THICK')
+    _G.PVPInfoTextString:SetFont(C.Assets.Fonts.Header, 22, outline or nil, '', nil, outline and 'NONE' or 'THICK')
+    _G.PVPArenaTextString:SetFont(C.Assets.Fonts.Header, 22, outline or nil, '', nil, outline and 'NONE' or 'THICK')
 
-    local text = F.CreateFS(Minimap, C.Assets.Fonts.Header, 16, outline, '', nil, outline or 'THICK')
+    local text = F.CreateFS(Minimap, C.Assets.Fonts.Header, 16, outline or nil, '', nil, outline and 'NONE' or 'THICK')
     text:SetPoint('TOP', Minimap, 0, -Minimap.halfDiff - 10)
     text:SetSize(Minimap:GetWidth(), 30)
     text:SetJustifyH('CENTER')
@@ -521,7 +527,9 @@ function MAP:SoundVolume()
 
     local f = CreateFrame('Frame', nil, _G.Minimap)
     f:SetAllPoints()
-    local text = F.CreateFS(f, C.Assets.Fonts.Heavy, 48, true)
+
+    local outline = _G.ANDROMEDA_ADB.FontOutline
+    local text = F.CreateFS(f, C.Assets.Fonts.Heavy, 48, outline or nil, '', nil, outline and 'NONE' or 'THICK')
 
     local anim = f:CreateAnimationGroup()
     anim:SetScript('OnPlay', function()

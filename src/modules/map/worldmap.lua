@@ -88,10 +88,10 @@ function MAP:AddCoords()
     end
 
     local WorldMapFrame = _G.WorldMapFrame
-
-    playerCoords = F.CreateFS(WorldMapFrame.BorderFrame.TitleContainer, C.Assets.Fonts.Bold, 12, '')
+    local outline = _G.ANDROMEDA_ADB.FontOutline
+    playerCoords = F.CreateFS(WorldMapFrame.BorderFrame.TitleContainer, C.Assets.Fonts.Bold, 12, outline or nil, '', nil, outline and 'NONE' or 'THICK')
     playerCoords:SetPoint('TOPLEFT', 10, -6)
-    cursorCoords = F.CreateFS(WorldMapFrame.BorderFrame.TitleContainer, C.Assets.Fonts.Bold, 12, '')
+    cursorCoords = F.CreateFS(WorldMapFrame.BorderFrame.TitleContainer, C.Assets.Fonts.Bold, 12, outline or nil, '', nil, outline and 'NONE' or 'THICK')
     cursorCoords:SetPoint('TOPLEFT', 120, -6)
 
     F.HideObject(WorldMapFrame.BorderFrame.Tutorial)

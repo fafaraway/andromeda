@@ -38,16 +38,17 @@ function INFOBAR:GuildPanel_CreateButton(parent, index)
     button.HL:SetAllPoints()
     button.HL:SetColorTexture(C.r, C.g, C.b, 0.2)
 
-    button.level = F.CreateFS(button, C.Assets.Fonts.Regular, 13, nil, 'Level', nil, true)
+    local outline = _G.ANDROMEDA_ADB.FontOutline
+    button.level = F.CreateFS(button, C.Assets.Fonts.Regular, 13, outline or nil, 'Level', nil, outline and 'NONE' or 'THICK')
     button.level:SetPoint('TOP', button, 'TOPLEFT', 16, -4)
     button.class = button:CreateTexture(nil, 'ARTWORK')
     button.class:SetPoint('LEFT', 40, 0)
     button.class:SetSize(16, 16)
     button.class:SetTexture('Interface\\GLUES\\CHARACTERCREATE\\UI-CHARACTERCREATE-CLASSES')
-    button.name = F.CreateFS(button, C.Assets.Fonts.Regular, 13, nil, 'Name', nil, true, 'LEFT', 70, 0)
+    button.name = F.CreateFS(button, C.Assets.Fonts.Regular, 13, outline or nil, 'Name', nil, outline and 'NONE' or 'THICK', 'LEFT', 70, 0)
     button.name:SetPoint('RIGHT', button, 'LEFT', 185, 0)
     button.name:SetJustifyH('LEFT')
-    button.zone = F.CreateFS(button, C.Assets.Fonts.Regular, 13, nil, 'Zone', nil, true, 'RIGHT', -2, 0)
+    button.zone = F.CreateFS(button, C.Assets.Fonts.Regular, 13, outline or nil, 'Zone', nil, outline and 'NONE' or 'THICK', 'RIGHT', -2, 0)
     button.zone:SetPoint('LEFT', button, 'RIGHT', -120, 0)
     button.zone:SetJustifyH('RIGHT')
     button.zone:SetWordWrap(false)
@@ -172,10 +173,11 @@ function INFOBAR:GuildPanel_Init()
         self:SetScript('OnUpdate', isPanelCanHide)
     end)
 
-    gName = F.CreateFS(infoFrame, C.Assets.Fonts.Bold, 16, nil, 'Guild', nil, true, 'TOPLEFT', 15, -10)
-    gOnline = F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, 'Online', nil, true, 'TOPLEFT', 15, -35)
-    -- gApps = F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, 'Applications', nil, true, 'TOPRIGHT', -15, -35)
-    gRank = F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, 'Rank', nil, true, 'TOPLEFT', 15, -51)
+    local outline = _G.ANDROMEDA_ADB.FontOutline
+    gName = F.CreateFS(infoFrame, C.Assets.Fonts.Bold, 16, outline or nil, 'Guild', nil, outline and 'NONE' or 'THICK', 'TOPLEFT', 15, -10)
+    gOnline = F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, outline or nil, 'Online', nil, outline and 'NONE' or 'THICK', 'TOPLEFT', 15, -35)
+    -- gApps = F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, outline or nil, 'Applications', nil, outline and 'NONE' or 'THICK', 'TOPRIGHT', -15, -35)
+    gRank = F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, outline or nil, 'Rank', nil, outline and 'NONE' or 'THICK', 'TOPLEFT', 15, -51)
 
     local bu = {}
     local width = { 30, 35, 126, 126 }
@@ -194,18 +196,18 @@ function INFOBAR:GuildPanel_Init()
         bu[i].index = i
         bu[i]:SetScript('OnClick', sortHeaderOnClick)
     end
-    F.CreateFS(bu[1], C.Assets.Fonts.Regular, 13, nil, _G.LEVEL)
-    F.CreateFS(bu[2], C.Assets.Fonts.Regular, 13, nil, _G.CLASS)
-    F.CreateFS(bu[3], C.Assets.Fonts.Regular, 13, nil, _G.NAME, nil, true, 'LEFT', 5, 0)
-    F.CreateFS(bu[4], C.Assets.Fonts.Regular, 13, nil, _G.ZONE, nil, true, 'RIGHT', -5, 0)
+    F.CreateFS(bu[1], C.Assets.Fonts.Regular, 13, outline or nil, _G.LEVEL, nil, outline and 'NONE' or 'THICK')
+    F.CreateFS(bu[2], C.Assets.Fonts.Regular, 13, outline or nil, _G.CLASS, nil, outline and 'NONE' or 'THICK')
+    F.CreateFS(bu[3], C.Assets.Fonts.Regular, 13, outline or nil, _G.NAME, nil, outline and 'NONE' or 'THICK', 'LEFT', 5, 0)
+    F.CreateFS(bu[4], C.Assets.Fonts.Regular, 13, outline or nil, _G.ZONE, nil, outline and 'NONE' or 'THICK', 'RIGHT', -5, 0)
 
-    F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, C.LINE_STRING, nil, true, 'BOTTOMRIGHT', -12, 58)
+    F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, outline or nil, C.LINE_STRING, nil, outline and 'NONE' or 'THICK', 'BOTTOMRIGHT', -12, 58)
     local whspInfo = C.INFO_COLOR .. C.MOUSE_RIGHT_BUTTON .. L['Whisper']
-    F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, whspInfo, nil, true, 'BOTTOMRIGHT', -15, 42)
+    F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, outline or nil, whspInfo, nil, outline and 'NONE' or 'THICK', 'BOTTOMRIGHT', -15, 42)
     local invtInfo = C.INFO_COLOR .. 'ALT +' .. C.MOUSE_LEFT_BUTTON .. L['Invite']
-    F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, invtInfo, nil, true, 'BOTTOMRIGHT', -15, 26)
+    F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, outline or nil, invtInfo, nil, outline and 'NONE' or 'THICK', 'BOTTOMRIGHT', -15, 26)
     local copyInfo = C.INFO_COLOR .. 'SHIFT +' .. C.MOUSE_LEFT_BUTTON .. L['Copy Name']
-    F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, copyInfo, nil, true, 'BOTTOMRIGHT', -15, 10)
+    F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, outline or nil, copyInfo, nil, outline and 'NONE' or 'THICK', 'BOTTOMRIGHT', -15, 10)
 
     local scrollFrame = CreateFrame(
         'ScrollFrame',

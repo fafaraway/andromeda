@@ -22,11 +22,13 @@ local function ConstructFrame()
     frame:SetFrameStrata('HIGH')
     F.CreateMF(frame)
     F.SetBD(frame)
-    F.CreateFS(frame, C.Assets.Fonts.Bold, 18, nil, L['Incompatible AddOns:'], 'RED', true, 'TOPLEFT', 10, -10)
+
+    local outline = _G.ANDROMEDA_ADB.FontOutline
+    F.CreateFS(frame, C.Assets.Fonts.Bold, 18, outline or nil, L['Incompatible AddOns:'], 'RED', outline and 'NONE' or 'THICK', 'TOPLEFT', 10, -10)
 
     local offset = 0
     for _, addon in pairs(IncompatibleList) do
-        F.CreateFS(frame, C.Assets.Fonts.Regular, 14, nil, addon, false, true, 'TOPLEFT', 10, -(50 + offset))
+        F.CreateFS(frame, C.Assets.Fonts.Regular, 14, outline or nil, addon, false, outline and 'NONE' or 'THICK', 'TOPLEFT', 10, -(50 + offset))
         offset = offset + 24
     end
     frame:SetSize(300, 100 + offset)

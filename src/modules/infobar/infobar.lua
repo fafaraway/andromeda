@@ -113,7 +113,7 @@ function INFOBAR:RegisterNewBlock(name, position, width, noFade)
     block:SetBackdropBorderColor(0, 0, 0, 0)
 
     local outline = _G.ANDROMEDA_ADB.FontOutline
-    block.text = F.CreateFS(block, C.Assets.Fonts.Condensed, 11, outline, '', nil, outline or 'THICK', 'CENTER', 0, 0)
+    block.text = F.CreateFS(block, C.Assets.Fonts.Condensed, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK', 'CENTER', 0, 0)
     block.position = position
 
     if C.DB.Infobar.Mouseover and not noFade then

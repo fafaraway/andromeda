@@ -149,12 +149,13 @@ function UNITFRAME:CreateAurasIndicator(self)
         parentFrame:SetAllPoints()
         parentFrame:SetFrameLevel(button:GetFrameLevel() + 8)
 
+        local outline = _G.ANDROMEDA_ADB.FontOutline
         local font = C.Assets.Fonts.HalfHeight
         local fontSize = max(auraSize * 0.4, 12)
-        button.count = F.CreateFS(parentFrame, font, fontSize, true, nil, nil, true)
+        button.count = F.CreateFS(parentFrame, font, fontSize, outline or nil, nil, nil, outline and 'NONE' or 'THICK')
         button.count:ClearAllPoints()
         button.count:SetPoint('RIGHT', button, 'TOPRIGHT')
-        button.timer = F.CreateFS(button, font, fontSize, true, nil, nil, true)
+        button.timer = F.CreateFS(button, font, fontSize, outline or nil, nil, nil, outline and 'NONE' or 'THICK')
         button.timer:ClearAllPoints()
         button.timer:SetPoint('LEFT', button, 'BOTTOMLEFT')
         button.glowFrame = F.CreateGlowFrame(button, auraSize)

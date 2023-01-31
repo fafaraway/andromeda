@@ -67,10 +67,11 @@ function UNITFRAME:CreateSpellsIndicator(self)
         button.cd:SetReverse(true)
         button.cd:SetHideCountdownNumbers(true)
 
+        local outline = _G.ANDROMEDA_ADB.FontOutline
         local font = C.Assets.Fonts.Small
         local fontSize = 11
-        button.timer = F.CreateFS(button, font, fontSize, true, nil, nil, true, 'CENTER', -counterOffsets[anchor][2][3], 0)
-        button.count = F.CreateFS(button, font, fontSize, true, nil, nil, true)
+        button.timer = F.CreateFS(button, font, fontSize, outline or nil, nil, nil, outline and 'NONE' or 'THICK', 'CENTER', -counterOffsets[anchor][2][3], 0)
+        button.count = F.CreateFS(button, font, fontSize, outline or nil, nil, nil, outline and 'NONE' or 'THICK')
 
         button.anchor = anchor
         buttons[anchor] = button

@@ -142,7 +142,7 @@ function NAMEPLATE.ConfigureNameTag(frame)
     name:ClearAllPoints()
 
     if nameOnly then
-        F:SetFS(name, C.Assets.Fonts.Header, 16, outline, nil, nil, outline or 'THICK')
+        F.SetFS(name, C.Assets.Fonts.Header, 16, outline or nil, nil, nil, outline and 'NONE' or 'THICK')
 
         name:SetParent(frame)
         name:SetPoint('CENTER', frame, 'TOP', 0, 8)
@@ -150,7 +150,7 @@ function NAMEPLATE.ConfigureNameTag(frame)
 
         frame:Tag(name, '[andromeda:color][andromeda:npnamefull]')
     else
-        F:SetFS(name, C.Assets.Fonts.Bold, 11, outline, nil, nil, outline or 'THICK')
+        F.SetFS(name, C.Assets.Fonts.Bold, 11, outline or nil, nil, nil, outline and 'NONE' or 'THICK')
 
         name:SetParent(frame.Health)
         name:SetPoint('LEFT', frame, 'TOPLEFT')
@@ -178,7 +178,7 @@ function NAMEPLATE:CreateNameTag(self)
     local outline = _G.ANDROMEDA_ADB.FontOutline
     local font = C.Assets.Fonts.Bold
 
-    local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
+    local text = F.CreateFS(self.Health, font, 11, outline or nil, nil, nil, outline and 'NONE' or 'THICK')
 
     self.NameTag = text
 
@@ -201,7 +201,7 @@ function NAMEPLATE:CreateHealthTag(self)
     local font = C.Assets.Fonts.Condensed
     local outline = _G.ANDROMEDA_ADB.FontOutline
 
-    local text = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
+    local text = F.CreateFS(self.Health, font, 11, outline or nil, nil, nil, outline and 'NONE' or 'THICK')
 
     self.HealthTag = text
 

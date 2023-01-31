@@ -104,7 +104,8 @@ function M:ContactButton_Create(parent, index)
     button.HL:SetAllPoints()
     button.HL:SetColorTexture(1, 1, 1, 0.25)
 
-    button.name = F.CreateFS(button, C.Assets.Fonts.Bold, 12, nil, 'Name', nil, true, 'LEFT', 0, 0)
+    local outline = _G.ANDROMEDA_ADB.FontOutline
+    button.name = F.CreateFS(button, C.Assets.Fonts.Bold, 12, outline or nil, 'Name', nil, outline and 'NONE' or 'THICK', 'LEFT', 0, 0)
     button.name:SetPoint('RIGHT', button, 'LEFT', 155, 0)
     button.name:SetJustifyH('LEFT')
 
@@ -214,7 +215,9 @@ function M:MailBox_ContactList()
     list:SetPoint('TOPLEFT', _G.MailFrame, 'TOPRIGHT', 3, -C.MULT)
     list:SetFrameStrata('Tooltip')
     F.SetBD(list)
-    F.CreateFS(list, C.Assets.Fonts.Regular, 12, nil, L['Contact List'], 'YELLOW', true, 'TOP', 0, -5)
+
+    local outline = _G.ANDROMEDA_ADB.FontOutline
+    F.CreateFS(list, C.Assets.Fonts.Regular, 12, outline or nil, L['Contact List'], 'YELLOW', outline and 'NONE' or 'THICK', 'TOP', 0, -5)
 
     bu:SetScript('OnClick', function()
         F:TogglePanel(list)

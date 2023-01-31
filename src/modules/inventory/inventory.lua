@@ -126,7 +126,7 @@ function INVENTORY:CreateMoneyFrame()
 
     local tag = self:SpawnPlugin('TagDisplay', '[money] [currencies]', moneyFrame)
     local outline = _G.ANDROMEDA_ADB.FontOutline
-    F:SetFS(tag, C.Assets.Fonts.Bold, 12, outline, '', nil, outline or 'THICK')
+    F.SetFS(tag, C.Assets.Fonts.Bold, 12, outline or nil, '', nil, outline and 'NONE' or 'THICK')
     tag:SetPoint('TOPLEFT', 0, -4)
 end
 
@@ -538,7 +538,7 @@ function INVENTORY:CreateFreeSlots()
 
     local tag = self:SpawnPlugin('TagDisplay', '[space]', slot)
     local outline = _G.ANDROMEDA_ADB.FontOutline
-    F:SetFS(tag, C.Assets.Fonts.Bold, 11, outline, '', 'CLASS', outline or 'THICK')
+    F.SetFS(tag, C.Assets.Fonts.Bold, 11, outline or nil, '', 'CLASS', outline and 'NONE' or 'THICK')
     tag:SetPoint('BOTTOMRIGHT', -2, 2)
     tag.__name = name
     slot.tag = tag
@@ -903,7 +903,7 @@ function INVENTORY:OnLogin()
         self.Icon:SetInside()
         self.Icon:SetTexCoord(unpack(C.TEX_COORD))
         local outline = _G.ANDROMEDA_ADB.FontOutline
-        F:SetFS(self.Count, C.Assets.Fonts.Bold, 11, outline, '', nil, outline or 'THICK', 'BOTTOMRIGHT', -2, 2)
+        F.SetFS(self.Count, C.Assets.Fonts.Bold, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK', 'BOTTOMRIGHT', -2, 2)
         self.Cooldown:SetInside()
         self.IconOverlay:SetInside()
         self.IconOverlay2:SetInside()
@@ -925,8 +925,8 @@ function INVENTORY:OnLogin()
         self.Quest:SetSize(24, 24)
         self.Quest:SetPoint('TOPLEFT', -2, -2)
 
-        self.iLvl = F.CreateFS(self, C.Assets.Fonts.Bold, 11, outline, '', nil, outline or 'THICK', 'BOTTOMRIGHT', -2, 2)
-        self.BindType = F.CreateFS(self, C.Assets.Fonts.Bold, 11, outline, '', nil, outline or 'THICK', 'TOPLEFT', 2, -2)
+        self.iLvl = F.CreateFS(self, C.Assets.Fonts.Bold, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK', 'BOTTOMRIGHT', -2, 2)
+        self.BindType = F.CreateFS(self, C.Assets.Fonts.Bold, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK', 'TOPLEFT', 2, -2)
 
         local flash = self:CreateTexture(nil, 'ARTWORK')
         flash:SetTexture('Interface\\Cooldown\\star4')
@@ -1251,7 +1251,7 @@ function INVENTORY:OnLogin()
 
         local outline = _G.ANDROMEDA_ADB.FontOutline
         if label then
-            self.label = F.CreateFS(self, C.Assets.Fonts.Bold, 11, outline, label, nil, outline or 'THICK', 'TOPLEFT', 5, -4)
+            self.label = F.CreateFS(self, C.Assets.Fonts.Bold, 11, outline or nil, label, nil, outline and 'NONE' or 'THICK', 'TOPLEFT', 5, -4)
             return
         end
 

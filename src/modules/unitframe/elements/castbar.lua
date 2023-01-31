@@ -317,11 +317,11 @@ function UNITFRAME:CreateCastBar(self)
     icon.__bg:SetBackdropBorderColor(0, 0, 0)
     castbar.Icon = icon
 
-    local text = F.CreateFS(castbar, font, 11, outline, '', nil, outline or 'THICK')
+    local text = F.CreateFS(castbar, font, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK')
     text:SetPoint('CENTER')
     castbar.Text = text
 
-    local time = F.CreateFS(castbar, font, 11, outline, '', nil, outline or 'THICK')
+    local time = F.CreateFS(castbar, font, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK')
     time:SetPoint('RIGHT')
     castbar.Time = time
     castbar.Decimal = '%.1f'
@@ -339,7 +339,7 @@ function UNITFRAME:CreateCastBar(self)
         self:RegisterEvent('CURRENT_SPELL_CAST_CHANGED', UNITFRAME.OnCastSent, true)
     end
 
-    local stage = F.CreateFS(castbar, C.Assets.Fonts.Condensed, 11, '')
+    local stage = F.CreateFS(castbar, C.Assets.Fonts.Condensed, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK')
     stage:ClearAllPoints()
     stage:SetPoint('CENTER', castbar.Icon, 'TOP')
     castbar.stageString = stage
@@ -424,12 +424,12 @@ function NAMEPLATE:CreateCastBar(self)
     spark:SetSize(12, castbar:GetHeight() * 2)
     castbar.Spark = spark
 
-    local text = F.CreateFS(castbar, font, 11, outline, '', nil, outline or 'THICK')
+    local text = F.CreateFS(castbar, font, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK')
     text:SetPoint('CENTER', castbar, 'BOTTOM')
     text:SetShown(not compact)
     castbar.Text = text
 
-    -- local time = F.CreateFS(castbar, font, 11, outline, '', nil, outline or 'THICK')
+    -- local time = F.CreateFS(castbar, font, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK')
     -- time:SetPoint('RIGHT')
     -- time:SetShown(not compact)
     -- castbar.Time = time

@@ -49,7 +49,7 @@ function EOT:HandleHeaderText()
     for i = 1, #frame do
         local modules = frame[i]
         if modules and modules.Header and modules.Header.Text then
-            F:SetFS(modules.Header.Text, C.Assets.Fonts.Header, 15, outline, nil, 'CLASS', outline or 'THICK')
+            F.SetFS(modules.Header.Text, C.Assets.Fonts.Header, 15, outline or nil, nil, 'CLASS', outline and 'NONE' or 'THICK')
         end
     end
 end
@@ -57,7 +57,7 @@ end
 function EOT:HandleTitleText(text)
     local font = C.Assets.Fonts.Bold
     local outline = _G.ANDROMEDA_ADB.FontOutline
-    F:SetFS(text, font, 14, outline, nil, 'YELLOW', outline or 'THICK')
+    F.SetFS(text, font, 14, outline or nil, nil, 'YELLOW', outline and 'NONE' or 'THICK')
 
     local height = text:GetStringHeight() + 2
     if height ~= text:GetHeight() then
@@ -72,7 +72,7 @@ function EOT:HandleInfoText(text)
 
     local font = C.Assets.Fonts.Regular
     local outline = _G.ANDROMEDA_ADB.FontOutline
-    F:SetFS(text, font, 13, outline, nil, nil, outline or 'THICK')
+    F.SetFS(text, font, 13, outline or nil, nil, nil, outline and 'NONE' or 'THICK')
     text:SetHeight(text:GetStringHeight())
 
     local line = text:GetParent()

@@ -239,7 +239,8 @@ end
 
 function TOOLTIP:RefreshStatusBar(value)
     if not self.text then
-        self.text = F.CreateFS(self, C.Assets.Fonts.Bold, 11, '')
+        local outline = _G.ANDROMEDA_ADB.FontOutline
+        self.text = F.CreateFS(self, C.Assets.Fonts.Bold, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK')
     end
     local unit = self.guid and UnitTokenFromGUID(self.guid)
     local unitHealthMax = unit and UnitHealthMax(unit)

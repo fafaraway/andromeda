@@ -149,14 +149,16 @@ function GUI:CreateDataFrame()
     dataFrame:SetFrameStrata('DIALOG')
     F.CreateMF(dataFrame)
     F.SetBD(dataFrame)
+
+    local outline = _G.ANDROMEDA_ADB.FontOutline
     dataFrame.Header = F.CreateFS(
         dataFrame,
         C.Assets.Fonts.Regular,
         14,
-        nil,
+        outline or nil,
         L['Export settings'],
         'YELLOW',
-        true,
+        outline and 'NONE' or 'THICK',
         'TOP',
         0,
         -5

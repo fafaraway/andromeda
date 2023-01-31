@@ -228,7 +228,9 @@ function BLIZZARD:AddAutoAcceptButton()
     bu:SetSize(20, 20)
     bu:SetHitRectInsets(0, -130, 0, 0)
     bu:SetPoint('RIGHT', searchPanel.RefreshButton, 'LEFT', -130, 0)
-    F.CreateFS(bu, C.Assets.Fonts.Regular, 12, nil, _G.LFG_LIST_AUTO_ACCEPT, 'YELLOW', true, 'LEFT', 24, 0)
+
+    local outline = _G.ANDROMEDA_ADB.FontOutline
+    F.CreateFS(bu, C.Assets.Fonts.Regular, 12, outline or nil, _G.LFG_LIST_AUTO_ACCEPT, 'YELLOW', outline and 'NONE' or 'THICK', 'LEFT', 24, 0)
 
     local lastTime = 0
     local function clickInviteButton(button)

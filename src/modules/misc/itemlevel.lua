@@ -55,14 +55,15 @@ function ITEMLEVEL:CreateItemString(frame, strType)
         return
     end
 
+    local outline = _G.ANDROMEDA_ADB.FontOutline
     for index, slot in pairs(inspectSlots) do
         if index ~= 4 then
             local slotFrame = _G[strType .. slot .. 'Slot']
-            slotFrame.iLvlText = F.CreateFS(slotFrame, C.Assets.Fonts.Bold, 11, true, '', nil, true)
+            slotFrame.iLvlText = F.CreateFS(slotFrame, C.Assets.Fonts.Bold, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK')
             slotFrame.iLvlText:ClearAllPoints()
             slotFrame.iLvlText:SetPoint('BOTTOMRIGHT', slotFrame, -1, 1)
             local relF, x, y = ITEMLEVEL:GetSlotAnchor(index)
-            slotFrame.enchantText = F.CreateFS(slotFrame, C.Assets.Fonts.Bold, 11, true, '', nil, true)
+            slotFrame.enchantText = F.CreateFS(slotFrame, C.Assets.Fonts.Bold, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK')
             slotFrame.enchantText:ClearAllPoints()
             slotFrame.enchantText:SetPoint(relF, slotFrame, x, y)
             slotFrame.enchantText:SetTextColor(0, 1, 0)
@@ -248,7 +249,8 @@ end
 
 function ITEMLEVEL:ItemLevel_FlyoutUpdate(bag, slot, quality)
     if not self.iLvl then
-        self.iLvl = F.CreateFS(self, C.Assets.Fonts.Bold, 11, true, '', nil, true, 'BOTTOMRIGHT', -1, 1)
+        local outline = _G.ANDROMEDA_ADB.FontOutline
+        self.iLvl = F.CreateFS(self, C.Assets.Fonts.Bold, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK', 'BOTTOMRIGHT', -1, 1)
     end
 
     if quality and quality <= 1 then
@@ -309,7 +311,8 @@ end
 
 function ITEMLEVEL:ItemLevel_ScrappingUpdate()
     if not self.iLvl then
-        self.iLvl = F.CreateFS(self, C.Assets.Fonts.Bold, 11, true, '', nil, true, 'BOTTOMRIGHT', -1, 1)
+        local outline = _G.ANDROMEDA_ADB.FontOutline
+        self.iLvl = F.CreateFS(self, C.Assets.Fonts.Bold, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK', 'BOTTOMRIGHT', -1, 1)
     end
     if not self.itemLink then
         self.iLvl:SetText('')
@@ -338,7 +341,8 @@ end
 
 function ITEMLEVEL:ItemLevel_UpdateMerchant(link)
     if not self.iLvl then
-        self.iLvl = F.CreateFS(_G[self:GetName() .. 'ItemButton'], C.Assets.Fonts.Bold, 11, true, '', nil, true, 'BOTTOMRIGHT', -1, 1)
+        local outline = _G.ANDROMEDA_ADB.FontOutline
+        self.iLvl = F.CreateFS(_G[self:GetName() .. 'ItemButton'], C.Assets.Fonts.Bold, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK', 'BOTTOMRIGHT', -1, 1)
     end
     local quality = link and select(3, GetItemInfo(link)) or nil
     if quality and quality > 1 then
@@ -389,11 +393,12 @@ function ITEMLEVEL:ItemLevel_ReplaceGuildNews()
 end
 
 function ITEMLEVEL:ItemLevel_UpdateLoot()
+    local outline = _G.ANDROMEDA_ADB.FontOutline
     for i = 1, self.ScrollTarget:GetNumChildren() do
         local button = select(i, self.ScrollTarget:GetChildren())
         if button and button.Item and button.GetElementData then
             if not button.iLvl then
-                button.iLvl = F.CreateFS(button.Item, C.Assets.Fonts.Bold, 11, true, '', nil, true, 'BOTTOMLEFT', 1, 1)
+                button.iLvl = F.CreateFS(button.Item, C.Assets.Fonts.Bold, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK', 'BOTTOMLEFT', 1, 1)
             end
 
             local slotIndex = button:GetSlotIndex()
@@ -414,7 +419,8 @@ function ITEMLEVEL:ItemLevel_UpdateBags()
     local button = self.__owner
 
     if not button.iLvl then
-        button.iLvl = F.CreateFS(button, C.Assets.Fonts.Bold, 11, true, '', nil, true, 'BOTTOMLEFT', 1, 1)
+        local outline = _G.ANDROMEDA_ADB.FontOutline
+        button.iLvl = F.CreateFS(button, C.Assets.Fonts.Bold, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK', 'BOTTOMLEFT', 1, 1)
     end
 
     local bagID = button:GetBagID()

@@ -430,7 +430,7 @@ function NAMEPLATE:CreateSpitefulIndicator(self)
     local font = C.Assets.Fonts.Condensed
     local outline = _G.ANDROMEDA_ADB.FontOutline
 
-    local tarName = F.CreateFS(self, font, 12, outline, nil, nil, outline or 'THICK')
+    local tarName = F.CreateFS(self, font, 12, outline or nil, nil, nil, outline and 'NONE' or 'THICK')
     tarName:ClearAllPoints()
     tarName:SetPoint('TOP', self, 'BOTTOM', 0, -10)
     tarName:Hide()

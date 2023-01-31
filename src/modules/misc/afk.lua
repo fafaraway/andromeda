@@ -77,14 +77,15 @@ local function OnKeyUp(_, key)
 end
 
 local function ConstructTextString(f)
+    local outline = _G.ANDROMEDA_ADB.FontOutline
     f.text = F.CreateFS(
         f,
         C.Assets.Fonts.Bold,
         12,
-        nil,
+        outline or nil,
         L['Double click left mouse button or press ESC key to exit this screen.'],
         { 0.3, 0.3, 0.3 },
-        'THICK',
+        outline and 'NONE' or 'THICK',
         'BOTTOM',
         0,
         C.UI_GAP
@@ -93,10 +94,10 @@ local function ConstructTextString(f)
         f,
         C.ASSET_PATH .. 'fonts\\suez-one.ttf',
         56,
-        nil,
+        outline or nil,
         'timer',
         'CLASS',
-        'THICK',
+        outline and 'NONE' or 'THICK',
         'TOP',
         0,
         -C.UI_GAP

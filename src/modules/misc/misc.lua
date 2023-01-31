@@ -350,11 +350,12 @@ end
 -- change the color of the current trader's name
 -- red stranger / blue guild / green friend
 do
-    local infoText = F.CreateFS(_G.TradeFrame, C.Assets.Fonts.Bold, 14, true)
-    infoText:ClearAllPoints()
-    infoText:SetPoint('TOP', _G.TradeFrameRecipientNameText, 'BOTTOM', 0, -5)
-
     local function updateColor()
+        local outline = _G.ANDROMEDA_ADB.FontOutline
+        local infoText = F.CreateFS(_G.TradeFrame, C.Assets.Fonts.Bold, 14, outline or nil, '', nil, outline and 'NONE' or 'THICK')
+        infoText:ClearAllPoints()
+        infoText:SetPoint('TOP', _G.TradeFrameRecipientNameText, 'BOTTOM', 0, -5)
+
         local r, g, b = F:UnitColor('NPC')
         _G.TradeFrameRecipientNameText:SetTextColor(r, g, b)
 

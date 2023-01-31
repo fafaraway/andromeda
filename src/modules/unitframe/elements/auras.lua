@@ -86,12 +86,13 @@ do
         button.HL:SetColorTexture(1, 1, 1, 0.25)
         button.HL:SetAllPoints()
 
+        local outline = _G.ANDROMEDA_ADB.FontOutline
         local font = C.Assets.Fonts.HalfHeight
         local fontSize = max((element.width or element.size) * 0.4, 12)
-        button.Count = F.CreateFS(button, font, fontSize, true, nil, nil, true)
+        button.Count = F.CreateFS(button, font, fontSize, outline or nil, nil, nil, outline and 'NONE' or 'THICK')
         button.Count:ClearAllPoints()
         button.Count:SetPoint('RIGHT', button, 'TOPRIGHT')
-        button.timer = F.CreateFS(button, font, fontSize, true, nil, nil, true)
+        button.timer = F.CreateFS(button, font, fontSize, outline or nil, nil, nil, outline and 'NONE' or 'THICK')
         button.timer:ClearAllPoints()
         button.timer:SetPoint('LEFT', button, 'BOTTOMLEFT')
     end
@@ -570,7 +571,8 @@ do
             parentFrame:SetAllPoints()
             parentFrame:SetFrameLevel(button:GetFrameLevel() + 6)
 
-            button.count = F.CreateFS(parentFrame, C.Assets.Fonts.Small, 11, true, nil, nil, true)
+            local outline = _G.ANDROMEDA_ADB.FontOutline
+            button.count = F.CreateFS(parentFrame, C.Assets.Fonts.Small, 11, outline or nil, nil, nil, outline and 'NONE' or 'THICK')
             button.count:ClearAllPoints()
             button.count:SetPoint('RIGHT', parentFrame, 'TOPRIGHT')
 
@@ -717,7 +719,8 @@ do
             parentFrame:SetAllPoints()
             parentFrame:SetFrameLevel(button:GetFrameLevel() + 3)
 
-            button.count = F.CreateFS(parentFrame, C.Assets.Fonts.Small, 11, true, nil, nil, true)
+            local outline = _G.ANDROMEDA_ADB.FontOutline
+            button.count = F.CreateFS(parentFrame, C.Assets.Fonts.Small, 11, outline or nil, nil, nil, outline and 'NONE' or 'THICK')
             button.count:ClearAllPoints()
             button.count:SetPoint('RIGHT', parentFrame, 'TOPRIGHT')
 

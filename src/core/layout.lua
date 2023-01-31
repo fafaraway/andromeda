@@ -124,6 +124,7 @@ local MoverList, f = {}
 local updater
 
 function F:Mover(text, value, anchor, width, height)
+    local outline = _G.ANDROMEDA_ADB.FontOutline
     local key = 'UIAnchor'
 
     local mover = CreateFrame('Frame', nil, _G.UIParent)
@@ -131,7 +132,7 @@ function F:Mover(text, value, anchor, width, height)
     mover:SetHeight(height or self:GetHeight())
     mover.bg = F.SetBD(mover)
     mover:Hide()
-    mover.text = F.CreateFS(mover, C.Assets.Fonts.Regular, 12, true, text)
+    mover.text = F.CreateFS(mover, C.Assets.Fonts.Regular, 12, outline or nil, text, nil, outline and 'NONE' or 'THICK')
     mover.text:SetWordWrap(true)
 
     if not C.DB[key][value] then
@@ -291,12 +292,13 @@ local function CreateConsole()
         return
     end
 
+    local outline = _G.ANDROMEDA_ADB.FontOutline
     f = CreateFrame('Frame', nil, _G.UIParent, 'BackdropTemplate')
     f:SetPoint('TOP', 0, -150)
     f:SetSize(260, 70)
     F.CreateBD(f)
     F.CreateSD(f)
-    F.CreateFS(f, C.Assets.Fonts.Regular, 12, true, L['Layout'], 'YELLOW', nil, 'TOP', 0, -10)
+    F.CreateFS(f, C.Assets.Fonts.Regular, 12, outline or nil, L['Layout'], 'YELLOW', outline and 'NONE' or 'THICK', 'TOP', 0, -10)
 
     local bu, text = {}, { _G.LOCK, L['Grids'], _G.RESET }
 
@@ -343,11 +345,11 @@ local function CreateConsole()
     frame:SetSize(260, 100)
     frame:SetPoint('TOP', f, 'BOTTOM', 0, -2)
     F.SetBD(frame)
-    f.__trimText = F.CreateFS(frame, C.Assets.Fonts.Regular, 12, true, '', 'YELLOW', nil, 'BOTTOM', 0, 5)
+    f.__trimText = F.CreateFS(frame, C.Assets.Fonts.Regular, 12, outline or nil, '', 'YELLOW', outline and 'NONE' or 'THICK', 'BOTTOM', 0, 5)
 
     local xBox = F.CreateEditBox(frame, 60, 22)
     xBox:SetPoint('TOPRIGHT', frame, 'TOP', -12, -15)
-    F.CreateFS(xBox, C.Assets.Fonts.Regular, 11, true, 'X', 'YELLOW', true, 'LEFT', -20, 0)
+    F.CreateFS(xBox, C.Assets.Fonts.Regular, 11, outline or nil, 'X', 'YELLOW', outline and 'NONE' or 'THICK', 'LEFT', -20, 0)
     xBox:SetJustifyH('CENTER')
     xBox.__current = 0
     xBox:HookScript('OnEnterPressed', function(self)
@@ -363,7 +365,7 @@ local function CreateConsole()
 
     local yBox = F.CreateEditBox(frame, 60, 22)
     yBox:SetPoint('TOPRIGHT', frame, 'TOP', -12, -39)
-    F.CreateFS(yBox, C.Assets.Fonts.Regular, 11, true, 'Y', 'YELLOW', true, 'LEFT', -20, 0)
+    F.CreateFS(yBox, C.Assets.Fonts.Regular, 11, outline or nil, 'Y', 'YELLOW', outline and 'NONE' or 'THICK', 'LEFT', -20, 0)
     yBox:SetJustifyH('CENTER')
     yBox.__current = 0
     yBox:HookScript('OnEnterPressed', function(self)

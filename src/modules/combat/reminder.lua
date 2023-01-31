@@ -217,6 +217,7 @@ function BR:Reminder_Update(cfg)
 end
 
 function BR:Reminder_Create(cfg)
+    local outline = _G.ANDROMEDA_ADB.FontOutline
     local frame = CreateFrame('Frame', nil, parentFrame)
     frame:SetSize(iconSize, iconSize)
     F.PixelIcon(frame)
@@ -229,7 +230,7 @@ function BR:Reminder_Create(cfg)
         end
     end
     frame.Icon:SetTexture(texture)
-    frame.text = F.CreateFS(frame, C.Assets.Fonts.Regular, 12, nil, L['lacking'], 'RED', 'THICK', 'TOP', 1, 15)
+    frame.text = F.CreateFS(frame, C.Assets.Fonts.Regular, 12, outline or nil, L['lacking'], 'RED', outline and 'NONE' or 'THICK', 'TOP', 1, 15)
     frame:Hide()
     cfg.frame = frame
 

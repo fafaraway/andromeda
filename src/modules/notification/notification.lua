@@ -32,13 +32,14 @@ local function ConstructFrame()
     sep:SetPoint('LEFT', icon, 'RIGHT', padding, 0)
     sep:SetColorTexture(0, 0, 0)
 
-    local title = F.CreateFS(f, C.Assets.Fonts.Bold, 14, nil, '', 'YELLOW', true)
+    local outline = _G.ANDROMEDA_ADB.FontOutline
+    local title = F.CreateFS(f, C.Assets.Fonts.Bold, 14, outline or nil, '', 'YELLOW', outline and 'NONE' or 'THICK')
     title:SetPoint('TOPLEFT', sep, padding, -padding - 4)
     title:SetPoint('TOPRIGHT', f, -padding, -4)
     title:SetJustifyH('LEFT')
     NOTIFICATION.Title = title
 
-    local text = F.CreateFS(f, C.Assets.Fonts.Regular, 12, nil, '', nil, true)
+    local text = F.CreateFS(f, C.Assets.Fonts.Regular, 12, outline or nil, '', nil, outline and 'NONE' or 'THICK')
     text:SetPoint('BOTTOMLEFT', sep, padding, padding + 4)
     text:SetPoint('BOTTOMRIGHT', f, -padding, 4)
     text:SetJustifyH('LEFT')

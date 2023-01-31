@@ -279,13 +279,14 @@ function ACTIONBAR:Bind_CreateDialog()
     frame:SetPoint('TOP', 0, -135)
     F.SetBD(frame)
 
+    local outline = _G.ANDROMEDA_ADB.FontOutline
     local font = C.Assets.Fonts.Bold
-    F.CreateFS(frame, font, 14, nil, _G.QUICK_KEYBIND_MODE, false, true, 'TOP', 0, -10)
+    F.CreateFS(frame, font, 14, outline or nil, _G.QUICK_KEYBIND_MODE, false, outline and 'NONE' or 'THICK', 'TOP', 0, -10)
 
     local helpInfo = F.CreateHelpInfo(frame, '|n' .. _G.QUICK_KEYBIND_DESCRIPTION .. '|n|n' .. L['You can even keybind your spellbook spells or macros without placing them to your actionbars.'])
     helpInfo:SetPoint('TOPRIGHT', 2, -2)
 
-    local text = F.CreateFS(frame, font, 12, nil, _G.CHARACTER_SPECIFIC_KEYBINDINGS, 'YELLOW', true, 'TOP', 0, -40)
+    local text = F.CreateFS(frame, font, 12, outline or nil, _G.CHARACTER_SPECIFIC_KEYBINDINGS, 'YELLOW', outline and 'NONE' or 'THICK', 'TOP', 0, -40)
     local box = F.CreateCheckButton(frame)
     box:SetChecked(C.DB.Actionbar.BindType == 2)
     box:SetPoint('RIGHT', text, 'LEFT', -5, -0)

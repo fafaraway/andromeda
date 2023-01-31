@@ -178,8 +178,9 @@ function INFOBAR:FriendsPanel_Init()
         self:SetScript('OnUpdate', isPanelCanHide)
     end)
 
-    F.CreateFS(infoFrame, C.Assets.Fonts.Bold, 16, nil, F:RgbToHex({ 0.9, 0.8, 0.6 }) .. _G.FRIENDS_LIST, nil, true, 'TOPLEFT', 15, -10)
-    infoFrame.friendCountText = F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 14, nil, '-/-', nil, true, 'TOPRIGHT', -15, -12)
+    local outline = _G.ANDROMEDA_ADB.FontOutline
+    F.CreateFS(infoFrame, C.Assets.Fonts.Bold, 16, outline or nil, F:RgbToHex({ 0.9, 0.8, 0.6 }) .. _G.FRIENDS_LIST, nil, outline and 'NONE' or 'THICK', 'TOPLEFT', 15, -10)
+    infoFrame.friendCountText = F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 14, outline or nil, '-/-', nil, outline and 'NONE' or 'THICK', 'TOPRIGHT', -15, -12)
 
     local scrollFrame = CreateFrame('ScrollFrame', C.ADDON_TITLE .. 'FriendsInfobarScrollFrame', infoFrame, 'HybridScrollFrameTemplate')
     scrollFrame:SetSize(370, 400)
@@ -209,11 +210,11 @@ function INFOBAR:FriendsPanel_Init()
     scrollBar:SetMinMaxValues(0, numButtons * buttonHeight)
     scrollBar:SetValue(0)
 
-    F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, C.LINE_STRING, nil, true, 'BOTTOMRIGHT', -12, 42)
+    F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, outline or nil, C.LINE_STRING, nil, outline and 'NONE' or 'THICK', 'BOTTOMRIGHT', -12, 42)
     local whspInfo = C.INFO_COLOR .. C.MOUSE_RIGHT_BUTTON .. L['Whisper']
-    F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, whspInfo, nil, true, 'BOTTOMRIGHT', -15, 26)
+    F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, outline or nil, whspInfo, nil, outline and 'NONE' or 'THICK', 'BOTTOMRIGHT', -15, 26)
     local invtInfo = C.INFO_COLOR .. 'ALT +' .. C.MOUSE_LEFT_BUTTON .. L['Invite']
-    F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, nil, invtInfo, nil, true, 'BOTTOMRIGHT', -15, 10)
+    F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, outline or nil, invtInfo, nil, outline and 'NONE' or 'THICK', 'BOTTOMRIGHT', -15, 10)
 end
 
 local function inviteFunc(_, bnetIDGameAccount, guid)
@@ -394,13 +395,14 @@ function INFOBAR:FriendsPanel_CreateButton(parent, index)
     button.status:SetPoint('LEFT', button, 5, 0)
     button.status:SetSize(16, 16)
 
-    button.name = F.CreateFS(button, C.Assets.Fonts.Regular, 13, nil, 'Tag (name)', nil, true, 'LEFT', 25, 0)
+    local outline = _G.ANDROMEDA_ADB.FontOutline
+    button.name = F.CreateFS(button, C.Assets.Fonts.Regular, 13, outline or nil, 'Tag (name)', nil, outline and 'NONE' or 'THICK', 'LEFT', 25, 0)
     button.name:SetPoint('RIGHT', button, 'LEFT', 230, 0)
     button.name:SetJustifyH('LEFT')
     button.name:SetTextColor(0.5, 0.7, 1)
     button.name:SetWordWrap(false)
 
-    button.zone = F.CreateFS(button, C.Assets.Fonts.Regular, 13, nil, 'Zone', nil, true, 'RIGHT', -28, 0)
+    button.zone = F.CreateFS(button, C.Assets.Fonts.Regular, 13, outline or nil, 'Zone', nil, outline and 'NONE' or 'THICK', 'RIGHT', -28, 0)
     button.zone:SetPoint('LEFT', button, 'RIGHT', -130, 0)
     button.zone:SetJustifyH('RIGHT')
     button.zone:SetWordWrap(false)

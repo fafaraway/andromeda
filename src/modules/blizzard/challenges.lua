@@ -27,7 +27,9 @@ function ECF:GuildBest_Create()
     frame:SetPoint('BOTTOMRIGHT', -8, 75)
     frame:SetSize(170, 105)
     F.CreateBD(frame, 0.3)
-    F.CreateFS(frame, C.Assets.Fonts.Regular, 14, true, _G.GUILD, nil, nil, 'TOPLEFT', 16, -6)
+
+    local outline = _G.ANDROMEDA_ADB.FontOutline
+    F.CreateFS(frame, C.Assets.Fonts.Regular, 14, outline or nil, _G.GUILD, nil, outline and 'NONE' or 'THICK', 'TOPLEFT', 16, -6)
 
     frame.entries = {}
     for i = 1, 4 do
@@ -35,10 +37,10 @@ function ECF:GuildBest_Create()
         entry:SetPoint('LEFT', 10, 0)
         entry:SetPoint('RIGHT', -10, 0)
         entry:SetHeight(18)
-        entry.CharacterName = F.CreateFS(entry, C.Assets.Fonts.Regular, 12, true, '', nil, nil, 'LEFT', 6, 0)
+        entry.CharacterName = F.CreateFS(entry, C.Assets.Fonts.Regular, 12, outline or nil, '', nil, outline and 'NONE' or 'THICK', 'LEFT', 6, 0)
         entry.CharacterName:SetPoint('RIGHT', -30, 0)
         entry.CharacterName:SetJustifyH('LEFT')
-        entry.Level = F.CreateFS(entry, C.Assets.Fonts.Regular, 12, true)
+        entry.Level = F.CreateFS(entry, C.Assets.Fonts.Regular, 12, outline or nil, '', nil, outline and 'NONE' or 'THICK')
         entry.Level:SetJustifyH('LEFT')
         entry.Level:ClearAllPoints()
         entry.Level:SetPoint('LEFT', entry, 'RIGHT', -22, 0)

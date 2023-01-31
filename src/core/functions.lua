@@ -362,18 +362,16 @@ do
     -- Dropdown menu
     F.EasyMenu = CreateFrame('Frame', C.ADDON_TITLE .. 'EasyMenu', _G.UIParent, 'UIDropDownMenuTemplate')
 
+
     -- Font string
     function F:CreateFS(font, size, flag, text, colour, shadow, anchor, x, y)
+        local outline = _G.ANDROMEDA_ADB.FontOutline
         local fs = self:CreateFontString(nil, 'OVERLAY')
 
         if font then
-            if type(font) == 'table' then
-                fs:SetFont(font[1], font[2], font[3])
-            else
-                fs:SetFont(font, size, flag and 'OUTLINE')
-            end
+            fs:SetFont(font, size, flag and 'OUTLINE' or '')
         else
-            fs:SetFont(C.Assets.Fonts.Regular, 12, 'OUTLINE')
+            fs:SetFont(C.Assets.Fonts.Regular, 12, outline and 'OUTLINE' or '')
         end
 
         if text then
@@ -405,14 +403,15 @@ do
             fs:SetTextColor(r / 255, g / 255, b / 255)
         end
 
-        if type(shadow) == 'boolean' then
+        if shadow == 'NORMAL' then
             fs:SetShadowColor(0, 0, 0, 1)
             fs:SetShadowOffset(1, -1)
         elseif shadow == 'THICK' then
             fs:SetShadowColor(0, 0, 0, 1)
             fs:SetShadowOffset(2, -2)
-        else
+        elseif shadow == 'NONE' then
             fs:SetShadowColor(0, 0, 0, 0)
+            fs:SetShadowOffset(0, 0)
         end
 
         if type(anchor) == 'table' then
@@ -426,15 +425,13 @@ do
         return fs
     end
 
-    function F:SetFS(object, font, size, flag, text, colour, shadow)
-        if type(font) == 'table' then
-            object:SetFont(font[1], font[2], font[3])
-        else
-            object:SetFont(font, size, flag and 'OUTLINE' or '')
-        end
+    function F:SetFS(font, size, flag, text, colour, shadow)
+        if not font then return end
+
+        self:SetFont(font, size, flag and 'OUTLINE' or '')
 
         if text then
-            object:SetText(text)
+            self:SetText(text)
         end
 
         local r, g, b
@@ -457,25 +454,41 @@ do
         end
 
         if type(colour) == 'table' then
-            object:SetTextColor(colour[1], colour[2], colour[3])
+            self:SetTextColor(colour[1], colour[2], colour[3])
         else
-            object:SetTextColor(r / 255, g / 255, b / 255)
+            self:SetTextColor(r / 255, g / 255, b / 255)
         end
 
-        if type(shadow) == 'boolean' then
-            object:SetShadowColor(0, 0, 0, 1)
-            object:SetShadowOffset(1, -1)
+        if shadow == 'NORMAL' then
+            self:SetShadowColor(0, 0, 0, 1)
+            self:SetShadowOffset(1, -1)
         elseif shadow == 'THICK' then
-            object:SetShadowColor(0, 0, 0, 1)
-            object:SetShadowOffset(2, -2)
-        else
-            object:SetShadowColor(0, 0, 0, 0)
+            self:SetShadowColor(0, 0, 0, 1)
+            self:SetShadowOffset(2, -2)
+        elseif shadow == 'NONE' then
+            self:SetShadowColor(0, 0, 0, 0)
+            self:SetShadowOffset(0, 0)
         end
     end
 
     function F:SetFontSize(size)
         local name, _, flag = self:GetFont()
         self:SetFont(name, size, flag)
+    end
+
+    function F:SetFontShadow(type)
+        if not type then return end
+
+        if type == 'NONE' then
+            self:SetShadowColor(0, 0, 0, 0)
+            self:SetShadowOffset(0, 0)
+        elseif type == 'NORMAL' then
+            self:SetShadowColor(0, 0, 0, 1)
+            self:SetShadowOffset(1, -1)
+        elseif type == 'THICK' then
+            self:SetShadowColor(0, 0, 0, 1)
+            self:SetShadowOffset(2, -2)
+        end
     end
 
     function F:CreateColorString(text, color)
@@ -829,13 +842,14 @@ do
     end
 
     function F:CreateButton(width, height, text, fontSize)
+        local outline = _G.ANDROMEDA_ADB.FontOutline
         local bu = CreateFrame('Button', nil, self, 'BackdropTemplate')
         bu:SetSize(width, height)
         if type(text) == 'boolean' then
             F.PixelIcon(bu, fontSize, true)
         else
             F.Reskin(bu)
-            bu.text = F.CreateFS(bu, C.Assets.Fonts.Regular, fontSize or 12, nil, text, nil, true)
+            bu.text = F.CreateFS(bu, C.Assets.Fonts.Regular, fontSize or 12, outline or nil, text, nil, outline and 'NONE' or 'THICK')
         end
 
         return bu
@@ -855,13 +869,18 @@ do
     end
 
     function F:CreateEditBox(width, height)
+        local outline = _G.ANDROMEDA_ADB.FontOutline
+        local font = C.Assets.Fonts.Condensed
+
         local eb = CreateFrame('EditBox', nil, self)
         eb:SetSize(width, height)
         eb:SetAutoFocus(false)
         eb:SetTextInsets(5, 5, 5, 5)
-        eb:SetFont(C.Assets.Fonts.Regular, 11, '')
+        eb:SetFont(font, 11, outline and 'OUTLINE' or '')
+
         eb.bg = F.CreateBDFrame(eb, 0.25, true)
         eb.bg:SetAllPoints()
+
         F.SetBorderColor(eb.bg)
         F.CreateSD(eb.bg, 0.25)
         F.CreateTex(eb)
@@ -936,6 +955,7 @@ do
 
     function F:CreateDropDown(width, height, data)
         local outline = _G.ANDROMEDA_ADB.FontOutline
+        local font = C.Assets.Fonts.Condensed
 
         local dd = CreateFrame('Frame', nil, self, 'BackdropTemplate')
         dd:SetSize(width, height)
@@ -944,7 +964,7 @@ do
         F.CreateSD(dd.bg, 0.25)
         F.CreateTex(dd)
 
-        dd.Text = F.CreateFS(dd, C.Assets.Fonts.Regular, 11, outline, '', nil, outline or 'THICK', 'LEFT', 5, 0)
+        dd.Text = F.CreateFS(dd, font, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK', 'LEFT', 5, 0)
         dd.Text:SetPoint('RIGHT', -5, 0)
         dd.options = {}
 
@@ -980,7 +1000,7 @@ do
             opt[i]:SetSize(width - 8, height)
             F.CreateBD(opt[i])
 
-            local text = F.CreateFS(opt[i], C.Assets.Fonts.Regular, 11, nil, j, nil, true, 'LEFT', 5, 0)
+            local text = F.CreateFS(opt[i], font, 11, outline or nil, j, nil, outline and 'NONE' or 'THICK', 'LEFT', 5, 0)
             text:SetPoint('RIGHT', -5, 0)
             opt[i].text = j
             opt[i].index = i
@@ -1052,7 +1072,8 @@ do
         F.CreateSD(swatch.bg, 0.25)
 
         if name then
-            swatch.text = F.CreateFS(swatch, C.Assets.Fonts.Regular, 12, nil, name, nil, true)
+            local outline = _G.ANDROMEDA_ADB.FontOutline
+            swatch.text = F.CreateFS(swatch, C.Assets.Fonts.Regular, 12, outline or nil, name, nil, outline and 'NONE' or 'THICK')
             swatch.text:SetPoint('LEFT', swatch, 'RIGHT', 6, 0)
         end
 
@@ -1061,7 +1082,7 @@ do
         local gradTex = C.Assets.Textures.StatusbarGradient
 
         local tex = swatch:CreateTexture()
-        tex:SetInside(swatch, 2, 2)
+        tex:SetInside(swatch, C.MULT, C.MULT)
         tex:SetTexture(gradStyle and gradTex or normTex)
         tex:SetVertexColor(color.r, color.g, color.b)
         tex.GetColor = GetSwatchTexColor
@@ -1105,23 +1126,24 @@ do
         slider:SetHitRectInsets(0, 0, 0, 0)
         F.ReskinSlider(slider)
 
-        slider.Low:SetText(minValue)
-        slider.Low:SetFontObject(_G.Game11Font)
+        local outline = _G.ANDROMEDA_ADB.FontOutline
+        local font = C.Assets.Fonts.Condensed
+
+        F.SetFS(slider.Low, font, 11, outline or nil, minValue, nil, outline and 'NONE' or 'THICK')
+        slider.Low:ClearAllPoints()
         slider.Low:SetPoint('TOPLEFT', slider, 'BOTTOMLEFT', 10, -2)
 
-        slider.High:SetText(maxValue)
-        slider.High:SetFontObject(_G.Game11Font)
+        F.SetFS(slider.High, font, 11, outline or nil, minValue, nil, outline and 'NONE' or 'THICK')
+        slider.High:ClearAllPoints()
         slider.High:SetPoint('TOPRIGHT', slider, 'BOTTOMRIGHT', -10, -2)
 
-        slider.Text:SetText(name)
-        slider.Text:SetFontObject(_G.Game11Font)
+        slider.Text = F.CreateFS(slider, font, 11, outline or nil, name, nil, outline and 'NONE' or 'THICK')
         slider.Text:ClearAllPoints()
         slider.Text:SetPoint('CENTER', 0, 16)
 
         slider.value = F.CreateEditBox(slider, 50, 20)
         slider.value:SetPoint('TOP', slider, 'BOTTOM', 0, -2)
         slider.value:SetJustifyH('CENTER')
-        slider.value:SetFont(C.Assets.Fonts.Regular, 11, '')
         slider.value.__owner = slider
         slider.value:SetScript('OnEnterPressed', UpdateSliderEditBox)
 

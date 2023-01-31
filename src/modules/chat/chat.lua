@@ -44,6 +44,15 @@ function CHAT:UpdateSizeAndPosition()
     isScaling = false
 end
 
+function CHAT:SetupSizeAndPosition()
+    if C.DB.Chat.Lock then
+        CHAT:UpdateSizeAndPosition()
+        F:RegisterEvent('UI_SCALE_CHANGED', CHAT.UpdateSizeAndPosition)
+        hooksecurefunc(_G.ChatFrame1, 'SetPoint', updateAnchor)
+        FCF_SavePositionAndDimensions(_G.ChatFrame1)
+    end
+end
+
 function CHAT:TabSetAlpha(alpha)
     if self.glow:IsShown() and alpha ~= 1 then
         self:SetAlpha(1)
@@ -207,12 +216,7 @@ local function setupChatFrame(frame)
 
     CHAT:UpdateTextFading()
 
-    if C.DB.Chat.Lock then
-        CHAT:UpdateSizeAndPosition()
-        F:RegisterEvent('UI_SCALE_CHANGED', CHAT.UpdateSizeAndPosition)
-        hooksecurefunc(_G.ChatFrame1, 'SetPoint', updateAnchor)
-        FCF_SavePositionAndDimensions(_G.ChatFrame1)
-    end
+    CHAT:SetupSizeAndPosition()
 
     F.HideObject(frame.buttonFrame)
     F.HideObject(frame.ScrollBar)
@@ -638,7 +642,8 @@ local function fixLanguageFilterSideEffects()
     end
     sideEffectFixed = true
 
-    F.CreateFS(_G.HelpFrame, C.Assets.Fonts.Bold, 14, nil, L['You need to uncheck language filter in GUI and reload UI to get access into CN BattleNet support.'], 'YELLOW', 'THICK', 'TOP', 0, 30)
+    local outline = _G.ANDROMEDA_ADB.FontOutline
+    F.CreateFS(_G.HelpFrame, C.Assets.Fonts.Bold, 14, outline or nil, L['You need to uncheck language filter in GUI and reload UI to get access into CN BattleNet support.'], 'YELLOW', outline and 'NONE' or 'THICK', 'TOP', 0, 30)
 
     local OLD_GetFriendGameAccountInfo = C_BattleNet.GetFriendGameAccountInfo
     function C_BattleNet.GetFriendGameAccountInfo(...)

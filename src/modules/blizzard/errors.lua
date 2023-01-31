@@ -46,7 +46,7 @@ local function CreateErrorFrames()
     frame1:Hide()
     frame1:SetFrameStrata('TOOLTIP')
     frame1:SetFrameLevel(30)
-    frame1.text = F.CreateFS(frame1, font, 14, outline, '', 'RED', outline or 'THICK')
+    frame1.text = F.CreateFS(frame1, font, 14, outline or nil, '', 'RED', outline and 'NONE' or 'THICK')
     frame1.text:SetPoint('TOP', _G.UIParent, 0, -80)
 
     local frame2 = CreateFrame('Frame', C.ADDON_TITLE .. 'ErrorFrame2', _G.UIParent)
@@ -57,7 +57,7 @@ local function CreateErrorFrames()
     frame2:Hide()
     frame2:SetFrameStrata('TOOLTIP')
     frame2:SetFrameLevel(30)
-    frame2.text = F.CreateFS(frame2, font, 14, outline, '', 'RED', outline or 'THICK')
+    frame2.text = F.CreateFS(frame2, font, 14, outline or nil, '', 'RED', outline and 'NONE' or 'THICK')
     frame2.text:SetPoint('TOP', _G.UIParent, 0, -96)
 
     BLIZZARD.ErrorFrame1 = frame1

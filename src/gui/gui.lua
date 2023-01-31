@@ -230,7 +230,7 @@ local function CreateTab(parent, i, name)
     F.ReskinIcon(tab.icon)
 
     local outline = _G.ANDROMEDA_ADB.FontOutline
-    tab.text = F.CreateFS(tab, C.Assets.Fonts.Bold, 13, outline, name, nil, outline or 'THICK')
+    tab.text = F.CreateFS(tab, C.Assets.Fonts.Bold, 13, outline or nil, name, nil, outline and 'NONE' or 'THICK')
     tab.text:SetPoint('LEFT', tab.icon, 'RIGHT', 6, 0)
 
     tab:HookScript('OnEnter', Tab_OnEnter)
@@ -320,8 +320,8 @@ local function updateDropdownClick(self)
 end
 
 local function CreateOptions(i)
-    local parent, offset = guiPage[i].child, 20
     local outline = _G.ANDROMEDA_ADB.FontOutline
+    local parent, offset = guiPage[i].child, 20
 
     for _, option in pairs(GUI.OptionsList[i]) do
         local optType, key, value, name, horizon, data, callback, tip = unpack(option)
@@ -342,7 +342,7 @@ local function CreateOptions(i)
             cb.__name = name
             cb.__callback = callback
 
-            cb.label = F.CreateFS(cb, C.Assets.Fonts.Regular, 12, outline, name, nil, outline or 'THICK')
+            cb.label = F.CreateFS(cb, C.Assets.Fonts.Regular, 12, outline or nil, name, nil, outline and 'NONE' or 'THICK')
             cb.label:SetPoint('LEFT', cb, 'RIGHT', 4, 0)
 
             cb:SetChecked(UpdateValue(key, value))
@@ -375,7 +375,7 @@ local function CreateOptions(i)
             eb.__callback = callback
             eb.__default = (key == 'ACCOUNT' and C.AccountSettings[value]) or C.CharacterSettings[key][value]
 
-            eb.label = F.CreateFS(eb, C.Assets.Fonts.Regular, 11, outline, name, nil, outline or 'THICK', 'CENTER', 0, 20)
+            eb.label = F.CreateFS(eb, C.Assets.Fonts.Condensed, 11, outline or nil, name, nil, outline and 'NONE' or 'THICK', 'CENTER', 0, 20)
             eb:SetText(UpdateValue(key, value))
 
             eb:HookScript('OnEscapePressed', Editbox_OnEscapePressed)
@@ -444,7 +444,7 @@ local function CreateOptions(i)
                 end
             end
 
-            dd.label = F.CreateFS(dd, C.Assets.Fonts.Regular, 11, outline, name, nil, outline or 'THICK')
+            dd.label = F.CreateFS(dd, C.Assets.Fonts.Condensed, 11, outline or nil, name, nil, outline and 'NONE' or 'THICK')
             dd.label:SetPoint('BOTTOM', dd, 'TOP', 0, 4)
             if tip then
                 dd.title = name
@@ -500,8 +500,8 @@ local function CreateConsole(tabIndex)
 
     local outline = _G.ANDROMEDA_ADB.FontOutline
     local verStr = format('%s: %s', L['Version'], C.ADDON_VERSION)
-    F.CreateFS(guiFrame, C.ASSET_PATH .. 'fonts\\suez-one.ttf', 22, outline, C.COLORFUL_ADDON_TITLE, nil, outline or 'THICK', 'TOP', 0, -4)
-    F.CreateFS(guiFrame, C.Assets.Fonts.Condensed, 10, outline, verStr, { 0.7, 0.7, 0.7 }, outline or 'THICK', 'TOP', 0, -30)
+    F.CreateFS(guiFrame, C.ASSET_PATH .. 'fonts\\suez-one.ttf', 22, outline or nil, C.COLORFUL_ADDON_TITLE, nil, outline and 'NONE' or 'THICK', 'TOP', 0, -4)
+    F.CreateFS(guiFrame, C.Assets.Fonts.Condensed, 10, outline or nil, verStr, { 0.7, 0.7, 0.7 }, outline and 'NONE' or 'THICK', 'TOP', 0, -30)
 
     GUI:CreateGradientLine(guiFrame, 140, -70, -26, 70, -26)
 

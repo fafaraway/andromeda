@@ -33,10 +33,11 @@ local function UrlBox_OnEditFocusLost(self)
 end
 
 local function CreateUrlBox(parent, text, url, position)
+    local outline = _G.ANDROMEDA_ADB.FontOutline
     local box = F.CreateEditBox(parent, 320, 24)
     box:SetPoint(unpack(position))
 
-    box.lable = F.CreateFS(box, C.Assets.Fonts.Condensed, 12, nil, text, 'YELLOW', true)
+    box.lable = F.CreateFS(box, C.Assets.Fonts.Condensed, 12, outline or nil, text, 'YELLOW', outline and 'NONE' or 'THICK')
     box.lable:SetPoint('RIGHT', box, 'LEFT', -4, 0)
 
     box.url = url
@@ -56,7 +57,7 @@ function GUI:CreateAboutFrame(parent)
     repo:SetSize(400, 90)
     repo:SetPoint('TOP', 0, -20)
 
-    F.CreateFS(repo, C.Assets.Fonts.Heavy, 18, outline, L['Repository'], 'CLASS', outline or 'THICK', 'TOP', 0, -10)
+    F.CreateFS(repo, C.Assets.Fonts.Heavy, 18, outline or nil, L['Repository'], 'CLASS', outline and 'NONE' or 'THICK', 'TOP', 0, -10)
 
     GUI:CreateGradientLine(repo, 120, -60, -34, 60, -34)
 
@@ -66,7 +67,7 @@ function GUI:CreateAboutFrame(parent)
     tracker:SetSize(400, 90)
     tracker:SetPoint('TOP', repo, 'BOTTOM')
 
-    F.CreateFS(tracker, C.Assets.Fonts.Heavy, 18, outline, L['Issue Tracker'], 'CLASS', outline or 'THICK', 'TOP', 0, -10)
+    F.CreateFS(tracker, C.Assets.Fonts.Heavy, 18, outline or nil, L['Issue Tracker'], 'CLASS', outline and 'NONE' or 'THICK', 'TOP', 0, -10)
 
     GUI:CreateGradientLine(tracker, 120, -60, -34, 60, -34)
 
@@ -76,7 +77,7 @@ function GUI:CreateAboutFrame(parent)
     download:SetSize(400, 150)
     download:SetPoint('TOP', tracker, 'BOTTOM')
 
-    F.CreateFS(download, C.Assets.Fonts.Heavy, 18, outline, L['Download'], 'CLASS', outline or 'THICK', 'TOP', 0, -10)
+    F.CreateFS(download, C.Assets.Fonts.Heavy, 18, outline or nil, L['Download'], 'CLASS', outline and 'NONE' or 'THICK', 'TOP', 0, -10)
 
     GUI:CreateGradientLine(download, 120, -60, -34, 60, -34)
 
@@ -88,7 +89,7 @@ function GUI:CreateAboutFrame(parent)
     feedback:SetSize(400, 150)
     feedback:SetPoint('TOP', download, 'BOTTOM')
 
-    F.CreateFS(feedback, C.Assets.Fonts.Heavy, 18, outline, L['Discussion'], 'CLASS', outline or 'THICK', 'TOP', 0, -10)
+    F.CreateFS(feedback, C.Assets.Fonts.Heavy, 18, outline or nil, L['Discussion'], 'CLASS', outline and 'NONE' or 'THICK', 'TOP', 0, -10)
 
     GUI:CreateGradientLine(feedback, 120, -60, -34, 60, -34)
 

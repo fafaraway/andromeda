@@ -120,7 +120,8 @@ function UNITFRAME:CreateClassPower(self)
         bars[i].bg.multiplier = 0.25
 
         if isDK then
-            bars[i].timer = F.CreateFS(bars[i], C.Assets.Fonts.Regular, 11, nil, '')
+            local outline = _G.ANDROMEDA_ADB.FontOutline
+            bars[i].timer = F.CreateFS(bars[i], C.Assets.Fonts.Regular, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK')
         end
     end
 

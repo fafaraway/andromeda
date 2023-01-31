@@ -99,10 +99,10 @@ local function CreateLootSlot(id)
 
     local outline = _G.ANDROMEDA_ADB.FontOutline
 
-    local count = F.CreateFS(iconFrame, C.Assets.Fonts.Regular, 12, true, nil, nil, true, 'TOP', 1, -2)
+    local count = F.CreateFS(iconFrame, C.Assets.Fonts.Bold, 12, outline or nil, nil, nil, outline and 'NONE' or 'THICK', 'TOP', 1, -2)
     frame.count = count
 
-    local name = F.CreateFS(frame, C.Assets.Fonts.Regular, 12, outline, nil, nil, outline or 'THICK')
+    local name = F.CreateFS(frame, C.Assets.Fonts.Regular, 12, outline or nil, nil, nil, outline and 'NONE' or 'THICK')
     name:SetPoint('RIGHT', frame)
     name:SetPoint('LEFT', icon, 'RIGHT', 8, 0)
     name:SetJustifyH('LEFT')
@@ -341,7 +341,8 @@ function EL:OnLogin()
     lootFrame:Hide()
     lootFrame:SetScript('OnHide', OnHide)
 
-    lootFrame.title = F.CreateFS(lootFrame, C.Assets.Fonts.Bold, 12, 'OUTLINE')
+    local outline = _G.ANDROMEDA_ADB.FontOutline
+    lootFrame.title = F.CreateFS(lootFrame, C.Assets.Fonts.Bold, 12, outline or nil, '', nil, outline and 'NONE' or 'THICK')
     lootFrame.title:SetPoint('BOTTOMLEFT', lootFrame, 'TOPLEFT')
 
     lootFrame.slots = {}

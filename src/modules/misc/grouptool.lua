@@ -130,6 +130,7 @@ local eventList = {
     'PLAYER_ENTERING_WORLD',
 }
 function GT:RaidTool_RoleCount(parent)
+    local outline = _G.ANDROMEDA_ADB.FontOutline
     local frame = CreateFrame('Frame', nil, parent)
     frame:SetAllPoints()
     local role = {}
@@ -138,7 +139,7 @@ function GT:RaidTool_RoleCount(parent)
         role[i]:SetPoint('LEFT', 36 * i - 34, 0)
         role[i]:SetSize(28, 28)
         role[i]:SetTexture(roleIcons[i])
-        role[i].text = F.CreateFS(frame, C.Assets.Fonts.Condensed, 11, true, '0', 'YELLOW', true)
+        role[i].text = F.CreateFS(frame, C.Assets.Fonts.Condensed, 11, outline or nil, '0', 'YELLOW', outline and 'NONE' or 'THICK')
         role[i].text:ClearAllPoints()
         role[i].text:SetPoint('LEFT', role[i], 'RIGHT', -4, 0)
     end
@@ -208,10 +209,11 @@ function GT:RaidTool_CombatRes(parent)
     F.PixelIcon(res, GetSpellTexture(20484))
     res.__owner = parent
 
-    res.Count = F.CreateFS(res, C.Assets.Fonts.Regular, 14, true, '0', nil, true)
+    local outline = _G.ANDROMEDA_ADB.FontOutline
+    res.Count = F.CreateFS(res, C.Assets.Fonts.Regular, 14, outline or nil, '0', nil, outline and 'NONE' or 'THICK')
     res.Count:ClearAllPoints()
     res.Count:SetPoint('LEFT', res, 'RIGHT', 10, 0)
-    res.Timer = F.CreateFS(frame, C.Assets.Fonts.Regular, 14, true, '00:00', nil, true, 'RIGHT', -5, 0)
+    res.Timer = F.CreateFS(frame, C.Assets.Fonts.Regular, 14, outline or nil, '00:00', nil, outline and 'NONE' or 'THICK', 'RIGHT', -5, 0)
     res:SetScript('OnUpdate', GT.RaidTool_UpdateRes)
 
     parent.resFrame = frame
@@ -226,8 +228,10 @@ function GT:RaidTool_ReadyCheck(parent)
         self:Hide()
     end)
     F.SetBD(frame)
-    F.CreateFS(frame, C.Assets.Fonts.Regular, 14, true, _G.READY_CHECK, nil, true, 'TOP', 0, -8)
-    local rc = F.CreateFS(frame, C.Assets.Fonts.Regular, 14, true, '', nil, true, 'TOP', 0, -28)
+
+    local outline = _G.ANDROMEDA_ADB.FontOutline
+    F.CreateFS(frame, C.Assets.Fonts.Regular, 14, outline or nil, _G.READY_CHECK, nil, outline and 'NONE' or 'THICK', 'TOP', 0, -8)
+    local rc = F.CreateFS(frame, C.Assets.Fonts.Regular, 14, outline or nil, '', nil, outline and 'NONE' or 'THICK', 'TOP', 0, -28)
 
     local count, total
     local function hideRCFrame()

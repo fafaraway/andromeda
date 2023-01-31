@@ -3,7 +3,6 @@ local GUI = F:GetModule('GUI')
 local UNITFRAME = F:GetModule('UnitFrame')
 local NAMEPLATE = F:GetModule('Nameplate')
 local ACTIONBAR = F:GetModule('ActionBar')
-local CHAT = F:GetModule('Chat')
 local ANNOUNCEMENT = F:GetModule('Announcement')
 local MAP = F:GetModule('Map')
 local INVENTORY = F:GetModule('Inventory')
@@ -57,8 +56,9 @@ local function createPanel(parent, name, title, bgFrame)
     frame:SetPoint('TOPLEFT', parent:GetParent(), 'TOPRIGHT', 3, 0)
     F.SetBD(frame)
 
+    local outline = _G.ANDROMEDA_ADB.FontOutline
     if title then
-        F.CreateFS(frame, C.Assets.Fonts.Bold, 13, nil, title, 'YELLOW', true, 'TOPLEFT', 10, -30)
+        F.CreateFS(frame, C.Assets.Fonts.Bold, 13, outline or nil, title, 'YELLOW', outline and 'NONE' or 'THICK', 'TOPLEFT', 10, -30)
     end
 
     if bgFrame then
@@ -86,8 +86,9 @@ local function createScrollFrame(parent, width, height, text, noBg)
         scroll:SetPoint('TOPLEFT', 10, -50)
     end
 
+    local outline = _G.ANDROMEDA_ADB.FontOutline
     if text then
-        F.CreateFS(scroll, C.Assets.Fonts.Bold, 13, true, text, nil, true, 'TOPLEFT', 5, 32)
+        F.CreateFS(scroll, C.Assets.Fonts.Bold, 13, outline or nil, text, nil, outline and 'NONE' or 'THICK', 'TOPLEFT', 5, 32)
     end
 
     if not noBg then
@@ -128,12 +129,6 @@ local function createSpellBarWidget(parent, texture)
     return icon, close
 end
 
----comment
----@param parent any
----@param spellID any
----@param barTable any
----@param tableName any
----@param isNew any
 local function createSpellBar(parent, spellID, barTable, tableName, isNew)
     local spellName = GetSpellInfo(spellID)
     local texture = GetSpellTexture(spellID)
@@ -158,8 +153,9 @@ local function createSpellBar(parent, spellID, barTable, tableName, isNew)
         sortSpellBar(barTable)
     end)
 
+    local outline = _G.ANDROMEDA_ADB.FontOutline
     local font = C.Assets.Fonts.Condensed
-    local name = F.CreateFS(bar, font, 12, nil, spellName, nil, true, 'LEFT', 26, 0)
+    local name = F.CreateFS(bar, font, 12, outline or nil, spellName, nil, outline and 'NONE' or 'THICK', 'LEFT', 26, 0)
     name:SetWidth(160)
     name:SetJustifyH('LEFT')
 
@@ -210,8 +206,9 @@ local function label_OnEnter(self)
 end
 
 local function createLabel(parent, text, tip)
+    local outline = _G.ANDROMEDA_ADB.FontOutline
     local font = C.Assets.Fonts.Regular
-    local label = F.CreateFS(parent, font, 11, nil, text, nil, true)
+    local label = F.CreateFS(parent, font, 11, outline or nil, text, nil, outline and 'NONE' or 'THICK')
     label:SetPoint('BOTTOM', parent, 'TOP', 0, 4)
     if not tip then
         return
@@ -243,7 +240,8 @@ local function createGroupTitle(parent, text, offset)
         return
     end
 
-    F.CreateFS(parent.child, C.Assets.Fonts.Regular, 13, nil, text, 'YELLOW', true, 'TOP', 0, offset)
+    local outline = _G.ANDROMEDA_ADB.FontOutline
+    F.CreateFS(parent.child, C.Assets.Fonts.Regular, 13, outline or nil, text, 'YELLOW', outline and 'NONE' or 'THICK', 'TOP', 0, offset)
     local line = F.SetGradient(parent.child, 'H', 0.5, 0.5, 0.5, 0.25, 0.25, 200, C.MULT)
     line:SetPoint('TOPLEFT', 10, offset - 20)
 
@@ -265,7 +263,9 @@ local function createCheckbox(parent, offset, key, value, text, func, tip)
     box:SetSize(18, 18)
     box:SetHitRectInsets(-5, -5, -5, -5)
     box:SetPoint('TOPLEFT', 10, offset)
-    box.label = F.CreateFS(box, C.Assets.Fonts.Regular, 12, nil, text, nil, true)
+
+    local outline = _G.ANDROMEDA_ADB.FontOutline
+    box.label = F.CreateFS(box, C.Assets.Fonts.Regular, 12, outline or nil, text, nil, outline and 'NONE' or 'THICK')
     box.label:SetPoint('LEFT', box, 'RIGHT', 4, 0)
 
     box:SetChecked(C.DB[key][value])
@@ -950,7 +950,8 @@ function GUI:SetupNameplateAuraFilter(parent)
             sortSpellBar(frameData[index].barList)
         end)
 
-        local spellName = F.CreateFS(bar, C.Assets.Fonts.Condensed, 12, nil, name, nil, true, 'LEFT', 26, 0)
+        local outline = _G.ANDROMEDA_ADB.FontOutline
+        local spellName = F.CreateFS(bar, C.Assets.Fonts.Condensed, 12, outline or nil, name, nil, outline and 'NONE' or 'THICK', 'LEFT', 26, 0)
         spellName:SetWidth(180)
         spellName:SetJustifyH('LEFT')
         if index == 2 then
@@ -999,8 +1000,9 @@ function GUI:SetupNameplateAuraFilter(parent)
         whileDead = 1,
     }
 
+    local outline = _G.ANDROMEDA_ADB.FontOutline
     for index, value in ipairs(frameData) do
-        F.CreateFS(panel, C.Assets.Fonts.Bold, 13, nil, value.text, 'YELLOW', true, 'TOPLEFT', 10, value.offset - 5)
+        F.CreateFS(panel, C.Assets.Fonts.Bold, 13, outline or nil, value.text, 'YELLOW', outline and 'NONE' or 'THICK', 'TOPLEFT', 10, value.offset - 5)
         local frame = CreateFrame('Frame', nil, panel, 'BackdropTemplate')
         frame:SetSize(240, 250)
         frame:SetPoint('TOPLEFT', 10, value.offset - 25)
@@ -1333,7 +1335,8 @@ function GUI:SetupNameplateUnitFilter(parent)
             sortSpellBar(barTable)
         end)
 
-        local name = F.CreateFS(bar, C.Assets.Fonts.Condensed, 12, nil, text, nil, true, 'LEFT', 26, 0)
+        local outline = _G.ANDROMEDA_ADB.FontOutline
+        local name = F.CreateFS(bar, C.Assets.Fonts.Condensed, 12, outline or nil, text, nil, outline and 'NONE' or 'THICK', 'LEFT', 26, 0)
         name:SetWidth(180)
         name:SetJustifyH('LEFT')
         if isNew then
@@ -1423,7 +1426,8 @@ function GUI:SetupNameplateColorByDot(parent)
             sortSpellBar(barTable)
         end)
 
-        local name = F.CreateFS(bar, C.Assets.Fonts.Condensed, 12, nil, spellName, nil, true, 'LEFT', 26, 0)
+        local outline = _G.ANDROMEDA_ADB.FontOutline
+        local name = F.CreateFS(bar, C.Assets.Fonts.Condensed, 12, outline or nil, spellName, nil, outline and 'NONE' or 'THICK', 'LEFT', 26, 0)
         name:SetWidth(180)
         name:SetJustifyH('LEFT')
         if isNew then
@@ -2353,12 +2357,13 @@ do
                 sortSpellBar(panel.barTable)
             end)
 
+            local outline = _G.ANDROMEDA_ADB.FontOutline
             local font = C.Assets.Fonts.Condensed
-            local name = F.CreateFS(bar, font, 11, nil, spellName, nil, true, 'LEFT', 30, 0)
+            local name = F.CreateFS(bar, font, 11, outline or nil, spellName, nil, outline and 'NONE' or 'THICK', 'LEFT', 30, 0)
             name:SetWidth(120)
             name:SetJustifyH('LEFT')
 
-            local timer = F.CreateFS(bar, font, 11, nil, duration, nil, true, 'RIGHT', -30, 0)
+            local timer = F.CreateFS(bar, font, 11, outline or nil, duration, nil, outline and 'NONE' or 'THICK', 'RIGHT', -30, 0)
             timer:SetWidth(60)
             timer:SetJustifyH('RIGHT')
             timer:SetTextColor(0, 1, 0)
@@ -2609,14 +2614,16 @@ do
                 setupBars(bar.instName)
             end)
 
-            local spellName = F.CreateFS(bar, C.Assets.Fonts.Condensed, 11, nil, '', nil, true, 'LEFT', 26, 0)
+            local outline = _G.ANDROMEDA_ADB.FontOutline
+            local spellName = F.CreateFS(bar, C.Assets.Fonts.Condensed, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK', 'LEFT', 26, 0)
             spellName:SetWidth(120)
             spellName:SetJustifyH('LEFT')
             bar.spellName = spellName
 
-            local prioBox = F.CreateEditBox(bar, 24, 24)
-            prioBox:SetPoint('RIGHT', close, 'LEFT', -1, 0)
-            prioBox:SetTextInsets(10, 0, 0, 0)
+            local prioBox = F.CreateEditBox(bar, 22, 22)
+            prioBox:SetPoint('RIGHT', close, 'LEFT', -3, 0)
+            --prioBox:SetTextInsets(10, 0, 0, 0)
+            prioBox:SetJustifyH('CENTER')
             prioBox:SetMaxLetters(1)
             prioBox:SetTextColor(0, 1, 0)
             prioBox.bg:SetBackdropColor(1, 1, 1, 0.3)
@@ -2744,20 +2751,15 @@ do
         }
 
         local anchors = {
-            'TL',
-            'T',
-            'TR',
-            'L',
-            'R',
-            'BL',
-            'B',
-            'BR',
+            'TL', 'T', 'TR',
+            'L', 'R',
+            'BL', 'B', 'BR',
         }
 
         local function createBar(parent, spellID, anchor, r, g, b, showAll)
             local name, _, texture = GetSpellInfo(spellID)
             local bar = CreateFrame('Frame', nil, parent, 'BackdropTemplate')
-            bar:SetSize(220, 30)
+            bar:SetSize(200, 28)
             F.CreateBD(bar, 0.25)
             barList[spellID] = bar
 
@@ -2776,15 +2778,16 @@ do
             end)
 
             name = L[anchor] or name
+            local outline = _G.ANDROMEDA_ADB.FontOutline
             local font = C.Assets.Fonts.Condensed
-            local text = F.CreateFS(bar, font, 12, nil, name, nil, true, 'LEFT', 30, 0)
-            text:SetWidth(180)
+            local text = F.CreateFS(bar, font, 12, outline or nil, name, nil, outline and 'NONE' or 'THICK', 'LEFT', 26, 0)
+            text:SetWidth(160)
             text:SetJustifyH('LEFT')
             if anchor then
                 text:SetTextColor(r, g, b)
             end
             if showAll then
-                F.CreateFS(bar, font, 12, nil, 'ALL', nil, true, 'RIGHT', -30, 0)
+                F.CreateFS(bar, font, 12, outline or nil, 'ALL', nil, outline and 'NONE' or 'THICK', 'RIGHT', -30, 0)
             end
 
             sortSpellBar(barList)
@@ -2824,10 +2827,31 @@ do
         local scrollArea = createScrollFrame(panel.bg, 200, 485)
         panel.scrollArea = scrollArea
 
-        local editBox = createEditbox(panel.bg, nil, 10, -10, nil, 50, 24)
+        scrollArea.dd = F.CreateDropDown(panel.bg, 40, 24, anchors)
+        scrollArea.dd:SetPoint('TOPLEFT', 10, -10)
+        scrollArea.dd.options[1]:Click()
+        for i = 1, 8 do
+            scrollArea.dd.options[i]:HookScript('OnEnter', optionOnEnter)
+            scrollArea.dd.options[i]:HookScript('OnLeave', F.HideTooltip)
+        end
+
+        local editBox = createEditbox(panel.bg, nil, nil, nil, nil, 40, 24)
+        editBox:SetPoint('TOPLEFT', scrollArea.dd, 'TOPRIGHT', 5, 0)
         panel.editBox = editBox
         editBox.title = L['Hint']
         F.AddTooltip(editBox, 'ANCHOR_TOPRIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE', true)
+
+        local swatch = F.CreateColorSwatch(panel.bg)
+        swatch:SetPoint('LEFT', editBox, 'RIGHT', 5, 0)
+        swatch:SetSize(22, 22)
+        scrollArea.swatch = swatch
+
+        local showAll = F.CreateCheckButton(panel.bg, true)
+        showAll:SetPoint('LEFT', swatch, 'RIGHT', 3, 0)
+        showAll:SetSize(24, 24)
+        showAll.title = L['Hint']
+        F.AddTooltip(showAll, 'ANCHOR_TOPRIGHT', L['If unchecked, you can only see the aura you cast.|nIf checked, the aura would be tracked from all casters.'], 'BLUE', true)
+        scrollArea.showAll = showAll
 
         local addBtn = F.CreateButton(panel.bg, 35, 24, _G.ADD, 11)
         addBtn.__owner = panel
@@ -2842,27 +2866,10 @@ do
             StaticPopup_Show('ANDROMEDA_RESET_CORNER_SPELLS')
         end)
 
-        scrollArea.dd = F.CreateDropDown(panel.bg, 50, 24, anchors)
-        scrollArea.dd:SetPoint('TOPLEFT', 10, -10)
-        scrollArea.dd.options[1]:Click()
 
-        for i = 1, 8 do
-            scrollArea.dd.options[i]:HookScript('OnEnter', optionOnEnter)
-            scrollArea.dd.options[i]:HookScript('OnLeave', F.HideTooltip)
-        end
-        editBox:SetPoint('TOPLEFT', scrollArea.dd, 'TOPRIGHT', 5, 0)
 
-        local swatch = F.CreateColorSwatch(panel.bg)
-        swatch:SetPoint('LEFT', editBox, 'RIGHT', 5, 0)
-        swatch:SetSize(24, 24)
-        scrollArea.swatch = swatch
 
-        local showAll = F.CreateCheckButton(panel.bg, true)
-        showAll:SetPoint('BOTTOMRIGHT', panel.bg, 'TOPRIGHT', 0, 5)
-        showAll:SetSize(18, 18)
-        showAll.title = L['Hint']
-        F.AddTooltip(showAll, 'ANCHOR_TOPRIGHT', L['If unchecked, you can only see the aura you cast.|nIf checked, the aura would be tracked from all casters.'], 'BLUE', true)
-        scrollArea.showAll = showAll
+
 
         for spellID, value in pairs(UNITFRAME.CornerSpellsList) do
             local r, g, b = unpack(value[2])
@@ -2917,15 +2924,15 @@ do
             end
         end
 
-        local cb = F.CreateCheckButton(panel.bg, true)
-        cb:SetPoint('BOTTOMRIGHT', panel.bg, 'TOPRIGHT', 0, 5)
-        cb:SetChecked(C.DB.Unitframe.RaidBuffAuto)
-        cb:SetSize(18, 18)
-        cb:SetScript('OnClick', function()
-            C.DB.Unitframe.RaidBuffAuto = cb:GetChecked()
-        end)
-        cb.title = L['Hint']
-        F.AddTooltip(cb, 'ANCHOR_TOPRIGHT', L['If checked, use blizzard API logic to display buffs, no longer use the white list below, up to 3.'], 'BLUE', true)
+        -- local cb = F.CreateCheckButton(panel.bg, true)
+        -- cb:SetPoint('BOTTOMRIGHT', panel.bg, 'TOPRIGHT', 0, 5)
+        -- cb:SetChecked(C.DB.Unitframe.RaidBuffAuto)
+        -- cb:SetSize(18, 18)
+        -- cb:SetScript('OnClick', function()
+        --     C.DB.Unitframe.RaidBuffAuto = cb:GetChecked()
+        -- end)
+        -- cb.title = L['Hint']
+        -- F.AddTooltip(cb, 'ANCHOR_TOPRIGHT', L['If checked, use blizzard API logic to display buffs, no longer use the white list below, up to 3.'], 'BLUE', true)
     end
 
     local function refreshDebuffsIndicator()
