@@ -334,3 +334,10 @@ TOOLTIP:RegisterTooltips('Blizzard_Calendar', function()
     _G.CalendarContextMenu:HookScript('OnShow', TOOLTIP.ReskinTooltip)
     _G.CalendarInviteStatusContextMenu:HookScript('OnShow', TOOLTIP.ReskinTooltip)
 end)
+
+TOOLTIP:RegisterTooltips('Blizzard_PerksProgram', function()
+    if _G.PerksProgramTooltip then
+        TOOLTIP.ReskinTooltip(_G.PerksProgramTooltip)
+        _G.PerksProgramTooltip:SetScale(_G.UIParent:GetScale())
+    end
+end)
