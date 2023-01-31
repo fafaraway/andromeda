@@ -1,6 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 local TUTORIAL = F:GetModule('Tutorial')
 local GUI = F:GetModule('GUI')
+local CHAT = F:GetModule('Chat')
 
 local function SetupCVars()
     SetCVar('deselectOnClick', 1)
@@ -146,12 +147,7 @@ end
 local function SetupActionbars() end
 
 local function SetupChatFrame()
-    if C.DB.Chat.Lock then
-        CHAT:UpdateSizeAndPosition()
-        F:RegisterEvent('UI_SCALE_CHANGED', CHAT.UpdateSizeAndPosition)
-        hooksecurefunc(_G.ChatFrame1, 'SetPoint', updateAnchor)
-        FCF_SavePositionAndDimensions(_G.ChatFrame1)
-    end
+    CHAT:SetupSizeAndPosition()
 end
 
 local function SetupAddons() end
