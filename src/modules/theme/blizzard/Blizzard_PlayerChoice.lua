@@ -87,18 +87,37 @@ C.Themes['Blizzard_PlayerChoice'] = function()
                     if not rewardFrame.styled then
                         local itemButton = rewardFrame.itemButton
                         F.StripTextures(itemButton, 1)
-                        itemButton.bg = F.ReskinIcon(itemButton:GetRegions(), nil)
+                        itemButton.bg = F.ReskinIcon((itemButton:GetRegions()))
                         F.ReskinIconBorder(itemButton.IconBorder, true)
 
                         rewardFrame.styled = true
                     end
                 end
 
-                --[[ unseen templates
-                    PlayerChoiceBaseOptionCurrencyContainerRewardTemplate
-                    PlayerChoiceBaseOptionCurrencyRewardTemplate
-                    PlayerChoiceBaseOptionReputationRewardTemplate
-                ]]
+                for rewardFrame in rewards.rewardsPool:EnumerateActive() do
+                    local text = rewardFrame.Name or rewardFrame.Text -- .Text for PlayerChoiceBaseOptionReputationRewardTemplate
+                    if text then
+                        ReskinOptionText(text, 0.9, 0.8, 0.5)
+                    end
+
+                    if not rewardFrame.styled then
+                        -- PlayerChoiceBaseOptionItemRewardTemplate, PlayerChoiceBaseOptionCurrencyContainerRewardTemplate
+                        local itemButton = rewardFrame.itemButton
+                        if itemButton then
+                            F.StripTextures(itemButton, 1)
+                            itemButton.bg = F.ReskinIcon((itemButton:GetRegions()))
+                            F.ReskinIconBorder(itemButton.IconBorder, true)
+                        end
+                        -- PlayerChoiceBaseOptionCurrencyRewardTemplate
+                        local count = rewardFrame.Count
+                        if count then
+                            rewardFrame.bg = F.ReskinIcon(rewardFrame.Icon)
+                            F.ReskinIconBorder(rewardFrame.IconBorder, true)
+                        end
+
+                        rewardFrame.styled = true
+                    end
+                end
             end
 
             local widgetContainer = optionFrame.WidgetContainer

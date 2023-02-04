@@ -106,12 +106,6 @@ tinsert(C.BlizzThemes, function()
     _G.FriendsFrameStatusDropDown:ClearAllPoints()
     _G.FriendsFrameStatusDropDown:SetPoint('TOPLEFT', _G.FriendsFrame, 'TOPLEFT', 10, -28)
 
-    for _, button in pairs({ _G.FriendsTabHeaderSoRButton, _G.FriendsTabHeaderRecruitAFriendButton }) do
-        button:SetPushedTexture(0)
-        button:GetRegions():SetTexCoord(unpack(C.TEX_COORD))
-        F.CreateBDFrame(button, 0.25)
-    end
-
     -- FriendsFrameBattlenetFrame
 
     _G.FriendsFrameBattlenetFrame:GetRegions():Hide()
@@ -192,4 +186,48 @@ tinsert(C.BlizzThemes, function()
     _G.WhoFrameWhoButton:SetPoint('RIGHT', _G.WhoFrameAddFriendButton, 'LEFT', -1, 0)
     _G.WhoFrameAddFriendButton:SetPoint('RIGHT', _G.WhoFrameGroupInviteButton, 'LEFT', -1, 0)
     _G.FriendsFrameTitleText:SetPoint('TOP', _G.FriendsFrame, 'TOP', 0, -8)
+
+    -- Recruite frame
+
+    local RecruitAFriendFrame = _G.RecruitAFriendFrame
+    RecruitAFriendFrame.SplashFrame.Description:SetTextColor(1, 1, 1)
+    F.Reskin(RecruitAFriendFrame.SplashFrame.OKButton)
+    F.StripTextures(RecruitAFriendFrame.RewardClaiming)
+    F.Reskin(RecruitAFriendFrame.RewardClaiming.ClaimOrViewRewardButton)
+    F.Reskin(RecruitAFriendFrame.RecruitmentButton)
+
+    local recruitList = RecruitAFriendFrame.RecruitList
+    F.StripTextures(recruitList.Header)
+    F.CreateBDFrame(recruitList.Header, 0.25)
+    recruitList.ScrollFrameInset:Hide()
+    F.ReskinTrimScroll(recruitList.ScrollBar)
+
+    local recruitmentFrame = _G.RecruitAFriendRecruitmentFrame
+    F.StripTextures(recruitmentFrame)
+    F.ReskinClose(recruitmentFrame.CloseButton)
+    F.SetBD(recruitmentFrame)
+    F.StripTextures(recruitmentFrame.EditBox)
+    local ebBg = F.CreateBDFrame(recruitmentFrame.EditBox, 0.25)
+    ebBg:SetPoint('TOPLEFT', -3, -3)
+    ebBg:SetPoint('BOTTOMRIGHT', 0, 3)
+    F.Reskin(recruitmentFrame.GenerateOrCopyLinkButton)
+
+    local rewardsFrame = _G.RecruitAFriendRewardsFrame
+    F.StripTextures(rewardsFrame)
+    F.ReskinClose(rewardsFrame.CloseButton)
+    F.SetBD(rewardsFrame)
+
+    rewardsFrame:HookScript('OnShow', function(self)
+        for i = 1, self:GetNumChildren() do
+            local child = select(i, self:GetChildren())
+            local button = child and child.Button
+            if button and not button.styled then
+                F.ReskinIcon(button.Icon)
+                button.IconBorder:Hide()
+                button:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
+
+                button.styled = true
+            end
+        end
+    end)
 end)

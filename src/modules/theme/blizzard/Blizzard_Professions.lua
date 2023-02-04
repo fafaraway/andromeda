@@ -215,7 +215,19 @@ C.Themes['Blizzard_Professions'] = function()
     end
 
     -- Tools
-    local slots = { 'Prof0ToolSlot', 'Prof0Gear0Slot', 'Prof0Gear1Slot', 'Prof1ToolSlot', 'Prof1Gear0Slot', 'Prof1Gear1Slot', 'CookingToolSlot', 'CookingGear0Slot', 'FishingToolSlot', 'FishingGear0Slot', 'FishingGear1Slot' }
+    local slots = {
+        'Prof0ToolSlot',
+        'Prof0Gear0Slot',
+        'Prof0Gear1Slot',
+        'Prof1ToolSlot',
+        'Prof1Gear0Slot',
+        'Prof1Gear1Slot',
+        'CookingToolSlot',
+        'CookingGear0Slot',
+        'FishingToolSlot',
+        'FishingGear0Slot',
+        'FishingGear1Slot',
+    }
     for _, name in pairs(slots) do
         local button = craftingPage[name]
         if button then
@@ -252,6 +264,10 @@ C.Themes['Blizzard_Professions'] = function()
     local specPage = frame.SpecPage
     F.Reskin(specPage.UnlockTabButton)
     F.Reskin(specPage.ApplyButton)
+    if C.IS_NEW_PATCH then
+        F.Reskin(specPage.ViewTreeButton)
+        F.Reskin(specPage.BackToPreviewButton)
+    end
     F.StripTextures(specPage.TreeView)
     specPage.TreeView.Background:Hide()
     F.CreateBDFrame(specPage.TreeView, 0.25):SetInside()

@@ -88,7 +88,7 @@ tinsert(C.BlizzThemes, function()
             button.expandOrCollapseButton.styled = true
         end
 
-        button.enableButton:GetCheckedTexture():SetDesaturated(true)
+        button.enableButton:GetCheckedTexture():SetAtlas('checkmark-minimal')
     end)
 
     F.StripTextures(_G.LFDParentFrame)
