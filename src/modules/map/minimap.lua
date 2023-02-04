@@ -141,7 +141,7 @@ end
 
 -- Mail Icon
 
-local function updateMailFrameAnchor(frame, _, _, _, _, _, force)
+local function updateIndicatorFrameAnchor(frame, _, _, _, _, _, force)
     if force then
         return
     end
@@ -151,15 +151,16 @@ local function updateMailFrameAnchor(frame, _, _, _, _, _, force)
 end
 
 function MAP:CreateMailButton()
-    local mail = _G.MinimapCluster.IndicatorFrame.MailFrame
     local icon = _G.MiniMapMailIcon
+    local indicatorFrame = _G.MinimapCluster.IndicatorFrame
 
-    updateMailFrameAnchor(mail)
-    hooksecurefunc(mail, 'SetPoint', updateMailFrameAnchor)
-
-    mail:SetFrameLevel(11)
-    icon:SetScale(1.2)
-    icon:SetPoint('CENTER', mail)
+    if indicatorFrame then
+        updateIndicatorFrameAnchor(indicatorFrame)
+        hooksecurefunc(indicatorFrame, 'SetPoint', updateIndicatorFrameAnchor)
+        indicatorFrame:SetFrameLevel(11)
+        icon:SetScale(1.2)
+        icon:SetPoint('CENTER', indicatorFrame)
+    end
 end
 
 -- Calendar Invite
