@@ -110,19 +110,6 @@ function BLIZZARD:UIWidgetFrameMover()
     end)
 end
 
-do
-    local distanceText = _G.SuperTrackedFrame.DistanceText
-    if not distanceText.__SetText then
-        distanceText.__SetText = distanceText.SetText
-        hooksecurefunc(distanceText, 'SetText', function(frame, text)
-            if strmatch(text, '%d%d%d%d.%d+') then
-                text = gsub(text, '(%d+)%.%d+', '%1')
-                frame:__SetText(text)
-            end
-        end)
-    end
-end
-
 -- Add ClickBinding tab to SpellBookFrame
 function BLIZZARD:ClickBindingTab()
     local cb = CreateFrame('CheckButton', C.ADDON_TITLE .. 'ClickCastingTab', _G.SpellBookSideTabsFrame, 'SpellBookSkillLineTabTemplate')
@@ -177,7 +164,7 @@ do
         C_CVar.SetCVar('showTutorials', 0)
         C_CVar.SetCVar('showNPETutorials', 0)
         C_CVar.SetCVar('hideAdventureJournalAlerts', 1)
-        C_CVar.RegisterCVar('hideHelptips', 1)
+        -- C_CVar.RegisterCVar('hideHelptips', 1) -- this can actually block interaction with mission tables
 
         local lastInfoFrame = C_CVar.GetCVarBitfield('closedInfoFrames', _G.NUM_LE_FRAME_TUTORIALS)
         if pendingChanges or not lastInfoFrame then
@@ -189,11 +176,10 @@ do
             end
         end
 
-        --if not IsAddOnLoaded(C.ADDON_NAME) then
+        -- disable alert of new talent
         function MainMenuMicroButton_AreAlertsEnabled()
             return false
         end
-        --end
 
         F:UnregisterEvent('VARIABLES_LOADED', variablesLoaded)
     end
@@ -207,4 +193,123 @@ do
             SetCVar('showTutorials', 0)
         end
     end)
+end
+
+do
+    local distanceText = _G.SuperTrackedFrame.DistanceText
+    if not distanceText.__SetText then
+        distanceText.__SetText = distanceText.SetText
+        hooksecurefunc(distanceText, 'SetText', function(frame, text)
+            if strmatch(text, '%d%d%d%d.%d+') then
+                text = gsub(text, '(%d+)%.%d+', '%1')
+                frame:__SetText(text)
+            end
+        end)
+    end
+end
+
+-- Fix Drag Collections taint
+do
+    local done
+    local function OnEvent(event, addon)
+        if event == 'ADDON_LOADED' and addon == 'Blizzard_Collections' then
+            -- Fix undragable issue
+            local checkBox = _G.WardrobeTransmogFrame.ToggleSecondaryAppearanceCheckbox
+            checkBox.Label:ClearAllPoints()
+            checkBox.Label:SetPoint('LEFT', checkBox, 'RIGHT', 2, 1)
+            checkBox.Label:SetWidth(152)
+
+            _G.CollectionsJournal:HookScript('OnShow', function()
+                if not done then
+                    if InCombatLockdown() then
+                        F:RegisterEvent('PLAYER_REGEN_ENABLED', OnEvent)
+                    else
+                        F.CreateMF(_G.CollectionsJournal)
+                    end
+                    done = true
+                end
+            end)
+            F:UnregisterEvent(event, OnEvent)
+        elseif event == 'PLAYER_REGEN_ENABLED' then
+            F.CreateMF(_G.CollectionsJournal)
+            F:UnregisterEvent(event, OnEvent)
+        end
+    end
+
+    F:RegisterEvent('ADDON_LOADED', OnEvent)
+end
+
+-- Select target when click on raid units
+do
+    local function FixRaidGroupButton()
+        for i = 1, 40 do
+            local bu = _G['RaidGroupButton' .. i]
+            if bu and bu.unit and not bu.clickFixed then
+                bu:SetAttribute('type', 'target')
+                bu:SetAttribute('unit', bu.unit)
+
+                bu.clickFixed = true
+            end
+        end
+    end
+
+    local function OnEvent(event, addon)
+        if event == 'ADDON_LOADED' and addon == 'Blizzard_RaidUI' then
+            if not InCombatLockdown() then
+                FixRaidGroupButton()
+            else
+                F:RegisterEvent('PLAYER_REGEN_ENABLED', OnEvent)
+            end
+            F:UnregisterEvent(event, OnEvent)
+        elseif event == 'PLAYER_REGEN_ENABLED' then
+            if _G.RaidGroupButton1 and _G.RaidGroupButton1:GetAttribute('type') ~= 'target' then
+                FixRaidGroupButton()
+                F:UnregisterEvent(event, OnEvent)
+            end
+        end
+    end
+
+    F:RegisterEvent('ADDON_LOADED', OnEvent)
+end
+
+-- Fix blizz guild news hyperlink error
+do
+    local function FixGuildNews(event, addon)
+        if addon ~= 'Blizzard_GuildUI' then
+            return
+        end
+
+        local _GuildNewsButton_OnEnter = _G.GuildNewsButton_OnEnter
+        function _G.GuildNewsButton_OnEnter(self)
+            if not (self.newsInfo and self.newsInfo.whatText) then
+                return
+            end
+            _GuildNewsButton_OnEnter(self)
+        end
+
+        F:UnregisterEvent(event, FixGuildNews)
+    end
+
+    F:RegisterEvent('ADDON_LOADED', FixGuildNews)
+end
+
+-- Fix blizz bug in addon list
+do
+    local _AddonTooltip_Update = _G.AddonTooltip_Update
+    function _G.AddonTooltip_Update(owner)
+        if not owner then
+            return
+        end
+        if owner:GetID() < 1 then
+            return
+        end
+        _AddonTooltip_Update(owner)
+    end
+end
+
+-- Fix empty string in party guide promote
+do
+    if not _G.PROMOTE_GUIDE then
+        _G.PROMOTE_GUIDE = _G.PARTY_PROMOTE_GUIDE
+    end
 end

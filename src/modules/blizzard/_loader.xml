@@ -9,7 +9,6 @@
     <Script file="colorpicker.lua"/>
     <Script file="dressup.lua"/>
     <Script file="errors.lua"/>
-    <Script file="fixes.lua"/>
     <Script file="fonts.lua"/>
     <!-- <Script file="friendslist.lua"/> -->
     <Script file="loot.lua"/>
