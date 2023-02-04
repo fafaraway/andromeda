@@ -587,22 +587,28 @@ do
             _G.GameTooltip:SetSpellByID(self.text)
         elseif self.text then
             if self.color == 'CLASS' then
-                r, g, b = C.r, C.g, C.b
-            elseif self.color == 'SYSTEM' then
-                r, g, b = 1, 0.8, 0
-            elseif self.color == 'BLUE' then
-                r, g, b = 0.6, 0.8, 1
+                r, g, b = F:HexToRgb(C.MY_CLASS_COLOR)
+            elseif self.color == 'INFO' then
+                r, g, b = F:HexToRgb(C.INFO_COLOR)
+            elseif self.color == 'YELLOW' then
+                r, g, b = F:HexToRgb(C.YELLOW_COLOR)
             elseif self.color == 'RED' then
-                r, g, b = 0.9, 0.3, 0.3
+                r, g, b = F:HexToRgb(C.RED_COLOR)
+            elseif self.color == 'GREEN' then
+                r, g, b = F:HexToRgb(C.GREEN_COLOR)
+            elseif self.color == 'BLUE' then
+                r, g, b = F:HexToRgb(C.BLUE_COLOR)
+            elseif self.color == 'GREY' then
+                r, g, b = F:HexToRgb(C.GREY_COLOR)
             else
-                r, g, b = 1, 1, 1
+                r, g, b = 255, 255, 255
             end
 
             if self.blankLine then
                 _G.GameTooltip:AddLine(' ')
             end
 
-            _G.GameTooltip:AddLine(self.text, r, g, b, 1)
+            _G.GameTooltip:AddLine(self.text, r / 255, g / 255, b / 255, 1)
         end
 
         _G.GameTooltip:Show()
