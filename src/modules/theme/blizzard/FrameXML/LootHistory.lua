@@ -66,6 +66,10 @@ tinsert(C.BlizzThemes, function()
             frame.ToggleButton:GetPushedTexture():SetAlpha(0)
             frame.ToggleButton:GetDisabledTexture():SetAlpha(0)
 
+            frame.WinnerName:SetFontObject(_G.Game13Font)
+            frame.WinnerRoll:SetWidth(28)
+            frame.WinnerRoll:SetFontObject(_G.Game13Font)
+
             frame.styled = true
         end
 
@@ -82,8 +86,11 @@ tinsert(C.BlizzThemes, function()
 
     hooksecurefunc('LootHistoryFrame_UpdatePlayerFrame', function(_, playerFrame)
         if not playerFrame.styled then
+            playerFrame.PlayerName:SetWordWrap(false)
+            playerFrame.PlayerName:SetFontObject(_G.Game13Font)
             playerFrame.RollText:SetTextColor(0.9, 0.9, 0.9)
-            playerFrame.RollText:SetWidth(30) -- needs review, might be too big
+            playerFrame.RollText:SetWidth(28)
+            playerFrame.RollText:SetFontObject(_G.Game13Font)
             playerFrame.WinMark:SetDesaturated(true)
 
             playerFrame.styled = true
@@ -106,20 +113,20 @@ tinsert(C.BlizzThemes, function()
     -- [[ Dropdown ]]
 
     _G.LootHistoryDropDown.initialize = function(self)
-        local info = _G.UIDropDownMenu_CreateInfo()
+        local info = UIDropDownMenu_CreateInfo()
         info.isTitle = 1
         info.text = _G.MASTER_LOOTER
         info.fontObject = _G.GameFontNormalLeft
         info.notCheckable = 1
-        _G.UIDropDownMenu_AddButton(info)
+        UIDropDownMenu_AddButton(info)
 
-        info = _G.UIDropDownMenu_CreateInfo()
+        info = UIDropDownMenu_CreateInfo()
         info.notCheckable = 1
         local name, class = C_LootHistory.GetPlayerInfo(self.itemIdx, self.playerIdx)
         local classColor = C.ClassColors[class]
         local colorCode = classColor.colorStr
         info.text = format(_G.MASTER_LOOTER_GIVE_TO, colorCode .. name .. '|r')
         info.func = _G.LootHistoryDropDown_OnClick
-        _G.UIDropDownMenu_AddButton(info)
+        UIDropDownMenu_AddButton(info)
     end
 end)

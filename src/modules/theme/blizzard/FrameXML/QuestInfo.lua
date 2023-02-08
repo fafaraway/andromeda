@@ -15,46 +15,11 @@ local function setHighlight(self)
     end
 end
 
-local function QuestInfo_GetQuestID()
-    if _G.QuestInfoFrame.questLog then
-        return C_QuestLog.GetSelectedQuest()
-    else
-        return GetQuestID()
-    end
-end
-
-local function colorObjectivesText()
-    if not _G.QuestInfoFrame.questLog then
-        return
-    end
-
-    local questID = QuestInfo_GetQuestID()
-    local objectivesTable = _G.QuestInfoObjectivesFrame.Objectives
-    local numVisibleObjectives = 0
-    local objective
-
-    local waypointText = C_QuestLog.GetNextWaypointText(questID)
-    if waypointText then
-        numVisibleObjectives = numVisibleObjectives + 1
-        objective = objectivesTable[numVisibleObjectives]
-        objective:SetTextColor(1, 1, 1)
-    end
-
-    for i = 1, GetNumQuestLeaderBoards() do
-        local _, type, finished = GetQuestLogLeaderBoard(i)
-
-        if type ~= 'spell' and type ~= 'log' and numVisibleObjectives < _G.MAX_OBJECTIVES then
-            numVisibleObjectives = numVisibleObjectives + 1
-            objective = objectivesTable[numVisibleObjectives]
-
-            if objective then
-                if finished then
-                    objective:SetTextColor(0.9, 0.9, 0.9)
-                else
-                    objective:SetTextColor(1, 1, 1)
-                end
-            end
-        end
+local function replaceTextColor(object, r)
+    if r == 0 then
+        object:SetTextColor(1, 1, 1)
+    elseif r == 0.2 then
+        object:SetTextColor(0.8, 0.8, 0.8)
     end
 end
 
@@ -73,7 +38,7 @@ local function restyleSpellButton(bu)
     bg:SetPoint('BOTTOMRIGHT', 0, 14)
 end
 
-local function ReskinRewardButton(bu)
+local function reskinRewardButton(bu)
     bu.NameFrame:Hide()
     bu.bg = F.ReskinIcon(bu.Icon)
 
@@ -83,8 +48,8 @@ local function ReskinRewardButton(bu)
     bu.textBg = bg
 end
 
-local function ReskinRewardButtonWithSize(bu, isMapQuestInfo)
-    ReskinRewardButton(bu)
+local function reskinRewardButtonWithSize(bu, isMapQuestInfo)
+    reskinRewardButton(bu)
 
     if isMapQuestInfo then
         bu.Icon:SetSize(29, 29)
@@ -93,28 +58,28 @@ local function ReskinRewardButtonWithSize(bu, isMapQuestInfo)
     end
 end
 
-local function HookTextColor_Yellow(self, r, g, b)
+local function hookTextColor_Yellow(self, r, g, b)
     if r ~= 1 or g ~= 0.8 or b ~= 0 then
         self:SetTextColor(1, 0.8, 0)
     end
 end
 
-local function SetTextColor_Yellow(font)
+local function setTextColor_Yellow(font)
     font:SetShadowColor(0, 0, 0, 0)
     font:SetTextColor(1, 0.8, 0)
-    hooksecurefunc(font, 'SetTextColor', HookTextColor_Yellow)
+    hooksecurefunc(font, 'SetTextColor', hookTextColor_Yellow)
 end
 
-local function HookTextColor_White(self, r, g, b)
+local function hookTextColor_White(self, r, g, b)
     if r ~= 1 or g ~= 1 or b ~= 1 then
         self:SetTextColor(1, 1, 1)
     end
 end
 
-local function SetTextColor_White(font)
+local function setTextColor_White(font)
     font:SetShadowColor(0, 0, 0)
     font:SetTextColor(1, 1, 1)
-    hooksecurefunc(font, 'SetTextColor', HookTextColor_White)
+    hooksecurefunc(font, 'SetTextColor', hookTextColor_White)
 end
 
 tinsert(C.BlizzThemes, function()
@@ -124,16 +89,13 @@ tinsert(C.BlizzThemes, function()
     _G.QuestInfoItemHighlight:HookScript('OnShow', setHighlight)
     _G.QuestInfoItemHighlight:HookScript('OnHide', clearHighlight)
 
-    -- Quest objective text color
-    hooksecurefunc('QuestMapFrame_ShowQuestDetails', colorObjectivesText)
-
     -- Reskin rewards
     restyleSpellButton(_G.QuestInfoSpellObjectiveFrame) -- needs review
 
     hooksecurefunc('QuestInfo_GetRewardButton', function(rewardsFrame, index)
         local bu = rewardsFrame.RewardButtons[index]
         if not bu.styled then
-            ReskinRewardButtonWithSize(bu, rewardsFrame == _G.MapQuestInfoRewardsFrame)
+            reskinRewardButtonWithSize(bu, rewardsFrame == _G.MapQuestInfoRewardsFrame)
             F.ReskinIconBorder(bu.IconBorder)
 
             bu.styled = true
@@ -153,11 +115,11 @@ tinsert(C.BlizzThemes, function()
             'WarModeBonusFrame',
         }
     do
-        ReskinRewardButtonWithSize(_G.MapQuestInfoRewardsFrame[name], true)
+        reskinRewardButtonWithSize(_G.MapQuestInfoRewardsFrame[name], true)
     end
 
     for _, name in next, { 'HonorFrame', 'SkillPointFrame', 'ArtifactXPFrame', 'WarModeBonusFrame' } do
-        ReskinRewardButtonWithSize(_G.QuestInfoRewardsFrame[name])
+        reskinRewardButtonWithSize(_G.QuestInfoRewardsFrame[name])
     end
 
     -- Title Reward, needs review
@@ -176,7 +138,18 @@ tinsert(C.BlizzThemes, function()
 
     -- Others
     hooksecurefunc('QuestInfo_Display', function()
-        colorObjectivesText()
+        local objectivesTable = _G.QuestInfoObjectivesFrame.Objectives
+        for i = #objectivesTable, 1, -1 do
+            local object = objectivesTable[i]
+            if object.hooked then
+                break
+            end
+            hooksecurefunc(object, 'SetTextColor', replaceTextColor)
+            local r, g, b = object:GetTextColor()
+            object:SetTextColor(r, g, b)
+
+            object.hooked = true
+        end
 
         local rewardsFrame = _G.QuestInfoFrame.rewardsFrame
         local isQuestLog = _G.QuestInfoFrame.questLog ~= nil
@@ -214,7 +187,7 @@ tinsert(C.BlizzThemes, function()
             -- Spell Rewards
             for spellReward in rewardsFrame.spellRewardPool:EnumerateActive() do
                 if not spellReward.styled then
-                    ReskinRewardButton(spellReward)
+                    reskinRewardButton(spellReward)
 
                     spellReward.styled = true
                 end
@@ -224,20 +197,15 @@ tinsert(C.BlizzThemes, function()
         -- Reputation Rewards
         for repReward in rewardsFrame.reputationRewardPool:EnumerateActive() do
             if not repReward.styled then
-                ReskinRewardButton(repReward)
+                reskinRewardButton(repReward)
                 repReward.styled = true
             end
         end
     end)
 
     -- Change text colors
-    hooksecurefunc(_G.QuestInfoRequiredMoneyText, 'SetTextColor', function(self, r)
-        if r == 0 then
-            self:SetTextColor(0.8, 0.8, 0.8)
-        elseif r == 0.2 then
-            self:SetTextColor(1, 1, 1)
-        end
-    end)
+    hooksecurefunc(_G.QuestInfoRequiredMoneyText, 'SetTextColor', replaceTextColor)
+    hooksecurefunc(_G.QuestInfoSpellObjectiveLearnLabel, 'SetTextColor', replaceTextColor)
 
     local yellowish = {
         _G.QuestInfoTitleHeader,
@@ -246,7 +214,7 @@ tinsert(C.BlizzThemes, function()
         _G.QuestInfoRewardsFrame.Header,
     }
     for _, font in pairs(yellowish) do
-        SetTextColor_Yellow(font)
+        setTextColor_Yellow(font)
     end
 
     local whitish = {
@@ -255,14 +223,13 @@ tinsert(C.BlizzThemes, function()
         _G.QuestInfoGroupSize,
         _G.QuestInfoRewardText,
         _G.QuestInfoTimerText,
-        _G.QuestInfoSpellObjectiveLearnLabel,
         _G.QuestInfoRewardsFrame.ItemChooseText,
         _G.QuestInfoRewardsFrame.ItemReceiveText,
         _G.QuestInfoRewardsFrame.PlayerTitleText,
         _G.QuestInfoRewardsFrame.XPFrame.ReceiveText,
     }
     for _, font in pairs(whitish) do
-        SetTextColor_White(font)
+        setTextColor_White(font)
     end
 
     -- Replace seal signature string

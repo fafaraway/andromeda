@@ -271,6 +271,7 @@ C.Themes['Blizzard_Professions'] = function()
     F.StripTextures(specPage.TreeView)
     specPage.TreeView.Background:Hide()
     F.CreateBDFrame(specPage.TreeView, 0.25):SetInside()
+    specPage.PanelFooter:Hide()
 
     hooksecurefunc(specPage, 'UpdateTabs', function(self)
         for tab in self.tabsPool:EnumerateActive() do
