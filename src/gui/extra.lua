@@ -1344,7 +1344,7 @@ function GUI:SetupNameplateUnitFilter(parent)
             name:SetTextColor(0, 1, 0)
         end
         if npcID then
-            F.GetNPCName(npcID, function(npcName)
+            F.GetNpcName(npcID, function(npcName)
                 name:SetText(npcName)
                 if npcName == _G.UNKNOWN then
                     name:SetTextColor(1, 0, 0)

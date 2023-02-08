@@ -205,8 +205,8 @@ do
     F.ScanTip = tip
 
     local slotData = { gems = {}, gemsColor = {} }
-    local itemLevelString = '^' .. gsub(_G.ITEM_LEVEL, '%%d', '')
-    local enchantString = gsub(_G.ENCHANTED_TOOLTIP_LINE, '%%s', '(.+)')
+    local ilvlStr = '^' .. gsub(_G.ITEM_LEVEL, '%%d', '')
+    local enchantStr = gsub(_G.ENCHANTED_TOOLTIP_LINE, '%%s', '(.+)')
     function F.GetItemLevel(link, arg1, arg2, fullScan)
         if fullScan then
             local data = C_TooltipInfo.GetInventoryItem(arg1, arg2)
@@ -227,7 +227,7 @@ do
                 if argVal then
                     if not slotData.iLvl then
                         local text = argVal[2] and argVal[2].stringVal
-                        local found = text and strfind(text, itemLevelString)
+                        local found = text and strfind(text, ilvlStr)
                         if found then
                             local level = strmatch(text, '(%d+)%)?$')
                             slotData.iLvl = tonumber(level) or 0
@@ -242,7 +242,7 @@ do
                         local lineInfo = argVal[4] and argVal[4].field
                         if lineInfo == 'enchantID' then
                             local enchant = argVal[2] and argVal[2].stringVal
-                            slotData.enchantText = strmatch(enchant, enchantString)
+                            slotData.enchantText = strmatch(enchant, enchantStr)
                         elseif lineInfo == 'gemIcon' then
                             num = num + 1
                             slotData.gems[num] = argVal[4].intVal
@@ -280,7 +280,7 @@ do
                 local argVal = lineData.args
                 if argVal then
                     local text = argVal[2] and argVal[2].stringVal
-                    local found = text and strfind(text, itemLevelString)
+                    local found = text and strfind(text, ilvlStr)
                     if found then
                         local level = strmatch(text, '(%d+)%)?$')
                         iLvlDB[link] = tonumber(level)
@@ -308,7 +308,7 @@ do
                         end
                         pendingNPCs[npcID] = nil
                     else
-                        local name = F.GetNPCName(npcID, callbacks[npcID])
+                        local name = F.GetNpcName(npcID, callbacks[npcID])
                         if name and name ~= loadingStr then
                             pendingNPCs[npcID] = nil
                         else
@@ -324,7 +324,7 @@ do
         end
     end)
 
-    function F.GetNPCName(npcID, callback)
+    function F.GetNpcName(npcID, callback)
         local name = nameCache[npcID]
         if not name then
             name = loadingStr
@@ -354,7 +354,7 @@ do
         return name
     end
 
-    local isKnownString = {
+    local knownStr = {
         [_G.TRANSMOGRIFY_TOOLTIP_APPEARANCE_UNKNOWN] = true,
         [_G.TRANSMOGRIFY_TOOLTIP_ITEM_UNKNOWN_APPEARANCE_KNOWN] = true,
     }
@@ -372,7 +372,7 @@ do
                     return false
                 end
                 local stringVal = argVal[2] and argVal[2].stringVal
-                if isKnownString[stringVal] then
+                if knownStr[stringVal] then
                     return true
                 end
             end
