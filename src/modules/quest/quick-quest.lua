@@ -218,15 +218,14 @@ QuickQuest:Register('GOSSIP_SHOW', function()
     end
 end)
 
-local darkmoonNPC = {
+local skipConfirmNPCs = {
     [57850] = true, -- Teleportologist Fozlebub
     [55382] = true, -- Darkmoon Faire Mystic Mage (Horde)
     [54334] = true, -- Darkmoon Faire Mystic Mage (Alliance)
 }
 
 QuickQuest:Register('GOSSIP_CONFIRM', function(index)
-    local npcID = GetNPCID()
-    if npcID and darkmoonNPC[npcID] then
+    if skipConfirmNPCs[GetNPCID()] then
         C_GossipInfo.SelectOption(index, '', true)
         StaticPopup_Hide('GOSSIP_CONFIRM')
     end
