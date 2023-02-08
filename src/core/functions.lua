@@ -201,13 +201,12 @@ end
 
 do
     local iLvlDB = {}
-    local itemLevelString = '^' .. gsub(_G.ITEM_LEVEL, '%%d', '')
-    local enchantString = gsub(_G.ENCHANTED_TOOLTIP_LINE, '%%s', '(.+)')
-
     local tip = CreateFrame('GameTooltip', C.ADDON_TITLE .. 'ScanTooltip', nil, 'GameTooltipTemplate')
     F.ScanTip = tip
 
     local slotData = { gems = {}, gemsColor = {} }
+    local itemLevelString = '^' .. gsub(_G.ITEM_LEVEL, '%%d', '')
+    local enchantString = gsub(_G.ENCHANTED_TOOLTIP_LINE, '%%s', '(.+)')
     function F.GetItemLevel(link, arg1, arg2, fullScan)
         if fullScan then
             local data = C_TooltipInfo.GetInventoryItem(arg1, arg2)
@@ -354,6 +353,31 @@ do
 
         return name
     end
+
+    local isKnownString = {
+        [_G.TRANSMOGRIFY_TOOLTIP_APPEARANCE_UNKNOWN] = true,
+        [_G.TRANSMOGRIFY_TOOLTIP_ITEM_UNKNOWN_APPEARANCE_KNOWN] = true,
+    }
+    function F.IsUnknownTransmog(bagID, slotID)
+        local data = C_TooltipInfo.GetBagItem(bagID, slotID)
+        local lineData = data and data.lines
+        if not lineData then
+            return
+        end
+
+        for i = #lineData, 1, -1 do
+            local argVal = lineData[i] and lineData[i].args
+            if argVal then
+                if argVal[4] and argVal[4].field == 'price' then
+                    return false
+                end
+                local stringVal = argVal[2] and argVal[2].stringVal
+                if isKnownString[stringVal] then
+                    return true
+                end
+            end
+        end
+    end
 end
 
 -- Widgets
@@ -361,7 +385,6 @@ end
 do
     -- Dropdown menu
     F.EasyMenu = CreateFrame('Frame', C.ADDON_TITLE .. 'EasyMenu', _G.UIParent, 'UIDropDownMenuTemplate')
-
 
     -- Font string
     function F:CreateFS(font, size, flag, text, colour, shadow, anchor, x, y)
@@ -426,7 +449,9 @@ do
     end
 
     function F:SetFS(font, size, flag, text, colour, shadow)
-        if not font then return end
+        if not font then
+            return
+        end
 
         self:SetFont(font, size, flag and 'OUTLINE' or '')
 
@@ -477,7 +502,9 @@ do
     end
 
     function F:SetFontShadow(type)
-        if not type then return end
+        if not type then
+            return
+        end
 
         if type == 'NONE' then
             self:SetShadowColor(0, 0, 0, 0)
