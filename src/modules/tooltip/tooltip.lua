@@ -71,6 +71,10 @@ function TOOLTIP:GetTarget(unit)
 end
 
 function TOOLTIP:OnTooltipCleared()
+    if self:IsForbidden() then
+        return
+    end
+
     self.tipUpdate = 1
     self.tipUnit = nil
 
@@ -78,6 +82,10 @@ function TOOLTIP:OnTooltipCleared()
     _G.GameTooltip_ClearStatusBars(self)
     _G.GameTooltip_ClearProgressBars(self)
     _G.GameTooltip_ClearWidgetSet(self)
+
+    if self.StatusBar then
+        self.StatusBar:ClearWatch()
+    end
 end
 
 local function FadeOut(self)
