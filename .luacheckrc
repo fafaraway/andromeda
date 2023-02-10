@@ -15,11 +15,11 @@ ignore = {
     '211/C',        -- Unused local variable 'C'
     '211/L',        -- unused local variable 'L'
     '212/self',     -- unused argument 'self'
-    '212/event',    -- unused argument 'event'
+    -- '212/event',    -- unused argument 'event'
     '213',          -- unused loop variable
     '241',          -- local variable is mutated but never accessed
     '311/i',        -- value assigned to a local variable is unused 'i'
-    '412/self',     -- redefining argument 'self'
+    -- '412/self',     -- redefining argument 'self'
     '421',          -- shadowing a local variable
     '423',          -- shadowing definition of loop variable
     '431',          -- shadowing upvalue
@@ -179,6 +179,7 @@ globals = {
     'unpack',
     'wipe',
     'xpcall',
+    'Lerp',
 
     -- Global APIs
     'AbandonSkill',
@@ -1119,7 +1120,6 @@ globals = {
     'GetNumSubgroupMembers',
     'GetNumTitles',
     'GetNumTrackedAchievements',
-    'GetNumTrackingTypes',
     'GetNumTrainerServices',
     'GetNumTreasurePickerItems',
     'GetNumUnspentPvpTalents',
@@ -1395,7 +1395,6 @@ globals = {
     'GetTotemInfo',
     'GetTotemTimeLeft',
     'GetTrackedAchievements',
-    'GetTrackingInfo',
     'GetTradePlayerItemInfo',
     'GetTradePlayerItemLink',
     'GetTradeTargetItemInfo',
@@ -1419,6 +1418,7 @@ globals = {
     'GetTutorialsEnabled',
     'GetUICameraInfo',
     'GetUnitChargedPowerPoints',
+    'GetUnitEmpowerHoldAtMaxTime',
     'GetUnitHealthModifier',
     'GetUnitMaxHealthModifier',
     'GetUnitName',
@@ -2020,6 +2020,7 @@ globals = {
     'SetBindingMacro',
     'SetBindingSpell',
     'SetCVar',
+    'SetCVarBitfield',
     'SetCemeteryPreference',
     'SetChannelOwner',
     'SetChannelPassword',
@@ -2428,6 +2429,7 @@ globals = {
     'UseToy',
     'UseToyByName',
     'UseWorldMapActionButtonSpellOnQuest',
+    'UIFrameFadeIn',
     'VehicleAimDecrement',
     'VehicleAimDownStart',
     'VehicleAimDownStop',
@@ -2561,6 +2563,7 @@ globals = {
     'C_PetJournal',
     'C_PlayerChoice',
     'C_PlayerInfo',
+    'C_PlayerInteractionManager',
     'C_PlayerMentorship',
     'C_PrototypeDialog',
     'C_PvP',
@@ -2696,5 +2699,21 @@ globals = {
     'ShowGarrisonLandingPage',
     'AutoCastShine_AutoCastStart',
     'AutoCastShine_AutoCastStop',
-    'SharedActionButton_RefreshSpellHighlight'
+    'SharedActionButton_RefreshSpellHighlight',
+    'ToggleClickBindingFrame',
+    'UnregisterStateDriver',
+    'CursorUpdate',
+    'CursorOnUpdate',
+    'MasterLooterFrame_Show',
+    'MasterLooterFrame_UpdatePlayers',
+    'GetBindingName',
+    'ObjectiveTracker_Collapse',
+    'ObjectiveTracker_Expand',
+    'ObjectiveTracker_Update',
+    'MainMenuMicroButton_AreAlertsEnabled',
+    'ChatEdit_ChooseBoxForSend',
+    'ChatEdit_ActivateChat',
+    'MailFrameTab_OnClick',
+    'UIDropDownMenu_CreateInfo',
+    'UIDropDownMenu_AddButton'
 }
