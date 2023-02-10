@@ -7,7 +7,7 @@ GUI.urlsList = {
     wowi = 'https://www.wowinterface.com/downloads/info23258',
     github = 'https://github.com/fafaraway/andromeda',
     tracker = 'https://github.com/fafaraway/andromeda/issues',
-    discord = 'https://discord.gg/86wbfZXxn7',
+    discord = 'https://discord.io/AndromedaUI',
     qq = '203621176',
 }
 
