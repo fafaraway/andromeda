@@ -376,7 +376,7 @@ local function onEnter(self)
     title = false
     if _G.ANDROMEDA_ADB['CommunityFeastTime'] ~= 0 then
         local currentTime = time()
-        local duration = 12600 -- 3.5 hrs
+        local duration = 5400 -- 1.5hrs
         local elapsed = mod(currentTime - _G.ANDROMEDA_ADB['CommunityFeastTime'], duration)
         local nextTime = duration - elapsed + currentTime
 
