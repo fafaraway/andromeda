@@ -706,7 +706,7 @@ function NAMEPLATE:OnUnitSoftTargetChanged(previousTarget, currentTarget)
         local guid = unitFrame and unitFrame.unitGUID
 
         if guid and (guid == previousTarget or guid == currentTarget) then
-            print(previousTarget, currentTarget)
+            -- print(previousTarget, currentTarget)
             unitFrame.previousType = nil
             NAMEPLATE.RefreshPlateType(unitFrame, unitFrame.unit)
             NAMEPLATE.UpdateSelectedChange(unitFrame)
