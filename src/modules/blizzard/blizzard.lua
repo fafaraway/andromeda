@@ -315,3 +315,15 @@ do
         _G.PROMOTE_GUIDE = _G.PARTY_PROMOTE_GUIDE
     end
 end
+
+-- Unregister talent event
+do
+    if _G.PlayerTalentFrame then
+        _G.PlayerTalentFrame:UnregisterEvent('ACTIVE_TALENT_GROUP_CHANGED')
+    else
+        hooksecurefunc('TalentFrame_LoadUI', function()
+            _G.PlayerTalentFrame:UnregisterEvent('ACTIVE_TALENT_GROUP_CHANGED')
+        end)
+    end
+end
+
