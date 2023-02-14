@@ -89,7 +89,7 @@ function MAP:RestyleMinimap()
     Minimap:SetHitRectInsets(0, 0, halfDiff * C.MULT, halfDiff * C.MULT)
     Minimap:SetClampRectInsets(0, 0, 0, 0)
     Minimap:ClearAllPoints()
-    Minimap:SetPoint('CENTER', holder)
+    Minimap:SetPoint('CENTER', mover)
 
     Minimap.diff = diff
     Minimap.halfDiff = halfDiff
