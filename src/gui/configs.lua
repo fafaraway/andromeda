@@ -704,4 +704,5 @@ C.AccountSettings = {
     NameplateTextureIndex = 1,
     NameplateCustomTexture = '',
     CommunityFeastTime = 0,
+    IgnoreNotesList = {},
 }

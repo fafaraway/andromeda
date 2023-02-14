@@ -2,6 +2,7 @@ local F, C, L = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 
 local npcIDstring = '%s ' .. C.INFO_COLOR .. '%s'
+local ignoreString = '|cffff0000' .. _G.IGNORED .. ':|r %s'
 local blanchyFix = '|n%s+|n'
 
 TOOLTIP.MountIDs = {}
@@ -123,8 +124,10 @@ function TOOLTIP:OnTooltipSetUnit()
 
     local isAltKeyDown = IsAltKeyDown()
     local isPlayer = UnitIsPlayer(unit)
+    local unitFullName
     if isPlayer then
         local name, realm = UnitName(unit)
+        unitFullName = name .. '-' .. (realm or C.MY_REALM)
         local pvpName = UnitPVPName(unit)
         local relationship = UnitRealmRelationship(unit)
         if not C.DB.Tooltip.HideTitle and pvpName then
@@ -230,6 +233,12 @@ function TOOLTIP:OnTooltipSetUnit()
     TOOLTIP.AddMythicPlusScore(self, unit)
     TOOLTIP.ScanTargets(self, unit)
     TOOLTIP.AddCovenantInfo()
+
+    -- Ignore note
+    local ignoreNote = unitFullName and _G.ANDROMEDA_ADB['IgnoreNotesList'][unitFullName]
+    if ignoreNote then
+        self:AddLine(format(ignoreString, ignoreNote), 1, 1, 1, 1)
+    end
 end
 
 function TOOLTIP:GameTooltip_OnUpdate(elapsed)
