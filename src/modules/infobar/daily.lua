@@ -42,6 +42,9 @@ local questlist = {
     { name = L['Timewarped Badge Reward'], id = 45799, texture = 1530590 }, -- MoP
     { name = L['Timewarped Badge Reward'], id = 55499, texture = 1129683 }, -- WoD
     { name = L['Timewarped Badge Reward'], id = 64710, texture = 1467047 }, -- Legion
+    { name = GetSpellInfo(388945), id = 70866 }, -- SoDK
+    { name = '', id = 70906, itemID = 200468 }, -- Grand hunt
+    { name = '', id = 70893, itemID = 200095 }, -- Community feast
 }
 
 local lesserVisions = { 58151, 58155, 58156, 58167, 58168 }
@@ -69,8 +72,20 @@ local bfaZoneTime = {
 }
 
 local invIndex = {
-    [1] = { title = L['Legion Invasion'], duration = 66600, maps = { 630, 641, 650, 634 }, timeTable = {}, baseTime = legionZoneTime[region] or legionZoneTime['CN'] },
-    [2] = { title = L['BfA Invasion'], duration = 68400, maps = { 862, 863, 864, 896, 942, 895 }, timeTable = { 4, 1, 6, 2, 5, 3 }, baseTime = bfaZoneTime[region] or bfaZoneTime['CN'] },
+    [1] = {
+        title = L['Legion Invasion'],
+        duration = 66600,
+        maps = { 630, 641, 650, 634 },
+        timeTable = {},
+        baseTime = legionZoneTime[region] or legionZoneTime['CN'],
+    },
+    [2] = {
+        title = L['BfA Invasion'],
+        duration = 68400,
+        maps = { 862, 863, 864, 896, 942, 895 },
+        timeTable = { 4, 1, 6, 2, 5, 3 },
+        baseTime = bfaZoneTime[region] or bfaZoneTime['CN'],
+    },
 }
 
 local mapAreaPoiIDs = {
@@ -204,24 +219,30 @@ local function getCurrentFeastTime()
     end
 end
 
-local lastCheck = 0
-local function refreshFeastTime()
-    if InCombatLockdown() then
+local lastTime = 0
+local function updateFeastTime()
+    if InCombatLockdown() or IsInInstance() then
         return
     end
 
-    local currentTime = GetTime()
-
-    if currentTime - lastCheck < 60 then
-        return
+    local nowTime = GetTime()
+    if nowTime - lastTime > 60 then
+        local currentFeast = getCurrentFeastTime()
+        if currentFeast then
+            _G.ANDROMEDA_ADB['CommunityFeastTime'] = currentFeast
+        end
+        lastTime = nowTime
     end
+end
 
-    lastCheck = currentTime
-
-    local currentFeast = getCurrentFeastTime()
-    if currentFeast then
-        _G.ANDROMEDA_ADB['CommunityFeastTime'] = currentFeast
+local itemCache = {}
+local function getItemLink(itemID)
+    local link = itemCache[itemID]
+    if not link then
+        link = select(2, GetItemInfo(itemID))
+        itemCache[itemID] = link
     end
+    return link
 end
 
 local title
@@ -254,6 +275,7 @@ local function onShiftDown(self)
     end
 end
 
+local communityFeastStr = GetSpellInfo(388961)
 local function onEnter(self)
     self.entered = true
 
@@ -313,7 +335,7 @@ local function onEnter(self)
         if v.name and C_QuestLog.IsQuestFlaggedCompleted(v.id) then
             if v.name == L['Timewarped'] and isTimeWalker and checkTexture(v.texture) or v.name ~= L['Timewarped'] then
                 addTitle(_G.QUESTS_LABEL)
-                GameTooltip:AddDoubleLine(v.name, _G.QUEST_COMPLETE, 1, 1, 1, 0, 1, 0)
+                GameTooltip:AddDoubleLine(v.itemID and getItemLink(v.itemID) or v.name, _G.QUEST_COMPLETE, 1, 1, 1, 1, 0, 0)
             end
         end
     end
@@ -380,11 +402,7 @@ local function onEnter(self)
         local elapsed = mod(currentTime - _G.ANDROMEDA_ADB['CommunityFeastTime'], duration)
         local nextTime = duration - elapsed + currentTime
 
-        addTitle(L['Community Feast'])
-
-        if C_QuestLog.IsQuestFlaggedCompleted(70893) then
-            GameTooltip:AddDoubleLine((select(2, GetItemInfo(200095))), _G.QUEST_COMPLETE, 1, 1, 1, 1, 0, 0)
-        end
+        addTitle(communityFeastStr)
 
         if currentTime - (nextTime - duration) < 900 then
             r, g, b = 0, 1, 0
@@ -480,8 +498,8 @@ function INFOBAR:CreateDailyBlock()
     end
 
     F:RegisterEvent('PLAYER_ENTERING_WORLD', checkTimeWalker)
-    F:RegisterEvent('PLAYER_ENTERING_WORLD', refreshFeastTime)
-    F:RegisterEvent('QUEST_LOG_UPDATE', refreshFeastTime)
+
+    _G.WorldMapFrame:HookScript('OnShow', updateFeastTime)
 
     local daily = INFOBAR:RegisterNewBlock('daily', 'RIGHT', 150)
     daily.onEnter = onEnter
