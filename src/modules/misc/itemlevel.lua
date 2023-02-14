@@ -385,10 +385,41 @@ function ITEMLEVEL.ItemLevel_ReplaceItemLink(link, name)
     return modLink
 end
 
-function ITEMLEVEL:ItemLevel_ReplaceGuildNews()
-    local newText = gsub(self.text:GetText(), '(|Hitem:%d+:.-|h%[(.-)%]|h)', ITEMLEVEL.ItemLevel_ReplaceItemLink)
-    if newText then
-        self.text:SetText(newText)
+function ITEMLEVEL:GuildNewsButtonOnClick(btn)
+    if self.isEvent or not self.playerName then
+        return
+    end
+    if btn == 'LeftButton' and IsShiftKeyDown() then
+        if _G.MailFrame:IsShown() then
+            MailFrameTab_OnClick(nil, 2)
+            _G.SendMailNameEditBox:SetText(self.playerName)
+            _G.SendMailNameEditBox:HighlightText()
+        else
+            local editBox = ChatEdit_ChooseBoxForSend()
+            local hasText = (editBox:GetText() ~= '')
+            ChatEdit_ActivateChat(editBox)
+            editBox:Insert(self.playerName)
+            if not hasText then
+                editBox:HighlightText()
+            end
+        end
+    end
+end
+
+function ITEMLEVEL:ItemLevel_ReplaceGuildNews(_, strFormat, playerName, itemName)
+    self.playerName = playerName
+
+    if itemName and not tonumber(itemName) then -- ignore MOTD and date
+        local newText = gsub(itemName, '(|Hitem:%d+:.-|h%[(.-)%]|h)', ITEMLEVEL.ItemLevel_ReplaceItemLink)
+        if newText then
+            self.text:SetFormattedText(strFormat, playerName, newText)
+        end
+    end
+
+    if not self.hooked then
+        self.text:SetFontObject(_G.Game13Font)
+        self:HookScript('OnClick', ITEMLEVEL.GuildNewsButtonOnClick) -- copy name by key shift
+        self.hooked = true
     end
 end
 
@@ -496,5 +527,5 @@ function ITEMLEVEL:OnLogin()
     hooksecurefunc(_G.LootFrame.ScrollBox, 'Update', ITEMLEVEL.ItemLevel_UpdateLoot)
 
     -- iLvl on default Container
-    -- ITEMLEVEL:ItemLevel_Containers()
+    ITEMLEVEL:ItemLevel_Containers()
 end
