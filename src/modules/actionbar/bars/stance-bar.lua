@@ -115,7 +115,7 @@ function ACTIONBAR:CreateStanceBar()
     frame.buttons = buttonList
 
     -- Fix stance bar updating
-    F:RegisterEvent("PLAYER_ENTERING_WORLD", ACTIONBAR.StanceBarOnEvent) -- needs PEW for 10.0.7
+    ACTIONBAR:StanceBarOnEvent()
     F:RegisterEvent('UPDATE_SHAPESHIFT_FORMS', ACTIONBAR.StanceBarOnEvent)
     F:RegisterEvent('UPDATE_SHAPESHIFT_USABLE', ACTIONBAR.StanceBarOnEvent)
     F:RegisterEvent('UPDATE_SHAPESHIFT_COOLDOWN', ACTIONBAR.StanceBarOnEvent)
