@@ -38,7 +38,7 @@ local framesToHide = {
     _G.SpellbookMicroButton,
     _G.CharacterMicroButton,
     _G.BagsBar,
-    _G.MicroButtonAndBagsBar
+    _G.MicroButtonAndBagsBar,
 }
 
 local framesToDisable = {
@@ -72,7 +72,7 @@ local framesToDisable = {
     _G.SpellbookMicroButton,
     _G.CharacterMicroButton,
     _G.BagsBar,
-    _G.MicroButtonAndBagsBar
+    _G.MicroButtonAndBagsBar,
 }
 
 local function disableAllScripts(frame)
@@ -106,9 +106,6 @@ local function buttonEventsRegisterFrame(self, added)
 end
 
 local function disableDefaultBarEvents() -- credit: Simpy
-    -- MainMenuBar:ClearAllPoints taint during combat
-    _G.MainMenuBar.SetPositionForStatusBars = nop
-
     -- Spellbook open in combat taint, only happens sometimes
     _G.MultiActionBar_HideAllGrids = nop
     _G.MultiActionBar_ShowAllGrids = nop
@@ -126,12 +123,14 @@ local function disableDefaultBarEvents() -- credit: Simpy
 
     hooksecurefunc(_G.ActionBarButtonEventsFrame, 'RegisterFrame', buttonEventsRegisterFrame)
     buttonEventsRegisterFrame(_G.ActionBarButtonEventsFrame)
-
-    -- fix keybind error, this actually just prevents reopen of the GameMenu
-    _G.SettingsPanel.TransitionBackOpeningPanel = _G.HideUIPanel
 end
 
 function ACTIONBAR:RemoveBlizzStuff()
+    _G.MainMenuBar:SetMovable(true)
+    _G.MainMenuBar:SetUserPlaced(true)
+    _G.MainMenuBar.ignoreFramePositionManager = true
+    _G.MainMenuBar:SetAttribute('ignoreFramePositionManager', true)
+
     for _, frame in next, framesToHide do
         frame:SetParent(F.HiddenFrame)
     end
@@ -141,7 +140,7 @@ function ACTIONBAR:RemoveBlizzStuff()
         disableAllScripts(frame)
     end
 
-    disableDefaultBarEvents()
+    -- disableDefaultBarEvents()
 
     -- Fix maw block anchor
     _G.MainMenuBarVehicleLeaveButton:RegisterEvent('PLAYER_ENTERING_WORLD')
