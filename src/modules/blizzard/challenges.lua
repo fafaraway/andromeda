@@ -58,6 +58,29 @@ function ECF:GuildBest_Create()
     if not hasAngryKeystones then
         _G.ChallengesFrame.WeeklyInfo.Child.Description:SetPoint('CENTER', 0, 20)
     end
+
+    -- Details key window
+    if _G.SlashCmdList.KEYSTONE then
+        local button = CreateFrame('Button', nil, frame)
+        button:SetSize(20, 20)
+        button:SetPoint('TOPRIGHT', -12, -5)
+        button:SetScript('OnClick', function()
+            if _G.DetailsKeystoneInfoFrame and _G.DetailsKeystoneInfoFrame:IsShown() then
+                _G.DetailsKeystoneInfoFrame:Hide()
+            else
+                _G.SlashCmdList.KEYSTONE()
+            end
+        end)
+
+        local tex = button:CreateTexture()
+        tex:SetAllPoints()
+        tex:SetTexture('Interface\\Buttons\\UI-GuildButton-PublicNote-Up')
+        tex:SetVertexColor(0, 1, 0)
+
+        local hl = button:CreateTexture(nil, 'HIGHLIGHT')
+        hl:SetAllPoints()
+        hl:SetTexture('Interface\\Buttons\\UI-GuildButton-PublicNote-Up')
+    end
 end
 
 function ECF:GuildBest_SetUp(leaderInfo)
@@ -143,7 +166,13 @@ function ECF:KeystoneInfo_WeeklyRuns()
         local isShiftKeyDown = IsShiftKeyDown()
 
         _G.GameTooltip:AddLine(' ')
-        _G.GameTooltip:AddDoubleLine(isShiftKeyDown and _G.CHALLENGE_MODE_THIS_WEEK or format(_G.WEEKLY_REWARDS_MYTHIC_TOP_RUNS, WeeklyRunsThreshold), '(' .. numRuns .. ')', 0.6, 0.8, 1)
+        _G.GameTooltip:AddDoubleLine(
+            isShiftKeyDown and _G.CHALLENGE_MODE_THIS_WEEK or format(_G.WEEKLY_REWARDS_MYTHIC_TOP_RUNS, WeeklyRunsThreshold),
+            '(' .. numRuns .. ')',
+            0.6,
+            0.8,
+            1
+        )
         sort(runHistory, sortHistory)
 
         for i = 1, isShiftKeyDown and numRuns or WeeklyRunsThreshold do
