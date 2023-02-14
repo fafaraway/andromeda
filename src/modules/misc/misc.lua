@@ -410,9 +410,27 @@ do
     end
 end
 
+-- action camera
+do
+    local function exec(cmd)
+        ConsoleExec('ActionCam ' .. cmd)
+    end
+
+    function M:UpdateActionCamera()
+        _G.UIParent:UnregisterEvent('EXPERIMENTAL_CVAR_CONFIRMATION_NEEDED')
+
+        if C.DB.General.ActionCamera then
+            exec('basic')
+        else
+            exec('off')
+        end
+    end
+end
+
 function M:OnLogin()
     M:ForceWarning()
     M:MuteAnnoyingSounds()
     M:FasterMovieSkip()
     M:WeeklyLottery()
+    M:UpdateActionCamera()
 end

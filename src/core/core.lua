@@ -13,7 +13,6 @@ do
     F:RegisterModule('Aura')
     F:RegisterModule('Automation')
     F:RegisterModule('Blizzard')
-    F:RegisterModule('Camera')
     F:RegisterModule('Chat')
     F:RegisterModule('Combat')
     F:RegisterModule('Cooldown')

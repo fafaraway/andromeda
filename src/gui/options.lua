@@ -7,7 +7,6 @@ local INVENTORY = F:GetModule('Inventory')
 local CHAT = F:GetModule('Chat')
 local VIGNETTING = F:GetModule('Vignetting')
 local BLIZZARD = F:GetModule('Blizzard')
-local CAMERA = F:GetModule('Camera')
 local INFOBAR = F:GetModule('InfoBar')
 local MAP = F:GetModule('Map')
 local oUF = F.Libs.oUF
@@ -328,7 +327,11 @@ local function SetupCustomClassColor()
 end
 
 local function UpdateActionCamera()
-    CAMERA:UpdateActionCamera()
+    F:GetModule('Misc'):UpdateActionCamera()
+end
+
+local function UpdateCameraZooming()
+    F:GetModule('EnhancedCamera'):UpdateCameraZooming()
 end
 
 local function UpdateBossBanner()
@@ -594,7 +597,7 @@ GUI.OptionsList = {
             L['Smooth Camera Zooming'],
             nil,
             nil,
-            nil,
+            UpdateCameraZooming,
             L['Faster and smoother camera zooming.'],
         },
         {

@@ -3,9 +3,9 @@
 -- https://www.wowinterface.com/downloads/info20483-FasterCamera.html
 
 local F, C = unpack(select(2, ...))
-local CAMERA = F:GetModule('Camera')
+local EC = F:RegisterModule('EnhancedCamera')
 
-local datas = {
+local db = {
     increment = 4,
     speed = 20,
     distance = 2.6,
@@ -13,66 +13,56 @@ local datas = {
     nearIncrement = 1,
 }
 
-local function SetupZooming(func, increment)
+local function update(func, increment)
     -- anything not 1 could be a custom zoom increment from another addon
     if increment ~= 1 then
         func(increment)
     else
-        local isCloseUp = GetCameraZoom() < datas.nearDistance and datas.increment > 1
-        func(isCloseUp and datas.nearIncrement or datas.increment)
+        local isCloseUp = GetCameraZoom() < db.nearDistance and db.increment > 1
+        func(isCloseUp and db.nearIncrement or db.increment)
     end
 end
 
-local function UpdateZooming()
-    local oldZoomIn = _G.CameraZoomIn
-    local oldZoomOut = _G.CameraZoomOut
+local oldZoomIn = CameraZoomIn
+local oldZoomOut = CameraZoomOut
 
-    function _G.CameraZoomIn(v)
-        SetupZooming(oldZoomIn, v)
-    end
+local newZoomIn = CameraZoomIn
+local newZoomOut = CameraZoomOut
 
-    function _G.CameraZoomOut(v)
-        SetupZooming(oldZoomOut, v)
-    end
-end
-
-local function CameraZoom_OnEvent()
-    F:Delay(1, function()
-        -- not actually necessary to override from savedvars
-        -- but better to do this if other addons also set it
-        SetCVar('cameraDistanceMaxZoomFactor', datas.distance)
-        SetCVar('cameraZoomSpeed', datas.speed)
-    end)
-
-    F:UnregisterEvent('ADDON_LOADED', CameraZoom_OnEvent)
-end
-
--- Camera action mode
-local function Exec(cmd)
-    ConsoleExec('ActionCam ' .. cmd)
-end
-
-function CAMERA:UpdateActionCamera()
-    if C.DB.General.ActionCamera then
-        Exec('basic')
-    else
-        Exec('off')
-    end
-end
-
-function CAMERA:ActionCamera()
-    _G.UIParent:UnregisterEvent('EXPERIMENTAL_CVAR_CONFIRMATION_NEEDED')
-
-    CAMERA:UpdateActionCamera()
-end
-
-function CAMERA:OnLogin()
+function EC:UpdateCameraZooming()
     if C.DB.General.FasterZooming then
-        UpdateZooming()
-        F:RegisterEvent('ADDON_LOADED', CameraZoom_OnEvent)
-    else
-        F:UnregisterEvent('ADDON_LOADED', CameraZoom_OnEvent)
-    end
+        function CameraZoomIn(v)
+            update(newZoomIn, v)
+        end
 
-    F:RegisterEvent('PLAYER_ENTERING_WORLD', CAMERA.ActionCamera)
+        function CameraZoomOut(v)
+            update(newZoomOut, v)
+        end
+    else
+        CameraZoomIn = oldZoomIn
+        CameraZoomOut = oldZoomOut
+    end
+end
+
+local function onEvent(_, _, addon)
+    if addon == C.ADDON_NAME then
+        F:Delay(1, function()
+            -- not actually necessary to override from savedvars
+            -- but better to do this if other addons also set it
+            SetCVar('cameraDistanceMaxZoomFactor', db.distance)
+            SetCVar('cameraZoomSpeed', db.speed)
+        end)
+
+        F:UnregisterEvent('ADDON_LOADED', onEvent)
+    end
+end
+
+function EC:OnLogin()
+    EC:UpdateCameraZooming()
+
+    if C.DB.General.FasterZooming then
+        F:RegisterEvent('ADDON_LOADED', onEvent)
+    else
+        F:UnregisterEvent('ADDON_LOADED', onEvent)
+    end
 end
