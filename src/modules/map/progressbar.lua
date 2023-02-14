@@ -63,8 +63,8 @@ local eventsList = {
 function M:CreateBar()
     local Minimap = _G.Minimap
     local bar = CreateFrame('StatusBar', C.ADDON_TITLE .. 'MinimapProgressBar', Minimap)
-    bar:SetPoint('TOPLEFT', 1, -Minimap.halfDiff - 1)
-    bar:SetPoint('TOPRIGHT', -1, -Minimap.halfDiff - 1)
+    bar:SetPoint('TOPLEFT', 0, -Minimap.halfDiff)
+    bar:SetPoint('TOPRIGHT', 0, -Minimap.halfDiff)
     bar:SetHeight(4)
     bar:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
     bar:SetFrameStrata('MEDIUM')
