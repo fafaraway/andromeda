@@ -365,7 +365,7 @@ local function ReskinMissionFrame(self)
     local FollowerList = self.FollowerList
     F.StripTextures(FollowerList)
     if FollowerList.SearchBox then
-        F.ReskinInput(FollowerList.SearchBox)
+        F.ReskinEditBox(FollowerList.SearchBox)
     end
 
     F.ReskinTrimScroll(FollowerList.ScrollBar)
@@ -653,7 +653,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     do
         local followerList = GarrisonLandingPage.FollowerList
         F.StripTextures(followerList)
-        F.ReskinInput(followerList.SearchBox)
+        F.ReskinEditBox(followerList.SearchBox)
         F.ReskinTrimScroll(followerList.ScrollBar)
 
         ReskinFollowerList(_G.GarrisonLandingPageFollowerList)
@@ -663,7 +663,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     -- Ship follower list
     local shipFollowerList = GarrisonLandingPage.ShipFollowerList
     F.StripTextures(shipFollowerList)
-    F.ReskinInput(shipFollowerList.SearchBox)
+    F.ReskinEditBox(shipFollowerList.SearchBox)
     F.ReskinTrimScroll(shipFollowerList.ScrollBar)
 
     -- Follower tab
@@ -851,7 +851,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     followerList:DisableDrawLayer('BORDER')
 
     F.ReskinTrimScroll(rsfollowerList.ScrollBar)
-    F.ReskinInput(rsfollowerList.SearchBox)
+    F.ReskinEditBox(rsfollowerList.SearchBox)
     ReskinFollowerList(rsfollowerList)
     hooksecurefunc(rsfollowerList, 'ShowFollower', UpdateFollowerAbilities)
 
@@ -916,7 +916,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     GarrisonShipyardFrame.BorderFrame.GarrCorners:Hide()
     GarrisonShipyardFrame.BackgroundTile:Hide()
     F.SetBD(GarrisonShipyardFrame)
-    F.ReskinInput(_G.GarrisonShipyardFrameFollowers.SearchBox)
+    F.ReskinEditBox(_G.GarrisonShipyardFrameFollowers.SearchBox)
     F.ReskinTrimScroll(GarrisonShipyardFrame.FollowerList.ScrollBar)
     F.StripTextures(_G.GarrisonShipyardFrameFollowers)
     ReskinGarrMaterial(_G.GarrisonShipyardFrameFollowers)

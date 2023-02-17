@@ -141,8 +141,8 @@ C.Themes['Blizzard_Collections'] = function()
         end
     end)
 
-    F.ReskinInput(_G.MountJournalSearchBox)
-    F.ReskinInput(_G.PetJournalSearchBox)
+    F.ReskinEditBox(_G.MountJournalSearchBox)
+    F.ReskinEditBox(_G.PetJournalSearchBox)
     F.ReskinArrow(MountJournal.MountDisplay.ModelScene.RotateLeftButton, 'left')
     F.ReskinArrow(MountJournal.MountDisplay.ModelScene.RotateRightButton, 'right')
     F.ReskinFilterButton(_G.PetJournalFilterButton)
@@ -322,7 +322,7 @@ C.Themes['Blizzard_Collections'] = function()
     local iconsFrame = ToyBox.iconsFrame
 
     F.StripTextures(iconsFrame)
-    F.ReskinInput(ToyBox.searchBox)
+    F.ReskinEditBox(ToyBox.searchBox)
     F.ReskinFilterButton(_G.ToyBoxFilterButton)
     F.ReskinArrow(ToyBox.PagingFrame.PrevPageButton, 'left')
     F.ReskinArrow(ToyBox.PagingFrame.NextPageButton, 'right')
@@ -386,7 +386,7 @@ C.Themes['Blizzard_Collections'] = function()
     local icons = HeirloomsJournal.iconsFrame
 
     F.StripTextures(icons)
-    F.ReskinInput(_G.HeirloomsJournalSearchBox)
+    F.ReskinEditBox(_G.HeirloomsJournalSearchBox)
     F.ReskinDropDown(_G.HeirloomsJournalClassDropDown)
     F.ReskinFilterButton(HeirloomsJournal.FilterButton)
     F.ReskinArrow(HeirloomsJournal.PagingFrame.PrevPageButton, 'left')
@@ -490,7 +490,7 @@ C.Themes['Blizzard_Collections'] = function()
     F.StripTextures(ItemsCollectionFrame)
     F.ReskinFilterButton(WardrobeCollectionFrame.FilterButton)
     F.ReskinDropDown(_G.WardrobeCollectionFrameWeaponDropDown)
-    F.ReskinInput(_G.WardrobeCollectionFrameSearchBox)
+    F.ReskinEditBox(_G.WardrobeCollectionFrameSearchBox)
 
     hooksecurefunc(WardrobeCollectionFrame, 'SetTab', function(self, tabID)
         for index = 1, 2 do

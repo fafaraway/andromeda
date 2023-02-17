@@ -11,7 +11,7 @@ local function ReskinTableAttribute(frame)
     F.ReskinCheckButton(frame.VisibilityButton)
     F.ReskinCheckButton(frame.HighlightButton)
     F.ReskinCheckButton(frame.DynamicUpdateButton)
-    F.ReskinInput(frame.FilterBox)
+    F.ReskinEditBox(frame.FilterBox)
 
     F.ReskinArrow(frame.OpenParentButton, 'up')
     F.ReskinArrow(frame.NavigateBackwardButton, 'left')

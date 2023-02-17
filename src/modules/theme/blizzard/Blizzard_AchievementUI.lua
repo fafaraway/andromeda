@@ -44,7 +44,7 @@ C.Themes['Blizzard_AchievementUI'] = function()
     F.ReskinClose(_G.AchievementFrameCloseButton)
 
     -- Search box
-    F.ReskinInput(AchievementFrame.SearchBox)
+    F.ReskinEditBox(AchievementFrame.SearchBox)
     AchievementFrame.SearchBox:ClearAllPoints()
     AchievementFrame.SearchBox:SetPoint('TOPRIGHT', AchievementFrame, 'TOPRIGHT', -25, -5)
     AchievementFrame.SearchBox:SetPoint('BOTTOMLEFT', AchievementFrame, 'TOPRIGHT', -130, -25)

@@ -41,7 +41,7 @@ C.Themes['Blizzard_LookingForGuildUI'] = function()
         F.ReskinCheckButton(_G.LookingForGuildWeekdaysButton)
         F.ReskinCheckButton(_G.LookingForGuildWeekendsButton)
         F.StripTextures(_G.GuildFinderRequestMembershipFrameInputFrame)
-        F.ReskinInput(_G.GuildFinderRequestMembershipFrameInputFrame)
+        F.ReskinEditBox(_G.GuildFinderRequestMembershipFrameInputFrame)
 
         -- [[ Browse frame ]]
 

@@ -45,8 +45,8 @@ function THEME:ReskinPGF()
         F.Reskin(self.ResetButton)
         F.Reskin(self.RefreshButton)
         F.ReskinDropDown(self.Difficulty.DropDown)
-        F.ReskinInput(self.Expression)
-        F.ReskinInput(self.Sorting.SortingExpression)
+        F.ReskinEditBox(self.Expression)
+        F.ReskinEditBox(self.Sorting.SortingExpression)
 
         if self.MoveableToggle then
             F.ReskinArrow(self.MoveableToggle, 'left')
@@ -88,8 +88,8 @@ function THEME:ReskinPGF()
 
                 local input = frame.Min
                 if input then
-                    F.ReskinInput(input)
-                    F.ReskinInput(frame.Max)
+                    F.ReskinEditBox(input)
+                    F.ReskinEditBox(frame.Max)
                 end
             end
         end

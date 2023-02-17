@@ -70,5 +70,5 @@ C.Themes['Blizzard_VoidStorageUI'] = function()
     F.Reskin(_G.VoidStoragePurchaseButton)
     F.Reskin(_G.VoidStorageTransferButton)
     F.ReskinClose(_G.VoidStorageBorderFrame.CloseButton)
-    F.ReskinInput(_G.VoidItemSearchBox)
+    F.ReskinEditBox(_G.VoidItemSearchBox)
 end

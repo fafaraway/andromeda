@@ -162,7 +162,7 @@ tinsert(C.BlizzThemes, function()
     F.Reskin(_G.BankFramePurchaseButton)
     F.ReskinTab(_G.BankFrameTab1)
     F.ReskinTab(_G.BankFrameTab2)
-    F.ReskinInput(_G.BankItemSearchBox)
+    F.ReskinEditBox(_G.BankItemSearchBox)
 
     for i = 1, 28 do
         ReskinBagSlot(_G['BankFrameItem' .. i])

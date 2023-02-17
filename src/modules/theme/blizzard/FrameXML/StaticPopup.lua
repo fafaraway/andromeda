@@ -60,10 +60,10 @@ tinsert(C.BlizzThemes, function()
         close:HookScript('OnEnter', colorMinimize)
         close:HookScript('OnLeave', clearMinimize)
 
-        F.ReskinInput(_G['StaticPopup' .. i .. 'EditBox'], 20)
-        F.ReskinInput(gold)
-        F.ReskinInput(silver)
-        F.ReskinInput(copper)
+        F.ReskinEditBox(_G['StaticPopup' .. i .. 'EditBox'], 20)
+        F.ReskinEditBox(gold)
+        F.ReskinEditBox(silver)
+        F.ReskinEditBox(copper)
     end
 
     hooksecurefunc('StaticPopup_Show', function(which, _, _, data)

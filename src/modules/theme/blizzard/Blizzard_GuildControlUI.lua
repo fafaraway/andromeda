@@ -11,7 +11,7 @@ local function updateGuildRanks()
             F.ReskinArrow(rank.upButton, 'up')
             F.ReskinArrow(rank.downButton, 'down')
             F.ReskinClose(rank.deleteButton)
-            F.ReskinInput(rank.nameBox, 20)
+            F.ReskinEditBox(rank.nameBox, 20)
 
             rank.styled = true
         end
@@ -56,7 +56,7 @@ C.Themes['Blizzard_GuildControlUI'] = function()
                 F.ReskinIcon(ownedTab.tabIcon)
                 F.CreateBDFrame(bu, 0.25)
                 F.Reskin(bu.buy.button)
-                F.ReskinInput(ownedTab.editBox)
+                F.ReskinEditBox(ownedTab.editBox)
 
                 for _, name in pairs(checkboxes) do
                     local box = ownedTab[name]
@@ -95,5 +95,5 @@ C.Themes['Blizzard_GuildControlUI'] = function()
     F.ReskinDropDown(_G.GuildControlUINavigationDropDown)
     F.ReskinDropDown(_G.GuildControlUIRankSettingsFrameRankDropDown)
     F.ReskinDropDown(_G.GuildControlUIRankBankFrameRankDropDown)
-    F.ReskinInput(_G.GuildControlUIRankSettingsFrameGoldBox, 20)
+    F.ReskinEditBox(_G.GuildControlUIRankSettingsFrameGoldBox, 20)
 end

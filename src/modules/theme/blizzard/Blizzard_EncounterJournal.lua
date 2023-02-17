@@ -220,7 +220,7 @@ C.Themes['Blizzard_EncounterJournal'] = function()
     -- Various controls
     F.ReskinPortraitFrame(EncounterJournal)
     F.Reskin(_G.EncounterJournalEncounterFrameInfoResetButton)
-    F.ReskinInput(_G.EncounterJournalSearchBox)
+    F.ReskinEditBox(_G.EncounterJournalSearchBox)
     F.ReskinTrimScroll(EncounterJournal.encounter.instance.LoreScrollBar)
     F.ReskinScroll(EncounterJournal.encounter.info.overviewScroll.ScrollBar)
     F.ReskinTrimScroll(EncounterJournal.encounter.info.BossesScrollBar)
