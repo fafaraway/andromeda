@@ -173,8 +173,8 @@ function ACTIONBAR:UpdateButtonConfig(i)
         button:SetAttribute('unlockedpreventdrag', not lockBars) -- make sure button can drag without being click
         button:SetAttribute('checkmouseovercast', true)
         button:SetAttribute('checkfocuscast', true)
-        button:SetAttribute('checkselfcast', true)
-        button:SetAttribute('*unit2', 'player')
+        -- button:SetAttribute('checkselfcast', true)
+        -- button:SetAttribute('*unit2', 'player')
         button:UpdateConfig(self.buttonConfig)
 
         if C.DB['Actionbar']['ClassColor'] then
