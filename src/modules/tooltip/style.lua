@@ -13,7 +13,7 @@ function TOOLTIP:ReskinTooltip()
         return
     end
 
-    self:SetScale(1)
+    self:SetScale(_G.UIParent:GetScale())
 
     if not self.tipStyled then
         self:HideBackdrop()
@@ -21,6 +21,7 @@ function TOOLTIP:ReskinTooltip()
         self.bg = F.SetBD(self)
         self.bg:SetInside(self)
         self.bg:SetFrameLevel(self:GetFrameLevel())
+
         local color = _G.ANDROMEDA_ADB.BackdropColor
         local alpha = C.DB.Tooltip.BackdropAlpha
         self.bg:SetBackdropBorderColor(color.r, color.g, color.b, alpha)
@@ -163,15 +164,11 @@ TOOLTIP:RegisterTooltips(C.ADDON_NAME, function()
         _G.IMECandidatesFrame,
         _G.QuickKeybindTooltip,
         _G.GameSmallHeaderTooltip,
+        _G.SettingsTooltip,
     }
 
     for _, f in pairs(tooltips) do
         f:HookScript('OnShow', TOOLTIP.ReskinTooltip)
-    end
-
-    if _G.SettingsTooltip then
-        TOOLTIP.ReskinTooltip(_G.SettingsTooltip)
-        _G.SettingsTooltip:SetScale(_G.UIParent:GetScale())
     end
 
     -- DropdownMenu
