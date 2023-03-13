@@ -47,7 +47,7 @@ local function lowHealthAlert(_, unit)
 end
 
 local function lowManaAlert(_, unit, powerType)
-    if unit ~= 'player' or powerTypes[powerType] then
+    if unit ~= 'player' or not allowedPowerTypes[powerType] then
         return
     end
 
