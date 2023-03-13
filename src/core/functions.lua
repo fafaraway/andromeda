@@ -1305,7 +1305,7 @@ do
             slider.Low:ClearAllPoints()
             slider.Low:SetPoint('TOPLEFT', slider, 'BOTTOMLEFT', 10, -2)
 
-            F.SetFS(slider.High, font, 11, outline or nil, minValue, nil, outline and 'NONE' or 'THICK')
+            F.SetFS(slider.High, font, 11, outline or nil, maxValue, nil, outline and 'NONE' or 'THICK')
             slider.High:ClearAllPoints()
             slider.High:SetPoint('TOPRIGHT', slider, 'BOTTOMRIGHT', -10, -2)
 
