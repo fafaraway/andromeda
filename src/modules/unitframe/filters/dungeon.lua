@@ -130,4 +130,5 @@ function UNITFRAME:RegisterDungeonSpells()
     UNITFRAME:RegisterInstanceSpell(6, inst, 0, 158061) -- 被祝福的净水
     UNITFRAME:RegisterInstanceSpell(6, inst, 0, 154442) -- 怨毒
     UNITFRAME:RegisterInstanceSpell(6, inst, 0, 153501) -- 虚空冲击
+    UNITFRAME:RegisterInstanceSpell(6, inst, 0, 152819, 6) -- 暗言术：虚
 end

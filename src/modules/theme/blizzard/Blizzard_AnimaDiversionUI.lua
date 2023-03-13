@@ -26,5 +26,5 @@ C.Themes['Blizzard_AnimaDiversionUI'] = function()
     F.ReplaceIconString(currencyFrame.Quantity)
     hooksecurefunc(currencyFrame.Quantity, 'SetText', F.ReplaceIconString)
 
-    F.Reskin(frame.ReinforceInfoFrame.AnimaNodeReinforceButton)
+    F.ReskinButton(frame.ReinforceInfoFrame.AnimaNodeReinforceButton)
 end

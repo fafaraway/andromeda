@@ -16,13 +16,13 @@ tinsert(C.BlizzThemes, function()
         end
     end)
 
-    F.Reskin(_G.ReadyCheckFrameYesButton)
-    F.Reskin(_G.ReadyCheckFrameNoButton)
+    F.ReskinButton(_G.ReadyCheckFrameYesButton)
+    F.ReskinButton(_G.ReadyCheckFrameNoButton)
 
     -- Role poll
     F.StripTextures(_G.RolePollPopup)
     F.SetBD(_G.RolePollPopup)
-    F.Reskin(_G.RolePollPopupAcceptButton)
+    F.ReskinButton(_G.RolePollPopupAcceptButton)
     F.ReskinClose(_G.RolePollPopupCloseButton)
 
     F.ReskinRole(_G.RolePollPopupRoleButtonTank, 'TANK')

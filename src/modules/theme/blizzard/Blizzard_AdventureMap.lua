@@ -5,10 +5,14 @@ C.Themes['Blizzard_AdventureMap'] = function()
 
     F.StripTextures(dialog)
     F.SetBD(dialog)
-    F.Reskin(dialog.AcceptButton)
-    F.Reskin(dialog.DeclineButton)
+    F.ReskinButton(dialog.AcceptButton)
+    F.ReskinButton(dialog.DeclineButton)
     F.ReskinClose(dialog.CloseButton)
-    F.ReskinScroll(dialog.Details.ScrollBar)
+    if C.IS_NEW_PATCH_10_1 then
+        F.ReskinTrimScroll(dialog.Details.ScrollBar)
+    else
+        F.ReskinScroll(dialog.Details.ScrollBar)
+    end
 
     dialog:HookScript('OnShow', function(self)
         if self.styled then

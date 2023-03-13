@@ -51,7 +51,7 @@ function GT:RaidTool_Header()
     local frame = CreateFrame('Button', nil, _G.UIParent)
     frame:SetSize(120, 28)
     frame:SetFrameLevel(2)
-    F.Reskin(frame)
+    F.ReskinButton(frame)
     F.Mover(frame, L['GroupTool'], 'GroupTool', { 'TOP', 0, -30 })
 
     GT:RaidTool_Visibility(frame)
@@ -301,7 +301,7 @@ function GT:RaidTool_Marker(parent)
             select(i, markerButton:GetRegions()):SetAlpha(0)
         end
 
-        F.Reskin(markerButton)
+        F.ReskinButton(markerButton)
         markerButton:SetNormalTexture('Interface\\RaidFrame\\Raid-WorldPing')
         markerButton:GetNormalTexture():SetVertexColor(0.2, 1, 0.2)
         markerButton:HookScript('OnMouseUp', function()
@@ -320,7 +320,7 @@ function GT:RaidTool_BuffChecker(parent)
     frame.tex = frame:CreateTexture(nil, 'ARTWORK')
     frame.tex:SetAllPoints()
     frame.tex:SetTexture('Interface\\TUTORIALFRAME\\UI-TutorialFrame-QuestCursor')
-    F.Reskin(frame)
+    F.ReskinButton(frame)
 
     local BuffName = { L['Flask'], _G.POWER_TYPE_FOOD, _G.SPELL_STAT4_NAME, _G.RAID_BUFF_2, _G.RAID_BUFF_3, _G.RUNES }
     local NoBuff, numGroups, numPlayer = {}, 6, 0

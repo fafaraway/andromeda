@@ -68,7 +68,8 @@ function COOLDOWN:TimerOnUpdate(elapsed)
     if self.nextUpdate > 0 then
         self.nextUpdate = self.nextUpdate - elapsed
     else
-        local remain = (self.duration - (GetTime() - self.start)) / self.modRate
+        local passTime = GetTime() - self.start
+        local remain = passTime >= 0 and ((self.duration - passTime) / self.modRate) or self.duration
         if remain > 0 then
             local getTime, nextUpdate = COOLDOWN.FormattedTimer(remain, self.modRate)
             self.text:SetText(getTime)
@@ -190,10 +191,10 @@ end
 
 function COOLDOWN:CooldownUpdate()
     local button = self:GetParent()
-    local start, duration = GetActionCooldown(button.action)
+    local start, duration, modRate = GetActionCooldown(button.action)
 
     if shouldUpdateTimer(self, start) then
-        COOLDOWN.StartTimer(self, start, duration)
+        COOLDOWN.StartTimer(self, start, duration, modRate)
     end
 end
 

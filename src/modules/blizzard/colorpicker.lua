@@ -257,7 +257,7 @@ function BLIZZARD:EnhancedColorPicker()
     copyButton:SetText(_G.CALENDAR_COPY_EVENT)
     copyButton:SetSize(52, 22)
     copyButton:SetPoint('TOPLEFT', 'ColorSwatch', 'BOTTOMLEFT', 0, -20)
-    F.Reskin(copyButton)
+    F.ReskinButton(copyButton)
 
     -- copy color into buffer on button click
     copyButton:SetScript('OnClick', function()
@@ -278,7 +278,7 @@ function BLIZZARD:EnhancedColorPicker()
     pasteButton:SetSize(52, 22)
     pasteButton:SetPoint('TOPLEFT', 'ColorPPCopy', 'TOPRIGHT', 12, 0)
     pasteButton:Disable() -- enable when something has been copied
-    F.Reskin(pasteButton)
+    F.ReskinButton(pasteButton)
 
     -- paste color on button click, updating frame components
     pasteButton:SetScript('OnClick', function()
@@ -305,7 +305,7 @@ function BLIZZARD:EnhancedColorPicker()
     defaultButton:SetScript('OnShow', function(btn)
         btn:SetEnabled(btn.colors)
     end)
-    F.Reskin(defaultButton)
+    F.ReskinButton(defaultButton)
 
     -- paste color on button click, updating frame components
     defaultButton:SetScript('OnClick', function(btn)
@@ -338,7 +338,7 @@ function BLIZZARD:EnhancedColorPicker()
         box:SetHeight(24)
         box:SetID(i)
         box:SetFont(C.Assets.Fonts.Condensed, 11, '')
-        F.ReskinEditBox(box)
+        F.ReskinEditbox(box)
 
         -- hex entry box
         if i == 4 then

@@ -1,5 +1,9 @@
 local F, C = unpack(select(2, ...))
 
+if C.IS_NEW_PATCH_10_1 then
+    return
+end -- the old guild removed in 10.1
+
 local function updateClassIcons()
     local index
     local offset = HybridScrollFrame_GetOffset(_G.GuildRosterContainer)
@@ -129,12 +133,12 @@ C.Themes['Blizzard_GuildUI'] = function()
     F.ReskinScroll(_G.GuildInfoDetailsFrameScrollBar)
     F.ReskinScroll(_G.GuildLogScrollFrameScrollBar)
     F.ReskinScroll(_G.GuildTextEditScrollFrameScrollBar)
-    F.ReskinDropDown(_G.GuildRosterViewDropdown)
-    F.ReskinDropDown(_G.GuildMemberRankDropdown)
+    F.ReskinDropdown(_G.GuildRosterViewDropdown)
+    F.ReskinDropdown(_G.GuildMemberRankDropdown)
 
-    F.ReskinCheckButton(_G.GuildRosterShowOfflineButton)
+    F.ReskinCheckbox(_G.GuildRosterShowOfflineButton)
     for i = 1, 7 do
-        F.ReskinCheckButton(_G.GuildNewsFiltersFrame.GuildNewsFilterButtons[i])
+        F.ReskinCheckbox(_G.GuildNewsFiltersFrame.GuildNewsFilterButtons[i])
     end
 
     local a1, p, a2, x, y = _G.GuildNewsBossModel:GetPoint()
@@ -193,8 +197,8 @@ C.Themes['Blizzard_GuildUI'] = function()
     hooksecurefunc('GuildRoster_Update', updateClassIcons)
     hooksecurefunc(_G.GuildRosterContainer, 'update', updateClassIcons)
 
-    F.Reskin(select(4, _G.GuildTextEditFrame:GetChildren()))
-    F.Reskin(select(3, _G.GuildLogFrame:GetChildren()))
+    F.ReskinButton(select(4, _G.GuildTextEditFrame:GetChildren()))
+    F.ReskinButton(select(3, _G.GuildLogFrame:GetChildren()))
 
     local gbuttons = {
         'GuildAddMemberButton',
@@ -205,7 +209,7 @@ C.Themes['Blizzard_GuildUI'] = function()
         'GuildMemberRemoveButton',
     }
     for i = 1, #gbuttons do
-        F.Reskin(_G[gbuttons[i]])
+        F.ReskinButton(_G[gbuttons[i]])
     end
 
     -- Tradeskill View

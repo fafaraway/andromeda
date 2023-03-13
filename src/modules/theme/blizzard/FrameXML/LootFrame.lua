@@ -10,7 +10,7 @@ tinsert(C.BlizzThemes, function()
     F.ReskinClose(LootFrame.ClosePanelButton)
     F.StripTextures(LootFrame)
     F.SetBD(LootFrame)
-    F.ReskinTrimScroll(LootFrame.ScrollBar, true)
+    F.ReskinTrimScroll(LootFrame.ScrollBar)
 
     local function updateHighlight(self)
         local button = self.__owner
@@ -35,17 +35,18 @@ tinsert(C.BlizzThemes, function()
             local button = select(i, self.ScrollTarget:GetChildren())
             local item = button.Item
             local questTexture = button.IconQuestTexture
+            local pushedFrame = button.PushedNameFrame
             if item and not button.styled then
                 F.StripTextures(item, 1)
                 item.bg = F.ReskinIcon(item.icon)
                 item.bg:SetFrameLevel(4)
                 F.ReskinIconBorder(item.IconBorder, true)
 
+                pushedFrame:SetAlpha(0)
                 questTexture:SetAlpha(0)
                 button.NameFrame:SetAlpha(0)
                 button.BorderFrame:SetAlpha(0)
                 button.HighlightNameFrame:SetAlpha(0)
-                button.PushedNameFrame:SetAlpha(0)
                 button.bg = F.CreateBDFrame(button.HighlightNameFrame, 0.25)
                 button.bg:SetAllPoints()
                 item.__owner = button
@@ -59,7 +60,7 @@ tinsert(C.BlizzThemes, function()
 
             local itemBG = item and item.bg
             if itemBG then
-                if questTexture:IsShown() then
+                if questTexture:IsShown() or pushedFrame:IsShown() then
                     itemBG:SetBackdropBorderColor(1, 0.8, 0)
                 else
                     itemBG:SetBackdropBorderColor(0, 0, 0)

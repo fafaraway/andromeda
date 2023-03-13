@@ -31,12 +31,12 @@ local function hidePanels()
 end
 
 local function resetOption(element)
-    if element.Type == 'EditBox' then
+    if element.Type == 'editbox' then
         element:ClearFocus()
         element:SetText('')
-    elseif element.Type == 'CheckBox' then
+    elseif element.Type == 'checkbox' then
         element:SetChecked(false)
-    elseif element.Type == 'DropDown' then
+    elseif element.Type == 'dropdown' then
         element.Text:SetText('')
         for i = 1, #element.options do
             element.options[i].selected = false
@@ -222,7 +222,7 @@ local function createLabel(parent, text, tip)
 end
 
 local function createEditbox(parent, text, x, y, tip, width, height)
-    local eb = F.CreateEditBox(parent, width or 90, height or 24)
+    local eb = F.CreateEditbox(parent, width or 90, height or 24)
     eb:SetPoint('TOPLEFT', x, y)
     eb:SetMaxLetters(255)
     createLabel(eb, text)
@@ -259,7 +259,7 @@ local function checkbox_OnClick(self)
 end
 
 local function createCheckbox(parent, offset, key, value, text, func, tip)
-    local box = F.CreateCheckButton(parent.child, true)
+    local box = F.CreateCheckbox(parent.child, true)
     box:SetSize(18, 18)
     box:SetHitRectInsets(-5, -5, -5, -5)
     box:SetPoint('TOPLEFT', 10, offset)
@@ -346,7 +346,7 @@ local function updateDropdownState(self)
 end
 
 local function createDropdown(parent, text, x, y, data, tip, width, height)
-    local dd = F.CreateDropDown(parent, width or 90, height or 30, data)
+    local dd = F.CreateDropdown(parent, width or 90, height or 30, data)
     dd:SetPoint('TOPLEFT', x, y)
     createLabel(dd, text)
 
@@ -1012,7 +1012,7 @@ function GUI:SetupNameplateAuraFilter(parent)
         scroll:ClearAllPoints()
         scroll:SetPoint('BOTTOMLEFT', 10, 10)
 
-        scroll.box = F.CreateEditBox(frame, 130, 24)
+        scroll.box = F.CreateEditbox(frame, 130, 24)
         scroll.box:SetPoint('TOPLEFT', 10, -10)
         scroll.box.tipHeader = L['Hint']
         F.AddTooltip(scroll.box, 'ANCHOR_RIGHT', value.tip, 'BLUE')
@@ -1363,7 +1363,7 @@ function GUI:SetupNameplateUnitFilter(parent)
     swatch.__default = C.CharacterSettings['Nameplate']['SpecialUnitColor']
     swatch:SetSize(24, 24)
 
-    scroll.box = F.CreateEditBox(frame, 100, 24)
+    scroll.box = F.CreateEditbox(frame, 100, 24)
     scroll.box:SetPoint('LEFT', swatch, 'RIGHT', 5, 0)
     scroll.box.tipHeader = L['Hint']
     F.AddTooltip(scroll.box, 'ANCHOR_TOPRIGHT', L['Enter NPC ID or name directly.'], 'BLUE')
@@ -1447,7 +1447,7 @@ function GUI:SetupNameplateColorByDot(parent)
     swatch.__default = C.CharacterSettings['Nameplate']['DotColor']
     swatch:SetSize(24, 24)
 
-    scroll.box = F.CreateEditBox(frame, 100, 24)
+    scroll.box = F.CreateEditbox(frame, 100, 24)
     scroll.box:SetPoint('LEFT', swatch, 'RIGHT', 5, 0)
     scroll.box.tipHeader = L['Hint']
     F.AddTooltip(scroll.box, 'ANCHOR_TOPRIGHT', L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 'BLUE')
@@ -2623,7 +2623,7 @@ do
             spellName:SetJustifyH('LEFT')
             bar.spellName = spellName
 
-            local prioBox = F.CreateEditBox(bar, 22, 22)
+            local prioBox = F.CreateEditbox(bar, 22, 22)
             prioBox:SetPoint('RIGHT', close, 'LEFT', -3, 0)
             --prioBox:SetTextInsets(10, 0, 0, 0)
             prioBox:SetJustifyH('CENTER')
@@ -2830,7 +2830,7 @@ do
         local scrollArea = createScrollFrame(panel.bg, 200, 485)
         panel.scrollArea = scrollArea
 
-        scrollArea.dd = F.CreateDropDown(panel.bg, 40, 24, anchors)
+        scrollArea.dd = F.CreateDropdown(panel.bg, 40, 24, anchors)
         scrollArea.dd:SetPoint('TOPLEFT', 10, -10)
         scrollArea.dd.options[1]:Click()
         for i = 1, 8 do
@@ -2849,7 +2849,7 @@ do
         swatch:SetSize(22, 22)
         scrollArea.swatch = swatch
 
-        local showAll = F.CreateCheckButton(panel.bg, true)
+        local showAll = F.CreateCheckbox(panel.bg, true)
         showAll:SetPoint('LEFT', swatch, 'RIGHT', 3, 0)
         showAll:SetSize(24, 24)
         showAll.tipHeader = L['Hint']
@@ -2927,7 +2927,7 @@ do
             end
         end
 
-        -- local cb = F.CreateCheckButton(panel.bg, true)
+        -- local cb = F.CreateCheckbox(panel.bg, true)
         -- cb:SetPoint('BOTTOMRIGHT', panel.bg, 'TOPRIGHT', 0, 5)
         -- cb:SetChecked(C.DB.Unitframe.RaidBuffAuto)
         -- cb:SetSize(18, 18)

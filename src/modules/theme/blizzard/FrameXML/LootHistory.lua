@@ -14,7 +14,11 @@ tinsert(C.BlizzThemes, function()
     F.StripTextures(LootHistoryFrame)
     F.SetBD(LootHistoryFrame)
     F.ReskinClose(LootHistoryFrame.CloseButton)
-    F.ReskinScroll(_G.LootHistoryFrameScrollFrameScrollBar)
+    if C.IS_NEW_PATCH_10_1 then
+        F.ReskinTrimScroll(_G.LootHistoryFrameScrollFrame.ScrollBar)
+    else
+        F.ReskinScroll(_G.LootHistoryFrameScrollFrameScrollBar)
+    end
 
     -- [[ Resize button ]]
 

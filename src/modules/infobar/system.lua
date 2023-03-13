@@ -110,12 +110,7 @@ local function Block_OnEnter(self)
 
     local today = C_DateAndTime.GetCurrentCalendarTime()
     local w, m, d, y = today.weekday, today.month, today.monthDay, today.year
-    _G.GameTooltip:AddLine(
-        format(_G.FULLDATE, _G.CALENDAR_WEEKDAY_NAMES[w], _G.CALENDAR_FULLDATE_MONTH_NAMES[m], d, y),
-        0.9,
-        0.82,
-        0.62
-    )
+    _G.GameTooltip:AddLine(format(_G.FULLDATE, _G.CALENDAR_WEEKDAY_NAMES[w], _G.CALENDAR_FULLDATE_MONTH_NAMES[m], d, y), 0.9, 0.82, 0.62)
     _G.GameTooltip:AddLine(' ')
     _G.GameTooltip:AddDoubleLine(L['Local Time'], _G.GameTime_GetLocalTime(true), 0.6, 0.8, 1, 1, 1, 1)
     _G.GameTooltip:AddDoubleLine(L['Realm Time'], _G.GameTime_GetGameTime(true), 0.6, 0.8, 1, 1, 1, 1)
@@ -150,31 +145,13 @@ local function Block_OnEnter(self)
             for i = (maxAddOns + 1), numEnabled do
                 hiddenMemory = hiddenMemory + infoTable[i][3]
             end
-            _G.GameTooltip:AddDoubleLine(
-                format(showMoreString, numEnabled - maxAddOns, L['Hidden'], L['Hold SHIFT for more details']),
-                formatMemory(hiddenMemory),
-                0.6,
-                0.8,
-                1,
-                0.6,
-                0.8,
-                1
-            )
+            _G.GameTooltip:AddDoubleLine(format(showMoreString, numEnabled - maxAddOns, L['Hidden'], L['Hold SHIFT for more details']), formatMemory(hiddenMemory), 0.6, 0.8, 1, 0.6, 0.8, 1)
         end
     else
         local totalCPU = UpdateCPU()
         local passedTime = max(1, GetTime() - INFOBAR.loginTime)
 
-        _G.GameTooltip:AddDoubleLine(
-            _G.ADDONS,
-            format(usageString, totalCPU / passedTime),
-            0.6,
-            0.8,
-            1,
-            1,
-            1,
-            1
-        )
+        _G.GameTooltip:AddDoubleLine(_G.ADDONS, format(usageString, totalCPU / passedTime), 0.6, 0.8, 1, 1, 1, 1)
         _G.GameTooltip:AddLine(' ')
 
         local numEnabled = 0
@@ -183,16 +160,7 @@ local function Block_OnEnter(self)
                 numEnabled = numEnabled + 1
                 if numEnabled <= maxShown then
                     local r, g, b = smoothColor(data[4], totalCPU)
-                    _G.GameTooltip:AddDoubleLine(
-                        data[2],
-                        format(usageString, data[4] / passedTime),
-                        1,
-                        1,
-                        1,
-                        r,
-                        g,
-                        b
-                    )
+                    _G.GameTooltip:AddDoubleLine(data[2], format(usageString, data[4] / passedTime), 1, 1, 1, r, g, b)
                 end
             end
         end
@@ -202,16 +170,7 @@ local function Block_OnEnter(self)
             for i = (maxAddOns + 1), numEnabled do
                 hiddenUsage = hiddenUsage + infoTable[i][4]
             end
-            _G.GameTooltip:AddDoubleLine(
-                format(showMoreString, numEnabled - maxAddOns, L['Hidden'], L['Hold SHIFT for more details']),
-                format(usageString, hiddenUsage / passedTime),
-                0.6,
-                0.8,
-                1,
-                0.6,
-                0.8,
-                1
-            )
+            _G.GameTooltip:AddDoubleLine(format(showMoreString, numEnabled - maxAddOns, L['Hidden'], L['Hold SHIFT for more details']), format(usageString, hiddenUsage / passedTime), 0.6, 0.8, 1, 0.6, 0.8, 1)
         end
     end
 
@@ -221,20 +180,7 @@ local function Block_OnEnter(self)
     if scriptProfileStatus then
         _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_RIGHT_BUTTON .. L['Switch Mode'] .. ' ', 1, 1, 1, 0.6, 0.8, 1)
     end
-    _G.GameTooltip:AddDoubleLine(
-        ' ',
-        C.MOUSE_MIDDLE_BUTTON
-            .. L['CPU Usage']
-            .. ': '
-            .. (GetCVarBool('scriptProfile') and enableString or disableString)
-            .. ' ',
-        1,
-        1,
-        1,
-        0.6,
-        0.8,
-        1
-    )
+    _G.GameTooltip:AddDoubleLine(' ', C.MOUSE_MIDDLE_BUTTON .. L['CPU Usage'] .. ': ' .. (GetCVarBool('scriptProfile') and enableString or disableString) .. ' ', 1, 1, 1, 0.6, 0.8, 1)
     _G.GameTooltip:Show()
 end
 

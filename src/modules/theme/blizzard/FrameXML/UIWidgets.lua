@@ -175,5 +175,5 @@ tinsert(C.BlizzThemes, function()
         ReskinWidgetStatusBar(self.Bar)
     end)
 
-    F.Reskin(_G.UIWidgetCenterDisplayFrame.CloseButton)
+    F.ReskinButton(_G.UIWidgetCenterDisplayFrame.CloseButton)
 end)

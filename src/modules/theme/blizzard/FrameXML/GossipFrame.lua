@@ -36,7 +36,7 @@ tinsert(C.BlizzThemes, function()
 
     _G.QuestFont:SetTextColor(1, 1, 1)
 
-    F.Reskin(GossipFrame.GreetingPanel.GoodbyeButton)
+    F.ReskinButton(GossipFrame.GreetingPanel.GoodbyeButton)
     F.ReskinTrimScroll(GossipFrame.GreetingPanel.ScrollBar)
 
     hooksecurefunc(GossipFrame.GreetingPanel.ScrollBox, 'Update', function(self)

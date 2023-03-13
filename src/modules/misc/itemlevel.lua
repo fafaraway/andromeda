@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local ITEMLEVEL = F:GetModule('ItemLevel')
+local IL = F:GetModule('ItemLevel')
 local TT = F:GetModule('Tooltip')
 
 local inspectSlots = {
@@ -22,7 +22,7 @@ local inspectSlots = {
     'SecondaryHand',
 }
 
-function ITEMLEVEL:GetSlotAnchor(index)
+function IL:GetSlotAnchor(index)
     if not index then
         return
     end
@@ -38,7 +38,7 @@ function ITEMLEVEL:GetSlotAnchor(index)
     end
 end
 
-function ITEMLEVEL:CreateItemTexture(slot, relF, x, y)
+function IL:CreateItemTexture(slot, relF, x, y)
     local icon = slot:CreateTexture()
     icon:SetPoint(relF, x, y)
     icon:SetSize(14, 14)
@@ -50,7 +50,7 @@ function ITEMLEVEL:CreateItemTexture(slot, relF, x, y)
     return icon
 end
 
-function ITEMLEVEL:CreateItemString(frame, strType)
+function IL:CreateItemString(frame, strType)
     if frame.fontCreated then
         return
     end
@@ -62,7 +62,7 @@ function ITEMLEVEL:CreateItemString(frame, strType)
             slotFrame.iLvlText = F.CreateFS(slotFrame, C.Assets.Fonts.Bold, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK')
             slotFrame.iLvlText:ClearAllPoints()
             slotFrame.iLvlText:SetPoint('BOTTOMRIGHT', slotFrame, -1, 1)
-            local relF, x, y = ITEMLEVEL:GetSlotAnchor(index)
+            local relF, x, y = IL:GetSlotAnchor(index)
             slotFrame.enchantText = F.CreateFS(slotFrame, C.Assets.Fonts.Bold, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK')
             slotFrame.enchantText:ClearAllPoints()
             slotFrame.enchantText:SetPoint(relF, slotFrame, x, y)
@@ -71,7 +71,7 @@ function ITEMLEVEL:CreateItemString(frame, strType)
                 local offset = (i - 1) * 18 + 5
                 local iconX = x > 0 and x + offset or x - offset
                 local iconY = index > 15 and 20 or 2
-                slotFrame['textureIcon' .. i] = ITEMLEVEL:CreateItemTexture(slotFrame, relF, iconX, iconY)
+                slotFrame['textureIcon' .. i] = IL:CreateItemTexture(slotFrame, relF, iconX, iconY)
             end
         end
     end
@@ -99,7 +99,7 @@ local function GetSlotItemLocation(id)
     return itemLocation
 end
 
-function ITEMLEVEL:ItemLevel_UpdateTraits(button, id, link)
+function IL:ItemLevel_UpdateTraits(button, id, link)
     local empoweredItemLocation = GetSlotItemLocation(id)
     if not empoweredItemLocation then
         return
@@ -131,7 +131,7 @@ function ITEMLEVEL:ItemLevel_UpdateTraits(button, id, link)
     end
 end
 
-function ITEMLEVEL:ItemLevel_UpdateInfo(slotFrame, info, quality)
+function IL:ItemLevel_UpdateInfo(slotFrame, info, quality)
     local infoType = type(info)
     local level
     if infoType == 'table' then
@@ -189,23 +189,23 @@ function ITEMLEVEL:ItemLevel_UpdateInfo(slotFrame, info, quality)
     end
 end
 
-function ITEMLEVEL:ItemLevel_RefreshInfo(link, unit, index, slotFrame)
+function IL:ItemLevel_RefreshInfo(link, unit, index, slotFrame)
     C_Timer.After(0.1, function()
         local quality = select(3, GetItemInfo(link))
         local info = F.GetItemLevel(link, unit, index, C.DB.General.GemEnchant)
         if info == 'tooSoon' then
             return
         end
-        ITEMLEVEL:ItemLevel_UpdateInfo(slotFrame, info, quality)
+        IL:ItemLevel_UpdateInfo(slotFrame, info, quality)
     end)
 end
 
-function ITEMLEVEL:ItemLevel_SetupLevel(frame, strType, unit)
+function IL:ItemLevel_SetupLevel(frame, strType, unit)
     if not UnitExists(unit) then
         return
     end
 
-    ITEMLEVEL:CreateItemString(frame, strType)
+    IL:CreateItemString(frame, strType)
 
     for index, slot in pairs(inspectSlots) do
         if index ~= 4 then
@@ -223,31 +223,31 @@ function ITEMLEVEL:ItemLevel_SetupLevel(frame, strType, unit)
                 local quality = select(3, GetItemInfo(link))
                 local info = F.GetItemLevel(link, unit, index, C.DB.General.GemEnchant)
                 if info == 'tooSoon' then
-                    ITEMLEVEL:ItemLevel_RefreshInfo(link, unit, index, slotFrame)
+                    IL:ItemLevel_RefreshInfo(link, unit, index, slotFrame)
                 else
-                    ITEMLEVEL:ItemLevel_UpdateInfo(slotFrame, info, quality)
+                    IL:ItemLevel_UpdateInfo(slotFrame, info, quality)
                 end
 
                 if strType == 'Character' then
-                    ITEMLEVEL:ItemLevel_UpdateTraits(slotFrame, index, link)
+                    IL:ItemLevel_UpdateTraits(slotFrame, index, link)
                 end
             end
         end
     end
 end
 
-function ITEMLEVEL:ItemLevel_UpdatePlayer()
-    ITEMLEVEL:ItemLevel_SetupLevel(_G.CharacterFrame, 'Character', 'player')
+function IL:ItemLevel_UpdatePlayer()
+    IL:ItemLevel_SetupLevel(_G.CharacterFrame, 'Character', 'player')
 end
 
-function ITEMLEVEL:ItemLevel_UpdateInspect(...)
+function IL:ItemLevel_UpdateInspect(...)
     local guid = ...
     if _G.InspectFrame and _G.InspectFrame.unit and UnitGUID(_G.InspectFrame.unit) == guid then
-        ITEMLEVEL:ItemLevel_SetupLevel(_G.InspectFrame, 'Inspect', _G.InspectFrame.unit)
+        IL:ItemLevel_SetupLevel(_G.InspectFrame, 'Inspect', _G.InspectFrame.unit)
     end
 end
 
-function ITEMLEVEL:ItemLevel_FlyoutUpdate(bag, slot, quality)
+function IL:ItemLevel_FlyoutUpdate(bag, slot, quality)
     if not self.iLvl then
         local outline = _G.ANDROMEDA_ADB.FontOutline
         self.iLvl = F.CreateFS(self, C.Assets.Fonts.Bold, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK', 'BOTTOMRIGHT', -1, 1)
@@ -271,7 +271,7 @@ function ITEMLEVEL:ItemLevel_FlyoutUpdate(bag, slot, quality)
     self.iLvl:SetTextColor(color.r, color.g, color.b)
 end
 
-function ITEMLEVEL:ItemLevel_FlyoutSetup()
+function IL:ItemLevel_FlyoutSetup()
     if self.iLvl then
         self.iLvl:SetText('')
     end
@@ -292,24 +292,24 @@ function ITEMLEVEL:ItemLevel_FlyoutSetup()
         end
         local quality = select(13, _G.EquipmentManager_GetItemInfoByLocation(location))
         if bags then
-            ITEMLEVEL.ItemLevel_FlyoutUpdate(self, bag, slot, quality)
+            IL.ItemLevel_FlyoutUpdate(self, bag, slot, quality)
         else
-            ITEMLEVEL.ItemLevel_FlyoutUpdate(self, nil, slot, quality)
+            IL.ItemLevel_FlyoutUpdate(self, nil, slot, quality)
         end
     else
         local itemLocation = self:GetItemLocation()
         local quality = itemLocation and C_Item.GetItemQuality(itemLocation)
         if itemLocation:IsBagAndSlot() then
             local bag, slot = itemLocation:GetBagAndSlot()
-            ITEMLEVEL.ItemLevel_FlyoutUpdate(self, bag, slot, quality)
+            IL.ItemLevel_FlyoutUpdate(self, bag, slot, quality)
         elseif itemLocation:IsEquipmentSlot() then
             local slot = itemLocation:GetEquipmentSlot()
-            ITEMLEVEL.ItemLevel_FlyoutUpdate(self, nil, slot, quality)
+            IL.ItemLevel_FlyoutUpdate(self, nil, slot, quality)
         end
     end
 end
 
-function ITEMLEVEL:ItemLevel_ScrappingUpdate()
+function IL:ItemLevel_ScrappingUpdate()
     if not self.iLvl then
         local outline = _G.ANDROMEDA_ADB.FontOutline
         self.iLvl = F.CreateFS(self, C.Assets.Fonts.Bold, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK', 'BOTTOMRIGHT', -1, 1)
@@ -329,17 +329,17 @@ function ITEMLEVEL:ItemLevel_ScrappingUpdate()
     self.iLvl:SetTextColor(color.r, color.g, color.b)
 end
 
-function ITEMLEVEL.ItemLevel_ScrappingShow(event, addon)
+function IL.ItemLevel_ScrappingShow(event, addon)
     if addon == 'Blizzard_ScrappingMachineUI' then
         for button in pairs(_G.ScrappingMachineFrame.ItemSlots.scrapButtons.activeObjects) do
-            hooksecurefunc(button, 'RefreshIcon', ITEMLEVEL.ItemLevel_ScrappingUpdate)
+            hooksecurefunc(button, 'RefreshIcon', IL.ItemLevel_ScrappingUpdate)
         end
 
-        F:UnregisterEvent(event, ITEMLEVEL.ItemLevel_ScrappingShow)
+        F:UnregisterEvent(event, IL.ItemLevel_ScrappingShow)
     end
 end
 
-function ITEMLEVEL:ItemLevel_UpdateMerchant(link)
+function IL:ItemLevel_UpdateMerchant(link)
     if not self.iLvl then
         local outline = _G.ANDROMEDA_ADB.FontOutline
         self.iLvl = F.CreateFS(_G[self:GetName() .. 'ItemButton'], C.Assets.Fonts.Bold, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK', 'BOTTOMRIGHT', -1, 1)
@@ -355,21 +355,21 @@ function ITEMLEVEL:ItemLevel_UpdateMerchant(link)
     end
 end
 
-function ITEMLEVEL.ItemLevel_UpdateTradePlayer(index)
+function IL.ItemLevel_UpdateTradePlayer(index)
     local button = _G['TradePlayerItem' .. index]
     local link = GetTradePlayerItemLink(index)
-    ITEMLEVEL.ItemLevel_UpdateMerchant(button, link)
+    IL.ItemLevel_UpdateMerchant(button, link)
 end
 
-function ITEMLEVEL.ItemLevel_UpdateTradeTarget(index)
+function IL.ItemLevel_UpdateTradeTarget(index)
     local button = _G['TradeRecipientItem' .. index]
     local link = GetTradeTargetItemLink(index)
-    ITEMLEVEL.ItemLevel_UpdateMerchant(button, link)
+    IL.ItemLevel_UpdateMerchant(button, link)
 end
 
 local itemCache = {}
 
-function ITEMLEVEL.ItemLevel_ReplaceItemLink(link, name)
+function IL.ItemLevel_ReplaceItemLink(link, name)
     if not link then
         return
     end
@@ -385,7 +385,7 @@ function ITEMLEVEL.ItemLevel_ReplaceItemLink(link, name)
     return modLink
 end
 
-function ITEMLEVEL:GuildNewsButtonOnClick(btn)
+function IL:GuildNewsButtonOnClick(btn)
     if self.isEvent or not self.playerName then
         return
     end
@@ -406,24 +406,22 @@ function ITEMLEVEL:GuildNewsButtonOnClick(btn)
     end
 end
 
-function ITEMLEVEL:ItemLevel_ReplaceGuildNews(_, strFormat, playerName, itemName)
+function IL:ItemLevel_ReplaceGuildNews(_, _, playerName)
     self.playerName = playerName
 
-    if itemName and not tonumber(itemName) then -- ignore MOTD and date
-        local newText = gsub(itemName, '(|Hitem:%d+:.-|h%[(.-)%]|h)', ITEMLEVEL.ItemLevel_ReplaceItemLink)
-        if newText then
-            self.text:SetFormattedText(strFormat, playerName, newText)
-        end
+    local newText = gsub(self.text:GetText(), '(|Hitem:%d+:.-|h%[(.-)%]|h)', IL.ItemLevel_ReplaceItemLink)
+    if newText then
+        self.text:SetText(newText)
     end
 
     if not self.hooked then
         self.text:SetFontObject(_G.Game13Font)
-        self:HookScript('OnClick', ITEMLEVEL.GuildNewsButtonOnClick) -- copy name by key shift
+        self:HookScript('OnClick', IL.GuildNewsButtonOnClick) -- copy name by key shift
         self.hooked = true
     end
 end
 
-function ITEMLEVEL:ItemLevel_UpdateLoot()
+function IL:ItemLevel_UpdateLoot()
     local outline = _G.ANDROMEDA_ADB.FontOutline
     for i = 1, self.ScrollTarget:GetNumChildren() do
         local button = select(i, self.ScrollTarget:GetChildren())
@@ -446,7 +444,7 @@ function ITEMLEVEL:ItemLevel_UpdateLoot()
     end
 end
 
-function ITEMLEVEL:ItemLevel_UpdateBags()
+function IL:ItemLevel_UpdateBags()
     local button = self.__owner
 
     if not button.iLvl then
@@ -470,7 +468,7 @@ function ITEMLEVEL:ItemLevel_UpdateBags()
     end
 end
 
-function ITEMLEVEL:ItemLevel_Containers()
+function IL:ItemLevel_Containers()
     if C.DB['Inventory']['Enable'] then
         return
     end
@@ -478,54 +476,54 @@ function ITEMLEVEL:ItemLevel_Containers()
     for i = 1, 13 do
         for _, button in _G['ContainerFrame' .. i]:EnumerateItems() do
             button.IconBorder.__owner = button
-            hooksecurefunc(button.IconBorder, 'SetShown', ITEMLEVEL.ItemLevel_UpdateBags)
+            hooksecurefunc(button.IconBorder, 'SetShown', IL.ItemLevel_UpdateBags)
         end
     end
 
     for i = 1, 28 do
         local button = _G['BankFrameItem' .. i]
         button.IconBorder.__owner = button
-        hooksecurefunc(button.IconBorder, 'SetShown', ITEMLEVEL.ItemLevel_UpdateBags)
+        hooksecurefunc(button.IconBorder, 'SetShown', IL.ItemLevel_UpdateBags)
     end
 end
 
-function ITEMLEVEL:OnLogin()
+function IL:OnLogin()
     if not C.DB.General.ItemLevel then
         return
     end
 
     -- iLvl on CharacterFrame
-    _G.CharacterFrame:HookScript('OnShow', ITEMLEVEL.ItemLevel_UpdatePlayer)
-    F:RegisterEvent('PLAYER_EQUIPMENT_CHANGED', ITEMLEVEL.ItemLevel_UpdatePlayer)
+    _G.CharacterFrame:HookScript('OnShow', IL.ItemLevel_UpdatePlayer)
+    F:RegisterEvent('PLAYER_EQUIPMENT_CHANGED', IL.ItemLevel_UpdatePlayer)
 
     -- iLvl on InspectFrame
-    F:RegisterEvent('INSPECT_READY', ITEMLEVEL.ItemLevel_UpdateInspect)
+    F:RegisterEvent('INSPECT_READY', IL.ItemLevel_UpdateInspect)
 
     -- iLvl on FlyoutButtons
     hooksecurefunc('EquipmentFlyout_UpdateItems', function()
         for _, button in pairs(_G.EquipmentFlyoutFrame.buttons) do
             if button:IsShown() then
-                ITEMLEVEL.ItemLevel_FlyoutSetup(button)
+                IL.ItemLevel_FlyoutSetup(button)
             end
         end
     end)
 
     -- iLvl on ScrappingMachineFrame
-    F:RegisterEvent('ADDON_LOADED', ITEMLEVEL.ItemLevel_ScrappingShow)
+    F:RegisterEvent('ADDON_LOADED', IL.ItemLevel_ScrappingShow)
 
     -- iLvl on MerchantFrame
-    hooksecurefunc('MerchantFrameItem_UpdateQuality', ITEMLEVEL.ItemLevel_UpdateMerchant)
+    hooksecurefunc('MerchantFrameItem_UpdateQuality', IL.ItemLevel_UpdateMerchant)
 
     -- iLvl on TradeFrame
-    hooksecurefunc('TradeFrame_UpdatePlayerItem', ITEMLEVEL.ItemLevel_UpdateTradePlayer)
-    hooksecurefunc('TradeFrame_UpdateTargetItem', ITEMLEVEL.ItemLevel_UpdateTradeTarget)
+    hooksecurefunc('TradeFrame_UpdatePlayerItem', IL.ItemLevel_UpdateTradePlayer)
+    hooksecurefunc('TradeFrame_UpdateTargetItem', IL.ItemLevel_UpdateTradeTarget)
 
     -- iLvl on GuildNews
-    hooksecurefunc('GuildNewsButton_SetText', ITEMLEVEL.ItemLevel_ReplaceGuildNews)
+    hooksecurefunc('GuildNewsButton_SetText', IL.ItemLevel_ReplaceGuildNews)
 
     -- iLvl on LootFrame
-    hooksecurefunc(_G.LootFrame.ScrollBox, 'Update', ITEMLEVEL.ItemLevel_UpdateLoot)
+    hooksecurefunc(_G.LootFrame.ScrollBox, 'Update', IL.ItemLevel_UpdateLoot)
 
     -- iLvl on default Container
-    ITEMLEVEL:ItemLevel_Containers()
+    IL:ItemLevel_Containers()
 end

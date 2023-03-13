@@ -50,7 +50,7 @@ tinsert(C.BlizzThemes, function()
                 checkbox:HideBackdrop()
                 local bg = F.CreateBDFrame(checkbox, 0.25)
                 bg:SetInside()
-                F.ReskinCheckButton(_G[checkBoxName .. 'Check'])
+                F.ReskinCheckbox(_G[checkBoxName .. 'Check'])
 
                 checkbox.styled = true
             end
@@ -65,11 +65,11 @@ tinsert(C.BlizzThemes, function()
         local nameString = frame:GetName() .. 'CheckBox'
         for index, value in ipairs(checkBoxTable) do
             local checkBoxName = nameString .. index
-            F.ReskinCheckButton(_G[checkBoxName])
+            F.ReskinCheckbox(_G[checkBoxName])
 
             if value.subTypes then
                 for i in ipairs(value.subTypes) do
-                    F.ReskinCheckButton(_G[checkBoxName .. '_' .. i])
+                    F.ReskinCheckbox(_G[checkBoxName .. '_' .. i])
                 end
             end
         end
@@ -151,7 +151,7 @@ tinsert(C.BlizzThemes, function()
         _G.CombatConfigSettingsRaid,
     }
     for _, box in pairs(combatBoxes) do
-        F.ReskinCheckButton(box)
+        F.ReskinCheckbox(box)
     end
 
     hooksecurefunc('ChatConfig_UpdateSwatches', function(frame)
@@ -177,18 +177,20 @@ tinsert(C.BlizzThemes, function()
     bg:SetPoint('TOPLEFT', 3, 0)
     bg:SetPoint('BOTTOMRIGHT', 0, 1)
 
-    F.Reskin(_G.CombatLogDefaultButton)
-    F.Reskin(_G.ChatConfigCombatSettingsFiltersCopyFilterButton)
-    F.Reskin(_G.ChatConfigCombatSettingsFiltersAddFilterButton)
-    F.Reskin(_G.ChatConfigCombatSettingsFiltersDeleteButton)
-    F.Reskin(_G.CombatConfigSettingsSaveButton)
-    F.Reskin(_G.ChatConfigFrameOkayButton)
-    F.Reskin(_G.ChatConfigFrameDefaultButton)
-    F.Reskin(_G.ChatConfigFrameRedockButton)
-    F.Reskin(_G.ChatConfigFrame.ToggleChatButton)
+    F.ReskinButton(_G.CombatLogDefaultButton)
+    F.ReskinButton(_G.ChatConfigCombatSettingsFiltersCopyFilterButton)
+    F.ReskinButton(_G.ChatConfigCombatSettingsFiltersAddFilterButton)
+    F.ReskinButton(_G.ChatConfigCombatSettingsFiltersDeleteButton)
+    F.ReskinButton(_G.CombatConfigSettingsSaveButton)
+    F.ReskinButton(_G.ChatConfigFrameOkayButton)
+    F.ReskinButton(_G.ChatConfigFrameDefaultButton)
+    F.ReskinButton(_G.ChatConfigFrameRedockButton)
+    if not C.IS_NEW_PATCH_10_1 then
+        F.ReskinButton(_G.ChatConfigFrame.ToggleChatButton)
+    end
     F.ReskinArrow(_G.ChatConfigMoveFilterUpButton, 'up')
     F.ReskinArrow(_G.ChatConfigMoveFilterDownButton, 'down')
-    F.ReskinEditBox(_G.CombatConfigSettingsNameEditBox)
+    F.ReskinEditbox(_G.CombatConfigSettingsNameEditBox)
     F.ReskinRadio(_G.CombatConfigColorsColorizeEntireLineBySource)
     F.ReskinRadio(_G.CombatConfigColorsColorizeEntireLineByTarget)
     F.ReskinColorSwatch(_G.CombatConfigColorsColorizeSpellNamesColorSwatch)
@@ -206,13 +208,13 @@ tinsert(C.BlizzThemes, function()
     -- TextToSpeech
     F.StripTextures(_G.TextToSpeechButton, 5)
 
-    F.Reskin(_G.TextToSpeechFramePlaySampleButton)
-    F.Reskin(_G.TextToSpeechFramePlaySampleAlternateButton)
-    F.Reskin(_G.TextToSpeechDefaultButton)
-    F.ReskinCheckButton(_G.TextToSpeechCharacterSpecificButton)
+    F.ReskinButton(_G.TextToSpeechFramePlaySampleButton)
+    F.ReskinButton(_G.TextToSpeechFramePlaySampleAlternateButton)
+    F.ReskinButton(_G.TextToSpeechDefaultButton)
+    F.ReskinCheckbox(_G.TextToSpeechCharacterSpecificButton)
 
-    F.ReskinDropDown(_G.TextToSpeechFrameTtsVoiceDropdown)
-    F.ReskinDropDown(_G.TextToSpeechFrameTtsVoiceAlternateDropdown)
+    F.ReskinDropdown(_G.TextToSpeechFrameTtsVoiceDropdown)
+    F.ReskinDropdown(_G.TextToSpeechFrameTtsVoiceAlternateDropdown)
     F.ReskinSlider(_G.TextToSpeechFrameAdjustRateSlider)
     F.ReskinSlider(_G.TextToSpeechFrameAdjustVolumeSlider)
 
@@ -225,7 +227,7 @@ tinsert(C.BlizzThemes, function()
     }
     for _, checkbox in pairs(checkboxes) do
         local check = _G.TextToSpeechFramePanelContainer[checkbox]
-        F.ReskinCheckButton(check)
+        F.ReskinCheckbox(check)
         check.bg:SetInside(check, 6, 6)
     end
 
@@ -238,7 +240,7 @@ tinsert(C.BlizzThemes, function()
                 checkBoxName = checkBoxNameString .. index
                 checkBox = _G[checkBoxName]
                 if checkBox and not checkBox.styled then
-                    F.ReskinCheckButton(checkBox)
+                    F.ReskinCheckbox(checkBox)
                     checkBox.bg:SetInside(checkBox, 6, 6)
                     checkBox.styled = true
                 end

@@ -36,7 +36,7 @@ C.Themes['Blizzard_AchievementUI'] = function()
         end
     end
 
-    F.ReskinDropDown(_G.AchievementFrameFilterDropDown)
+    F.ReskinDropdown(_G.AchievementFrameFilterDropDown)
     _G.AchievementFrameFilterDropDown:ClearAllPoints()
     _G.AchievementFrameFilterDropDown:SetPoint('TOPRIGHT', -120, 0)
     _G.AchievementFrameFilterDropDownText:ClearAllPoints()
@@ -44,7 +44,7 @@ C.Themes['Blizzard_AchievementUI'] = function()
     F.ReskinClose(_G.AchievementFrameCloseButton)
 
     -- Search box
-    F.ReskinEditBox(AchievementFrame.SearchBox)
+    F.ReskinEditbox(AchievementFrame.SearchBox)
     AchievementFrame.SearchBox:ClearAllPoints()
     AchievementFrame.SearchBox:SetPoint('TOPRIGHT', AchievementFrame, 'TOPRIGHT', -25, -5)
     AchievementFrame.SearchBox:SetPoint('BOTTOMLEFT', AchievementFrame, 'TOPRIGHT', -130, -25)
@@ -154,7 +154,7 @@ C.Themes['Blizzard_AchievementUI'] = function()
                 bg:SetPoint('BOTTOMRIGHT', 0, 2)
                 F.ReskinIcon(child.Icon.texture)
 
-                F.ReskinCheckButton(child.Tracked)
+                F.ReskinCheckbox(child.Tracked)
                 child.Tracked:SetSize(20, 20)
                 child.Check:SetAlpha(0)
 

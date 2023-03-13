@@ -219,7 +219,7 @@ end
 local function CreateTab(parent, i, name)
     local tab = CreateFrame('Button', nil, parent, 'BackdropTemplate')
     tab:SetSize(140, 26)
-    F.Reskin(tab)
+    F.ReskinButton(tab)
     tab.index = i
     tab:SetPoint('TOPLEFT', 10, -31 * i - 20)
 
@@ -326,7 +326,7 @@ local function CreateOptions(i)
     for _, option in pairs(GUI.OptionsList[i]) do
         local optType, key, value, name, horizon, data, callback, tip = unpack(option)
         if optType == 1 then -- checkbox
-            local cb = F.CreateCheckButton(parent, true, nil, true)
+            local cb = F.CreateCheckbox(parent, true, nil, true)
             cb:SetSize(14, 14)
             cb:SetHitRectInsets(-5, -5, -5, -5)
 
@@ -359,7 +359,7 @@ local function CreateOptions(i)
                 F.AddTooltip(cb, 'ANCHOR_TOPLEFT', tip, 'BLUE')
             end
         elseif optType == 2 then -- editbox
-            local eb = F.CreateEditBox(parent, 170, 22)
+            local eb = F.CreateEditbox(parent, 170, 22)
             eb:SetMaxLetters(999)
 
             if horizon then
@@ -419,7 +419,7 @@ local function CreateOptions(i)
                 end
             end
 
-            local dd = F.CreateDropDown(parent, 170, 20, data)
+            local dd = F.CreateDropdown(parent, 170, 20, data)
             if horizon then
                 dd:SetPoint('TOPLEFT', 260, -offset + 55)
             else
@@ -513,7 +513,7 @@ local function CreateConsole(tabIndex)
         PlaySound(_G.SOUNDKIT.IG_MAINMENU_OPTION)
         guiFrame:Hide()
     end)
-    F.Reskin(btnClose)
+    F.ReskinButton(btnClose)
 
     local btnApply = CreateFrame('Button', nil, guiFrame, 'UIPanelButtonTemplate')
     btnApply:SetPoint('RIGHT', btnClose, 'LEFT', -6, 0)
@@ -527,7 +527,7 @@ local function CreateConsole(tabIndex)
             GUI.NeedUIReload = nil
         end
     end)
-    F.Reskin(btnApply)
+    F.ReskinButton(btnApply)
 
     for i, name in pairs(tabsList) do
         guiTab[i] = CreateTab(guiFrame, i, name)
@@ -635,7 +635,7 @@ local function CreateGameMenuButton()
     end)
 
     if _G.ANDROMEDA_ADB.ReskinBlizz then
-        F.Reskin(bu)
+        F.ReskinButton(bu)
     end
 
     GUI.GameMenuButton = bu

@@ -29,7 +29,7 @@ local function reskinProfessionsFlyout(_, parent)
 
             F.StripTextures(flyoutFrame)
             F.SetBD(flyoutFrame):SetFrameLevel(2)
-            F.ReskinCheckButton(flyoutFrame.HideUnownedCheckBox)
+            F.ReskinCheckbox(flyoutFrame.HideUnownedCheckBox)
             flyoutFrame.HideUnownedCheckBox.bg:SetInside(nil, 6, 6)
             hooksecurefunc(flyoutFrame.ScrollBox, 'Update', refreshFlyoutButtons)
 
@@ -57,7 +57,7 @@ end
 
 local function reskinArrowInput(box)
     box:DisableDrawLayer('BACKGROUND')
-    F.ReskinEditBox(box)
+    F.ReskinEditbox(box)
     F.ReskinArrow(box.DecrementButton, 'left')
     F.ReskinArrow(box.IncrementButton, 'right')
 end
@@ -85,13 +85,13 @@ local function reskinProfessionForm(form)
 
     local trackBox = form.TrackRecipeCheckBox
     if trackBox then
-        F.ReskinCheckButton(trackBox)
+        F.ReskinCheckbox(trackBox)
         trackBox:SetSize(24, 24)
     end
 
     local checkBox = form.AllocateBestQualityCheckBox
     if checkBox then
-        F.ReskinCheckButton(checkBox)
+        F.ReskinCheckbox(checkBox)
         checkBox:SetSize(24, 24)
     end
 
@@ -100,8 +100,8 @@ local function reskinProfessionForm(form)
         F.StripTextures(qDialog)
         F.SetBD(qDialog)
         F.ReskinClose(qDialog.ClosePanelButton)
-        F.Reskin(qDialog.AcceptButton)
-        F.Reskin(qDialog.CancelButton)
+        F.ReskinButton(qDialog.AcceptButton)
+        F.ReskinButton(qDialog.CancelButton)
 
         reskinQualityContainer(qDialog.Container1)
         reskinQualityContainer(qDialog.Container2)
@@ -176,7 +176,7 @@ local function reskinOutputLog(outputLog)
     F.StripTextures(outputLog)
     F.SetBD(outputLog)
     F.ReskinClose(outputLog.ClosePanelButton)
-    F.ReskinTrimScroll(outputLog.ScrollBar, true)
+    F.ReskinTrimScroll(outputLog.ScrollBar)
     hooksecurefunc(outputLog.ScrollBox, 'Update', reskinOutputButtons)
 end
 
@@ -193,17 +193,20 @@ C.Themes['Blizzard_Professions'] = function()
 
     F.ReskinPortraitFrame(frame)
     craftingPage.TutorialButton.Ring:Hide()
-    F.Reskin(craftingPage.CreateButton)
-    F.Reskin(craftingPage.CreateAllButton)
-    F.Reskin(craftingPage.ViewGuildCraftersButton)
+    F.ReskinButton(craftingPage.CreateButton)
+    F.ReskinButton(craftingPage.CreateAllButton)
+    F.ReskinButton(craftingPage.ViewGuildCraftersButton)
     reskinArrowInput(craftingPage.CreateMultipleInputBox)
+    if C.IS_NEW_PATCH_10_1 then
+        F.ReskinMinMax(frame.MaximizeMinimize)
+    end
 
     local guildFrame = craftingPage.GuildFrame
     F.StripTextures(guildFrame)
     F.CreateBDFrame(guildFrame, 0.25)
     F.StripTextures(guildFrame.Container)
     F.CreateBDFrame(guildFrame.Container, 0.25)
-    F.ReskinTrimScroll(guildFrame.Container.ScrollBar, true)
+    F.ReskinTrimScroll(guildFrame.Container.ScrollBar)
 
     for i = 1, 3 do
         local tab = select(i, frame.TabSystem:GetChildren())
@@ -238,12 +241,12 @@ C.Themes['Blizzard_Professions'] = function()
 
     local recipeList = craftingPage.RecipeList
     F.StripTextures(recipeList)
-    F.ReskinTrimScroll(recipeList.ScrollBar, true)
+    F.ReskinTrimScroll(recipeList.ScrollBar)
     if recipeList.BackgroundNineSlice then
         recipeList.BackgroundNineSlice:Hide()
     end -- in case blizz rename
     F.CreateBDFrame(recipeList, 0.25):SetInside()
-    F.ReskinEditBox(recipeList.SearchBox)
+    F.ReskinEditbox(recipeList.SearchBox)
     F.ReskinFilterButton(recipeList.FilterButton)
 
     local form = craftingPage.SchematicForm
@@ -251,6 +254,9 @@ C.Themes['Blizzard_Professions'] = function()
     form.Background:SetAlpha(0)
     F.CreateBDFrame(form, 0.25):SetInside()
     reskinProfessionForm(form)
+    if C.IS_NEW_PATCH_10_1 then
+        form.MinimalBackground:SetAlpha(0)
+    end
 
     local rankBar = craftingPage.RankBar
     reskinRankBar(rankBar)
@@ -260,16 +266,21 @@ C.Themes['Blizzard_Professions'] = function()
     craftingPage.LinkButton:SetPoint('LEFT', rankBar.Fill, 'RIGHT', 3, 0)
 
     local specPage = frame.SpecPage
-    F.Reskin(specPage.UnlockTabButton)
-    F.Reskin(specPage.ApplyButton)
+    F.ReskinButton(specPage.UnlockTabButton)
+    F.ReskinButton(specPage.ApplyButton)
     if C.IS_NEW_PATCH then
-        F.Reskin(specPage.ViewTreeButton)
-        F.Reskin(specPage.BackToPreviewButton)
+        F.ReskinButton(specPage.ViewTreeButton)
+        F.ReskinButton(specPage.BackToFullTreeButton)
+        F.ReskinButton(specPage.ViewPreviewButton)
+        F.ReskinButton(specPage.BackToPreviewButton)
     end
+    specPage.TopDivider:Hide()
+    specPage.VerticalDivider:Hide()
+    specPage.PanelFooter:Hide()
     F.StripTextures(specPage.TreeView)
     specPage.TreeView.Background:Hide()
-    F.CreateBDFrame(specPage.TreeView, 0.25):SetInside()
-    specPage.PanelFooter:Hide()
+    local treeViewBG = F.CreateBDFrame(specPage.TreeView, 0.25)
+    treeViewBG:SetInside()
 
     hooksecurefunc(specPage, 'UpdateTabs', function(self)
         for tab in self.tabsPool:EnumerateActive() do
@@ -282,10 +293,13 @@ C.Themes['Blizzard_Professions'] = function()
 
     local view = specPage.DetailedView
     F.StripTextures(view)
-    F.CreateBDFrame(view, 0.25):SetInside()
-    F.Reskin(view.UnlockPathButton)
-    F.Reskin(view.SpendPointsButton)
+    local detailedViewBG = F.CreateBDFrame(view, 0.25)
+    detailedViewBG:SetInside()
+    F.ReskinButton(view.UnlockPathButton)
+    F.ReskinButton(view.SpendPointsButton)
     F.ReskinIcon(view.UnspentPoints.Icon)
+
+    treeViewBG:SetPoint('BOTTOMRIGHT', detailedViewBG, 'BOTTOMLEFT', -3, 0)
 
     -- log
     reskinOutputLog(craftingPage.CraftingOutputLog)
@@ -301,18 +315,18 @@ C.Themes['Blizzard_Professions'] = function()
     end -- not exists in retail yet
 
     local browseFrame = frame.OrdersPage.BrowseFrame
-    F.Reskin(browseFrame.SearchButton)
-    F.Reskin(browseFrame.FavoritesSearchButton)
+    F.ReskinButton(browseFrame.SearchButton)
+    F.ReskinButton(browseFrame.FavoritesSearchButton)
     browseFrame.FavoritesSearchButton:SetSize(22, 22)
 
     local rList = browseFrame.RecipeList
     F.StripTextures(rList)
-    F.ReskinTrimScroll(rList.ScrollBar, true)
+    F.ReskinTrimScroll(rList.ScrollBar)
     if rList.BackgroundNineSlice then
         rList.BackgroundNineSlice:Hide()
     end -- in case blizz rename
     F.CreateBDFrame(rList, 0.25):SetInside()
-    F.ReskinEditBox(rList.SearchBox)
+    F.ReskinEditbox(rList.SearchBox)
     F.ReskinFilterButton(rList.FilterButton)
 
     F.ReskinTab(browseFrame.PublicOrdersButton)
@@ -325,7 +339,7 @@ C.Themes['Blizzard_Professions'] = function()
     F.StripTextures(orderList)
     orderList.Background:SetAlpha(0)
     F.CreateBDFrame(orderList, 0.25):SetInside()
-    F.ReskinTrimScroll(orderList.ScrollBar, true)
+    F.ReskinTrimScroll(orderList.ScrollBar)
 
     hooksecurefunc(frame.OrdersPage, 'SetupTable', function()
         local maxHeaders = orderList.HeaderContainer:GetNumChildren()
@@ -347,19 +361,23 @@ C.Themes['Blizzard_Professions'] = function()
     frame.OrdersPage:SetupTable() -- init header
 
     local orderView = frame.OrdersPage.OrderView
-    F.Reskin(orderView.CreateButton)
-    F.Reskin(orderView.CompleteOrderButton)
+    F.ReskinButton(orderView.CreateButton)
+    F.ReskinButton(orderView.StartRecraftButton)
+    F.ReskinButton(orderView.StopRecraftButton)
+    F.ReskinButton(orderView.CompleteOrderButton)
     reskinOutputLog(orderView.CraftingOutputLog)
     reskinRankBar(orderView.RankBar)
 
     local orderInfo = orderView.OrderInfo
     F.StripTextures(orderInfo)
     F.CreateBDFrame(orderInfo, 0.25):SetInside()
-    F.Reskin(orderInfo.BackButton)
-    F.Reskin(orderInfo.IgnoreButton)
-    F.Reskin(orderInfo.StartOrderButton)
-    F.Reskin(orderInfo.DeclineOrderButton)
-    F.Reskin(orderInfo.ReleaseOrderButton)
+    F.ReskinButton(orderInfo.BackButton)
+    if not C.IS_NEW_PATCH then
+        F.ReskinButton(orderInfo.IgnoreButton)
+    end
+    F.ReskinButton(orderInfo.StartOrderButton)
+    F.ReskinButton(orderInfo.DeclineOrderButton)
+    F.ReskinButton(orderInfo.ReleaseOrderButton)
     F.StripTextures(orderInfo.NoteBox)
     F.CreateBDFrame(orderInfo.NoteBox, 0.25)
 

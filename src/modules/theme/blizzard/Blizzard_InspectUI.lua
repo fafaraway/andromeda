@@ -4,11 +4,11 @@ C.Themes['Blizzard_InspectUI'] = function()
     F.StripTextures(_G.InspectTalentFrame)
     F.StripTextures(_G.InspectModelFrame, true)
     _G.InspectGuildFrameBG:Hide()
-    F.Reskin(_G.InspectPaperDollFrame.ViewButton)
+    F.ReskinButton(_G.InspectPaperDollFrame.ViewButton)
     _G.InspectPaperDollFrame.ViewButton:ClearAllPoints()
     _G.InspectPaperDollFrame.ViewButton:SetPoint('TOP', _G.InspectFrame, 0, -45)
     _G.InspectPVPFrame.BG:Hide()
-    F.Reskin(_G.InspectPaperDollItemsFrame.InspectTalents)
+    F.ReskinButton(_G.InspectPaperDollItemsFrame.InspectTalents)
 
     -- Character
     local slots = {

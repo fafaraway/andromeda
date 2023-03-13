@@ -51,6 +51,6 @@ C.Themes['Blizzard_TrainerUI'] = function()
 
     F.CreateBDFrame(_G.ClassTrainerStatusBar, 0.25)
 
-    F.Reskin(_G.ClassTrainerTrainButton)
-    F.ReskinDropDown(_G.ClassTrainerFrameFilterDropDown)
+    F.ReskinButton(_G.ClassTrainerTrainButton)
+    F.ReskinDropdown(_G.ClassTrainerFrameFilterDropDown)
 end

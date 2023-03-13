@@ -10,9 +10,9 @@ tinsert(C.BlizzThemes, function()
     F.StripTextures(frame)
     F.SetBD(frame)
     F.ReskinClose(frame.ClosePanelButton)
-    F.ReskinEditBox(frame.SearchBox)
-    F.Reskin(frame.ApplyButton)
-    F.Reskin(frame.CloseButton)
+    F.ReskinEditbox(frame.SearchBox)
+    F.ReskinButton(frame.ApplyButton)
+    F.ReskinButton(frame.CloseButton)
 
     local function resetTabAnchor(tab)
         tab.Text:SetPoint('BOTTOM', 0, 4)
@@ -59,10 +59,10 @@ tinsert(C.BlizzThemes, function()
     local cBg = F.CreateBDFrame(frame.Container, 0.25)
     cBg:SetInside()
     cBg:SetPoint('TOPLEFT', 1, 6)
-    F.Reskin(frame.Container.SettingsList.Header.DefaultsButton)
-    F.ReskinTrimScroll(frame.Container.SettingsList.ScrollBar, true)
+    F.ReskinButton(frame.Container.SettingsList.Header.DefaultsButton)
+    F.ReskinTrimScroll(frame.Container.SettingsList.ScrollBar)
 
-    local function ReskinDropDownArrow(button, direction)
+    local function ReskinDropdownArrow(button, direction)
         button.NormalTexture:SetAlpha(0)
         button.PushedTexture:SetAlpha(0)
         button:GetHighlightTexture():SetAlpha(0)
@@ -83,25 +83,26 @@ tinsert(C.BlizzThemes, function()
 
     local function ReskinOptionDropDown(option)
         local button = option.Button
-        F.Reskin(button)
+        F.ReskinButton(button)
         button.__bg:SetInside(button, 6, 6)
         button.NormalTexture:SetAlpha(0)
         button.HighlightTexture:SetAlpha(0)
 
-        ReskinDropDownArrow(option.DecrementButton, 'left')
-        ReskinDropDownArrow(option.IncrementButton, 'right')
+        ReskinDropdownArrow(option.DecrementButton, 'left')
+        ReskinDropdownArrow(option.IncrementButton, 'right')
     end
 
     local function UpdateKeybindButtons(self)
         if not self.bindingsPool then
             return
         end
+
         for panel in self.bindingsPool:EnumerateActive() do
             if not panel.styled then
-                F.Reskin(panel.Button1)
-                F.Reskin(panel.Button2)
+                F.ReskinButton(panel.Button1)
+                F.ReskinButton(panel.Button2)
                 if panel.CustomButton then
-                    F.Reskin(panel.CustomButton)
+                    F.ReskinButton(panel.CustomButton)
                 end
                 panel.styled = true
             end
@@ -119,21 +120,52 @@ tinsert(C.BlizzThemes, function()
         self.CheckBox:DesaturateHierarchy(1)
     end
 
+    local function ReskinControlsGroup(controls)
+        for i = 1, controls:GetNumChildren() do
+            local element = select(i, controls:GetChildren())
+            if element.SliderWithSteppers then
+                F.ReskinStepperSlider(element.SliderWithSteppers)
+            end
+
+            if element.DropDown then
+                ReskinOptionDropDown(element.DropDown)
+            end
+
+            if element.CheckBox then
+                F.ReskinCheck(element.CheckBox)
+                element.CheckBox.bg:SetInside(nil, 6, 6)
+
+                hooksecurefunc(element, 'DesaturateHierarchy', forceSaturation)
+            end
+        end
+    end
+
     hooksecurefunc(frame.Container.SettingsList.ScrollBox, 'Update', function(self)
         for i = 1, self.ScrollTarget:GetNumChildren() do
             local child = select(i, self.ScrollTarget:GetChildren())
             if not child.styled then
+                if child.NineSlice then
+                    child.NineSlice:SetAlpha(0)
+
+                    local bg = F.CreateBDFrame(child, 0.25)
+                    bg:SetPoint('TOPLEFT', 15, -30)
+                    bg:SetPoint('BOTTOMRIGHT', -30, -5)
+                end
+
                 if child.CheckBox then
-                    F.ReskinCheckButton(child.CheckBox)
+                    F.ReskinCheckbox(child.CheckBox)
                     child.CheckBox.bg:SetInside(nil, 6, 6)
                     hooksecurefunc(child, 'DesaturateHierarchy', forceSaturation)
                 end
+
                 if child.DropDown then
                     ReskinOptionDropDown(child.DropDown)
                 end
+
                 if child.ColorBlindFilterDropDown then
                     ReskinOptionDropDown(child.ColorBlindFilterDropDown)
                 end
+
                 for j = 1, 13 do
                     local control = child['Control' .. j]
                     if control then
@@ -142,9 +174,10 @@ tinsert(C.BlizzThemes, function()
                         end
                     end
                 end
+
                 if child.Button then
                     if child.Button:GetWidth() < 250 then
-                        F.Reskin(child.Button)
+                        F.ReskinButton(child.Button)
                     else
                         F.StripTextures(child.Button)
                         child.Button.Right:SetAlpha(0)
@@ -162,23 +195,52 @@ tinsert(C.BlizzThemes, function()
                         hooksecurefunc(child, 'EvaluateVisibility', UpdateHeaderExpand)
                     end
                 end
+
                 if child.ToggleTest then
-                    F.Reskin(child.ToggleTest)
+                    F.ReskinButton(child.ToggleTest)
                     F.StripTextures(child.VUMeter)
                     local bg = F.CreateBDFrame(child.VUMeter, 0.3)
                     bg:SetInside(nil, 4, 4)
                     child.VUMeter.Status:SetStatusBarTexture(C.Assets.Textures.Backdrop)
                     child.VUMeter.Status:SetInside(bg)
                 end
+
                 if child.PushToTalkKeybindButton then
-                    F.Reskin(child.PushToTalkKeybindButton)
+                    F.ReskinButton(child.PushToTalkKeybindButton)
                 end
+
                 if child.SliderWithSteppers then
                     F.ReskinStepperSlider(child.SliderWithSteppers)
                 end
+
                 if child.Button1 and child.Button2 then
-                    F.Reskin(child.Button1)
-                    F.Reskin(child.Button2)
+                    F.ReskinButton(child.Button1)
+                    F.ReskinButton(child.Button2)
+                end
+
+                if child.Controls then
+                    for i = 1, #child.Controls do
+                        local control = child.Controls[i]
+                        if control.SliderWithSteppers then
+                            F.ReskinStepperSlider(control.SliderWithSteppers)
+                        end
+                    end
+                end
+
+                if child.BaseTab then
+                    F.StripTextures(child.BaseTab, 0)
+                end
+
+                if child.RaidTab then
+                    F.StripTextures(child.RaidTab, 0)
+                end
+
+                if child.BaseQualityControls then
+                    ReskinControlsGroup(child.BaseQualityControls)
+                end
+
+                if child.RaidQualityControls then
+                    ReskinControlsGroup(child.RaidQualityControls)
                 end
 
                 child.styled = true
@@ -196,18 +258,20 @@ tinsert(C.BlizzThemes, function()
             for i = 1, frame:GetNumChildren() do
                 local child = select(i, frame:GetChildren())
                 if child:IsObjectType('CheckButton') then
-                    F.ReskinCheckButton(child)
+                    F.ReskinCheckbox(child)
                 elseif child:IsObjectType('Button') then
-                    F.Reskin(child)
+                    F.ReskinButton(child)
                 elseif child:IsObjectType('Frame') and child.Left and child.Middle and child.Right then
-                    F.ReskinDropDown(child)
+                    F.ReskinDropdown(child)
                 end
             end
         end
     end
+
     if _G.CompactUnitFrameProfilesSeparator then
         _G.CompactUnitFrameProfilesSeparator:SetAtlas('Options_HorizontalDivider')
     end
+
     if _G.CompactUnitFrameProfilesGeneralOptionsFrameAutoActivateBG then
         _G.CompactUnitFrameProfilesGeneralOptionsFrameAutoActivateBG:Hide()
         F.CreateBDFrame(_G.CompactUnitFrameProfilesGeneralOptionsFrameAutoActivateBG, 0.25)

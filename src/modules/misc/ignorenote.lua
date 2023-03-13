@@ -5,8 +5,11 @@ local unitName
 local noteTex = 'Interface\\Buttons\\UI-GuildButton-PublicNote-Up'
 local noteStr = '|T' .. noteTex .. ':12|t %s'
 
-local function GetButtonName(button)
+local function getButtonName(button)
     local name = button.name:GetText()
+    if not name then
+        return
+    end
     if not strmatch(name, '-') then
         name = name .. '-' .. C.MY_REALM
     end
@@ -14,12 +17,12 @@ local function GetButtonName(button)
 end
 
 function IN:IgnoreButton_OnClick()
-    unitName = GetButtonName(self)
+    unitName = getButtonName(self)
     StaticPopup_Show('ANDROMEDA_IGNORE_NOTE', unitName)
 end
 
 function IN:IgnoreButton_OnEnter()
-    local name = GetButtonName(self)
+    local name = getButtonName(self)
     local savedNote = _G.ANDROMEDA_ADB['IgnoreNotesList'][name]
     if savedNote then
         _G.GameTooltip:SetOwner(self, 'ANCHOR_NONE')
@@ -50,7 +53,7 @@ function IN:IgnoreButton_Hook()
         self.hooked = true
     end
 
-    self.noteTex:SetShown(_G.ANDROMEDA_ADB['IgnoreNotesList'][GetButtonName(self)])
+    self.noteTex:SetShown(_G.ANDROMEDA_ADB['IgnoreNotesList'][getButtonName(self)])
 end
 
 StaticPopupDialogs['ANDROMEDA_IGNORE_NOTE'] = {
@@ -108,13 +111,13 @@ function IN:OnLogin()
         self:ForEachFrame(IN.IgnoreButton_Hook)
     end)
 
-    _G.FriendsFrameUnsquelchButton:HookScript("OnClick", function()
-		local name = C_FriendList.GetIgnoreName(C_FriendList.GetSelectedIgnore())
-		if name then
-			if not strmatch(name, "-") then
-				name = name.."-"..C.MY_REALM
-			end
-			_G.ANDROMEDA_ADB['IgnoreNotesList'][name] = nil
-		end
-	end)
+    _G.FriendsFrameUnsquelchButton:HookScript('OnClick', function()
+        local name = C_FriendList.GetIgnoreName(C_FriendList.GetSelectedIgnore())
+        if name then
+            if not strmatch(name, '-') then
+                name = name .. '-' .. C.MY_REALM
+            end
+            _G.ANDROMEDA_ADB['IgnoreNotesList'][name] = nil
+        end
+    end)
 end

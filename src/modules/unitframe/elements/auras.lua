@@ -248,6 +248,9 @@ do
         local nameplateShowAll = data.nameplateShowAll
 
         if style == 'nameplate' or style == 'boss' or style == 'arena' then
+            if name and spellID == 209859 then -- pass all bolster
+                return true
+            end
             if element.__owner.plateType == 'NameOnly' then
                 return NAMEPLATE.NameplateAuraWhiteList[spellID]
             elseif NAMEPLATE.NameplateAuraBlackList[spellID] then

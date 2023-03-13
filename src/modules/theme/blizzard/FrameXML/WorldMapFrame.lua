@@ -14,7 +14,7 @@ tinsert(C.BlizzThemes, function()
     F.ReskinMinMax(BorderFrame.MaximizeMinimizeFrame)
 
     local overlayFrames = WorldMapFrame.overlayFrames
-    F.ReskinDropDown(overlayFrames[1])
+    F.ReskinDropdown(overlayFrames[1])
     F.StripTextures(overlayFrames[2], 3)
     F.StripTextures(overlayFrames[3], 3)
     overlayFrames[3].ActiveTexture:SetTexture('Interface\\Minimap\\UI-Minimap-ZoomButton-Toggle')

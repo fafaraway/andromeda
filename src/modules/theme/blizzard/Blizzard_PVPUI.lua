@@ -40,7 +40,7 @@ C.Themes['Blizzard_PVPUI'] = function()
         local cu = bu.CurrencyDisplay
 
         bu.Ring:Hide()
-        F.Reskin(bu, true)
+        F.ReskinButton(bu, true)
         bu.Background:SetInside(bu.__bg)
         bu.Background:SetColorTexture(r, g, b, 0.25)
         bu.Background:SetAlpha(1)
@@ -78,7 +78,7 @@ C.Themes['Blizzard_PVPUI'] = function()
     F.StripTextures(PVPQueueFrame.HonorInset)
 
     local popup = PVPQueueFrame.NewSeasonPopup
-    F.Reskin(popup.Leave)
+    F.ReskinButton(popup.Leave)
     popup.Leave.__bg:SetFrameLevel(popup:GetFrameLevel() + 1)
     popup.NewSeason:SetTextColor(1, 0.8, 0)
     popup.SeasonRewardText:SetTextColor(1, 0.8, 0)
@@ -104,8 +104,8 @@ C.Themes['Blizzard_PVPUI'] = function()
 
     HonorFrame.Inset:Hide()
     ReskinPvPFrame(HonorFrame)
-    F.Reskin(HonorFrame.QueueButton)
-    F.ReskinDropDown(_G.HonorFrameTypeDropDown)
+    F.ReskinButton(HonorFrame.QueueButton)
+    F.ReskinDropdown(_G.HonorFrameTypeDropDown)
 
     F.ReskinTrimScroll(HonorFrame.SpecificScrollBar)
 
@@ -146,7 +146,7 @@ C.Themes['Blizzard_PVPUI'] = function()
         'BrawlButton2',
     }) do
         local bu = bonusFrame[bonusButton]
-        F.Reskin(bu, true)
+        F.ReskinButton(bu, true)
         bu.SelectedTexture:SetDrawLayer('BACKGROUND')
         bu.SelectedTexture:SetColorTexture(r, g, b, 0.25)
         bu.SelectedTexture:SetInside(bu.__bg)
@@ -169,13 +169,13 @@ C.Themes['Blizzard_PVPUI'] = function()
     ConquestFrame.Arena2v2:HookScript('OnEnter', ConquestFrameButton_OnEnter)
     ConquestFrame.Arena3v3:HookScript('OnEnter', ConquestFrameButton_OnEnter)
     ConquestFrame.RatedBG:HookScript('OnEnter', ConquestFrameButton_OnEnter)
-    F.Reskin(ConquestFrame.JoinButton)
+    F.ReskinButton(ConquestFrame.JoinButton)
 
     local names = { 'RatedSoloShuffle', 'Arena2v2', 'Arena3v3', 'RatedBG' }
     for _, name in pairs(names) do
         local bu = ConquestFrame[name]
         if bu then
-            F.Reskin(bu, true)
+            F.ReskinButton(bu, true)
             local reward = bu.Reward
             if reward then
                 reward.Border:Hide()

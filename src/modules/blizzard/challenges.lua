@@ -81,6 +81,10 @@ function ECF:GuildBest_Create()
         hl:SetAllPoints()
         hl:SetTexture('Interface\\Buttons\\UI-GuildButton-PublicNote-Up')
     end
+
+    if _G.RaiderIO_GuildWeeklyFrame then
+        F.HideObject(_G.RaiderIO_GuildWeeklyFrame)
+    end
 end
 
 function ECF:GuildBest_SetUp(leaderInfo)

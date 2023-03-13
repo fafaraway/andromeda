@@ -4,16 +4,16 @@ local function reskinTalentFrameDialog(dialog)
     F.StripTextures(dialog)
     F.SetBD(dialog)
     if dialog.AcceptButton then
-        F.Reskin(dialog.AcceptButton)
+        F.ReskinButton(dialog.AcceptButton)
     end
     if dialog.CancelButton then
-        F.Reskin(dialog.CancelButton)
+        F.ReskinButton(dialog.CancelButton)
     end
     if dialog.DeleteButton then
-        F.Reskin(dialog.DeleteButton)
+        F.ReskinButton(dialog.DeleteButton)
     end
 
-    F.ReskinEditBox(dialog.NameControl.EditBox)
+    F.ReskinEditbox(dialog.NameControl.EditBox)
     dialog.NameControl.EditBox.__bg:SetPoint('TOPLEFT', -5, -10)
     dialog.NameControl.EditBox.__bg:SetPoint('BOTTOMRIGHT', 5, 10)
 end
@@ -27,10 +27,10 @@ C.Themes['Blizzard_ClassTalentUI'] = function()
     frame.SpecTab.BlackBG:SetAlpha(0)
 
     F.ReskinPortraitFrame(frame)
-    F.Reskin(frame.TalentsTab.ApplyButton)
-    F.ReskinDropDown(frame.TalentsTab.LoadoutDropDown.DropDownControl.DropDownMenu)
-    F.Reskin(frame.TalentsTab.InspectCopyButton)
-    F.ReskinEditBox(frame.TalentsTab.SearchBox)
+    F.ReskinButton(frame.TalentsTab.ApplyButton)
+    F.ReskinDropdown(frame.TalentsTab.LoadoutDropDown.DropDownControl.DropDownMenu)
+    F.ReskinButton(frame.TalentsTab.InspectCopyButton)
+    F.ReskinEditbox(frame.TalentsTab.SearchBox)
     frame.TalentsTab.SearchBox.__bg:SetPoint('TOPLEFT', -4, -5)
     frame.TalentsTab.SearchBox.__bg:SetPoint('BOTTOMRIGHT', 0, 5)
 
@@ -42,7 +42,7 @@ C.Themes['Blizzard_ClassTalentUI'] = function()
     hooksecurefunc(frame.SpecTab, 'UpdateSpecFrame', function(self)
         for specContentFrame in self.SpecContentFramePool:EnumerateActive() do
             if not specContentFrame.styled then
-                F.Reskin(specContentFrame.ActivateButton)
+                F.ReskinButton(specContentFrame.ActivateButton)
 
                 local role = GetSpecializationRole(specContentFrame.specIndex)
                 if role then
@@ -80,14 +80,14 @@ C.Themes['Blizzard_ClassTalentUI'] = function()
 
         local editbox = ed.LoadoutName
         if editbox then
-            F.ReskinEditBox(editbox)
+            F.ReskinEditbox(editbox)
             editbox.__bg:SetPoint('TOPLEFT', -5, -5)
             editbox.__bg:SetPoint('BOTTOMRIGHT', 5, 5)
         end
 
         local check = ed.UsesSharedActionBars
         if check then
-            F.ReskinCheckButton(check.CheckButton)
+            F.ReskinCheckbox(check.CheckButton)
             check.CheckButton.bg:SetInside(nil, 6, 6)
         end
     end

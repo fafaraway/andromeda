@@ -47,9 +47,9 @@ tinsert(C.BlizzThemes, function()
         frame.Border:Hide()
         F.SetBD(frame)
         for j = 1, 4 do
-            F.Reskin(frame['button' .. j])
+            F.ReskinButton(frame['button' .. j])
         end
-        F.Reskin(frame.extraButton)
+        F.ReskinButton(frame.extraButton)
         F.ReskinClose(close)
 
         close.minimize = close:CreateTexture(nil, 'OVERLAY')
@@ -60,10 +60,10 @@ tinsert(C.BlizzThemes, function()
         close:HookScript('OnEnter', colorMinimize)
         close:HookScript('OnLeave', clearMinimize)
 
-        F.ReskinEditBox(_G['StaticPopup' .. i .. 'EditBox'], 20)
-        F.ReskinEditBox(gold)
-        F.ReskinEditBox(silver)
-        F.ReskinEditBox(copper)
+        F.ReskinEditbox(_G['StaticPopup' .. i .. 'EditBox'], 20)
+        F.ReskinEditbox(gold)
+        F.ReskinEditbox(silver)
+        F.ReskinEditbox(copper)
     end
 
     hooksecurefunc('StaticPopup_Show', function(which, _, _, data)
@@ -124,16 +124,16 @@ tinsert(C.BlizzThemes, function()
     F.SetBD(_G.PetBattleQueueReadyFrame)
     F.CreateBDFrame(_G.PetBattleQueueReadyFrame.Art)
     _G.PetBattleQueueReadyFrame.Border:Hide()
-    F.Reskin(_G.PetBattleQueueReadyFrame.AcceptButton)
-    F.Reskin(_G.PetBattleQueueReadyFrame.DeclineButton)
+    F.ReskinButton(_G.PetBattleQueueReadyFrame.AcceptButton)
+    F.ReskinButton(_G.PetBattleQueueReadyFrame.DeclineButton)
 
     -- PlayerReportFrame
     F.StripTextures(_G.ReportFrame)
     F.SetBD(_G.ReportFrame)
     F.ReskinClose(_G.ReportFrame.CloseButton)
-    F.Reskin(_G.ReportFrame.ReportButton)
-    F.ReskinDropDown(_G.ReportFrame.ReportingMajorCategoryDropdown)
-    F.ReskinEditBox(_G.ReportFrame.Comment)
+    F.ReskinButton(_G.ReportFrame.ReportButton)
+    F.ReskinDropdown(_G.ReportFrame.ReportingMajorCategoryDropdown)
+    F.ReskinEditbox(_G.ReportFrame.Comment)
 
     hooksecurefunc(_G.ReportFrame, 'AnchorMinorCategory', function(self)
         if self.MinorCategoryButtonPool then

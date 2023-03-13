@@ -32,7 +32,7 @@ local function ReskinBar(bar, frame)
 
     if not bar.styled then
         F.StripTextures(bar)
-        F.CreateSB(bar, true)
+        F.CreateStatusbar(bar, true)
 
         bar.styled = true
     end

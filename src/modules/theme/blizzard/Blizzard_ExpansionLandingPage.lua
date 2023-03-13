@@ -32,7 +32,7 @@ C.Themes['Blizzard_AdventureMap'] = function()
             F.SetBD(panel)
 
             if panel.DragonridingPanel then
-                F.Reskin(panel.DragonridingPanel.SkillsButton)
+                F.ReskinButton(panel.DragonridingPanel.SkillsButton)
             end
             if panel.CloseButton then
                 F.ReskinClose(panel.CloseButton)

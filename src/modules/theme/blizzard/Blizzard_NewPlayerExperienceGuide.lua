@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 C.Themes['Blizzard_NewPlayerExperience'] = function()
-    F.Reskin(_G.KeyboardMouseConfirmButton)
+    F.ReskinButton(_G.KeyboardMouseConfirmButton)
 
     if _G.NPE_TutorialWalk_Frame then
         _G.NPE_TutorialWalk_Frame.ContainerFrame.TURNLEFT.KeyBind:SetTextColor(1, 0.8, 0)
@@ -18,6 +18,10 @@ C.Themes['Blizzard_NewPlayerExperienceGuide'] = function()
     F.ReskinPortraitFrame(GuideFrame)
     GuideFrame.Title:SetTextColor(1, 0.8, 0)
     GuideFrame.ScrollFrame.Child.Text:SetTextColor(1, 1, 1)
-    F.ReskinScroll(GuideFrame.ScrollFrame.ScrollBar)
-    F.Reskin(GuideFrame.ScrollFrame.ConfirmationButton)
+    if C.IS_NEW_PATCH_10_1 then
+        F.ReskinTrimScroll(GuideFrame.ScrollFrame.ScrollBar)
+    else
+        F.ReskinScroll(GuideFrame.ScrollFrame.ScrollBar)
+    end
+    F.ReskinButton(GuideFrame.ScrollFrame.ConfirmationButton)
 end

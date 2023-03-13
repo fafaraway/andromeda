@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 local function ReskinEventTraceButton(button)
-    F.Reskin(button)
+    F.ReskinButton(button)
     button.NormalTexture:SetAlpha(0)
     button.MouseoverOverlay:SetAlpha(0)
 end
@@ -11,13 +11,13 @@ local function ReskinScrollChild(self)
         local child = select(i, self.ScrollTarget:GetChildren())
         local hideButton = child and child.HideButton
         if hideButton and not hideButton.styled then
-            F.ReskinClose(hideButton)
+            F.ReskinClose(hideButton, nil, nil, nil, true)
             hideButton:ClearAllPoints()
             hideButton:SetPoint('LEFT', 3, 0)
 
             local checkButton = child.CheckButton
             if checkButton then
-                F.ReskinCheckButton(checkButton)
+                F.ReskinCheckbox(checkButton)
                 checkButton:SetSize(22, 22)
             end
 
@@ -45,7 +45,7 @@ C.Themes['Blizzard_EventTrace'] = function()
 
     local logBar = _G.EventTrace.Log.Bar
     local filterBar = _G.EventTrace.Filter.Bar
-    F.ReskinEditBox(logBar.SearchBox)
+    F.ReskinEditbox(logBar.SearchBox)
 
     ReskinEventTraceFrame(_G.EventTrace.Log.Events)
     ReskinEventTraceFrame(_G.EventTrace.Log.Search)

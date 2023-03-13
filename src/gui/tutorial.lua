@@ -196,14 +196,14 @@ function TUTORIAL:HelloWorld()
     local pBarText = F.CreateFS(pBar, C.Assets.Fonts.Regular, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK', 'CENTER', 0, 0)
 
     local lBtn = CreateFrame('Button', '', f, 'UIPanelButtonTemplate')
-    lBtn:SetPoint('BOTTOM', -42, 10)
+    lBtn:SetPoint('BOTTOM', -45, 10)
     lBtn:SetSize(80, 22)
-    F.Reskin(lBtn)
+    F.ReskinButton(lBtn)
 
     local rBtn = CreateFrame('Button', '', f, 'UIPanelButtonTemplate')
-    rBtn:SetPoint('BOTTOM', 42, 10)
+    rBtn:SetPoint('BOTTOM', 45, 10)
     rBtn:SetSize(80, 22)
-    F.Reskin(rBtn)
+    F.ReskinButton(rBtn)
 
     local step6 = function()
         pBar:SetValue(600)

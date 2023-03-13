@@ -6,12 +6,12 @@ tinsert(C.BlizzThemes, function()
     end
 
     F.ReskinPortraitFrame(_G.AddonList)
-    F.Reskin(_G.AddonListEnableAllButton)
-    F.Reskin(_G.AddonListDisableAllButton)
-    F.Reskin(_G.AddonListCancelButton)
-    F.Reskin(_G.AddonListOkayButton)
-    F.ReskinCheckButton(_G.AddonListForceLoad)
-    F.ReskinDropDown(_G.AddonCharacterDropDown)
+    F.ReskinButton(_G.AddonListEnableAllButton)
+    F.ReskinButton(_G.AddonListDisableAllButton)
+    F.ReskinButton(_G.AddonListCancelButton)
+    F.ReskinButton(_G.AddonListOkayButton)
+    F.ReskinCheckbox(_G.AddonListForceLoad)
+    F.ReskinDropdown(_G.AddonCharacterDropDown)
     F.ReskinTrimScroll(_G.AddonList.ScrollBar)
 
     _G.AddonListForceLoad:SetSize(18, 18)
@@ -29,9 +29,9 @@ tinsert(C.BlizzThemes, function()
         for i = 1, self.ScrollTarget:GetNumChildren() do
             local child = select(i, self.ScrollTarget:GetChildren())
             if not child.styled then
-                F.ReskinCheckButton(child.Enabled, true)
+                F.ReskinCheckbox(child.Enabled, true)
                 child.Enabled:SetSize(18, 18)
-                F.Reskin(child.LoadAddonButton)
+                F.ReskinButton(child.LoadAddonButton)
                 hooksecurefunc(child.Enabled:GetCheckedTexture(), 'SetDesaturated', forceSaturation)
 
                 child.styled = true

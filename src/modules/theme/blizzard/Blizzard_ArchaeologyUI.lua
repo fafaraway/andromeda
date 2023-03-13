@@ -3,8 +3,8 @@ local F, C = unpack(select(2, ...))
 C.Themes['Blizzard_ArchaeologyUI'] = function()
     F.ReskinPortraitFrame(_G.ArchaeologyFrame)
     _G.ArchaeologyFrame:DisableDrawLayer('BACKGROUND')
-    F.Reskin(_G.ArchaeologyFrameArtifactPageSolveFrameSolveButton)
-    F.Reskin(_G.ArchaeologyFrameArtifactPageBackButton)
+    F.ReskinButton(_G.ArchaeologyFrameArtifactPageSolveFrameSolveButton)
+    F.ReskinButton(_G.ArchaeologyFrameArtifactPageBackButton)
 
     _G.ArchaeologyFrameSummaryPageTitle:SetTextColor(1, 1, 1)
     _G.ArchaeologyFrameArtifactPageHistoryTitle:SetTextColor(1, 0.8, 0)
@@ -44,8 +44,12 @@ C.Themes['Blizzard_ArchaeologyUI'] = function()
     _G.ArchaeologyFrameCompletedButton:SetPoint('TOPLEFT', _G.ArchaeologyFrame, 'TOPRIGHT', 1, -120)
     _G.ArchaeologyFrameCompletedButton:SetFrameLevel(_G.ArchaeologyFrame:GetFrameLevel() - 1)
 
-    F.ReskinDropDown(_G.ArchaeologyFrameRaceFilter)
-    F.ReskinScroll(_G.ArchaeologyFrameArtifactPageHistoryScrollScrollBar)
+    F.ReskinDropdown(_G.ArchaeologyFrameRaceFilter)
+    if C.IS_NEW_PATCH_10_1 then
+        F.ReskinTrimScroll(_G.ArchaeologyFrameArtifactPageHistoryScroll.ScrollBar)
+    else
+        F.ReskinScroll(_G.ArchaeologyFrameArtifactPageHistoryScrollScrollBar)
+    end
     F.ReskinArrow(_G.ArchaeologyFrameCompletedPagePrevPageButton, 'left')
     F.ReskinArrow(_G.ArchaeologyFrameCompletedPageNextPageButton, 'right')
     _G.ArchaeologyFrameCompletedPagePrevPageButtonIcon:Hide()

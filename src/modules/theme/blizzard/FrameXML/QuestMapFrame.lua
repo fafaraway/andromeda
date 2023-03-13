@@ -30,8 +30,8 @@ local function ReskinSessionDialog(_, dialog)
     if not dialog.styled then
         F.StripTextures(dialog)
         F.SetBD(dialog)
-        F.Reskin(dialog.ButtonContainer.Confirm)
-        F.Reskin(dialog.ButtonContainer.Decline)
+        F.ReskinButton(dialog.ButtonContainer.Confirm)
+        F.ReskinButton(dialog.ButtonContainer.Decline)
         if dialog.MinimizeButton then
             F.ReskinArrow(dialog.MinimizeButton, 'down')
         end
@@ -65,12 +65,18 @@ tinsert(C.BlizzThemes, function()
     QuestScrollFrame.DetailFrame.BottomDetail:SetAlpha(0)
     QuestScrollFrame.Contents.Separator:SetAlpha(0)
     ReskinQuestHeader(QuestScrollFrame.Contents.StoryHeader)
-    F.ReskinScroll(QuestScrollFrame.ScrollBar)
 
     local campaignOverview = QuestMapFrame.CampaignOverview
     campaignOverview.BG:SetAlpha(0)
     ReskinQuestHeader(campaignOverview.Header)
-    F.ReskinScroll(campaignOverview.ScrollFrame.ScrollBar)
+
+    if C.IS_NEW_PATCH_10_1 then
+        F.ReskinTrimScroll(QuestScrollFrame.ScrollBar)
+        F.ReskinTrimScroll(campaignOverview.ScrollFrame.ScrollBar)
+    else
+        F.ReskinScroll(QuestScrollFrame.ScrollBar)
+        F.ReskinScroll(campaignOverview.ScrollFrame.ScrollBar)
+    end
 
     -- Quest details
 
@@ -83,11 +89,15 @@ tinsert(C.BlizzThemes, function()
     DetailsFrame.Bg:SetAlpha(0)
     DetailsFrame.SealMaterialBG:SetAlpha(0)
 
-    F.Reskin(DetailsFrame.BackButton)
-    F.Reskin(DetailsFrame.AbandonButton)
-    F.Reskin(DetailsFrame.ShareButton)
-    F.Reskin(DetailsFrame.TrackButton)
-    F.ReskinScroll(_G.QuestMapDetailsScrollFrame.ScrollBar)
+    F.ReskinButton(DetailsFrame.BackButton)
+    F.ReskinButton(DetailsFrame.AbandonButton)
+    F.ReskinButton(DetailsFrame.ShareButton)
+    F.ReskinButton(DetailsFrame.TrackButton)
+    if C.IS_NEW_PATCH_10_1 then
+        F.ReskinTrimScroll(_G.QuestMapDetailsScrollFrame.ScrollBar)
+    else
+        F.ReskinScroll(_G.QuestMapDetailsScrollFrame.ScrollBar)
+    end
 
     DetailsFrame.AbandonButton:ClearAllPoints()
     DetailsFrame.AbandonButton:SetPoint('BOTTOMLEFT', DetailsFrame, -1, 0)
@@ -134,18 +144,22 @@ tinsert(C.BlizzThemes, function()
     -- Complete quest frame
     F.StripTextures(CompleteQuestFrame)
     F.StripTextures(CompleteQuestFrame.CompleteButton)
-    F.Reskin(CompleteQuestFrame.CompleteButton)
+    F.ReskinButton(CompleteQuestFrame.CompleteButton)
 
     -- [[ Quest log popup detail frame ]]
 
     local QuestLogPopupDetailFrame = _G.QuestLogPopupDetailFrame
 
     F.ReskinPortraitFrame(QuestLogPopupDetailFrame)
-    F.ReskinScroll(_G.QuestLogPopupDetailFrameScrollFrameScrollBar)
-    F.Reskin(QuestLogPopupDetailFrame.AbandonButton)
-    F.Reskin(QuestLogPopupDetailFrame.TrackButton)
-    F.Reskin(QuestLogPopupDetailFrame.ShareButton)
+    F.ReskinButton(QuestLogPopupDetailFrame.AbandonButton)
+    F.ReskinButton(QuestLogPopupDetailFrame.TrackButton)
+    F.ReskinButton(QuestLogPopupDetailFrame.ShareButton)
     QuestLogPopupDetailFrame.SealMaterialBG:SetAlpha(0)
+    if C.IS_NEW_PATCH_10_1 then
+        F.ReskinTrimScroll(_G.QuestLogPopupDetailFrameScrollFrame.ScrollBar)
+    else
+        F.ReskinScroll(_G.QuestLogPopupDetailFrameScrollFrameScrollBar)
+    end
 
     -- Show map button
 
@@ -162,7 +176,7 @@ tinsert(C.BlizzThemes, function()
     ShowMapButton:ClearAllPoints()
     ShowMapButton:SetPoint('TOPRIGHT', QuestLogPopupDetailFrame, -30, -25)
 
-    F.Reskin(ShowMapButton)
+    F.ReskinButton(ShowMapButton)
 
     ShowMapButton:HookScript('OnEnter', function(self)
         self.Text:SetTextColor(1, 1, 1)
@@ -187,7 +201,7 @@ tinsert(C.BlizzThemes, function()
     hooksecurefunc(_G.QuestSessionManager, 'NotifyDialogShow', ReskinSessionDialog)
 
     local executeSessionCommand = sessionManagement.ExecuteSessionCommand
-    F.Reskin(executeSessionCommand)
+    F.ReskinButton(executeSessionCommand)
 
     local icon = executeSessionCommand:CreateTexture(nil, 'ARTWORK')
     icon:SetInside()

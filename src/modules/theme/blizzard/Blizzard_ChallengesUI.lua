@@ -54,7 +54,7 @@ C.Themes['Blizzard_ChallengesUI'] = function()
     local keystone = _G.ChallengesKeystoneFrame
     F.SetBD(keystone)
     F.ReskinClose(keystone.CloseButton)
-    F.Reskin(keystone.StartButton)
+    F.ReskinButton(keystone.StartButton)
 
     hooksecurefunc(keystone, 'Reset', function(self)
         self:GetRegions():SetAlpha(0)
@@ -65,7 +65,7 @@ C.Themes['Blizzard_ChallengesUI'] = function()
 
     -- New season
     local noticeFrame = _G.ChallengesFrame.SeasonChangeNoticeFrame
-    F.Reskin(noticeFrame.Leave)
+    F.ReskinButton(noticeFrame.Leave)
     noticeFrame.Leave.__bg:SetFrameLevel(noticeFrame:GetFrameLevel() + 1)
     noticeFrame.NewSeason:SetTextColor(1, 0.8, 0)
     noticeFrame.SeasonDescription:SetTextColor(1, 1, 1)

@@ -153,4 +153,8 @@ function ACTIONBAR:RemoveBlizzStuff()
 
     -- Update token panel
     F:RegisterEvent('CURRENCY_DISPLAY_UPDATE', updateTokenVisibility)
+
+    -- Hide blizzard expbar
+    _G.StatusTrackingBarManager:UnregisterAllEvents()
+    _G.StatusTrackingBarManager:Hide()
 end

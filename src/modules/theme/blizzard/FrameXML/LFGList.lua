@@ -42,8 +42,8 @@ tinsert(C.BlizzThemes, function()
 
     local categorySelection = LFGListFrame.CategorySelection
 
-    F.Reskin(categorySelection.FindGroupButton)
-    F.Reskin(categorySelection.StartGroupButton)
+    F.ReskinButton(categorySelection.FindGroupButton)
+    F.ReskinButton(categorySelection.StartGroupButton)
     categorySelection.Inset:Hide()
     categorySelection.CategoryButtons[1]:SetNormalFontObject(_G.GameFontNormal)
 
@@ -61,7 +61,7 @@ tinsert(C.BlizzThemes, function()
     hooksecurefunc('LFGListSearchEntry_Update', function(self)
         local cancelButton = self.CancelButton
         if not cancelButton.styled then
-            F.Reskin(cancelButton)
+            F.ReskinButton(cancelButton)
             cancelButton.styled = true
         end
     end)
@@ -78,13 +78,11 @@ tinsert(C.BlizzThemes, function()
 
     local searchPanel = LFGListFrame.SearchPanel
 
-    F.Reskin(searchPanel.RefreshButton)
-    F.Reskin(searchPanel.BackButton)
-    F.Reskin(searchPanel.BackToGroupButton)
-    F.Reskin(searchPanel.SignUpButton)
-    F.Reskin(searchPanel.ScrollBox.StartGroupButton)
-    F.ReskinTrimScroll(searchPanel.ScrollBar)
-    F.ReskinEditBox(searchPanel.SearchBox)
+    F.ReskinButton(searchPanel.RefreshButton)
+    F.ReskinButton(searchPanel.BackButton)
+    F.ReskinButton(searchPanel.BackToGroupButton)
+    F.ReskinButton(searchPanel.SignUpButton)
+    F.ReskinEditbox(searchPanel.SearchBox)
     F.ReskinFilterButton(searchPanel.FilterButton)
 
     searchPanel.RefreshButton:SetSize(24, 24)
@@ -129,12 +127,20 @@ tinsert(C.BlizzThemes, function()
     local function skinCreateButton(button)
         local child = button:GetChildren()
         if not child.styled and child:IsObjectType('Button') then
-            F.Reskin(child)
+            F.ReskinButton(child)
             child.styled = true
         end
     end
 
+    local delayStyled -- otherwise it taints while listing
     hooksecurefunc(searchPanel.ScrollBox, 'Update', function(self)
+        if not delayStyled then
+            F.ReskinButton(self.StartGroupButton, true)
+            F.ReskinTrimScroll(searchPanel.ScrollBar)
+
+            delayStyled = true
+        end
+
         self:ForEachFrame(skinCreateButton)
     end)
 
@@ -175,11 +181,11 @@ tinsert(C.BlizzThemes, function()
         prevHeader = header
     end
 
-    F.Reskin(applicationViewer.RefreshButton)
-    F.Reskin(applicationViewer.RemoveEntryButton)
-    F.Reskin(applicationViewer.EditButton)
-    F.Reskin(applicationViewer.BrowseGroupsButton)
-    F.ReskinCheckButton(applicationViewer.AutoAcceptButton)
+    F.ReskinButton(applicationViewer.RefreshButton)
+    F.ReskinButton(applicationViewer.RemoveEntryButton)
+    F.ReskinButton(applicationViewer.EditButton)
+    F.ReskinButton(applicationViewer.BrowseGroupsButton)
+    F.ReskinCheckbox(applicationViewer.AutoAcceptButton)
     F.ReskinTrimScroll(applicationViewer.ScrollBar)
 
     applicationViewer.RefreshButton:SetSize(24, 24)
@@ -187,9 +193,9 @@ tinsert(C.BlizzThemes, function()
 
     hooksecurefunc('LFGListApplicationViewer_UpdateApplicant', function(button)
         if not button.styled then
-            F.Reskin(button.DeclineButton)
-            F.Reskin(button.InviteButton)
-            F.Reskin(button.InviteButtonSmall)
+            F.ReskinButton(button.DeclineButton)
+            F.ReskinButton(button.InviteButton)
+            F.ReskinButton(button.InviteButtonSmall)
 
             button.styled = true
         end
@@ -214,27 +220,27 @@ tinsert(C.BlizzThemes, function()
     local entryCreation = LFGListFrame.EntryCreation
     entryCreation.Inset:Hide()
     F.StripTextures(entryCreation.Description)
-    F.Reskin(entryCreation.ListGroupButton)
-    F.Reskin(entryCreation.CancelButton)
-    F.ReskinEditBox(entryCreation.Description)
-    F.ReskinEditBox(entryCreation.Name)
-    F.ReskinEditBox(entryCreation.ItemLevel.EditBox)
-    F.ReskinEditBox(entryCreation.VoiceChat.EditBox)
-    F.ReskinDropDown(entryCreation.GroupDropDown)
-    F.ReskinDropDown(entryCreation.ActivityDropDown)
-    F.ReskinDropDown(entryCreation.PlayStyleDropdown)
-    F.ReskinCheckButton(entryCreation.MythicPlusRating.CheckButton)
-    F.ReskinEditBox(entryCreation.MythicPlusRating.EditBox)
-    F.ReskinCheckButton(entryCreation.PVPRating.CheckButton)
-    F.ReskinEditBox(entryCreation.PVPRating.EditBox)
+    F.ReskinButton(entryCreation.ListGroupButton)
+    F.ReskinButton(entryCreation.CancelButton)
+    F.ReskinEditbox(entryCreation.Description)
+    F.ReskinEditbox(entryCreation.Name)
+    F.ReskinEditbox(entryCreation.ItemLevel.EditBox)
+    F.ReskinEditbox(entryCreation.VoiceChat.EditBox)
+    F.ReskinDropdown(entryCreation.GroupDropDown)
+    F.ReskinDropdown(entryCreation.ActivityDropDown)
+    F.ReskinDropdown(entryCreation.PlayStyleDropdown)
+    F.ReskinCheckbox(entryCreation.MythicPlusRating.CheckButton)
+    F.ReskinEditbox(entryCreation.MythicPlusRating.EditBox)
+    F.ReskinCheckbox(entryCreation.PVPRating.CheckButton)
+    F.ReskinEditbox(entryCreation.PVPRating.EditBox)
     if entryCreation.PvpItemLevel then -- I do believe blizz will rename Pvp into PvP in future build
-        F.ReskinCheckButton(entryCreation.PvpItemLevel.CheckButton)
-        F.ReskinEditBox(entryCreation.PvpItemLevel.EditBox)
+        F.ReskinCheckbox(entryCreation.PvpItemLevel.CheckButton)
+        F.ReskinEditbox(entryCreation.PvpItemLevel.EditBox)
     end
-    F.ReskinCheckButton(entryCreation.ItemLevel.CheckButton)
-    F.ReskinCheckButton(entryCreation.VoiceChat.CheckButton)
-    F.ReskinCheckButton(entryCreation.PrivateGroup.CheckButton)
-    F.ReskinCheckButton(entryCreation.CrossFactionGroup.CheckButton)
+    F.ReskinCheckbox(entryCreation.ItemLevel.CheckButton)
+    F.ReskinCheckbox(entryCreation.VoiceChat.CheckButton)
+    F.ReskinCheckbox(entryCreation.PrivateGroup.CheckButton)
+    F.ReskinCheckbox(entryCreation.CrossFactionGroup.CheckButton)
 
     -- [[ Role count ]]
 
@@ -271,9 +277,9 @@ tinsert(C.BlizzThemes, function()
     local finderDialog = activityFinder.Dialog
     F.StripTextures(finderDialog)
     F.SetBD(finderDialog)
-    F.Reskin(finderDialog.SelectButton)
-    F.Reskin(finderDialog.CancelButton)
-    F.ReskinEditBox(finderDialog.EntryBox)
+    F.ReskinButton(finderDialog.SelectButton)
+    F.ReskinButton(finderDialog.CancelButton)
+    F.ReskinEditbox(finderDialog.EntryBox)
     F.ReskinTrimScroll(finderDialog.ScrollBar)
 
     -- [[ Application dialog ]]
@@ -284,8 +290,8 @@ tinsert(C.BlizzThemes, function()
     F.SetBD(LFGListApplicationDialog)
     F.StripTextures(LFGListApplicationDialog.Description)
     F.CreateBDFrame(LFGListApplicationDialog.Description, 0.25)
-    F.Reskin(LFGListApplicationDialog.SignUpButton)
-    F.Reskin(LFGListApplicationDialog.CancelButton)
+    F.ReskinButton(LFGListApplicationDialog.SignUpButton)
+    F.ReskinButton(LFGListApplicationDialog.CancelButton)
 
     -- [[ Invite dialog ]]
 
@@ -293,9 +299,9 @@ tinsert(C.BlizzThemes, function()
 
     F.StripTextures(LFGListInviteDialog)
     F.SetBD(LFGListInviteDialog)
-    F.Reskin(LFGListInviteDialog.AcceptButton)
-    F.Reskin(LFGListInviteDialog.DeclineButton)
-    F.Reskin(LFGListInviteDialog.AcknowledgeButton)
+    F.ReskinButton(LFGListInviteDialog.AcceptButton)
+    F.ReskinButton(LFGListInviteDialog.DeclineButton)
+    F.ReskinButton(LFGListInviteDialog.AcknowledgeButton)
 
     local roleIcon = LFGListInviteDialog.RoleIcon
     roleIcon:SetTexture(C.Assets.Textures.RoleLfgIcons)

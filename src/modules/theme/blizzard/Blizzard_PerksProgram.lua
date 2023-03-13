@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 local function reskinCustomizeButton(button)
-    F.Reskin(button)
+    F.ReskinButton(button)
     button.__bg:SetInside(nil, 5, 5)
 end
 
@@ -33,8 +33,8 @@ C.Themes['Blizzard_PerksProgram'] = function()
         reskinCustomizeButton(footerFrame.PurchaseButton)
         reskinCustomizeButton(footerFrame.RefundButton)
 
-        F.ReskinCheckButton(footerFrame.TogglePlayerPreview)
-        F.ReskinCheckButton(footerFrame.ToggleHideArmor)
+        F.ReskinCheckbox(footerFrame.TogglePlayerPreview)
+        F.ReskinCheckbox(footerFrame.ToggleHideArmor)
 
         reskinCustomizeButton(footerFrame.RotateButtonContainer.RotateLeftButton)
         reskinCustomizeButton(footerFrame.RotateButtonContainer.RotateRightButton)
@@ -50,7 +50,7 @@ C.Themes['Blizzard_PerksProgram'] = function()
         local productsContainer = productsFrame.ProductsScrollBoxContainer
         F.StripTextures(productsContainer)
         F.SetBD(productsContainer)
-        F.ReskinTrimScroll(productsContainer.ScrollBar, true)
+        F.ReskinTrimScroll(productsContainer.ScrollBar)
         F.StripTextures(productsContainer.PerksProgramHoldFrame)
         F.CreateBDFrame(productsContainer.PerksProgramHoldFrame, 0.25):SetInside(nil, 3, 3)
 

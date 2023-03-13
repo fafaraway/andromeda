@@ -13,7 +13,7 @@ local function ReskinOptionButton(self)
     end
 
     F.StripTextures(self, true)
-    F.Reskin(self, true)
+    F.ReskinButton(self, true)
 end
 
 local function ReskinSpellWidget(spell)
@@ -48,7 +48,7 @@ C.Themes['Blizzard_PlayerChoice'] = function()
             self.bg = F.SetBD(self)
 
             if _G.GenericPlayerChoiceToggleButton then
-                F.Reskin(_G.GenericPlayerChoiceToggleButton)
+                F.ReskinButton(_G.GenericPlayerChoiceToggleButton)
             end
         end
 

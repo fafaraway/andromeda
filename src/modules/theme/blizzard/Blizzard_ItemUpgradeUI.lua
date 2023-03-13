@@ -29,8 +29,8 @@ C.Themes['Blizzard_ItemUpgradeUI'] = function()
     itemButton.bg = F.ReskinIcon(itemButton.icon)
     F.ReskinIconBorder(itemButton.IconBorder)
 
-    F.ReskinDropDown(ItemUpgradeFrame.ItemInfo.Dropdown)
-    F.Reskin(ItemUpgradeFrame.UpgradeButton)
+    F.ReskinDropdown(ItemUpgradeFrame.ItemInfo.Dropdown)
+    F.ReskinButton(ItemUpgradeFrame.UpgradeButton)
     _G.ItemUpgradeFramePlayerCurrenciesBorder:Hide()
 
     F.CreateBDFrame(_G.ItemUpgradeFrameLeftItemPreviewFrame, 0.25)

@@ -6,6 +6,7 @@ local function onEvent(_, isLogin, isReload)
     if isLogin or isReload then
         F.HideObject(_G.BuffFrame)
         F.HideObject(_G.DebuffFrame)
+        _G.BuffFrame.numHideableBuffs = 0 -- IS_NEW_PATCH_10_1
     end
 end
 

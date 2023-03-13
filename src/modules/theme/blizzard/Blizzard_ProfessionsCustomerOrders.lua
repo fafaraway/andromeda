@@ -57,7 +57,7 @@ local function reskinBrowseOrders(frame)
 end
 
 local function reskinMoneyInput(box)
-    F.ReskinEditBox(box)
+    F.ReskinEditbox(box)
     box.__bg:SetPoint('TOPLEFT', 0, -3)
     box.__bg:SetPoint('BOTTOMRIGHT', 0, 3)
 end
@@ -72,9 +72,23 @@ local function reskinContainer(container)
 
     local box = container.EditBox
     box:DisableDrawLayer('BACKGROUND')
-    F.ReskinEditBox(box)
+    F.ReskinEditbox(box)
     F.ReskinArrow(box.DecrementButton, 'left')
     F.ReskinArrow(box.IncrementButton, 'right')
+end
+
+local function reskinOrderIcon(child)
+    if child.styled then
+        return
+    end
+
+    local button = child:GetChildren()
+    if button and button.IconBorder then
+        button.bg = F.ReskinIcon(button.Icon)
+        F.ReskinIconBorder(button.IconBorder)
+    end
+
+    child.styled = true
 end
 
 C.Themes['Blizzard_ProfessionsCustomerOrders'] = function()
@@ -89,17 +103,17 @@ C.Themes['Blizzard_ProfessionsCustomerOrders'] = function()
     F.StripTextures(frame.MoneyFrameInset)
 
     local searchBar = frame.BrowseOrders.SearchBar
-    F.Reskin(searchBar.FavoritesSearchButton)
+    F.ReskinButton(searchBar.FavoritesSearchButton)
     searchBar.FavoritesSearchButton:SetSize(22, 22)
-    F.ReskinEditBox(searchBar.SearchBox)
-    F.Reskin(searchBar.SearchButton)
+    F.ReskinEditbox(searchBar.SearchBox)
+    F.ReskinButton(searchBar.SearchButton)
 
     local filterButton = searchBar.FilterButton
     F.ReskinFilterButton(filterButton)
     F.ReskinFilterReset(filterButton.ClearFiltersButton)
 
     F.StripTextures(frame.BrowseOrders.CategoryList)
-    F.ReskinTrimScroll(frame.BrowseOrders.CategoryList.ScrollBar, true)
+    F.ReskinTrimScroll(frame.BrowseOrders.CategoryList.ScrollBar)
 
     hooksecurefunc(frame.BrowseOrders.CategoryList.ScrollBox, 'Update', function(self)
         for i = 1, self.ScrollTarget:GetNumChildren() do
@@ -116,15 +130,15 @@ C.Themes['Blizzard_ProfessionsCustomerOrders'] = function()
     local recipeList = frame.BrowseOrders.RecipeList
     F.StripTextures(recipeList)
     F.CreateBDFrame(recipeList.ScrollBox, 0.25):SetInside()
-    F.ReskinTrimScroll(recipeList.ScrollBar, true)
+    F.ReskinTrimScroll(recipeList.ScrollBar)
 
     hooksecurefunc(frame.BrowseOrders, 'SetupTable', reskinBrowseOrders)
     hooksecurefunc(frame.BrowseOrders, 'StartSearch', reskinListIcon)
 
     -- Form
-    F.Reskin(frame.Form.BackButton)
-    F.ReskinCheckButton(frame.Form.AllocateBestQualityCheckBox)
-    F.ReskinCheckButton(frame.Form.TrackRecipeCheckBox.Checkbox)
+    F.ReskinButton(frame.Form.BackButton)
+    F.ReskinCheckbox(frame.Form.AllocateBestQualityCheckBox)
+    F.ReskinCheckbox(frame.Form.TrackRecipeCheckBox.Checkbox)
     frame.Form.RecipeHeader:Hide() -- needs review
     F.CreateBDFrame(frame.Form.RecipeHeader, 0.25)
     F.StripTextures(frame.Form.LeftPanelBackground)
@@ -139,11 +153,11 @@ C.Themes['Blizzard_ProfessionsCustomerOrders'] = function()
     hl:SetColorTexture(1, 1, 1, 0.25)
     hl:SetInside(itemButton.bg)
 
-    F.ReskinEditBox(frame.Form.OrderRecipientTarget)
+    F.ReskinEditbox(frame.Form.OrderRecipientTarget)
     frame.Form.OrderRecipientTarget.__bg:SetPoint('TOPLEFT', -8, -2)
     frame.Form.OrderRecipientTarget.__bg:SetPoint('BOTTOMRIGHT', 0, 2)
-    F.ReskinDropDown(frame.Form.OrderRecipientDropDown)
-    F.ReskinDropDown(frame.Form.MinimumQuality.DropDown)
+    F.ReskinDropdown(frame.Form.OrderRecipientDropDown)
+    F.ReskinDropdown(frame.Form.MinimumQuality.DropDown)
 
     local paymentContainer = frame.Form.PaymentContainer
     F.StripTextures(paymentContainer.NoteEditBox)
@@ -153,9 +167,9 @@ C.Themes['Blizzard_ProfessionsCustomerOrders'] = function()
 
     reskinMoneyInput(paymentContainer.TipMoneyInputFrame.GoldBox)
     reskinMoneyInput(paymentContainer.TipMoneyInputFrame.SilverBox)
-    F.ReskinDropDown(paymentContainer.DurationDropDown)
-    F.Reskin(paymentContainer.ListOrderButton)
-    F.Reskin(paymentContainer.CancelOrderButton)
+    F.ReskinDropdown(paymentContainer.DurationDropDown)
+    F.ReskinButton(paymentContainer.ListOrderButton)
+    F.ReskinButton(paymentContainer.CancelOrderButton)
 
     local viewButton = paymentContainer.ViewListingsButton
     viewButton:SetAlpha(0)
@@ -168,8 +182,8 @@ C.Themes['Blizzard_ProfessionsCustomerOrders'] = function()
     local current = frame.Form.CurrentListings
     F.StripTextures(current)
     F.SetBD(current)
-    F.Reskin(current.CloseButton)
-    F.ReskinTrimScroll(current.OrderList.ScrollBar, true)
+    F.ReskinButton(current.CloseButton)
+    F.ReskinTrimScroll(current.OrderList.ScrollBar)
     reskinListHeader(current.OrderList.HeaderContainer)
     F.StripTextures(current.OrderList)
     current:ClearAllPoints()
@@ -189,7 +203,7 @@ C.Themes['Blizzard_ProfessionsCustomerOrders'] = function()
                 if button.SlotBackground then
                     button.SlotBackground:Hide()
                 end
-                F.ReskinCheckButton(slot.Checkbox)
+                F.ReskinCheckbox(slot.Checkbox)
                 button.HighlightTexture:SetColorTexture(1, 0.8, 0, 0.5)
                 button.HighlightTexture:SetInside(button.bg)
 
@@ -202,19 +216,22 @@ C.Themes['Blizzard_ProfessionsCustomerOrders'] = function()
     F.StripTextures(qualityDialog)
     F.SetBD(qualityDialog)
     F.ReskinClose(qualityDialog.ClosePanelButton)
-    F.Reskin(qualityDialog.AcceptButton)
-    F.Reskin(qualityDialog.CancelButton)
+    F.ReskinButton(qualityDialog.AcceptButton)
+    F.ReskinButton(qualityDialog.CancelButton)
 
     for i = 1, 3 do
         reskinContainer(qualityDialog['Container' .. i])
     end
 
     -- Orders
-    F.Reskin(frame.MyOrdersPage.RefreshButton)
+    F.ReskinButton(frame.MyOrdersPage.RefreshButton)
     frame.MyOrdersPage.RefreshButton.__bg:SetInside(nil, 3, 3)
-    reskinListHeader(frame.MyOrdersPage.OrderList.HeaderContainer)
-    F.ReskinTrimScroll(frame.MyOrdersPage.OrderList.ScrollBar, true)
-
     F.StripTextures(frame.MyOrdersPage.OrderList)
     F.CreateBDFrame(frame.MyOrdersPage.OrderList, 0.25)
+    reskinListHeader(frame.MyOrdersPage.OrderList.HeaderContainer)
+    F.ReskinTrimScroll(frame.MyOrdersPage.OrderList.ScrollBar)
+
+    hooksecurefunc(frame.MyOrdersPage.OrderList.ScrollBox, 'Update', function(self)
+        self:ForEachFrame(reskinOrderIcon)
+    end)
 end

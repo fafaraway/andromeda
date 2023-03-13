@@ -197,7 +197,8 @@ function BLIZZARD:ShowLeaderOverallScore()
     if searchResultInfo then
         local activityInfo = C_LFGList.GetActivityInfoTable(searchResultInfo.activityID, nil, searchResultInfo.isWarMode)
         if activityInfo then
-            local showScore = activityInfo.isMythicPlusActivity and searchResultInfo.leaderOverallDungeonScore or activityInfo.isRatedPvpActivity and searchResultInfo.leaderPvpRatingInfo and searchResultInfo.leaderPvpRatingInfo.rating
+            local showScore = activityInfo.isMythicPlusActivity and searchResultInfo.leaderOverallDungeonScore
+                or activityInfo.isRatedPvpActivity and searchResultInfo.leaderPvpRatingInfo and searchResultInfo.leaderPvpRatingInfo.rating
             if showScore then
                 local oldName = self.ActivityName:GetText()
                 oldName = gsub(oldName, '.-' .. _G.HEADER_COLON, '') -- Tazavesh
@@ -224,7 +225,7 @@ function BLIZZARD:ShowLeaderOverallScore()
 end
 
 function BLIZZARD:AddAutoAcceptButton()
-    local bu = F.CreateCheckButton(searchPanel, true)
+    local bu = F.CreateCheckbox(searchPanel, true)
     bu:SetSize(20, 20)
     bu:SetHitRectInsets(0, -130, 0, 0)
     bu:SetPoint('RIGHT', searchPanel.RefreshButton, 'LEFT', -130, 0)
@@ -294,7 +295,7 @@ function BLIZZARD:ReplaceFindGroupButton()
     end)
 
     if _G.ANDROMEDA_ADB.ReskinBlizz then
-        F.Reskin(bu)
+        F.ReskinButton(bu)
     end
 end
 
@@ -461,7 +462,6 @@ function BLIZZARD:FixListingTaint()
         if not (activityInfo and playstyle and playstyle ~= 0 and C_LFGList.GetLfgCategoryInfo(activityInfo.categoryID).showPlaystyleDropdown) then
             return nil
         end
-
         local globalStringPrefix
         if activityInfo.isMythicPlusActivity then
             globalStringPrefix = 'GROUP_FINDER_PVE_PLAYSTYLE'
@@ -472,7 +472,6 @@ function BLIZZARD:FixListingTaint()
         elseif activityInfo.isMythicActivity then
             globalStringPrefix = 'GROUP_FINDER_PVE_MYTHICZERO_PLAYSTYLE'
         end
-
         return globalStringPrefix and _G[globalStringPrefix .. tostring(playstyle)] or nil
     end
 

@@ -296,8 +296,6 @@ function M:CreateProgressBar()
         return
     end
 
-    _G.StatusTrackingBarManager:UnregisterAllEvents()
-
     M:CreateBar()
     M:SetupScript()
     M:InitRenownLevel()

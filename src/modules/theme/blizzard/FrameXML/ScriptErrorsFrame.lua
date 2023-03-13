@@ -13,8 +13,12 @@ tinsert(C.BlizzThemes, function()
 
     F.ReskinArrow(ScriptErrorsFrame.PreviousError, 'left')
     F.ReskinArrow(ScriptErrorsFrame.NextError, 'right')
-    F.Reskin(ScriptErrorsFrame.Reload)
-    F.Reskin(ScriptErrorsFrame.Close)
-    F.ReskinScroll(_G.ScriptErrorsFrameScrollBar)
+    F.ReskinButton(ScriptErrorsFrame.Reload)
+    F.ReskinButton(ScriptErrorsFrame.Close)
+    if C.IS_NEW_PATCH_10_1 then
+        F.ReskinTrimScroll(ScriptErrorsFrame.ScrollFrame.ScrollBar)
+    else
+        F.ReskinScroll(_G.ScriptErrorsFrameScrollBar)
+    end
     F.ReskinClose(_G.ScriptErrorsFrameClose)
 end)

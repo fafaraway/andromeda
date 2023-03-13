@@ -66,29 +66,42 @@ C.CharacterSettings = {
         CombatAlert = true,
         CombatAlertScale = 0.4,
         CombatAlertSpeed = 1,
-        SoundAlert = true,
+
+
         Interrupt = true,
         Dispel = true,
-        SpellSteal = true,
-        SpellMiss = true,
+        Steal = true,
+        Miss = true,
+
         LowHealth = true,
         LowHealthThreshold = 0.3,
         LowMana = true,
         LowManaThreshold = 0.3,
-        PvPSound = true,
+
+        KillingBlow = true,
         SmartTab = true,
         EasyMark = true,
         EasyMarkKey = 1,
         EasyFocus = true,
         EasyFocusKey = 3,
         EasyFocusOnUnitframe = false,
+
         SimpleFloatingCombatText = true,
         Pet = true,
         Periodic = true,
         Merge = true,
         Incoming = true,
         Outgoing = false,
+
         CooldownPulse = true,
+        FadeInTime = 0.3,
+        FadeOutTime = 0.3,
+        MaxAlpha = 1,
+        AnimScale = 2,
+        IconSize = 24,
+        HoldTime = 0.3,
+        Threshold = 3,
+
         BuffReminder = true,
     },
     Announcement = {
@@ -625,15 +638,24 @@ C.AccountSettings = {
     UIScale = 1,
     HelpTips = {},
     GoldStatistic = {},
+
     ShadowOutline = true,
-    BackdropColor = { r = 0.1, g = 0.1, b = 0.1 },
+    ShadowColor = { r = 0, g = 0, b = 0 },
+    ShadowAlpha = 0.25,
+
+    BackdropColor = { r = 0, g = 0, b = 0 },
     BackdropAlpha = 0.55,
-    BorderColor = { r = 0.25, g = 0.25, b = 0.25 },
+
+    BorderColor = { r = 0, g = 0, b = 0 },
+    BorderAlpha = 1,
+
     ButtonBackdropColor = { r = 0.1, g = 0.1, b = 0.1 },
     ButtonBackdropAlpha = 0.25,
+
     ButtonHoverAnimation = true,
     WidgetHighlightClassColor = true,
     WidgetHighlightColor = { r = 1, g = 1, b = 1 },
+
     GuildSortBy = 1,
     GuildSortOrder = true,
     GradientStyle = true,
@@ -674,6 +696,8 @@ C.AccountSettings = {
     MajorSpellsList = {},
     PartySpellsList = {},
     AnnounceableSpellsList = {},
+
+    CooldownPulseIgnoredSpellsList = {},
 
     KeystoneInfo = {},
     ProfileIndex = {},

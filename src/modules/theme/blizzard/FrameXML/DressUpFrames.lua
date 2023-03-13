@@ -15,15 +15,15 @@ tinsert(C.BlizzThemes, function()
     local DressUpFrame = _G.DressUpFrame
 
     F.ReskinPortraitFrame(DressUpFrame)
-    F.Reskin(_G.DressUpFrameOutfitDropDown.SaveButton)
-    F.Reskin(_G.DressUpFrameCancelButton)
-    F.Reskin(_G.DressUpFrameResetButton)
+    F.ReskinButton(_G.DressUpFrameOutfitDropDown.SaveButton)
+    F.ReskinButton(_G.DressUpFrameCancelButton)
+    F.ReskinButton(_G.DressUpFrameResetButton)
     F.StripTextures(_G.DressUpFrameOutfitDropDown)
-    F.ReskinDropDown(_G.DressUpFrameOutfitDropDown)
+    F.ReskinDropdown(_G.DressUpFrameOutfitDropDown)
     F.ReskinMinMax(DressUpFrame.MaximizeMinimizeFrame)
 
-    F.Reskin(DressUpFrame.LinkButton)
-    F.Reskin(DressUpFrame.ToggleOutfitDetailsButton)
+    F.ReskinButton(DressUpFrame.LinkButton)
+    F.ReskinButton(DressUpFrame.ToggleOutfitDetailsButton)
     ResetToggleTexture(DressUpFrame.ToggleOutfitDetailsButton, 1392954) -- 70_professions_scroll_01
 
     F.StripTextures(DressUpFrame.OutfitDetailsPanel)
@@ -48,13 +48,13 @@ tinsert(C.BlizzThemes, function()
     DressUpFrame.ModelBackground:Hide()
     F.CreateBDFrame(DressUpFrame.ModelScene)
 
-    F.ReskinCheckButton(_G.TransmogAndMountDressupFrame.ShowMountCheckButton)
+    F.ReskinCheckbox(_G.TransmogAndMountDressupFrame.ShowMountCheckButton)
 
     -- SideDressUp
 
     F.StripTextures(_G.SideDressUpFrame, 0)
     F.SetBD(_G.SideDressUpFrame)
-    F.Reskin(_G.SideDressUpFrame.ResetButton)
+    F.ReskinButton(_G.SideDressUpFrame.ResetButton)
     F.ReskinClose(_G.SideDressUpFrameCloseButton)
 
     _G.SideDressUpFrame:HookScript('OnShow', function(self)
@@ -86,7 +86,7 @@ tinsert(C.BlizzThemes, function()
     local ebbg = F.CreateBDFrame(_G.WardrobeOutfitEditFrame.EditBox, 0.25, true)
     ebbg:SetPoint('TOPLEFT', -5, -3)
     ebbg:SetPoint('BOTTOMRIGHT', 5, 3)
-    F.Reskin(_G.WardrobeOutfitEditFrame.AcceptButton)
-    F.Reskin(_G.WardrobeOutfitEditFrame.CancelButton)
-    F.Reskin(_G.WardrobeOutfitEditFrame.DeleteButton)
+    F.ReskinButton(_G.WardrobeOutfitEditFrame.AcceptButton)
+    F.ReskinButton(_G.WardrobeOutfitEditFrame.CancelButton)
+    F.ReskinButton(_G.WardrobeOutfitEditFrame.DeleteButton)
 end)

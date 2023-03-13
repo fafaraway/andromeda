@@ -112,7 +112,7 @@ function GUI:CreateProfileBar(parent, index)
         icon:SetScript('OnLeave', F.HideTooltip)
     end
 
-    local note = F.CreateEditBox(bar, 180, 30)
+    local note = F.CreateEditbox(bar, 180, 30)
     note:SetPoint('LEFT', icon, 'RIGHT', 5, 0)
     note:SetMaxLetters(20)
     if index == 1 then
@@ -266,7 +266,7 @@ function GUI:CreateProfileFrame(parent)
     end)
     F.AddTooltip(export, 'ANCHOR_TOP', L['Export settings.'])
 
-    local delete = F.CreateEditBox(parent, 205, 24)
+    local delete = F.CreateEditbox(parent, 205, 24)
     delete:SetPoint('BOTTOMLEFT', import, 'TOPLEFT', 0, 10)
     delete:HookScript('OnEnterPressed', GUI.Delete_OnEnter)
     delete:HookScript('OnEscapePressed', GUI.Delete_OnEscape)

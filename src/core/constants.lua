@@ -1,7 +1,8 @@
 local F, C, L = unpack(select(2, ...))
 
 do
-    C.IS_NEW_PATCH = select(4, GetBuildInfo()) >= 100007
+    C.IS_NEW_PATCH = select(4, GetBuildInfo()) >= 100007 -- 10.0.7
+    C.IS_NEW_PATCH_10_1 = select(4, GetBuildInfo()) >= 100100 -- 10.1.0
     C.MY_REALM = GetRealmName()
     C.MY_CLASS = select(2, UnitClass('player'))
     C.MY_NAME = UnitName('player')
@@ -39,7 +40,12 @@ do
         end
 
         local classColor = _G.ANDROMEDA_ADB.WidgetHighlightClassColor
-        local newColor = _G.ANDROMEDA_ADB.WidgetHighlightColor
+        local newColor
+        if classColor then
+            newColor = _G.ANDROMEDA_ADB.WidgetHighlightColor
+        else
+            newColor = C.ClassColors[C.MY_CLASS]
+        end
 
         if classColor then
             C.r = C.ClassColors[C.MY_CLASS].r

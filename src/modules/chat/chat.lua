@@ -219,8 +219,10 @@ local function setupChatFrame(frame)
     CHAT:SetupSizeAndPosition()
 
     F.HideObject(frame.buttonFrame)
-    F.HideObject(frame.ScrollBar)
-    F.HideObject(frame.ScrollToBottomButton)
+    if not C.IS_NEW_PATCH_10_1 then
+        F.HideObject(frame.ScrollBar)
+        F.HideObject(frame.ScrollToBottomButton)
+    end
 
     F.HideObject(_G.ChatFrameMenuButton)
     F.HideObject(_G.QuickJoinToastButton)
@@ -643,7 +645,18 @@ local function fixLanguageFilterSideEffects()
     sideEffectFixed = true
 
     local outline = _G.ANDROMEDA_ADB.FontOutline
-    F.CreateFS(_G.HelpFrame, C.Assets.Fonts.Bold, 14, outline or nil, L['You need to uncheck language filter in GUI and reload UI to get access into CN BattleNet support.'], 'YELLOW', outline and 'NONE' or 'THICK', 'TOP', 0, 30)
+    F.CreateFS(
+        _G.HelpFrame,
+        C.Assets.Fonts.Bold,
+        14,
+        outline or nil,
+        L['You need to uncheck language filter in GUI and reload UI to get access into CN BattleNet support.'],
+        'YELLOW',
+        outline and 'NONE' or 'THICK',
+        'TOP',
+        0,
+        30
+    )
 
     local OLD_GetFriendGameAccountInfo = C_BattleNet.GetFriendGameAccountInfo
     function C_BattleNet.GetFriendGameAccountInfo(...)

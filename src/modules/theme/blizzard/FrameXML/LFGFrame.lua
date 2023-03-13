@@ -82,33 +82,40 @@ tinsert(C.BlizzThemes, function()
     -- LFDFrame
     hooksecurefunc('LFGDungeonListButton_SetDungeon', function(button)
         if not button.expandOrCollapseButton.styled then
-            F.ReskinCheckButton(button.enableButton)
+            F.ReskinCheckbox(button.enableButton)
             F.ReskinCollapse(button.expandOrCollapseButton)
 
             button.expandOrCollapseButton.styled = true
         end
 
         button.enableButton:GetCheckedTexture():SetAtlas('checkmark-minimal')
+        local disabledTexture = button.enableButton:GetDisabledCheckedTexture()
+        disabledTexture:SetAtlas('checkmark-minimal')
+        disabledTexture:SetDesaturated(true)
     end)
 
     F.StripTextures(_G.LFDParentFrame)
     _G.LFDQueueFrameBackground:Hide()
     F.SetBD(_G.LFDRoleCheckPopup)
     _G.LFDRoleCheckPopup.Border:Hide()
-    F.Reskin(_G.LFDRoleCheckPopupAcceptButton)
-    F.Reskin(_G.LFDRoleCheckPopupDeclineButton)
+    F.ReskinButton(_G.LFDRoleCheckPopupAcceptButton)
+    F.ReskinButton(_G.LFDRoleCheckPopupDeclineButton)
     F.ReskinTrimScroll(_G.LFDQueueFrameSpecific.ScrollBar)
-    F.StripTextures(_G.LFDQueueFrameRandomScrollFrameScrollBar, 0)
-    F.ReskinScroll(_G.LFDQueueFrameRandomScrollFrameScrollBar)
-    F.ReskinDropDown(_G.LFDQueueFrameTypeDropDown)
-    F.Reskin(_G.LFDQueueFrameFindGroupButton)
-    F.Reskin(_G.LFDQueueFramePartyBackfillBackfillButton)
-    F.Reskin(_G.LFDQueueFramePartyBackfillNoBackfillButton)
-    F.Reskin(_G.LFDQueueFrameNoLFDWhileLFRLeaveQueueButton)
-    styleRewardButton(_G.LFDQueueFrameRandomScrollFrameChildFrameMoneyReward)
+    if C.IS_NEW_PATCH_10_1 then
+        F.ReskinTrimScroll(_G.LFDQueueFrameRandomScrollFrame.ScrollBar)
+    else
+        F.StripTextures(_G.LFDQueueFrameRandomScrollFrameScrollBar, 0)
+        F.ReskinScroll(_G.LFDQueueFrameRandomScrollFrameScrollBar)
 
-    _G.LFDQueueFrameRandomScrollFrame:SetWidth(_G.LFDQueueFrameRandomScrollFrame:GetWidth() + 1)
-    _G.LFDQueueFrameRandomScrollFrameScrollBarScrollDownButton:SetPoint('TOP', _G.LFDQueueFrameRandomScrollFrameScrollBar, 'BOTTOM', 0, 2)
+        _G.LFDQueueFrameRandomScrollFrame:SetWidth(_G.LFDQueueFrameRandomScrollFrame:GetWidth() + 1)
+        _G.LFDQueueFrameRandomScrollFrameScrollBarScrollDownButton:SetPoint('TOP', LFDQueueFrameRandomScrollFrameScrollBar, 'BOTTOM', 0, 2)
+    end
+    F.ReskinDropdown(_G.LFDQueueFrameTypeDropDown)
+    F.ReskinButton(_G.LFDQueueFrameFindGroupButton)
+    F.ReskinButton(_G.LFDQueueFramePartyBackfillBackfillButton)
+    F.ReskinButton(_G.LFDQueueFramePartyBackfillNoBackfillButton)
+    F.ReskinButton(_G.LFDQueueFrameNoLFDWhileLFRLeaveQueueButton)
+    styleRewardButton(_G.LFDQueueFrameRandomScrollFrameChildFrameMoneyReward)
 
     -- LFGFrame
     hooksecurefunc('LFGRewardsFrame_SetItemButton', function(parentFrame, _, index)
@@ -177,10 +184,10 @@ tinsert(C.BlizzThemes, function()
     F.StripTextures(_G.LFGDungeonReadyStatus)
     F.SetBD(_G.LFGDungeonReadyStatus)
 
-    F.Reskin(_G.LFGDungeonReadyDialogEnterDungeonButton)
-    F.Reskin(_G.LFGDungeonReadyDialogLeaveQueueButton)
-    F.Reskin(_G.LFGInvitePopupAcceptButton)
-    F.Reskin(_G.LFGInvitePopupDeclineButton)
+    F.ReskinButton(_G.LFGDungeonReadyDialogEnterDungeonButton)
+    F.ReskinButton(_G.LFGDungeonReadyDialogLeaveQueueButton)
+    F.ReskinButton(_G.LFGInvitePopupAcceptButton)
+    F.ReskinButton(_G.LFGInvitePopupDeclineButton)
     F.ReskinClose(_G.LFGDungeonReadyDialogCloseButton)
     F.ReskinClose(_G.LFGDungeonReadyStatusCloseButton)
 
@@ -275,11 +282,15 @@ tinsert(C.BlizzThemes, function()
     -- this fixes right border of second reward being cut off
     _G.RaidFinderQueueFrameScrollFrame:SetWidth(_G.RaidFinderQueueFrameScrollFrame:GetWidth() + 1)
 
-    F.ReskinScroll(_G.RaidFinderQueueFrameScrollFrameScrollBar)
-    F.ReskinDropDown(_G.RaidFinderQueueFrameSelectionDropDown)
-    F.Reskin(_G.RaidFinderFrameFindRaidButton)
-    F.Reskin(_G.RaidFinderQueueFrameIneligibleFrameLeaveQueueButton)
-    F.Reskin(_G.RaidFinderQueueFramePartyBackfillBackfillButton)
-    F.Reskin(_G.RaidFinderQueueFramePartyBackfillNoBackfillButton)
+    if C.IS_NEW_PATCH_10_1 then
+        F.ReskinTrimScroll(_G.RaidFinderQueueFrameScrollFrame.ScrollBar)
+    else
+        F.ReskinScroll(_G.RaidFinderQueueFrameScrollFrameScrollBar)
+    end
+    F.ReskinDropdown(_G.RaidFinderQueueFrameSelectionDropDown)
+    F.ReskinButton(_G.RaidFinderFrameFindRaidButton)
+    F.ReskinButton(_G.RaidFinderQueueFrameIneligibleFrameLeaveQueueButton)
+    F.ReskinButton(_G.RaidFinderQueueFramePartyBackfillBackfillButton)
+    F.ReskinButton(_G.RaidFinderQueueFramePartyBackfillNoBackfillButton)
     styleRewardButton(_G.RaidFinderQueueFrameScrollFrameChildFrameMoneyReward)
 end)

@@ -11,17 +11,22 @@ local function scrollOnLeave(self)
 end
 
 local function ReskinChatScroll(self)
-    local bu = _G[self:GetName() .. 'ThumbTexture']
-    bu:SetAlpha(0)
-    bu:SetWidth(16)
-    local bg = F.CreateBDFrame(bu, 0, true)
-    local down = self.ScrollToBottomButton
-    F.ReskinArrow(down, 'down')
-    down:SetPoint('BOTTOMRIGHT', _G[self:GetName() .. 'ResizeButton'], 'TOPRIGHT', -4, -2)
+    if C.IS_NEW_PATCH_10_1 then
+        F.ReskinTrimScroll(self.ScrollBar)
+    else
+        local bu = _G[self:GetName() .. 'ThumbTexture']
+        bu:SetAlpha(0)
+        bu:SetWidth(16)
 
-    self.ScrollBar.thumbBG = bg
-    self.ScrollBar:HookScript('OnEnter', scrollOnEnter)
-    self.ScrollBar:HookScript('OnLeave', scrollOnLeave)
+        local bg = F.CreateBDFrame(bu, 0, true)
+        local down = self.ScrollToBottomButton
+        F.ReskinArrow(down, 'down')
+        down:SetPoint('BOTTOMRIGHT', _G[self:GetName() .. 'ResizeButton'], 'TOPRIGHT', -4, -2)
+
+        self.ScrollBar.thumbBG = bg
+        self.ScrollBar:HookScript('OnEnter', scrollOnEnter)
+        self.ScrollBar:HookScript('OnLeave', scrollOnLeave)
+    end
 end
 
 tinsert(C.BlizzThemes, function()
@@ -42,8 +47,8 @@ tinsert(C.BlizzThemes, function()
     -- Battletag invite frame
     local border, send, cancel = _G.BattleTagInviteFrame:GetChildren()
     border:Hide()
-    F.Reskin(send)
-    F.Reskin(cancel)
+    F.ReskinButton(send)
+    F.ReskinButton(cancel)
     F.SetBD(_G.BattleTagInviteFrame)
 
     local friendTex = 'Interface\\HELPFRAME\\ReportLagIcon-Chat'
@@ -83,13 +88,13 @@ tinsert(C.BlizzThemes, function()
     end)
 
     -- ChatFrame
-    F.Reskin(_G.ChatFrameChannelButton)
+    F.ReskinButton(_G.ChatFrameChannelButton)
     _G.ChatFrameChannelButton:SetSize(20, 20)
-    F.Reskin(_G.ChatFrameToggleVoiceDeafenButton)
+    F.ReskinButton(_G.ChatFrameToggleVoiceDeafenButton)
     _G.ChatFrameToggleVoiceDeafenButton:SetSize(20, 20)
-    F.Reskin(_G.ChatFrameToggleVoiceMuteButton)
+    F.ReskinButton(_G.ChatFrameToggleVoiceMuteButton)
     _G.ChatFrameToggleVoiceMuteButton:SetSize(20, 20)
-    F.Reskin(_G.ChatFrameMenuButton)
+    F.ReskinButton(_G.ChatFrameMenuButton)
     _G.ChatFrameMenuButton:SetSize(20, 20)
     _G.ChatFrameMenuButton:SetNormalTexture(homeTex)
     _G.ChatFrameMenuButton:SetPushedTexture(homeTex)
@@ -100,9 +105,13 @@ tinsert(C.BlizzThemes, function()
 
     -- ChannelFrame
     F.ReskinPortraitFrame(_G.ChannelFrame)
-    F.Reskin(_G.ChannelFrame.NewButton)
-    F.Reskin(_G.ChannelFrame.SettingsButton)
-    F.ReskinScroll(_G.ChannelFrame.ChannelList.ScrollBar)
+    F.ReskinButton(_G.ChannelFrame.NewButton)
+    F.ReskinButton(_G.ChannelFrame.SettingsButton)
+    if C.IS_NEW_PATCH_10_1 then
+        F.ReskinTrimScroll(_G.ChannelFrame.ChannelList.ScrollBar)
+    else
+        F.ReskinScroll(_G.ChannelFrame.ChannelList.ScrollBar)
+    end
     F.ReskinTrimScroll(_G.ChannelFrame.ChannelRoster.ScrollBar)
 
     hooksecurefunc(_G.ChannelFrame.ChannelList, 'Update', function(self)
@@ -120,14 +129,14 @@ tinsert(C.BlizzThemes, function()
 
     F.StripTextures(_G.CreateChannelPopup)
     F.SetBD(_G.CreateChannelPopup)
-    F.Reskin(_G.CreateChannelPopup.OKButton)
-    F.Reskin(_G.CreateChannelPopup.CancelButton)
+    F.ReskinButton(_G.CreateChannelPopup.OKButton)
+    F.ReskinButton(_G.CreateChannelPopup.CancelButton)
     F.ReskinClose(_G.CreateChannelPopup.CloseButton)
-    F.ReskinEditBox(_G.CreateChannelPopup.Name)
-    F.ReskinEditBox(_G.CreateChannelPopup.Password)
+    F.ReskinEditbox(_G.CreateChannelPopup.Name)
+    F.ReskinEditbox(_G.CreateChannelPopup.Password)
 
     F.SetBD(_G.VoiceChatPromptActivateChannel)
-    F.Reskin(_G.VoiceChatPromptActivateChannel.AcceptButton)
+    F.ReskinButton(_G.VoiceChatPromptActivateChannel.AcceptButton)
     _G.VoiceChatChannelActivatedNotification:SetBackdrop(nil)
     F.SetBD(_G.VoiceChatChannelActivatedNotification)
 

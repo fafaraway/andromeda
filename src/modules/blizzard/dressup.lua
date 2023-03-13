@@ -8,7 +8,7 @@ function BLIZZARD:CreatButton(parent, width, height, text, anchor)
     button:SetText(text)
 
     if _G.ANDROMEDA_ADB.ReskinBlizz then
-        F.Reskin(button)
+        F.ReskinButton(button)
     end
 
     return button

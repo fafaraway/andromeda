@@ -40,7 +40,7 @@ C.Themes['Blizzard_RuneforgeUI'] = function()
     F.ReskinClose(frame.CloseButton, nil, -70, -70)
 
     local createFrame = frame.CreateFrame
-    F.Reskin(createFrame.CraftItemButton)
+    F.ReskinButton(createFrame.CraftItemButton)
 
     hooksecurefunc(frame.CurrencyDisplay, 'SetCurrencies', SetCurrenciesHook)
     hooksecurefunc(createFrame.Cost.Currencies, 'SetCurrencies', SetCurrenciesHook)

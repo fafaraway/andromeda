@@ -11,7 +11,7 @@ local function ReskinMissionPage(self)
         F.StripTextures(self.StartMissionFrame)
     end
     self.StartMissionButton.Flash:SetTexture('')
-    F.Reskin(self.StartMissionButton)
+    F.ReskinButton(self.StartMissionButton)
     F.ReskinClose(self.CloseButton, nil, -10, -5)
 
     if self.EnemyBackground then
@@ -146,7 +146,7 @@ local function ReskinMissionComplete(self)
         F.CreateBDFrame(bonusRewards)
     end
     if missionComplete.NextMissionButton then
-        F.Reskin(missionComplete.NextMissionButton)
+        F.ReskinButton(missionComplete.NextMissionButton)
     end
     if missionComplete.CompleteFrame then
         F.StripTextures(missionComplete)
@@ -155,9 +155,9 @@ local function ReskinMissionComplete(self)
         bg:SetPoint('BOTTOMRIGHT', -3, -10)
 
         F.StripTextures(missionComplete.CompleteFrame)
-        F.Reskin(missionComplete.CompleteFrame.ContinueButton)
-        F.Reskin(missionComplete.CompleteFrame.SpeedButton)
-        F.Reskin(missionComplete.RewardsScreen.FinalRewardsPanel.ContinueButton)
+        F.ReskinButton(missionComplete.CompleteFrame.ContinueButton)
+        F.ReskinButton(missionComplete.CompleteFrame.SpeedButton)
+        F.ReskinButton(missionComplete.RewardsScreen.FinalRewardsPanel.ContinueButton)
     end
     if missionComplete.MissionInfo then
         F.StripTextures(missionComplete.MissionInfo)
@@ -359,13 +359,13 @@ local function ReskinMissionFrame(self)
 
     ReskinGarrMaterial(missionList)
     ReskinMissionTabs(missionList)
-    F.Reskin(missionList.CompleteDialog.BorderFrame.ViewButton)
+    F.ReskinButton(missionList.CompleteDialog.BorderFrame.ViewButton)
     hooksecurefunc(missionList.ScrollBox, 'Update', ReskinMissionList)
 
     local FollowerList = self.FollowerList
     F.StripTextures(FollowerList)
     if FollowerList.SearchBox then
-        F.ReskinEditBox(FollowerList.SearchBox)
+        F.ReskinEditbox(FollowerList.SearchBox)
     end
 
     F.ReskinTrimScroll(FollowerList.ScrollBar)
@@ -513,8 +513,8 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     F.CreateBDFrame(infoBox, 0.25)
     F.StripTextures(townHallBox)
     F.CreateBDFrame(townHallBox, 0.25)
-    F.Reskin(infoBox.UpgradeButton)
-    F.Reskin(townHallBox.UpgradeButton)
+    F.ReskinButton(infoBox.UpgradeButton)
+    F.ReskinButton(townHallBox.UpgradeButton)
     GarrisonBuildingFrame.MapFrame.TownHall.TownHallName:SetTextColor(1, 0.8, 0)
 
     local followerPortrait = infoBox.FollowerPortrait
@@ -534,12 +534,12 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     local confirmation = GarrisonBuildingFrame.Confirmation
     confirmation:GetRegions():Hide()
     F.CreateBDFrame(confirmation)
-    F.Reskin(confirmation.CancelButton)
-    F.Reskin(confirmation.BuildButton)
-    F.Reskin(confirmation.UpgradeButton)
-    F.Reskin(confirmation.UpgradeGarrisonButton)
-    F.Reskin(confirmation.ReplaceButton)
-    F.Reskin(confirmation.SwitchButton)
+    F.ReskinButton(confirmation.CancelButton)
+    F.ReskinButton(confirmation.BuildButton)
+    F.ReskinButton(confirmation.UpgradeButton)
+    F.ReskinButton(confirmation.UpgradeGarrisonButton)
+    F.ReskinButton(confirmation.ReplaceButton)
+    F.ReskinButton(confirmation.SwitchButton)
 
     -- Capacitive display frame
     local GarrisonCapacitiveDisplayFrame = _G.GarrisonCapacitiveDisplayFrame
@@ -551,8 +551,8 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     GarrisonCapacitiveDisplayFrame.Count:SetTextInsets(3, 0, 0, 0)
 
     F.ReskinPortraitFrame(GarrisonCapacitiveDisplayFrame)
-    F.Reskin(GarrisonCapacitiveDisplayFrame.StartWorkOrderButton, true)
-    F.Reskin(GarrisonCapacitiveDisplayFrame.CreateAllWorkOrdersButton, true)
+    F.ReskinButton(GarrisonCapacitiveDisplayFrame.StartWorkOrderButton, true)
+    F.ReskinButton(GarrisonCapacitiveDisplayFrame.CreateAllWorkOrdersButton, true)
     F.ReskinArrow(GarrisonCapacitiveDisplayFrame.DecrementButton, 'left')
     F.ReskinArrow(GarrisonCapacitiveDisplayFrame.IncrementButton, 'right')
 
@@ -653,7 +653,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     do
         local followerList = GarrisonLandingPage.FollowerList
         F.StripTextures(followerList)
-        F.ReskinEditBox(followerList.SearchBox)
+        F.ReskinEditbox(followerList.SearchBox)
         F.ReskinTrimScroll(followerList.ScrollBar)
 
         ReskinFollowerList(_G.GarrisonLandingPageFollowerList)
@@ -663,7 +663,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     -- Ship follower list
     local shipFollowerList = GarrisonLandingPage.ShipFollowerList
     F.StripTextures(shipFollowerList)
-    F.ReskinEditBox(shipFollowerList.SearchBox)
+    F.ReskinEditbox(shipFollowerList.SearchBox)
     F.ReskinTrimScroll(shipFollowerList.ScrollBar)
 
     -- Follower tab
@@ -829,14 +829,14 @@ C.Themes['Blizzard_GarrisonUI'] = function()
 
     -- Pick
     local Pick = GarrisonRecruiterFrame.Pick
-    F.Reskin(Pick.ChooseRecruits)
-    F.ReskinDropDown(Pick.ThreatDropDown)
+    F.ReskinButton(Pick.ChooseRecruits)
+    F.ReskinDropdown(Pick.ThreatDropDown)
     F.ReskinRadio(Pick.Radio1)
     F.ReskinRadio(Pick.Radio2)
 
     -- Unavailable frame
     local UnavailableFrame = GarrisonRecruiterFrame.UnavailableFrame
-    F.Reskin(UnavailableFrame:GetChildren())
+    F.ReskinButton(UnavailableFrame:GetChildren())
 
     -- Recruiter select frame
     local GarrisonRecruitSelectFrame = _G.GarrisonRecruitSelectFrame
@@ -851,7 +851,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     followerList:DisableDrawLayer('BORDER')
 
     F.ReskinTrimScroll(rsfollowerList.ScrollBar)
-    F.ReskinEditBox(rsfollowerList.SearchBox)
+    F.ReskinEditbox(rsfollowerList.SearchBox)
     ReskinFollowerList(rsfollowerList)
     hooksecurefunc(rsfollowerList, 'ShowFollower', UpdateFollowerAbilities)
 
@@ -861,7 +861,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     for i = 1, 3 do
         local recruit = FollowerSelection['Recruit' .. i]
         F.ReskinGarrisonPortrait(recruit.PortraitFrame)
-        F.Reskin(recruit.HireRecruits)
+        F.ReskinButton(recruit.HireRecruits)
     end
 
     hooksecurefunc('GarrisonRecruitSelectFrame_UpdateRecruits', function(waiting)
@@ -916,7 +916,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     GarrisonShipyardFrame.BorderFrame.GarrCorners:Hide()
     GarrisonShipyardFrame.BackgroundTile:Hide()
     F.SetBD(GarrisonShipyardFrame)
-    F.ReskinEditBox(_G.GarrisonShipyardFrameFollowers.SearchBox)
+    F.ReskinEditbox(_G.GarrisonShipyardFrameFollowers.SearchBox)
     F.ReskinTrimScroll(GarrisonShipyardFrame.FollowerList.ScrollBar)
     F.StripTextures(_G.GarrisonShipyardFrameFollowers)
     ReskinGarrMaterial(_G.GarrisonShipyardFrameFollowers)
@@ -933,7 +933,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     local shipyardMission = GarrisonShipyardFrame.MissionTab.MissionPage
     F.StripTextures(shipyardMission)
     F.ReskinClose(shipyardMission.CloseButton)
-    F.Reskin(shipyardMission.StartMissionButton)
+    F.ReskinButton(shipyardMission.StartMissionButton)
     local smbg = F.CreateBDFrame(shipyardMission.Stage)
     smbg:SetPoint('TOPLEFT', 4, 1)
     smbg:SetPoint('BOTTOMRIGHT', -4, -1)
@@ -943,9 +943,9 @@ C.Themes['Blizzard_GarrisonUI'] = function()
 
     GarrisonShipyardFrame.MissionCompleteBackground:GetRegions():Hide()
     GarrisonShipyardFrame.MissionTab.MissionList.CompleteDialog:GetRegions():Hide()
-    F.Reskin(GarrisonShipyardFrame.MissionTab.MissionList.CompleteDialog.BorderFrame.ViewButton)
+    F.ReskinButton(GarrisonShipyardFrame.MissionTab.MissionList.CompleteDialog.BorderFrame.ViewButton)
     select(11, GarrisonShipyardFrame.MissionComplete.BonusRewards:GetRegions()):SetTextColor(1, 0.8, 0)
-    F.Reskin(GarrisonShipyardFrame.MissionComplete.NextMissionButton)
+    F.ReskinButton(GarrisonShipyardFrame.MissionComplete.NextMissionButton)
 
     -- Orderhall UI
     local OrderHallMissionFrame = _G.OrderHallMissionFrame
@@ -953,7 +953,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
 
     -- allies
     local combatAlly = _G.OrderHallMissionFrameMissions.CombatAllyUI
-    F.Reskin(combatAlly.InProgress.Unassign)
+    F.ReskinButton(combatAlly.InProgress.Unassign)
     combatAlly:GetRegions():Hide()
     F.CreateBDFrame(combatAlly, 0.25)
     F.ReskinIcon(combatAlly.InProgress.CombatAllySpell.iconTexture)
@@ -980,7 +980,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     F.StripTextures(ZoneSupportMissionPage)
     F.CreateBDFrame(ZoneSupportMissionPage, 0.25)
     F.ReskinClose(ZoneSupportMissionPage.CloseButton)
-    F.Reskin(ZoneSupportMissionPage.StartMissionButton)
+    F.ReskinButton(ZoneSupportMissionPage.StartMissionButton)
     F.ReskinIcon(ZoneSupportMissionPage.CombatAllySpell.iconTexture)
     ZoneSupportMissionPage.Follower1:GetRegions():Hide()
     F.CreateBDFrame(ZoneSupportMissionPage.Follower1, 0.25)
@@ -1005,9 +1005,13 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     _G.CombatLog.ElevatedFrame:SetAlpha(0)
     F.StripTextures(_G.CombatLog.CombatLogMessageFrame)
     F.CreateBDFrame(_G.CombatLog.CombatLogMessageFrame, 0.25)
-    F.ReskinScroll(_G.CombatLog.CombatLogMessageFrame.ScrollBar)
+    if C.IS_NEW_PATCH_10_1 then
+        -- todo
+    else
+        F.ReskinScroll(_G.CombatLog.CombatLogMessageFrame.ScrollBar)
+    end
 
-    F.Reskin(_G.HealFollowerButtonTemplate)
+    F.ReskinButton(_G.HealFollowerButtonTemplate)
     local bg = F.CreateBDFrame(CovenantMissionFrame.FollowerTab, 0.25)
     bg:SetPoint('TOPLEFT', 3, 2)
     bg:SetPoint('BOTTOMRIGHT', -3, -10)
@@ -1015,7 +1019,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
     CovenantMissionFrame.FollowerTab.RaisedFrameEdges:SetAlpha(0)
     CovenantMissionFrame.FollowerTab.HealFollowerFrame.ButtonFrame:SetAlpha(0)
     _G.CovenantMissionFrameFollowers.ElevatedFrame:SetAlpha(0)
-    F.Reskin(_G.CovenantMissionFrameFollowers.HealAllButton)
+    F.ReskinButton(_G.CovenantMissionFrameFollowers.HealAllButton)
     F.ReskinIcon(CovenantMissionFrame.FollowerTab.HealFollowerFrame.CostFrame.CostIcon)
 
     CovenantMissionFrame.MissionTab.MissionPage.Board:HookScript('OnShow', ReskinMissionBoards)
@@ -1044,7 +1048,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
                     if groups then
                         for j = 1, #groups do
                             local group = groups[j]
-                            F.Reskin(group)
+                            F.ReskinButton(group)
                             reskinWidgetFont(group.Features, 1, 0.8, 0)
                         end
                     end
@@ -1068,7 +1072,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
 
             reskinWarPlanMissions(WarPlanFrame)
             WarPlanFrame:HookScript('OnShow', reskinWarPlanMissions)
-            F.Reskin(WarPlanFrame.TaskBoard.AllPurposeButton)
+            F.ReskinButton(WarPlanFrame.TaskBoard.AllPurposeButton)
 
             local entries = WarPlanFrame.HistoryFrame.Entries
             for i = 1, #entries do
@@ -1187,11 +1191,11 @@ C.Themes['Blizzard_GarrisonUI'] = function()
         function _G.VPEX_OnUIObjectCreated(otype, widget, peek)
             if widget:IsObjectType('Frame') then
                 if otype == 'MissionButton' then
-                    F.Reskin(peek('ViewButton'))
-                    F.Reskin(peek('DoomRunButton'))
-                    F.Reskin(peek('TentativeClear'))
+                    F.ReskinButton(peek('ViewButton'))
+                    F.ReskinButton(peek('DoomRunButton'))
+                    F.ReskinButton(peek('TentativeClear'))
                     if peek('GroupHints') then
-                        F.Reskin(peek('GroupHints'))
+                        F.ReskinButton(peek('GroupHints'))
                     end
                     reskinWidgetFont(peek('Description'), 0.8, 0.8, 0.8)
                     reskinWidgetFont(peek('enemyHP'), 1, 1, 1)
@@ -1200,12 +1204,12 @@ C.Themes['Blizzard_GarrisonUI'] = function()
                     reskinWidgetFont(peek('duration'), 1, 0.8, 0)
                     reskinWidgetFont(widget.CDTDisplay:GetFontString(), 1, 0.8, 0)
                 elseif otype == 'CopyBoxUI' then
-                    F.Reskin(widget.ResetButton)
+                    F.ReskinButton(widget.ResetButton)
                     F.ReskinClose(widget.CloseButton2)
                     reskinWidgetFont(widget.Intro, 1, 1, 1)
-                    F.ReskinEditBox(widget.FirstInputBox)
+                    F.ReskinEditbox(widget.FirstInputBox)
                     reskinWidgetFont(widget.FirstInputBoxLabel, 1, 0.8, 0)
-                    F.ReskinEditBox(widget.SecondInputBox)
+                    F.ReskinEditbox(widget.SecondInputBox)
                     reskinWidgetFont(widget.SecondInputBoxLabel, 1, 0.8, 0)
                     reskinWidgetFont(widget.VersionText, 1, 1, 1)
                 elseif otype == 'MissionList' then
@@ -1215,8 +1219,8 @@ C.Themes['Blizzard_GarrisonUI'] = function()
                     F.CreateBDFrame(background, 0.25)
                 elseif otype == 'MissionPage' then
                     F.StripTextures(widget)
-                    F.Reskin(peek('UnButton'))
-                    F.Reskin(peek('StartButton'))
+                    F.ReskinButton(peek('UnButton'))
+                    F.ReskinButton(peek('StartButton'))
                     peek('StartButton'):SetText('|T' .. C.Assets.Textures.Arrow .. ':16|t')
                 elseif otype == 'ILButton' then
                     widget:DisableDrawLayer('BACKGROUND')
@@ -1234,7 +1238,7 @@ C.Themes['Blizzard_GarrisonUI'] = function()
                     F.StripTextures(widget)
                     F.CreateBDFrame(widget, 0.25)
                     hooksecurefunc(widget, 'SetHeight', AdjustFollowerList)
-                    F.Reskin(peek('HealAllButton'))
+                    F.ReskinButton(peek('HealAllButton'))
 
                     for i, troop in pairs(VPTroops) do
                         troop:ClearAllPoints()
@@ -1352,7 +1356,7 @@ C.Themes['Blizzard_OrderHallUI'] = function()
     local OrderHallTalentFrame = _G.OrderHallTalentFrame
 
     F.ReskinPortraitFrame(OrderHallTalentFrame)
-    F.Reskin(OrderHallTalentFrame.BackButton)
+    F.ReskinButton(OrderHallTalentFrame.BackButton)
     F.ReskinIcon(OrderHallTalentFrame.Currency.Icon)
     OrderHallTalentFrame.OverlayElements:SetAlpha(0)
 

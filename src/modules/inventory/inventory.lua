@@ -297,7 +297,12 @@ function INVENTORY:CreateDepositButton()
     end)
 
     bu.tipHeader = _G.REAGENTBANK_DEPOSIT
-    F.AddTooltip(bu, 'ANCHOR_TOP', L['Left click to deposit reagents, right click to switch deposit mode.|nIf the button is highlight, the reagents from your bags would auto deposit once you open the bank.'], 'BLUE')
+    F.AddTooltip(
+        bu,
+        'ANCHOR_TOP',
+        L['Left click to deposit reagents, right click to switch deposit mode.|nIf the button is highlight, the reagents from your bags would auto deposit once you open the bank.'],
+        'BLUE'
+    )
     updateDepositButtonStatus(bu)
 
     return bu
@@ -737,31 +742,6 @@ function INVENTORY:ButtonOnClick(btn)
     customJunkOnClick(self)
 end
 
-local function CheckBoundStatus(itemLink, bagID, slotID, string)
-    local tip = F.ScanTip
-    tip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
-    if bagID and type(bagID) == 'string' then
-        tip:SetInventoryItem(bagID, slotID)
-    elseif bagID and type(bagID) == 'number' then
-        tip:SetBagItem(bagID, slotID)
-    else
-        tip:SetHyperlink(itemLink)
-    end
-
-    for i = 2, 6 do
-        local line = _G[tip:GetName() .. 'TextLeft' .. i]
-        if line then
-            local text = line:GetText() or ''
-            local found = strfind(text, string)
-            if found then
-                return true
-            end
-        end
-    end
-
-    return false
-end
-
 function INVENTORY:UpdateAllBags()
     if self.Bags and self.Bags:IsShown() then
         self.Bags:BAG_UPDATE()
@@ -816,11 +796,11 @@ function INVENTORY:OnLogin()
     end
 
     function Backpack:OnInit()
-        AddNewContainer('Bag', 6, 'BagReagent', filters.onlyBagReagent)
-        AddNewContainer('Bag', 16, 'Junk', filters.bagsJunk)
         for i = 1, 5 do
             AddNewContainer('Bag', i, 'BagCustom' .. i, filters['bagCustom' .. i])
         end
+        AddNewContainer('Bag', 6, 'BagReagent', filters.onlyBagReagent)
+        AddNewContainer('Bag', 16, 'Junk', filters.bagsJunk)
         AddNewContainer('Bag', 9, 'EquipSet', filters.bagEquipSet)
         AddNewContainer('Bag', 7, 'AzeriteItem', filters.bagAzeriteItem)
         AddNewContainer('Bag', 8, 'Equipment', filters.bagEquipment)
@@ -927,7 +907,7 @@ function INVENTORY:OnLogin()
         self.Quest:SetPoint('TOPLEFT', -2, -2)
 
         self.iLvl = F.CreateFS(self, C.Assets.Fonts.Bold, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK', 'BOTTOMRIGHT', -2, 2)
-        self.BindType = F.CreateFS(self, C.Assets.Fonts.Bold, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK', 'TOPLEFT', 2, -2)
+        self.BindType = F.CreateFS(self, C.Assets.Fonts.Condensed, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK', 'TOPLEFT', 2, -2)
 
         local flash = self:CreateTexture(nil, 'ARTWORK')
         flash:SetTexture('Interface\\Cooldown\\star4')
@@ -1109,15 +1089,10 @@ function INVENTORY:OnLogin()
                 return
             end
 
-            local isBOA = CheckBoundStatus(item.link, item.bagId, item.slotId, _G.ITEM_BNETACCOUNTBOUND)
-                or CheckBoundStatus(item.link, item.bagId, item.slotId, _G.ITEM_BIND_TO_BNETACCOUNT)
-                or CheckBoundStatus(item.link, item.bagId, item.slotId, _G.ITEM_ACCOUNTBOUND)
-            local isSoulBound = CheckBoundStatus(item.link, item.bagId, item.slotId, _G.ITEM_SOULBOUND)
             local _, _, itemRarity, _, _, _, _, _, _, _, _, _, _, bindType = GetItemInfo(itemLink)
-
-            if isBOA or itemRarity == 7 or itemRarity == 8 then
+            if F.IsBoA(item.bagId, item.slotId) or itemRarity == 7 or itemRarity == 8 then
                 self.BindType:SetText('|cff00ccffBOA|r')
-            elseif bindType == 2 and not isSoulBound then
+            elseif not F.IsSoulBound(item.bagId, item.slotId) and bindType == 2 then
                 self.BindType:SetText('|cff1eff00BOE|r')
             else
                 self.BindType:SetText('')

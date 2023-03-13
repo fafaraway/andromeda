@@ -7,7 +7,7 @@ tinsert(C.BlizzThemes, function()
 
     local SplashFrame = _G.SplashFrame
 
-    F.Reskin(SplashFrame.BottomCloseButton)
+    F.ReskinButton(SplashFrame.BottomCloseButton)
     F.ReskinClose(SplashFrame.TopCloseButton, SplashFrame, -18, -18)
 
     SplashFrame.Label:SetTextColor(1, 0.8, 0)

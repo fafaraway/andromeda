@@ -28,7 +28,7 @@ tinsert(C.BlizzThemes, function()
     for _, buttonName in next, buttons do
         local button = _G[buttonName]
         if button then
-            F.Reskin(button)
+            F.ReskinButton(button)
         end
     end
 end)

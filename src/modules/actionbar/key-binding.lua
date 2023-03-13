@@ -287,7 +287,7 @@ function ACTIONBAR:Bind_CreateDialog()
     helpInfo:SetPoint('TOPRIGHT', 2, -2)
 
     local text = F.CreateFS(frame, font, 12, outline or nil, _G.CHARACTER_SPECIFIC_KEYBINDINGS, 'YELLOW', outline and 'NONE' or 'THICK', 'TOP', 0, -40)
-    local box = F.CreateCheckButton(frame)
+    local box = F.CreateCheckbox(frame)
     box:SetChecked(C.DB.Actionbar.BindType == 2)
     box:SetPoint('RIGHT', text, 'LEFT', -5, -0)
     box:SetScript('OnClick', function(self)

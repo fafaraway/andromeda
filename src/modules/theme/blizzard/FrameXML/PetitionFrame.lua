@@ -6,10 +6,10 @@ tinsert(C.BlizzThemes, function()
     end
 
     F.ReskinPortraitFrame(_G.PetitionFrame)
-    F.Reskin(_G.PetitionFrameSignButton)
-    F.Reskin(_G.PetitionFrameRequestButton)
-    F.Reskin(_G.PetitionFrameRenameButton)
-    F.Reskin(_G.PetitionFrameCancelButton)
+    F.ReskinButton(_G.PetitionFrameSignButton)
+    F.ReskinButton(_G.PetitionFrameRequestButton)
+    F.ReskinButton(_G.PetitionFrameRenameButton)
+    F.ReskinButton(_G.PetitionFrameCancelButton)
 
     _G.PetitionFrameCharterTitle:SetTextColor(1, 0.8, 0)
     _G.PetitionFrameCharterTitle:SetShadowColor(0, 0, 0)

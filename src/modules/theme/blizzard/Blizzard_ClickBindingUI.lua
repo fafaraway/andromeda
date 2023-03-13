@@ -25,7 +25,7 @@ local function reskinScrollChild(self)
             child.Background:Hide()
             child.bg = F.CreateBDFrame(child.Background, 0.25)
 
-            F.Reskin(child.DeleteButton)
+            F.ReskinButton(child.DeleteButton)
             child.DeleteButton:SetSize(20, 20)
             child.FrameHighlight:SetInside(child.bg)
             child.FrameHighlight:SetColorTexture(1, 1, 1, 0.15) -- 0.25 might be too much
@@ -67,9 +67,9 @@ C.Themes['Blizzard_ClickBindingUI'] = function()
     frame.TutorialButton.Ring:Hide()
     frame.TutorialButton:SetPoint('TOPLEFT', frame, 'TOPLEFT', -12, 12)
 
-    F.Reskin(frame.ResetButton)
-    F.Reskin(frame.AddBindingButton)
-    F.Reskin(frame.SaveButton)
+    F.ReskinButton(frame.ResetButton)
+    F.ReskinButton(frame.AddBindingButton)
+    F.ReskinButton(frame.SaveButton)
     F.ReskinTrimScroll(frame.ScrollBar)
 
     frame.ScrollBoxBackground:Hide()
@@ -82,6 +82,6 @@ C.Themes['Blizzard_ClickBindingUI'] = function()
     F.SetBD(frame.TutorialFrame)
 
     if frame.EnableMouseoverCastCheckbox then
-        F.ReskinCheckButton(frame.EnableMouseoverCastCheckbox)
+        F.ReskinCheckbox(frame.EnableMouseoverCastCheckbox)
     end
 end

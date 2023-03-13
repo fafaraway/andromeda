@@ -5,11 +5,11 @@ function F:ReskinIconSelector()
     F.SetBD(self):SetInside()
     F.StripTextures(self.BorderBox)
     F.StripTextures(self.BorderBox.IconSelectorEditBox, 2)
-    F.ReskinEditBox(self.BorderBox.IconSelectorEditBox)
+    F.ReskinEditbox(self.BorderBox.IconSelectorEditBox)
     F.StripTextures(self.BorderBox.SelectedIconArea.SelectedIconButton)
     F.ReskinIcon(self.BorderBox.SelectedIconArea.SelectedIconButton.Icon)
-    F.Reskin(self.BorderBox.OkayButton)
-    F.Reskin(self.BorderBox.CancelButton)
+    F.ReskinButton(self.BorderBox.OkayButton)
+    F.ReskinButton(self.BorderBox.CancelButton)
     F.ReskinTrimScroll(self.IconSelector.ScrollBar)
 
     hooksecurefunc(self.IconSelector.ScrollBox, 'Update', function(self)
@@ -218,8 +218,8 @@ tinsert(C.BlizzThemes, function()
 
     -- [[ Equipment manager ]]
 
-    F.Reskin(_G.PaperDollFrameEquipSet)
-    F.Reskin(_G.PaperDollFrameSaveSet)
+    F.ReskinButton(_G.PaperDollFrameEquipSet)
+    F.ReskinButton(_G.PaperDollFrameSaveSet)
     F.ReskinTrimScroll(_G.PaperDollFrame.EquipmentManagerPane.ScrollBar)
 
     hooksecurefunc(_G.PaperDollFrame.EquipmentManagerPane.ScrollBox, 'Update', function(self)
@@ -310,12 +310,12 @@ tinsert(C.BlizzThemes, function()
     F.StripTextures(_G.ReputationDetailFrame)
     F.SetBD(_G.ReputationDetailFrame)
     F.ReskinClose(_G.ReputationDetailCloseButton)
-    F.ReskinCheckButton(_G.ReputationDetailInactiveCheckBox)
-    F.ReskinCheckButton(_G.ReputationDetailMainScreenCheckBox)
-    F.Reskin(_G.ReputationDetailViewRenownButton)
+    F.ReskinCheckbox(_G.ReputationDetailInactiveCheckBox)
+    F.ReskinCheckbox(_G.ReputationDetailMainScreenCheckBox)
+    F.ReskinButton(_G.ReputationDetailViewRenownButton)
 
     local atWarCheck = _G.ReputationDetailAtWarCheckBox
-    F.ReskinCheckButton(atWarCheck)
+    F.ReskinCheckbox(atWarCheck)
     local atWarCheckTex = atWarCheck:GetCheckedTexture()
     atWarCheckTex:ClearAllPoints()
     atWarCheckTex:SetSize(26, 26)
@@ -325,8 +325,8 @@ tinsert(C.BlizzThemes, function()
     if _G.TokenFramePopup.CloseButton then -- needs review, blizz typo
         F.ReskinClose(_G.TokenFramePopup.CloseButton)
     end
-    F.ReskinCheckButton(_G.TokenFramePopup.InactiveCheckBox)
-    F.ReskinCheckButton(_G.TokenFramePopup.BackpackCheckBox)
+    F.ReskinCheckbox(_G.TokenFramePopup.InactiveCheckBox)
+    F.ReskinCheckbox(_G.TokenFramePopup.BackpackCheckBox)
     F.ReskinTrimScroll(_G.TokenFrame.ScrollBar)
 
     hooksecurefunc(_G.TokenFrame.ScrollBox, 'Update', function(self)
@@ -375,11 +375,11 @@ tinsert(C.BlizzThemes, function()
 
     -- Quick Join
     F.ReskinTrimScroll(_G.QuickJoinFrame.ScrollBar)
-    F.Reskin(_G.QuickJoinFrame.JoinQueueButton)
+    F.ReskinButton(_G.QuickJoinFrame.JoinQueueButton)
 
     F.SetBD(_G.QuickJoinRoleSelectionFrame)
-    F.Reskin(_G.QuickJoinRoleSelectionFrame.AcceptButton)
-    F.Reskin(_G.QuickJoinRoleSelectionFrame.CancelButton)
+    F.ReskinButton(_G.QuickJoinRoleSelectionFrame.AcceptButton)
+    F.ReskinButton(_G.QuickJoinRoleSelectionFrame.CancelButton)
     F.ReskinClose(_G.QuickJoinRoleSelectionFrame.CloseButton)
     F.StripTextures(_G.QuickJoinRoleSelectionFrame)
 

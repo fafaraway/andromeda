@@ -34,7 +34,7 @@ end
 
 local function CreateUrlBox(parent, text, url, position)
     local outline = _G.ANDROMEDA_ADB.FontOutline
-    local box = F.CreateEditBox(parent, 320, 24)
+    local box = F.CreateEditbox(parent, 320, 24)
     box:SetPoint(unpack(position))
 
     box.lable = F.CreateFS(box, C.Assets.Fonts.Condensed, 12, outline or nil, text, 'YELLOW', outline and 'NONE' or 'THICK')

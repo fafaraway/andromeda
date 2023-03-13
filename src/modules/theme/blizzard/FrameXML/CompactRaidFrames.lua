@@ -44,7 +44,7 @@ tinsert(C.BlizzThemes, function()
         for i = 1, 9 do
             select(i, button:GetRegions()):SetAlpha(0)
         end
-        F.Reskin(button)
+        F.ReskinButton(button)
     end
     _G.CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton:SetNormalTexture('Interface\\RaidFrame\\Raid-WorldPing')
 
@@ -58,6 +58,6 @@ tinsert(C.BlizzThemes, function()
     local bd = F.SetBD(_G.CompactRaidFrameManager)
     bd:SetPoint('TOPLEFT')
     bd:SetPoint('BOTTOMRIGHT', -9, 9)
-    F.ReskinCheckButton(_G.CompactRaidFrameManagerDisplayFrameEveryoneIsAssistButton)
-    F.ReskinCheckButton(_G.CompactRaidFrameManagerDisplayFrameEveryoneIsAssistButton)
+    F.ReskinCheckbox(_G.CompactRaidFrameManagerDisplayFrameEveryoneIsAssistButton)
+    F.ReskinCheckbox(_G.CompactRaidFrameManagerDisplayFrameEveryoneIsAssistButton)
 end)

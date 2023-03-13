@@ -1,5 +1,9 @@
 local F, C = unpack(select(2, ...))
 
+if C.IS_NEW_PATCH_10_1 then
+    return
+end -- ui removed in 10.1
+
 C.Themes['Blizzard_LookingForGuildUI'] = function()
     local r, g, b = C.r, C.g, C.b
 
@@ -30,22 +34,22 @@ C.Themes['Blizzard_LookingForGuildUI'] = function()
         _G.LookingForGuildFrameTabardEmblem:Hide()
         _G.LookingForGuildFrameTabardBorder:Hide()
 
-        F.Reskin(_G.LookingForGuildBrowseButton)
-        F.Reskin(_G.GuildFinderRequestMembershipFrameAcceptButton)
-        F.Reskin(_G.GuildFinderRequestMembershipFrameCancelButton)
-        F.ReskinCheckButton(_G.LookingForGuildQuestButton)
-        F.ReskinCheckButton(_G.LookingForGuildDungeonButton)
-        F.ReskinCheckButton(_G.LookingForGuildRaidButton)
-        F.ReskinCheckButton(_G.LookingForGuildPvPButton)
-        F.ReskinCheckButton(_G.LookingForGuildRPButton)
-        F.ReskinCheckButton(_G.LookingForGuildWeekdaysButton)
-        F.ReskinCheckButton(_G.LookingForGuildWeekendsButton)
+        F.ReskinButton(_G.LookingForGuildBrowseButton)
+        F.ReskinButton(_G.GuildFinderRequestMembershipFrameAcceptButton)
+        F.ReskinButton(_G.GuildFinderRequestMembershipFrameCancelButton)
+        F.ReskinCheckbox(_G.LookingForGuildQuestButton)
+        F.ReskinCheckbox(_G.LookingForGuildDungeonButton)
+        F.ReskinCheckbox(_G.LookingForGuildRaidButton)
+        F.ReskinCheckbox(_G.LookingForGuildPvPButton)
+        F.ReskinCheckbox(_G.LookingForGuildRPButton)
+        F.ReskinCheckbox(_G.LookingForGuildWeekdaysButton)
+        F.ReskinCheckbox(_G.LookingForGuildWeekendsButton)
         F.StripTextures(_G.GuildFinderRequestMembershipFrameInputFrame)
-        F.ReskinEditBox(_G.GuildFinderRequestMembershipFrameInputFrame)
+        F.ReskinEditbox(_G.GuildFinderRequestMembershipFrameInputFrame)
 
         -- [[ Browse frame ]]
 
-        F.Reskin(_G.LookingForGuildRequestButton)
+        F.ReskinButton(_G.LookingForGuildRequestButton)
         F.ReskinScroll(_G.LookingForGuildBrowseFrameContainerScrollBar)
 
         for i = 1, 5 do

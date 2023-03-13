@@ -2,7 +2,7 @@ local F, C = unpack(select(2, ...))
 
 C.Themes['Blizzard_CovenantPreviewUI'] = function()
     local CovenantPreviewFrame = _G.CovenantPreviewFrame
-    F.Reskin(CovenantPreviewFrame.SelectButton)
+    F.ReskinButton(CovenantPreviewFrame.SelectButton)
 
     local infoPanel = CovenantPreviewFrame.InfoPanel
     infoPanel.Name:SetTextColor(1, 0.8, 0)
@@ -75,7 +75,7 @@ C.Themes['Blizzard_CovenantSanctum'] = function()
     local upgradesTab = CovenantSanctumFrame.UpgradesTab
     upgradesTab.Background:SetAlpha(0)
     F.CreateBDFrame(upgradesTab.Background, 0.25)
-    F.Reskin(upgradesTab.DepositButton)
+    F.ReskinButton(upgradesTab.DepositButton)
     for _, frame in ipairs(upgradesTab.Upgrades) do
         if frame.TierBorder then
             frame.TierBorder:SetAlpha(0)
@@ -89,7 +89,7 @@ C.Themes['Blizzard_CovenantSanctum'] = function()
     F.CreateBDFrame(talentsList, 0.25)
     talentsList.BackgroundTile:SetAlpha(0)
     talentsList.IntroBox.Background:Hide()
-    F.Reskin(talentsList.UpgradeButton)
+    F.ReskinButton(talentsList.UpgradeButton)
     hooksecurefunc(talentsList, 'Refresh', reskinTalentsList)
 end
 

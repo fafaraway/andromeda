@@ -528,6 +528,7 @@ function MAP:SoundVolume()
 
     local f = CreateFrame('Frame', nil, _G.Minimap)
     f:SetAllPoints()
+    f:SetFrameLevel(999)
 
     local outline = _G.ANDROMEDA_ADB.FontOutline
     local text = F.CreateFS(f, C.Assets.Fonts.Heavy, 48, outline or nil, '', nil, outline and 'NONE' or 'THICK')

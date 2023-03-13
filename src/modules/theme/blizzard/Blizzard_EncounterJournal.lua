@@ -5,7 +5,7 @@ local function reskinHeader(header)
     for i = 4, 18 do
         select(i, header.button:GetRegions()):SetTexture('')
     end
-    F.Reskin(header.button)
+    F.ReskinButton(header.button)
     header.descriptionBG:SetAlpha(0)
     header.descriptionBGBottom:SetAlpha(0)
     header.description:SetTextColor(1, 1, 1)
@@ -39,7 +39,7 @@ end
 
 local function reskinFilterToggle(button)
     F.StripTextures(button)
-    F.Reskin(button)
+    F.ReskinButton(button)
 end
 
 C.Themes['Blizzard_EncounterJournal'] = function()
@@ -79,7 +79,7 @@ C.Themes['Blizzard_EncounterJournal'] = function()
 
     -- Instance select
     _G.EncounterJournalInstanceSelectBG:SetAlpha(0)
-    F.ReskinDropDown(EncounterJournal.instanceSelect.tierDropDown)
+    F.ReskinDropdown(EncounterJournal.instanceSelect.tierDropDown)
     F.ReskinTrimScroll(EncounterJournal.instanceSelect.ScrollBar)
 
     hooksecurefunc(EncounterJournal.instanceSelect.ScrollBox, 'Update', function(self)
@@ -121,7 +121,7 @@ C.Themes['Blizzard_EncounterJournal'] = function()
         for i = 1, self.ScrollTarget:GetNumChildren() do
             local child = select(i, self.ScrollTarget:GetChildren())
             if not child.styled then
-                F.Reskin(child, true)
+                F.ReskinButton(child, true)
                 local hl = child:GetHighlightTexture()
                 hl:SetColorTexture(r, g, b, 0.25)
                 hl:SetInside(child.__bg)
@@ -219,13 +219,18 @@ C.Themes['Blizzard_EncounterJournal'] = function()
 
     -- Various controls
     F.ReskinPortraitFrame(EncounterJournal)
-    F.Reskin(_G.EncounterJournalEncounterFrameInfoResetButton)
-    F.ReskinEditBox(_G.EncounterJournalSearchBox)
+    F.ReskinButton(_G.EncounterJournalEncounterFrameInfoResetButton)
+    F.ReskinEditbox(_G.EncounterJournalSearchBox)
     F.ReskinTrimScroll(EncounterJournal.encounter.instance.LoreScrollBar)
-    F.ReskinScroll(EncounterJournal.encounter.info.overviewScroll.ScrollBar)
     F.ReskinTrimScroll(EncounterJournal.encounter.info.BossesScrollBar)
-    F.ReskinScroll(EncounterJournal.encounter.info.detailsScroll.ScrollBar)
     F.ReskinTrimScroll(EncounterJournal.encounter.info.LootContainer.ScrollBar)
+    if C.IS_NEW_PATCH_10_1 then
+        F.ReskinTrimScroll(EncounterJournal.encounter.info.overviewScroll.ScrollBar)
+        F.ReskinTrimScroll(EncounterJournal.encounter.info.detailsScroll.ScrollBar)
+    else
+        F.ReskinScroll(EncounterJournal.encounter.info.overviewScroll.ScrollBar)
+        F.ReskinScroll(EncounterJournal.encounter.info.detailsScroll.ScrollBar)
+    end
 
     local buttons = {
         _G.EncounterJournalEncounterFrameInfoDifficulty,
@@ -249,7 +254,7 @@ C.Themes['Blizzard_EncounterJournal'] = function()
     local centerDisplay = suggestion.centerDisplay
     centerDisplay.title.text:SetTextColor(1, 1, 1)
     centerDisplay.description.text:SetTextColor(0.9, 0.9, 0.9)
-    F.Reskin(suggestion.button)
+    F.ReskinButton(suggestion.button)
 
     local reward = suggestion.reward
     reward.text:SetTextColor(0.9, 0.9, 0.9)
@@ -274,7 +279,7 @@ C.Themes['Blizzard_EncounterJournal'] = function()
         centerDisplay:SetPoint('TOPLEFT', 85, -10)
         centerDisplay.title.text:SetTextColor(1, 1, 1)
         centerDisplay.description.text:SetTextColor(0.9, 0.9, 0.9)
-        F.Reskin(centerDisplay.button)
+        F.ReskinButton(centerDisplay.button)
 
         local reward = suggestion.reward
         reward.iconRing:Hide()
@@ -357,10 +362,14 @@ C.Themes['Blizzard_EncounterJournal'] = function()
     -- ItemSetsFrame
     if EncounterJournal.LootJournalItems then
         F.StripTextures(EncounterJournal.LootJournalItems)
-        F.ReskinDropDown(EncounterJournal.LootJournalViewDropDown)
+        F.ReskinDropdown(EncounterJournal.LootJournalViewDropDown)
 
         local itemSetsFrame = EncounterJournal.LootJournalItems.ItemSetsFrame
-        F.ReskinScroll(itemSetsFrame.scrollBar)
+        if C.IS_NEW_PATCH_10_1 then
+            F.ReskinTrimScroll(itemSetsFrame.ScrollBar)
+        else
+            F.ReskinScroll(itemSetsFrame.scrollBar)
+        end
         reskinFilterToggle(itemSetsFrame.ClassButton)
 
         hooksecurefunc(itemSetsFrame, 'UpdateList', function(self)
@@ -389,6 +398,6 @@ C.Themes['Blizzard_EncounterJournal'] = function()
     local frame = _G.EncounterJournalMonthlyActivitiesFrame
     if frame then
         F.StripTextures(frame)
-        F.ReskinTrimScroll(frame.ScrollBar, true)
+        F.ReskinTrimScroll(frame.ScrollBar)
     end
 end

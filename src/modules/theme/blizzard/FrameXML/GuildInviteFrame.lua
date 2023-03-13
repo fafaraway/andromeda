@@ -9,6 +9,6 @@ tinsert(C.BlizzThemes, function()
     for i = 1, 10 do
         select(i, _G.GuildInviteFrame:GetRegions()):Hide()
     end
-    F.Reskin(_G.GuildInviteFrameJoinButton)
-    F.Reskin(_G.GuildInviteFrameDeclineButton)
+    F.ReskinButton(_G.GuildInviteFrameJoinButton)
+    F.ReskinButton(_G.GuildInviteFrameDeclineButton)
 end)

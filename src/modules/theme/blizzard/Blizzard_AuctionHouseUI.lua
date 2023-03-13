@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 local function reskinAuctionButton(button)
-    F.Reskin(button)
+    F.ReskinButton(button)
     button:SetSize(22, 22)
 end
 
@@ -23,18 +23,18 @@ local function reskinSellPanel(frame)
     itemButton.bg = F.ReskinIcon(itemButton.Icon)
     F.ReskinIconBorder(itemButton.IconBorder)
 
-    F.ReskinEditBox(frame.QuantityInput.InputBox)
-    F.Reskin(frame.QuantityInput.MaxButton)
-    F.ReskinEditBox(frame.PriceInput.MoneyInputFrame.GoldBox)
-    F.ReskinEditBox(frame.PriceInput.MoneyInputFrame.SilverBox)
+    F.ReskinEditbox(frame.QuantityInput.InputBox)
+    F.ReskinButton(frame.QuantityInput.MaxButton)
+    F.ReskinEditbox(frame.PriceInput.MoneyInputFrame.GoldBox)
+    F.ReskinEditbox(frame.PriceInput.MoneyInputFrame.SilverBox)
     if frame.SecondaryPriceInput then
-        F.ReskinEditBox(frame.SecondaryPriceInput.MoneyInputFrame.GoldBox)
-        F.ReskinEditBox(frame.SecondaryPriceInput.MoneyInputFrame.SilverBox)
+        F.ReskinEditbox(frame.SecondaryPriceInput.MoneyInputFrame.GoldBox)
+        F.ReskinEditbox(frame.SecondaryPriceInput.MoneyInputFrame.SilverBox)
     end
-    F.ReskinDropDown(frame.DurationDropDown.DropDown)
-    F.Reskin(frame.PostButton)
+    F.ReskinDropdown(frame.DurationDropDown.DropDown)
+    F.ReskinButton(frame.PostButton)
     if frame.BuyoutModeCheckButton then
-        F.ReskinCheckButton(frame.BuyoutModeCheckButton)
+        F.ReskinCheckbox(frame.BuyoutModeCheckButton)
         frame.BuyoutModeCheckButton:SetSize(28, 28)
     end
 end
@@ -166,14 +166,14 @@ C.Themes['Blizzard_AuctionHouseUI'] = function()
 
     local searchBar = AuctionHouseFrame.SearchBar
     reskinAuctionButton(searchBar.FavoritesSearchButton)
-    F.ReskinEditBox(searchBar.SearchBox)
-    F.Reskin(searchBar.SearchButton)
+    F.ReskinEditbox(searchBar.SearchBox)
+    F.ReskinButton(searchBar.SearchButton)
 
     local filterButton = searchBar.FilterButton
     F.ReskinFilterButton(filterButton)
     F.ReskinFilterReset(filterButton.ClearFiltersButton)
-    F.ReskinEditBox(filterButton.LevelRangeFrame.MinLevel)
-    F.ReskinEditBox(filterButton.LevelRangeFrame.MaxLevel)
+    F.ReskinEditbox(filterButton.LevelRangeFrame.MinLevel)
+    F.ReskinEditbox(filterButton.LevelRangeFrame.MaxLevel)
 
     F.StripTextures(AuctionHouseFrame.CategoriesList)
     F.ReskinTrimScroll(AuctionHouseFrame.CategoriesList.ScrollBar)
@@ -187,32 +187,32 @@ C.Themes['Blizzard_AuctionHouseUI'] = function()
     end)
 
     local itemBuyFrame = AuctionHouseFrame.ItemBuyFrame
-    F.Reskin(itemBuyFrame.BackButton)
-    F.Reskin(itemBuyFrame.BidFrame.BidButton)
-    F.Reskin(itemBuyFrame.BuyoutFrame.BuyoutButton)
-    F.ReskinEditBox(_G.AuctionHouseFrameGold)
-    F.ReskinEditBox(_G.AuctionHouseFrameSilver)
+    F.ReskinButton(itemBuyFrame.BackButton)
+    F.ReskinButton(itemBuyFrame.BidFrame.BidButton)
+    F.ReskinButton(itemBuyFrame.BuyoutFrame.BuyoutButton)
+    F.ReskinEditbox(_G.AuctionHouseFrameGold)
+    F.ReskinEditbox(_G.AuctionHouseFrameSilver)
     reskinItemDisplay(itemBuyFrame.ItemDisplay)
     reskinItemList(itemBuyFrame.ItemList, true)
 
     local commBuyFrame = AuctionHouseFrame.CommoditiesBuyFrame
-    F.Reskin(commBuyFrame.BackButton)
+    F.ReskinButton(commBuyFrame.BackButton)
     local buyDisplay = commBuyFrame.BuyDisplay
     F.StripTextures(buyDisplay)
-    F.ReskinEditBox(buyDisplay.QuantityInput.InputBox)
-    F.Reskin(buyDisplay.BuyButton)
+    F.ReskinEditbox(buyDisplay.QuantityInput.InputBox)
+    F.ReskinButton(buyDisplay.BuyButton)
     reskinItemDisplay(buyDisplay.ItemDisplay)
     reskinItemList(commBuyFrame.ItemList)
 
     local wowTokenResults = AuctionHouseFrame.WoWTokenResults
     F.StripTextures(wowTokenResults)
-    F.Reskin(wowTokenResults.Buyout)
+    F.ReskinButton(wowTokenResults.Buyout)
     reskinItemDisplay(wowTokenResults.TokenDisplay, true)
     F.ReskinTrimScroll(wowTokenResults.DummyScrollBar)
 
     local gameTimeTutorial = wowTokenResults.GameTimeTutorial
     F.ReskinPortraitFrame(gameTimeTutorial)
-    F.Reskin(gameTimeTutorial.RightDisplay.StoreButton)
+    F.ReskinButton(gameTimeTutorial.RightDisplay.StoreButton)
     gameTimeTutorial.LeftDisplay.Label:SetTextColor(1, 1, 1)
     gameTimeTutorial.LeftDisplay.Tutorial1:SetTextColor(1, 0.8, 0)
     gameTimeTutorial.RightDisplay.Label:SetTextColor(1, 1, 1)
@@ -220,7 +220,7 @@ C.Themes['Blizzard_AuctionHouseUI'] = function()
 
     local woWTokenSellFrame = AuctionHouseFrame.WoWTokenSellFrame
     F.StripTextures(woWTokenSellFrame)
-    F.Reskin(woWTokenSellFrame.PostButton)
+    F.ReskinButton(woWTokenSellFrame.PostButton)
     F.StripTextures(woWTokenSellFrame.DummyItemList)
     F.CreateBDFrame(woWTokenSellFrame.DummyItemList, 0.25)
     F.ReskinTrimScroll(woWTokenSellFrame.DummyItemList.DummyScrollBar)
@@ -241,18 +241,18 @@ C.Themes['Blizzard_AuctionHouseUI'] = function()
 
     F.ReskinTab(_G.AuctionHouseFrameAuctionsFrameAuctionsTab)
     F.ReskinTab(_G.AuctionHouseFrameAuctionsFrameBidsTab)
-    F.ReskinEditBox(_G.AuctionHouseFrameAuctionsFrameGold)
-    F.ReskinEditBox(_G.AuctionHouseFrameAuctionsFrameSilver)
-    F.Reskin(_G.AuctionHouseFrameAuctionsFrame.CancelAuctionButton)
-    F.Reskin(_G.AuctionHouseFrameAuctionsFrame.BidFrame.BidButton)
-    F.Reskin(_G.AuctionHouseFrameAuctionsFrame.BuyoutFrame.BuyoutButton)
+    F.ReskinEditbox(_G.AuctionHouseFrameAuctionsFrameGold)
+    F.ReskinEditbox(_G.AuctionHouseFrameAuctionsFrameSilver)
+    F.ReskinButton(_G.AuctionHouseFrameAuctionsFrame.CancelAuctionButton)
+    F.ReskinButton(_G.AuctionHouseFrameAuctionsFrame.BidFrame.BidButton)
+    F.ReskinButton(_G.AuctionHouseFrameAuctionsFrame.BuyoutFrame.BuyoutButton)
 
     local buyDialog = AuctionHouseFrame.BuyDialog
     F.StripTextures(buyDialog)
     F.SetBD(buyDialog)
-    F.Reskin(buyDialog.OkayButton)
-    F.Reskin(buyDialog.BuyNowButton)
-    F.Reskin(buyDialog.CancelButton)
+    F.ReskinButton(buyDialog.OkayButton)
+    F.ReskinButton(buyDialog.BuyNowButton)
+    F.ReskinButton(buyDialog.CancelButton)
 
     local multisellFrame = _G.AuctionHouseMultisellProgressFrame
     F.StripTextures(multisellFrame)

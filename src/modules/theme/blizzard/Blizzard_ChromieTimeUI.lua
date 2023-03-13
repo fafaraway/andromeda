@@ -7,7 +7,7 @@ C.Themes['Blizzard_ChromieTimeUI'] = function()
     F.StripTextures(frame)
     F.SetBD(frame)
     F.ReskinClose(frame.CloseButton)
-    F.Reskin(frame.SelectButton)
+    F.ReskinButton(frame.SelectButton)
 
     local header = frame.Title
     header:DisableDrawLayer('BACKGROUND')

@@ -69,7 +69,7 @@ C.Themes['Blizzard_TalentUI'] = function()
             local bu = frame['specButton' .. i]
             local _, _, _, icon, role = GetSpecializationInfo(i, false, frame.isPet)
             F.StripTextures(bu)
-            F.Reskin(bu)
+            F.ReskinButton(bu)
 
             bu.selectedTex:SetColorTexture(r, g, b, 0.25)
             bu.selectedTex:SetDrawLayer('BACKGROUND')
@@ -195,13 +195,13 @@ C.Themes['Blizzard_TalentUI'] = function()
     end)
 
     F.ReskinPortraitFrame(_G.PlayerTalentFrame)
-    F.Reskin(_G.PlayerTalentFrameSpecializationLearnButton)
-    F.Reskin(_G.PlayerTalentFrameActivateButton)
-    F.Reskin(_G.PlayerTalentFramePetSpecializationLearnButton)
+    F.ReskinButton(_G.PlayerTalentFrameSpecializationLearnButton)
+    F.ReskinButton(_G.PlayerTalentFrameActivateButton)
+    F.ReskinButton(_G.PlayerTalentFramePetSpecializationLearnButton)
 
     -- PVP Talents
 
-    F.Reskin(_G.PlayerTalentFrameTalentsPvpTalentButton)
+    F.ReskinButton(_G.PlayerTalentFrameTalentsPvpTalentButton)
     _G.PlayerTalentFrameTalentsPvpTalentButton:SetSize(20, 20)
 
     local talentList = _G.PlayerTalentFrameTalentsPvpTalentFrameTalentList
@@ -210,13 +210,19 @@ C.Themes['Blizzard_TalentUI'] = function()
     F.StripTextures(talentList)
     F.SetBD(talentList)
     talentList.Inset:Hide()
-    F.Reskin(select(4, talentList:GetChildren()), nil)
+    F.ReskinButton(select(4, talentList:GetChildren()), nil)
 
     F.StripTextures(_G.PlayerTalentFrameTalentsPvpTalentFrame)
-    F.ReskinScroll(_G.PlayerTalentFrameTalentsPvpTalentFrameTalentListScrollFrameScrollBar)
+    if C.IS_NEW_PATCH_10_1 then
+        F.ReskinTrimScroll(talentList.ScrollBar)
 
-    for i = 1, 10 do
-        local bu = _G['PlayerTalentFrameTalentsPvpTalentFrameTalentListScrollFrameButton' .. i]
-        hooksecurefunc(bu, 'Update', ReskinPvPTalent)
+        -- todo, might removed in the future build
+    else
+        F.ReskinScroll(_G.PlayerTalentFrameTalentsPvpTalentFrameTalentListScrollFrameScrollBar)
+
+        for i = 1, 10 do
+            local bu = _G['PlayerTalentFrameTalentsPvpTalentFrameTalentListScrollFrameButton' .. i]
+            hooksecurefunc(bu, 'Update', ReskinPvPTalent)
+        end
     end
 end

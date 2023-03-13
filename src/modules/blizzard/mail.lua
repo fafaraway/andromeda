@@ -223,7 +223,7 @@ function M:MailBox_ContactList()
         F:TogglePanel(list)
     end)
 
-    local editbox = F.CreateEditBox(list, 120, 20)
+    local editbox = F.CreateEditbox(list, 120, 20)
     editbox:SetPoint('TOPLEFT', 4, -25)
     editbox.tipHeader = L['Add Contacts']
     F.AddTooltip(
@@ -351,7 +351,7 @@ function M:MailBox_CreatButton(parent, width, height, text, anchor)
     button:SetPoint(unpack(anchor))
     button:SetText(text)
     if _G.ANDROMEDA_ADB.ReskinBlizz then
-        F.Reskin(button)
+        F.ReskinButton(button)
     end
 
     return button
@@ -415,7 +415,7 @@ function M:LastMailSaver()
     mailSaver:SetHitRectInsets(0, 0, 0, 0)
     mailSaver:SetPoint('LEFT', _G.SendMailNameEditBox, 'RIGHT', 0, 0)
     mailSaver:SetSize(24, 24)
-    F.ReskinCheckButton(mailSaver)
+    F.ReskinCheckbox(mailSaver)
 
     mailSaver:SetChecked(C.DB.General.SaveRecipient)
     mailSaver:SetScript('OnClick', function(self)

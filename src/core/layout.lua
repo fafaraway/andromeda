@@ -347,7 +347,7 @@ local function CreateConsole()
     F.SetBD(frame)
     f.__trimText = F.CreateFS(frame, C.Assets.Fonts.Regular, 12, outline or nil, '', 'YELLOW', outline and 'NONE' or 'THICK', 'BOTTOM', 0, 5)
 
-    local xBox = F.CreateEditBox(frame, 60, 22)
+    local xBox = F.CreateEditbox(frame, 60, 22)
     xBox:SetPoint('TOPRIGHT', frame, 'TOP', -12, -15)
     F.CreateFS(xBox, C.Assets.Fonts.Regular, 11, outline or nil, 'X', 'YELLOW', outline and 'NONE' or 'THICK', 'LEFT', -20, 0)
     xBox:SetJustifyH('CENTER')
@@ -363,7 +363,7 @@ local function CreateConsole()
     end)
     f.__x = xBox
 
-    local yBox = F.CreateEditBox(frame, 60, 22)
+    local yBox = F.CreateEditbox(frame, 60, 22)
     yBox:SetPoint('TOPRIGHT', frame, 'TOP', -12, -39)
     F.CreateFS(yBox, C.Assets.Fonts.Regular, 11, outline or nil, 'Y', 'YELLOW', outline and 'NONE' or 'THICK', 'LEFT', -20, 0)
     yBox:SetJustifyH('CENTER')

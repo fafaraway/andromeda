@@ -4,7 +4,7 @@ local function reskinHelpTips(self)
     for frame in self.framePool:EnumerateActive() do
         if not frame.styled then
             if frame.OkayButton then
-                F.Reskin(frame.OkayButton)
+                F.ReskinButton(frame.OkayButton)
             end
             if frame.CloseButton then
                 F.ReskinClose(frame.CloseButton)

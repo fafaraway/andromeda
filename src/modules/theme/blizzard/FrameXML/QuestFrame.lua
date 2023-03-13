@@ -56,17 +56,24 @@ tinsert(C.BlizzThemes, function()
         end
     end)
 
-    F.Reskin(_G.QuestFrameAcceptButton)
-    F.Reskin(_G.QuestFrameDeclineButton)
-    F.Reskin(_G.QuestFrameCompleteQuestButton)
-    F.Reskin(_G.QuestFrameCompleteButton)
-    F.Reskin(_G.QuestFrameGoodbyeButton)
-    F.Reskin(_G.QuestFrameGreetingGoodbyeButton)
+    F.ReskinButton(_G.QuestFrameAcceptButton)
+    F.ReskinButton(_G.QuestFrameDeclineButton)
+    F.ReskinButton(_G.QuestFrameCompleteQuestButton)
+    F.ReskinButton(_G.QuestFrameCompleteButton)
+    F.ReskinButton(_G.QuestFrameGoodbyeButton)
+    F.ReskinButton(_G.QuestFrameGreetingGoodbyeButton)
 
-    F.ReskinScroll(_G.QuestProgressScrollFrameScrollBar)
-    F.ReskinScroll(_G.QuestRewardScrollFrameScrollBar)
-    F.ReskinScroll(_G.QuestDetailScrollFrameScrollBar)
-    F.ReskinScroll(_G.QuestGreetingScrollFrameScrollBar)
+    if C.IS_NEW_PATCH_10_1 then
+        F.ReskinTrimScroll(_G.QuestProgressScrollFrame.ScrollBar)
+        F.ReskinTrimScroll(_G.QuestRewardScrollFrame.ScrollBar)
+        F.ReskinTrimScroll(_G.QuestDetailScrollFrame.ScrollBar)
+        F.ReskinTrimScroll(_G.QuestGreetingScrollFrame.ScrollBar)
+    else
+        F.ReskinScroll(_G.QuestProgressScrollFrameScrollBar)
+        F.ReskinScroll(_G.QuestRewardScrollFrameScrollBar)
+        F.ReskinScroll(_G.QuestDetailScrollFrameScrollBar)
+        F.ReskinScroll(_G.QuestGreetingScrollFrameScrollBar)
+    end
 
     -- Text colour stuff
 

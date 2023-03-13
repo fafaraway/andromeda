@@ -45,7 +45,7 @@ local function ReskinTitleButton(self, index)
     local button = self.Buttons[index]
     if button and not button.styled then
         F.StripTextures(button)
-        F.Reskin(button)
+        F.ReskinButton(button)
         button.Overlay:Hide()
         button.Hilite:Hide()
 

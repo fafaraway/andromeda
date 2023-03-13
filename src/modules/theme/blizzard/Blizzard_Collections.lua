@@ -78,9 +78,9 @@ C.Themes['Blizzard_Collections'] = function()
     F.CreateBDFrame(MountJournal.MountDisplay.ModelScene, 0.25)
     F.ReskinIcon(MountJournal.MountDisplay.InfoButton.Icon)
 
-    F.Reskin(_G.MountJournalMountButton)
-    F.Reskin(_G.PetJournalSummonButton)
-    F.Reskin(_G.PetJournalFindBattle)
+    F.ReskinButton(_G.MountJournalMountButton)
+    F.ReskinButton(_G.PetJournalSummonButton)
+    F.ReskinButton(_G.PetJournalFindBattle)
     F.ReskinTrimScroll(MountJournal.ScrollBar)
 
     hooksecurefunc(MountJournal.ScrollBox, 'Update', reskinFrameButton)
@@ -141,15 +141,15 @@ C.Themes['Blizzard_Collections'] = function()
         end
     end)
 
-    F.ReskinEditBox(_G.MountJournalSearchBox)
-    F.ReskinEditBox(_G.PetJournalSearchBox)
+    F.ReskinEditbox(_G.MountJournalSearchBox)
+    F.ReskinEditbox(_G.PetJournalSearchBox)
     F.ReskinArrow(MountJournal.MountDisplay.ModelScene.RotateLeftButton, 'left')
     F.ReskinArrow(MountJournal.MountDisplay.ModelScene.RotateRightButton, 'right')
     F.ReskinFilterButton(_G.PetJournalFilterButton)
     F.ReskinFilterButton(_G.MountJournalFilterButton)
 
     local togglePlayer = MountJournal.MountDisplay.ModelScene.TogglePlayer
-    F.ReskinCheckButton(togglePlayer)
+    F.ReskinCheckbox(togglePlayer)
     togglePlayer:SetSize(28, 28)
 
     F.StripTextures(MountJournal.BottomLeftInset)
@@ -322,7 +322,7 @@ C.Themes['Blizzard_Collections'] = function()
     local iconsFrame = ToyBox.iconsFrame
 
     F.StripTextures(iconsFrame)
-    F.ReskinEditBox(ToyBox.searchBox)
+    F.ReskinEditbox(ToyBox.searchBox)
     F.ReskinFilterButton(_G.ToyBoxFilterButton)
     F.ReskinArrow(ToyBox.PagingFrame.PrevPageButton, 'left')
     F.ReskinArrow(ToyBox.PagingFrame.NextPageButton, 'right')
@@ -386,8 +386,8 @@ C.Themes['Blizzard_Collections'] = function()
     local icons = HeirloomsJournal.iconsFrame
 
     F.StripTextures(icons)
-    F.ReskinEditBox(_G.HeirloomsJournalSearchBox)
-    F.ReskinDropDown(_G.HeirloomsJournalClassDropDown)
+    F.ReskinEditbox(_G.HeirloomsJournalSearchBox)
+    F.ReskinDropdown(_G.HeirloomsJournalClassDropDown)
     F.ReskinFilterButton(HeirloomsJournal.FilterButton)
     F.ReskinArrow(HeirloomsJournal.PagingFrame.PrevPageButton, 'left')
     F.ReskinArrow(HeirloomsJournal.PagingFrame.NextPageButton, 'right')
@@ -489,8 +489,8 @@ C.Themes['Blizzard_Collections'] = function()
 
     F.StripTextures(ItemsCollectionFrame)
     F.ReskinFilterButton(WardrobeCollectionFrame.FilterButton)
-    F.ReskinDropDown(_G.WardrobeCollectionFrameWeaponDropDown)
-    F.ReskinEditBox(_G.WardrobeCollectionFrameSearchBox)
+    F.ReskinDropdown(_G.WardrobeCollectionFrameWeaponDropDown)
+    F.ReskinEditbox(_G.WardrobeCollectionFrameSearchBox)
 
     hooksecurefunc(WardrobeCollectionFrame, 'SetTab', function(self, tabID)
         for index = 1, 2 do
@@ -581,11 +581,11 @@ C.Themes['Blizzard_Collections'] = function()
 
     F.StripTextures(WardrobeTransmogFrame)
     F.ReskinPortraitFrame(WardrobeFrame)
-    F.Reskin(WardrobeTransmogFrame.ApplyButton)
+    F.ReskinButton(WardrobeTransmogFrame.ApplyButton)
     F.StripTextures(WardrobeTransmogFrame.SpecButton)
     F.ReskinArrow(WardrobeTransmogFrame.SpecButton, 'down')
     WardrobeTransmogFrame.SpecButton:SetPoint('RIGHT', WardrobeTransmogFrame.ApplyButton, 'LEFT', -3, 0)
-    F.ReskinCheckButton(WardrobeTransmogFrame.ToggleSecondaryAppearanceCheckbox)
+    F.ReskinCheckbox(WardrobeTransmogFrame.ToggleSecondaryAppearanceCheckbox)
 
     local modelScene = WardrobeTransmogFrame.ModelScene
     modelScene.ClearAllPendingButton:DisableDrawLayer('BACKGROUND')
@@ -604,8 +604,8 @@ C.Themes['Blizzard_Collections'] = function()
     end
 
     -- Outfit Frame
-    F.Reskin(_G.WardrobeOutfitDropDown.SaveButton)
-    F.ReskinDropDown(_G.WardrobeOutfitDropDown)
+    F.ReskinButton(_G.WardrobeOutfitDropDown.SaveButton)
+    F.ReskinDropdown(_G.WardrobeOutfitDropDown)
     _G.WardrobeOutfitDropDown:SetHeight(32)
     _G.WardrobeOutfitDropDown.SaveButton:SetPoint('LEFT', _G.WardrobeOutfitDropDown, 'RIGHT', -13, 2)
 
@@ -617,11 +617,11 @@ C.Themes['Blizzard_Collections'] = function()
         end
         if not reskinHPet then
             if _G.HPetInitOpenButton then
-                F.Reskin(_G.HPetInitOpenButton)
+                F.ReskinButton(_G.HPetInitOpenButton)
             end
             if _G.HPetAllInfoButton then
                 F.StripTextures(_G.HPetAllInfoButton)
-                F.Reskin(_G.HPetAllInfoButton)
+                F.ReskinButton(_G.HPetAllInfoButton)
             end
 
             if _G.PetJournalBandageButton then

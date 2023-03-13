@@ -20,8 +20,8 @@ tinsert(C.BlizzThemes, function()
         end
     end)
 
-    F.Reskin(PVPReadyDialog.enterButton)
-    F.Reskin(PVPReadyDialog.leaveButton)
+    F.ReskinButton(PVPReadyDialog.enterButton)
+    F.ReskinButton(PVPReadyDialog.leaveButton)
     F.ReskinClose(_G.PVPReadyDialogCloseButton)
 
     local function stripBorders(self)
@@ -74,7 +74,7 @@ tinsert(C.BlizzThemes, function()
         end
 
         local buttonContainer = PVPMatchResults.buttonContainer
-        F.Reskin(buttonContainer.leaveButton)
-        F.Reskin(buttonContainer.requeueButton)
+        F.ReskinButton(buttonContainer.leaveButton)
+        F.ReskinButton(buttonContainer.requeueButton)
     end
 end)

@@ -28,9 +28,9 @@ C.Themes['Blizzard_BlackMarketUI'] = function()
 
     F.SetBD(BlackMarketFrame)
     F.CreateBDFrame(BlackMarketFrame.HotDeal, 0.25)
-    F.Reskin(BlackMarketFrame.BidButton)
+    F.ReskinButton(BlackMarketFrame.BidButton)
     F.ReskinClose(BlackMarketFrame.CloseButton)
-    F.ReskinEditBox(_G.BlackMarketBidPriceGold)
+    F.ReskinEditbox(_G.BlackMarketBidPriceGold)
     F.ReskinTrimScroll(BlackMarketFrame.ScrollBar)
 
     hooksecurefunc(BlackMarketFrame.ScrollBox, 'Update', function(self)

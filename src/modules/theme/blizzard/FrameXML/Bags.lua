@@ -114,6 +114,9 @@ tinsert(C.BlizzThemes, function()
         F.StripTextures(frame)
         F.SetBD(frame)
         frame.PortraitContainer:Hide()
+        if frame.Bg then
+            frame.Bg:Hide()
+        end
         createBagIcon(frame, i)
         hooksecurefunc(frame, 'Update', updateContainer)
 
@@ -140,7 +143,7 @@ tinsert(C.BlizzThemes, function()
         end
     end)
 
-    F.ReskinEditBox(_G.BagItemSearchBox)
+    F.ReskinEditbox(_G.BagItemSearchBox)
     ReskinSortButton(_G.BagItemAutoSortButton)
 
     -- Combined bags
@@ -159,10 +162,10 @@ tinsert(C.BlizzThemes, function()
     select(10, _G.BankSlotsFrame:GetRegions()):SetDrawLayer('OVERLAY')
 
     F.ReskinPortraitFrame(_G.BankFrame)
-    F.Reskin(_G.BankFramePurchaseButton)
+    F.ReskinButton(_G.BankFramePurchaseButton)
     F.ReskinTab(_G.BankFrameTab1)
     F.ReskinTab(_G.BankFrameTab2)
-    F.ReskinEditBox(_G.BankItemSearchBox)
+    F.ReskinEditbox(_G.BankItemSearchBox)
 
     for i = 1, 28 do
         ReskinBagSlot(_G['BankFrameItem' .. i])
@@ -186,8 +189,8 @@ tinsert(C.BlizzThemes, function()
     _G.ReagentBankFrame:DisableDrawLayer('BORDER')
     _G.ReagentBankFrame:DisableDrawLayer('ARTWORK')
 
-    F.Reskin(_G.ReagentBankFrame.DespositButton)
-    F.Reskin(_G.ReagentBankFrameUnlockInfoPurchaseButton)
+    F.ReskinButton(_G.ReagentBankFrame.DespositButton)
+    F.ReskinButton(_G.ReagentBankFrameUnlockInfoPurchaseButton)
 
     -- make button more visible
     F.StripTextures(_G.ReagentBankFrameUnlockInfo)

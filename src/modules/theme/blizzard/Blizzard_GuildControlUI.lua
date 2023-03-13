@@ -11,7 +11,7 @@ local function updateGuildRanks()
             F.ReskinArrow(rank.upButton, 'up')
             F.ReskinArrow(rank.downButton, 'down')
             F.ReskinClose(rank.deleteButton)
-            F.ReskinEditBox(rank.nameBox, 20)
+            F.ReskinEditbox(rank.nameBox, 20)
 
             rank.styled = true
         end
@@ -36,8 +36,10 @@ C.Themes['Blizzard_GuildControlUI'] = function()
     _G.GuildControlUIRankSettingsFrameBankBg:SetAlpha(0)
     _G.GuildControlUITopBg:Hide()
     _G.GuildControlUIHbar:Hide()
-    _G.GuildControlUIRankBankFrameInsetScrollFrameTop:SetAlpha(0)
-    _G.GuildControlUIRankBankFrameInsetScrollFrameBottom:SetAlpha(0)
+    if not C.IS_NEW_PATCH_10_1 then
+        _G.GuildControlUIRankBankFrameInsetScrollFrameTop:SetAlpha(0)
+        _G.GuildControlUIRankBankFrameInsetScrollFrameBottom:SetAlpha(0)
+    end
 
     -- Guild ranks
     F:RegisterEvent('GUILD_RANKS_UPDATE', updateGuildRanks)
@@ -55,8 +57,8 @@ C.Themes['Blizzard_GuildControlUI'] = function()
                 _G[tab .. 'Bg']:Hide()
                 F.ReskinIcon(ownedTab.tabIcon)
                 F.CreateBDFrame(bu, 0.25)
-                F.Reskin(bu.buy.button)
-                F.ReskinEditBox(ownedTab.editBox)
+                F.ReskinButton(bu.buy.button)
+                F.ReskinEditbox(ownedTab.editBox)
 
                 for _, name in pairs(checkboxes) do
                     local box = ownedTab[name]
@@ -81,19 +83,23 @@ C.Themes['Blizzard_GuildControlUI'] = function()
         end
     end)
 
-    F.ReskinCheckButton(_G.GuildControlUIRankSettingsFrameOfficerCheckbox)
+    F.ReskinCheckbox(_G.GuildControlUIRankSettingsFrameOfficerCheckbox)
     for i = 1, 20 do
         local checbox = _G['GuildControlUIRankSettingsFrameCheckbox' .. i]
         if checbox then
-            F.ReskinCheckButton(checbox)
+            F.ReskinCheckbox(checbox)
         end
     end
 
-    F.Reskin(_G.GuildControlUIRankOrderFrameNewButton)
+    F.ReskinButton(_G.GuildControlUIRankOrderFrameNewButton)
     F.ReskinClose(_G.GuildControlUICloseButton)
-    F.ReskinScroll(_G.GuildControlUIRankBankFrameInsetScrollFrameScrollBar)
-    F.ReskinDropDown(_G.GuildControlUINavigationDropDown)
-    F.ReskinDropDown(_G.GuildControlUIRankSettingsFrameRankDropDown)
-    F.ReskinDropDown(_G.GuildControlUIRankBankFrameRankDropDown)
-    F.ReskinEditBox(_G.GuildControlUIRankSettingsFrameGoldBox, 20)
+    if C.IS_NEW_PATCH_10_1 then
+        F.ReskinTrimScroll(_G.GuildControlUIRankBankFrameInsetScrollFrame.ScrollBar)
+    else
+        F.ReskinScroll(_G.GuildControlUIRankBankFrameInsetScrollFrameScrollBar)
+    end
+    F.ReskinDropdown(_G.GuildControlUINavigationDropDown)
+    F.ReskinDropdown(_G.GuildControlUIRankSettingsFrameRankDropDown)
+    F.ReskinDropdown(_G.GuildControlUIRankBankFrameRankDropDown)
+    F.ReskinEditbox(_G.GuildControlUIRankSettingsFrameGoldBox, 20)
 end

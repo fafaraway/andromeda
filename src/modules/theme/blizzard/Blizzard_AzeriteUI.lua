@@ -11,20 +11,29 @@ C.Themes['Blizzard_AzeriteEssenceUI'] = function()
 
     F.ReskinPortraitFrame(_G.AzeriteEssenceUI)
     F.StripTextures(_G.AzeriteEssenceUI.PowerLevelBadgeFrame)
-    F.ReskinScroll(_G.AzeriteEssenceUI.EssenceList.ScrollBar)
+    if C.IS_NEW_PATCH_10_1 then
+        F.ReskinTrimScroll(_G.AzeriteEssenceUI.EssenceList.ScrollBar)
+    else
+        F.ReskinScroll(_G.AzeriteEssenceUI.EssenceList.ScrollBar)
+    end
 
     local headerButton = _G.AzeriteEssenceUI.EssenceList.HeaderButton
-    headerButton:DisableDrawLayer('BORDER')
-    headerButton:DisableDrawLayer('BACKGROUND')
-    local bg = F.CreateBDFrame(headerButton, 0, true)
-    bg:SetPoint('TOPLEFT', headerButton.ExpandedIcon, -4, 6)
-    bg:SetPoint('BOTTOMRIGHT', headerButton.ExpandedIcon, 4, -6)
-    headerButton:SetScript('OnEnter', function()
-        bg:SetBackdropColor(r, g, b, 0.25)
-    end)
-    headerButton:SetScript('OnLeave', function()
-        bg:SetBackdropColor(0, 0, 0, 0)
-    end)
+    if headerButton then -- todo: removed in 10.1
+        headerButton:DisableDrawLayer('BORDER')
+        headerButton:DisableDrawLayer('BACKGROUND')
+
+        local bg = F.CreateBDFrame(headerButton, 0, true)
+        bg:SetPoint('TOPLEFT', headerButton.ExpandedIcon, -4, 6)
+        bg:SetPoint('BOTTOMRIGHT', headerButton.ExpandedIcon, 4, -6)
+
+        headerButton:SetScript('OnEnter', function()
+            bg:SetBackdropColor(r, g, b, 0.25)
+        end)
+
+        headerButton:SetScript('OnLeave', function()
+            bg:SetBackdropColor(0, 0, 0, 0)
+        end)
+    end
 
     for _, milestoneFrame in pairs(_G.AzeriteEssenceUI.Milestones) do
         if milestoneFrame.LockedState then
@@ -75,10 +84,10 @@ local function reskinReforgeUI(frame, index)
     bg:SetPoint('TOPLEFT', buttonFrame.MoneyFrameEdge, 3, 0)
     bg:SetPoint('BOTTOMRIGHT', buttonFrame.MoneyFrameEdge, 0, 2)
     if buttonFrame.AzeriteRespecButton then
-        F.Reskin(buttonFrame.AzeriteRespecButton)
+        F.ReskinButton(buttonFrame.AzeriteRespecButton)
     end
     if buttonFrame.ActionButton then
-        F.Reskin(buttonFrame.ActionButton)
+        F.ReskinButton(buttonFrame.ActionButton)
     end
     if buttonFrame.Currency then
         F.ReskinIcon(buttonFrame.Currency.Icon)

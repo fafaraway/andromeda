@@ -9,8 +9,8 @@ tinsert(C.BlizzThemes, function()
     ColorPickerFrame.Border:Hide()
 
     F.SetBD(ColorPickerFrame)
-    F.Reskin(_G.ColorPickerOkayButton)
-    F.Reskin(_G.ColorPickerCancelButton)
+    F.ReskinButton(_G.ColorPickerOkayButton)
+    F.ReskinButton(_G.ColorPickerCancelButton)
     F.ReskinSlider(_G.OpacitySliderFrame, true)
 
     _G.ColorPickerCancelButton:ClearAllPoints()

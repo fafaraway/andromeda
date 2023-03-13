@@ -29,7 +29,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ]]
 local MAJOR_VERSION = "LibActionButton-1.0"
-local MINOR_VERSION = 106
+local MINOR_VERSION = 107
 
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end
 local lib, oldversion = LibStub:NewLibrary(MAJOR_VERSION, MINOR_VERSION)
@@ -1246,6 +1246,17 @@ function InitializeEventHandler()
 	end
 end
 
+local function PlayerHasLockAndLoad()
+	local name, spellID, _
+	for i = 1, 40 do
+		name, _, _, _, _, _, _, _, _, spellID = UnitAura("player", i, "HELPFUL")
+		if not name then break end
+		if spellID == 194594 then
+			return true
+		end
+	end
+end
+
 local _lastFormUpdate = GetTime()
 function OnEvent(frame, event, arg1, ...)
 	if event == "PLAYER_LOGIN" then
@@ -1378,6 +1389,7 @@ function OnEvent(frame, event, arg1, ...)
 		for button in next, ActiveButtons do
 			local spellId = button:GetSpellId()
 			if spellId and spellId == arg1 then
+				if spellId == 19434 and not PlayerHasLockAndLoad() then return end -- NDui: Ignore MM hunter T29x2
 				ShowOverlayGlow(button)
 			else
 				if button._state_type == "action" then
@@ -1596,6 +1608,34 @@ function Generic:UpdateAction(force)
 	end
 end
 
+local function ClearProfessionQuality(self)
+	if self.ProfessionQuality then
+		self.ProfessionQuality:Hide()
+	end
+end
+
+local function UpdateProfessionQuality(self)
+	if self._state_type == "custom" then return end
+
+	local action = self._state_action
+	if action and IsItemAction(action) then
+		local quality = C_ActionBar.GetProfessionQuality(action)
+		if quality then
+			if not self.ProfessionQuality then
+				self.ProfessionQuality = CreateFrame("Frame", nil, self)
+				self.ProfessionQuality:SetInside()
+				local tex = self.ProfessionQuality:CreateTexture(nil, "ARTWORK")
+				tex:SetPoint("TOPLEFT")
+				self.ProfessionQuality.Texture = tex
+			end
+			self.ProfessionQuality:Show()
+			self.ProfessionQuality.Texture:SetAtlas(format("Professions-Icon-Quality-Tier%d-Inv", quality), true)
+			return
+		end
+	end
+	ClearProfessionQuality(self)
+end
+
 function Update(self)
 	if self:HasAction() then
 		ActiveButtons[self] = true
@@ -1611,6 +1651,7 @@ function Update(self)
 		UpdateUsable(self)
 		UpdateCooldown(self)
 		UpdateFlash(self)
+		UpdateProfessionQuality(self)
 	else
 		ActiveButtons[self] = nil
 		ActionButtons[self] = nil
@@ -1620,6 +1661,7 @@ function Update(self)
 		end
 		self.cooldown:Hide()
 		self:SetChecked(false)
+		ClearProfessionQuality(self)
 
 		if self.chargeCooldown then
 			EndChargeCooldown(self.chargeCooldown)

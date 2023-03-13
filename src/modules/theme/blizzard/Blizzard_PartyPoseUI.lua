@@ -9,7 +9,7 @@ local function reskinPartyPose(frame)
         frame.OverlayElements.Topper:SetAlpha(0)
     end
     F.SetBD(frame)
-    F.Reskin(frame.LeaveButton)
+    F.ReskinButton(frame.LeaveButton)
     F.StripTextures(frame.ModelScene)
     F.CreateBDFrame(frame.ModelScene, 0.25)
 

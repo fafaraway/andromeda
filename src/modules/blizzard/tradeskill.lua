@@ -171,7 +171,7 @@ function BLIZZARD:TradeTabs_FilterIcons()
 
     local buttons = {}
     for index, value in pairs(buttonList) do
-        local bu = CreateFrame('Button', nil, _G.ProfessionsFrame.CraftingPage, 'BackdropTemplate')
+        local bu = CreateFrame('Button', nil, _G.ProfessionsFrame.CraftingPage.RecipeList, 'BackdropTemplate')
         bu:SetSize(22, 22)
         bu:SetPoint('BOTTOMRIGHT', _G.ProfessionsFrame.CraftingPage.RecipeList.FilterButton, 'TOPRIGHT', -(index - 1) * 27, 10)
         F.PixelIcon(bu, value[1], true)

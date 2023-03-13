@@ -14,7 +14,7 @@ tinsert(C.BlizzThemes, function()
     F.ReskinArrow(Display.ModelScene.CarouselLeftButton, 'left')
     F.ReskinArrow(Display.ModelScene.CarouselRightButton, 'right')
     F.ReskinClose(_G.ModelPreviewFrameCloseButton)
-    F.Reskin(ModelPreviewFrame.CloseButton)
+    F.ReskinButton(ModelPreviewFrame.CloseButton)
 
     local bg = F.CreateBDFrame(Display.ModelScene, 0.25)
     bg:SetPoint('TOPLEFT', -1, 0)

@@ -3,13 +3,13 @@ local F, C = unpack(select(2, ...))
 C.Themes['Blizzard_BarbershopUI'] = function()
     local frame = _G.BarberShopFrame
 
-    F.Reskin(frame.AcceptButton)
-    F.Reskin(frame.CancelButton)
-    F.Reskin(frame.ResetButton)
+    F.ReskinButton(frame.AcceptButton)
+    F.ReskinButton(frame.CancelButton)
+    F.ReskinButton(frame.ResetButton)
 end
 
 local function ReskinCustomizeButton(button)
-    F.Reskin(button)
+    F.ReskinButton(button)
     button.__bg:SetInside(nil, 5, 5)
 end
 
@@ -61,7 +61,7 @@ C.Themes['Blizzard_CharacterCustomize'] = function()
         local optionPool = self.pools:GetPool('CharCustomizeOptionCheckButtonTemplate')
         for button in optionPool:EnumerateActive() do
             if not button.styled then
-                F.ReskinCheckButton(button.Button)
+                F.ReskinCheckbox(button.Button)
                 button.styled = true
             end
         end

@@ -100,7 +100,7 @@ function CHAT:ChatCopy_Create()
     local copy = CreateFrame('Button', nil, _G.UIParent)
     copy:SetPoint('TOPRIGHT', _G.ChatFrame1, 'TOPLEFT', -6, 0)
     copy:SetSize(20, 20)
-    F.Reskin(copy)
+    F.ReskinButton(copy)
     CHAT.CopyButton = copy
 
     copy.Icon = copy:CreateTexture(nil, 'ARTWORK')

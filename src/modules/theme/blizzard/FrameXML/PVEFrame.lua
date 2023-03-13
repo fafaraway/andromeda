@@ -18,7 +18,7 @@ tinsert(C.BlizzThemes, function()
         local bu = _G.GroupFinderFrame['groupButton' .. i]
 
         bu.ring:Hide()
-        F.Reskin(bu)
+        F.ReskinButton(bu)
         bu.bg:SetColorTexture(r, g, b, 0.25)
         bu.bg:SetInside(bu.__bg)
 

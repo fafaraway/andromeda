@@ -67,8 +67,8 @@ C.Themes['Blizzard_VoidStorageUI'] = function()
     _G.VoidStorageFrame.Page1:ClearAllPoints()
     _G.VoidStorageFrame.Page1:SetPoint('LEFT', _G.VoidStorageFrame, 'TOPRIGHT', 2, -60)
 
-    F.Reskin(_G.VoidStoragePurchaseButton)
-    F.Reskin(_G.VoidStorageTransferButton)
+    F.ReskinButton(_G.VoidStoragePurchaseButton)
+    F.ReskinButton(_G.VoidStorageTransferButton)
     F.ReskinClose(_G.VoidStorageBorderFrame.CloseButton)
-    F.ReskinEditBox(_G.VoidItemSearchBox)
+    F.ReskinEditbox(_G.VoidItemSearchBox)
 end

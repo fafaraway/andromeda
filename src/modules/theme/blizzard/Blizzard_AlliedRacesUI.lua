@@ -6,9 +6,13 @@ C.Themes['Blizzard_AlliedRacesUI'] = function()
     select(2, AlliedRacesFrame.ModelFrame:GetRegions()):Hide()
 
     local scrollFrame = AlliedRacesFrame.RaceInfoFrame.ScrollFrame
-    F.ReskinScroll(scrollFrame.ScrollBar)
-    scrollFrame.ScrollBar.ScrollUpBorder:Hide()
-    scrollFrame.ScrollBar.ScrollDownBorder:Hide()
+    if C.IS_NEW_PATCH_10_1 then
+        F.ReskinTrimScroll(scrollFrame.ScrollBar)
+    else
+        F.ReskinScroll(scrollFrame.ScrollBar)
+        scrollFrame.ScrollBar.ScrollUpBorder:Hide()
+        scrollFrame.ScrollBar.ScrollDownBorder:Hide()
+    end
     AlliedRacesFrame.RaceInfoFrame.AlliedRacesRaceName:SetTextColor(1, 0.8, 0)
     scrollFrame.Child.RaceDescriptionText:SetTextColor(1, 1, 1)
     scrollFrame.Child.RacialTraitsLabel:SetTextColor(1, 0.8, 0)

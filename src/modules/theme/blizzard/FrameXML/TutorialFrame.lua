@@ -7,7 +7,7 @@ tinsert(C.BlizzThemes, function()
     _G.TutorialFrameBackground.Show = nop
     _G.TutorialFrame:DisableDrawLayer('BORDER')
 
-    F.Reskin(_G.TutorialFrameOkayButton, true)
+    F.ReskinButton(_G.TutorialFrameOkayButton, true)
     F.ReskinClose(_G.TutorialFrameCloseButton)
     F.ReskinArrow(_G.TutorialFramePrevButton, 'left')
     F.ReskinArrow(_G.TutorialFrameNextButton, 'right')

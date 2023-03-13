@@ -8,10 +8,10 @@ local function ReskinTableAttribute(frame)
     F.StripTextures(frame)
     F.SetBD(frame)
     F.ReskinClose(frame.CloseButton)
-    F.ReskinCheckButton(frame.VisibilityButton)
-    F.ReskinCheckButton(frame.HighlightButton)
-    F.ReskinCheckButton(frame.DynamicUpdateButton)
-    F.ReskinEditBox(frame.FilterBox)
+    F.ReskinCheckbox(frame.VisibilityButton)
+    F.ReskinCheckbox(frame.HighlightButton)
+    F.ReskinCheckbox(frame.DynamicUpdateButton)
+    F.ReskinEditbox(frame.FilterBox)
 
     F.ReskinArrow(frame.OpenParentButton, 'up')
     F.ReskinArrow(frame.NavigateBackwardButton, 'left')
@@ -27,7 +27,11 @@ local function ReskinTableAttribute(frame)
 
     F.StripTextures(frame.ScrollFrameArt)
     F.CreateBDFrame(frame.ScrollFrameArt, 0.25)
-    F.ReskinScroll(frame.LinesScrollFrame.ScrollBar)
+    if C.IS_NEW_PATCH_10_1 then
+        F.ReskinTrimScroll(frame.LinesScrollFrame.ScrollBar)
+    else
+        F.ReskinScroll(frame.LinesScrollFrame.ScrollBar)
+    end
 
     frame.styled = true
 end

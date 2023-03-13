@@ -163,11 +163,15 @@ TOOLTIP:RegisterTooltips(C.ADDON_NAME, function()
         _G.IMECandidatesFrame,
         _G.QuickKeybindTooltip,
         _G.GameSmallHeaderTooltip,
-        _G.SettingsTooltip,
     }
 
     for _, f in pairs(tooltips) do
         f:HookScript('OnShow', TOOLTIP.ReskinTooltip)
+    end
+
+    if _G.SettingsTooltip then
+        TOOLTIP.ReskinTooltip(_G.SettingsTooltip)
+        _G.SettingsTooltip:SetScale(_G.UIParent:GetScale())
     end
 
     -- DropdownMenu

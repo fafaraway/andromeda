@@ -42,11 +42,11 @@ function THEME:ReskinPGF()
         F.StripTextures(self)
         F.SetBD(self):SetAllPoints()
         F.ReskinClose(self.CloseButton)
-        F.Reskin(self.ResetButton)
-        F.Reskin(self.RefreshButton)
-        F.ReskinDropDown(self.Difficulty.DropDown)
-        F.ReskinEditBox(self.Expression)
-        F.ReskinEditBox(self.Sorting.SortingExpression)
+        F.ReskinButton(self.ResetButton)
+        F.ReskinButton(self.RefreshButton)
+        F.ReskinDropdown(self.Difficulty.DropDown)
+        F.ReskinEditbox(self.Expression)
+        F.ReskinEditbox(self.Sorting.SortingExpression)
 
         if self.MoveableToggle then
             F.ReskinArrow(self.MoveableToggle, 'left')
@@ -83,13 +83,13 @@ function THEME:ReskinPGF()
                 if check then
                     check:SetSize(26, 26)
                     check:SetPoint('TOPLEFT', 5, -3)
-                    F.ReskinCheckButton(check)
+                    F.ReskinCheckbox(check)
                 end
 
                 local input = frame.Min
                 if input then
-                    F.ReskinEditBox(input)
-                    F.ReskinEditBox(frame.Max)
+                    F.ReskinEditbox(input)
+                    F.ReskinEditbox(frame.Max)
                 end
             end
         end
