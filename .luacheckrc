@@ -2715,5 +2715,12 @@ globals = {
     'ChatEdit_ActivateChat',
     'MailFrameTab_OnClick',
     'UIDropDownMenu_CreateInfo',
-    'UIDropDownMenu_AddButton'
+    'UIDropDownMenu_AddButton',
+    'BNet_GetValidatedCharacterName',
+    'FriendsFrame_InviteOrRequestToJoin',
+    'ChatFrame_SendBNetTell',
+    'ChatFrame_SendTell',
+    'HybridScrollFrame_Update',
+    'StaticPopupSpecial_Show',
+    'AddFriendFrame_ShowEntry'
 }
