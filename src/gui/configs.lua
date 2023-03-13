@@ -410,6 +410,7 @@ C.CharacterSettings = {
     },
     Tooltip = {
         Enable = true,
+        Scale = 1,
         BackdropAlpha = 0.65,
         FollowCursor = false,
         Icon = true,

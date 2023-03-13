@@ -13,7 +13,7 @@ function TOOLTIP:ReskinTooltip()
         return
     end
 
-    self:SetScale(_G.UIParent:GetScale())
+    self:SetScale(C.DB.Tooltip.Scale)
 
     if not self.tipStyled then
         self:HideBackdrop()
