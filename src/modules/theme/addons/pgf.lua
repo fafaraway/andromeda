@@ -107,7 +107,10 @@ function THEME:ReskinPGF()
     _G.UsePFGButton:SetPoint('RIGHT', _G.LFGListFrame.SearchPanel.RefreshButton, 'LEFT', -40, 0)
     _G.UsePFGButton:SetSize(20, 20)
 
-    F.ReskinCheckButton(_G.UsePFGButton, true)
-    _G.UsePFGButton.text:SetWidth(35)
-    _G.UsePFGButton.text:SetFontObject(_G.Game12Font)
+    local button = _G.UsePFGButton or _G.UsePGFButton
+    if button then
+        F.ReskinCheckbox(button, true)
+        button.text:SetWidth(35)
+        button.text:SetFontObject(_G.Game12Font)
+    end
 end
