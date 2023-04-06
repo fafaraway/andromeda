@@ -37,6 +37,7 @@ C.NameplateAuraBlackList = {
 }
 
 C.NameplateShowTargetNPCsList = {
+    [56792] = true, -- 青龙寺，怀疑臆象
     [165251] = true, -- 仙林狐狸
     [174773] = true, -- 怨毒怪
 }
@@ -69,6 +70,7 @@ C.SpecialUnitsList = {
 }
 
 C.PowerUnitsList = {
+    [56792] = true, -- 青龙寺，怀疑臆象
     [165556] = true, -- 赤红深渊，瞬息具象
     [171557] = true, -- 猎手阿尔迪莫，巴加斯特之影
     [163746] = true, -- 垃圾场，步行震击者X1型
