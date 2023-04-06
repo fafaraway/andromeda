@@ -160,6 +160,7 @@ C.CharacterSettings = {
         FilterFavourite = true,
         FilterAnima = true,
         FilterRelic = true,
+        FilterStone = true,
         AutoSellJunk = true,
         AutoRepair = true,
     },
@@ -728,6 +729,5 @@ C.AccountSettings = {
     UnitframeCustomTexture = '',
     NameplateTextureIndex = 1,
     NameplateCustomTexture = '',
-    CommunityFeastTime = 0,
     IgnoreNotesList = {},
 }

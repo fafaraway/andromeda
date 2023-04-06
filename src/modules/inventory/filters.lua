@@ -261,6 +261,23 @@ local function isKorthiaRelic(item)
     return item.id and isKorthiaRelicByID(item.id)
 end
 
+local primordialStones = {}
+for id = 204000, 204030 do
+    primordialStones[id] = true
+end
+
+local function isPrimordialStone(item)
+    if not C.DB['Inventory']['ItemFilter'] then
+        return
+    end
+
+    if not C.DB['Inventory']['FilterStone'] then
+        return
+    end
+
+    return item.id and primordialStones[item.id]
+end
+
 function INVENTORY:GetFilters()
     local filters = {}
 
@@ -354,6 +371,10 @@ function INVENTORY:GetFilters()
 
     filters.onlyBagReagent = function(item)
         return isItemInBagReagent(item) and not isEmptySlot(item)
+    end
+
+    filters.bagStone = function(item)
+        return isItemInBag(item) and isPrimordialStone(item)
     end
 
     for i = 1, 5 do

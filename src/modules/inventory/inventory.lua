@@ -676,7 +676,8 @@ end
 
 local customJunkEnable
 function INVENTORY:CreateCustomJunkButton()
-    local enabledText = L["Click to tag item as junk.|nIf 'Auto sell junk' enabled, these items would be sold as well.|nThe list is saved account-wide, and won't be in the export data.|nYou can hold CTRL + ALT and click to wipe the custom junk list."]
+    local enabledText =
+        L["Click to tag item as junk.|nIf 'Auto sell junk' enabled, these items would be sold as well.|nThe list is saved account-wide, and won't be in the export data.|nYou can hold CTRL + ALT and click to wipe the custom junk list."]
 
     local bu = F.CreateButton(self, 16, 16, true, iconsList.BagJunk)
     bu.Icon:SetVertexColor(unpack(iconColor))
@@ -800,16 +801,17 @@ function INVENTORY:OnLogin()
             AddNewContainer('Bag', i, 'BagCustom' .. i, filters['bagCustom' .. i])
         end
         AddNewContainer('Bag', 6, 'BagReagent', filters.onlyBagReagent)
-        AddNewContainer('Bag', 16, 'Junk', filters.bagsJunk)
+        AddNewContainer('Bag', 17, 'Junk', filters.bagsJunk)
         AddNewContainer('Bag', 9, 'EquipSet', filters.bagEquipSet)
         AddNewContainer('Bag', 7, 'AzeriteItem', filters.bagAzeriteItem)
         AddNewContainer('Bag', 8, 'Equipment', filters.bagEquipment)
         AddNewContainer('Bag', 10, 'BagCollection', filters.bagCollection)
-        AddNewContainer('Bag', 14, 'Consumable', filters.bagConsumable)
+        AddNewContainer('Bag', 15, 'Consumable', filters.bagConsumable)
         AddNewContainer('Bag', 11, 'BagGoods', filters.bagGoods)
-        AddNewContainer('Bag', 15, 'BagQuest', filters.bagQuest)
+        AddNewContainer('Bag', 16, 'BagQuest', filters.bagQuest)
         AddNewContainer('Bag', 12, 'BagAnima', filters.bagAnima)
         AddNewContainer('Bag', 13, 'BagRelic', filters.bagRelic)
+        AddNewContainer('Bag', 14, 'BagStone', filters.bagStone)
 
         f.main = MyContainer:New('Bag', { Bags = 'bags', BagType = 'Bag' })
         f.main.__anchor = { 'BOTTOMRIGHT', -C.UI_GAP, C.UI_GAP }
@@ -962,7 +964,7 @@ function INVENTORY:OnLogin()
     end
 
     local function isItemNeedsLevel(item)
-        return item.link and item.quality > 1 and INVENTORY:IsItemHasLevel(item)
+        return item.link and item.quality > 1 and (INVENTORY:IsItemHasLevel(item) or item.classID == Enum.ItemClass.Gem)
     end
 
     local function isItemExist(item)
@@ -1223,6 +1225,8 @@ function INVENTORY:OnLogin()
             label = INVENTORY.GetCustomGroupTitle(settings.Index)
         elseif name == 'BagReagent' then
             label = L['Reagent Bag']
+        elseif name == 'BagStone' then
+            label = GetSpellInfo(404861)
         end
 
         local outline = _G.ANDROMEDA_ADB.FontOutline

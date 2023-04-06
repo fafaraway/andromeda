@@ -468,11 +468,12 @@ function GUI:SetupInventoryFilter(parent)
         [4] = { value = 'FilterConsumable', text = _G.BAG_FILTER_CONSUMABLES },
         [5] = { value = 'FilterAnima', text = _G.POWER_TYPE_ANIMA },
         [6] = { value = 'FilterRelic', text = L['Korthia Relics'] },
-        [7] = { value = 'FilterEquipment', text = _G.BAG_FILTER_EQUIPMENT },
-        [8] = { value = 'FilterEquipSet', text = L['Equipement Set'] },
-        [9] = { value = 'FilterLegendary', text = _G.LOOT_JOURNAL_LEGENDARIES },
-        [10] = { value = 'FilterCollection', text = _G.COLLECTIONS },
-        [11] = { value = 'FilterFavourite', text = _G.PREFERENCES },
+        [7] = { value = 'FilterStone', text = L['Primordial Stones'] },
+        [8] = { value = 'FilterEquipment', text = _G.BAG_FILTER_EQUIPMENT },
+        [9] = { value = 'FilterEquipSet', text = L['Equipement Set'] },
+        [10] = { value = 'FilterLegendary', text = _G.LOOT_JOURNAL_LEGENDARIES },
+        [11] = { value = 'FilterCollection', text = _G.COLLECTIONS },
+        [12] = { value = 'FilterFavourite', text = _G.PREFERENCES },
     }
 
     local offset = -10
