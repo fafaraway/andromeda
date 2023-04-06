@@ -6,7 +6,7 @@ local F, C, L = unpack(select(2, ...))
 local ACTIONBAR = F:GetModule('ActionBar')
 
 local onlyCurrentZone = true
-local maxDistanceYards = 1e4 -- needs review
+local maxDistanceYards = 1e3 -- needs review
 
 -- Warlords of Draenor intro quest items which inspired this addon
 local blacklist = {
