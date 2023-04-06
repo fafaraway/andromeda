@@ -2567,6 +2567,7 @@ globals = {
     'C_PlayerMentorship',
     'C_PrototypeDialog',
     'C_PvP',
+    'C_QuestInfoSystem',
     'C_QuestLine',
     'C_QuestLog',
     'C_QuestSession',
