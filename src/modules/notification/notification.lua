@@ -9,7 +9,7 @@ local bannerHeight = 50
 local padding = 4
 local interval = 0.1
 
-local function ConstructFrame()
+local function constructFrame()
     local f = CreateFrame('Frame', C.ADDON_TITLE .. 'Notification', _G.UIParent, 'BackdropTemplate')
     f:SetFrameStrata('FULLSCREEN_DIALOG')
     f:SetSize(bannerWidth, bannerHeight)
@@ -48,7 +48,7 @@ local function ConstructFrame()
 end
 
 local bannerShown = false
-local function HideBanner()
+local function hideBanner()
     if animations then
         local scale
         NOTIFICATION.Frame:SetScript('OnUpdate', function(self)
@@ -70,7 +70,7 @@ local function HideBanner()
     end
 end
 
-local function FadeTimer()
+local function fadeTimer()
     local last = 0
     NOTIFICATION.Frame:SetScript('OnUpdate', function(self, elapsed)
         local width = NOTIFICATION.Frame:GetWidth()
@@ -81,12 +81,12 @@ local function FadeTimer()
         if last >= duration then
             self:SetWidth(bannerWidth)
             self:SetScript('OnUpdate', nil)
-            HideBanner()
+            hideBanner()
         end
     end)
 end
 
-local function ShowBanner()
+local function showBanner()
     bannerShown = true
     if animations then
         NOTIFICATION.Frame:Show()
@@ -98,18 +98,18 @@ local function ShowBanner()
             if scale >= 1 then
                 self:SetScale(1)
                 self:SetScript('OnUpdate', nil)
-                FadeTimer()
+                fadeTimer()
             end
         end)
     else
         NOTIFICATION.Frame:SetScale(1)
         NOTIFICATION.Frame:SetAlpha(1)
         NOTIFICATION.Frame:Show()
-        FadeTimer()
+        fadeTimer()
     end
 end
 
-local function Display(name, message, clickFunc, texture)
+local function display(name, message, clickFunc, texture)
     if type(clickFunc) == 'function' then
         NOTIFICATION.Frame.clickFunc = clickFunc
     else
@@ -125,7 +125,7 @@ local function Display(name, message, clickFunc, texture)
     NOTIFICATION.Title:SetText(C.YELLOW_COLOR .. name)
     NOTIFICATION.Text:SetText(C.BLUE_COLOR .. message)
 
-    ShowBanner()
+    showBanner()
 
     if playSounds then
         PlaySoundFile(C.Assets.Sounds.Notification)
@@ -136,7 +136,7 @@ local handler = CreateFrame('Frame')
 local incoming = {}
 local processing = false
 
-local function HandleIncoming()
+local function handleIncoming()
     processing = true
     local i = 1
 
@@ -148,7 +148,7 @@ local function HandleIncoming()
             return
         else
             if not bannerShown then
-                Display(unpack(incoming[i]))
+                display(unpack(incoming[i]))
                 i = i + 1
             end
         end
@@ -166,14 +166,14 @@ function F:CreateNotification(name, message, clickFunc, texture)
     elseif bannerShown or #incoming ~= 0 then
         tinsert(incoming, { name, message, clickFunc, texture })
         if not processing then
-            HandleIncoming()
+            handleIncoming()
         end
     else
-        Display(name, message, clickFunc, texture)
+        display(name, message, clickFunc, texture)
     end
 end
 
-local function Expand(self)
+local function expand(self)
     local width = self:GetWidth()
 
     if NOTIFICATION.Text:IsTruncated() and width < (GetScreenWidth() / 1.5) then
@@ -183,14 +183,14 @@ local function Expand(self)
     end
 end
 
-local function OnEnter(self)
+local function onEnter(self)
     self:SetScript('OnUpdate', nil)
     self:SetScale(1)
     self:SetAlpha(1)
-    self:SetScript('OnUpdate', Expand)
+    self:SetScript('OnUpdate', expand)
 end
 
-local function OnMouseUp(self, button)
+local function onMouseUp(self, button)
     self:SetScript('OnUpdate', nil)
     self:Hide()
     self:SetScale(0.1)
@@ -208,9 +208,9 @@ local function OnMouseUp(self, button)
     end
 end
 
-local function OnEvent(self, _, unit)
+local function onEvent(self, _, unit)
     if unit == 'player' and not UnitIsAFK('player') then
-        HandleIncoming()
+        handleIncoming()
         self:UnregisterEvent('PLAYER_FLAGS_CHANGED')
     end
 end
@@ -220,13 +220,13 @@ function NOTIFICATION:OnLogin()
         return
     end
 
-    ConstructFrame()
+    constructFrame()
 
-    NOTIFICATION.Frame:SetScript('OnEnter', OnEnter)
-    NOTIFICATION.Frame:SetScript('OnLeave', FadeTimer)
-    NOTIFICATION.Frame:SetScript('OnMouseUp', OnMouseUp)
+    NOTIFICATION.Frame:SetScript('OnEnter', onEnter)
+    NOTIFICATION.Frame:SetScript('OnLeave', fadeTimer)
+    NOTIFICATION.Frame:SetScript('OnMouseUp', onMouseUp)
 
-    handler:SetScript('OnEvent', OnEvent)
+    handler:SetScript('OnEvent', onEvent)
 
     self:NewMailNotify()
     self:BagFullNotify()
