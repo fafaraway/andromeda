@@ -9,9 +9,11 @@
 
 --]]
 
+local getAddOnMetadata = GetAddOnMetadata or C_AddOns.GetAddOnMetadata -- isPatch10_1
+
 do
     -- binding header
-    _G.BINDING_HEADER_ANDROMEDA = GetAddOnMetadata(..., 'Title')
+    _G.BINDING_HEADER_ANDROMEDA = getAddOnMetadata(..., 'Title')
 end
 
 local addonName, engine = ...
@@ -47,7 +49,7 @@ do
     -- ADDON_NAME is the name of the addon folder, which is 'andromeda'
     -- ADDON_TITLE is the title of the addon, which is 'AndromedaUI'
     C.ADDON_NAME = tostring(addonName)
-    C.COLORFUL_ADDON_TITLE = GetAddOnMetadata(C.ADDON_NAME, 'Title')
+    C.COLORFUL_ADDON_TITLE = getAddOnMetadata(C.ADDON_NAME, 'Title')
     C.ADDON_TITLE = gsub(C.COLORFUL_ADDON_TITLE, '|c........([^|]+)|r', '%1')
 end
 
