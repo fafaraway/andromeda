@@ -26,7 +26,7 @@ local events = {
 }
 
 -- item level and gem
-local function IsItemHasLevel(link)
+local function isItemHasLevel(link)
     local name, _, rarity, level, _, _, _, _, _, _, _, classID = GetItemInfo(link)
     if name and level and rarity > 1 and (classID == Enum.ItemClass.Weapon or classID == Enum.ItemClass.Armor) then
         local itemLevel = F.GetItemLevel(link)
@@ -46,9 +46,10 @@ local socketWatchList = {
     ['PUNCHCARDRED'] = true,
     ['PUNCHCARDYELLOW'] = true,
     ['DOMINATION'] = true,
+    ['PRIMORDIAL'] = true,
 }
 
-local function GetSocketTexture(socket, count)
+local function getSocketTexture(socket, count)
     return strrep('|TInterface\\ItemSocketingFrame\\UI-EmptySocket-' .. socket .. ':0|t', count)
 end
 
@@ -60,7 +61,11 @@ function F.IsItemHasGem(link)
         for stat, count in pairs(stats) do
             local socket = strmatch(stat, 'EMPTY_SOCKET_(%S+)')
             if socket and socketWatchList[socket] then
-                text = text .. GetSocketTexture(socket, count)
+                if socket == 'PRIMORDIAL' then
+                    socket = 'META'
+                end -- primordial texture is missing, use meta instead, needs review
+
+                text = text .. getSocketTexture(socket, count)
             end
         end
     end
@@ -79,11 +84,13 @@ function CHAT.ReplaceChatHyperlink(link, linkType, value)
         if itemCache[link] then
             return itemCache[link]
         end
-        local name, itemLevel = IsItemHasLevel(link)
+
+        local name, itemLevel = isItemHasLevel(link)
         if name and itemLevel then
             link = gsub(link, '|h%[(.-)%]|h', '|h[' .. name .. '(' .. itemLevel .. ')]|h' .. F.IsItemHasGem(link))
             itemCache[link] = link
         end
+
         return link
     elseif linkType == 'dungeonScore' then
         return value and gsub(link, '|h%[(.-)%]|h', '|h[' .. format(L['MythicScore'], GetDungeonScoreInColor(value)) .. ']|h')
@@ -92,6 +99,7 @@ end
 
 function CHAT:UpdateItemLevel(_, msg, ...)
     msg = gsub(msg, '(|H([^:]+):(%d+):.-|h.-|h)', CHAT.ReplaceChatHyperlink)
+
     return false, msg, ...
 end
 
