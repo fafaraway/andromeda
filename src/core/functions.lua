@@ -227,9 +227,6 @@ end
 
 do
     local iLvlDB = {}
-    local tip = CreateFrame('GameTooltip', C.ADDON_TITLE .. 'ScanTooltip', nil, 'GameTooltipTemplate')
-    F.ScanTip = tip
-
     local slotData = { gems = {}, gemsColor = {} }
     local ilvlStr = '^' .. gsub(_G.ITEM_LEVEL, '%%d', '')
     local enchantStr = gsub(_G.ENCHANTED_TOOLTIP_LINE, '%%s', '(.+)')
@@ -245,36 +242,63 @@ do
             slotData.iLvl = nil
             slotData.enchantText = nil
 
-            local isHoA = data.args and data.args[2] and data.args[2].intVal == 158075
+            local isHoA = C.IS_NEW_PATCH_10_1 and data.id == 158075 or data.args and data.args[2] and data.args[2].intVal == 158075
             local num = 0
             for i = 2, #data.lines do
                 local lineData = data.lines[i]
-                local argVal = lineData and lineData.args
-                if argVal then
+                if C.IS_NEW_PATCH_10_1 then
                     if not slotData.iLvl then
-                        local text = argVal[2] and argVal[2].stringVal
+                        local text = lineData.leftText
                         local found = text and strfind(text, ilvlStr)
                         if found then
                             local level = strmatch(text, '(%d+)%)?$')
                             slotData.iLvl = tonumber(level) or 0
                         end
                     elseif isHoA then
-                        if argVal[6] and argVal[6].field == 'essenceIcon' then
+                        if lineData.essenceIcon then
                             num = num + 1
-                            slotData.gems[num] = argVal[6].intVal
-                            slotData.gemsColor[num] = argVal[3] and argVal[3].colorVal
+                            slotData.gems[num] = lineData.essenceIcon
+                            slotData.gemsColor[num] = lineData.leftColor
                         end
                     else
-                        local lineInfo = argVal[4] and argVal[4].field
-                        if lineInfo == 'enchantID' then
-                            local enchant = argVal[2] and argVal[2].stringVal
-                            slotData.enchantText = strmatch(enchant, enchantStr)
-                        elseif lineInfo == 'gemIcon' then
+                        if lineData.enchantID then
+                            slotData.enchantText = strmatch(lineData.leftText, enchantStr)
+                        elseif lineData.gemIcon then
                             num = num + 1
-                            slotData.gems[num] = argVal[4].intVal
-                        elseif lineInfo == 'socketType' then
+                            slotData.gems[num] = lineData.gemIcon
+                        elseif lineData.socketType then
                             num = num + 1
-                            slotData.gems[num] = format('Interface\\ItemSocketingFrame\\UI-EmptySocket-%s', argVal[4].stringVal)
+                            slotData.gems[num] = format('Interface\\ItemSocketingFrame\\UI-EmptySocket-%s', lineData.socketType)
+                        end
+                    end
+                else
+                    local argVal = lineData and lineData.args
+                    if argVal then
+                        if not slotData.iLvl then
+                            local text = argVal[2] and argVal[2].stringVal
+                            local found = text and strfind(text, ilvlStr)
+                            if found then
+                                local level = strmatch(text, '(%d+)%)?$')
+                                slotData.iLvl = tonumber(level) or 0
+                            end
+                        elseif isHoA then
+                            if argVal[6] and argVal[6].field == 'essenceIcon' then
+                                num = num + 1
+                                slotData.gems[num] = argVal[6].intVal
+                                slotData.gemsColor[num] = argVal[3] and argVal[3].colorVal
+                            end
+                        else
+                            local lineInfo = argVal[4] and argVal[4].field
+                            if lineInfo == 'enchantID' then
+                                local enchant = argVal[2] and argVal[2].stringVal
+                                slotData.enchantText = strmatch(enchant, enchantStr)
+                            elseif lineInfo == 'gemIcon' then
+                                num = num + 1
+                                slotData.gems[num] = argVal[4].intVal
+                            elseif lineInfo == 'socketType' then
+                                num = num + 1
+                                slotData.gems[num] = format('Interface\\ItemSocketingFrame\\UI-EmptySocket-%s', argVal[4].stringVal)
+                            end
                         end
                     end
                 end
@@ -294,6 +318,7 @@ do
             else
                 data = C_TooltipInfo.GetHyperlink(link, nil, nil, true)
             end
+
             if not data then
                 return
             end
@@ -303,17 +328,29 @@ do
                 if not lineData then
                     break
                 end
-                local argVal = lineData.args
-                if argVal then
-                    local text = argVal[2] and argVal[2].stringVal
+
+                if C.IS_NEW_PATCH_10_1 then
+                    local text = lineData.leftText
                     local found = text and strfind(text, ilvlStr)
                     if found then
                         local level = strmatch(text, '(%d+)%)?$')
                         iLvlDB[link] = tonumber(level)
                         break
                     end
+                else
+                    local argVal = lineData.args
+                    if argVal then
+                        local text = argVal[2] and argVal[2].stringVal
+                        local found = text and strfind(text, ilvlStr)
+                        if found then
+                            local level = strmatch(text, '(%d+)%)?$')
+                            iLvlDB[link] = tonumber(level)
+                            break
+                        end
+                    end
                 end
             end
+
             return iLvlDB[link]
         end
     end
@@ -385,7 +422,7 @@ do
     --
 
     do
-        local knownStr = {
+        local unknownStr = {
             [_G.TRANSMOGRIFY_TOOLTIP_APPEARANCE_UNKNOWN] = true,
             [_G.TRANSMOGRIFY_TOOLTIP_ITEM_UNKNOWN_APPEARANCE_KNOWN] = true,
         }
@@ -397,14 +434,25 @@ do
             end
 
             for i = #lineData, 1, -1 do
-                local argVal = lineData[i] and lineData[i].args
-                if argVal then
-                    if argVal[4] and argVal[4].field == 'price' then
+                if C.IS_NEW_PATCH_10_1 then
+                    local line = lineData[i]
+
+                    if line.price then
                         return false
                     end
-                    local stringVal = argVal[2] and argVal[2].stringVal
-                    if knownStr[stringVal] then
-                        return true
+
+                    return line.leftText and unknownStr[line.leftText]
+                else
+                    local argVal = lineData[i] and lineData[i].args
+                    if argVal then
+                        if argVal[4] and argVal[4].field == 'price' then
+                            return false
+                        end
+
+                        local stringVal = argVal[2] and argVal[2].stringVal
+                        if unknownStr[stringVal] then
+                            return true
+                        end
                     end
                 end
             end
@@ -1947,6 +1995,7 @@ do
             local alpha = _G.ANDROMEDA_ADB.ButtonBackdropAlpha
             local thumb = self:GetThumb()
             if thumb then
+                thumb:DisableDrawLayer('ARTWORK')
                 thumb:DisableDrawLayer('BACKGROUND')
                 thumb.bg = F.CreateBDFrame(thumb)
                 thumb.bg:SetBackdropColor(color.r, color.g, color.b, alpha)
@@ -2399,7 +2448,8 @@ do
 
         function F:StyleSearchButton()
             F.StripTextures(self)
-            F.CreateBDFrame(self, 0.25)
+            local bg = F.CreateBDFrame(self, 0.25)
+            bg:SetInside()
 
             local icon = self.icon or self.Icon
             if icon then
@@ -2409,7 +2459,7 @@ do
             self:SetHighlightTexture(C.Assets.Textures.Backdrop)
             local hl = self:GetHighlightTexture()
             hl:SetVertexColor(C.r, C.g, C.b, 0.25)
-            hl:SetInside()
+            hl:SetInside(bg)
         end
 
         function F:AffixesSetup()

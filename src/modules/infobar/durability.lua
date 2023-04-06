@@ -92,9 +92,15 @@ local function Block_OnEnter(self)
 
             local data = C_TooltipInfo.GetInventoryItem('player', slot)
             if data then
-                local argVal = data.args and data.args[7]
-                if argVal and argVal.field == 'repairCost' then
-                    totalCost = totalCost + argVal.intVal
+                if C.IS_NEW_PATCH_10_1 then
+                    if data.repairCost then
+                        totalCost = totalCost + data.repairCost
+                    end
+                else
+                    local argVal = data.args and data.args[7]
+                    if argVal and argVal.field == 'repairCost' then
+                        totalCost = totalCost + argVal.intVal
+                    end
                 end
             end
         end
