@@ -236,6 +236,7 @@ tinsert(C.BlizzThemes, function()
                 child.HighlightBar:SetDrawLayer('BACKGROUND')
                 child.SelectedBar:SetColorTexture(r, g, b, 0.25)
                 child.SelectedBar:SetDrawLayer('BACKGROUND')
+                child.Check:SetAtlas('checkmark-minimal')
 
                 child.styled = true
             end
@@ -252,6 +253,8 @@ tinsert(C.BlizzThemes, function()
             local child = select(i, self.ScrollTarget:GetChildren())
             if not child.styled then
                 child:DisableDrawLayer('BACKGROUND')
+                child.Check:SetAtlas('checkmark-minimal')
+
                 child.styled = true
             end
         end
@@ -259,30 +262,6 @@ tinsert(C.BlizzThemes, function()
 
     -- Reputation Frame
     _G.ReputationDetailFrame:SetPoint('TOPLEFT', _G.ReputationFrame, 'TOPRIGHT', 3, -28)
-
-    local function UpdateFactionSkins()
-        for i = 1, GetNumFactions() do
-            local statusbar = _G['ReputationBar' .. i .. 'ReputationBar']
-            if statusbar then
-                statusbar:SetStatusBarTexture(C.Assets.Textures.StatusbarNormal)
-
-                if not statusbar.reskinned then
-                    F.CreateBDFrame(statusbar, 0.25)
-                    statusbar.reskinned = true
-                end
-
-                _G['ReputationBar' .. i .. 'Background']:SetTexture(nil)
-                _G['ReputationBar' .. i .. 'ReputationBarHighlight1']:SetTexture(nil)
-                _G['ReputationBar' .. i .. 'ReputationBarHighlight2']:SetTexture(nil)
-                _G['ReputationBar' .. i .. 'ReputationBarAtWarHighlight1']:SetTexture(nil)
-                _G['ReputationBar' .. i .. 'ReputationBarAtWarHighlight2']:SetTexture(nil)
-                _G['ReputationBar' .. i .. 'ReputationBarLeftTexture']:SetTexture(nil)
-                _G['ReputationBar' .. i .. 'ReputationBarRightTexture']:SetTexture(nil)
-            end
-        end
-    end
-    _G.ReputationFrame:HookScript('OnShow', UpdateFactionSkins)
-    _G.ReputationFrame:HookScript('OnEvent', UpdateFactionSkins)
 
     local function updateReputationBars(self)
         for i = 1, self.ScrollTarget:GetNumChildren() do

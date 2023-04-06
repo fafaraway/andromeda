@@ -27,17 +27,20 @@ C.Themes['Blizzard_ChallengesUI'] = function()
         if IsAddOnLoaded('AngryKeystones') and not angryStyle then
             local mod = _G.AngryKeystones.Modules.Schedule
             local scheduel = mod.AffixFrame
-            local party = mod.PartyFrame
+            if scheduel then
+                F.StripTextures(scheduel)
+                F.CreateBDFrame(scheduel, 0.25)
 
-            F.StripTextures(scheduel)
-            F.CreateBDFrame(scheduel, 0.25)
-            if scheduel.Entries then
-                for i = 1, 3 do
-                    F.AffixesSetup(scheduel.Entries[i])
+                if scheduel.Entries then
+                    for i = 1, 3 do
+                        F.AffixesSetup(scheduel.Entries[i])
+                    end
                 end
+
+                local party = mod.PartyFrame
+                F.StripTextures(party)
+                F.CreateBDFrame(party, 0.25)
             end
-            F.StripTextures(party)
-            F.CreateBDFrame(party, 0.25)
 
             angryStyle = true
         end

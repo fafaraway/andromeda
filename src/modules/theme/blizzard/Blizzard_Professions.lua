@@ -31,6 +31,7 @@ local function reskinProfessionsFlyout(_, parent)
             F.SetBD(flyoutFrame):SetFrameLevel(2)
             F.ReskinCheckbox(flyoutFrame.HideUnownedCheckBox)
             flyoutFrame.HideUnownedCheckBox.bg:SetInside(nil, 6, 6)
+            F.ReskinTrimScroll(flyoutFrame.ScrollBar)
             hooksecurefunc(flyoutFrame.ScrollBox, 'Update', refreshFlyoutButtons)
 
             break
@@ -52,6 +53,11 @@ local function reskinSlotButton(button)
         end
 
         button.styled = true
+    end
+
+    if C.IS_NEW_PATCH_10_1 then
+        button:SetNormalTexture(0)
+        button:SetPushedTexture(0)
     end
 end
 
@@ -268,12 +274,10 @@ C.Themes['Blizzard_Professions'] = function()
     local specPage = frame.SpecPage
     F.ReskinButton(specPage.UnlockTabButton)
     F.ReskinButton(specPage.ApplyButton)
-    if C.IS_NEW_PATCH then
-        F.ReskinButton(specPage.ViewTreeButton)
-        F.ReskinButton(specPage.BackToFullTreeButton)
-        F.ReskinButton(specPage.ViewPreviewButton)
-        F.ReskinButton(specPage.BackToPreviewButton)
-    end
+    F.ReskinButton(specPage.ViewTreeButton)
+    F.ReskinButton(specPage.BackToFullTreeButton)
+    F.ReskinButton(specPage.ViewPreviewButton)
+    F.ReskinButton(specPage.BackToPreviewButton)
     specPage.TopDivider:Hide()
     specPage.VerticalDivider:Hide()
     specPage.PanelFooter:Hide()
@@ -372,9 +376,6 @@ C.Themes['Blizzard_Professions'] = function()
     F.StripTextures(orderInfo)
     F.CreateBDFrame(orderInfo, 0.25):SetInside()
     F.ReskinButton(orderInfo.BackButton)
-    if not C.IS_NEW_PATCH then
-        F.ReskinButton(orderInfo.IgnoreButton)
-    end
     F.ReskinButton(orderInfo.StartOrderButton)
     F.ReskinButton(orderInfo.DeclineOrderButton)
     F.ReskinButton(orderInfo.ReleaseOrderButton)

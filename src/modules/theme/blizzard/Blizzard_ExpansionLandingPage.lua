@@ -34,10 +34,13 @@ C.Themes['Blizzard_AdventureMap'] = function()
             if panel.DragonridingPanel then
                 F.ReskinButton(panel.DragonridingPanel.SkillsButton)
             end
+
             if panel.CloseButton then
                 F.ReskinClose(panel.CloseButton)
             end
+
             if panel.MajorFactionList then
+                F.ReskinTrimScroll(panel.MajorFactionList.ScrollBar)
                 panel.MajorFactionList.ScrollBox:ForEachFrame(skinFactionCategory)
                 hooksecurefunc(panel.MajorFactionList.ScrollBox, 'Update', function(self)
                     self:ForEachFrame(skinFactionCategory)

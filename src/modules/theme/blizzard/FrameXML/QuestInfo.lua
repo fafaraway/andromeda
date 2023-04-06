@@ -153,7 +153,15 @@ tinsert(C.BlizzThemes, function()
 
         local rewardsFrame = _G.QuestInfoFrame.rewardsFrame
         local isQuestLog = _G.QuestInfoFrame.questLog ~= nil
-        local numSpellRewards = isQuestLog and GetNumQuestLogRewardSpells() or GetNumRewardSpells()
+        local numSpellRewards
+
+        if C.IS_NEW_PATCH_10_1 then
+            local questID = isQuestLog and C_QuestLog.GetSelectedQuest() or GetQuestID()
+            local spellRewards = C_QuestInfoSystem.GetQuestRewardSpells(questID) or {}
+            numSpellRewards = #spellRewards
+        else
+            numSpellRewards = isQuestLog and GetNumQuestLogRewardSpells() or GetNumRewardSpells()
+        end
 
         if numSpellRewards > 0 then
             -- Spell Headers

@@ -79,6 +79,7 @@ tinsert(C.BlizzThemes, function()
 
     _G.QuestProgressRequiredItemsText:SetTextColor(1, 0.8, 0)
     _G.QuestProgressRequiredItemsText:SetShadowColor(0, 0, 0)
+    _G.QuestProgressRequiredItemsText.SetTextColor = nop
     _G.QuestProgressTitleText:SetTextColor(1, 0.8, 0)
     _G.QuestProgressTitleText:SetShadowColor(0, 0, 0)
     _G.QuestProgressTitleText.SetTextColor = nop

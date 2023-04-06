@@ -96,6 +96,7 @@ tinsert(C.BlizzThemes, function()
             playerFrame.RollText:SetWidth(28)
             playerFrame.RollText:SetFontObject(_G.Game13Font)
             playerFrame.WinMark:SetDesaturated(true)
+            playerFrame.WinMark:SetAtlas('checkmark-minimal')
 
             playerFrame.styled = true
         end
