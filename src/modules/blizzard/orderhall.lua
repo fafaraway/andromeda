@@ -1,6 +1,9 @@
 local F, C, L = unpack(select(2, ...))
 local BLIZZARD = F:GetModule('Blizzard')
 
+local LE_GARRISON_TYPE_7_0 = Enum.GarrisonType.Type_7_0_Garrison or Enum.GarrisonType.Type_7_0
+local LE_FOLLOWER_TYPE_GARRISON_7_0 = Enum.GarrisonFollowerType.FollowerType_7_0_GarrisonFollower or Enum.GarrisonFollowerType.FollowerType_7_0
+
 function BLIZZARD:OrderHall_CreateIcon()
     local hall = CreateFrame('Frame', C.ADDON_TITLE .. 'OrderHallIcon', _G.UIParent)
     hall:SetSize(50, 50)
@@ -29,14 +32,14 @@ function BLIZZARD:OrderHall_CreateIcon()
 end
 
 function BLIZZARD:OrderHall_Refresh()
-    C_Garrison.RequestClassSpecCategoryInfo(_G.Enum.GarrisonFollowerType.FollowerType_7_0)
-    local currency = C_Garrison.GetCurrencyTypes(_G.Enum.GarrisonType.Type_7_0)
+    C_Garrison.RequestClassSpecCategoryInfo(LE_FOLLOWER_TYPE_GARRISON_7_0)
+    local currency = C_Garrison.GetCurrencyTypes(LE_GARRISON_TYPE_7_0)
     local info = C_CurrencyInfo.GetCurrencyInfo(currency)
     self.name = info.name
     self.amount = info.quantity
     self.texture = info.iconFileID
 
-    local categoryInfo = C_Garrison.GetClassSpecCategoryInfo(_G.Enum.GarrisonFollowerType.FollowerType_7_0)
+    local categoryInfo = C_Garrison.GetClassSpecCategoryInfo(LE_FOLLOWER_TYPE_GARRISON_7_0)
     for index, info in ipairs(categoryInfo) do
         local category = self.Category
         if not category[index] then
