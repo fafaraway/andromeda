@@ -202,38 +202,13 @@ local function getFormattedTimeLeft(timeLeft)
     return format('%.2d:%.2d', timeLeft / 60, timeLeft % 60)
 end
 
-local function getCurrentFeastTime()
-    local prepareRemain = C_AreaPoiInfo.GetAreaPOISecondsLeft(7219)
-    if prepareRemain then -- 准备盛宴，15分钟
-        return prepareRemain + time(), 1 -- 开始时间=剩余准备时间+现在时间
-    end
-
-    local cookingRemain = C_AreaPoiInfo.GetAreaPOISecondsLeft(7218)
-    if cookingRemain then -- 盛宴进行中，15分钟
-        return time() - (15 * 60 - cookingRemain), 2 -- 开始时间=现在时间-盛宴已进行时长
-    end
-
-    local soupRemain = C_AreaPoiInfo.GetAreaPOISecondsLeft(7220)
-    if soupRemain then -- 盛宴结束，喝汤1小时
-        return time() - (60 * 60 - soupRemain) - 15 * 60, 3 -- 开始时间=现在时间-盛宴已结束时长-盛宴进行时长
-    end
-end
-
-local lastTime = 0
-local function updateFeastTime()
-    if InCombatLockdown() or IsInInstance() then
-        return
-    end
-
-    local nowTime = GetTime()
-    if nowTime - lastTime > 60 then
-        local currentFeast = getCurrentFeastTime()
-        if currentFeast then
-            _G.ANDROMEDA_ADB['CommunityFeastTime'] = currentFeast
-        end
-        lastTime = nowTime
-    end
-end
+local communityFeastTime = {
+    ['TW'] = 1679747400, -- 20:30
+    ['KR'] = 1679747400, -- 20:30
+    ['EU'] = 1679749200, -- 21:00
+    ['US'] = 1679751000, -- 21:30
+    ['CN'] = 1679751000, -- 21:30
+}
 
 local itemCache = {}
 local function getItemLink(itemID)
@@ -396,10 +371,11 @@ local function onEnter(self)
 
     -- Community feast
     title = false
-    if _G.ANDROMEDA_ADB['CommunityFeastTime'] ~= 0 then
+    local feastTime = communityFeastTime[region]
+    if feastTime then
         local currentTime = time()
         local duration = 5400 -- 1.5hrs
-        local elapsed = mod(currentTime - _G.ANDROMEDA_ADB['CommunityFeastTime'], duration)
+        local elapsed = mod(currentTime - feastTime, duration)
         local nextTime = duration - elapsed + currentTime
 
         addTitle(communityFeastStr)
@@ -498,8 +474,6 @@ function INFOBAR:CreateDailyBlock()
     end
 
     F:RegisterEvent('PLAYER_ENTERING_WORLD', checkTimeWalker)
-
-    _G.WorldMapFrame:HookScript('OnShow', updateFeastTime)
 
     local daily = INFOBAR:RegisterNewBlock('daily', 'RIGHT', 150)
     daily.onEnter = onEnter
