@@ -96,7 +96,41 @@ function LOGO:Logo_Create()
     LOGO.logoFrame = frame
 end
 
+local function replaceIconString(self, text)
+    if not text then
+        text = self:GetText()
+    end
+    if not text or text == '' then
+        return
+    end
+
+    if strfind(text, 'Andromeda') then
+        local newText, count = gsub(text, '|T([^:]-):[%d+:]+|t', '|T' .. C.Assets.Textures.LogoChat .. ':12:24|t')
+        if count > 0 then
+            self:SetFormattedText('%s', newText)
+        end
+    end
+end
+
+function LOGO:HandleTitle()
+    -- Square logo texture
+    if not C.IS_NEW_PATCH_10_1 then
+        return
+    end
+
+    hooksecurefunc('AddonList_InitButton', function(entry)
+        if not entry.logoHooked then
+            replaceIconString(entry.Title)
+            hooksecurefunc(entry.Title, 'SetText', replaceIconString)
+
+            entry.logoHooked = true
+        end
+    end)
+end
+
 function LOGO:OnLogin()
+    LOGO:HandleTitle()
+
     if not C.DB.InstallationComplete then
         return
     end
