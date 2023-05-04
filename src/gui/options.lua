@@ -681,6 +681,28 @@ GUI.OptionsList = {
             nil,
             L['Collapse objective tracker automatically when you enter the instance, and restore it when you leave the instance.'],
         },
+        {},
+        {
+            1,
+            'General',
+            'BlockStrangerInvite',
+            L['Block invite from strangers'],
+            nil,
+            nil,
+            nil,
+            L['If checked, only accept invites from friends and guild members.'],
+        },
+        {
+            1,
+            'General',
+            'BlockStrangerRequest',
+            L['Block join request from strangers'],
+            true,
+            nil,
+            nil,
+            L['If checked, only popout join requests from friends and guild members.'],
+        },
+
     },
     [2] = { -- notification
         {

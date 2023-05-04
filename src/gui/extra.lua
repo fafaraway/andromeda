@@ -408,9 +408,13 @@ function GUI:SetupAuraSize(parent)
             [1] = { key = 'DebuffSize', value = db.DebuffSize, text = L['Size'], min = 24, max = 50, step = 1 },
             [2] = { key = 'DebuffPerRow', value = db.DebuffSize, text = L['Per Row'], min = 6, max = 20, step = 1 },
         },
+        private = {
+            [1] = { key = 'PrivateSize', value = db.PrivateSize, text = L['Size'], min = 24, max = 50, step = 1 },
+        },
         layout = {
             [1] = { value = 'BuffReverse', text = L['Buffs Reverse Growth'] },
             [2] = { value = 'DebuffReverse', text = L['Debuffs Reverse Growth'] },
+            [3] = { value = 'PrivateReverse', text = L['Private Auras Reverse Growth'] },
         },
     }
 
@@ -434,6 +438,14 @@ function GUI:SetupAuraSize(parent)
     for _, v in ipairs(datas.debuff) do
         createGroupTitle(scroll, L['Debuff'], offset - 80)
         createSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 130, UpdateAuraSize)
+        offset = offset - 65
+    end
+
+    scroll.groupTitle = nil
+
+    for _, v in ipairs(datas.private) do
+        createGroupTitle(scroll, L['Private Aura'], offset - 130)
+        createSlider(scroll, mKey, v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 180, UpdateAuraSize)
         offset = offset - 65
     end
 end

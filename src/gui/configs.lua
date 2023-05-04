@@ -60,6 +60,9 @@ C.CharacterSettings = {
 
         MuteAnnoyingSounds = true,
         WeeklyLottery = true,
+
+        BlockStrangerInvite = false,
+        BlockStrangerRequest = false,
     },
     Combat = {
         Enable = true,
@@ -125,6 +128,8 @@ C.CharacterSettings = {
         DebuffSize = 50,
         DebuffPerRow = 12,
         DebuffReverse = true,
+        PrivateSize = 50,
+        PrivateReverse = true,
         HideBlizzFrame = false,
     },
     Inventory = {
