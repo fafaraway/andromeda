@@ -394,6 +394,15 @@ function MAP:CreateQueueStatusButton()
     _G.QueueStatusFrame:ClearAllPoints()
     _G.QueueStatusFrame:SetPoint('BOTTOMRIGHT', Minimap, 'BOTTOMLEFT', -4, Minimap.halfDiff)
 
+    if C.IS_NEW_PATCH_10_1 then
+        hooksecurefunc(_G.QueueStatusButton, 'SetPoint', function(button, _, _, _, x)
+            if x == -15 then
+                button:ClearAllPoints()
+                button:SetPoint('BOTTOMRIGHT', Minimap, 0, Minimap.halfDiff)
+            end
+        end)
+    end
+
     local queueIcon = Minimap:CreateTexture(nil, 'ARTWORK')
     queueIcon:SetPoint('CENTER', _G.QueueStatusButton)
     queueIcon:SetSize(50, 50)
