@@ -242,7 +242,7 @@ C.Themes['Blizzard_Communities'] = function()
     F.ReskinButton(CommunitiesFrame.InviteButton)
     F.StripTextures(CommunitiesFrame.Chat)
     if C.IS_NEW_PATCH_10_1 then
-        -- todo
+        F.ReskinTrimScroll(CommunitiesFrame.Chat.ScrollBar)
     else
         F.ReskinScroll(CommunitiesFrame.Chat.MessageFrame.ScrollBar)
     end

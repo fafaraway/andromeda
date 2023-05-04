@@ -289,7 +289,9 @@ tinsert(C.BlizzThemes, function()
 
     -- Maw buffs container
     ReskinMawBuffsContainer(_G.ScenarioBlocksFrame.MawBuffsBlock.Container)
-    ReskinMawBuffsContainer(_G.MawBuffsBelowMinimapFrame.Container)
+    if not C.IS_NEW_PATCH_10_1 then
+        ReskinMawBuffsContainer(_G.MawBuffsBelowMinimapFrame.Container)
+    end
 
     -- Reskin Headers
     local headers = {

@@ -250,6 +250,7 @@ tinsert(C.BlizzThemes, function()
             F.ReskinSmallRole(self.HealerIcon, 'HEALER')
             F.ReskinSmallRole(self.DamagerIcon, 'DPS')
 
+            self.DamagerIcon:ClearAllPoints() -- fix for PGFinder
             self.HealerIcon:SetPoint('RIGHT', self.DamagerIcon, 'LEFT', -22, 0)
             self.TankIcon:SetPoint('RIGHT', self.HealerIcon, 'LEFT', -22, 0)
 

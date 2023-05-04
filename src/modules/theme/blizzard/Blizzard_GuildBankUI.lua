@@ -9,7 +9,7 @@ C.Themes['Blizzard_GuildBankUI'] = function()
     F.ReskinButton(_G.GuildBankFrame.WithdrawButton)
     F.ReskinButton(_G.GuildBankFrame.DepositButton)
     if C.IS_NEW_PATCH_10_1 then
-        -- todo
+        F.ReskinTrimScroll(_G.GuildBankFrame.Log.ScrollBar)
         F.ReskinTrimScroll(_G.GuildBankInfoScrollFrame.ScrollBar)
     else
         F.ReskinScroll(_G.GuildBankTransactionsScrollFrameScrollBar)

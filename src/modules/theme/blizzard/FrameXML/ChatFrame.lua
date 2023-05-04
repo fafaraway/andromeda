@@ -10,9 +10,14 @@ local function scrollOnLeave(self)
     self.thumbBG:SetBackdropBorderColor(0, 0, 0)
 end
 
-local function ReskinChatScroll(self)
+local function reskinChatScroll(self)
     if C.IS_NEW_PATCH_10_1 then
         F.ReskinTrimScroll(self.ScrollBar)
+        F.StripTextures(self.ScrollToBottomButton)
+
+        local flash = self.ScrollToBottomButton.Flash
+        F.SetupArrow(flash, 'down')
+        flash:SetVertexColor(1, 0.8, 0)
     else
         local bu = _G[self:GetName() .. 'ThumbTexture']
         bu:SetAlpha(0)
@@ -100,7 +105,7 @@ tinsert(C.BlizzThemes, function()
     _G.ChatFrameMenuButton:SetPushedTexture(homeTex)
 
     for i = 1, _G.NUM_CHAT_WINDOWS do
-        ReskinChatScroll(_G['ChatFrame' .. i])
+        reskinChatScroll(_G['ChatFrame' .. i])
     end
 
     -- ChannelFrame

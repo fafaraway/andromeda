@@ -71,6 +71,7 @@ tinsert(C.BlizzThemes, function()
     ReskinQuestHeader(campaignOverview.Header)
 
     if C.IS_NEW_PATCH_10_1 then
+        QuestScrollFrame.Edge:Hide()
         F.ReskinTrimScroll(QuestScrollFrame.ScrollBar)
         F.ReskinTrimScroll(campaignOverview.ScrollFrame.ScrollBar)
     else

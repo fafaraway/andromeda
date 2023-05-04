@@ -25,17 +25,20 @@ tinsert(C.BlizzThemes, function()
         self:SetDesaturated(true, true)
     end
 
-    hooksecurefunc(_G.AddonList.ScrollBox, 'Update', function(self)
-        for i = 1, self.ScrollTarget:GetNumChildren() do
-            local child = select(i, self.ScrollTarget:GetChildren())
-            if not child.styled then
-                F.ReskinCheckbox(child.Enabled, true)
-                child.Enabled:SetSize(18, 18)
-                F.ReskinButton(child.LoadAddonButton)
-                hooksecurefunc(child.Enabled:GetCheckedTexture(), 'SetDesaturated', forceSaturation)
+    hooksecurefunc('AddonList_InitButton', function(entry)
+        if not entry.styled then
+            entry.Enabled:SetSize(18, 18)
+            F.ReskinCheckbox(entry.Enabled, true)
+            F.ReskinButton(entry.LoadAddonButton)
 
-                child.styled = true
+            hooksecurefunc(entry.Enabled:GetCheckedTexture(), 'SetDesaturated', forceSaturation)
+
+            if C.IS_NEW_PATCH_10_1 then
+                F.ReplaceIconString(entry.Title)
+                hooksecurefunc(entry.Title, 'SetText', F.ReplaceIconString)
             end
+
+            entry.styled = true
         end
     end)
 

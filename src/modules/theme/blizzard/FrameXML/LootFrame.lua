@@ -30,6 +30,10 @@ tinsert(C.BlizzThemes, function()
         end
     end
 
+    local function onHide(self)
+        self.__owner.bg:SetBackdropBorderColor(0, 0, 0)
+    end
+
     hooksecurefunc(LootFrame.ScrollBox, 'Update', function(self)
         for i = 1, self.ScrollTarget:GetNumChildren() do
             local button = select(i, self.ScrollTarget:GetChildren())
@@ -39,7 +43,7 @@ tinsert(C.BlizzThemes, function()
             if item and not button.styled then
                 F.StripTextures(item, 1)
                 item.bg = F.ReskinIcon(item.icon)
-                item.bg:SetFrameLevel(4)
+                item.bg:SetFrameLevel(item.bg:GetFrameLevel() + 1)
                 F.ReskinIconBorder(item.IconBorder, true)
 
                 pushedFrame:SetAlpha(0)
@@ -54,17 +58,14 @@ tinsert(C.BlizzThemes, function()
                 item:HookScript('OnMouseDown', updatePushed)
                 item:HookScript('OnEnter', updateHighlight)
                 item:HookScript('OnLeave', updateHighlight)
+                item:HookScript('OnHide', onHide)
 
                 button.styled = true
             end
 
             local itemBG = item and item.bg
-            if itemBG then
-                if questTexture:IsShown() or pushedFrame:IsShown() then
-                    itemBG:SetBackdropBorderColor(1, 0.8, 0)
-                else
-                    itemBG:SetBackdropBorderColor(0, 0, 0)
-                end
+            if itemBG and questTexture:IsShown() then
+                itemBG:SetBackdropBorderColor(1, 0.8, 0)
             end
         end
     end)
