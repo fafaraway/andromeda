@@ -37,7 +37,6 @@ C.NameplateAuraBlackList = {
 }
 
 C.NameplateShowTargetNPCsList = {
-    [56792] = true, -- 青龙寺，怀疑臆象
     [165251] = true, -- 仙林狐狸
     [174773] = true, -- 怨毒怪
 }
