@@ -375,6 +375,32 @@ do
     hooksecurefunc('TradeFrame_Update', updateColor)
 end
 
+-- block invite from strangers
+function M:BlockStrangerInvite()
+    F:RegisterEvent('PARTY_INVITE_REQUEST', function(_, _, _, _, _, _, _, guid)
+        if C.DB['General']['BlockStrangerInvite'] and not (C_BattleNet.GetGameAccountInfoByGUID(guid) or C_FriendList.IsFriend(guid) or IsGuildMember(guid)) then
+            DeclineGroup()
+            StaticPopup_Hide('PARTY_INVITE')
+        end
+    end)
+
+    F:RegisterEvent('GROUP_INVITE_CONFIRMATION', function()
+        if not C.DB['General']['BlockStrangerRequest'] then
+            return
+        end
+
+        local guid = GetNextPendingInviteConfirmation()
+        if not guid then
+            return
+        end
+
+        if not (C_BattleNet.GetGameAccountInfoByGUID(guid) or C_FriendList.IsFriend(guid) or IsGuildMember(guid)) then
+            RespondToInviteConfirmation(guid, false)
+            StaticPopup_Hide('GROUP_INVITE_CONFIRMATION')
+        end
+    end)
+end
+
 -- weekly lottery
 do
     local function onMouseUp(self)
@@ -433,4 +459,5 @@ function M:OnLogin()
     M:FasterMovieSkip()
     M:WeeklyLottery()
     M:UpdateActionCamera()
+    M:BlockStrangerInvite()
 end
