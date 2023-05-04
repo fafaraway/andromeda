@@ -158,13 +158,7 @@ function INFOBAR:GuildPanel_Init()
 
     infoFrame = CreateFrame('Frame', C.ADDON_TITLE .. 'GuildInfobar', INFOBAR.Bar)
     infoFrame:SetSize(335, 495)
-    infoFrame:SetPoint(
-        anchorTop and 'TOP' or 'BOTTOM',
-        INFOBAR.GuildBlock,
-        anchorTop and 'BOTTOM' or 'TOP',
-        0,
-        anchorTop and -6 or 6
-    )
+    infoFrame:SetPoint(anchorTop and 'TOP' or 'BOTTOM', INFOBAR.GuildBlock, anchorTop and 'BOTTOM' or 'TOP', 0, anchorTop and -6 or 6)
     infoFrame:SetClampedToScreen(true)
     infoFrame:SetFrameStrata('TOOLTIP')
     F.SetBD(infoFrame)
@@ -209,12 +203,7 @@ function INFOBAR:GuildPanel_Init()
     local copyInfo = C.INFO_COLOR .. 'SHIFT +' .. C.MOUSE_LEFT_BUTTON .. L['Copy Name']
     F.CreateFS(infoFrame, C.Assets.Fonts.Regular, 13, outline or nil, copyInfo, nil, outline and 'NONE' or 'THICK', 'BOTTOMRIGHT', -15, 10)
 
-    local scrollFrame = CreateFrame(
-        'ScrollFrame',
-        C.ADDON_TITLE .. 'GuildInfobarScrollFrame',
-        infoFrame,
-        'HybridScrollFrameTemplate'
-    )
+    local scrollFrame = CreateFrame('ScrollFrame', C.ADDON_TITLE .. 'GuildInfobarScrollFrame', infoFrame, 'HybridScrollFrameTemplate')
     scrollFrame:SetSize(305, 320)
     scrollFrame:SetPoint('TOPLEFT', 10, -100)
     infoFrame.scrollFrame = scrollFrame
@@ -314,26 +303,19 @@ local function delayLeave()
     infoFrame:Hide()
 end
 
-local function Block_OnMouseUp(self, btn)
-    if infoFrame then
-        infoFrame:Hide()
+local function Block_OnMouseUp(self)
+    if not IsInGuild() then
+        return
     end
 
-    if btn == 'LeftButton' then
-        if IsInGuild() then
-            if not _G.GuildFrame then
-                LoadAddOn('Blizzard_GuildUI')
-            end
-            _G.GuildFrame_Toggle()
-            _G.GuildFrame_TabClicked(_G.GuildFrameTab2)
-        else
-            if not _G.LookingForGuildFrame then
-                LoadAddOn('Blizzard_LookingForGuildUI')
-            end
-            _G.LookingForGuildFrame_Toggle()
-        end
-    elseif btn == 'RightButton' then
-        _G.ToggleCommunitiesFrame()
+    infoFrame:Hide()
+
+    if not _G.CommunitiesFrame then
+        LoadAddOn('Blizzard_Communities')
+    end
+
+    if _G.CommunitiesFrame then
+        ToggleFrame(_G.CommunitiesFrame)
     end
 end
 
