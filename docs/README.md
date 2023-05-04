@@ -1,12 +1,12 @@
 <div align="center">
 
 # ![Logo](../assets/logo-circle-text.png)
-[![WoW](https://img.shields.io/badge/WoW-Retail-f6e36a)]()
-[![Discord Channel](https://img.shields.io/discord/242811601260904450?color=7289DA&label=Discord)](https://discord.gg/86wbfZXxn7)
-[![QQ群](https://img.shields.io/badge/QQ群-203621176-f66a8d)](https://jq.qq.com/?_wv=1027&k=LStIpBBc)
-[![License](https://img.shields.io/github/license/fafaraway/andromeda)](https://github.com/fafaraway/andromeda/blob/development/LICENSE)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/fafaraway/andromeda/release.yml)](https://github.com/fafaraway/andromeda/actions)
-[![Latest Release](https://img.shields.io/github/v/release/fafaraway/andromeda)](https://github.com/fafaraway/andromeda/releases)
+![WoW](https://img.shields.io/badge/WoW-Retail-f6e36a)
+![Discord Channel](https://img.shields.io/discord/242811601260904450?color=7289DA&label=Discord)
+![QQ群](https://img.shields.io/badge/QQ群-203621176-f66a8d)
+![License](https://img.shields.io/github/license/fafaraway/andromeda)
+![Build Status](https://img.shields.io/github/actions/workflow/status/fafaraway/andromeda/release.yml)
+![Latest Release](https://img.shields.io/github/v/release/fafaraway/andromeda)
 
 </div>
 
