@@ -51,6 +51,8 @@ function AURA:BuildBuffFrame()
     AURA.DebuffFrame.mover = F.Mover(AURA.DebuffFrame, L['DebuffFrame'], 'DebuffAnchor', { 'TOPLEFT', AURA.BuffFrame.mover, 'BOTTOMLEFT', 0, 30 })
     AURA.DebuffFrame:ClearAllPoints()
     AURA.DebuffFrame:SetPoint('TOPRIGHT', AURA.DebuffFrame.mover)
+
+    AURA:CreatePrivateAuras()
 end
 
 local day, hour, minute = 86400, 3600, 60
@@ -320,6 +322,80 @@ function AURA:CreateAuraIcon(button)
     button:SetScript('OnAttributeChanged', AURA.OnAttributeChanged)
     button:SetScript('OnEnter', AURA.Button_OnEnter)
     button:SetScript('OnLeave', F.HideTooltip)
+end
+
+local auraAnchor = {
+    unitToken = 'player',
+    auraIndex = 1,
+    parent = _G.UIParent,
+    showCountdownFrame = true,
+    showCountdownNumbers = true,
+
+    iconInfo = {
+        iconWidth = 30,
+        iconHeight = 30,
+        iconAnchor = {
+            point = 'CENTER',
+            relativeTo = _G.UIParent,
+            relativePoint = 'CENTER',
+            offsetX = 0,
+            offsetY = 0,
+        },
+    },
+
+    durationAnchor = {
+        point = 'TOP',
+        relativeTo = _G.UIParent,
+        relativePoint = 'BOTTOM',
+        offsetX = 0,
+        offsetY = 0,
+    },
+}
+
+function AURA:CreatePrivateAuras()
+    if not C.IS_NEW_PATCH_10_1 then
+        return
+    end
+
+    local maxButtons = 4 -- only 4 in blzz code, needs review
+    local buttonSize = C.DB.Aura.PrivateSize
+    local reverse = C.DB.Aura.PrivateReverse
+
+    AURA.PrivateFrame = CreateFrame('Frame', 'NDuiPrivateAuras', _G.UIParent)
+    AURA.PrivateFrame:SetSize((buttonSize + C.DB.Aura.Margin) * maxButtons - C.DB.Aura.Margin, buttonSize + 2 * C.DB.Aura.Margin)
+    AURA.PrivateFrame.mover = F.Mover(AURA.PrivateFrame, 'PrivateAuras', 'PrivateAuras', { 'TOPRIGHT', AURA.DebuffFrame.mover, 'BOTTOMRIGHT', 0, -12 })
+    AURA.PrivateFrame:ClearAllPoints()
+    AURA.PrivateFrame:SetPoint('TOPRIGHT', AURA.PrivateFrame.mover)
+
+    AURA.PrivateAuras = {}
+    local prevButton
+
+    local rel1 = reverse and 'TOPLEFT' or 'TOPRIGHT'
+    local rel2 = reverse and 'LEFT' or 'RIGHT'
+    local rel3 = reverse and 'RIGHT' or 'LEFT'
+    local margin = reverse and C.DB.Aura.Margin or -C.DB.Aura.Margin
+
+    for i = 1, maxButtons do
+        local button = CreateFrame('Frame', '$parentAnchor' .. i, AURA.PrivateFrame)
+        button:SetSize(buttonSize, buttonSize)
+        if not prevButton then
+            button:SetPoint(rel1, AURA.PrivateFrame)
+        else
+            button:SetPoint(rel2, prevButton, rel3, margin, 0)
+        end
+        prevButton = button
+
+        auraAnchor.auraIndex = i
+        auraAnchor.parent = button
+        auraAnchor.durationAnchor.relativeTo = button
+        auraAnchor.iconInfo.iconWidth = buttonSize
+        auraAnchor.iconInfo.iconHeight = buttonSize
+        auraAnchor.iconInfo.iconAnchor.relativeTo = button
+
+        C_UnitAuras.RemovePrivateAuraAnchor(i)
+        C_UnitAuras.AddPrivateAuraAnchor(auraAnchor)
+        AURA.PrivateAuras[i] = button
+    end
 end
 
 function AURA:OnLogin()
