@@ -116,6 +116,7 @@ function ACTIONBAR:CreateStanceBar()
 
     -- Fix stance bar updating
     ACTIONBAR:StanceBarOnEvent()
+    F:RegisterEvent('UPDATE_SHAPESHIFT_FORM', ACTIONBAR.StanceBarOnEvent)
     F:RegisterEvent('UPDATE_SHAPESHIFT_FORMS', ACTIONBAR.StanceBarOnEvent)
     F:RegisterEvent('UPDATE_SHAPESHIFT_USABLE', ACTIONBAR.StanceBarOnEvent)
     F:RegisterEvent('UPDATE_SHAPESHIFT_COOLDOWN', ACTIONBAR.StanceBarOnEvent)
