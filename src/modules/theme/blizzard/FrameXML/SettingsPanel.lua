@@ -132,7 +132,7 @@ tinsert(C.BlizzThemes, function()
             end
 
             if element.CheckBox then
-                F.ReskinCheck(element.CheckBox)
+                F.ReskinCheckbox(element.CheckBox)
                 element.CheckBox.bg:SetInside(nil, 6, 6)
 
                 hooksecurefunc(element, 'DesaturateHierarchy', forceSaturation)
