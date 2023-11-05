@@ -96,7 +96,9 @@ tinsert(C.BlizzThemes, function()
     _G.BONUS_ROLL_CURRENT_COUNT = _G.BONUS_ROLL_CURRENT_COUNT:gsub(from, to)
 
     -- Loot Roll Frame
-    hooksecurefunc('GroupLootFrame_OpenNewFrame', function()
+    -- DEBUG: change from GroupLootFrame_OpenNewFrame to GroupLootContainer_OpenNewFrame
+    -- Don't know is this working
+    hooksecurefunc('GroupLootContainer_OpenNewFrame', function()
         for i = 1, _G.NUM_GROUP_LOOT_FRAMES do
             local frame = _G['GroupLootFrame' .. i]
             if not frame.styled then

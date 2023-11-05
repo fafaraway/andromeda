@@ -272,7 +272,9 @@ tinsert(C.BlizzThemes, function()
     hooksecurefunc('Scenario_ChallengeMode_SetUpAffixes', F.AffixesSetup)
 
     -- Rewards on bonus tracker
-    hooksecurefunc('BonusObjectiveTracker_AnimateReward', function(block)
+    -- DEBUG: BonusObjectiveTracker_AnimateReward to BonusObjectiveTracker_AddReward
+    -- Don't know is this working
+    hooksecurefunc('BonusObjectiveTracker_AddReward', function(block)
         local rewardsFrame = block.module.rewardsFrame
         local rewards = rewardsFrame.Rewards
         for i = #rewards, 1, -1 do

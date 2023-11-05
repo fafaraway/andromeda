@@ -28,6 +28,11 @@ local function reskinMerchantItem(item)
 end
 
 local function reskinMerchantInteract(button)
+    -- CHANGES:
+    -- add button:GetRegions():Hide()
+    -- add F.ReskinIcon(button.Icon)
+    button:GetRegions():Hide()
+    F.ReskinIcon(button.Icon)
     button:SetPushedTexture(0)
     button:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
     F.CreateBDFrame(button)
@@ -66,15 +71,16 @@ tinsert(C.BlizzThemes, function()
     end
 
     _G.MerchantBuyBackItem:SetHeight(44)
+
+    -- CHANGES:
+    -- Add New Icons
+    -- Remove:SetTexCoord
     reskinMerchantItem(_G.MerchantBuyBackItem)
+	reskinMerchantInteract(_G.MerchantGuildBankRepairButton)
+	reskinMerchantInteract(_G.MerchantRepairAllButton)
+	reskinMerchantInteract(_G.MerchantRepairItemButton)
+	reskinMerchantInteract(_G.MerchantSellAllJunkButton)
 
-    reskinMerchantInteract(_G.MerchantGuildBankRepairButton)
-    _G.MerchantGuildBankRepairButtonIcon:SetTexCoord(0.595, 0.8075, 0.05, 0.52)
-
-    reskinMerchantInteract(_G.MerchantRepairAllButton)
-    _G.MerchantRepairAllIcon:SetTexCoord(0.31375, 0.53, 0.06, 0.52)
-
-    reskinMerchantInteract(_G.MerchantRepairItemButton)
     local ic = _G.MerchantRepairItemButton:GetRegions()
     ic:SetTexture('Interface\\Icons\\INV_Hammer_20')
     ic:SetTexCoord(unpack(C.TEX_COORD))
