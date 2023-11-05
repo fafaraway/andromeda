@@ -142,7 +142,10 @@ tinsert(C.BlizzThemes, function()
     iconTexture:SetTexture(C.Assets.Textures.RoleLfgIcons)
     local bg = F.CreateBDFrame(iconTexture)
 
-    hooksecurefunc('LFGDungeonReadyPopup_Update', function()
+    -- DEBUG: LFGDungeonReadyPopup_Update to LFGDungeonReadyPopup_OnUpdate
+    -- Don't know is this working
+    hooksecurefunc('LFGDungeonReadyPopup_OnUpdate', function()
+        print(_G.LFGDungeonReadyDialog)
         _G.LFGDungeonReadyDialog:SetBackdrop(nil)
         leaderFrame:SetShown(_G.LFGDungeonReadyDialogRoleIconLeaderIcon:IsShown())
 
