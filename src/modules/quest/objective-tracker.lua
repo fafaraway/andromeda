@@ -252,10 +252,10 @@ function EOT:OnLogin()
     -- Kill reward animation when finished dungeon or bonus objectives
     _G.ObjectiveTrackerScenarioRewardsFrame.Show = nop
 
-    hooksecurefunc('BonusObjectiveTracker_AnimateReward', function()
-        _G.ObjectiveTrackerBonusRewardsFrame:ClearAllPoints()
-        _G.ObjectiveTrackerBonusRewardsFrame:SetPoint('BOTTOM', _G.UIParent, 'TOP', 0, 90)
-    end)
+    -- hooksecurefunc('BonusObjectiveTracker_AnimateReward', function()
+    --     _G.ObjectiveTrackerBonusRewardsFrame:ClearAllPoints()
+    --     _G.ObjectiveTrackerBonusRewardsFrame:SetPoint('BOTTOM', _G.UIParent, 'TOP', 0, 90)
+    -- end)
 
     -- Auto collapse Objective Tracker
     if C.DB.Quest.AutoCollapseTracker then

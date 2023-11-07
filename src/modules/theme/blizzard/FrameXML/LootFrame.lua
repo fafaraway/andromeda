@@ -96,13 +96,16 @@ tinsert(C.BlizzThemes, function()
     _G.BONUS_ROLL_CURRENT_COUNT = _G.BONUS_ROLL_CURRENT_COUNT:gsub(from, to)
 
     -- Loot Roll Frame
-    hooksecurefunc('GroupLootFrame_OpenNewFrame', function()
+    local NUM_GROUP_LOOT_FRAMES = 4
+
+    hooksecurefunc('GroupLootContainer_OpenNewFrame', function()
         for i = 1, _G.NUM_GROUP_LOOT_FRAMES do
             local frame = _G['GroupLootFrame' .. i]
             if not frame.styled then
                 frame.Border:SetAlpha(0)
                 frame.Background:SetAlpha(0)
                 frame.bg = F.SetBD(frame)
+                F.ReskinIconBorder(frame.Border, true)
 
                 frame.Timer.Bar:SetTexture(C.Assets.Textures.Backdrop)
                 frame.Timer.Bar:SetVertexColor(1, 0.8, 0)
@@ -117,12 +120,6 @@ tinsert(C.BlizzThemes, function()
                 bg:SetPoint('BOTTOMRIGHT', frame.IconFrame.Icon, 'BOTTOMRIGHT', 150, -1)
 
                 frame.styled = true
-            end
-
-            if frame:IsShown() then
-                local _, _, _, quality = GetLootRollItemInfo(frame.rollID)
-                local color = C.QualityColors[quality]
-                frame.bg:SetBackdropBorderColor(color.r, color.g, color.b)
             end
         end
     end)

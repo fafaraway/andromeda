@@ -1,7 +1,6 @@
 local F, C = unpack(select(2, ...))
 
 C.Themes['Blizzard_InspectUI'] = function()
-    F.StripTextures(_G.InspectTalentFrame)
     F.StripTextures(_G.InspectModelFrame, true)
     _G.InspectGuildFrameBG:Hide()
     F.ReskinButton(_G.InspectPaperDollFrame.ViewButton)
@@ -55,48 +54,18 @@ C.Themes['Blizzard_InspectUI'] = function()
         UpdateCosmetic(button)
     end)
 
-    -- Talents
-    local inspectSpec = _G.InspectTalentFrame.InspectSpec
+    for i = 1, 4 do
+		local tab = _G["InspectFrameTab"..i]
+		if tab then
+			F.ReskinTab(tab)
+			if i ~= 1 then
+				tab:ClearAllPoints()
+				tab:SetPoint("LEFT", _G["InspectFrameTab"..i-1], "RIGHT", -15, 0)
+			end
+		end
+	end
 
-    inspectSpec.ring:Hide()
-    F.ReskinIcon(inspectSpec.specIcon)
-    inspectSpec.roleIcon:SetTexture(C.Assets.Textures.RoleLfgIcons)
-    F.CreateBDFrame(inspectSpec.roleIcon)
-
-    for i = 1, 7 do
-        local row = _G.InspectTalentFrame.InspectTalents['tier' .. i]
-        for j = 1, 3 do
-            local bu = row['talent' .. j]
-            bu.Slot:Hide()
-            bu.border:SetTexture('')
-            F.ReskinIcon(bu.icon)
-        end
-    end
-
-    local function updateIcon(self)
-        local spec = nil
-        if _G.INSPECTED_UNIT ~= nil then
-            spec = GetInspectSpecialization(_G.INSPECTED_UNIT)
-        end
-        if spec ~= nil and spec > 0 then
-            local role1 = GetSpecializationRoleByID(spec)
-            if role1 ~= nil then
-                local _, _, _, icon = GetSpecializationInfoByID(spec)
-                self.specIcon:SetTexture(icon)
-                self.roleIcon:SetTexCoord(F.GetRoleTexCoord(role1))
-            end
-        end
-    end
-
-    inspectSpec:HookScript('OnShow', updateIcon)
-    _G.InspectTalentFrame:HookScript('OnEvent', function(self, event, unit)
-        if not _G.InspectFrame:IsShown() then
-            return
-        end
-        if event == 'INSPECT_READY' and _G.InspectFrame.unit and UnitGUID(_G.InspectFrame.unit) == unit then
-            updateIcon(self.InspectSpec)
-        end
-    end)
+    F.ReskinPortraitFrame(InspectFrame)
 
     _G.InspectFrameTab1:ClearAllPoints()
     _G.InspectFrameTab1:SetPoint('TOPLEFT', _G.InspectFrame, 'BOTTOMLEFT', 10, 1)

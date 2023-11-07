@@ -272,20 +272,20 @@ tinsert(C.BlizzThemes, function()
     hooksecurefunc('Scenario_ChallengeMode_SetUpAffixes', F.AffixesSetup)
 
     -- Rewards on bonus tracker
-    hooksecurefunc('BonusObjectiveTracker_AnimateReward', function(block)
-        local rewardsFrame = block.module.rewardsFrame
-        local rewards = rewardsFrame.Rewards
-        for i = #rewards, 1, -1 do
-            local reward = rewards[i]
-            if reward.styled then
-                break
-            end
-            F.ReskinIcon(reward.ItemIcon)
-            reward.ItemBorder:SetTexture('')
+    -- hooksecurefunc('BonusObjectiveTracker_AnimateReward', function(block)
+    --     local rewardsFrame = block.module.rewardsFrame
+    --     local rewards = rewardsFrame.Rewards
+    --     for i = #rewards, 1, -1 do
+    --         local reward = rewards[i]
+    --         if reward.styled then
+    --             break
+    --         end
+    --         F.ReskinIcon(reward.ItemIcon)
+    --         reward.ItemBorder:SetTexture('')
 
-            reward.styled = true
-        end
-    end)
+    --         reward.styled = true
+    --     end
+    -- end)
 
     -- Maw buffs container
     ReskinMawBuffsContainer(_G.ScenarioBlocksFrame.MawBuffsBlock.Container)

@@ -2463,7 +2463,10 @@ do
         end
 
         function F:AffixesSetup()
-            for _, frame in ipairs(self.Affixes) do
+            local list = self.AffixesContainer and self.AffixesContainer.Affixes or self.Affixes
+		    if not list then return end
+
+            for _, frame in ipairs(list) do
                 frame.Border:SetTexture(nil)
                 frame.Portrait:SetTexture(nil)
                 if not frame.bg then
@@ -2481,77 +2484,38 @@ do
     end
 
     -- Role Icons
+    function F:GetRoleTex()
+        if self == 'TANK' then
+            return C.Assets.Textures.RoleTank
+        elseif self == 'DPS' or self == 'DAMAGER' then
+            return C.Assets.Textures.RoleDamager
+        elseif self == 'HEALER' then
+            return C.Assets.Textures.RoleHealer
+        end
+    end
 
-    do
-        function F:GetRoleTexCoord()
-            if self == 'TANK' then
-                return 0.34 / 9.03, 2.85 / 9.03, 3.16 / 9.03, 5.67 / 9.03
-            elseif self == 'DPS' or self == 'DAMAGER' then
-                return 3.27 / 9.03, 5.78 / 9.03, 3.16 / 9.03, 5.67 / 9.03
-            elseif self == 'HEALER' then
-                return 3.27 / 9.03, 5.78 / 9.03, 0.27 / 9.03, 2.78 / 9.03
-            elseif self == 'LEADER' then
-                return 0.34 / 9.03, 2.85 / 9.03, 0.27 / 9.03, 2.78 / 9.03
-            elseif self == 'READY' then
-                return 6.17 / 9.03, 8.68 / 9.03, 0.27 / 9.03, 2.78 / 9.03
-            elseif self == 'PENDING' then
-                return 6.17 / 9.03, 8.68 / 9.03, 3.16 / 9.03, 5.67 / 9.03
-            elseif self == 'REFUSE' then
-                return 3.27 / 9.03, 5.78 / 9.03, 6.04 / 9.03, 8.55 / 9.03
-            end
+    function F:ReskinSmallRole(role)
+        self:SetTexture(F.GetRoleTex(role))
+        self:SetTexCoord(0, 1, 0, 1)
+        self:SetSize(32, 32)
+    end
+
+    function F:ReskinRole()
+        if self.background then
+            self.background:SetTexture('')
         end
 
-        function F:GetRoleTex()
-            if self == 'TANK' then
-                return C.Assets.Textures.RoleTank
-            elseif self == 'DPS' or self == 'DAMAGER' then
-                return C.Assets.Textures.RoleDamager
-            elseif self == 'HEALER' then
-                return C.Assets.Textures.RoleHealer
-            end
+        local cover = self.cover or self.Cover
+        if cover then
+            cover:SetTexture('')
         end
 
-        function F:ReskinSmallRole(role)
-            self:SetTexture(F.GetRoleTex(role))
-            self:SetTexCoord(0, 1, 0, 1)
-            self:SetSize(32, 32)
-        end
-
-        function F:ReskinRole(role)
-            if self.background then
-                self.background:SetTexture('')
-            end
-
-            local cover = self.cover or self.Cover
-            if cover then
-                cover:SetTexture('')
-            end
-
-            local texture = self.GetNormalTexture and self:GetNormalTexture() or self.texture or self.Texture or (self.SetTexture and self) or self.Icon
-            if texture then
-                texture:SetTexture(C.Assets.Textures.RoleLfgIcons)
-                texture:SetTexCoord(F.GetRoleTexCoord(role))
-            end
-            self.bg = F.CreateBDFrame(self)
-
-            local checkButton = self.checkButton or self.CheckButton or self.CheckBox
-            if checkButton then
-                checkButton:SetFrameLevel(self:GetFrameLevel() + 2)
-                checkButton:SetPoint('BOTTOMLEFT', -2, -2)
-                checkButton:SetSize(20, 20)
-                F.ReskinCheckbox(checkButton, true)
-            end
-
-            local shortageBorder = self.shortageBorder
-            if shortageBorder then
-                shortageBorder:SetTexture('')
-                local icon = self.incentiveIcon
-                icon:SetPoint('BOTTOMRIGHT')
-                icon:SetSize(14, 14)
-                icon.texture:SetSize(14, 14)
-                F.ReskinIcon(icon.texture)
-                icon.border:SetTexture('')
-            end
+        local checkButton = self.checkButton or self.CheckButton or self.CheckBox
+        if checkButton then
+            checkButton:SetFrameLevel(self:GetFrameLevel() + 2)
+            checkButton:SetPoint('BOTTOMLEFT', -2, -2)
+            checkButton:SetSize(20, 20)
+            F.ReskinCheckbox(checkButton, true)
         end
     end
 

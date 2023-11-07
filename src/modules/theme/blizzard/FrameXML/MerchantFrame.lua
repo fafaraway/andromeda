@@ -28,9 +28,10 @@ local function reskinMerchantItem(item)
 end
 
 local function reskinMerchantInteract(button)
+    button:GetRegions():Hide()
+	F.ReskinIcon(button.Icon)
     button:SetPushedTexture(0)
     button:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
-    F.CreateBDFrame(button)
 end
 
 tinsert(C.BlizzThemes, function()
@@ -47,7 +48,8 @@ tinsert(C.BlizzThemes, function()
     _G.BuybackBG:SetAlpha(0)
 
     _G.MerchantFrameTab1:ClearAllPoints()
-    _G.MerchantFrameTab1:SetPoint('TOPLEFT', _G.MerchantFrame, 'BOTTOMLEFT', 10, 1)
+    _G.MerchantFrameTab1:SetPoint("CENTER", MerchantFrame, "BOTTOMLEFT", 50, -14)
+	_G.MerchantFrameTab2:SetPoint("LEFT", MerchantFrameTab1, "RIGHT", -15, 0)
 
     for i = 1, 2 do
         F.ReskinTab(_G['MerchantFrameTab' .. i])
@@ -66,15 +68,13 @@ tinsert(C.BlizzThemes, function()
     end
 
     _G.MerchantBuyBackItem:SetHeight(44)
+
     reskinMerchantItem(_G.MerchantBuyBackItem)
+	reskinMerchantInteract(_G.MerchantGuildBankRepairButton)
+	reskinMerchantInteract(_G.MerchantRepairAllButton)
+	reskinMerchantInteract(_G.MerchantRepairItemButton)
+	reskinMerchantInteract(_G.MerchantSellAllJunkButton)
 
-    reskinMerchantInteract(_G.MerchantGuildBankRepairButton)
-    _G.MerchantGuildBankRepairButtonIcon:SetTexCoord(0.595, 0.8075, 0.05, 0.52)
-
-    reskinMerchantInteract(_G.MerchantRepairAllButton)
-    _G.MerchantRepairAllIcon:SetTexCoord(0.31375, 0.53, 0.06, 0.52)
-
-    reskinMerchantInteract(_G.MerchantRepairItemButton)
     local ic = _G.MerchantRepairItemButton:GetRegions()
     ic:SetTexture('Interface\\Icons\\INV_Hammer_20')
     ic:SetTexCoord(unpack(C.TEX_COORD))
@@ -95,12 +95,6 @@ tinsert(C.BlizzThemes, function()
 
                 bu.styled = true
             end
-        end
-    end)
-
-    hooksecurefunc('MerchantFrame_UpdateRepairButtons', function()
-        if CanGuildBankRepair() then
-            _G.MerchantRepairText:SetPoint('CENTER', _G.MerchantFrame, 'BOTTOMLEFT', 65, 73)
         end
     end)
 
