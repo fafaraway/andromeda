@@ -143,8 +143,6 @@ C.Themes['Blizzard_Collections'] = function()
 
     F.ReskinEditbox(_G.MountJournalSearchBox)
     F.ReskinEditbox(_G.PetJournalSearchBox)
-    F.ReskinArrow(MountJournal.MountDisplay.ModelScene.RotateLeftButton, 'left')
-    F.ReskinArrow(MountJournal.MountDisplay.ModelScene.RotateRightButton, 'right')
     F.ReskinFilterButton(_G.PetJournalFilterButton)
     F.ReskinFilterButton(_G.MountJournalFilterButton)
 
