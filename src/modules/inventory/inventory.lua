@@ -2,6 +2,7 @@ local F, C, L = unpack(select(2, ...))
 local INVENTORY = F:GetModule('Inventory')
 local cargBags = F.Libs.cargBags
 local iconsList = C.Assets.Textures
+local LBG = F.Libs.LibButtonGlow
 
 local iconColor = { 0.5, 0.5, 0.5 }
 local bagTypeColor = {
@@ -911,35 +912,15 @@ function INVENTORY:OnLogin()
         self.iLvl = F.CreateFS(self, C.Assets.Fonts.Bold, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK', 'BOTTOMRIGHT', -2, 2)
         self.BindType = F.CreateFS(self, C.Assets.Fonts.Condensed, 11, outline or nil, '', nil, outline and 'NONE' or 'THICK', 'TOPLEFT', 2, -2)
 
-        local flash = self:CreateTexture(nil, 'ARTWORK')
-        flash:SetTexture('Interface\\Cooldown\\star4')
-        flash:SetPoint('TOPLEFT', -20, 20)
-        flash:SetPoint('BOTTOMRIGHT', 20, -20)
-        flash:SetBlendMode('ADD')
-        flash:SetAlpha(0)
-        local anim = flash:CreateAnimationGroup()
-        anim:SetLooping('REPEAT')
-        anim.rota = anim:CreateAnimation('Rotation')
-        anim.rota:SetDuration(1)
-        anim.rota:SetDegrees(-90)
-        anim.fader = anim:CreateAnimation('Alpha')
-        anim.fader:SetFromAlpha(0)
-        anim.fader:SetToAlpha(0.5)
-        anim.fader:SetDuration(0.5)
-        anim.fader:SetSmoothing('OUT')
-        anim.fader2 = anim:CreateAnimation('Alpha')
-        anim.fader2:SetStartDelay(0.5)
-        anim.fader2:SetFromAlpha(0.5)
-        anim.fader2:SetToAlpha(0)
-        anim.fader2:SetDuration(1.2)
-        anim.fader2:SetSmoothing('OUT')
-        self:HookScript('OnHide', function()
-            if anim:IsPlaying() then
-                anim:Stop()
-            end
-        end)
-        self.anim = anim
+        -- self:HookScript('OnHide', function()
+        --     if anim:IsPlaying() then
+        --         anim:Stop()
+        --     end
+        -- end)
         self.ShowNewItems = showNewItem
+        if showNewItem then
+			self.glowFrame = F.CreateGlowFrame(self, iconSize)
+		end
 
         self:HookScript('OnClick', INVENTORY.ButtonOnClick)
 
@@ -956,10 +937,8 @@ function INVENTORY:OnLogin()
     end
 
     function MyButton:ItemOnEnter()
-        if self.ShowNewItems then
-            if self.anim:IsPlaying() then
-                self.anim:Stop()
-            end
+        if self.glowFrame then
+            LBG.HideOverlayGlow(self.glowFrame)
         end
     end
 
@@ -1051,11 +1030,9 @@ function INVENTORY:OnLogin()
 
         if self.ShowNewItems then
             if C_NewItems.IsNewItem(item.bagId, item.slotId) then
-                self.anim:Play()
+                LBG.ShowOverlayGlow(self.glowFrame)
             else
-                if self.anim:IsPlaying() then
-                    self.anim:Stop()
-                end
+                LBG.HideOverlayGlow(self.glowFrame)
             end
         end
 
