@@ -149,7 +149,7 @@ function COOLDOWN:StartTimer(start, duration, modRate)
             COOLDOWN.StopTimer(chargeTimer)
         end
 
-        if timer.fontScale >= minScale then
+        if timer.fontScale and timer.fontScale >= minScale then
             timer:Show()
         end
     elseif self.timer then

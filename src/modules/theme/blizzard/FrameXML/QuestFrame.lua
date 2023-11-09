@@ -63,17 +63,10 @@ tinsert(C.BlizzThemes, function()
     F.ReskinButton(_G.QuestFrameGoodbyeButton)
     F.ReskinButton(_G.QuestFrameGreetingGoodbyeButton)
 
-    if C.IS_NEW_PATCH_10_1 then
-        F.ReskinTrimScroll(_G.QuestProgressScrollFrame.ScrollBar)
-        F.ReskinTrimScroll(_G.QuestRewardScrollFrame.ScrollBar)
-        F.ReskinTrimScroll(_G.QuestDetailScrollFrame.ScrollBar)
-        F.ReskinTrimScroll(_G.QuestGreetingScrollFrame.ScrollBar)
-    else
-        F.ReskinScroll(_G.QuestProgressScrollFrameScrollBar)
-        F.ReskinScroll(_G.QuestRewardScrollFrameScrollBar)
-        F.ReskinScroll(_G.QuestDetailScrollFrameScrollBar)
-        F.ReskinScroll(_G.QuestGreetingScrollFrameScrollBar)
-    end
+    F.ReskinTrimScroll(_G.QuestProgressScrollFrame.ScrollBar)
+    F.ReskinTrimScroll(_G.QuestRewardScrollFrame.ScrollBar)
+    F.ReskinTrimScroll(_G.QuestDetailScrollFrame.ScrollBar)
+    F.ReskinTrimScroll(_G.QuestGreetingScrollFrame.ScrollBar)
 
     -- Text colour stuff
 
