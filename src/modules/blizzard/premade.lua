@@ -401,14 +401,15 @@ function BLIZZARD:AddDungeonsFilter()
 end
 
 local function ClickSortButton(self)
-    self.__owner.Sorting.SortingExpression:SetText(self.sortStr)
-    self.__owner.RefreshButton:Click()
+    self.__owner.Sorting.Expression:SetText(self.sortStr)
+    self.__parent.RefreshButton:Click()
 end
 
-local function CreateSortButton(parent, texture, sortStr)
+local function CreateSortButton(parent, texture, sortStr, panel)
     local bu = F.CreateButton(parent, 24, 24, true, texture)
     bu.sortStr = sortStr
-    bu.__owner = parent
+    bu.__parent = parent
+    bu.__owner = panel
     bu:SetScript('OnClick', ClickSortButton)
     F.AddTooltip(bu, 'ANCHOR_RIGHT', _G.CLUB_FINDER_SORT_BY)
 
@@ -421,11 +422,12 @@ function BLIZZARD:AddPGFSortingExpression()
     end
 
     local PGFDialog = _G.PremadeGroupsFilterDialog
+    local ExpressionPanel = _G.PremadeGroupsFilterMiniPanel
     PGFDialog.__sortBu = {}
 
-    CreateSortButton(PGFDialog, 525134, 'mprating desc')
-    CreateSortButton(PGFDialog, 1455894, 'pvprating desc')
-    CreateSortButton(PGFDialog, 237538, 'age asc')
+    CreateSortButton(PGFDialog, 525134, 'mprating desc', ExpressionPanel)
+    CreateSortButton(PGFDialog, 1455894, 'pvprating desc', ExpressionPanel)
+    CreateSortButton(PGFDialog, 237538, 'age asc', ExpressionPanel)
 
     for i = 1, #PGFDialog.__sortBu do
         local bu = PGFDialog.__sortBu[i]

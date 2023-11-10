@@ -2464,7 +2464,9 @@ do
 
         function F:AffixesSetup()
             local list = self.AffixesContainer and self.AffixesContainer.Affixes or self.Affixes
-		    if not list then return end
+            if not list then
+                return
+            end
 
             for _, frame in ipairs(list) do
                 frame.Border:SetTexture(nil)
@@ -2640,6 +2642,7 @@ do
             self:SetWidth(width)
         end
     end
+    F.ReskinInput = F.ReskinEditbox -- Deprecated
 
     -- Handle color swatch
 
