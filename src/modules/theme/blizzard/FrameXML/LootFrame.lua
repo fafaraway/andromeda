@@ -99,7 +99,7 @@ tinsert(C.BlizzThemes, function()
     local NUM_GROUP_LOOT_FRAMES = 4
 
     hooksecurefunc('GroupLootContainer_OpenNewFrame', function()
-        for i = 1, _G.NUM_GROUP_LOOT_FRAMES do
+        for i = 1, NUM_GROUP_LOOT_FRAMES do
             local frame = _G['GroupLootFrame' .. i]
             if not frame.styled then
                 frame.Border:SetAlpha(0)
