@@ -207,7 +207,7 @@ QuickQuest:Register('GOSSIP_SHOW', function()
     local questGossipID
     for i = 1, numOptions do
         local option = gossipInfoTable[i]
-        if option.name and strfind(option.name, 'cFF0000FF') then
+        if option.name and (strfind(option.name, 'cFF0000FF') or option.flags == QuestLabelPrepend) then
             numQuestGossips = numQuestGossips + 1
             questGossipID = option.gossipOptionID
         end

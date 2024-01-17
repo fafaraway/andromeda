@@ -301,21 +301,14 @@ end
 
 function BLIZZARD:AddDungeonsFilter()
     local mapData = {
-        -- S1
-        [0] = { mapID = 2, aID = 1192 }, -- 青龙寺
-        [1] = { mapID = 165, aID = 1193 }, -- 影月谷
-        [2] = { mapID = 200, aID = 461 }, -- 英灵殿
-        [3] = { mapID = 210, aID = 466 }, -- 群星庭院
-        [4] = { mapID = 399, aID = 1176 }, -- 红玉新生法池
-        [5] = { mapID = 400, aID = 1184 }, -- 诺库德狙击战
-        [6] = { mapID = 401, aID = 1180 }, -- 碧蓝魔馆
-        [7] = { mapID = 402, aID = 1160 }, -- 艾杰斯亚学院
-
-        -- S2
-        -- [4] = { mapID = 403, aID = 1188 }, -- 奥丹姆：提尔的遗产
-        -- [5] = { mapID = 404, aID = 1172 }, -- 奈萨鲁斯
-        -- [6] = { mapID = 405, aID = 1164 }, -- 蕨皮山谷
-        -- [7] = { mapID = 406, aID = 1168 }, -- 注能大厅
+        [0] = { aID = 1247, mapID = 463 }, -- 永恒黎明：迦拉克隆的陨落
+        [1] = { aID = 1248, mapID = 464 }, -- 永恒黎明：姆诺兹多的崛起
+        [2] = { aID = 530, mapID = 248 }, -- 维克雷斯庄园
+        [3] = { aID = 502, mapID = 244 }, -- 阿塔达萨
+        [4] = { aID = 460, mapID = 198 }, -- 黑心林地
+        [5] = { aID = 463, mapID = 199 }, -- 黑鸦堡垒
+        [6] = { aID = 184, mapID = 168 }, -- 永茂林地
+        [7] = { aID = 1274, mapID = 456 }, -- 潮汐王座
     }
 
     local function GetDungeonNameByID(mapID)

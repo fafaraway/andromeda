@@ -3,6 +3,7 @@ local TOOLTIP = F:GetModule('Tooltip')
 
 local npcIDstring = '%s ' .. C.INFO_COLOR .. '%s'
 local ignoreString = '|cffff0000' .. _G.IGNORED .. ':|r %s'
+local specPrefix = '|cffFFCC00' .. _G.SPECIALIZATION .. ': ' .. C.INFO_COLOR
 local blanchyFix = '|n%s+|n'
 
 TOOLTIP.MountIDs = {}
@@ -36,6 +37,10 @@ local FACTION_COLORS = {
     [_G.FACTION_HORDE] = '|cffff5040%s|r',
 }
 
+local function replaceSpecInfo(str)
+    return strfind(str, '%s') and specPrefix .. str or str
+end
+
 function TOOLTIP:UpdateFactionLine(lineData)
     if self:IsForbidden() then
         return
@@ -45,11 +50,23 @@ function TOOLTIP:UpdateFactionLine(lineData)
         return
     end
 
+    local unit = TOOLTIP.GetUnit(self)
+    local unitClass = unit and UnitClass(unit)
+    local unitCreature = unit and UnitCreatureType(unit)
+
     local linetext = lineData.leftText
     if linetext == _G.PVP then
         return true
     elseif FACTION_COLORS[linetext] then
-        lineData.leftText = format(FACTION_COLORS[linetext], linetext)
+        if C.DB.Tooltip.FactionIcon then
+            return true
+        else
+            lineData.leftText = format(FACTION_COLORS[linetext], linetext)
+        end
+    elseif unitClass and strfind(linetext, unitClass) then
+        lineData.leftText = gsub(linetext, '(.-)%S+$', replaceSpecInfo)
+    elseif unitCreature and linetext == unitCreature then
+        return true
     end
 end
 
@@ -205,6 +222,8 @@ function TOOLTIP:OnTooltipSetUnit()
         local textLevel = format('%s%s%s|r', F:RgbToHex(diff), boss or format('%d', level), classification[classify] or '')
         local tiptextLevel = TOOLTIP.GetLevelLine(self)
         if tiptextLevel then
+            local reaction = UnitReaction(unit, 'player')
+            local standingText = not isPlayer and reaction and hexColor .. _G['FACTION_STANDING_LABEL' .. reaction] .. '|r ' or ''
             local pvpFlag = isPlayer and UnitIsPVP(unit) and format(' |cffff0000%s|r', _G.PVP) or ''
             local unitClass = isPlayer and format('%s %s', UnitRace(unit) or '', hexColor .. (UnitClass(unit) or '') .. '|r') or UnitCreatureType(unit) or ''
             tiptextLevel:SetFormattedText('%s%s %s %s', textLevel, pvpFlag, unitClass, (not alive and '|cffCCCCCC' .. _G.DEAD .. '|r' or ''))
@@ -225,7 +244,7 @@ function TOOLTIP:OnTooltipSetUnit()
         if npcID then
             local reaction = UnitReaction(unit, 'player')
             local standingText = reaction and hexColor .. _G['FACTION_STANDING_LABEL' .. reaction]
-            self:AddLine(format(npcIDstring, standingText or '', npcID))
+            self:AddLine(format(npcIDstring, 'NpcID:', npcID))
         end
     end
 
@@ -457,9 +476,9 @@ function TOOLTIP:OnLogin()
     TOOLTIP:ItemInfo()
     TOOLTIP:MountSource()
     TOOLTIP:HyperLink()
-    TOOLTIP:CovenantInfo()
+    -- TOOLTIP:CovenantInfo()
     TOOLTIP:Achievement()
-    TOOLTIP:AzeriteArmor()
+    -- TOOLTIP:AzeriteArmor()
     TOOLTIP:ParagonRewards()
     TOOLTIP:FixStoneSoupError()
 

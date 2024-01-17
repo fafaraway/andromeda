@@ -164,7 +164,7 @@ local function UpdateClassColor(self)
     r = ConvertColor(r)
     g = ConvertColor(g)
     b = ConvertColor(b)
-    _G.ColorPickerFrame:SetColorRGB(r, g, b)
+    _G.ColorPickerFrame.Content.ColorPicker:SetColorRGB(r, g, b)
 end
 
 local function CreateClassColorButton()
@@ -199,52 +199,54 @@ function BLIZZARD:EnhancedColorPicker()
     Header:ClearAllPoints()
     Header:SetPoint('TOP', Picker, 0, 5)
 
-    _G.ColorPickerCancelButton:ClearAllPoints()
-    _G.ColorPickerOkayButton:ClearAllPoints()
-    _G.ColorPickerCancelButton:SetPoint('BOTTOMRIGHT', Picker, 'BOTTOMRIGHT', -6, 6)
-    _G.ColorPickerCancelButton:SetPoint('BOTTOMLEFT', Picker, 'BOTTOM', 0, 6)
-    _G.ColorPickerOkayButton:SetPoint('BOTTOMLEFT', Picker, 'BOTTOMLEFT', 6, 6)
-    _G.ColorPickerOkayButton:SetPoint('RIGHT', _G.ColorPickerCancelButton, 'LEFT', -4, 0)
+    _G.ColorPickerFrame.Footer.CancelButton:ClearAllPoints()
+    _G.ColorPickerFrame.Footer.OkayButton:ClearAllPoints()
+    _G.ColorPickerFrame.Footer.CancelButton:SetPoint('BOTTOMRIGHT', Picker, 'BOTTOMRIGHT', -6, 6)
+    _G.ColorPickerFrame.Footer.CancelButton:SetPoint('BOTTOMLEFT', Picker, 'BOTTOM', 0, 6)
+    _G.ColorPickerFrame.Footer.OkayButton:SetPoint('BOTTOMLEFT', Picker, 'BOTTOMLEFT', 6, 6)
+    _G.ColorPickerFrame.Footer.OkayButton:SetPoint('RIGHT', _G.ColorPickerFrame.Footer.CancelButton, 'LEFT', -4, 0)
 
     Picker:HookScript('OnShow', function(frame)
         -- get color that will be replaced
         local r, g, b = frame:GetColorRGB()
-        _G.ColorPPOldColorSwatch:SetColorTexture(r, g, b)
+        -- _G.ColorPPOldColorSwatch:SetColorTexture(r, g, b)
+        frame.Content.ColorSwatchOriginal:SetColorTexture(r, g, b)
 
         -- show/hide the alpha box
         if frame.hasOpacity then
             _G.ColorPPBoxA:Show()
             _G.ColorPPBoxLabelA:Show()
-            _G.ColorPPBoxH:SetScript('OnTabPressed', ColorPPBoxA_SetFocus)
+            frame.Content.HexBox:SetScript('OnTabPressed', ColorPPBoxA_SetFocus)
             UpdateAlphaText()
             UpdateColorTexts()
             frame:SetWidth(405)
         else
             _G.ColorPPBoxA:Hide()
             _G.ColorPPBoxLabelA:Hide()
-            _G.ColorPPBoxH:SetScript('OnTabPressed', ColorPPBoxR_SetFocus)
+            frame.Content.HexBox:SetScript('OnTabPressed', ColorPPBoxR_SetFocus)
             UpdateColorTexts()
             frame:SetWidth(345)
         end
 
         -- Memory Fix, Colorpicker will call the self.func() 100x per second, causing fps/memory issues,
         -- We overwrite these two scripts and set a limit on how often we allow a call their update functions
-        _G.OpacitySliderFrame:SetScript('OnValueChanged', OnValueChanged)
-        frame:SetScript('OnColorSelect', OnColorSelect)
+        -- _G.OpacitySliderFrame:SetScript('OnValueChanged', OnValueChanged)
+        -- frame:SetScript('OnColorSelect', OnColorSelect)
+        UpdateColorTexts(nil, nil, nil, _G.ColorPickerFrame.Content.HexBox)
     end)
 
     -- move the Color Swatch
-    _G.ColorSwatch:ClearAllPoints()
-    _G.ColorSwatch:SetPoint('TOPLEFT', Picker, 'TOPLEFT', 215, -45)
-    local swatchWidth, swatchHeight = _G.ColorSwatch:GetSize()
+    _G.ColorPickerFrame.Content.ColorSwatchCurrent:ClearAllPoints()
+    _G.ColorPickerFrame.Content.ColorSwatchCurrent:SetPoint('TOPLEFT', Picker, 'TOPLEFT', 215, -45)
+    local swatchWidth, swatchHeight = _G.ColorPickerFrame.Content.ColorSwatchCurrent:GetSize()
 
     -- add Color Swatch for original color
-    local originalColor = Picker:CreateTexture('ColorPPOldColorSwatch')
-    originalColor:SetSize(swatchWidth * 0.75, swatchHeight * 0.75)
-    originalColor:SetColorTexture(0, 0, 0)
-    -- OldColorSwatch to appear beneath ColorSwatch
-    originalColor:SetDrawLayer('BORDER')
-    originalColor:SetPoint('BOTTOMLEFT', 'ColorSwatch', 'TOPRIGHT', -(swatchWidth / 2), -(swatchHeight / 3))
+    -- local originalColor = Picker:CreateTexture('ColorPPOldColorSwatch')
+    -- originalColor:SetSize(swatchWidth * 0.75, swatchHeight * 0.75)
+    -- originalColor:SetColorTexture(0, 0, 0)
+    -- -- OldColorSwatch to appear beneath ColorSwatch
+    -- originalColor:SetDrawLayer('BORDER')
+    -- originalColor:SetPoint('BOTTOMLEFT', 'ColorSwatch', 'TOPRIGHT', -(swatchWidth / 2), -(swatchHeight / 3))
 
     -- add Color Swatch for the copied color
     local copiedColor = Picker:CreateTexture('ColorPPCopyColorSwatch')
@@ -256,7 +258,7 @@ function BLIZZARD:EnhancedColorPicker()
     local copyButton = CreateFrame('Button', 'ColorPPCopy', Picker, 'UIPanelButtonTemplate')
     copyButton:SetText(_G.CALENDAR_COPY_EVENT)
     copyButton:SetSize(52, 22)
-    copyButton:SetPoint('TOPLEFT', 'ColorSwatch', 'BOTTOMLEFT', 0, -20)
+    -- copyButton:SetPoint('TOPLEFT', 'ColorSwatch', 'BOTTOMLEFT', 0, -20)
     F.ReskinButton(copyButton)
 
     -- copy color into buffer on button click
@@ -323,14 +325,14 @@ function BLIZZARD:EnhancedColorPicker()
     _G.ColorPPCopyColorSwatch:SetPoint('BOTTOM', 'ColorPPPaste', 'TOP', 0, 10)
 
     -- move the Opacity Slider to align with bottom of Copy ColorSwatch
-    _G.OpacitySliderFrame:ClearAllPoints()
-    _G.OpacitySliderFrame:SetPoint('BOTTOM', 'ColorPPDefault', 'BOTTOM', 0, 0)
-    _G.OpacitySliderFrame:SetPoint('RIGHT', 'ColorPickerFrame', 'RIGHT', -35, 18)
+    -- _G.OpacitySliderFrame:ClearAllPoints()
+    -- _G.OpacitySliderFrame:SetPoint('BOTTOM', 'ColorPPDefault', 'BOTTOM', 0, 0)
+    -- _G.OpacitySliderFrame:SetPoint('RIGHT', 'ColorPickerFrame', 'RIGHT', -35, 18)
 
     -- set up edit box frames and interior label and text areas
     for i, rgb in next, { 'R', 'G', 'B', 'H', 'A' } do
         local box = CreateFrame('EditBox', 'ColorPPBox' .. rgb, Picker, 'InputBoxTemplate')
-        box:SetPoint('TOP', 'ColorPickerWheel', 'BOTTOM', 0, -15)
+        box:SetPoint('TOP', Picker.Content.ColorSwatchOriginal, 'BOTTOM', 0, -15)
         box:SetFrameStrata('DIALOG')
         box:SetAutoFocus(false)
         box:SetTextInsets(0, 0, 0, 0)

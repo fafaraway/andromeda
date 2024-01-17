@@ -29,7 +29,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ]]
 local MAJOR_VERSION = "LibActionButton-1.0"
-local MINOR_VERSION = 108
+local MINOR_VERSION = 109
 
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end
 local lib, oldversion = LibStub:NewLibrary(MAJOR_VERSION, MINOR_VERSION)
@@ -50,7 +50,7 @@ local UseCustomFlyout = WoWRetail
 
 local KeyBound = LibStub("LibKeyBound-1.0", true)
 local CBH = LibStub("CallbackHandler-1.0")
-local LBG = LibStub("LibButtonGlow-1.0", true)
+local LCG = LibStub("LibCustomGlow-1.0-Adromeda", true)
 local Masque = LibStub("Masque", true)
 
 lib.eventFrame = lib.eventFrame or CreateFrame("Frame")
@@ -286,10 +286,13 @@ function SetupSecureSnippets(button)
 			local pressAndHold = false
 			if type == "action" then
 				self:SetAttribute("typerelease", "actionrelease")
-				local actionType, id = GetActionInfo(action)
+				local actionType, id, subType = GetActionInfo(action)
 				if actionType == "spell" then
 					pressAndHold = IsPressHoldReleaseSpell(id)
 				elseif actionType == "macro" then
+					if subType == "spell" then
+						pressAndHold = IsPressHoldReleaseSpell(id)
+					end
 					-- GetMacroSpell is not in the restricted environment
 					--[=[
 						local spellID = GetMacroSpell(id)
@@ -1610,7 +1613,7 @@ function Generic:UpdateAction(force)
 		Update(self)
 	end
 end
-
+-- NDui: add quality border
 local function ClearProfessionQuality(self)
 	if self.ProfessionQuality then
 		self.ProfessionQuality:Hide()
@@ -2011,14 +2014,14 @@ function UpdateHotkeys(self)
 end
 
 function ShowOverlayGlow(self)
-	if LBG then
-		LBG.ShowOverlayGlow(self)
+	if LCG then
+		LCG.ShowOverlayGlow(self)
 	end
 end
 
 function HideOverlayGlow(self)
-	if LBG then
-		LBG.HideOverlayGlow(self)
+	if LCG then
+		LCG.HideOverlayGlow(self)
 	end
 end
 
@@ -2287,10 +2290,14 @@ Action.IsConsumableOrStackable = function(self) return IsConsumableAction(self._
 Action.IsUnitInRange           = function(self, unit) return IsActionInRange(self._state_action, unit) end
 Action.SetTooltip              = function(self) return GameTooltip:SetAction(self._state_action) end
 Action.GetSpellId              = function(self)
-	if self._state_type == "action" then
-		local actionType, id, subType = GetActionInfo(self._state_action)
-		if actionType == "spell" or (actionType == "macro" and subType == "spell") then
+	local actionType, id, subType = GetActionInfo(self._state_action)
+	if actionType == "spell" then
+		return id
+	elseif actionType == "macro" then
+		if subType == "spell" then
 			return id
+		else
+			return (GetMacroSpell(id))
 		end
 	end
 end
@@ -2374,7 +2381,7 @@ Item.IsCurrentlyActive       = function(self) return IsCurrentItem(self._state_a
 Item.IsAutoRepeat            = function(self) return nil end
 Item.IsUsable                = function(self) return IsUsableItem(self._state_action) end
 Item.IsConsumableOrStackable = function(self) return IsConsumableItem(self._state_action) end
-Item.IsUnitInRange           = function(self, unit) return IsItemInRange(self._state_action, unit) end
+--Item.IsUnitInRange           = function(self, unit) return IsItemInRange(self._state_action, unit) end
 Item.SetTooltip              = function(self) return GameTooltip:SetHyperlink(self._state_action) end
 Item.GetSpellId              = function(self) return nil end
 Item.GetPassiveCooldownSpellID = function(self) return nil end

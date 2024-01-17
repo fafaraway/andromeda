@@ -1,6 +1,5 @@
 local parent, ns = ...
-local getAddOnMetadata = GetAddOnMetadata or C_AddOns.GetAddOnMetadata -- isPatch10_1
-local global = getAddOnMetadata(parent, 'X-oUF')
+local global = C_AddOns.GetAddOnMetadata(parent, 'X-oUF')
 local _VERSION = '@project-version@'
 if(_VERSION:find('project%-version')) then
 	_VERSION = 'devel'
@@ -625,7 +624,7 @@ do
 	                 for possible values.
 
 	In addition to the standard group headers, oUF implements some of its own attributes. These can be supplied by the
-	layout, but are optional.
+	layout, but are optional. PingableUnitFrameTemplate is inherited for Ping support.
 
 	* oUF-initialConfigFunction - can contain code that will be securely run at the end of the initial secure
 	                              configuration (string?)
@@ -640,7 +639,7 @@ do
 		local name = overrideName or generateName(nil, ...)
 		local header = CreateFrame('Frame', name, PetBattleFrameHider, template)
 
-		header:SetAttribute('template', 'SecureUnitButtonTemplate, SecureHandlerStateTemplate, SecureHandlerEnterLeaveTemplate, SecureHandlerShowHideTemplate, SecureHandlerMouseUpDownTemplate')
+		header:SetAttribute('template', 'SecureUnitButtonTemplate, SecureHandlerStateTemplate, SecureHandlerEnterLeaveTemplate, PingableUnitFrameTemplate')
 		for i = 1, select('#', ...), 2 do
 			local att, val = select(i, ...)
 			if(not att) then break end
@@ -720,20 +719,21 @@ Used to create a single unit frame and apply the currently active style to it.
                  (string?)
 
 oUF implements some of its own attributes. These can be supplied by the layout, but are optional.
+PingableUnitFrameTemplate is inherited for Ping support.
 
 * oUF-enableArenaPrep - can be used to toggle arena prep support. Defaults to true (boolean)
 --]]
-function oUF:Spawn(unit, overrideName, noHandle)
+function oUF:Spawn(unit, overrideName)
 	argcheck(unit, 2, 'string')
 	if(not style) then return error('Unable to create frame. No styles have been registered.') end
 
 	unit = unit:lower()
 
 	local name = overrideName or generateName(unit)
-	local object = CreateFrame('Button', name, PetBattleFrameHider, 'SecureUnitButtonTemplate')
+	local object = CreateFrame('Button', name, PetBattleFrameHider, 'SecureUnitButtonTemplate, PingableUnitFrameTemplate')
 	Private.UpdateUnits(object, unit)
 
-	if not noHandle then self:DisableBlizzard(unit) end
+	self:DisableBlizzard(unit)
 	walkObject(object, unit)
 
 	object:SetAttribute('unit', unit)
@@ -751,6 +751,8 @@ Used to create nameplates and apply the currently active style to them.
               the callback are the updated nameplate, if any, the event that triggered the update, and the new unit
               (function?)
 * variables - list of console variable-value pairs to be set when the player logs in (table?)
+
+PingableUnitFrameTemplate is inherited for Ping support.
 --]]
 function oUF:SpawnNamePlates(namePrefix, nameplateCallback, nameplateCVars)
 	argcheck(nameplateCallback, 3, 'function', 'nil')
@@ -807,7 +809,7 @@ function oUF:SpawnNamePlates(namePrefix, nameplateCallback, nameplateCVars)
 			if(not nameplate.unitFrame) then
 				nameplate.style = style
 
-				nameplate.unitFrame = CreateFrame('Button', prefix..nameplate:GetName(), nameplate)
+				nameplate.unitFrame = CreateFrame('Button', prefix..nameplate:GetName(), nameplate, 'PingableUnitFrameTemplate')
 				nameplate.unitFrame:EnableMouse(false)
 				nameplate.unitFrame.isNamePlate = true
 
@@ -819,6 +821,18 @@ function oUF:SpawnNamePlates(namePrefix, nameplateCallback, nameplateCVars)
 			end
 
 			nameplate.unitFrame:SetAttribute('unit', unit)
+
+			if(nameplate.UnitFrame) then
+				if(nameplate.UnitFrame.WidgetContainer) then
+					nameplate.UnitFrame.WidgetContainer:SetParent(nameplate.unitFrame)
+					nameplate.unitFrame.WidgetContainer = nameplate.UnitFrame.WidgetContainer
+				end
+
+				if(nameplate.UnitFrame.SoftTargetFrame) then
+					nameplate.UnitFrame.SoftTargetFrame:SetParent(nameplate.unitFrame)
+					nameplate.unitFrame.SoftTargetFrame = nameplate.UnitFrame.SoftTargetFrame
+				end
+			end
 
 			if(nameplateCallback) then
 				nameplateCallback(nameplate.unitFrame, event, unit)
