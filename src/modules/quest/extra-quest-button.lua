@@ -289,7 +289,7 @@ end)
 
 ExtraQuestButton:SetScript('OnUpdate', function(self, elapsed)
     if self.updateRange then
-        if (self.rangeTimer or 0) > _G.TOOLTIP_UPDATE_TIME then
+        if not InCombatLockdown() and ((self.rangeTimer or 0) > _G.TOOLTIP_UPDATE_TIME) then
             local HotKey = self.HotKey
             local Icon = self.Icon
 

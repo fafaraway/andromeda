@@ -49,6 +49,10 @@ local function HandleBar(f)
     f.bg:SetBackdropBorderColor(0, 0, 0)
 end
 
+local function ResetBGLevel(frame)
+	frame.bg:SetFrameLevel(0)
+end
+
 local function RestyleIconAndBar(f, fType)
     if fType == 'icon' then
         if not f.styled then
@@ -60,6 +64,7 @@ local function RestyleIconAndBar(f, fType)
         if not f.styled then
             HandleBar(f)
             HandleIcon(f.icon)
+            hooksecurefunc(f, "SetFrameStrata", ResetBGLevel)
 
             f.styled = true
         end
@@ -73,16 +78,27 @@ local function RestyleObjects()
         return
     end
 
-    local function OnPrototypeCreate(region)
-        RestyleIconAndBar(region, region.regionType)
-    end
+    if _G.WeakAuras.regionPrototype then
+        local function OnPrototypeCreate(region)
+            RestyleIconAndBar(region, region.regionType)
+        end
 
-    local function OnPrototypeModifyFinish(_, region)
-        RestyleIconAndBar(region, region.regionType)
+        local function OnPrototypeModifyFinish(_, region)
+            RestyleIconAndBar(region, region.regionType)
+        end
+        hooksecurefunc(_G.WeakAuras.regionPrototype, 'create', OnPrototypeCreate)
+        hooksecurefunc(_G.WeakAuras.regionPrototype, 'modifyFinish', OnPrototypeModifyFinish)
+    elseif _G.WeakAuras.SetTextureOrAtlas then
+        hooksecurefunc(_G.WeakAuras, "SetTextureOrAtlas", function(icon)
+            local parent = icon:GetParent()
+			if parent then
+				local region = parent.regionType and parent or parent:GetParent()
+				if region.regionType then
+					Skin_WeakAuras(region, region.regionType)
+				end
+			end
+        end)
     end
-
-    hooksecurefunc(_G.WeakAuras.regionPrototype, 'create', OnPrototypeCreate)
-    hooksecurefunc(_G.WeakAuras.regionPrototype, 'modifyFinish', OnPrototypeModifyFinish)
 end
 
 THEME:RegisterSkin('WeakAuras', RestyleObjects)

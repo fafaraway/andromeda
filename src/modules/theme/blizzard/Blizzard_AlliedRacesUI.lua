@@ -3,7 +3,7 @@ local F, C = unpack(select(2, ...))
 C.Themes['Blizzard_AlliedRacesUI'] = function()
     local AlliedRacesFrame = _G.AlliedRacesFrame
     F.ReskinPortraitFrame(AlliedRacesFrame)
-    select(2, AlliedRacesFrame.ModelFrame:GetRegions()):Hide()
+    select(2, AlliedRacesFrame.ModelScene:GetRegions()):Hide()
 
     local scrollFrame = AlliedRacesFrame.RaceInfoFrame.ScrollFrame
     if C.IS_NEW_PATCH_10_1 then

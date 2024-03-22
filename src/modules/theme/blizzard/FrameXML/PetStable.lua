@@ -10,14 +10,15 @@ tinsert(C.BlizzThemes, function()
         return
     end
 
+    local x1, x2, y1, y2 = unpack(C.TEX_COORD)
+
     _G.PetStableBottomInset:Hide()
     _G.PetStableLeftInset:Hide()
-    _G.PetStableModelShadow:Hide()
-    _G.PetStableModelRotateLeftButton:Hide()
-    _G.PetStableModelRotateRightButton:Hide()
     _G.PetStableFrameModelBg:Hide()
     _G.PetStablePrevPageButtonIcon:SetTexture('')
     _G.PetStableNextPageButtonIcon:SetTexture('')
+    _G.PetStableDietTexture:SetTexture(132165)
+	_G.PetStableDietTexture:SetTexCoord(x1, x2, y1, y2)
 
     F.ReskinPortraitFrame(_G.PetStableFrame)
     F.ReskinArrow(_G.PetStablePrevPageButton, 'left')
@@ -33,7 +34,7 @@ tinsert(C.BlizzThemes, function()
         bu.Checked:SetTexture(C.Assets.Textures.ButtonChecked)
         bu:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
 
-        _G['PetStableActivePet' .. i .. 'IconTexture']:SetTexCoord(unpack(C.TEX_COORD))
+        _G['PetStableActivePet' .. i .. 'IconTexture']:SetTexCoord(x1, x2, y1, y2)
         F.CreateBDFrame(bu, 0.25)
     end
 
@@ -45,7 +46,7 @@ tinsert(C.BlizzThemes, function()
         bu:GetHighlightTexture():SetColorTexture(1, 1, 1, 0.25)
         bu:DisableDrawLayer('BACKGROUND')
 
-        _G['PetStableStabledPet' .. i .. 'IconTexture']:SetTexCoord(unpack(C.TEX_COORD))
+        _G['PetStableStabledPet' .. i .. 'IconTexture']:SetTexCoord(x1, x2, y1, y2)
         F.CreateBDFrame(bu, 0.25)
     end
 end)

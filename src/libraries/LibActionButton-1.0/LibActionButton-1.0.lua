@@ -29,7 +29,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ]]
 local MAJOR_VERSION = "LibActionButton-1.0"
-local MINOR_VERSION = 107
+local MINOR_VERSION = 110
 
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end
 local lib, oldversion = LibStub:NewLibrary(MAJOR_VERSION, MINOR_VERSION)
@@ -50,7 +50,7 @@ local UseCustomFlyout = WoWRetail
 
 local KeyBound = LibStub("LibKeyBound-1.0", true)
 local CBH = LibStub("CallbackHandler-1.0")
-local LBG = LibStub("LibButtonGlow-1.0", true)
+local LCG = LibStub("LibCustomGlow-1.0-Adromeda", true)
 local Masque = LibStub("Masque", true)
 
 lib.eventFrame = lib.eventFrame or CreateFrame("Frame")
@@ -286,10 +286,13 @@ function SetupSecureSnippets(button)
 			local pressAndHold = false
 			if type == "action" then
 				self:SetAttribute("typerelease", "actionrelease")
-				local actionType, id = GetActionInfo(action)
+				local actionType, id, subType = GetActionInfo(action)
 				if actionType == "spell" then
 					pressAndHold = IsPressHoldReleaseSpell(id)
 				elseif actionType == "macro" then
+					if subType == "spell" then
+						pressAndHold = IsPressHoldReleaseSpell(id)
+					end
 					-- GetMacroSpell is not in the restricted environment
 					--[=[
 						local spellID = GetMacroSpell(id)
@@ -743,6 +746,13 @@ if UseCustomFlyout then
 			local slotButton = self:GetFrameRef("flyoutButton" .. i)
 			if slotButton then
 				slotButton:Hide()
+
+				-- unset its action, so it stops updating
+				slotButton:SetAttribute("labtype-0", "empty")
+				slotButton:SetAttribute("labaction-0", nil)
+
+				slotButton:CallMethod("SetStateFromHandlerInsecure", 0, "empty")
+				slotButton:CallMethod("UpdateAction")
 			end
 		end
 
@@ -936,6 +946,14 @@ if UseCustomFlyout then
 			end
 
 			lib.flyoutHandler:SetAttribute("numFlyoutButtons", #lib.FlyoutButtons)
+		end
+
+		-- hide flyout frame
+		GetFlyoutHandler():Hide()
+
+		-- ensure buttons are cleared, they will be filled when the flyout is shown
+		for i = 1, #lib.FlyoutButtons do
+			lib.FlyoutButtons[i]:SetState(0, "empty")
 		end
 
 		InSync = false
@@ -1246,17 +1264,6 @@ function InitializeEventHandler()
 	end
 end
 
-local function PlayerHasLockAndLoad()
-	local name, spellID, _
-	for i = 1, 40 do
-		name, _, _, _, _, _, _, _, _, spellID = UnitAura("player", i, "HELPFUL")
-		if not name then break end
-		if spellID == 194594 then
-			return true
-		end
-	end
-end
-
 local _lastFormUpdate = GetTime()
 function OnEvent(frame, event, arg1, ...)
 	if event == "PLAYER_LOGIN" then
@@ -1389,7 +1396,6 @@ function OnEvent(frame, event, arg1, ...)
 		for button in next, ActiveButtons do
 			local spellId = button:GetSpellId()
 			if spellId and spellId == arg1 then
-				if spellId == 19434 and not PlayerHasLockAndLoad() then return end -- NDui: Ignore MM hunter T29x2
 				ShowOverlayGlow(button)
 			else
 				if button._state_type == "action" then
@@ -1607,7 +1613,7 @@ function Generic:UpdateAction(force)
 		Update(self)
 	end
 end
-
+-- NDui: add quality border
 local function ClearProfessionQuality(self)
 	if self.ProfessionQuality then
 		self.ProfessionQuality:Hide()
@@ -2008,14 +2014,14 @@ function UpdateHotkeys(self)
 end
 
 function ShowOverlayGlow(self)
-	if LBG then
-		LBG.ShowOverlayGlow(self)
+	if LCG then
+		LCG.ShowOverlayGlow(self)
 	end
 end
 
 function HideOverlayGlow(self)
-	if LBG then
-		LBG.HideOverlayGlow(self)
+	if LCG then
+		LCG.HideOverlayGlow(self)
 	end
 end
 
@@ -2284,15 +2290,19 @@ Action.IsConsumableOrStackable = function(self) return IsConsumableAction(self._
 Action.IsUnitInRange           = function(self, unit) return IsActionInRange(self._state_action, unit) end
 Action.SetTooltip              = function(self) return GameTooltip:SetAction(self._state_action) end
 Action.GetSpellId              = function(self)
-	local actionType, id, _subType = GetActionInfo(self._state_action)
+	local actionType, id, subType = GetActionInfo(self._state_action)
 	if actionType == "spell" then
 		return id
 	elseif actionType == "macro" then
-		return (GetMacroSpell(id))
+		if subType == "spell" then
+			return id
+		else
+			return (GetMacroSpell(id))
+		end
 	end
 end
 Action.GetLossOfControlCooldown = function(self) return GetActionLossOfControlCooldown(self._state_action) end
-if C_UnitAuras then
+if C_UnitAuras and C_UnitAuras.GetCooldownAuraBySpellID and C_ActionBar and C_ActionBar.GetItemActionOnEquipSpellID then
 	Action.GetPassiveCooldownSpellID = function(self)
 		local _actionType, actionID = GetActionInfo(self._state_action)
 		local onEquipPassiveSpellID
@@ -2335,13 +2345,13 @@ Spell.GetTexture              = function(self) return GetSpellTexture(self._stat
 Spell.GetCharges              = function(self) return GetSpellCharges(self._state_action) end
 Spell.GetCount                = function(self) return GetSpellCount(self._state_action) end
 Spell.GetCooldown             = function(self) return GetSpellCooldown(self._state_action) end
-Spell.IsAttack                = function(self) return IsAttackSpell(FindSpellBookSlotBySpellID(self._state_action), "spell") end -- needs spell book id as of 4.0.1.13066
+Spell.IsAttack                = function(self) local slot = FindSpellBookSlotBySpellID(self._state_action) return slot and IsAttackSpell(slot, "spell") or nil end -- needs spell book id as of 4.0.1.13066
 Spell.IsEquipped              = function(self) return nil end
 Spell.IsCurrentlyActive       = function(self) return IsCurrentSpell(self._state_action) end
-Spell.IsAutoRepeat            = function(self) return IsAutoRepeatSpell(FindSpellBookSlotBySpellID(self._state_action), "spell") end -- needs spell book id as of 4.0.1.13066
+Spell.IsAutoRepeat            = function(self) local slot = FindSpellBookSlotBySpellID(self._state_action) return slot and IsAutoRepeatSpell(slot, "spell") or nil end -- needs spell book id as of 4.0.1.13066
 Spell.IsUsable                = function(self) return IsUsableSpell(self._state_action) end
 Spell.IsConsumableOrStackable = function(self) return IsConsumableSpell(self._state_action) end
-Spell.IsUnitInRange           = function(self, unit) return IsSpellInRange(FindSpellBookSlotBySpellID(self._state_action), "spell", unit) end -- needs spell book id as of 4.0.1.13066
+Spell.IsUnitInRange           = function(self, unit) local slot = FindSpellBookSlotBySpellID(self._state_action) return slot and IsSpellInRange(slot, "spell", unit) or nil end -- needs spell book id as of 4.0.1.13066
 Spell.SetTooltip              = function(self) return GameTooltip:SetSpellByID(self._state_action) end
 Spell.GetSpellId              = function(self) return self._state_action end
 Spell.GetLossOfControlCooldown = function(self) return GetSpellLossOfControlCooldown(self._state_action) end
@@ -2371,7 +2381,7 @@ Item.IsCurrentlyActive       = function(self) return IsCurrentItem(self._state_a
 Item.IsAutoRepeat            = function(self) return nil end
 Item.IsUsable                = function(self) return IsUsableItem(self._state_action) end
 Item.IsConsumableOrStackable = function(self) return IsConsumableItem(self._state_action) end
-Item.IsUnitInRange           = function(self, unit) return IsItemInRange(self._state_action, unit) end
+--Item.IsUnitInRange           = function(self, unit) return IsItemInRange(self._state_action, unit) end
 Item.SetTooltip              = function(self) return GameTooltip:SetHyperlink(self._state_action) end
 Item.GetSpellId              = function(self) return nil end
 Item.GetPassiveCooldownSpellID = function(self) return nil end

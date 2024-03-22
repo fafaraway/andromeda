@@ -123,7 +123,7 @@ local function buildBNetTable(num)
 
                 local infoText = getOnlineInfoText(client, isMobile, rafLinkType, gameText)
                 if client == _G.BNET_CLIENT_WOW and wowProjectID == WOW_PROJECT_ID then
-                    infoText = getOnlineInfoText(client, isMobile, rafLinkType, zoneName)
+                    infoText = getOnlineInfoText(client, isMobile, rafLinkType, zoneName or gameText)
                 end
 
                 if client == _G.BNET_CLIENT_WOW and wowProjectID ~= WOW_PROJECT_ID then
@@ -342,7 +342,7 @@ local function buttonOnEnter(self)
             local realmName = gameAccountInfo.realmName or ''
             local faction = gameAccountInfo.factionName
             local class = gameAccountInfo.className or _G.UNKNOWN
-            local zoneName = gameAccountInfo.areaName or _G.UNKNOWN
+            local zoneName = gameAccountInfo.areaName
             local level = gameAccountInfo.characterLevel
             local gameText = gameAccountInfo.richPresence or ''
             local wowProjectID = gameAccountInfo.wowProjectID

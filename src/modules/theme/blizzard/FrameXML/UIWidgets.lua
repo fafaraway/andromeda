@@ -108,6 +108,10 @@ local function ReskinSpellDisplayWidget(spell)
 end
 
 local function ReskinPowerBarWidget(self)
+    if not self.widgetFrames then
+        return
+    end
+
     for _, widgetFrame in pairs(self.widgetFrames) do
         if widgetFrame.widgetType == Type_StatusBar then
             if not widgetFrame:IsForbidden() then
@@ -118,6 +122,10 @@ local function ReskinPowerBarWidget(self)
 end
 
 local function ReskinWidgetGroups(self)
+    if not self.widgetFrames then
+        return
+    end
+
     for _, widgetFrame in pairs(self.widgetFrames) do
         if not widgetFrame:IsForbidden() then
             local widgetType = widgetFrame.widgetType
@@ -137,6 +145,10 @@ tinsert(C.BlizzThemes, function()
     ReskinWidgetGroups(_G.UIWidgetTopCenterContainerFrame)
 
     hooksecurefunc(_G.UIWidgetBelowMinimapContainerFrame, 'UpdateWidgetLayout', function(self)
+        if not self.widgetFrames then
+            return
+        end
+
         for _, widgetFrame in pairs(self.widgetFrames) do
             if widgetFrame.widgetType == Type_CaptureBar then
                 if not widgetFrame:IsForbidden() then
@@ -152,6 +164,10 @@ tinsert(C.BlizzThemes, function()
     hooksecurefunc(_G.TopScenarioWidgetContainerBlock.WidgetContainer, 'UpdateWidgetLayout', ReskinPowerBarWidget)
 
     hooksecurefunc(_G.BottomScenarioWidgetContainerBlock.WidgetContainer, 'UpdateWidgetLayout', function(self)
+        if not self.widgetFrames then
+            return
+        end
+
         for _, widgetFrame in pairs(self.widgetFrames) do
             if widgetFrame.widgetType == Type_SpellDisplay then
                 if not widgetFrame:IsForbidden() then

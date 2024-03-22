@@ -11,7 +11,6 @@ C.Assets = {
         RoleTank              = C.ASSET_PATH .. 'textures\\role-tank',
         RoleHealer            = C.ASSET_PATH .. 'textures\\role-healer',
         RoleDamager           = C.ASSET_PATH .. 'textures\\role-damager',
-        RoleLfgIcons          = C.ASSET_PATH .. 'textures\\role-lfg-icons',
         ClassifyRare          = C.ASSET_PATH .. 'textures\\nameplate-rare',
         ClassifyElite         = C.ASSET_PATH .. 'textures\\nameplate-elite',
         ClassifyBoss          = C.ASSET_PATH .. 'textures\\nameplate-boss',

@@ -68,16 +68,13 @@ do
     end
 
     function THEME:ReskinMirrorBars()
-        local previous
-        for i = 1, 3 do
-            local bar = _G['MirrorTimer' .. i]
-            reskinTimerBar(bar)
-
-            if previous then
-                bar:SetPoint('TOP', previous, 'BOTTOM', 0, -5)
+        hooksecurefunc(MirrorTimerContainer, "SetupTimer", function(self, timer)
+            local bar = self:GetAvailableTimer(timer)
+            if not bar.styled then
+                reskinTimerBar(bar)
+                bar.styled = true
             end
-            previous = bar
-        end
+        end)
     end
 
     local function updateTimerTracker()

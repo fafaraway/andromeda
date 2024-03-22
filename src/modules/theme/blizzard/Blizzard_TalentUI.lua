@@ -79,22 +79,11 @@ C.Themes['Blizzard_TalentUI'] = function()
             bu.specIcon:SetSize(56, 56)
             bu.specIcon:SetPoint('LEFT', bu, 'LEFT', 2, 0)
             F.ReskinIcon(bu.specIcon)
-
-            local roleIcon = bu.roleIcon
-            roleIcon:SetTexture(C.Assets.Textures.RoleLfgIcons)
-            F.CreateBDFrame(roleIcon):SetFrameLevel(2)
-            if role then
-                roleIcon:SetTexCoord(F.GetRoleTexCoord(role))
-            end
         end
 
         local scrollChild = frame.spellsScroll.child
         F.StripTextures(scrollChild)
         F.ReskinIcon(scrollChild.specIcon)
-
-        local roleIcon = scrollChild.roleIcon
-        roleIcon:SetTexture(C.Assets.Textures.RoleLfgIcons)
-        F.CreateBDFrame(roleIcon)
     end
 
     hooksecurefunc('PlayerTalentFrame_UpdateSpecFrame', function(self, spec)
@@ -110,9 +99,6 @@ C.Themes['Blizzard_TalentUI'] = function()
 
         local scrollChild = self.spellsScroll.child
         scrollChild.specIcon:SetTexture(icon)
-        if role then
-            scrollChild.roleIcon:SetTexCoord(F.GetRoleTexCoord(role))
-        end
 
         local index = 1
         local bonuses

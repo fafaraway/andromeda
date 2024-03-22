@@ -2389,8 +2389,15 @@ do
 
         local options = {}
         options[1] = createEditbox(panel.bg, nil, 10, -10, L['Fill in SpellID, must be a number.|nSpell name is not supported.'], 60, 24)
-        options[2] =
-            createEditbox(panel.bg, nil, 76, -10, L["Enter the spell's cooldown duration.|nParty watcher only support regular spells and abilities.|nFor spells like 'Aspect of the Wild' (BM Hunter), you need to sync cooldown with your party members."], 60, 24)
+        options[2] = createEditbox(
+            panel.bg,
+            nil,
+            76,
+            -10,
+            L["Enter the spell's cooldown duration.|nParty watcher only support regular spells and abilities.|nFor spells like 'Aspect of the Wild' (BM Hunter), you need to sync cooldown with your party members."],
+            60,
+            24
+        )
 
         local scrollArea = createScrollFrame(panel.bg, 200, 485)
         panel.scrollArea = scrollArea
@@ -2486,7 +2493,16 @@ do
         local frame = panel.bg
         local bars, options = {}, {}
 
-        local iType = createDropdown(frame, L['Instance Type'], 10, -30, { _G.DUNGEONS, _G.RAID, _G.OTHER }, L['Select the type of instance.|nThe list of debuffs is saved separately for each instance.'], 107, 24)
+        local iType = createDropdown(
+            frame,
+            L['Instance Type'],
+            10,
+            -30,
+            { _G.DUNGEONS, _G.RAID, _G.OTHER },
+            L['Select the type of instance.|nThe list of debuffs is saved separately for each instance.'],
+            107,
+            24
+        )
         iType.title = L['Hint']
         for i = 1, 3 do
             iType.options[i]:HookScript('OnClick', function()
@@ -2515,13 +2531,18 @@ do
                 addNewDungeon(dungeons, dungeonID)
             end
         end
-        addNewDungeon(dungeons, 313) -- 青龙寺
-        addNewDungeon(dungeons, 537) -- 影月墓地
-        addNewDungeon(dungeons, 721) -- 英灵殿
-        addNewDungeon(dungeons, 800) -- 群星庭院
+        AddNewDungeon(dungeons, 1209) -- Dawn of  the Infinite
+        AddNewDungeon(dungeons, 65) -- Throne of the Tides
+        AddNewDungeon(dungeons, 556) -- The Everbloom
+        AddNewDungeon(dungeons, 740) -- Black Rook Hold
+        AddNewDungeon(dungeons, 762) -- Darkheart Thicket
+        AddNewDungeon(dungeons, 968) -- Atal'Dazar
+        AddNewDungeon(dungeons, 1021) -- Waycrest Manor
 
         local raids = {
             [1] = EJ_GetInstanceInfo(1200),
+            [2] = EJ_GetInstanceInfo(1208),
+            [3] = EJ_GetInstanceInfo(1207),
         }
 
         options[1] = createDropdown(frame, _G.DUNGEONS, 123, -30, dungeons, L['Select a specific dungeon.'], 107, 24)
@@ -2767,9 +2788,14 @@ do
         }
 
         local anchors = {
-            'TL', 'T', 'TR',
-            'L', 'R',
-            'BL', 'B', 'BR',
+            'TL',
+            'T',
+            'TR',
+            'L',
+            'R',
+            'BL',
+            'B',
+            'BR',
         }
 
         local function createBar(parent, spellID, anchor, r, g, b, showAll)
@@ -2881,11 +2907,6 @@ do
         rstBtn:SetScript('OnClick', function()
             StaticPopup_Show('ANDROMEDA_RESET_CORNER_SPELLS')
         end)
-
-
-
-
-
 
         for spellID, value in pairs(UNITFRAME.CornerSpellsList) do
             local r, g, b = unpack(value[2])
@@ -3089,8 +3110,6 @@ function GUI:SetupVignettingVisibility(parent)
 end
 
 -- Chat
-
-
 
 -- Combat
 function GUI:SetupSimpleFloatingCombatText(parent)

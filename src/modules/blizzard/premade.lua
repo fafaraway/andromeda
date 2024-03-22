@@ -301,21 +301,14 @@ end
 
 function BLIZZARD:AddDungeonsFilter()
     local mapData = {
-        -- S1
-        [0] = { mapID = 2, aID = 1192 }, -- 青龙寺
-        [1] = { mapID = 165, aID = 1193 }, -- 影月谷
-        [2] = { mapID = 200, aID = 461 }, -- 英灵殿
-        [3] = { mapID = 210, aID = 466 }, -- 群星庭院
-        [4] = { mapID = 399, aID = 1176 }, -- 红玉新生法池
-        [5] = { mapID = 400, aID = 1184 }, -- 诺库德狙击战
-        [6] = { mapID = 401, aID = 1180 }, -- 碧蓝魔馆
-        [7] = { mapID = 402, aID = 1160 }, -- 艾杰斯亚学院
-
-        -- S2
-        -- [4] = { mapID = 403, aID = 1188 }, -- 奥丹姆：提尔的遗产
-        -- [5] = { mapID = 404, aID = 1172 }, -- 奈萨鲁斯
-        -- [6] = { mapID = 405, aID = 1164 }, -- 蕨皮山谷
-        -- [7] = { mapID = 406, aID = 1168 }, -- 注能大厅
+        [0] = { aID = 1247, mapID = 463 }, -- 永恒黎明：迦拉克隆的陨落
+        [1] = { aID = 1248, mapID = 464 }, -- 永恒黎明：姆诺兹多的崛起
+        [2] = { aID = 530, mapID = 248 }, -- 维克雷斯庄园
+        [3] = { aID = 502, mapID = 244 }, -- 阿塔达萨
+        [4] = { aID = 460, mapID = 198 }, -- 黑心林地
+        [5] = { aID = 463, mapID = 199 }, -- 黑鸦堡垒
+        [6] = { aID = 184, mapID = 168 }, -- 永茂林地
+        [7] = { aID = 1274, mapID = 456 }, -- 潮汐王座
     }
 
     local function GetDungeonNameByID(mapID)
@@ -401,14 +394,15 @@ function BLIZZARD:AddDungeonsFilter()
 end
 
 local function ClickSortButton(self)
-    self.__owner.Sorting.SortingExpression:SetText(self.sortStr)
-    self.__owner.RefreshButton:Click()
+    self.__owner.Sorting.Expression:SetText(self.sortStr)
+    self.__parent.RefreshButton:Click()
 end
 
-local function CreateSortButton(parent, texture, sortStr)
+local function CreateSortButton(parent, texture, sortStr, panel)
     local bu = F.CreateButton(parent, 24, 24, true, texture)
     bu.sortStr = sortStr
-    bu.__owner = parent
+    bu.__parent = parent
+    bu.__owner = panel
     bu:SetScript('OnClick', ClickSortButton)
     F.AddTooltip(bu, 'ANCHOR_RIGHT', _G.CLUB_FINDER_SORT_BY)
 
@@ -421,11 +415,12 @@ function BLIZZARD:AddPGFSortingExpression()
     end
 
     local PGFDialog = _G.PremadeGroupsFilterDialog
+    local ExpressionPanel = _G.PremadeGroupsFilterMiniPanel
     PGFDialog.__sortBu = {}
 
-    CreateSortButton(PGFDialog, 525134, 'mprating desc')
-    CreateSortButton(PGFDialog, 1455894, 'pvprating desc')
-    CreateSortButton(PGFDialog, 237538, 'age asc')
+    CreateSortButton(PGFDialog, 525134, 'mprating desc', ExpressionPanel)
+    CreateSortButton(PGFDialog, 1455894, 'pvprating desc', ExpressionPanel)
+    CreateSortButton(PGFDialog, 237538, 'age asc', ExpressionPanel)
 
     for i = 1, #PGFDialog.__sortBu do
         local bu = PGFDialog.__sortBu[i]

@@ -36,7 +36,7 @@ local function refreshDefaultLootSpec()
         return
     end
     local mult = 3 + numSpecs
-    newMenu[numLocal - mult].text = format(_G.LOOT_SPECIALIZATION_DEFAULT, select(2, GetSpecializationInfo(currentSpecIndex)))
+    newMenu[numLocal - mult].text = format(_G.LOOT_SPECIALIZATION_DEFAULT, (select(2, GetSpecializationInfo(currentSpecIndex))) or NONE)
 end
 
 local function selectCurrentConfig(_, configID, specID)

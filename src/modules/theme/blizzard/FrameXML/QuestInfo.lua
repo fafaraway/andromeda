@@ -15,11 +15,13 @@ local function setHighlight(self)
     end
 end
 
+local defaultColor = GetMaterialTextColors('Default')
+
 local function replaceTextColor(object, r)
-    if r == 0 then
+    if r == 0 or r == defaultColor[1] then
         object:SetTextColor(1, 1, 1)
     elseif r == 0.2 then
-        object:SetTextColor(0.8, 0.8, 0.8)
+        object:SetTextColor(0.7, 0.7, 0.7)
     end
 end
 
@@ -145,8 +147,7 @@ tinsert(C.BlizzThemes, function()
                 break
             end
             hooksecurefunc(object, 'SetTextColor', replaceTextColor)
-            local r, g, b = object:GetTextColor()
-            object:SetTextColor(r, g, b)
+            object:SetTextColor(1, 1, 1)
 
             object.hooked = true
         end

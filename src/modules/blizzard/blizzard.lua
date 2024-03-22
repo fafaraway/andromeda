@@ -58,7 +58,7 @@ function BLIZZARD:VehicleIndicatorMover()
         if parent ~= frame then
             self:ClearAllPoints()
             self:SetPoint('TOPLEFT', frame)
-            self:SetScale(0.7)
+            -- self:SetScale(0.7)
         end
     end)
 end

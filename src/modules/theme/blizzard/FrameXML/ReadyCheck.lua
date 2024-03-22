@@ -6,15 +6,9 @@ tinsert(C.BlizzThemes, function()
     end
 
     -- Ready check
-    F.SetBD(_G.ReadyCheckFrame)
+    F.StripTextures(_G.ReadyCheckListenerFrame)
+    F.SetBD(_G.ReadyCheckListenerFrame, nil, 30, -1, 1, -1)
     _G.ReadyCheckPortrait:SetAlpha(0)
-    select(2, _G.ReadyCheckListenerFrame:GetRegions()):Hide()
-
-    _G.ReadyCheckFrame:HookScript('OnShow', function(self)
-        if self.initiator and UnitIsUnit('player', self.initiator) then
-            self:Hide()
-        end
-    end)
 
     F.ReskinButton(_G.ReadyCheckFrameYesButton)
     F.ReskinButton(_G.ReadyCheckFrameNoButton)
