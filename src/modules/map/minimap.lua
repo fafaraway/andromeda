@@ -12,7 +12,7 @@ function MAP:RemoveBlizzStuff()
 
     F:DisableEditMode(MinimapCluster)
     MinimapCluster:EnableMouse(false)
-    MinimapCluster.Tracking:Hide()
+    MinimapCluster.TrackingFrame:Hide()
     MinimapCluster.BorderTop:Hide()
     MinimapCluster.ZoneTextButton:Hide()
     Minimap:SetArchBlobRingScalar(0)
@@ -595,7 +595,7 @@ function MAP:BuildDropDown()
     dropdown.noResize = true
     _G.UIDropDownMenu_Initialize(dropdown, _G.MiniMapTrackingDropDown_Initialize, 'MENU')
 
-    hooksecurefunc(_G.MinimapCluster.Tracking.Button, 'Update', function()
+    hooksecurefunc(_G.MinimapCluster.TrackingFrame.Button, 'Update', function()
         if _G.UIDROPDOWNMENU_OPEN_MENU == dropdown then
             UIDropDownMenu_RefreshAll(dropdown)
         end

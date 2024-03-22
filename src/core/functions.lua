@@ -1258,7 +1258,7 @@ do
             _G.ColorPickerFrame.func = updatePicker
             _G.ColorPickerFrame.previousValues = { r = r, g = g, b = b }
             _G.ColorPickerFrame.cancelFunc = cancelPicker
-            _G.ColorPickerFrame:SetColorRGB(r, g, b)
+            _G.ColorPickerFrame.Content.ColorPicker:SetColorRGB(r, g, b)
             _G.ColorPickerFrame:Show()
         end
 
@@ -1421,6 +1421,10 @@ do
     -- Kill region
 
     do
+        function F:Dummy()
+            return
+        end
+
         F.HiddenFrame = CreateFrame('Frame')
         F.HiddenFrame:Hide()
 
@@ -1491,6 +1495,7 @@ do
                             end
                         else
                             region:SetTexture('')
+                            region:SetAtlas('')
                         end
                     end
                 end

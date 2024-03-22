@@ -9,9 +9,9 @@ local function AlphaValue(num)
 end
 
 local function UpdateAlphaText(alpha)
-    if not alpha then
-        alpha = AlphaValue(_G.OpacitySliderFrame:GetValue())
-    end
+    -- if not alpha then
+    --     alpha = AlphaValue(_G.OpacitySliderFrame:GetValue())
+    -- end
 
     _G.ColorPPBoxA:SetText(alpha)
 end
@@ -136,7 +136,7 @@ local function OnValueChanged(frame, value)
     if frame.lastAlpha ~= alpha then
         frame.lastAlpha = alpha
 
-        UpdateAlphaText(alpha)
+        -- UpdateAlphaText(alpha)
 
         if not _G.ColorPickerFrame:IsVisible() then
             DelayCall()
@@ -217,7 +217,7 @@ function BLIZZARD:EnhancedColorPicker()
             _G.ColorPPBoxA:Show()
             _G.ColorPPBoxLabelA:Show()
             frame.Content.HexBox:SetScript('OnTabPressed', ColorPPBoxA_SetFocus)
-            UpdateAlphaText()
+            -- UpdateAlphaText()
             UpdateColorTexts()
             frame:SetWidth(405)
         else
